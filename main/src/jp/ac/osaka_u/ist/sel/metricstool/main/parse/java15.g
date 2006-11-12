@@ -1,5 +1,5 @@
 header {
-	package jp.ac.osaka-u.ist.sel.metricstool.main.parse;
+	package jp.ac.osaka_u.ist.sel.metricstool.main.parse;
 }
 
 /** Java 1.5 Recognizer
