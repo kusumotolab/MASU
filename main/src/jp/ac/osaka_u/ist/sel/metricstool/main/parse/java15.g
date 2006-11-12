@@ -178,7 +178,7 @@ header {
  * This grammar is in the PUBLIC DOMAIN
  */
 
-class Java15Recognizer extends Parser;
+class Java15Parser extends Parser;
 
 options {
 	k = 2;							// two token lookahead
