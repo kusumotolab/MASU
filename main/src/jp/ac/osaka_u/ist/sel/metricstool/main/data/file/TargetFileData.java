@@ -14,7 +14,7 @@ import java.util.Set;
  * 
  * since 2006.11.12
  */
-public class TargetFileData implements Iterable {
+public class TargetFileData implements Iterable<TargetFile> {
 
     /**
      * 

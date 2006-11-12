@@ -33,9 +33,8 @@ public class MetricsTool {
         }
 
         try {
-            // targetFiles を TargetFiles型で宣言するとエラーになる．なぜ？
-            for (Object targetFile : targetFiles) {
-                String name = ((TargetFile) targetFile).getName();
+            for (TargetFile targetFile : targetFiles) {
+                String name = targetFile.getName();
                 System.out.println("processing " + name);
                 Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
                 Java15Parser parser = new Java15Parser(lexer);
