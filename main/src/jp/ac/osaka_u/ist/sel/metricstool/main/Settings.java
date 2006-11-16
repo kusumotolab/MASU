@@ -110,6 +110,11 @@ public class Settings {
     }
 
     /**
+     * 文字列の引数の初期化に使われる定数
+     */
+    public static final String INIT = "INIT";
+    
+    /**
      * ヘルプモードであるか，そうでないかを記録するための変数
      */
     private static boolean helpMode = false;
@@ -122,36 +127,35 @@ public class Settings {
     /**
      * 解析対象ディレクトリを記録するための変数
      */
-    private static String targetDirectory = null;
+    private static String targetDirectory = INIT;
 
     /**
      * 解析対象ファイルのパスを記述したファイルのパスを記録するための変数
      */
-    private static String listFile = null;
+    private static String listFile = INIT;
 
     /**
      * 解析対象ファイルの記述言語を記録するための変数
      */
-    private static String language = null;
+    private static String language = INIT;
 
     /**
      * 計測するメトリクスを記録するための変数
      */
-    private static String metrics = null;
+    private static String metrics = INIT;
 
     /**
      * ファイルタイプのメトリクスを出力するファイルのパスを記録するための変数
      */
-    private static String fileMetricsFile = null;
+    private static String fileMetricsFile = INIT;
 
     /**
      * クラスタイプのメトリクスを出力するファイルのパスを記録するための変数
      */
-    private static String classMetricsFile = null;
+    private static String classMetricsFile = INIT;
 
     /**
      * メソッドタイプのメトリクスを出力するファイルのパスを記録するための変数
      */
-    private static String methodMetricsFile = null;
-
+    private static String methodMetricsFile = INIT;
 }
