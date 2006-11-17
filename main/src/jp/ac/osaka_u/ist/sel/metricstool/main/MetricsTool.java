@@ -14,6 +14,7 @@ import org.jargp.StringDef;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileData;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
@@ -39,6 +40,25 @@ public class MetricsTool {
         ArgumentProcessor.processArgs(args, parameterDefs, settings);
         checkParameterValidation();
 
+        // ヘルプモードの場合
+        if (Settings.isHelpMode()) {
+
+            // 情報表示モードの場合
+        } else if (Settings.isDisplayMode()) {
+
+            // 解析モードの場合
+        } else if (Settings.isHelpMode() && Settings.isDisplayMode()) {
+
+            //ディレクトリから読み込み
+            if (Settings.getTargetDirectory().equals(Settings.INIT)) {
+                registerFilesFromDirectory(Settings.getTargetDirectory());
+
+                //リストファイルから読み込み
+            } else if (Settings.getListFile().equals(Settings.INIT)) {
+                registerFilesFromListFile();
+            }
+
+        }
         /*
          * TargetFileData targetFiles = TargetFileData.getInstance(); for (int i = 0; i <
          * args.length; i++) { targetFiles.add(new TargetFile(args[i])); }
@@ -259,7 +279,7 @@ public class MetricsTool {
 
     /**
      *   
-     * リストファイルから対象ファイルを読み込む．
+     * リストファイルから対象ファイルを登録する．
      * 読み込みエラーが発生した場合は，このメソッド内でプログラムを終了する．
      */
     private static void registerFilesFromListFile() {
@@ -282,4 +302,36 @@ public class MetricsTool {
             System.exit(0);
         }
     }
+
+    /**
+     * 
+     * @param path 対象ファイルまたはディレクトリ
+     * 
+     * 対象がディレクトリの場合は，その子に対して再帰的に処理をする．
+     * 対象がファイルの場合は，対象言語のソースファイルであれば，登録処理を行う．
+     */
+    private static void registerFilesFromDirectory(String path) {
+
+        File file = new File(path);
+        if (file.isDirectory()) {
+            String[] subfiles = file.list();
+            for (int i = 0; i < subfiles.length; i++) {
+                registerFilesFromDirectory(path);
+            }
+        } else if (file.isFile()) {
+
+            LANGUAGE language = Settings.getLanguage();
+            String extension = language.getExtension();
+            if (path.endsWith(extension)) {
+                TargetFileData targetFiles = TargetFileData.getInstance();
+                TargetFile targetFile = new TargetFile(path);
+                targetFiles.add(targetFile);
+            }
+
+        } else {
+            System.err.println("\"" + path + "\" is not a vaild file!");
+            System.exit(0);
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 /**
  * 
@@ -50,8 +51,8 @@ public class Settings {
      * 解析対象ファイルの記述言語を返す
      * 
      */
-    public static String getLanguage() {
-        return language;
+    public static LANGUAGE getLanguage() {
+        return LANGUAGE.JAVA;
     }
 
     /**
@@ -113,7 +114,7 @@ public class Settings {
      * 文字列の引数の初期化に使われる定数
      */
     public static final String INIT = "INIT";
-    
+
     /**
      * ヘルプモードであるか，そうでないかを記録するための変数
      */

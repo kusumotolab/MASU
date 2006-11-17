@@ -16,6 +16,11 @@ public enum LANGUAGE {
         public boolean isObjectOrientedLanguage() {
             return true;
         }
+        
+        @Override
+        public String getExtension() {
+            return ".java";
+        }
     },
 
     // C_PLUS_PLUS{
@@ -69,4 +74,12 @@ public enum LANGUAGE {
     public boolean isScriptLanguage() {
         return false;
     }
+    
+    
+    /**
+     * ‚±‚ÌŒ¾Œê‚ÌŠg’£Žq‚ð•Ô‚·
+     * 
+     * @return ‚±‚ÌŒ¾Œê‚ÌŠg’£Žq
+     */
+    public abstract String getExtension();
 }
