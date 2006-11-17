@@ -1,12 +1,19 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main;
 
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import org.jargp.ArgumentProcessor;
 import org.jargp.BoolDef;
 import org.jargp.ParameterDef;
 import org.jargp.StringDef;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileData;
 
 
 /**
@@ -72,24 +79,12 @@ public class MetricsTool {
             System.exit(0);
         }
 
-        
-        
         // -d で指定されたターゲットディレクトリのチェック
         if (!Settings.getTargetDirectory().equals(Settings.INIT)) {
             String directoryPath = Settings.getTargetDirectory();
             File directory = new File(directoryPath);
             if (!directory.isDirectory()) {
                 System.err.println("\"directoryPath\" is not a valid directory!");
-                System.exit(0);
-            }
-        }
-
-        // -i で指定されたリストファイルのチェック
-        if (!Settings.getListFile().equals(Settings.INIT)) {
-            String filePath = Settings.getTargetDirectory();
-            File file = new File(filePath);
-            if (!file.isFile()) {
-                System.err.println("\"filePath\" is not a valid file!");
                 System.exit(0);
             }
         }
@@ -214,13 +209,13 @@ public class MetricsTool {
                     printUsage();
                     System.exit(0);
                 }
-                
+
                 // ファイルメトリクスを算出する場合は，-F が指定されていない時は不正
                 // TODO
-                
+
                 // クラスメトリクスを算出する場合は，-C が指定されていない時は不正
                 // TODO
-                
+
                 // メソッドメトリクスを算出する場合は，-M が指定されていない時は不正
                 // TODO
             }
@@ -260,5 +255,31 @@ public class MetricsTool {
                 .println("\tMetricsTool -d directory -l language -m metrics1,metrics2 -C file1 -F file2 -M file3");
         System.err
                 .println("\tMetricsTool -l listFile -l language -m metrics1,metrics2 -C file1 -F file2 -M file3");
+    }
+
+    /**
+     *   
+     * リストファイルから対象ファイルを読み込む．
+     * 読み込みエラーが発生した場合は，このメソッド内でプログラムを終了する．
+     */
+    private static void registerFilesFromListFile() {
+
+        try {
+
+            TargetFileData targetFiles = TargetFileData.getInstance();
+            for (BufferedReader reader = new BufferedReader(new FileReader(Settings.getListFile())); reader
+                    .ready();) {
+                String line = reader.readLine();
+                TargetFile targetFile = new TargetFile(line);
+                targetFiles.add(targetFile);
+            }
+
+        } catch (FileNotFoundException e) {
+            System.err.println("\"" + Settings.getListFile() + "\" is not a valid file!");
+            System.exit(0);
+        } catch (IOException e) {
+            System.err.println("\"" + Settings.getListFile() + "\" can\'t read!");
+            System.exit(0);
+        }
     }
 }
