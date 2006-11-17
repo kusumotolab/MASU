@@ -22,26 +22,26 @@ public interface PluginLoader {
      * @return ロードしたプラグインクラスのインスタンス
      * @throws PluginLoadException プラグインのロードに失敗した場合に投げられる．但し，下記の例外のいずれかにケースに該当した時はそちらが優先される．
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合．
-     * @throws IlleagalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合．
+     * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合．
      */
-    public AbstractPlugin loadPlugin(final String pluginDirName) throws PluginLoadException,
-            IllegalPluginXmlFormatException, IlleagalPluginDirectoryStructureException,
+    public AbstractPlugin loadPlugin(String pluginDirName) throws PluginLoadException,
+            IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
             PluginClassLoadException;
 
     /**
-     * pluginsDirで指定されてディレクトリ以下から，pluginNameで指定されたディレクトリ名を持つプラグインをロードする
+     * pluginsDirで指定されたディレクトリ以下から，pluginNameで指定されたディレクトリ名を持つプラグインをロードする
      * @param pluginsDir プラグインが配置されるディレクトリ
      * @param pluginDirName プラグインのルートディレクトリ
      * @return ロードしたプラグインクラスのインスタンス
      * @throws PluginLoadException プラグインのロードに失敗した場合に投げられる．但し，下記の例外のいずれかにケースに該当した時はそちらが優先される．
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合．
-     * @throws IlleagalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合．
+     * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合．
      */
-    public AbstractPlugin loadPlugin(final File pluginsDir, final String pluginDirName)
+    public AbstractPlugin loadPlugin(File pluginsDir, String pluginDirName)
             throws PluginLoadException, IllegalPluginXmlFormatException,
-            IlleagalPluginDirectoryStructureException, PluginClassLoadException;
+            IllegalPluginDirectoryStructureException, PluginClassLoadException;
 
     /**
      * プラグイン自体のディレクトリを直接pluginRootDirで指定してロードするメソッド．
@@ -49,17 +49,17 @@ public interface PluginLoader {
      * @return ロードしたプラグインクラスのインスタンス
      * @throws PluginLoadException プラグインのロードに失敗した場合に投げられる．但し，下記の例外のいずれかにケースに該当した時はそちらが優先される．
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合．
-     * @throws IlleagalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合．
+     * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合．
      */
-    public AbstractPlugin loadPlugin(final File pluginRootDir) throws PluginLoadException,
-            IllegalPluginXmlFormatException, IlleagalPluginDirectoryStructureException,
+    public AbstractPlugin loadPlugin(File pluginRootDir) throws PluginLoadException,
+            IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
             PluginClassLoadException;
 
     /**
      * デフォルトのpluginsディレクトリから全てのプラグインをロードするメソッド
      * 個別のプラグインのロード失敗によって発生した例外は返さない．
-     * @return ロードできた各プラグインのプラグインクラスを格納するメソッド
+     * @return ロードできた各プラグインのプラグインクラスを格納するリスト
      * @throws PluginLoadException デフォルトのpluginsディレクトリの検出に失敗した場合．
      */
     public List<AbstractPlugin> loadPlugins() throws PluginLoadException;
@@ -68,7 +68,7 @@ public interface PluginLoader {
      * 指定したディレクトリ以下にある全てのプラグインをロードするメソッド．
      * 個別のプラグインのロード失敗によって発生した例外は返さない．
      * @param pluginsDir プラグインが配置されているディレクトリ
-     * @return　ロードできた各プラグインのプラグインクラスを格納するメソッド
+     * @return　ロードできた各プラグインのプラグインクラスを格納するリスト
      */
-    public List<AbstractPlugin> loadPlugins(final File pluginsDir);
+    public List<AbstractPlugin> loadPlugins(File pluginsDir);
 }

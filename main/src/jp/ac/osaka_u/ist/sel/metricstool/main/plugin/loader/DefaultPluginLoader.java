@@ -34,7 +34,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
  * まず，addLibraryExtensionメソッド用いて，デフォルトでライブラリとみなすファイルの拡張子群を指定する．
  * これによって，各プラグインのディレクトリ直下にあるファイルで，設定した拡張子を持つファイル群にはXMLで指定しなくても
  * パスを通すことができる．次に，addLibraryDirectoryNameメソッドを用いて，
- * 各プラグインのディレクトリ以外のディレクトリでもライブラリファイルの置き場とみなして，指定した拡張子を持つファイル群に
+ * 各プラグインのルートディレクトリ以外のディレクトリをライブラリファイルの置き場とみなして，指定した拡張子を持つファイル群に
  * パスを通すことができる．
  * 例えば，
  * <code>
@@ -109,28 +109,28 @@ public class DefaultPluginLoader implements PluginLoader {
      * @return ロードしたプラグインクラスのインスタンス
      * @throws PluginLoadException プラグインのロードに失敗した場合に投げられる．但し，下記の例外のいずれかにケースに該当した時はそちらが優先される．
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合に投げられる．
-     * @throws IlleagalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合に投げられる．
+     * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合に投げられる．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合に投げられる．
      */
     public AbstractPlugin loadPlugin(final String pluginDirName) throws PluginLoadException,
-            IllegalPluginXmlFormatException, IlleagalPluginDirectoryStructureException,
+            IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
             PluginClassLoadException {
         return this.loadPlugin(this.searchPluginsDirectory(), pluginDirName);
     }
 
     /**
-     * pluginsDirで指定されてディレクトリ以下から，pluginNameで指定されたディレクトリ名を持つプラグインをロードする
+     * pluginsDirで指定されたディレクトリ以下から，pluginNameで指定されたディレクトリ名を持つプラグインをロードする
      * @param pluginsDir プラグインが配置されるディレクトリ
      * @param pluginDirName プラグインのルートディレクトリ
      * @return ロードしたプラグインクラスのインスタンス
      * @throws PluginLoadException プラグインのロードに失敗した場合に投げられる．但し，下記の例外のいずれかにケースに該当した時はそちらが優先される．
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合に投げられる．
-     * @throws IlleagalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合に投げられる．
+     * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合に投げられる．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合に投げられる．
      */
     public AbstractPlugin loadPlugin(final File pluginsDir, final String pluginDirName)
             throws PluginLoadException, IllegalPluginXmlFormatException,
-            IlleagalPluginDirectoryStructureException, PluginClassLoadException {
+            IllegalPluginDirectoryStructureException, PluginClassLoadException {
         if (null == pluginsDir || null == pluginDirName) {
             throw new NullPointerException();
         }
@@ -152,11 +152,11 @@ public class DefaultPluginLoader implements PluginLoader {
      * @return ロードしたプラグインクラスのインスタンス
      * @throws PluginLoadException プラグインのロードに失敗した場合に投げられる．但し，下記の例外のいずれかにケースに該当した時はそちらが優先される．
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合に投げられる．
-     * @throws IlleagalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合に投げられる．
+     * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合に投げられる．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合に投げられる．
      */
     public AbstractPlugin loadPlugin(final File pluginRootDir) throws PluginLoadException,
-            IllegalPluginXmlFormatException, IlleagalPluginDirectoryStructureException,
+            IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
             PluginClassLoadException {
         if (null == pluginRootDir) {
             throw new NullPointerException();
@@ -177,7 +177,7 @@ public class DefaultPluginLoader implements PluginLoader {
         final File pluginXml = this.detectPluginXmlFile(pluginRootDir);
         if (null == pluginXml) {
             //xmlがなかった
-            throw new IlleagalPluginDirectoryStructureException(this.pluginXmlFileName
+            throw new IllegalPluginDirectoryStructureException(this.pluginXmlFileName
                     + " is not found in " + pluginRootDir.getName() + ".");
         }
 
@@ -193,7 +193,7 @@ public class DefaultPluginLoader implements PluginLoader {
             pluginClassName = interpreter.getPluginClassName();
             classpathStrings = interpreter.getClassPathAttributeNames();
         } catch (final FileNotFoundException e) {//ありえない
-            throw new IlleagalPluginDirectoryStructureException(this.pluginXmlFileName
+            throw new IllegalPluginDirectoryStructureException(this.pluginXmlFileName
                     + " is not found in " + pluginRootDir.getName() + ".", e);
         } catch (final IOException e) {
             throw new PluginLoadException("Failed to read " + pluginXml.getAbsolutePath() + ".", e);
@@ -259,7 +259,7 @@ public class DefaultPluginLoader implements PluginLoader {
     /**
      * デフォルトのpluginsディレクトリから全てのプラグインをロードするメソッド
      * 個別のプラグインのロード失敗によって発生した例外は返さない．
-     * @return ロードできた各プラグインのプラグインクラスを格納するメソッド
+     * @return ロードできた各プラグインのプラグインクラスを格納するリスト
      * @throws PluginLoadException デフォルトのpluginsディレクトリの検出に失敗した場合．
      */
     public List<AbstractPlugin> loadPlugins() throws PluginLoadException {
@@ -270,7 +270,7 @@ public class DefaultPluginLoader implements PluginLoader {
      * 指定したディレクトリ以下にある全てのプラグインをロードするメソッド．
      * 個別のプラグインのロード失敗によって発生した例外は返さない．
      * @param pluginsDir プラグインが配置されているディレクトリ
-     * @return　ロードできた各プラグインのプラグインクラスを格納するメソッド
+     * @return　ロードできた各プラグインのプラグインクラスを格納するリスト
      */
     public List<AbstractPlugin> loadPlugins(final File pluginsDir) {
         if (null == pluginsDir) {
@@ -375,10 +375,10 @@ public class DefaultPluginLoader implements PluginLoader {
      * デフォルトのpluginsディレクトリを探索するメソッド．
      * @return デフォルトのpluginsディレクトリ
      * @throws PluginLoadException pluginsディレクトリの探索がセキュリティ上できなかった場合，最終的に見つからなかった場合
-     * @throws IlleagalPluginDirectoryStructureException 探索結果のディレクトリが不正な場所であった場合
+     * @throws IllegalPluginDirectoryStructureException 探索結果のディレクトリが不正な場所であった場合
      */
     protected synchronized File searchPluginsDirectory() throws PluginLoadException,
-            IlleagalPluginDirectoryStructureException {
+            IllegalPluginDirectoryStructureException {
         if (null != this.pluginsDirectory) {
             return this.pluginsDirectory;
         }
@@ -398,7 +398,7 @@ public class DefaultPluginLoader implements PluginLoader {
             try {
                 sourceUri = sourceUrl.toURI();
             } catch (final URISyntaxException e) {
-                throw new IlleagalPluginDirectoryStructureException(
+                throw new IllegalPluginDirectoryStructureException(
                         "Could not allocate plugins directory " + sourceUrl, e);
             }
 
