@@ -44,7 +44,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
  * とすると，XMLで指定しなくても各プラグイン直下のjarファイルとlibディレクトリ以下のjarファイルにクラスパスを
  * 通すことができる． 
  */
-public class DefaultPluginLoader implements PluginClassLoader {
+public class DefaultPluginLoader implements PluginLoader {
 
     /**
      * ライブラリファイルを置くデフォルトディレクトリ名を追加するメソッド．
