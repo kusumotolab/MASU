@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,7 +15,10 @@ import org.jargp.StringDef;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileData;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
 
 
 /**
@@ -47,28 +51,31 @@ public class MetricsTool {
         } else if (Settings.isDisplayMode()) {
 
             // 解析モードの場合
-        } else if (Settings.isHelpMode() && Settings.isDisplayMode()) {
+        } else if (!Settings.isHelpMode() && !Settings.isDisplayMode()) {
 
-            //ディレクトリから読み込み
-            if (Settings.getTargetDirectory().equals(Settings.INIT)) {
-                registerFilesFromDirectory(Settings.getTargetDirectory());
+            // ディレクトリから読み込み
+            if (!Settings.getTargetDirectory().equals(Settings.INIT)) {
+                registerFilesFromDirectory();
 
-                //リストファイルから読み込み
-            } else if (Settings.getListFile().equals(Settings.INIT)) {
+                // リストファイルから読み込み
+            } else if (!Settings.getListFile().equals(Settings.INIT)) {
                 registerFilesFromListFile();
             }
 
-        }
-        /*
-         * TargetFileData targetFiles = TargetFileData.getInstance(); for (int i = 0; i <
-         * args.length; i++) { targetFiles.add(new TargetFile(args[i])); }
-         * 
-         * try { for (TargetFile targetFile : targetFiles) { String name = targetFile.getName();
-         * System.out.println("processing " + name); Java15Lexer lexer = new Java15Lexer(new
-         * FileInputStream(name)); Java15Parser parser = new Java15Parser(lexer);
-         * parser.compilationUnit(); } } catch (Exception e) { e.printStackTrace(); }
-         */
+            try {
 
+                TargetFileData targetFiles = TargetFileData.getInstance();
+                for (TargetFile targetFile : targetFiles) {
+                    String name = targetFile.getName();
+                    System.out.println("processing " + name);
+                    Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
+                    Java15Parser parser = new Java15Parser(lexer);
+                    parser.compilationUnit();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -109,11 +116,6 @@ public class MetricsTool {
             }
         }
 
-        // -l で指定された言語が解析可能言語であるかをチェック
-        if (!Settings.getLanguage().equals(Settings.INIT)) {
-            // TODO
-        }
-
         // -m で指定されたメトリクスが算出可能なメトリクスであるかをチェック
         if (!Settings.getMetrics().equals(Settings.INIT)) {
             // TODO
@@ -129,32 +131,12 @@ public class MetricsTool {
             }
         }
 
-        // -F で指定されたリストファイルのチェック
-        if (!Settings.getFileMetricsFile().equals(Settings.INIT)) {
-            String filePath = Settings.getTargetDirectory();
-            File file = new File(filePath);
-            if (!file.isFile()) {
-                System.err.println("\"filePath\" is not a valid file!");
-                System.exit(0);
-            }
-        }
-
-        // -M で指定されたリストファイルのチェック
-        if (!Settings.getMethodMetricsFile().equals(Settings.INIT)) {
-            String filePath = Settings.getTargetDirectory();
-            File file = new File(filePath);
-            if (!file.isFile()) {
-                System.err.println("\"filePath\" is not a valid file!");
-                System.exit(0);
-            }
-        }
-
         // ヘルプモードの場合
         if (Settings.isHelpMode()) {
             // -h は他のオプションと同時指定できない
             if ((!Settings.getTargetDirectory().equals(Settings.INIT))
                     || (!Settings.getListFile().equals(Settings.INIT))
-                    || (!Settings.getLanguage().equals(Settings.INIT))
+                    || (!Settings.getLanguageString().equals(Settings.INIT))
                     || (!Settings.getMetrics().equals(Settings.INIT))
                     || (!Settings.getFileMetricsFile().equals(Settings.INIT))
                     || (!Settings.getClassMetricsFile().equals(Settings.INIT))
@@ -278,9 +260,8 @@ public class MetricsTool {
     }
 
     /**
-     *   
-     * リストファイルから対象ファイルを登録する．
-     * 読み込みエラーが発生した場合は，このメソッド内でプログラムを終了する．
+     * 
+     * リストファイルから対象ファイルを登録する． 読み込みエラーが発生した場合は，このメソッド内でプログラムを終了する．
      */
     private static void registerFilesFromListFile() {
 
@@ -305,33 +286,52 @@ public class MetricsTool {
 
     /**
      * 
+     * registerFilesFromDirectory(File file)を呼び出すのみ． mainメソッドで new File(Settings.getTargetDirectory)
+     * するのが気持ち悪かったため作成．
+     * 
+     */
+    private static void registerFilesFromDirectory() {
+
+        File targetDirectory = new File(Settings.getTargetDirectory());
+        registerFilesFromDirectory(targetDirectory);
+    }
+
+    /**
+     * 
      * @param path 対象ファイルまたはディレクトリ
      * 
-     * 対象がディレクトリの場合は，その子に対して再帰的に処理をする．
-     * 対象がファイルの場合は，対象言語のソースファイルであれば，登録処理を行う．
+     * 対象がディレクトリの場合は，その子に対して再帰的に処理をする． 対象がファイルの場合は，対象言語のソースファイルであれば，登録処理を行う．
      */
-    private static void registerFilesFromDirectory(String path) {
+    private static void registerFilesFromDirectory(File file) {
 
-        File file = new File(path);
+        // ディレクトリならば，再帰的に処理
         if (file.isDirectory()) {
-            String[] subfiles = file.list();
+            File[] subfiles = file.listFiles();
             for (int i = 0; i < subfiles.length; i++) {
-                registerFilesFromDirectory(path);
+                registerFilesFromDirectory(subfiles[i]);
             }
+
+            // ファイルならば，拡張子が対象言語と一致すれば登録
         } else if (file.isFile()) {
 
-            LANGUAGE language = Settings.getLanguage();
-            String extension = language.getExtension();
-            if (path.endsWith(extension)) {
-                TargetFileData targetFiles = TargetFileData.getInstance();
-                TargetFile targetFile = new TargetFile(path);
-                targetFiles.add(targetFile);
+            try {
+                LANGUAGE language = Settings.getLanguage();
+                String extension = language.getExtension();
+                String path = file.getAbsolutePath();
+                if (path.endsWith(extension)) {
+                    TargetFileData targetFiles = TargetFileData.getInstance();
+                    TargetFile targetFile = new TargetFile(path);
+                    targetFiles.add(targetFile);
+                }
+            } catch (UnavailableLanguageException e) {
+                System.err.println(e.getMessage());
+                System.exit(0);
             }
 
+            // ディレクトリでもファイルでもない場合は不正
         } else {
-            System.err.println("\"" + path + "\" is not a vaild file!");
+            System.err.println("\"" + file.getAbsolutePath() + "\" is not a vaild file!");
             System.exit(0);
         }
     }
-
 }
