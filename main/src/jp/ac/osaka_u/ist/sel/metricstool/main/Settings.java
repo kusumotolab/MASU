@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main;
 
 
+import java.util.StringTokenizer;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
 
@@ -54,30 +56,29 @@ public class Settings {
      * 解析対象ファイルの記述言語を返す
      * 
      */
-    public static LANGUAGE getLanguage() throws UnavailableLanguageException{
+    public static LANGUAGE getLanguage() throws UnavailableLanguageException {
         if (language.equalsIgnoreCase("java")) {
             return LANGUAGE.JAVA;
-// }else if (language.equalsIgnoreCase("cpp")) {
-// return LANGUAGE.C_PLUS_PLUS;
-// }else if (language.equalsIgnoreCase("csharp")) {
-// return LANGUAGE.C_SHARP
-        }else{
-            throw new UnavailableLanguageException("\"" + language + "\"is not an available programming language!");
+            // }else if (language.equalsIgnoreCase("cpp")) {
+            // return LANGUAGE.C_PLUS_PLUS;
+            // }else if (language.equalsIgnoreCase("csharp")) {
+            // return LANGUAGE.C_SHARP
+        } else {
+            throw new UnavailableLanguageException("\"" + language
+                    + "\"is not an available programming language!");
         }
     }
 
-    
     /**
      * 
      * @return language 引数で，-l の後ろで指定されたプログラミング言語を表す文字列
      * 
-     * -l の後ろで指定されたプログラミング言語を表す文字列を返す．
-     * 有効でない文字列であっても，そのまま返す．
+     * -l の後ろで指定されたプログラミング言語を表す文字列を返す． 有効でない文字列であっても，そのまま返す．
      */
-    public static String getLanguageString(){
+    public static String getLanguageString() {
         return language;
     }
-    
+
     /**
      * 
      * @return 解析対象ファイルのパスを記述しているファイル
@@ -97,7 +98,23 @@ public class Settings {
      * 
      */
     public static String getMetrics() {
+        // TODO メトリクスを表すクラスを作って，その型で返すべき？
         return metrics;
+    }
+
+    /**
+     * 
+     * @return -m で指定されたメトリクス名一覧
+     * 
+     * -m で指定されたメトリクス名一覧を返す．計測可能でないメトリクス名もそのまま返す．
+     */
+    public static String[] getMetricStrings() {
+        StringTokenizer tokenizer = new StringTokenizer(metrics, ",", false);
+        String[] metricStrings = new String[tokenizer.countTokens()];
+        for (int i = 0; i < metricStrings.length; i++) {
+            metricStrings[i] = tokenizer.nextToken();
+        }
+        return metricStrings;
     }
 
     /**
