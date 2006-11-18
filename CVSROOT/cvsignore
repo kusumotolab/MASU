@@ -1,1 +1,4 @@
 .settings
+.antlr-eclipse
+.classpath
+.project
