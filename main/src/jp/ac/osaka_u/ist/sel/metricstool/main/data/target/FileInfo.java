@@ -19,6 +19,18 @@ final public class FileInfo {
     }
 
     /**
+     * 引数とこのファイルが等しいかを判定する．判定には，変数nameを用いる．
+     * 
+     * @param o 比較対象ファイル
+     * @return 等しい場合は true, 等しくない場合は false
+     */
+    public boolean equals(Object o) {
+        String thisName = this.getName();
+        String correspondName = ((FileInfo) o).getName();
+        return thisName.equals(correspondName);
+    }
+
+    /**
      * 行数を返す．
      * 
      * @return 行数
