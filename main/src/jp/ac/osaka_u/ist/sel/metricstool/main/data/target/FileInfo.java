@@ -19,8 +19,9 @@ final public class FileInfo {
     }
 
     /**
+     * s”‚ğ•Ô‚·D
      * 
-     * @return
+     * @return s”
      */
     public int getLOC() {
         return loc;
