@@ -34,7 +34,8 @@ public class MetricsTool {
 
     /**
      * 
-     * @param args 対象ファイルのファイルパス
+     * @param args
+     *            対象ファイルのファイルパス
      * 
      * 現在仮実装． 対象ファイルのデータを格納した後，構文解析を行う．
      */
@@ -87,18 +88,17 @@ public class MetricsTool {
                 registerFilesFromListFile();
             }
 
-            try {
-
-                TargetFileData targetFiles = TargetFileData.getInstance();
-                for (TargetFile targetFile : targetFiles) {
+            TargetFileData targetFiles = TargetFileData.getInstance();
+            for (TargetFile targetFile : targetFiles) {
+                try {
                     String name = targetFile.getName();
                     System.out.println("processing " + name);
                     Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
                     Java15Parser parser = new Java15Parser(lexer);
                     parser.compilationUnit();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
@@ -276,8 +276,8 @@ public class MetricsTool {
 
     /**
      * 
-     * registerFilesFromDirectory(File file)を呼び出すのみ． mainメソッドで new File(Settings.getTargetDirectory)
-     * するのが気持ち悪かったため作成．
+     * registerFilesFromDirectory(File file)を呼び出すのみ． mainメソッドで new
+     * File(Settings.getTargetDirectory) するのが気持ち悪かったため作成．
      * 
      */
     private static void registerFilesFromDirectory() {
@@ -288,7 +288,8 @@ public class MetricsTool {
 
     /**
      * 
-     * @param path 対象ファイルまたはディレクトリ
+     * @param path
+     *            対象ファイルまたはディレクトリ
      * 
      * 対象がディレクトリの場合は，その子に対して再帰的に処理をする． 対象がファイルの場合は，対象言語のソースファイルであれば，登録処理を行う．
      */
