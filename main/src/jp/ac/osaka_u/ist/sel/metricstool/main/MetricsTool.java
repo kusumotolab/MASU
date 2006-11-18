@@ -47,8 +47,33 @@ public class MetricsTool {
         // ヘルプモードの場合
         if (Settings.isHelpMode()) {
 
+            printUsage();
+
             // 情報表示モードの場合
         } else if (Settings.isDisplayMode()) {
+
+            // -l で言語が指定されていない場合は，解析可能言語一覧を表示
+            if (Settings.getLanguageString().equals(Settings.INIT)) {
+
+                System.err.println("Available languages;");
+                LANGUAGE[] language = LANGUAGE.values();
+                for (int i = 0; i < language.length; i++) {
+                    System.err.println("\t" + language[0].getName()
+                            + ": can be specified with term \"" + language[0].getIdentifierName()
+                            + "\"");
+                }
+
+                // -l で言語が指定されている場合は，そのプログラミング言語で使用可能なメトリクス一覧を表示
+            } else {
+
+                try {
+                    LANGUAGE language = Settings.getLanguage();
+                    // TODO 利用可能メトリクス一覧を表示
+                } catch (UnavailableLanguageException e) {
+                    System.err.println(e.getMessage());
+                    System.exit(0);
+                }
+            }
 
             // 解析モードの場合
         } else if (!Settings.isHelpMode() && !Settings.isDisplayMode()) {
@@ -106,31 +131,6 @@ public class MetricsTool {
             System.exit(0);
         }
 
-        // -d で指定されたターゲットディレクトリのチェック
-        if (!Settings.getTargetDirectory().equals(Settings.INIT)) {
-            String directoryPath = Settings.getTargetDirectory();
-            File directory = new File(directoryPath);
-            if (!directory.isDirectory()) {
-                System.err.println("\"directoryPath\" is not a valid directory!");
-                System.exit(0);
-            }
-        }
-
-        // -m で指定されたメトリクスが算出可能なメトリクスであるかをチェック
-        if (!Settings.getMetrics().equals(Settings.INIT)) {
-            // TODO
-        }
-
-        // -C で指定されたリストファイルのチェック
-        if (!Settings.getClassMetricsFile().equals(Settings.INIT)) {
-            String filePath = Settings.getTargetDirectory();
-            File file = new File(filePath);
-            if (!file.isFile()) {
-                System.err.println("\"filePath\" is not a valid file!");
-                System.exit(0);
-            }
-        }
-
         // ヘルプモードの場合
         if (Settings.isHelpMode()) {
             // -h は他のオプションと同時指定できない
@@ -172,57 +172,47 @@ public class MetricsTool {
             }
 
             // -C は使えない
-            if (Settings.getFileMetricsFile().equals(Settings.INIT)) {
+            if (!Settings.getClassMetricsFile().equals(Settings.INIT)) {
                 System.err.println("-C can't be specified in the display mode!");
                 printUsage();
                 System.exit(0);
             }
 
             // -M は使えない
-            if (!Settings.getFileMetricsFile().equals(Settings.INIT)) {
+            if (!Settings.getMethodMetricsFile().equals(Settings.INIT)) {
                 System.err.println("-M can't be specified in the display mode!");
                 printUsage();
                 System.exit(0);
             }
+        }
 
-            // -m が指定されている場合，-l で解析可能言語が指定されていなければならない
-            if (!Settings.getMetrics().equals(Settings.INIT)) {
-                System.err
-                        .println("available language must be specified by -l when -m is specified in the display mode!");
+        // 解析モードの場合
+        if (!Settings.isHelpMode() && !Settings.isDisplayMode()) {
+
+            // -d と -i のどちらも指定されているのは不正
+            if (Settings.getTargetDirectory().equals(Settings.INIT)
+                    && Settings.getListFile().equals(Settings.INIT)) {
+                System.err.println("-d or -i must be specified in the analysis mode!");
                 printUsage();
                 System.exit(0);
             }
 
-            // 解析モードの場合
-            if (!Settings.isHelpMode() && !Settings.isDisplayMode()) {
-
-                // -d と -i のどちらも指定されているのは不正
-                if (Settings.getTargetDirectory().equals(Settings.INIT)
-                        && Settings.getListFile().equals(Settings.INIT)) {
-                    System.err.println("-d or -i must be specified in the analysis mode!");
-                    printUsage();
-                    System.exit(0);
-                }
-
-                // -d と -i の両方が指定されているのは不正
-                if (!Settings.getTargetDirectory().equals(Settings.INIT)
-                        && !Settings.getListFile().equals(Settings.INIT)) {
-                    System.err.println("-d and -i can't be specified at the same time!");
-                    printUsage();
-                    System.exit(0);
-                }
-
-                // ファイルメトリクスを算出する場合は，-F が指定されていない時は不正
-                // TODO
-
-                // クラスメトリクスを算出する場合は，-C が指定されていない時は不正
-                // TODO
-
-                // メソッドメトリクスを算出する場合は，-M が指定されていない時は不正
-                // TODO
+            // -d と -i の両方が指定されているのは不正
+            if (!Settings.getTargetDirectory().equals(Settings.INIT)
+                    && !Settings.getListFile().equals(Settings.INIT)) {
+                System.err.println("-d and -i can't be specified at the same time!");
+                printUsage();
+                System.exit(0);
             }
-        }
 
+            // ファイルメトリクスを算出する場合は，-F が指定されていない時は不正
+            // TODO
+            // クラスメトリクスを算出する場合は，-C が指定されていない時は不正
+            // TODO
+
+            // メソッドメトリクスを算出する場合は，-M が指定されていない時は不正
+            // TODO
+        }
     }
 
     /**
