@@ -9,7 +9,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * 
  * since 2006.11.12
  */
-public class TargetFile {
+public class TargetFile implements Comparable<TargetFile> {
 
     /**
      * 
@@ -19,6 +19,17 @@ public class TargetFile {
      */
     public TargetFile(final String name) {
         this.name = name;
+    }
+
+    /**
+     * このオブジェクトと対象オブジェクトの順序関係を返す．
+     * @param targetFile 比較対象オブジェクト
+     * @return 順序関係
+     */
+    public int compareTo(TargetFile targetFile) {
+        String name = this.getName();
+        String correspondName = targetFile.getName();
+        return name.compareTo(correspondName);
     }
 
     /**

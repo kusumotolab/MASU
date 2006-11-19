@@ -1,9 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 
 /**
@@ -44,9 +44,11 @@ public class TargetFileData implements Iterable<TargetFile> {
     /**
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている
+     * 以前は HashSet を用いていたが，同じディレクトリのファイルはまとめて返すほうがよいので，TreeSet に変更した．
      */
     private TargetFileData() {
-        this.targetFiles = new HashSet<TargetFile>();
+        /*this.targetFiles = new HashSet<TargetFile>();*/
+        this.targetFiles = new TreeSet<TargetFile>();
     }
 
     /**
