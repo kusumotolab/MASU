@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import antlr.RecognitionException;
+import antlr.TokenStreamException;
 import org.jargp.ArgumentProcessor;
 import org.jargp.BoolDef;
 import org.jargp.ParameterDef;
@@ -96,8 +98,14 @@ public class MetricsTool {
                     Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
                     Java15Parser parser = new Java15Parser(lexer);
                     parser.compilationUnit();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (FileNotFoundException e) {
+                    System.err.println(e.getMessage());
+                } catch (RecognitionException e) {
+                    System.err.println(e.getMessage());
+                    // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
+                } catch (TokenStreamException e) {
+                    System.err.println(e.getMessage());
+                    // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
                 }
             }
         }
