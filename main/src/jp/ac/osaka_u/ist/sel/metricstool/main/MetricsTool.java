@@ -81,33 +81,55 @@ public class MetricsTool {
             // 解析モードの場合
         } else if (!Settings.isHelpMode() && !Settings.isDisplayMode()) {
 
-            // ディレクトリから読み込み
-            if (!Settings.getTargetDirectory().equals(Settings.INIT)) {
-                registerFilesFromDirectory();
+            //解析対象ファイルを登録
+            {
+                // ディレクトリから読み込み
+                if (!Settings.getTargetDirectory().equals(Settings.INIT)) {
+                    registerFilesFromDirectory();
 
-                // リストファイルから読み込み
-            } else if (!Settings.getListFile().equals(Settings.INIT)) {
-                registerFilesFromListFile();
-            }
-
-            TargetFileData targetFiles = TargetFileData.getInstance();
-            for (TargetFile targetFile : targetFiles) {
-                try {
-                    String name = targetFile.getName();
-                    System.out.println("processing " + name);
-                    Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
-                    Java15Parser parser = new Java15Parser(lexer);
-                    parser.compilationUnit();
-                } catch (FileNotFoundException e) {
-                    System.err.println(e.getMessage());
-                } catch (RecognitionException e) {
-                    System.err.println(e.getMessage());
-                    // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
-                } catch (TokenStreamException e) {
-                    System.err.println(e.getMessage());
-                    // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
+                    // リストファイルから読み込み
+                } else if (!Settings.getListFile().equals(Settings.INIT)) {
+                    registerFilesFromListFile();
                 }
             }
+            
+
+            //対象ファイルを解析
+            {
+                for (TargetFile targetFile : TargetFileData.getInstance()) {
+                    try {
+                        String name = targetFile.getName();
+                        System.out.println("processing " + name);
+                        Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
+                        Java15Parser parser = new Java15Parser(lexer);
+                        parser.compilationUnit();
+                        targetFile.setCorrectSytax(true);
+
+                    } catch (FileNotFoundException e) {
+                        System.err.println(e.getMessage());
+                    } catch (RecognitionException e) {
+                        targetFile.setCorrectSytax(false);
+                        System.err.println(e.getMessage());
+                        // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
+                    } catch (TokenStreamException e) {
+                        targetFile.setCorrectSytax(false);
+                        System.err.println(e.getMessage());
+                        // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
+                    }
+                }
+            }
+
+            //文法誤りのあるファイル一覧を表示
+            {
+                System.err.println("The following files includes uncorrect syntax.");
+                System.err.println("Any metrics of them were not measured");
+                for ( TargetFile targetFile : TargetFileData.getInstance()) {
+                    if (!targetFile.isCorrectSyntax()) {
+                        System.err.println("\t" + targetFile.getName());
+                    }
+                }
+            }
+
         }
     }
 

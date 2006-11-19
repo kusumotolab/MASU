@@ -18,6 +18,7 @@ public class TargetFile implements Comparable<TargetFile> {
      * 対象ファイルのパスを用いて初期化
      */
     public TargetFile(final String name) {
+        this.correctSyntax = false;
         this.name = name;
     }
 
@@ -57,20 +58,41 @@ public class TargetFile implements Comparable<TargetFile> {
     }
 
     /**
-     * 
+     * 対象ファイルのハッシュコードを返す 
      * @return 対象ファイルのハッシュコード
-     * 
-     * 対象ファイルのハッシュコードを返す
      * 
      */
     public int hashCode() {
         String name = this.getName();
         return name.hashCode();
     }
+    
+    /**
+     * 対象ファイルが文法が正しいかを返す 
+     * @return 文法が正しい場合は true, 正しくない場合は false
+     */
+    public boolean isCorrectSyntax(){
+        return this.correctSyntax;
+    }
 
+    /**
+     * 対象ファイルの文法が正しいかどうかを保存する
+     * @param correctSyntax 対象ファイルの文法の正しさ．正しい場合は true，正しくない場合は false
+     */
+    public void setCorrectSytax(boolean correctSyntax){
+        this.correctSyntax = correctSyntax;
+    }
+    
+    /**
+     * 対象ファイルの構文が正しいかを保存するための変数
+     */
+    private boolean correctSyntax;
+    
     /**
      * 
      * 対象ファイルのパスを保存するための変数
      */
     private final String name;
+    
+
 }
