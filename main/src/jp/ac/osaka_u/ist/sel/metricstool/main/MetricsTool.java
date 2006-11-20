@@ -17,7 +17,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.DefaultPluginLoader;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.PluginLoadException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRICS_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
 
 import org.jargp.ArgumentProcessor;
