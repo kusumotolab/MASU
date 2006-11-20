@@ -8,19 +8,24 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import antlr.RecognitionException;
-import antlr.TokenStreamException;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileData;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.DefaultPluginLoader;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.PluginLoadException;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
+
 import org.jargp.ArgumentProcessor;
 import org.jargp.BoolDef;
 import org.jargp.ParameterDef;
 import org.jargp.StringDef;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileData;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
+import antlr.RecognitionException;
+import antlr.TokenStreamException;
 
 
 /**
@@ -71,8 +76,21 @@ public class MetricsTool {
 
                 try {
                     LANGUAGE language = Settings.getLanguage();
+                    
+                    System.err.println("Available metrics for " + language.getName());
+                    DefaultPluginLoader loader = new DefaultPluginLoader();
+                    for ( AbstractPlugin plugin : loader.loadPlugins() ) {
+                        PluginInfo pluginInfo = plugin.getPluginInfo();
+                        if (pluginInfo.isMesureable(language)) {
+                            System.err.println("\t" + pluginInfo.getMetricsName());
+                        }
+                    }
+                    
                     // TODO 利用可能メトリクス一覧を表示
                 } catch (UnavailableLanguageException e) {
+                    System.err.println(e.getMessage());
+                    System.exit(0);
+                } catch (PluginLoadException e) {
                     System.err.println(e.getMessage());
                     System.exit(0);
                 }

@@ -65,7 +65,7 @@ public class Settings {
             // return LANGUAGE.C_SHARP
         } else {
             throw new UnavailableLanguageException("\"" + language
-                    + "\"is not an available programming language!");
+                    + "\" is not an available programming language!");
         }
     }
 
