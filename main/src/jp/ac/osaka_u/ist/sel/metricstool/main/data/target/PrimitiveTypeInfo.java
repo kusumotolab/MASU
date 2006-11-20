@@ -51,6 +51,11 @@ public class PrimitiveTypeInfo implements TypeInfo {
     public static final String DOUBLE_STRING = new String("double");
 
     /**
+     * 不明な型を表す定数
+     */
+    public static final String UNKNOWN_STRING = new String("unknown");
+
+    /**
      * boolean 型を表すための定数．
      */
     public static final PrimitiveTypeInfo BOOLEAN = new PrimitiveTypeInfo(BOOLEAN_STRING);
@@ -71,7 +76,7 @@ public class PrimitiveTypeInfo implements TypeInfo {
     public static final PrimitiveTypeInfo SHORT = new PrimitiveTypeInfo(SHORT_STRING);
 
     /**
-     * long 型を表すための定数．
+     * int 型を表すための定数．
      */
     public static final PrimitiveTypeInfo INT = new PrimitiveTypeInfo(INT_STRING);
 
@@ -90,28 +95,40 @@ public class PrimitiveTypeInfo implements TypeInfo {
      */
     public static final PrimitiveTypeInfo DOUBLE = new PrimitiveTypeInfo(DOUBLE_STRING);
 
-    
-    public static PrimitiveTypeInfo getType(String typeName) throws UnknownTypeException {
+    /**
+     * 不明な型を表すための定数．
+     */
+    public static final PrimitiveTypeInfo UNKNOWN = new PrimitiveTypeInfo(UNKNOWN_STRING);
+
+    /**
+     * {@link PrimitiveTypeInfo}のファクトリメソッド．
+     * 
+     * @param typeName 作成する型の名前
+     * @return 指定された方を表す {@link PrimitiveTypeInfo} のインスタンス．
+     */
+    public static PrimitiveTypeInfo getType(String typeName) {
 
         if (typeName.equals(BOOLEAN_STRING)) {
             return BOOLEAN;
-        }else if (typeName.equals(BYTE_STRING)) {
+        } else if (typeName.equals(BYTE_STRING)) {
             return BYTE;
-        }else if (typeName.equals(CHAR_STRING)) {
+        } else if (typeName.equals(CHAR_STRING)) {
             return CHAR;
-        }else if (typeName.equals(SHORT_STRING)) {
+        } else if (typeName.equals(SHORT_STRING)) {
             return SHORT;
-        }else if (typeName.equals(INT_STRING)) {
+        } else if (typeName.equals(INT_STRING)) {
             return INT;
-        }else if (typeName.equals(LONG_STRING)) {
+        } else if (typeName.equals(LONG_STRING)) {
             return LONG;
-        }else if (typeName.equals(FLOAT_STRING)) {
+        } else if (typeName.equals(FLOAT_STRING)) {
             return FLOAT;
-        }else if (typeName.equals(DOUBLE_STRING)) {
+        } else if (typeName.equals(DOUBLE_STRING)) {
             return DOUBLE;
+        } else {
+            assert (false) : "Illegal state: primitive type " + typeName + " is unknown.";
         }
-        
-        throw new UnknownTypeException();
+
+        return UNKNOWN;
     }
 
     /**
