@@ -1,6 +1,14 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader;
 
 
+/**
+ * プラグイン定義XMLファイルを解析し，プラグイン定義XMLファイルを解析し，
+ * その中で記述されているプラグイン情報を取得するメソッド群を提供する．
+ * <p>
+ * プラグイン定義XMLファイルの記述形式が変更された場合はこのインタフェースにアクセサメソッドを追加する必要がある．
+ * @author kou-tngt
+ *
+ */
 public interface PluginXmlInterpreter {
     /**
      * 解析対象のxmlファイル中に記述されている，プラグインクラス名を返すメソッド

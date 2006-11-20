@@ -1,11 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader;
 
+
 /**
- * @author kou-tngt
- * 
  * 
  * この例外は，プラグインをロードするためのクラスローダが生成できない場合や，
  * プラグインクラスのロードに失敗した場合に投げられる．
+ * 
+ * @author kou-tngt
  */
 public class PluginClassLoadException extends PluginLoadException {
 

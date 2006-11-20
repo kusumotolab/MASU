@@ -8,11 +8,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 
 
 /**
- * @author kou-tngt
+ * 
  * 
  * このインタフェースはプラグインをロードするためのメソッド群を提供する．
  * loadPlugin，またはloadPluginsメソッド群を用いて，任意のディレクトリ以下のプラグインをロードすることができる．
  * 単にデフォルトのpluginsディレクトリから全てのプラグインをロードする場合はloadPlugins()メソッドを使う．
+ * 
+ * @author kou-tngt
  *
  */
 public interface PluginLoader {
@@ -38,6 +40,8 @@ public interface PluginLoader {
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合．
      * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合．
+     * @throws NullPointerException pluginsDirがnullの場合
+     * @throws IllegalArgumentException pluginsDirが存在しない場合，ディレクトリではない場合
      */
     public AbstractPlugin loadPlugin(File pluginsDir, String pluginDirName)
             throws PluginLoadException, IllegalPluginXmlFormatException,
@@ -51,6 +55,8 @@ public interface PluginLoader {
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合．
      * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合．
+     * @throws NullPointerException pluginRootDirがnullの場合
+     * @throws IllegalArgumentException pluginRootDirが存在しない場合，ディレクトリではない場合
      */
     public AbstractPlugin loadPlugin(File pluginRootDir) throws PluginLoadException,
             IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
@@ -69,6 +75,8 @@ public interface PluginLoader {
      * 個別のプラグインのロード失敗によって発生した例外は返さない．
      * @param pluginsDir プラグインが配置されているディレクトリ
      * @return　ロードできた各プラグインのプラグインクラスを格納するリスト
+     * @throws NullPointerException pluginsDirがnullの場合
+     * @throws IllegalArgumentException pluginsDirが存在しない場合，ディレクトリではない場合
      */
     public List<AbstractPlugin> loadPlugins(File pluginsDir);
 }

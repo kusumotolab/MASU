@@ -19,13 +19,13 @@ import org.xml.sax.SAXException;
 
 
 /**
- * @author kou-tngt
- * 
  * PluginXmlInterpreterクラスは，コンストラクタで引数として与えられたプラグイン定義XMLファイルを解析し，
  * その中で記述されているプラグイン情報を取得するpublicメソッド群を提供する．
  * <p>
  * プラグイン定義XMLファイルの記述形式が変更された場合は，このクラスを修正するか，
  * あるいはこのクラスのサブクラスを新たに作成して新形式に対応しなければならない．
+ * 
+ * @author kou-tngt
  */
 public class DefaultPluginXmlInterpreter {
 
@@ -40,7 +40,8 @@ public class DefaultPluginXmlInterpreter {
      * @throws IlleagalArgumentException　pluginXmlが存在しない場合，ファイルではない場合，または拡張子がxmlではない場合
      * 
      */
-    public DefaultPluginXmlInterpreter(final File pluginXml) throws PluginLoadException, FileNotFoundException,IOException, IllegalPluginXmlFormatException {
+    public DefaultPluginXmlInterpreter(final File pluginXml) throws PluginLoadException,
+            FileNotFoundException, IOException, IllegalPluginXmlFormatException {
         if (null == pluginXml) {
             throw new NullPointerException();
         }
@@ -68,13 +69,14 @@ public class DefaultPluginXmlInterpreter {
                     + ".", e);
         } catch (final SAXException e) {
             //XML構文が間違っていてDocumentが作れなかった場合）
-            throw new IllegalPluginXmlFormatException("Syntax error : " + pluginXml.getAbsolutePath(), e);
+            throw new IllegalPluginXmlFormatException("Syntax error : "
+                    + pluginXml.getAbsolutePath(), e);
         }
 
         if (!this.document.getDocumentElement().getNodeName().equals(PLUGIN_TAG)) {
             //XMLファイルの中身が<plugin>から始まっていない＝形式がおかしい）
-            throw new IllegalPluginXmlFormatException("Syntax error : The root tag must be <" + PLUGIN_TAG
-                    + ">. at " + pluginXml.getAbsolutePath());
+            throw new IllegalPluginXmlFormatException("Syntax error : The root tag must be <"
+                    + PLUGIN_TAG + ">. at " + pluginXml.getAbsolutePath());
         }
 
         //XMLを解析して情報を取得
@@ -166,7 +168,8 @@ public class DefaultPluginXmlInterpreter {
 
                     if (classPathTagName.equals(FILE_TAG)) {
                         //<file>タグだった
-                        final String classPathToFile = this.getNodeAttribute(classPathNode, PATH_ATTRIBUTE);
+                        final String classPathToFile = this.getNodeAttribute(classPathNode,
+                                PATH_ATTRIBUTE);
                         if (null != classPathToFile && 0 != classPathToFile.length()) {
                             //登録
                             classPathToFileSet.add(classPathToFile);
@@ -179,7 +182,7 @@ public class DefaultPluginXmlInterpreter {
                             //登録
                             classPathToDirectorySet.add(classPathToDirectory);
                         }
-                    } else if (classPathTagName.equals(TEXT_TAG)){
+                    } else if (classPathTagName.equals(TEXT_TAG)) {
                         //何もしない
                     } else {
                         //<file>でも<dir>でもないタグが<classpath>直下にあった
@@ -284,7 +287,7 @@ public class DefaultPluginXmlInterpreter {
      * プラグイン設定情報XMLファイルの，ファイルに対するクラスパス指定のタグ名fileを表す文字列定数
      */
     private static final String FILE_TAG = "file";
-    
+
     /**
      * XMLファイルの，テキスト情報を表すタグ
      */

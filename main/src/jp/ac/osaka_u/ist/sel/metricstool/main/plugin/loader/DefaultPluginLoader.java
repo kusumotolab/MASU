@@ -21,8 +21,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 
 
 /**
- * @author kou-tngt
- * 
  * PluginLoaderインタフェースを実装したのデフォルトのプラグインローダ．
  * <p>
  * このクラスのインスタンスを作成した後，loadPlugin，またはloadPluginsメソッド群を用いて，
@@ -43,6 +41,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
  * </code>
  * とすると，XMLで指定しなくても各プラグイン直下のjarファイルとlibディレクトリ以下のjarファイルにクラスパスを
  * 通すことができる． 
+ * 
+ * @author kou-tngt
  */
 public class DefaultPluginLoader implements PluginLoader {
 
@@ -127,6 +127,8 @@ public class DefaultPluginLoader implements PluginLoader {
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合に投げられる．
      * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合に投げられる．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合に投げられる．
+     * @throws NullPointerException pluginsDirがnullの場合
+     * @throws IllegalArgumentException pluginsDirが存在しない場合，ディレクトリではない場合
      */
     public AbstractPlugin loadPlugin(final File pluginsDir, final String pluginDirName)
             throws PluginLoadException, IllegalPluginXmlFormatException,
@@ -154,6 +156,8 @@ public class DefaultPluginLoader implements PluginLoader {
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合に投げられる．
      * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合に投げられる．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合に投げられる．
+     * @throws NullPointerException pluginRootDirがnullの場合
+     * @throws IllegalArgumentException pluginRootDirが存在しない場合，ディレクトリではない場合
      */
     public AbstractPlugin loadPlugin(final File pluginRootDir) throws PluginLoadException,
             IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
@@ -185,10 +189,9 @@ public class DefaultPluginLoader implements PluginLoader {
 
         String pluginClassName = null;
         String[] classpathStrings = null;
-        DefaultPluginXmlInterpreter interpreter;
         try {
             //xmlを解析
-            interpreter = new DefaultPluginXmlInterpreter(pluginXml);
+            final DefaultPluginXmlInterpreter interpreter = new DefaultPluginXmlInterpreter(pluginXml);
             //プラグインクラス名とクラスパス群を取得
             pluginClassName = interpreter.getPluginClassName();
             classpathStrings = interpreter.getClassPathAttributeNames();
@@ -215,7 +218,8 @@ public class DefaultPluginLoader implements PluginLoader {
             try {
                 libraryClassPathSet.add(defaultLibrary.toURL());
             } catch (final MalformedURLException e) {
-                //自動的にロードするライブラリとして，ディレクトリを探して見つけたファイルのURLが作れなかった．多分このケースは有り得ないし，万が一起こっても無視する．
+                //自動的にロードするライブラリとして，ディレクトリを探して見つけたファイルのURLが作れなかった．
+                //多分このケースは有り得ないし，万が一起こっても無視する．
             }
         }
 
@@ -271,6 +275,8 @@ public class DefaultPluginLoader implements PluginLoader {
      * 個別のプラグインのロード失敗によって発生した例外は返さない．
      * @param pluginsDir プラグインが配置されているディレクトリ
      * @return　ロードできた各プラグインのプラグインクラスを格納するリスト
+     * @throws NullPointerException pluginsDirがnullの場合
+     * @throws IllegalArgumentException pluginsDirが存在しない場合，ディレクトリではない場合
      */
     public List<AbstractPlugin> loadPlugins(final File pluginsDir) {
         if (null == pluginsDir) {
@@ -285,7 +291,7 @@ public class DefaultPluginLoader implements PluginLoader {
             throw new IllegalArgumentException(pluginsDir.getAbsolutePath() + " is not directory.");
         }
 
-        final List<AbstractPlugin> result = new ArrayList<AbstractPlugin>(20);
+        final List<AbstractPlugin> result = new ArrayList<AbstractPlugin>(100);
         final File[] pluginDirs = pluginsDir.listFiles();
 
         for (final File pluginDir : pluginDirs) {
@@ -351,7 +357,7 @@ public class DefaultPluginLoader implements PluginLoader {
 
     /**
      * デフォルトライブラリファイルかどうかを判定するメソッド．
-     * このメソッドをオーバーライドすることによって，どのファイルをライブラリ見なすの判断を
+     * このメソッドをオーバーライドすることによって，どのファイルをライブラリと見なすかの判断を
      * 自由に拡張できる．
      * @param file 判定対象ファイル
      * @return ライブラリと見なす場合はtrue
@@ -426,7 +432,8 @@ public class DefaultPluginLoader implements PluginLoader {
         }
 
         if (null != result) {
-            assert (result.isDirectory()) : result + " is not plugins directory";
+            assert (result.exists()) : result + " is not found.";
+            assert (result.isDirectory()) : result + " is not plugins directory.";
 
             this.pluginsDirectory = result;
             return result;
