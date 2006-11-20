@@ -17,6 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.DefaultPluginLoader;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.PluginLoadException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRICS_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
 
 import org.jargp.ArgumentProcessor;
@@ -41,8 +42,7 @@ public class MetricsTool {
 
     /**
      * 
-     * @param args
-     *            対象ファイルのファイルパス
+     * @param args 対象ファイルのファイルパス
      * 
      * 現在仮実装． 対象ファイルのデータを格納した後，構文解析を行う．
      */
@@ -76,16 +76,16 @@ public class MetricsTool {
 
                 try {
                     LANGUAGE language = Settings.getLanguage();
-                    
+
                     System.err.println("Available metrics for " + language.getName());
                     DefaultPluginLoader loader = new DefaultPluginLoader();
-                    for ( AbstractPlugin plugin : loader.loadPlugins() ) {
+                    for (AbstractPlugin plugin : loader.loadPlugins()) {
                         PluginInfo pluginInfo = plugin.getPluginInfo();
                         if (pluginInfo.isMeasurable(language)) {
                             System.err.println("\t" + pluginInfo.getMetricsName());
                         }
                     }
-                    
+
                     // TODO 利用可能メトリクス一覧を表示
                 } catch (UnavailableLanguageException e) {
                     System.err.println(e.getMessage());
@@ -99,7 +99,7 @@ public class MetricsTool {
             // 解析モードの場合
         } else if (!Settings.isHelpMode() && !Settings.isDisplayMode()) {
 
-            //解析対象ファイルを登録
+            // 解析対象ファイルを登録
             {
                 // ディレクトリから読み込み
                 if (!Settings.getTargetDirectory().equals(Settings.INIT)) {
@@ -110,9 +110,8 @@ public class MetricsTool {
                     registerFilesFromListFile();
                 }
             }
-            
 
-            //対象ファイルを解析
+            // 対象ファイルを解析
             {
                 for (TargetFile targetFile : TargetFileData.getInstance()) {
                     try {
@@ -137,11 +136,11 @@ public class MetricsTool {
                 }
             }
 
-            //文法誤りのあるファイル一覧を表示
+            // 文法誤りのあるファイル一覧を表示
             {
                 System.err.println("The following files includes uncorrect syntax.");
                 System.err.println("Any metrics of them were not measured");
-                for ( TargetFile targetFile : TargetFileData.getInstance()) {
+                for (TargetFile targetFile : TargetFileData.getInstance()) {
                     if (!targetFile.isCorrectSyntax()) {
                         System.err.println("\t" + targetFile.getName());
                     }
@@ -253,13 +252,48 @@ public class MetricsTool {
                 System.exit(0);
             }
 
-            // ファイルメトリクスを算出する場合は，-F が指定されていない時は不正
-            // TODO
-            // クラスメトリクスを算出する場合は，-C が指定されていない時は不正
-            // TODO
+            try {
+                boolean measureFileMetrics = false;
+                boolean measureClassMetrics = false;
+                boolean measureMethodMetrics = false;
 
-            // メソッドメトリクスを算出する場合は，-M が指定されていない時は不正
-            // TODO
+                DefaultPluginLoader loader = new DefaultPluginLoader();
+                for (AbstractPlugin plugin : loader.loadPlugins()) {
+                    PluginInfo pluginInfo = plugin.getPluginInfo();
+                    switch (pluginInfo.getMetricsType()) {
+                    case FILE_METRICS:
+                        measureFileMetrics = true;
+                        break;
+                    case CLASS_METRICS:
+                        measureClassMetrics = true;
+                        break;
+                    case METHOD_METRICS:
+                        measureMethodMetrics = true;
+                        break;
+                    }
+                }
+                
+                //ファイルメトリクスを計測する場合は -F オプションが指定されていなければならない
+                if (measureFileMetrics && (Settings.getFileMetricsFile().equals(Settings.INIT))){
+                    System.err.println("-F must be used for specifying a file for file metrics!");
+                    System.exit(0);
+                }
+                
+                //クラスメトリクスを計測する場合は -C オプションが指定されていなければならない
+                if (measureClassMetrics && (Settings.getClassMetricsFile().equals(Settings.INIT))){
+                    System.err.println("-C must be used for specifying a file for class metrics!");
+                    System.exit(0);
+                }
+                //メソッドメトリクスを計測する場合は -M オプションが指定されていなければならない                
+                if (measureMethodMetrics && (Settings.getMethodMetricsFile().equals(Settings.INIT))){
+                    System.err.println("-M must be used for specifying a file for method metrics!");
+                    System.exit(0);
+                }
+                
+            } catch (PluginLoadException e) {
+                System.err.println(e.getMessage());
+                System.exit(0);
+            }
         }
     }
 
@@ -324,8 +358,8 @@ public class MetricsTool {
 
     /**
      * 
-     * registerFilesFromDirectory(File file)を呼び出すのみ． mainメソッドで new
-     * File(Settings.getTargetDirectory) するのが気持ち悪かったため作成．
+     * registerFilesFromDirectory(File file)を呼び出すのみ． mainメソッドで new File(Settings.getTargetDirectory)
+     * するのが気持ち悪かったため作成．
      * 
      */
     private static void registerFilesFromDirectory() {
@@ -336,8 +370,7 @@ public class MetricsTool {
 
     /**
      * 
-     * @param path
-     *            対象ファイルまたはディレクトリ
+     * @param path 対象ファイルまたはディレクトリ
      * 
      * 対象がディレクトリの場合は，その子に対して再帰的に処理をする． 対象がファイルの場合は，対象言語のソースファイルであれば，登録処理を行う．
      */
