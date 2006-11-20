@@ -35,9 +35,9 @@ public abstract class AbstractPlugin {
          * デフォルトのコンストラクタ
          */
         private PluginInfo() {
-            final LANGUAGE[] languages = AbstractPlugin.this.getMesuarableLanguages();
-            this.mesureableLanguages = new LANGUAGE[languages.length];
-            System.arraycopy(languages, 0, this.mesureableLanguages, 0, languages.length);
+            final LANGUAGE[] languages = AbstractPlugin.this.getMeasurableLanguages();
+            this.measurableLanguages = new LANGUAGE[languages.length];
+            System.arraycopy(languages, 0, this.measurableLanguages, 0, languages.length);
             this.metricsName = AbstractPlugin.this.getMetricsName();
             this.metricsType = AbstractPlugin.this.getMetricsType();
             this.useClassInfo = AbstractPlugin.this.useClassInfo();
@@ -51,8 +51,8 @@ public abstract class AbstractPlugin {
          * 
          * @return 計測可能な言語を全て含む配列．
          */
-        public LANGUAGE[] getMesureableLanguages() {
-            return mesureableLanguages;
+        public LANGUAGE[] getMeasurableLanguages() {
+            return measurableLanguages;
         }
 
         /**
@@ -61,10 +61,10 @@ public abstract class AbstractPlugin {
          * @param language 利用可能であるかを調べたい言語
          * @return 利用可能である場合は true，利用できない場合は false．
          */
-        public boolean isMesureable(LANGUAGE language) {
-            LANGUAGE[] mesureableLanguages = this.getMesureableLanguages();
-            for (int i = 0; i < mesureableLanguages.length; i++) {
-                if (language.equals(mesureableLanguages[i])) {
+        public boolean isMeasurable(LANGUAGE language) {
+            LANGUAGE[] measurableLanguages = this.getMeasurableLanguages();
+            for (int i = 0; i < measurableLanguages.length; i++) {
+                if (language.equals(measurableLanguages[i])) {
                     return true;
                 }
             }
@@ -126,7 +126,7 @@ public abstract class AbstractPlugin {
             return useMethodLocalInfo;
         }
 
-        private final LANGUAGE[] mesureableLanguages;
+        private final LANGUAGE[] measurableLanguages;
 
         private final String metricsName;
 
@@ -164,7 +164,7 @@ public abstract class AbstractPlugin {
      * @return 計測可能な言語を全て含む配列
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE
      */
-    protected LANGUAGE[] getMesuarableLanguages() {
+    protected LANGUAGE[] getMeasurableLanguages() {
         return LANGUAGE.values();
     }
 

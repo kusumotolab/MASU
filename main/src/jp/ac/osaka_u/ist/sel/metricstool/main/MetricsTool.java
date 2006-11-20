@@ -81,7 +81,7 @@ public class MetricsTool {
                     DefaultPluginLoader loader = new DefaultPluginLoader();
                     for ( AbstractPlugin plugin : loader.loadPlugins() ) {
                         PluginInfo pluginInfo = plugin.getPluginInfo();
-                        if (pluginInfo.isMesureable(language)) {
+                        if (pluginInfo.isMeasurable(language)) {
                             System.err.println("\t" + pluginInfo.getMetricsName());
                         }
                     }
