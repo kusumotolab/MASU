@@ -16,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.DefaultPluginLoader;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.PluginLoadException;
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
 
@@ -46,6 +47,7 @@ public class MetricsTool {
      * 現在仮実装． 対象ファイルのデータを格納した後，構文解析を行う．
      */
     public static void main(String[] args) {
+        System.setSecurityManager(MetricsToolSecurityManager.getInstance());
 
         Settings settings = new Settings();
         ArgumentProcessor.processArgs(args, parameterDefs, settings);

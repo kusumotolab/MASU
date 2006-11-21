@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
 /**
@@ -35,10 +36,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
  * 各プラグインのルートディレクトリ以外のディレクトリをライブラリファイルの置き場とみなして，指定した拡張子を持つファイル群に
  * パスを通すことができる．
  * 例えば，
- * <code>
+ * <pre>
  *    addLibraryExtensions("jar");
  *    addLibraryDirectoryName("lib");
- * </code>
+ * </pre>
  * とすると，XMLで指定しなくても各プラグイン直下のjarファイルとlibディレクトリ以下のjarファイルにクラスパスを
  * 通すことができる． 
  * 
@@ -58,7 +59,10 @@ public class DefaultPluginLoader implements PluginLoader {
      * ライブラリファイルの拡張子を追加するメソッド．
      * @param extension 追加するライブラリファイルの拡張子名．
      */
-    public void addLibraryExtension(final String extension) {
+    public void addLibraryExtension(String extension) {
+        if (!extension.startsWith(".")){
+            extension = "." + extension;
+        }
         this.libraryExtensions.add(extension);
     }
 
@@ -162,6 +166,10 @@ public class DefaultPluginLoader implements PluginLoader {
     public AbstractPlugin loadPlugin(final File pluginRootDir) throws PluginLoadException,
             IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
             PluginClassLoadException {
+        
+        //アクセス権限をチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        
         if (null == pluginRootDir) {
             throw new NullPointerException();
         }
