@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author y-higo
  * 
  */
-public class FieldInfo implements Comparable<FieldInfo> {
+public final class FieldInfo extends VariableInfo {
 
     /**
      * フィールドオブジェクトを初期化する． フィールド名と型が与えられなければならない．
@@ -16,8 +16,8 @@ public class FieldInfo implements Comparable<FieldInfo> {
      * @param type フィールドの型
      */
     public FieldInfo(String name, TypeInfo type, ClassInfo ownerClass) {
-        this.name = name;
-        this.type = type;
+
+        super(name, type);
         this.ownerClass = ownerClass;
     }
 
@@ -33,28 +33,8 @@ public class FieldInfo implements Comparable<FieldInfo> {
         if (classOrder != 0) {
             return classOrder;
         } else {
-            String fieldName = this.getName();
-            String correspondFieldName = this.getName();
-            return fieldName.compareTo(correspondFieldName);
+            return super.compareTo(fieldInfo);
         }
-    }
-
-    /**
-     * フィールド名を返す
-     * 
-     * @return フィールド名
-     */
-    public String getName() {
-        return this.name;
-    }
-
-    /**
-     * フィールドの型を返す
-     * 
-     * @return フィールドの型
-     */
-    public TypeInfo getType() {
-        return this.type;
     }
 
     /**
@@ -65,16 +45,6 @@ public class FieldInfo implements Comparable<FieldInfo> {
     public ClassInfo getOwnerClass() {
         return this.ownerClass;
     }
-
-    /**
-     * フィールド名を表す変数
-     */
-    private final String name;
-
-    /**
-     * フィールドの型を表す変数
-     */
-    private final TypeInfo type;
 
     /**
      * このフィールドを定義しているクラスを保存する変数
