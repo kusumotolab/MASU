@@ -191,7 +191,7 @@ public class DefaultPluginLoader implements PluginLoader {
         String[] classpathStrings = null;
         try {
             //xmlを解析
-            final DefaultPluginXmlInterpreter interpreter = new DefaultPluginXmlInterpreter(pluginXml);
+            final PluginXmlInterpreter interpreter = new DefaultPluginXmlInterpreter(pluginXml);
             //プラグインクラス名とクラスパス群を取得
             pluginClassName = interpreter.getPluginClassName();
             classpathStrings = interpreter.getClassPathAttributeNames();

@@ -27,7 +27,7 @@ import org.xml.sax.SAXException;
  * 
  * @author kou-tngt
  */
-public class DefaultPluginXmlInterpreter {
+public class DefaultPluginXmlInterpreter implements PluginXmlInterpreter{
 
     /**
      * PluginXmlInterpreterクラスの唯一のコンストラクタ．
