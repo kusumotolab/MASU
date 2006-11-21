@@ -9,7 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileData;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
@@ -112,7 +112,7 @@ public class MetricsTool {
 
             // ëŒè€ÉtÉ@ÉCÉãÇâêÕ
             {
-                for (TargetFile targetFile : TargetFileData.getInstance()) {
+                for (TargetFile targetFile : TargetFileManager.getInstance()) {
                     try {
                         String name = targetFile.getName();
                         System.out.println("processing " + name);
@@ -139,7 +139,7 @@ public class MetricsTool {
             {
                 System.err.println("The following files includes uncorrect syntax.");
                 System.err.println("Any metrics of them were not measured");
-                for (TargetFile targetFile : TargetFileData.getInstance()) {
+                for (TargetFile targetFile : TargetFileManager.getInstance()) {
                     if (!targetFile.isCorrectSyntax()) {
                         System.err.println("\t" + targetFile.getName());
                     }
@@ -338,7 +338,7 @@ public class MetricsTool {
 
         try {
 
-            TargetFileData targetFiles = TargetFileData.getInstance();
+            TargetFileManager targetFiles = TargetFileManager.getInstance();
             for (BufferedReader reader = new BufferedReader(new FileReader(Settings.getListFile())); reader
                     .ready();) {
                 String line = reader.readLine();
@@ -390,7 +390,7 @@ public class MetricsTool {
                 String extension = language.getExtension();
                 String path = file.getAbsolutePath();
                 if (path.endsWith(extension)) {
-                    TargetFileData targetFiles = TargetFileData.getInstance();
+                    TargetFileManager targetFiles = TargetFileManager.getInstance();
                     TargetFile targetFile = new TargetFile(path);
                     targetFiles.add(targetFile);
                 }

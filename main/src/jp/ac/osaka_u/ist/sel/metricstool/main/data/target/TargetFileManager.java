@@ -14,7 +14,7 @@ import java.util.TreeSet;
  * 
  * since 2006.11.12
  */
-public class TargetFileData implements Iterable<TargetFile> {
+public class TargetFileManager implements Iterable<TargetFile> {
 
     /**
      * 
@@ -22,9 +22,9 @@ public class TargetFileData implements Iterable<TargetFile> {
      * 
      * シングルトンパターンを用いて実装している．
      */
-    public static TargetFileData getInstance() {
+    public static TargetFileManager getInstance() {
         if (TARGET_FILE_DATA == null) {
-            TARGET_FILE_DATA = new TargetFileData();
+            TARGET_FILE_DATA = new TargetFileManager();
         }
         return TARGET_FILE_DATA;
     }
@@ -46,7 +46,7 @@ public class TargetFileData implements Iterable<TargetFile> {
      * コンストラクタ． シングルトンパターンで実装しているために private がついている
      * 以前は HashSet を用いていたが，同じディレクトリのファイルはまとめて返すほうがよいので，TreeSet に変更した．
      */
-    private TargetFileData() {
+    private TargetFileManager() {
         /*this.targetFiles = new HashSet<TargetFile>();*/
         this.targetFiles = new TreeSet<TargetFile>();
     }
@@ -55,7 +55,7 @@ public class TargetFileData implements Iterable<TargetFile> {
      * 
      * シングルトンパターンを実装するための変数．
      */
-    private static TargetFileData TARGET_FILE_DATA = null;
+    private static TargetFileManager TARGET_FILE_DATA = null;
 
     /**
      * 
