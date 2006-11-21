@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -113,7 +114,8 @@ public class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @return スーパークラスの Iterator
      */
     public Iterator<ClassInfo> superClassIterator() {
-        return this.superClasses.iterator();
+        Set<ClassInfo> unmodifiableSuperClasses = Collections.unmodifiableSet(this.superClasses);
+        return unmodifiableSuperClasses.iterator();
     }
 
     /**
@@ -122,7 +124,8 @@ public class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @return サブクラスの Iterator
      */
     public Iterator<ClassInfo> subClassIterator() {
-        return this.subClasses.iterator();
+        Set<ClassInfo> unmodifiablesubClasses = Collections.unmodifiableSet(this.subClasses);
+        return unmodifiablesubClasses.iterator();
     }
 
     /**
@@ -131,7 +134,8 @@ public class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @return インナークラスの Iterator
      */
     public Iterator<ClassInfo> innerClassIterator() {
-        return this.innerClasses.iterator();
+        Set<ClassInfo> unmodifiableInnerClasses = Collections.unmodifiableSet(this.innerClasses);        
+        return unmodifiableInnerClasses.iterator();
     }
 
     /**
@@ -140,7 +144,8 @@ public class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @return 定義されているメソッドの Iterator
      */
     public Iterator<MethodInfo> definedMethodIterator() {
-        return this.definedMethods.iterator();
+        Set<MethodInfo> unmodifiableDefinedMethods = Collections.unmodifiableSet(this.definedMethods);        
+        return unmodifiableDefinedMethods.iterator();
     }
 
     /**
@@ -149,7 +154,8 @@ public class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @return 定義されているフィールドの Iterator
      */
     public Iterator<FieldInfo> definedFieldIterator() {
-        return this.definedFields.iterator();
+        Set<FieldInfo> unmodifiableDefinedFields = Collections.unmodifiableSet(this.definedFields);        
+        return unmodifiableDefinedFields.iterator();
     }
 
     /**

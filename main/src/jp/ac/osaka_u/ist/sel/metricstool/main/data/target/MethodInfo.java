@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -159,7 +160,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @return このメソッドの引数の Iterator
      */
     public Iterator<ParameterInfo> parameterIterator() {
-        return this.parameters.iterator();
+        List<ParameterInfo> unmodifiableParameters = Collections.unmodifiableList(this.parameters);
+        return unmodifiableParameters.iterator();
     }
 
     /**
@@ -186,7 +188,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @return このメソッドが呼び出しているメソッドの Iterator
      */
     public Iterator<MethodInfo> calleeIterator() {
-        return this.callees.iterator();
+        Set<MethodInfo> unmodifiableCallees = Collections.unmodifiableSet(this.callees);
+        return unmodifiableCallees.iterator();
     }
 
     /**
@@ -195,7 +198,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @return このメソッドを呼び出しているメソッドの Iterator
      */
     public Iterator<MethodInfo> callerIterator() {
-        return this.callers.iterator();
+        Set<MethodInfo> unmodifiableCallers = Collections.unmodifiableSet(this.callers);
+        return unmodifiableCallers.iterator();
     }
 
     /**
@@ -204,7 +208,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @return このメソッドがオーバーライドしているメソッドの Iterator
      */
     public Iterator<MethodInfo> overrideeIterator() {
-        return this.overridees.iterator();
+        Set<MethodInfo> unmodifiableOverridees = Collections.unmodifiableSet(this.overridees);
+        return unmodifiableOverridees.iterator();
     }
 
     /**
@@ -213,7 +218,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @return このメソッドをオーバーライドしているメソッドの Iterator
      */
     public Iterator<MethodInfo> overriderIterator() {
-        return this.overriders.iterator();
+        Set<MethodInfo> unmodifiableOverriders = Collections.unmodifiableSet(this.overriders);
+        return unmodifiableOverriders.iterator();
     }
 
     /**
@@ -222,7 +228,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @return このメソッドが参照しているフィールドの Iterator
      */
     public Iterator<FieldInfo> referenceIterator() {
-        return this.referencees.iterator();
+        Set<FieldInfo> unmodifiableReferencees = Collections.unmodifiableSet(this.referencees);
+        return unmodifiableReferencees.iterator();
     }
 
     /**
@@ -231,7 +238,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @return このメソッドが代入しているフィールドの Iterator
      */
     public Iterator<FieldInfo> assignmenteeIterator() {
-        return this.assignmentees.iterator();
+        Set<FieldInfo> unmodifiableAssignmentees = Collections.unmodifiableSet(this.assignmentees);
+        return unmodifiableAssignmentees.iterator();
     }
 
     /**
@@ -253,16 +261,11 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      */
     private final List<ParameterInfo> parameters;
 
-    // TODO シグネチャを保存するための変数を定義する
     /**
      * 行数を保存するための変数
      */
     private int loc;
 
-    /**
-     * ローカル変数を保存するための変数
-     */
-    // TODO ローカル変数を保存するための変数を定義する
     /**
      * 所属しているクラスを保存するための変数
      */
