@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -38,7 +39,8 @@ public class TargetFileManager implements Iterable<TargetFile> {
     }
 
     public Iterator<TargetFile> iterator() {
-        return this.targetFiles.iterator();
+        Set<TargetFile> unmodifiableTargetFiles = Collections.unmodifiableSet(this.targetFiles);
+        return unmodifiableTargetFiles.iterator();
     }
 
     /**
