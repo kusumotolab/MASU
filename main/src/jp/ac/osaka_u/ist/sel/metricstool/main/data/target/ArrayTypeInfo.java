@@ -1,6 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 /**
  * 配列型を表すためのクラス．
  * 
@@ -43,12 +47,31 @@ public class ArrayTypeInfo implements TypeInfo {
     }
 
     /**
+     * ArrayTypeInfo のインスタンスを返すためのファクトリメソッド．
+     * 
+     * @param type 型を表す変数
+     * @param dimension 次元を表す変数
+     * @return 生成した ArrayTypeInfo オブジェクト
+     */
+    public static ArrayTypeInfo getType(TypeInfo type, int dimension) {
+
+        Key key = new Key(type, dimension);
+        ArrayTypeInfo arrayType = ARRAY_TYPE_MAP.get(key);
+        if (arrayType == null) {
+            arrayType = new ArrayTypeInfo(type, dimension);
+            ARRAY_TYPE_MAP.put(key, arrayType);
+        }
+
+        return arrayType;
+    }
+
+    /**
      * オブジェクトの初期化を行う．配列の要素の型と配列の次元が与えられなければならない
      * 
      * @param type 配列の要素の型
      * @param dimension 配列の事件
      */
-    public ArrayTypeInfo(TypeInfo type, int dimension) {
+    private ArrayTypeInfo(TypeInfo type, int dimension) {
         this.type = type;
         this.dimension = dimension;
     }
@@ -63,4 +86,81 @@ public class ArrayTypeInfo implements TypeInfo {
      */
     private final int dimension;
 
+    /**
+     * ArrayTypeInfo オブジェクトを一元管理するための Map．オブジェクトはファクトリメソッドで生成される．
+     */
+    private static final Map<Key, ArrayTypeInfo> ARRAY_TYPE_MAP = new HashMap<Key, ArrayTypeInfo>();
+
+    /**
+     * 変数の型と次元を用いてキーとなるクラス．
+     * 
+     * @author y-higo
+     */
+    static class Key {
+
+        /**
+         * 第一キー
+         */
+        private final TypeInfo type;
+
+        /**
+         * 第二キー
+         */
+        private final int dimension;
+
+        /**
+         * 第一，第二キーから，キーオブジェクトを生成する
+         * 
+         * @param type 第一キー
+         * @param dimension 第二キー
+         */
+        Key(TypeInfo type, int dimension) {
+            this.type = type;
+            this.dimension = dimension;
+        }
+
+        /**
+         * このオブジェクトのハッシュコードを返す．
+         */
+        public int hashCode() {
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(this.type.getName());
+            buffer.append(this.dimension);
+            String hashString = buffer.toString();
+            return hashString.hashCode();
+        }
+
+        /**
+         * このキーオブジェクトの第一キーを返す．
+         * 
+         * @return 第一キー
+         */
+        public String getFirstKey() {
+            return this.type.getName();
+        }
+
+        /**
+         * このキーオブジェクトの第二キーを返す．
+         * 
+         * @return 第二キー
+         */
+        public int getSecondKey() {
+            return this.dimension;
+        }
+
+        /**
+         * このオブジェクトと引数で指定されたオブジェクトが等しいかを返す．
+         */
+        public boolean equals(Object o) {
+            String firstKey = this.getFirstKey();
+            String correspondFirstKey = ((Key) o).getFirstKey();
+            if (firstKey.equals(correspondFirstKey)) {
+                return true;
+            } else {
+                int secondKey = this.getSecondKey();
+                int correspondSecondKey = ((Key) o).getSecondKey();
+                return secondKey == correspondSecondKey;
+            }
+        }
+    }
 }
