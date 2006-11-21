@@ -10,7 +10,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 public interface TypeInfo {
 
     /**
-     * * ‚±‚ÌŒ^–¼‚ð•Ô‚·
+     * ‚±‚ÌŒ^–¼‚ð•Ô‚·
      * 
      * @return Œ^–¼
      */
