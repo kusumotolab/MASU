@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * メソッド情報を管理するクラス． methodInfo を要素として持つ．
@@ -32,6 +34,7 @@ public class MethodInfoManager implements Iterable<MethodInfo> {
      * @param methodInfo 追加するメソッド情報
      */
     public void add(final MethodInfo methodInfo) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
         this.methodInfos.add(methodInfo);
     }
 

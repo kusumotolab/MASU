@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * メソッドの情報を保有するクラス． 以下の情報を持つ．
@@ -60,15 +62,77 @@ public final class MethodInfo implements Comparable<MethodInfo> {
     }
 
     /**
-     * 引数を追加するメソッド． public 宣言してあるが， プラグインからの呼び出しははじく．
+     * このメソッドの引数を追加する． public 宣言してあるが， プラグインからの呼び出しははじく．
      * 
      * @param parameter 追加する引数
      */
     public void addParameter(ParameterInfo parameter) {
-        // TODO プラグインからの呼び出しをはじく処理をする
+        MetricsToolSecurityManager.getInstance().checkAccess();
         this.parameters.add(parameter);
     }
 
+    /**
+     * このメソッドが呼び出しているメソッドを追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param callee 追加する呼び出されるメソッド
+     */
+    public void addCallee(final MethodInfo callee) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.callees.add(callee);
+    }
+
+    /**
+     * このメソッドを呼び出しているメソッドを追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param caller 追加する呼び出すメソッド
+     */
+    public void addCaller(final MethodInfo caller) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.callers.add(caller);
+    }
+    
+    /**
+     * このメソッドがオーバーライドしているメソッドを追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param overridee 追加するオーバーライドされているメソッド
+     */
+    public void addOverridee(final MethodInfo overridee) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.overridees.add(overridee);
+    }
+    
+    /**
+     * このメソッドをオーバーライドしているメソッドを追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param overrider 追加するオーバーライドしているメソッド
+     *      
+     */
+    public void addOverrider(final MethodInfo overrider) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.overriders.add(overrider);
+    }
+    
+    /**
+     * このメソッドが参照している変数を追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param referencee 追加する参照されている変数
+     */
+    public void addReferencee(final FieldInfo referencee) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.referencees.add(referencee);
+    }
+    
+    /**
+     * このメソッドが代入を行っている変数を追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param assignmentee 追加する代入されている変数
+     */
+    public void addAssignmentee(final FieldInfo assignmentee) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.assignmentees.add(assignmentee);
+    }
+    
+    
     /**
      * メソッド間の順序関係を定義するメソッド．以下の順序で順序を決める．
      * <ol>

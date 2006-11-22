@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * 
@@ -35,6 +37,7 @@ public class TargetFileManager implements Iterable<TargetFile> {
      * @param targetFile ’Ç‰Á‚·‚é‘ÎÛƒtƒ@ƒCƒ‹ (TargetFile)
      */
     public void add(final TargetFile targetFile) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
         this.targetFiles.add(targetFile);
     }
 

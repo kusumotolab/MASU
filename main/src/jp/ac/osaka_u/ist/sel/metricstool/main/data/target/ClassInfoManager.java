@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * クラス情報を管理するクラス． ClassInfo を要素として持つ．
@@ -32,6 +34,7 @@ public class ClassInfoManager implements Iterable<ClassInfo> {
      * @param classInfo 追加するクラス情報 (classInfo)
      */
     public void add(final ClassInfo classInfo) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
         this.classInfos.add(classInfo);
     }
 

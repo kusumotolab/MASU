@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import sun.reflect.FieldInfo;
 
 
@@ -28,7 +29,7 @@ import sun.reflect.FieldInfo;
  * @author y-higo
  * 
  */
-public class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
+public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
 
     /**
      * クラスオブジェクトを初期化する． 以下の情報が引数として与えられなければならない．
@@ -50,6 +51,56 @@ public class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
         this.definedFields = new TreeSet<FieldInfo>();
     }
 
+    /**
+     * このクラスに親クラスを追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param superClass 追加する親クラス
+     */
+    public void addSuperClass(final ClassInfo superClass) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.superClasses.add(superClass);
+    }
+
+    /**
+     * このクラスに子クラスを追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param subClass 追加する子クラス
+     */
+    public void addSubClass(final ClassInfo subClass) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.subClasses.add(subClass);
+    }
+
+    /**
+     * このクラスにインナークラスを追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param innerClass 追加するインナークラス
+     */
+    public void addInnerClass(final ClassInfo innerClass) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.innerClasses.add(innerClass);
+    }
+    
+    /**
+     * このクラスに定義されたメソッド情報を追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param definedMethod 追加する定義されたメソッド
+     */
+    public void addDefinedMethod(final MethodInfo definedMethod) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.definedMethods.add(definedMethod);
+    }
+    
+    /**
+     * このクラスに定義されたフィールド情報を追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param definedField 追加する定義されたフィールド
+     */
+    public void addDefinedField(final FieldInfo definedField) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.definedFields.add(definedField);
+    }
+    
     /**
      * クラスオブジェクトの順序関係を定義するメソッド． 現在は，名前空間名順序を用いている．名前空間名が同じ場合は，クラス名（String）の順序になる．
      */
@@ -134,7 +185,7 @@ public class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @return インナークラスの Iterator
      */
     public Iterator<ClassInfo> innerClassIterator() {
-        Set<ClassInfo> unmodifiableInnerClasses = Collections.unmodifiableSet(this.innerClasses);        
+        Set<ClassInfo> unmodifiableInnerClasses = Collections.unmodifiableSet(this.innerClasses);
         return unmodifiableInnerClasses.iterator();
     }
 
@@ -144,7 +195,8 @@ public class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @return 定義されているメソッドの Iterator
      */
     public Iterator<MethodInfo> definedMethodIterator() {
-        Set<MethodInfo> unmodifiableDefinedMethods = Collections.unmodifiableSet(this.definedMethods);        
+        Set<MethodInfo> unmodifiableDefinedMethods = Collections
+                .unmodifiableSet(this.definedMethods);
         return unmodifiableDefinedMethods.iterator();
     }
 
@@ -154,7 +206,7 @@ public class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @return 定義されているフィールドの Iterator
      */
     public Iterator<FieldInfo> definedFieldIterator() {
-        Set<FieldInfo> unmodifiableDefinedFields = Collections.unmodifiableSet(this.definedFields);        
+        Set<FieldInfo> unmodifiableDefinedFields = Collections.unmodifiableSet(this.definedFields);
         return unmodifiableDefinedFields.iterator();
     }
 
