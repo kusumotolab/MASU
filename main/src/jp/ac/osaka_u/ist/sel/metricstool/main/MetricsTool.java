@@ -48,11 +48,11 @@ public class MetricsTool {
      * 現在仮実装． 対象ファイルのデータを格納した後，構文解析を行う．
      */
     public static void main(String[] args) {
-        try{
+        try {
             MetricsToolSecurityManager sm = MetricsToolSecurityManager.getInstance();
-            sm.addGlobalPermissions(new LoggingPermission("control",null));
+            sm.addGlobalPermission(new LoggingPermission("control", null));
             System.setSecurityManager(sm);
-        } catch (final SecurityException e){
+        } catch (final SecurityException e) {
             //TODO 既にセットされているセキュリティマネージャによって，新たなセキュリティマネージャの登録が許可されなかった．なんかエラー表示？
         }
 
@@ -280,24 +280,24 @@ public class MetricsTool {
                         break;
                     }
                 }
-                
+
                 //ファイルメトリクスを計測する場合は -F オプションが指定されていなければならない
-                if (measureFileMetrics && (Settings.getFileMetricsFile().equals(Settings.INIT))){
+                if (measureFileMetrics && (Settings.getFileMetricsFile().equals(Settings.INIT))) {
                     System.err.println("-F must be used for specifying a file for file metrics!");
                     System.exit(0);
                 }
-                
+
                 //クラスメトリクスを計測する場合は -C オプションが指定されていなければならない
-                if (measureClassMetrics && (Settings.getClassMetricsFile().equals(Settings.INIT))){
+                if (measureClassMetrics && (Settings.getClassMetricsFile().equals(Settings.INIT))) {
                     System.err.println("-C must be used for specifying a file for class metrics!");
                     System.exit(0);
                 }
                 //メソッドメトリクスを計測する場合は -M オプションが指定されていなければならない                
-                if (measureMethodMetrics && (Settings.getMethodMetricsFile().equals(Settings.INIT))){
+                if (measureMethodMetrics && (Settings.getMethodMetricsFile().equals(Settings.INIT))) {
                     System.err.println("-M must be used for specifying a file for method metrics!");
                     System.exit(0);
                 }
-                
+
             } catch (PluginLoadException e) {
                 System.err.println(e.getMessage());
                 System.exit(0);

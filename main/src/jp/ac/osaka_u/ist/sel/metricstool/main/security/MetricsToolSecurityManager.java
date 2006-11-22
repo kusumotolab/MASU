@@ -23,7 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.WeakHashSet;
  * <p>
  * また，特権とは別のアクセスコントロールとしてグローバルパーミッションという概念を扱う．
  * グローバルパーミッションとはプラグインやGUIを含むVM上の全てのクラスに許されるパーミッションのことで，
- * {@link #addGlobalPermissions(Permission)}によって登録されたパーミッションは，
+ * {@link #addGlobalPermission(Permission)}によって登録されたパーミッションは，
  * 全てのスレッド，全てのコンテキスト，全てのコードソースに許可される．
  * ただし，グローバルパーミッションの追加は特権スレッドのみから可能である．
  * <p>
@@ -58,9 +58,15 @@ public final class MetricsToolSecurityManager extends SecurityManager {
      * ロギングとかやりたい場合は，これを使って登録する．
      * 登録するには呼び出しスレッドに特権が必要
      * @param permission 許可したいパーミッションインスタンス
+     * @throws AccessControlException スレッドに特別権限がない場合
+     * @throws NullPointerException permissionがnullの場合
      */
-    public final void addGlobalPermissions(final Permission permission) {
+    public final void addGlobalPermission(final Permission permission) {
         this.checkAccess();
+        if (null == permission){
+            throw new NullPointerException("permission is null.");
+        }
+        
         this.globalPermissions.add(permission);
     }
 
@@ -71,11 +77,11 @@ public final class MetricsToolSecurityManager extends SecurityManager {
      * @throws NullPointerException threadがnullだった場合
      */
     public final void addPrivilegeThread(final Thread thread) {
+        this.checkAccess();
         if (null == thread) {
             throw new NullPointerException("Added thread is null.");
         }
-
-        this.checkAccess();
+        
         this.privilegeThreads.add(thread);
     }
 
