@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.LoggingPermission;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
@@ -47,7 +48,13 @@ public class MetricsTool {
      * 現在仮実装． 対象ファイルのデータを格納した後，構文解析を行う．
      */
     public static void main(String[] args) {
-        System.setSecurityManager(MetricsToolSecurityManager.getInstance());
+        try{
+            MetricsToolSecurityManager sm = MetricsToolSecurityManager.getInstance();
+            sm.addGlobalPermissions(new LoggingPermission("control",null));
+            System.setSecurityManager(sm);
+        } catch (final SecurityException e){
+            //TODO 既にセットされているセキュリティマネージャによって，新たなセキュリティマネージャの登録が許可されなかった．なんかエラー表示？
+        }
 
         Settings settings = new Settings();
         ArgumentProcessor.processArgs(args, parameterDefs, settings);
