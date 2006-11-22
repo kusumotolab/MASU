@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.security;
 
 import java.security.AccessControlException;
 import java.security.Permission;
+import java.security.Permissions;
 import java.util.Collections;
 import java.util.Set;
 
@@ -20,7 +21,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.WeakHashSet;
  * 呼び出したスレッドが特権を持たない場合は， {@link AccessControlException}　例外がスローされる．
  * 特権を持つスレッドであった場合は，何もせずに処理を返す．
  * <p>
- * また，特権を持つスレッド以外には通常の {@link SecurityManager} と同等の機構を適用する．
+ * また，特権とは別のアクセスコントロールとしてグローバルパーミッションという概念を扱う．
+ * グローバルパーミッションとはプラグインやGUIを含むVM上の全てのクラスに許されるパーミッションのことで，
+ * {@link #addGlobalPermissions(Permission)}によって登録されたパーミッションは，
+ * 全てのスレッド，全てのコンテキスト，全てのコードソースに許可される．
+ * ただし，グローバルパーミッションの追加は特権スレッドのみから可能である．
+ * <p>
+ * 特権を持たないスレッドで，グローバルパーミッションに登録されていないものについては，
+ * 通常の {@link SecurityManager} と同等の機構を適用する．
  * <p>
  * シングルトンクラスであるため，コンストラクタは private であり，このクラスを継承することはできないが，
  * それを明示的に宣言するために final 修飾子をつけている．
@@ -43,6 +51,17 @@ public final class MetricsToolSecurityManager extends SecurityManager {
             }
         }
         return SINGLETON;
+    }
+
+    /**
+     * メトリクスツールを実行しているVM上の全体で許可するパーミッションを追加する．
+     * ロギングとかやりたい場合は，これを使って登録する．
+     * 登録するには呼び出しスレッドに特権が必要
+     * @param permission 許可したいパーミッションインスタンス
+     */
+    public final void addGlobalPermissions(final Permission permission) {
+        this.checkAccess();
+        this.globalPermissions.add(permission);
     }
 
     /**
@@ -87,17 +106,46 @@ public final class MetricsToolSecurityManager extends SecurityManager {
 
     /**
      * {@link SecurityManager#checkPermission(Permission)} メソッドをオーバーライドし，
-     * 特権スレッドならば親クラスのメソッドを呼ばずに終了する．
-     * 特権スレッドでないならば親クラスのメソッドを呼ぶ．
-     * @param チェックするパーミッション
+     * 特権スレッドからの呼び出し，あるいはグローバルパーミッションとして登録済みであれば，
+     * パーミッションチェックをせずに終了する．
+     * そうでないなら，親クラスのメソッドを呼び，パーミッションのチェックを行う．
+     * @param perm チェックするパーミッション
+     * @throws NullPointerException 引数permがnullの場合
+     * @throws SecurityException 特権スレッドでもグローバルパーミッションでもない場合に，パーミッションが許可されていない場合
      * @see java.lang.SecurityManager#checkPermission(java.security.Permission)
      */
     @Override
-    public final void checkPermission(final Permission permission) {
+    public final void checkPermission(final Permission perm) {
+        if (null == perm) {
+            throw new NullPointerException("Permission is null.");
+        }
         if (this.isPrivilegeThread()) {
             return;
+        } else if (this.globalPermissions.implies(perm)) {
+            return;
         } else {
-            super.checkPermission(permission);
+            super.checkPermission(perm);
+        }
+    }
+
+    /**
+     * {@link SecurityManager#checkPermission(Permission, Object)} メソッドをオーバーライドし，
+     * グローバルパーミッションとして登録済みであればパーミッションチェックをせずに終了する．
+     * そうでないなら，親クラスのメソッドを呼び，パーミッションのチェックを行う．
+     * @param perm チェックするパーミッション
+     * @throws NullPointerException 引数permがnullの場合
+     * @throws SecurityException permがグローバルパーミッションでない場合に，パーミッションが許可されていない場合
+     * @see java.lang.SecurityManager#checkPermission(Permission, Object)
+     */
+    @Override
+    public void checkPermission(final Permission perm, final Object context) {
+        if (null == perm) {
+            throw new NullPointerException("Permission is null.");
+        }
+        if (this.globalPermissions.implies(perm)) {
+            return;
+        } else {
+            super.checkPermission(perm, context);
         }
     }
 
@@ -140,4 +188,9 @@ public final class MetricsToolSecurityManager extends SecurityManager {
      * シングルトンインスタンス．
      */
     private static MetricsToolSecurityManager SINGLETON;
+
+    /**
+     * VM全体で許可するパーミッションのコレクション
+     */
+    private final Permissions globalPermissions = new Permissions();
 }
