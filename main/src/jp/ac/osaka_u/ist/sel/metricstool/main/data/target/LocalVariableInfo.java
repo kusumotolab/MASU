@@ -15,7 +15,7 @@ public final class LocalVariableInfo extends VariableInfo {
      * @param name ローカル変数名
      * @param type ローカル変数の型
      */
-    public LocalVariableInfo(String name, TypeInfo type) {
+    public LocalVariableInfo(final String name, final TypeInfo type) {
         super(name, type);
     }
 }

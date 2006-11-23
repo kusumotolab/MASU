@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public class FileInfoManager implements Iterable<FileInfo> {
+public final class FileInfoManager implements Iterable<FileInfo> {
 
     /**
      * ファイル情報を管理しているインスタンスを返す． シングルトンパターンを持ちている．
@@ -34,7 +34,12 @@ public class FileInfoManager implements Iterable<FileInfo> {
      * @param fileInfo 追加するクラス情報
      */
     public void add(final FileInfo fileInfo) {
+        
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == fileInfo) {
+            throw new NullPointerException();
+        }
+        
         this.fileInfos.add(fileInfo);
     }
 
@@ -51,6 +56,7 @@ public class FileInfoManager implements Iterable<FileInfo> {
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */
     private FileInfoManager() {
+        MetricsToolSecurityManager.getInstance().checkAccess();
         this.fileInfos = new TreeSet<FileInfo>();
     }
 

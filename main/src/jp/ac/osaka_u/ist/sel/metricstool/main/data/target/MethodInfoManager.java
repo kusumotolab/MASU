@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public class MethodInfoManager implements Iterable<MethodInfo> {
+public final class MethodInfoManager implements Iterable<MethodInfo> {
 
     /**
      * メソッド情報を管理しているインスタンスを返す． シングルトンパターンを持ちている．
@@ -34,7 +34,12 @@ public class MethodInfoManager implements Iterable<MethodInfo> {
      * @param methodInfo 追加するメソッド情報
      */
     public void add(final MethodInfo methodInfo) {
+        
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == methodInfo) {
+            throw new NullPointerException();
+        }
+        
         this.methodInfos.add(methodInfo);
     }
 
@@ -51,6 +56,7 @@ public class MethodInfoManager implements Iterable<MethodInfo> {
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */
     private MethodInfoManager() {
+        MetricsToolSecurityManager.getInstance().checkAccess();
         this.methodInfos = new TreeSet<MethodInfo>();
     }
 

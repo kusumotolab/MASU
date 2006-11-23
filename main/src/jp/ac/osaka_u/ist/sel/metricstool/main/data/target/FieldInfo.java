@@ -15,9 +15,14 @@ public final class FieldInfo extends VariableInfo {
      * @param name フィールド名
      * @param type フィールドの型
      */
-    public FieldInfo(String name, TypeInfo type, ClassInfo ownerClass) {
-
+    public FieldInfo(final String name, final TypeInfo type, final ClassInfo ownerClass) {
+        
         super(name, type);
+        
+        if (null == ownerClass) {
+            throw new NullPointerException();
+        }
+        
         this.ownerClass = ownerClass;
     }
 
@@ -26,7 +31,12 @@ public final class FieldInfo extends VariableInfo {
      * 
      * @return フィールドの順序関係
      */
-    public int compareTo(FieldInfo fieldInfo) {
+    public int compareTo(final FieldInfo fieldInfo) {
+        
+        if (null == fieldInfo) {
+            throw new NullPointerException();
+        }
+        
         ClassInfo classInfo = this.getOwnerClass();
         ClassInfo correspondClassInfo = this.getOwnerClass();
         int classOrder = classInfo.compareTo(correspondClassInfo);

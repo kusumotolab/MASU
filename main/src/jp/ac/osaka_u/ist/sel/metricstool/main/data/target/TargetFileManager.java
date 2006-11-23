@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * since 2006.11.12
  */
-public class TargetFileManager implements Iterable<TargetFile> {
+public final class TargetFileManager implements Iterable<TargetFile> {
 
     /**
      * 
@@ -37,7 +37,12 @@ public class TargetFileManager implements Iterable<TargetFile> {
      * @param targetFile 追加する対象ファイル (TargetFile)
      */
     public void add(final TargetFile targetFile) {
+        
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == targetFile) {
+            throw new NullPointerException();
+        }
+        
         this.targetFiles.add(targetFile);
     }
 
@@ -52,7 +57,7 @@ public class TargetFileManager implements Iterable<TargetFile> {
      * 以前は HashSet を用いていたが，同じディレクトリのファイルはまとめて返すほうがよいので，TreeSet に変更した．
      */
     private TargetFileManager() {
-        /*this.targetFiles = new HashSet<TargetFile>();*/
+        MetricsToolSecurityManager.getInstance().checkAccess();        
         this.targetFiles = new TreeSet<TargetFile>();
     }
 

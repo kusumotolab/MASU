@@ -4,6 +4,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * 配列型を表すためのクラス．
@@ -11,7 +13,7 @@ import java.util.Map;
  * @author y-higo
  * 
  */
-public class ArrayTypeInfo implements TypeInfo {
+public final class ArrayTypeInfo implements TypeInfo {
 
     /**
      * 型名を返す
@@ -53,7 +55,7 @@ public class ArrayTypeInfo implements TypeInfo {
      * @param dimension 次元を表す変数
      * @return 生成した ArrayTypeInfo オブジェクト
      */
-    public static ArrayTypeInfo getType(TypeInfo type, int dimension) {
+    public static ArrayTypeInfo getType(final TypeInfo type, final int dimension) {
 
         Key key = new Key(type, dimension);
         ArrayTypeInfo arrayType = ARRAY_TYPE_MAP.get(key);
@@ -71,7 +73,16 @@ public class ArrayTypeInfo implements TypeInfo {
      * @param type 配列の要素の型
      * @param dimension 配列の事件
      */
-    private ArrayTypeInfo(TypeInfo type, int dimension) {
+    private ArrayTypeInfo(final TypeInfo type, final int dimension) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == type) {
+            throw new NullPointerException();
+        }
+        if (1 < dimension) {
+            throw new IllegalArgumentException("Dimension of array must be 1 or more!");
+        }
+
         this.type = type;
         this.dimension = dimension;
     }
@@ -114,7 +125,15 @@ public class ArrayTypeInfo implements TypeInfo {
          * @param type 第一キー
          * @param dimension 第二キー
          */
-        Key(TypeInfo type, int dimension) {
+        Key(final TypeInfo type, final int dimension) {
+
+            if (null == type) {
+                throw new NullPointerException();
+            }
+            if (1 < dimension) {
+                throw new IllegalArgumentException("Dimension of array must be 1 or more!");
+            }
+
             this.type = type;
             this.dimension = dimension;
         }
@@ -152,6 +171,11 @@ public class ArrayTypeInfo implements TypeInfo {
          * このオブジェクトと引数で指定されたオブジェクトが等しいかを返す．
          */
         public boolean equals(Object o) {
+
+            if (null == o) {
+                throw new NullPointerException();
+            }
+
             String firstKey = this.getFirstKey();
             String correspondFirstKey = ((Key) o).getFirstKey();
             if (firstKey.equals(correspondFirstKey)) {

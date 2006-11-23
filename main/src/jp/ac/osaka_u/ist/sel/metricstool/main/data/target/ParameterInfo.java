@@ -15,7 +15,7 @@ public final class ParameterInfo extends VariableInfo {
      * @param name ˆø”–¼
      * @param type ˆø”‚ÌŒ^
      */
-    public ParameterInfo(String name, TypeInfo type) {
+    public ParameterInfo(final String name, final TypeInfo type) {
         super(name, type);
     }
 }

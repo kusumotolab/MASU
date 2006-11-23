@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * 
@@ -9,7 +11,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * 
  * since 2006.11.12
  */
-public class TargetFile implements Comparable<TargetFile> {
+public final class TargetFile implements Comparable<TargetFile> {
 
     /**
      * 
@@ -18,6 +20,12 @@ public class TargetFile implements Comparable<TargetFile> {
      * 対象ファイルのパスを用いて初期化
      */
     public TargetFile(final String name) {
+        
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == name) {
+            throw new NullPointerException();
+        }
+        
         this.correctSyntax = false;
         this.name = name;
     }
@@ -27,7 +35,12 @@ public class TargetFile implements Comparable<TargetFile> {
      * @param targetFile 比較対象オブジェクト
      * @return 順序関係
      */
-    public int compareTo(TargetFile targetFile) {
+    public int compareTo(final TargetFile targetFile) {
+        
+        if (null == targetFile) {
+            throw new NullPointerException();
+        }
+        
         String name = this.getName();
         String correspondName = targetFile.getName();
         return name.compareTo(correspondName);
@@ -42,6 +55,11 @@ public class TargetFile implements Comparable<TargetFile> {
      * 
      */
     public boolean equals(Object o) {
+        
+        if (null == o) {
+            throw new NullPointerException();
+        }
+        
         String thisName = this.getName();
         String correspondName = ((TargetFile) o).getName();
         return thisName.equals(correspondName);
@@ -79,7 +97,7 @@ public class TargetFile implements Comparable<TargetFile> {
      * 対象ファイルの文法が正しいかどうかを保存する
      * @param correctSyntax 対象ファイルの文法の正しさ．正しい場合は true，正しくない場合は false
      */
-    public void setCorrectSytax(boolean correctSyntax){
+    public void setCorrectSytax(final boolean correctSyntax){
         this.correctSyntax = correctSyntax;
     }
     

@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * プリミティブ型を表すためのクラス．プリミティブ型はプログラミング言語によって提唱されている型であるため， ユーザが新たらしい型を作ることができないよう，コンストラクタは private
@@ -8,7 +10,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author y-higo
  * 
  */
-public class PrimitiveTypeInfo implements TypeInfo {
+public final class PrimitiveTypeInfo implements TypeInfo {
 
     /**
      * boolean を表す定数
@@ -106,8 +108,12 @@ public class PrimitiveTypeInfo implements TypeInfo {
      * @param typeName 作成する型の名前
      * @return 指定された方を表す {@link PrimitiveTypeInfo} のインスタンス．
      */
-    public static PrimitiveTypeInfo getType(String typeName) {
+    public static PrimitiveTypeInfo getType(final String typeName) {
 
+        if (null == typeName) {
+            throw new NullPointerException();
+        }
+        
         if (typeName.equals(BOOLEAN_STRING)) {
             return BOOLEAN;
         } else if (typeName.equals(BYTE_STRING)) {
@@ -143,7 +149,13 @@ public class PrimitiveTypeInfo implements TypeInfo {
      * 
      * @param name 型名
      */
-    private PrimitiveTypeInfo(String name) {
+    private PrimitiveTypeInfo(final String name) {
+        
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == name) {
+            throw new NullPointerException();
+        }
+        
         this.name = name;
     }
 

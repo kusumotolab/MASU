@@ -47,7 +47,13 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @param name メソッド名
      * 
      */
-    public MethodInfo(String name, TypeInfo returnType, ClassInfo ownerClass) {
+    public MethodInfo(final String name, final TypeInfo returnType, final ClassInfo ownerClass) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == name) || (null == returnType) || (null == ownerClass)) {
+            throw new NullPointerException();
+        }
+
         this.name = name;
         this.ownerClass = ownerClass;
         this.returnType = returnType;
@@ -66,8 +72,13 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * 
      * @param parameter 追加する引数
      */
-    public void addParameter(ParameterInfo parameter) {
+    public void addParameter(final ParameterInfo parameter) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == parameter) {
+            throw new NullPointerException();
+        }
+
         this.parameters.add(parameter);
     }
 
@@ -77,7 +88,12 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @param callee 追加する呼び出されるメソッド
      */
     public void addCallee(final MethodInfo callee) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == callee) {
+            throw new NullPointerException();
+        }
+
         this.callees.add(callee);
     }
 
@@ -87,52 +103,76 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @param caller 追加する呼び出すメソッド
      */
     public void addCaller(final MethodInfo caller) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == caller) {
+            throw new NullPointerException();
+        }
+
         this.callers.add(caller);
     }
-    
+
     /**
      * このメソッドがオーバーライドしているメソッドを追加する．プラグインから呼ぶとランタイムエラー．
      * 
      * @param overridee 追加するオーバーライドされているメソッド
      */
     public void addOverridee(final MethodInfo overridee) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == overridee) {
+            throw new NullPointerException();
+        }
+
         this.overridees.add(overridee);
     }
-    
+
     /**
      * このメソッドをオーバーライドしているメソッドを追加する．プラグインから呼ぶとランタイムエラー．
      * 
      * @param overrider 追加するオーバーライドしているメソッド
-     *      
+     * 
      */
     public void addOverrider(final MethodInfo overrider) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == overrider) {
+            throw new NullPointerException();
+        }
+
         this.overriders.add(overrider);
     }
-    
+
     /**
      * このメソッドが参照している変数を追加する．プラグインから呼ぶとランタイムエラー．
      * 
      * @param referencee 追加する参照されている変数
      */
     public void addReferencee(final FieldInfo referencee) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == referencee) {
+            throw new NullPointerException();
+        }
+
         this.referencees.add(referencee);
     }
-    
+
     /**
      * このメソッドが代入を行っている変数を追加する．プラグインから呼ぶとランタイムエラー．
      * 
      * @param assignmentee 追加する代入されている変数
      */
     public void addAssignmentee(final FieldInfo assignmentee) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == assignmentee) {
+            throw new NullPointerException();
+        }
+
         this.assignmentees.add(assignmentee);
     }
-    
-    
+
     /**
      * メソッド間の順序関係を定義するメソッド．以下の順序で順序を決める．
      * <ol>
@@ -142,7 +182,12 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * <li>メソッドの引数の個数</li>
      * <li>メソッドの引数の型（第一引数から順番に）</li>
      */
-    public int compareTo(MethodInfo method) {
+    public int compareTo(final MethodInfo method) {
+        
+        if (null == method) {
+            throw new NullPointerException();
+        }
+        
         // クラスオブジェクトの compareTo を用いる．
         // クラスの名前空間名，クラス名が比較に用いられている．
         ClassInfo ownerClass = this.getOwnerClass();

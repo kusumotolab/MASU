@@ -40,10 +40,16 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * 
      * @param className クラス名
      */
-    public ClassInfo(NamespaceInfo namespace, String className) {
+    public ClassInfo(final NamespaceInfo namespace, final String className) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == namespace) || (null == className)) {
+            throw new NullPointerException();
+        }
+
         this.namespace = namespace;
         this.className = className;
-
         this.superClasses = new TreeSet<ClassInfo>();
         this.subClasses = new TreeSet<ClassInfo>();
         this.innerClasses = new TreeSet<ClassInfo>();
@@ -57,7 +63,12 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @param superClass 追加する親クラス
      */
     public void addSuperClass(final ClassInfo superClass) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == superClass) {
+            throw new NullPointerException();
+        }
+
         this.superClasses.add(superClass);
     }
 
@@ -67,7 +78,12 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @param subClass 追加する子クラス
      */
     public void addSubClass(final ClassInfo subClass) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == subClass) {
+            throw new NullPointerException();
+        }
+
         this.subClasses.add(subClass);
     }
 
@@ -77,34 +93,54 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @param innerClass 追加するインナークラス
      */
     public void addInnerClass(final ClassInfo innerClass) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == innerClass) {
+            throw new NullPointerException();
+        }
+
         this.innerClasses.add(innerClass);
     }
-    
+
     /**
      * このクラスに定義されたメソッド情報を追加する．プラグインから呼ぶとランタイムエラー．
      * 
      * @param definedMethod 追加する定義されたメソッド
      */
     public void addDefinedMethod(final MethodInfo definedMethod) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == definedMethod) {
+            throw new NullPointerException();
+        }
+
         this.definedMethods.add(definedMethod);
     }
-    
+
     /**
      * このクラスに定義されたフィールド情報を追加する．プラグインから呼ぶとランタイムエラー．
      * 
      * @param definedField 追加する定義されたフィールド
      */
     public void addDefinedField(final FieldInfo definedField) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == definedField) {
+            throw new NullPointerException();
+        }
+
         this.definedFields.add(definedField);
     }
-    
+
     /**
      * クラスオブジェクトの順序関係を定義するメソッド． 現在は，名前空間名順序を用いている．名前空間名が同じ場合は，クラス名（String）の順序になる．
      */
-    public int compareTo(ClassInfo classInfo) {
+    public int compareTo(final ClassInfo classInfo) {
+
+        if (null == classInfo) {
+            throw new NullPointerException();
+        }
+
         NamespaceInfo namespace = this.getNamespace();
         NamespaceInfo correspondNamespace = classInfo.getNamespace();
         int namespaceOrder = namespace.compareTo(correspondNamespace);
@@ -136,7 +172,7 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
     }
 
     /**
-     * このクラスの名前空間名を返す
+     * このクラスの名前を返す． ここの名前とは，名前空間名 + クラス名を表す．
      */
     public String getName() {
         NamespaceInfo namespace = this.getNamespace();
@@ -156,9 +192,6 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
         return this.loc;
     }
 
-    /**
-     * このクラスの名前を返す． ここの名前とは，名前空間名 + クラス名を表す．
-     */
     /**
      * このクラスのスーパークラスの Iterator を返す．
      * 

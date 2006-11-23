@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * フィールド，引数，ローカル変数の共通の親クラス． 以下の情報を持つ．
@@ -18,7 +20,12 @@ public abstract class VariableInfo implements Comparable<VariableInfo> {
      * 
      * @return 変数の順序関係
      */
-    public int compareTo(VariableInfo variable) {
+    public int compareTo(final VariableInfo variable) {
+        
+        if (null == variable) {
+            throw new NullPointerException();
+        }
+        
         String variableName = this.getName();
         String correspondVariableName = variable.getName();
         return variableName.compareTo(correspondVariableName);
@@ -48,7 +55,13 @@ public abstract class VariableInfo implements Comparable<VariableInfo> {
      * @param name 変数名
      * @param type 変数の型
      */
-    protected VariableInfo(String name, TypeInfo type) {
+    protected VariableInfo(final String name, final TypeInfo type) {
+        
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == name) || (null == type)) {
+            throw new NullPointerException();
+        }
+        
         this.name = name;
         this.type = type;
     }

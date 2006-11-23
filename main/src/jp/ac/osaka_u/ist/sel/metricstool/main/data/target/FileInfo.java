@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * 
@@ -7,14 +9,20 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * 
  * ファイルの情報を表すクラス．
  */
-final public class FileInfo {
+public final class FileInfo {
 
     /**
      * 指定されたファイル名のオブジェクトを初期化する．
      * 
      * @param name ファイル名
      */
-    public FileInfo(String name) {
+    public FileInfo(final String name) {
+        
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == name) {
+            throw new NullPointerException();
+        }
+        
         this.name = name;
     }
 
@@ -24,7 +32,13 @@ final public class FileInfo {
      * @param o 比較対象ファイル
      * @return 等しい場合は true, 等しくない場合は false
      */
+    @Override
     public boolean equals(Object o) {
+        
+        if (null == o) {
+            throw new NullPointerException();
+        }
+        
         String thisName = this.getName();
         String correspondName = ((FileInfo) o).getName();
         return thisName.equals(correspondName);
@@ -64,7 +78,12 @@ final public class FileInfo {
      * 
      * @param loc 行数
      */
-    public void setLOC(int loc) {
+    public void setLOC(final int loc) {
+        
+        if (loc < 0) {
+            throw new IllegalArgumentException("LOC must be 0 or more!");
+        }
+        
         this.loc = loc;
     }
 
