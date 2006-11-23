@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Logger;
 import java.util.logging.LoggingPermission;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
@@ -49,11 +50,21 @@ public class MetricsTool {
      */
     public static void main(String[] args) {
         try {
+            //MetricsToolSecurityManagerのシングルトンインスタンスを構築し，初期特別権限スレッドになる
             MetricsToolSecurityManager sm = MetricsToolSecurityManager.getInstance();
-            sm.addGlobalPermission(new LoggingPermission("control", null));
+            
+            //システムのセキュリティーマネージャとして登録してみる
             System.setSecurityManager(sm);
+            
+            //システムに登録できたので，とりあえずロギングパーミッションをグローバルでセット
+            //TODO グローバルに与えるパーミッションは設定ファイルで記述できた方がいいかも
+            sm.addGlobalPermission(new LoggingPermission("control", null));
+            
         } catch (final SecurityException e) {
-            //TODO 既にセットされているセキュリティマネージャによって，新たなセキュリティマネージャの登録が許可されなかった．なんかエラー表示？
+            //既にセットされているセキュリティマネージャによって，新たなセキュリティマネージャの登録が許可されなかった．
+            //システムのセキュリティマネージャとして使わなくても，特別権限スレッドのアクセス制御は問題なく動作するのでとりあえず無視する
+            Logger.global
+                    .info(("Failed to set system security manager. MetricsToolsecurityManager works only to manage privilege threads."));
         }
 
         Settings settings = new Settings();
