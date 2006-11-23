@@ -6,8 +6,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRICS_TYPE;
 
 
 /**
- * @author kou-tngt
- * 
  * 仮実装(2006/11/17） 他のコード群で型を利用するため，コンパイル用に登録．
  * 
  * <p>
@@ -17,6 +15,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRICS_TYPE;
  * <p>
  * mainモジュールは各プラグインディレクトリからplugin.xmlファイルを探索し、 そこに記述されている，このクラスを継承したクラスをインスタンス化し、
  * 各メソッドを通じて情報を取得した後、executeメソッドを呼び出してメトリクス値を計測する
+ * 
+ * @author kou-tngt
  */
 public abstract class AbstractPlugin {
 
@@ -44,8 +44,30 @@ public abstract class AbstractPlugin {
             this.useMethodInfo = AbstractPlugin.this.useMethodInfo();
             this.useFileInfo = AbstractPlugin.this.useFileInfo();
             this.useMethodLocalInfo = AbstractPlugin.this.useMethodLocalInfo();
+            this.description = AbstractPlugin.this.getDescription();
+            this.detailDescription = AbstractPlugin.this.getDetailDescription();
         }
 
+        /**
+         * このプラグインの簡易説明を１行で返す（できれば英語で）.
+         * デフォルトの実装では "Measure メトリクス名 metrics." と返す
+         * 各プラグインはこのメソッドを任意にオーバーライドする.
+         * @return 簡易説明文字列
+         */
+        public String getDescription() {
+            return description;
+        }
+
+        /**
+         * このプラグインの詳細説明を返す（できれば英語で）.
+         * デフォルトの実装では空文字列を返す
+         * 各プラグインはこのメソッドを任意にオーバーライドする.
+         * @return 詳細説明文字列
+         */
+        public String getDetailDescription() {
+            return detailDescription;
+        }
+        
         /**
          * このプラグインがメトリクスを計測できる言語を返す．
          * 
@@ -131,6 +153,10 @@ public abstract class AbstractPlugin {
         private final String metricsName;
 
         private final METRICS_TYPE metricsType;
+        
+        private final String description;
+        
+        private final String detailDescription;
 
         private final boolean useClassInfo;
 
@@ -156,6 +182,26 @@ public abstract class AbstractPlugin {
             }
         }
         return this.pluginInfo;
+    }
+
+    /**
+     * このプラグインの簡易説明を１行で返す（できれば英語で）
+     * デフォルトの実装では "Measure メトリクス名 metrics." と返す
+     * 各プラグインはこのメソッドを任意にオーバーライドする.
+     * @return 簡易説明文字列
+     */
+    protected String getDescription() {
+        return "Measure " + getMetricsName() + " metrics.";
+    }
+
+    /**
+     * このプラグインの詳細説明を返す（できれば英語で）
+     * デフォルト実装では空文字列を返す.
+     * 各プラグインはこのメソッドを任意にオーバーライドする.
+     * @return
+     */
+    protected String getDetailDescription() {
+        return "";
     }
 
     /**
