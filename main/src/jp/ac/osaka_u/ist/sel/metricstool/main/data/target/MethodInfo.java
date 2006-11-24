@@ -42,10 +42,13 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * <li>修飾子</li>
      * <li>シグネチャ</li>
      * <li>所有しているクラス</li>
+     * <li>コンストラクタかどうか</li>
      * </ul>
      * 
      * @param name メソッド名
-     * 
+     * @param returnType 返り値の型．コンストラクタの場合は，そのクラスの型を与える．
+     * @param ownerClass 所有しているクラス
+     * @param constructor コンストラクタかどうか．コンストラクタの場合は true,そうでない場合は false．
      */
     public MethodInfo(final String name, final TypeInfo returnType, final ClassInfo ownerClass,
             final boolean constructor) {
