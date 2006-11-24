@@ -47,7 +47,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @param name メソッド名
      * 
      */
-    public MethodInfo(final String name, final TypeInfo returnType, final ClassInfo ownerClass) {
+    public MethodInfo(final String name, final TypeInfo returnType, final ClassInfo ownerClass,
+            final boolean constructor) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == name) || (null == returnType) || (null == ownerClass)) {
@@ -57,6 +58,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
         this.name = name;
         this.ownerClass = ownerClass;
         this.returnType = returnType;
+        this.constructor = constructor;
 
         this.parameters = new LinkedList<ParameterInfo>();
         this.callees = new TreeSet<MethodInfo>();
@@ -183,11 +185,11 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * <li>メソッドの引数の型（第一引数から順番に）</li>
      */
     public int compareTo(final MethodInfo method) {
-        
+
         if (null == method) {
             throw new NullPointerException();
         }
-        
+
         // クラスオブジェクトの compareTo を用いる．
         // クラスの名前空間名，クラス名が比較に用いられている．
         ClassInfo ownerClass = this.getOwnerClass();
@@ -234,6 +236,14 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 
             }
         }
+    }
+
+    /**
+     * このメソッドがコンストラクタかどうかを返す．
+     * @return コンストラクタである場合は true，そうでない場合は false
+     */
+    public boolean isConstuructor() {
+        return this.constructor;
     }
 
     /**
@@ -409,4 +419,9 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * 代入しているフィールド一覧を保存するための変数
      */
     private final Set<FieldInfo> assignmentees;
+
+    /**
+     * このメソッドがコンストラクタかどうかを保存するための変数
+     */
+    private final boolean constructor;
 }
