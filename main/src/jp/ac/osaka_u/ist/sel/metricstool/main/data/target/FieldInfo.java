@@ -1,8 +1,25 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
+
 /**
- * フィールドの情報を現すクラス
+ * フィールドの情報を現すクラス．
+ * 以下の情報をもつ．
+ * <ul>
+ * <li>フィールド名</li>
+ * <li>フィールドの型</li>
+ * <li>フィールドの修飾子</li>
+ * <li>フィールドを定義しているクラス</li>
+ * <li>フィールドを参照しているメソッド群</li>
+ * <li>フィールドに対して代入を行っているメソッド群</li>
+ * </ul>
  * 
  * @author y-higo
  * 
@@ -16,14 +33,46 @@ public final class FieldInfo extends VariableInfo {
      * @param type フィールドの型
      */
     public FieldInfo(final String name, final TypeInfo type, final ClassInfo ownerClass) {
-        
+
         super(name, type);
-        
+
         if (null == ownerClass) {
             throw new NullPointerException();
         }
-        
+
         this.ownerClass = ownerClass;
+        this.referencers = new TreeSet<MethodInfo>();
+        this.assignmenters = new TreeSet<MethodInfo>();
+    }
+
+    /**
+     * このフィールドを参照しているメソッドを追加する
+     * 
+     * @param referencer このフィールドを参照しているメソッド
+     */
+    public void addReferencer(final MethodInfo referencer) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == referencer) {
+            throw new NullPointerException();
+        }
+
+        this.referencers.add(referencer);
+    }
+
+    /**
+     * このフィールドに対して代入を行っているメソッドを追加する
+     * 
+     * @param assignmenter このフィールドに対して代入を行っているメソッド
+     */
+    public void addAssignmenter(final MethodInfo assignmenter) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == assignmenter) {
+            throw new NullPointerException();
+        }
+
+        this.assignmenters.add(assignmenter);
     }
 
     /**
@@ -32,11 +81,11 @@ public final class FieldInfo extends VariableInfo {
      * @return フィールドの順序関係
      */
     public int compareTo(final FieldInfo fieldInfo) {
-        
+
         if (null == fieldInfo) {
             throw new NullPointerException();
         }
-        
+
         ClassInfo classInfo = this.getOwnerClass();
         ClassInfo correspondClassInfo = this.getOwnerClass();
         int classOrder = classInfo.compareTo(correspondClassInfo);
@@ -57,9 +106,39 @@ public final class FieldInfo extends VariableInfo {
     }
 
     /**
+     * このフィールドを参照しているメソッドのイテレータを返す．
+     * 
+     * @return このフィールドを参照しているメソッドのイテレータ
+     */
+    public Iterator<MethodInfo> referencerIterator() {
+        Set<MethodInfo> unmodifiableReferencers = Collections.unmodifiableSet(this.referencers);
+        return unmodifiableReferencers.iterator();
+    }
+
+    /**
+     * このフィールドに対して代入を行っているメソッドのイテレータを返す．
+     * 
+     * @return このフィールドに対して代入を行っているメソッドのイテレータ
+     */
+    public Iterator<MethodInfo> assignmenterIterator() {
+        Set<MethodInfo> unmodifiableAssignmenters = Collections.unmodifiableSet(this.assignmenters);
+        return unmodifiableAssignmenters.iterator();
+    }
+
+    /**
      * このフィールドを定義しているクラスを保存する変数
      */
     private final ClassInfo ownerClass;
+
+    /**
+     * このフィールドを参照しているメソッド群を保存するための変数
+     */
+    private final Set<MethodInfo> referencers;
+
+    /**
+     * このフィールドに対して代入を行っているメソッド群を保存するための変数
+     */
+    private final Set<MethodInfo> assignmenters;
 
     /**
      * フィールドの修飾子を表す変数
