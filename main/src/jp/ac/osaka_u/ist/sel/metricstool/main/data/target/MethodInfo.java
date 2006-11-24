@@ -63,6 +63,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
         this.returnType = returnType;
         this.constructor = constructor;
 
+        this.localVariables = new TreeSet<LocalVariableInfo>();
         this.parameters = new LinkedList<ParameterInfo>();
         this.callees = new TreeSet<MethodInfo>();
         this.callers = new TreeSet<MethodInfo>();
@@ -70,6 +71,21 @@ public final class MethodInfo implements Comparable<MethodInfo> {
         this.overriders = new TreeSet<MethodInfo>();
         this.referencees = new TreeSet<FieldInfo>();
         this.assignmentees = new TreeSet<FieldInfo>();
+    }
+
+    /**
+     * このメソッドで定義されているローカル変数を追加する． public 宣言してあるが， プラグインからの呼び出しははじく．
+     * 
+     * @param localVariable 追加する引数
+     */
+    public void addLocalVariable(final LocalVariableInfo localVariable) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == localVariable) {
+            throw new NullPointerException();
+        }
+
+        this.localVariables.add(localVariable);
     }
 
     /**
@@ -277,6 +293,17 @@ public final class MethodInfo implements Comparable<MethodInfo> {
     }
 
     /**
+     * このメソッドで定義されているローカル変数の Iterator を返す．
+     * 
+     * @return このメソッドで定義されているローカル変数の Iterator
+     */
+    public Iterator<LocalVariableInfo> localVariableIterator() {
+        Set<LocalVariableInfo> unmodifiableLocalVariables = Collections
+                .unmodifiableSet(this.localVariables);
+        return unmodifiableLocalVariables.iterator();
+    }
+
+    /**
      * このメソッドの引数の Iterator を返す．
      * 
      * @return このメソッドの引数の Iterator
@@ -392,6 +419,11 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * 所属しているクラスを保存するための変数
      */
     private final ClassInfo ownerClass;
+
+    /**
+     * このメソッドの内部で定義されているローカル変数
+     */
+    private final Set<LocalVariableInfo> localVariables;
 
     /**
      * このメソッドが呼び出しているメソッド一覧を保存するための変数
