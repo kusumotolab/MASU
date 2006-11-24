@@ -1,5 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -17,13 +23,40 @@ public final class FileInfo {
      * @param name ファイル名
      */
     public FileInfo(final String name) {
-        
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == name) {
             throw new NullPointerException();
         }
-        
+
         this.name = name;
+        this.definedClasses = new TreeSet<ClassInfo>();
+    }
+
+    /**
+     * このファイルに定義されているクラスを追加する．
+     * 
+     * @param definedClass 定義されたクラス．
+     */
+    public void addDefinedClass(final ClassInfo definedClass) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == definedClass) {
+            throw new NullPointerException();
+        }
+
+        this.definedClasses.add(definedClass);
+    }
+
+    /**
+     * このファイルに定義されているクラスのイテレータを返す
+     * 
+     * @return このファイルに定義されているクラスのイテレータ
+     */
+    public Iterator<ClassInfo> definedClassIterator() {
+        Set<ClassInfo> unmodifiableDefinedClasses = Collections
+                .unmodifiableSet(this.definedClasses);
+        return unmodifiableDefinedClasses.iterator();
     }
 
     /**
@@ -34,11 +67,11 @@ public final class FileInfo {
      */
     @Override
     public boolean equals(Object o) {
-        
+
         if (null == o) {
             throw new NullPointerException();
         }
-        
+
         String thisName = this.getName();
         String correspondName = ((FileInfo) o).getName();
         return thisName.equals(correspondName);
@@ -79,11 +112,12 @@ public final class FileInfo {
      * @param loc 行数
      */
     public void setLOC(final int loc) {
-        
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (loc < 0) {
             throw new IllegalArgumentException("LOC must be 0 or more!");
         }
-        
+
         this.loc = loc;
     }
 
@@ -96,6 +130,8 @@ public final class FileInfo {
      * ファイル名を表す変数. ハッシュコードの計算に使っている．
      */
     private final String name;
+
+    private final Set<ClassInfo> definedClasses;
 
     // TODO 宣言されているクラスの情報を追加
     // TODO importしているクラスの情報を追加
