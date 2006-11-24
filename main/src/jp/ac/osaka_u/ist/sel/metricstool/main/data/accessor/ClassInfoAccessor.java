@@ -1,26 +1,23 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor;
 
+
 import java.util.Iterator;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+
 
 /**
- * プラグインが ClassInfo にアクセスするために用いるインターフェース
+ * このインターフェースは，クラス情報を取得するためのメソッド郡を提供する．
  * 
  * @author y-higo
  *
  */
-public final class ClassInfoAccessor {
+public interface ClassInfoAccessor {
 
     /**
-     * ClassInfo のイテレータを返す． このイテレータは参照専用であり変更処理を行うことはできない．
+     * 対象クラスのイテレータを返すメソッド．
      * 
-     * @return ClassInfo のイテレータ
+     * @return 対象クラスのイテレータ
      */
-    public static Iterator<ClassInfo> classInfoIterator() {
-        ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
-        return classInfoManager.iterator();
-    }
-    
+    public Iterator<ClassInfo> classInfoIterator();
 }
