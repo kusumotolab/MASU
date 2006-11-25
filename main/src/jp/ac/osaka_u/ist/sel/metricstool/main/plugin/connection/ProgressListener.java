@@ -20,6 +20,7 @@ public interface ProgressListener extends EventListener {
     
     /**
      * 進捗報告が途切れた時に呼び出されるメソッド
+     * @param event 進捗報告が途切れたことを表すイベント
      */
-    public void disconnected();
+    public void disconnected(ProgressEvent event);
 }

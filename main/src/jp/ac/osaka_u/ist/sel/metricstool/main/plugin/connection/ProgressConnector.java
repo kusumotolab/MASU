@@ -78,7 +78,7 @@ public final class ProgressConnector {
         
         //リスナーに通知してから全削除
         for(ProgressListener listener: listeners){
-            listener.disconnected();
+            listener.disconnected(new ProgressEvent(this.plugin,-1));
         }
         this.listeners.clear();
     }
