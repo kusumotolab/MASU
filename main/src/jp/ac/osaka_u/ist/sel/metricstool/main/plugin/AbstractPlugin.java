@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRICS_TYPE;
  * 
  * @author kou-tngt
  */
-public abstract class AbstractPlugin/* implements MessageSource この機能はまだコミットしてないのでコメントアウト*/{
+public abstract class AbstractPlugin implements Comparable<AbstractPlugin> /* MessageSource この機能はまだコミットしてないのでコメントアウト */{
 
     /**
      * プラグインの情報を保存する内部不変クラス． AbstractPluginからのみインスタンス化できる．
@@ -49,9 +49,9 @@ public abstract class AbstractPlugin/* implements MessageSource この機能はまだコ
         }
 
         /**
-         * このプラグインの簡易説明を１行で返す（できれば英語で）.
-         * デフォルトの実装では "Measure メトリクス名 metrics." と返す
+         * このプラグインの簡易説明を１行で返す（できれば英語で）. デフォルトの実装では "Measure メトリクス名 metrics." と返す
          * 各プラグインはこのメソッドを任意にオーバーライドする.
+         * 
          * @return 簡易説明文字列
          */
         public String getDescription() {
@@ -59,9 +59,8 @@ public abstract class AbstractPlugin/* implements MessageSource この機能はまだコ
         }
 
         /**
-         * このプラグインの詳細説明を返す（できれば英語で）.
-         * デフォルトの実装では空文字列を返す
-         * 各プラグインはこのメソッドを任意にオーバーライドする.
+         * このプラグインの詳細説明を返す（できれば英語で）. デフォルトの実装では空文字列を返す 各プラグインはこのメソッドを任意にオーバーライドする.
+         * 
          * @return 詳細説明文字列
          */
         public String getDetailDescription() {
@@ -168,8 +167,17 @@ public abstract class AbstractPlugin/* implements MessageSource この機能はまだコ
     }
 
     /**
-     * プラグインのルートディレクトリをセットする
-     * 一度セットされた値を変更することは出来ない.
+     * プラグインの順序を定義するメソッド
+     */
+    public final int compareTo(final AbstractPlugin plugin) {
+        String name = this.getMetricsName();
+        String correspondName = this.getMetricsName();
+        return name.compareTo(correspondName);
+    }   
+    
+    /**
+     * プラグインのルートディレクトリをセットする 一度セットされた値を変更することは出来ない.
+     * 
      * @param rootDir ルートディレクトリ
      * @throws NullPointerException rootDirがnullの場合
      * @throws IllegalStateException rootDirが既にセットされている場合
@@ -187,14 +195,15 @@ public abstract class AbstractPlugin/* implements MessageSource この機能はまだコ
         this.pluginRootDir = rootDir;
     }
 
-    //    /**
-    //     * メッセージ送信者としての名前を返す
-    //     * @return 送信者としての名前
-    //     * @see jp.ac.osaka_u.ist.sel.metricstool.main.plugin.connection.MessageSource#getMessageSourceName()
-    //     */
-    //    public String getMessageSourceName() {
-    //        return "Plugin(" + getMetricsName() + ")";
-    //    }
+    // /**
+    // * メッセージ送信者としての名前を返す
+    // * @return 送信者としての名前
+    // * @see
+    // jp.ac.osaka_u.ist.sel.metricstool.main.plugin.connection.MessageSource#getMessageSourceName()
+    // */
+    // public String getMessageSourceName() {
+    // return "Plugin(" + getMetricsName() + ")";
+    // }
 
     /**
      * プラグイン情報を保存している{@link PluginInfo}クラスのインスタンスを返す．
@@ -215,6 +224,7 @@ public abstract class AbstractPlugin/* implements MessageSource この機能はまだコ
 
     /**
      * プラグインのルートディレクトリを返す
+     * 
      * @return プラグインのルートディレクトリ
      */
     public final File getPluginRootDir() {
@@ -222,9 +232,9 @@ public abstract class AbstractPlugin/* implements MessageSource この機能はまだコ
     }
 
     /**
-     * このプラグインの簡易説明を１行で返す（できれば英語で）
-     * デフォルトの実装では "Measure メトリクス名 metrics." と返す
+     * このプラグインの簡易説明を１行で返す（できれば英語で） デフォルトの実装では "Measure メトリクス名 metrics." と返す
      * 各プラグインはこのメソッドを任意にオーバーライドする.
+     * 
      * @return 簡易説明文字列
      */
     protected String getDescription() {
@@ -232,9 +242,8 @@ public abstract class AbstractPlugin/* implements MessageSource この機能はまだコ
     }
 
     /**
-     * このプラグインの詳細説明を返す（できれば英語で）
-     * デフォルト実装では空文字列を返す.
-     * 各プラグインはこのメソッドを任意にオーバーライドする.
+     * このプラグインの詳細説明を返す（できれば英語で） デフォルト実装では空文字列を返す. 各プラグインはこのメソッドを任意にオーバーライドする.
+     * 
      * @return
      */
     protected String getDetailDescription() {

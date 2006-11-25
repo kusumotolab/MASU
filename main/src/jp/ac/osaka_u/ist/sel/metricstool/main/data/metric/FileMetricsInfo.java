@@ -1,8 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
 
 
+import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.TreeMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 
@@ -19,7 +20,7 @@ public final class FileMetricsInfo {
      * 引数なしコンストラクタ．
      */
     public FileMetricsInfo() {
-        this.fileMetrics = new ConcurrentHashMap<AbstractPlugin, Float>();
+        this.fileMetrics = Collections.synchronizedMap(new TreeMap<AbstractPlugin, Float>());
     }
     
     /**
