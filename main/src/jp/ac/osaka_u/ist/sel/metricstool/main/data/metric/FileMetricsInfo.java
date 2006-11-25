@@ -21,7 +21,28 @@ public final class FileMetricsInfo {
     public FileMetricsInfo() {
         this.fileMetrics = new ConcurrentHashMap<AbstractPlugin, Float>();
     }
+    
+    /**
+     * 引数で指定したプラグインによって登録されたメトリクス情報を取得するメソッド．
+     * 
+     * @param key ほしいメトリクスを登録したプラグイン
+     * @return メトリクス値
+     * @throws MetricNotRegisteredException メトリクスが登録されていないときにスローされる
+     */
+    public float getMetric(final AbstractPlugin key) throws MetricNotRegisteredException {
 
+        if (null == key) {
+            throw new NullPointerException();
+        }
+
+        Float value = this.fileMetrics.get(key);
+        if (null == value) {
+            throw new MetricNotRegisteredException();
+        }
+
+        return value.floatValue();
+    }
+    
     /**
      * 第一引数で与えられたプラグインで計測されたメトリクス値（第二引数）を登録する．
      * 
