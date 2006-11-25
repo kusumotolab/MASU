@@ -120,14 +120,14 @@ public final class ProgressConnector {
      * このメソッドを呼び出す時は，引数の正しさは事前にチェックしておかなければならない.
      * 
      * @param percentage 進捗情報（%）
-     * @throws AlreadyConnectedException コネクションが切断されている場合
+     * @throws DisconnectedException コネクションが切断されている場合
      * @throws PluginConnectionException コネクションが確立されていない場合
      */
-    void reportProgress(final int percentage) throws AlreadyConnectedException,PluginConnectionException{
+    void reportProgress(final int percentage) throws DisconnectedException,PluginConnectionException{
         if (STATE.INIT == this.connectionState) {
             throw new PluginConnectionException("No Connection was created.");
         } else if (STATE.DISCONNECTED == this.connectionState) {
-            throw new AlreadyConnectedException("Already disconnected.");
+            throw new DisconnectedException("Already disconnected.");
         }
 
         //コネクション管理の本質とは外れるので，例外ではなくアサーションで引数の正しさをチェック
