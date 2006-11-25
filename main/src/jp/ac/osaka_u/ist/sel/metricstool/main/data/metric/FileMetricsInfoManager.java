@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
 
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -29,25 +30,25 @@ public final class FileMetricsInfoManager {
      */
     public void putMetric(final FileInfo fileInfo, final AbstractPlugin plugin, final int value)
             throws MetricAlreadyRegisteredException {
-        
+
         FileMetricsInfo fileMetricsInfo = this.fileMetricsInfos.get(fileInfo);
-        
-        //対象ファイルの fileMetricsInfo が無い場合は，new して Map に登録する
+
+        // 対象ファイルの fileMetricsInfo が無い場合は，new して Map に登録する
         if (null == fileMetricsInfo) {
             fileMetricsInfo = new FileMetricsInfo();
             this.fileMetricsInfos.put(fileInfo, fileMetricsInfo);
         }
-        
+
         fileMetricsInfo.putMetric(plugin, value);
     }
 
     /**
-     * ファイルメトリクスマネージャのオブジェクトを生成する．
-     * シングルトンパターンを用いているため，private がついている．
-     *
+     * ファイルメトリクスマネージャのオブジェクトを生成する． シングルトンパターンを用いているため，private がついている．
+     * 
      */
     private FileMetricsInfoManager() {
-        this.fileMetricsInfos = new TreeMap<FileInfo, FileMetricsInfo>();
+        this.fileMetricsInfos = Collections
+                .synchronizedMap(new TreeMap<FileInfo, FileMetricsInfo>());
     }
 
     /**

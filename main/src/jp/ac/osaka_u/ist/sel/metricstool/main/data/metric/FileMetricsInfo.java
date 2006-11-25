@@ -1,8 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
 
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 
@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
  * ファイルメトリクスを登録するためのデータクラス
  * 
  * @author y-higo
- *
+ * 
  */
 public final class FileMetricsInfo {
 
@@ -19,7 +19,7 @@ public final class FileMetricsInfo {
      * 引数なしコンストラクタ．
      */
     public FileMetricsInfo() {
-        this.fileMetrics = new HashMap<AbstractPlugin, Float>();
+        this.fileMetrics = new ConcurrentHashMap<AbstractPlugin, Float>();
     }
 
     /**
@@ -29,10 +29,11 @@ public final class FileMetricsInfo {
      * @param value 登録するメトリクス値(int)
      * @throws MetricAlreadyRegisteredException 登録しようとしていたメトリクスが既に登録されていた場合にスローされる
      */
-    public void putMetric(final AbstractPlugin key, final int value) throws MetricAlreadyRegisteredException {
+    public void putMetric(final AbstractPlugin key, final int value)
+            throws MetricAlreadyRegisteredException {
         this.putMetric(key, new Float(value));
     }
-    
+
     /**
      * 第一引数で与えられたプラグインで計測されたメトリクス値（第二引数）を登録する．
      * 
@@ -40,10 +41,11 @@ public final class FileMetricsInfo {
      * @param value 登録するメトリクス値(float)
      * @throws MetricAlreadyRegisteredException 登録しようとしていたメトリクスが既に登録されていた場合にスローされる
      */
-    public void putMetric(final AbstractPlugin key, final float value) throws MetricAlreadyRegisteredException {
+    public void putMetric(final AbstractPlugin key, final float value)
+            throws MetricAlreadyRegisteredException {
         this.putMetric(key, new Float(value));
     }
-    
+
     /**
      * 第一引数で与えられたプラグインで計測されたメトリクス値（第二引数）を登録する．
      * 
