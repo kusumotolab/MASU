@@ -5,6 +5,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManage
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricAlreadyRegisteredException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRICS_TYPE;
 
 
 /**
@@ -20,6 +22,15 @@ public class DefaultClassMetricsRegister implements ClassMetricsRegister {
      * @param plugin 初期化を行うプラグインのインスタンス
      */
     public DefaultClassMetricsRegister(final AbstractPlugin plugin) {
+
+        if (null == plugin) {
+            throw new NullPointerException();
+        }
+        PluginInfo pluginInfo = plugin.getPluginInfo();
+        if (METRICS_TYPE.CLASS_METRICS != pluginInfo.getMetricsType()) {
+            throw new IllegalArgumentException("plugin must be class type!");
+        }
+
         this.plugin = plugin;
     }
 
