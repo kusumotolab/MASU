@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
  * @author y-higo
  *
  */
-public final class DefaultFileInfoAccessor implements FileInfoAccessor {
+public class DefaultFileInfoAccessor implements FileInfoAccessor {
 
     /**
      * FileInfo のイテレータを返す． このイテレータは参照専用であり変更処理を行うことはできない．

@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
  * @author y-higo
  *
  */
-public final class DefaultMethodInfoAccessor implements MethodInfoAccessor {
+public class DefaultMethodInfoAccessor implements MethodInfoAccessor {
 
     /**
      * MethodInfo のイテレータを返す． このイテレータは参照専用であり変更処理を行うことはできない．
