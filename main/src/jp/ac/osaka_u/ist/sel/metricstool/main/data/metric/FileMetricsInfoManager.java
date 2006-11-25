@@ -1,14 +1,24 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
 
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
+/**
+ * ファイルメトリクスを管理するクラス．
+ * 
+ * @author y-higo
+ * 
+ */
 public final class FileMetricsInfoManager {
 
     /**
@@ -18,6 +28,43 @@ public final class FileMetricsInfoManager {
      */
     public static FileMetricsInfoManager getInstance() {
         return FILE_METRICS_MAP;
+    }
+
+    /**
+     * メトリクスが登録されているクラスのイテレータを返す．
+     * 
+     * @return メトリクスが登録されているクラスのイテレータ
+     */
+    public Iterator<FileInfo> fileInfoIterator() {
+        Set<FileInfo> unmodifiableFileInfoSet = Collections.unmodifiableSet(this.fileMetricsInfos
+                .keySet());
+        return unmodifiableFileInfoSet.iterator();
+    }
+
+    /**
+     * メトリクス情報一覧のイテレータを返す．
+     * 
+     * @return メトリクス情報のイテレータ
+     */
+    public Iterator<FileMetricsInfo> fileMetricsInfoIterator() {
+        Collection<FileMetricsInfo> unmodifiableFileMetricsInfoCollection = Collections
+                .unmodifiableCollection(this.fileMetricsInfos.values());
+        return unmodifiableFileMetricsInfoCollection.iterator();
+    }
+
+    /**
+     * 引数で指定されたファイルのメトリクス情報を返す． 引数で指定されたファイルのメトリクス情報が存在しない場合は， null を返す．
+     * 
+     * @param fileInfo ほしいメトリクス情報のファイル
+     * @return メトリクス情報
+     */
+    public FileMetricsInfo get(final FileInfo fileInfo) {
+        
+        if (null == fileInfo) {
+            throw new NullPointerException();
+        }
+        
+        return this.fileMetricsInfos.get(fileInfo);
     }
 
     /**
@@ -47,6 +94,7 @@ public final class FileMetricsInfoManager {
      * 
      */
     private FileMetricsInfoManager() {
+        MetricsToolSecurityManager.getInstance().checkAccess();
         this.fileMetricsInfos = Collections
                 .synchronizedMap(new TreeMap<FileInfo, FileMetricsInfo>());
     }
