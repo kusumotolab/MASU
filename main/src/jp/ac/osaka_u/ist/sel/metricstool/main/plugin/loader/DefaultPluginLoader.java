@@ -60,7 +60,7 @@ public class DefaultPluginLoader implements PluginLoader {
      * @param extension 追加するライブラリファイルの拡張子名．
      */
     public void addLibraryExtension(String extension) {
-        if (!extension.startsWith(".")){
+        if (!extension.startsWith(".")) {
             extension = "." + extension;
         }
         this.libraryExtensions.add(extension);
@@ -166,10 +166,10 @@ public class DefaultPluginLoader implements PluginLoader {
     public AbstractPlugin loadPlugin(final File pluginRootDir) throws PluginLoadException,
             IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
             PluginClassLoadException {
-        
+
         //アクセス権限をチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        
+
         if (null == pluginRootDir) {
             throw new NullPointerException();
         }
@@ -255,16 +255,19 @@ public class DefaultPluginLoader implements PluginLoader {
 
             assert (null != plugin) : "Illeagal state: Plugin class's instance is null.";
 
-            //ロードしてキャストできたので返す
+            plugin.setPluginRootdir(pluginRootDir);
+            //ロードしてキャストしてインスタンス化してディレクトリがセットできたので返す.
             return plugin;
         } catch (final SecurityException e) {
-            throw new PluginClassLoadException("Failed to load " + pluginClassName + ".");
+            throw new PluginClassLoadException("Failed to load " + pluginClassName + ".", e);
         } catch (final ClassNotFoundException e) {
-            throw new PluginClassLoadException("Failed to load " + pluginClassName + ".");
+            throw new PluginClassLoadException("Failed to load " + pluginClassName + ".", e);
         } catch (final InstantiationException e) {
-            throw new PluginClassLoadException("Failed to instanciate " + pluginClassName + ".");
+            throw new PluginClassLoadException("Failed to instanciate " + pluginClassName + ".", e);
         } catch (final IllegalAccessException e) {
-            throw new PluginClassLoadException("Failed to access to " + pluginClassName + ".");
+            throw new PluginClassLoadException("Failed to access to " + pluginClassName + ".", e);
+        } catch (final IllegalStateException e) {
+            throw new PluginLoadException("Failed to set plugin root direcotyr.", e);
         }
     }
 

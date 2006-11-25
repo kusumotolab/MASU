@@ -1,14 +1,14 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.plugin;
 
 
+import java.io.File;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRICS_TYPE;
 
 
 /**
- * 仮実装(2006/11/17） 他のコード群で型を利用するため，コンパイル用に登録．
- * 
- * <p>
  * メトリクス計測プラグイン実装用の抽象クラス
  * <p>
  * 各プラグインはこのクラスを継承したクラスを1つもたなければならない． また，そのクラス名をplugin.xmlファイルに指定の形式で記述しなければならない．
@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRICS_TYPE;
  * 
  * @author kou-tngt
  */
-public abstract class AbstractPlugin {
+public abstract class AbstractPlugin/* implements MessageSource この機能はまだコミットしてないのでコメントアウト*/{
 
     /**
      * プラグインの情報を保存する内部不変クラス． AbstractPluginからのみインスタンス化できる．
@@ -55,7 +55,7 @@ public abstract class AbstractPlugin {
          * @return 簡易説明文字列
          */
         public String getDescription() {
-            return description;
+            return this.description;
         }
 
         /**
@@ -65,16 +65,16 @@ public abstract class AbstractPlugin {
          * @return 詳細説明文字列
          */
         public String getDetailDescription() {
-            return detailDescription;
+            return this.detailDescription;
         }
-        
+
         /**
          * このプラグインがメトリクスを計測できる言語を返す．
          * 
          * @return 計測可能な言語を全て含む配列．
          */
         public LANGUAGE[] getMeasurableLanguages() {
-            return measurableLanguages;
+            return this.measurableLanguages;
         }
 
         /**
@@ -83,8 +83,8 @@ public abstract class AbstractPlugin {
          * @param language 利用可能であるかを調べたい言語
          * @return 利用可能である場合は true，利用できない場合は false．
          */
-        public boolean isMeasurable(LANGUAGE language) {
-            LANGUAGE[] measurableLanguages = this.getMeasurableLanguages();
+        public boolean isMeasurable(final LANGUAGE language) {
+            final LANGUAGE[] measurableLanguages = this.getMeasurableLanguages();
             for (int i = 0; i < measurableLanguages.length; i++) {
                 if (language.equals(measurableLanguages[i])) {
                     return true;
@@ -99,7 +99,7 @@ public abstract class AbstractPlugin {
          * @return メトリクス名
          */
         public String getMetricsName() {
-            return metricsName;
+            return this.metricsName;
         }
 
         /**
@@ -109,7 +109,7 @@ public abstract class AbstractPlugin {
          * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.METRICS_TYPE
          */
         public METRICS_TYPE getMetricsType() {
-            return metricsType;
+            return this.metricsType;
         }
 
         /**
@@ -118,7 +118,7 @@ public abstract class AbstractPlugin {
          * @return クラスに関する情報を利用する場合はtrue．
          */
         public boolean isUseClassInfo() {
-            return useClassInfo;
+            return this.useClassInfo;
         }
 
         /**
@@ -127,7 +127,7 @@ public abstract class AbstractPlugin {
          * @return ファイルに関する情報を利用する場合はtrue．
          */
         public boolean isUseFileInfo() {
-            return useFileInfo;
+            return this.useFileInfo;
         }
 
         /**
@@ -136,7 +136,7 @@ public abstract class AbstractPlugin {
          * @return メソッドに関する情報を利用する場合はtrue．
          */
         public boolean isUseMethodInfo() {
-            return useMethodInfo;
+            return this.useMethodInfo;
         }
 
         /**
@@ -145,7 +145,7 @@ public abstract class AbstractPlugin {
          * @return メソッド内部に関する情報を利用する場合はtrue．
          */
         public boolean isUseMethodLocalInfo() {
-            return useMethodLocalInfo;
+            return this.useMethodLocalInfo;
         }
 
         private final LANGUAGE[] measurableLanguages;
@@ -153,9 +153,9 @@ public abstract class AbstractPlugin {
         private final String metricsName;
 
         private final METRICS_TYPE metricsType;
-        
+
         private final String description;
-        
+
         private final String detailDescription;
 
         private final boolean useClassInfo;
@@ -166,6 +166,35 @@ public abstract class AbstractPlugin {
 
         private final boolean useMethodLocalInfo;
     }
+
+    /**
+     * プラグインのルートディレクトリをセットする
+     * 一度セットされた値を変更することは出来ない.
+     * @param rootDir ルートディレクトリ
+     * @throws NullPointerException rootDirがnullの場合
+     * @throws IllegalStateException rootDirが既にセットされている場合
+     */
+    public final synchronized void setPluginRootdir(final File rootDir) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+
+        if (null == rootDir) {
+            throw new NullPointerException("rootdir is null.");
+        }
+        if (null != this.pluginRootDir) {
+            throw new IllegalStateException("rootdir was already set.");
+        }
+
+        this.pluginRootDir = rootDir;
+    }
+
+    //    /**
+    //     * メッセージ送信者としての名前を返す
+    //     * @return 送信者としての名前
+    //     * @see jp.ac.osaka_u.ist.sel.metricstool.main.plugin.connection.MessageSource#getMessageSourceName()
+    //     */
+    //    public String getMessageSourceName() {
+    //        return "Plugin(" + getMetricsName() + ")";
+    //    }
 
     /**
      * プラグイン情報を保存している{@link PluginInfo}クラスのインスタンスを返す．
@@ -185,13 +214,21 @@ public abstract class AbstractPlugin {
     }
 
     /**
+     * プラグインのルートディレクトリを返す
+     * @return プラグインのルートディレクトリ
+     */
+    public final File getPluginRootDir() {
+        return this.pluginRootDir;
+    }
+
+    /**
      * このプラグインの簡易説明を１行で返す（できれば英語で）
      * デフォルトの実装では "Measure メトリクス名 metrics." と返す
      * 各プラグインはこのメソッドを任意にオーバーライドする.
      * @return 簡易説明文字列
      */
     protected String getDescription() {
-        return "Measure " + getMetricsName() + " metrics.";
+        return "Measure " + this.getMetricsName() + " metrics.";
     }
 
     /**
@@ -279,4 +316,9 @@ public abstract class AbstractPlugin {
      * それ以降、このフィールドは常に同じインスタンスを参照する．
      */
     private PluginInfo pluginInfo;
+
+    /**
+     * プラグインのルートディレクトリ
+     */
+    private File pluginRootDir;
 }
