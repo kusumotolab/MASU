@@ -97,7 +97,7 @@ public final class FileMetricsInfo {
             Float value = this.getMetric(plugin);
             if (null == value) {
                 PluginInfo pluginInfo = plugin.getPluginInfo();
-                String metricName = pluginInfo.getMetricsName();
+                String metricName = pluginInfo.getMetricName();
                 FileInfo fileInfo = this.getFileInfo();
                 String fileName = fileInfo.getName();
                 throw new MetricNotRegisteredException("Metric \"" + metricName + "\" of "

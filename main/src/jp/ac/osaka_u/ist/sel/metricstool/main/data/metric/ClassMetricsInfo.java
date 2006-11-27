@@ -97,7 +97,7 @@ public final class ClassMetricsInfo {
             Float value = this.getMetric(plugin);
             if (null == value) {
                 PluginInfo pluginInfo = plugin.getPluginInfo();
-                String metricName = pluginInfo.getMetricsName();
+                String metricName = pluginInfo.getMetricName();
                 ClassInfo classInfo = this.getClassInfo();
                 String className = classInfo.getName();
                 throw new MetricNotRegisteredException("Metric \"" + metricName + "\" of "

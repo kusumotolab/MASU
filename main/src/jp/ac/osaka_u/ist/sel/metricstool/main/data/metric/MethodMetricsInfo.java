@@ -98,7 +98,7 @@ public final class MethodMetricsInfo {
             Float value = this.getMetric(plugin);
             if (null == value) {
                 PluginInfo pluginInfo = plugin.getPluginInfo();
-                String metricName = pluginInfo.getMetricsName();
+                String metricName = pluginInfo.getMetricName();
                 MethodInfo methodInfo = this.getMethodInfo();
                 String methodName = methodInfo.getName();
                 ClassInfo ownerClassInfo = methodInfo.getOwnerClass();
