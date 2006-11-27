@@ -5,6 +5,8 @@ import java.security.AccessControlException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.ConcurrentHashSet;
 
@@ -40,6 +42,7 @@ public class PluginManager {
         }
 
         this.plugins.add(plugin);
+        this.pluginInfos.add(plugin.getPluginInfo());
     }
 
     /**
@@ -63,13 +66,21 @@ public class PluginManager {
 
     /**
      * プラグインの編集不可なSetを返す
-     * プラグインスレッドからは呼び出せない
+     * 特別権限を持つスレッド以外からは呼び出せない
      * @return プラグインのSet
-     * @throws AccessControlException プラグインスレッドからの呼び出しの場合
+     * @throws AccessControlException 特別権限を持っていないスレッドからの呼び出しの場合
      */
     public Set<AbstractPlugin> getPlugins() {
-        MetricsToolSecurityManager.getInstance().checkPlugin();
+        MetricsToolSecurityManager.getInstance().checkAccess();
         return Collections.unmodifiableSet(this.plugins);
+    }
+
+    /**
+     * プラグイン情報の編集不可なSetを返す
+     * @return プラグイン情報のSet
+     */
+    public Set<PluginInfo> getPluginInfos() {
+        return Collections.unmodifiableSet(this.pluginInfos);
     }
 
     /**
@@ -96,6 +107,11 @@ public class PluginManager {
      * プラグインのSet
      */
     private final Set<AbstractPlugin> plugins = new ConcurrentHashSet<AbstractPlugin>();
+
+    /**
+     * プラグイン情報のSet
+     */
+    private final Set<PluginInfo> pluginInfos = new ConcurrentHashSet<PluginInfo>();
 
     /**
      * シングルトンインスタンス
