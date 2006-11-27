@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -71,5 +72,5 @@ public final class TargetFileManager implements Iterable<TargetFile> {
      * 
      * 対象ファイル (TargetFile) を格納する変数．
      */
-    private final Set<TargetFile> targetFiles;
+    private final SortedSet<TargetFile> targetFiles;
 }

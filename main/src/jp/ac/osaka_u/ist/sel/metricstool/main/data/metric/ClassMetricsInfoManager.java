@@ -4,8 +4,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
@@ -92,20 +92,22 @@ public final class ClassMetricsInfoManager {
 
     /**
      * クラスメトリクスに登録漏れがないかをチェックする
+     * 
      * @throws MetricNotRegisteredException 登録漏れがあった場合にスローされる
      */
     public void checkMetrics() throws MetricNotRegisteredException {
-        
+
         for (ClassInfo classInfo : ClassInfoManager.getInstance()) {
-            
+
             ClassMetricsInfo classMetricsInfo = this.get(classInfo);
             if (null == classMetricsInfo) {
-                throw new MetricNotRegisteredException("Class \"" + classInfo.getName() + "\" metrics are not registered!");
+                throw new MetricNotRegisteredException("Class \"" + classInfo.getName()
+                        + "\" metrics are not registered!");
             }
             classMetricsInfo.checkMetrics();
         }
     }
-    
+
     /**
      * クラスメトリクスマネージャのオブジェクトを生成する． シングルトンパターンを用いているため，private がついている．
      * 
@@ -113,7 +115,7 @@ public final class ClassMetricsInfoManager {
     private ClassMetricsInfoManager() {
         MetricsToolSecurityManager.getInstance().checkAccess();
         this.classMetricsInfos = Collections
-                .synchronizedMap(new TreeMap<ClassInfo, ClassMetricsInfo>());
+                .synchronizedSortedMap(new TreeMap<ClassInfo, ClassMetricsInfo>());
     }
 
     /**
@@ -124,5 +126,5 @@ public final class ClassMetricsInfoManager {
     /**
      * クラスメトリクスのマップを保存するための変数
      */
-    private final Map<ClassInfo, ClassMetricsInfo> classMetricsInfos;
+    private final SortedMap<ClassInfo, ClassMetricsInfo> classMetricsInfos;
 }

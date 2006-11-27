@@ -4,8 +4,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
@@ -119,7 +119,7 @@ public final class MethodMetricsInfoManager {
     private MethodMetricsInfoManager() {
         MetricsToolSecurityManager.getInstance().checkAccess();
         this.methodMetricsInfos = Collections
-                .synchronizedMap(new TreeMap<MethodInfo, MethodMetricsInfo>());
+                .synchronizedSortedMap(new TreeMap<MethodInfo, MethodMetricsInfo>());
     }
 
     /**
@@ -130,5 +130,5 @@ public final class MethodMetricsInfoManager {
     /**
      * メソッドメトリクスのマップを保存するための変数
      */
-    private final Map<MethodInfo, MethodMetricsInfo> methodMetricsInfos;
+    private final SortedMap<MethodInfo, MethodMetricsInfo> methodMetricsInfos;
 }

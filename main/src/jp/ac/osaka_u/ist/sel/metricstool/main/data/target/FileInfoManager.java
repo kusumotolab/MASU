@@ -3,7 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -34,12 +34,12 @@ public final class FileInfoManager implements Iterable<FileInfo> {
      * @param fileInfo 追加するクラス情報
      */
     public void add(final FileInfo fileInfo) {
-        
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == fileInfo) {
             throw new NullPointerException();
         }
-        
+
         this.fileInfos.add(fileInfo);
     }
 
@@ -47,7 +47,8 @@ public final class FileInfoManager implements Iterable<FileInfo> {
      * ファイル情報の Iterator を返す．この Iterator は unmodifiable であり，変更操作を行うことはできない．
      */
     public Iterator<FileInfo> iterator() {
-        Set<FileInfo> unmodifiableFileInfos = Collections.unmodifiableSet(this.fileInfos);
+        SortedSet<FileInfo> unmodifiableFileInfos = Collections
+                .unmodifiableSortedSet(this.fileInfos);
         return unmodifiableFileInfos.iterator();
     }
 
@@ -70,5 +71,5 @@ public final class FileInfoManager implements Iterable<FileInfo> {
      * 
      * ファイル情報 (FileInfo) を格納する変数．
      */
-    private final Set<FileInfo> fileInfos;
+    private final SortedSet<FileInfo> fileInfos;
 }

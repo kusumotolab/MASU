@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -70,5 +71,5 @@ public final class ClassInfoManager implements Iterable<ClassInfo> {
      * 
      * ƒNƒ‰ƒXî•ñ (ClassInfo) ‚ğŠi”[‚·‚é•Ï”D
      */
-    private final Set<ClassInfo> classInfos;
+    private final SortedSet<ClassInfo> classInfos;
 }

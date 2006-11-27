@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -34,12 +35,12 @@ public final class MethodInfoManager implements Iterable<MethodInfo> {
      * @param methodInfo 追加するメソッド情報
      */
     public void add(final MethodInfo methodInfo) {
-        
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == methodInfo) {
             throw new NullPointerException();
         }
-        
+
         this.methodInfos.add(methodInfo);
     }
 
@@ -70,5 +71,5 @@ public final class MethodInfoManager implements Iterable<MethodInfo> {
      * 
      * メソッド情報 (methodInfo) を格納する変数．
      */
-    private final Set<MethodInfo> methodInfos;
+    private final SortedSet<MethodInfo> methodInfos;
 }

@@ -3,7 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -198,7 +198,8 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @return スーパークラスの Iterator
      */
     public Iterator<ClassInfo> superClassIterator() {
-        Set<ClassInfo> unmodifiableSuperClasses = Collections.unmodifiableSet(this.superClasses);
+        SortedSet<ClassInfo> unmodifiableSuperClasses = Collections
+                .unmodifiableSortedSet(this.superClasses);
         return unmodifiableSuperClasses.iterator();
     }
 
@@ -208,7 +209,8 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @return サブクラスの Iterator
      */
     public Iterator<ClassInfo> subClassIterator() {
-        Set<ClassInfo> unmodifiablesubClasses = Collections.unmodifiableSet(this.subClasses);
+        SortedSet<ClassInfo> unmodifiablesubClasses = Collections
+                .unmodifiableSortedSet(this.subClasses);
         return unmodifiablesubClasses.iterator();
     }
 
@@ -218,7 +220,8 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @return インナークラスの Iterator
      */
     public Iterator<ClassInfo> innerClassIterator() {
-        Set<ClassInfo> unmodifiableInnerClasses = Collections.unmodifiableSet(this.innerClasses);
+        SortedSet<ClassInfo> unmodifiableInnerClasses = Collections
+                .unmodifiableSortedSet(this.innerClasses);
         return unmodifiableInnerClasses.iterator();
     }
 
@@ -228,8 +231,8 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @return 定義されているメソッドの Iterator
      */
     public Iterator<MethodInfo> definedMethodIterator() {
-        Set<MethodInfo> unmodifiableDefinedMethods = Collections
-                .unmodifiableSet(this.definedMethods);
+        SortedSet<MethodInfo> unmodifiableDefinedMethods = Collections
+                .unmodifiableSortedSet(this.definedMethods);
         return unmodifiableDefinedMethods.iterator();
     }
 
@@ -239,7 +242,8 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @return 定義されているフィールドの Iterator
      */
     public Iterator<FieldInfo> definedFieldIterator() {
-        Set<FieldInfo> unmodifiableDefinedFields = Collections.unmodifiableSet(this.definedFields);
+        SortedSet<FieldInfo> unmodifiableDefinedFields = Collections
+                .unmodifiableSortedSet(this.definedFields);
         return unmodifiableDefinedFields.iterator();
     }
 
@@ -265,26 +269,26 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
     /**
      * このクラスが継承しているクラス一覧を保存するための変数． 直接の親クラスのみを保有するが，多重継承を考えて Set にしている．
      */
-    private final Set<ClassInfo> superClasses;
+    private final SortedSet<ClassInfo> superClasses;
 
     /**
      * このクラスを継承しているクラス一覧を保存するための変数．直接の子クラスのみを保有する．
      */
-    private final Set<ClassInfo> subClasses;
+    private final SortedSet<ClassInfo> subClasses;
 
     /**
      * このクラスの内部クラス一覧を保存するための変数．直接の内部クラスのみを保有する．
      */
-    private final Set<ClassInfo> innerClasses;
+    private final SortedSet<ClassInfo> innerClasses;
 
     /**
      * このクラスで定義されているメソッド一覧を保存するための変数．
      */
-    private final Set<MethodInfo> definedMethods;
+    private final SortedSet<MethodInfo> definedMethods;
 
     /**
      * このクラスで定義されているフィールド一覧を保存するための変数．
      */
-    private final Set<FieldInfo> definedFields;
+    private final SortedSet<FieldInfo> definedFields;
 
 }

@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -259,6 +259,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 
     /**
      * このメソッドがコンストラクタかどうかを返す．
+     * 
      * @return コンストラクタである場合は true，そうでない場合は false
      */
     public boolean isConstuructor() {
@@ -298,8 +299,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @return このメソッドで定義されているローカル変数の Iterator
      */
     public Iterator<LocalVariableInfo> localVariableIterator() {
-        Set<LocalVariableInfo> unmodifiableLocalVariables = Collections
-                .unmodifiableSet(this.localVariables);
+        SortedSet<LocalVariableInfo> unmodifiableLocalVariables = Collections
+                .unmodifiableSortedSet(this.localVariables);
         return unmodifiableLocalVariables.iterator();
     }
 
@@ -337,7 +338,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @return このメソッドが呼び出しているメソッドの Iterator
      */
     public Iterator<MethodInfo> calleeIterator() {
-        Set<MethodInfo> unmodifiableCallees = Collections.unmodifiableSet(this.callees);
+        SortedSet<MethodInfo> unmodifiableCallees = Collections.unmodifiableSortedSet(this.callees);
         return unmodifiableCallees.iterator();
     }
 
@@ -347,7 +348,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @return このメソッドを呼び出しているメソッドの Iterator
      */
     public Iterator<MethodInfo> callerIterator() {
-        Set<MethodInfo> unmodifiableCallers = Collections.unmodifiableSet(this.callers);
+        SortedSet<MethodInfo> unmodifiableCallers = Collections.unmodifiableSortedSet(this.callers);
         return unmodifiableCallers.iterator();
     }
 
@@ -357,7 +358,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @return このメソッドがオーバーライドしているメソッドの Iterator
      */
     public Iterator<MethodInfo> overrideeIterator() {
-        Set<MethodInfo> unmodifiableOverridees = Collections.unmodifiableSet(this.overridees);
+        SortedSet<MethodInfo> unmodifiableOverridees = Collections
+                .unmodifiableSortedSet(this.overridees);
         return unmodifiableOverridees.iterator();
     }
 
@@ -367,7 +369,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @return このメソッドをオーバーライドしているメソッドの Iterator
      */
     public Iterator<MethodInfo> overriderIterator() {
-        Set<MethodInfo> unmodifiableOverriders = Collections.unmodifiableSet(this.overriders);
+        SortedSet<MethodInfo> unmodifiableOverriders = Collections
+                .unmodifiableSortedSet(this.overriders);
         return unmodifiableOverriders.iterator();
     }
 
@@ -377,7 +380,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @return このメソッドが参照しているフィールドの Iterator
      */
     public Iterator<FieldInfo> referenceIterator() {
-        Set<FieldInfo> unmodifiableReferencees = Collections.unmodifiableSet(this.referencees);
+        SortedSet<FieldInfo> unmodifiableReferencees = Collections
+                .unmodifiableSortedSet(this.referencees);
         return unmodifiableReferencees.iterator();
     }
 
@@ -387,7 +391,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
      * @return このメソッドが代入しているフィールドの Iterator
      */
     public Iterator<FieldInfo> assignmenteeIterator() {
-        Set<FieldInfo> unmodifiableAssignmentees = Collections.unmodifiableSet(this.assignmentees);
+        SortedSet<FieldInfo> unmodifiableAssignmentees = Collections
+                .unmodifiableSortedSet(this.assignmentees);
         return unmodifiableAssignmentees.iterator();
     }
 
@@ -423,37 +428,37 @@ public final class MethodInfo implements Comparable<MethodInfo> {
     /**
      * このメソッドの内部で定義されているローカル変数
      */
-    private final Set<LocalVariableInfo> localVariables;
+    private final SortedSet<LocalVariableInfo> localVariables;
 
     /**
      * このメソッドが呼び出しているメソッド一覧を保存するための変数
      */
-    private final Set<MethodInfo> callees;
+    private final SortedSet<MethodInfo> callees;
 
     /**
      * このメソッドを呼び出しているメソッド一覧を保存するための変数
      */
-    private final Set<MethodInfo> callers;
+    private final SortedSet<MethodInfo> callers;
 
     /**
      * このメソッドがオーバーライドしているメソッド一覧を保存するための変数
      */
-    private final Set<MethodInfo> overridees;
+    private final SortedSet<MethodInfo> overridees;
 
     /**
      * オーバーライドされているメソッドを保存するための変数
      */
-    private final Set<MethodInfo> overriders;
+    private final SortedSet<MethodInfo> overriders;
 
     /**
      * 参照しているフィールド一覧を保存するための変数
      */
-    private final Set<FieldInfo> referencees;
+    private final SortedSet<FieldInfo> referencees;
 
     /**
      * 代入しているフィールド一覧を保存するための変数
      */
-    private final Set<FieldInfo> assignmentees;
+    private final SortedSet<FieldInfo> assignmentees;
 
     /**
      * このメソッドがコンストラクタかどうかを保存するための変数

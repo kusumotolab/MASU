@@ -3,7 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -54,8 +54,8 @@ public final class FileInfo {
      * @return このファイルに定義されているクラスのイテレータ
      */
     public Iterator<ClassInfo> definedClassIterator() {
-        Set<ClassInfo> unmodifiableDefinedClasses = Collections
-                .unmodifiableSet(this.definedClasses);
+        SortedSet<ClassInfo> unmodifiableDefinedClasses = Collections
+                .unmodifiableSortedSet(this.definedClasses);
         return unmodifiableDefinedClasses.iterator();
     }
 
@@ -131,7 +131,7 @@ public final class FileInfo {
      */
     private final String name;
 
-    private final Set<ClassInfo> definedClasses;
+    private final SortedSet<ClassInfo> definedClasses;
 
     // TODO 宣言されているクラスの情報を追加
     // TODO importしているクラスの情報を追加

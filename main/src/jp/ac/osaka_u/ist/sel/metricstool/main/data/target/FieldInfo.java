@@ -3,15 +3,14 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
 /**
- * フィールドの情報を現すクラス．
- * 以下の情報をもつ．
+ * フィールドの情報を現すクラス． 以下の情報をもつ．
  * <ul>
  * <li>フィールド名</li>
  * <li>フィールドの型</li>
@@ -111,7 +110,8 @@ public final class FieldInfo extends VariableInfo {
      * @return このフィールドを参照しているメソッドのイテレータ
      */
     public Iterator<MethodInfo> referencerIterator() {
-        Set<MethodInfo> unmodifiableReferencers = Collections.unmodifiableSet(this.referencers);
+        SortedSet<MethodInfo> unmodifiableReferencers = Collections
+                .unmodifiableSortedSet(this.referencers);
         return unmodifiableReferencers.iterator();
     }
 
@@ -121,7 +121,8 @@ public final class FieldInfo extends VariableInfo {
      * @return このフィールドに対して代入を行っているメソッドのイテレータ
      */
     public Iterator<MethodInfo> assignmenterIterator() {
-        Set<MethodInfo> unmodifiableAssignmenters = Collections.unmodifiableSet(this.assignmenters);
+        SortedSet<MethodInfo> unmodifiableAssignmenters = Collections
+                .unmodifiableSortedSet(this.assignmenters);
         return unmodifiableAssignmenters.iterator();
     }
 
@@ -133,12 +134,12 @@ public final class FieldInfo extends VariableInfo {
     /**
      * このフィールドを参照しているメソッド群を保存するための変数
      */
-    private final Set<MethodInfo> referencers;
+    private final SortedSet<MethodInfo> referencers;
 
     /**
      * このフィールドに対して代入を行っているメソッド群を保存するための変数
      */
-    private final Set<MethodInfo> assignmenters;
+    private final SortedSet<MethodInfo> assignmenters;
 
     /**
      * フィールドの修飾子を表す変数

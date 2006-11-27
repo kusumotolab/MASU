@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
 
 
 import java.util.Collections;
-import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
@@ -29,7 +29,7 @@ public final class ClassMetricsInfo {
         }
 
         this.classInfo = classInfo;
-        this.classMetrics = Collections.synchronizedMap(new TreeMap<AbstractPlugin, Float>());
+        this.classMetrics = Collections.synchronizedSortedMap(new TreeMap<AbstractPlugin, Float>());
     }
 
     /**
@@ -134,5 +134,5 @@ public final class ClassMetricsInfo {
     /**
      * クラスメトリクスを保存するための変数
      */
-    private final Map<AbstractPlugin, Float> classMetrics;
+    private final SortedMap<AbstractPlugin, Float> classMetrics;
 }

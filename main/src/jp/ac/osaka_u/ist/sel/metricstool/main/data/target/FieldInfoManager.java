@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -49,7 +48,8 @@ public final class FieldInfoManager implements Iterable<FieldInfo> {
      * フィールド情報の Iterator を返す．この Iterator は unmodifiable であり，変更操作を行うことはできない．
      */
     public Iterator<FieldInfo> iterator() {
-        Set<FieldInfo> unmodifiableFieldInfos = Collections.unmodifiableSet(this.fieldInfos);
+        SortedSet<FieldInfo> unmodifiableFieldInfos = Collections
+                .unmodifiableSortedSet(this.fieldInfos);
         return unmodifiableFieldInfos.iterator();
     }
 
