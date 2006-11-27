@@ -40,8 +40,8 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
             final LANGUAGE[] languages = AbstractPlugin.this.getMeasurableLanguages();
             this.measurableLanguages = new LANGUAGE[languages.length];
             System.arraycopy(languages, 0, this.measurableLanguages, 0, languages.length);
-            this.metricsName = AbstractPlugin.this.getMetricsName();
-            this.metricsType = AbstractPlugin.this.getMetricsType();
+            this.metricName = AbstractPlugin.this.getMetricName();
+            this.metricType = AbstractPlugin.this.getMetricType();
             this.useClassInfo = AbstractPlugin.this.useClassInfo();
             this.useMethodInfo = AbstractPlugin.this.useMethodInfo();
             this.useFileInfo = AbstractPlugin.this.useFileInfo();
@@ -100,8 +100,8 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
          * 
          * @return メトリクス名
          */
-        public String getMetricsName() {
-            return this.metricsName;
+        public String getMetricName() {
+            return this.metricName;
         }
 
         /**
@@ -110,8 +110,8 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
          * @return メトリクスタイプ
          * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE
          */
-        public METRIC_TYPE getMetricsType() {
-            return this.metricsType;
+        public METRIC_TYPE getMetricType() {
+            return this.metricType;
         }
 
         /**
@@ -152,9 +152,9 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
         private final LANGUAGE[] measurableLanguages;
 
-        private final String metricsName;
+        private final String metricName;
 
-        private final METRIC_TYPE metricsType;
+        private final METRIC_TYPE metricType;
 
         private final String description;
 
@@ -209,7 +209,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
             synchronized (this) {
                 if (null == this.pluginInfo) {
                     this.pluginInfo = new PluginInfo();
-                    this.sourceName = "Plugin(" + pluginInfo.getMetricsName() + ")";
+                    this.sourceName = "Plugin(" + pluginInfo.getMetricName() + ")";
                 }
             }
         }
@@ -240,7 +240,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * @return 簡易説明文字列
      */
     protected String getDescription() {
-        return "Measure " + this.getMetricsName() + " metrics.";
+        return "Measure " + this.getMetricName() + " metrics.";
     }
 
     /**
@@ -268,7 +268,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * 
      * @return メトリクス名
      */
-    protected abstract String getMetricsName();
+    protected abstract String getMetricName();
 
     /**
      * このプラグインが計測するメトリクスのタイプを返す抽象メソッド．
@@ -276,7 +276,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * @return メトリクスタイプ
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE
      */
-    protected abstract METRIC_TYPE getMetricsType();
+    protected abstract METRIC_TYPE getMetricType();
 
     /**
      * このプラグインがクラスに関する情報を利用するかどうかを返すメソッド． デフォルト実装ではfalseを返す．

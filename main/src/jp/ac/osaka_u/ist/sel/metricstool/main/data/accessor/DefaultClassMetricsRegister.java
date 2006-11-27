@@ -27,7 +27,7 @@ public class DefaultClassMetricsRegister implements ClassMetricsRegister {
             throw new NullPointerException();
         }
         PluginInfo pluginInfo = plugin.getPluginInfo();
-        if (METRIC_TYPE.CLASS_METRIC != pluginInfo.getMetricsType()) {
+        if (METRIC_TYPE.CLASS_METRIC != pluginInfo.getMetricType()) {
             throw new IllegalArgumentException("plugin must be class type!");
         }
 

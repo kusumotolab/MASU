@@ -27,7 +27,7 @@ public class DefaultFileMetricsRegister implements FileMetricsRegister {
             throw new NullPointerException();
         }
         PluginInfo pluginInfo = plugin.getPluginInfo();
-        if (METRIC_TYPE.FILE_METRIC != pluginInfo.getMetricsType()) {
+        if (METRIC_TYPE.FILE_METRIC != pluginInfo.getMetricType()) {
             throw new IllegalArgumentException("plugin must be file type!");
         }
 

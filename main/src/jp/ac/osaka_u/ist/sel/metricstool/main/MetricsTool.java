@@ -101,7 +101,7 @@ public class MetricsTool {
                     for (AbstractPlugin plugin : loader.loadPlugins()) {
                         PluginInfo pluginInfo = plugin.getPluginInfo();
                         if (pluginInfo.isMeasurable(language)) {
-                            System.err.println("\t" + pluginInfo.getMetricsName());
+                            System.err.println("\t" + pluginInfo.getMetricName());
                         }
                     }
 
@@ -279,7 +279,7 @@ public class MetricsTool {
                 DefaultPluginLoader loader = new DefaultPluginLoader();
                 for (AbstractPlugin plugin : loader.loadPlugins()) {
                     PluginInfo pluginInfo = plugin.getPluginInfo();
-                    switch (pluginInfo.getMetricsType()) {
+                    switch (pluginInfo.getMetricType()) {
                     case FILE_METRIC:
                         measureFileMetrics = true;
                         break;

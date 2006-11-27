@@ -27,7 +27,7 @@ public class DefaultMethodMetricsRegister implements MethodMetricsRegister {
             throw new NullPointerException();
         }
         PluginInfo pluginInfo = plugin.getPluginInfo();
-        if (METRIC_TYPE.METHOD_METRIC != pluginInfo.getMetricsType()) {
+        if (METRIC_TYPE.METHOD_METRIC != pluginInfo.getMetricType()) {
             throw new IllegalArgumentException("plugin must be method type!");
         }
 
