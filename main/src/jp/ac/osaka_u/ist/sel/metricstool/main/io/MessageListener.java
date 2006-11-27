@@ -15,5 +15,5 @@ public interface MessageListener extends EventListener {
      * メッセージ受信メソッド
      * @param event メッセージイベント
      */
-    public void messageSent(MessageEvent event);
+    public void messageReceived(MessageEvent event);
 }

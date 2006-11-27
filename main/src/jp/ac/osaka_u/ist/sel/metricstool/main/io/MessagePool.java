@@ -98,7 +98,7 @@ public class MessagePool {
 
         synchronized (this) {
             for (final MessageListener listener : this.listeners) {
-                listener.messageSent(event);
+                listener.messageReceived(event);
             }
         }
     }
