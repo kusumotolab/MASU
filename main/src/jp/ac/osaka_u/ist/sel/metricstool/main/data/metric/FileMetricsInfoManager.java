@@ -4,7 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -20,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class FileMetricsInfoManager {
+public final class FileMetricsInfoManager implements Iterable<FileMetricsInfo> {
 
     /**
      * このクラスのインスタンスを返す．シングルトンパターンを用いている．
@@ -32,22 +31,12 @@ public final class FileMetricsInfoManager {
     }
 
     /**
-     * メトリクスが登録されているクラスのイテレータを返す．
-     * 
-     * @return メトリクスが登録されているクラスのイテレータ
-     */
-    public Iterator<FileInfo> fileInfoIterator() {
-        Set<FileInfo> unmodifiableFileInfoSet = Collections.unmodifiableSet(this.fileMetricsInfos
-                .keySet());
-        return unmodifiableFileInfoSet.iterator();
-    }
-
-    /**
      * メトリクス情報一覧のイテレータを返す．
      * 
      * @return メトリクス情報のイテレータ
      */
-    public Iterator<FileMetricsInfo> fileMetricsInfoIterator() {
+    public Iterator<FileMetricsInfo> iterator() {
+        MetricsToolSecurityManager.getInstance().checkAccess();
         Collection<FileMetricsInfo> unmodifiableFileMetricsInfoCollection = Collections
                 .unmodifiableCollection(this.fileMetricsInfos.values());
         return unmodifiableFileMetricsInfoCollection.iterator();
@@ -61,6 +50,7 @@ public final class FileMetricsInfoManager {
      */
     public FileMetricsInfo get(final FileInfo fileInfo) {
 
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == fileInfo) {
             throw new NullPointerException();
         }
@@ -96,6 +86,8 @@ public final class FileMetricsInfoManager {
      * @throws MetricNotRegisteredException 登録漏れがあった場合にスローされる
      */
     public void checkMetrics() throws MetricNotRegisteredException {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
 
         for (FileInfo fileInfo : FileInfoManager.getInstance()) {
 

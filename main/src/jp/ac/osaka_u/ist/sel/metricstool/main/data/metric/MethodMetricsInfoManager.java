@@ -4,7 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -21,7 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class MethodMetricsInfoManager {
+public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInfo>{
 
     /**
      * このクラスのインスタンスを返す．シングルトンパターンを用いている．
@@ -33,22 +32,12 @@ public final class MethodMetricsInfoManager {
     }
 
     /**
-     * メトリクスが登録されているクラスのイテレータを返す．
-     * 
-     * @return メトリクスが登録されているクラスのイテレータ
-     */
-    public Iterator<MethodInfo> methodInfoIterator() {
-        Set<MethodInfo> unmodifiableMethodInfoSet = Collections
-                .unmodifiableSet(this.methodMetricsInfos.keySet());
-        return unmodifiableMethodInfoSet.iterator();
-    }
-
-    /**
      * メトリクス情報一覧のイテレータを返す．
      * 
      * @return メトリクス情報のイテレータ
      */
-    public Iterator<MethodMetricsInfo> methodMetricsInfoIterator() {
+    public Iterator<MethodMetricsInfo> iterator() {
+        MetricsToolSecurityManager.getInstance().checkAccess();
         Collection<MethodMetricsInfo> unmodifiableMethodMetricsInfoCollection = Collections
                 .unmodifiableCollection(this.methodMetricsInfos.values());
         return unmodifiableMethodMetricsInfoCollection.iterator();
@@ -62,6 +51,7 @@ public final class MethodMetricsInfoManager {
      */
     public MethodMetricsInfo get(final MethodInfo methodInfo) {
 
+        MetricsToolSecurityManager.getInstance().checkAccess();        
         if (null == methodInfo) {
             throw new NullPointerException();
         }
@@ -98,6 +88,8 @@ public final class MethodMetricsInfoManager {
      */
     public void checkMetrics() throws MetricNotRegisteredException {
 
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        
         for (MethodInfo methodInfo : MethodInfoManager.getInstance()) {
 
             MethodMetricsInfo methodMetricsInfo = this.get(methodInfo);

@@ -4,7 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -20,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class ClassMetricsInfoManager {
+public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo> {
 
     /**
      * このクラスのインスタンスを返す．シングルトンパターンを用いている．
@@ -32,22 +31,12 @@ public final class ClassMetricsInfoManager {
     }
 
     /**
-     * メトリクスが登録されているクラスのイテレータを返す．
-     * 
-     * @return メトリクスが登録されているクラスのイテレータ
-     */
-    public Iterator<ClassInfo> classInfoIterator() {
-        Set<ClassInfo> unmodifiableClassInfoSet = Collections
-                .unmodifiableSet(this.classMetricsInfos.keySet());
-        return unmodifiableClassInfoSet.iterator();
-    }
-
-    /**
      * メトリクス情報一覧のイテレータを返す．
      * 
      * @return メトリクス情報のイテレータ
      */
-    public Iterator<ClassMetricsInfo> classMetricsInfoIterator() {
+    public Iterator<ClassMetricsInfo> iterator() {
+        MetricsToolSecurityManager.getInstance().checkAccess();
         Collection<ClassMetricsInfo> unmodifiableClassMetricsInfoCollection = Collections
                 .unmodifiableCollection(this.classMetricsInfos.values());
         return unmodifiableClassMetricsInfoCollection.iterator();
@@ -61,6 +50,7 @@ public final class ClassMetricsInfoManager {
      */
     public ClassMetricsInfo get(final ClassInfo classInfo) {
 
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfo) {
             throw new NullPointerException();
         }
@@ -97,6 +87,8 @@ public final class ClassMetricsInfoManager {
      */
     public void checkMetrics() throws MetricNotRegisteredException {
 
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        
         for (ClassInfo classInfo : ClassInfoManager.getInstance()) {
 
             ClassMetricsInfo classMetricsInfo = this.get(classInfo);
