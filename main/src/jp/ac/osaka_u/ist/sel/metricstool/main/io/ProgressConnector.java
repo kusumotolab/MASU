@@ -57,20 +57,6 @@ public final class ProgressConnector {
     }
 
     /**
-     * リスナが登録されていない接続中のコネクタのセットを返す
-     * @return リスナが登録されていない接続中のコネクタのセット
-     */
-    public static synchronized Set<ProgressConnector> getUnlistenedConnectors() {
-        final Set<ProgressConnector> result = new HashSet<ProgressConnector>();
-        for (final ProgressConnector connector : connectionsMap.values()) {
-            if (connector.getListeners().isEmpty() && STATE.CONNECTED == connector.connectionState) {
-                result.add(connector);
-            }
-        }
-        return result;
-    }
-
-    /**
      * 進捗報告を受け取るリスナーを登録する
      * @param listener 進捗報告を受け取るリスナー
      * @throws NullPointerException　listnerがnullの場合
