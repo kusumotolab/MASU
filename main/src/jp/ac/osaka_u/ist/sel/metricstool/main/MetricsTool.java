@@ -280,13 +280,13 @@ public class MetricsTool {
                 for (AbstractPlugin plugin : loader.loadPlugins()) {
                     PluginInfo pluginInfo = plugin.getPluginInfo();
                     switch (pluginInfo.getMetricsType()) {
-                    case FILE_METRICS:
+                    case FILE_METRIC:
                         measureFileMetrics = true;
                         break;
-                    case CLASS_METRICS:
+                    case CLASS_METRIC:
                         measureClassMetrics = true;
                         break;
-                    case METHOD_METRICS:
+                    case METHOD_METRIC:
                         measureMethodMetrics = true;
                         break;
                     }
