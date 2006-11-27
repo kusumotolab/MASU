@@ -2,9 +2,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.util;
 
 
 /**
- * @author kou-tngt 言語情報を表すEnum．
+ * 言語情報を表すEnum．
  * 
  * 現在はJAVAのみ(2006/11/16)
+ * 
+ * @author kou-tngt
  * 
  */
 public enum LANGUAGE {
@@ -16,7 +18,7 @@ public enum LANGUAGE {
         public boolean isObjectOrientedLanguage() {
             return true;
         }
-
+        
         @Override
         public String getExtension() {
             return ".java";
@@ -33,19 +35,19 @@ public enum LANGUAGE {
         }
     },
 
-    // C_PLUS_PLUS{
-    // @Override
-    // public boolean isObjectOrientedLanguage(){
-    // return true;
-    // }
-    // },
-
-    // C_SHARP{
-    // @Override
-    // public boolean isObjectOrientedLanguage(){
-    // return true;
-    // }
-    // },
+//    C_PLUS_PLUS {
+//        @Override
+//        public boolean isObjectOrientedLanguage() {
+//            return true;
+//        }
+//    },
+    
+//    C_SHARP {
+//        @Override
+//        public boolean isObjectOrientedLanguage() {
+//            return true;
+//        }
+//    },
 
     ;
 
