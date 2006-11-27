@@ -5,7 +5,10 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 
 
 /**
@@ -19,8 +22,23 @@ public final class ClassMetricsInfo {
     /**
      * 引数なしコンストラクタ．
      */
-    public ClassMetricsInfo() {
+    public ClassMetricsInfo(final ClassInfo classInfo) {
+
+        if (null == classInfo) {
+            throw new NullPointerException();
+        }
+
+        this.classInfo = classInfo;
         this.classMetrics = Collections.synchronizedMap(new TreeMap<AbstractPlugin, Float>());
+    }
+
+    /**
+     * このメトリクス情報のクラスを返す
+     * 
+     * @return このメトリクス情報のクラス
+     */
+    public ClassInfo getClassInfo() {
+        return this.classInfo;
     }
 
     /**
@@ -69,6 +87,26 @@ public final class ClassMetricsInfo {
     }
 
     /**
+     * このメトリクス情報に不足がないかをチェックする
+     * 
+     * @throws MetricNotRegisteredException
+     */
+    void checkMetrics() throws MetricNotRegisteredException {
+        PluginManager pluginManager = PluginManager.getInstance();
+        for (AbstractPlugin plugin : pluginManager.getPlugins()) {
+            Float value = this.getMetric(plugin);
+            if (null == value) {
+                PluginInfo pluginInfo = plugin.getPluginInfo();
+                String metricName = pluginInfo.getMetricsName();
+                ClassInfo classInfo = this.getClassInfo();
+                String className = classInfo.getName();
+                throw new MetricNotRegisteredException("Metric \"" + metricName + "\" of "
+                        + className + " is not registered!");
+            }
+        }
+    }
+
+    /**
      * 第一引数で与えられたプラグインで計測されたメトリクス値（第二引数）を登録する．
      * 
      * @param key 計測したプラグインインスタンス，Map のキーとして用いる．
@@ -87,6 +125,11 @@ public final class ClassMetricsInfo {
 
         this.classMetrics.put(key, value);
     }
+
+    /**
+     * メトリクス情報のクラスを保存するための変数
+     */
+    private final ClassInfo classInfo;
 
     /**
      * クラスメトリクスを保存するための変数

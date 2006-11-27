@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -82,13 +83,29 @@ public final class ClassMetricsInfoManager {
 
         // 対象クラスの classMetricsInfo が無い場合は，new して Map に登録する
         if (null == classMetricsInfo) {
-            classMetricsInfo = new ClassMetricsInfo();
+            classMetricsInfo = new ClassMetricsInfo(classInfo);
             this.classMetricsInfos.put(classInfo, classMetricsInfo);
         }
 
         classMetricsInfo.putMetric(plugin, value);
     }
 
+    /**
+     * クラスメトリクスに登録漏れがないかをチェックする
+     * @throws MetricNotRegisteredException 登録漏れがあった場合にスローされる
+     */
+    public void checkMetrics() throws MetricNotRegisteredException {
+        
+        for (ClassInfo classInfo : ClassInfoManager.getInstance()) {
+            
+            ClassMetricsInfo classMetricsInfo = this.get(classInfo);
+            if (null == classMetricsInfo) {
+                throw new MetricNotRegisteredException("Class \"" + classInfo.getName() + "\" metrics are not registered!");
+            }
+            classMetricsInfo.checkMetrics();
+        }
+    }
+    
     /**
      * クラスメトリクスマネージャのオブジェクトを生成する． シングルトンパターンを用いているため，private がついている．
      * 

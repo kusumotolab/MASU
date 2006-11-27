@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -59,11 +60,11 @@ public final class FileMetricsInfoManager {
      * @return メトリクス情報
      */
     public FileMetricsInfo get(final FileInfo fileInfo) {
-        
+
         if (null == fileInfo) {
             throw new NullPointerException();
         }
-        
+
         return this.fileMetricsInfos.get(fileInfo);
     }
 
@@ -82,11 +83,29 @@ public final class FileMetricsInfoManager {
 
         // 対象ファイルの fileMetricsInfo が無い場合は，new して Map に登録する
         if (null == fileMetricsInfo) {
-            fileMetricsInfo = new FileMetricsInfo();
+            fileMetricsInfo = new FileMetricsInfo(fileInfo);
             this.fileMetricsInfos.put(fileInfo, fileMetricsInfo);
         }
 
         fileMetricsInfo.putMetric(plugin, value);
+    }
+
+    /**
+     * ファイルメトリクスに登録漏れがないかをチェックする
+     * 
+     * @throws MetricNotRegisteredException 登録漏れがあった場合にスローされる
+     */
+    public void checkMetrics() throws MetricNotRegisteredException {
+
+        for (FileInfo fileInfo : FileInfoManager.getInstance()) {
+
+            FileMetricsInfo fileMetricsInfo = this.get(fileInfo);
+            if (null == fileMetricsInfo) {
+                throw new MetricNotRegisteredException("File \"" + fileInfo.getName()
+                        + "\" metrics are not registered!");
+            }
+            fileMetricsInfo.checkMetrics();
+        }
     }
 
     /**

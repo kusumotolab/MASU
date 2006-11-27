@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -36,8 +38,8 @@ public final class MethodMetricsInfoManager {
      * @return メトリクスが登録されているクラスのイテレータ
      */
     public Iterator<MethodInfo> methodInfoIterator() {
-        Set<MethodInfo> unmodifiableMethodInfoSet = Collections.unmodifiableSet(this.methodMetricsInfos
-                .keySet());
+        Set<MethodInfo> unmodifiableMethodInfoSet = Collections
+                .unmodifiableSet(this.methodMetricsInfos.keySet());
         return unmodifiableMethodInfoSet.iterator();
     }
 
@@ -59,11 +61,11 @@ public final class MethodMetricsInfoManager {
      * @return メトリクス情報
      */
     public MethodMetricsInfo get(final MethodInfo methodInfo) {
-        
+
         if (null == methodInfo) {
             throw new NullPointerException();
         }
-        
+
         return this.methodMetricsInfos.get(methodInfo);
     }
 
@@ -82,11 +84,32 @@ public final class MethodMetricsInfoManager {
 
         // 対象メソッドの methodMetricsInfo が無い場合は，new して Map に登録する
         if (null == methodMetricsInfo) {
-            methodMetricsInfo = new MethodMetricsInfo();
+            methodMetricsInfo = new MethodMetricsInfo(methodInfo);
             this.methodMetricsInfos.put(methodInfo, methodMetricsInfo);
         }
 
         methodMetricsInfo.putMetric(plugin, value);
+    }
+
+    /**
+     * メソッドメトリクスに登録漏れがないかをチェックする
+     * 
+     * @throws MetricNotRegisteredException 登録漏れがあった場合にスローされる
+     */
+    public void checkMetrics() throws MetricNotRegisteredException {
+
+        for (MethodInfo methodInfo : MethodInfoManager.getInstance()) {
+
+            MethodMetricsInfo methodMetricsInfo = this.get(methodInfo);
+            if (null == methodMetricsInfo) {
+                String methodName = methodInfo.getName();
+                ClassInfo ownerClassInfo = methodInfo.getOwnerClass();
+                String ownerClassName = ownerClassInfo.getName();
+                throw new MetricNotRegisteredException("Metrics of " + ownerClassName + "::"
+                        + methodName + " are not registered!");
+            }
+            methodMetricsInfo.checkMetrics();
+        }
     }
 
     /**
@@ -109,4 +132,3 @@ public final class MethodMetricsInfoManager {
      */
     private final Map<MethodInfo, MethodMetricsInfo> methodMetricsInfos;
 }
-
