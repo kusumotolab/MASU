@@ -6,19 +6,19 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.util;
  * 
  * メトリクスの種類を表すEnum．
  */
-public enum METRICS_TYPE {
+public enum METRIC_TYPE {
     /**
      * ファイル単位のメトリクス
      */
-    FILE_METRICS,
+    FILE_METRIC,
 
     /**
      * クラス単位のメトリクス
      */
-    CLASS_METRICS,
+    CLASS_METRIC,
 
     /**
      * メソッド単位のメトリクス
      */
-    METHOD_METRICS
+    METHOD_METRIC
 }

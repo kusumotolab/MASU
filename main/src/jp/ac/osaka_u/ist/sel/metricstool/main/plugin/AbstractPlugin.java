@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.ProgressSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRICS_TYPE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 
 
 /**
@@ -108,9 +108,9 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
          * このプラグインが計測するメトリクスのタイプを返す．
          * 
          * @return メトリクスタイプ
-         * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.METRICS_TYPE
+         * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE
          */
-        public METRICS_TYPE getMetricsType() {
+        public METRIC_TYPE getMetricsType() {
             return this.metricsType;
         }
 
@@ -154,7 +154,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
         private final String metricsName;
 
-        private final METRICS_TYPE metricsType;
+        private final METRIC_TYPE metricsType;
 
         private final String description;
 
@@ -274,9 +274,9 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * このプラグインが計測するメトリクスのタイプを返す抽象メソッド．
      * 
      * @return メトリクスタイプ
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.METRICS_TYPE
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE
      */
-    protected abstract METRICS_TYPE getMetricsType();
+    protected abstract METRIC_TYPE getMetricsType();
 
     /**
      * このプラグインがクラスに関する情報を利用するかどうかを返すメソッド． デフォルト実装ではfalseを返す．

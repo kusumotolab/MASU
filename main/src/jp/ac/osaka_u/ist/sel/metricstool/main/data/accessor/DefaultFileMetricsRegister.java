@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricAlreadyRegistere
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRICS_TYPE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 
 
 /**
@@ -27,7 +27,7 @@ public class DefaultFileMetricsRegister implements FileMetricsRegister {
             throw new NullPointerException();
         }
         PluginInfo pluginInfo = plugin.getPluginInfo();
-        if (METRICS_TYPE.FILE_METRICS != pluginInfo.getMetricsType()) {
+        if (METRIC_TYPE.FILE_METRIC != pluginInfo.getMetricsType()) {
             throw new IllegalArgumentException("plugin must be file type!");
         }
 

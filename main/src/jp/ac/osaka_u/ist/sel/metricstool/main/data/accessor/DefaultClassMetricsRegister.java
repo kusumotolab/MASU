@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricAlreadyRegistere
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRICS_TYPE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 
 
 /**
@@ -27,7 +27,7 @@ public class DefaultClassMetricsRegister implements ClassMetricsRegister {
             throw new NullPointerException();
         }
         PluginInfo pluginInfo = plugin.getPluginInfo();
-        if (METRICS_TYPE.CLASS_METRICS != pluginInfo.getMetricsType()) {
+        if (METRIC_TYPE.CLASS_METRIC != pluginInfo.getMetricsType()) {
             throw new IllegalArgumentException("plugin must be class type!");
         }
 
