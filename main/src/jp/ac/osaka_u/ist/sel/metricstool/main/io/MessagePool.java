@@ -83,7 +83,7 @@ public class MessagePool {
             throw new NullPointerException("source is null.");
         }
 
-        this.fireMessage(new MessageEvent(source, message));
+        this.fireMessage(new MessageEvent(source, this.messageType, message));
     }
 
     /**
