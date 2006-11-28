@@ -252,7 +252,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * @return ŠÈˆÕà–¾•¶š—ñ
      */
     protected String getDescription() {
-        return "Measure " + this.getMetricName() + " metrics.";
+        return "Measuring the " + this.getMetricName() + " metric.";
     }
 
     /**
