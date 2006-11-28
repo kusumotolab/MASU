@@ -44,6 +44,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
             this.metricType = AbstractPlugin.this.getMetricType();
             this.useClassInfo = AbstractPlugin.this.useClassInfo();
             this.useMethodInfo = AbstractPlugin.this.useMethodInfo();
+            this.useFieldInfo = AbstractPlugin.this.useFieldInfo();
             this.useFileInfo = AbstractPlugin.this.useFileInfo();
             this.useMethodLocalInfo = AbstractPlugin.this.useMethodLocalInfo();
             this.description = AbstractPlugin.this.getDescription();
@@ -124,6 +125,15 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
         }
 
         /**
+         * このプラグインがフィールドに関する情報を利用するかどうかを返す．
+         * 
+         * @return フィールドに関する情報を利用する場合はtrue．
+         */
+        public boolean isUseFieldInfo() {
+            return this.useFieldInfo;
+        }
+        
+        /**
          * このプラグインがファイルに関する情報を利用するかどうかを返す．
          * 
          * @return ファイルに関する情報を利用する場合はtrue．
@@ -162,6 +172,8 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
         private final boolean useClassInfo;
 
+        private final boolean useFieldInfo;
+        
         private final boolean useFileInfo;
 
         private final boolean useMethodInfo;
@@ -285,6 +297,16 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * @return クラスに関する情報を利用する場合はtrue．
      */
     protected boolean useClassInfo() {
+        return false;
+    }
+
+    /**
+     * このプラグインがフィールドに関する情報を利用するかどうかを返すメソッド． デフォルト実装ではfalseを返す．
+     * フィールドに関する情報を利用するプラグインはこのメソッドをオーバーラードしてtrueを返さなければ成らない．
+     * 
+     * @return フィールドに関する情報を利用する場合はtrue．
+     */
+    protected boolean useFieldInfo() {
         return false;
     }
 
