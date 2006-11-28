@@ -7,6 +7,7 @@ import java.security.AccessControlException;
 import java.security.Permission;
 import java.security.Permissions;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -276,6 +277,37 @@ public final class MetricsToolSecurityManager extends SecurityManager {
      */
     public final boolean isPrivilegeThread(final Thread thread) {
         return this.privilegeThreads.contains(thread);
+    }
+    
+    /**
+     * プラグインディレクトリへのアクセス権限を解除する
+     * @param plugin
+     */
+    public final void removePluginDirAccessPermission(final AbstractPlugin plugin){
+        Thread current = Thread.currentThread();
+        String filePath = plugin.getPluginRootDir().getAbsolutePath() + File.separator+ "-";
+        
+        Permissions permissions;
+        if (this.threadPermissions.containsKey(current)) {
+            permissions = this.threadPermissions.get(current);
+        } else {
+            permissions = new Permissions();
+            this.threadPermissions.put(current, permissions);
+        }
+        
+        Permissions newPermissions = new Permissions();
+        FilePermission readPermission = new FilePermission(filePath, "read");
+        FilePermission writePermission = new FilePermission(filePath, "write");
+        FilePermission deletePermission = new FilePermission(filePath, "delete");
+        
+        for(Enumeration<Permission> enumerator = permissions.elements(); enumerator.hasMoreElements();){
+            Permission permission = enumerator.nextElement();
+            if (!permission.equals(readPermission) && !permission.equals(writePermission) && !permission.equals(deletePermission)){
+                newPermissions.add(permission);
+            }
+        }
+        
+        this.threadPermissions.put(current, newPermissions);
     }
     
     /**
