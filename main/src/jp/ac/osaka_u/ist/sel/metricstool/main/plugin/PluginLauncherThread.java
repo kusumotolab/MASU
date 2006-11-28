@@ -16,6 +16,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.ClosableLinkedBlockingQueue;
  * このスレッドのインスタンスは必ず特別権限を持つ.
  * このラッパークラスを通すことで，本来特別権限が必要なプラグイン実行メソッドへのアクセスを特別権限無しで実行することができる.
  * ゆえに，このクラスをインスタンス化した特別権限を持つスレッドは，そのインスタンスがプラグインに取得されないように注意しなければならない.
+ * <p>
+ * 全てのプラグインの実行が終わった後に，必ず {@link #stopLaunching()}または
+ * {@link #stopLaunchingNow()}を呼ばなければならない.
  * @author kou-tngt
  *
  */
@@ -152,6 +155,13 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
                 if (this.requestCancelAll) {
                     this.requestCancelAll = false;
                     this.launcher.cancelAll();
+                    this.launchQueue.clear();
+                }
+                
+                //最大同時実行数の変更要求が来たので変更する
+                if (this.maximumLaunchingNumRequest > 0){
+                    this.launcher.setMaximumLaunchingNum(this.maximumLaunchingNumRequest);
+                    this.maximumLaunchingNumRequest = 0;
                 }
 
                 if (!this.stopNowFlag && !this.stopFlag) {
@@ -182,7 +192,7 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
             throw new IllegalArgumentException("size must be a natural number.");
         }
 
-        this.launcher.setMaximumLaunchingNum(size);
+        this.maximumLaunchingNumRequest = size;
     }
 
     /**
@@ -233,5 +243,10 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
      * タスクの全キャンセル要求
      */
     private boolean requestCancelAll = false;
+    
+    /**
+     * タスク最大実行数の変更要求をする変数
+     */
+    private int maximumLaunchingNumRequest = 0;
 
 }
