@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -105,25 +104,21 @@ public final class FieldInfo extends VariableInfo {
     }
 
     /**
-     * このフィールドを参照しているメソッドのイテレータを返す．
+     * このフィールドを参照しているメソッドの SortedSet を返す．
      * 
-     * @return このフィールドを参照しているメソッドのイテレータ
+     * @return このフィールドを参照しているメソッドの SortedSet
      */
-    public Iterator<MethodInfo> referencerIterator() {
-        SortedSet<MethodInfo> unmodifiableReferencers = Collections
-                .unmodifiableSortedSet(this.referencers);
-        return unmodifiableReferencers.iterator();
+    public SortedSet<MethodInfo> getReferences() {
+        return Collections.unmodifiableSortedSet(this.referencers);
     }
 
     /**
-     * このフィールドに対して代入を行っているメソッドのイテレータを返す．
+     * このフィールドに対して代入を行っているメソッドの SortedSet を返す．
      * 
-     * @return このフィールドに対して代入を行っているメソッドのイテレータ
+     * @return このフィールドに対して代入を行っているメソッドの SortedSet
      */
-    public Iterator<MethodInfo> assignmenterIterator() {
-        SortedSet<MethodInfo> unmodifiableAssignmenters = Collections
-                .unmodifiableSortedSet(this.assignmenters);
-        return unmodifiableAssignmenters.iterator();
+    public SortedSet<MethodInfo> getAssignmenters() {
+        return Collections.unmodifiableSortedSet(this.assignmenters);
     }
 
     /**

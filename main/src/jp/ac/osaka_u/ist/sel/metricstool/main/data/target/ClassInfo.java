@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -193,58 +192,48 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
     }
 
     /**
-     * このクラスのスーパークラスの Iterator を返す．
+     * このクラスのスーパークラスの SortedSet を返す．
      * 
-     * @return スーパークラスの Iterator
+     * @return スーパークラスの SortedSet
      */
-    public Iterator<ClassInfo> superClassIterator() {
-        SortedSet<ClassInfo> unmodifiableSuperClasses = Collections
-                .unmodifiableSortedSet(this.superClasses);
-        return unmodifiableSuperClasses.iterator();
+    public SortedSet<ClassInfo> getSuperClasses() {
+        return Collections.unmodifiableSortedSet(this.superClasses);
     }
 
     /**
-     * このクラスのサブクラスの Iterator を返す．
+     * このクラスのサブクラスの SortedSet を返す．
      * 
-     * @return サブクラスの Iterator
+     * @return サブクラスの SortedSet
      */
-    public Iterator<ClassInfo> subClassIterator() {
-        SortedSet<ClassInfo> unmodifiablesubClasses = Collections
-                .unmodifiableSortedSet(this.subClasses);
-        return unmodifiablesubClasses.iterator();
+    public SortedSet<ClassInfo> getSubClasses() {
+        return Collections.unmodifiableSortedSet(this.subClasses);
     }
 
     /**
-     * このクラスのインナークラスの Iterator を返す．
+     * このクラスのインナークラスの SortedSet を返す．
      * 
-     * @return インナークラスの Iterator
+     * @return インナークラスの SortedSet
      */
-    public Iterator<ClassInfo> innerClassIterator() {
-        SortedSet<ClassInfo> unmodifiableInnerClasses = Collections
-                .unmodifiableSortedSet(this.innerClasses);
-        return unmodifiableInnerClasses.iterator();
+    public SortedSet<ClassInfo> getInnerClasses() {
+        return Collections.unmodifiableSortedSet(this.innerClasses);
     }
 
     /**
-     * このクラスに定義されているメソッドの Iterator を返す．
+     * このクラスに定義されているメソッドの SortedSet を返す．
      * 
-     * @return 定義されているメソッドの Iterator
+     * @return 定義されているメソッドの SortedSet
      */
-    public Iterator<MethodInfo> definedMethodIterator() {
-        SortedSet<MethodInfo> unmodifiableDefinedMethods = Collections
-                .unmodifiableSortedSet(this.definedMethods);
-        return unmodifiableDefinedMethods.iterator();
+    public SortedSet<MethodInfo> getDefinedMethods() {
+        return Collections.unmodifiableSortedSet(this.definedMethods);
     }
 
     /**
-     * このクラスに定義されているフィールドの Iterator を返す．
+     * このクラスに定義されているフィールドの SortedSet を返す．
      * 
-     * @return 定義されているフィールドの Iterator
+     * @return 定義されているフィールドの SortedSet
      */
-    public Iterator<FieldInfo> definedFieldIterator() {
-        SortedSet<FieldInfo> unmodifiableDefinedFields = Collections
-                .unmodifiableSortedSet(this.definedFields);
-        return unmodifiableDefinedFields.iterator();
+    public SortedSet<FieldInfo> getDefinedFields() {
+        return Collections.unmodifiableSortedSet(this.definedFields);
     }
 
     /**
