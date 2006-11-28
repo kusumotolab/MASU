@@ -60,6 +60,8 @@ public class PluginExecutor implements Runnable {
 
         ProgressConnector.getConnector(this.plugin).progressEnd();
         MetricsToolSecurityManager.getInstance().removePluginDirAccessPermission(this.plugin);
+        
+        fireExecutionEnd();
     }
 
     /**
