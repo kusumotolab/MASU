@@ -20,7 +20,7 @@ public class DefaultFileInfoAccessor implements FileInfoAccessor {
      * 
      * @return FileInfo のイテレータ
      */
-    public Iterator<FileInfo> fileInfoIterator() {
+    public Iterator<FileInfo> iterator() {
         FileInfoManager fileInfoManager = FileInfoManager.getInstance();
         return fileInfoManager.iterator();
     }

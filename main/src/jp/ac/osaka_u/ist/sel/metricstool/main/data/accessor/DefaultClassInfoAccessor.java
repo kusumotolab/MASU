@@ -20,7 +20,7 @@ public class DefaultClassInfoAccessor implements ClassInfoAccessor {
      * 
      * @return ClassInfo のイテレータ
      */
-    public Iterator<ClassInfo> classInfoIterator() {
+    public Iterator<ClassInfo> iterator() {
         ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
         return classInfoManager.iterator();
     }

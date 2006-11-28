@@ -20,7 +20,7 @@ public class DefaultMethodInfoAccessor implements MethodInfoAccessor {
      * 
      * @return MethodInfo のイテレータ
      */
-    public Iterator<MethodInfo> methodInfoIterator() {
+    public Iterator<MethodInfo> iterator() {
         MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
         return methodInfoManager.iterator();
     }

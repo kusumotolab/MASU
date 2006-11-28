@@ -12,15 +12,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
  * @author y-higo
  *
  */
-public interface MethodInfoAccessor {
+public interface MethodInfoAccessor extends Iterable<MethodInfo> {
 
     /**
      * 対象メソッドのイテレータを返すメソッド．
      * 
      * @return 対象メソッドのイテレータ
      */
-    public Iterator<MethodInfo> methodInfoIterator();
-    
+    public Iterator<MethodInfo> iterator();
+
     /**
      * 対象メソッドのの数を返すメソッド.
      * @return 対象メソッドの数

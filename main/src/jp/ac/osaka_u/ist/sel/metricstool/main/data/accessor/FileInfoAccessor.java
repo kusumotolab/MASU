@@ -12,14 +12,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
  * @author y-higo
  *
  */
-public interface FileInfoAccessor {
+public interface FileInfoAccessor extends Iterable<FileInfo> {
 
     /**
      * 対象ファイルのイテレータを返すメソッド．
      * 
      * @return 対象ファイルのイテレータ
      */
-    public Iterator<FileInfo> fileInfoIterator();
+    public Iterator<FileInfo> iterator();
 
     /**
      * 対象ファイルの数を返すメソッド.
