@@ -20,4 +20,10 @@ public interface ClassInfoAccessor {
      * @return 対象クラスのイテレータ
      */
     public Iterator<ClassInfo> classInfoIterator();
+    
+    /**
+     * 対象クラスの数を返すメソッド.
+     * @return 対象クラスの数
+     */
+    public int getClassCount();
 }

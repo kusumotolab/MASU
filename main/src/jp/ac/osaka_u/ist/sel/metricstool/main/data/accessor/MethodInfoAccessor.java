@@ -20,4 +20,10 @@ public interface MethodInfoAccessor {
      * @return 対象メソッドのイテレータ
      */
     public Iterator<MethodInfo> methodInfoIterator();
+    
+    /**
+     * 対象メソッドのの数を返すメソッド.
+     * @return 対象メソッドの数
+     */
+    public int getMethodCount();
 }

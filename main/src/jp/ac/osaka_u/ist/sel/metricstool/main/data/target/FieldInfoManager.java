@@ -54,6 +54,14 @@ public final class FieldInfoManager implements Iterable<FieldInfo> {
     }
 
     /**
+     * 持っているフィールドの個数を返す
+     * @return フィールドの個数
+     */
+    public int getFieldCount() {
+        return this.fieldInfos.size();
+    }
+
+    /**
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */

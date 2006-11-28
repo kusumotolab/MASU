@@ -53,6 +53,14 @@ public final class ClassInfoManager implements Iterable<ClassInfo> {
     }
 
     /**
+     * 持っているクラス情報の個数を返す.
+     * @return クラスの個数
+     */
+    public int getClassCount() {
+        return this.classInfos.size();
+    }
+
+    /**
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */

@@ -53,6 +53,14 @@ public final class MethodInfoManager implements Iterable<MethodInfo> {
     }
 
     /**
+     * 持っているメソッド情報の個数を返す.
+     * @return メソッドの個数
+     */
+    public int getMethodCount() {
+        return this.methodInfos.size();
+    }
+
+    /**
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */

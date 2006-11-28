@@ -53,6 +53,14 @@ public final class FileInfoManager implements Iterable<FileInfo> {
     }
 
     /**
+     * 情報を持っているファイルの個数を返す
+     * @return　ファイルの個数
+     */
+    public int getFileCount() {
+        return this.fileInfos.size();
+    }
+
+    /**
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */

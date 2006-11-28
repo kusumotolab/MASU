@@ -25,4 +25,12 @@ public class DefaultClassInfoAccessor implements ClassInfoAccessor {
         return classInfoManager.iterator();
     }
 
+    /**
+     * 対象クラスの数を返すメソッド.
+     * @return 対象クラスの数
+     */
+    public int getClassCount() {
+        return ClassInfoManager.getInstance().getClassCount();
+    }
+
 }

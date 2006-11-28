@@ -20,4 +20,10 @@ public interface FileInfoAccessor {
      * @return 対象ファイルのイテレータ
      */
     public Iterator<FileInfo> fileInfoIterator();
+
+    /**
+     * 対象ファイルの数を返すメソッド.
+     * @return 対象ファイルの数
+     */
+    public int getFileCount();
 }
