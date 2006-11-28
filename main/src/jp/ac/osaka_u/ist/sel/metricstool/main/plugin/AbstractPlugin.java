@@ -209,7 +209,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
             synchronized (this) {
                 if (null == this.pluginInfo) {
                     this.pluginInfo = new PluginInfo();
-                    this.sourceName = "Plugin(" + pluginInfo.getMetricName() + ")";
+                    this.sourceName = pluginInfo.getMetricName();
                 }
             }
         }
