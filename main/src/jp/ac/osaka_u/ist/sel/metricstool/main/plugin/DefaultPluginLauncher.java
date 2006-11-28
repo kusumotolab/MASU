@@ -19,6 +19,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.ClosableLinkedBlockingQueue;
 /**
  * プラグインを実行するランチャー
  * ほとんどのパブリックメソッドの実行に特別権限を必要とする.
+ * 全てのプラグインの実行が終わった後に，必ず {@link #stopLaunching()}または
+ * {@link #stopLaunchingNow()}を呼ばなければならない.
  * @author kou-tngt
  *
  */
@@ -49,8 +51,10 @@ public final class DefaultPluginLauncher implements PluginLauncher {
 
     /**
      * 実行をまとめてキャンセルするメソッド.
+     * 特別権限を持つスレッドからしか実行できない.
      * @param plugins キャンセルするプラグイン群を含むコレクション
      * @throws NullPointerException pluginsがnullの場合
+     * @throws AccessControlException 特別権限を持たない場合
      */
     public void cancelAll(final Collection<AbstractPlugin> plugins) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -66,6 +70,8 @@ public final class DefaultPluginLauncher implements PluginLauncher {
 
     /**
      * 実行中，実行待ちのタスクを全てキャンセルする.
+     * 特別権限を持つスレッドからしか実行できない.
+     * @throws AccessControlException 特別権限を持たない場合
      */
     public void cancelAll() {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -132,9 +138,11 @@ public final class DefaultPluginLauncher implements PluginLauncher {
     }
 
     /**
-     * 同時実行最大数を設定するメソッド
+     * 同時実行最大数を設定するメソッド.
+     * 特別権限を持つスレッドからしか実行できない.
      * @param size 同時実行最大数
      * @throws IllegalArgumentException sizeが0以下だった場合
+     * @throws AccessControlException 特別権限を持たないスレッドから呼び出された場合
      */
     public void setMaximumLaunchingNum(final int size) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -146,7 +154,9 @@ public final class DefaultPluginLauncher implements PluginLauncher {
 
     /**
      *  ランチャーを終了する.
+     *  特別権限を持つスレッドからしか実行できない.
      *  実行中のタスクは終わるまで待つ.
+     *  @throws AccessControlException 特別権限を持たないスレッドから呼び出された場合
      */
     public void stopLaunching() {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -157,7 +167,9 @@ public final class DefaultPluginLauncher implements PluginLauncher {
 
     /**
      * ランチャーを終了する.
+     * 特別権限を持つスレッドからしか実行できない.
      * 実行中のタスクも全てキャンセルする.
+     * @throws AccessControlException 特別権限を持たないスレッドから呼び出された場合
      */
     public void stopLaunchingNow() {
         MetricsToolSecurityManager.getInstance().checkAccess();
