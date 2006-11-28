@@ -4,14 +4,12 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 import java.security.AccessControlException;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.ConcurrentHashSet;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.WeakHashSet;
 
 
 /**
@@ -104,6 +102,13 @@ public final class ProgressConnector {
     }
 
     /**
+     * 進捗情報の終了イベントを送るメソッド
+     */
+    public final void progressEnd() {
+        fireProgressEnd(new ProgressEvent(this.source, 100));
+    }
+
+    /**
      * リスナーを削除する
      * @param listener　削除するリスナー
      */
@@ -173,6 +178,22 @@ public final class ProgressConnector {
         synchronized (this) {
             for (final ProgressListener listener : this.listeners) {
                 listener.updataProgress(event);
+            }
+        }
+    }
+
+    /**
+     * リスナに進捗情報の終了を通知するメソッド
+     * @param event　通知するイベント
+     */
+    private void fireProgressEnd(final ProgressEvent event) {
+        if (null == event) {
+            throw new NullPointerException("event is null.");
+        }
+
+        synchronized (this) {
+            for (final ProgressListener listener : this.listeners) {
+                listener.progressEnd(event);
             }
         }
     }

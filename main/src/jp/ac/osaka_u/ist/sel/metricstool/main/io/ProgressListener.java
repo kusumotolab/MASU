@@ -17,10 +17,16 @@ public interface ProgressListener extends EventListener {
      * @param event 進捗報告内容を表すイベント
      */
     public void updataProgress(ProgressEvent event);
-    
+
     /**
      * 進捗報告が途切れた時に呼び出されるメソッド
      * @param event 進捗報告が途切れたことを表すイベント
      */
     public void disconnected(ProgressEvent event);
+
+    /**
+     * 進捗報告が終了すると呼び出されるメソッド
+     * @param event 進捗報告が終了したことを表すイベント
+     */
+    public void progressEnd(ProgressEvent event);
 }
