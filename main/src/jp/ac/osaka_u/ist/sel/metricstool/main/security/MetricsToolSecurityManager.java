@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.security;
 
 
+import java.io.File;
+import java.io.FilePermission;
 import java.security.AccessControlException;
 import java.security.Permission;
 import java.security.Permissions;
@@ -9,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.WeakHashSet;
 
 
@@ -273,6 +276,27 @@ public final class MetricsToolSecurityManager extends SecurityManager {
      */
     public final boolean isPrivilegeThread(final Thread thread) {
         return this.privilegeThreads.contains(thread);
+    }
+    
+    /**
+     * プラグインディレクトリへのアクセス権限を取得する
+     * @param plugin　プラグインインスタンス
+     */
+    public final void requestPluginDirAccessPermission(final AbstractPlugin plugin){
+        Thread current = Thread.currentThread();
+        String filePath = plugin.getPluginRootDir().getAbsolutePath() + File.separator+ "-";
+        
+        Permissions permissions;
+        if (this.threadPermissions.containsKey(current)) {
+            permissions = this.threadPermissions.get(current);
+        } else {
+            permissions = new Permissions();
+            this.threadPermissions.put(current, permissions);
+        }
+        
+        permissions.add(new FilePermission(filePath, "read"));
+        permissions.add(new FilePermission(filePath, "write"));
+        permissions.add(new FilePermission(filePath, "delete"));
     }
 
     /**

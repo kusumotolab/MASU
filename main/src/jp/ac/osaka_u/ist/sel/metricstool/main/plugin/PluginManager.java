@@ -12,10 +12,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.ConcurrentHashSet;
 
 
 /**
- * @author kou-tngt
  *
  * プラグインインスタンスを管理するクラス．
  * 
+ * @author kou-tngt
  */
 public class PluginManager {
 

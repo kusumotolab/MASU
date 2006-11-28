@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.ClosableLinkedBlockingQueue;
 
 /**
  * プラグインを実行するランチャー
- * 全てのパブリックメソッドの実行に特別権限を必要とする.
+ * ほとんどのパブリックメソッドの実行に特別権限を必要とする.
  * @author kou-tngt
  *
  */
@@ -68,6 +68,7 @@ public final class DefaultPluginLauncher implements PluginLauncher {
      * 実行中，実行待ちのタスクを全てキャンセルする.
      */
     public void cancelAll() {
+        MetricsToolSecurityManager.getInstance().checkAccess();
         for (final AbstractPlugin plugin : this.futureMap.keySet()) {
             this.cancel(plugin);
         }
@@ -148,6 +149,7 @@ public final class DefaultPluginLauncher implements PluginLauncher {
      *  実行中のタスクは終わるまで待つ.
      */
     public void stopLaunching() {
+        MetricsToolSecurityManager.getInstance().checkAccess();
         this.stoped = true;
         this.workQueue.close();
         this.threadPool.setCorePoolSize(0);
@@ -158,6 +160,7 @@ public final class DefaultPluginLauncher implements PluginLauncher {
      * 実行中のタスクも全てキャンセルする.
      */
     public void stopLaunchingNow() {
+        MetricsToolSecurityManager.getInstance().checkAccess();
         this.stopLaunching();
         this.cancelAll();
     }
