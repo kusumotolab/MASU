@@ -10,11 +10,19 @@ import java.io.IOException;
 import java.util.logging.Logger;
 import java.util.logging.LoggingPermission;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVClassMetricsWriter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVFileMetricsWriter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVMethodMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageListener;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
@@ -48,7 +56,7 @@ import antlr.TokenStreamException;
  * since 2006.11.12
  * 
  */
-public class MetricsTool {
+public class MetricsTool implements MessageSource {
 
     /**
      * 
@@ -58,33 +66,34 @@ public class MetricsTool {
      */
     public static void main(String[] args) {
         try {
-            //MetricsToolSecurityManagerのシングルトンインスタンスを構築し，初期特別権限スレッドになる
+            // MetricsToolSecurityManagerのシングルトンインスタンスを構築し，初期特別権限スレッドになる
             MetricsToolSecurityManager sm = MetricsToolSecurityManager.getInstance();
-            
-            //システムのセキュリティーマネージャとして登録してみる
+
+            // システムのセキュリティーマネージャとして登録してみる
             System.setSecurityManager(sm);
-            
-            //システムに登録できたので，とりあえずロギングパーミッションをグローバルでセット
+
+            // システムに登録できたので，とりあえずロギングパーミッションをグローバルでセット
             sm.addGlobalPermission(new LoggingPermission("control", null));
-            
+
         } catch (final SecurityException e) {
-            //既にセットされているセキュリティマネージャによって，新たなセキュリティマネージャの登録が許可されなかった．
-            //システムのセキュリティマネージャとして使わなくても，特別権限スレッドのアクセス制御は問題なく動作するのでとりあえず無視する
+            // 既にセットされているセキュリティマネージャによって，新たなセキュリティマネージャの登録が許可されなかった．
+            // システムのセキュリティマネージャとして使わなくても，特別権限スレッドのアクセス制御は問題なく動作するのでとりあえず無視する
             Logger.global
                     .info(("Failed to set system security manager. MetricsToolsecurityManager works only to manage privilege threads."));
         }
-        
-        
-        //情報表示用のリスナを作成
-        MessagePool.getInstance(MESSAGE_TYPE.OUT).addMessageListener(new MessageListener(){
+
+        // 情報表示用のリスナを作成
+        MessagePool.getInstance(MESSAGE_TYPE.OUT).addMessageListener(new MessageListener() {
             public void messageReceived(MessageEvent event) {
-                System.out.print(event.getSource().getMessageSourceName() + " > " + event.getMessage());
+                System.out.print(event.getSource().getMessageSourceName() + " > "
+                        + event.getMessage());
             }
         });
-        
-        MessagePool.getInstance(MESSAGE_TYPE.ERROR).addMessageListener(new MessageListener(){
+
+        MessagePool.getInstance(MESSAGE_TYPE.ERROR).addMessageListener(new MessageListener() {
             public void messageReceived(MessageEvent event) {
-                System.out.print(event.getSource().getMessageSourceName() + " > " + event.getMessage());
+                System.out.print(event.getSource().getMessageSourceName() + " > "
+                        + event.getMessage());
             }
         });
 
@@ -139,7 +148,7 @@ public class MetricsTool {
             // 解析モードの場合
         } else if (!Settings.isHelpMode() && !Settings.isDisplayMode()) {
 
-            //言語を取得
+            // 言語を取得
             LANGUAGE language = null;
             try {
                 language = Settings.getLanguage();
@@ -147,7 +156,7 @@ public class MetricsTool {
                 System.err.println(e.getMessage());
                 System.exit(0);
             }
-            
+
             // 解析対象ファイルを登録
             {
                 // ディレクトリから読み込み
@@ -196,7 +205,7 @@ public class MetricsTool {
                 }
             }
 
-            //対象言語を解析可能なプラグインをロード->登録->実行
+            // 対象言語を解析可能なプラグインをロード->登録->実行
             {
                 PluginManager manager = PluginManager.getInstance();
                 PluginLoader loader = new DefaultPluginLoader();
@@ -220,7 +229,7 @@ public class MetricsTool {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
-                        //気にしない
+                        // 気にしない
                     }
                 } while (0 < launcher.getCurrentLaunchingNum());
 
@@ -228,7 +237,65 @@ public class MetricsTool {
 
             }
 
+            // メトリクス情報をファイルに出力
+            {
+
+                if (!Settings.getFileMetricsFile().equals(Settings.INIT)) {
+
+                    try {
+                        FileMetricsInfoManager manager = FileMetricsInfoManager.getInstance();
+                        manager.checkMetrics();
+
+                        String fileName = Settings.getFileMetricsFile();
+                        CSVFileMetricsWriter writer = new CSVFileMetricsWriter(fileName);
+                        writer.write();
+                        
+                    } catch (MetricNotRegisteredException e) {
+                        System.exit(0);
+                    }
+                }
+
+                if (!Settings.getClassMetricsFile().equals(Settings.INIT)) {
+
+                    try {
+                        ClassMetricsInfoManager manager = ClassMetricsInfoManager.getInstance();
+                        manager.checkMetrics();
+
+                        String fileName = Settings.getClassMetricsFile();
+                        CSVClassMetricsWriter writer = new CSVClassMetricsWriter(fileName);
+                        writer.write();
+                        
+                    } catch (MetricNotRegisteredException e) {
+                        System.exit(0);
+                    }
+                }
+
+                if (!Settings.getMethodMetricsFile().equals(Settings.INIT)) {
+                    
+                    try {
+                        MethodMetricsInfoManager manager = MethodMetricsInfoManager.getInstance();
+                        manager.checkMetrics();
+
+                        String fileName = Settings.getMethodMetricsFile();
+                        CSVMethodMetricsWriter writer = new CSVMethodMetricsWriter(fileName);
+                        writer.write();
+                        
+                    } catch (MetricNotRegisteredException e) {
+                        System.exit(0);
+                    }
+
+                }
+            }
         }
+    }
+
+    /**
+     * メッセージ送信者名を返す
+     * 
+     * @return メッセージ送信者名
+     */
+    public String getMessageSourceName() {
+        return this.getClass().getName();
     }
 
     /**
@@ -354,18 +421,18 @@ public class MetricsTool {
                     }
                 }
 
-                //ファイルメトリクスを計測する場合は -F オプションが指定されていなければならない
+                // ファイルメトリクスを計測する場合は -F オプションが指定されていなければならない
                 if (measureFileMetrics && (Settings.getFileMetricsFile().equals(Settings.INIT))) {
                     System.err.println("-F must be used for specifying a file for file metrics!");
                     System.exit(0);
                 }
 
-                //クラスメトリクスを計測する場合は -C オプションが指定されていなければならない
+                // クラスメトリクスを計測する場合は -C オプションが指定されていなければならない
                 if (measureClassMetrics && (Settings.getClassMetricsFile().equals(Settings.INIT))) {
                     System.err.println("-C must be used for specifying a file for class metrics!");
                     System.exit(0);
                 }
-                //メソッドメトリクスを計測する場合は -M オプションが指定されていなければならない                
+                // メソッドメトリクスを計測する場合は -M オプションが指定されていなければならない
                 if (measureMethodMetrics && (Settings.getMethodMetricsFile().equals(Settings.INIT))) {
                     System.err.println("-M must be used for specifying a file for method metrics!");
                     System.exit(0);

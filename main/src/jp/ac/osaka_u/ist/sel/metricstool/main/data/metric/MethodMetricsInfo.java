@@ -7,6 +7,9 @@ import java.util.TreeMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
@@ -18,7 +21,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
  * @author y-higo
  * 
  */
-public final class MethodMetricsInfo {
+public final class MethodMetricsInfo implements MessageSource{
 
     /**
      * 引数なしコンストラクタ．
@@ -30,7 +33,8 @@ public final class MethodMetricsInfo {
         }
 
         this.methodInfo = methodInfo;
-        this.methodMetrics = Collections.synchronizedSortedMap(new TreeMap<AbstractPlugin, Float>());
+        this.methodMetrics = Collections
+                .synchronizedSortedMap(new TreeMap<AbstractPlugin, Float>());
     }
 
     /**
@@ -86,7 +90,16 @@ public final class MethodMetricsInfo {
             throws MetricAlreadyRegisteredException {
         this.putMetric(key, new Float(value));
     }
-
+    
+    /**
+     * メッセージの送信者名を返す
+     * 
+     * @return メッセージの送信者名
+     */
+    public String getMessageSourceName() {
+        return this.getClass().getName();
+    }
+    
     /**
      * このメトリクス情報に不足がないかをチェックする
      * 
@@ -103,8 +116,12 @@ public final class MethodMetricsInfo {
                 String methodName = methodInfo.getName();
                 ClassInfo ownerClassInfo = methodInfo.getOwnerClass();
                 String ownerClassName = ownerClassInfo.getName();
-                throw new MetricNotRegisteredException("Metric \"" + metricName + "\" of "
-                        + ownerClassName + "::" + methodName + " is not registered!");
+                String message = "Metric \"" + metricName + "\" of " + ownerClassName + "::"
+                        + methodName + " is not registered!";
+                MessagePrinter printer = new DefaultMessagePrinter(this,
+                        MessagePrinter.MESSAGE_TYPE.ERROR);
+                printer.println(message);
+                throw new MetricNotRegisteredException(message);
             }
         }
     }

@@ -10,6 +10,9 @@ import java.util.TreeMap;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -20,7 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInfo>{
+public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInfo>, MessageSource {
 
     /**
      * このクラスのインスタンスを返す．シングルトンパターンを用いている．
@@ -51,7 +54,7 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
      */
     public MethodMetricsInfo get(final MethodInfo methodInfo) {
 
-        MetricsToolSecurityManager.getInstance().checkAccess();        
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == methodInfo) {
             throw new NullPointerException();
         }
@@ -89,7 +92,7 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
     public void checkMetrics() throws MetricNotRegisteredException {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        
+
         for (MethodInfo methodInfo : MethodInfoManager.getInstance()) {
 
             MethodMetricsInfo methodMetricsInfo = this.get(methodInfo);
@@ -97,13 +100,26 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
                 String methodName = methodInfo.getName();
                 ClassInfo ownerClassInfo = methodInfo.getOwnerClass();
                 String ownerClassName = ownerClassInfo.getName();
-                throw new MetricNotRegisteredException("Metrics of " + ownerClassName + "::"
-                        + methodName + " are not registered!");
+                String message = "Metrics of " + ownerClassName + "::" + methodName
+                        + " are not registered!";
+                MessagePrinter printer = new DefaultMessagePrinter(this,
+                        MessagePrinter.MESSAGE_TYPE.ERROR);
+                printer.println(message);
+                throw new MetricNotRegisteredException(message);
             }
             methodMetricsInfo.checkMetrics();
         }
     }
 
+    /**
+     * メッセージ送信者名を返す
+     * 
+     * @return メッセージ送信者
+     */
+    public String getMessageSourceName() {
+        return this.getClass().getName();
+    }
+    
     /**
      * メソッドメトリクスマネージャのオブジェクトを生成する． シングルトンパターンを用いているため，private がついている．
      * 

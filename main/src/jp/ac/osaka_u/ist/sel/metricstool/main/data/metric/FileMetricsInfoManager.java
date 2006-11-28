@@ -9,6 +9,9 @@ import java.util.TreeMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -19,7 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class FileMetricsInfoManager implements Iterable<FileMetricsInfo> {
+public final class FileMetricsInfoManager implements Iterable<FileMetricsInfo>, MessageSource {
 
     /**
      * このクラスのインスタンスを返す．シングルトンパターンを用いている．
@@ -93,11 +96,23 @@ public final class FileMetricsInfoManager implements Iterable<FileMetricsInfo> {
 
             FileMetricsInfo fileMetricsInfo = this.get(fileInfo);
             if (null == fileMetricsInfo) {
-                throw new MetricNotRegisteredException("File \"" + fileInfo.getName()
-                        + "\" metrics are not registered!");
+                String message = "File \"" + fileInfo.getName() + "\" metrics are not registered!";
+                MessagePrinter printer = new DefaultMessagePrinter(this,
+                        MessagePrinter.MESSAGE_TYPE.ERROR);
+                printer.println(message);
+                throw new MetricNotRegisteredException(message);
             }
             fileMetricsInfo.checkMetrics();
         }
+    }
+
+    /**
+     * メッセージ送信者名を返す
+     * 
+     * @return メッセージ送信者
+     */
+    public String getMessageSourceName() {
+        return this.getClass().getName();
     }
 
     /**

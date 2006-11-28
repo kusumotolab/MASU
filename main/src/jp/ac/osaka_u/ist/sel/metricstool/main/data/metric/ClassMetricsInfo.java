@@ -6,6 +6,9 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
@@ -17,7 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
  * @author y-higo
  * 
  */
-public final class ClassMetricsInfo {
+public final class ClassMetricsInfo implements MessageSource {
 
     /**
      * 引数なしコンストラクタ．
@@ -87,6 +90,15 @@ public final class ClassMetricsInfo {
     }
 
     /**
+     * メッセージの送信者名を返す
+     * 
+     * @return メッセージの送信者名
+     */
+    public String getMessageSourceName() {
+        return this.getClass().getName();
+    }
+
+    /**
      * このメトリクス情報に不足がないかをチェックする
      * 
      * @throws MetricNotRegisteredException
@@ -100,8 +112,12 @@ public final class ClassMetricsInfo {
                 String metricName = pluginInfo.getMetricName();
                 ClassInfo classInfo = this.getClassInfo();
                 String className = classInfo.getName();
-                throw new MetricNotRegisteredException("Metric \"" + metricName + "\" of "
-                        + className + " is not registered!");
+                String message = "Metric \"" + metricName + "\" of " + className
+                        + " is not registered!";
+                MessagePrinter printer = new DefaultMessagePrinter(this,
+                        MessagePrinter.MESSAGE_TYPE.ERROR);
+                printer.println(message);
+                throw new MetricNotRegisteredException(message);
             }
         }
     }
