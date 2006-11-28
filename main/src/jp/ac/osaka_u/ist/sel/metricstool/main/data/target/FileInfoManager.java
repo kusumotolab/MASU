@@ -23,10 +23,7 @@ public final class FileInfoManager implements Iterable<FileInfo> {
      * @return ファイル情報を管理しているインスタンス
      */
     public static FileInfoManager getInstance() {
-        if (FILE_INFO_DATA == null) {
-            FILE_INFO_DATA = new FileInfoManager();
-        }
-        return FILE_INFO_DATA;
+        return SINGLETON;
     }
 
     /**
@@ -65,7 +62,6 @@ public final class FileInfoManager implements Iterable<FileInfo> {
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */
     private FileInfoManager() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
         this.fileInfos = new TreeSet<FileInfo>();
     }
 
@@ -73,7 +69,7 @@ public final class FileInfoManager implements Iterable<FileInfo> {
      * 
      * シングルトンパターンを実装するための変数．
      */
-    private static FileInfoManager FILE_INFO_DATA = null;
+    private static final FileInfoManager SINGLETON = new FileInfoManager();
 
     /**
      * 

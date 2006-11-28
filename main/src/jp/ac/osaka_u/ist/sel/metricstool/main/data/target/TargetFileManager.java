@@ -27,10 +27,7 @@ public final class TargetFileManager implements Iterable<TargetFile> {
      * シングルトンパターンを用いて実装している．
      */
     public static TargetFileManager getInstance() {
-        if (TARGET_FILE_DATA == null) {
-            TARGET_FILE_DATA = new TargetFileManager();
-        }
-        return TARGET_FILE_DATA;
+        return SINGLETON;
     }
 
     /**
@@ -58,7 +55,6 @@ public final class TargetFileManager implements Iterable<TargetFile> {
      * 以前は HashSet を用いていたが，同じディレクトリのファイルはまとめて返すほうがよいので，TreeSet に変更した．
      */
     private TargetFileManager() {
-        MetricsToolSecurityManager.getInstance().checkAccess();        
         this.targetFiles = new TreeSet<TargetFile>();
     }
 
@@ -66,7 +62,7 @@ public final class TargetFileManager implements Iterable<TargetFile> {
      * 
      * シングルトンパターンを実装するための変数．
      */
-    private static TargetFileManager TARGET_FILE_DATA = null;
+    private static final TargetFileManager SINGLETON = new TargetFileManager();
 
     /**
      * 

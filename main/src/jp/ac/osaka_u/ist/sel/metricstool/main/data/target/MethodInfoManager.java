@@ -24,10 +24,7 @@ public final class MethodInfoManager implements Iterable<MethodInfo> {
      * @return メソッド情報を管理しているインスタンス
      */
     public static MethodInfoManager getInstance() {
-        if (METHOD_INFO_DATA == null) {
-            METHOD_INFO_DATA = new MethodInfoManager();
-        }
-        return METHOD_INFO_DATA;
+        return SINGLETON;
     }
 
     /**
@@ -65,7 +62,6 @@ public final class MethodInfoManager implements Iterable<MethodInfo> {
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */
     private MethodInfoManager() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
         this.methodInfos = new TreeSet<MethodInfo>();
     }
 
@@ -73,7 +69,7 @@ public final class MethodInfoManager implements Iterable<MethodInfo> {
      * 
      * シングルトンパターンを実装するための変数．
      */
-    private static MethodInfoManager METHOD_INFO_DATA = null;
+    private static final MethodInfoManager SINGLETON = new MethodInfoManager();
 
     /**
      * 

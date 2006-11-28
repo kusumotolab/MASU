@@ -23,10 +23,7 @@ public final class FieldInfoManager implements Iterable<FieldInfo> {
      * @return フィールド情報を管理しているインスタンス
      */
     public static FieldInfoManager getInstance() {
-        if (FIELD_INFO_DATA == null) {
-            FIELD_INFO_DATA = new FieldInfoManager();
-        }
-        return FIELD_INFO_DATA;
+        return SINGLETON;
     }
 
     /**
@@ -66,7 +63,6 @@ public final class FieldInfoManager implements Iterable<FieldInfo> {
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */
     private FieldInfoManager() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
         this.fieldInfos = new TreeSet<FieldInfo>();
     }
 
@@ -74,7 +70,7 @@ public final class FieldInfoManager implements Iterable<FieldInfo> {
      * 
      * シングルトンパターンを実装するための変数．
      */
-    private static FieldInfoManager FIELD_INFO_DATA = null;
+    private static final FieldInfoManager SINGLETON = new FieldInfoManager();
 
     /**
      * 

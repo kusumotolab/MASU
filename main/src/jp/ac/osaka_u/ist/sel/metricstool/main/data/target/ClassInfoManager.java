@@ -24,10 +24,7 @@ public final class ClassInfoManager implements Iterable<ClassInfo> {
      * @return クラス情報を管理しているインスタンス
      */
     public static ClassInfoManager getInstance() {
-        if (CLASS_INFO_DATA == null) {
-            CLASS_INFO_DATA = new ClassInfoManager();
-        }
-        return CLASS_INFO_DATA;
+        return SINGLETON;
     }
 
     /**
@@ -65,7 +62,6 @@ public final class ClassInfoManager implements Iterable<ClassInfo> {
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */
     private ClassInfoManager() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
         this.classInfos = new TreeSet<ClassInfo>();
     }
 
@@ -73,7 +69,7 @@ public final class ClassInfoManager implements Iterable<ClassInfo> {
      * 
      * シングルトンパターンを実装するための変数．
      */
-    private static ClassInfoManager CLASS_INFO_DATA = null;
+    private static final ClassInfoManager SINGLETON = new ClassInfoManager();
 
     /**
      * 
