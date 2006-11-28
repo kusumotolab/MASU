@@ -12,12 +12,20 @@ import java.util.logging.LoggingPermission;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageListener;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.DefaultPluginLauncher;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginLauncher;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.DefaultPluginLoader;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.PluginLoadException;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.PluginLoader;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
@@ -57,7 +65,6 @@ public class MetricsTool {
             System.setSecurityManager(sm);
             
             //システムに登録できたので，とりあえずロギングパーミッションをグローバルでセット
-            //TODO グローバルに与えるパーミッションは設定ファイルで記述できた方がいいかも
             sm.addGlobalPermission(new LoggingPermission("control", null));
             
         } catch (final SecurityException e) {
@@ -66,6 +73,20 @@ public class MetricsTool {
             Logger.global
                     .info(("Failed to set system security manager. MetricsToolsecurityManager works only to manage privilege threads."));
         }
+        
+        
+        //情報表示用のリスナを作成
+        MessagePool.getInstance(MESSAGE_TYPE.OUT).addMessageListener(new MessageListener(){
+            public void messageReceived(MessageEvent event) {
+                System.out.print(event.getSource().getMessageSourceName() + " > " + event.getMessage());
+            }
+        });
+        
+        MessagePool.getInstance(MESSAGE_TYPE.ERROR).addMessageListener(new MessageListener(){
+            public void messageReceived(MessageEvent event) {
+                System.out.print(event.getSource().getMessageSourceName() + " > " + event.getMessage());
+            }
+        });
 
         Settings settings = new Settings();
         ArgumentProcessor.processArgs(args, parameterDefs, settings);
@@ -118,6 +139,15 @@ public class MetricsTool {
             // 解析モードの場合
         } else if (!Settings.isHelpMode() && !Settings.isDisplayMode()) {
 
+            //言語を取得
+            LANGUAGE language = null;
+            try {
+                language = Settings.getLanguage();
+            } catch (UnavailableLanguageException e) {
+                System.err.println(e.getMessage());
+                System.exit(0);
+            }
+            
             // 解析対象ファイルを登録
             {
                 // ディレクトリから読み込み
@@ -164,6 +194,38 @@ public class MetricsTool {
                         System.err.println("\t" + targetFile.getName());
                     }
                 }
+            }
+
+            //対象言語を解析可能なプラグインをロード->登録->実行
+            {
+                PluginManager manager = PluginManager.getInstance();
+                PluginLoader loader = new DefaultPluginLoader();
+                try {
+                    for (AbstractPlugin plugin : loader.loadPlugins()) {
+                        PluginInfo pluginInfo = plugin.getPluginInfo();
+                        if (pluginInfo.isMeasurable(language)) {
+                            manager.addPlugin(plugin);
+                        }
+                    }
+                } catch (PluginLoadException e) {
+                    System.err.println(e.getMessage());
+                    System.exit(0);
+                }
+
+                PluginLauncher launcher = new DefaultPluginLauncher();
+                launcher.setMaximumLaunchingNum(1);
+                launcher.launchAll(manager.getPlugins());
+
+                do {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        //気にしない
+                    }
+                } while (0 < launcher.getCurrentLaunchingNum());
+
+                launcher.stopLaunching();
+
             }
 
         }
