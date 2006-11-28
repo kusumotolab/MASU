@@ -10,21 +10,19 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.ClosableLinkedBlockingQueue;
 
 
 /**
- * プラグインを実行するランチャー
+ * プラグインを実行スレッドを起動するランチャー
  * ほとんどのパブリックメソッドの実行に特別権限を必要とする.
  * 全てのプラグインの実行が終わった後に，必ず {@link #stopLaunching()}または
  * {@link #stopLaunchingNow()}を呼ばなければならない.
  * @author kou-tngt
  *
  */
-public final class DefaultPluginLauncher implements PluginLauncher {
+public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEndListener {
 
     /**
      * プラグインの実行をキャンセルするメソッド.
@@ -81,6 +79,15 @@ public final class DefaultPluginLauncher implements PluginLauncher {
     }
 
     /**
+     * 実行終了通知を受け取るリスナ
+     * 
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.plugin.ExecutionEndListener#executionEnd(jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin)
+     */
+    public void executionEnd(final AbstractPlugin plugin) {
+        this.futureMap.remove(plugin);
+    }
+
+    /**
      * 現在実行中のプラグインの数を返すメソッド.
      * @return 実行中のプラグインの数.
      */
@@ -113,9 +120,9 @@ public final class DefaultPluginLauncher implements PluginLauncher {
             throw new NullPointerException("plugin is null.");
         }
 
-        final RunnablePlugin runnablePlugin = new RunnablePlugin(plugin);
-        final Future future = this.threadPool.submit(runnablePlugin);
-        this.futureMap.put(runnablePlugin.getPlugin(), future);
+        final PluginExecutor executor = new PluginExecutor(plugin);
+        final Future future = this.threadPool.submit(executor);
+        this.futureMap.put(executor.getPlugin(), future);
     }
 
     /**
@@ -163,6 +170,7 @@ public final class DefaultPluginLauncher implements PluginLauncher {
         this.stoped = true;
         this.workQueue.close();
         this.threadPool.setCorePoolSize(0);
+        this.threadPool.setMaximumPoolSize(1);
     }
 
     /**
@@ -207,51 +215,6 @@ public final class DefaultPluginLauncher implements PluginLauncher {
     }
 
     /**
-     * プラグインをスレッド単位で実行するための {@link Runnable} なクラス
-     * @author kou-tngt
-     *
-     */
-    private class RunnablePlugin implements Runnable {
-        public void run() {
-            try {
-                //プラグインディレクトリへのファイルアクセスを要求してからプラグインのexecuteを呼び出す
-                //MetricsToolSecurityManagerがシステムのセキュリティマネージャーではない場合，
-                //ファイルアクセス権限が与えられるかどうかは
-                //システムのセキュリティマネージャー次第
-                MetricsToolSecurityManager.getInstance().requestPluginDirAccessPermission(
-                        this.plugin);
-                this.plugin.execute();
-            } catch (final Exception e) {
-                (new DefaultMessagePrinter(this.plugin, MessagePrinter.MESSAGE_TYPE.ERROR))
-                        .println(e.getMessage());
-            }
-            DefaultPluginLauncher.this.futureMap.remove(this.plugin);
-        }
-
-        /**
-         * コンストラクタ
-         * @param plugin このクラスで実行するプラグイン
-         */
-        private RunnablePlugin(final AbstractPlugin plugin) {
-            this.plugin = plugin;
-        }
-
-        /**
-         * このインスタンスで実行するプラグインを返す
-         * @return このインスタンスで実行するプラグイン
-         */
-        private AbstractPlugin getPlugin() {
-            return this.plugin;
-        }
-
-        /**
-         * このインスタンスで実行するプラグイン
-         */
-        private final AbstractPlugin plugin;
-
-    }
-
-    /**
      * 各 {@link RunnablePlugin} のFutureを保存するマップ
      */
     private final Map<AbstractPlugin, Future> futureMap = new ConcurrentHashMap<AbstractPlugin, Future>();
@@ -271,4 +234,5 @@ public final class DefaultPluginLauncher implements PluginLauncher {
      */
     private final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(Integer.MAX_VALUE,
             Integer.MAX_VALUE, 0, TimeUnit.SECONDS, this.workQueue, new PluginThreadFactory());
+
 }
