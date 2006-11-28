@@ -62,7 +62,13 @@ public class SamplePlugin2 extends AbstractPlugin {
         reporter.reportProgress(5);
         reporter.reportProgress(20);
         
-        err.println("Warning : mesuaring process is too buzy.");
+        try{
+            reporter.reportProgress(5);
+        } catch (IllegalStateException e){
+            err.println(e);
+        }
+        
+        err.println("Warning : measuring process is too buzy.");
         
         reporter.reportProgress(50);
         reporter.reportProgress(100);
@@ -74,12 +80,28 @@ public class SamplePlugin2 extends AbstractPlugin {
         File file = new File(this.getPluginRootDir(),"test.txt");
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write("test");
+            writer.write("I am Sample Plugin 2!");
             writer.close();
             out.println(file.getAbsolutePath() + " was created!");
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            err.println(e);
+            err.println(file.getAbsolutePath() + " was not created...");
+        }
+        File file2 = null;
+        try {
+            out.println("Try to create <PLUGIN_ROOT>\\..\\test.txt");
+            file2 = new File(this.getPluginRootDir(),"..\\test.txt");
+           
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file2));
+            writer.write("I am Sample Plugin 2!");
+            writer.close();
+            out.println(file2.getAbsolutePath() + " was created!");
+        } catch (IOException e) {
+            err.println(e);
+            err.println(file2.getAbsolutePath() + " was not created...");
+        } catch (SecurityException e){
+            err.println(e);
+            err.println(file2.getAbsolutePath() + " was not created...");
         }
     }
 
