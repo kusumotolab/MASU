@@ -10,6 +10,7 @@ import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.ConcurrentHashSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.WeakHashSet;
 
 
@@ -203,7 +204,7 @@ public final class ProgressConnector {
      * リスナーを管理するSet.
      * ここにだけ参照があっても意味が無いので，弱参照で持つ.
      */
-    private final Set<ProgressListener> listeners = new WeakHashSet<ProgressListener>();
+    private final Set<ProgressListener> listeners = new ConcurrentHashSet<ProgressListener>();
 
     /**
      * このインスタンスの接続状態

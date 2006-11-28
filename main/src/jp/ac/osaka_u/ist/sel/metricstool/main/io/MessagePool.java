@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.WeakHashSet;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.ConcurrentHashSet;
 
 
 /**
@@ -119,7 +119,7 @@ public class MessagePool {
     /**
      * 登録されているメッセージリスナ
      */
-    private final Set<MessageListener> listeners = new WeakHashSet<MessageListener>();
+    private final Set<MessageListener> listeners = new ConcurrentHashSet<MessageListener>();
 
     /**
      * インスタンス群
