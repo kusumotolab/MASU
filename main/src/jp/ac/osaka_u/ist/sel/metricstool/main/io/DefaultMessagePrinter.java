@@ -23,26 +23,33 @@ public class DefaultMessagePrinter implements MessagePrinter {
      * メッセージをそのまま出力する
      * @param message 出力するメッセージ
      */
-    public void print(final String message) {
-        this.pool.sendMessage(this.source, message);
+    public void print(final Object o) {
+        this.pool.sendMessage(this.source, String.valueOf(o));
+    }
+
+    /**
+     * 改行する
+     */
+    public void println() {
+        this.print(LINE_SEPARATOR);
     }
 
     /**
      * メッセージを出力して改行する
      * @param message 出力するメッセージ
      */
-    public void println(final String message) {
-        this.print(message + LINE_SEPARATOR);
+    public void println(final Object o) {
+        this.print(String.valueOf(o) + LINE_SEPARATOR);
     }
 
     /**
      * 複数行のメッセージの間に，他のメッセージの割り込みがないように出力する.
      * @param messages 出力するメッセージの配列
      */
-    public void println(final String[] messages) {
+    public void println(final Object[] objects) {
         final StringBuilder builder = new StringBuilder();
-        for (final String message : messages) {
-            builder.append(message);
+        for (final Object o : objects) {
+            builder.append(String.valueOf(o));
             builder.append(LINE_SEPARATOR);
         }
         this.print(builder.toString());

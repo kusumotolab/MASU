@@ -20,17 +20,22 @@ public interface MessagePrinter {
      * メッセージをそのまま出力する
      * @param message 出力するメッセージ
      */
-    public void print(String message);
+    public void print(Object o);
+
+    /**
+     * 改行する
+     */
+    public void println();
 
     /**
      * メッセージを出力して改行する
      * @param message 出力するメッセージ
      */
-    public void println(String message);
+    public void println(Object o);
 
     /**
      * 複数行のメッセージの間に，他のメッセージの割り込みがないように出力する.
      * @param messages 出力するメッセージの配列
      */
-    public void println(String[] messages);
+    public void println(Object[] o);
 }
