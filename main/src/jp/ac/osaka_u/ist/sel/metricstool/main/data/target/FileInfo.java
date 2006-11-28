@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -49,14 +48,12 @@ public final class FileInfo {
     }
 
     /**
-     * このファイルに定義されているクラスのイテレータを返す
+     * このファイルに定義されているクラスのSortedSetを返す
      * 
-     * @return このファイルに定義されているクラスのイテレータ
+     * @return このファイルに定義されているクラスのSortedSet
      */
-    public Iterator<ClassInfo> definedClassIterator() {
-        SortedSet<ClassInfo> unmodifiableDefinedClasses = Collections
-                .unmodifiableSortedSet(this.definedClasses);
-        return unmodifiableDefinedClasses.iterator();
+    public SortedSet<ClassInfo> getDefinedClasses() {
+        return Collections.unmodifiableSortedSet(this.definedClasses);
     }
 
     /**

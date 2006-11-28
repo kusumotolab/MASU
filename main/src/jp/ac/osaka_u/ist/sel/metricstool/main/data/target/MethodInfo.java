@@ -236,9 +236,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
                 } else {
 
                     // 引数の型で比較．第一引数から順番に．
-                    Iterator<ParameterInfo> parameterIterator = this.parameterIterator();
-                    Iterator<ParameterInfo> correspondParameterIterator = method
-                            .parameterIterator();
+                    Iterator<ParameterInfo> parameterIterator = this.getParameters().iterator();
+                    Iterator<ParameterInfo> correspondParameterIterator = method.getParameters().iterator();
                     while (parameterIterator.hasNext() && correspondParameterIterator.hasNext()) {
                         ParameterInfo parameter = parameterIterator.next();
                         ParameterInfo correspondParameter = correspondParameterIterator.next();
@@ -294,24 +293,21 @@ public final class MethodInfo implements Comparable<MethodInfo> {
     }
 
     /**
-     * このメソッドで定義されているローカル変数の Iterator を返す．
+     * このメソッドで定義されているローカル変数の SortedSet を返す．
      * 
-     * @return このメソッドで定義されているローカル変数の Iterator
+     * @return このメソッドで定義されているローカル変数の SortedSet
      */
-    public Iterator<LocalVariableInfo> localVariableIterator() {
-        SortedSet<LocalVariableInfo> unmodifiableLocalVariables = Collections
-                .unmodifiableSortedSet(this.localVariables);
-        return unmodifiableLocalVariables.iterator();
+    public SortedSet<LocalVariableInfo> getLocalVariables() {
+        return Collections.unmodifiableSortedSet(this.localVariables);
     }
 
     /**
-     * このメソッドの引数の Iterator を返す．
+     * このメソッドの引数の List を返す．
      * 
-     * @return このメソッドの引数の Iterator
+     * @return このメソッドの引数の List
      */
-    public Iterator<ParameterInfo> parameterIterator() {
-        List<ParameterInfo> unmodifiableParameters = Collections.unmodifiableList(this.parameters);
-        return unmodifiableParameters.iterator();
+    public List<ParameterInfo> getParameters() {
+        return Collections.unmodifiableList(this.parameters);
     }
 
     /**
@@ -333,67 +329,57 @@ public final class MethodInfo implements Comparable<MethodInfo> {
     }
 
     /**
-     * このメソッドが呼び出しているメソッドの Iterator を返す．
+     * このメソッドが呼び出しているメソッドの SortedSet を返す．
      * 
-     * @return このメソッドが呼び出しているメソッドの Iterator
+     * @return このメソッドが呼び出しているメソッドの SortedSet
      */
-    public Iterator<MethodInfo> calleeIterator() {
-        SortedSet<MethodInfo> unmodifiableCallees = Collections.unmodifiableSortedSet(this.callees);
-        return unmodifiableCallees.iterator();
+    public SortedSet<MethodInfo> getCallees() {
+        return Collections.unmodifiableSortedSet(this.callees);
     }
 
     /**
-     * このメソッドを呼び出しているメソッドの Iterator を返す．
+     * このメソッドを呼び出しているメソッドの SortedSet を返す．
      * 
-     * @return このメソッドを呼び出しているメソッドの Iterator
+     * @return このメソッドを呼び出しているメソッドの SortedSet
      */
-    public Iterator<MethodInfo> callerIterator() {
-        SortedSet<MethodInfo> unmodifiableCallers = Collections.unmodifiableSortedSet(this.callers);
-        return unmodifiableCallers.iterator();
+    public SortedSet<MethodInfo> getCallers() {
+        return Collections.unmodifiableSortedSet(this.callers);
     }
 
     /**
-     * このメソッドがオーバーライドしているメソッドの Iterator を返す．
+     * このメソッドがオーバーライドしているメソッドの SortedSet を返す．
      * 
-     * @return このメソッドがオーバーライドしているメソッドの Iterator
+     * @return このメソッドがオーバーライドしているメソッドの SortedSet
      */
-    public Iterator<MethodInfo> overrideeIterator() {
-        SortedSet<MethodInfo> unmodifiableOverridees = Collections
-                .unmodifiableSortedSet(this.overridees);
-        return unmodifiableOverridees.iterator();
+    public SortedSet<MethodInfo> getOverridees() {
+        return Collections.unmodifiableSortedSet(this.overridees);
     }
 
     /**
-     * このメソッドをオーバーライドしているメソッドの Iterator を返す．
+     * このメソッドをオーバーライドしているメソッドの SortedSet を返す．
      * 
-     * @return このメソッドをオーバーライドしているメソッドの Iterator
+     * @return このメソッドをオーバーライドしているメソッドの SortedSet
      */
-    public Iterator<MethodInfo> overriderIterator() {
-        SortedSet<MethodInfo> unmodifiableOverriders = Collections
-                .unmodifiableSortedSet(this.overriders);
-        return unmodifiableOverriders.iterator();
+    public SortedSet<MethodInfo> getOverriders() {
+        return Collections.unmodifiableSortedSet(this.overriders);
     }
 
     /**
-     * このメソッドが参照しているフィールドの Iterator を返す．
+     * このメソッドが参照しているフィールドの SortedSet を返す．
      * 
-     * @return このメソッドが参照しているフィールドの Iterator
+     * @return このメソッドが参照しているフィールドの SortedSet
      */
-    public Iterator<FieldInfo> referenceIterator() {
-        SortedSet<FieldInfo> unmodifiableReferencees = Collections
-                .unmodifiableSortedSet(this.referencees);
-        return unmodifiableReferencees.iterator();
+    public SortedSet<FieldInfo> getReferencees() {
+        return Collections.unmodifiableSortedSet(this.referencees);
     }
 
     /**
-     * このメソッドが代入しているフィールドの Iterator を返す．
+     * このメソッドが代入しているフィールドの SortedSet を返す．
      * 
-     * @return このメソッドが代入しているフィールドの Iterator
+     * @return このメソッドが代入しているフィールドの SortedSet
      */
-    public Iterator<FieldInfo> assignmenteeIterator() {
-        SortedSet<FieldInfo> unmodifiableAssignmentees = Collections
-                .unmodifiableSortedSet(this.assignmentees);
-        return unmodifiableAssignmentees.iterator();
+    public SortedSet<FieldInfo> getAssignmentees() {
+        return Collections.unmodifiableSortedSet(this.assignmentees);
     }
 
     /**
