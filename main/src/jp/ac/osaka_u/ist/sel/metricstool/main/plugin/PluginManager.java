@@ -4,7 +4,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin;
 import java.security.AccessControlException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -41,7 +43,9 @@ public class PluginManager {
         }
 
         this.plugins.add(plugin);
-        this.pluginInfos.add(plugin.getPluginInfo());
+        final PluginInfo info = plugin.getPluginInfo();
+        this.pluginInfos.add(info);
+        this.info2pluginMap.put(info, plugin);
     }
 
     /**
@@ -61,6 +65,15 @@ public class PluginManager {
         for (final AbstractPlugin plugin : collection) {
             this.addPlugin(plugin);
         }
+    }
+
+    /**
+     * プラグイン情報をキーにして，対応するプラグインインスタンスを返す.
+     * @param info キーとなるプラグイン情報
+     * @return 対応するプラグイン
+     */
+    public AbstractPlugin getPlugin(final PluginInfo info) {
+        return this.info2pluginMap.get(info);
     }
 
     /**
@@ -101,6 +114,9 @@ public class PluginManager {
 
         if (null != plugin) {
             this.plugins.remove(plugin);
+            final PluginInfo info = plugin.getPluginInfo();
+            this.pluginInfos.remove(info);
+            this.info2pluginMap.remove(info);
         }
     }
 
@@ -145,6 +161,11 @@ public class PluginManager {
      * プラグイン情報のSet
      */
     private final Set<PluginInfo> pluginInfos = new ConcurrentHashSet<PluginInfo>();
+
+    /**
+     * プラグイン情報からプラグインインスタンスへのマッピング
+     */
+    private final Map<PluginInfo, AbstractPlugin> info2pluginMap = new ConcurrentHashMap<PluginInfo, AbstractPlugin>();
 
     /**
      * シングルトンインスタンス
