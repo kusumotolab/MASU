@@ -234,7 +234,7 @@ public class MetricsTool implements MessageSource {
                         } catch (InterruptedException e) {
                             //‹C‚É‚µ‚È‚¢
                         }
-                    } while (0 < launcher.getCurrentLaunchingNum());
+                    } while (0 < launcher.getCurrentLaunchingNum() + launcher.getLaunchWaitingTaskNum());
 
                     launcher.stopLaunching();
                 }

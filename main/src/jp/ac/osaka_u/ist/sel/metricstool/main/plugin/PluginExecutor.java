@@ -43,7 +43,7 @@ public class PluginExecutor implements Runnable {
     }
 
     /**
-     * 実行スレッド
+     * 実行メソッド
      */
     public void execute() {
         try {

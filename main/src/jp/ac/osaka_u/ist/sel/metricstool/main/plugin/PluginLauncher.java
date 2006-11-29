@@ -47,16 +47,22 @@ public interface PluginLauncher {
 
     /**
      * ランチャーを停止する.
-     * 実行中のタスクは終わるまで待つ.
+     * 実行待ちのタスクは削除し，実行中のタスクは終わるまで待つ.
      */
     public void stopLaunching();
 
     /**
      * ランチャーを直ちに停止する.
-     * 実行中のタスクは全てキャンセルされる.
+     * 実行待ちのタスクは削除し，実行中のタスクは全てキャンセルされる.
      */
     public void stopLaunchingNow();
 
+    
+    /**
+     * 実行待ちのタスクの数を返す.
+     */
+    public int getLaunchWaitingTaskNum();
+    
     /**
      * 同時実行最大数を返すメソッド
      * @return 同時実行最大数

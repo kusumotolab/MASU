@@ -74,6 +74,14 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
     public void cancelAll() {
         this.requestCancelAll = true;
     }
+    
+    /**
+     * 実行待ちのタスクの数を返す.
+     * @return 実行待ちのタスクの数
+     */
+    public int getLaunchWaitingTaskNum(){
+        return this.launcher.getLaunchWaitingTaskNum() + this.launchQueue.size();
+    }
 
     /**
      * 現在実行中のプラグインの数を返すメソッド.
@@ -197,20 +205,23 @@ public class PluginLauncherThread extends Thread implements PluginLauncher {
 
     /**
      * このスレッドに停止信号を送るメソッド.
-     * 実行中のプラグインは終了するまで待つ.
+     * 実行待ちのタスクは削除し，実行中のプラグインは終了するまで待つ.
      */
     public synchronized void stopLaunching() {
         this.stopFlag = true;
         this.launchQueue.close();
+        this.launchQueue.clear();
         this.notify();
     }
 
     /**
-     * ランチャーを直ちに停止する. 実行中のタスクは全てキャンセルされる. 
+     * ランチャーを直ちに停止する. 
+     * 実行待ちのタスクは削除し，実行中のタスクは全てキャンセルされる. 
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginLauncher#stopLaunchingNow()
      */
     public void stopLaunchingNow() {
         this.stopNowFlag = true;
+        this.cancelQueue.clear();
         this.stopLaunching();
     }
 

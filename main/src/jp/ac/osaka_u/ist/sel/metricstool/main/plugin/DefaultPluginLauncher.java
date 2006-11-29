@@ -88,6 +88,14 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
     }
 
     /**
+     * 実行待ちのタスクの数を返す.
+     * @return 実行待ちのタスクの数
+     */
+    public int getLaunchWaitingTaskNum(){
+        return this.workQueue.size();
+    }
+    
+    /**
      * 現在実行中のプラグインの数を返すメソッド.
      * @return 実行中のプラグインの数.
      */
@@ -157,26 +165,27 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
             throw new IllegalArgumentException("parameter size must be natural number.");
         }
         this.threadPool.setCorePoolSize(size);
+        this.threadPool.setMaximumPoolSize(size);
     }
 
     /**
      *  ランチャーを終了する.
      *  特別権限を持つスレッドからしか実行できない.
-     *  実行中のタスクは終わるまで待つ.
+     *  実行待ちのタスクは削除し，実行中のタスクは終わるまで待つ.
      *  @throws AccessControlException 特別権限を持たないスレッドから呼び出された場合
      */
     public void stopLaunching() {
         MetricsToolSecurityManager.getInstance().checkAccess();
         this.stoped = true;
         this.workQueue.close();
+        this.workQueue.clear();
         this.threadPool.setCorePoolSize(0);
-        this.threadPool.setMaximumPoolSize(1);
     }
 
     /**
      * ランチャーを終了する.
      * 特別権限を持つスレッドからしか実行できない.
-     * 実行中のタスクも全てキャンセルする.
+     * 実行待ちのタスクは削除し，実行中のタスクも全てキャンセルする.
      * @throws AccessControlException 特別権限を持たないスレッドから呼び出された場合
      */
     public void stopLaunchingNow() {
