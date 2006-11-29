@@ -60,7 +60,7 @@ public final class ProgressConnector {
      * @param listener 進捗報告を受け取るリスナー
      * @throws NullPointerException　listnerがnullの場合
      */
-    public final synchronized void addProgressListener(final ProgressListener listener) {
+    public final void addProgressListener(final ProgressListener listener) {
         if (null == listener) {
             throw new NullPointerException("listener is null.");
         }
@@ -89,7 +89,7 @@ public final class ProgressConnector {
      * このコネクタに現在登録されているリスナを返す
      * @return
      */
-    public final synchronized Set<ProgressListener> getListeners() {
+    public final Set<ProgressListener> getListeners() {
         return Collections.unmodifiableSet(this.listeners);
     }
 
@@ -102,9 +102,11 @@ public final class ProgressConnector {
     }
 
     /**
-     * 進捗情報の終了イベントを送るメソッド
+     * 進捗情報の送信を終了するメソッド
      */
-    public final void progressEnd() {
+    public final synchronized void progressEnd() {
+        this.reporter = null;
+        this.connectionState = STATE.DISCONNECTED;
         fireProgressEnd(new ProgressEvent(this.source, 100));
     }
 
@@ -112,7 +114,7 @@ public final class ProgressConnector {
      * リスナーを削除する
      * @param listener　削除するリスナー
      */
-    public final synchronized void removeProgressListener(final ProgressListener listener) {
+    public final void removeProgressListener(final ProgressListener listener) {
         if (null != listener) {
             this.listeners.remove(listener);
         }
