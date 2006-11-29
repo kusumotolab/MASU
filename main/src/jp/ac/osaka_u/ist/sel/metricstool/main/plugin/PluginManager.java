@@ -12,7 +12,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.ConcurrentHashSet;
 
 
 /**
- *
  * プラグインインスタンスを管理するクラス．
  * 
  * @author kou-tngt
@@ -65,6 +64,14 @@ public class PluginManager {
     }
 
     /**
+     * 登録されているプラグインの数を返す.
+     * @return 登録されているプラグインの数.
+     */
+    public int getPluginCount() {
+        return this.plugins.size();
+    }
+
+    /**
      * プラグインの編集不可なSetを返す
      * 特別権限を持つスレッド以外からは呼び出せない
      * @return プラグインのSet
@@ -95,6 +102,32 @@ public class PluginManager {
         if (null != plugin) {
             this.plugins.remove(plugin);
         }
+    }
+
+    /**
+     * プラグインを削除する
+     * 特別権限スレッドのみから呼び出せる.
+     * @param plugins 削除するプラグインのCollection
+     * @throws AccessControlException 特別権限を持っていない場合
+     */
+    public void removePlugins(final Collection<AbstractPlugin> plugins) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+
+        if (plugins != null) {
+            for (final AbstractPlugin plugin : plugins) {
+                this.removePlugin(plugin);
+            }
+        }
+    }
+
+    /**
+     * 登録されているプラグインを全て削除する
+     * 特別権限スレッドのみから呼び出せる.
+     * @throws AccessControlException 特別権限を持っていない場合
+     */
+    public void removeAllPlugins() {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.plugins.clear();
     }
 
     /**
