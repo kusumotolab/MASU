@@ -7,8 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.logging.Logger;
-import java.util.logging.LoggingPermission;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
@@ -59,6 +57,23 @@ import antlr.TokenStreamException;
  * 
  */
 public class MetricsTool implements MessageSource {
+    
+    static{
+        //情報表示用のリスナを作成
+        MessagePool.getInstance(MESSAGE_TYPE.OUT).addMessageListener(new MessageListener() {
+            public void messageReceived(MessageEvent event) {
+                System.out.print(event.getSource().getMessageSourceName() + " > "
+                        + event.getMessage());
+            }
+        });
+
+        MessagePool.getInstance(MESSAGE_TYPE.ERROR).addMessageListener(new MessageListener() {
+            public void messageReceived(MessageEvent event) {
+                System.err.print(event.getSource().getMessageSourceName() + " > "
+                        + event.getMessage());
+            }
+        });
+    }
 
     /**
      * 
@@ -74,30 +89,11 @@ public class MetricsTool implements MessageSource {
             //システムのセキュリティーマネージャとして登録してみる
             System.setSecurityManager(sm);
 
-            //システムに登録できたので，とりあえずロギングパーミッションをグローバルでセット
-            sm.addGlobalPermission(new LoggingPermission("control", null));
-
         } catch (final SecurityException e) {
             //既にセットされているセキュリティマネージャによって，新たなセキュリティマネージャの登録が許可されなかった．
             //システムのセキュリティマネージャとして使わなくても，特別権限スレッドのアクセス制御は問題なく動作するのでとりあえず無視する
-            Logger.global
-                    .info(("Failed to set system security manager. MetricsToolsecurityManager works only to manage privilege threads."));
+            err.println("Failed to set system security manager. MetricsToolsecurityManager works only to manage privilege threads.");
         }
-
-        //情報表示用のリスナを作成
-        MessagePool.getInstance(MESSAGE_TYPE.OUT).addMessageListener(new MessageListener() {
-            public void messageReceived(MessageEvent event) {
-                System.out.print(event.getSource().getMessageSourceName() + " > "
-                        + event.getMessage());
-            }
-        });
-
-        MessagePool.getInstance(MESSAGE_TYPE.ERROR).addMessageListener(new MessageListener() {
-            public void messageReceived(MessageEvent event) {
-                System.err.print(event.getSource().getMessageSourceName() + " > "
-                        + event.getMessage());
-            }
-        });
 
         Settings settings = new Settings();
         ArgumentProcessor.processArgs(args, parameterDefs, settings);

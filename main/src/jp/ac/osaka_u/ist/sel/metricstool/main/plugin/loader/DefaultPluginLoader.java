@@ -15,8 +15,11 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -305,13 +308,18 @@ public class DefaultPluginLoader implements PluginLoader {
         final List<AbstractPlugin> result = new ArrayList<AbstractPlugin>(100);
         final File[] pluginDirs = pluginsDir.listFiles();
 
+        final MessagePrinter errorPrinter = new DefaultMessagePrinter(new MessageSource(){
+            public String getMessageSourceName() {
+                return "PluginLoader#loadPlugins(File)";
+            }},MESSAGE_TYPE.ERROR);
+        
         for (final File pluginDir : pluginDirs) {
             if (pluginDir.isDirectory()) {
                 try {
                     final AbstractPlugin plugin = this.loadPlugin(pluginDir);
                     result.add(plugin);
                 } catch (final PluginLoadException e) {
-                    Logger.global.warning("Failed to load plugin : " + pluginDir.getName());
+                    errorPrinter.println("Failed to load plugin : " + pluginDir.getName());
                 }
             }
         }
