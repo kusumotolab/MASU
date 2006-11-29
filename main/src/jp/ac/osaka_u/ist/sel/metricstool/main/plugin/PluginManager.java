@@ -69,10 +69,13 @@ public class PluginManager {
 
     /**
      * プラグイン情報をキーにして，対応するプラグインインスタンスを返す.
+     * 特別権限を持つスレッド以外からは呼び出せない
      * @param info キーとなるプラグイン情報
      * @return 対応するプラグイン
+     * @throws AccessControlException 特別権限を持っていないスレッドからの呼び出しの場合
      */
     public AbstractPlugin getPlugin(final PluginInfo info) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
         return this.info2pluginMap.get(info);
     }
 
