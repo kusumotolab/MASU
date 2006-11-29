@@ -182,6 +182,55 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
+     * プラグインインスタンス同士を比較する.
+     * クラスの標準名が取れるならそれを用いて比較する.
+     * 取れない場合は， {@link Class}インスタンスのを比較する.
+     * ただし，通常の機能を用いていロードされるプラグインが匿名クラスであることはありえない.
+     * よって，同一プラグインクラスのインスタンスは別のクラスローダからロードされても同一であると判定される.
+     * @see java.lang.Object#equals(java.lang.Object)
+     * @see #hashCode()
+     */
+    @Override
+    public final boolean equals(final Object o) {
+        if (o instanceof AbstractPlugin) {
+            final String myClassName = this.getClass().getCanonicalName();
+            final String otherClassName = o.getClass().getCanonicalName();
+            if (null != myClassName && null != otherClassName) {
+                //どちらも匿名クラスじゃない場合
+                return myClassName.equals(otherClassName);
+            } else if (null != myClassName || null != otherClassName) {
+                //どっちかは匿名クラスだけど，どっちかは違う
+                return false;
+            } else {
+                //両方とも匿名クラス
+                return this.getClass().equals(o.getClass());
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * プラグインインスタンスのハッシュコードを返す.
+     * クラスの標準名が取れるならそのハッシュコードを使う.
+     * 取れない場合は， {@link Class}インスタンスのハッシュコードを使う.
+     * ただし，通常の機能を用いていロードされるプラグインが匿名クラスであることはありえない.
+     * よって，同一プラグインクラスのインスタンスは別のクラスローダからロードされても同一のハッシュコードを返す.
+     * @see java.lang.Object#hashCode()(java.lang.Object)
+     * @see #equals(Object)
+     */
+    @Override
+    public final int hashCode() {
+        final Class myClass = this.getClass();
+        final String myClassName = myClass.getCanonicalName();
+        if (myClassName != null) {
+            return myClassName.hashCode();
+        } else {
+            return myClass.hashCode();
+        }
+    }
+
+    /**
      * プラグインのルートディレクトリをセットする
      * 一度セットされた値を変更することは出来ない.
      * @param rootDir ルートディレクトリ
@@ -249,7 +298,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * プラグイン情報が既に構築済みかどうかを返す
      * @return プラグイン情報が既に構築済みならtrue,そうでなければfalse
      */
-    public boolean isPluginInfoCreated() {
+    public final boolean isPluginInfoCreated() {
         return null != this.pluginInfo;
     }
 
