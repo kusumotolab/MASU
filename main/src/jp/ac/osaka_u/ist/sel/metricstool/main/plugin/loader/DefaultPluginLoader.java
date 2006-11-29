@@ -21,6 +21,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginResponseException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -118,10 +119,11 @@ public class DefaultPluginLoader implements PluginLoader {
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合に投げられる．
      * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合に投げられる．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合に投げられる．
+     * @throws PluginResponseException ロードしたプラグインからの応答がなかった場合.
      */
     public AbstractPlugin loadPlugin(final String pluginDirName) throws PluginLoadException,
             IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
-            PluginClassLoadException {
+            PluginClassLoadException, PluginResponseException {
         return this.loadPlugin(this.searchPluginsDirectory(), pluginDirName);
     }
 
@@ -134,12 +136,14 @@ public class DefaultPluginLoader implements PluginLoader {
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合に投げられる．
      * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合に投げられる．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合に投げられる．
+     * @throws PluginResponseException ロードしたプラグインからの応答がなかった場合.
      * @throws NullPointerException pluginsDirがnullの場合
      * @throws IllegalArgumentException pluginsDirが存在しない場合，ディレクトリではない場合
      */
     public AbstractPlugin loadPlugin(final File pluginsDir, final String pluginDirName)
             throws PluginLoadException, IllegalPluginXmlFormatException,
-            IllegalPluginDirectoryStructureException, PluginClassLoadException {
+            IllegalPluginDirectoryStructureException, PluginClassLoadException,
+            PluginResponseException {
         if (null == pluginsDir || null == pluginDirName) {
             throw new NullPointerException();
         }
@@ -163,12 +167,13 @@ public class DefaultPluginLoader implements PluginLoader {
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合に投げられる．
      * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合に投げられる．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合に投げられる．
+     * @throws PluginResponseException ロードしたプラグインからの応答がなかった場合.
      * @throws NullPointerException pluginRootDirがnullの場合
      * @throws IllegalArgumentException pluginRootDirが存在しない場合，ディレクトリではない場合
      */
     public AbstractPlugin loadPlugin(final File pluginRootDir) throws PluginLoadException,
             IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
-            PluginClassLoadException {
+            PluginClassLoadException, PluginResponseException {
 
         //アクセス権限をチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -258,8 +263,17 @@ public class DefaultPluginLoader implements PluginLoader {
 
             assert (null != plugin) : "Illeagal state: Plugin class's instance is null.";
 
+            //プラグインディレクトリをセット
             plugin.setPluginRootdir(pluginRootDir);
-            //ロードしてキャストしてインスタンス化してディレクトリがセットできたので返す.
+
+            //プラグイン情報の構築を試みる
+            if (!this.createPluginInfo(plugin)) {
+                throw new PluginResponseException("Failed to create plugin information about "
+                        + pluginClassName + ". Plugin's information methods must return within "
+                        + PLUGIN_METHODS_RESPONSE_TIME + " milli seconds.");
+            }
+
+            //ロード->キャスト->インスタンス化->ディレクトリのセット->プラグイン情報の構築が全て成功したので返す.
             return plugin;
         } catch (final SecurityException e) {
             throw new PluginClassLoadException("Failed to load " + pluginClassName + ".", e);
@@ -308,11 +322,12 @@ public class DefaultPluginLoader implements PluginLoader {
         final List<AbstractPlugin> result = new ArrayList<AbstractPlugin>(100);
         final File[] pluginDirs = pluginsDir.listFiles();
 
-        final MessagePrinter errorPrinter = new DefaultMessagePrinter(new MessageSource(){
+        final MessagePrinter errorPrinter = new DefaultMessagePrinter(new MessageSource() {
             public String getMessageSourceName() {
                 return "PluginLoader#loadPlugins(File)";
-            }},MESSAGE_TYPE.ERROR);
-        
+            }
+        }, MESSAGE_TYPE.ERROR);
+
         for (final File pluginDir : pluginDirs) {
             if (pluginDir.isDirectory()) {
                 try {
@@ -320,6 +335,8 @@ public class DefaultPluginLoader implements PluginLoader {
                     result.add(plugin);
                 } catch (final PluginLoadException e) {
                     errorPrinter.println("Failed to load plugin : " + pluginDir.getName());
+                } catch (final PluginResponseException e) {
+                    errorPrinter.println(e.getMessage());
                 }
             }
         }
@@ -462,6 +479,29 @@ public class DefaultPluginLoader implements PluginLoader {
     }
 
     /**
+     * プラグイン情報を別スレッドで構築する.
+     * 指定時間以内に構築できなかった場合は諦める.
+     * @param plugin 情報を構築するプラグイン.
+     * @return プラグイン情報を指定時間以内に構築できたからtrue，できなかったらfalse.
+     */
+    private boolean createPluginInfo(final AbstractPlugin plugin) {
+        final Thread creationThread = new Thread() {
+            @Override
+            public void run() {
+                plugin.getPluginInfo();
+            }
+        };
+
+        creationThread.start();
+        try {
+            creationThread.join(PLUGIN_METHODS_RESPONSE_TIME);//構築まで指定時間待つ
+        } catch (final InterruptedException e) {
+            //諦める
+        }
+        return plugin.isPluginInfoCreated();
+    }
+
+    /**
      * 指定されたディレクトリからプラグイン設定XMLファイルを探すメソッド
      * @param pluginRootDir 探すディレクトリ
      * @return XMLファイル．見つからなければnull．
@@ -550,4 +590,9 @@ public class DefaultPluginLoader implements PluginLoader {
      * デフォルトpluginsディレクトリ名．
      */
     private static final String PLUGINS_DIRECTORY_NAME = "plugins";
+
+    /**
+     * プラグイン情報の構築時に待つ最大時間.
+     */
+    private static final int PLUGIN_METHODS_RESPONSE_TIME = 5000;
 }

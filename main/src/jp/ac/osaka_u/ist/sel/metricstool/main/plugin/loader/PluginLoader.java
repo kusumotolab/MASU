@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginResponseException;
 
 
 /**
@@ -26,10 +27,11 @@ public interface PluginLoader {
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合．
      * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合．
+     * @throws PluginResponseException ロードしたプラグインからの応答がなかった場合.
      */
     public AbstractPlugin loadPlugin(String pluginDirName) throws PluginLoadException,
             IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
-            PluginClassLoadException;
+            PluginClassLoadException, PluginResponseException;
 
     /**
      * pluginsDirで指定されたディレクトリ以下から，pluginNameで指定されたディレクトリ名を持つプラグインをロードする
@@ -40,12 +42,14 @@ public interface PluginLoader {
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合．
      * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合．
+     * @throws PluginResponseException ロードしたプラグインからの応答がなかった場合.
      * @throws NullPointerException pluginsDirがnullの場合
      * @throws IllegalArgumentException pluginsDirが存在しない場合，ディレクトリではない場合
      */
     public AbstractPlugin loadPlugin(File pluginsDir, String pluginDirName)
             throws PluginLoadException, IllegalPluginXmlFormatException,
-            IllegalPluginDirectoryStructureException, PluginClassLoadException;
+            IllegalPluginDirectoryStructureException, PluginClassLoadException,
+            PluginResponseException;
 
     /**
      * プラグイン自体のディレクトリを直接pluginRootDirで指定してロードするメソッド．
@@ -55,12 +59,13 @@ public interface PluginLoader {
      * @throws IllegalPluginXmlFormatException ロードするプラグインの設定情報を記述したXMLファイルの形式が正しくない場合．
      * @throws IllegalPluginDirectoryStructureException ロードするプラグインのディレクトリ構成が正しくない場合．
      * @throws PluginClassLoadException プラグインのクラスロードに失敗した場合．
+     * @throws PluginResponseException ロードしたプラグインからの応答がなかった場合.
      * @throws NullPointerException pluginRootDirがnullの場合
      * @throws IllegalArgumentException pluginRootDirが存在しない場合，ディレクトリではない場合
      */
     public AbstractPlugin loadPlugin(File pluginRootDir) throws PluginLoadException,
             IllegalPluginXmlFormatException, IllegalPluginDirectoryStructureException,
-            PluginClassLoadException;
+            PluginClassLoadException, PluginResponseException;
 
     /**
      * デフォルトのpluginsディレクトリから全てのプラグインをロードするメソッド

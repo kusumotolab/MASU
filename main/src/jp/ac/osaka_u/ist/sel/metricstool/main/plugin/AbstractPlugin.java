@@ -132,7 +132,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
         public boolean isUseFieldInfo() {
             return this.useFieldInfo;
         }
-        
+
         /**
          * このプラグインがファイルに関する情報を利用するかどうかを返す．
          * 
@@ -173,7 +173,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
         private final boolean useClassInfo;
 
         private final boolean useFieldInfo;
-        
+
         private final boolean useFileInfo;
 
         private final boolean useMethodInfo;
@@ -207,7 +207,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.plugin.connection.MessageSource#getMessageSourceName()
      */
     public String getMessageSourceName() {
-        return sourceName;
+        return this.sourceName;
     }
 
     /**
@@ -221,7 +221,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
             synchronized (this) {
                 if (null == this.pluginInfo) {
                     this.pluginInfo = new PluginInfo();
-                    this.sourceName = pluginInfo.getMetricName();
+                    this.sourceName = this.pluginInfo.getMetricName();
                 }
             }
         }
@@ -242,7 +242,15 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.plugin.connection.ProgressSource#getProgressSourceName()
      */
     public String getProgressSourceName() {
-        return sourceName;
+        return this.sourceName;
+    }
+
+    /**
+     * プラグイン情報が既に構築済みかどうかを返す
+     * @return プラグイン情報が既に構築済みならtrue,そうでなければfalse
+     */
+    public boolean isPluginInfoCreated() {
+        return null != this.pluginInfo;
     }
 
     /**
