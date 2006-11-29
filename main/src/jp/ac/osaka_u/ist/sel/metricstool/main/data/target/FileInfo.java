@@ -128,9 +128,11 @@ public final class FileInfo {
      */
     private final String name;
 
+    /**
+     * このファイルで宣言されているクラス一覧を保存するための変数
+     */
     private final SortedSet<ClassInfo> definedClasses;
 
-    // TODO 宣言されているクラスの情報を追加
     // TODO importしているクラスの情報を追加
     // TODO includeしているファイルの情報を追加
 }

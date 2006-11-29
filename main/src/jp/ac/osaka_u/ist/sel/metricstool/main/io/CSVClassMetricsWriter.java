@@ -10,6 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredExc
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 
 
@@ -28,6 +29,7 @@ public final class CSVClassMetricsWriter implements ClassMetricsWriter, CSVWrite
      */
     public CSVClassMetricsWriter(final String fileName) {
 
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == fileName) {
             throw new NullPointerException();
         }
@@ -88,19 +90,19 @@ public final class CSVClassMetricsWriter implements ClassMetricsWriter, CSVWrite
     }
 
     /**
-     * MessagerPrinter を用いるために必要なメソッド
+     * MessagerPrinter を用いるために必要なメソッド．メッセージ送信者名を返す
      * 
      * @see MessagePrinter
      * @see MessageSource
      * 
-     * @return メッセージ送信者名を返す
+     * @return メッセージ送信者名
      */
     public String getMessageSourceName() {
         return this.getClass().toString();
     }
 
     /**
-     * クラスメトリクスを書きだすファイル名を保存するためのメトリクス
+     * クラスメトリクスを書きだすファイル名を保存するための変数
      */
     private final String fileName;
 }

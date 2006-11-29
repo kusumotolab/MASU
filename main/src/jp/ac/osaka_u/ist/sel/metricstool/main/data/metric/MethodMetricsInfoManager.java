@@ -31,7 +31,7 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
      * @return このクラスのインスタンス
      */
     public static MethodMetricsInfoManager getInstance() {
-        return METHOD_METRICS_MAP;
+        return SINGLETON;
     }
 
     /**
@@ -125,7 +125,6 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
      * 
      */
     private MethodMetricsInfoManager() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
         this.methodMetricsInfos = Collections
                 .synchronizedSortedMap(new TreeMap<MethodInfo, MethodMetricsInfo>());
     }
@@ -133,7 +132,7 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
     /**
      * このクラスのオブジェクトを管理している定数．シングルトンパターンを用いている．
      */
-    private static final MethodMetricsInfoManager METHOD_METRICS_MAP = new MethodMetricsInfoManager();
+    private static final MethodMetricsInfoManager SINGLETON = new MethodMetricsInfoManager();
 
     /**
      * メソッドメトリクスのマップを保存するための変数

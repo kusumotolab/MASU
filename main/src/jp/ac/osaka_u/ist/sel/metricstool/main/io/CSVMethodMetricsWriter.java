@@ -10,6 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredExc
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 
 
@@ -28,6 +29,7 @@ public final class CSVMethodMetricsWriter implements MethodMetricsWriter, CSVWri
      */
     public CSVMethodMetricsWriter(final String fileName) {
 
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == fileName) {
             throw new NullPointerException();
         }
@@ -100,7 +102,7 @@ public final class CSVMethodMetricsWriter implements MethodMetricsWriter, CSVWri
     }
 
     /**
-     * メソッドメトリクスを書きだすファイル名を保存するためのメトリクス
+     * メソッドメトリクスを書きだすファイル名を保存するための変数
      */
     private final String fileName;
 }

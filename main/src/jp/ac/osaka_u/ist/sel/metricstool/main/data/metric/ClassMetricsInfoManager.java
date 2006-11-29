@@ -30,7 +30,7 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
      * @return このクラスのインスタンス
      */
     public static ClassMetricsInfoManager getInstance() {
-        return CLASS_METRICS_MAP;
+        return SINGLETON;
     }
 
     /**
@@ -117,10 +117,8 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
     
     /**
      * クラスメトリクスマネージャのオブジェクトを生成する． シングルトンパターンを用いているため，private がついている．
-     * 
      */
     private ClassMetricsInfoManager() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
         this.classMetricsInfos = Collections
                 .synchronizedSortedMap(new TreeMap<ClassInfo, ClassMetricsInfo>());
     }
@@ -128,7 +126,7 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
     /**
      * このクラスのオブジェクトを管理している定数．シングルトンパターンを用いている．
      */
-    private static final ClassMetricsInfoManager CLASS_METRICS_MAP = new ClassMetricsInfoManager();
+    private static final ClassMetricsInfoManager SINGLETON = new ClassMetricsInfoManager();
 
     /**
      * クラスメトリクスのマップを保存するための変数

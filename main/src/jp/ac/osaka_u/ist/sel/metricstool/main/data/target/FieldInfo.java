@@ -25,10 +25,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class FieldInfo extends VariableInfo {
 
     /**
-     * フィールドオブジェクトを初期化する． フィールド名と型が与えられなければならない．
+     * フィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．
      * 
      * @param name フィールド名
      * @param type フィールドの型
+     * @param ownerClass フィールドを定義しているクラス
      */
     public FieldInfo(final String name, final TypeInfo type, final ClassInfo ownerClass) {
 

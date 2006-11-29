@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -20,27 +21,28 @@ public final class TargetFile implements Comparable<TargetFile> {
      * 対象ファイルのパスを用いて初期化
      */
     public TargetFile(final String name) {
-        
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == name) {
             throw new NullPointerException();
         }
-        
+
         this.correctSyntax = false;
         this.name = name;
     }
 
     /**
      * このオブジェクトと対象オブジェクトの順序関係を返す．
+     * 
      * @param targetFile 比較対象オブジェクト
      * @return 順序関係
      */
     public int compareTo(final TargetFile targetFile) {
-        
+
         if (null == targetFile) {
             throw new NullPointerException();
         }
-        
+
         String name = this.getName();
         String correspondName = targetFile.getName();
         return name.compareTo(correspondName);
@@ -55,11 +57,11 @@ public final class TargetFile implements Comparable<TargetFile> {
      * 
      */
     public boolean equals(Object o) {
-        
+
         if (null == o) {
             throw new NullPointerException();
         }
-        
+
         String thisName = this.getName();
         String correspondName = ((TargetFile) o).getName();
         return thisName.equals(correspondName);
@@ -76,7 +78,8 @@ public final class TargetFile implements Comparable<TargetFile> {
     }
 
     /**
-     * 対象ファイルのハッシュコードを返す 
+     * 対象ファイルのハッシュコードを返す
+     * 
      * @return 対象ファイルのハッシュコード
      * 
      */
@@ -84,33 +87,34 @@ public final class TargetFile implements Comparable<TargetFile> {
         String name = this.getName();
         return name.hashCode();
     }
-    
+
     /**
-     * 対象ファイルが文法が正しいかを返す 
+     * 対象ファイルが文法が正しいかを返す
+     * 
      * @return 文法が正しい場合は true, 正しくない場合は false
      */
-    public boolean isCorrectSyntax(){
+    public boolean isCorrectSyntax() {
         return this.correctSyntax;
     }
 
     /**
      * 対象ファイルの文法が正しいかどうかを保存する
+     * 
      * @param correctSyntax 対象ファイルの文法の正しさ．正しい場合は true，正しくない場合は false
      */
-    public void setCorrectSytax(final boolean correctSyntax){
+    public void setCorrectSytax(final boolean correctSyntax) {
         this.correctSyntax = correctSyntax;
     }
-    
+
     /**
      * 対象ファイルの構文が正しいかを保存するための変数
      */
     private boolean correctSyntax;
-    
+
     /**
      * 
      * 対象ファイルのパスを保存するための変数
      */
     private final String name;
-    
 
 }

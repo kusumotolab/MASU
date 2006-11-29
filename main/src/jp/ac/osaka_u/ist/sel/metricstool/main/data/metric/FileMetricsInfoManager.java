@@ -30,7 +30,7 @@ public final class FileMetricsInfoManager implements Iterable<FileMetricsInfo>, 
      * @return このクラスのインスタンス
      */
     public static FileMetricsInfoManager getInstance() {
-        return FILE_METRICS_MAP;
+        return SINGLETON;
     }
 
     /**
@@ -120,7 +120,6 @@ public final class FileMetricsInfoManager implements Iterable<FileMetricsInfo>, 
      * 
      */
     private FileMetricsInfoManager() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
         this.fileMetricsInfos = Collections
                 .synchronizedSortedMap(new TreeMap<FileInfo, FileMetricsInfo>());
     }
@@ -128,7 +127,7 @@ public final class FileMetricsInfoManager implements Iterable<FileMetricsInfo>, 
     /**
      * このクラスのオブジェクトを管理している定数．シングルトンパターンを用いている．
      */
-    private static final FileMetricsInfoManager FILE_METRICS_MAP = new FileMetricsInfoManager();
+    private static final FileMetricsInfoManager SINGLETON = new FileMetricsInfoManager();
 
     /**
      * ファイルメトリクスのマップを保存するための変数

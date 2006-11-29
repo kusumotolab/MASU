@@ -151,7 +151,6 @@ public final class PrimitiveTypeInfo implements TypeInfo {
      */
     private PrimitiveTypeInfo(final String name) {
         
-        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == name) {
             throw new NullPointerException();
         }

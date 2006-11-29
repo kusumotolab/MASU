@@ -132,7 +132,7 @@ public final class FileMetricsInfo implements MessageSource {
     private void putMetric(final AbstractPlugin key, final Float value)
             throws MetricAlreadyRegisteredException {
 
-        if (null == key) {
+        if ((null == key)||(null == value)) {
             throw new NullPointerException();
         }
         if (this.fileMetrics.containsKey(key)) {
