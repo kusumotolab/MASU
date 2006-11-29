@@ -57,12 +57,11 @@ public interface PluginLauncher {
      */
     public void stopLaunchingNow();
 
-    
     /**
      * 実行待ちのタスクの数を返す.
      */
     public int getLaunchWaitingTaskNum();
-    
+
     /**
      * 同時実行最大数を返すメソッド
      * @return 同時実行最大数

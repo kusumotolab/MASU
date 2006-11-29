@@ -10,6 +10,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.ProgressConnector;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.ClosableLinkedBlockingQueue;
 
@@ -42,6 +43,7 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
         if (this.futureMap.containsKey(plugin)) {
             final Future<Boolean> future = this.futureMap.get(plugin);
             this.futureMap.remove(plugin);
+            ProgressConnector.getConnector(plugin).disconnect();
             return future.cancel(true);
         }
         return false;
@@ -91,10 +93,10 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
      * 実行待ちのタスクの数を返す.
      * @return 実行待ちのタスクの数
      */
-    public int getLaunchWaitingTaskNum(){
+    public int getLaunchWaitingTaskNum() {
         return this.workQueue.size();
     }
-    
+
     /**
      * 現在実行中のプラグインの数を返すメソッド.
      * @return 実行中のプラグインの数.
