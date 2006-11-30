@@ -4,9 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin;
 import java.security.AccessControlException;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.ProgressConnector;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.WeakHashSet;
 
@@ -46,22 +43,8 @@ public class PluginExecutor implements Runnable {
      * 実行メソッド
      */
     public void execute() {
-        try {
-            //プラグインディレクトリへのファイルアクセスを要求してからプラグインのexecuteを呼び出す
-            //MetricsToolSecurityManagerがシステムのセキュリティマネージャーではない場合，
-            //ファイルアクセス権限が与えられるかどうかは
-            //システムのセキュリティマネージャー次第
-            MetricsToolSecurityManager.getInstance().requestPluginDirAccessPermission(this.plugin);
-            this.plugin.execute();
-        } catch (final Exception e) {
-            (new DefaultMessagePrinter(this.plugin, MessagePrinter.MESSAGE_TYPE.ERROR)).println(e
-                    .getMessage());
-        }
-
-        ProgressConnector.getConnector(this.plugin).progressEnd();
-        MetricsToolSecurityManager.getInstance().removePluginDirAccessPermission(this.plugin);
-        
-        fireExecutionEnd();
+        this.plugin.executionWrapper();
+        this.fireExecutionEnd();
     }
 
     /**

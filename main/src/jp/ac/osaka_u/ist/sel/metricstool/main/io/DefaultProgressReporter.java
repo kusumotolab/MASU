@@ -22,6 +22,16 @@ public class DefaultProgressReporter implements ProgressReporter {
         this.connector = ProgressConnector.getConnector(source);
         this.connector.connect(this);
     }
+    
+    /**
+     * 進捗情報送信の終了を報告するメソッド
+     */
+    public void reportProgressEnd() {
+        if (null != this.connector) {
+            this.connector.progressEnd();
+            this.connector = null;
+        }
+    }
 
     /**
      * 進捗情報を報告するメソッド
@@ -60,4 +70,6 @@ public class DefaultProgressReporter implements ProgressReporter {
      * 1回前にに報告した進捗情報値
      */
     private int previousValue;
+
+    
 }

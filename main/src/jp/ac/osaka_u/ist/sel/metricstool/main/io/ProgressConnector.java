@@ -102,15 +102,6 @@ public final class ProgressConnector {
     }
 
     /**
-     * 進捗情報の送信を終了するメソッド
-     */
-    public final synchronized void progressEnd() {
-        this.reporter = null;
-        this.connectionState = STATE.DISCONNECTED;
-        fireProgressEnd(new ProgressEvent(this.source, 100));
-    }
-
-    /**
      * リスナーを削除する
      * @param listener　削除するリスナー
      */
@@ -138,6 +129,15 @@ public final class ProgressConnector {
 
         this.reporter = reporter;
         this.connectionState = STATE.CONNECTED;
+    }
+
+    /**
+     * 進捗情報の送信を終了するメソッド
+     */
+    final synchronized void progressEnd() {
+        this.reporter = null;
+        this.connectionState = STATE.DISCONNECTED;
+        this.fireProgressEnd(new ProgressEvent(this.source, 100));
     }
 
     /**

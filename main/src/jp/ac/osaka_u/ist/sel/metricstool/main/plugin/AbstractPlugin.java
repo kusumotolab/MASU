@@ -3,8 +3,14 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin;
 
 import java.io.File;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.AlreadyConnectedException;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultProgressReporter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.ProgressReporter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.ProgressSource;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
@@ -348,6 +354,16 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     protected abstract METRIC_TYPE getMetricType();
 
     /**
+     * このプラグインからの進捗情報を送るメソッド
+     * @param percentage 進捗情報値
+     */
+    protected final void reportProgress(int percentage) {
+        if (this.reporter != null){
+            this.reporter.reportProgress(percentage);
+        }
+    }
+
+    /**
      * このプラグインがクラスに関する情報を利用するかどうかを返すメソッド． デフォルト実装ではfalseを返す．
      * クラスに関する情報を利用するプラグインはこのメソッドをオーバーラードしてtrueを返さなければ成らない．
      * 
@@ -398,9 +414,55 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
+     * 実行前後の共通処理をしてから， {@link #execute()}を呼び出す.
+     */
+    final synchronized void executionWrapper() {
+        assert(null == reporter) : "Illegal state : previous reporter was not removed.";
+        try {
+            this.reporter = new DefaultProgressReporter(this);
+        } catch (AlreadyConnectedException e1) {
+            assert(null == reporter) : "Illegal state : previous reporter was still connected.";
+        }
+        
+        //プラグインディレクトリ以下へのアクセス権限を要請
+        MetricsToolSecurityManager.getInstance().requestPluginDirAccessPermission(this);
+        
+        try{
+            this.execute();
+        } catch (final Exception e) {
+            err.println(e);
+        }
+        
+        if (null != reporter){
+            //進捗報告の終了イベントを送る
+            //プラグイン側で既に送られていたら何もせずに返ってくる
+            this.reporter.reportProgressEnd();
+            this.reporter = null;
+        }
+        
+        //プラグインディレクトリ以下へのアクセス権限解除
+        MetricsToolSecurityManager.getInstance().removePluginDirAccessPermission(this);
+    }
+    
+    /**
      * メトリクス解析をスタートする抽象メソッド．
      */
     protected abstract void execute();
+
+    /**
+     * メッセージ出力用のプリンター
+     */
+    protected final MessagePrinter out = new DefaultMessagePrinter(this, MESSAGE_TYPE.OUT);
+
+    /**
+     * エラーメッセージ出力用のプリンター
+     */
+    protected final MessagePrinter err = new DefaultMessagePrinter(this, MESSAGE_TYPE.ERROR);
+
+    /**
+     * 進捗情報送信用のレポーター
+     */
+    private ProgressReporter reporter;
 
     /**
      * プラグインの情報を保存する{@link PluginInfo}クラスのインスタンス getPluginInfoメソッドの初回の呼び出しによって作成され．
