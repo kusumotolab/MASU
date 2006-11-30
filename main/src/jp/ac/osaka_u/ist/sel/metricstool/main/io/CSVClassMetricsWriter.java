@@ -56,6 +56,8 @@ public final class CSVClassMetricsWriter implements ClassMetricsWriter, CSVWrite
                     writer.write(metricName);
                 }
             }
+            
+            writer.newLine();
 
             // メトリクス値を書き出し
             for (ClassMetricsInfo classMetricsInfo : CLASS_METRICS_MANAGER) {

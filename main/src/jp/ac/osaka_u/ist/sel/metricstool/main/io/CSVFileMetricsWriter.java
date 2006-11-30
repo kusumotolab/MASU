@@ -57,6 +57,8 @@ public final class CSVFileMetricsWriter implements FileMetricsWriter, CSVWriter,
                 }
             }
 
+            writer.newLine();
+            
             // メトリクス値を書き出し
             for (FileMetricsInfo fileMetricsInfo : FILE_METRICS_MANAGER) {
                 FileInfo fileInfo = fileMetricsInfo.getFileInfo();
