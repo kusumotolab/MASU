@@ -3,6 +3,22 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin;
 
 import java.io.File;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.ClassInfoAccessor;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.ClassMetricsRegister;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.DefaultClassInfoAccessor;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.DefaultClassMetricsRegister;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.DefaultFileInfoAccessor;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.DefaultFileMetricsRegister;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.DefaultMethodInfoAccessor;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.DefaultMethodMetricsRegister;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.FileInfoAccessor;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.FileMetricsRegister;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.MethodInfoAccessor;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.MethodMetricsRegister;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricAlreadyRegisteredException;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.AlreadyConnectedException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultProgressReporter;
@@ -309,6 +325,35 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
+     * メトリクス解析をスタートする抽象メソッド．
+     */
+    protected abstract void execute();
+
+    /**
+     * ファイル情報にアクセスするデフォルトのアクセサを取得する.
+     * @return ファイル情報にアクセスするデフォルトのアクセサ.
+     */
+    protected final FileInfoAccessor getFileInfoAccessor() {
+        return this.fileInfoAccessor;
+    }
+
+    /**
+     * クラス情報にアクセスするデフォルトのアクセサを取得する.
+     * @return　クラス情報にアクセスするデフォルトのアクセサ.
+     */
+    protected final ClassInfoAccessor getClassInfoAccessor() {
+        return this.classInfoAccessor;
+    }
+
+    /**
+     * メソッド情報にアクセスするデフォルトのアクセサを取得する.
+     * @return メソッド情報にアクセスするデフォルトのアクセサ.
+     */
+    protected final MethodInfoAccessor getMethodInfoAccessor() {
+        return this.methodInfoAccessor;
+    }
+
+    /**
      * このプラグインの簡易説明を１行で返す（できれば英語で）
      * デフォルトの実装では "Measure メトリクス名 metrics." と返す
      * 各プラグインはこのメソッドを任意にオーバーライドする.
@@ -354,11 +399,68 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     protected abstract METRIC_TYPE getMetricType();
 
     /**
+     * ファイル単位のメトリクス値を登録するメソッド.
+     * 
+     * @param fileInfo メトリクス値を登録するファイル
+     * @param value メトリクス値
+     * @throws MetricAlreadyRegisteredException 既にこのプラグインからこのファイルに関するメトリクス値の報告がされている場合.
+     */
+    protected final void registMetric(final FileInfo fileInfo, final float value)
+            throws MetricAlreadyRegisteredException {
+        if (null == this.fileMetricsRegister) {
+            synchronized (this) {
+                if (null == this.fileMetricsRegister) {
+                    this.fileMetricsRegister = new DefaultFileMetricsRegister(this);
+                }
+            }
+        }
+        this.fileMetricsRegister.registMetric(fileInfo, value);
+    }
+
+    /**
+     * クラス単位のメトリクス値を登録するメソッド.
+     * 
+     * @param classInfo メトリクス値を登録するクラス
+     * @param value メトリクス値
+     * @throws MetricAlreadyRegisteredException 既にこのプラグインからこのクラスに関するメトリクス値の報告がされている場合.
+     */
+    protected final void registMetric(final ClassInfo classInfo, final float value)
+            throws MetricAlreadyRegisteredException {
+        if (null == this.classMetricsRegister) {
+            synchronized (this) {
+                if (null == this.classMetricsRegister) {
+                    this.classMetricsRegister = new DefaultClassMetricsRegister(this);
+                }
+            }
+        }
+        this.classMetricsRegister.registMetric(classInfo, value);
+    }
+
+    /**
+     * メソッド単位のメトリクス値を登録するメソッド.
+     * 
+     * @param methodInfo メトリクス値を登録するメソッド
+     * @param value メトリクス値
+     * @throws MetricAlreadyRegisteredException 既にこのプラグインからこのメソッドに関するメトリクス値の報告がされている場合.
+     */
+    protected final void registMetric(final MethodInfo methodInfo, final float value)
+            throws MetricAlreadyRegisteredException {
+        if (null == this.methodMetricsRegister) {
+            synchronized (this) {
+                if (null == this.methodMetricsRegister) {
+                    this.methodMetricsRegister = new DefaultMethodMetricsRegister(this);
+                }
+            }
+        }
+        this.methodMetricsRegister.registMetric(methodInfo, value);
+    }
+
+    /**
      * このプラグインからの進捗情報を送るメソッド
      * @param percentage 進捗情報値
      */
-    protected final void reportProgress(int percentage) {
-        if (this.reporter != null){
+    protected final void reportProgress(final int percentage) {
+        if (this.reporter != null) {
             this.reporter.reportProgress(percentage);
         }
     }
@@ -417,37 +519,32 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * 実行前後の共通処理をしてから， {@link #execute()}を呼び出す.
      */
     final synchronized void executionWrapper() {
-        assert(null == reporter) : "Illegal state : previous reporter was not removed.";
+        assert (null == this.reporter) : "Illegal state : previous reporter was not removed.";
         try {
             this.reporter = new DefaultProgressReporter(this);
-        } catch (AlreadyConnectedException e1) {
-            assert(null == reporter) : "Illegal state : previous reporter was still connected.";
+        } catch (final AlreadyConnectedException e1) {
+            assert (null == this.reporter) : "Illegal state : previous reporter was still connected.";
         }
-        
+
         //プラグインディレクトリ以下へのアクセス権限を要請
         MetricsToolSecurityManager.getInstance().requestPluginDirAccessPermission(this);
-        
-        try{
+
+        try {
             this.execute();
         } catch (final Exception e) {
-            err.println(e);
+            this.err.println(e);
         }
-        
-        if (null != reporter){
+
+        if (null != this.reporter) {
             //進捗報告の終了イベントを送る
             //プラグイン側で既に送られていたら何もせずに返ってくる
             this.reporter.reportProgressEnd();
             this.reporter = null;
         }
-        
+
         //プラグインディレクトリ以下へのアクセス権限解除
         MetricsToolSecurityManager.getInstance().removePluginDirAccessPermission(this);
     }
-    
-    /**
-     * メトリクス解析をスタートする抽象メソッド．
-     */
-    protected abstract void execute();
 
     /**
      * メッセージ出力用のプリンター
@@ -458,6 +555,36 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * エラーメッセージ出力用のプリンター
      */
     protected final MessagePrinter err = new DefaultMessagePrinter(this, MESSAGE_TYPE.ERROR);
+
+    /**
+     * 登録されているファイル情報にアクセスするデフォルトのアクセサ.
+     */
+    private final FileInfoAccessor fileInfoAccessor = new DefaultFileInfoAccessor();
+
+    /**
+     * 登録されているクラス情報にアクセスするデフォルトのアクセサ.
+     */
+    private final ClassInfoAccessor classInfoAccessor = new DefaultClassInfoAccessor();
+
+    /**
+     * 登録されているメソッド情報にアクセスするデフォルトのアクセサ.
+     */
+    private final MethodInfoAccessor methodInfoAccessor = new DefaultMethodInfoAccessor();
+
+    /**
+     * ファイル単位のメトリクス値を登録するレジスタ.
+     */
+    private FileMetricsRegister fileMetricsRegister;
+
+    /**
+     * クラス単位のメトリクス値を登録するレジスタ.
+     */
+    private ClassMetricsRegister classMetricsRegister;
+
+    /**
+     * メソッド単位のメトリクス値を登録するレジスタ.
+     */
+    private MethodMetricsRegister methodMetricsRegister;
 
     /**
      * 進捗情報送信用のレポーター
