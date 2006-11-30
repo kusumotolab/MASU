@@ -1,0 +1,3 @@
+Main-class: jp/ac/osaka_u/ist/sel/metricstool/main/MetricsTool
+Class-path: ./argp.jar:./antlr.jar
+

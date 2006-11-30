@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<project default="build">
+
+	<tstamp />
+
+	<property name="tool.name" value="mas" />
+	<property name="src.dir" value="src" />
+	<property name="cls.dir" value="cls" />
+	<property name="grammer.dir" value="${src.dir}/jp/ac/osaka_u/ist/sel/metricstool/main/parse" />
+	
+	<property name="package.name" value="${tool.name}" />
+	<property name="package.dir" value="${package.name}" />
+	<property name="package.bin.dir" value="${package.dir}/bin" />
+	<property name="package.plugin.dir" value="${package.bin.dir}/plugin" />
+	<property name="package.api.dir" value="${package.dir}/api" />
+	<property name="package.doc.dir" value="${package.dir}/doc" />
+
+	<property name="java15grammer" value="${grammer.dir}/java15.g" />
+	<!-- property name="cppgrammer" value="${grammer}/cpp.g" / -->
+	<!-- property name="csharpgrammer" value="${grammer}/sharp.g" / -->
+	
+	<property name="antlr.jar" value="lib/antlr.jar" />
+	<property name="jargp.jar" value="lib/jargp.jar" />
+	<property name="manifest.mf" value="resource/manifest.mf" />
+	<property name="zip.name" value="${tool.name}${DSTAMP}${TSTAMP}.zip" />
+	
+	<target name="antlr">
+		<antlr target="${java15grammer}">
+			<classpath path="${antlr.jar}" />
+		</antlr>
+	</target>
+		
+	<target name="compile" depends="antlr">
+		<mkdir dir="${cls.dir}" />
+		<javac classpath="${jargp.jar}:${antlr.jar}" srcdir="${src.dir}" destdir="${cls.dir}" />
+	</target>
+
+
+	<target name="build" depends="compile">
+		<mkdir dir="${package.dir}" />
+		<mkdir dir="${package.bin.dir}" />
+		<mkdir dir="${package.plugin.dir}" />
+		<mkdir dir="${package.doc.dir}" />
+
+		<jar basedir="${cls.dir}" jarfile="${package.bin.dir}/${tool.name}.jar" manifest="${manifest.mf}" />
+		<copy file="${jargp.jar}" todir="${package.bin.dir}" />
+		<copy file="${antlr.jar}" todir="${package.bin.dir}" />
+	</target>
+	
+	<target name="package" depends="build">
+		<javadoc packagenames="jp.ac.osaka_u.ist.sel.metricstool.*" sourcepath="${src.dir}" destdir="${package.api.dir}" public="true" />
+		
+		<zip destfile="${zip.name}" basedir="${package.dir}" />
+	</target>
+
+	
+	<target name="clean">
+		<delete dir="${cls.dir}" />
+		<delete dir="${package.dir}" />
+		<delete verbose="true">
+			<fileset dir="${grammer.dir}" includes="*.java" />
+		</delete>	
+		<delete verbose="true">
+			<fileset dir="${grammer.dir}" includes="*.smap" />
+		</delete>	
+		<delete verbose="true">
+			<fileset dir="${grammer.dir}" includes="*.txt" />
+		</delete>	
+		<delete verbose="true">
+			<fileset dir="." includes="${tool.name}*.zip" />
+		</delete>
+	</target>
+		
+	<target name="all" depends="clean, package" />
+</project>
