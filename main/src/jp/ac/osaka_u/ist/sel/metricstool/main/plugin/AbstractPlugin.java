@@ -2,6 +2,12 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin;
 
 
 import java.io.File;
+import java.security.AccessControlException;
+import java.security.Permission;
+import java.security.Permissions;
+import java.util.Enumeration;
+
+import antlr.collections.Enumerator;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.ClassInfoAccessor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.ClassMetricsRegister;
@@ -204,6 +210,17 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
+     * プラグインの実行時に許可されるパーミッションを追加する.
+     * 特別権限を持つスレッドからしか呼び出せない.
+     * @param permission 許可するパーミッション
+     * @throws AccessControlException 特別権限を持たないスレッドから呼び出した場合
+     */
+    public final void addPermission(Permission permission){
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        permissions.add(permission);
+    }
+    
+    /**
      * プラグインインスタンス同士を比較する.
      * クラスの標準名が取れるならそれを用いて比較する.
      * 取れない場合は， {@link Class}インスタンスのを比較する.
@@ -281,6 +298,20 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
         return this.sourceName;
     }
 
+    /**
+     * このプラグインに許可されているパーミッションの不変な集合を返す.
+     * @return このプラグインに許可されているパーミッションの集合.
+     */
+    public Permissions getPermissions(){
+        Permissions permissions = new Permissions();
+        
+        for(Enumeration<Permission> enumeration = this.permissions.elements(); enumeration.hasMoreElements();){
+            permissions.add(enumeration.nextElement());
+        }
+        permissions.setReadOnly();
+        return permissions;
+    }
+    
     /**
      * プラグイン情報を保存している{@link PluginInfo}クラスのインスタンスを返す．
      * 同一のAbstractPluginインスタンスに対するこのメソッドは必ず同一のインスタンスを返し， その内部に保存されている情報は不変である．
@@ -527,7 +558,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
         }
 
         //プラグインディレクトリ以下へのアクセス権限を要請
-        MetricsToolSecurityManager.getInstance().requestPluginDirAccessPermission(this);
+        MetricsToolSecurityManager.getInstance().requestPluginPermission(this);
 
         try {
             this.execute();
@@ -543,7 +574,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
         }
 
         //プラグインディレクトリ以下へのアクセス権限解除
-        MetricsToolSecurityManager.getInstance().removePluginDirAccessPermission(this);
+        MetricsToolSecurityManager.getInstance().removePluginPermission(this);
     }
 
     /**
@@ -591,6 +622,11 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      */
     private ProgressReporter reporter;
 
+    /**
+     * このプラグインの実行時の許可されるパーミッション
+     */
+    private final Permissions permissions = new Permissions();
+    
     /**
      * プラグインの情報を保存する{@link PluginInfo}クラスのインスタンス getPluginInfoメソッドの初回の呼び出しによって作成され．
      * それ以降、このフィールドは常に同じインスタンスを参照する．

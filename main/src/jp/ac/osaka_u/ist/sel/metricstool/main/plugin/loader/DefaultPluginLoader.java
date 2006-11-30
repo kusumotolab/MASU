@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FilePermission;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -265,6 +266,17 @@ public class DefaultPluginLoader implements PluginLoader {
 
             //プラグインディレクトリをセット
             plugin.setPluginRootdir(pluginRootDir);
+            
+            //プラグインディレクトリ以下へのアクセスパーミッションをセット
+            try{
+                String filePath = plugin.getPluginRootDir().getAbsolutePath() + File.separator+ "-";
+                plugin.addPermission(new FilePermission(filePath, "read"));
+                plugin.addPermission(new FilePermission(filePath, "write"));
+                plugin.addPermission(new FilePermission(filePath, "delete"));
+            } catch (SecurityException e){
+                //パーミッションが得られなかったけど、問題ないかもしれないので続ける.
+                assert (false) : "Illegal state: Plugin directory's access permission can not created.";
+            }
 
             //プラグイン情報の構築を試みる
             if (!this.createPluginInfo(plugin)) {
@@ -445,10 +457,7 @@ public class DefaultPluginLoader implements PluginLoader {
             }
 
             if (null != sourceUri) {
-                File sourceRootDir = new File(sourceUri);
-                if (sourceRootDir.isFile()) {
-                    sourceRootDir = sourceRootDir.getParentFile();
-                }
+                File sourceRootDir = new File(sourceUri).getParentFile();
 
                 assert (sourceRootDir.exists()) : "Illeagal state: "
                         + sourceRootDir.getAbsolutePath() + " is not found.";

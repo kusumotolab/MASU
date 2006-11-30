@@ -280,13 +280,13 @@ public final class MetricsToolSecurityManager extends SecurityManager {
     }
     
     /**
-     * プラグインディレクトリへのアクセス権限を解除する
+     * プラグインのアクセス権限を解除する
      * @param plugin
      */
-    public final void removePluginDirAccessPermission(final AbstractPlugin plugin){
+    public final void removePluginPermission(final AbstractPlugin plugin){
         Thread current = Thread.currentThread();
-        String filePath = plugin.getPluginRootDir().getAbsolutePath() + File.separator+ "-";
         
+        //許可されていたパーミッションを取ってくる.
         Permissions permissions;
         if (this.threadPermissions.containsKey(current)) {
             permissions = this.threadPermissions.get(current);
@@ -295,28 +295,34 @@ public final class MetricsToolSecurityManager extends SecurityManager {
             this.threadPermissions.put(current, permissions);
         }
         
+        //新規パーミッションセットを作る
         Permissions newPermissions = new Permissions();
-        FilePermission readPermission = new FilePermission(filePath, "read");
-        FilePermission writePermission = new FilePermission(filePath, "write");
-        FilePermission deletePermission = new FilePermission(filePath, "delete");
         
+        //許可されていたパーミッションがプラグインのパーミッションセットに含まれて居なければ新規パーミッションセットに入れる
         for(Enumeration<Permission> enumerator = permissions.elements(); enumerator.hasMoreElements();){
             Permission permission = enumerator.nextElement();
-            if (!permission.equals(readPermission) && !permission.equals(writePermission) && !permission.equals(deletePermission)){
+            boolean include = false;
+            for(Enumeration<Permission> pluginPermissions = plugin.getPermissions().elements(); pluginPermissions.hasMoreElements();){
+                Permission pluginPermission = pluginPermissions.nextElement();
+                if (pluginPermission == permission){//インスタンスの比較をする
+                    include = true;
+                    break;
+                }
+            }
+            if (!include){
                 newPermissions.add(permission);
             }
         }
-        
+        //新規パーミッションセットをこのスレッドのパーミッションとしてセットする
         this.threadPermissions.put(current, newPermissions);
     }
     
     /**
-     * プラグインディレクトリへのアクセス権限を取得する
+     * プラグインのアクセス権限を設定する
      * @param plugin　プラグインインスタンス
      */
-    public final void requestPluginDirAccessPermission(final AbstractPlugin plugin){
+    public final void requestPluginPermission(final AbstractPlugin plugin){
         Thread current = Thread.currentThread();
-        String filePath = plugin.getPluginRootDir().getAbsolutePath() + File.separator+ "-";
         
         Permissions permissions;
         if (this.threadPermissions.containsKey(current)) {
@@ -326,9 +332,11 @@ public final class MetricsToolSecurityManager extends SecurityManager {
             this.threadPermissions.put(current, permissions);
         }
         
-        permissions.add(new FilePermission(filePath, "read"));
-        permissions.add(new FilePermission(filePath, "write"));
-        permissions.add(new FilePermission(filePath, "delete"));
+        Permissions pluginPermissions = plugin.getPermissions();
+        
+        for(Enumeration<Permission> enumeration = pluginPermissions.elements(); enumeration.hasMoreElements();){
+            permissions.add(enumeration.nextElement());
+        }
     }
 
     /**
