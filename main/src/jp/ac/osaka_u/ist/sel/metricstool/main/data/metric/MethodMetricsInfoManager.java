@@ -72,6 +72,19 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
      */
     public void putMetric(final MethodInfo methodInfo, final AbstractPlugin plugin, final int value)
             throws MetricAlreadyRegisteredException {
+        putMetric(methodInfo, plugin, (float) value);
+    }
+
+    /**
+     * メトリクスを登録する
+     * 
+     * @param methodInfo メトリクス計測対象のメソッドオブジェクト
+     * @param plugin メトリクスのプラグイン
+     * @param value メトリクス値
+     * @throws MetricAlreadyRegisteredException 登録しようとしているメトリクスが既に登録されている
+     */
+    public void putMetric(final MethodInfo methodInfo, final AbstractPlugin plugin,
+            final float value) throws MetricAlreadyRegisteredException {
 
         MethodMetricsInfo methodMetricsInfo = this.methodMetricsInfos.get(methodInfo);
 
@@ -119,7 +132,7 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
     public String getMessageSourceName() {
         return this.getClass().getName();
     }
-    
+
     /**
      * メソッドメトリクスマネージャのオブジェクトを生成する． シングルトンパターンを用いているため，private がついている．
      * 

@@ -44,7 +44,17 @@ public class DefaultMethodMetricsRegister implements MethodMetricsRegister {
     }
 
     /**
+     * 第一引数のメソッドのメトリクス値（第二引数）を登録する
+     */
+    public void registMetric(MethodInfo methodInfo, float value)
+            throws MetricAlreadyRegisteredException {
+        MethodMetricsInfoManager manager = MethodMetricsInfoManager.getInstance();
+        manager.putMetric(methodInfo, this.plugin, value);
+    }
+
+    /**
      * プラグインオブジェクトを保存しておくための変数
      */
     private final AbstractPlugin plugin;
+
 }

@@ -10,7 +10,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
-import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.ClassNamePluginComparator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.MetricTypeAndNamePluginComparator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
@@ -77,7 +76,7 @@ public final class ClassMetricsInfo implements MessageSource {
      */
     public void putMetric(final AbstractPlugin key, final int value)
             throws MetricAlreadyRegisteredException {
-        this.putMetric(key, new Float(value));
+        this.putMetric(key, Float.valueOf(value));
     }
 
     /**
@@ -89,7 +88,7 @@ public final class ClassMetricsInfo implements MessageSource {
      */
     public void putMetric(final AbstractPlugin key, final float value)
             throws MetricAlreadyRegisteredException {
-        this.putMetric(key, new Float(value));
+        this.putMetric(key, Float.valueOf(value));
     }
 
     /**

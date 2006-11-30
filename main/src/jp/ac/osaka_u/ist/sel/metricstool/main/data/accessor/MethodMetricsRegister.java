@@ -21,4 +21,13 @@ public interface MethodMetricsRegister {
      * @throws 登録しようとしているメトリクスが既に登録されている場合にスローされる
      */
     void registMetric(MethodInfo methodInfo, int value) throws MetricAlreadyRegisteredException;
+
+    /**
+     * 第一引数のメソッドのメトリクス値（第二引数）を登録する
+     * 
+     * @param methodInfo メトリクスの計測対象メソッド
+     * @param value メトリクス値
+     * @throws 登録しようとしているメトリクスが既に登録されている場合にスローされる
+     */
+    void registMetric(MethodInfo methodInfo, float value) throws MetricAlreadyRegisteredException;
 }

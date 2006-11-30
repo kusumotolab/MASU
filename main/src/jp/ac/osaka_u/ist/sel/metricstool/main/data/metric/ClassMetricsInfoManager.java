@@ -71,6 +71,19 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
      */
     public void putMetric(final ClassInfo classInfo, final AbstractPlugin plugin, final int value)
             throws MetricAlreadyRegisteredException {
+        this.putMetric(classInfo, plugin, (float) value);
+    }
+
+    /**
+     * メトリクスを登録する
+     * 
+     * @param classInfo メトリクス計測対象のクラスオブジェクト
+     * @param plugin メトリクスのプラグイン
+     * @param value メトリクス値
+     * @throws MetricAlreadyRegisteredException 登録しようとしているメトリクスが既に登録されている
+     */
+    public void putMetric(final ClassInfo classInfo, final AbstractPlugin plugin, final float value)
+            throws MetricAlreadyRegisteredException {
 
         ClassMetricsInfo classMetricsInfo = this.classMetricsInfos.get(classInfo);
 
@@ -91,12 +104,13 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
     public void checkMetrics() throws MetricNotRegisteredException {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        
+
         for (ClassInfo classInfo : ClassInfoManager.getInstance()) {
 
             ClassMetricsInfo classMetricsInfo = this.get(classInfo);
             if (null == classMetricsInfo) {
-                String message = "Class \"" + classInfo.getName() + "\" metrics are not registered!";
+                String message = "Class \"" + classInfo.getName()
+                        + "\" metrics are not registered!";
                 MessagePrinter printer = new DefaultMessagePrinter(this,
                         MessagePrinter.MESSAGE_TYPE.ERROR);
                 printer.println(message);
@@ -114,7 +128,7 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
     public String getMessageSourceName() {
         return this.getClass().getName();
     }
-    
+
     /**
      * クラスメトリクスマネージャのオブジェクトを生成する． シングルトンパターンを用いているため，private がついている．
      */

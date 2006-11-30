@@ -44,6 +44,15 @@ public class DefaultFileMetricsRegister implements FileMetricsRegister {
     }
 
     /**
+     * 第一引数のファイルのメトリクス値（第二引数）を登録する
+     */
+    public void registMetric(final FileInfo fileInfo, final float value)
+            throws MetricAlreadyRegisteredException {
+        FileMetricsInfoManager manager = FileMetricsInfoManager.getInstance();
+        manager.putMetric(fileInfo, this.plugin, value);
+    }
+
+    /**
      * プラグインオブジェクトを保存しておくための変数
      */
     private final AbstractPlugin plugin;
