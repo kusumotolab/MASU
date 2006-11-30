@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.sample;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,19 +22,18 @@ public class SamplePlugin extends AbstractPlugin {
         //Enumを全部取得
         final LANGUAGE[] languages = LANGUAGE.values();
         final List<LANGUAGE> resultList = new ArrayList<LANGUAGE>();
-        
-        for(final LANGUAGE language : languages){
-            if (language.isObjectOrientedLanguage()){
+
+        for (final LANGUAGE language : languages) {
+            if (language.isObjectOrientedLanguage()) {
                 //Enumの言語でオブジェクト指向言語なものだけをリストに詰める
                 resultList.add(language);
             }
         }
-        
+
         //戻り値用の配列を作って返す．
         final LANGUAGE[] resultArray = new LANGUAGE[resultList.size()];
         return resultList.toArray(resultArray);
     }
-
 
     @Override
     protected String getMetricName() {
@@ -47,17 +47,17 @@ public class SamplePlugin extends AbstractPlugin {
 
     @Override
     protected void execute() {
-        System.out.println("This is plugin sample.");
-        System.out.println("Measure Sample Metrics!");
-        System.out.println();
-        System.out.println("======================");
-        System.out.println("Start classpath test");
-        System.out.println("======================");
-        System.out.println("Instanciate ClassPathTest ...");
-        
+        this.out.println("This is plugin sample.");
+        this.out.println("Measure Sample Metrics!");
+        this.out.println();
+        this.out.println("======================");
+        this.out.println("Start classpath test");
+        this.out.println("======================");
+        this.out.println("Instanciate ClassPathTest ...");
+
         final ClassPathTest test = new ClassPathTest();
-        System.out.println("success!");
-        System.out.println();
-        System.out.println(test);
+        this.out.println("success!");
+        this.out.println();
+        this.out.println(test.toString());
     }
 }
