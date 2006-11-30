@@ -10,6 +10,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.ClassNamePluginComparator;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.MetricTypeAndNamePluginComparator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 
@@ -32,7 +34,8 @@ public final class FileMetricsInfo implements MessageSource {
         }
 
         this.fileInfo = fileInfo;
-        this.fileMetrics = Collections.synchronizedSortedMap(new TreeMap<AbstractPlugin, Float>());
+        this.fileMetrics = Collections.synchronizedSortedMap(new TreeMap<AbstractPlugin, Float>(
+                new MetricTypeAndNamePluginComparator()));
     }
 
     /**
@@ -132,7 +135,7 @@ public final class FileMetricsInfo implements MessageSource {
     private void putMetric(final AbstractPlugin key, final Float value)
             throws MetricAlreadyRegisteredException {
 
-        if ((null == key)||(null == value)) {
+        if ((null == key) || (null == value)) {
             throw new NullPointerException();
         }
         if (this.fileMetrics.containsKey(key)) {

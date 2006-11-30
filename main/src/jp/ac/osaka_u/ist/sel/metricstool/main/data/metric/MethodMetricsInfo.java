@@ -11,6 +11,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.ClassNamePluginComparator;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.MetricTypeAndNamePluginComparator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 
@@ -21,7 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
  * @author y-higo
  * 
  */
-public final class MethodMetricsInfo implements MessageSource{
+public final class MethodMetricsInfo implements MessageSource {
 
     /**
      * 引数なしコンストラクタ．
@@ -33,8 +35,8 @@ public final class MethodMetricsInfo implements MessageSource{
         }
 
         this.methodInfo = methodInfo;
-        this.methodMetrics = Collections
-                .synchronizedSortedMap(new TreeMap<AbstractPlugin, Float>());
+        this.methodMetrics = Collections.synchronizedSortedMap(new TreeMap<AbstractPlugin, Float>(
+                new MetricTypeAndNamePluginComparator()));
     }
 
     /**
@@ -90,7 +92,7 @@ public final class MethodMetricsInfo implements MessageSource{
             throws MetricAlreadyRegisteredException {
         this.putMetric(key, new Float(value));
     }
-    
+
     /**
      * メッセージの送信者名を返す
      * 
@@ -99,7 +101,7 @@ public final class MethodMetricsInfo implements MessageSource{
     public String getMessageSourceName() {
         return this.getClass().getName();
     }
-    
+
     /**
      * このメトリクス情報に不足がないかをチェックする
      * 
@@ -136,7 +138,7 @@ public final class MethodMetricsInfo implements MessageSource{
     private void putMetric(final AbstractPlugin key, final Float value)
             throws MetricAlreadyRegisteredException {
 
-        if ((null == key)||(null == value)) {
+        if ((null == key) || (null == value)) {
             throw new NullPointerException();
         }
         if (this.methodMetrics.containsKey(key)) {
