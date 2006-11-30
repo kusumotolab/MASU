@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * ファイルの情報を表すクラス．
  */
-public final class FileInfo {
+public final class FileInfo implements Comparable<FileInfo> {
 
     /**
      * 指定されたファイル名のオブジェクトを初期化する．
@@ -45,6 +45,15 @@ public final class FileInfo {
         }
 
         this.definedClasses.add(definedClass);
+    }
+
+    /**
+     * このクラスのインスタンス同士を比較するメソッド
+     * @param 比較対象のインスタンス
+     * @return このインスタンスが比較対象のインスタンスより順序的に小さければ負の数，等しければ0，大きければ正の数.
+     */
+    public int compareTo(FileInfo o) {
+        return this.getName().compareTo(o.getName());
     }
 
     /**
