@@ -2,36 +2,35 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 /**
- * void 型を表すクラス．
+ * 名前解決できない型を表すクラス．
  * 
  * @author y-higo
  * 
  */
-public final class VoidTypeInfo implements TypeInfo {
+public class UnknownTypeInfo implements TypeInfo {
 
     /**
      * このクラスの単一オブジェクトを返す
-     * 
      * @return このクラスの単一オブジェクト
      */
-    public static VoidTypeInfo getInstance(){
+    public static UnknownTypeInfo getInstance() {
         return SINGLETON;
     }
-    
+
     /**
-     * void 型の名前を返す．
+     * 名前解決できない型の名前を返す．
      */
     public String getName() {
-        return VOID_STRING;
+        return UNKNOWN_STRING;
     }
 
     /**
      * void 型の型名を表す定数
      */
-    public static final String VOID_STRING = new String("void");
+    public static final String UNKNOWN_STRING = new String("unknown");
 
     /**
      * このクラスの単一オブジェクトを保存するための定数
      */
-    private static final VoidTypeInfo SINGLETON = new VoidTypeInfo();
+    private static final UnknownTypeInfo SINGLETON = new UnknownTypeInfo();
 }

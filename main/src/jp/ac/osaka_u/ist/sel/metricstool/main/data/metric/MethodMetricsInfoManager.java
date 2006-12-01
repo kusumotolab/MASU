@@ -110,9 +110,9 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
 
             MethodMetricsInfo methodMetricsInfo = this.get(methodInfo);
             if (null == methodMetricsInfo) {
-                String methodName = methodInfo.getName();
+                String methodName = methodInfo.getMethodName();
                 ClassInfo ownerClassInfo = methodInfo.getOwnerClass();
-                String ownerClassName = ownerClassInfo.getName();
+                String ownerClassName = ownerClassInfo.getFullQualifiedtName();
                 String message = "Metrics of " + ownerClassName + "::" + methodName
                         + " are not registered!";
                 MessagePrinter printer = new DefaultMessagePrinter(this,

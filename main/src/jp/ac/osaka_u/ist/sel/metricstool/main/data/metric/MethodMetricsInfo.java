@@ -114,9 +114,9 @@ public final class MethodMetricsInfo implements MessageSource {
                 PluginInfo pluginInfo = plugin.getPluginInfo();
                 String metricName = pluginInfo.getMetricName();
                 MethodInfo methodInfo = this.getMethodInfo();
-                String methodName = methodInfo.getName();
+                String methodName = methodInfo.getMethodName();
                 ClassInfo ownerClassInfo = methodInfo.getOwnerClass();
-                String ownerClassName = ownerClassInfo.getName();
+                String ownerClassName = ownerClassInfo.getFullQualifiedtName();
                 String message = "Metric \"" + metricName + "\" of " + ownerClassName + "::"
                         + methodName + " is not registered!";
                 MessagePrinter printer = new DefaultMessagePrinter(this,

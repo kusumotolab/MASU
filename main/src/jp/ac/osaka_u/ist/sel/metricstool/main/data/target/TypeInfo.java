@@ -10,9 +10,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 public interface TypeInfo {
 
     /**
-     * ‚±‚ÌŒ^–¼‚ð•Ô‚·
-     * 
-     * @return Œ^–¼
+     * Œ^–¼‚ð•Ô‚·
      */
     String getName();
 }

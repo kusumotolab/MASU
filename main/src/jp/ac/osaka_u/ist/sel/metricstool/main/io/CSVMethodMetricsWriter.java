@@ -63,7 +63,7 @@ public final class CSVMethodMetricsWriter implements MethodMetricsWriter, CSVWri
             for (MethodMetricsInfo methodMetricsInfo : METHOD_METRICS_MANAGER) {
                 MethodInfo methodInfo = methodMetricsInfo.getMethodInfo();
 
-                String methodName = methodInfo.getName();
+                String methodName = methodInfo.getMethodName();
                 writer.write(methodName);
                 for (AbstractPlugin plugin : PLUGIN_MANAGER.getPlugins()) {
                     PluginInfo pluginInfo = plugin.getPluginInfo();
