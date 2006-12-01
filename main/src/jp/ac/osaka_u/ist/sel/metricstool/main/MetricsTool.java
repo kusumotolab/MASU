@@ -7,13 +7,19 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredException;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVClassMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVFileMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVMethodMetricsWriter;
@@ -58,7 +64,7 @@ import antlr.TokenStreamException;
 public class MetricsTool {
 
     static {
-        //情報表示用のリスナを作成
+        // 情報表示用のリスナを作成
         MessagePool.getInstance(MESSAGE_TYPE.OUT).addMessageListener(new MessageListener() {
             public void messageReceived(MessageEvent event) {
                 System.out.print(event.getSource().getMessageSourceName() + " > "
@@ -93,17 +99,17 @@ public class MetricsTool {
         }
 
         if (Settings.isHelpMode()) {
-            //ヘルプモードの場合
+            // ヘルプモードの場合
             doHelpMode();
         } else {
             LANGUAGE language = getLanguage();
             loadPlugins(language, Settings.getMetricStrings());
 
             if (Settings.isDisplayMode()) {
-                //情報表示モードの場合
+                // 情報表示モードの場合
                 doDisplayMode(language);
             } else {
-                //解析モード
+                // 解析モード
                 doAnalysisMode(language);
             }
         }
@@ -111,11 +117,12 @@ public class MetricsTool {
 
     /**
      * 読み込んだ対象ファイル群を解析する.
+     * 
      * @param language 解析対象の言語
      */
     private static void analysisTargetFiles(final LANGUAGE language) {
         // 対象ファイルを解析
-        //TODO ここか専用の解析部で，言語ごとに分岐
+        // TODO ここか専用の解析部で，言語ごとに分岐
         for (TargetFile targetFile : TargetFileManager.getInstance()) {
             try {
                 String name = targetFile.getName();
@@ -214,6 +221,7 @@ public class MetricsTool {
     /**
      * 
      * 解析モードの引数の整合性を確認するためのメソッド． 不正な引数が指定されていた場合，main メソッドには戻らず，この関数内でプログラムを終了する．
+     * 
      * @param 指定された言語
      * 
      */
@@ -233,9 +241,9 @@ public class MetricsTool {
             printUsage();
             System.exit(0);
         }
-        
-        //言語が指定されなかったのは不正
-        if (null == language){
+
+        // 言語が指定されなかったのは不正
+        if (null == language) {
             System.err.println("-l must be specified in the analysis mode.");
             printUsage();
             System.exit(0);
@@ -259,18 +267,18 @@ public class MetricsTool {
             }
         }
 
-        //ファイルメトリクスを計測する場合は -F オプションが指定されていなければならない
+        // ファイルメトリクスを計測する場合は -F オプションが指定されていなければならない
         if (measureFileMetrics && (Settings.getFileMetricsFile().equals(Settings.INIT))) {
             System.err.println("-F must be used for specifying a file for file metrics!");
             System.exit(0);
         }
 
-        //クラスメトリクスを計測する場合は -C オプションが指定されていなければならない
+        // クラスメトリクスを計測する場合は -C オプションが指定されていなければならない
         if (measureClassMetrics && (Settings.getClassMetricsFile().equals(Settings.INIT))) {
             System.err.println("-C must be used for specifying a file for class metrics!");
             System.exit(0);
         }
-        //メソッドメトリクスを計測する場合は -M オプションが指定されていなければならない                
+        // メソッドメトリクスを計測する場合は -M オプションが指定されていなければならない
         if (measureMethodMetrics && (Settings.getMethodMetricsFile().equals(Settings.INIT))) {
             System.err.println("-M must be used for specifying a file for method metrics!");
             System.exit(0);
@@ -279,11 +287,12 @@ public class MetricsTool {
 
     /**
      * 解析モードを実行する.
+     * 
      * @param language 対象言語
      */
     private static void doAnalysisMode(LANGUAGE language) {
         checkAnalysisModeParameterValidation(language);
-        
+
         readTargetFiles();
         analysisTargetFiles(language);
         launchPlugins();
@@ -292,18 +301,20 @@ public class MetricsTool {
 
     /**
      * 情報表示モードを実行する
+     * 
      * @param language 対象言語
      */
     private static void doDisplayMode(LANGUAGE language) {
         checkDisplayModeParameterValidation();
 
-        //-l で言語が指定されていない場合は，解析可能言語一覧を表示
+        // -l で言語が指定されていない場合は，解析可能言語一覧を表示
         if (null == language) {
             System.err.println("Available languages;");
             LANGUAGE[] languages = LANGUAGE.values();
             for (int i = 0; i < languages.length; i++) {
-                System.err.println("\t" + languages[0].getName() + ": can be specified with term \""
-                        + languages[0].getIdentifierName() + "\"");
+                System.err.println("\t" + languages[0].getName()
+                        + ": can be specified with term \"" + languages[0].getIdentifierName()
+                        + "\"");
             }
 
             // -l で言語が指定されている場合は，そのプログラミング言語で使用可能なメトリクス一覧を表示
@@ -330,34 +341,34 @@ public class MetricsTool {
 
     /**
      * 対象言語を取得する.
+     * 
      * @return 指定された対象言語.指定されなかった場合はnull
      */
     private static LANGUAGE getLanguage() {
-        if (Settings.getLanguageString().equals(Settings.INIT)){
+        if (Settings.getLanguageString().equals(Settings.INIT)) {
             return null;
         }
-        
+
         try {
             return Settings.getLanguage();
         } catch (UnavailableLanguageException e) {
             System.err.println(e.getMessage());
             System.exit(0);
         }
-        
-        return null;//来ないけど書かないとコンパイル通らないので
+
+        return null;// 来ないけど書かないとコンパイル通らないので
     }
 
     /**
-     * {@link MetricsToolSecurityManager} の初期化を行う.
-     * システムに登録できれば，システムのセキュリティマネージャにも登録する.
+     * {@link MetricsToolSecurityManager} の初期化を行う. システムに登録できれば，システムのセキュリティマネージャにも登録する.
      */
     private static void initSecurityManager() {
         try {
-            //MetricsToolSecurityManagerのシングルトンインスタンスを構築し，初期特別権限スレッドになる
+            // MetricsToolSecurityManagerのシングルトンインスタンスを構築し，初期特別権限スレッドになる
             System.setSecurityManager(MetricsToolSecurityManager.getInstance());
         } catch (final SecurityException e) {
-            //既にセットされているセキュリティマネージャによって，新たなセキュリティマネージャの登録が許可されなかった．
-            //システムのセキュリティマネージャとして使わなくても，特別権限スレッドのアクセス制御は問題なく動作するのでとりあえず無視する
+            // 既にセットされているセキュリティマネージャによって，新たなセキュリティマネージャの登録が許可されなかった．
+            // システムのセキュリティマネージャとして使わなくても，特別権限スレッドのアクセス制御は問題なく動作するのでとりあえず無視する
             err
                     .println("Failed to set system security manager. MetricsToolsecurityManager works only to manage privilege threads.");
         }
@@ -375,7 +386,7 @@ public class MetricsTool {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                //気にしない
+                // 気にしない
             }
         } while (0 < launcher.getCurrentLaunchingNum() + launcher.getLaunchWaitingTaskNum());
 
@@ -383,24 +394,25 @@ public class MetricsTool {
     }
 
     /**
-     * プラグインをロードする.
-     * 指定された言語，指定されたメトリクスに関連するプラグインのみを {@link PluginManager}に登録する.
+     * プラグインをロードする. 指定された言語，指定されたメトリクスに関連するプラグインのみを {@link PluginManager}に登録する.
+     * 
      * @param language 指定しされた言語.
      */
     private static void loadPlugins(final LANGUAGE language, final String[] metrics) {
-        //指定言語に対応するプラグインで指定されたメトリクスを計測するプラグインをロードして登録
-        
-        //metrics[]が０個じゃないかつ，2つ以上指定されている or １つだけどデフォルトの文字列じゃない
-        boolean metricsSpecified = metrics.length != 0 && (1 < metrics.length || !metrics[0].equals(Settings.INIT));
+        // 指定言語に対応するプラグインで指定されたメトリクスを計測するプラグインをロードして登録
+
+        // metrics[]が０個じゃないかつ，2つ以上指定されている or １つだけどデフォルトの文字列じゃない
+        boolean metricsSpecified = metrics.length != 0
+                && (1 < metrics.length || !metrics[0].equals(Settings.INIT));
 
         final PluginManager pluginManager = PluginManager.getInstance();
         try {
-            for (final AbstractPlugin plugin : (new DefaultPluginLoader()).loadPlugins()) {//プラグインを全ロード
+            for (final AbstractPlugin plugin : (new DefaultPluginLoader()).loadPlugins()) {// プラグインを全ロード
                 final PluginInfo info = plugin.getPluginInfo();
                 if (null == language || info.isMeasurable(language)) {
-                    //対象言語が指定されていない or 対象言語を計測可能
+                    // 対象言語が指定されていない or 対象言語を計測可能
                     if (metricsSpecified) {
-                        //メトリクスが指定されているのでこのプラグインと一致するかチェック
+                        // メトリクスが指定されているのでこのプラグインと一致するかチェック
                         final String pluginMetricName = info.getMetricName();
                         for (final String metric : metrics) {
                             if (metric.equals(pluginMetricName)) {
@@ -409,7 +421,7 @@ public class MetricsTool {
                             }
                         }
                     } else {
-                        //メトリクスが指定されていないのでとりあえず全部登録
+                        // メトリクスが指定されていないのでとりあえず全部登録
                         pluginManager.addPlugin(plugin);
                     }
                 }
@@ -432,7 +444,8 @@ public class MetricsTool {
         System.err.println("\t-d: root directory that you are going to analysis.");
         System.err.println("\t-i: List file including file paths that you are going to analysis.");
         System.err.println("\t-l: Programming language of the target files.");
-        System.err.println("\t-m: Metrics that you want to get. Metrics names are separated with \',\'.");
+        System.err
+                .println("\t-m: Metrics that you want to get. Metrics names are separated with \',\'.");
         System.err.println("\t-C: File path that the class type metrics are output");
         System.err.println("\t-F: File path that the file type metrics are output.");
         System.err.println("\t-M: File path that the method type metrics are output");
@@ -627,4 +640,64 @@ public class MetricsTool {
         }
     }, MESSAGE_TYPE.ERROR);
 
+    /**
+     * クラスの定義を ClassInfoManager に登録する．一度目の AST パースの後に呼び出さなければならない．
+     */
+    private static void registClassInfos() {
+
+        UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
+                .getInstance();
+        ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+
+        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+                .getUnresolvedClassInfos()) {
+
+            // 名前空間，クラス名を取得
+            String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
+            String className = fullQualifiedName[fullQualifiedName.length - 1];
+            String[] namespaceStrings = new String[fullQualifiedName.length - 1];
+            System.arraycopy(fullQualifiedName, 0, namespaceStrings, 0,
+                    fullQualifiedName.length - 1);
+            NamespaceInfo namespace = new NamespaceInfo(namespaceStrings);
+
+            // 行数を取得
+            int loc = unresolvedClassInfo.getLOC();
+
+            // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
+            ClassInfo classInfo = new ClassInfo(namespace, className, loc);
+            classInfoManager.add(classInfo);
+        }
+    }
+
+    /**
+     * クラスの継承情報を ClassInfo に追加する．一度目の AST パースの後，かつ registClassInfos の後によびださなければならない．
+     */
+    private static void addInheritanceInformationToClassInfos() {
+
+        UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
+                .getInstance();
+        ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+
+        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+                .getUnresolvedClassInfos()) {
+
+            Set<String[]> superClassNames = unresolvedClassInfo.getSuperClasses();
+        }
+    }
+
+    /**
+     * メソッドの定義を MethodInfoManager に登録する．一度目の AST パースの後，かつ registClassInfos の後に呼び出さなければならない．
+     */
+    private static void registMethodInfos() {
+
+    }
+
+    /**
+     * メソッドオーバーライド情報を MethodInfo に追加する．一度目の AST パースの後，かつ addInheritanceInfomationToClassInfos
+     * の後に呼び出さなければならない
+     * 
+     */
+    private static void addOverrideInformationToMethodInfos() {
+
+    }
 }

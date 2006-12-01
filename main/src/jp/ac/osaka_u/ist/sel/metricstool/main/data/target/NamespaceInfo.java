@@ -15,7 +15,7 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo> {
      * 
      * @param name
      */
-    public NamespaceInfo(final String name) {
+    public NamespaceInfo(final String[] name) {
         
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == name) {
@@ -37,8 +37,8 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo> {
             throw new NullPointerException();
         }
         
-        String name = this.getName();
-        String correspondName = namespace.getName();
+        String name = this.getName(".");
+        String correspondName = namespace.getName(".");
         return name.compareTo(correspondName);
     }
 
@@ -47,13 +47,32 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo> {
      * 
      * @return 名前空間名
      */
-    public String getName() {
+    public String[] getName() {
         return this.name;
     }
 
     /**
+     * 名前空間名を返す
+     * 
+     * @param separator 名前間のセパレータ
+     * @return 名前空間をつないだ String
+     */
+    public String getName(final String separator){
+        
+        String[] names = this.getName();
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0 ; i < names.length ; i++ ){
+            buffer.append(names[i]);
+            buffer.append(separator);
+        }
+        
+        return buffer.toString();
+        
+    }
+    
+    /**
      * 名前空間を表す変数
      */
-    private final String name;
+    private final String[] name;
 
 }

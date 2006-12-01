@@ -39,7 +39,7 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * 
      * @param className クラス名
      */
-    public ClassInfo(final NamespaceInfo namespace, final String className) {
+    public ClassInfo(final NamespaceInfo namespace, final String className, final int loc) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -49,6 +49,7 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
 
         this.namespace = namespace;
         this.className = className;
+        this.loc = loc;
         this.superClasses = new TreeSet<ClassInfo>();
         this.subClasses = new TreeSet<ClassInfo>();
         this.innerClasses = new TreeSet<ClassInfo>();
@@ -253,7 +254,7 @@ public final class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
     /**
      * 行数を保存するための変数
      */
-    private int loc;
+    private final int loc;
 
     /**
      * このクラスが継承しているクラス一覧を保存するための変数． 直接の親クラスのみを保有するが，多重継承を考えて Set にしている．
