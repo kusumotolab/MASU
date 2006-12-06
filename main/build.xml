@@ -3,7 +3,7 @@
 
 	<tstamp />
 
-	<property name="tool.name" value="mas" />
+	<property name="tool.name" value="masu" />
 	<property name="src.dir" value="src" />
 	<property name="cls.dir" value="cls" />
 	<property name="grammer.dir" value="${src.dir}/jp/ac/osaka_u/ist/sel/metricstool/main/parse" />
