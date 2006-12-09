@@ -25,6 +25,22 @@ public class UnknownTypeInfo implements TypeInfo {
     }
 
     /**
+     * 等しいかどうかのチェックを行う
+     */
+    public boolean equals(final TypeInfo typeInfo){
+        
+        if (null == typeInfo){
+            throw new NullPointerException();
+        }
+        
+        if (typeInfo instanceof UnknownTypeInfo){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    /**
      * void 型の型名を表す定数
      */
     public static final String UNKNOWN_STRING = new String("unknown");

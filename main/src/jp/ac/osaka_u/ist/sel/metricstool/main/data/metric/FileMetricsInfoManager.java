@@ -105,7 +105,7 @@ public final class FileMetricsInfoManager implements Iterable<FileMetricsInfo>, 
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        for (FileInfo fileInfo : FileInfoManager.getInstance()) {
+        for (FileInfo fileInfo : FileInfoManager.getInstance().getFileInfos()) {
 
             FileMetricsInfo fileMetricsInfo = this.get(fileInfo);
             if (null == fileMetricsInfo) {

@@ -6,7 +6,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
-import sun.reflect.FieldInfo;
 
 
 /**
@@ -31,58 +30,44 @@ import sun.reflect.FieldInfo;
 public final class TargetClassInfo extends ClassInfo {
 
     /**
-     * クラスオブジェクトを初期化する． 以下の情報が引数として与えられなければならない．
-     * <ul>
-     * <li>クラス名</li>
-     * <li>修飾子</li>
-     * </ul>
-     * 
+     * 名前空間名，クラス名を与えて暮らす情報オブジェクトを初期化
+
+     * @param namespace 名前空間名
      * @param className クラス名
+     * @param loc 行数
      */
     public TargetClassInfo(final NamespaceInfo namespace, final String className, final int loc) {
 
         super(namespace, className);
 
-        if (loc < 0){
+        if (loc < 0) {
+            throw new IllegalAccessError("LOC is must be 0 or more!");
+        }
+
+        this.loc = loc;
+        this.innerClasses = new TreeSet<TargetClassInfo>();
+        this.definedMethods = new TreeSet<TargetMethodInfo>();
+        this.definedFields = new TreeSet<TargetFieldInfo>();
+    }
+
+    /**
+     * 完全限定名を与えて，クラス情報オブジェクトを初期化
+     * 
+     * @param fullQualifiedName 完全限定名
+     * @param loc 行数
+     */
+    public TargetClassInfo(final String[] fullQualifiedName, final int loc) {
+
+        super(fullQualifiedName);
+
+        if (loc < 0) {
             throw new IllegalAccessError("LOC is must be 0 or more!");
         }
         
         this.loc = loc;
-        this.superClasses = new TreeSet<ClassInfo>();
-        this.subClasses = new TreeSet<ClassInfo>();
-        this.innerClasses = new TreeSet<ClassInfo>();
-        this.definedMethods = new TreeSet<MethodInfo>();
-        this.definedFields = new TreeSet<FieldInfo>();
-    }
-
-    /**
-     * このクラスに親クラスを追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param superClass 追加する親クラス
-     */
-    public void addSuperClass(final ClassInfo superClass) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == superClass) {
-            throw new NullPointerException();
-        }
-
-        this.superClasses.add(superClass);
-    }
-
-    /**
-     * このクラスに子クラスを追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param subClass 追加する子クラス
-     */
-    public void addSubClass(final ClassInfo subClass) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == subClass) {
-            throw new NullPointerException();
-        }
-
-        this.subClasses.add(subClass);
+        this.innerClasses = new TreeSet<TargetClassInfo>();
+        this.definedMethods = new TreeSet<TargetMethodInfo>();
+        this.definedFields = new TreeSet<TargetFieldInfo>();
     }
 
     /**
@@ -90,7 +75,7 @@ public final class TargetClassInfo extends ClassInfo {
      * 
      * @param innerClass 追加するインナークラス
      */
-    public void addInnerClass(final ClassInfo innerClass) {
+    public void addInnerClass(final TargetClassInfo innerClass) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == innerClass) {
@@ -98,36 +83,6 @@ public final class TargetClassInfo extends ClassInfo {
         }
 
         this.innerClasses.add(innerClass);
-    }
-
-    /**
-     * このクラスに定義されたメソッド情報を追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param definedMethod 追加する定義されたメソッド
-     */
-    public void addDefinedMethod(final MethodInfo definedMethod) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == definedMethod) {
-            throw new NullPointerException();
-        }
-
-        this.definedMethods.add(definedMethod);
-    }
-
-    /**
-     * このクラスに定義されたフィールド情報を追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param definedField 追加する定義されたフィールド
-     */
-    public void addDefinedField(final FieldInfo definedField) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == definedField) {
-            throw new NullPointerException();
-        }
-
-        this.definedFields.add(definedField);
     }
 
     /**
@@ -140,30 +95,42 @@ public final class TargetClassInfo extends ClassInfo {
     }
 
     /**
-     * このクラスのスーパークラスの SortedSet を返す．
-     * 
-     * @return スーパークラスの SortedSet
-     */
-    public SortedSet<ClassInfo> getSuperClasses() {
-        return Collections.unmodifiableSortedSet(this.superClasses);
-    }
-
-    /**
-     * このクラスのサブクラスの SortedSet を返す．
-     * 
-     * @return サブクラスの SortedSet
-     */
-    public SortedSet<ClassInfo> getSubClasses() {
-        return Collections.unmodifiableSortedSet(this.subClasses);
-    }
-
-    /**
      * このクラスのインナークラスの SortedSet を返す．
      * 
      * @return インナークラスの SortedSet
      */
-    public SortedSet<ClassInfo> getInnerClasses() {
+    public SortedSet<TargetClassInfo> getInnerClasses() {
         return Collections.unmodifiableSortedSet(this.innerClasses);
+    }
+
+    /**
+     * このクラスに定義されたメソッド情報を追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param definedMethod 追加する定義されたメソッド
+     */
+    public void addDefinedMethod(final TargetMethodInfo definedMethod) {
+    
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == definedMethod) {
+            throw new NullPointerException();
+        }
+    
+        this.definedMethods.add(definedMethod);
+    }
+
+    /**
+     * このクラスに定義されたフィールド情報を追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param definedField 追加する定義されたフィールド
+     */
+    public void addDefinedField(final TargetFieldInfo definedField) {
+    
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == definedField) {
+            throw new NullPointerException();
+        }
+    
+        this.definedFields.add(definedField);
     }
 
     /**
@@ -171,7 +138,7 @@ public final class TargetClassInfo extends ClassInfo {
      * 
      * @return 定義されているメソッドの SortedSet
      */
-    public SortedSet<MethodInfo> getDefinedMethods() {
+    public SortedSet<TargetMethodInfo> getDefinedMethods() {
         return Collections.unmodifiableSortedSet(this.definedMethods);
     }
 
@@ -180,7 +147,7 @@ public final class TargetClassInfo extends ClassInfo {
      * 
      * @return 定義されているフィールドの SortedSet
      */
-    public SortedSet<FieldInfo> getDefinedFields() {
+    public SortedSet<TargetFieldInfo> getDefinedFields() {
         return Collections.unmodifiableSortedSet(this.definedFields);
     }
 
@@ -194,28 +161,17 @@ public final class TargetClassInfo extends ClassInfo {
     private final int loc;
 
     /**
-     * このクラスが継承しているクラス一覧を保存するための変数． 直接の親クラスのみを保有するが，多重継承を考えて Set にしている．
-     */
-    private final SortedSet<ClassInfo> superClasses;
-
-    /**
-     * このクラスを継承しているクラス一覧を保存するための変数．直接の子クラスのみを保有する．
-     */
-    private final SortedSet<ClassInfo> subClasses;
-
-    /**
      * このクラスの内部クラス一覧を保存するための変数．直接の内部クラスのみを保有する．
      */
-    private final SortedSet<ClassInfo> innerClasses;
+    private final SortedSet<TargetClassInfo> innerClasses;
 
     /**
      * このクラスで定義されているメソッド一覧を保存するための変数．
      */
-    private final SortedSet<MethodInfo> definedMethods;
+    private final SortedSet<TargetMethodInfo> definedMethods;
 
     /**
      * このクラスで定義されているフィールド一覧を保存するための変数．
      */
-    private final SortedSet<FieldInfo> definedFields;
-
+    private final SortedSet<TargetFieldInfo> definedFields;
 }

@@ -1,15 +1,13 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
-
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
-
 /**
- * フィールドの情報を現すクラス． 以下の情報をもつ．
+ * フィールドオブジェクトを表すクラス． 以下の情報をもつ．
  * <ul>
  * <li>フィールド名</li>
  * <li>フィールドの型</li>
@@ -20,9 +18,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * </ul>
  * 
  * @author y-higo
- * 
  */
-public final class FieldInfo extends VariableInfo {
+public abstract class FieldInfo extends VariableInfo {
 
     /**
      * フィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．
@@ -40,8 +37,8 @@ public final class FieldInfo extends VariableInfo {
         }
 
         this.ownerClass = ownerClass;
-        this.referencers = new TreeSet<MethodInfo>();
-        this.assignmenters = new TreeSet<MethodInfo>();
+        this.referencers = new TreeSet<TargetMethodInfo>();
+        this.assignmenters = new TreeSet<TargetMethodInfo>();
     }
 
     /**
@@ -49,13 +46,13 @@ public final class FieldInfo extends VariableInfo {
      * 
      * @param referencer このフィールドを参照しているメソッド
      */
-    public void addReferencer(final MethodInfo referencer) {
-
+    public final void addReferencer(final TargetMethodInfo referencer) {
+    
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == referencer) {
             throw new NullPointerException();
         }
-
+    
         this.referencers.add(referencer);
     }
 
@@ -64,13 +61,13 @@ public final class FieldInfo extends VariableInfo {
      * 
      * @param assignmenter このフィールドに対して代入を行っているメソッド
      */
-    public void addAssignmenter(final MethodInfo assignmenter) {
-
+    public final void addAssignmenter(final TargetMethodInfo assignmenter) {
+    
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == assignmenter) {
             throw new NullPointerException();
         }
-
+    
         this.assignmenters.add(assignmenter);
     }
 
@@ -79,12 +76,12 @@ public final class FieldInfo extends VariableInfo {
      * 
      * @return フィールドの順序関係
      */
-    public int compareTo(final FieldInfo fieldInfo) {
-
+    public final int compareTo(final TargetFieldInfo fieldInfo) {
+    
         if (null == fieldInfo) {
             throw new NullPointerException();
         }
-
+    
         ClassInfo classInfo = this.getOwnerClass();
         ClassInfo correspondClassInfo = this.getOwnerClass();
         int classOrder = classInfo.compareTo(correspondClassInfo);
@@ -100,7 +97,7 @@ public final class FieldInfo extends VariableInfo {
      * 
      * @return このフィールドを定義しているクラス
      */
-    public ClassInfo getOwnerClass() {
+    public final ClassInfo getOwnerClass() {
         return this.ownerClass;
     }
 
@@ -109,7 +106,7 @@ public final class FieldInfo extends VariableInfo {
      * 
      * @return このフィールドを参照しているメソッドの SortedSet
      */
-    public SortedSet<MethodInfo> getReferences() {
+    public final SortedSet<TargetMethodInfo> getReferences() {
         return Collections.unmodifiableSortedSet(this.referencers);
     }
 
@@ -118,27 +115,22 @@ public final class FieldInfo extends VariableInfo {
      * 
      * @return このフィールドに対して代入を行っているメソッドの SortedSet
      */
-    public SortedSet<MethodInfo> getAssignmenters() {
+    public final SortedSet<TargetMethodInfo> getAssignmenters() {
         return Collections.unmodifiableSortedSet(this.assignmenters);
     }
 
     /**
      * このフィールドを定義しているクラスを保存する変数
      */
-    private final ClassInfo ownerClass;
+    protected final ClassInfo ownerClass;
 
     /**
      * このフィールドを参照しているメソッド群を保存するための変数
      */
-    private final SortedSet<MethodInfo> referencers;
-
+    protected final SortedSet<TargetMethodInfo> referencers;
     /**
      * このフィールドに対して代入を行っているメソッド群を保存するための変数
      */
-    private final SortedSet<MethodInfo> assignmenters;
+    protected final SortedSet<TargetMethodInfo> assignmenters;
 
-    /**
-     * フィールドの修飾子を表す変数
-     */
-    // TODO 修飾子を表す変数を定義する．
 }

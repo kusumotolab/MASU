@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * UnresolvedClassInfoManager を操作するクラス
+ * UnresolvedClassInfoManager を管理するクラス
  * 
  * @author y-higo
  * 
@@ -19,6 +19,8 @@ public class UnresolvedClassInfoManager {
 
     /**
      * 単一オブジェクトを返す
+     * 
+     * @return 単一オブジェクト
      */
     public static UnresolvedClassInfoManager getInstance() {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -32,6 +34,8 @@ public class UnresolvedClassInfoManager {
      */
     public void addClass(final UnresolvedClassInfo classInfo) {
 
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfo) {
             throw new NullPointerException();
         }
@@ -45,7 +49,7 @@ public class UnresolvedClassInfoManager {
      * 
      * @return クラス情報のセット
      */
-    public Collection<UnresolvedClassInfo> getUnresolvedClassInfos() {
+    public Collection<UnresolvedClassInfo> getClassInfos() {
         return Collections.unmodifiableCollection(this.classInfos.values());
     }
 
@@ -63,6 +67,13 @@ public class UnresolvedClassInfoManager {
          * @param fullQualifiedName クラスの完全修飾名
          */
         ClassKey(final String[] fullQualifiedName) {
+            
+            // 不正な呼び出しでないかをチェック
+            MetricsToolSecurityManager.getInstance().checkAccess();
+            if (null == fullQualifiedName){
+                throw new NullPointerException();
+            }
+            
             this.fullQualifiedName = fullQualifiedName;
         }
 
@@ -79,6 +90,11 @@ public class UnresolvedClassInfoManager {
          * キーの順序を定義する
          */
         public int compareTo(final ClassKey classKey) {
+            
+            if (null == classKey){
+                throw new NullPointerException();
+            }
+            
             String[] fullQualifiedName = this.getFullQualifiedName();
             String[] correspondFullQualifiedName = classKey.getFullQualifiedName();
 
@@ -100,9 +116,16 @@ public class UnresolvedClassInfoManager {
 
         /**
          * このクラスと対象クラスが等しいかどうかを判定する
+         * 
+         * @param o 比較対象オブジェクト
+         * @return 等しい場合は true，等しくない場合は false
          */
         public boolean equals(Object o) {
 
+            if (null == o){
+                throw new NullPointerException();
+            }
+            
             String[] fullQualifiedName = this.getFullQualifiedName();
             String[] correspondFullQualifiedName = ((UnresolvedClassInfo) o).getFullQualifiedName();
 
@@ -121,6 +144,8 @@ public class UnresolvedClassInfoManager {
 
         /**
          * このクラスのハッシュコードを返す
+         * 
+         * @return このクラスのハッシュコード
          */
         public int hashCode() {
 

@@ -16,7 +16,10 @@ public abstract class MethodInfo implements Comparable<MethodInfo> {
     /**
      * メソッドオブジェクトを初期化する
      * 
-     * @param methodName
+     * @param methodName メソッド名
+     * @param 返り値の型
+     * @param メソッドを定義しているクラス
+     * @param コンストラクタかどうか
      */
     public MethodInfo(final String methodName, final TypeInfo returnType,
             final ClassInfo ownerClass, final boolean constructor) {
@@ -30,7 +33,7 @@ public abstract class MethodInfo implements Comparable<MethodInfo> {
         this.returnType = returnType;
         this.ownerClass = ownerClass;
         this.constructor = constructor;
-        
+
         this.parameters = new LinkedList<ParameterInfo>();
         this.callees = new TreeSet<MethodInfo>();
         this.callers = new TreeSet<MethodInfo>();
@@ -99,6 +102,38 @@ public abstract class MethodInfo implements Comparable<MethodInfo> {
 
             }
         }
+    }
+
+    public final boolean isSameSignature(final MethodInfo methodInfo) {
+
+        if (null == methodInfo) {
+            throw new NullPointerException();
+        }
+
+        // メソッド名が等しいかをチェック
+        if (!this.getMethodName().equals(methodInfo.getMethodName())) {
+            return false;
+        }
+
+        // 引数の数が等しいかをチェック
+        if (this.getParameterNumber() != methodInfo.getParameterNumber()) {
+            return false;
+        }
+
+        // 引数の型をチェック
+        Iterator<ParameterInfo> parameterIterator = this.getParameters().iterator();
+        Iterator<ParameterInfo> correspondParameterIterator = methodInfo.getParameters().iterator();
+        while (parameterIterator.hasNext() && (correspondParameterIterator.hasNext())) {
+            ParameterInfo parameter = parameterIterator.next();
+            ParameterInfo correspondParameter = correspondParameterIterator.next();
+            String typeName = parameter.getName();
+            String correspondTypeName = correspondParameter.getName();
+            if (!typeName.equals(correspondTypeName)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -176,12 +211,12 @@ public abstract class MethodInfo implements Comparable<MethodInfo> {
      * @param callee 追加する呼び出されるメソッド
      */
     public void addCallee(final MethodInfo callee) {
-    
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == callee) {
             throw new NullPointerException();
         }
-    
+
         this.callees.add(callee);
     }
 
@@ -191,12 +226,12 @@ public abstract class MethodInfo implements Comparable<MethodInfo> {
      * @param caller 追加する呼び出すメソッド
      */
     public void addCaller(final MethodInfo caller) {
-    
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == caller) {
             throw new NullPointerException();
         }
-    
+
         this.callers.add(caller);
     }
 
@@ -206,12 +241,12 @@ public abstract class MethodInfo implements Comparable<MethodInfo> {
      * @param overridee 追加するオーバーライドされているメソッド
      */
     public void addOverridee(final MethodInfo overridee) {
-    
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == overridee) {
             throw new NullPointerException();
         }
-    
+
         this.overridees.add(overridee);
     }
 
@@ -222,12 +257,12 @@ public abstract class MethodInfo implements Comparable<MethodInfo> {
      * 
      */
     public void addOverrider(final MethodInfo overrider) {
-    
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == overrider) {
             throw new NullPointerException();
         }
-    
+
         this.overriders.add(overrider);
     }
 

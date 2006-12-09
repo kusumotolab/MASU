@@ -2,11 +2,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -16,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class MethodInfoManager implements Iterable<MethodInfo> {
+public final class MethodInfoManager {
 
     /**
      * メソッド情報を管理しているインスタンスを返す． シングルトンパターンを持ちている．
@@ -31,38 +30,73 @@ public final class MethodInfoManager implements Iterable<MethodInfo> {
      * 
      * @param methodInfo 追加するメソッド情報
      */
-    public void add(final MethodInfo methodInfo) {
+    public void add(final TargetMethodInfo methodInfo) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == methodInfo) {
             throw new NullPointerException();
         }
 
-        this.methodInfos.add(methodInfo);
+        this.targetMethodInfos.add(methodInfo);
     }
 
     /**
-     * メソッド情報の Iterator を返す．この Iterator は unmodifiable であり，変更操作を行うことはできない．
+     * 
+     * @param methodInfo 追加するメソッド情報
      */
-    public Iterator<MethodInfo> iterator() {
-        Set<MethodInfo> unmodifiableMethodInfos = Collections.unmodifiableSet(this.methodInfos);
-        return unmodifiableMethodInfos.iterator();
+    public void add(final ExternalMethodInfo methodInfo) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == methodInfo) {
+            throw new NullPointerException();
+        }
+
+        this.externalMethodInfos.add(methodInfo);
+    }
+    
+    /**
+     * 対象メソッド情報のSortedSetを返す．
+     * 
+     * @return 対象メソッド情報のSortedSet
+     */
+    public SortedSet<TargetMethodInfo> getTargetMethodInfos() {
+        return Collections.unmodifiableSortedSet(this.targetMethodInfos);
     }
 
     /**
-     * 持っているメソッド情報の個数を返す.
-     * @return メソッドの個数
+     * 外部メソッド情報のSortedSetを返す．
+     * 
+     * @return 外部メソッド情報のSortedSet
      */
-    public int getMethodCount() {
-        return this.methodInfos.size();
+    public SortedSet<ExternalMethodInfo> getExternalMethodInfos() {
+        return Collections.unmodifiableSortedSet(this.externalMethodInfos);
+    }
+    
+    /**
+     * 持っている対象メソッド情報の個数を返す.
+     * 
+     * @return 対象メソッドの個数
+     */
+    public int getTargetMethodCount() {
+        return this.targetMethodInfos.size();
     }
 
+    /**
+     * 持っている外部メソッド情報の個数を返す.
+     * 
+     * @return 外部メソッドの個数
+     */
+    public int getExternalMethodCount() {
+        return this.externalMethodInfos.size();
+    }
+    
     /**
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */
     private MethodInfoManager() {
-        this.methodInfos = new TreeSet<MethodInfo>();
+        this.targetMethodInfos = new TreeSet<TargetMethodInfo>();
+        this.externalMethodInfos = new TreeSet<ExternalMethodInfo>();
     }
 
     /**
@@ -73,7 +107,13 @@ public final class MethodInfoManager implements Iterable<MethodInfo> {
 
     /**
      * 
-     * メソッド情報 (methodInfo) を格納する変数．
+     * 対象メソッド情報を格納する変数．
      */
-    private final SortedSet<MethodInfo> methodInfos;
+    private final SortedSet<TargetMethodInfo> targetMethodInfos;
+    
+    /**
+     * 
+     * 外部メソッド情報を格納する変数．
+     */
+    private final SortedSet<ExternalMethodInfo> externalMethodInfos;
 }

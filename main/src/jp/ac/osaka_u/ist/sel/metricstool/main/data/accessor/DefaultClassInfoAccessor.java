@@ -2,16 +2,17 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor;
 
 
 import java.util.Iterator;
+import java.util.SortedSet;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
 
 /**
  * プラグインが ClassInfo にアクセスするために用いるインターフェース
  * 
  * @author y-higo
- *
+ * 
  */
 public class DefaultClassInfoAccessor implements ClassInfoAccessor {
 
@@ -20,17 +21,19 @@ public class DefaultClassInfoAccessor implements ClassInfoAccessor {
      * 
      * @return ClassInfo のイテレータ
      */
-    public Iterator<ClassInfo> iterator() {
+    public Iterator<TargetClassInfo> iterator() {
         ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
-        return classInfoManager.iterator();
+        SortedSet<TargetClassInfo> classInfos = classInfoManager.getTargetClassInfos();
+        return classInfos.iterator();
     }
 
     /**
      * 対象クラスの数を返すメソッド.
+     * 
      * @return 対象クラスの数
      */
     public int getClassCount() {
-        return ClassInfoManager.getInstance().getClassCount();
+        return ClassInfoManager.getInstance().getTargetClassCount();
     }
 
 }

@@ -31,6 +31,35 @@ public final class ArrayTypeInfo implements TypeInfo {
     }
 
     /**
+     * 等しいかどうかのチェックを行う
+     */
+    public boolean equals(final TypeInfo typeInfo) {
+
+        if (null == typeInfo) {
+            throw new NullPointerException();
+        }
+
+        if (!(typeInfo instanceof ArrayTypeInfo)) {
+            return false;
+        }
+
+        TypeInfo elementTypeInfo = this.getElementType();
+        TypeInfo correspondElementTypeInfo = ((ArrayTypeInfo) typeInfo).getElementType();
+        if (!elementTypeInfo.equals(correspondElementTypeInfo)) {
+            return false;
+        } else {
+
+            int dimension = this.getDimension();
+            int correspondDimension = ((ArrayTypeInfo) typeInfo).getDimension();
+            if (dimension != correspondDimension) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
+    /**
      * 配列の要素の型を返す
      * 
      * @return 配列の要素の型
@@ -57,6 +86,13 @@ public final class ArrayTypeInfo implements TypeInfo {
      */
     public static ArrayTypeInfo getType(final TypeInfo type, final int dimension) {
 
+        if (null == type) {
+            throw new NullPointerException();
+        }
+        if (dimension < 1) {
+            throw new IllegalArgumentException("Array dimension must be 1 or more!");
+        }
+
         Key key = new Key(type, dimension);
         ArrayTypeInfo arrayType = ARRAY_TYPE_MAP.get(key);
         if (arrayType == null) {
@@ -80,7 +116,7 @@ public final class ArrayTypeInfo implements TypeInfo {
             throw new NullPointerException();
         }
         if (1 < dimension) {
-            throw new IllegalArgumentException("Dimension of array must be 1 or more!");
+            throw new IllegalArgumentException("Array dimension must be 1 or more!");
         }
 
         this.type = type;
@@ -131,7 +167,7 @@ public final class ArrayTypeInfo implements TypeInfo {
                 throw new NullPointerException();
             }
             if (1 < dimension) {
-                throw new IllegalArgumentException("Dimension of array must be 1 or more!");
+                throw new IllegalArgumentException("Array dimension must be 1 or more!");
             }
 
             this.type = type;

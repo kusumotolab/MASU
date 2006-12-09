@@ -7,19 +7,34 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredException;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NamespaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.NameResolver;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsage;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCall;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVClassMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVFileMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVMethodMetricsWriter;
@@ -641,30 +656,24 @@ public class MetricsTool {
     }, MESSAGE_TYPE.ERROR);
 
     /**
-     * クラスの定義を ClassInfoManager に登録する．一度目の AST パースの後に呼び出さなければならない．
+     * クラスの定義を ClassInfoManager に登録する．AST パースの後に呼び出さなければならない．
      */
     private static void registClassInfos() {
 
+        // Unresolved クラス情報マネージャ， クラス情報マネージャを取得
         UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
         ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
 
-        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
-                .getUnresolvedClassInfos()) {
+        // 各 Unresolvedクラスに対して
+        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
 
-            // 名前空間，クラス名を取得
+            // 完全限定名，行数を取得
             String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
-            String className = fullQualifiedName[fullQualifiedName.length - 1];
-            String[] namespaceStrings = new String[fullQualifiedName.length - 1];
-            System.arraycopy(fullQualifiedName, 0, namespaceStrings, 0,
-                    fullQualifiedName.length - 1);
-            NamespaceInfo namespace = new NamespaceInfo(namespaceStrings);
-
-            // 行数を取得
             int loc = unresolvedClassInfo.getLOC();
 
             // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
-            TargetClassInfo classInfo = new TargetClassInfo(namespace, className, loc);
+            TargetClassInfo classInfo = new TargetClassInfo(fullQualifiedName, loc);
             classInfoManager.add(classInfo);
         }
     }
@@ -674,30 +683,274 @@ public class MetricsTool {
      */
     private static void addInheritanceInformationToClassInfos() {
 
+        // Unresolved クラス情報マネージャ， クラス情報マネージャを取得
         UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
         ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
 
-        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
-                .getUnresolvedClassInfos()) {
+        // 各 Unresolvedクラスに対して
+        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
 
-            Set<String[]> superClassNames = unresolvedClassInfo.getSuperClasses();
+            // ClassInfo を取得
+            ClassInfo classInfo = NameResolver.resolveClassInfo(unresolvedClassInfo,
+                    classInfoManager);
+
+            // 各Unresolvedな親クラス名に対して
+            for (String[] superClassName : unresolvedClassInfo.getSuperClasses()) {
+                ClassInfo superClassInfo = classInfoManager.getClassInfo(superClassName);
+                if (null == superClassInfo) {
+                    superClassInfo = new ExternalClassInfo(superClassName);
+                    classInfoManager.add((ExternalClassInfo) superClassInfo);
+                }
+                classInfo.addSuperClass(superClassInfo);
+                superClassInfo.addSubClass(classInfo);
+            }
         }
     }
 
     /**
-     * メソッドの定義を MethodInfoManager に登録する．一度目の AST パースの後，かつ registClassInfos の後に呼び出さなければならない．
+     * フィールドの定義を FieldInfoManager に登録する． registClassInfos の後に呼び出さなければならない
+     * 
+     */
+    private static void registFieldInfos() {
+
+        // Unresolved クラス情報マネージャ，クラス情報マネージャ，フィールド情報マネージャを取得
+        UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
+                .getInstance();
+        ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+        FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
+
+        // 各 Unresolvedクラスに対して
+        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
+
+            // ClassInfo を取得
+            ClassInfo ownerClass = NameResolver.resolveClassInfo(unresolvedClassInfo,
+                    classInfoManager);
+            if (!(ownerClass instanceof TargetClassInfo)) {
+                throw new IllegalArgumentException(ownerClass.toString()
+                        + " must be an instance of TargetClassInfo!");
+            }
+
+            // Unresolvedクラスに定義されている各Unresolvedフィールドに対して
+            for (UnresolvedFieldInfo unresolvedFieldInfo : unresolvedClassInfo.getDefinedFields()) {
+
+                // フィールド名を取得
+                String fieldName = unresolvedFieldInfo.getName();
+
+                // フィールドの型を取得
+                UnresolvedTypeInfo unresolvedFieldType = unresolvedFieldInfo.getType();
+                TypeInfo fieldType = NameResolver.resolveTypeInfo(unresolvedFieldType,
+                        classInfoManager);
+
+                // TODO フィールドの修飾子に関する処理を追加
+
+                // フィールドオブジェクトを生成
+                TargetFieldInfo fieldInfo = new TargetFieldInfo(fieldName, fieldType, ownerClass);
+
+                // フィールド情報を追加
+                ((TargetClassInfo) ownerClass).addDefinedField(fieldInfo);
+                fieldInfoManager.add(fieldInfo);
+            }
+        }
+    }
+
+    /**
+     * メソッドの定義を MethodInfoManager に登録する．registClassInfos の後に呼び出さなければならない．
      */
     private static void registMethodInfos() {
+
+        // Unresolved クラス情報マネージャ， クラス情報マネージャ，メソッド情報マネージャを取得
+        UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
+                .getInstance();
+        ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+        MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
+
+        // 各 Unresolvedクラスに対して
+        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
+
+            // ClassInfo を取得
+            ClassInfo ownerClass = NameResolver.resolveClassInfo(unresolvedClassInfo,
+                    classInfoManager);
+            if (!(ownerClass instanceof TargetClassInfo)) {
+                throw new IllegalArgumentException(ownerClass.toString()
+                        + " must be an instance of TargetClassInfo");
+            }
+
+            // Unresolvedクラスに定義されている各Unresolvedメソッドに対して
+            for (UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo
+                    .getDefinedMethods()) {
+
+                // メソッド名を取得
+                String methodName = unresolvedMethodInfo.getMethodName();
+
+                // TODO メソッドの修飾子に関する処理を追加
+
+                // メソッドの返り値を取得
+                UnresolvedTypeInfo unresolvedReturnType = unresolvedMethodInfo.getReturnType();
+                TypeInfo returnType = NameResolver.resolveTypeInfo(unresolvedReturnType,
+                        classInfoManager);
+
+                // 行数，コンストラクタかどうかを取得
+                int loc = unresolvedMethodInfo.getLOC();
+                boolean constructor = unresolvedMethodInfo.isConstructor();
+
+                // MethodInfo オブジェクトを生成し，引数を追加していく
+                TargetMethodInfo methodInfo = new TargetMethodInfo(methodName, returnType,
+                        ownerClass, constructor, loc);
+                for (UnresolvedParameterInfo unresolvedParameterInfo : unresolvedMethodInfo
+                        .getParameterInfos()) {
+
+                    // パラメータ名を取得
+                    String parameterName = unresolvedParameterInfo.getName();
+
+                    // パラメータの型を取得
+                    UnresolvedTypeInfo unresolvedParameterType = unresolvedParameterInfo.getType();
+                    TypeInfo parameterType = NameResolver.resolveTypeInfo(unresolvedParameterType,
+                            classInfoManager);
+
+                    // パラメータオブジェクトを生成し，メソッドに追加
+                    TargetParameterInfo parameterInfo = new TargetParameterInfo(parameterName,
+                            parameterType);
+                    methodInfo.addParameter(parameterInfo);
+                }
+
+                // メソッド情報を追加
+                ((TargetClassInfo) ownerClass).addDefinedMethod(methodInfo);
+                methodInfoManager.add(methodInfo);
+            }
+        }
 
     }
 
     /**
-     * メソッドオーバーライド情報を MethodInfo に追加する．一度目の AST パースの後，かつ addInheritanceInfomationToClassInfos
+     * メソッドオーバーライド情報を各MethodInfoに追加する．addInheritanceInfomationToClassInfos の後 かつ registMethodInfos
      * の後に呼び出さなければならない
-     * 
      */
     private static void addOverrideInformationToMethodInfos() {
 
+        // 全ての対象クラスに対して
+        for (TargetClassInfo classInfo : ClassInfoManager.getInstance().getTargetClassInfos()) {
+
+            // 各対象クラスの親クラスに対して
+            for (ClassInfo superClassInfo : classInfo.getSuperClasses()) {
+
+                // 各対象クラスの各メソッドについて，親クラスのメソッドをオー払い度しているかを調査
+                for (MethodInfo methodInfo : classInfo.getDefinedMethods()) {
+                    addOverrideInformationToMethodInfos(superClassInfo, methodInfo);
+                }
+            }
+        }
+    }
+
+    /**
+     * メソッドオーバライド情報を追加する．引数で指定されたクラスで定義されているメソッドに対して操作を行う.
+     * AddOverrideInformationToMethodInfos()の中からのみ呼び出される．
+     * 
+     * @param classInfo クラス情報
+     * @param overrider オーバーライド対象のメソッド
+     */
+    private static void addOverrideInformationToMethodInfos(final ClassInfo classInfo,
+            final MethodInfo overrider) {
+
+        if ((null == classInfo) || (null == overrider)) {
+            throw new NullPointerException();
+        }
+
+        if (!(classInfo instanceof TargetClassInfo)) {
+            return;
+        }
+
+        for (TargetMethodInfo methodInfo : ((TargetClassInfo) classInfo).getDefinedMethods()) {
+
+            if (methodInfo.isSameSignature(overrider)) {
+                overrider.addOverridee(methodInfo);
+                methodInfo.addOverrider(overrider);
+
+                // 直接のオーバーライド関係しか抽出しないので，このクラスの親クラスは調査しない
+                return;
+            }
+        }
+
+        // 親クラス群に対して再帰的に処理
+        for (ClassInfo superClassInfo : classInfo.getSuperClasses()) {
+            addOverrideInformationToMethodInfos(superClassInfo, overrider);
+        }
+    }
+
+    /**
+     * フィールドの使用関係を追加する．
+     */
+    private static void addUseInformationToFieldInfos() {
+
+        UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
+                .getInstance();
+        ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+        FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
+
+        // 各UnresolvedClassInfo に対して
+        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
+
+            for (UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo
+                    .getDefinedMethods()) {
+
+                // UnresolvedMethodInfo から MethodInfo を取得
+                TargetMethodInfo methodInfo = NameResolver.resolveMethodInfo(unresolvedMethodInfo,
+                        classInfoManager);
+
+                // 各UnresolvedMethodInfo の各Unresolvedフィールド参照 に対して
+                for (UnresolvedFieldUsage fieldUsage : unresolvedMethodInfo.getFieldReferences()) {
+
+                    // UnresolvedFieldUsage から FieldInfo を取得
+                    FieldInfo referencee = NameResolver.resolveFieldUsage(fieldUsage,
+                            classInfoManager, fieldInfoManager);
+                    methodInfo.addReferencee(referencee);
+                    referencee.addReferencer(methodInfo);
+                }
+
+                // UnresolvedMethodInfo の各Unresolvedフィールド代入に対して
+                for (UnresolvedFieldUsage fieldUsage : unresolvedMethodInfo.getFieldAssignments()) {
+
+                    // UnresolvedFieldUsage から FieldInfo を取得
+                    FieldInfo assignmentee = NameResolver.resolveFieldUsage(fieldUsage,
+                            classInfoManager, fieldInfoManager);
+                    methodInfo.addAssignmentee(assignmentee);
+                    assignmentee.addAssignmenter(methodInfo);
+                }
+            }
+        }
+    }
+
+    /**
+     * メソッドの呼び出し関係情報を追加する．registMethodInfosの後に呼び出さなければならない.
+     */
+    private static void addCallInformationToMethodInfos() {
+
+        UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
+                .getInstance();
+        ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+        MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
+
+        // 各 UnresolvedClassInfo に対して
+        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
+
+            // 各 UnresolvedClassInfo の各UnresolvedMethodInfo に対して
+            for (UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo
+                    .getDefinedMethods()) {
+
+                // UnresolvedMethodInfo から MethodInfo を取得
+                MethodInfo caller = NameResolver.resolveMethodInfo(unresolvedMethodInfo,
+                        classInfoManager);
+
+                // 各UnresolvedMethodInfo での各メソッド呼び出し情報(UnresolvedMethodCall)に対して
+                for (UnresolvedMethodCall methodCall : unresolvedMethodInfo.getMethodCalls()) {
+
+                    // UnresolvedMethodUsage から MethodInfo を取得
+                    MethodInfo callee = NameResolver.resolveMethodCall(methodCall,
+                            classInfoManager, methodInfoManager);
+                    caller.addCallee(callee);
+                    callee.addCaller(caller);
+                }
+            }
+        }
     }
 }

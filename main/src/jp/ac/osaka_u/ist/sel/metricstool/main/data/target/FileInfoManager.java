@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class FileInfoManager implements Iterable<FileInfo> {
+public final class FileInfoManager {
 
     /**
      * ファイル情報を管理しているインスタンスを返す． シングルトンパターンを持ちている．
@@ -41,17 +41,18 @@ public final class FileInfoManager implements Iterable<FileInfo> {
     }
 
     /**
-     * ファイル情報の Iterator を返す．この Iterator は unmodifiable であり，変更操作を行うことはできない．
+     * ファイル情報の SortedSet を返す．
+     * 
+     * @return ファイル情報の SortedSet
      */
-    public Iterator<FileInfo> iterator() {
-        SortedSet<FileInfo> unmodifiableFileInfos = Collections
-                .unmodifiableSortedSet(this.fileInfos);
-        return unmodifiableFileInfos.iterator();
+    public SortedSet<FileInfo> getFileInfos() {
+        return Collections.unmodifiableSortedSet(this.fileInfos);
     }
 
     /**
      * 情報を持っているファイルの個数を返す
-     * @return　ファイルの個数
+     * 
+     * @return ファイルの個数
      */
     public int getFileCount() {
         return this.fileInfos.size();

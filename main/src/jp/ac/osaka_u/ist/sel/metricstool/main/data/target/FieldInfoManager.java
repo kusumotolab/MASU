@@ -2,10 +2,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class FieldInfoManager implements Iterable<FieldInfo> {
+public final class FieldInfoManager {
 
     /**
      * フィールド情報を管理しているインスタンスを返す． シングルトンパターンを持ちている．
@@ -27,35 +27,69 @@ public final class FieldInfoManager implements Iterable<FieldInfo> {
     }
 
     /**
-     * フィールド情報を追加する
+     * 対象フィールドを追加する
      * 
-     * @param fieldInfo 追加するフィールド情報
+     * @param fieldInfo 追加する対象フィールド情報
      */
-    public void add(final FieldInfo fieldInfo) {
+    public void add(final TargetFieldInfo fieldInfo) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == fieldInfo) {
             throw new NullPointerException();
         }
 
-        this.fieldInfos.add(fieldInfo);
+        this.targetFieldInfos.add(fieldInfo);
     }
 
     /**
-     * フィールド情報の Iterator を返す．この Iterator は unmodifiable であり，変更操作を行うことはできない．
+     * 外部フィールドを追加する
+     * 
+     * @param fieldInfo 追加する外部フィールド
      */
-    public Iterator<FieldInfo> iterator() {
-        SortedSet<FieldInfo> unmodifiableFieldInfos = Collections
-                .unmodifiableSortedSet(this.fieldInfos);
-        return unmodifiableFieldInfos.iterator();
+    public void add(final ExternalFieldInfo fieldInfo) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == fieldInfo) {
+            throw new NullPointerException();
+        }
+
+        this.externalFieldInfos.add(fieldInfo);
     }
 
     /**
-     * 持っているフィールドの個数を返す
-     * @return フィールドの個数
+     * 対象フィールドの SortedSet を返す．
+     * 
+     * @return 対象フィールドの SortedSet
      */
-    public int getFieldCount() {
-        return this.fieldInfos.size();
+    public SortedSet<TargetFieldInfo> getTargetFieldInfos() {
+        return Collections.unmodifiableSortedSet(this.targetFieldInfos);
+    }
+
+    /**
+     * 外部フィールドの SortedSet を返す．
+     * 
+     * @return 外部フィールドの SortedSet
+     */
+    public SortedSet<ExternalFieldInfo> getExternalFieldInfos() {
+        return Collections.unmodifiableSortedSet(this.externalFieldInfos);
+    }
+
+    /**
+     * 対象フィールドの個数を返す
+     * 
+     * @return 対象フィールドの個数
+     */
+    public int getTargetFieldCount() {
+        return this.targetFieldInfos.size();
+    }
+
+    /**
+     * 外部フィールドの個数を返す
+     * 
+     * @return 外部フィールドの個数
+     */
+    public int getExternalFieldCount() {
+        return this.externalFieldInfos.size();
     }
 
     /**
@@ -63,7 +97,8 @@ public final class FieldInfoManager implements Iterable<FieldInfo> {
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */
     private FieldInfoManager() {
-        this.fieldInfos = new TreeSet<FieldInfo>();
+        this.targetFieldInfos = new TreeSet<TargetFieldInfo>();
+        this.externalFieldInfos = new TreeSet<ExternalFieldInfo>();
     }
 
     /**
@@ -74,7 +109,13 @@ public final class FieldInfoManager implements Iterable<FieldInfo> {
 
     /**
      * 
-     * フィールド情報 (FieldInfo) を格納する変数．
+     * 対象フィールド情報を格納する変数．
      */
-    private final SortedSet<FieldInfo> fieldInfos;
+    private final SortedSet<TargetFieldInfo> targetFieldInfos;
+
+    /**
+     * 
+     * 外部フィールド情報を格納する変数．
+     */
+    private final SortedSet<ExternalFieldInfo> externalFieldInfos;
 }

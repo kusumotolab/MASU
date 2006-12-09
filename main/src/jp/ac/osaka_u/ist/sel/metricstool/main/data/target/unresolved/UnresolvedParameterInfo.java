@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
+package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 /**
@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author y-higo
  * 
  */
-public abstract class ParameterInfo extends VariableInfo {
+public final class UnresolvedParameterInfo extends UnresolvedVariableInfo {
 
     /**
      * 引数オブジェクトを初期化する．名前と型が必要．
@@ -15,7 +15,7 @@ public abstract class ParameterInfo extends VariableInfo {
      * @param name 引数名
      * @param type 引数の型
      */
-    public ParameterInfo(final String name, final TypeInfo type) {
+    public UnresolvedParameterInfo(final String name, final UnresolvedTypeInfo type) {
         super(name, type);
     }
 }

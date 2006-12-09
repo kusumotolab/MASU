@@ -9,8 +9,19 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * 一度目のASTパースで取得したクラス情報を一時的に格納するためのクラス．
+ * ASTパースで取得したクラス情報を一時的に格納するためのクラス． 以下の情報を持つ
  * 
+ * <ul>
+ * <li>未解決名前空間</li>
+ * <li>クラス名</li>
+ * <li>行数</li>
+ * <li>未解決親クラス名一覧</li>
+ * <li>未解決子クラス名一覧</li>
+ * <li>未解決インナークラス一覧</li>
+ * <li>未解決定義メソッド一覧</li>
+ * <li>未解決定義フィールド一覧
+ * <li>
+ * </ul>
  * 
  * @author y-higo
  * 
@@ -19,7 +30,6 @@ public final class UnresolvedClassInfo {
 
     /**
      * 引数なしコンストラクタ
-     * 
      */
     public UnresolvedClassInfo() {
 
@@ -37,8 +47,18 @@ public final class UnresolvedClassInfo {
 
     /**
      * このクラスと対象クラスが等しいかどうかを判定する
+     * 
+     * @param o 比較対象クラス
      */
     public boolean equals(Object o) {
+
+        if (null == o) {
+            throw new NullPointerException();
+        }
+
+        if (!(o instanceof UnresolvedClassInfo)) {
+            return false;
+        }
 
         String[] fullQualifiedName = this.getFullQualifiedName();
         String[] correspondFullQualifiedName = ((UnresolvedClassInfo) o).getFullQualifiedName();
@@ -48,28 +68,30 @@ public final class UnresolvedClassInfo {
         }
 
         for (int i = 0; i < fullQualifiedName.length; i++) {
-            if (!fullQualifiedName[i].equals(correspondFullQualifiedName[i])){
+            if (!fullQualifiedName[i].equals(correspondFullQualifiedName[i])) {
                 return false;
             }
         }
-        
+
         return true;
     }
 
     /**
      * このクラスのハッシュコードを返す
+     * 
+     * @param このクラスのハッシュコード
      */
-    public int hashCode(){
-        
+    public int hashCode() {
+
         StringBuffer buffer = new StringBuffer();
         String[] fullQualifiedName = this.getFullQualifiedName();
-        for (int i = 0 ; i < fullQualifiedName.length ; i++){
+        for (int i = 0; i < fullQualifiedName.length; i++) {
             buffer.append(fullQualifiedName[i]);
         }
-        
+
         return buffer.toString().hashCode();
     }
-    
+
     /**
      * 名前空間名を返す
      * 
@@ -133,6 +155,8 @@ public final class UnresolvedClassInfo {
      */
     public void setClassName(final String[] className) {
 
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == className) {
             throw new NullPointerException();
         }
@@ -155,9 +179,14 @@ public final class UnresolvedClassInfo {
      * @param loc 行数
      */
     public void setLOC(final int loc) {
+        
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (loc < 0) {
             throw new IllegalArgumentException("LOC must be o or more!");
         }
+        
+        this.loc = loc;
     }
 
     /**
@@ -167,6 +196,8 @@ public final class UnresolvedClassInfo {
      */
     public void addSuperClass(final String[] superClass) {
 
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == superClass) {
             throw new NullPointerException();
         }
@@ -181,6 +212,8 @@ public final class UnresolvedClassInfo {
      */
     public void addInnerClass(final String innerClass) {
 
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == innerClass) {
             throw new NullPointerException();
         }
@@ -195,6 +228,8 @@ public final class UnresolvedClassInfo {
      */
     public void addDefinedMethod(final UnresolvedMethodInfo definedMethod) {
 
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == definedMethod) {
             throw new NullPointerException();
         }
@@ -209,6 +244,8 @@ public final class UnresolvedClassInfo {
      */
     public void addDefinedField(final UnresolvedFieldInfo definedField) {
 
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == definedField) {
             throw new NullPointerException();
         }

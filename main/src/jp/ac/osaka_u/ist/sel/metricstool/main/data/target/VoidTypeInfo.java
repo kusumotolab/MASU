@@ -26,6 +26,22 @@ public final class VoidTypeInfo implements TypeInfo {
     }
 
     /**
+     * 等しいかどうかのチェックを行う
+     */
+    public boolean equals(final TypeInfo typeInfo){
+        
+        if (null == typeInfo){
+            throw new NullPointerException();
+        }
+        
+        if (typeInfo instanceof VoidTypeInfo){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    /**
      * void 型の型名を表す定数
      */
     public static final String VOID_STRING = new String("void");

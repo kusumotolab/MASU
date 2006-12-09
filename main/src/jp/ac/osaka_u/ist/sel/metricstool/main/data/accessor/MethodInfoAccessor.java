@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 
 
 /**
@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
  * @author y-higo
  *
  */
-public interface MethodInfoAccessor extends Iterable<MethodInfo> {
+public interface MethodInfoAccessor extends Iterable<TargetMethodInfo> {
 
     /**
      * 対象メソッドのの数を返すメソッド.

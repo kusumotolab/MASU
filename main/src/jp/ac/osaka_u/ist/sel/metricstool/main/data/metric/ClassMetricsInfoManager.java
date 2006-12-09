@@ -105,7 +105,7 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        for (ClassInfo classInfo : ClassInfoManager.getInstance()) {
+        for (ClassInfo classInfo : ClassInfoManager.getInstance().getTargetClassInfos()) {
 
             ClassMetricsInfo classMetricsInfo = this.get(classInfo);
             if (null == classMetricsInfo) {

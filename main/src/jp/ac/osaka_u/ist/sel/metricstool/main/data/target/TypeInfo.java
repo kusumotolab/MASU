@@ -13,4 +13,10 @@ public interface TypeInfo {
      * 型名を返す
      */
     String getName();
+    
+    /**
+     * 等価性のチェック
+     */
+    boolean equals(TypeInfo typeInfo);
+    
 }

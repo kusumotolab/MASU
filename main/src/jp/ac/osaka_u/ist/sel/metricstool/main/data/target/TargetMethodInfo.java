@@ -48,7 +48,7 @@ public final class TargetMethodInfo extends MethodInfo {
      * @param constructor コンストラクタかどうか．コンストラクタの場合は true,そうでない場合は false．
      */
     public TargetMethodInfo(final String name, final TypeInfo returnType,
-            final TargetClassInfo ownerClass, final boolean constructor, final int loc) {
+            final ClassInfo ownerClass, final boolean constructor, final int loc) {
 
         super(name, returnType, ownerClass, constructor);
 

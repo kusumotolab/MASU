@@ -2,16 +2,18 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor;
 
 
 import java.util.Iterator;
+import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 
 
 /**
  * プラグインが MethodInfo にアクセスするために用いるインターフェース
  * 
  * @author y-higo
- *
+ * 
  */
 public class DefaultMethodInfoAccessor implements MethodInfoAccessor {
 
@@ -20,17 +22,19 @@ public class DefaultMethodInfoAccessor implements MethodInfoAccessor {
      * 
      * @return MethodInfo のイテレータ
      */
-    public Iterator<MethodInfo> iterator() {
+    public Iterator<TargetMethodInfo> iterator() {
         MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
-        return methodInfoManager.iterator();
+        SortedSet<TargetMethodInfo> methodInfos = methodInfoManager.getTargetMethodInfos();
+        return methodInfos.iterator();
     }
 
     /**
      * 対象メソッドの数を返すメソッド.
+     * 
      * @return 対象メソッドの数
      */
     public int getMethodCount() {
-        return MethodInfoManager.getInstance().getMethodCount();
+        return MethodInfoManager.getInstance().getTargetMethodCount();
     }
 
 }

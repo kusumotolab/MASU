@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor;
 
 
 import java.util.Iterator;
+import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
@@ -22,7 +23,8 @@ public class DefaultFileInfoAccessor implements FileInfoAccessor {
      */
     public Iterator<FileInfo> iterator() {
         FileInfoManager fileInfoManager = FileInfoManager.getInstance();
-        return fileInfoManager.iterator();
+        SortedSet<FileInfo> fileInfos = fileInfoManager.getFileInfos();
+        return fileInfos.iterator();
     }
 
     /**

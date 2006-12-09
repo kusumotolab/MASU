@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+
 
 
 /**
@@ -10,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class PrimitiveTypeInfo implements TypeInfo {
+public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
 
     /**
      * boolean を表す定数
@@ -142,6 +143,37 @@ public final class PrimitiveTypeInfo implements TypeInfo {
      */
     public String getName() {
         return this.name;
+    }
+    
+    /**
+     * 等しいかどうかのチェックを行う
+     */
+    public boolean equals(final TypeInfo typeInfo){
+    
+        if (null == typeInfo){
+            throw new NullPointerException();
+        }
+        
+        if (typeInfo instanceof PrimitiveTypeInfo) {
+
+            if(this.getName().equals(typeInfo.getName())){
+                return false;
+            }else{
+                return false;
+            }
+            
+        }else{
+            return false;
+        }
+    }
+    
+    /**
+     * この型名を返す
+     */
+    public String[] getNameString(){
+        String[] nameString = new String[1];
+        nameString[0] = this.getName();
+        return nameString;
     }
 
     /**
