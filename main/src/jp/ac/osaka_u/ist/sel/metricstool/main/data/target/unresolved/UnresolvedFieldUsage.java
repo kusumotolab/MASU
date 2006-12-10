@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -17,24 +18,24 @@ public final class UnresolvedFieldUsage implements Comparable<UnresolvedFieldUsa
      * @param ownerClassName フィールド使用が実行される変数の型名
      * @param fieldName 変数名
      */
-    public UnresolvedFieldUsage(final String[] ownerClassName, final String fieldName) {
-        
+    public UnresolvedFieldUsage(final UnresolvedTypeInfo ownerClassType, final String fieldName) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == ownerClassName) || (null == fieldName)){
+        if ((null == ownerClassType) || (null == fieldName)) {
             throw new NullPointerException();
         }
-        
-        this.ownerClassName = ownerClassName;
+
+        this.ownerClassType = ownerClassType;
         this.fieldName = fieldName;
     }
 
     /**
-     * フィールド使用が実行される変数の型名を返す
+     * フィールド使用が実行される変数の未解決型名を返す
      * 
-     * @return フィールド使用が実行される変数の型名
+     * @return フィールド使用が実行される変数の未解決型名
      */
-    public String[] getOwnerClassName() {
-        return this.ownerClassName;
+    public UnresolvedTypeInfo getOwnerClassType() {
+        return this.ownerClassType;
     }
 
     /**
@@ -64,28 +65,16 @@ public final class UnresolvedFieldUsage implements Comparable<UnresolvedFieldUsa
         }
 
         // メソッド呼び出しが行われている変数の型で比較
-        final String[] ownerClassName = this.getOwnerClassName();
-        final String[] correspondOwnerClassName = unresolvedFieldUsage.getOwnerClassName();
-        if (ownerClassName.length > correspondOwnerClassName.length) {
-            return 1;
-        } else if (ownerClassName.length < correspondOwnerClassName.length) {
-            return -1;
-        } else {
-            for (int i = 0; i < ownerClassName.length; i++) {
-                final int stringOrder = ownerClassName[i].compareTo(correspondOwnerClassName[i]);
-                if (0 != stringOrder) {
-                    return stringOrder;
-                }
-            }
-
-            return 0;
-        }
+        final UnresolvedTypeInfo ownerClassType = this.getOwnerClassType();
+        final UnresolvedTypeInfo correspondOwnerClassType = unresolvedFieldUsage
+                .getOwnerClassType();
+        return ownerClassType.compareTo(correspondOwnerClassType);
     }
 
     /**
-     * フィールド使用が実行される変数の型名を保存するための変数
+     * フィールド使用が実行される変数の未解決型名を保存するための変数
      */
-    private final String[] ownerClassName;
+    private final UnresolvedTypeInfo ownerClassType;
 
     /**
      * フィールド名を保存するための変数

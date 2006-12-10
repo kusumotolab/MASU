@@ -1,7 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
 /**
@@ -114,7 +115,7 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
         if (null == typeName) {
             throw new NullPointerException();
         }
-        
+
         if (typeName.equals(BOOLEAN_STRING)) {
             return BOOLEAN;
         } else if (typeName.equals(BYTE_STRING)) {
@@ -144,36 +145,63 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
     public String getName() {
         return this.name;
     }
-    
+
     /**
-     * 等しいかどうかのチェックを行う
+     * オブジェクトの等価性のチェックを行う
      */
-    public boolean equals(final TypeInfo typeInfo){
-    
-        if (null == typeInfo){
+    public boolean equals(final TypeInfo typeInfo) {
+
+        if (null == typeInfo) {
             throw new NullPointerException();
         }
-        
-        if (typeInfo instanceof PrimitiveTypeInfo) {
 
-            if(this.getName().equals(typeInfo.getName())){
-                return false;
-            }else{
-                return false;
-            }
-            
-        }else{
+        if (!(typeInfo instanceof PrimitiveTypeInfo)) {
             return false;
         }
+
+        return this.getName().equals(typeInfo.getName());
     }
-    
+
     /**
-     * この型名を返す
+     * オブジェクトの等価性のチェックを行う
      */
-    public String[] getNameString(){
-        String[] nameString = new String[1];
-        nameString[0] = this.getName();
-        return nameString;
+    public boolean equals(final UnresolvedTypeInfo typeInfo) {
+
+        if (null == typeInfo) {
+            throw new NullPointerException();
+        }
+
+        if (!(typeInfo instanceof PrimitiveTypeInfo)) {
+            return false;
+        }
+
+        return this.getName().equals(typeInfo.getName());
+    }
+
+    /**
+     * 順序関係を定義する
+     */
+    public int compareTo(final UnresolvedTypeInfo typeInfo) {
+
+        if (null == typeInfo) {
+            throw new NullPointerException();
+        }
+
+        // 比較対象が UnresolvedReferenceTypeInfo の場合
+        // 順序は PrimitiveType > UnresolvedReferenceTypeInfo
+        if (typeInfo instanceof UnresolvedReferenceTypeInfo) {
+            return 1;
+
+            // 比較対象がPrimitiveTypeInfoの場合
+        } else if (typeInfo instanceof PrimitiveTypeInfo) {
+
+            String typeName = this.getName();
+            String correspondTypeName = ((PrimitiveTypeInfo) typeInfo).getName();
+            return typeName.compareTo(correspondTypeName);
+
+        } else {
+            throw new IllegalArgumentException(typeInfo.toString() + " is a wrong object!");
+        }
     }
 
     /**
@@ -182,11 +210,11 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
      * @param name 型名
      */
     private PrimitiveTypeInfo(final String name) {
-        
+
         if (null == name) {
             throw new NullPointerException();
         }
-        
+
         this.name = name;
     }
 

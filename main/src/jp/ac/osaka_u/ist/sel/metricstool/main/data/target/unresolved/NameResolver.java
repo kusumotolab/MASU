@@ -113,26 +113,24 @@ public final class NameResolver {
         // フィールド名を取得
         String fieldName = fieldUsage.getFieldName();
 
-        // クラスを特定
-        String[] ownerClassName = fieldUsage.getOwnerClassName();
-        ClassInfo ownerClass = classInfoManager.getClassInfo(ownerClassName);
-        if (null == ownerClass) {
-            ownerClass = new ExternalClassInfo(ownerClassName);
-            classInfoManager.add((ExternalClassInfo) ownerClass);
-        }
+        // フィールドが定義されているクラスの型を特定
+        UnresolvedTypeInfo unresolvedOwnerClassType = fieldUsage.getOwnerClassType();
+        TypeInfo ownerClassType = NameResolver.resolveTypeInfo(unresolvedOwnerClassType,
+                classInfoManager);
 
         // 外部クラスの場合は，呼び出すフィールド情報を生成し，フィールドマネージャに追加
-        if (ownerClass instanceof ExternalClassInfo) {
+        if (ownerClassType instanceof ExternalClassInfo) {
 
-            ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName, ownerClass);
+            ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName,
+                    (ClassInfo) ownerClassType);
             fieldInfoManager.add(fieldInfo);
             return fieldInfo;
 
             // 対象クラスの場合は，そのクラスから該当フィールドの探す，
             // 見つからなければ，生成し登録する
-        } else if (ownerClass instanceof TargetClassInfo) {
+        } else if (ownerClassType instanceof TargetClassInfo) {
 
-            for (TargetFieldInfo fieldInfo : ((TargetClassInfo) ownerClass).getDefinedFields()) {
+            for (TargetFieldInfo fieldInfo : ((TargetClassInfo) ownerClassType).getDefinedFields()) {
 
                 if (fieldName.equals(fieldInfo.getName())) {
                     return fieldInfo;
@@ -142,7 +140,7 @@ public final class NameResolver {
             // 使用されているフィールドがClassInfoManagerに登録されていないので，追加する．
             // 対象クラスに定義されていないフィールドなので ExternalFieldInfo になる.
             // おそらく対象クラスの（外部の）親クラスに定義されているフィールドの使用．
-            ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName, ownerClass);
+            ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName, (ClassInfo)ownerClassType);
             fieldInfoManager.add(fieldInfo);
             return fieldInfo;
         }

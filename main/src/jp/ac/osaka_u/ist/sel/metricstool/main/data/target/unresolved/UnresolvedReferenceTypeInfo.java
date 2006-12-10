@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -10,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
+public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
 
     /**
      * 名前空間名，クラス名を与えて初期化
@@ -47,6 +48,49 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      */
     public String getClassName() {
         return this.className;
+    }
+
+    /**
+     * オブジェクトの等価性をチェックする
+     */
+    public boolean equals(final UnresolvedTypeInfo typeInfo) {
+
+        if (null == typeInfo) {
+            throw new NullPointerException();
+        }
+
+        if (!(typeInfo instanceof UnresolvedTypeInfo)) {
+            return false;
+        }
+
+        String className = this.getClassName();
+        String correspondClassName = ((UnresolvedReferenceTypeInfo) typeInfo).getClassName();
+        return className.equals(correspondClassName);
+    }
+
+    /**
+     * 順序を定義する
+     */
+    public int compareTo(final UnresolvedTypeInfo typeInfo) {
+
+        if (null == typeInfo) {
+            throw new NullPointerException();
+        }
+
+        // 比較対象が UnresolvedReferenceTypeInfo の場合
+        // 順序は PrimitiveType > UnresolvedReferenceTypeInfo
+        if (typeInfo instanceof PrimitiveTypeInfo) {
+            return -1;
+
+        } else if (typeInfo instanceof UnresolvedReferenceTypeInfo) {
+
+            String className = this.getClassName();
+            String correspondClassName = ((UnresolvedReferenceTypeInfo) typeInfo).getClassName();
+            return className.compareTo(correspondClassName);
+
+        } else {
+            throw new IllegalArgumentException(typeInfo.toString() + " is a wrong object!");
+        }
     }
 
     /**
