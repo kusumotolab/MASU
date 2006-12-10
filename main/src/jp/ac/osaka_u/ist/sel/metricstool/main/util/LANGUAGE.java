@@ -33,6 +33,11 @@ public enum LANGUAGE {
         public String getIdentifierName() {
             return "java";
         }
+        
+        @Override
+        public String getNamespaceDelimiter(){
+            return ".";
+        }
     },
 
 //    C_PLUS_PLUS {
@@ -102,7 +107,6 @@ public enum LANGUAGE {
      */
     public abstract String getName();
     
-    
     /**
      * この言語の識別子名を返す．
      * 識別子名は -l オプションに用いられる.
@@ -110,4 +114,11 @@ public enum LANGUAGE {
      * @return この言語の説明文
      */
     public abstract String getIdentifierName();
+    
+    /**
+     * この言語の名前空間を区切る文字（列）をを返す．
+     * 
+     * @return この言語の名前空間を区切る文字（列）
+     */
+    public abstract String getNamespaceDelimiter();
 }
