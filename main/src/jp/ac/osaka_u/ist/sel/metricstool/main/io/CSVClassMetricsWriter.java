@@ -63,7 +63,7 @@ public final class CSVClassMetricsWriter implements ClassMetricsWriter, CSVWrite
             for (ClassMetricsInfo classMetricsInfo : CLASS_METRICS_MANAGER) {
                 ClassInfo classInfo = classMetricsInfo.getClassInfo();
 
-                String className = classInfo.getFullQualifiedtName();
+                String className = classInfo.getFullQualifiedtName(".");
                 writer.write(className);
                 for (AbstractPlugin plugin : PLUGIN_MANAGER.getPlugins()) {
                     PluginInfo pluginInfo = plugin.getPluginInfo();

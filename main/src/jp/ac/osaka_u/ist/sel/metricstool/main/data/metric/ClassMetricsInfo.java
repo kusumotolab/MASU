@@ -113,7 +113,7 @@ public final class ClassMetricsInfo implements MessageSource {
                 PluginInfo pluginInfo = plugin.getPluginInfo();
                 String metricName = pluginInfo.getMetricName();
                 ClassInfo classInfo = this.getClassInfo();
-                String className = classInfo.getFullQualifiedtName();
+                String className = classInfo.getFullQualifiedtName(".");
                 String message = "Metric \"" + metricName + "\" of " + className
                         + " is not registered!";
                 MessagePrinter printer = new DefaultMessagePrinter(this,

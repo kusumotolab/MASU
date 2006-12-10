@@ -109,7 +109,7 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
 
             ClassMetricsInfo classMetricsInfo = this.get(classInfo);
             if (null == classMetricsInfo) {
-                String message = "Class \"" + classInfo.getFullQualifiedtName()
+                String message = "Class \"" + classInfo.getFullQualifiedtName(".")
                         + "\" metrics are not registered!";
                 MessagePrinter printer = new DefaultMessagePrinter(this,
                         MessagePrinter.MESSAGE_TYPE.ERROR);
