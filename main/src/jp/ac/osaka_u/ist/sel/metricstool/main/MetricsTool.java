@@ -16,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -31,6 +32,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsage;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCall;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
@@ -814,6 +816,24 @@ public class MetricsTool {
                     methodInfo.addParameter(parameterInfo);
                 }
 
+                // UnresovedLocalVariableInfo の名前解決を行い，MethodInfo に追加していく
+                for (UnresolvedLocalVariableInfo unresolvedLocalVariable : unresolvedMethodInfo
+                        .getLocalVariables()) {
+
+                    // 変数名を取得
+                    String variableName = unresolvedLocalVariable.getName();
+
+                    // 変数の型を取得
+                    UnresolvedTypeInfo unresolvedVariableType = unresolvedLocalVariable.getType();
+                    TypeInfo variableType = NameResolver.resolveTypeInfo(unresolvedVariableType,
+                            classInfoManager);
+
+                    // ローカル変数オブジェクトを生成し，MethodInfoに追加
+                    LocalVariableInfo localVariable = new LocalVariableInfo(variableName,
+                            variableType);
+                    methodInfo.addLocalVariable(localVariable);
+                }
+
                 // メソッド情報を追加
                 ((TargetClassInfo) ownerClass).addDefinedMethod(methodInfo);
                 methodInfoManager.add(methodInfo);
@@ -843,7 +863,7 @@ public class MetricsTool {
     }
 
     /**
-     * メソッドオーバライド情報を追加する．引数で指定されたクラスで定義されているメソッドに対して操作を行う.
+     * メソッドオーバーライド情報を追加する．引数で指定されたクラスで定義されているメソッドに対して操作を行う.
      * AddOverrideInformationToMethodInfos()の中からのみ呼び出される．
      * 
      * @param classInfo クラス情報

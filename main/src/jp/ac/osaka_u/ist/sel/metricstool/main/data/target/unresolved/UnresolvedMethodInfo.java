@@ -41,6 +41,7 @@ public class UnresolvedMethodInfo {
         this.methodCalls = new TreeSet<UnresolvedMethodCall>();
         this.fieldReferences = new TreeSet<UnresolvedFieldUsage>();
         this.fieldAssignments = new TreeSet<UnresolvedFieldUsage>();
+        this.localVariables = new TreeSet<UnresolvedLocalVariableInfo>();
     }
 
     /**
@@ -144,6 +145,22 @@ public class UnresolvedMethodInfo {
     }
 
     /**
+     * ローカル変数を追加する
+     * 
+     * @param localVariable ローカル変数 
+     */
+    public void addLocalVariable(final UnresolvedLocalVariableInfo localVariable){
+    
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == localVariable) {
+            throw new NullPointerException();
+        }
+        
+        this.localVariables.add(localVariable);
+    }
+    
+    /**
      * メソッドの引数のリストを返す
      * 
      * @return メソッドの引数のリスト
@@ -179,6 +196,15 @@ public class UnresolvedMethodInfo {
         return Collections.unmodifiableSortedSet(this.fieldAssignments);
     }
 
+    /**
+     * 定義されているローカル変数のSortedSetを返す
+     * 
+     * @return 定義されているローカル変数の SortedSet 
+     */
+    public SortedSet<UnresolvedLocalVariableInfo> getLocalVariables() {
+        return Collections.unmodifiableSortedSet(this.localVariables);
+    }
+    
     /**
      * このメソッドの行数を返す
      * 
@@ -237,6 +263,11 @@ public class UnresolvedMethodInfo {
      */
     private final SortedSet<UnresolvedFieldUsage> fieldAssignments;
 
+    /**
+     * このメソッド内で定義されているローカル変数を保存する変数
+     */
+    private final SortedSet<UnresolvedLocalVariableInfo> localVariables;
+    
     /**
      * メソッドの行数を保存するための変数
      */
