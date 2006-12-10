@@ -149,12 +149,22 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
     }
 
     /**
-     * このクラスの名前を返す． ここの名前とは，名前空間名 + クラス名を表す．
+     * このクラスの完全限定名を返す．完全限定名は引数で与えられた文字列により連結され，返される．
+     * 
+     * @param 区切り文字
      */
-    public final String getFullQualifiedtName() {
-        NamespaceInfo namespace = this.getNamespace();
+    public final String getFullQualifiedtName(final String delimiter) {
+        
+        if (null == delimiter){
+            throw new NullPointerException();
+        }
+        
         StringBuffer buffer = new StringBuffer();
-        buffer.append(namespace.getName());
+        String[] namespace = this.getNamespace().getName();
+        for( int i = 0 ; i < namespace.length ; i++ ){
+            buffer.append(namespace[i]);
+            buffer.append(delimiter);
+        }
         buffer.append(this.getClassName());
         return buffer.toString();
     }
@@ -165,7 +175,7 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @return このクラスの型名を返す
      */
     public final String getName() {
-        return this.getFullQualifiedtName();
+        return this.getClassName();
     }
 
     /**

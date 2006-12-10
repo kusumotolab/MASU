@@ -60,12 +60,12 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo> {
     /**
      * 名前空間名を返す
      * 
-     * @param separator 名前間のセパレータ
+     * @param delimiter 名前の区切り文字
      * @return 名前空間をつないだ String
      */
-    public String getName(final String separator) {
+    public String getName(final String delimiter) {
 
-        if (null == separator){
+        if (null == delimiter){
             throw new  NullPointerException();
         }
         
@@ -73,7 +73,7 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo> {
         StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < names.length; i++) {
             buffer.append(names[i]);
-            buffer.append(separator);
+            buffer.append(delimiter);
         }
 
         return buffer.toString();
