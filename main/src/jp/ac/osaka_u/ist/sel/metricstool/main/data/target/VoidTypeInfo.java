@@ -38,31 +38,7 @@ public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo {
         
         return typeInfo instanceof VoidTypeInfo;
     }
-
-    /**
-     * 等しいかどうかのチェックを行う
-     */
-    public boolean equals(final UnresolvedTypeInfo typeInfo){
-        
-        if (null == typeInfo){
-            throw new NullPointerException();
-        }
-
-        return typeInfo instanceof VoidTypeInfo;
-    }
-    
-    /**
-     * オブジェクトの順序を定義する
-     */
-    public int compareTo(final UnresolvedTypeInfo typeInfo){
-        
-        if (null == typeInfo){
-            throw new NullPointerException();
-        }
-        
-        return this.getTypeName().compareTo(typeInfo.getTypeName());
-    }
-    
+   
     /**
      * void 型の型名を表す定数
      */

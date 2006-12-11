@@ -51,36 +51,6 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
     }
 
     /**
-     * オブジェクトの等価性をチェックする
-     */
-    public boolean equals(final UnresolvedTypeInfo typeInfo) {
-
-        if (null == typeInfo) {
-            throw new NullPointerException();
-        }
-
-        if (!(typeInfo instanceof UnresolvedTypeInfo)) {
-            return false;
-        }
-
-        String className = this.getTypeName();
-        String correspondClassName = ((UnresolvedReferenceTypeInfo) typeInfo).getTypeName();
-        return className.equals(correspondClassName);
-    }
-
-    /**
-     * 順序を定義する
-     */
-    public int compareTo(final UnresolvedTypeInfo typeInfo) {
-
-        if (null == typeInfo) {
-            throw new NullPointerException();
-        }
-        
-        return this.getTypeName().compareTo(typeInfo.getTypeName());
-    }
-
-    /**
      * この参照型の完全限定名として可能性のある名前空間名の一覧を返す
      * 
      * @return この参照型の完全限定名として可能性のある名前空間名の一覧

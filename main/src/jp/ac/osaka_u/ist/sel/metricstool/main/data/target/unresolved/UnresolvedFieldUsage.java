@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class UnresolvedFieldUsage implements Comparable<UnresolvedFieldUsage> {
+public final class UnresolvedFieldUsage {
 
     /**
      * フィールド使用が実行される変数の型名と変数名を与えてオブジェクトを初期化
@@ -45,30 +45,6 @@ public final class UnresolvedFieldUsage implements Comparable<UnresolvedFieldUsa
      */
     public String getFieldName() {
         return this.fieldName;
-    }
-
-    /**
-     * フィールド使用の順序を定義
-     * 
-     * @return フィールド使用の順序
-     */
-    public int compareTo(final UnresolvedFieldUsage unresolvedFieldUsage) {
-
-        if (null == unresolvedFieldUsage) {
-            throw new NullPointerException();
-        }
-
-        // フィールド名で比較
-        int fieldNameOrder = this.getFieldName().compareTo(unresolvedFieldUsage.getFieldName());
-        if (0 != fieldNameOrder) {
-            return fieldNameOrder;
-        }
-
-        // メソッド呼び出しが行われている変数の型で比較
-        final UnresolvedTypeInfo ownerClassType = this.getOwnerClassType();
-        final UnresolvedTypeInfo correspondOwnerClassType = unresolvedFieldUsage
-                .getOwnerClassType();
-        return ownerClassType.compareTo(correspondOwnerClassType);
     }
 
     /**

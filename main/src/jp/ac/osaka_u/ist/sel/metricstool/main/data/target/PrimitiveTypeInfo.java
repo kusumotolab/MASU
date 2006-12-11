@@ -161,33 +161,27 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
         return this.getTypeName().equals(typeInfo.getTypeName());
     }
 
-    /**
+    /*
      * オブジェクトの等価性のチェックを行う
+     * 
+     * public boolean equals(final UnresolvedTypeInfo typeInfo) {
+     * 
+     * if (null == typeInfo) { throw new NullPointerException(); }
+     * 
+     * if (!(typeInfo instanceof PrimitiveTypeInfo)) { return false; }
+     * 
+     * return this.getTypeName().equals(typeInfo.getTypeName()); }
      */
-    public boolean equals(final UnresolvedTypeInfo typeInfo) {
 
-        if (null == typeInfo) {
-            throw new NullPointerException();
-        }
-
-        if (!(typeInfo instanceof PrimitiveTypeInfo)) {
-            return false;
-        }
-
-        return this.getTypeName().equals(typeInfo.getTypeName());
-    }
-
-    /**
+    /*
      * 順序関係を定義する
+     * 
+     * public int compareTo(final UnresolvedTypeInfo typeInfo) {
+     * 
+     * if (null == typeInfo) { throw new NullPointerException(); }
+     * 
+     * return this.getTypeName().compareTo(typeInfo.getTypeName()); }
      */
-    public int compareTo(final UnresolvedTypeInfo typeInfo) {
-
-        if (null == typeInfo) {
-            throw new NullPointerException();
-        }
-
-        return this.getTypeName().compareTo(typeInfo.getTypeName());
-    }
 
     /**
      * オブジェクトに型名を与えて初期化する． 型名は固定であるため，外部からはオブジェクトを生成できないようにしている．
