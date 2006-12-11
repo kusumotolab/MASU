@@ -118,8 +118,8 @@ public final class UnresolvedMethodCall implements Comparable<UnresolvedMethodCa
                 while (typeIterator.hasNext() && correspondTypeIterator.hasNext()) {
                     final UnresolvedTypeInfo typeInfo = typeIterator.next();
                     final UnresolvedTypeInfo correspondTypeInfo = correspondTypeIterator.next();
-                    final String typeInfoName = typeInfo.getName();
-                    final String correspondTypeInfoName = correspondTypeInfo.getName();
+                    final String typeInfoName = typeInfo.getTypeName();
+                    final String correspondTypeInfoName = correspondTypeInfo.getTypeName();
                     final int stringOrder = typeInfoName.compareTo(correspondTypeInfoName);
                     if (0 != stringOrder) {
                         return stringOrder;

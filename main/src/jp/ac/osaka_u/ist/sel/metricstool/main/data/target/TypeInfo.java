@@ -12,7 +12,7 @@ public interface TypeInfo {
     /**
      * 型名を返す
      */
-    String getName();
+    String getTypeName();
     
     /**
      * 等価性のチェック

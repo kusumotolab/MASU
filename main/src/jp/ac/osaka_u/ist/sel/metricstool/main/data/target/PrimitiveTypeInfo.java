@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -142,7 +141,7 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
     /**
      * Ç±ÇÃå^ñºÇï‘Ç∑ÅD
      */
-    public String getName() {
+    public String getTypeName() {
         return this.name;
     }
 
@@ -159,7 +158,7 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             return false;
         }
 
-        return this.getName().equals(typeInfo.getName());
+        return this.getTypeName().equals(typeInfo.getTypeName());
     }
 
     /**
@@ -175,7 +174,7 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             return false;
         }
 
-        return this.getName().equals(typeInfo.getName());
+        return this.getTypeName().equals(typeInfo.getTypeName());
     }
 
     /**
@@ -187,7 +186,7 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             throw new NullPointerException();
         }
 
-        return this.getName().compareTo(typeInfo.getName());
+        return this.getTypeName().compareTo(typeInfo.getTypeName());
     }
 
     /**

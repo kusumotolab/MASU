@@ -23,7 +23,7 @@ public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo {
     /**
      * void å^ÇÃñºëOÇï‘Ç∑ÅD
      */
-    public String getName() {
+    public String getTypeName() {
         return VOID_STRING;
     }
 
@@ -60,7 +60,7 @@ public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             throw new NullPointerException();
         }
         
-        return this.getName().compareTo(typeInfo.getName());
+        return this.getTypeName().compareTo(typeInfo.getTypeName());
     }
     
     /**

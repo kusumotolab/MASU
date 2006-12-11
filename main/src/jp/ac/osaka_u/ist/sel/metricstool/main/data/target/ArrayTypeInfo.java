@@ -18,12 +18,12 @@ public final class ArrayTypeInfo implements TypeInfo {
     /**
      * Œ^–¼‚ð•Ô‚·
      */
-    public String getName() {
+    public String getTypeName() {
         TypeInfo elementType = this.getElementType();
         int dimension = this.getDimension();
 
         StringBuffer buffer = new StringBuffer();
-        buffer.append(elementType.getName());
+        buffer.append(elementType.getTypeName());
         for (int i = 0; i < dimension; i++) {
             buffer.append("[]");
         }
@@ -179,7 +179,7 @@ public final class ArrayTypeInfo implements TypeInfo {
          */
         public int hashCode() {
             StringBuffer buffer = new StringBuffer();
-            buffer.append(this.type.getName());
+            buffer.append(this.type.getTypeName());
             buffer.append(this.dimension);
             String hashString = buffer.toString();
             return hashString.hashCode();
@@ -191,7 +191,7 @@ public final class ArrayTypeInfo implements TypeInfo {
          * @return ‘æˆêƒL[
          */
         public String getFirstKey() {
-            return this.type.getName();
+            return this.type.getTypeName();
         }
 
         /**

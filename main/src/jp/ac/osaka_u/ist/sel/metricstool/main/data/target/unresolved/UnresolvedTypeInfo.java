@@ -12,7 +12,7 @@ public interface UnresolvedTypeInfo extends Comparable<UnresolvedTypeInfo> {
     /**
      * 型名を返す
      */
-    String getName();
+    String getTypeName();
 
     /**
      * オブジェクトの等価性をチェックする

@@ -20,7 +20,7 @@ public class UnknownTypeInfo implements TypeInfo {
     /**
      * –¼‘O‰ğŒˆ‚Å‚«‚È‚¢Œ^‚Ì–¼‘O‚ğ•Ô‚·D
      */
-    public String getName() {
+    public String getTypeName() {
         return UNKNOWN_STRING;
     }
 

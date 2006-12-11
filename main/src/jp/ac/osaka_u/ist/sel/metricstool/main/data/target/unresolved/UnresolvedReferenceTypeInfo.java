@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -37,7 +36,7 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 
      * @return Ç±ÇÃéQè∆å^ÇÃñºëOÇï‘Ç∑
      */
-    public String getName() {
+    public String getTypeName() {
         String[] referenceName = this.getReferenceName();
         return referenceName[referenceName.length - 1];
     }
@@ -64,8 +63,8 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
             return false;
         }
 
-        String className = this.getName();
-        String correspondClassName = ((UnresolvedReferenceTypeInfo) typeInfo).getName();
+        String className = this.getTypeName();
+        String correspondClassName = ((UnresolvedReferenceTypeInfo) typeInfo).getTypeName();
         return className.equals(correspondClassName);
     }
 
@@ -78,7 +77,7 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
             throw new NullPointerException();
         }
         
-        return this.getName().compareTo(typeInfo.getName());
+        return this.getTypeName().compareTo(typeInfo.getTypeName());
     }
 
     /**

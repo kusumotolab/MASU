@@ -5,7 +5,9 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
 
 
 /**
@@ -154,14 +156,14 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @param 区切り文字
      */
     public final String getFullQualifiedtName(final String delimiter) {
-        
-        if (null == delimiter){
+
+        if (null == delimiter) {
             throw new NullPointerException();
         }
-        
+
         StringBuffer buffer = new StringBuffer();
         String[] namespace = this.getNamespace().getName();
-        for( int i = 0 ; i < namespace.length ; i++ ){
+        for (int i = 0; i < namespace.length; i++) {
             buffer.append(namespace[i]);
             buffer.append(delimiter);
         }
@@ -174,10 +176,26 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * 
      * @return このクラスの型名を返す
      */
-    public final String getName() {
-        return this.getClassName();
-    }
+    public final String getTypeName() {
 
+        String delimiter = null;
+        try{
+            delimiter = Settings.getLanguage().getNamespaceDelimiter();
+        }catch(UnavailableLanguageException e){
+            delimiter = ".";
+        }
+        
+        final StringBuffer buffer = new StringBuffer();
+        final String[] namespace = this.getNamespace().getName();
+        for (int i = 0 ; i < namespace.length ; i++ ){
+            buffer.append(namespace[i]);
+            buffer.append(delimiter);
+        }
+        buffer.append(this.getClassName());
+        
+        return buffer.toString();
+    }
+    
     /**
      * 等しいかどうかのチェック
      * 

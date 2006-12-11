@@ -205,7 +205,7 @@ public final class ClassInfoManager {
 
                 // 追加するクラス情報の名前空間階層が，この名前空間階層と同じ場合は，この名前空間にクラス情報を追加する
             } else if (this.getDepth() == packageNames.length) {
-                this.classInfos.put(classInfo.getName(), classInfo);
+                this.classInfos.put(classInfo.getClassName(), classInfo);
 
                 // 追加するクラス情報の名前空間階層が，この名前空間階層よりも浅い場合は，エラー
             } else {
