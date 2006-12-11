@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class UnresolvedMethodCall implements Comparable<UnresolvedMethodCall> {
+public final class UnresolvedMethodCall {
 
     /**
      * メソッド呼び出しが実行される変数の型名，メソッド名を与えてオブジェクトを初期化
@@ -78,74 +78,6 @@ public final class UnresolvedMethodCall implements Comparable<UnresolvedMethodCa
      */
     public boolean isConstructor() {
         return this.constructor;
-    }
-
-    /**
-     * メソッド呼び出しの順序関係を定義する
-     * 
-     * @methodCall 比較対象メソッド呼び出し
-     * @return メソッド呼び出しの順序
-     */
-    public int compareTo(final UnresolvedMethodCall methodCall) {
-
-        if (null == methodCall) {
-            throw new NullPointerException();
-        }
-
-        // メソッド名での比較
-        final String methodName = this.getMethodName();
-        final String correspondMethodName = methodCall.getMethodName();
-        final int methodNameOrder = methodName.compareTo(correspondMethodName);
-        if (0 != methodNameOrder) {
-            return methodNameOrder;
-
-        } else {
-
-            // 引数の数での比較
-            final List<UnresolvedTypeInfo> parameterTypes = this.getParameterTypes();
-            final List<UnresolvedTypeInfo> correspondParameterTypes = methodCall
-                    .getParameterTypes();
-            if (parameterTypes.size() > correspondParameterTypes.size()) {
-                return 1;
-            } else if (parameterTypes.size() < correspondParameterTypes.size()) {
-                return -1;
-            } else {
-
-                // 引数の型を前から順番に見て，比較を行う
-                final Iterator<UnresolvedTypeInfo> typeIterator = parameterTypes.iterator();
-                final Iterator<UnresolvedTypeInfo> correspondTypeIterator = correspondParameterTypes
-                        .iterator();
-                while (typeIterator.hasNext() && correspondTypeIterator.hasNext()) {
-                    final UnresolvedTypeInfo typeInfo = typeIterator.next();
-                    final UnresolvedTypeInfo correspondTypeInfo = correspondTypeIterator.next();
-                    final String typeInfoName = typeInfo.getTypeName();
-                    final String correspondTypeInfoName = correspondTypeInfo.getTypeName();
-                    final int stringOrder = typeInfoName.compareTo(correspondTypeInfoName);
-                    if (0 != stringOrder) {
-                        return stringOrder;
-                    }
-                }
-
-                // メソッド呼び出しが行われている変数の型で比較
-                final String[] ownerClassName = this.getOwnerClassName();
-                final String[] correspondOwnerClassName = methodCall.getOwnerClassName();
-                if (ownerClassName.length > correspondOwnerClassName.length) {
-                    return 1;
-                } else if (ownerClassName.length < correspondOwnerClassName.length) {
-                    return -1;
-                } else {
-                    for (int i = 0; i < ownerClassName.length; i++) {
-                        final int stringOrder = ownerClassName[i]
-                                .compareTo(correspondOwnerClassName[i]);
-                        if (0 != stringOrder) {
-                            return stringOrder;
-                        }
-                    }
-
-                    return 0;
-                }
-            }
-        }
     }
 
     /**

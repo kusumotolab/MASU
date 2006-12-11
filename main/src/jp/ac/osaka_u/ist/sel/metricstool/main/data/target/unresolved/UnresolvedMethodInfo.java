@@ -2,10 +2,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -38,10 +38,10 @@ public class UnresolvedMethodInfo {
         this.ownerClass = ownerClass;
         this.constructor = constructor;
         this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
-        this.methodCalls = new TreeSet<UnresolvedMethodCall>();
-        this.fieldReferences = new TreeSet<UnresolvedFieldUsage>();
-        this.fieldAssignments = new TreeSet<UnresolvedFieldUsage>();
-        this.localVariables = new TreeSet<UnresolvedLocalVariableInfo>();
+        this.methodCalls = new HashSet<UnresolvedMethodCall>();
+        this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
+        this.fieldAssignments = new HashSet<UnresolvedFieldUsage>();
+        this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
     }
 
     /**
@@ -170,39 +170,39 @@ public class UnresolvedMethodInfo {
     }
 
     /**
-     * メソッド呼び出しのSortedSetを返す
+     * メソッド呼び出しの Set を返す
      * 
-     * @return メソッド呼び出しのSortedSet
+     * @return メソッド呼び出しの Set
      */
-    public SortedSet<UnresolvedMethodCall> getMethodCalls() {
-        return Collections.unmodifiableSortedSet(this.methodCalls);
+    public Set<UnresolvedMethodCall> getMethodCalls() {
+        return Collections.unmodifiableSet(this.methodCalls);
     }
 
     /**
-     * フィールド参照のSortedSetを返す
+     * フィールド参照の Set を返す
      * 
-     * @return フィールド参照の SortedSet
+     * @return フィールド参照の Set
      */
-    public SortedSet<UnresolvedFieldUsage> getFieldReferences() {
-        return Collections.unmodifiableSortedSet(this.fieldReferences);
+    public Set<UnresolvedFieldUsage> getFieldReferences() {
+        return Collections.unmodifiableSet(this.fieldReferences);
     }
 
     /**
-     * フィールド代入のSortedSetを返す
+     * フィールド代入の Set を返す
      * 
-     * @return フィールド代入の SortedSet
+     * @return フィールド代入の Set
      */
-    public SortedSet<UnresolvedFieldUsage> getFieldAssignments() {
-        return Collections.unmodifiableSortedSet(this.fieldAssignments);
+    public Set<UnresolvedFieldUsage> getFieldAssignments() {
+        return Collections.unmodifiableSet(this.fieldAssignments);
     }
 
     /**
-     * 定義されているローカル変数のSortedSetを返す
+     * 定義されているローカル変数の Set を返す
      * 
-     * @return 定義されているローカル変数の SortedSet 
+     * @return 定義されているローカル変数の Set 
      */
-    public SortedSet<UnresolvedLocalVariableInfo> getLocalVariables() {
-        return Collections.unmodifiableSortedSet(this.localVariables);
+    public Set<UnresolvedLocalVariableInfo> getLocalVariables() {
+        return Collections.unmodifiableSet(this.localVariables);
     }
     
     /**
@@ -251,22 +251,22 @@ public class UnresolvedMethodInfo {
     /**
      * メソッド呼び出しを保存する変数
      */
-    private final SortedSet<UnresolvedMethodCall> methodCalls;
+    private final Set<UnresolvedMethodCall> methodCalls;
 
     /**
      * フィールド参照を保存する変数
      */
-    private final SortedSet<UnresolvedFieldUsage> fieldReferences;
+    private final Set<UnresolvedFieldUsage> fieldReferences;
 
     /**
      * フィールド代入を保存する変数
      */
-    private final SortedSet<UnresolvedFieldUsage> fieldAssignments;
+    private final Set<UnresolvedFieldUsage> fieldAssignments;
 
     /**
      * このメソッド内で定義されているローカル変数を保存する変数
      */
-    private final SortedSet<UnresolvedLocalVariableInfo> localVariables;
+    private final Set<UnresolvedLocalVariableInfo> localVariables;
     
     /**
      * メソッドの行数を保存するための変数
