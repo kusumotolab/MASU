@@ -27,7 +27,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class TargetClassInfo extends ClassInfo {
+public class TargetClassInfo extends ClassInfo {
 
     /**
      * 名前空間名，クラス名を与えて暮らす情報オブジェクトを初期化
@@ -45,7 +45,7 @@ public final class TargetClassInfo extends ClassInfo {
         }
 
         this.loc = loc;
-        this.innerClasses = new TreeSet<TargetClassInfo>();
+        this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
     }
@@ -65,7 +65,7 @@ public final class TargetClassInfo extends ClassInfo {
         }
         
         this.loc = loc;
-        this.innerClasses = new TreeSet<TargetClassInfo>();
+        this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
     }
@@ -75,7 +75,7 @@ public final class TargetClassInfo extends ClassInfo {
      * 
      * @param innerClass 追加するインナークラス
      */
-    public void addInnerClass(final TargetClassInfo innerClass) {
+    public void addInnerClass(final TargetInnerClassInfo innerClass) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == innerClass) {
@@ -99,7 +99,7 @@ public final class TargetClassInfo extends ClassInfo {
      * 
      * @return インナークラスの SortedSet
      */
-    public SortedSet<TargetClassInfo> getInnerClasses() {
+    public SortedSet<TargetInnerClassInfo> getInnerClasses() {
         return Collections.unmodifiableSortedSet(this.innerClasses);
     }
 
@@ -163,7 +163,7 @@ public final class TargetClassInfo extends ClassInfo {
     /**
      * このクラスの内部クラス一覧を保存するための変数．直接の内部クラスのみを保有する．
      */
-    private final SortedSet<TargetClassInfo> innerClasses;
+    private final SortedSet<TargetInnerClassInfo> innerClasses;
 
     /**
      * このクラスで定義されているメソッド一覧を保存するための変数．

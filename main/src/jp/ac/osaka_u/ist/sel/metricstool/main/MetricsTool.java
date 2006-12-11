@@ -23,10 +23,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.NameResolver;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
@@ -677,7 +677,46 @@ public class MetricsTool {
             // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
             TargetClassInfo classInfo = new TargetClassInfo(fullQualifiedName, loc);
             classInfoManager.add(classInfo);
+
+            for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
+                    .getInnerClasses()) {
+                final TargetInnerClassInfo innerClass = registInnerClassInfo(
+                        unresolvedInnerClassInfo, classInfo, classInfoManager);
+                classInfo.addInnerClass(innerClass);
+            }
         }
+    }
+
+    /**
+     * インナークラスの定義を ClassInfoManager に登録する． registClassInfos からのみ呼ばれるべきである．
+     * 
+     * @param unresolvedClassInfo 名前解決されるインナークラスオブジェクト
+     * @param outerClass 外側のクラス
+     * @param classInfoManager インナークラスを登録するクラスマネージャ
+     * @return 生成したインナークラスの ClassInfo
+     */
+    private static TargetInnerClassInfo registInnerClassInfo(
+            final UnresolvedClassInfo unresolvedClassInfo, final TargetClassInfo outerClass,
+            final ClassInfoManager classInfoManager) {
+
+        // 完全限定名，行数を取得
+        String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
+        int loc = unresolvedClassInfo.getLOC();
+
+        // ClassInfo オブジェクトを生成し，ClassInfoマネージャに登録
+        TargetInnerClassInfo classInfo = new TargetInnerClassInfo(fullQualifiedName, outerClass,
+                loc);
+        classInfoManager.add(classInfo);
+
+        // このクラスのインナークラスに対して再帰的に処理
+        for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo.getInnerClasses()) {
+            final TargetInnerClassInfo innerClass = registInnerClassInfo(unresolvedInnerClassInfo,
+                    classInfo, classInfoManager);
+            classInfo.addInnerClass(innerClass);
+        }
+
+        // このクラスの ClassInfo を返す
+        return classInfo;
     }
 
     /**
