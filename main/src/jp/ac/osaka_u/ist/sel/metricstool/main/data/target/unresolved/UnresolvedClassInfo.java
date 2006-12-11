@@ -39,7 +39,7 @@ public final class UnresolvedClassInfo {
         this.className = null;
         this.loc = 0;
 
-        this.superClasses = new HashSet<String[]>();
+        this.superClasses = new HashSet<UnresolvedTypeInfo>();
         this.innerClasses = new HashSet<UnresolvedClassInfo>();
         this.definedMethods = new HashSet<UnresolvedMethodInfo>();
         this.definedFields = new HashSet<UnresolvedFieldInfo>();
@@ -194,7 +194,7 @@ public final class UnresolvedClassInfo {
      * 
      * @param superClass 親クラス名
      */
-    public void addSuperClass(final String[] superClass) {
+    public void addSuperClass(final UnresolvedTypeInfo superClass) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -258,7 +258,7 @@ public final class UnresolvedClassInfo {
      * 
      * @return 親クラス名のセット
      */
-    public Set<String[]> getSuperClasses() {
+    public Set<UnresolvedTypeInfo> getSuperClasses() {
         return Collections.unmodifiableSet(this.superClasses);
     }
 
@@ -307,7 +307,7 @@ public final class UnresolvedClassInfo {
     /**
      * 親クラスを保存するためのセット
      */
-    private final Set<String[]> superClasses;
+    private final Set<UnresolvedTypeInfo> superClasses;
 
     /**
      * インナークラスを保存するためのセット

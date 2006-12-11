@@ -698,14 +698,12 @@ public class MetricsTool {
                     classInfoManager);
 
             // 各Unresolvedな親クラス名に対して
-            for (String[] superClassName : unresolvedClassInfo.getSuperClasses()) {
-                ClassInfo superClassInfo = classInfoManager.getClassInfo(superClassName);
-                if (null == superClassInfo) {
-                    superClassInfo = new ExternalClassInfo(superClassName);
-                    classInfoManager.add((ExternalClassInfo) superClassInfo);
-                }
-                classInfo.addSuperClass(superClassInfo);
-                superClassInfo.addSubClass(classInfo);
+            for (UnresolvedTypeInfo unresolvedSuperClassType : unresolvedClassInfo
+                    .getSuperClasses()) {
+                final ClassInfo superClass = (ClassInfo) NameResolver.resolveTypeInfo(
+                        unresolvedSuperClassType, classInfoManager);
+                classInfo.addSuperClass(superClass);
+                superClass.addSubClass(classInfo);
             }
         }
     }
