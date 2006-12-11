@@ -40,7 +40,7 @@ public final class UnresolvedClassInfo {
         this.loc = 0;
 
         this.superClasses = new HashSet<String[]>();
-        this.innerClasses = new HashSet<String>();
+        this.innerClasses = new HashSet<UnresolvedClassInfo>();
         this.definedMethods = new HashSet<UnresolvedMethodInfo>();
         this.definedFields = new HashSet<UnresolvedFieldInfo>();
     }
@@ -208,9 +208,9 @@ public final class UnresolvedClassInfo {
     /**
      * インナークラスを追加する
      * 
-     * @param innerClass インナークラス名
+     * @param innerClass インナークラス
      */
-    public void addInnerClass(final String innerClass) {
+    public void addInnerClass(final UnresolvedClassInfo innerClass) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -263,11 +263,11 @@ public final class UnresolvedClassInfo {
     }
 
     /**
-     * インナークラス名のセットを返す
+     * インナークラスのセットを返す
      * 
-     * @return インナークラス名のセット
+     * @return インナークラスのセット
      */
-    public Set<String> getInnerClasses() {
+    public Set<UnresolvedClassInfo> getInnerClasses() {
         return Collections.unmodifiableSet(this.innerClasses);
     }
 
@@ -312,7 +312,7 @@ public final class UnresolvedClassInfo {
     /**
      * インナークラスを保存するためのセット
      */
-    private final Set<String> innerClasses;
+    private final Set<UnresolvedClassInfo> innerClasses;
 
     /**
      * 定義しているメソッドを保存するためのセット
