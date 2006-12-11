@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class UnresolvedFieldUsage {
+public final class UnresolvedFieldUsage implements UnresolvedTypeInfo {
 
     /**
      * フィールド使用が実行される変数の型名と変数名を与えてオブジェクトを初期化
@@ -46,7 +46,16 @@ public final class UnresolvedFieldUsage {
     public String getFieldName() {
         return this.fieldName;
     }
-
+    
+    /**
+     * このフィールド使用の型（返り値みたいなもの）を返す
+     * 
+     * @return このフィールド使用の型（返り値みたいなもの）
+     */
+    public String getTypeName() {
+        return UnresolvedTypeInfo.UNRESOLVED;
+    }
+    
     /**
      * フィールド使用が実行される変数の未解決型名を保存するための変数
      */
