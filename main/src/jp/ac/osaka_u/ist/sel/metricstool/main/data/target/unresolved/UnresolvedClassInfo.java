@@ -106,7 +106,7 @@ public final class UnresolvedClassInfo {
      * 
      * @return クラス名
      */
-    public String[] getClassName() {
+    public String getClassName() {
         return this.className;
     }
 
@@ -118,18 +118,12 @@ public final class UnresolvedClassInfo {
     public String[] getFullQualifiedName() {
 
         String[] namespace = this.getNamespace();
-        String[] className = this.getClassName();
+        String[] fullQualifiedName = new String[namespace.length + 1];
 
-        int length = namespace.length + className.length;
-        String[] fullQualifiedName = new String[length];
-
-        for (int i = 0; i < length; i++) {
-            if (i < namespace.length) {
-                fullQualifiedName[i] = namespace[i];
-            } else {
-                fullQualifiedName[i] = className[i - namespace.length];
-            }
+        for (int i = 0; i < namespace.length ; i++) {
+            fullQualifiedName[i] = namespace[i];
         }
+        fullQualifiedName[fullQualifiedName.length - 1] = this.getClassName();
 
         return fullQualifiedName;
     }
@@ -153,7 +147,7 @@ public final class UnresolvedClassInfo {
      * 
      * @param className
      */
-    public void setClassName(final String[] className) {
+    public void setClassName(final String className) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -297,7 +291,7 @@ public final class UnresolvedClassInfo {
     /**
      * クラス名を保存するための変数
      */
-    private String[] className;
+    private String className;
 
     /**
      * 行数を保存するための変数
