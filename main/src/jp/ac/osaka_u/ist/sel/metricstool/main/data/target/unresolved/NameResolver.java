@@ -16,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VoidTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalMethodInfo;
@@ -51,38 +52,71 @@ public final class NameResolver {
         if (unresolvedTypeInfo instanceof PrimitiveTypeInfo) {
             return (PrimitiveTypeInfo) unresolvedTypeInfo;
 
+            // void型の場合
+        } else if (unresolvedTypeInfo instanceof VoidTypeInfo) {
+            return (VoidTypeInfo) unresolvedTypeInfo;
+
             // 参照型の場合
         } else if (unresolvedTypeInfo instanceof UnresolvedReferenceTypeInfo) {
 
-            // 利用可能な名前空間名から，型名を探す
-            String typeName = ((UnresolvedReferenceTypeInfo) unresolvedTypeInfo).getClassName();
+            // 利用可能な名前空間から，型名を探す
+            String[] referenceName = ((UnresolvedReferenceTypeInfo) unresolvedTypeInfo)
+                    .getReferenceName();
             for (AvailableNamespaceInfo availableNamespace : ((UnresolvedReferenceTypeInfo) unresolvedTypeInfo)
                     .getAvailableNamespaces()) {
 
+                // 名前空間名.* となっている場合
                 if (availableNamespace.isAllClasses()) {
                     String[] namespace = availableNamespace.getNamespace();
+
+                    // 名前空間の下にある各クラスに対して
                     for (ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
                         String className = classInfo.getClassName();
-                        if (typeName.equals(className)) {
-                            return classInfo;
+
+                        // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
+                        if (className.equals(referenceName[0])) {
+                            String[] fullQualifiedName = new String[namespace.length
+                                    + referenceName.length];
+                            System.arraycopy(namespace, 0, fullQualifiedName, 0, namespace.length);
+                            System.arraycopy(referenceName, 0, fullQualifiedName, namespace.length,
+                                    referenceName.length);
+                            ClassInfo specifiedClassInfo = classInfoManager
+                                    .getClassInfo(fullQualifiedName);
+                            if (null == specifiedClassInfo) {
+                                specifiedClassInfo = new ExternalClassInfo(fullQualifiedName);
+                                classInfoManager.add((ExternalClassInfo) specifiedClassInfo);
+                            }
+                            return specifiedClassInfo;
                         }
                     }
 
+                    // 名前空間.クラス名 となっている場合
                 } else {
-                    String[] fullQualifiedName = availableNamespace.getImportName();
-                    if (typeName.equals(fullQualifiedName[fullQualifiedName.length - 1])) {
-                        ClassInfo classInfo = classInfoManager.getClassInfo(fullQualifiedName);
-                        if (null == classInfo) {
-                            classInfo = new ExternalClassInfo(fullQualifiedName);
-                            classInfoManager.add((ExternalClassInfo) classInfo);
-                            return classInfo;
+
+                    final String[] importName = availableNamespace.getImportName();
+
+                    // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
+                    if (importName[importName.length - 1].equals(referenceName[0])) {
+
+                        final String[] namespace = availableNamespace.getNamespace();
+                        final String[] fullQualifiedName = new String[namespace.length
+                                + referenceName.length];
+                        System.arraycopy(namespace, 0, fullQualifiedName, 0, namespace.length);
+                        System.arraycopy(referenceName, 0, fullQualifiedName, namespace.length,
+                                referenceName.length);
+                        ClassInfo specifiedClassInfo = classInfoManager
+                                .getClassInfo(fullQualifiedName);
+                        if (null == specifiedClassInfo) {
+                            specifiedClassInfo = new ExternalClassInfo(fullQualifiedName);
+                            classInfoManager.add((ExternalClassInfo) specifiedClassInfo);
                         }
+                        return specifiedClassInfo;
                     }
                 }
             }
 
             // 見つからなかった場合は名前空間名がUNKNOWNなクラスを登録する
-            ExternalClassInfo classInfo = new ExternalClassInfo(typeName);
+            ExternalClassInfo classInfo = new ExternalClassInfo(referenceName[referenceName.length - 1]);
             classInfoManager.add(classInfo);
             return classInfo;
 
@@ -140,7 +174,8 @@ public final class NameResolver {
             // 使用されているフィールドがClassInfoManagerに登録されていないので，追加する．
             // 対象クラスに定義されていないフィールドなので ExternalFieldInfo になる.
             // おそらく対象クラスの（外部の）親クラスに定義されているフィールドの使用．
-            ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName, (ClassInfo)ownerClassType);
+            ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName,
+                    (ClassInfo) ownerClassType);
             fieldInfoManager.add(fieldInfo);
             return fieldInfo;
         }

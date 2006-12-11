@@ -187,21 +187,7 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             throw new NullPointerException();
         }
 
-        // î‰ärëŒè€Ç™ UnresolvedReferenceTypeInfo ÇÃèÍçá
-        // èáèòÇÕ PrimitiveType > UnresolvedReferenceTypeInfo
-        if (typeInfo instanceof UnresolvedReferenceTypeInfo) {
-            return 1;
-
-            // î‰ärëŒè€Ç™PrimitiveTypeInfoÇÃèÍçá
-        } else if (typeInfo instanceof PrimitiveTypeInfo) {
-
-            String typeName = this.getName();
-            String correspondTypeName = ((PrimitiveTypeInfo) typeInfo).getName();
-            return typeName.compareTo(correspondTypeName);
-
-        } else {
-            throw new IllegalArgumentException(typeInfo.toString() + " is a wrong object!");
-        }
+        return this.getName().compareTo(typeInfo.getName());
     }
 
     /**

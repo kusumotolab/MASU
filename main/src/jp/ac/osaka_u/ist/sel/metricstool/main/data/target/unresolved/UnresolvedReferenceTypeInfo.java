@@ -14,40 +14,41 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
 
     /**
-     * 名前空間名，クラス名を与えて初期化
+     * 名前空間名，参照名を与えて初期化
      * 
      * @param namespace 名前空間名
-     * @param className クラス名
+     * @param referenceName 参照名
      */
     public UnresolvedReferenceTypeInfo(final AvailableNamespaceInfoSet availableNamespaceSet,
-            final String className) {
+            final String[] referenceName) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == availableNamespaceSet) || (null == className)) {
+        if ((null == availableNamespaceSet) || (null == referenceName)) {
             throw new NullPointerException();
         }
 
         this.availableNamespaceSet = availableNamespaceSet;
-        this.className = className;
+        this.referenceName = referenceName;
     }
 
     /**
-     * この参照型のクラス名を返す
+     * この参照型の名前を返す
      * 
-     * @return この参照型のクラス名を返す
+     * @return この参照型の名前を返す
      */
     public String getName() {
-        return this.getClassName();
+        String[] referenceName = this.getReferenceName();
+        return referenceName[referenceName.length - 1];
     }
 
     /**
-     * この参照型のクラス名を返す
+     * この参照型の参照名を返す
      * 
-     * @return この参照型のクラス名
+     * @return この参照型の参照名を返す
      */
-    public String getClassName() {
-        return this.className;
+    public String[] getReferenceName() {
+        return this.referenceName;
     }
 
     /**
@@ -63,8 +64,8 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
             return false;
         }
 
-        String className = this.getClassName();
-        String correspondClassName = ((UnresolvedReferenceTypeInfo) typeInfo).getClassName();
+        String className = this.getName();
+        String correspondClassName = ((UnresolvedReferenceTypeInfo) typeInfo).getName();
         return className.equals(correspondClassName);
     }
 
@@ -76,21 +77,8 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
         if (null == typeInfo) {
             throw new NullPointerException();
         }
-
-        // 比較対象が UnresolvedReferenceTypeInfo の場合
-        // 順序は PrimitiveType > UnresolvedReferenceTypeInfo
-        if (typeInfo instanceof PrimitiveTypeInfo) {
-            return -1;
-
-        } else if (typeInfo instanceof UnresolvedReferenceTypeInfo) {
-
-            String className = this.getClassName();
-            String correspondClassName = ((UnresolvedReferenceTypeInfo) typeInfo).getClassName();
-            return className.compareTo(correspondClassName);
-
-        } else {
-            throw new IllegalArgumentException(typeInfo.toString() + " is a wrong object!");
-        }
+        
+        return this.getName().compareTo(typeInfo.getName());
     }
 
     /**
@@ -108,7 +96,7 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
     private final AvailableNamespaceInfoSet availableNamespaceSet;
 
     /**
-     * クラス名を保存する変数
+     * 参照名を保存する変数
      */
-    private final String className;
+    private final String[] referenceName;
 }

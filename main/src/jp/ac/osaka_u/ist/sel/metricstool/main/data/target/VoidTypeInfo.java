@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+
 
 /**
  * void 型を表すクラス．
@@ -7,7 +9,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author y-higo
  * 
  */
-public final class VoidTypeInfo implements TypeInfo {
+public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo {
 
     /**
      * このクラスの単一オブジェクトを返す
@@ -34,11 +36,31 @@ public final class VoidTypeInfo implements TypeInfo {
             throw new NullPointerException();
         }
         
-        if (typeInfo instanceof VoidTypeInfo){
-            return true;
-        }else{
-            return false;
+        return typeInfo instanceof VoidTypeInfo;
+    }
+
+    /**
+     * 等しいかどうかのチェックを行う
+     */
+    public boolean equals(final UnresolvedTypeInfo typeInfo){
+        
+        if (null == typeInfo){
+            throw new NullPointerException();
         }
+
+        return typeInfo instanceof VoidTypeInfo;
+    }
+    
+    /**
+     * オブジェクトの順序を定義する
+     */
+    public int compareTo(final UnresolvedTypeInfo typeInfo){
+        
+        if (null == typeInfo){
+            throw new NullPointerException();
+        }
+        
+        return this.getName().compareTo(typeInfo.getName());
     }
     
     /**
