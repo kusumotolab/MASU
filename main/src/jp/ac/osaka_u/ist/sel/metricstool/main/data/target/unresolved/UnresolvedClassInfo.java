@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -12,6 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * ASTパースで取得したクラス情報を一時的に格納するためのクラス． 以下の情報を持つ
  * 
  * <ul>
+ * <li>修飾子</li>
  * <li>未解決名前空間</li>
  * <li>クラス名</li>
  * <li>行数</li>
@@ -35,6 +37,7 @@ public final class UnresolvedClassInfo {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
+        this.modifier = null;
         this.namespace = null;
         this.className = null;
         this.loc = 0;
@@ -120,12 +123,38 @@ public final class UnresolvedClassInfo {
         String[] namespace = this.getNamespace();
         String[] fullQualifiedName = new String[namespace.length + 1];
 
-        for (int i = 0; i < namespace.length ; i++) {
+        for (int i = 0; i < namespace.length; i++) {
             fullQualifiedName[i] = namespace[i];
         }
         fullQualifiedName[fullQualifiedName.length - 1] = this.getClassName();
 
         return fullQualifiedName;
+    }
+
+    /**
+     * 修飾子を保存する
+     * 
+     * @param modidier 修飾子
+     * 
+     */
+    public void setModifier(final ModifierInfo modifier) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == modifier) {
+            throw new NullPointerException();
+        }
+
+        this.modifier = modifier;
+    }
+
+    /**
+     * 修飾子を返す
+     * 
+     * @return 修飾子
+     */
+    public ModifierInfo getModifier() {
+        return this.modifier;
     }
 
     /**
@@ -135,6 +164,8 @@ public final class UnresolvedClassInfo {
      */
     public void setNamespace(final String[] namespace) {
 
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == namespace) {
             throw new NullPointerException();
         }
@@ -173,13 +204,13 @@ public final class UnresolvedClassInfo {
      * @param loc 行数
      */
     public void setLOC(final int loc) {
-        
+
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (loc < 0) {
             throw new IllegalArgumentException("LOC must be o or more!");
         }
-        
+
         this.loc = loc;
     }
 
@@ -282,6 +313,11 @@ public final class UnresolvedClassInfo {
     public Set<UnresolvedFieldInfo> getDefinedFields() {
         return Collections.unmodifiableSet(this.definedFields);
     }
+
+    /**
+     * 修飾子を保存するための変数
+     */
+    private ModifierInfo modifier;
 
     /**
      * 名前空間名を保存するための変数

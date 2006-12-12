@@ -25,7 +25,8 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      * @param className クラス名
      * 
      */
-    public ClassInfo(final NamespaceInfo namespace, final String className) {
+    public ClassInfo(final NamespaceInfo namespace,
+            final String className) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -179,23 +180,23 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
     public final String getTypeName() {
 
         String delimiter = null;
-        try{
+        try {
             delimiter = Settings.getLanguage().getNamespaceDelimiter();
-        }catch(UnavailableLanguageException e){
+        } catch (UnavailableLanguageException e) {
             delimiter = ".";
         }
-        
+
         final StringBuffer buffer = new StringBuffer();
         final String[] namespace = this.getNamespace().getName();
-        for (int i = 0 ; i < namespace.length ; i++ ){
+        for (int i = 0; i < namespace.length; i++) {
             buffer.append(namespace[i]);
             buffer.append(delimiter);
         }
         buffer.append(this.getClassName());
-        
+
         return buffer.toString();
     }
-    
+
     /**
      * 等しいかどうかのチェック
      * 

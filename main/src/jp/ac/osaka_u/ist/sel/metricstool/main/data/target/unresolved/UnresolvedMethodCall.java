@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class UnresolvedMethodCall {
+public final class UnresolvedMethodCall implements UnresolvedTypeInfo {
 
     /**
      * メソッド呼び出しが実行される変数の型名，メソッド名を与えてオブジェクトを初期化
@@ -87,6 +86,15 @@ public final class UnresolvedMethodCall {
      */
     public String getMethodName() {
         return this.methodName;
+    }
+    
+    /**
+     * このメソッド呼び出しの返り値の型を返す
+     * 
+     * @return このメソッド呼び出しの返り値の型
+     */
+    public String getTypeName() {
+        return UnresolvedTypeInfo.UNRESOLVED;
     }
 
     /**

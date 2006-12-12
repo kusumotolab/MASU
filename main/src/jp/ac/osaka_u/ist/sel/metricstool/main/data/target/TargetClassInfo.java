@@ -31,12 +31,14 @@ public class TargetClassInfo extends ClassInfo {
 
     /**
      * 名前空間名，クラス名を与えて暮らす情報オブジェクトを初期化
-
+     * 
+     * @param modifier 修飾子
      * @param namespace 名前空間名
      * @param className クラス名
      * @param loc 行数
      */
-    public TargetClassInfo(final NamespaceInfo namespace, final String className, final int loc) {
+    public TargetClassInfo(final ModifierInfo modifier, final NamespaceInfo namespace,
+            final String className, final int loc) {
 
         super(namespace, className);
 
@@ -44,6 +46,7 @@ public class TargetClassInfo extends ClassInfo {
             throw new IllegalAccessError("LOC is must be 0 or more!");
         }
 
+        this.modifier = modifier;
         this.loc = loc;
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
@@ -53,21 +56,33 @@ public class TargetClassInfo extends ClassInfo {
     /**
      * 完全限定名を与えて，クラス情報オブジェクトを初期化
      * 
+     * @param modifier 修飾子
      * @param fullQualifiedName 完全限定名
      * @param loc 行数
      */
-    public TargetClassInfo(final String[] fullQualifiedName, final int loc) {
+    public TargetClassInfo(final ModifierInfo modifier, final String[] fullQualifiedName,
+            final int loc) {
 
         super(fullQualifiedName);
 
         if (loc < 0) {
             throw new IllegalAccessError("LOC is must be 0 or more!");
         }
-        
+
+        this.modifier = modifier;
         this.loc = loc;
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
+    }
+
+    /**
+     * このクラスの修飾子を返す
+     * 
+     * @return このクラスの修飾子
+     */
+    public ModifierInfo getModifier() {
+        return this.modifier;
     }
 
     /**
@@ -109,12 +124,12 @@ public class TargetClassInfo extends ClassInfo {
      * @param definedMethod 追加する定義されたメソッド
      */
     public void addDefinedMethod(final TargetMethodInfo definedMethod) {
-    
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == definedMethod) {
             throw new NullPointerException();
         }
-    
+
         this.definedMethods.add(definedMethod);
     }
 
@@ -124,12 +139,12 @@ public class TargetClassInfo extends ClassInfo {
      * @param definedField 追加する定義されたフィールド
      */
     public void addDefinedField(final TargetFieldInfo definedField) {
-    
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == definedField) {
             throw new NullPointerException();
         }
-    
+
         this.definedFields.add(definedField);
     }
 
@@ -174,4 +189,10 @@ public class TargetClassInfo extends ClassInfo {
      * このクラスで定義されているフィールド一覧を保存するための変数．
      */
     private final SortedSet<TargetFieldInfo> definedFields;
+
+    /**
+     * クラスの修飾子を保存するための変数
+     */
+    private final ModifierInfo modifier;
+
 }

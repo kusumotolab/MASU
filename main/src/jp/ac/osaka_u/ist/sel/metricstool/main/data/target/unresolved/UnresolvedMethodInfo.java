@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -20,23 +21,49 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedMethodInfo {
 
     /**
-     * メソッド情報を初期化，コンストラクタかどうかを与える
+     * 未解決メソッド定義情報オブジェクトを初期化
+     */
+    public UnresolvedMethodInfo() {
+
+        this.modifier = null;
+        this.methodName = null;
+        this.returnType = null;
+        this.ownerClass = null;
+        this.constructor = false;
+
+        this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
+        this.methodCalls = new HashSet<UnresolvedMethodCall>();
+        this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
+        this.fieldAssignments = new HashSet<UnresolvedFieldUsage>();
+        this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
+    }
+
+    /**
+     * 未解決メソッド定義情報オブジェクトを初期化
      * 
+     * @param modifier 修飾子
+     * @param methodName メソッド名
+     * @param returnType 返り値の型
+     * @param ownerClass このメソッドを定義しているクラス
      * @param constructor コンストラクタかどうか
      */
-    public UnresolvedMethodInfo(final String methodName, final UnresolvedTypeInfo returnType,
-            final UnresolvedClassInfo ownerClass, final boolean constructor) {
+    public UnresolvedMethodInfo(final ModifierInfo modifier, final String methodName,
+            final UnresolvedTypeInfo returnType, final UnresolvedClassInfo ownerClass,
+            final boolean constructor) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == methodName) || (null == returnType) || (null == ownerClass)) {
+        if ((null == modifier) || (null == methodName) || (null == returnType)
+                || (null == ownerClass)) {
             throw new NullPointerException();
         }
 
+        this.modifier = modifier;
         this.methodName = methodName;
         this.returnType = returnType;
         this.ownerClass = ownerClass;
         this.constructor = constructor;
+        
         this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
         this.methodCalls = new HashSet<UnresolvedMethodCall>();
         this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
@@ -54,12 +81,62 @@ public class UnresolvedMethodInfo {
     }
 
     /**
+     * コンストラクタかどうかをセットする
+     * 
+     * @param constructor コンストラクタかどうか
+     */
+    public void setConstructor(final boolean constructor) {
+        this.constructor = constructor;
+    }
+
+    /**
+     * 修飾子を返す
+     * 
+     * @return 修飾子
+     */
+    public ModifierInfo getModifier() {
+        return this.modifier;
+    }
+
+    /**
+     * 修飾子をセットする
+     * 
+     * @param modifier 修飾子
+     */
+    public void setModifier(final ModifierInfo modifier) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == modifier) {
+            throw new NullPointerException();
+        }
+
+        this.modifier = modifier;
+    }
+
+    /**
      * メソッド名を返す
      * 
      * @return メソッド名
      */
     public String getMethodName() {
         return this.methodName;
+    }
+
+    /**
+     * メソッド名をセットする
+     * 
+     * @param methodName メソッド名
+     */
+    public void setMethodName(final String methodName) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == methodName) {
+            throw new NullPointerException();
+        }
+
+        this.methodName = methodName;
     }
 
     /**
@@ -72,12 +149,44 @@ public class UnresolvedMethodInfo {
     }
 
     /**
+     * メソッドの返り値をセットする
+     * 
+     * @param returnType メソッドの返り値
+     */
+    public void setReturnType(final UnresolvedTypeInfo returnType) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == returnType) {
+            throw new NullPointerException();
+        }
+
+        this.returnType = returnType;
+    }
+
+    /**
      * このメソッドを定義しているクラスを返す
      * 
      * @return このメソッドを定義しているクラス
      */
     public UnresolvedClassInfo getOwnerClass() {
         return this.ownerClass;
+    }
+
+    /**
+     * メソッドを定義しているクラスをセットする
+     * 
+     * @param ownerClass メソッドを定義しているクラス
+     */
+    public void setOwnerClass(final UnresolvedClassInfo ownerClass) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == ownerClass) {
+            throw new NullPointerException();
+        }
+
+        this.ownerClass = ownerClass;
     }
 
     /**
@@ -147,19 +256,19 @@ public class UnresolvedMethodInfo {
     /**
      * ローカル変数を追加する
      * 
-     * @param localVariable ローカル変数 
+     * @param localVariable ローカル変数
      */
-    public void addLocalVariable(final UnresolvedLocalVariableInfo localVariable){
-    
+    public void addLocalVariable(final UnresolvedLocalVariableInfo localVariable) {
+
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == localVariable) {
             throw new NullPointerException();
         }
-        
+
         this.localVariables.add(localVariable);
     }
-    
+
     /**
      * メソッドの引数のリストを返す
      * 
@@ -199,12 +308,12 @@ public class UnresolvedMethodInfo {
     /**
      * 定義されているローカル変数の Set を返す
      * 
-     * @return 定義されているローカル変数の Set 
+     * @return 定義されているローカル変数の Set
      */
     public Set<UnresolvedLocalVariableInfo> getLocalVariables() {
         return Collections.unmodifiableSet(this.localVariables);
     }
-    
+
     /**
      * このメソッドの行数を返す
      * 
@@ -224,6 +333,11 @@ public class UnresolvedMethodInfo {
     }
 
     /**
+     * 修飾子を保存する
+     */
+    private ModifierInfo modifier;
+
+    /**
      * メソッド名を保存するための変数
      */
     private String methodName;
@@ -236,17 +350,17 @@ public class UnresolvedMethodInfo {
     /**
      * メソッドの返り値を保存するための変数
      */
-    private final UnresolvedTypeInfo returnType;
+    private UnresolvedTypeInfo returnType;
 
     /**
      * このメソッドを定義しているクラスを保存するための変数
      */
-    private final UnresolvedClassInfo ownerClass;
+    private UnresolvedClassInfo ownerClass;
 
     /**
      * コンストラクタかどうかを表す変数
      */
-    private final boolean constructor;
+    private boolean constructor;
 
     /**
      * メソッド呼び出しを保存する変数
@@ -267,7 +381,7 @@ public class UnresolvedMethodInfo {
      * このメソッド内で定義されているローカル変数を保存する変数
      */
     private final Set<UnresolvedLocalVariableInfo> localVariables;
-    
+
     /**
      * メソッドの行数を保存するための変数
      */

@@ -9,7 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * メソッドの情報を保有するクラス． 以下の情報を持つ．
+ * 対象メソッドの情報を保有するクラス． 以下の情報を持つ．
  * <ul>
  * <li>メソッド名</li>
  * <li>修飾子</li>
@@ -42,23 +42,30 @@ public final class TargetMethodInfo extends MethodInfo {
      * <li>コンストラクタかどうか</li>
      * </ul>
      * 
+     * @param modifier 修飾子
      * @param name メソッド名
      * @param returnType 返り値の型．コンストラクタの場合は，そのクラスの型を与える．
      * @param ownerClass 所有しているクラス
      * @param constructor コンストラクタかどうか．コンストラクタの場合は true,そうでない場合は false．
      */
-    public TargetMethodInfo(final String name, final TypeInfo returnType,
-            final ClassInfo ownerClass, final boolean constructor, final int loc) {
+    public TargetMethodInfo(final ModifierInfo modifier, final String name,
+            final TypeInfo returnType, final ClassInfo ownerClass, final boolean constructor,
+            final int loc) {
 
         super(name, returnType, ownerClass, constructor);
 
-        if (loc < 0){
+        if (null == modifier) {
+            throw new NullPointerException();
+        }
+
+        if (loc < 0) {
             throw new IllegalArgumentException("LOC must be 0 or more!");
         }
-        
+
+        this.modifier = modifier;
         this.loc = loc;
         this.localVariables = new TreeSet<LocalVariableInfo>();
- 
+
         this.referencees = new TreeSet<FieldInfo>();
         this.assignmentees = new TreeSet<FieldInfo>();
     }
@@ -118,6 +125,15 @@ public final class TargetMethodInfo extends MethodInfo {
     }
 
     /**
+     * 修飾子を返す
+     * 
+     * @return 修飾子
+     */
+    public ModifierInfo getModifier() {
+        return this.modifier;
+    }
+
+    /**
      * このメソッドの行数を返す
      * 
      * @return このメソッドの行数
@@ -143,6 +159,11 @@ public final class TargetMethodInfo extends MethodInfo {
     public SortedSet<FieldInfo> getAssignmentees() {
         return Collections.unmodifiableSortedSet(this.assignmentees);
     }
+
+    /**
+     * 修飾子を保存するための変数
+     */
+    private final ModifierInfo modifier;
 
     /**
      * 行数を保存するための変数
