@@ -2,6 +2,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -32,57 +34,59 @@ public class TargetClassInfo extends ClassInfo {
     /**
      * 名前空間名，クラス名を与えて暮らす情報オブジェクトを初期化
      * 
-     * @param modifier 修飾子
+     * @param modifiers 修飾子の Set
      * @param namespace 名前空間名
      * @param className クラス名
      * @param loc 行数
      */
-    public TargetClassInfo(final ModifierInfo modifier, final NamespaceInfo namespace,
+    public TargetClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
             final String className, final int loc) {
 
         super(namespace, className);
 
+        if (null == modifiers) {
+            throw new NullPointerException();
+        }
+        
         if (loc < 0) {
             throw new IllegalAccessError("LOC is must be 0 or more!");
         }
 
-        this.modifier = modifier;
         this.loc = loc;
+        this.modifiers = new HashSet<ModifierInfo>();
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
+        
+        this.modifiers.addAll(modifiers);
     }
 
     /**
      * 完全限定名を与えて，クラス情報オブジェクトを初期化
      * 
-     * @param modifier 修飾子
+     * @param modifiers 修飾子の Set
      * @param fullQualifiedName 完全限定名
      * @param loc 行数
      */
-    public TargetClassInfo(final ModifierInfo modifier, final String[] fullQualifiedName,
-            final int loc) {
+    public TargetClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName, final int loc) {
 
         super(fullQualifiedName);
 
+        if (null == modifiers) {
+            throw new NullPointerException();
+        }
+        
         if (loc < 0) {
             throw new IllegalAccessError("LOC is must be 0 or more!");
         }
 
-        this.modifier = modifier;
         this.loc = loc;
+        this.modifiers = new HashSet<ModifierInfo>();
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
-    }
-
-    /**
-     * このクラスの修飾子を返す
-     * 
-     * @return このクラスの修飾子
-     */
-    public ModifierInfo getModifier() {
-        return this.modifier;
+        
+        this.modifiers.addAll(modifiers);
     }
 
     /**
@@ -107,6 +111,15 @@ public class TargetClassInfo extends ClassInfo {
      */
     public int getLOC() {
         return this.loc;
+    }
+
+    /**
+     * このクラスの修飾子の Set を返す
+     * 
+     * @return このクラスの修飾子の Set
+     */
+    public Set<ModifierInfo> getModifiers() {
+        return Collections.unmodifiableSet(this.modifiers);
     }
 
     /**
@@ -167,13 +180,14 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
-     * 修飾子を保存する変数
-     */
-    // TODO 修飾子を保存するための変数
-    /**
      * 行数を保存するための変数
      */
     private final int loc;
+
+    /**
+     * 修飾子を保存する変数
+     */
+    private final Set<ModifierInfo> modifiers;
 
     /**
      * このクラスの内部クラス一覧を保存するための変数．直接の内部クラスのみを保有する．
@@ -189,10 +203,4 @@ public class TargetClassInfo extends ClassInfo {
      * このクラスで定義されているフィールド一覧を保存するための変数．
      */
     private final SortedSet<TargetFieldInfo> definedFields;
-
-    /**
-     * クラスの修飾子を保存するための変数
-     */
-    private final ModifierInfo modifier;
-
 }

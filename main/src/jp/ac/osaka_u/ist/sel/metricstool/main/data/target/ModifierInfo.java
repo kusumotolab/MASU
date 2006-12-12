@@ -1,7 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -16,106 +17,130 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public class ModifierInfo {
-
-    public ModifierInfo() {
-        this.publicInfo = false;
-        this.privateInfo = false;
-        this.virtualInfo = false;
-    }
+public final class ModifierInfo {
 
     /**
-     * private かどうかを返す
+     * abstract を表す定数
+     */
+    public static final String ABSTRACT_STRING = "abstract";
+
+    /**
+     * final を表す定数
+     */
+    public static final String FINAL_STRING = "final";
+
+    /**
+     * private を表す定数
+     */
+    public static final String PRIVATE_STRING = "private";
+
+    /**
+     * protected を表す定数
+     */
+    public static final String PROTECTED_STRING = "protected";
+
+    /**
+     * public を表す定数
+     */
+    public static final String PUBLIC_STRING = "public";
+
+    /**
+     * static を表す定数
+     */
+    public static final String STATIC_STRING = "static";
+
+    /**
+     * virtual を表す定数
+     */
+    public static final String VIRTUAL_STRING = "virtual";
+
+    /**
+     * abstract を表す定数
+     */
+    public static final ModifierInfo ABSTRACT = new ModifierInfo(ABSTRACT_STRING);
+
+    /**
+     * final を表す定数
+     */
+    public static final ModifierInfo FINAL = new ModifierInfo(FINAL_STRING);
+
+    /**
+     * private を表す定数
+     */
+    public static final ModifierInfo PRIVATE = new ModifierInfo(PRIVATE_STRING);
+
+    /**
+     * protected を表す定数
+     */
+    public static final ModifierInfo PROTECTED = new ModifierInfo(PROTECTED_STRING);
+
+    /**
+     * public を表す定数
+     */
+    public static final ModifierInfo PUBLIC = new ModifierInfo(PUBLIC_STRING);
+
+    /**
+     * static を表す定数
+     */
+    public static final ModifierInfo STATIC = new ModifierInfo(STATIC_STRING);
+
+    /**
+     * virtual を表す定数
+     */
+    public static final ModifierInfo VIRTUAL = new ModifierInfo(VIRTUAL_STRING);
+
+    /**
+     * 修飾子名から，修飾子オブジェクトを生成するファクトリメソッド
      * 
-     * @return private な場合は true，そうでない場合は false
+     * @param name 修飾子名
+     * @return 修飾子オブジェクト
      */
-    public boolean isPrivateInfo() {
-        return privateInfo;
+    public static ModifierInfo getModifierInfo(final String name) {
+
+        ModifierInfo requiredModifier = MODIFIERS.get(name);
+        if (null == requiredModifier) {
+            requiredModifier = new ModifierInfo(name);
+            MODIFIERS.put(name, requiredModifier);
+        }
+
+        return requiredModifier;
     }
 
     /**
-     * private かどうかをセットする
+     * 修飾子名を与えて，オブジェクトを初期化
      * 
-     * @param privateInfo private かどうか
+     * @param name
      */
-    public void setPrivateInfo(boolean privateInfo) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        this.privateInfo = privateInfo;
+    private ModifierInfo(final String name) {
+        this.name = name;
     }
 
     /**
-     * public かどうかを返す
+     * 修飾子名を返す
      * 
-     * @return public な場合は true，そうでない場合は false
+     * @return 修飾子名
      */
-    public boolean isPublicInfo() {
-        return this.publicInfo;
+    public String getName() {
+        return this.name;
     }
 
     /**
-     * public かどうかをセットする
-     * 
-     * @param publicInfo public かどうか
+     * 生成した ModifierInfo オブジェクトを保存していくための定数
      */
-    public void setPublicInfo(boolean publicInfo) {
+    private static final Map<String, ModifierInfo> MODIFIERS = new HashMap<String, ModifierInfo>();
 
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        this.publicInfo = publicInfo;
+    static {
+        MODIFIERS.put(ABSTRACT_STRING, ABSTRACT);
+        MODIFIERS.put(FINAL_STRING, FINAL);
+        MODIFIERS.put(PRIVATE_STRING, PRIVATE);
+        MODIFIERS.put(PROTECTED_STRING, PROTECTED);
+        MODIFIERS.put(PUBLIC_STRING, PUBLIC);
+        MODIFIERS.put(STATIC_STRING, STATIC);
+        MODIFIERS.put(VIRTUAL_STRING, VIRTUAL);
     }
 
     /**
-     * virtual (abstract) かどうかを返す
-     * 
-     * @return virtual (abstract) な場合は true，そうでない場合は false
+     * 修飾子名を保存するための変数
      */
-    public boolean isVirtualInfo() {
-        return this.virtualInfo;
-    }
-
-    /**
-     * abstract (virtual) かどうかを返す
-     * 
-     * @return abstract (virtual) な場合は true，そうでない場合は false
-     */
-    public boolean isAbstractInfo() {
-        return this.virtualInfo;
-    }
-
-    /**
-     * virtual (abstract) かどうかをセットする
-     * 
-     * @param virtualInfo virtual (abstract) かどうか
-     */
-    public void setVirtualInfo(boolean virtualInfo) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        this.virtualInfo = virtualInfo;
-    }
-
-    /**
-     * abstract (virtual) かどうかをセットする
-     * 
-     * @param virtualInfo abstract (virtual) かどうか
-     */
-    public void setAbstractInfo(boolean virtualInfo) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        this.virtualInfo = virtualInfo;
-    }
-
-    /**
-     * public かどうかを表す変数
-     */
-    private boolean publicInfo;
-
-    /**
-     * private かどうかを表す変数
-     */
-    private boolean privateInfo;
-
-    /**
-     * virtual(abstract) かどうかを表す変数
-     */
-    private boolean virtualInfo;
+    private final String name;
 }

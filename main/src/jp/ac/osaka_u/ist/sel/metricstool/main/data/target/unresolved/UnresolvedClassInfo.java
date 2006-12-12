@@ -37,11 +37,11 @@ public final class UnresolvedClassInfo {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        this.modifier = null;
         this.namespace = null;
         this.className = null;
         this.loc = 0;
 
+        this.modifiers = new HashSet<ModifierInfo>();
         this.superClasses = new HashSet<UnresolvedTypeInfo>();
         this.innerClasses = new HashSet<UnresolvedClassInfo>();
         this.definedMethods = new HashSet<UnresolvedMethodInfo>();
@@ -132,29 +132,12 @@ public final class UnresolvedClassInfo {
     }
 
     /**
-     * 修飾子を保存する
+     * 修飾子の Set を返す
      * 
-     * @param modidier 修飾子
-     * 
+     * @return 修飾子の Set
      */
-    public void setModifier(final ModifierInfo modifier) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == modifier) {
-            throw new NullPointerException();
-        }
-
-        this.modifier = modifier;
-    }
-
-    /**
-     * 修飾子を返す
-     * 
-     * @return 修飾子
-     */
-    public ModifierInfo getModifier() {
-        return this.modifier;
+    public Set<ModifierInfo> getModifiers() {
+        return Collections.unmodifiableSet(this.modifiers);
     }
 
     /**
@@ -315,11 +298,6 @@ public final class UnresolvedClassInfo {
     }
 
     /**
-     * 修飾子を保存するための変数
-     */
-    private ModifierInfo modifier;
-
-    /**
      * 名前空間名を保存するための変数
      */
     private String[] namespace;
@@ -334,6 +312,11 @@ public final class UnresolvedClassInfo {
      */
     private int loc;
 
+    /**
+     * 修飾子を保存するための変数
+     */
+    private final Set<ModifierInfo> modifiers;
+    
     /**
      * 親クラスを保存するためのセット
      */

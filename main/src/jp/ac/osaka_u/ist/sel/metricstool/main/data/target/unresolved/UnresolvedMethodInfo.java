@@ -25,12 +25,12 @@ public class UnresolvedMethodInfo {
      */
     public UnresolvedMethodInfo() {
 
-        this.modifier = null;
         this.methodName = null;
         this.returnType = null;
         this.ownerClass = null;
         this.constructor = false;
 
+        this.modifiers = new HashSet<ModifierInfo>();
         this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
         this.methodCalls = new HashSet<UnresolvedMethodCall>();
         this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
@@ -41,29 +41,26 @@ public class UnresolvedMethodInfo {
     /**
      * 未解決メソッド定義情報オブジェクトを初期化
      * 
-     * @param modifier 修飾子
      * @param methodName メソッド名
      * @param returnType 返り値の型
      * @param ownerClass このメソッドを定義しているクラス
      * @param constructor コンストラクタかどうか
      */
-    public UnresolvedMethodInfo(final ModifierInfo modifier, final String methodName,
-            final UnresolvedTypeInfo returnType, final UnresolvedClassInfo ownerClass,
-            final boolean constructor) {
+    public UnresolvedMethodInfo(final String methodName, final UnresolvedTypeInfo returnType,
+            final UnresolvedClassInfo ownerClass, final boolean constructor) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == modifier) || (null == methodName) || (null == returnType)
-                || (null == ownerClass)) {
+        if ((null == methodName) || (null == returnType) || (null == ownerClass)) {
             throw new NullPointerException();
         }
 
-        this.modifier = modifier;
         this.methodName = methodName;
         this.returnType = returnType;
         this.ownerClass = ownerClass;
         this.constructor = constructor;
-        
+
+        this.modifiers = new HashSet<ModifierInfo>();
         this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
         this.methodCalls = new HashSet<UnresolvedMethodCall>();
         this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
@@ -90,20 +87,20 @@ public class UnresolvedMethodInfo {
     }
 
     /**
-     * 修飾子を返す
+     * 修飾子の Set を返す
      * 
-     * @return 修飾子
+     * @return 修飾子の Set
      */
-    public ModifierInfo getModifier() {
-        return this.modifier;
+    public Set<ModifierInfo> getModifiers() {
+        return Collections.unmodifiableSet(this.modifiers);
     }
 
     /**
-     * 修飾子をセットする
+     * 修飾子を追加する
      * 
-     * @param modifier 修飾子
+     * @param modifier 追加する修飾子
      */
-    public void setModifier(final ModifierInfo modifier) {
+    public void addModifier(final ModifierInfo modifier) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -111,7 +108,7 @@ public class UnresolvedMethodInfo {
             throw new NullPointerException();
         }
 
-        this.modifier = modifier;
+        this.modifiers.add(modifier);
     }
 
     /**
@@ -335,7 +332,7 @@ public class UnresolvedMethodInfo {
     /**
      * 修飾子を保存する
      */
-    private ModifierInfo modifier;
+    private Set<ModifierInfo> modifiers;
 
     /**
      * メソッド名を保存するための変数

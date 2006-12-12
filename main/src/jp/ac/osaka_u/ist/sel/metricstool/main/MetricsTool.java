@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
@@ -672,12 +673,12 @@ public class MetricsTool {
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
 
             // 修飾子，完全限定名，行数を取得
-            ModifierInfo modifier = unresolvedClassInfo.getModifier();
+            Set<ModifierInfo> modifiers = unresolvedClassInfo.getModifiers();
             String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
             int loc = unresolvedClassInfo.getLOC();
 
             // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
-            TargetClassInfo classInfo = new TargetClassInfo(modifier, fullQualifiedName, loc);
+            TargetClassInfo classInfo = new TargetClassInfo(modifiers, fullQualifiedName, loc);
             classInfoManager.add(classInfo);
 
             for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
@@ -702,12 +703,12 @@ public class MetricsTool {
             final ClassInfoManager classInfoManager) {
 
         // 修飾子，完全限定名，行数を取得
-        ModifierInfo modifier = unresolvedClassInfo.getModifier();
+        Set<ModifierInfo> modifiers = unresolvedClassInfo.getModifiers();
         String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
         int loc = unresolvedClassInfo.getLOC();
 
         // ClassInfo オブジェクトを生成し，ClassInfoマネージャに登録
-        TargetInnerClassInfo classInfo = new TargetInnerClassInfo(modifier, fullQualifiedName,
+        TargetInnerClassInfo classInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
                 outerClass, loc);
         classInfoManager.add(classInfo);
 
@@ -777,7 +778,7 @@ public class MetricsTool {
             for (UnresolvedFieldInfo unresolvedFieldInfo : unresolvedClassInfo.getDefinedFields()) {
 
                 // フィールドの修飾子を取得
-                ModifierInfo modifier = unresolvedFieldInfo.getModifier();
+                Set<ModifierInfo> modifiers = unresolvedFieldInfo.getModifiers();
 
                 // フィールド名を取得
                 String fieldName = unresolvedFieldInfo.getName();
@@ -790,7 +791,7 @@ public class MetricsTool {
                 // TODO フィールドの修飾子に関する処理を追加
 
                 // フィールドオブジェクトを生成
-                TargetFieldInfo fieldInfo = new TargetFieldInfo(modifier, fieldName, fieldType,
+                TargetFieldInfo fieldInfo = new TargetFieldInfo(modifiers, fieldName, fieldType,
                         ownerClass);
 
                 // フィールド情報を追加
@@ -826,7 +827,7 @@ public class MetricsTool {
             for (UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo
                     .getDefinedMethods()) {
 
-                ModifierInfo modifier = unresolvedMethodInfo.getModifier();
+                Set<ModifierInfo> modifiers = unresolvedMethodInfo.getModifiers();
 
                 // メソッド名を取得
                 String methodName = unresolvedMethodInfo.getMethodName();
@@ -843,7 +844,7 @@ public class MetricsTool {
                 boolean constructor = unresolvedMethodInfo.isConstructor();
 
                 // MethodInfo オブジェクトを生成し，引数を追加していく
-                TargetMethodInfo methodInfo = new TargetMethodInfo(modifier, methodName,
+                TargetMethodInfo methodInfo = new TargetMethodInfo(modifiers, methodName,
                         returnType, ownerClass, constructor, loc);
                 for (UnresolvedParameterInfo unresolvedParameterInfo : unresolvedMethodInfo
                         .getParameterInfos()) {

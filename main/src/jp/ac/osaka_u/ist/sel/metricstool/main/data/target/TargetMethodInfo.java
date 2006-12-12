@@ -2,6 +2,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -36,7 +38,6 @@ public final class TargetMethodInfo extends MethodInfo {
      * メソッドオブジェクトを初期化する． 以下の情報が引数として与えられなければならない．
      * <ul>
      * <li>メソッド名</li>
-     * <li>修飾子</li>
      * <li>シグネチャ</li>
      * <li>所有しているクラス</li>
      * <li>コンストラクタかどうか</li>
@@ -48,26 +49,27 @@ public final class TargetMethodInfo extends MethodInfo {
      * @param ownerClass 所有しているクラス
      * @param constructor コンストラクタかどうか．コンストラクタの場合は true,そうでない場合は false．
      */
-    public TargetMethodInfo(final ModifierInfo modifier, final String name,
+    public TargetMethodInfo(final Set<ModifierInfo> modifiers, final String name,
             final TypeInfo returnType, final ClassInfo ownerClass, final boolean constructor,
             final int loc) {
 
         super(name, returnType, ownerClass, constructor);
 
-        if (null == modifier) {
+        if (null == modifiers) {
             throw new NullPointerException();
         }
-
+        
         if (loc < 0) {
             throw new IllegalArgumentException("LOC must be 0 or more!");
         }
 
-        this.modifier = modifier;
         this.loc = loc;
+        this.modifiers = new HashSet<ModifierInfo>();
         this.localVariables = new TreeSet<LocalVariableInfo>();
-
         this.referencees = new TreeSet<FieldInfo>();
         this.assignmentees = new TreeSet<FieldInfo>();
+        
+        this.modifiers.addAll(modifiers);
     }
 
     /**
@@ -125,12 +127,12 @@ public final class TargetMethodInfo extends MethodInfo {
     }
 
     /**
-     * 修飾子を返す
+     * 修飾子の Set を返す
      * 
-     * @return 修飾子
+     * @return 修飾子の Set
      */
-    public ModifierInfo getModifier() {
-        return this.modifier;
+    public Set<ModifierInfo> getModifiers() {
+        return Collections.unmodifiableSet(this.modifiers);
     }
 
     /**
@@ -161,14 +163,14 @@ public final class TargetMethodInfo extends MethodInfo {
     }
 
     /**
-     * 修飾子を保存するための変数
-     */
-    private final ModifierInfo modifier;
-
-    /**
      * 行数を保存するための変数
      */
     private final int loc;
+
+    /**
+     * 修飾子を保存するための変数
+     */
+    private final Set<ModifierInfo> modifiers;
 
     /**
      * このメソッドの内部で定義されているローカル変数

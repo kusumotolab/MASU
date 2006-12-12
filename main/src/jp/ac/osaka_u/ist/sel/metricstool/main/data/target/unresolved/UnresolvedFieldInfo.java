@@ -1,6 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 
 
@@ -16,45 +20,45 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo {
     /**
      * Unresolvedフィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．
      * 
-     * @param modifier 修飾子
      * @param name フィールド名
      * @param type フィールドの型
      * @param ownerClass フィールドを定義しているクラス
      */
-    public UnresolvedFieldInfo(final ModifierInfo modifier, final String name,
-            final UnresolvedTypeInfo type, final UnresolvedClassInfo ownerClass) {
+    public UnresolvedFieldInfo(final String name, final UnresolvedTypeInfo type,
+            final UnresolvedClassInfo ownerClass) {
 
         super(name, type);
 
-        if ((null == modifier) || (null == ownerClass)) {
+        if (null == ownerClass) {
             throw new NullPointerException();
         }
 
-        this.modifier = modifier;
         this.ownerClass = ownerClass;
+        this.modifiers = new HashSet<ModifierInfo>();
+
     }
 
     /**
-     * 修飾子を返す
+     * 修飾子の Set を返す
      * 
-     * @return 修飾子
+     * @return 修飾子の Set
      */
-    public ModifierInfo getModifier(){
-        return this.modifier;
+    public Set<ModifierInfo> getModifiers() {
+        return Collections.unmodifiableSet(this.modifiers);
     }
 
     /**
-     * 修飾子をセットする
+     * 修飾子を追加する
      * 
-     * @param modifier 修飾子
+     * @param modifier 追加する修飾子
      */
-    public void setModifiar(final ModifierInfo modifier) {
+    public void addModifiar(final ModifierInfo modifier) {
 
         if (null == modifier) {
             throw new NullPointerException();
         }
 
-        this.modifier = modifier;
+        this.modifiers.add(modifier);
     }
 
     /**
@@ -83,7 +87,7 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo {
     /**
      * このフィールドの修飾子を保存するための変数
      */
-    private ModifierInfo modifier;
+    private Set<ModifierInfo> modifiers;
 
     /**
      * このフィールドを定義しているクラスを保存するための変数
