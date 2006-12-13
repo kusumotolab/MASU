@@ -167,7 +167,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
             if (null == type) {
                 throw new NullPointerException();
             }
-            if (1 < dimension) {
+            if (1 > dimension) {
                 throw new IllegalArgumentException("Array dimension must be 1 or more!");
             }
 
