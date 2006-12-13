@@ -1,6 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -64,12 +69,35 @@ public abstract class UnresolvedVariableInfo {
     }
 
     /**
+     * 修飾子の Set を返す
+     * 
+     * @return 修飾子の Set
+     */
+    public Set<ModifierInfo> getModifiers() {
+        return Collections.unmodifiableSet(this.modifiers);
+    }
+
+    /**
+     * 修飾子を追加する
+     * 
+     * @param modifier 追加する修飾子
+     */
+    public void addModifiar(final ModifierInfo modifier) {
+
+        if (null == modifier) {
+            throw new NullPointerException();
+        }
+
+        this.modifiers.add(modifier);
+    }
+
+    /**
      * 変数オブジェクトを初期化する．
      * 
      * @param name 変数名
      * @param type 変数の型
      */
-    protected UnresolvedVariableInfo(final String name, final UnresolvedTypeInfo type) {
+    UnresolvedVariableInfo(final String name, final UnresolvedTypeInfo type) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == name) || (null == type)) {
@@ -78,16 +106,18 @@ public abstract class UnresolvedVariableInfo {
 
         this.name = name;
         this.type = type;
+        this.modifiers = new HashSet<ModifierInfo>();
     }
 
     /**
      * 変数オブジェクトを初期化する．
      */
-    protected UnresolvedVariableInfo() {
+    UnresolvedVariableInfo() {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         this.name = null;
         this.type = null;
+        this.modifiers = new HashSet<ModifierInfo>();
     }
 
     /**
@@ -99,5 +129,10 @@ public abstract class UnresolvedVariableInfo {
      * 変数の型を表す変数
      */
     private UnresolvedTypeInfo type;
+
+    /**
+     * このフィールドの修飾子を保存するための変数
+     */
+    private Set<ModifierInfo> modifiers;
 
 }

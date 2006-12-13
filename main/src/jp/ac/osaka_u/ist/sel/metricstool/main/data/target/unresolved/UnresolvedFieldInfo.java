@@ -1,11 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 
 
 /**
@@ -35,37 +30,13 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo implements
         }
 
         this.ownerClass = ownerClass;
-        this.modifiers = new HashSet<ModifierInfo>();
 
         this.privateVisible = false;
         this.inheritanceVisible = false;
         this.namespaceVisible = false;
         this.publicVisible = false;
-        
+
         this.instance = true;
-    }
-
-    /**
-     * 修飾子の Set を返す
-     * 
-     * @return 修飾子の Set
-     */
-    public Set<ModifierInfo> getModifiers() {
-        return Collections.unmodifiableSet(this.modifiers);
-    }
-
-    /**
-     * 修飾子を追加する
-     * 
-     * @param modifier 追加する修飾子
-     */
-    public void addModifiar(final ModifierInfo modifier) {
-
-        if (null == modifier) {
-            throw new NullPointerException();
-        }
-
-        this.modifiers.add(modifier);
     }
 
     /**
@@ -189,11 +160,6 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo implements
     public void setInstanceMember(final boolean instance) {
         this.instance = instance;
     }
-
-    /**
-     * このフィールドの修飾子を保存するための変数
-     */
-    private Set<ModifierInfo> modifiers;
 
     /**
      * このフィールドを定義しているクラスを保存するための変数
