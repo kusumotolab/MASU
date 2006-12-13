@@ -15,7 +15,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
  * @author y-higo
  * 
  */
-public final class UnresolvedFieldInfo extends UnresolvedVariableInfo {
+public final class UnresolvedFieldInfo extends UnresolvedVariableInfo implements
+        VisualizableSetting {
 
     /**
      * Unresolvedフィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．
@@ -36,6 +37,10 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo {
         this.ownerClass = ownerClass;
         this.modifiers = new HashSet<ModifierInfo>();
 
+        this.privateVisible = false;
+        this.inheritanceVisible = false;
+        this.namespaceVisible = false;
+        this.publicVisible = false;
     }
 
     /**
@@ -85,6 +90,78 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo {
     }
 
     /**
+     * 子クラスから参照可能かどうかを設定する
+     * 
+     * @param inheritanceVisible 子クラスから参照可能な場合は true，そうでない場合は false
+     */
+    public void setInheritanceVisible(final boolean inheritanceVisible) {
+        this.inheritanceVisible = inheritanceVisible;
+    }
+
+    /**
+     * 同じ名前空間内から参照可能かどうかを設定する
+     * 
+     * @param namespaceVisible 同じ名前空間から参照可能な場合は true，そうでない場合は false
+     */
+    public void setNamespaceVisible(final boolean namespaceVisible) {
+        this.namespaceVisible = namespaceVisible;
+    }
+
+    /**
+     * クラス内からのみ参照可能かどうかを設定する
+     * 
+     * @param privateVisible クラス内からのみ参照可能な場合は true，そうでない場合は false
+     */
+    public void setPrivateVibible(final boolean privateVisible) {
+        this.privateVisible = privateVisible;
+    }
+
+    /**
+     * どこからでも参照可能かどうかを設定する
+     * 
+     * @param publicVisible どこからでも参照可能な場合は true，そうでない場合は false
+     */
+    public void setPublicVisible(final boolean publicVisible) {
+        this.publicVisible = publicVisible;
+    }
+
+    /**
+     * 子クラスから参照可能かどうかを返す
+     * 
+     * @return 子クラスから参照可能な場合は true, そうでない場合は false
+     */
+    public boolean isInheritanceVisible() {
+        return this.privateVisible;
+    }
+
+    /**
+     * 同じ名前空間から参照可能かどうかを返す
+     * 
+     * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
+     */
+    public boolean isNamespaceVisible() {
+        return this.namespaceVisible;
+    }
+
+    /**
+     * クラス内からのみ参照可能かどうかを返す
+     * 
+     * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
+     */
+    public boolean isPrivateVisible() {
+        return this.inheritanceVisible;
+    }
+
+    /**
+     * どこからでも参照可能かどうかを返す
+     * 
+     * @return どこからでも参照可能な場合は true, そうでない場合は false
+     */
+    public boolean isPublicVisible() {
+        return this.publicVisible;
+    }
+
+    /**
      * このフィールドの修飾子を保存するための変数
      */
     private Set<ModifierInfo> modifiers;
@@ -93,4 +170,24 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo {
      * このフィールドを定義しているクラスを保存するための変数
      */
     private UnresolvedClassInfo ownerClass;
+
+    /**
+     * クラス内からのみ参照可能かどうか保存するための変数
+     */
+    private boolean privateVisible;
+
+    /**
+     * 同じ名前空間から参照可能かどうか保存するための変数
+     */
+    private boolean namespaceVisible;
+
+    /**
+     * 子クラスから参照可能かどうか保存するための変数
+     */
+    private boolean inheritanceVisible;
+
+    /**
+     * どこからでも参照可能かどうか保存するための変数
+     */
+    private boolean publicVisible;
 }

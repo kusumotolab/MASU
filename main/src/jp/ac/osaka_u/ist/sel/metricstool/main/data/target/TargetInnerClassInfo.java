@@ -19,11 +19,18 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * @param className クラス名
      * @param outerClass 外側のクラス
      * @param loc 行数
+     * @param privateVisible クラス内からのみ参照可能
+     * @param namespaceVisible 同じ名前空間から参照可能
+     * @param inheritanceVisible 子クラスから参照可能
+     * @param publicVisible どこからでも参照可能
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
-            final String className, final TargetClassInfo outerClass, final int loc) {
+            final String className, final TargetClassInfo outerClass, final int loc,
+            final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible) {
 
-        super(modifiers, namespace, className, loc);
+        super(modifiers, namespace, className, loc, privateVisible, namespaceVisible,
+                inheritanceVisible, publicVisible);
 
         if (null == outerClass) {
             throw new NullPointerException();
@@ -39,11 +46,18 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * @param fullQualifiedName 完全限定名
      * @param outerClass 外側のクラス
      * @param loc 行数
+     * @param privateVisible クラス内からのみ参照可能
+     * @param namespaceVisible 同じ名前空間から参照可能
+     * @param inheritanceVisible 子クラスから参照可能
+     * @param publicVisible どこからでも参照可能
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers,
-            final String[] fullQualifiedName, final TargetClassInfo outerClass, final int loc) {
+            final String[] fullQualifiedName, final TargetClassInfo outerClass, final int loc,
+            final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible) {
 
-        super(modifiers, fullQualifiedName, loc);
+        super(modifiers, fullQualifiedName, loc, privateVisible, namespaceVisible,
+                inheritanceVisible, publicVisible);
 
         if (null == outerClass) {
             throw new NullPointerException();

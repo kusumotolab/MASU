@@ -32,7 +32,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class TargetMethodInfo extends MethodInfo {
+public final class TargetMethodInfo extends MethodInfo implements Visualizable {
 
     /**
      * メソッドオブジェクトを初期化する． 以下の情報が引数として与えられなければならない．
@@ -41,6 +41,7 @@ public final class TargetMethodInfo extends MethodInfo {
      * <li>シグネチャ</li>
      * <li>所有しているクラス</li>
      * <li>コンストラクタかどうか</li>
+     * <li>行数</li>
      * </ul>
      * 
      * @param modifier 修飾子
@@ -48,17 +49,23 @@ public final class TargetMethodInfo extends MethodInfo {
      * @param returnType 返り値の型．コンストラクタの場合は，そのクラスの型を与える．
      * @param ownerClass 所有しているクラス
      * @param constructor コンストラクタかどうか．コンストラクタの場合は true,そうでない場合は false．
+     * @param loc メソッドの行数
+     * @param privateVisible クラス内からのみ参照可能
+     * @param namespaceVisible 同じ名前空間から参照可能
+     * @param inheritanceVisible 子クラスから参照可能
+     * @param publicVisible どこからでも参照可能
      */
     public TargetMethodInfo(final Set<ModifierInfo> modifiers, final String name,
             final TypeInfo returnType, final ClassInfo ownerClass, final boolean constructor,
-            final int loc) {
+            final int loc, final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible) {
 
         super(name, returnType, ownerClass, constructor);
 
         if (null == modifiers) {
             throw new NullPointerException();
         }
-        
+
         if (loc < 0) {
             throw new IllegalArgumentException("LOC must be 0 or more!");
         }
@@ -68,8 +75,13 @@ public final class TargetMethodInfo extends MethodInfo {
         this.localVariables = new TreeSet<LocalVariableInfo>();
         this.referencees = new TreeSet<FieldInfo>();
         this.assignmentees = new TreeSet<FieldInfo>();
-        
+
         this.modifiers.addAll(modifiers);
+
+        this.privateVisible = privateVisible;
+        this.namespaceVisible = namespaceVisible;
+        this.inheritanceVisible = inheritanceVisible;
+        this.publicVisible = publicVisible;
     }
 
     /**
@@ -163,6 +175,42 @@ public final class TargetMethodInfo extends MethodInfo {
     }
 
     /**
+     * 子クラスから参照可能かどうかを返す
+     * 
+     * @return 子クラスから参照可能な場合は true, そうでない場合は false
+     */
+    public boolean isInheritanceVisible() {
+        return this.privateVisible;
+    }
+
+    /**
+     * 同じ名前空間から参照可能かどうかを返す
+     * 
+     * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
+     */
+    public boolean isNamespaceVisible() {
+        return this.namespaceVisible;
+    }
+
+    /**
+     * クラス内からのみ参照可能かどうかを返す
+     * 
+     * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
+     */
+    public boolean isPrivateVisible() {
+        return this.inheritanceVisible;
+    }
+
+    /**
+     * どこからでも参照可能かどうかを返す
+     * 
+     * @return どこからでも参照可能な場合は true, そうでない場合は false
+     */
+    public boolean isPublicVisible() {
+        return this.publicVisible;
+    }
+
+    /**
      * 行数を保存するための変数
      */
     private final int loc;
@@ -187,4 +235,23 @@ public final class TargetMethodInfo extends MethodInfo {
      */
     private final SortedSet<FieldInfo> assignmentees;
 
+    /**
+     * クラス内からのみ参照可能かどうか保存するための変数
+     */
+    private final boolean privateVisible;
+
+    /**
+     * 同じ名前空間から参照可能かどうか保存するための変数
+     */
+    private final boolean namespaceVisible;
+
+    /**
+     * 子クラスから参照可能かどうか保存するための変数
+     */
+    private final boolean inheritanceVisible;
+
+    /**
+     * どこからでも参照可能かどうか保存するための変数
+     */
+    private final boolean publicVisible;
 }

@@ -665,20 +665,25 @@ public class MetricsTool {
     private static void registClassInfos() {
 
         // Unresolved クラス情報マネージャ， クラス情報マネージャを取得
-        UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
-        ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+        final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
 
         // 各 Unresolvedクラスに対して
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
 
-            // 修飾子，完全限定名，行数を取得
-            Set<ModifierInfo> modifiers = unresolvedClassInfo.getModifiers();
-            String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
-            int loc = unresolvedClassInfo.getLOC();
+            // 修飾子，完全限定名，行数，可視性を取得
+            final Set<ModifierInfo> modifiers = unresolvedClassInfo.getModifiers();
+            final String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
+            final int loc = unresolvedClassInfo.getLOC();
+            final boolean privateVisible = unresolvedClassInfo.isPrivateVisible();
+            final boolean namespaceVisible = unresolvedClassInfo.isNamespaceVisible();
+            final boolean inheritanceVisible = unresolvedClassInfo.isInheritanceVisible();
+            final boolean publicVisible = unresolvedClassInfo.isPublicVisible();
 
             // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
-            TargetClassInfo classInfo = new TargetClassInfo(modifiers, fullQualifiedName, loc);
+            final TargetClassInfo classInfo = new TargetClassInfo(modifiers, fullQualifiedName,
+                    loc, privateVisible, namespaceVisible, inheritanceVisible, publicVisible);
             classInfoManager.add(classInfo);
 
             for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
@@ -702,14 +707,19 @@ public class MetricsTool {
             final UnresolvedClassInfo unresolvedClassInfo, final TargetClassInfo outerClass,
             final ClassInfoManager classInfoManager) {
 
-        // 修飾子，完全限定名，行数を取得
-        Set<ModifierInfo> modifiers = unresolvedClassInfo.getModifiers();
-        String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
-        int loc = unresolvedClassInfo.getLOC();
+        // 修飾子，完全限定名，行数，可視性を取得
+        final Set<ModifierInfo> modifiers = unresolvedClassInfo.getModifiers();
+        final String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
+        final int loc = unresolvedClassInfo.getLOC();
+        final boolean privateVisible = unresolvedClassInfo.isPrivateVisible();
+        final boolean namespaceVisible = unresolvedClassInfo.isNamespaceVisible();
+        final boolean inheritanceVisible = unresolvedClassInfo.isInheritanceVisible();
+        final boolean publicVisible = unresolvedClassInfo.isPublicVisible();
 
         // ClassInfo オブジェクトを生成し，ClassInfoマネージャに登録
         TargetInnerClassInfo classInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
-                outerClass, loc);
+                outerClass, loc, privateVisible, namespaceVisible, inheritanceVisible,
+                publicVisible);
         classInfoManager.add(classInfo);
 
         // このクラスのインナークラスに対して再帰的に処理
@@ -729,15 +739,15 @@ public class MetricsTool {
     private static void addInheritanceInformationToClassInfos() {
 
         // Unresolved クラス情報マネージャ， クラス情報マネージャを取得
-        UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
-        ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+        final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
 
         // 各 Unresolvedクラスに対して
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
 
             // ClassInfo を取得
-            ClassInfo classInfo = NameResolver.resolveClassInfo(unresolvedClassInfo,
+            final ClassInfo classInfo = NameResolver.resolveClassInfo(unresolvedClassInfo,
                     classInfoManager);
 
             // 各Unresolvedな親クラス名に対して
@@ -758,16 +768,16 @@ public class MetricsTool {
     private static void registFieldInfos() {
 
         // Unresolved クラス情報マネージャ，クラス情報マネージャ，フィールド情報マネージャを取得
-        UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
-        ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
-        FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
+        final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+        final FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
 
         // 各 Unresolvedクラスに対して
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
 
             // ClassInfo を取得
-            ClassInfo ownerClass = NameResolver.resolveClassInfo(unresolvedClassInfo,
+            final ClassInfo ownerClass = NameResolver.resolveClassInfo(unresolvedClassInfo,
                     classInfoManager);
             if (!(ownerClass instanceof TargetClassInfo)) {
                 throw new IllegalArgumentException(ownerClass.toString()
@@ -777,22 +787,21 @@ public class MetricsTool {
             // Unresolvedクラスに定義されている各Unresolvedフィールドに対して
             for (UnresolvedFieldInfo unresolvedFieldInfo : unresolvedClassInfo.getDefinedFields()) {
 
-                // フィールドの修飾子を取得
-                Set<ModifierInfo> modifiers = unresolvedFieldInfo.getModifiers();
-
-                // フィールド名を取得
-                String fieldName = unresolvedFieldInfo.getName();
-
-                // フィールドの型を取得
-                UnresolvedTypeInfo unresolvedFieldType = unresolvedFieldInfo.getType();
-                TypeInfo fieldType = NameResolver.resolveTypeInfo(unresolvedFieldType,
+                // 修飾子，名前，型，可視性を取得
+                final Set<ModifierInfo> modifiers = unresolvedFieldInfo.getModifiers();
+                final String fieldName = unresolvedFieldInfo.getName();
+                final UnresolvedTypeInfo unresolvedFieldType = unresolvedFieldInfo.getType();
+                final TypeInfo fieldType = NameResolver.resolveTypeInfo(unresolvedFieldType,
                         classInfoManager);
-
-                // TODO フィールドの修飾子に関する処理を追加
+                final boolean privateVisible = unresolvedClassInfo.isPrivateVisible();
+                final boolean namespaceVisible = unresolvedClassInfo.isNamespaceVisible();
+                final boolean inheritanceVisible = unresolvedClassInfo.isInheritanceVisible();
+                final boolean publicVisible = unresolvedClassInfo.isPublicVisible();
 
                 // フィールドオブジェクトを生成
-                TargetFieldInfo fieldInfo = new TargetFieldInfo(modifiers, fieldName, fieldType,
-                        ownerClass);
+                final TargetFieldInfo fieldInfo = new TargetFieldInfo(modifiers, fieldName,
+                        fieldType, ownerClass, privateVisible, namespaceVisible,
+                        inheritanceVisible, publicVisible);
 
                 // フィールド情報を追加
                 ((TargetClassInfo) ownerClass).addDefinedField(fieldInfo);
@@ -807,76 +816,73 @@ public class MetricsTool {
     private static void registMethodInfos() {
 
         // Unresolved クラス情報マネージャ， クラス情報マネージャ，メソッド情報マネージャを取得
-        UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
-        ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
-        MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
+        final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+        final MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
 
         // 各 Unresolvedクラスに対して
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
 
             // ClassInfo を取得
-            ClassInfo ownerClass = NameResolver.resolveClassInfo(unresolvedClassInfo,
+            final ClassInfo ownerClass = NameResolver.resolveClassInfo(unresolvedClassInfo,
                     classInfoManager);
             if (!(ownerClass instanceof TargetClassInfo)) {
                 throw new IllegalArgumentException(ownerClass.toString()
                         + " must be an instance of TargetClassInfo");
             }
 
-            // Unresolvedクラスに定義されている各Unresolvedメソッドに対して
+            // Unresolvedクラスに定義されている各未解決メソッドに対して
             for (UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo
                     .getDefinedMethods()) {
 
-                Set<ModifierInfo> modifiers = unresolvedMethodInfo.getModifiers();
-
-                // メソッド名を取得
-                String methodName = unresolvedMethodInfo.getMethodName();
-
-                // TODO メソッドの修飾子に関する処理を追加
-
-                // メソッドの返り値を取得
-                UnresolvedTypeInfo unresolvedReturnType = unresolvedMethodInfo.getReturnType();
-                TypeInfo returnType = NameResolver.resolveTypeInfo(unresolvedReturnType,
+                // 修飾子，名前，返り値，行数，コンストラクタかどうか，可視性を取得
+                final Set<ModifierInfo> modifiers = unresolvedMethodInfo.getModifiers();
+                final String methodName = unresolvedMethodInfo.getMethodName();
+                final UnresolvedTypeInfo unresolvedReturnType = unresolvedMethodInfo
+                        .getReturnType();
+                final TypeInfo returnType = NameResolver.resolveTypeInfo(unresolvedReturnType,
                         classInfoManager);
-
-                // 行数，コンストラクタかどうかを取得
-                int loc = unresolvedMethodInfo.getLOC();
-                boolean constructor = unresolvedMethodInfo.isConstructor();
+                final int loc = unresolvedMethodInfo.getLOC();
+                final boolean constructor = unresolvedMethodInfo.isConstructor();
+                final boolean privateVisible = unresolvedClassInfo.isPrivateVisible();
+                final boolean namespaceVisible = unresolvedClassInfo.isNamespaceVisible();
+                final boolean inheritanceVisible = unresolvedClassInfo.isInheritanceVisible();
+                final boolean publicVisible = unresolvedClassInfo.isPublicVisible();
 
                 // MethodInfo オブジェクトを生成し，引数を追加していく
-                TargetMethodInfo methodInfo = new TargetMethodInfo(modifiers, methodName,
-                        returnType, ownerClass, constructor, loc);
+                final TargetMethodInfo methodInfo = new TargetMethodInfo(modifiers, methodName,
+                        returnType, ownerClass, constructor, loc, privateVisible, namespaceVisible,
+                        inheritanceVisible, publicVisible);
                 for (UnresolvedParameterInfo unresolvedParameterInfo : unresolvedMethodInfo
                         .getParameterInfos()) {
 
-                    // パラメータ名を取得
-                    String parameterName = unresolvedParameterInfo.getName();
-
-                    // パラメータの型を取得
-                    UnresolvedTypeInfo unresolvedParameterType = unresolvedParameterInfo.getType();
-                    TypeInfo parameterType = NameResolver.resolveTypeInfo(unresolvedParameterType,
-                            classInfoManager);
+                    // パラメータ名，型を取得
+                    final String parameterName = unresolvedParameterInfo.getName();
+                    final UnresolvedTypeInfo unresolvedParameterType = unresolvedParameterInfo
+                            .getType();
+                    final TypeInfo parameterType = NameResolver.resolveTypeInfo(
+                            unresolvedParameterType, classInfoManager);
 
                     // パラメータオブジェクトを生成し，メソッドに追加
-                    TargetParameterInfo parameterInfo = new TargetParameterInfo(parameterName,
-                            parameterType);
+                    final TargetParameterInfo parameterInfo = new TargetParameterInfo(
+                            parameterName, parameterType);
                     methodInfo.addParameter(parameterInfo);
                 }
 
-                // UnresovedLocalVariableInfo の名前解決を行い，MethodInfo に追加していく
+                // メソッド内で定義されている各未解決ローカル変数に対して
                 for (UnresolvedLocalVariableInfo unresolvedLocalVariable : unresolvedMethodInfo
                         .getLocalVariables()) {
 
-                    // 変数名を取得
-                    String variableName = unresolvedLocalVariable.getName();
-
-                    // 変数の型を取得
-                    UnresolvedTypeInfo unresolvedVariableType = unresolvedLocalVariable.getType();
-                    TypeInfo variableType = NameResolver.resolveTypeInfo(unresolvedVariableType,
-                            classInfoManager);
+                    // 変数名，型を取得
+                    final String variableName = unresolvedLocalVariable.getName();
+                    final UnresolvedTypeInfo unresolvedVariableType = unresolvedLocalVariable
+                            .getType();
+                    final TypeInfo variableType = NameResolver.resolveTypeInfo(
+                            unresolvedVariableType, classInfoManager);
 
                     // ローカル変数オブジェクトを生成し，MethodInfoに追加
-                    LocalVariableInfo localVariable = new LocalVariableInfo(variableName,
+                    final LocalVariableInfo localVariable = new LocalVariableInfo(variableName,
                             variableType);
                     methodInfo.addLocalVariable(localVariable);
                 }
@@ -949,10 +955,10 @@ public class MetricsTool {
      */
     private static void addUseInformationToFieldInfos() {
 
-        UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
-        ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
-        FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
+        final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+        final FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
 
         // 各UnresolvedClassInfo に対して
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
@@ -961,24 +967,24 @@ public class MetricsTool {
                     .getDefinedMethods()) {
 
                 // UnresolvedMethodInfo から MethodInfo を取得
-                TargetMethodInfo methodInfo = NameResolver.resolveMethodInfo(unresolvedMethodInfo,
-                        classInfoManager);
+                final TargetMethodInfo methodInfo = NameResolver.resolveMethodInfo(
+                        unresolvedMethodInfo, classInfoManager);
 
-                // 各UnresolvedMethodInfo の各Unresolvedフィールド参照 に対して
+                // 未解決参照フィールドの名前解決処理
                 for (UnresolvedFieldUsage fieldUsage : unresolvedMethodInfo.getFieldReferences()) {
 
                     // UnresolvedFieldUsage から FieldInfo を取得
-                    FieldInfo referencee = NameResolver.resolveFieldUsage(fieldUsage,
+                    final FieldInfo referencee = NameResolver.resolveFieldUsage(fieldUsage,
                             classInfoManager, fieldInfoManager);
                     methodInfo.addReferencee(referencee);
                     referencee.addReferencer(methodInfo);
                 }
 
-                // UnresolvedMethodInfo の各Unresolvedフィールド代入に対して
+                // 未解決代入フィールドの名前解決処理
                 for (UnresolvedFieldUsage fieldUsage : unresolvedMethodInfo.getFieldAssignments()) {
 
                     // UnresolvedFieldUsage から FieldInfo を取得
-                    FieldInfo assignmentee = NameResolver.resolveFieldUsage(fieldUsage,
+                    final FieldInfo assignmentee = NameResolver.resolveFieldUsage(fieldUsage,
                             classInfoManager, fieldInfoManager);
                     methodInfo.addAssignmentee(assignmentee);
                     assignmentee.addAssignmenter(methodInfo);
@@ -992,10 +998,10 @@ public class MetricsTool {
      */
     private static void addCallInformationToMethodInfos() {
 
-        UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
-        ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
-        MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
+        final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+        final MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
 
         // 各 UnresolvedClassInfo に対して
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
@@ -1005,14 +1011,14 @@ public class MetricsTool {
                     .getDefinedMethods()) {
 
                 // UnresolvedMethodInfo から MethodInfo を取得
-                MethodInfo caller = NameResolver.resolveMethodInfo(unresolvedMethodInfo,
+                final MethodInfo caller = NameResolver.resolveMethodInfo(unresolvedMethodInfo,
                         classInfoManager);
 
                 // 各UnresolvedMethodInfo での各メソッド呼び出し情報(UnresolvedMethodCall)に対して
                 for (UnresolvedMethodCall methodCall : unresolvedMethodInfo.getMethodCalls()) {
 
                     // UnresolvedMethodUsage から MethodInfo を取得
-                    MethodInfo callee = NameResolver.resolveMethodCall(methodCall,
+                    final MethodInfo callee = NameResolver.resolveMethodCall(methodCall,
                             classInfoManager, methodInfoManager);
                     caller.addCallee(callee);
                     callee.addCaller(caller);

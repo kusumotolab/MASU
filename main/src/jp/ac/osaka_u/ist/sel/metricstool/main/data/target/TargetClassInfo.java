@@ -38,16 +38,22 @@ public class TargetClassInfo extends ClassInfo {
      * @param namespace 名前空間名
      * @param className クラス名
      * @param loc 行数
+     * @param privateVisible クラス内からのみ参照可能
+     * @param namespaceVisible 同じ名前空間から参照可能
+     * @param inheritanceVisible 子クラスから参照可能
+     * @param publicVisible どこからでも参照可能
      */
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
-            final String className, final int loc) {
+            final String className, final int loc, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible) {
 
         super(namespace, className);
 
         if (null == modifiers) {
             throw new NullPointerException();
         }
-        
+
         if (loc < 0) {
             throw new IllegalAccessError("LOC is must be 0 or more!");
         }
@@ -57,7 +63,12 @@ public class TargetClassInfo extends ClassInfo {
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
-        
+
+        this.privateVisible = privateVisible;
+        this.namespaceVisible = namespaceVisible;
+        this.inheritanceVisible = inheritanceVisible;
+        this.publicVisible = publicVisible;
+
         this.modifiers.addAll(modifiers);
     }
 
@@ -67,15 +78,21 @@ public class TargetClassInfo extends ClassInfo {
      * @param modifiers 修飾子の Set
      * @param fullQualifiedName 完全限定名
      * @param loc 行数
+     * @param privateVisible クラス内からのみ参照可能
+     * @param namespaceVisible 同じ名前空間から参照可能
+     * @param inheritanceVisible 子クラスから参照可能
+     * @param publicVisible どこからでも参照可能
      */
-    public TargetClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName, final int loc) {
+    public TargetClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
+            final int loc, final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible) {
 
         super(fullQualifiedName);
 
         if (null == modifiers) {
             throw new NullPointerException();
         }
-        
+
         if (loc < 0) {
             throw new IllegalAccessError("LOC is must be 0 or more!");
         }
@@ -85,7 +102,12 @@ public class TargetClassInfo extends ClassInfo {
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
-        
+
+        this.privateVisible = privateVisible;
+        this.namespaceVisible = namespaceVisible;
+        this.inheritanceVisible = inheritanceVisible;
+        this.publicVisible = publicVisible;
+
         this.modifiers.addAll(modifiers);
     }
 
@@ -180,6 +202,42 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
+     * 子クラスから参照可能かどうかを返す
+     * 
+     * @return 子クラスから参照可能な場合は true, そうでない場合は false
+     */
+    public boolean isInheritanceVisible() {
+        return this.privateVisible;
+    }
+
+    /**
+     * 同じ名前空間から参照可能かどうかを返す
+     * 
+     * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
+     */
+    public boolean isNamespaceVisible() {
+        return this.namespaceVisible;
+    }
+
+    /**
+     * クラス内からのみ参照可能かどうかを返す
+     * 
+     * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
+     */
+    public boolean isPrivateVisible() {
+        return this.inheritanceVisible;
+    }
+
+    /**
+     * どこからでも参照可能かどうかを返す
+     * 
+     * @return どこからでも参照可能な場合は true, そうでない場合は false
+     */
+    public boolean isPublicVisible() {
+        return this.publicVisible;
+    }
+
+    /**
      * 行数を保存するための変数
      */
     private final int loc;
@@ -203,4 +261,24 @@ public class TargetClassInfo extends ClassInfo {
      * このクラスで定義されているフィールド一覧を保存するための変数．
      */
     private final SortedSet<TargetFieldInfo> definedFields;
+
+    /**
+     * クラス内からのみ参照可能かどうか保存するための変数
+     */
+    private final boolean privateVisible;
+
+    /**
+     * 同じ名前空間から参照可能かどうか保存するための変数
+     */
+    private final boolean namespaceVisible;
+
+    /**
+     * 子クラスから参照可能かどうか保存するための変数
+     */
+    private final boolean inheritanceVisible;
+
+    /**
+     * どこからでも参照可能かどうか保存するための変数
+     */
+    private final boolean publicVisible;
 }
