@@ -46,13 +46,29 @@ public final class UnresolvedClassInfo implements VisualizableSetting, MemberSet
         this.innerClasses = new HashSet<UnresolvedClassInfo>();
         this.definedMethods = new HashSet<UnresolvedMethodInfo>();
         this.definedFields = new HashSet<UnresolvedFieldInfo>();
-        
+
         this.privateVisible = false;
         this.inheritanceVisible = false;
         this.namespaceVisible = false;
         this.publicVisible = false;
-        
+
         this.instance = true;
+    }
+
+    /**
+     * 修飾子を追加する
+     * 
+     * @param modifier 追加する修飾子
+     */
+    public void addModifier(final ModifierInfo modifier) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == modifier) {
+            throw new NullPointerException();
+        }
+
+        this.modifiers.add(modifier);
     }
 
     /**
@@ -402,7 +418,7 @@ public final class UnresolvedClassInfo implements VisualizableSetting, MemberSet
     public void setInstanceMember(final boolean instance) {
         this.instance = instance;
     }
-    
+
     /**
      * 名前空間名を保存するための変数
      */
@@ -462,7 +478,7 @@ public final class UnresolvedClassInfo implements VisualizableSetting, MemberSet
      * どこからでも参照可能かどうか保存するための変数
      */
     private boolean publicVisible;
-    
+
     /**
      * インスタンスメンバーかどうかを保存するための変数
      */
