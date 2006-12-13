@@ -16,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
  * 
  */
 public final class UnresolvedFieldInfo extends UnresolvedVariableInfo implements
-        VisualizableSetting {
+        VisualizableSetting, MemberSetting {
 
     /**
      * Unresolvedフィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．
@@ -41,6 +41,8 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo implements
         this.inheritanceVisible = false;
         this.namespaceVisible = false;
         this.publicVisible = false;
+        
+        this.instance = true;
     }
 
     /**
@@ -162,6 +164,33 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo implements
     }
 
     /**
+     * インスタンスメンバーかどうかを返す
+     * 
+     * @return インスタンスメンバーの場合 true，そうでない場合 false
+     */
+    public boolean isInstanceMember() {
+        return this.instance;
+    }
+
+    /**
+     * スタティックメンバーかどうかを返す
+     * 
+     * @return スタティックメンバーの場合 true，そうでない場合 false
+     */
+    public boolean isStaticMember() {
+        return !this.instance;
+    }
+
+    /**
+     * インスタンスメンバーかどうかをセットする
+     * 
+     * @param instance インスタンスメンバーの場合は true， スタティックメンバーの場合は false
+     */
+    public void setInstanceMember(final boolean instance) {
+        this.instance = instance;
+    }
+
+    /**
      * このフィールドの修飾子を保存するための変数
      */
     private Set<ModifierInfo> modifiers;
@@ -190,4 +219,9 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo implements
      * どこからでも参照可能かどうか保存するための変数
      */
     private boolean publicVisible;
+
+    /**
+     * インスタンスメンバーかどうかを保存するための変数
+     */
+    private boolean instance;
 }

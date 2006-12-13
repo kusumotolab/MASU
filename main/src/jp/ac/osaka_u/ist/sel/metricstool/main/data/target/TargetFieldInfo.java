@@ -11,7 +11,7 @@ import java.util.Set;
  * 
  * @author y-higo
  */
-public final class TargetFieldInfo extends FieldInfo implements Visualizable {
+public final class TargetFieldInfo extends FieldInfo implements Visualizable, Member {
 
     /**
      * フィールド情報オブジェクトを初期化
@@ -24,21 +24,24 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable {
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
+     * @param instance インスタンスメンバーかどうか
      */
     public TargetFieldInfo(final Set<ModifierInfo> modifiers, final String name,
             final TypeInfo type, final ClassInfo ownerClass, final boolean privateVisible,
             final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible) {
+            final boolean publicVisible, final boolean instance) {
 
         super(name, type, ownerClass);
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
-        
+
         this.privateVisible = privateVisible;
         this.namespaceVisible = namespaceVisible;
         this.inheritanceVisible = inheritanceVisible;
         this.publicVisible = publicVisible;
+
+        this.instance = instance;
     }
 
     /**
@@ -87,6 +90,24 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable {
     }
 
     /**
+     * インスタンスメンバーかどうかを返す
+     * 
+     * @return インスタンスメンバーの場合 true，そうでない場合 false
+     */
+    public boolean isInstanceMember() {
+        return this.instance;
+    }
+
+    /**
+     * スタティックメンバーかどうかを返す
+     * 
+     * @return スタティックメンバーの場合 true，そうでない場合 false
+     */
+    public boolean isStaticMember() {
+        return !this.instance;
+    }
+
+    /**
      * 修飾子を保存するための変数
      */
     private final Set<ModifierInfo> modifiers;
@@ -110,4 +131,9 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable {
      * どこからでも参照可能かどうか保存するための変数
      */
     private final boolean publicVisible;
+
+    /**
+     * インスタンスメンバーかどうかを保存するための変数
+     */
+    private final boolean instance;
 }

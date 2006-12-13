@@ -29,7 +29,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public class TargetClassInfo extends ClassInfo {
+public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
 
     /**
      * 名前空間名，クラス名を与えて暮らす情報オブジェクトを初期化
@@ -42,11 +42,12 @@ public class TargetClassInfo extends ClassInfo {
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
+     * @param instance インスタンスメンバーかどうか
      */
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
             final String className, final int loc, final boolean privateVisible,
             final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible) {
+            final boolean publicVisible, final boolean instance) {
 
         super(namespace, className);
 
@@ -64,12 +65,14 @@ public class TargetClassInfo extends ClassInfo {
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
 
+        this.modifiers.addAll(modifiers);
+
         this.privateVisible = privateVisible;
         this.namespaceVisible = namespaceVisible;
         this.inheritanceVisible = inheritanceVisible;
         this.publicVisible = publicVisible;
 
-        this.modifiers.addAll(modifiers);
+        this.instance = instance;
     }
 
     /**
@@ -82,10 +85,11 @@ public class TargetClassInfo extends ClassInfo {
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
+     * @param instance インスタンスメンバーかどうか
      */
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
             final int loc, final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible) {
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
 
         super(fullQualifiedName);
 
@@ -103,12 +107,14 @@ public class TargetClassInfo extends ClassInfo {
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
 
+        this.modifiers.addAll(modifiers);
+
         this.privateVisible = privateVisible;
         this.namespaceVisible = namespaceVisible;
         this.inheritanceVisible = inheritanceVisible;
         this.publicVisible = publicVisible;
 
-        this.modifiers.addAll(modifiers);
+        this.instance = instance;
     }
 
     /**
@@ -238,6 +244,24 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
+     * インスタンスメンバーかどうかを返す
+     * 
+     * @return インスタンスメンバーの場合 true，そうでない場合 false
+     */
+    public boolean isInstanceMember() {
+        return this.instance;
+    }
+
+    /**
+     * スタティックメンバーかどうかを返す
+     * 
+     * @return スタティックメンバーの場合 true，そうでない場合 false
+     */
+    public boolean isStaticMember() {
+        return !this.instance;
+    }
+
+    /**
      * 行数を保存するための変数
      */
     private final int loc;
@@ -281,4 +305,9 @@ public class TargetClassInfo extends ClassInfo {
      * どこからでも参照可能かどうか保存するための変数
      */
     private final boolean publicVisible;
+
+    /**
+     * インスタンスメンバーかどうかを保存するための変数
+     */
+    private final boolean instance;
 }

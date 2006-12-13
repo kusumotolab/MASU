@@ -672,7 +672,7 @@ public class MetricsTool {
         // 各 Unresolvedクラスに対して
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
 
-            // 修飾子，完全限定名，行数，可視性を取得
+            // 修飾子，完全限定名，行数，可視性，インスタンスメンバーかどうかを取得
             final Set<ModifierInfo> modifiers = unresolvedClassInfo.getModifiers();
             final String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
             final int loc = unresolvedClassInfo.getLOC();
@@ -680,10 +680,12 @@ public class MetricsTool {
             final boolean namespaceVisible = unresolvedClassInfo.isNamespaceVisible();
             final boolean inheritanceVisible = unresolvedClassInfo.isInheritanceVisible();
             final boolean publicVisible = unresolvedClassInfo.isPublicVisible();
+            final boolean instance = unresolvedClassInfo.isInstanceMember();
 
             // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
             final TargetClassInfo classInfo = new TargetClassInfo(modifiers, fullQualifiedName,
-                    loc, privateVisible, namespaceVisible, inheritanceVisible, publicVisible);
+                    loc, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
+                    instance);
             classInfoManager.add(classInfo);
 
             for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
@@ -715,11 +717,12 @@ public class MetricsTool {
         final boolean namespaceVisible = unresolvedClassInfo.isNamespaceVisible();
         final boolean inheritanceVisible = unresolvedClassInfo.isInheritanceVisible();
         final boolean publicVisible = unresolvedClassInfo.isPublicVisible();
+        final boolean instance = unresolvedClassInfo.isInstanceMember();
 
         // ClassInfo オブジェクトを生成し，ClassInfoマネージャに登録
         TargetInnerClassInfo classInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
                 outerClass, loc, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible);
+                publicVisible, instance);
         classInfoManager.add(classInfo);
 
         // このクラスのインナークラスに対して再帰的に処理
@@ -787,21 +790,22 @@ public class MetricsTool {
             // Unresolvedクラスに定義されている各Unresolvedフィールドに対して
             for (UnresolvedFieldInfo unresolvedFieldInfo : unresolvedClassInfo.getDefinedFields()) {
 
-                // 修飾子，名前，型，可視性を取得
+                // 修飾子，名前，型，可視性，インスタンスメンバーかどうかを取得
                 final Set<ModifierInfo> modifiers = unresolvedFieldInfo.getModifiers();
                 final String fieldName = unresolvedFieldInfo.getName();
                 final UnresolvedTypeInfo unresolvedFieldType = unresolvedFieldInfo.getType();
                 final TypeInfo fieldType = NameResolver.resolveTypeInfo(unresolvedFieldType,
                         classInfoManager);
-                final boolean privateVisible = unresolvedClassInfo.isPrivateVisible();
-                final boolean namespaceVisible = unresolvedClassInfo.isNamespaceVisible();
-                final boolean inheritanceVisible = unresolvedClassInfo.isInheritanceVisible();
-                final boolean publicVisible = unresolvedClassInfo.isPublicVisible();
+                final boolean privateVisible = unresolvedFieldInfo.isPrivateVisible();
+                final boolean namespaceVisible = unresolvedFieldInfo.isNamespaceVisible();
+                final boolean inheritanceVisible = unresolvedFieldInfo.isInheritanceVisible();
+                final boolean publicVisible = unresolvedFieldInfo.isPublicVisible();
+                final boolean instance = unresolvedClassInfo.isInstanceMember();
 
                 // フィールドオブジェクトを生成
                 final TargetFieldInfo fieldInfo = new TargetFieldInfo(modifiers, fieldName,
                         fieldType, ownerClass, privateVisible, namespaceVisible,
-                        inheritanceVisible, publicVisible);
+                        inheritanceVisible, publicVisible, instance);
 
                 // フィールド情報を追加
                 ((TargetClassInfo) ownerClass).addDefinedField(fieldInfo);
@@ -836,7 +840,7 @@ public class MetricsTool {
             for (UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo
                     .getDefinedMethods()) {
 
-                // 修飾子，名前，返り値，行数，コンストラクタかどうか，可視性を取得
+                // 修飾子，名前，返り値，行数，コンストラクタかどうか，可視性，インスタンスメンバーかどうかを取得
                 final Set<ModifierInfo> modifiers = unresolvedMethodInfo.getModifiers();
                 final String methodName = unresolvedMethodInfo.getMethodName();
                 final UnresolvedTypeInfo unresolvedReturnType = unresolvedMethodInfo
@@ -845,15 +849,16 @@ public class MetricsTool {
                         classInfoManager);
                 final int loc = unresolvedMethodInfo.getLOC();
                 final boolean constructor = unresolvedMethodInfo.isConstructor();
-                final boolean privateVisible = unresolvedClassInfo.isPrivateVisible();
-                final boolean namespaceVisible = unresolvedClassInfo.isNamespaceVisible();
-                final boolean inheritanceVisible = unresolvedClassInfo.isInheritanceVisible();
-                final boolean publicVisible = unresolvedClassInfo.isPublicVisible();
-
+                final boolean privateVisible = unresolvedMethodInfo.isPrivateVisible();
+                final boolean namespaceVisible = unresolvedMethodInfo.isNamespaceVisible();
+                final boolean inheritanceVisible = unresolvedMethodInfo.isInheritanceVisible();
+                final boolean publicVisible = unresolvedMethodInfo.isPublicVisible();
+                final boolean instance = unresolvedMethodInfo.isInstanceMember();
+                
                 // MethodInfo オブジェクトを生成し，引数を追加していく
                 final TargetMethodInfo methodInfo = new TargetMethodInfo(modifiers, methodName,
                         returnType, ownerClass, constructor, loc, privateVisible, namespaceVisible,
-                        inheritanceVisible, publicVisible);
+                        inheritanceVisible, publicVisible, instance);
                 for (UnresolvedParameterInfo unresolvedParameterInfo : unresolvedMethodInfo
                         .getParameterInfos()) {
 

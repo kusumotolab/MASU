@@ -54,11 +54,12 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
+     * @param instance インスタンスメンバーかどうか
      */
     public TargetMethodInfo(final Set<ModifierInfo> modifiers, final String name,
             final TypeInfo returnType, final ClassInfo ownerClass, final boolean constructor,
             final int loc, final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible) {
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
 
         super(name, returnType, ownerClass, constructor);
 
@@ -82,6 +83,8 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
         this.namespaceVisible = namespaceVisible;
         this.inheritanceVisible = inheritanceVisible;
         this.publicVisible = publicVisible;
+        
+        this.instance = instance;
     }
 
     /**
@@ -211,6 +214,24 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
     }
 
     /**
+     * インスタンスメンバーかどうかを返す
+     * 
+     * @return インスタンスメンバーの場合 true，そうでない場合 false
+     */
+    public boolean isInstanceMember() {
+        return this.instance;
+    }
+
+    /**
+     * スタティックメンバーかどうかを返す
+     * 
+     * @return スタティックメンバーの場合 true，そうでない場合 false
+     */
+    public boolean isStaticMember() {
+        return !this.instance;
+    }
+    
+    /**
      * 行数を保存するための変数
      */
     private final int loc;
@@ -254,4 +275,9 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
      * どこからでも参照可能かどうか保存するための変数
      */
     private final boolean publicVisible;
+    
+    /**
+     * インスタンスメンバーかどうかを保存するための変数
+     */
+    private final boolean instance;
 }

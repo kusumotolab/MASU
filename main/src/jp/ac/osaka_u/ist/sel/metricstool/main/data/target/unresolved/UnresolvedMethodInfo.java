@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public class UnresolvedMethodInfo implements VisualizableSetting {
+public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting {
 
     /**
      * 未解決メソッド定義情報オブジェクトを初期化
@@ -41,6 +41,8 @@ public class UnresolvedMethodInfo implements VisualizableSetting {
         this.inheritanceVisible = false;
         this.namespaceVisible = false;
         this.publicVisible = false;
+        
+        this.instance = true;
     }
 
     /**
@@ -412,6 +414,33 @@ public class UnresolvedMethodInfo implements VisualizableSetting {
     }
 
     /**
+     * インスタンスメンバーかどうかを返す
+     * 
+     * @return インスタンスメンバーの場合 true，そうでない場合 false
+     */
+    public boolean isInstanceMember() {
+        return this.instance;
+    }
+
+    /**
+     * スタティックメンバーかどうかを返す
+     * 
+     * @return スタティックメンバーの場合 true，そうでない場合 false
+     */
+    public boolean isStaticMember() {
+        return !this.instance;
+    }
+
+    /**
+     * インスタンスメンバーかどうかをセットする
+     * 
+     * @param instance インスタンスメンバーの場合は true， スタティックメンバーの場合は false
+     */
+    public void setInstanceMember(final boolean instance) {
+        this.instance = instance;
+    }
+    
+    /**
      * 修飾子を保存する
      */
     private Set<ModifierInfo> modifiers;
@@ -485,4 +514,9 @@ public class UnresolvedMethodInfo implements VisualizableSetting {
      * どこからでも参照可能かどうか保存するための変数
      */
     private boolean publicVisible;
+    
+    /**
+     * インスタンスメンバーかどうかを保存するための変数
+     */
+    private boolean instance;
 }

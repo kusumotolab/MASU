@@ -28,7 +28,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class UnresolvedClassInfo implements VisualizableSetting {
+public final class UnresolvedClassInfo implements VisualizableSetting, MemberSetting {
 
     /**
      * 引数なしコンストラクタ
@@ -51,6 +51,8 @@ public final class UnresolvedClassInfo implements VisualizableSetting {
         this.inheritanceVisible = false;
         this.namespaceVisible = false;
         this.publicVisible = false;
+        
+        this.instance = true;
     }
 
     /**
@@ -375,6 +377,33 @@ public final class UnresolvedClassInfo implements VisualizableSetting {
     }
 
     /**
+     * インスタンスメンバーかどうかを返す
+     * 
+     * @return インスタンスメンバーの場合 true，そうでない場合 false
+     */
+    public boolean isInstanceMember() {
+        return this.instance;
+    }
+
+    /**
+     * スタティックメンバーかどうかを返す
+     * 
+     * @return スタティックメンバーの場合 true，そうでない場合 false
+     */
+    public boolean isStaticMember() {
+        return !this.instance;
+    }
+
+    /**
+     * インスタンスメンバーかどうかをセットする
+     * 
+     * @param instance インスタンスメンバーの場合は true， スタティックメンバーの場合は false
+     */
+    public void setInstanceMember(final boolean instance) {
+        this.instance = instance;
+    }
+    
+    /**
      * 名前空間名を保存するための変数
      */
     private String[] namespace;
@@ -433,4 +462,9 @@ public final class UnresolvedClassInfo implements VisualizableSetting {
      * どこからでも参照可能かどうか保存するための変数
      */
     private boolean publicVisible;
+    
+    /**
+     * インスタンスメンバーかどうかを保存するための変数
+     */
+    private boolean instance;
 }

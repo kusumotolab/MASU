@@ -23,14 +23,15 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
+     * @param instance インスタンスメンバーかどうか
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
             final String className, final TargetClassInfo outerClass, final int loc,
             final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible) {
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
 
         super(modifiers, namespace, className, loc, privateVisible, namespaceVisible,
-                inheritanceVisible, publicVisible);
+                inheritanceVisible, publicVisible, instance);
 
         if (null == outerClass) {
             throw new NullPointerException();
@@ -50,14 +51,15 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
+     * @param instance インスタンスメンバーかどうか
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers,
             final String[] fullQualifiedName, final TargetClassInfo outerClass, final int loc,
             final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible) {
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
 
         super(modifiers, fullQualifiedName, loc, privateVisible, namespaceVisible,
-                inheritanceVisible, publicVisible);
+                inheritanceVisible, publicVisible, instance);
 
         if (null == outerClass) {
             throw new NullPointerException();
