@@ -51,11 +51,7 @@ public final class ArrayTypeInfo implements TypeInfo {
 
             int dimension = this.getDimension();
             int correspondDimension = ((ArrayTypeInfo) typeInfo).getDimension();
-            if (dimension != correspondDimension) {
-                return false;
-            } else {
-                return true;
-            }
+            return dimension == correspondDimension;
         }
     }
 
@@ -214,8 +210,8 @@ public final class ArrayTypeInfo implements TypeInfo {
 
             String firstKey = this.getFirstKey();
             String correspondFirstKey = ((Key) o).getFirstKey();
-            if (firstKey.equals(correspondFirstKey)) {
-                return true;
+            if (!firstKey.equals(correspondFirstKey)) {
+                return false;
             } else {
                 int secondKey = this.getSecondKey();
                 int correspondSecondKey = ((Key) o).getSecondKey();
