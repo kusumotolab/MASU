@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external;
 
 
+import java.util.HashSet;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 
@@ -18,7 +21,7 @@ public final class ExternalParameterInfo extends ParameterInfo {
      * @param type à¯êîÇÃå^
      */
     public ExternalParameterInfo(final TypeInfo type) {
-        super(UNKNOWN_NAME, type);
+        super(new HashSet<ModifierInfo>(), UNKNOWN_NAME, type);
     }
 
     /**

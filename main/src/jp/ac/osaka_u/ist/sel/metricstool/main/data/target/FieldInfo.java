@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Collections;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -28,9 +29,9 @@ public abstract class FieldInfo extends VariableInfo {
      * @param type フィールドの型
      * @param ownerClass フィールドを定義しているクラス
      */
-    public FieldInfo(final String name, final TypeInfo type, final ClassInfo ownerClass) {
+    public FieldInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type, final ClassInfo ownerClass) {
 
-        super(name, type);
+        super(modifiers, name, type);
 
         if (null == ownerClass) {
             throw new NullPointerException();

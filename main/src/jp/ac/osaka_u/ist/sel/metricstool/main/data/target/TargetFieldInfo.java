@@ -1,8 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -16,7 +14,7 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
     /**
      * フィールド情報オブジェクトを初期化
      * 
-     * @param modidiers 修飾子名の Set
+     * @param modidiers 修飾子の Set
      * @param name 名前
      * @param type 型
      * @param ownerClass このフィールドを定義しているクラス
@@ -31,10 +29,9 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
             final boolean namespaceVisible, final boolean inheritanceVisible,
             final boolean publicVisible, final boolean instance) {
 
-        super(name, type, ownerClass);
+        super(modifiers, name, type, ownerClass);
 
-        this.modifiers = new HashSet<ModifierInfo>();
-        this.modifiers.addAll(modifiers);
+ 
 
         this.privateVisible = privateVisible;
         this.namespaceVisible = namespaceVisible;
@@ -44,14 +41,7 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
         this.instance = instance;
     }
 
-    /**
-     * 修飾子の Set を返す
-     * 
-     * @return 修飾子の Set
-     */
-    public Set<ModifierInfo> getModifiers() {
-        return Collections.unmodifiableSet(this.modifiers);
-    }
+
 
     /**
      * 子クラスから参照可能かどうかを返す
@@ -107,11 +97,7 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
         return !this.instance;
     }
 
-    /**
-     * 修飾子を保存するための変数
-     */
-    private final Set<ModifierInfo> modifiers;
-
+ 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数
      */

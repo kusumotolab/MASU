@@ -1,8 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external;
 
 
+import java.util.HashSet;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 
 
@@ -20,7 +23,7 @@ public class ExternalFieldInfo extends FieldInfo {
      * @param ownerClass フィールドを定義しているクラス
      */
     public ExternalFieldInfo(final String name, final ClassInfo ownerClass) {
-        super(name, UnknownTypeInfo.getInstance(), ownerClass);
+        super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(), ownerClass);
     }
 
 }

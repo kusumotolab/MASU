@@ -841,28 +841,30 @@ public class MetricsTool {
                     .getDefinedMethods()) {
 
                 // 修飾子，名前，返り値，行数，コンストラクタかどうか，可視性，インスタンスメンバーかどうかを取得
-                final Set<ModifierInfo> modifiers = unresolvedMethodInfo.getModifiers();
+                final Set<ModifierInfo> methodModifiers = unresolvedMethodInfo.getModifiers();
                 final String methodName = unresolvedMethodInfo.getMethodName();
-                final UnresolvedTypeInfo unresolvedReturnType = unresolvedMethodInfo
+                final UnresolvedTypeInfo unresolvedMethodReturnType = unresolvedMethodInfo
                         .getReturnType();
-                final TypeInfo returnType = NameResolver.resolveTypeInfo(unresolvedReturnType,
+                final TypeInfo methodReturnType = NameResolver.resolveTypeInfo(unresolvedMethodReturnType,
                         classInfoManager);
-                final int loc = unresolvedMethodInfo.getLOC();
+                final int methodLOC = unresolvedMethodInfo.getLOC();
                 final boolean constructor = unresolvedMethodInfo.isConstructor();
                 final boolean privateVisible = unresolvedMethodInfo.isPrivateVisible();
                 final boolean namespaceVisible = unresolvedMethodInfo.isNamespaceVisible();
                 final boolean inheritanceVisible = unresolvedMethodInfo.isInheritanceVisible();
                 final boolean publicVisible = unresolvedMethodInfo.isPublicVisible();
                 final boolean instance = unresolvedMethodInfo.isInstanceMember();
-                
+
                 // MethodInfo オブジェクトを生成し，引数を追加していく
-                final TargetMethodInfo methodInfo = new TargetMethodInfo(modifiers, methodName,
-                        returnType, ownerClass, constructor, loc, privateVisible, namespaceVisible,
+                final TargetMethodInfo methodInfo = new TargetMethodInfo(methodModifiers, methodName,
+                        methodReturnType, ownerClass, constructor, methodLOC, privateVisible, namespaceVisible,
                         inheritanceVisible, publicVisible, instance);
                 for (UnresolvedParameterInfo unresolvedParameterInfo : unresolvedMethodInfo
                         .getParameterInfos()) {
 
-                    // パラメータ名，型を取得
+                    // 修飾子，パラメータ名，型を取得
+                    final Set<ModifierInfo> parameterModifiers = unresolvedParameterInfo
+                            .getModifiers();
                     final String parameterName = unresolvedParameterInfo.getName();
                     final UnresolvedTypeInfo unresolvedParameterType = unresolvedParameterInfo
                             .getType();
@@ -871,7 +873,7 @@ public class MetricsTool {
 
                     // パラメータオブジェクトを生成し，メソッドに追加
                     final TargetParameterInfo parameterInfo = new TargetParameterInfo(
-                            parameterName, parameterType);
+                            parameterModifiers, parameterName, parameterType);
                     methodInfo.addParameter(parameterInfo);
                 }
 
@@ -879,7 +881,8 @@ public class MetricsTool {
                 for (UnresolvedLocalVariableInfo unresolvedLocalVariable : unresolvedMethodInfo
                         .getLocalVariables()) {
 
-                    // 変数名，型を取得
+                    // 修飾子，変数名，型を取得
+                    final Set<ModifierInfo> localModifiers = unresolvedLocalVariable.getModifiers();
                     final String variableName = unresolvedLocalVariable.getName();
                     final UnresolvedTypeInfo unresolvedVariableType = unresolvedLocalVariable
                             .getType();
@@ -887,8 +890,8 @@ public class MetricsTool {
                             unresolvedVariableType, classInfoManager);
 
                     // ローカル変数オブジェクトを生成し，MethodInfoに追加
-                    final LocalVariableInfo localVariable = new LocalVariableInfo(variableName,
-                            variableType);
+                    final LocalVariableInfo localVariable = new LocalVariableInfo(localModifiers,
+                            variableName, variableType);
                     methodInfo.addLocalVariable(localVariable);
                 }
 
