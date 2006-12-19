@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManager;
@@ -15,7 +17,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManag
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
@@ -32,8 +33,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.NameResolver;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsage;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsage;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCall;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
@@ -845,8 +846,8 @@ public class MetricsTool {
                 final String methodName = unresolvedMethodInfo.getMethodName();
                 final UnresolvedTypeInfo unresolvedMethodReturnType = unresolvedMethodInfo
                         .getReturnType();
-                final TypeInfo methodReturnType = NameResolver.resolveTypeInfo(unresolvedMethodReturnType,
-                        classInfoManager);
+                final TypeInfo methodReturnType = NameResolver.resolveTypeInfo(
+                        unresolvedMethodReturnType, classInfoManager);
                 final int methodLOC = unresolvedMethodInfo.getLOC();
                 final boolean constructor = unresolvedMethodInfo.isConstructor();
                 final boolean privateVisible = unresolvedMethodInfo.isPrivateVisible();
@@ -856,9 +857,10 @@ public class MetricsTool {
                 final boolean instance = unresolvedMethodInfo.isInstanceMember();
 
                 // MethodInfo オブジェクトを生成し，引数を追加していく
-                final TargetMethodInfo methodInfo = new TargetMethodInfo(methodModifiers, methodName,
-                        methodReturnType, ownerClass, constructor, methodLOC, privateVisible, namespaceVisible,
-                        inheritanceVisible, publicVisible, instance);
+                final TargetMethodInfo methodInfo = new TargetMethodInfo(methodModifiers,
+                        methodName, methodReturnType, ownerClass, constructor, methodLOC,
+                        privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
+                        instance);
                 for (UnresolvedParameterInfo unresolvedParameterInfo : unresolvedMethodInfo
                         .getParameterInfos()) {
 
@@ -907,7 +909,7 @@ public class MetricsTool {
      * メソッドオーバーライド情報を各MethodInfoに追加する．addInheritanceInfomationToClassInfos の後 かつ registMethodInfos
      * の後に呼び出さなければならない
      */
-    private static void addOverrideInformationToMethodInfos() {
+    private static void addOverrideRelation() {
 
         // 全ての対象クラスに対して
         for (TargetClassInfo classInfo : ClassInfoManager.getInstance().getTargetClassInfos()) {
@@ -917,7 +919,7 @@ public class MetricsTool {
 
                 // 各対象クラスの各メソッドについて，親クラスのメソッドをオー払い度しているかを調査
                 for (MethodInfo methodInfo : classInfo.getDefinedMethods()) {
-                    addOverrideInformationToMethodInfos(superClassInfo, methodInfo);
+                    addOverrideRelation(superClassInfo, methodInfo);
                 }
             }
         }
@@ -930,8 +932,7 @@ public class MetricsTool {
      * @param classInfo クラス情報
      * @param overrider オーバーライド対象のメソッド
      */
-    private static void addOverrideInformationToMethodInfos(final ClassInfo classInfo,
-            final MethodInfo overrider) {
+    private static void addOverrideRelation(final ClassInfo classInfo, final MethodInfo overrider) {
 
         if ((null == classInfo) || (null == overrider)) {
             throw new NullPointerException();
@@ -954,82 +955,61 @@ public class MetricsTool {
 
         // 親クラス群に対して再帰的に処理
         for (ClassInfo superClassInfo : classInfo.getSuperClasses()) {
-            addOverrideInformationToMethodInfos(superClassInfo, overrider);
+            addOverrideRelation(superClassInfo, overrider);
         }
     }
 
     /**
-     * フィールドの使用関係を追加する．
+     * エンティティ（フィールドやクラス）の代入・参照，メソッドの呼び出し関係を追加する．
      */
-    private static void addUseInformationToFieldInfos() {
+    private static void addReferenceAssignmentCallRelateion() {
 
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
         final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
         final FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
+        final MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
+        final Map<UnresolvedTypeInfo, TypeInfo> resolvedCache = new HashMap<UnresolvedTypeInfo, TypeInfo>();
 
-        // 各UnresolvedClassInfo に対して
+        // 各未解決クラス情報 に対して
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
 
+            // 未解決クラス情報から，解決済みクラス情報を取得
+            final TargetClassInfo userClass = NameResolver.resolveClassInfo(unresolvedClassInfo,
+                    classInfoManager);
+
+            // 各未解決メソッド情報に対して
             for (UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo
                     .getDefinedMethods()) {
 
-                // UnresolvedMethodInfo から MethodInfo を取得
-                final TargetMethodInfo methodInfo = NameResolver.resolveMethodInfo(
+                // 未解決メソッド情報から，解決済みメソッド情報を取得
+                final TargetMethodInfo caller = NameResolver.resolveMethodInfo(
                         unresolvedMethodInfo, classInfoManager);
 
-                // 未解決参照フィールドの名前解決処理
-                for (UnresolvedFieldUsage fieldUsage : unresolvedMethodInfo.getFieldReferences()) {
+                // 各未解決参照エンティティの名前解決処理
+                for (UnresolvedEntityUsage referencee : unresolvedMethodInfo.getFieldReferences()) {
 
-                    // UnresolvedFieldUsage から FieldInfo を取得
-                    final FieldInfo referencee = NameResolver.resolveFieldUsage(fieldUsage,
-                            classInfoManager, fieldInfoManager);
-                    methodInfo.addReferencee(referencee);
-                    referencee.addReferencer(methodInfo);
+                    // 未解決参照処理を解決
+                    NameResolver.resolveEntityReference(referencee, userClass, caller,
+                            classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
                 }
 
-                // 未解決代入フィールドの名前解決処理
-                for (UnresolvedFieldUsage fieldUsage : unresolvedMethodInfo.getFieldAssignments()) {
+                // 未解決代入エンティティの名前解決処理
+                for (UnresolvedEntityUsage assignmentee : unresolvedMethodInfo
+                        .getFieldAssignments()) {
 
-                    // UnresolvedFieldUsage から FieldInfo を取得
-                    final FieldInfo assignmentee = NameResolver.resolveFieldUsage(fieldUsage,
-                            classInfoManager, fieldInfoManager);
-                    methodInfo.addAssignmentee(assignmentee);
-                    assignmentee.addAssignmenter(methodInfo);
+                    // 未解決代入処理を解決
+                    NameResolver.resolveEntityAssignment(assignmentee, userClass, caller,
+                            classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
                 }
-            }
-        }
-    }
 
-    /**
-     * メソッドの呼び出し関係情報を追加する．registMethodInfosの後に呼び出さなければならない.
-     */
-    private static void addCallInformationToMethodInfos() {
-
-        final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
-                .getInstance();
-        final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
-        final MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
-
-        // 各 UnresolvedClassInfo に対して
-        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
-
-            // 各 UnresolvedClassInfo の各UnresolvedMethodInfo に対して
-            for (UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo
-                    .getDefinedMethods()) {
-
-                // UnresolvedMethodInfo から MethodInfo を取得
-                final MethodInfo caller = NameResolver.resolveMethodInfo(unresolvedMethodInfo,
-                        classInfoManager);
-
-                // 各UnresolvedMethodInfo での各メソッド呼び出し情報(UnresolvedMethodCall)に対して
+                // 各未解決メソッド呼び出し処理の解決処理
                 for (UnresolvedMethodCall methodCall : unresolvedMethodInfo.getMethodCalls()) {
 
-                    // UnresolvedMethodUsage から MethodInfo を取得
-                    final MethodInfo callee = NameResolver.resolveMethodCall(methodCall,
-                            classInfoManager, methodInfoManager);
-                    caller.addCallee(callee);
-                    callee.addCaller(caller);
+                    // 各未解決メソッド呼び出し処理を解決
+                    NameResolver.resolveMethodCall(methodCall, userClass, caller, classInfoManager,
+                            fieldInfoManager, methodInfoManager, resolvedCache);
+
                 }
             }
         }

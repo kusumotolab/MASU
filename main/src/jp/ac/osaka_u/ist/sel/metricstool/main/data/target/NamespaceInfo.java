@@ -44,6 +44,34 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo> {
     }
 
     /**
+     * 名前空間の比較を行う．等しい場合は true，そうでない場合 false を返す
+     */
+    @Override
+    public boolean equals(final Object o) {
+
+        if (null == o) {
+            throw new NullPointerException();
+        }
+
+        if (!(o instanceof NamespaceInfo)) {
+            return false;
+        }
+
+        final String[] name = this.getName();
+        final String[] correspondName = ((NamespaceInfo) o).getName();
+        if (name.length != correspondName.length) {
+            return false;
+        } else {
+            for (int i = 0; i < name.length; i++) {
+                if (!name[i].equals(correspondName[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    /**
      * 名前空間名を返す
      * 
      * @return 名前空間名
@@ -65,10 +93,10 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo> {
      */
     public String getName(final String delimiter) {
 
-        if (null == delimiter){
-            throw new  NullPointerException();
+        if (null == delimiter) {
+            throw new NullPointerException();
         }
-        
+
         String[] names = this.getName();
         StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < names.length; i++) {

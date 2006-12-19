@@ -17,20 +17,20 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedMethodCall implements UnresolvedTypeInfo {
 
     /**
-     * メソッド呼び出しが実行される変数の型名，メソッド名を与えてオブジェクトを初期化
+     * メソッド呼び出しが実行される変数の型，メソッド名を与えてオブジェクトを初期化
      * 
-     * @param ownerClassName メソッド呼び出しが実行される変数の型名
+     * @param ownerClassType メソッド呼び出しが実行される変数の型
      * @param methodName メソッド名
      */
-    public UnresolvedMethodCall(final String[] ownerClassName, final String methodName,
+    public UnresolvedMethodCall(final UnresolvedTypeInfo ownerClassType, final String methodName,
             final boolean constructor) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == ownerClassName) || (null == methodName)) {
+        if ((null == ownerClassType) || (null == methodName)) {
             throw new NullPointerException();
         }
 
-        this.ownerClassName = ownerClassName;
+        this.ownerClassType = ownerClassType;
         this.methodName = methodName;
         this.constructor = constructor;
         this.parameterTypes = new LinkedList<UnresolvedTypeInfo>();
@@ -62,12 +62,12 @@ public final class UnresolvedMethodCall implements UnresolvedTypeInfo {
     }
 
     /**
-     * メソッド呼び出しが実行される変数の型名を返す
+     * メソッド呼び出しが実行される変数の型を返す
      * 
      * @return メソッド呼び出しが実行される変数の型
      */
-    public String[] getOwnerClassName() {
-        return this.ownerClassName;
+    public UnresolvedTypeInfo getOwnerClassType() {
+        return this.ownerClassType;
     }
 
     /**
@@ -87,7 +87,7 @@ public final class UnresolvedMethodCall implements UnresolvedTypeInfo {
     public String getMethodName() {
         return this.methodName;
     }
-    
+
     /**
      * このメソッド呼び出しの返り値の型を返す
      * 
@@ -98,9 +98,9 @@ public final class UnresolvedMethodCall implements UnresolvedTypeInfo {
     }
 
     /**
-     * メソッド呼び出しが実行される変数の型名を保存するための変数
+     * メソッド呼び出しが実行される変数の型を保存するための変数
      */
-    private final String[] ownerClassName;
+    private final UnresolvedTypeInfo ownerClassType;
 
     /**
      * メソッド名を保存するための変数

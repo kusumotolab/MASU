@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class UnresolvedFieldUsage implements UnresolvedTypeInfo {
+public final class UnresolvedEntityUsage implements UnresolvedTypeInfo {
 
     /**
      * フィールド使用が実行される変数の型名と変数名を与えてオブジェクトを初期化
@@ -18,15 +18,26 @@ public final class UnresolvedFieldUsage implements UnresolvedTypeInfo {
      * @param ownerClassName フィールド使用が実行される変数の型名
      * @param fieldName 変数名
      */
-    public UnresolvedFieldUsage(final UnresolvedTypeInfo ownerClassType, final String fieldName) {
+    public UnresolvedEntityUsage(final AvailableNamespaceInfoSet availableNamespaces,
+            final UnresolvedTypeInfo ownerClassType, final String fieldName) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == ownerClassType) || (null == fieldName)) {
+        if ((null == availableNamespaces) || (null == ownerClassType) || (null == fieldName)) {
             throw new NullPointerException();
         }
 
+        this.availableNamespaces = availableNamespaces;
         this.ownerClassType = ownerClassType;
         this.fieldName = fieldName;
+    }
+
+    /**
+     * 使用可能な名前空間を返す
+     * 
+     * @return 使用可能な名前空間を返す
+     */
+    public AvailableNamespaceInfoSet getAvailableNamespaces() {
+        return this.availableNamespaces;
     }
 
     /**
@@ -46,7 +57,7 @@ public final class UnresolvedFieldUsage implements UnresolvedTypeInfo {
     public String getFieldName() {
         return this.fieldName;
     }
-    
+
     /**
      * このフィールド使用の型（返り値みたいなもの）を返す
      * 
@@ -55,7 +66,12 @@ public final class UnresolvedFieldUsage implements UnresolvedTypeInfo {
     public String getTypeName() {
         return UnresolvedTypeInfo.UNRESOLVED;
     }
-    
+
+    /**
+     * 使用可能な名前空間を保存するための変数
+     */
+    private final AvailableNamespaceInfoSet availableNamespaces;
+
     /**
      * フィールド使用が実行される変数の未解決型名を保存するための変数
      */

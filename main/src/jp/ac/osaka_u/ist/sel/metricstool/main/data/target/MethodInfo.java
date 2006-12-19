@@ -104,6 +104,45 @@ public abstract class MethodInfo implements Comparable<MethodInfo> {
         }
     }
 
+    /**
+     * このメソッドが，引数で与えられた情報を使って呼び出すことができるかどうかを判定する．
+     * 
+     * @param methodName メソッド名
+     * @param parameterTypes 引数の型のリスト
+     * @return 呼び出せる場合は true，そうでない場合は false
+     */
+    public final boolean canCalledWith(final String methodName, final List<TypeInfo> parameterTypes) {
+
+        if ((null == methodName) || (null == parameterTypes)) {
+            throw new NullPointerException();
+        }
+
+        // メソッド名が等しくない場合は該当しない
+        if (!methodName.equals(this.getMethodName())) {
+            return false;
+        }
+
+        // 引数の数が等しくない場合は該当しない
+        final List<ParameterInfo> parameters = this.getParameters();
+        if (parameters.size() != parameterTypes.size()) {
+            return false;
+        }
+
+        // 引数の型を先頭からチェック等しくない場合は該当しない
+        final Iterator<ParameterInfo> parameterIterator = parameters.iterator();
+        final Iterator<TypeInfo> typeIterator = parameterTypes.iterator();
+        while (parameterIterator.hasNext() && (typeIterator.hasNext())) {
+            final ParameterInfo parameter = parameterIterator.next();
+            final TypeInfo type = typeIterator.next();
+            if (!parameter.getType().getTypeName().equals(type.getTypeName())) {
+                return false;
+            }
+            // TODO クラス階層を使って判定をする必要がある
+        }
+
+        return true;
+    }
+
     public final boolean isSameSignature(final MethodInfo methodInfo) {
 
         if (null == methodInfo) {
