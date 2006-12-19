@@ -31,7 +31,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
  * @author y-higo
  * 
  */
-public final class UnresolvedClassInfo implements UnresolvedTypeInfo,VisualizableSetting, MemberSetting {
+public final class UnresolvedClassInfo implements UnresolvedTypeInfo, VisualizableSetting,
+        MemberSetting {
 
     /**
      * 引数なしコンストラクタ
@@ -79,7 +80,8 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo,Visualizabl
      * 
      * @param o 比較対象クラス
      */
-    public boolean equals(Object o) {
+    @Override
+    public boolean equals(final Object o) {
 
         if (null == o) {
             throw new NullPointerException();
@@ -89,8 +91,8 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo,Visualizabl
             return false;
         }
 
-        String[] fullQualifiedName = this.getFullQualifiedName();
-        String[] correspondFullQualifiedName = ((UnresolvedClassInfo) o).getFullQualifiedName();
+        final String[] fullQualifiedName = this.getFullQualifiedName();
+        final String[] correspondFullQualifiedName = ((UnresolvedClassInfo) o).getFullQualifiedName();
 
         if (fullQualifiedName.length != correspondFullQualifiedName.length) {
             return false;
@@ -110,10 +112,11 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo,Visualizabl
      * 
      * @param このクラスのハッシュコード
      */
+    @Override
     public int hashCode() {
 
-        StringBuffer buffer = new StringBuffer();
-        String[] fullQualifiedName = this.getFullQualifiedName();
+        final StringBuffer buffer = new StringBuffer();
+        final String[] fullQualifiedName = this.getFullQualifiedName();
         for (int i = 0; i < fullQualifiedName.length; i++) {
             buffer.append(fullQualifiedName[i]);
         }
@@ -146,8 +149,8 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo,Visualizabl
      */
     public String[] getFullQualifiedName() {
 
-        String[] namespace = this.getNamespace();
-        String[] fullQualifiedName = new String[namespace.length + 1];
+        final String[] namespace = this.getNamespace();
+        final String[] fullQualifiedName = new String[namespace.length + 1];
 
         for (int i = 0; i < namespace.length; i++) {
             fullQualifiedName[i] = namespace[i];
@@ -306,6 +309,14 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo,Visualizabl
     }
 
     /**
+     * 外部クラスを返す
+     * @return 外部クラス.　外部クラスがない場合はnull
+     */
+    public UnresolvedClassInfo getOuterClass() {
+        return this.outerClass;
+    }
+
+    /**
      * 定義しているメソッドのセットを返す
      * 
      * @return 定義しているメソッドのセット
@@ -322,9 +333,7 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo,Visualizabl
     public Set<UnresolvedFieldInfo> getDefinedFields() {
         return Collections.unmodifiableSet(this.definedFields);
     }
-    
-    
-    
+
     /**
      * 型名を返す
      * @return 型名
@@ -333,23 +342,23 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo,Visualizabl
         String delimiter = null;
         try {
             delimiter = Settings.getLanguage().getNamespaceDelimiter();
-        } catch (UnavailableLanguageException e) {
+        } catch (final UnavailableLanguageException e) {
             delimiter = ".";
         }
 
         final StringBuffer buffer = new StringBuffer();
-        
-        for(String name : this.getFullQualifiedName()){
+
+        for (final String name : this.getFullQualifiedName()) {
             buffer.append(name);
             buffer.append(delimiter);
         }
-        
+
         int delimiterLength = 0;
-        if (null != delimiter){
+        if (null != delimiter) {
             delimiterLength = delimiter.length();
         }
-        
-        return buffer.substring(0, buffer.length()-delimiterLength);
+
+        return buffer.substring(0, buffer.length() - delimiterLength);
     }
 
     /**
@@ -368,6 +377,14 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo,Visualizabl
      */
     public void setNamespaceVisible(final boolean namespaceVisible) {
         this.namespaceVisible = namespaceVisible;
+    }
+
+    /**
+     * 外部クラスをセットする
+     * @param outerClass 外部クラス
+     */
+    public void setOuterClass(final UnresolvedClassInfo outerClass) {
+        this.outerClass = outerClass;
     }
 
     /**
@@ -480,6 +497,11 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo,Visualizabl
      * インナークラスを保存するためのセット
      */
     private final Set<UnresolvedClassInfo> innerClasses;
+
+    /**
+     * 外側のクラスを保持する変数
+     */
+    private UnresolvedClassInfo outerClass;
 
     /**
      * 定義しているメソッドを保存するためのセット
