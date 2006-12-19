@@ -3,10 +3,13 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
 
 
 /**
@@ -28,7 +31,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class UnresolvedClassInfo implements VisualizableSetting, MemberSetting {
+public final class UnresolvedClassInfo implements UnresolvedTypeInfo,VisualizableSetting, MemberSetting {
 
     /**
      * 引数なしコンストラクタ
@@ -42,7 +45,7 @@ public final class UnresolvedClassInfo implements VisualizableSetting, MemberSet
         this.loc = 0;
 
         this.modifiers = new HashSet<ModifierInfo>();
-        this.superClasses = new HashSet<UnresolvedTypeInfo>();
+        this.superClasses = new LinkedHashSet<UnresolvedTypeInfo>();
         this.innerClasses = new HashSet<UnresolvedClassInfo>();
         this.definedMethods = new HashSet<UnresolvedMethodInfo>();
         this.definedFields = new HashSet<UnresolvedFieldInfo>();
@@ -318,6 +321,35 @@ public final class UnresolvedClassInfo implements VisualizableSetting, MemberSet
      */
     public Set<UnresolvedFieldInfo> getDefinedFields() {
         return Collections.unmodifiableSet(this.definedFields);
+    }
+    
+    
+    
+    /**
+     * 型名を返す
+     * @return 型名
+     */
+    public String getTypeName() {
+        String delimiter = null;
+        try {
+            delimiter = Settings.getLanguage().getNamespaceDelimiter();
+        } catch (UnavailableLanguageException e) {
+            delimiter = ".";
+        }
+
+        final StringBuffer buffer = new StringBuffer();
+        
+        for(String name : this.getFullQualifiedName()){
+            buffer.append(name);
+            buffer.append(delimiter);
+        }
+        
+        int delimiterLength = 0;
+        if (null != delimiter){
+            delimiterLength = delimiter.length();
+        }
+        
+        return buffer.substring(0, buffer.length()-delimiterLength);
     }
 
     /**
