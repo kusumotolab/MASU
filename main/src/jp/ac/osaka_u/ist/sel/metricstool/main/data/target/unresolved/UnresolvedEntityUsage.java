@@ -1,11 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
 
 
 /**
- * 未解決フィールド使用を保存するためのクラス
+ * 未解決エンティティ使用を保存するためのクラス． 未解決エンティティ使用とは，パッケージ名やクラス名の参照 を表す．
  * 
  * @author y-higo
  * 
@@ -13,72 +14,62 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedEntityUsage implements UnresolvedTypeInfo {
 
     /**
-     * フィールド使用が実行される変数の型名と変数名を与えてオブジェクトを初期化
+     * 未解決エンティティ使用オブジェクトを作成する．
      * 
-     * @param ownerClassName フィールド使用が実行される変数の型名
-     * @param fieldName 変数名
+     * @param availableNamespaces 利用可能な名前空間 
+     * @param name 未解決エンティティ使用名
      */
     public UnresolvedEntityUsage(final AvailableNamespaceInfoSet availableNamespaces,
-            final UnresolvedTypeInfo ownerClassType, final String fieldName) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == availableNamespaces) || (null == ownerClassType) || (null == fieldName)) {
-            throw new NullPointerException();
-        }
+            final String[] name) {
 
         this.availableNamespaces = availableNamespaces;
-        this.ownerClassType = ownerClassType;
-        this.fieldName = fieldName;
+        this.name = name;
     }
 
     /**
-     * 使用可能な名前空間を返す
+     * 型名を返す. このクラスは UnresolvedTypeInfo を実装しているので便宜上存在しているだけ．
+     */
+    public String getTypeName() {
+
+        try {
+            final String delimiter = Settings.getLanguage().getNamespaceDelimiter();
+            final StringBuffer buffer = new StringBuffer();
+            for (int i = 0; i < (this.name.length - 1); i++) {
+                buffer.append(this.name[i]);
+                buffer.append(delimiter);
+            }
+            buffer.append(this.name[this.name.length - 1]);
+            return buffer.toString();
+        } catch (UnavailableLanguageException e) {
+            return "";
+        }
+    }
+
+    /**
+     * 未解決エンティティ使用名を返す．
      * 
-     * @return 使用可能な名前空間を返す
+     * @return 未解決エンティティ使用名
+     */
+    public String[] getName() {
+        return this.name;
+    }
+
+    /**
+     * この未解決エンティティ使用が利用することのできる名前空間を返す．
+     * 
+     * @return この未解決エンティティ使用が利用することのできる名前空間
      */
     public AvailableNamespaceInfoSet getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
     /**
-     * フィールド使用が実行される変数の未解決型名を返す
-     * 
-     * @return フィールド使用が実行される変数の未解決型名
-     */
-    public UnresolvedTypeInfo getOwnerClassType() {
-        return this.ownerClassType;
-    }
-
-    /**
-     * フィールド名を返す
-     * 
-     * @return フィールド名
-     */
-    public String getFieldName() {
-        return this.fieldName;
-    }
-
-    /**
-     * このフィールド使用の型（返り値みたいなもの）を返す
-     * 
-     * @return このフィールド使用の型（返り値みたいなもの）
-     */
-    public String getTypeName() {
-        return UnresolvedTypeInfo.UNRESOLVED;
-    }
-
-    /**
-     * 使用可能な名前空間を保存するための変数
+     * この未解決エンティティ使用が利用することのできる名前空間を保存するための変数
      */
     private final AvailableNamespaceInfoSet availableNamespaces;
 
     /**
-     * フィールド使用が実行される変数の未解決型名を保存するための変数
+     * この未解決エンティティ使用名を保存するための変数
      */
-    private final UnresolvedTypeInfo ownerClassType;
-
-    /**
-     * フィールド名を保存するための変数
-     */
-    private final String fieldName;
+    private final String[] name;
 }

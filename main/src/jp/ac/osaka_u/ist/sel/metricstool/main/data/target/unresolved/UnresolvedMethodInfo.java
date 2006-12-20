@@ -33,8 +33,8 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting 
         this.modifiers = new HashSet<ModifierInfo>();
         this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
         this.methodCalls = new HashSet<UnresolvedMethodCall>();
-        this.fieldReferences = new HashSet<UnresolvedEntityUsage>();
-        this.fieldAssignments = new HashSet<UnresolvedEntityUsage>();
+        this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
+        this.fieldAssignments = new HashSet<UnresolvedFieldUsage>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
         
         this.privateVisible = false;
@@ -70,8 +70,8 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting 
         this.modifiers = new HashSet<ModifierInfo>();
         this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
         this.methodCalls = new HashSet<UnresolvedMethodCall>();
-        this.fieldReferences = new HashSet<UnresolvedEntityUsage>();
-        this.fieldAssignments = new HashSet<UnresolvedEntityUsage>();
+        this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
+        this.fieldAssignments = new HashSet<UnresolvedFieldUsage>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
         
         this.privateVisible = false;
@@ -235,7 +235,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting 
      * 
      * @param fieldUsage フィールド参照
      */
-    public void addFieldReference(final UnresolvedEntityUsage fieldUsage) {
+    public void addFieldReference(final UnresolvedFieldUsage fieldUsage) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -251,7 +251,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting 
      * 
      * @param fieldUsage フィールド代入
      */
-    public void addFieldAssignment(final UnresolvedEntityUsage fieldUsage) {
+    public void addFieldAssignment(final UnresolvedFieldUsage fieldUsage) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -301,7 +301,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting 
      * 
      * @return フィールド参照の Set
      */
-    public Set<UnresolvedEntityUsage> getFieldReferences() {
+    public Set<UnresolvedFieldUsage> getFieldReferences() {
         return Collections.unmodifiableSet(this.fieldReferences);
     }
 
@@ -310,7 +310,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting 
      * 
      * @return フィールド代入の Set
      */
-    public Set<UnresolvedEntityUsage> getFieldAssignments() {
+    public Set<UnresolvedFieldUsage> getFieldAssignments() {
         return Collections.unmodifiableSet(this.fieldAssignments);
     }
 
@@ -478,12 +478,12 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting 
     /**
      * フィールド参照を保存する変数
      */
-    private final Set<UnresolvedEntityUsage> fieldReferences;
+    private final Set<UnresolvedFieldUsage> fieldReferences;
 
     /**
      * フィールド代入を保存する変数
      */
-    private final Set<UnresolvedEntityUsage> fieldAssignments;
+    private final Set<UnresolvedFieldUsage> fieldAssignments;
 
     /**
      * このメソッド内で定義されているローカル変数を保存する変数

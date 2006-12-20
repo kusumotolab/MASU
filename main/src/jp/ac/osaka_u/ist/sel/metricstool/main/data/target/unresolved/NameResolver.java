@@ -35,7 +35,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class NameResolver {
 
     /**
-     * UnresolvedTypeInfoな情報から TypeInfoを生成する． 参照されているTypeInfoがclassInfoManagerに含まれていない場合は追加する．
+     * 未解決型情報（UnresolvedTypeInfo）から 解決済み（TypeInfo）を生成する．
+     * 参照されているTypeInfoがclassInfoManagerに含まれていない場合は追加する．
      * 
      * @param unresolvedTypeInfo 名前解決したい型情報
      * @param classInfoManager 参照型の解決に用いるデータベース
@@ -62,14 +63,14 @@ public final class NameResolver {
         } else if (unresolvedTypeInfo instanceof UnresolvedReferenceTypeInfo) {
 
             // 利用可能な名前空間から，型名を探す
-            String[] referenceName = ((UnresolvedReferenceTypeInfo) unresolvedTypeInfo)
+            final String[] referenceName = ((UnresolvedReferenceTypeInfo) unresolvedTypeInfo)
                     .getReferenceName();
             for (AvailableNamespaceInfo availableNamespace : ((UnresolvedReferenceTypeInfo) unresolvedTypeInfo)
                     .getAvailableNamespaces()) {
 
                 // 名前空間名.* となっている場合
                 if (availableNamespace.isAllClasses()) {
-                    String[] namespace = availableNamespace.getNamespace();
+                    final String[] namespace = availableNamespace.getNamespace();
 
                     // 名前空間の下にある各クラスに対して
                     for (ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
@@ -95,59 +96,9 @@ public final class NameResolver {
                         System.arraycopy(namespace, 0, fullQualifiedName, 0, namespace.length);
                         System.arraycopy(referenceName, 0, fullQualifiedName, namespace.length,
                                 referenceName.length);
-                        ClassInfo specifiedClassInfo = classInfoManager
+                        final ClassInfo specifiedClassInfo = classInfoManager
                                 .getClassInfo(fullQualifiedName);
-                        if (null == specifiedClassInfo) {
-                            specifiedClassInfo = new ExternalClassInfo(fullQualifiedName);
-                            classInfoManager.add((ExternalClassInfo) specifiedClassInfo);
-                        }
-                        return specifiedClassInfo;
-                    }
-                }
-            }
-
-            // 見つからなかった場合は名前空間名がUNKNOWNなクラスを登録する
-            ExternalClassInfo classInfo = new ExternalClassInfo(
-                    referenceName[referenceName.length - 1]);
-            classInfoManager.add(classInfo);
-            return classInfo;
-
-            // 未解決エンティティ使用の場合
-        } else if (unresolvedTypeInfo instanceof UnresolvedEntityUsage) {
-
-            final String specifiedName = ((UnresolvedEntityUsage) unresolvedTypeInfo)
-                    .getFieldName();
-            final AvailableNamespaceInfoSet availableNamespaces = ((UnresolvedEntityUsage) unresolvedTypeInfo)
-                    .getAvailableNamespaces();
-            for (AvailableNamespaceInfo availableNamespace : availableNamespaces) {
-
-                // 名前空間名.* となっている場合
-                if (availableNamespace.isAllClasses()) {
-
-                    // 名前空間名を取得
-                    final String[] namespace = availableNamespace.getNamespace();
-
-                    // 名前空間の下にある各クラスに対して
-                    for (ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
-
-                        // クラス名と参照名が等しい場合は，そのクラス名が参照先であると決定する．
-                        if (specifiedName.equals(classInfo.getClassName())) {
-                            return classInfo;
-                        }
-                    }
-
-                    // 名前空間名.クラス名となっている場合
-                } else {
-
-                    final String[] importName = availableNamespace.getImportName();
-
-                    // クラス名と参照名が等しい場合は，そのクラス名が参照先であると決定する．
-                    if (specifiedName.equals(importName[importName.length - 1])) {
-                        ClassInfo specifiedClassInfo = classInfoManager.getClassInfo(importName);
-                        if (null == specifiedClassInfo) {
-                            specifiedClassInfo = new ExternalClassInfo(importName);
-                            classInfoManager.add((ExternalClassInfo) specifiedClassInfo);
-                        }
+                        // クラスが見つからなかった場合は null が返される
                         return specifiedClassInfo;
                     }
                 }
@@ -163,18 +114,18 @@ public final class NameResolver {
     }
 
     /**
-     * 未解決エンティティ使用情報を解決し，エンティティ使用処理が行われているメソッドに登録する．また，エンティティの型を返す．
+     * 未解決フィールド参照を解決し，フィールド参照が行われているメソッドに登録する．また，フィールドの型を返す．
      * 
-     * @param entityUsage 未解決エンティティ使用情報
-     * @param usingClass エンティティ使用処理が行われているクラス
-     * @param usingMethod エンティティ使用処理が行われているメソッド
+     * @param fieldReference 未解決フィールド参照
+     * @param usingClass フィールド参照が行われているクラス
+     * @param usingMethod フィールド参照が行われているメソッド
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
      * @param methodInfoManager 用いるメソッドマネージャ
      * @param resolvedCache 解決済みUnresolvedTypeInfoのキャッシュ
-     * @return 解決済みエンティティの型
+     * @return 解決済みフィールド参照の型（つまり，フィールドの型）
      */
-    public static TypeInfo resolveEntityReference(final UnresolvedEntityUsage entityUsage,
+    public static TypeInfo resolveFieldReference(final UnresolvedFieldUsage fieldReference,
             final TargetClassInfo usingClass, final TargetMethodInfo usingMethod,
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
             final MethodInfoManager methodInfoManager,
@@ -182,35 +133,35 @@ public final class NameResolver {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == entityUsage) || (null == usingClass) || (null == usingMethod)
+        if ((null == fieldReference) || (null == usingClass) || (null == usingMethod)
                 || (null == classInfoManager) || (null == fieldInfoManager)
                 || (null == methodInfoManager) || (null == resolvedCache)) {
             throw new NullPointerException();
         }
 
         // 既に解決済みであれば，そこから型を取得
-        if (resolvedCache.containsKey(entityUsage)) {
-            final TypeInfo type = resolvedCache.get(entityUsage);
+        if (resolvedCache.containsKey(fieldReference)) {
+            final TypeInfo type = resolvedCache.get(fieldReference);
             return type;
         }
 
-        // エンティティ名，及びエンティティ使用がくっついている未定義型を取得
-        final String fieldName = entityUsage.getFieldName();
-        final UnresolvedTypeInfo unresolvedFieldOwnerClassType = entityUsage.getOwnerClassType();
+        // フィールド名，及びフィールド参照がくっついている未定義型を取得
+        final String fieldName = fieldReference.getFieldName();
+        final UnresolvedTypeInfo unresolvedFieldOwnerClassType = fieldReference.getOwnerClassType();
 
-        // エンティティ使用(a)がエンティティ使用(b)にくっついている場合 (b.a)
-        if (unresolvedFieldOwnerClassType instanceof UnresolvedEntityUsage) {
+        // フィールド参照(a)がフィールド参照(b)にくっついている場合 (b.a)
+        if (unresolvedFieldOwnerClassType instanceof UnresolvedFieldUsage) {
 
             // (b)のクラス定義を取得
-            final TypeInfo fieldOwnerClassType = NameResolver.resolveEntityReference(
-                    (UnresolvedEntityUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
+            final TypeInfo fieldOwnerClassType = NameResolver.resolveFieldReference(
+                    (UnresolvedFieldUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
             // 利用可能なフィールド一覧を取得
             final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
                     (TargetClassInfo) fieldOwnerClassType, usingClass);
 
-            // 利用可能なフィールドを，未解決エンティティ名で検索
+            // 利用可能なフィールドを，未解決フィールド名で検索
             for (TargetFieldInfo availableField : availableFields) {
 
                 // 一致するフィールド名が見つかった場合
@@ -219,16 +170,16 @@ public final class NameResolver {
                     availableField.addReferencer(usingMethod);
 
                     // 解決済みキャッシュにに登録
-                    resolvedCache.put(entityUsage, availableField.getType());
+                    resolvedCache.put(fieldReference, availableField.getType());
 
                     return availableField.getType();
                 }
             }
 
-            err.println("resolveEntityReference : TODO1");
+            err.println("resolveFieldReference : TODO1");
             // TODO 見つからなかった場合の処理が必要
 
-            // エンティティ使用(a)がメソッド呼び出し(c())にくっついている場合(c().a)
+            // フィールド参照(a)がメソッド呼び出し(c())にくっついている場合(c().a)
         } else if (unresolvedFieldOwnerClassType instanceof UnresolvedMethodCall) {
 
             // (c)のクラス定義を取得
@@ -249,19 +200,47 @@ public final class NameResolver {
                     availableField.addReferencer(usingMethod);
 
                     // 解決済みキャッシュにに登録
-                    resolvedCache.put(entityUsage, availableField.getType());
+                    resolvedCache.put(fieldReference, availableField.getType());
 
                     return availableField.getType();
                 }
             }
 
-            err.println("resolveEntityReference : TODO2");
+            err.println("resolveFieldReference : TODO2");
             // TODO 見つからなかった場合の処理が必要
 
-            // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
-        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedReferenceTypeInfo) {
+            // フィールド参照(a)がエンティティ使用にくっついている場合
+        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedEntityUsage) {
 
-            // 使用可能なフィールド名から，未解決エンティティ使用を解決
+            // エンティティのクラス定義を取得
+            final TypeInfo fieldOwnerClassType = NameResolver.resolveEntityUsage(
+                    (UnresolvedEntityUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+
+            // 利用可能なフィールド一覧を取得
+            final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
+                    (TargetClassInfo) fieldOwnerClassType, usingClass);
+
+            // 利用可能なフィールド一覧を，未解決フィールド名で検索
+            for (TargetFieldInfo availableField : availableFields) {
+
+                // フィールド名が見つかった場合
+                if (fieldName.equals(availableField.getName())) {
+                    usingMethod.addReferencee(availableField);
+                    availableField.addReferencer(usingMethod);
+
+                    // 解決済みキャッシュに登録
+                    resolvedCache.put(fieldReference, availableField.getType());
+                }
+            }
+
+            err.println("resolveFieldReference : TODO3");
+            // TODO 見つからなかった場合の処理が必要
+            
+            // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
+        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedClassInfo) {
+
+            // 使用可能なフィールド名から，未解決フィールド使用を解決
             {
                 // 利用可能なフィールド一覧を取得
                 final List<TargetFieldInfo> availableFields = NameResolver
@@ -275,51 +254,34 @@ public final class NameResolver {
                         usingMethod.addReferencee(availableField);
                         availableField.addReferencer(usingMethod);
 
-                        // 解決済みキャッシュにに登録
-                        resolvedCache.put(entityUsage, availableField.getType());
+                        // 解決済みキャッシュに登録
+                        resolvedCache.put(fieldReference, availableField.getType());
 
                         return availableField.getType();
                     }
                 }
             }
 
-            // 利用可能なクラス名から未解決エンティティ使用を解決
-            {
-                final TypeInfo classInfo = NameResolver.resolveTypeInfo(
-                        unresolvedFieldOwnerClassType, classInfoManager);
-
-                // 一致するクラス名が見つかった場合
-                if (null != classInfo) {
-
-                    // 解決済みキャッシュにに登録
-                    resolvedCache.put(entityUsage, classInfo);
-                    return classInfo;
-                }
-            }
-
-            err.println("resolveEntityReference : TODO3");
+            err.println("resolveFieldReference : TODO4");
             // TODO 見つからなかった場合の処理が必要
-            // クラス名を見ている場合や，
-            // ExternalClassInfo を継承していて，そこで定義されている変数を使用している場合など
-
         }
 
-        throw new IllegalArgumentException(entityUsage.toString() + " is wrong!");
+        throw new IllegalArgumentException(fieldReference.toString() + " is wrong!");
     }
-    
+
     /**
-     * 未解決エンティティ代入情報を解決し，エンティティ代入処理が行われているメソッドに登録する．また，エンティティの型を返す．
+     * 未解決フィールド代入を解決し，フィールド代入が行われているメソッドに登録する．また，フィールドの型を返す．
      * 
-     * @param entityUsage 未解決エンティティ使用情報
-     * @param usingClass エンティティ使用処理が行われているクラス
-     * @param usingMethod エンティティ使用処理が行われているメソッド
+     * @param fieldAssignment 未解決フィールド代入
+     * @param usingClass フィールド代入が行われているクラス
+     * @param usingMethod フィールド代入が行われているメソッド
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
      * @param methodInfoManager 用いるメソッドマネージャ
      * @param resolvedCache 解決済みUnresolvedTypeInfoのキャッシュ
-     * @return 解決済みエンティティの型
+     * @return 解決済みフィールド代入の型（つまり，フィールドの型）
      */
-    public static TypeInfo resolveEntityAssignment(final UnresolvedEntityUsage entityUsage,
+    public static TypeInfo resolveFieldAssignment(final UnresolvedFieldUsage fieldAssignment,
             final TargetClassInfo usingClass, final TargetMethodInfo usingMethod,
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
             final MethodInfoManager methodInfoManager,
@@ -327,28 +289,30 @@ public final class NameResolver {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == entityUsage) || (null == usingClass) || (null == usingMethod)
+        if ((null == fieldAssignment) || (null == usingClass) || (null == usingMethod)
                 || (null == classInfoManager) || (null == fieldInfoManager)
                 || (null == methodInfoManager) || (null == resolvedCache)) {
             throw new NullPointerException();
         }
 
         // 既に解決済みであれば，そこから型を取得
-        if (resolvedCache.containsKey(entityUsage)) {
-            final TypeInfo type = resolvedCache.get(entityUsage);
+        if (resolvedCache.containsKey(fieldAssignment)) {
+            final TypeInfo type = resolvedCache.get(fieldAssignment);
             return type;
         }
 
-        // エンティティ名，及びエンティティ使用がくっついている未定義型を取得
-        final String fieldName = entityUsage.getFieldName();
-        final UnresolvedTypeInfo unresolvedFieldOwnerClassType = entityUsage.getOwnerClassType();
+        // フィールド名，及びフィールド代入がくっついている未定義型を取得
+        final String fieldName = fieldAssignment.getFieldName();
+        final UnresolvedTypeInfo unresolvedFieldOwnerClassType = fieldAssignment
+                .getOwnerClassType();
 
-        // エンティティ使用(a)がエンティティ使用(b)にくっついている場合 (b.a)
-        if (unresolvedFieldOwnerClassType instanceof UnresolvedEntityUsage) {
+        // フィールド代入(a)がフィールド参照(b)にくっついている場合 (b.a)
+        // TODO この場合はありうるか疑問
+        if (unresolvedFieldOwnerClassType instanceof UnresolvedFieldUsage) {
 
             // (b)のクラス定義を取得
-            final TypeInfo fieldOwnerClassType = NameResolver.resolveEntityReference(
-                    (UnresolvedEntityUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
+            final TypeInfo fieldOwnerClassType = NameResolver.resolveFieldReference(
+                    (UnresolvedFieldUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
             // 利用可能なフィールド一覧を取得
@@ -364,16 +328,16 @@ public final class NameResolver {
                     availableField.addAssignmenter(usingMethod);
 
                     // 解決済みキャッシュにに登録
-                    resolvedCache.put(entityUsage, availableField.getType());
+                    resolvedCache.put(fieldAssignment, availableField.getType());
 
                     return availableField.getType();
                 }
             }
 
-            err.println("resolveEntityAssignment : TODO1");
+            err.println("resolveFieldAssignment : TODO1");
             // TODO 見つからなかった場合の処理が必要
 
-            // エンティティ使用(a)がメソッド呼び出し(c())にくっついている場合(c().a)
+            // フィールド代入(a)がメソッド呼び出し(c())にくっついている場合(c().a)
         } else if (unresolvedFieldOwnerClassType instanceof UnresolvedMethodCall) {
 
             // (c)のクラス定義を取得
@@ -394,19 +358,47 @@ public final class NameResolver {
                     availableField.addAssignmenter(usingMethod);
 
                     // 解決済みキャッシュにに登録
-                    resolvedCache.put(entityUsage, availableField.getType());
+                    resolvedCache.put(fieldAssignment, availableField.getType());
 
                     return availableField.getType();
                 }
             }
 
-            err.println("resolveEntityAssignment : TODO2");
+            err.println("resolveFieldAssignment : TODO2");
             // TODO 見つからなかった場合の処理が必要
 
-            // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
-        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedReferenceTypeInfo) {
+            // フィールド代入(a)がエンティティ使用にくっついている場合
+        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedEntityUsage) {
 
-            // 使用可能なフィールド名から，未解決エンティティ使用を解決
+            // エンティティのクラス定義を取得
+            final TypeInfo fieldOwnerClassType = NameResolver.resolveEntityUsage(
+                    (UnresolvedEntityUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+
+            // 利用可能なフィールド一覧を取得
+            final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
+                    (TargetClassInfo) fieldOwnerClassType, usingClass);
+
+            // 利用可能なフィールド一覧を，未解決フィールド名で検索
+            for (TargetFieldInfo availableField : availableFields) {
+
+                // フィールド名が見つかった場合
+                if (fieldName.equals(availableField.getName())) {
+                    usingMethod.addAssignmentee(availableField);
+                    availableField.addAssignmenter(usingMethod);
+
+                    // 解決済みキャッシュに登録
+                    resolvedCache.put(fieldAssignment, availableField.getType());
+                }
+            }
+
+            err.println("resolveFieldAssignment : TODO3");
+            // TODO 見つからなかった場合の処理が必要
+            
+            // フィールド代入(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
+        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedClassInfo) {
+
+            // 使用可能なフィールド名から，未解決フィールド代入を解決
             {
                 // 利用可能なフィールド一覧を取得
                 final List<TargetFieldInfo> availableFields = NameResolver
@@ -421,39 +413,22 @@ public final class NameResolver {
                         availableField.addAssignmenter(usingMethod);
 
                         // 解決済みキャッシュにに登録
-                        resolvedCache.put(entityUsage, availableField.getType());
+                        resolvedCache.put(fieldAssignment, availableField.getType());
 
                         return availableField.getType();
                     }
                 }
             }
 
-            // 利用可能なクラス名から未解決エンティティ使用を解決
-            {
-                final TypeInfo classInfo = NameResolver.resolveTypeInfo(
-                        unresolvedFieldOwnerClassType, classInfoManager);
-
-                // 一致するクラス名が見つかった場合
-                if (null != classInfo) {
-
-                    // 解決済みキャッシュにに登録
-                    resolvedCache.put(entityUsage, classInfo);
-                    return classInfo;
-                }
-            }
-
-            err.println("resolveEntityAssignment : TODO3");
+            err.println("resolveFieldAssignment : TODO4");
             // TODO 見つからなかった場合の処理が必要
-            // クラス名を見ている場合や，
-            // ExternalClassInfo を継承していて，そこで定義されている変数を使用している場合など
-
         }
 
-        throw new IllegalArgumentException(entityUsage.toString() + " is wrong!");
+        throw new IllegalArgumentException(fieldAssignment.toString() + " is wrong!");
     }
 
     /**
-     * 未解決メソッド呼び出し情報を解決し，メソッド呼び出し処理処理が行われているメソッドに登録する．また，メソッドの返り値の型を返す．
+     * 未解決メソッド呼び出し情報を解決し，メソッド呼び出し処理が行われているメソッドに登録する．また，メソッドの返り値の型を返す．
      * 
      * @param methodCall メソッド呼び出し情報
      * @param usingClass メソッド呼び出しが行われているクラス
@@ -493,22 +468,21 @@ public final class NameResolver {
         final List<TypeInfo> parameterTypes = new LinkedList<TypeInfo>();
         for (UnresolvedTypeInfo unresolvedParameterType : unresolvedParameterTypes) {
 
-            if (unresolvedParameterType instanceof UnresolvedEntityUsage) {
-                final TypeInfo parameterType = NameResolver.resolveEntityReference(
-                        (UnresolvedEntityUsage) unresolvedParameterType, usingClass, usingMethod,
+            if (unresolvedParameterType instanceof UnresolvedFieldUsage) {
+                final TypeInfo parameterType = NameResolver.resolveFieldReference(
+                        (UnresolvedFieldUsage) unresolvedParameterType, usingClass, usingMethod,
                         classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
                 parameterTypes.add(parameterType);
             }
         }
 
         // メソッド呼び出し(a())がフィールド使用(b)にくっついている場合 (b.a())
-        if (unresolvedMethodOwnerClassType instanceof UnresolvedEntityUsage) {
+        if (unresolvedMethodOwnerClassType instanceof UnresolvedFieldUsage) {
 
             // (b)のクラス定義を取得
-            final TypeInfo methodOwnerClassType = NameResolver.resolveEntityReference(
-                    (UnresolvedEntityUsage) unresolvedMethodOwnerClassType, usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
-                    resolvedCache);
+            final TypeInfo methodOwnerClassType = NameResolver.resolveFieldReference(
+                    (UnresolvedFieldUsage) unresolvedMethodOwnerClassType, usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
             // 利用可能なメソッド一覧を取得
             final List<TargetMethodInfo> availableMethods = NameResolver.getAvailableMethods(
@@ -522,18 +496,17 @@ public final class NameResolver {
                 if (availableMethod.canCalledWith(methodName, parameterTypes)) {
                     usingMethod.addCallee(availableMethod);
                     availableMethod.addCaller(usingMethod);
-                    
+
                     // 解決済みキャッシュにに登録
                     resolvedCache.put(methodCall, availableMethod.getReturnType());
-                    
+
                     return availableMethod.getReturnType();
                 }
             }
 
             // TODO 見つからなかった場合の処理が必要
             err.println("resolveMethodCall : TODO1");
-            
-            
+
             // メソッド呼び出し(a())がメソッド呼び出し(c())にくっついている場合(c().a())
         } else if (unresolvedMethodOwnerClassType instanceof UnresolvedMethodCall) {
 
@@ -554,19 +527,50 @@ public final class NameResolver {
                 if (availableMethod.canCalledWith(methodName, parameterTypes)) {
                     usingMethod.addCallee(availableMethod);
                     availableMethod.addCaller(usingMethod);
-                    
+
                     // 解決済みキャッシュにに登録
                     resolvedCache.put(methodCall, availableMethod.getReturnType());
-                    
+
                     return availableMethod.getReturnType();
                 }
             }
 
             // TODO 見つからなかった場合の処理が必要
             err.println("resolveMethodCall : TODO2");
+
+            // メソッド呼び出し(a())がエンティティ使用にくっついている場合
+        } else if (unresolvedMethodOwnerClassType instanceof UnresolvedEntityUsage) {
+            
+            // エンティティのクラス定義を取得
+            final TypeInfo methodOwnerClassType = NameResolver.resolveEntityUsage(
+                    (UnresolvedEntityUsage) unresolvedMethodOwnerClassType, usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+
+            // 利用可能なメソッド一覧を取得
+            final List<TargetMethodInfo> availableMethods = NameResolver.getAvailableMethods(
+                    (TargetClassInfo) methodOwnerClassType, usingClass);
+
+            // 利用可能なメソッドから，未解決メソッドと一致するものを検索
+            // メソッド名，引数の型のリストを用いて，このメソッドの呼び出しであるかどうかを判定
+            for (TargetMethodInfo availableMethod : availableMethods) {
+
+                // 呼び出し可能なメソッドが見つかった場合
+                if (availableMethod.canCalledWith(methodName, parameterTypes)) {
+                    usingMethod.addCallee(availableMethod);
+                    availableMethod.addCaller(usingMethod);
+
+                    // 解決済みキャッシュにに登録
+                    resolvedCache.put(methodCall, availableMethod.getReturnType());
+
+                    return availableMethod.getReturnType();
+                }
+            }
+            
+            // TODO 見つからなかった場合の処理が必要
+            err.println("resolveMethodCall : TODO3");
             
             // メソッド呼び出し(a())が自オブジェクトにくっついている場合(a or this.a or super.a )
-        } else if (unresolvedMethodOwnerClassType instanceof UnresolvedReferenceTypeInfo) {
+        } else if (unresolvedMethodOwnerClassType instanceof UnresolvedClassInfo) {
 
             // 利用可能なメソッド一覧を取得
             final List<TargetMethodInfo> availableMethods = NameResolver
@@ -580,20 +584,109 @@ public final class NameResolver {
                 if (availableMethod.canCalledWith(methodName, parameterTypes)) {
                     usingMethod.addCallee(availableMethod);
                     availableMethod.addCaller(usingMethod);
-                    
+
                     // 解決済みキャッシュにに登録
                     resolvedCache.put(methodCall, availableMethod.getReturnType());
-                    
+
                     return availableMethod.getReturnType();
                 }
             }
 
-            err.println("resolveMethodCall : TODO3");
+            err.println("resolveMethodCall : TODO4");
             // TODO 見つからなかった場合の処理が必要
-            // ExternalClassInfo を継承していて，そこで定義されているメソッドを使用している場合など
         }
 
         throw new IllegalArgumentException(methodCall.toString() + " is wrong!");
+    }
+
+    /**
+     * 未解決エンティティ使用情報を解決し，エンティティ使用処理が行われているメソッドに登録する．また，エンティティの解決済み型を返す．
+     * 
+     * @param entityUsage 未解決エンティティ使用
+     * @param usingClass メソッド呼び出しが行われているクラス
+     * @param usingMethod メソッド呼び出しが行われているメソッド
+     * @param classInfoManager 用いるクラスマネージャ
+     * @param fieldInfoManager 用いるフィールドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
+     * @param resolvedCache 解決済みUnresolvedTypeInfoのキャッシュ
+     * @return メソッド呼び出し情報に対応する MethodInfo
+     */
+    public static TypeInfo resolveEntityUsage(final UnresolvedEntityUsage entityUsage,
+            final TargetClassInfo usingClass, final TargetMethodInfo usingMethod,
+            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
+            final MethodInfoManager methodInfoManager,
+            final Map<UnresolvedTypeInfo, TypeInfo> resolvedCache) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == entityUsage) || (null == usingClass) || (null == usingMethod)
+                || (null == classInfoManager) || (null == methodInfoManager)
+                || (null == resolvedCache)) {
+            throw new NullPointerException();
+        }
+
+        // 既に解決済みであれば，そこから型を取得
+        if (resolvedCache.containsKey(entityUsage)) {
+            final TypeInfo type = resolvedCache.get(entityUsage);
+            return type;
+        }
+
+        // エンティティ参照名を取得
+        final String[] name = entityUsage.getName();
+
+        // エンティティ名が１word の場合
+        if (name.length == 1) {
+
+            // 利用可能なフィールド名からエンティティ名を検索
+            {
+                // 利用可能なフィールド一覧を取得
+                final List<TargetFieldInfo> availableFields = NameResolver
+                        .getAvailableFields(usingClass);
+
+                for (TargetFieldInfo availableField : availableFields) {
+
+                    // 一致するフィールド名が見つかった場合
+                    if (name[0].equals(availableField.getName())) {
+                        usingMethod.addReferencee(availableField);
+                        availableField.addReferencer(usingMethod);
+
+                        // 解決済みキャッシュに登録
+                        resolvedCache.put(entityUsage, availableField.getType());
+
+                        return availableField.getType();
+                    }
+                }
+            }
+
+            // 利用可能なクラス名からエンティティ名を検索
+            {
+                final AvailableNamespaceInfoSet availableNamespaces = entityUsage
+                        .getAvailableNamespaces();
+
+                // UnresolvedReferenceTypeInfo オブジェクトを構築し，resolveTypeInfo メソッドを用いて該当クラスを検索
+                final UnresolvedReferenceTypeInfo unresolvedReferenceType = new UnresolvedReferenceTypeInfo(
+                        availableNamespaces, name);
+                final TypeInfo classInfo = NameResolver.resolveTypeInfo(unresolvedReferenceType,
+                        classInfoManager);
+
+                // 一致するクラスが見つかった場合
+                if (null != classInfo) {
+
+                    // 解決済みキャッシュに登録
+                    resolvedCache.put(entityUsage, classInfo);
+
+                    return classInfo;
+                }
+            }
+            
+            err.println("resolveEntityUsage : TODO1");
+            // TODO 見つからなかった場合の処理が必要
+
+            // エンティティ名が2words 以上の場合
+        } else {
+
+        }
+        throw new IllegalArgumentException(entityUsage.toString() + " is wrong!");
     }
 
     /**
@@ -613,17 +706,22 @@ public final class NameResolver {
         }
 
         // 所有クラスを取得，取得したクラスが外部クラスである場合は，引数の情報がおかしい
-        UnresolvedClassInfo unresolvedOwnerClass = unresolvedFieldInfo.getOwnerClass();
-        ClassInfo ownerClass = NameResolver
-                .resolveClassInfo(unresolvedOwnerClass, classInfoManager);
+        final UnresolvedClassInfo unresolvedOwnerClass = unresolvedFieldInfo.getOwnerClass();
+        final ClassInfo ownerClass = NameResolver.resolveClassInfo(unresolvedOwnerClass,
+                classInfoManager);
         if (!(ownerClass instanceof TargetClassInfo)) {
             throw new IllegalArgumentException(unresolvedFieldInfo.toString() + " is wrong!");
         }
 
         // UnresolvedFieldInfo からフィールド名，型名を取得
-        String fieldName = unresolvedFieldInfo.getName();
-        UnresolvedTypeInfo unresolvedFieldType = unresolvedFieldInfo.getType();
+        final String fieldName = unresolvedFieldInfo.getName();
+        final UnresolvedTypeInfo unresolvedFieldType = unresolvedFieldInfo.getType();
         TypeInfo fieldType = NameResolver.resolveTypeInfo(unresolvedFieldType, classInfoManager);
+        if (null == fieldType) {
+            fieldType = NameResolver
+                    .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedFieldType);
+            classInfoManager.add((ExternalClassInfo) fieldType);
+        }
 
         for (TargetFieldInfo fieldInfo : ((TargetClassInfo) ownerClass).getDefinedFields()) {
 
@@ -660,16 +758,16 @@ public final class NameResolver {
         }
 
         // UnresolvedMethodInfo から所有クラスを取得，取得したクラスが外部クラスである場合は，引数の情報がおかしい
-        UnresolvedClassInfo unresolvedOwnerClass = unresolvedMethodInfo.getOwnerClass();
-        ClassInfo ownerClass = NameResolver
-                .resolveClassInfo(unresolvedOwnerClass, classInfoManager);
+        final UnresolvedClassInfo unresolvedOwnerClass = unresolvedMethodInfo.getOwnerClass();
+        final ClassInfo ownerClass = NameResolver.resolveClassInfo(unresolvedOwnerClass,
+                classInfoManager);
         if (!(ownerClass instanceof TargetClassInfo)) {
             throw new IllegalArgumentException(unresolvedMethodInfo.toString() + " is wrong!");
         }
 
         // Unresolved メソッド名，引数を取得
-        String methodName = unresolvedMethodInfo.getMethodName();
-        List<UnresolvedParameterInfo> unresolvedParameterInfos = unresolvedMethodInfo
+        final String methodName = unresolvedMethodInfo.getMethodName();
+        final List<UnresolvedParameterInfo> unresolvedParameterInfos = unresolvedMethodInfo
                 .getParameterInfos();
 
         for (TargetMethodInfo methodInfo : ((TargetClassInfo) ownerClass).getDefinedMethods()) {
@@ -680,23 +778,28 @@ public final class NameResolver {
             }
 
             // 引数の数が違う場合は，該当メソッドではない
-            List<ParameterInfo> typeInfos = methodInfo.getParameters();
+            final List<ParameterInfo> typeInfos = methodInfo.getParameters();
             if (unresolvedParameterInfos.size() != typeInfos.size()) {
                 continue;
             }
 
             // 全ての引数の型をチェック，1つでも異なる場合は，該当メソッドではない
-            Iterator<UnresolvedParameterInfo> unresolvedParameterIterator = unresolvedParameterInfos
+            final Iterator<UnresolvedParameterInfo> unresolvedParameterIterator = unresolvedParameterInfos
                     .iterator();
-            Iterator<ParameterInfo> parameterInfoIterator = typeInfos.iterator();
+            final Iterator<ParameterInfo> parameterInfoIterator = typeInfos.iterator();
             boolean same = true;
             while (unresolvedParameterIterator.hasNext() && parameterInfoIterator.hasNext()) {
-                UnresolvedParameterInfo unresolvedParameterInfo = unresolvedParameterIterator
+                final UnresolvedParameterInfo unresolvedParameterInfo = unresolvedParameterIterator
                         .next();
-                UnresolvedTypeInfo unresolvedTypeInfo = unresolvedParameterInfo.getType();
+                final UnresolvedTypeInfo unresolvedTypeInfo = unresolvedParameterInfo.getType();
                 TypeInfo typeInfo = NameResolver.resolveTypeInfo(unresolvedTypeInfo,
                         classInfoManager);
-                ParameterInfo parameterInfo = parameterInfoIterator.next();
+                if (null == typeInfo) {
+                    typeInfo = NameResolver
+                            .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedTypeInfo);
+                    classInfoManager.add((ExternalClassInfo) typeInfo);
+                }
+                final ParameterInfo parameterInfo = parameterInfoIterator.next();
                 if (!typeInfo.equals(parameterInfo.getType())) {
                     same = false;
                     break;
@@ -727,8 +830,8 @@ public final class NameResolver {
         }
 
         // 完全限定名を取得し，ClassInfo を取得
-        String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
-        ClassInfo classInfo = classInfoManager.getClassInfo(fullQualifiedName);
+        final String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
+        final ClassInfo classInfo = classInfoManager.getClassInfo(fullQualifiedName);
 
         // UnresolvedClassInfo のオブジェクトは registClassInfo メソッドにより，全て登録済みのはずなので，
         // null が返ってきた場合は，不正
@@ -987,6 +1090,51 @@ public final class NameResolver {
         }
 
         return Collections.unmodifiableList(availableMethods);
+    }
+
+    public static ExternalClassInfo createExternalClassInfo(
+            final UnresolvedReferenceTypeInfo unresolvedReferenceType) {
+
+        if (null == unresolvedReferenceType) {
+            throw new NullPointerException();
+        }
+
+        // 未解決クラス情報の参照名を取得
+        final String[] referenceName = unresolvedReferenceType.getReferenceName();
+
+        // 利用可能な名前空間を検索し，未解決クラス情報の完全限定名を決定
+        for (AvailableNamespaceInfo availableNamespace : unresolvedReferenceType
+                .getAvailableNamespaces()) {
+
+            // 名前空間名.* となっている場合は，見つけることができない
+            if (availableNamespace.isAllClasses()) {
+                continue;
+
+                // 名前空間.クラス名 となっている場合
+            } else {
+
+                final String[] importName = availableNamespace.getImportName();
+
+                // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
+                if (importName[importName.length - 1].equals(referenceName[0])) {
+
+                    final String[] namespace = availableNamespace.getNamespace();
+                    final String[] fullQualifiedName = new String[namespace.length
+                            + referenceName.length];
+                    System.arraycopy(namespace, 0, fullQualifiedName, 0, namespace.length);
+                    System.arraycopy(referenceName, 0, fullQualifiedName, namespace.length,
+                            referenceName.length);
+
+                    final ExternalClassInfo classInfo = new ExternalClassInfo(fullQualifiedName);
+                    return classInfo;
+                }
+            }
+        }
+
+        // 見つからない場合は，名前空間が UNKNOWN な 外部クラス情報を作成
+        final ExternalClassInfo unknownClassInfo = new ExternalClassInfo(
+                referenceName[referenceName.length - 1]);
+        return unknownClassInfo;
     }
 
     /**
