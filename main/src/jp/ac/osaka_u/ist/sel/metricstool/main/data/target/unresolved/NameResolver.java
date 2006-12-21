@@ -35,8 +35,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class NameResolver {
 
     /**
-     * 未解決型情報（UnresolvedTypeInfo）から 解決済み（TypeInfo）を生成する．
-     * 参照されているTypeInfoがclassInfoManagerに含まれていない場合は追加する．
+     * 未解決型情報（UnresolvedTypeInfo）に解決済み型情報（TypeInfo）を返す．
+     * 既にいったん
+     * 参照されているTypeInfoがclassInfoManagerに含まれていない場合は新規で生成し追加する．
      * 
      * @param unresolvedTypeInfo 名前解決したい型情報
      * @param classInfoManager 参照型の解決に用いるデータベース
@@ -157,6 +158,14 @@ public final class NameResolver {
                     (UnresolvedFieldUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
+            // 親が解決できなかった場合はどうしようもない
+            if (null == fieldOwnerClassType){
+                
+                // 見つからなかった処理を行う
+                usingMethod.addUnresolvedUsage(fieldReference);
+                return null;
+            }
+            
             // 利用可能なフィールド一覧を取得
             final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
                     (TargetClassInfo) fieldOwnerClassType, usingClass);
@@ -176,8 +185,9 @@ public final class NameResolver {
                 }
             }
 
-            err.println("resolveFieldReference : TODO1");
-            // TODO 見つからなかった場合の処理が必要
+            // 見つからなかった処理を行う
+            usingMethod.addUnresolvedUsage(fieldReference);
+            return null;
 
             // フィールド参照(a)がメソッド呼び出し(c())にくっついている場合(c().a)
         } else if (unresolvedFieldOwnerClassType instanceof UnresolvedMethodCall) {
@@ -187,6 +197,14 @@ public final class NameResolver {
                     (UnresolvedMethodCall) unresolvedFieldOwnerClassType, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
+            // 親が解決できなかった場合はどうしようもない
+            if (null == fieldOwnerClassType){
+                
+                // 見つからなかった処理を行う
+                usingMethod.addUnresolvedUsage(fieldReference);
+                return null;
+            }
+            
             // 利用可能なフィールド一覧を取得
             final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
                     (TargetClassInfo) fieldOwnerClassType, usingClass);
@@ -206,8 +224,9 @@ public final class NameResolver {
                 }
             }
 
-            err.println("resolveFieldReference : TODO2");
-            // TODO 見つからなかった場合の処理が必要
+            // 見つからなかった処理を行う
+            usingMethod.addUnresolvedUsage(fieldReference);
+            return null;
 
             // フィールド参照(a)がエンティティ使用にくっついている場合
         } else if (unresolvedFieldOwnerClassType instanceof UnresolvedEntityUsage) {
@@ -217,6 +236,14 @@ public final class NameResolver {
                     (UnresolvedEntityUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
+            // 親が解決できなかった場合はどうしようもない
+            if (null == fieldOwnerClassType){
+                
+                // 見つからなかった処理を行う
+                usingMethod.addUnresolvedUsage(fieldReference);
+                return null;
+            }
+            
             // 利用可能なフィールド一覧を取得
             final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
                     (TargetClassInfo) fieldOwnerClassType, usingClass);
@@ -234,8 +261,9 @@ public final class NameResolver {
                 }
             }
 
-            err.println("resolveFieldReference : TODO3");
-            // TODO 見つからなかった場合の処理が必要
+            // 見つからなかった処理を行う
+            usingMethod.addUnresolvedUsage(fieldReference);
+            return null;
 
             // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
         } else if (unresolvedFieldOwnerClassType instanceof UnresolvedClassInfo) {
@@ -262,8 +290,9 @@ public final class NameResolver {
                 }
             }
 
-            err.println("resolveFieldReference : TODO4");
-            // TODO 見つからなかった場合の処理が必要
+            // 見つからなかった処理を行う
+            usingMethod.addUnresolvedUsage(fieldReference);
+            return null;
         }
 
         throw new IllegalArgumentException(fieldReference.toString() + " is wrong!");
@@ -307,7 +336,6 @@ public final class NameResolver {
                 .getOwnerClassType();
 
         // フィールド代入(a)がフィールド参照(b)にくっついている場合 (b.a)
-        // TODO この場合はありうるか疑問
         if (unresolvedFieldOwnerClassType instanceof UnresolvedFieldUsage) {
 
             // (b)のクラス定義を取得
@@ -315,6 +343,14 @@ public final class NameResolver {
                     (UnresolvedFieldUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
+            // 親が解決できなかった場合はどうしようもない
+            if (null == fieldOwnerClassType){
+                
+                // 見つからなかった処理を行う
+                usingMethod.addUnresolvedUsage(fieldAssignment);
+                return null;
+            }
+            
             // 利用可能なフィールド一覧を取得
             final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
                     (TargetClassInfo) fieldOwnerClassType, usingClass);
@@ -334,8 +370,9 @@ public final class NameResolver {
                 }
             }
 
-            err.println("resolveFieldAssignment : TODO1");
-            // TODO 見つからなかった場合の処理が必要
+            // 見つからなかった処理を行う
+            usingMethod.addUnresolvedUsage(fieldAssignment);
+            return null;
 
             // フィールド代入(a)がメソッド呼び出し(c())にくっついている場合(c().a)
         } else if (unresolvedFieldOwnerClassType instanceof UnresolvedMethodCall) {
@@ -345,6 +382,14 @@ public final class NameResolver {
                     (UnresolvedMethodCall) unresolvedFieldOwnerClassType, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
+            // 親が解決できなかった場合はどうしようもない
+            if (null == fieldOwnerClassType){
+                
+                // 見つからなかった処理を行う
+                usingMethod.addUnresolvedUsage(fieldAssignment);
+                return null;
+            }
+            
             // 利用可能なフィールド一覧を取得
             final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
                     (TargetClassInfo) fieldOwnerClassType, usingClass);
@@ -364,8 +409,9 @@ public final class NameResolver {
                 }
             }
 
-            err.println("resolveFieldAssignment : TODO2");
-            // TODO 見つからなかった場合の処理が必要
+            // 見つからなかった処理を行う
+            usingMethod.addUnresolvedUsage(fieldAssignment);
+            return null;
 
             // フィールド代入(a)がエンティティ使用にくっついている場合
         } else if (unresolvedFieldOwnerClassType instanceof UnresolvedEntityUsage) {
@@ -375,6 +421,14 @@ public final class NameResolver {
                     (UnresolvedEntityUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
+            // 親が解決できなかった場合はどうしようもない
+            if (null == fieldOwnerClassType){
+                
+                // 見つからなかった処理を行う
+                usingMethod.addUnresolvedUsage(fieldAssignment);
+                return null;
+            }
+            
             // 利用可能なフィールド一覧を取得
             final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
                     (TargetClassInfo) fieldOwnerClassType, usingClass);
@@ -392,8 +446,9 @@ public final class NameResolver {
                 }
             }
 
-            err.println("resolveFieldAssignment : TODO3");
-            // TODO 見つからなかった場合の処理が必要
+            // 見つからなかった処理を行う
+            usingMethod.addUnresolvedUsage(fieldAssignment);
+            return null;
 
             // フィールド代入(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
         } else if (unresolvedFieldOwnerClassType instanceof UnresolvedClassInfo) {
@@ -420,8 +475,9 @@ public final class NameResolver {
                 }
             }
 
-            err.println("resolveFieldAssignment : TODO4");
-            // TODO 見つからなかった場合の処理が必要
+            // 見つからなかった処理を行う
+            usingMethod.addUnresolvedUsage(fieldAssignment);
+            return null;
         }
 
         throw new IllegalArgumentException(fieldAssignment.toString() + " is wrong!");
@@ -484,6 +540,14 @@ public final class NameResolver {
                     (UnresolvedFieldUsage) unresolvedMethodOwnerClassType, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
+            // 親が解決できなかった場合はどうしようもない
+            if (null == methodOwnerClassType){
+                
+                // 見つからなかった処理を行う
+                usingMethod.addUnresolvedUsage(methodCall);
+                return null;
+            }
+            
             // 利用可能なメソッド一覧を取得
             final List<TargetMethodInfo> availableMethods = NameResolver.getAvailableMethods(
                     (TargetClassInfo) methodOwnerClassType, usingClass);
@@ -504,8 +568,9 @@ public final class NameResolver {
                 }
             }
 
-            // TODO 見つからなかった場合の処理が必要
-            err.println("resolveMethodCall : TODO1");
+            // 見つからなかった処理を行う
+            usingMethod.addUnresolvedUsage(methodCall);
+            return null;
 
             // メソッド呼び出し(a())がメソッド呼び出し(c())にくっついている場合(c().a())
         } else if (unresolvedMethodOwnerClassType instanceof UnresolvedMethodCall) {
@@ -515,6 +580,14 @@ public final class NameResolver {
                     (UnresolvedMethodCall) unresolvedMethodOwnerClassType, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
+            // 親が解決できなかった場合はどうしようもない
+            if (null == methodOwnerClassType){
+                
+                // 見つからなかった処理を行う
+                usingMethod.addUnresolvedUsage(methodCall);
+                return null;
+            }
+            
             // 利用可能なメソッド一覧を取得
             final List<TargetMethodInfo> availableMethods = NameResolver.getAvailableMethods(
                     (TargetClassInfo) methodOwnerClassType, usingClass);
@@ -535,8 +608,9 @@ public final class NameResolver {
                 }
             }
 
-            // TODO 見つからなかった場合の処理が必要
-            err.println("resolveMethodCall : TODO2");
+            // 見つからなかった処理を行う
+            usingMethod.addUnresolvedUsage(methodCall);
+            return null;
 
             // メソッド呼び出し(a())がエンティティ使用にくっついている場合
         } else if (unresolvedMethodOwnerClassType instanceof UnresolvedEntityUsage) {
@@ -547,6 +621,14 @@ public final class NameResolver {
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
                     resolvedCache);
 
+            // 親が解決できなかった場合はどうしようもない
+            if (null == methodOwnerClassType){
+                
+                // 見つからなかった処理を行う
+                usingMethod.addUnresolvedUsage(methodCall);
+                return null;
+            }
+            
             // 利用可能なメソッド一覧を取得
             final List<TargetMethodInfo> availableMethods = NameResolver.getAvailableMethods(
                     (TargetClassInfo) methodOwnerClassType, usingClass);
@@ -567,8 +649,9 @@ public final class NameResolver {
                 }
             }
 
-            // TODO 見つからなかった場合の処理が必要
-            err.println("resolveMethodCall : TODO3");
+            // 見つからなかった処理を行う
+            usingMethod.addUnresolvedUsage(methodCall);
+            return null;
 
             // メソッド呼び出し(a())が自オブジェクトにくっついている場合(a or this.a or super.a )
         } else if (unresolvedMethodOwnerClassType instanceof UnresolvedClassInfo) {
@@ -593,8 +676,9 @@ public final class NameResolver {
                 }
             }
 
-            err.println("resolveMethodCall : TODO4");
-            // TODO 見つからなかった場合の処理が必要
+            // 見つからなかった処理を行う
+            usingMethod.addUnresolvedUsage(methodCall);
+            return null;
         }
 
         throw new IllegalArgumentException(methodCall.toString() + " is wrong!");
@@ -670,7 +754,10 @@ public final class NameResolver {
                         }
 
                         if (!found) {
-                            // TODO 見つからなかったときの処理が必要
+                            
+                            // 見つからなかった処理を行う
+                            usingMethod.addUnresolvedUsage(entityUsage);
+                            return null;
                         }
                     }
 
@@ -715,7 +802,10 @@ public final class NameResolver {
                         }
 
                         if (!found) {
-                            // TODO 見つからなかったときの処理が必要
+
+                            // 見つからなかった処理を行う
+                            usingMethod.addUnresolvedUsage(entityUsage);
+                            return null;
                         }
                     }
 
@@ -727,9 +817,9 @@ public final class NameResolver {
             }
         }
 
-        // TODO 見つからなかった場合の処理が必要
-
-        throw new IllegalArgumentException(entityUsage.toString() + " is wrong!");
+        // 見つからなかった処理を行う
+        usingMethod.addUnresolvedUsage(entityUsage);
+        return null;
     }
 
     /**

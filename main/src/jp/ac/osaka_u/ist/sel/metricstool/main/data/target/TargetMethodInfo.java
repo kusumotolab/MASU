@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -76,6 +77,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
         this.localVariables = new TreeSet<LocalVariableInfo>();
         this.referencees = new TreeSet<FieldInfo>();
         this.assignmentees = new TreeSet<FieldInfo>();
+        this.unresolvedUsage = new HashSet<UnresolvedTypeInfo>();
 
         this.modifiers.addAll(modifiers);
 
@@ -83,7 +85,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
         this.namespaceVisible = namespaceVisible;
         this.inheritanceVisible = inheritanceVisible;
         this.publicVisible = publicVisible;
-        
+
         this.instance = instance;
     }
 
@@ -133,6 +135,21 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
     }
 
     /**
+     * このメソッド内で，名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しを追加する． プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param unresolvedType 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出し
+     */
+    public void addUnresolvedUsage(final UnresolvedTypeInfo unresolvedType) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == unresolvedType) {
+            throw new NullPointerException();
+        }
+
+        this.unresolvedUsage.add(unresolvedType);
+    }
+
+    /**
      * このメソッドで定義されているローカル変数の SortedSet を返す．
      * 
      * @return このメソッドで定義されているローカル変数の SortedSet
@@ -175,6 +192,15 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
      */
     public SortedSet<FieldInfo> getAssignmentees() {
         return Collections.unmodifiableSortedSet(this.assignmentees);
+    }
+
+    /**
+     * このメソッド内で，名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しの Set を返す．
+     * 
+     * @return このメソッド内で，名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しの Set
+     */
+    public Set<UnresolvedTypeInfo> getUnresolvedUsages() {
+        return Collections.unmodifiableSet(this.unresolvedUsage);
     }
 
     /**
@@ -230,7 +256,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
     public boolean isStaticMember() {
         return !this.instance;
     }
-    
+
     /**
      * 行数を保存するための変数
      */
@@ -257,6 +283,11 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
     private final SortedSet<FieldInfo> assignmentees;
 
     /**
+     * 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しなどを保存するための変数
+     */
+    private final Set<UnresolvedTypeInfo> unresolvedUsage;
+
+    /**
      * クラス内からのみ参照可能かどうか保存するための変数
      */
     private final boolean privateVisible;
@@ -275,7 +306,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
      * どこからでも参照可能かどうか保存するための変数
      */
     private final boolean publicVisible;
-    
+
     /**
      * インスタンスメンバーかどうかを保存するための変数
      */
