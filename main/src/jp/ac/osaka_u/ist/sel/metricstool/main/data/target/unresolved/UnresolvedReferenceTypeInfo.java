@@ -13,6 +13,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
 
     /**
+     * null参照を表す定数
+     */
+    public static final UnresolvedReferenceTypeInfo NULL = new UnresolvedReferenceTypeInfo(
+            new AvailableNamespaceInfoSet(), new String[] { "null" });
+
+    /**
      * 名前空間名，参照名を与えて初期化
      * 
      * @param namespace 名前空間名
@@ -37,7 +43,7 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * @return この参照型の名前を返す
      */
     public String getTypeName() {
-        String[] referenceName = this.getReferenceName();
+        final String[] referenceName = this.getReferenceName();
         return referenceName[referenceName.length - 1];
     }
 
