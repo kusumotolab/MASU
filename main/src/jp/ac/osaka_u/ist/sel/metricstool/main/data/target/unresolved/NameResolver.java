@@ -236,7 +236,7 @@ public final class NameResolver {
 
             err.println("resolveFieldReference : TODO3");
             // TODO 見つからなかった場合の処理が必要
-            
+
             // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
         } else if (unresolvedFieldOwnerClassType instanceof UnresolvedClassInfo) {
 
@@ -394,7 +394,7 @@ public final class NameResolver {
 
             err.println("resolveFieldAssignment : TODO3");
             // TODO 見つからなかった場合の処理が必要
-            
+
             // フィールド代入(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
         } else if (unresolvedFieldOwnerClassType instanceof UnresolvedClassInfo) {
 
@@ -540,11 +540,12 @@ public final class NameResolver {
 
             // メソッド呼び出し(a())がエンティティ使用にくっついている場合
         } else if (unresolvedMethodOwnerClassType instanceof UnresolvedEntityUsage) {
-            
+
             // エンティティのクラス定義を取得
             final TypeInfo methodOwnerClassType = NameResolver.resolveEntityUsage(
-                    (UnresolvedEntityUsage) unresolvedMethodOwnerClassType, usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+                    (UnresolvedEntityUsage) unresolvedMethodOwnerClassType, usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
+                    resolvedCache);
 
             // 利用可能なメソッド一覧を取得
             final List<TargetMethodInfo> availableMethods = NameResolver.getAvailableMethods(
@@ -565,10 +566,10 @@ public final class NameResolver {
                     return availableMethod.getReturnType();
                 }
             }
-            
+
             // TODO 見つからなかった場合の処理が必要
             err.println("resolveMethodCall : TODO3");
-            
+
             // メソッド呼び出し(a())が自オブジェクトにくっついている場合(a or this.a or super.a )
         } else if (unresolvedMethodOwnerClassType instanceof UnresolvedClassInfo) {
 
@@ -634,58 +635,100 @@ public final class NameResolver {
         // エンティティ参照名を取得
         final String[] name = entityUsage.getName();
 
-        // エンティティ名が１word の場合
-        if (name.length == 1) {
+        // 利用可能なフィールド名からエンティティ名を検索
+        {
+            // このクラスで利用可能なフィールド一覧を取得
+            final List<TargetFieldInfo> availableFieldsOfThisClass = NameResolver
+                    .getAvailableFields(usingClass);
 
-            // 利用可能なフィールド名からエンティティ名を検索
-            {
-                // 利用可能なフィールド一覧を取得
-                final List<TargetFieldInfo> availableFields = NameResolver
-                        .getAvailableFields(usingClass);
+            for (TargetFieldInfo availableFieldOfThisClass : availableFieldsOfThisClass) {
 
-                for (TargetFieldInfo availableField : availableFields) {
+                // 一致するフィールド名が見つかった場合
+                if (name[0].equals(availableFieldOfThisClass.getName())) {
+                    usingMethod.addReferencee(availableFieldOfThisClass);
+                    availableFieldOfThisClass.addReferencer(usingMethod);
 
-                    // 一致するフィールド名が見つかった場合
-                    if (name[0].equals(availableField.getName())) {
-                        usingMethod.addReferencee(availableField);
-                        availableField.addReferencer(usingMethod);
+                    // availableField.getType() から次のword(name[i])を名前解決
+                    TypeInfo ownerTypeInfo = availableFieldOfThisClass.getType();
+                    for (int i = 1; i < name.length; i++) {
 
-                        // 解決済みキャッシュに登録
-                        resolvedCache.put(entityUsage, availableField.getType());
+                        // 利用可能なフィールド一覧を取得
+                        final List<TargetFieldInfo> availableFields = NameResolver
+                                .getAvailableFields((TargetClassInfo) ownerTypeInfo, usingClass);
 
-                        return availableField.getType();
+                        boolean found = false;
+                        for (TargetFieldInfo availableField : availableFields) {
+
+                            // 一致するフィールド名が見つかった場合
+                            if (name[i].equals(availableField.getName())) {
+                                usingMethod.addReferencee(availableField);
+                                availableField.addReferencer(usingMethod);
+
+                                ownerTypeInfo = availableField.getType();
+                                found = true;
+                            }
+                        }
+
+                        if (!found) {
+                            // TODO 見つからなかったときの処理が必要
+                        }
                     }
-                }
-            }
-
-            // 利用可能なクラス名からエンティティ名を検索
-            {
-                final AvailableNamespaceInfoSet availableNamespaces = entityUsage
-                        .getAvailableNamespaces();
-
-                // UnresolvedReferenceTypeInfo オブジェクトを構築し，resolveTypeInfo メソッドを用いて該当クラスを検索
-                final UnresolvedReferenceTypeInfo unresolvedReferenceType = new UnresolvedReferenceTypeInfo(
-                        availableNamespaces, name);
-                final TypeInfo classInfo = NameResolver.resolveTypeInfo(unresolvedReferenceType,
-                        classInfoManager);
-
-                // 一致するクラスが見つかった場合
-                if (null != classInfo) {
 
                     // 解決済みキャッシュに登録
-                    resolvedCache.put(entityUsage, classInfo);
+                    resolvedCache.put(entityUsage, ownerTypeInfo);
 
-                    return classInfo;
+                    return ownerTypeInfo;
                 }
             }
-            
-            err.println("resolveEntityUsage : TODO1");
-            // TODO 見つからなかった場合の処理が必要
-
-            // エンティティ名が2words 以上の場合
-        } else {
-
         }
+
+        // 利用可能なクラス名からエンティティ名を検索
+        {
+
+            for (int length = 1; length <= name.length; length++) {
+
+                // 検索する名前(String[])を作成
+                final String[] searchingName = new String[length];
+                System.arraycopy(name, 0, searchingName, 0, length);
+
+                final ClassInfo searchingClass = classInfoManager.getClassInfo(searchingName);
+                if (null != searchingClass) {
+
+                    TypeInfo ownerTypeInfo = searchingClass;
+                    for (int i = length; i < name.length; i++) {
+
+                        // 利用可能なフィールド一覧を取得
+                        final List<TargetFieldInfo> availableFields = NameResolver
+                                .getAvailableFields((TargetClassInfo) ownerTypeInfo, usingClass);
+
+                        boolean found = false;
+                        for (TargetFieldInfo availableField : availableFields) {
+
+                            // 一致するフィールドが見つかった場合
+                            if (name[i].equals(availableField.getName())) {
+                                usingMethod.addReferencee(availableField);
+                                availableField.addReferencer(usingMethod);
+
+                                ownerTypeInfo = availableField.getType();
+                                found = true;
+                            }
+                        }
+
+                        if (!found) {
+                            // TODO 見つからなかったときの処理が必要
+                        }
+                    }
+
+                    // 解決済みキャッシュに登録
+                    resolvedCache.put(entityUsage, ownerTypeInfo);
+
+                    return ownerTypeInfo;
+                }
+            }
+        }
+
+        // TODO 見つからなかった場合の処理が必要
+
         throw new IllegalArgumentException(entityUsage.toString() + " is wrong!");
     }
 
