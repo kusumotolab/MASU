@@ -35,9 +35,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class NameResolver {
 
     /**
-     * 未解決型情報（UnresolvedTypeInfo）に解決済み型情報（TypeInfo）を返す．
-     * 既にいったん
-     * 参照されているTypeInfoがclassInfoManagerに含まれていない場合は新規で生成し追加する．
+     * 未解決型情報（UnresolvedTypeInfo）から解決済み型情報（TypeInfo）を返す． 対応する解決済み型情報がない場合は null を返す．
      * 
      * @param unresolvedTypeInfo 名前解決したい型情報
      * @param classInfoManager 参照型の解決に用いるデータベース
@@ -159,13 +157,13 @@ public final class NameResolver {
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
             // 親が解決できなかった場合はどうしようもない
-            if (null == fieldOwnerClassType){
-                
+            if (null == fieldOwnerClassType) {
+
                 // 見つからなかった処理を行う
                 usingMethod.addUnresolvedUsage(fieldReference);
                 return null;
             }
-            
+
             // 利用可能なフィールド一覧を取得
             final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
                     (TargetClassInfo) fieldOwnerClassType, usingClass);
@@ -198,13 +196,13 @@ public final class NameResolver {
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
             // 親が解決できなかった場合はどうしようもない
-            if (null == fieldOwnerClassType){
-                
+            if (null == fieldOwnerClassType) {
+
                 // 見つからなかった処理を行う
                 usingMethod.addUnresolvedUsage(fieldReference);
                 return null;
             }
-            
+
             // 利用可能なフィールド一覧を取得
             final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
                     (TargetClassInfo) fieldOwnerClassType, usingClass);
@@ -237,13 +235,13 @@ public final class NameResolver {
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
             // 親が解決できなかった場合はどうしようもない
-            if (null == fieldOwnerClassType){
-                
+            if (null == fieldOwnerClassType) {
+
                 // 見つからなかった処理を行う
                 usingMethod.addUnresolvedUsage(fieldReference);
                 return null;
             }
-            
+
             // 利用可能なフィールド一覧を取得
             final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
                     (TargetClassInfo) fieldOwnerClassType, usingClass);
@@ -344,13 +342,13 @@ public final class NameResolver {
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
             // 親が解決できなかった場合はどうしようもない
-            if (null == fieldOwnerClassType){
-                
+            if (null == fieldOwnerClassType) {
+
                 // 見つからなかった処理を行う
                 usingMethod.addUnresolvedUsage(fieldAssignment);
                 return null;
             }
-            
+
             // 利用可能なフィールド一覧を取得
             final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
                     (TargetClassInfo) fieldOwnerClassType, usingClass);
@@ -383,13 +381,13 @@ public final class NameResolver {
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
             // 親が解決できなかった場合はどうしようもない
-            if (null == fieldOwnerClassType){
-                
+            if (null == fieldOwnerClassType) {
+
                 // 見つからなかった処理を行う
                 usingMethod.addUnresolvedUsage(fieldAssignment);
                 return null;
             }
-            
+
             // 利用可能なフィールド一覧を取得
             final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
                     (TargetClassInfo) fieldOwnerClassType, usingClass);
@@ -422,13 +420,13 @@ public final class NameResolver {
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
             // 親が解決できなかった場合はどうしようもない
-            if (null == fieldOwnerClassType){
-                
+            if (null == fieldOwnerClassType) {
+
                 // 見つからなかった処理を行う
                 usingMethod.addUnresolvedUsage(fieldAssignment);
                 return null;
             }
-            
+
             // 利用可能なフィールド一覧を取得
             final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
                     (TargetClassInfo) fieldOwnerClassType, usingClass);
@@ -541,13 +539,13 @@ public final class NameResolver {
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
             // 親が解決できなかった場合はどうしようもない
-            if (null == methodOwnerClassType){
-                
+            if (null == methodOwnerClassType) {
+
                 // 見つからなかった処理を行う
                 usingMethod.addUnresolvedUsage(methodCall);
                 return null;
             }
-            
+
             // 利用可能なメソッド一覧を取得
             final List<TargetMethodInfo> availableMethods = NameResolver.getAvailableMethods(
                     (TargetClassInfo) methodOwnerClassType, usingClass);
@@ -581,13 +579,13 @@ public final class NameResolver {
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
 
             // 親が解決できなかった場合はどうしようもない
-            if (null == methodOwnerClassType){
-                
+            if (null == methodOwnerClassType) {
+
                 // 見つからなかった処理を行う
                 usingMethod.addUnresolvedUsage(methodCall);
                 return null;
             }
-            
+
             // 利用可能なメソッド一覧を取得
             final List<TargetMethodInfo> availableMethods = NameResolver.getAvailableMethods(
                     (TargetClassInfo) methodOwnerClassType, usingClass);
@@ -622,13 +620,13 @@ public final class NameResolver {
                     resolvedCache);
 
             // 親が解決できなかった場合はどうしようもない
-            if (null == methodOwnerClassType){
-                
+            if (null == methodOwnerClassType) {
+
                 // 見つからなかった処理を行う
                 usingMethod.addUnresolvedUsage(methodCall);
                 return null;
             }
-            
+
             // 利用可能なメソッド一覧を取得
             final List<TargetMethodInfo> availableMethods = NameResolver.getAvailableMethods(
                     (TargetClassInfo) methodOwnerClassType, usingClass);
@@ -754,7 +752,7 @@ public final class NameResolver {
                         }
 
                         if (!found) {
-                            
+
                             // 見つからなかった処理を行う
                             usingMethod.addUnresolvedUsage(entityUsage);
                             return null;
@@ -1225,6 +1223,13 @@ public final class NameResolver {
         return Collections.unmodifiableList(availableMethods);
     }
 
+    /**
+     * 引数で与えられた未解決型情報を表す解決済み型情報クラスを生成する． ここで引数として与えられるのは，ソースコードがパースされていない型であるので，生成する解決済み型情報クラスは
+     * ExternalClassInfo となる．
+     * 
+     * @param unresolvedReferenceType 未解決型情報
+     * @return 解決済み型情報
+     */
     public static ExternalClassInfo createExternalClassInfo(
             final UnresolvedReferenceTypeInfo unresolvedReferenceType) {
 
