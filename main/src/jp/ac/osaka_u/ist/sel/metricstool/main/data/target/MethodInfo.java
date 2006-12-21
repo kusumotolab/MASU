@@ -227,6 +227,21 @@ public abstract class MethodInfo implements Comparable<MethodInfo> {
     }
 
     /**
+     * このメソッドの引数を追加する． public 宣言してあるが， プラグインからの呼び出しははじく．
+     * 
+     * @param parameters 追加する引数群
+     */
+    public void addParameters(final List<ParameterInfo> parameters){
+        
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == parameters) {
+            throw new NullPointerException();
+        }
+
+        this.parameters.addAll(parameters);
+    }
+    
+    /**
      * このメソッドの引数の数を返す
      * 
      * @return このメソッドの引数の数

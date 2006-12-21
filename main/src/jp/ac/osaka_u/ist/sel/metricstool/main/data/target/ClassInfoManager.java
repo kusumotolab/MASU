@@ -105,22 +105,29 @@ public final class ClassInfoManager {
      * @return クラス情報
      */
     public ClassInfo getClassInfo(final String[] fullQualifiedName) {
-        
-        if (null == fullQualifiedName){
+
+        if (null == fullQualifiedName) {
             throw new NullPointerException();
         }
-        
+
         return this.packageInfo.getClassInfo(fullQualifiedName);
     }
 
+    /**
+     * 引数で指定した名前空間を持つクラス情報の Collection を返す
+     * 
+     * @param namespace 名前空間
+     * @return 引数で指定した名前空間を持つクラス情報の Collection
+     */
     public Collection<ClassInfo> getClassInfos(final String[] namespace) {
-        
-        if (null == namespace){
+
+        if (null == namespace) {
             throw new NullPointerException();
         }
-        
+
         return this.packageInfo.getClassInfos(namespace);
     }
+
     /**
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
@@ -166,14 +173,14 @@ public final class ClassInfoManager {
          * @param packageName 名前空間名
          */
         PackageInfo(final String packageName, final int depth) {
-            
-            if(null == packageName){
+
+            if (null == packageName) {
                 throw new NullPointerException();
             }
-            if(depth < 0){
+            if (depth < 0) {
                 throw new IllegalArgumentException("Depth must be 0 or more!");
             }
-            
+
             this.packageName = packageName;
             this.depth = depth;
             this.classInfos = new TreeMap<String, ClassInfo>();
@@ -238,10 +245,10 @@ public final class ClassInfoManager {
          */
         ClassInfo getClassInfo(final String[] fullQualifiedName) {
 
-            if (null == fullQualifiedName){
+            if (null == fullQualifiedName) {
                 throw new NullPointerException();
             }
-            
+
             int namespaceLength = fullQualifiedName.length - 1;
 
             // ほしいクラス情報の名前空間階層が，この名前空間階層よりも深い場合は，該当するサブ名前空間を呼び出す
@@ -264,30 +271,35 @@ public final class ClassInfoManager {
                         + fullQualifiedName.toString());
             }
         }
-        
-        Collection<ClassInfo> getClassInfos(final String[] namespace){
-            
-            if (null == namespace){
+
+        /**
+         * 引数で与えられた名前空間を持つクラスの Collection を返す
+         * 
+         * @param namespace 名前空間
+         * @return 引数で与えられた名前空間を持つクラスの Collection
+         */
+        Collection<ClassInfo> getClassInfos(final String[] namespace) {
+
+            if (null == namespace) {
                 throw new NullPointerException();
             }
 
-            //ほしいクラス情報の名前空間層が，この名前空間層よりも深い場合は，該当するサブ名前空間名を呼び出す
-            if (this.getDepth() < namespace.length){
+            // ほしいクラス情報の名前空間層が，この名前空間層よりも深い場合は，該当するサブ名前空間名を呼び出す
+            if (this.getDepth() < namespace.length) {
                 PackageInfo subPackage = this.subPackages.get(namespace[this.getDepth()]);
                 if (null == subPackage) {
                     return Collections.unmodifiableCollection(new HashSet<ClassInfo>());
-                }else{
+                } else {
                     return subPackage.getClassInfos(namespace);
                 }
-            
+
                 // ほしいクラス情報の名前空間層が，この名前空間層と同じ場合は，クラス情報を返す
-            }else if (this.getDepth() == namespace.length){
-                
+            } else if (this.getDepth() == namespace.length) {
+
                 return Collections.unmodifiableCollection(this.classInfos.values());
-                //ほしいクラス情報の名前空間階層が，この名前空間階層よりも浅い場合は，エラー
-            }else{
-                throw new IllegalArgumentException("Illegal namepace: "
-                        + namespace.toString());
+                // ほしいクラス情報の名前空間階層が，この名前空間階層よりも浅い場合は，エラー
+            } else {
+                throw new IllegalArgumentException("Illegal namepace: " + namespace.toString());
             }
         }
 
