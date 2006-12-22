@@ -11,6 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -919,11 +920,28 @@ public final class NameResolver {
         final List<TypeInfo> parameterTypes = new LinkedList<TypeInfo>();
         for (UnresolvedTypeInfo unresolvedParameterType : unresolvedParameterTypes) {
 
+            // 引数がフィールド参照の場合
             if (unresolvedParameterType instanceof UnresolvedFieldUsage) {
                 final TypeInfo parameterType = NameResolver.resolveFieldReference(
                         (UnresolvedFieldUsage) unresolvedParameterType, usingClass, usingMethod,
                         classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
                 parameterTypes.add(parameterType);
+
+                // 引数がメソッド呼び出しの場合
+            } else if (unresolvedParameterType instanceof UnresolvedMethodCall) {
+                final TypeInfo parameterType = NameResolver.resolveMethodCall(
+                        (UnresolvedMethodCall) unresolvedParameterType, usingClass, usingMethod,
+                        classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+                parameterTypes.add(parameterType);
+            
+                // 引数が null の場合
+            } else if (unresolvedParameterType instanceof NullTypeInfo) {
+                parameterTypes.add((TypeInfo)unresolvedParameterType);
+            
+                // それ以外の型はエラー
+            } else {
+                err.println("Here shouldn't be reached!");
+                return null;
             }
         }
 
