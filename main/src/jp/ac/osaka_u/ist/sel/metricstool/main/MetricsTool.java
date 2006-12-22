@@ -684,11 +684,15 @@ public class MetricsTool {
             final boolean inheritanceVisible = unresolvedClassInfo.isInheritanceVisible();
             final boolean publicVisible = unresolvedClassInfo.isPublicVisible();
             final boolean instance = unresolvedClassInfo.isInstanceMember();
-
+            final int fromLine = unresolvedClassInfo.getFromLine();
+            final int fromColumn = unresolvedClassInfo.getFromColumn();
+            final int toLine = unresolvedClassInfo.getToLine();
+            final int toColumn = unresolvedClassInfo.getToColumn();
+            
             // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
             final TargetClassInfo classInfo = new TargetClassInfo(modifiers, fullQualifiedName,
                     loc, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
-                    instance);
+                    instance, fromLine, fromColumn, toLine, toColumn);
             classInfoManager.add(classInfo);
 
             for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
@@ -721,11 +725,15 @@ public class MetricsTool {
         final boolean inheritanceVisible = unresolvedClassInfo.isInheritanceVisible();
         final boolean publicVisible = unresolvedClassInfo.isPublicVisible();
         final boolean instance = unresolvedClassInfo.isInstanceMember();
-
+        final int fromLine = unresolvedClassInfo.getFromLine();
+        final int fromColumn = unresolvedClassInfo.getFromColumn();
+        final int toLine = unresolvedClassInfo.getToLine();
+        final int toColumn = unresolvedClassInfo.getToColumn();
+        
         // ClassInfo オブジェクトを生成し，ClassInfoマネージャに登録
         TargetInnerClassInfo classInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
                 outerClass, loc, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible, instance);
+                publicVisible, instance, fromLine, fromColumn, toLine, toColumn);
         classInfoManager.add(classInfo);
 
         // このクラスのインナークラスに対して再帰的に処理
@@ -766,7 +774,7 @@ public class MetricsTool {
                 if (null == superClass) {
                     superClass = NameResolver
                             .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedSuperClassType);
-                    classInfoManager.add((ExternalClassInfo)superClass);
+                    classInfoManager.add((ExternalClassInfo) superClass);
                 }
 
                 classInfo.addSuperClass(superClass);
@@ -810,18 +818,23 @@ public class MetricsTool {
                 if (null == fieldType) {
                     fieldType = NameResolver
                             .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedFieldType);
-                    classInfoManager.add((ExternalClassInfo)fieldType);
+                    classInfoManager.add((ExternalClassInfo) fieldType);
                 }
                 final boolean privateVisible = unresolvedFieldInfo.isPrivateVisible();
                 final boolean namespaceVisible = unresolvedFieldInfo.isNamespaceVisible();
                 final boolean inheritanceVisible = unresolvedFieldInfo.isInheritanceVisible();
                 final boolean publicVisible = unresolvedFieldInfo.isPublicVisible();
-                final boolean instance = unresolvedClassInfo.isInstanceMember();
-
+                final boolean instance = unresolvedFieldInfo.isInstanceMember();
+                final int fromLine = unresolvedFieldInfo.getFromLine();
+                final int fromColumn = unresolvedFieldInfo.getFromColumn();
+                final int toLine = unresolvedFieldInfo.getToLine();
+                final int toColumn = unresolvedFieldInfo.getToColumn();
+                
                 // フィールドオブジェクトを生成
                 final TargetFieldInfo fieldInfo = new TargetFieldInfo(modifiers, fieldName,
                         fieldType, ownerClass, privateVisible, namespaceVisible,
-                        inheritanceVisible, publicVisible, instance);
+                        inheritanceVisible, publicVisible, instance, fromLine, fromColumn, toLine,
+                        toColumn);
 
                 // フィールド情報を追加
                 ((TargetClassInfo) ownerClass).addDefinedField(fieldInfo);
@@ -866,7 +879,7 @@ public class MetricsTool {
                 if (null == methodReturnType) {
                     methodReturnType = NameResolver
                             .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedMethodReturnType);
-                    classInfoManager.add((ExternalClassInfo)methodReturnType);
+                    classInfoManager.add((ExternalClassInfo) methodReturnType);
                 }
                 final int methodLOC = unresolvedMethodInfo.getLOC();
                 final boolean constructor = unresolvedMethodInfo.isConstructor();
@@ -875,12 +888,16 @@ public class MetricsTool {
                 final boolean inheritanceVisible = unresolvedMethodInfo.isInheritanceVisible();
                 final boolean publicVisible = unresolvedMethodInfo.isPublicVisible();
                 final boolean instance = unresolvedMethodInfo.isInstanceMember();
-
+                final int fromLine = unresolvedMethodInfo.getFromLine();
+                final int fromColumn = unresolvedMethodInfo.getFromColumn();
+                final int toLine = unresolvedMethodInfo.getToLine();
+                final int toColumn = unresolvedMethodInfo.getToColumn();
+                
                 // MethodInfo オブジェクトを生成し，引数を追加していく
                 final TargetMethodInfo methodInfo = new TargetMethodInfo(methodModifiers,
                         methodName, methodReturnType, ownerClass, constructor, methodLOC,
                         privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
-                        instance);
+                        instance, fromLine, fromColumn, toLine, toColumn);
                 for (UnresolvedParameterInfo unresolvedParameterInfo : unresolvedMethodInfo
                         .getParameterInfos()) {
 

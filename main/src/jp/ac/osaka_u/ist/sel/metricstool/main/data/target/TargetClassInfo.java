@@ -29,10 +29,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
+public class TargetClassInfo extends ClassInfo implements Visualizable, Member, Position {
 
     /**
-     * 名前空間名，クラス名を与えて暮らす情報オブジェクトを初期化
+     * 名前空間名，クラス名を与えてクラス情報オブジェクトを初期化
      * 
      * @param modifiers 修飾子の Set
      * @param namespace 名前空間名
@@ -43,11 +43,16 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
      * @param instance インスタンスメンバーかどうか
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
             final String className, final int loc, final boolean privateVisible,
             final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final boolean instance) {
+            final boolean publicVisible, final boolean instance, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(namespace, className);
 
@@ -73,6 +78,11 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         this.publicVisible = publicVisible;
 
         this.instance = instance;
+
+        this.fromLine = fromLine;
+        this.fromColumn = fromColumn;
+        this.toLine = toLine;
+        this.toColumn = toColumn;
     }
 
     /**
@@ -86,10 +96,15 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
      * @param instance インスタンスメンバーかどうか
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
             final int loc, final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(fullQualifiedName);
 
@@ -115,6 +130,11 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         this.publicVisible = publicVisible;
 
         this.instance = instance;
+
+        this.fromLine = fromLine;
+        this.fromColumn = fromColumn;
+        this.toLine = toLine;
+        this.toColumn = toColumn;
     }
 
     /**
@@ -122,7 +142,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @param innerClass 追加するインナークラス
      */
-    public void addInnerClass(final TargetInnerClassInfo innerClass) {
+    public final void addInnerClass(final TargetInnerClassInfo innerClass) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == innerClass) {
@@ -137,7 +157,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @return このクラスの行数
      */
-    public int getLOC() {
+    public final int getLOC() {
         return this.loc;
     }
 
@@ -146,7 +166,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @return このクラスの修飾子の Set
      */
-    public Set<ModifierInfo> getModifiers() {
+    public final Set<ModifierInfo> getModifiers() {
         return Collections.unmodifiableSet(this.modifiers);
     }
 
@@ -155,7 +175,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @return インナークラスの SortedSet
      */
-    public SortedSet<TargetInnerClassInfo> getInnerClasses() {
+    public final SortedSet<TargetInnerClassInfo> getInnerClasses() {
         return Collections.unmodifiableSortedSet(this.innerClasses);
     }
 
@@ -164,7 +184,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @param definedMethod 追加する定義されたメソッド
      */
-    public void addDefinedMethod(final TargetMethodInfo definedMethod) {
+    public final void addDefinedMethod(final TargetMethodInfo definedMethod) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == definedMethod) {
@@ -179,7 +199,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @param definedField 追加する定義されたフィールド
      */
-    public void addDefinedField(final TargetFieldInfo definedField) {
+    public final void addDefinedField(final TargetFieldInfo definedField) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == definedField) {
@@ -194,7 +214,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @return 定義されているメソッドの SortedSet
      */
-    public SortedSet<TargetMethodInfo> getDefinedMethods() {
+    public final SortedSet<TargetMethodInfo> getDefinedMethods() {
         return Collections.unmodifiableSortedSet(this.definedMethods);
     }
 
@@ -203,7 +223,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @return 定義されているフィールドの SortedSet
      */
-    public SortedSet<TargetFieldInfo> getDefinedFields() {
+    public final SortedSet<TargetFieldInfo> getDefinedFields() {
         return Collections.unmodifiableSortedSet(this.definedFields);
     }
 
@@ -212,7 +232,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @return 子クラスから参照可能な場合は true, そうでない場合は false
      */
-    public boolean isInheritanceVisible() {
+    public final boolean isInheritanceVisible() {
         return this.privateVisible;
     }
 
@@ -221,7 +241,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
      */
-    public boolean isNamespaceVisible() {
+    public final boolean isNamespaceVisible() {
         return this.namespaceVisible;
     }
 
@@ -230,7 +250,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
      */
-    public boolean isPrivateVisible() {
+    public final boolean isPrivateVisible() {
         return this.inheritanceVisible;
     }
 
@@ -239,7 +259,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @return どこからでも参照可能な場合は true, そうでない場合は false
      */
-    public boolean isPublicVisible() {
+    public final boolean isPublicVisible() {
         return this.publicVisible;
     }
 
@@ -248,7 +268,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @return インスタンスメンバーの場合 true，そうでない場合 false
      */
-    public boolean isInstanceMember() {
+    public final boolean isInstanceMember() {
         return this.instance;
     }
 
@@ -257,8 +277,44 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @return スタティックメンバーの場合 true，そうでない場合 false
      */
-    public boolean isStaticMember() {
+    public final boolean isStaticMember() {
         return !this.instance;
+    }
+
+    /**
+     * 開始行を返す
+     * 
+     * @return 開始行
+     */
+    public final int getFromLine() {
+        return this.fromLine;
+    }
+
+    /**
+     * 開始列を返す
+     * 
+     * @return 開始列
+     */
+    public final int getFromColumn() {
+        return this.fromColumn;
+    }
+
+    /**
+     * 終了行を返す
+     * 
+     * @return 終了行
+     */
+    public final int getToLine() {
+        return this.toLine;
+    }
+
+    /**
+     * 終了列を返す
+     * 
+     * @return 終了列
+     */
+    public final int getToColumn() {
+        return this.toColumn;
     }
 
     /**
@@ -310,4 +366,24 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * インスタンスメンバーかどうかを保存するための変数
      */
     private final boolean instance;
+
+    /**
+     * 開始行を保存するための変数
+     */
+    private final int fromLine;
+
+    /**
+     * 開始列を保存するための変数
+     */
+    private final int fromColumn;
+
+    /**
+     * 終了行を保存するための変数
+     */
+    private final int toLine;
+
+    /**
+     * 開始列を保存するための変数
+     */
+    private final int toColumn;
 }

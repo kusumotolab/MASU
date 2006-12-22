@@ -24,14 +24,19 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
      * @param instance インスタンスメンバーかどうか
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
             final String className, final TargetClassInfo outerClass, final int loc,
             final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(modifiers, namespace, className, loc, privateVisible, namespaceVisible,
-                inheritanceVisible, publicVisible, instance);
+                inheritanceVisible, publicVisible, instance, fromLine, fromColumn, toLine, toColumn);
 
         if (null == outerClass) {
             throw new NullPointerException();
@@ -52,14 +57,19 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
      * @param instance インスタンスメンバーかどうか
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers,
             final String[] fullQualifiedName, final TargetClassInfo outerClass, final int loc,
             final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(modifiers, fullQualifiedName, loc, privateVisible, namespaceVisible,
-                inheritanceVisible, publicVisible, instance);
+                inheritanceVisible, publicVisible, instance, fromLine, fromColumn, toLine, toColumn);
 
         if (null == outerClass) {
             throw new NullPointerException();

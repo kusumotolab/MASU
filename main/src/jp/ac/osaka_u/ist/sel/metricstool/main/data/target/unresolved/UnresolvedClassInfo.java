@@ -24,15 +24,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
  * <li>未解決子クラス名一覧</li>
  * <li>未解決インナークラス一覧</li>
  * <li>未解決定義メソッド一覧</li>
- * <li>未解決定義フィールド一覧
- * <li>
+ * <li>未解決定義フィールド一覧</li>
+ * <li>ファイル内位置</li>
  * </ul>
  * 
  * @author y-higo
  * 
  */
 public final class UnresolvedClassInfo implements UnresolvedTypeInfo, VisualizableSetting,
-        MemberSetting {
+        MemberSetting, PositionSetting {
 
     /**
      * 引数なしコンストラクタ
@@ -57,6 +57,11 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
         this.publicVisible = false;
 
         this.instance = true;
+        
+        this.fromLine = 0;
+        this.fromColumn = 0;
+        this.toLine = 0;
+        this.toColumn = 0;
     }
 
     /**
@@ -92,7 +97,8 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
         }
 
         final String[] fullQualifiedName = this.getFullQualifiedName();
-        final String[] correspondFullQualifiedName = ((UnresolvedClassInfo) o).getFullQualifiedName();
+        final String[] correspondFullQualifiedName = ((UnresolvedClassInfo) o)
+                .getFullQualifiedName();
 
         if (fullQualifiedName.length != correspondFullQualifiedName.length) {
             return false;
@@ -469,6 +475,98 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
     }
 
     /**
+     * 開始行をセットする
+     * 
+     * @param fromLine 開始行
+     */
+    public void setFromLine(final int fromLine) {
+
+        if (fromLine < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        this.fromLine = fromLine;
+    }
+
+    /**
+     * 開始列をセットする
+     * 
+     * @param fromColumn 開始列
+     */
+    public void setFromColumn(final int fromColumn) {
+
+        if (fromColumn < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        this.fromColumn = fromColumn;
+    }
+
+    /**
+     * 終了行をセットする
+     * 
+     * @param toLine 終了行
+     */
+    public void setToLine(final int toLine) {
+
+        if (toLine < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        this.toLine = toLine;
+    }
+
+    /**
+     * 終了列をセットする
+     * 
+     * @param toColumn 終了列
+     */
+    public void setToColumn(final int toColumn) {
+
+        if (toColumn < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        this.toColumn = toColumn;
+    }
+
+    /**
+     * 開始行を返す
+     * 
+     * @return 開始行
+     */
+    public int getFromLine() {
+        return this.fromLine;
+    }
+
+    /**
+     * 開始列を返す
+     * 
+     * @return 開始列
+     */
+    public int getFromColumn() {
+        return this.fromColumn;
+    }
+
+    /**
+     * 終了行を返す
+     * 
+     * @return 終了行
+     */
+    public int getToLine() {
+        return this.toLine;
+    }
+
+    /**
+     * 終了列を返す
+     * 
+     * @return 終了列
+     */
+    public int getToColumn() {
+        return this.toColumn;
+    }
+
+    /**
      * 名前空間名を保存するための変数
      */
     private String[] namespace;
@@ -537,4 +635,24 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      * インスタンスメンバーかどうかを保存するための変数
      */
     private boolean instance;
+
+    /**
+     * 開始行を保存するための変数
+     */
+    private int fromLine;
+
+    /**
+     * 開始列を保存するための変数
+     */
+    private int fromColumn;
+
+    /**
+     * 終了行を保存するための変数
+     */
+    private int toLine;
+
+    /**
+     * 開始列を保存するための変数
+     */
+    private int toColumn;
 }

@@ -33,7 +33,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class TargetMethodInfo extends MethodInfo implements Visualizable {
+public final class TargetMethodInfo extends MethodInfo implements Visualizable, Member, Position {
 
     /**
      * メソッドオブジェクトを初期化する． 以下の情報が引数として与えられなければならない．
@@ -56,11 +56,16 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
      * @param instance インスタンスメンバーかどうか
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
     public TargetMethodInfo(final Set<ModifierInfo> modifiers, final String name,
             final TypeInfo returnType, final ClassInfo ownerClass, final boolean constructor,
             final int loc, final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(name, returnType, ownerClass, constructor);
 
@@ -87,6 +92,11 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
         this.publicVisible = publicVisible;
 
         this.instance = instance;
+        
+        this.fromLine = fromLine;
+        this.fromColumn = fromColumn;
+        this.toLine = toLine;
+        this.toColumn = toColumn;
     }
 
     /**
@@ -258,6 +268,42 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
     }
 
     /**
+     * 開始行を返す
+     * 
+     * @return 開始行
+     */
+    public int getFromLine() {
+        return this.fromLine;
+    }
+
+    /**
+     * 開始列を返す
+     * 
+     * @return 開始列
+     */
+    public int getFromColumn() {
+        return this.fromColumn;
+    }
+
+    /**
+     * 終了行を返す
+     * 
+     * @return 終了行
+     */
+    public int getToLine() {
+        return this.toLine;
+    }
+
+    /**
+     * 終了列を返す
+     * 
+     * @return 終了列
+     */
+    public int getToColumn() {
+        return this.toColumn;
+    }
+
+    /**
      * 行数を保存するための変数
      */
     private final int loc;
@@ -311,4 +357,24 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable {
      * インスタンスメンバーかどうかを保存するための変数
      */
     private final boolean instance;
+
+    /**
+     * 開始行を保存するための変数
+     */
+    private final int fromLine;
+
+    /**
+     * 開始列を保存するための変数
+     */
+    private final int fromColumn;
+
+    /**
+     * 終了行を保存するための変数
+     */
+    private final int toLine;
+
+    /**
+     * 開始列を保存するための変数
+     */
+    private final int toColumn;
 }
