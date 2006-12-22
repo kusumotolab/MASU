@@ -15,12 +15,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * <li>変数名</li>
  * <li>型</li>
  * <li>修飾子</li>
+ * <li>位置情報</li>
  * </ul>
  * 
  * @author y-higo
  * 
  */
-public abstract class UnresolvedVariableInfo {
+public abstract class UnresolvedVariableInfo implements PositionSetting {
 
     /**
      * 変数名を返す
@@ -92,6 +93,99 @@ public abstract class UnresolvedVariableInfo {
     }
 
     /**
+     * 開始行をセットする
+     * 
+     * @param fromLine 開始行
+     */
+    public void setFromLine(final int fromLine) {
+
+        if (fromLine < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        this.fromLine = fromLine;
+    }
+
+    /**
+     * 開始列をセットする
+     * 
+     * @param fromColumn 開始列
+     */
+    public void setFromColumn(final int fromColumn) {
+
+        if (fromColumn < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        this.fromColumn = fromColumn;
+    }
+
+    /**
+     * 終了行をセットする
+     * 
+     * @param toLine 終了行
+     */
+    public void setToLine(final int toLine) {
+
+        if (toLine < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        this.toLine = toLine;
+    }
+
+    /**
+     * 終了列をセットする
+     * 
+     * @param toColumn 終了列
+     */
+    public void setToColumn(final int toColumn) {
+
+        if (toColumn < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        this.toColumn = toColumn;
+    }
+    
+    /**
+     * 開始行を返す
+     * 
+     * @return 開始行
+     */
+    public int getFromLine() {
+        return this.fromLine;
+    }
+
+    /**
+     * 開始列を返す
+     * 
+     * @return 開始列
+     */
+    public int getFromColumn() {
+        return this.fromColumn;
+    }
+
+    /**
+     * 終了行を返す
+     * 
+     * @return 終了行
+     */
+    public int getToLine() {
+        return this.toLine;
+    }
+
+    /**
+     * 終了列を返す
+     * 
+     * @return 終了列
+     */
+    public int getToColumn() {
+        return this.toColumn;
+    }
+
+    
+    /**
      * 変数オブジェクトを初期化する．
      * 
      * @param name 変数名
@@ -118,6 +212,11 @@ public abstract class UnresolvedVariableInfo {
         this.name = null;
         this.type = null;
         this.modifiers = new HashSet<ModifierInfo>();
+        
+        this.fromLine = 0;
+        this.fromColumn = 0;
+        this.toLine = 0;
+        this.toColumn = 0;
     }
 
     /**
@@ -134,5 +233,25 @@ public abstract class UnresolvedVariableInfo {
      * このフィールドの修飾子を保存するための変数
      */
     private Set<ModifierInfo> modifiers;
+    
 
+    /**
+     * 開始行を保存するための変数
+     */
+    private int fromLine;
+
+    /**
+     * 開始列を保存するための変数
+     */
+    private int fromColumn;
+
+    /**
+     * 終了行を保存するための変数
+     */
+    private int toLine;
+
+    /**
+     * 開始列を保存するための変数
+     */
+    private int toColumn;
 }

@@ -7,7 +7,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsage;
 
 
 /**
@@ -24,7 +23,8 @@ public final class ExternalFieldInfo extends FieldInfo {
      * @param ownerClass フィールドを定義しているクラス
      */
     public ExternalFieldInfo(final String name, final ClassInfo ownerClass) {
-        super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(), ownerClass);
+        super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(), ownerClass, 0, 0,
+                0, 0);
     }
 
 }

@@ -21,7 +21,7 @@ public final class ExternalParameterInfo extends ParameterInfo {
      * @param type ˆø”‚ÌŒ^
      */
     public ExternalParameterInfo(final TypeInfo type) {
-        super(new HashSet<ModifierInfo>(), UNKNOWN_NAME, type);
+        super(new HashSet<ModifierInfo>(), UNKNOWN_NAME, type, 0, 0, 0, 0);
     }
 
     /**

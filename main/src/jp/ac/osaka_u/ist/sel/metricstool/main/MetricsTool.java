@@ -688,7 +688,7 @@ public class MetricsTool {
             final int fromColumn = unresolvedClassInfo.getFromColumn();
             final int toLine = unresolvedClassInfo.getToLine();
             final int toColumn = unresolvedClassInfo.getToColumn();
-            
+
             // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
             final TargetClassInfo classInfo = new TargetClassInfo(modifiers, fullQualifiedName,
                     loc, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
@@ -729,7 +729,7 @@ public class MetricsTool {
         final int fromColumn = unresolvedClassInfo.getFromColumn();
         final int toLine = unresolvedClassInfo.getToLine();
         final int toColumn = unresolvedClassInfo.getToColumn();
-        
+
         // ClassInfo オブジェクトを生成し，ClassInfoマネージャに登録
         TargetInnerClassInfo classInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
                 outerClass, loc, privateVisible, namespaceVisible, inheritanceVisible,
@@ -829,7 +829,7 @@ public class MetricsTool {
                 final int fromColumn = unresolvedFieldInfo.getFromColumn();
                 final int toLine = unresolvedFieldInfo.getToLine();
                 final int toColumn = unresolvedFieldInfo.getToColumn();
-                
+
                 // フィールドオブジェクトを生成
                 final TargetFieldInfo fieldInfo = new TargetFieldInfo(modifiers, fieldName,
                         fieldType, ownerClass, privateVisible, namespaceVisible,
@@ -888,20 +888,20 @@ public class MetricsTool {
                 final boolean inheritanceVisible = unresolvedMethodInfo.isInheritanceVisible();
                 final boolean publicVisible = unresolvedMethodInfo.isPublicVisible();
                 final boolean instance = unresolvedMethodInfo.isInstanceMember();
-                final int fromLine = unresolvedMethodInfo.getFromLine();
-                final int fromColumn = unresolvedMethodInfo.getFromColumn();
-                final int toLine = unresolvedMethodInfo.getToLine();
-                final int toColumn = unresolvedMethodInfo.getToColumn();
-                
+                final int methodFromLine = unresolvedMethodInfo.getFromLine();
+                final int methodFromColumn = unresolvedMethodInfo.getFromColumn();
+                final int methodToLine = unresolvedMethodInfo.getToLine();
+                final int methodToColumn = unresolvedMethodInfo.getToColumn();
+
                 // MethodInfo オブジェクトを生成し，引数を追加していく
                 final TargetMethodInfo methodInfo = new TargetMethodInfo(methodModifiers,
                         methodName, methodReturnType, ownerClass, constructor, methodLOC,
                         privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
-                        instance, fromLine, fromColumn, toLine, toColumn);
+                        instance, methodFromLine, methodFromColumn, methodToLine, methodToColumn);
                 for (UnresolvedParameterInfo unresolvedParameterInfo : unresolvedMethodInfo
                         .getParameterInfos()) {
 
-                    // 修飾子，パラメータ名，型を取得
+                    // 修飾子，パラメータ名，型，位置情報を取得
                     final Set<ModifierInfo> parameterModifiers = unresolvedParameterInfo
                             .getModifiers();
                     final String parameterName = unresolvedParameterInfo.getName();
@@ -909,10 +909,15 @@ public class MetricsTool {
                             .getType();
                     final TypeInfo parameterType = NameResolver.resolveTypeInfo(
                             unresolvedParameterType, classInfoManager);
+                    final int parameterFromLine = unresolvedParameterInfo.getFromLine();
+                    final int parameterFromColumn = unresolvedParameterInfo.getFromColumn();
+                    final int parameterToLine = unresolvedParameterInfo.getToLine();
+                    final int parameterToColumn = unresolvedParameterInfo.getToColumn();
 
                     // パラメータオブジェクトを生成し，メソッドに追加
                     final TargetParameterInfo parameterInfo = new TargetParameterInfo(
-                            parameterModifiers, parameterName, parameterType);
+                            parameterModifiers, parameterName, parameterType, parameterFromLine,
+                            parameterFromColumn, parameterToLine, parameterToColumn);
                     methodInfo.addParameter(parameterInfo);
                 }
 
@@ -927,10 +932,15 @@ public class MetricsTool {
                             .getType();
                     final TypeInfo variableType = NameResolver.resolveTypeInfo(
                             unresolvedVariableType, classInfoManager);
+                    final int localFromLine = unresolvedLocalVariable.getFromLine();
+                    final int localFromColumn = unresolvedLocalVariable.getFromColumn();
+                    final int localToLine = unresolvedLocalVariable.getToLine();
+                    final int localToColumn = unresolvedLocalVariable.getToColumn();
 
                     // ローカル変数オブジェクトを生成し，MethodInfoに追加
                     final LocalVariableInfo localVariable = new LocalVariableInfo(localModifiers,
-                            variableName, variableType);
+                            variableName, variableType, localFromLine, localFromColumn,
+                            localToLine, localToColumn);
                     methodInfo.addLocalVariable(localVariable);
                 }
 

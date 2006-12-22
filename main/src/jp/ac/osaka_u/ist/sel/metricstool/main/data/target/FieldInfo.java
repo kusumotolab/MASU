@@ -1,11 +1,13 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+
 import java.util.Collections;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * フィールドオブジェクトを表すクラス． 以下の情報をもつ．
@@ -28,10 +30,16 @@ public abstract class FieldInfo extends VariableInfo {
      * @param name フィールド名
      * @param type フィールドの型
      * @param ownerClass フィールドを定義しているクラス
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
-    public FieldInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type, final ClassInfo ownerClass) {
+    public FieldInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type,
+            final ClassInfo ownerClass, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
-        super(modifiers, name, type);
+        super(modifiers, name, type, fromLine, fromColumn, toLine, toColumn);
 
         if (null == ownerClass) {
             throw new NullPointerException();
@@ -48,12 +56,12 @@ public abstract class FieldInfo extends VariableInfo {
      * @param referencer このフィールドを参照しているメソッド
      */
     public final void addReferencer(final TargetMethodInfo referencer) {
-    
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == referencer) {
             throw new NullPointerException();
         }
-    
+
         this.referencers.add(referencer);
     }
 
@@ -63,12 +71,12 @@ public abstract class FieldInfo extends VariableInfo {
      * @param assignmenter このフィールドに対して代入を行っているメソッド
      */
     public final void addAssignmenter(final TargetMethodInfo assignmenter) {
-    
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == assignmenter) {
             throw new NullPointerException();
         }
-    
+
         this.assignmenters.add(assignmenter);
     }
 
@@ -78,11 +86,11 @@ public abstract class FieldInfo extends VariableInfo {
      * @return フィールドの順序関係
      */
     public final int compareTo(final TargetFieldInfo fieldInfo) {
-    
+
         if (null == fieldInfo) {
             throw new NullPointerException();
         }
-    
+
         ClassInfo classInfo = this.getOwnerClass();
         ClassInfo correspondClassInfo = this.getOwnerClass();
         int classOrder = classInfo.compareTo(correspondClassInfo);
@@ -129,6 +137,7 @@ public abstract class FieldInfo extends VariableInfo {
      * このフィールドを参照しているメソッド群を保存するための変数
      */
     protected final SortedSet<TargetMethodInfo> referencers;
+
     /**
      * このフィールドに対して代入を行っているメソッド群を保存するための変数
      */

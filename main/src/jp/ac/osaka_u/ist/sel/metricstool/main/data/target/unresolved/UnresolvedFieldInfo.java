@@ -1,8 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-
-
 /**
  * ASTパースで取得したフィールド情報を一時的に格納するためのクラス．
  * 
@@ -11,7 +9,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
  * 
  */
 public final class UnresolvedFieldInfo extends UnresolvedVariableInfo implements
-        VisualizableSetting, MemberSetting, PositionSetting {
+        VisualizableSetting, MemberSetting {
 
     /**
      * Unresolvedフィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．
@@ -37,11 +35,6 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo implements
         this.publicVisible = false;
 
         this.instance = true;
-        
-        this.fromLine = 0;
-        this.fromColumn = 0;
-        this.toLine = 0;
-        this.toColumn = 0;
     }
 
     /**
@@ -167,98 +160,6 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo implements
     }
 
     /**
-     * 開始行をセットする
-     * 
-     * @param fromLine 開始行
-     */
-    public void setFromLine(final int fromLine) {
-
-        if (fromLine < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        this.fromLine = fromLine;
-    }
-
-    /**
-     * 開始列をセットする
-     * 
-     * @param fromColumn 開始列
-     */
-    public void setFromColumn(final int fromColumn) {
-
-        if (fromColumn < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        this.fromColumn = fromColumn;
-    }
-
-    /**
-     * 終了行をセットする
-     * 
-     * @param toLine 終了行
-     */
-    public void setToLine(final int toLine) {
-
-        if (toLine < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        this.toLine = toLine;
-    }
-
-    /**
-     * 終了列をセットする
-     * 
-     * @param toColumn 終了列
-     */
-    public void setToColumn(final int toColumn) {
-
-        if (toColumn < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        this.toColumn = toColumn;
-    }
-
-    /**
-     * 開始行を返す
-     * 
-     * @return 開始行
-     */
-    public int getFromLine() {
-        return this.fromLine;
-    }
-
-    /**
-     * 開始列を返す
-     * 
-     * @return 開始列
-     */
-    public int getFromColumn() {
-        return this.fromColumn;
-    }
-
-    /**
-     * 終了行を返す
-     * 
-     * @return 終了行
-     */
-    public int getToLine() {
-        return this.toLine;
-    }
-
-    /**
-     * 終了列を返す
-     * 
-     * @return 終了列
-     */
-    public int getToColumn() {
-        return this.toColumn;
-    }
-
-    /**
      * このフィールドを定義しているクラスを保存するための変数
      */
     private UnresolvedClassInfo ownerClass;
@@ -287,24 +188,4 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo implements
      * インスタンスメンバーかどうかを保存するための変数
      */
     private boolean instance;
-
-    /**
-     * 開始行を保存するための変数
-     */
-    private int fromLine;
-
-    /**
-     * 開始列を保存するための変数
-     */
-    private int fromColumn;
-
-    /**
-     * 終了行を保存するための変数
-     */
-    private int toLine;
-
-    /**
-     * 開始列を保存するための変数
-     */
-    private int toColumn;
 }
