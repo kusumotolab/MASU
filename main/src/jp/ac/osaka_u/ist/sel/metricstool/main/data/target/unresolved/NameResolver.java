@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
@@ -108,6 +109,24 @@ public final class NameResolver {
                 }
             }
 
+            // 見つからなかった場合は null を返す
+            return null;
+
+        } else if (unresolvedTypeInfo instanceof UnresolvedArrayTypeInfo) {
+
+            final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedTypeInfo)
+                    .getElementType();
+            final int dimension = ((UnresolvedArrayTypeInfo) unresolvedTypeInfo).getDimension();
+
+            final TypeInfo elementType = NameResolver.resolveTypeInfo(unresolvedElementType,
+                    classInfoManager);
+            if (elementType != null) {
+
+                final ArrayTypeInfo arrayType = ArrayTypeInfo.getType(elementType, dimension);
+                return arrayType;
+            }
+
+            // 要素の型が不明なときは null を返す
             return null;
 
             // それ以外の型の場合はエラー
@@ -179,6 +198,14 @@ public final class NameResolver {
             fieldOwnerClassType = NameResolver.resolveEntityUsage(
                     (UnresolvedEntityUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+
+            // フィールド参照(a)が配列の要素にくっついている場合(d[i].a)
+        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedArrayElement) {
+
+            fieldOwnerClassType = NameResolver.resolveArrayElementUsage(
+                    (UnresolvedArrayElement) unresolvedFieldOwnerClassType, usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
+                    resolvedCache);
 
             // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
         } else if (unresolvedFieldOwnerClassType instanceof UnresolvedClassInfo) {
@@ -343,6 +370,14 @@ public final class NameResolver {
             fieldOwnerClassType = NameResolver.resolveEntityUsage(
                     (UnresolvedEntityUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+
+            // フィールド代入(a)が配列の要素にくっついている場合(d[i].a)
+        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedArrayElement) {
+
+            fieldOwnerClassType = NameResolver.resolveArrayElementUsage(
+                    (UnresolvedArrayElement) unresolvedFieldOwnerClassType, usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
+                    resolvedCache);
 
             // フィールド代入(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
         } else if (unresolvedFieldOwnerClassType instanceof UnresolvedClassInfo) {
@@ -539,6 +574,14 @@ public final class NameResolver {
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
                     resolvedCache);
 
+            // メソッド呼び出し(a())が配列の要素にくっついている場合(d[i].a())
+        } else if (unresolvedMethodOwnerClassType instanceof UnresolvedArrayElement) {
+
+            methodOwnerClassType = NameResolver.resolveArrayElementUsage(
+                    (UnresolvedArrayElement) unresolvedMethodOwnerClassType, usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
+                    resolvedCache);
+
             // メソッド呼び出し(a())が自オブジェクトにくっついている場合(a or this.a or super.a )
         } else if (unresolvedMethodOwnerClassType instanceof UnresolvedClassInfo) {
 
@@ -645,6 +688,99 @@ public final class NameResolver {
 
         err.println("Here shouldn't be reached!");
         return null;
+    }
+
+    /**
+     * 未解決配列型フィールドの要素使用を解決し，配列型フィールドの要素使用が行われているメソッドに登録する．また，フィールドの型を返す．
+     * 
+     * @param arrayElement 未解決配列型フィールドの要素使用
+     * @param usingClass フィールド代入が行われているクラス
+     * @param usingMethod フィールド代入が行われているメソッド
+     * @param classInfoManager 用いるクラスマネージャ
+     * @param fieldInfoManager 用いるフィールドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
+     * @param resolvedCache 解決済みUnresolvedTypeInfoのキャッシュ
+     * @return 解決済みフィールド代入の型（つまり，フィールドの型）
+     */
+    public static TypeInfo resolveArrayElementUsage(final UnresolvedArrayElement arrayElement,
+            final TargetClassInfo usingClass, final TargetMethodInfo usingMethod,
+            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
+            final MethodInfoManager methodInfoManager,
+            final Map<UnresolvedTypeInfo, TypeInfo> resolvedCache) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == arrayElement) || (null == usingClass) || (null == usingMethod)
+                || (null == classInfoManager) || (null == fieldInfoManager)
+                || (null == methodInfoManager) || (null == resolvedCache)) {
+            throw new NullPointerException();
+        }
+
+        // 既に解決済みであれば，そこから型を取得
+        if (resolvedCache.containsKey(arrayElement)) {
+            final TypeInfo type = resolvedCache.get(arrayElement);
+            return type;
+        }
+
+        // 要素使用がくっついている未定義型を取得
+        final UnresolvedTypeInfo unresolvedOwnerArrayType = arrayElement.getOwnerArrayType();
+
+        // 要素使用([i])がフィールド参照(b)にくっついている場合 (b[i])
+        if (unresolvedOwnerArrayType instanceof UnresolvedFieldUsage) {
+
+            // (b)のクラス定義を取得
+            final TypeInfo ownerArrayType = NameResolver.resolveFieldReference(
+                    (UnresolvedFieldUsage) unresolvedOwnerArrayType, usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+
+            // 解決済みキャッシュに登録
+            resolvedCache.put(arrayElement, ownerArrayType);
+
+            return ownerArrayType;
+
+            // 要素使用([i])がメソッド呼び出し(c())にくっついている場合(c()[i])
+        } else if (unresolvedOwnerArrayType instanceof UnresolvedMethodCall) {
+
+            // (c)のクラス定義を取得
+            final TypeInfo ownerArrayType = NameResolver.resolveMethodCall(
+                    (UnresolvedMethodCall) unresolvedOwnerArrayType, usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+
+            // 解決済みキャッシュに登録
+            resolvedCache.put(arrayElement, ownerArrayType);
+
+            return ownerArrayType;
+
+            // 要素使用([i])がエンティティ使用にくっついている場合
+        } else if (unresolvedOwnerArrayType instanceof UnresolvedEntityUsage) {
+
+            // エンティティのクラス定義を取得
+            final TypeInfo ownerArrayType = NameResolver.resolveEntityUsage(
+                    (UnresolvedEntityUsage) unresolvedOwnerArrayType, usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+
+            // 解決済みキャッシュに登録
+            resolvedCache.put(arrayElement, ownerArrayType);
+
+            return ownerArrayType;
+
+            // 要素使用([i])が配列の要素にくっついている場合(d[j][i])
+        } else if (unresolvedOwnerArrayType instanceof UnresolvedArrayElement) {
+
+            final TypeInfo ownerArrayType = NameResolver.resolveArrayElementUsage(
+                    (UnresolvedArrayElement) unresolvedOwnerArrayType, usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+
+            // 解決済みキャッシュに登録
+            resolvedCache.put(arrayElement, ownerArrayType);
+
+            return ownerArrayType;
+            
+        } else {
+
+            err.println("Here shouldn't be reached!");
+            return null;
+        }
     }
 
     /**

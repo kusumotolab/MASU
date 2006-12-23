@@ -15,6 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManage
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredException;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
@@ -32,6 +33,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.NameResolver;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
@@ -816,9 +818,20 @@ public class MetricsTool {
                 TypeInfo fieldType = NameResolver.resolveTypeInfo(unresolvedFieldType,
                         classInfoManager);
                 if (null == fieldType) {
-                    fieldType = NameResolver
-                            .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedFieldType);
-                    classInfoManager.add((ExternalClassInfo) fieldType);
+                    if (unresolvedFieldType instanceof UnresolvedReferenceTypeInfo) {
+                        fieldType = NameResolver
+                                .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedFieldType);
+                        classInfoManager.add((ExternalClassInfo) fieldType);
+                    } else if (unresolvedFieldType instanceof UnresolvedArrayTypeInfo) {
+                        final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
+                                .getElementType();
+                        final int dimension = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
+                                .getDimension();
+                        final TypeInfo elementType = NameResolver
+                                .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
+                        classInfoManager.add((ExternalClassInfo) elementType);
+                        fieldType = ArrayTypeInfo.getType(elementType, dimension);
+                    }
                 }
                 final boolean privateVisible = unresolvedFieldInfo.isPrivateVisible();
                 final boolean namespaceVisible = unresolvedFieldInfo.isNamespaceVisible();
@@ -877,9 +890,20 @@ public class MetricsTool {
                 TypeInfo methodReturnType = NameResolver.resolveTypeInfo(
                         unresolvedMethodReturnType, classInfoManager);
                 if (null == methodReturnType) {
-                    methodReturnType = NameResolver
-                            .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedMethodReturnType);
-                    classInfoManager.add((ExternalClassInfo) methodReturnType);
+                    if (unresolvedMethodReturnType instanceof UnresolvedReferenceTypeInfo) {
+                        methodReturnType = NameResolver
+                                .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedMethodReturnType);
+                        classInfoManager.add((ExternalClassInfo) methodReturnType);
+                    } else if (unresolvedMethodReturnType instanceof UnresolvedArrayTypeInfo) {
+                        final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
+                                .getElementType();
+                        final int dimension = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
+                                .getDimension();
+                        final TypeInfo elementType = NameResolver
+                                .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
+                        classInfoManager.add((ExternalClassInfo) elementType);
+                        methodReturnType = ArrayTypeInfo.getType(elementType, dimension);
+                    }
                 }
                 final int methodLOC = unresolvedMethodInfo.getLOC();
                 final boolean constructor = unresolvedMethodInfo.isConstructor();
@@ -907,8 +931,24 @@ public class MetricsTool {
                     final String parameterName = unresolvedParameterInfo.getName();
                     final UnresolvedTypeInfo unresolvedParameterType = unresolvedParameterInfo
                             .getType();
-                    final TypeInfo parameterType = NameResolver.resolveTypeInfo(
+                    TypeInfo parameterType = NameResolver.resolveTypeInfo(
                             unresolvedParameterType, classInfoManager);
+                    if (null == parameterType) {
+                        if (unresolvedParameterType instanceof UnresolvedReferenceTypeInfo) {
+                            parameterType = NameResolver
+                                    .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedParameterType);
+                            classInfoManager.add((ExternalClassInfo) parameterType);
+                        } else if (unresolvedParameterType instanceof UnresolvedArrayTypeInfo) {
+                            final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedParameterType)
+                                    .getElementType();
+                            final int dimension = ((UnresolvedArrayTypeInfo) unresolvedParameterType)
+                                    .getDimension();
+                            final TypeInfo elementType = NameResolver
+                                    .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
+                            classInfoManager.add((ExternalClassInfo) elementType);
+                            parameterType = ArrayTypeInfo.getType(elementType, dimension);
+                        }
+                    }
                     final int parameterFromLine = unresolvedParameterInfo.getFromLine();
                     final int parameterFromColumn = unresolvedParameterInfo.getFromColumn();
                     final int parameterToLine = unresolvedParameterInfo.getToLine();
