@@ -11,10 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.JavaAstVisitorManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitorManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredException;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
@@ -72,6 +76,8 @@ import org.jargp.BoolDef;
 import org.jargp.ParameterDef;
 import org.jargp.StringDef;
 
+import sun.security.krb5.internal.crypto.l;
+
 import antlr.RecognitionException;
 import antlr.TokenStreamException;
 
@@ -102,8 +108,6 @@ public class MetricsTool {
                         + event.getMessage());
             }
         });
-
-        initSecurityManager();
     }
 
     /**
@@ -113,6 +117,8 @@ public class MetricsTool {
      * 現在仮実装． 対象ファイルのデータを格納した後，構文解析を行う．
      */
     public static void main(String[] args) {
+        initSecurityManager();
+
         ArgumentProcessor.processArgs(args, parameterDefs, new Settings());
 
         // ヘルプモードと情報表示モードが同時にオンになっている場合は不正
@@ -144,18 +150,33 @@ public class MetricsTool {
      * 
      * @param language 解析対象の言語
      */
-    private static void analysisTargetFiles(final LANGUAGE language) {
+    private static void analyzeTargetFiles(final LANGUAGE language) {
         // 対象ファイルを解析
-        // TODO ここか専用の解析部で，言語ごとに分岐
+        
+        AstVisitorManager visitorManager = null;
+        if (language.equals(LANGUAGE.JAVA)){
+            visitorManager = new JavaAstVisitorManager();
+        }
+        
         for (TargetFile targetFile : TargetFileManager.getInstance()) {
             try {
                 String name = targetFile.getName();
+
+                FileInfo fileInfo = new FileInfo(name);
+                FileInfoManager.getInstance().add(fileInfo);
 
                 out.println("processing " + name);
                 Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
                 Java15Parser parser = new Java15Parser(lexer);
                 parser.compilationUnit();
                 targetFile.setCorrectSytax(true);
+                
+                if (visitorManager != null){
+                    visitorManager.setLineColumnManager(parser.getPositionManger());
+                    visitorManager.visitStart(parser.getAST());
+                }
+                
+                fileInfo.setLOC(lexer.getLine());
 
             } catch (FileNotFoundException e) {
                 err.println(e.getMessage());
@@ -311,21 +332,19 @@ public class MetricsTool {
 
     /**
      * 解析モードを実行する.
-     * 
      * @param language 対象言語
      */
     private static void doAnalysisMode(LANGUAGE language) {
         checkAnalysisModeParameterValidation(language);
 
         readTargetFiles();
-        analysisTargetFiles(language);
+        analyzeTargetFiles(language);
         launchPlugins();
         writeMetrics();
     }
 
     /**
      * 情報表示モードを実行する
-     * 
      * @param language 対象言語
      */
     private static void doDisplayMode(LANGUAGE language) {
@@ -384,7 +403,8 @@ public class MetricsTool {
     }
 
     /**
-     * {@link MetricsToolSecurityManager} の初期化を行う. システムに登録できれば，システムのセキュリティマネージャにも登録する.
+     * {@link MetricsToolSecurityManager} の初期化を行う.
+     * システムに登録できれば，システムのセキュリティマネージャにも登録する.
      */
     private static void initSecurityManager() {
         try {
@@ -418,8 +438,8 @@ public class MetricsTool {
     }
 
     /**
-     * プラグインをロードする. 指定された言語，指定されたメトリクスに関連するプラグインのみを {@link PluginManager}に登録する.
-     * 
+     * プラグインをロードする.
+     * 指定された言語，指定されたメトリクスに関連するプラグインのみを {@link PluginManager}に登録する.
      * @param language 指定しされた言語.
      */
     private static void loadPlugins(final LANGUAGE language, final String[] metrics) {
