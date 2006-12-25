@@ -115,7 +115,7 @@ public abstract class VariableInfo implements Comparable<VariableInfo> {
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == name) || (null == type)) {
+        if ((null == modifiers) || (null == name) || (null == type)) {
             throw new NullPointerException();
         }
 
