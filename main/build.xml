@@ -11,7 +11,7 @@
 	<property name="package.name" value="${tool.name}" />
 	<property name="package.dir" value="${package.name}" />
 	<property name="package.bin.dir" value="${package.dir}/bin" />
-	<property name="package.plugin.dir" value="${package.bin.dir}/plugin" />
+	<property name="package.plugin.dir" value="${package.bin.dir}/plugins" />
 	<property name="package.api.dir" value="${package.dir}/api" />
 	<property name="package.doc.dir" value="${package.dir}/doc" />
 
@@ -32,7 +32,7 @@
 		
 	<target name="compile" depends="antlr">
 		<mkdir dir="${cls.dir}" />
-		<javac classpath="${jargp.jar}:${antlr.jar}" srcdir="${src.dir}" destdir="${cls.dir}" />
+		<javac classpath="${jargp.jar};${antlr.jar}" srcdir="${src.dir}" destdir="${cls.dir}" />
 	</target>
 
 
