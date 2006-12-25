@@ -7,14 +7,14 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
  * @author kou-tngt
  * @see UnresolvedTypeInfo
  */
-public class UnresolvedArrayElement implements UnresolvedTypeInfo {
+public class UnresolvedArrayElementUsage implements UnresolvedTypeInfo {
 
     /**
      * —v‘f‚ªQÆ‚³‚ê‚½”z—ñ‚ÌŒ^‚ğ—^‚¦‚é.
      * 
      * @param ownerArrayType —v‘f‚ªQÆ‚³‚ê‚½”z—ñ‚ÌŒ^
      */
-    public UnresolvedArrayElement(final UnresolvedTypeInfo ownerArrayType) {
+    public UnresolvedArrayElementUsage(final UnresolvedTypeInfo ownerArrayType) {
         if (null == ownerArrayType) {
             throw new NullPointerException("ownerArrayType is null.");
         }
