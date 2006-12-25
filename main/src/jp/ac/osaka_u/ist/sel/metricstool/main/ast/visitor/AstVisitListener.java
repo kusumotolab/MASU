@@ -5,29 +5,30 @@ import java.util.EventListener;
 
 
 /**
- * 抽象構文木のビジターが通知するイベントを受け取るインタフェース.
+ * 抽象構文木のビジターから {@link AstVisitEvent} の通知を受け取るインタフェース.
  * 
  * 任意のノードaについて,{@link #visited(AstVisitEvent)},{@link #entered(AstVisitEvent)},{@link #exited(AstVisitEvent)}
  * の順番に通知される.
+ * 木構造の葉であるノードについても， {@link #entered(AstVisitEvent)}と{@link #exited(AstVisitEvent)}メソッドが呼ばれる.
  * 
  * @author kou-tngt
  *
  */
 public interface AstVisitListener extends EventListener {
     /**
-     * ある頂点に到達したイベントを受け取る.
+     * ビジターがある頂点に到達した時にイベントを受け取る.
      * @param e 到達イベント
      */
     public void visited(AstVisitEvent e);
 
     /**
-     * ある頂点の中に入るイベントを受け取る.
+     * ビジターがある頂点の中に入る時にイベントを受け取る.
      * @param e
      */
     public void entered(AstVisitEvent e);
 
     /**
-     * ある頂点の外に出たイベントを受け取る
+     * ビジターがある頂点の中から出た時にイベントを受け取る
      * @param e
      */
     public void exited(AstVisitEvent e);
