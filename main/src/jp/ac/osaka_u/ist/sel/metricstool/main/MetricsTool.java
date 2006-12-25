@@ -11,8 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java15AntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.JavaAstVisitorManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitorManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.antlr.AntlrAstVisitor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManager;
@@ -78,6 +80,7 @@ import org.jargp.StringDef;
 
 import antlr.RecognitionException;
 import antlr.TokenStreamException;
+import antlr.collections.AST;
 
 
 /**
@@ -151,9 +154,9 @@ public class MetricsTool {
     private static void analyzeTargetFiles(final LANGUAGE language) {
         // ëŒè€ÉtÉ@ÉCÉãÇâêÕ
         
-        AstVisitorManager visitorManager = null;
+        AstVisitorManager<AST>  visitorManager = null;
         if (language.equals(LANGUAGE.JAVA)){
-            visitorManager = new JavaAstVisitorManager();
+            visitorManager= new JavaAstVisitorManager<AST>(new AntlrAstVisitor(new Java15AntlrAstTranslator()));
         }
         
         for (TargetFile targetFile : TargetFileManager.getInstance()) {

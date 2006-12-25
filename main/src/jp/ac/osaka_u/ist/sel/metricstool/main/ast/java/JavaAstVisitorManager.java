@@ -4,8 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import antlr.collections.AST;
-
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BlockScopeBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ClassBuilder;
@@ -15,7 +13,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.InheritanceBuilder
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalVariableBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.MethodBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameSpaceBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.CompoundIdentifierBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionDescriptionBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.InstanceElementBuilder;
@@ -25,13 +22,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.SingleI
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitorManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.antlr.AntlrAstVisitor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.PositionManager;
 
-public class JavaAstVisitorManager implements AstVisitorManager {
-    public JavaAstVisitorManager() {
-
-        AstVisitor<AST> visitor = new AntlrAstVisitor(new Java15AntlrAstTranslator());
+public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
+    public JavaAstVisitorManager(AstVisitor<T> visitor) {
 
         JavaModifiersInterpriter modifiersInterpriter = new JavaModifiersInterpriter();
 
@@ -76,7 +70,7 @@ public class JavaAstVisitorManager implements AstVisitorManager {
     /* (non-Javadoc)
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.AstVisitorManager#visitStart(antlr.collections.AST)
      */
-    public void visitStart(AST node){
+    public void visitStart(T node){
         this.reset();
         
         visitor.visit(node);
@@ -97,7 +91,7 @@ public class JavaAstVisitorManager implements AstVisitorManager {
         buildDataManager.reset();
     }
     
-    private final AstVisitor<AST> visitor;
+    private final AstVisitor<T> visitor;
     
     private final BuildDataManager buildDataManager = new JavaBuildManager();
     private final ExpressionElementManager expressionManager = new ExpressionElementManager();
