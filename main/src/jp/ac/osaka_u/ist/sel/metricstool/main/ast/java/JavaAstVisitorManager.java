@@ -79,8 +79,8 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
     /* (non-Javadoc)
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.AstVisitorManager#setLineColumnManager(jp.ac.osaka_u.ist.sel.metricstool.main.ast.LineColumnPositionManager)
      */
-    public void setLineColumnManager(PositionManager lineColumn){
-        visitor.setLineColumnManager(lineColumn);
+    public void setPositionManager(PositionManager lineColumn){
+        visitor.setPositionManager(lineColumn);
     }
     
     private void reset(){
