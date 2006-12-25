@@ -1,5 +1,7 @@
 header {
 	package jp.ac.osaka_u.ist.sel.metricstool.main.parse;
+	
+	import java.util.Stack;
 }
 
 /** Java 1.5 Recognizer
@@ -175,6 +177,16 @@ header {
  *      always siblings of IDENT rather than children. Fully.qualified.names trees now
  *      look a little less clean when TYPE_ARGUMENTS are present though.
  *
+ * Version 1.22.51 (for MASU) (December 10, 2006)
+ *    Fixed to MASU ast analyzer by Koji Taniguchi
+ *    o Added FIELD_DEF token which is used field definition of classes and interfaces instead of VARIABLE_DEF.
+ *    o Modified to use BLOCK token when parsing '{' instead of SLIST.
+ *    o Added NAME token used to declaration's of a name of the class, interface, method, enum and all variables. 
+ *    o VARIABLE_DEF was renamed to LOCAL_VARIABLE_DEF
+ *    o PARAMETER_DEF token was separated in METHOD_PARAMETER_DEF and LOCAL_PARAMETER_DEF. 
+ *    o Line and column registration actions were inserted.
+ *    o Modified to a node of CTOR_CALL and SUPER_CTOR_CALL into EXPR node.
+ *
  * This grammar is in the PUBLIC DOMAIN
  */
 
@@ -190,12 +202,12 @@ options {
 }
 
 tokens {
-	BLOCK; MODIFIERS; OBJBLOCK; SLIST; CTOR_DEF; METHOD_DEF; VARIABLE_DEF;
-	INSTANCE_INIT; STATIC_INIT; TYPE; CLASS_DEF; INTERFACE_DEF;
+	BLOCK; MODIFIERS; OBJBLOCK; SLIST; CTOR_DEF; METHOD_DEF; LOCAL_VARIABLE_DEF;FIELD_DEF;
+	INSTANCE_INIT; STATIC_INIT; TYPE; NAME; CLASS_DEF; INTERFACE_DEF;
 	PACKAGE_DEF; ARRAY_DECLARATOR; EXTENDS_CLAUSE; IMPLEMENTS_CLAUSE;
-	PARAMETERS; PARAMETER_DEF; LABELED_STAT; TYPECAST; INDEX_OP;
+	PARAMETERS; METHOD_PARAMETER_DEF; LOCAL_PARAMETER_DEF;LABELED_STAT; TYPECAST; INDEX_OP;
 	POST_INC; POST_DEC; METHOD_CALL; EXPR; ARRAY_INIT;
-	IMPORT; UNARY_MINUS; UNARY_PLUS; CASE_GROUP; ELIST; FOR_INIT; FOR_CONDITION;
+	IMPORT; UNARY_MINUS; UNARY_PLUS; CASE_GROUP; ELIST; FOR;FOR_INIT; FOR_CONDITION;
 	FOR_ITERATOR; EMPTY_STAT; FINAL="final"; ABSTRACT="abstract";
 	STRICTFP="strictfp"; SUPER_CTOR_CALL; CTOR_CALL; VARIABLE_PARAMETER_DEF;
 	STATIC_IMPORT; ENUM_DEF; ENUM_CONSTANT_DEF; FOR_EACH_CLAUSE; ANNOTATION_DEF; ANNOTATIONS;
@@ -212,6 +224,41 @@ tokens {
 	 * either GT, SR or BSR tokens.
 	 */
 	private int ltCounter = 0;
+	
+	private boolean useNameTag = true;
+	
+	private final Stack<Integer> lineStack = new Stack<Integer>();
+	private final Stack<Integer> columnStack = new Stack<Integer>();
+	
+	private PositionManager positionManager = new DefaultPositionManager();
+	
+	private Java15Lexer lexer;
+
+	public Java15Parser(Java15Lexer lexer){
+		this(lexer,2);
+		this.lexer = lexer;
+	}
+	
+	public PositionManager getPositionManger(){
+		return positionManager;
+	}
+	
+	public void setPositionManager(PositionManager manager){
+		this.positionManager = manager;
+	}
+	
+	private void pushStartLineColumn(){
+		if (null != lexer){
+    		lineStack.push(lexer.getTokenStartLine());
+    		columnStack.push(lexer.getTokenStartColumn());
+		}	
+	}
+	
+	private void registLineColumnInfo(AST node){
+		if (null != lexer && null != positionManager && !lineStack.isEmpty() && !columnStack.isEmpty()){
+    		positionManager.setPosition(node, lineStack.pop(), columnStack.pop(), lexer.getTokenStartLine(), lexer.getTokenStartColumn());
+		}
+	}
 }
 
 // Compilation Unit: In Java, this is a single file. This is the start
@@ -250,8 +297,14 @@ importDefinition
 // A type definition is either a class, interface, enum or annotation with possible additional semis.
 typeDefinition
 	options {defaultErrorHandler = true;}
-	:	m:modifiers!
+	:
+		{pushStartLineColumn();}
+		
+		m:modifiers!
 		typeDefinitionInternal[#m]
+		
+		{registLineColumnInfo(#typeDefinition);}
+		
 	|	SEMI!
 	;
 
@@ -266,8 +319,13 @@ protected typeDefinitionInternal[AST mods]
 // A declaration is the creation of a reference or primitive-type variable
 // Create a separate Type/Var tree for each var in the var list.
 declaration!
-	:	m:modifiers t:typeSpec[false] v:variableDefinitions[#m,#t]
+	:
+		{pushStartLineColumn();}
+		
+		m:modifiers t:typeSpec[false] v:variableDefinitions[#m,#t]
 		{#declaration = #v;}
+		
+		{registLineColumnInfo(#declaration);}
 	;
 
 // A type specification is a type name with possible brackets afterwards
@@ -364,7 +422,7 @@ protected typeArgumentsOrParametersEnd
 typeArgumentBounds
 	{boolean isUpperBounds = false;}
 	:
-		( "extends"! {isUpperBounds=true;} | "super"! ) classOrInterfaceType[false]
+		( "extends"! {isUpperBounds=true;} | "super"! ) classOrInterfaceType[true]
 		{
 			if (isUpperBounds)
 			{
@@ -408,7 +466,7 @@ builtInTypeSpec[boolean addImagNode]
 // A type name. which is either a (possibly qualified and parameterized)
 // class name or a primitive (builtin) type
 type
-	:	classOrInterfaceType[false]
+	:	classOrInterfaceType[true]
 	|	builtInType
 	;
 
@@ -529,15 +587,19 @@ annotationMemberArrayValueInitializer
 	;
 
 superClassClause!
-	:	( "extends" c:classOrInterfaceType[false] )?
+	:	( "extends" c:classOrInterfaceType[true] )?
 		{#superClassClause = #(#[EXTENDS_CLAUSE,"EXTENDS_CLAUSE"],c);}
 	;
 
 // Definition of a Java class
 classDefinition![AST modifiers]
-	:	"class" IDENT
+	:	
+		"class"
+	    // name
+		n:name
 		// it _might_ have type paramaters
 		(tp:typeParameters)?
+		
 		// it _might_ have a superclass...
 		sc:superClassClause
 		// it might implement some interfaces...
@@ -545,12 +607,16 @@ classDefinition![AST modifiers]
 		// now parse the body of the class
 		cb:classBlock
 		{#classDefinition = #(#[CLASS_DEF,"CLASS_DEF"],
-								modifiers,IDENT,tp,sc,ic,cb);}
+								modifiers,n,tp,sc,ic,cb);}
 	;
+	
+
 
 // Definition of a Java Interface
 interfaceDefinition![AST modifiers]
-	:	"interface" IDENT
+	:	"interface"
+	    // name
+		n:name
 		// it _might_ have type paramaters
 		(tp:typeParameters)?
 		// it might extend some other interfaces
@@ -558,25 +624,38 @@ interfaceDefinition![AST modifiers]
 		// now parse the body of the interface (looks like a class...)
 		ib:interfaceBlock
 		{#interfaceDefinition = #(#[INTERFACE_DEF,"INTERFACE_DEF"],
-									modifiers,IDENT,tp,ie,ib);}
+									modifiers,n,tp,ie,ib);}
 	;
 
+
 enumDefinition![AST modifiers]
-	:	"enum" IDENT
+	:	"enum"
+	    // name
+		n:name
 		// it might implement some interfaces...
 		ic:implementsClause
 		// now parse the body of the enum
 		eb:enumBlock
 		{#enumDefinition = #(#[ENUM_DEF,"ENUM_DEF"],
-								modifiers,IDENT,ic,eb);}
+								modifiers,n,ic,eb);}
 	;
-
+	
+name
+    :   IDENT
+    	{
+            if ( useNameTag ){
+    	        {#name = #(#[NAME,"NAME"],#name);}
+            }
+    	}
+    ;
+    
 annotationDefinition![AST modifiers]
-	:	AT "interface" IDENT
+	:	AT "interface"
+	    n:name
 		// now parse the body of the annotation
 		ab:annotationBlock
 		{#annotationDefinition = #(#[ANNOTATION_DEF,"ANNOTATION_DEF"],
-									modifiers,IDENT,ab);}
+									modifiers,n,ab);}
 	;
 
 typeParameters
@@ -597,14 +676,14 @@ typeParameters
 typeParameter
 	:
 		// I'm pretty sure Antlr generates the right thing here:
-		(id:IDENT) ( options{generateAmbigWarnings=false;}: typeParameterBounds )?
+		(id:name) ( options{generateAmbigWarnings=false;}: typeParameterBounds )?
 		{#typeParameter = #(#[TYPE_PARAMETER,"TYPE_PARAMETER"], #typeParameter);}
 	;
 
 typeParameterBounds
 	:
-		"extends"! classOrInterfaceType[false]
-		(BAND! classOrInterfaceType[false])*
+		"extends"! classOrInterfaceType[true]
+		(BAND! classOrInterfaceType[true])*
 		{#typeParameterBounds = #(#[TYPE_UPPER_BOUNDS,"TYPE_UPPER_BOUNDS"], #typeParameterBounds);}
 	;
 
@@ -645,43 +724,55 @@ enumBlock
 
 // An annotation field
 annotationField!
-	:	mods:modifiers
-		(	td:typeDefinitionInternal[#mods]
-			{#annotationField = #td;}
-		|	t:typeSpec[false]		// annotation field
-			(	i:IDENT				// the name of the field
+	:
+		{pushStartLineColumn();}
 
-				LPAREN! RPAREN!
-
-				rt:declaratorBrackets[#t]
-
-				( "default" amvi:annotationMemberValueInitializer )?
-
-				SEMI
-
-				{#annotationField =
-					#(#[ANNOTATION_FIELD_DEF,"ANNOTATION_FIELD_DEF"],
-						 mods,
-						 #(#[TYPE,"TYPE"],rt),
-						 i,amvi
-						 );}
-			|	v:variableDefinitions[#mods,#t] SEMI	// variable
-				{#annotationField = #v;}
-			)
+		(
+    		mods:modifiers
+    		(	td:typeDefinitionInternal[#mods]
+    			{#annotationField = #td;}
+    		|	t:typeSpec[false]		// annotation field
+    			(	i:name				// the name of the field
+    
+    				LPAREN! RPAREN!
+    
+    				rt:declaratorBrackets[#t]
+    
+    				( "default" amvi:annotationMemberValueInitializer )?
+    
+    				SEMI
+    
+    				{#annotationField =
+    					#(#[ANNOTATION_FIELD_DEF,"ANNOTATION_FIELD_DEF"],
+    						 mods,
+    						 #(#[TYPE,"TYPE"],rt),
+    						 i,amvi
+    						 );}
+    			|	v:variableDefinitions[#mods,#t] SEMI	// variable
+    				{#annotationField = #v;}
+    			)
+    		)
 		)
+		
+		{registLineColumnInfo(#annotationField);}
 	;
 
 //An enum constant may have optional parameters and may have a
 //a class body
 enumConstant!
 	:	an:annotations
-		i:IDENT
+	
+		{pushStartLineColumn();}
+	
+		i:name
 		(	LPAREN!
 			a:argList
 			RPAREN!
 		)?
 		( b:enumConstantBlock )?
 		{#enumConstant = #([ENUM_CONSTANT_DEF, "ENUM_CONSTANT_DEF"], an, i, a, b);}
+		
+		{registLineColumnInfo(#enumConstant);}
 	;
 
 //The class-like body of an enum constant
@@ -695,49 +786,59 @@ enumConstantBlock
 //An enum constant field is just like a class field but without
 //the posibility of a constructor definition or a static initializer
 enumConstantField!
-	:	mods:modifiers
-		(	td:typeDefinitionInternal[#mods]
-			{#enumConstantField = #td;}
-
-		|	// A generic method has the typeParameters before the return type.
-			// This is not allowed for variable definitions, but this production
-			// allows it, a semantic check could be used if you wanted.
-			(tp:typeParameters)? t:typeSpec[false]		// method or variable declaration(s)
-			(	IDENT									// the name of the method
-
-				// parse the formal parameter declarations.
-				LPAREN! param:parameterDeclarationList RPAREN!
-
-				rt:declaratorBrackets[#t]
-
-				// get the list of exceptions that this method is
-				// declared to throw
-				(tc:throwsClause)?
-
-				( s2:compoundStatement | SEMI )
-				{#enumConstantField = #(#[METHOD_DEF,"METHOD_DEF"],
-							 mods,
-							 tp,
-							 #(#[TYPE,"TYPE"],rt),
-							 IDENT,
-							 param,
-							 tc,
-							 s2);}
-			|	v:variableDefinitions[#mods,#t] SEMI
-				{#enumConstantField = #v;}
-			)
+	:
+		{pushStartLineColumn();}
+		
+		(
+    		mods:modifiers
+    		(	td:typeDefinitionInternal[#mods]
+    			{#enumConstantField = #td;}
+    
+    		|	// A generic method has the typeParameters before the return type.
+    			// This is not allowed for variable definitions, but this production
+    			// allows it, a semantic check could be used if you wanted.
+    			(tp:typeParameters)? t:typeSpec[false]		// method or variable declaration(s)
+    			(	n:name									// the name of the method
+    
+    				// parse the formal parameter declarations.
+    				LPAREN! param:parameterDeclarationList RPAREN!
+    
+    				rt:declaratorBrackets[#t]
+    
+    				// get the list of exceptions that this method is
+    				// declared to throw
+    				(tc:throwsClause)?
+    
+    				( s2:compoundStatement | SEMI )
+    				{#enumConstantField = #(#[METHOD_DEF,"METHOD_DEF"],
+    							 mods,
+    							 tp,
+    							 #(#[TYPE,"TYPE"],rt),
+    							 n,
+    							 param,
+    							 tc,
+    							 s2);}
+    			|	f:fieldDefinitions[#mods,#t] SEMI
+    				{#enumConstantField = #f;}
+    			)
+    		)
+    
+    	// "{ ... }" instance initializer
+    	|	s4:compoundStatement
+    		{#enumConstantField = #(#[INSTANCE_INIT,"INSTANCE_INIT"], s4);}
 		)
-
-	// "{ ... }" instance initializer
-	|	s4:compoundStatement
-		{#enumConstantField = #(#[INSTANCE_INIT,"INSTANCE_INIT"], s4);}
+		
+		{registLineColumnInfo(#enumConstantField);}
 	;
+
+
+
 
 // An interface can extend several other interfaces...
 interfaceExtends
 	:	(
 		e:"extends"!
-		classOrInterfaceType[false] ( COMMA! classOrInterfaceType[false] )*
+		classOrInterfaceType[true] ( COMMA! classOrInterfaceType[true] )*
 		)?
 		{#interfaceExtends = #(#[EXTENDS_CLAUSE,"EXTENDS_CLAUSE"],
 								#interfaceExtends);}
@@ -746,7 +847,7 @@ interfaceExtends
 // A class can implement several interfaces...
 implementsClause
 	:	(
-			i:"implements"! classOrInterfaceType[false] ( COMMA! classOrInterfaceType[false] )*
+			i:"implements"! classOrInterfaceType[true] ( COMMA! classOrInterfaceType[true] )*
 		)?
 		{#implementsClause = #(#[IMPLEMENTS_CLAUSE,"IMPLEMENTS_CLAUSE"],
 								 #implementsClause);}
@@ -755,95 +856,107 @@ implementsClause
 // Now the various things that can be defined inside a class
 classField!
 	:	// method, constructor, or variable declaration
-		mods:modifiers
-		(	td:typeDefinitionInternal[#mods]
-			{#classField = #td;}
-
-		|	(tp:typeParameters)?
-			(
-				h:ctorHead s:constructorBody // constructor
-				{#classField = #(#[CTOR_DEF,"CTOR_DEF"], mods, tp, h, s);}
-
-				|	// A generic method/ctor has the typeParameters before the return type.
-					// This is not allowed for variable definitions, but this production
-					// allows it, a semantic check could be used if you wanted.
-					t:typeSpec[false]		// method or variable declaration(s)
-					(	IDENT				// the name of the method
-
-						// parse the formal parameter declarations.
-						LPAREN! param:parameterDeclarationList RPAREN!
-
-						rt:declaratorBrackets[#t]
-
-						// get the list of exceptions that this method is
-						// declared to throw
-						(tc:throwsClause)?
-
-						( s2:compoundStatement | SEMI )
-						{#classField = #(#[METHOD_DEF,"METHOD_DEF"],
-									 mods,
-									 tp,
-									 #(#[TYPE,"TYPE"],rt),
-									 IDENT,
-									 param,
-									 tc,
-									 s2);}
-					|	v:variableDefinitions[#mods,#t] SEMI
-						{#classField = #v;}
-					)
-			)
+		{pushStartLineColumn();}
+		
+		(
+    		mods:modifiers
+    		(	td:typeDefinitionInternal[#mods]
+    			{#classField = #td;}
+    
+    		|	(tp:typeParameters)?
+    			(
+    				h:ctorHead s:constructorBody // constructor
+    				{#classField = #(#[CTOR_DEF,"CTOR_DEF"], mods, tp, h, s);}
+    
+    				|	// A generic method/ctor has the typeParameters before the return type.
+    					// This is not allowed for variable definitions, but this production
+    					// allows it, a semantic check could be used if you wanted.
+    					t:typeSpec[false]		// method or variable declaration(s)
+    					(	n:name				// the name of the method
+    
+    						// parse the formal parameter declarations.
+    						LPAREN! param:parameterDeclarationList RPAREN!
+    
+    						rt:declaratorBrackets[#t]
+    
+    						// get the list of exceptions that this method is
+    						// declared to throw
+    						(tc:throwsClause)?
+    
+    						( s2:compoundStatement | SEMI )
+    						{#classField = #(#[METHOD_DEF,"METHOD_DEF"],
+    									 mods,
+    									 tp,
+    									 #(#[TYPE,"TYPE"],rt),
+    									 n,
+    									 param,
+    									 tc,
+    									 s2);}
+    					|	f:fieldDefinitions[#mods,#t] SEMI
+    						{#classField = #f;}
+    					)
+    			)
+    		)
+    
+    	// "static { ... }" class initializer
+    	|	"static" s3:compoundStatement
+    		{#classField = #(#[STATIC_INIT,"STATIC_INIT"], s3);}
+    
+    	// "{ ... }" instance initializer
+    	|	s4:compoundStatement
+    		{#classField = #(#[INSTANCE_INIT,"INSTANCE_INIT"], s4);}
 		)
-
-	// "static { ... }" class initializer
-	|	"static" s3:compoundStatement
-		{#classField = #(#[STATIC_INIT,"STATIC_INIT"], s3);}
-
-	// "{ ... }" instance initializer
-	|	s4:compoundStatement
-		{#classField = #(#[INSTANCE_INIT,"INSTANCE_INIT"], s4);}
+		
+		{registLineColumnInfo(#classField);}
 	;
 
 // Now the various things that can be defined inside a interface
 interfaceField!
 	:	// method, constructor, or variable declaration
-		mods:modifiers
-		(	td:typeDefinitionInternal[#mods]
-			{#interfaceField = #td;}
-
-		|	(tp:typeParameters)?
-			// A generic method has the typeParameters before the return type.
-			// This is not allowed for variable definitions, but this production
-			// allows it, a semantic check could be used if you want a more strict
-			// grammar.
-			t:typeSpec[false]		// method or variable declaration(s)
-			(	IDENT				// the name of the method
-
-				// parse the formal parameter declarations.
-				LPAREN! param:parameterDeclarationList RPAREN!
-
-				rt:declaratorBrackets[#t]
-
-				// get the list of exceptions that this method is
-				// declared to throw
-				(tc:throwsClause)?
-
-				SEMI
-				
-				{#interfaceField = #(#[METHOD_DEF,"METHOD_DEF"],
-							 mods,
-							 tp,
-							 #(#[TYPE,"TYPE"],rt),
-							 IDENT,
-							 param,
-							 tc);}
-			|	v:variableDefinitions[#mods,#t] SEMI
-				{#interfaceField = #v;}
-			)
-		)
+		{pushStartLineColumn();}
+		
+		(
+    		mods:modifiers
+    		(	td:typeDefinitionInternal[#mods]
+    			{#interfaceField = #td;}
+    
+    		|	(tp:typeParameters)?
+    			// A generic method has the typeParameters before the return type.
+    			// This is not allowed for variable definitions, but this production
+    			// allows it, a semantic check could be used if you want a more strict
+    			// grammar.
+    			t:typeSpec[false]		// method or variable declaration(s)
+    			(	n:name				// the name of the method
+    
+    				// parse the formal parameter declarations.
+    				LPAREN! param:parameterDeclarationList RPAREN!
+    
+    				rt:declaratorBrackets[#t]
+    
+    				// get the list of exceptions that this method is
+    				// declared to throw
+    				(tc:throwsClause)?
+    
+    				SEMI
+    				
+    				{#interfaceField = #(#[METHOD_DEF,"METHOD_DEF"],
+    							 mods,
+    							 tp,
+    							 #(#[TYPE,"TYPE"],rt),
+    							 n,
+    							 param,
+    							 tc);}
+    			|	f:fieldDefinitions[#mods,#t] SEMI
+    				{#interfaceField = #f;}
+    			)
+    		)
+    	)
+    	
+		{registLineColumnInfo(#interfaceField);}
 	;
 
 constructorBody
-	:	lc:LCURLY^ {#lc.setType(SLIST);}
+	:	lc:LCURLY^ {#lc.setType(BLOCK);}
 			( options { greedy=true; } : explicitConstructorInvocation)?
 			(statement)*
 		RCURLY!
@@ -857,7 +970,27 @@ explicitConstructorInvocation
 		|	"super"! lp2:LPAREN^ argList RPAREN! SEMI!
 			{#lp2.setType(SUPER_CTOR_CALL);}
 		)
+		
+		{#explicitConstructorInvocation = #(#[EXPR,"EXPR"],#explicitConstructorInvocation);}
 	;
+
+fieldDefinitions[AST mods, AST t]
+	:	fieldDeclarator[getASTFactory().dupTree(mods),
+							getASTFactory().dupList(t)] //dupList as this also copies siblings (like TYPE_ARGUMENTS)
+		(	COMMA!
+			fieldDeclarator[getASTFactory().dupTree(mods),
+							getASTFactory().dupList(t)] //dupList as this also copies siblings (like TYPE_ARGUMENTS)
+		)*
+	;
+
+/** Declaration of a field. This can be a class/instance field.
+ *  It can also include possible initialization.
+ */
+fieldDeclarator![AST mods, AST t]
+	:	id:name d:declaratorBrackets[t] v:varInitializer
+		{#fieldDeclarator = #(#[FIELD_DEF,"FIELD_DEF"], mods, #(#[TYPE,"TYPE"],d), id, v);}
+	;
+
 
 variableDefinitions[AST mods, AST t]
 	:	variableDeclarator[getASTFactory().dupTree(mods),
@@ -873,8 +1006,8 @@ variableDefinitions[AST mods, AST t]
  *  It can also include possible initialization.
  */
 variableDeclarator![AST mods, AST t]
-	:	id:IDENT d:declaratorBrackets[t] v:varInitializer
-		{#variableDeclarator = #(#[VARIABLE_DEF,"VARIABLE_DEF"], mods, #(#[TYPE,"TYPE"],d), id, v);}
+	:	id:name d:declaratorBrackets[t] v:varInitializer
+		{#variableDeclarator = #(#[LOCAL_VARIABLE_DEF,"LOCAL_VARIABLE_DEF"], mods, #(#[TYPE,"TYPE"],d), id, v);}
 	;
 
 declaratorBrackets[AST typ]
@@ -918,7 +1051,7 @@ initializer
 // for the method.
 // This also watches for a list of exception classes in a "throws" clause.
 ctorHead
-	:	IDENT // the name of the method
+	:	name // the name of the method
 
 		// parse the formal parameter declarations.
 		LPAREN! parameterDeclarationList RPAREN!
@@ -944,23 +1077,34 @@ parameterDeclarationList
 		|
 			variableLengthParameterDeclaration
 		)?
+	
 		{#parameterDeclarationList = #(#[PARAMETERS,"PARAMETERS"],
 									#parameterDeclarationList);}
 	;
 
 // A formal parameter.
 parameterDeclaration!
-	:	pm:parameterModifier t:typeSpec[false] id:IDENT
+	:
+		{pushStartLineColumn();}
+		
+		pm:parameterModifier t:typeSpec[false] id:name
 		pd:declaratorBrackets[#t]
-		{#parameterDeclaration = #(#[PARAMETER_DEF,"PARAMETER_DEF"],
+		{#parameterDeclaration = #(#[METHOD_PARAMETER_DEF,"METHOD_PARAMETER_DEF"],
 									pm, #([TYPE,"TYPE"],pd), id);}
+									
+		{registLineColumnInfo(#parameterDeclaration);}
 	;
 
 variableLengthParameterDeclaration!
-	:	pm:parameterModifier t:typeSpec[false] TRIPLE_DOT! id:IDENT
+	:
+	{pushStartLineColumn();}
+	
+		pm:parameterModifier t:typeSpec[false] TRIPLE_DOT! id:name
 		pd:declaratorBrackets[#t]
 		{#variableLengthParameterDeclaration = #(#[VARIABLE_PARAMETER_DEF,"VARIABLE_PARAMETER_DEF"],
 												pm, #([TYPE,"TYPE"],pd), id);}
+												
+	{registLineColumnInfo(#variableLengthParameterDeclaration);}
 	;
 
 parameterModifier
@@ -980,7 +1124,7 @@ parameterModifier
 // it starts a new scope for variable definitions
 
 compoundStatement
-	:	lc:LCURLY^ {#lc.setType(SLIST);}
+	:	lc:LCURLY^ {#lc.setType(BLOCK);}
 			// include the (possibly-empty) list of statements
 			(statement)*
 		RCURLY!
@@ -1004,7 +1148,12 @@ statement
 
 	//TODO: what abour interfaces, enums and annotations
 	// class definition
-	|	m:modifiers! classDefinition[#m]
+	|
+		{pushStartLineColumn();}
+		
+		m:modifiers! classDefinition[#m]
+		
+		{registLineColumnInfo(#statement);}
 
 	// Attach a label to the front of a statement
 	|	IDENT c:COLON^ {#c.setType(LABELED_STAT);} statement
@@ -1061,14 +1210,23 @@ statement
 	|	s:SEMI {#s.setType(EMPTY_STAT);}
 	;
 
-forStatement
+forStatement!
 	:	f:"for"^
 		LPAREN!
-			(	(forInit SEMI)=>traditionalForClause
-			|	forEachClause
+			(	(forInit SEMI)=> h1:traditionalForClause
+			|	h2:forEachClause
 			)
 		RPAREN!
-		statement					 // statement to loop over
+		s:statement
+		
+		{
+		  if (null != #h1){
+			#forStatement = #(#[FOR,"for"], #h1,#(#[BLOCK,"{"], #s));
+		  }
+		  else {
+		  	#forStatement = #(#[FOR,"for"], #h2, #(#[BLOCK,"{"], #s));
+		  }
+		}	
 	;
 
 traditionalForClause
@@ -1080,8 +1238,20 @@ traditionalForClause
 
 forEachClause
 	:
-		p:parameterDeclaration COLON! expression
+		p:localParameterDeclaration COLON! expression
 		{#forEachClause = #(#[FOR_EACH_CLAUSE,"FOR_EACH_CLAUSE"], #forEachClause);}
+	;
+
+localParameterDeclaration!
+	:
+		{pushStartLineColumn();}
+		
+		pm:parameterModifier t:typeSpec[false] id:name
+		pd:declaratorBrackets[#t]
+		{#localParameterDeclaration = #(#[LOCAL_PARAMETER_DEF,"LOCAL_PARAMETER_DEF"],
+									pm, #([TYPE,"TYPE"],pd), id);}
+									
+		{registLineColumnInfo(#localParameterDeclaration);}
 	;
 
 casesGroup
@@ -1141,7 +1311,7 @@ finallyClause
 
 // an exception handler
 handler
-	:	"catch"^ LPAREN! parameterDeclaration RPAREN! compoundStatement
+	:	"catch"^ LPAREN! localParameterDeclaration RPAREN! compoundStatement
 	;
 
 
@@ -1569,6 +1739,14 @@ options {
 	public void enableEnum(boolean shouldEnable) { enumEnabled = shouldEnable; }
 	/** Query the "enum" keyword state */
 	public boolean isEnumEnabled() { return enumEnabled; }
+	
+	public int getTokenStartColumn(){
+		return inputState.getTokenStartColumn();
+	}
+	
+	public int getTokenStartLine(){
+		return inputState.getTokenStartLine();
+	}
 }
 
 // OPERATORS
