@@ -93,7 +93,7 @@ public class AntlrAstVisitor implements AstVisitor<AST>{
         this.listeners.remove(listener);
     }
     
-    public void setLineColumnManager(PositionManager lineColumn) {
+    public void setPositionManager(PositionManager lineColumn) {
         this.lineColumnManager = lineColumn;
     }
     

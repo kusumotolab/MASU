@@ -8,5 +8,5 @@ public interface AstVisitorManager<T> {
 
     public void visitStart(T node);
 
-    public void setLineColumnManager(PositionManager lineColumn);
+    public void setPositionManager(PositionManager lineColumn);
 }

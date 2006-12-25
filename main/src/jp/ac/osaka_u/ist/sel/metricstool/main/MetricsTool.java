@@ -173,7 +173,7 @@ public class MetricsTool {
                 targetFile.setCorrectSytax(true);
                 
                 if (visitorManager != null){
-                    visitorManager.setLineColumnManager(parser.getPositionManger());
+                    visitorManager.setPositionManager(parser.getPositionManger());
                     visitorManager.visitStart(parser.getAST());
                 }
                 
