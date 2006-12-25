@@ -7,8 +7,6 @@ import java.security.Permission;
 import java.security.Permissions;
 import java.util.Enumeration;
 
-import antlr.collections.Enumerator;
-
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.ClassInfoAccessor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.ClassMetricsRegister;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.DefaultClassInfoAccessor;
@@ -215,16 +213,16 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * @param permission 許可するパーミッション
      * @throws AccessControlException 特別権限を持たないスレッドから呼び出した場合
      */
-    public final void addPermission(Permission permission){
+    public final void addPermission(final Permission permission){
         MetricsToolSecurityManager.getInstance().checkAccess();
-        permissions.add(permission);
+        this.permissions.add(permission);
     }
     
     /**
      * プラグインインスタンス同士を比較する.
      * クラスの標準名が取れるならそれを用いて比較する.
      * 取れない場合は， {@link Class}インスタンスのを比較する.
-     * ただし，通常の機能を用いていロードされるプラグインが匿名クラスであることはありえない.
+     * ただし，通常の機能を用いてロードされるプラグインが匿名クラスであることはありえない.
      * よって，同一プラグインクラスのインスタンスは別のクラスローダからロードされても同一であると判定される.
      * @see java.lang.Object#equals(java.lang.Object)
      * @see #hashCode()
@@ -302,10 +300,10 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * このプラグインに許可されているパーミッションの不変な集合を返す.
      * @return このプラグインに許可されているパーミッションの集合.
      */
-    public Permissions getPermissions(){
-        Permissions permissions = new Permissions();
+    public final Permissions getPermissions(){
+        final Permissions permissions = new Permissions();
         
-        for(Enumeration<Permission> enumeration = this.permissions.elements(); enumeration.hasMoreElements();){
+        for(final Enumeration<Permission> enumeration = this.permissions.elements(); enumeration.hasMoreElements();){
             permissions.add(enumeration.nextElement());
         }
         permissions.setReadOnly();
@@ -386,7 +384,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
     /**
      * このプラグインの簡易説明を１行で返す（できれば英語で）
-     * デフォルトの実装では "Measure メトリクス名 metrics." と返す
+     * デフォルトの実装では "Measuring the メトリクス名 metric." と返す
      * 各プラグインはこのメソッドを任意にオーバーライドする.
      * @return 簡易説明文字列
      */
@@ -557,7 +555,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
             assert (null == this.reporter) : "Illegal state : previous reporter was still connected.";
         }
 
-        //プラグインディレクトリ以下へのアクセス権限を要請
+        //このスレッドにパーミッションを許可するように要請
         MetricsToolSecurityManager.getInstance().requestPluginPermission(this);
 
         try {
@@ -573,7 +571,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
             this.reporter = null;
         }
 
-        //プラグインディレクトリ以下へのアクセス権限解除
+        //このスレッドからパーミッションを解除するように要請
         MetricsToolSecurityManager.getInstance().removePluginPermission(this);
     }
 
