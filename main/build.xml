@@ -58,8 +58,14 @@
 		<delete dir="${cls.dir}" />
 		<delete dir="${package.dir}" />
 		<delete verbose="true">
-			<fileset dir="${grammer.dir}" includes="*.java" />
+			<fileset dir="${grammer.dir}" includes="*Lexer.java" />
 		</delete>	
+		<delete verbose="true">
+			<fileset dir="${grammer.dir}" includes="*Parser.java" />
+		</delete>	
+			<delete verbose="true">
+		<fileset dir="${grammer.dir}" includes="*TokenTypes.java" />
+			</delete>	
 		<delete verbose="true">
 			<fileset dir="${grammer.dir}" includes="*.smap" />
 		</delete>	
