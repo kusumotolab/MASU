@@ -19,7 +19,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.InstanceToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.SyntaxToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.VisitControlToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15TokenTypes;
 
 
@@ -286,14 +288,9 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             result = new ConstantToken("char",PrimitiveTypeInfo.CHAR);
             break;
         case Java15TokenTypes.STRING_LITERAL:
-            UnresolvedClassInfo classInfo = new UnresolvedClassInfo();
-            classInfo.setClassName("String");
-            classInfo.setNamespace(new String[]{"java","lang"});
-            classInfo.setPublicVisible(true);
-            classInfo.setPrivateVibible(false);
-            classInfo.setInheritanceVisible(true);
-            classInfo.setNamespaceVisible(true);
-            result = new ConstantToken("String",classInfo);
+            UnresolvedReferenceTypeInfo stringReference = new UnresolvedReferenceTypeInfo(
+                    new AvailableNamespaceInfoSet(),new String[]{"java","lang","String"});
+            result = new ConstantToken("String",stringReference);
             break;
         case Java15TokenTypes.NUM_FLOAT:
             result = new ConstantToken("float",PrimitiveTypeInfo.FLOAT);
