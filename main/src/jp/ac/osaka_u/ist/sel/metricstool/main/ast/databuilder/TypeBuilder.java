@@ -82,25 +82,9 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo>{
             
             assert(0 != identifier.length) : "Illegal state: identifier was not built.";
             
-            List<String> fullIdentifierName = new ArrayList<String>();
-            String first = identifier[0];
-            int startPosition = 0;
-            //1個目の要素のエイリアスを解決
-            if (buildDataManager.hasAlias(first)){
-                String[] aliasedName = buildDataManager.getAliasedName(first);
-                if (aliasedName.length > 0){
-                    for(String tmp : aliasedName){
-                        fullIdentifierName.add(tmp);
-                    }
-                }
-                
-                startPosition++;
-            }
+            String[] trueName = buildDataManager.resolveAliase(identifier);
             
-            for(int i=startPosition; i< identifier.length; i++){
-                fullIdentifierName.add(identifier[i]);
-            }
-            resultType = new UnresolvedReferenceTypeInfo(buildDataManager.getAvailableNameSpaceSet(),fullIdentifierName.toArray(new String[fullIdentifierName.size()]));
+            resultType = new UnresolvedReferenceTypeInfo(buildDataManager.getAvailableNameSpaceSet(),trueName);
             
         } else {
             assert(false) : "Illegal state: type can not built.";

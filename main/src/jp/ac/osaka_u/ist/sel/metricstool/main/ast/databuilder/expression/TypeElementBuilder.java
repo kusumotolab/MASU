@@ -43,8 +43,9 @@ public class TypeElementBuilder extends ExpressionBuilder{
         
         if (elements.length == 1){
             if (elements[0] instanceof IdentifierElement){
-                String[] typeNames = ((IdentifierElement)elements[0]).getQualifiedName();
-                UnresolvedReferenceTypeInfo type = new UnresolvedReferenceTypeInfo(buildManager.getAvailableNameSpaceSet(),typeNames);
+                String[] typeName = ((IdentifierElement)elements[0]).getQualifiedName();
+                String[] trueTypeName = buildManager.resolveAliase(typeName);
+                UnresolvedReferenceTypeInfo type = new UnresolvedReferenceTypeInfo(buildManager.getAvailableNameSpaceSet(),trueTypeName);
                 pushElement(new TypeElement(type));
             } else if (elements[0] instanceof TypeElement){
                 pushElement(elements[0]);
