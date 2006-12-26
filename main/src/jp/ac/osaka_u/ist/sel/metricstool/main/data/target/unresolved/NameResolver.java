@@ -208,10 +208,11 @@ public final class NameResolver {
                     resolvedCache);
 
             // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
-        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedClassInfo) {
+        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedReferenceTypeInfo) {
 
             // 自クラスのクラス定義を取得
-            fieldOwnerClassType = usingClass;
+            fieldOwnerClassType = NameResolver.resolveTypeInfo(unresolvedFieldOwnerClassType,
+                    classInfoManager);
 
         } else {
             err.println("Here shouldn't be reached!");
@@ -380,9 +381,10 @@ public final class NameResolver {
                     resolvedCache);
 
             // フィールド代入(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
-        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedClassInfo) {
+        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedReferenceTypeInfo) {
 
-            fieldOwnerClassType = usingClass;
+            fieldOwnerClassType = NameResolver.resolveTypeInfo(unresolvedFieldOwnerClassType,
+                    classInfoManager);
 
         } else {
 
@@ -583,9 +585,10 @@ public final class NameResolver {
                     resolvedCache);
 
             // メソッド呼び出し(a())が自オブジェクトにくっついている場合(a or this.a or super.a )
-        } else if (unresolvedMethodOwnerClassType instanceof UnresolvedClassInfo) {
+        } else if (unresolvedMethodOwnerClassType instanceof UnresolvedReferenceTypeInfo) {
 
-            methodOwnerClassType = usingClass;
+            methodOwnerClassType = NameResolver.resolveTypeInfo(unresolvedMethodOwnerClassType,
+                    classInfoManager);
 
         } else {
 
