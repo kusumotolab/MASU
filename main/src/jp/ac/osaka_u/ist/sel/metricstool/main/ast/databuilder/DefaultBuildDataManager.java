@@ -178,6 +178,7 @@ public class DefaultBuildDataManager implements BuildDataManager{
                 result.add(info);
             }
         }
+        result.add(new AvailableNamespaceInfo(getCurrentNameSpace(),true));
         return result;
     }
 
@@ -230,7 +231,7 @@ public class DefaultBuildDataManager implements BuildDataManager{
             for (final String nameSpaceString : nameSpace) {
                 nameSpaceList.add(nameSpaceString);
             }
-        }
+        } 
 
         return nameSpaceList.toArray(new String[nameSpaceList.size()]);
     }
