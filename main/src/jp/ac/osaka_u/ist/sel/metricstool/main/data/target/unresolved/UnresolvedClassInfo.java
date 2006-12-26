@@ -237,7 +237,7 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      * 
      * @param superClass 親クラス名
      */
-    public void addSuperClass(final UnresolvedTypeInfo superClass) {
+    public void addSuperClass(final UnresolvedReferenceTypeInfo superClass) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
