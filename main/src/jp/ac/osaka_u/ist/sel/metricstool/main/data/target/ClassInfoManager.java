@@ -9,8 +9,10 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
@@ -136,6 +138,13 @@ public final class ClassInfoManager {
         this.targetClassInfos = new TreeSet<TargetClassInfo>();
         this.externalClassInfos = new TreeSet<ExternalClassInfo>();
         this.packageInfo = new PackageInfo("DEFAULT", 0);
+
+        //java言語の場合は，暗黙にインポートされるクラスを追加しておく
+        if (Settings.getLanguage().equals(LANGUAGE.JAVA)){
+            for (int i = 0 ; i < ExternalClassInfo.JAVA_PREIMPORTED_CLASSES.length ; i++){
+                this.add(ExternalClassInfo.JAVA_PREIMPORTED_CLASSES[i]);
+            }
+        }
     }
 
     /**
