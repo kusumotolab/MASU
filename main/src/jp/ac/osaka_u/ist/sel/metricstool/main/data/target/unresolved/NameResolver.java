@@ -768,14 +768,15 @@ public final class NameResolver {
         } else if (unresolvedOwnerArrayType instanceof UnresolvedArrayElementUsage) {
 
             final TypeInfo ownerArrayType = NameResolver.resolveArrayElementUsage(
-                    (UnresolvedArrayElementUsage) unresolvedOwnerArrayType, usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+                    (UnresolvedArrayElementUsage) unresolvedOwnerArrayType, usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
+                    resolvedCache);
 
             // âåàçœÇ›ÉLÉÉÉbÉVÉÖÇ…ìoò^
             resolvedCache.put(arrayElement, ownerArrayType);
 
             return ownerArrayType;
-            
+
         } else {
 
             err.println("Here shouldn't be reached!");
@@ -1145,10 +1146,22 @@ public final class NameResolver {
                 TypeInfo typeInfo = NameResolver.resolveTypeInfo(unresolvedTypeInfo,
                         classInfoManager);
                 if (null == typeInfo) {
-                    typeInfo = NameResolver
-                            .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedTypeInfo);
-                    classInfoManager.add((ExternalClassInfo) typeInfo);
+                    if (unresolvedTypeInfo instanceof UnresolvedReferenceTypeInfo) {
+                        typeInfo = NameResolver
+                                .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedTypeInfo);
+                        classInfoManager.add((ExternalClassInfo) typeInfo);
+                    } else if (unresolvedTypeInfo instanceof UnresolvedArrayTypeInfo) {
+                        final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedTypeInfo)
+                                .getElementType();
+                        final int dimension = ((UnresolvedArrayTypeInfo) unresolvedTypeInfo)
+                                .getDimension();
+                        final TypeInfo elementType = NameResolver
+                                .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
+                        classInfoManager.add((ExternalClassInfo) elementType);
+                        typeInfo = ArrayTypeInfo.getType(elementType, dimension);
+                    }
                 }
+
                 final ParameterInfo parameterInfo = parameterInfoIterator.next();
                 if (!typeInfo.equals(parameterInfo.getType())) {
                     same = false;
