@@ -191,6 +191,13 @@ public class MetricsTool {
                 // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
             }
         }
+        
+        registClassInfos();
+        registMethodInfos();
+        registFieldInfos();
+        addInheritanceInformationToClassInfos();
+        addOverrideRelation();
+        addReferenceAssignmentCallRelateion();
 
         // 文法誤りのあるファイル一覧を表示
         err.println("The following files includes uncorrect syntax.");
@@ -312,7 +319,7 @@ public class MetricsTool {
                 break;
             }
         }
-
+ 
         // ファイルメトリクスを計測する場合は -F オプションが指定されていなければならない
         if (measureFileMetrics && (Settings.getFileMetricsFile().equals(Settings.INIT))) {
             System.err.println("-F must be used for specifying a file for file metrics!");
