@@ -179,13 +179,7 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
      */
     public final String getTypeName() {
 
-        String delimiter = null;
-        try {
-            delimiter = Settings.getLanguage().getNamespaceDelimiter();
-        } catch (UnavailableLanguageException e) {
-            delimiter = ".";
-        }
-
+        final String delimiter = Settings.getLanguage().getNamespaceDelimiter();
         final StringBuffer buffer = new StringBuffer();
         final String[] namespace = this.getNamespace().getName();
         for (int i = 0; i < namespace.length; i++) {

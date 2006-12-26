@@ -8,7 +8,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.util;
  * 利用可能でないプログラミング言語が指定された場合に用いられる．
  * 
  */
-public class UnavailableLanguageException extends Exception {
+public class UnavailableLanguageException extends RuntimeException {
 
     public UnavailableLanguageException() {
         super();

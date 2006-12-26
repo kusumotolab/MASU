@@ -153,12 +153,13 @@ public class MetricsTool {
      */
     private static void analyzeTargetFiles(final LANGUAGE language) {
         // 対象ファイルを解析
-        
-        AstVisitorManager<AST>  visitorManager = null;
-        if (language.equals(LANGUAGE.JAVA)){
-            visitorManager= new JavaAstVisitorManager<AST>(new AntlrAstVisitor(new Java15AntlrAstTranslator()));
+
+        AstVisitorManager<AST> visitorManager = null;
+        if (language.equals(LANGUAGE.JAVA)) {
+            visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
+                    new Java15AntlrAstTranslator()));
         }
-        
+
         for (TargetFile targetFile : TargetFileManager.getInstance()) {
             try {
                 String name = targetFile.getName();
@@ -171,12 +172,12 @@ public class MetricsTool {
                 Java15Parser parser = new Java15Parser(lexer);
                 parser.compilationUnit();
                 targetFile.setCorrectSytax(true);
-                
-                if (visitorManager != null){
+
+                if (visitorManager != null) {
                     visitorManager.setPositionManager(parser.getPositionManger());
                     visitorManager.visitStart(parser.getAST());
                 }
-                
+
                 fileInfo.setLOC(lexer.getLine());
 
             } catch (FileNotFoundException e) {
@@ -191,10 +192,17 @@ public class MetricsTool {
                 // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
             }
         }
-        
+
         registClassInfos();
         registMethodInfos();
         registFieldInfos();
+        addInheritanceInformationToClassInfos();
+        addOverrideRelation();
+        addReferenceAssignmentCallRelateion();
+
+        registClassInfos();
+        registFieldInfos();
+        registMethodInfos();
         addInheritanceInformationToClassInfos();
         addOverrideRelation();
         addReferenceAssignmentCallRelateion();
@@ -319,7 +327,7 @@ public class MetricsTool {
                 break;
             }
         }
- 
+
         // ファイルメトリクスを計測する場合は -F オプションが指定されていなければならない
         if (measureFileMetrics && (Settings.getFileMetricsFile().equals(Settings.INIT))) {
             System.err.println("-F must be used for specifying a file for file metrics!");
@@ -400,14 +408,7 @@ public class MetricsTool {
             return null;
         }
 
-        try {
-            return Settings.getLanguage();
-        } catch (UnavailableLanguageException e) {
-            System.err.println(e.getMessage());
-            System.exit(0);
-        }
-
-        return null;// 来ないけど書かないとコンパイル通らないので
+        return Settings.getLanguage();
     }
 
     /**
@@ -588,18 +589,13 @@ public class MetricsTool {
             // ファイルならば，拡張子が対象言語と一致すれば登録
         } else if (file.isFile()) {
 
-            try {
-                LANGUAGE language = Settings.getLanguage();
-                String extension = language.getExtension();
-                String path = file.getAbsolutePath();
-                if (path.endsWith(extension)) {
-                    TargetFileManager targetFiles = TargetFileManager.getInstance();
-                    TargetFile targetFile = new TargetFile(path);
-                    targetFiles.add(targetFile);
-                }
-            } catch (UnavailableLanguageException e) {
-                err.println(e.getMessage());
-                System.exit(0);
+            final LANGUAGE language = Settings.getLanguage();
+            final String extension = language.getExtension();
+            final String path = file.getAbsolutePath();
+            if (path.endsWith(extension)) {
+                final TargetFileManager targetFiles = TargetFileManager.getInstance();
+                final TargetFile targetFile = new TargetFile(path);
+                targetFiles.add(targetFile);
             }
 
             // ディレクトリでもファイルでもない場合は不正
@@ -959,8 +955,8 @@ public class MetricsTool {
                     final String parameterName = unresolvedParameterInfo.getName();
                     final UnresolvedTypeInfo unresolvedParameterType = unresolvedParameterInfo
                             .getType();
-                    TypeInfo parameterType = NameResolver.resolveTypeInfo(
-                            unresolvedParameterType, classInfoManager);
+                    TypeInfo parameterType = NameResolver.resolveTypeInfo(unresolvedParameterType,
+                            classInfoManager);
                     if (null == parameterType) {
                         if (unresolvedParameterType instanceof UnresolvedReferenceTypeInfo) {
                             parameterType = NameResolver

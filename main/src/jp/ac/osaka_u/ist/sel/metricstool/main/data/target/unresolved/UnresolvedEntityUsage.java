@@ -31,18 +31,14 @@ public final class UnresolvedEntityUsage implements UnresolvedTypeInfo {
      */
     public String getTypeName() {
 
-        try {
-            final String delimiter = Settings.getLanguage().getNamespaceDelimiter();
-            final StringBuffer buffer = new StringBuffer();
-            for (int i = 0; i < (this.name.length - 1); i++) {
-                buffer.append(this.name[i]);
-                buffer.append(delimiter);
-            }
-            buffer.append(this.name[this.name.length - 1]);
-            return buffer.toString();
-        } catch (UnavailableLanguageException e) {
-            return "";
+        final String delimiter = Settings.getLanguage().getNamespaceDelimiter();
+        final StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < (this.name.length - 1); i++) {
+            buffer.append(this.name[i]);
+            buffer.append(delimiter);
         }
+        buffer.append(this.name[this.name.length - 1]);
+        return buffer.toString();
     }
 
     /**

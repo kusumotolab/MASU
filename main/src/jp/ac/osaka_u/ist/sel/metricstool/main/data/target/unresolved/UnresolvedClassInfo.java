@@ -345,13 +345,8 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      * @return Œ^–¼
      */
     public String getTypeName() {
-        String delimiter = null;
-        try {
-            delimiter = Settings.getLanguage().getNamespaceDelimiter();
-        } catch (final UnavailableLanguageException e) {
-            delimiter = ".";
-        }
 
+        final String delimiter = Settings.getLanguage().getNamespaceDelimiter();
         final StringBuffer buffer = new StringBuffer();
 
         for (final String name : this.getFullQualifiedName()) {
