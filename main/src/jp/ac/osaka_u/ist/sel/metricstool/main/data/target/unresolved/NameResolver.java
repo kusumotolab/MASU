@@ -208,6 +208,13 @@ public final class NameResolver {
                     resolvedCache);
 
             // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
+        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedClassInfo) {
+
+            // 自クラスのクラス定義を取得
+            fieldOwnerClassType = NameResolver.resolveClassInfo(
+                    (UnresolvedClassInfo) unresolvedFieldOwnerClassType, classInfoManager);
+
+            // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
         } else if (unresolvedFieldOwnerClassType instanceof UnresolvedReferenceTypeInfo) {
 
             // 自クラスのクラス定義を取得
@@ -379,6 +386,13 @@ public final class NameResolver {
                     (UnresolvedArrayElementUsage) unresolvedFieldOwnerClassType, usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
                     resolvedCache);
+
+            // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
+        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedClassInfo) {
+
+            // 自クラスのクラス定義を取得
+            fieldOwnerClassType = NameResolver.resolveClassInfo(
+                    (UnresolvedClassInfo) unresolvedFieldOwnerClassType, classInfoManager);
 
             // フィールド代入(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
         } else if (unresolvedFieldOwnerClassType instanceof UnresolvedReferenceTypeInfo) {
@@ -583,6 +597,13 @@ public final class NameResolver {
                     (UnresolvedArrayElementUsage) unresolvedMethodOwnerClassType, usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
                     resolvedCache);
+
+            // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
+        } else if (unresolvedMethodOwnerClassType instanceof UnresolvedClassInfo) {
+
+            // 自クラスのクラス定義を取得
+            methodOwnerClassType = NameResolver.resolveClassInfo(
+                    (UnresolvedClassInfo) unresolvedMethodOwnerClassType, classInfoManager);
 
             // メソッド呼び出し(a())が自オブジェクトにくっついている場合(a or this.a or super.a )
         } else if (unresolvedMethodOwnerClassType instanceof UnresolvedReferenceTypeInfo) {
