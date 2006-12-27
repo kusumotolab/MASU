@@ -994,8 +994,24 @@ public class MetricsTool {
                     final String variableName = unresolvedLocalVariable.getName();
                     final UnresolvedTypeInfo unresolvedVariableType = unresolvedLocalVariable
                             .getType();
-                    final TypeInfo variableType = NameResolver.resolveTypeInfo(
+                    TypeInfo variableType = NameResolver.resolveTypeInfo(
                             unresolvedVariableType, classInfoManager);
+                    if (null == variableType) {
+                        if (unresolvedVariableType instanceof UnresolvedReferenceTypeInfo) {
+                            variableType = NameResolver
+                                    .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedVariableType);
+                            classInfoManager.add((ExternalClassInfo) variableType);
+                        } else if (unresolvedVariableType instanceof UnresolvedArrayTypeInfo) {
+                            final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedVariableType)
+                                    .getElementType();
+                            final int dimension = ((UnresolvedArrayTypeInfo) unresolvedVariableType)
+                                    .getDimension();
+                            final TypeInfo elementType = NameResolver
+                                    .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
+                            classInfoManager.add((ExternalClassInfo) elementType);
+                            variableType = ArrayTypeInfo.getType(elementType, dimension);
+                        }
+                    }
                     final int localFromLine = unresolvedLocalVariable.getFromLine();
                     final int localFromColumn = unresolvedLocalVariable.getFromColumn();
                     final int localToLine = unresolvedLocalVariable.getToLine();
