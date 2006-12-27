@@ -112,6 +112,7 @@ public final class NameResolver {
             // 見つからなかった場合は null を返す
             return null;
 
+            //未解決配列型の場合
         } else if (unresolvedTypeInfo instanceof UnresolvedArrayTypeInfo) {
 
             final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedTypeInfo)
@@ -128,6 +129,13 @@ public final class NameResolver {
 
             // 要素の型が不明なときは null を返す
             return null;
+
+            // 未解決クラス情報の場合
+        } else if (unresolvedTypeInfo instanceof UnresolvedClassInfo) {
+
+            final TypeInfo classInfo = NameResolver.resolveClassInfo(
+                    (UnresolvedClassInfo) unresolvedTypeInfo, classInfoManager);
+            return classInfo;
 
             // それ以外の型の場合はエラー
         } else {
