@@ -159,6 +159,7 @@ public class MetricsTool {
                     new Java15AntlrAstTranslator()));
         }
 
+        out.println("Parse all target files.");
         for (TargetFile targetFile : TargetFileManager.getInstance()) {
             try {
                 String name = targetFile.getName();
@@ -166,7 +167,7 @@ public class MetricsTool {
                 FileInfo fileInfo = new FileInfo(name);
                 FileInfoManager.getInstance().add(fileInfo);
 
-                out.println("processing " + name);
+                out.println("parsing " + name);
                 Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
                 Java15Parser parser = new Java15Parser(lexer);
                 parser.compilationUnit();
@@ -192,18 +193,18 @@ public class MetricsTool {
             }
         }
 
+        out.println("Resolve Definitions and Usages.");
+        out.println("STEP1 : resolve class definitions.");
         registClassInfos();
-        registMethodInfos();
+        out.println("STEP2 : resolve field definitions.");
         registFieldInfos();
-        addInheritanceInformationToClassInfos();
-        addOverrideRelation();
-        addReferenceAssignmentCallRelateion();
-
-        registClassInfos();
-        registFieldInfos();
+        out.println("STEP3 : resolve method definitions.");
         registMethodInfos();
+        out.println("STEP4 : resolve class inheritances.");
         addInheritanceInformationToClassInfos();
+        out.println("STEP5 : resolve method overrides.");
         addOverrideRelation();
+        out.println("STEP6 : resolve field and method usages.");
         addReferenceAssignmentCallRelateion();
 
         // 文法誤りのあるファイル一覧を表示
