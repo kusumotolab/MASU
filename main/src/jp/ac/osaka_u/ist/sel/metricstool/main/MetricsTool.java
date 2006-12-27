@@ -19,12 +19,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManage
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredException;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -71,7 +71,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.DefaultPluginLoader;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.PluginLoadException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
 
 import org.jargp.ArgumentProcessor;
 import org.jargp.BoolDef;
@@ -208,11 +207,11 @@ public class MetricsTool {
         addReferenceAssignmentCallRelateion();
 
         // 文法誤りのあるファイル一覧を表示
-        err.println("The following files includes uncorrect syntax.");
-        err.println("Any metrics of them were not measured");
+        // err.println("The following files includes uncorrect syntax.");
+        // err.println("Any metrics of them were not measured");
         for (TargetFile targetFile : TargetFileManager.getInstance()) {
             if (!targetFile.isCorrectSyntax()) {
-                err.println("\t" + targetFile.getName());
+                err.println("Incorrect syntax file: " + targetFile.getName());
             }
         }
     }

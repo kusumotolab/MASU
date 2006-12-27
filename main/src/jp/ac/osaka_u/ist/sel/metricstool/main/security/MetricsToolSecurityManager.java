@@ -1,8 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.security;
 
 
-import java.io.File;
-import java.io.FilePermission;
 import java.security.AccessControlException;
 import java.security.Permission;
 import java.security.Permissions;

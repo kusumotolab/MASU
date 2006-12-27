@@ -7,7 +7,6 @@ import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
 
 
 /**
