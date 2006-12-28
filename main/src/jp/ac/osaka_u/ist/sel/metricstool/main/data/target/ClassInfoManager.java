@@ -46,6 +46,11 @@ public final class ClassInfoManager {
 
         this.targetClassInfos.add(classInfo);
         this.packageInfo.add(classInfo);
+        
+        // 内部クラスに対して再帰的に処理
+        for (TargetInnerClassInfo innerClassInfo : classInfo.getInnerClasses()){
+            this.add(innerClassInfo);
+        }
     }
 
     /**
@@ -222,6 +227,10 @@ public final class ClassInfoManager {
             } else if (this.getDepth() == packageNames.length) {
                 this.classInfos.put(classInfo.getClassName(), classInfo);
 
+                final PackageInfo innerPackage = new PackageInfo(classInfo.getClassName(), this.getDepth() + 1);
+                this.subPackages.put(classInfo.getClassName(), innerPackage);
+                
+                
                 // 追加するクラス情報の名前空間階層が，この名前空間階層よりも浅い場合は，エラー
             } else {
                 throw new IllegalArgumentException("Illegal class Info: " + classInfo.toString());

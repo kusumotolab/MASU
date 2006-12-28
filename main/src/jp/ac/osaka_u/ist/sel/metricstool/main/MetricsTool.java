@@ -215,6 +215,8 @@ public class MetricsTool {
                 err.println("Incorrect syntax file: " + targetFile.getName());
             }
         }
+        
+        out.println("finished.");
     }
 
     /**

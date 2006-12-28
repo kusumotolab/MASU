@@ -510,9 +510,25 @@ public final class NameResolver {
         final List<TypeInfo> parameterTypes = new LinkedList<TypeInfo>();
         for (UnresolvedTypeInfo unresolvedParameterType : unresolvedParameterTypes) {
 
-            final TypeInfo parameterType = NameResolver.resolveTypeInfo(unresolvedParameterType,
+            TypeInfo parameterType = NameResolver.resolveTypeInfo(unresolvedParameterType,
                     usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
                     resolvedCache);
+            if (null == parameterType) {
+                if (unresolvedParameterType instanceof UnresolvedReferenceTypeInfo) {
+                    parameterType = NameResolver
+                            .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedParameterType);
+                    classInfoManager.add((ExternalClassInfo) parameterType);
+                } else if (unresolvedParameterType instanceof UnresolvedArrayTypeInfo) {
+                    final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedParameterType)
+                            .getElementType();
+                    final int dimension = ((UnresolvedArrayTypeInfo) unresolvedParameterType)
+                            .getDimension();
+                    final TypeInfo elementType = NameResolver
+                            .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
+                    classInfoManager.add((ExternalClassInfo) elementType);
+                    parameterType = ArrayTypeInfo.getType(elementType, dimension);
+                }
+            }
             parameterTypes.add(parameterType);
         }
 
@@ -653,64 +669,14 @@ public final class NameResolver {
 
         // 要素使用がくっついている未定義型を取得
         final UnresolvedTypeInfo unresolvedOwnerArrayType = arrayElement.getOwnerArrayType();
+        final TypeInfo ownerArrayType = NameResolver.resolveTypeInfo(unresolvedOwnerArrayType,
+                usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
+                resolvedCache);
 
-        // 要素使用([i])がフィールド参照(b)にくっついている場合 (b[i])
-        if (unresolvedOwnerArrayType instanceof UnresolvedFieldUsage) {
+        // 解決済みキャッシュに登録
+        resolvedCache.put(arrayElement, ownerArrayType);
 
-            // (b)のクラス定義を取得
-            final TypeInfo ownerArrayType = NameResolver.resolveFieldReference(
-                    (UnresolvedFieldUsage) unresolvedOwnerArrayType, usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
-
-            // 解決済みキャッシュに登録
-            resolvedCache.put(arrayElement, ownerArrayType);
-
-            return ownerArrayType;
-
-            // 要素使用([i])がメソッド呼び出し(c())にくっついている場合(c()[i])
-        } else if (unresolvedOwnerArrayType instanceof UnresolvedMethodCall) {
-
-            // (c)のクラス定義を取得
-            final TypeInfo ownerArrayType = NameResolver.resolveMethodCall(
-                    (UnresolvedMethodCall) unresolvedOwnerArrayType, usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
-
-            // 解決済みキャッシュに登録
-            resolvedCache.put(arrayElement, ownerArrayType);
-
-            return ownerArrayType;
-
-            // 要素使用([i])がエンティティ使用にくっついている場合
-        } else if (unresolvedOwnerArrayType instanceof UnresolvedEntityUsage) {
-
-            // エンティティのクラス定義を取得
-            final TypeInfo ownerArrayType = NameResolver.resolveEntityUsage(
-                    (UnresolvedEntityUsage) unresolvedOwnerArrayType, usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
-
-            // 解決済みキャッシュに登録
-            resolvedCache.put(arrayElement, ownerArrayType);
-
-            return ownerArrayType;
-
-            // 要素使用([i])が配列の要素にくっついている場合(d[j][i])
-        } else if (unresolvedOwnerArrayType instanceof UnresolvedArrayElementUsage) {
-
-            final TypeInfo ownerArrayType = NameResolver.resolveArrayElementUsage(
-                    (UnresolvedArrayElementUsage) unresolvedOwnerArrayType, usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
-                    resolvedCache);
-
-            // 解決済みキャッシュに登録
-            resolvedCache.put(arrayElement, ownerArrayType);
-
-            return ownerArrayType;
-
-        } else {
-
-            err.println("resolveArrayElementUsage1: Here shouldn't be reached!");
-            return null;
-        }
+        return ownerArrayType;
     }
 
     /**
