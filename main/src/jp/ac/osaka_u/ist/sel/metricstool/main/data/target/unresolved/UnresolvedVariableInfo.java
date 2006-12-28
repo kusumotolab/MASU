@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Resolved;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -21,7 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public abstract class UnresolvedVariableInfo implements PositionSetting {
+public abstract class UnresolvedVariableInfo implements PositionSetting, Unresolved {
 
     /**
      * 変数名を返す
@@ -147,7 +149,7 @@ public abstract class UnresolvedVariableInfo implements PositionSetting {
 
         this.toColumn = toColumn;
     }
-    
+
     /**
      * 開始行を返す
      * 
@@ -184,7 +186,33 @@ public abstract class UnresolvedVariableInfo implements PositionSetting {
         return this.toColumn;
     }
 
-    
+    /**
+     * 名前解決された情報を返す
+     * 
+     * @return 名前解決された情報
+     */
+    public Resolved getResolvedInfo() {
+        return this.resolvedInfo;
+    }
+
+    /**
+     * 名前解決された情報をセットする
+     * 
+     * @param resolvedInfo 名前解決された情報
+     */
+    public void setResolvedInfo(final Resolved resolvedInfo) {
+
+        if (null == resolvedInfo) {
+            throw new NullPointerException();
+        }
+
+        if (!(resolvedInfo instanceof VariableInfo)) {
+            throw new IllegalArgumentException();
+        }
+
+        this.resolvedInfo = resolvedInfo;
+    }
+
     /**
      * 変数オブジェクトを初期化する．
      * 
@@ -212,11 +240,13 @@ public abstract class UnresolvedVariableInfo implements PositionSetting {
         this.name = null;
         this.type = null;
         this.modifiers = new HashSet<ModifierInfo>();
-        
+
         this.fromLine = 0;
         this.fromColumn = 0;
         this.toLine = 0;
         this.toColumn = 0;
+
+        this.resolvedInfo = null;
     }
 
     /**
@@ -233,7 +263,6 @@ public abstract class UnresolvedVariableInfo implements PositionSetting {
      * このフィールドの修飾子を保存するための変数
      */
     private Set<ModifierInfo> modifiers;
-    
 
     /**
      * 開始行を保存するための変数
@@ -254,4 +283,9 @@ public abstract class UnresolvedVariableInfo implements PositionSetting {
      * 開始列を保存するための変数
      */
     private int toColumn;
+
+    /**
+     * 名前解決された情報を格納するための変数
+     */
+    private Resolved resolvedInfo;
 }

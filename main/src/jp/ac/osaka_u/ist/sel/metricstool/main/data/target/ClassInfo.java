@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo> {
+public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Resolved {
 
     /**
      * 名前空間名とクラス名からオブジェクトを生成する

@@ -7,7 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Resolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -18,7 +20,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting, PositionSetting {
+public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting, PositionSetting,
+        Unresolved {
 
     /**
      * 未解決メソッド定義情報オブジェクトを初期化
@@ -43,11 +46,13 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         this.publicVisible = false;
 
         this.instance = true;
-        
+
         this.fromLine = 0;
         this.fromColumn = 0;
         this.toLine = 0;
         this.toColumn = 0;
+
+        this.resolvedInfo = null;
     }
 
     /**
@@ -538,6 +543,33 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
     }
 
     /**
+     * 名前解決された情報を返す
+     * 
+     * @return 名前解決された情報
+     */
+    public Resolved getResolvedInfo() {
+        return this.resolvedInfo;
+    }
+
+    /**
+     * 名前解決された情報をセットする
+     * 
+     * @param resolvedInfo 名前解決された情報
+     */
+    public void setResolvedInfo(final Resolved resolvedInfo) {
+
+        if (null == resolvedInfo) {
+            throw new NullPointerException();
+        }
+
+        if (!(resolvedInfo instanceof MethodInfo)) {
+            throw new IllegalArgumentException();
+        }
+
+        this.resolvedInfo = resolvedInfo;
+    }
+
+    /**
      * 修飾子を保存する
      */
     private Set<ModifierInfo> modifiers;
@@ -636,4 +668,9 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * 開始列を保存するための変数
      */
     private int toColumn;
+
+    /**
+     * 名前解決された情報を格納するための変数
+     */
+    private Resolved resolvedInfo;
 }

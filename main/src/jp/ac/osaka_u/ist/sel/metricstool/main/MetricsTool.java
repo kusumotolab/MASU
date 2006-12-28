@@ -348,6 +348,7 @@ public class MetricsTool {
 
     /**
      * 解析モードを実行する.
+     * 
      * @param language 対象言語
      */
     private static void doAnalysisMode(LANGUAGE language) {
@@ -361,6 +362,7 @@ public class MetricsTool {
 
     /**
      * 情報表示モードを実行する
+     * 
      * @param language 対象言語
      */
     private static void doDisplayMode(LANGUAGE language) {
@@ -412,8 +414,7 @@ public class MetricsTool {
     }
 
     /**
-     * {@link MetricsToolSecurityManager} の初期化を行う.
-     * システムに登録できれば，システムのセキュリティマネージャにも登録する.
+     * {@link MetricsToolSecurityManager} の初期化を行う. システムに登録できれば，システムのセキュリティマネージャにも登録する.
      */
     private static void initSecurityManager() {
         try {
@@ -447,8 +448,8 @@ public class MetricsTool {
     }
 
     /**
-     * プラグインをロードする.
-     * 指定された言語，指定されたメトリクスに関連するプラグインのみを {@link PluginManager}に登録する.
+     * プラグインをロードする. 指定された言語，指定されたメトリクスに関連するプラグインのみを {@link PluginManager}に登録する.
+     * 
      * @param language 指定しされた言語.
      */
     private static void loadPlugins(final LANGUAGE language, final String[] metrics) {
@@ -721,6 +722,9 @@ public class MetricsTool {
                     instance, fromLine, fromColumn, toLine, toColumn);
             classInfoManager.add(classInfo);
 
+            // 未解決クラス情報に解決済みクラス情報を追加しておく
+            unresolvedClassInfo.setResolvedInfo(classInfo);
+
             for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
                     .getInnerClasses()) {
                 final TargetInnerClassInfo innerClass = registInnerClassInfo(
@@ -762,6 +766,9 @@ public class MetricsTool {
                 publicVisible, instance, fromLine, fromColumn, toLine, toColumn);
         classInfoManager.add(classInfo);
 
+        // 未解決クラス情報に解決済みクラス情報を追加しておく
+        unresolvedClassInfo.setResolvedInfo(classInfo);
+
         // このクラスのインナークラスに対して再帰的に処理
         for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo.getInnerClasses()) {
             final TargetInnerClassInfo innerClass = registInnerClassInfo(unresolvedInnerClassInfo,
@@ -787,14 +794,18 @@ public class MetricsTool {
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
 
             // ClassInfo を取得
-            final ClassInfo classInfo = NameResolver.resolveClassInfo(unresolvedClassInfo,
-                    classInfoManager);
+            final ClassInfo classInfo = (ClassInfo) unresolvedClassInfo.getResolvedInfo();
+            if (!(classInfo instanceof TargetClassInfo)) {
+                throw new IllegalArgumentException(classInfo.toString()
+                        + " must be an instance of TargetClassInfo!");
+            }
 
             // 各Unresolvedな親クラス名に対して
             for (UnresolvedTypeInfo unresolvedSuperClassType : unresolvedClassInfo
                     .getSuperClasses()) {
                 ClassInfo superClass = (ClassInfo) NameResolver.resolveTypeInfo(
-                        unresolvedSuperClassType, classInfoManager);
+                        unresolvedSuperClassType, (TargetClassInfo) classInfo, null,
+                        classInfoManager, null, null, null);
 
                 // 見つからなかった場合は名前空間名がUNKNOWNなクラスを登録する
                 if (null == superClass) {
@@ -825,8 +836,7 @@ public class MetricsTool {
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
 
             // ClassInfo を取得
-            final ClassInfo ownerClass = NameResolver.resolveClassInfo(unresolvedClassInfo,
-                    classInfoManager);
+            final ClassInfo ownerClass = (ClassInfo) unresolvedClassInfo.getResolvedInfo();
             if (!(ownerClass instanceof TargetClassInfo)) {
                 throw new IllegalArgumentException(ownerClass.toString()
                         + " must be an instance of TargetClassInfo!");
@@ -840,7 +850,7 @@ public class MetricsTool {
                 final String fieldName = unresolvedFieldInfo.getName();
                 final UnresolvedTypeInfo unresolvedFieldType = unresolvedFieldInfo.getType();
                 TypeInfo fieldType = NameResolver.resolveTypeInfo(unresolvedFieldType,
-                        classInfoManager);
+                        (TargetClassInfo) ownerClass, null, classInfoManager, null, null, null);
                 if (null == fieldType) {
                     if (unresolvedFieldType instanceof UnresolvedReferenceTypeInfo) {
                         fieldType = NameResolver
@@ -873,9 +883,12 @@ public class MetricsTool {
                         inheritanceVisible, publicVisible, instance, fromLine, fromColumn, toLine,
                         toColumn);
 
-                // フィールド情報を追加
+                // フィールド情報をクラスとフィールド情報マネージャに追加
                 ((TargetClassInfo) ownerClass).addDefinedField(fieldInfo);
                 fieldInfoManager.add(fieldInfo);
+
+                // 未解決フィールド情報にも追加
+                unresolvedFieldInfo.setResolvedInfo(fieldInfo);
             }
         }
     }
@@ -895,8 +908,7 @@ public class MetricsTool {
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
 
             // ClassInfo を取得
-            final ClassInfo ownerClass = NameResolver.resolveClassInfo(unresolvedClassInfo,
-                    classInfoManager);
+            final ClassInfo ownerClass = (ClassInfo) unresolvedClassInfo.getResolvedInfo();
             if (!(ownerClass instanceof TargetClassInfo)) {
                 throw new IllegalArgumentException(ownerClass.toString()
                         + " must be an instance of TargetClassInfo");
@@ -912,7 +924,8 @@ public class MetricsTool {
                 final UnresolvedTypeInfo unresolvedMethodReturnType = unresolvedMethodInfo
                         .getReturnType();
                 TypeInfo methodReturnType = NameResolver.resolveTypeInfo(
-                        unresolvedMethodReturnType, classInfoManager);
+                        unresolvedMethodReturnType, (TargetClassInfo) ownerClass, null,
+                        classInfoManager, null, null, null);
                 if (null == methodReturnType) {
                     if (unresolvedMethodReturnType instanceof UnresolvedReferenceTypeInfo) {
                         methodReturnType = NameResolver
@@ -956,7 +969,8 @@ public class MetricsTool {
                     final UnresolvedTypeInfo unresolvedParameterType = unresolvedParameterInfo
                             .getType();
                     TypeInfo parameterType = NameResolver.resolveTypeInfo(unresolvedParameterType,
-                            classInfoManager);
+                            (TargetClassInfo) ownerClass, methodInfo, classInfoManager, null, null,
+                            null);
                     if (null == parameterType) {
                         if (unresolvedParameterType instanceof UnresolvedReferenceTypeInfo) {
                             parameterType = NameResolver
@@ -994,8 +1008,9 @@ public class MetricsTool {
                     final String variableName = unresolvedLocalVariable.getName();
                     final UnresolvedTypeInfo unresolvedVariableType = unresolvedLocalVariable
                             .getType();
-                    TypeInfo variableType = NameResolver.resolveTypeInfo(
-                            unresolvedVariableType, classInfoManager);
+                    TypeInfo variableType = NameResolver.resolveTypeInfo(unresolvedVariableType,
+                            (TargetClassInfo) ownerClass, methodInfo, classInfoManager, null, null,
+                            null);
                     if (null == variableType) {
                         if (unresolvedVariableType instanceof UnresolvedReferenceTypeInfo) {
                             variableType = NameResolver
@@ -1024,9 +1039,12 @@ public class MetricsTool {
                     methodInfo.addLocalVariable(localVariable);
                 }
 
-                // メソッド情報を追加
+                // メソッド情報をメソッド情報マネージャに追加
                 ((TargetClassInfo) ownerClass).addDefinedMethod(methodInfo);
                 methodInfoManager.add(methodInfo);
+
+                // 未解決メソッド情報にも追加
+                unresolvedMethodInfo.setResolvedInfo(methodInfo);
             }
         }
 
@@ -1102,16 +1120,14 @@ public class MetricsTool {
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
 
             // 未解決クラス情報から，解決済みクラス情報を取得
-            final TargetClassInfo userClass = NameResolver.resolveClassInfo(unresolvedClassInfo,
-                    classInfoManager);
+            final TargetClassInfo userClass = (TargetClassInfo)unresolvedClassInfo.getResolvedInfo();
 
             // 各未解決メソッド情報に対して
             for (UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo
                     .getDefinedMethods()) {
 
                 // 未解決メソッド情報から，解決済みメソッド情報を取得
-                final TargetMethodInfo caller = NameResolver.resolveMethodInfo(
-                        unresolvedMethodInfo, classInfoManager);
+                final TargetMethodInfo caller = (TargetMethodInfo)unresolvedMethodInfo.getResolvedInfo();
 
                 // 各未解決参照エンティティの名前解決処理
                 for (UnresolvedFieldUsage referencee : unresolvedMethodInfo.getFieldReferences()) {

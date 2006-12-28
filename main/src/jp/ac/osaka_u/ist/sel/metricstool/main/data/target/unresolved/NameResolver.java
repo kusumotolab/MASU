@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -44,16 +43,30 @@ public final class NameResolver {
      * 未解決型情報（UnresolvedTypeInfo）から解決済み型情報（TypeInfo）を返す． 対応する解決済み型情報がない場合は null を返す．
      * 
      * @param unresolvedTypeInfo 名前解決したい型情報
-     * @param classInfoManager 参照型の解決に用いるデータベース
+     * @param usingClass この未解決型が存在しているクラス
+     * @param usingMethod この未解決型が存在しているメソッド，メソッド外である場合は null を与える
+     * @param classInfoManager 型解決に用いるクラス情報データベース
+     * @param fieldInfoManager 型解決に用いるフィールド情報データベース
+     * @param methodInfoManager 型解決に用いるメソッド情報データベース
+     * @param resolvCache 解決済みUnresolvedTypeInfoのキャッシュ
      * @return 名前解決された型情報
      */
     public static TypeInfo resolveTypeInfo(final UnresolvedTypeInfo unresolvedTypeInfo,
-            final ClassInfoManager classInfoManager) {
+            final TargetClassInfo usingClass, final TargetMethodInfo usingMethod,
+            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
+            final MethodInfoManager methodInfoManager,
+            final Map<UnresolvedTypeInfo, TypeInfo> resolvedCache) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == unresolvedTypeInfo) || (null == classInfoManager)) {
+        if (null == unresolvedTypeInfo) {
             throw new NullPointerException();
+        }
+
+        // 既に解決済みであれば，そこから型を取得
+        if ((null != resolvedCache) && resolvedCache.containsKey(unresolvedTypeInfo)) {
+            final TypeInfo type = resolvedCache.get(unresolvedTypeInfo);
+            return type;
         }
 
         // 未解決プリミティブ型の場合
@@ -63,6 +76,9 @@ public final class NameResolver {
             // 未解決void型の場合
         } else if (unresolvedTypeInfo instanceof VoidTypeInfo) {
             return (VoidTypeInfo) unresolvedTypeInfo;
+
+        } else if (unresolvedTypeInfo instanceof NullTypeInfo) {
+            return (NullTypeInfo) unresolvedTypeInfo;
 
             // 未解決参照型の場合
         } else if (unresolvedTypeInfo instanceof UnresolvedReferenceTypeInfo) {
@@ -83,6 +99,12 @@ public final class NameResolver {
 
                         // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
                         if (className.equals(referenceName[0])) {
+
+                            // キャッシュ用ハッシュテーブルがる場合はキャッシュを追加
+                            if (null != resolvedCache) {
+                                resolvedCache.put(unresolvedTypeInfo, classInfo);
+                            }
+
                             return classInfo;
                         }
                     }
@@ -103,6 +125,12 @@ public final class NameResolver {
                                 referenceName.length);
                         final ClassInfo specifiedClassInfo = classInfoManager
                                 .getClassInfo(fullQualifiedName);
+
+                        // キャッシュ用ハッシュテーブルがる場合はキャッシュを追加
+                        if (null != resolvedCache) {
+                            resolvedCache.put(unresolvedTypeInfo, specifiedClassInfo);
+                        }
+
                         // クラスが見つからなかった場合は null が返される
                         return specifiedClassInfo;
                     }
@@ -112,7 +140,7 @@ public final class NameResolver {
             // 見つからなかった場合は null を返す
             return null;
 
-            //未解決配列型の場合
+            // 未解決配列型の場合
         } else if (unresolvedTypeInfo instanceof UnresolvedArrayTypeInfo) {
 
             final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedTypeInfo)
@@ -120,7 +148,9 @@ public final class NameResolver {
             final int dimension = ((UnresolvedArrayTypeInfo) unresolvedTypeInfo).getDimension();
 
             final TypeInfo elementType = NameResolver.resolveTypeInfo(unresolvedElementType,
-                    classInfoManager);
+                    usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
+                    resolvedCache);
+
             if (elementType != null) {
 
                 final ArrayTypeInfo arrayType = ArrayTypeInfo.getType(elementType, dimension);
@@ -133,8 +163,42 @@ public final class NameResolver {
             // 未解決クラス情報の場合
         } else if (unresolvedTypeInfo instanceof UnresolvedClassInfo) {
 
-            final TypeInfo classInfo = NameResolver.resolveClassInfo(
-                    (UnresolvedClassInfo) unresolvedTypeInfo, classInfoManager);
+            final TypeInfo classInfo = (ClassInfo) ((UnresolvedClassInfo) unresolvedTypeInfo)
+                    .getResolvedInfo();
+            return classInfo;
+
+            // 未解決フィールド使用の場合
+        } else if (unresolvedTypeInfo instanceof UnresolvedFieldUsage) {
+
+            final TypeInfo classInfo = NameResolver.resolveFieldReference(
+                    (UnresolvedFieldUsage) unresolvedTypeInfo, usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+            return classInfo;
+
+            // 未解決メソッド呼び出しの場合
+        } else if (unresolvedTypeInfo instanceof UnresolvedMethodCall) {
+
+            // (c)のクラス定義を取得
+            final TypeInfo classInfo = NameResolver.resolveMethodCall(
+                    (UnresolvedMethodCall) unresolvedTypeInfo, usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+            return classInfo;
+
+            // 未解決エンティティ使用の場合
+        } else if (unresolvedTypeInfo instanceof UnresolvedEntityUsage) {
+
+            // エンティティのクラス定義を取得
+            final TypeInfo classInfo = NameResolver.resolveEntityUsage(
+                    (UnresolvedEntityUsage) unresolvedTypeInfo, usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+            return classInfo;
+
+            // 未解決配列使用の場合
+        } else if (unresolvedTypeInfo instanceof UnresolvedArrayElementUsage) {
+
+            final TypeInfo classInfo = NameResolver.resolveArrayElementUsage(
+                    (UnresolvedArrayElementUsage) unresolvedTypeInfo, usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
             return classInfo;
 
             // それ以外の型の場合はエラー
@@ -176,63 +240,14 @@ public final class NameResolver {
             return type;
         }
 
-        // フィールド名，及びフィールド参照がくっついている未定義型を取得
+        // フィールド名を取得
         final String fieldName = fieldReference.getFieldName();
+
+        // 親の型を解決
         final UnresolvedTypeInfo unresolvedFieldOwnerClassType = fieldReference.getOwnerClassType();
-
-        // -----ここから親のTypeInfo を取得するコード
-        TypeInfo fieldOwnerClassType = null;
-
-        // フィールド参照(a)がフィールド参照(b)にくっついている場合 (b.a)
-        if (unresolvedFieldOwnerClassType instanceof UnresolvedFieldUsage) {
-
-            // (b)のクラス定義を取得
-            fieldOwnerClassType = NameResolver.resolveFieldReference(
-                    (UnresolvedFieldUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
-
-            // フィールド参照(a)がメソッド呼び出し(c())にくっついている場合(c().a)
-        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedMethodCall) {
-
-            // (c)のクラス定義を取得
-            fieldOwnerClassType = NameResolver.resolveMethodCall(
-                    (UnresolvedMethodCall) unresolvedFieldOwnerClassType, usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
-
-            // フィールド参照(a)がエンティティ使用にくっついている場合
-        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedEntityUsage) {
-
-            // エンティティのクラス定義を取得
-            fieldOwnerClassType = NameResolver.resolveEntityUsage(
-                    (UnresolvedEntityUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
-
-            // フィールド参照(a)が配列の要素にくっついている場合(d[i].a)
-        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedArrayElementUsage) {
-
-            fieldOwnerClassType = NameResolver.resolveArrayElementUsage(
-                    (UnresolvedArrayElementUsage) unresolvedFieldOwnerClassType, usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
-                    resolvedCache);
-
-            // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
-        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedClassInfo) {
-
-            // 自クラスのクラス定義を取得
-            fieldOwnerClassType = NameResolver.resolveClassInfo(
-                    (UnresolvedClassInfo) unresolvedFieldOwnerClassType, classInfoManager);
-
-            // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
-        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedReferenceTypeInfo) {
-
-            // 自クラスのクラス定義を取得
-            fieldOwnerClassType = NameResolver.resolveTypeInfo(unresolvedFieldOwnerClassType,
-                    classInfoManager);
-
-        } else {
-            err.println("Here shouldn't be reached!");
-            return null;
-        }
+        final TypeInfo fieldOwnerClassType = NameResolver.resolveTypeInfo(
+                unresolvedFieldOwnerClassType, usingClass, usingMethod, classInfoManager,
+                fieldInfoManager, methodInfoManager, resolvedCache);
 
         // -----ここから親のTypeInfo に応じて処理を分岐
         // 親が解決できなかった場合はどうしようもない
@@ -319,7 +334,7 @@ public final class NameResolver {
             return null;
         }
 
-        err.println("Here shouldn't be reached!");
+        err.println("resolveFieldReference2: Here shouldn't be reached!");
         return null;
     }
 
@@ -355,64 +370,15 @@ public final class NameResolver {
             return type;
         }
 
-        // フィールド名，及びフィールド代入がくっついている未定義型を取得
+        // フィールド名を取得
         final String fieldName = fieldAssignment.getFieldName();
+
+        // 親の型を解決
         final UnresolvedTypeInfo unresolvedFieldOwnerClassType = fieldAssignment
                 .getOwnerClassType();
-
-        // -----ここから親のTypeInfo を取得するコード
-        TypeInfo fieldOwnerClassType = null;
-
-        // フィールド代入(a)がフィールド参照(b)にくっついている場合 (b.a)
-        if (unresolvedFieldOwnerClassType instanceof UnresolvedFieldUsage) {
-
-            // (b)のクラス定義を取得
-            fieldOwnerClassType = NameResolver.resolveFieldReference(
-                    (UnresolvedFieldUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
-
-            // フィールド代入(a)がメソッド呼び出し(c())にくっついている場合(c().a)
-        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedMethodCall) {
-
-            // (c)のクラス定義を取得
-            fieldOwnerClassType = NameResolver.resolveMethodCall(
-                    (UnresolvedMethodCall) unresolvedFieldOwnerClassType, usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
-
-            // フィールド代入(a)がエンティティ使用にくっついている場合
-        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedEntityUsage) {
-
-            // エンティティのクラス定義を取得
-            fieldOwnerClassType = NameResolver.resolveEntityUsage(
-                    (UnresolvedEntityUsage) unresolvedFieldOwnerClassType, usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
-
-            // フィールド代入(a)が配列の要素にくっついている場合(d[i].a)
-        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedArrayElementUsage) {
-
-            fieldOwnerClassType = NameResolver.resolveArrayElementUsage(
-                    (UnresolvedArrayElementUsage) unresolvedFieldOwnerClassType, usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
-                    resolvedCache);
-
-            // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
-        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedClassInfo) {
-
-            // 自クラスのクラス定義を取得
-            fieldOwnerClassType = NameResolver.resolveClassInfo(
-                    (UnresolvedClassInfo) unresolvedFieldOwnerClassType, classInfoManager);
-
-            // フィールド代入(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
-        } else if (unresolvedFieldOwnerClassType instanceof UnresolvedReferenceTypeInfo) {
-
-            fieldOwnerClassType = NameResolver.resolveTypeInfo(unresolvedFieldOwnerClassType,
-                    classInfoManager);
-
-        } else {
-
-            err.println("Here shouldn't be reached!");
-            return null;
-        }
+        final TypeInfo fieldOwnerClassType = NameResolver.resolveTypeInfo(
+                unresolvedFieldOwnerClassType, usingClass, usingMethod, classInfoManager,
+                fieldInfoManager, methodInfoManager, resolvedCache);
 
         // -----ここから親のTypeInfo に応じて処理を分岐
         // 親が解決できなかった場合はどうしようもない
@@ -499,7 +465,7 @@ public final class NameResolver {
             return null;
         }
 
-        err.println("Here shouldn't be reached!");
+        err.println("resolveFieldAssignment2: Here shouldn't be reached!");
         return null;
     }
 
@@ -535,95 +501,26 @@ public final class NameResolver {
             return type;
         }
 
-        // メソッドのシグネチャ，及びメソッド使用がくっついている未定義参照型を取得
+        // メソッドのシグネチャを取得
         final String methodName = methodCall.getMethodName();
         final boolean constructor = methodCall.isConstructor();
         final List<UnresolvedTypeInfo> unresolvedParameterTypes = methodCall.getParameterTypes();
-        final UnresolvedTypeInfo unresolvedMethodOwnerClassType = methodCall.getOwnerClassType();
 
         // メソッドの未解決引数を解決
         final List<TypeInfo> parameterTypes = new LinkedList<TypeInfo>();
         for (UnresolvedTypeInfo unresolvedParameterType : unresolvedParameterTypes) {
 
-            // 引数がフィールド参照の場合
-            if (unresolvedParameterType instanceof UnresolvedFieldUsage) {
-                final TypeInfo parameterType = NameResolver.resolveFieldReference(
-                        (UnresolvedFieldUsage) unresolvedParameterType, usingClass, usingMethod,
-                        classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
-                parameterTypes.add(parameterType);
-
-                // 引数がメソッド呼び出しの場合
-            } else if (unresolvedParameterType instanceof UnresolvedMethodCall) {
-                final TypeInfo parameterType = NameResolver.resolveMethodCall(
-                        (UnresolvedMethodCall) unresolvedParameterType, usingClass, usingMethod,
-                        classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
-                parameterTypes.add(parameterType);
-
-                // 引数が null の場合
-            } else if (unresolvedParameterType instanceof NullTypeInfo) {
-                parameterTypes.add((TypeInfo) unresolvedParameterType);
-
-                // それ以外の型はエラー
-            } else {
-                err.println("Here shouldn't be reached!");
-                return null;
-            }
+            final TypeInfo parameterType = NameResolver.resolveTypeInfo(unresolvedParameterType,
+                    usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
+                    resolvedCache);
+            parameterTypes.add(parameterType);
         }
 
-        // -----ここから親のTypeInfo を取得するコード
-        TypeInfo methodOwnerClassType = null;
-
-        // メソッド呼び出し(a())がフィールド使用(b)にくっついている場合 (b.a())
-        if (unresolvedMethodOwnerClassType instanceof UnresolvedFieldUsage) {
-
-            // (b)のクラス定義を取得
-            methodOwnerClassType = NameResolver.resolveFieldReference(
-                    (UnresolvedFieldUsage) unresolvedMethodOwnerClassType, usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
-
-            // メソッド呼び出し(a())がメソッド呼び出し(c())にくっついている場合(c().a())
-        } else if (unresolvedMethodOwnerClassType instanceof UnresolvedMethodCall) {
-
-            // (c)のクラス定義を取得
-            methodOwnerClassType = NameResolver.resolveMethodCall(
-                    (UnresolvedMethodCall) unresolvedMethodOwnerClassType, usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
-
-            // メソッド呼び出し(a())がエンティティ使用にくっついている場合
-        } else if (unresolvedMethodOwnerClassType instanceof UnresolvedEntityUsage) {
-
-            // エンティティのクラス定義を取得
-            methodOwnerClassType = NameResolver.resolveEntityUsage(
-                    (UnresolvedEntityUsage) unresolvedMethodOwnerClassType, usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
-                    resolvedCache);
-
-            // メソッド呼び出し(a())が配列の要素にくっついている場合(d[i].a())
-        } else if (unresolvedMethodOwnerClassType instanceof UnresolvedArrayElementUsage) {
-
-            methodOwnerClassType = NameResolver.resolveArrayElementUsage(
-                    (UnresolvedArrayElementUsage) unresolvedMethodOwnerClassType, usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
-                    resolvedCache);
-
-            // フィールド使用(a)が自オブジェクトにくっついている場合(a or this.a or super.a )
-        } else if (unresolvedMethodOwnerClassType instanceof UnresolvedClassInfo) {
-
-            // 自クラスのクラス定義を取得
-            methodOwnerClassType = NameResolver.resolveClassInfo(
-                    (UnresolvedClassInfo) unresolvedMethodOwnerClassType, classInfoManager);
-
-            // メソッド呼び出し(a())が自オブジェクトにくっついている場合(a or this.a or super.a )
-        } else if (unresolvedMethodOwnerClassType instanceof UnresolvedReferenceTypeInfo) {
-
-            methodOwnerClassType = NameResolver.resolveTypeInfo(unresolvedMethodOwnerClassType,
-                    classInfoManager);
-
-        } else {
-
-            err.println("Here shouldn't be reached!");
-            return null;
-        }
+        // 親の型を解決
+        final UnresolvedTypeInfo unresolvedMethodOwnerClassType = methodCall.getOwnerClassType();
+        final TypeInfo methodOwnerClassType = NameResolver.resolveTypeInfo(
+                unresolvedMethodOwnerClassType, usingClass, usingMethod, classInfoManager,
+                fieldInfoManager, methodInfoManager, resolvedCache);
 
         // -----ここから親のTypeInfo に応じて処理を分岐
         // 親が解決できなかった場合はどうしようもない
@@ -718,7 +615,7 @@ public final class NameResolver {
             return null;
         }
 
-        err.println("Here shouldn't be reached!");
+        err.println("resolveMethodCall3: Here shouldn't be reached!");
         return null;
     }
 
@@ -811,7 +708,7 @@ public final class NameResolver {
 
         } else {
 
-            err.println("Here shouldn't be reached!");
+            err.println("resolveArrayElementUsage1: Here shouldn't be reached!");
             return null;
         }
     }
@@ -1070,175 +967,6 @@ public final class NameResolver {
         resolvedCache.put(entityUsage, null);
 
         return null;
-    }
-
-    /**
-     * 未解決フィールド情報から，対応するFieldInfo を返す．該当するメソッドがない場合は， IllegalArgumentException が投げられる
-     * 
-     * @param unresolvedFieldInfo 未解決フィールド情報
-     * @param classInfoManager 用いるクラスマネージャ
-     * @return 対応する FieldInfo
-     */
-    public static TargetFieldInfo resolveFieldInfo(final UnresolvedFieldInfo unresolvedFieldInfo,
-            final ClassInfoManager classInfoManager) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == unresolvedFieldInfo) || (null == classInfoManager)) {
-            throw new NullPointerException();
-        }
-
-        // 所有クラスを取得，取得したクラスが外部クラスである場合は，引数の情報がおかしい
-        final UnresolvedClassInfo unresolvedOwnerClass = unresolvedFieldInfo.getOwnerClass();
-        final ClassInfo ownerClass = NameResolver.resolveClassInfo(unresolvedOwnerClass,
-                classInfoManager);
-        if (!(ownerClass instanceof TargetClassInfo)) {
-            throw new IllegalArgumentException(unresolvedFieldInfo.toString() + " is wrong!");
-        }
-
-        // UnresolvedFieldInfo からフィールド名，型名を取得
-        final String fieldName = unresolvedFieldInfo.getName();
-        final UnresolvedTypeInfo unresolvedFieldType = unresolvedFieldInfo.getType();
-        TypeInfo fieldType = NameResolver.resolveTypeInfo(unresolvedFieldType, classInfoManager);
-        if (null == fieldType) {
-            fieldType = NameResolver
-                    .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedFieldType);
-            classInfoManager.add((ExternalClassInfo) fieldType);
-        }
-
-        for (TargetFieldInfo fieldInfo : ((TargetClassInfo) ownerClass).getDefinedFields()) {
-
-            // フィールド名が違う場合は，該当フィールドではない
-            if (!fieldName.equals(fieldInfo.getName())) {
-                continue;
-            }
-
-            // フィールドの型が違う場合は，該当フィールドではない
-            if (!fieldType.equals(fieldInfo.getType())) {
-                continue;
-            }
-
-            return fieldInfo;
-        }
-
-        throw new IllegalArgumentException(unresolvedFieldInfo.toString() + " is wrong!");
-    }
-
-    /**
-     * 未解決メソッド情報から，対応するMethodInfo を返す．該当するメソッドがない場合は IllegalArgumentException が投げられる
-     * 
-     * @param unresolvedMethodInfo 未解決メソッド情報
-     * @param classInfoManager 用いるクラスマネージャ
-     * @return 対応する MethodInfo
-     */
-    public static TargetMethodInfo resolveMethodInfo(
-            final UnresolvedMethodInfo unresolvedMethodInfo, final ClassInfoManager classInfoManager) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == unresolvedMethodInfo) || (null == classInfoManager)) {
-            throw new NullPointerException();
-        }
-
-        // UnresolvedMethodInfo から所有クラスを取得，取得したクラスが外部クラスである場合は，引数の情報がおかしい
-        final UnresolvedClassInfo unresolvedOwnerClass = unresolvedMethodInfo.getOwnerClass();
-        final ClassInfo ownerClass = NameResolver.resolveClassInfo(unresolvedOwnerClass,
-                classInfoManager);
-        if (!(ownerClass instanceof TargetClassInfo)) {
-            throw new IllegalArgumentException(unresolvedMethodInfo.toString() + " is wrong!");
-        }
-
-        // Unresolved メソッド名，引数を取得
-        final String methodName = unresolvedMethodInfo.getMethodName();
-        final List<UnresolvedParameterInfo> unresolvedParameterInfos = unresolvedMethodInfo
-                .getParameterInfos();
-
-        for (TargetMethodInfo methodInfo : ((TargetClassInfo) ownerClass).getDefinedMethods()) {
-
-            // メソッド名が違う場合は，該当メソッドではない
-            if (!methodName.equals(methodInfo.getMethodName())) {
-                continue;
-            }
-
-            // 引数の数が違う場合は，該当メソッドではない
-            final List<ParameterInfo> typeInfos = methodInfo.getParameters();
-            if (unresolvedParameterInfos.size() != typeInfos.size()) {
-                continue;
-            }
-
-            // 全ての引数の型をチェック，1つでも異なる場合は，該当メソッドではない
-            final Iterator<UnresolvedParameterInfo> unresolvedParameterIterator = unresolvedParameterInfos
-                    .iterator();
-            final Iterator<ParameterInfo> parameterInfoIterator = typeInfos.iterator();
-            boolean same = true;
-            while (unresolvedParameterIterator.hasNext() && parameterInfoIterator.hasNext()) {
-                final UnresolvedParameterInfo unresolvedParameterInfo = unresolvedParameterIterator
-                        .next();
-                final UnresolvedTypeInfo unresolvedTypeInfo = unresolvedParameterInfo.getType();
-                TypeInfo typeInfo = NameResolver.resolveTypeInfo(unresolvedTypeInfo,
-                        classInfoManager);
-                if (null == typeInfo) {
-                    if (unresolvedTypeInfo instanceof UnresolvedReferenceTypeInfo) {
-                        typeInfo = NameResolver
-                                .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedTypeInfo);
-                        classInfoManager.add((ExternalClassInfo) typeInfo);
-                    } else if (unresolvedTypeInfo instanceof UnresolvedArrayTypeInfo) {
-                        final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedTypeInfo)
-                                .getElementType();
-                        final int dimension = ((UnresolvedArrayTypeInfo) unresolvedTypeInfo)
-                                .getDimension();
-                        final TypeInfo elementType = NameResolver
-                                .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
-                        classInfoManager.add((ExternalClassInfo) elementType);
-                        typeInfo = ArrayTypeInfo.getType(elementType, dimension);
-                    }
-                }
-
-                final ParameterInfo parameterInfo = parameterInfoIterator.next();
-                if (!typeInfo.equals(parameterInfo.getType())) {
-                    same = false;
-                    break;
-                }
-            }
-            if (same) {
-                return methodInfo;
-            }
-        }
-
-        throw new IllegalArgumentException(unresolvedMethodInfo.toString() + " is wrong!");
-    }
-
-    /**
-     * 未解決クラス情報から，該当する ClassInfo を返す．該当するクラスがない場合は IllegalArgumentException が投げられる
-     * 
-     * @param unresolvedClassInfo 未解決クラス情報
-     * @param classInfoManager 用いるクラスマネージャ
-     * @return 該当する ClassInfo
-     */
-    public static TargetClassInfo resolveClassInfo(final UnresolvedClassInfo unresolvedClassInfo,
-            final ClassInfoManager classInfoManager) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == unresolvedClassInfo) || (null == classInfoManager)) {
-            throw new NullPointerException();
-        }
-
-        // 完全限定名を取得し，ClassInfo を取得
-        final String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
-        final ClassInfo classInfo = classInfoManager.getClassInfo(fullQualifiedName);
-
-        // UnresolvedClassInfo のオブジェクトは registClassInfo メソッドにより，全て登録済みのはずなので，
-        // null が返ってきた場合は，不正
-        if (null == classInfo) {
-            throw new IllegalArgumentException(unresolvedClassInfo.toString() + " is wrong!");
-        }
-        // registClassInfoにより登録されたクラス情報は TargetClassInfo であるべき
-        if (!(classInfo instanceof TargetClassInfo)) {
-            throw new IllegalArgumentException(unresolvedClassInfo.toString() + " is wrong!");
-        }
-
-        return (TargetClassInfo) classInfo;
     }
 
     /**

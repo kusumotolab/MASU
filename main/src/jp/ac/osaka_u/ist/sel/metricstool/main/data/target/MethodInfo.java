@@ -11,7 +11,7 @@ import java.util.TreeSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
-public abstract class MethodInfo implements Comparable<MethodInfo> {
+public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
 
     /**
      * メソッドオブジェクトを初期化する

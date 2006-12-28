@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public abstract class VariableInfo implements Comparable<VariableInfo> {
+public abstract class VariableInfo implements Comparable<VariableInfo>, Resolved {
 
     /**
      * 変数の順序を定義するメソッド．変数名（String）に従う．

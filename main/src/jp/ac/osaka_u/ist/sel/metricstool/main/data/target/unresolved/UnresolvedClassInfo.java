@@ -7,7 +7,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Resolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -31,7 +33,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 public final class UnresolvedClassInfo implements UnresolvedTypeInfo, VisualizableSetting,
-        MemberSetting, PositionSetting {
+        MemberSetting, PositionSetting, Unresolved {
 
     /**
      * 引数なしコンストラクタ
@@ -56,11 +58,13 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
         this.publicVisible = false;
 
         this.instance = true;
-        
+
         this.fromLine = 0;
         this.fromColumn = 0;
         this.toLine = 0;
         this.toColumn = 0;
+
+        this.resolvedInfo = null;
     }
 
     /**
@@ -315,7 +319,8 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
 
     /**
      * 外部クラスを返す
-     * @return 外部クラス.　外部クラスがない場合はnull
+     * 
+     * @return 外部クラス. 外部クラスがない場合はnull
      */
     public UnresolvedClassInfo getOuterClass() {
         return this.outerClass;
@@ -341,6 +346,7 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
 
     /**
      * 型名を返す
+     * 
      * @return 型名
      */
     public String getTypeName() {
@@ -381,6 +387,7 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
 
     /**
      * 外部クラスをセットする
+     * 
      * @param outerClass 外部クラス
      */
     public void setOuterClass(final UnresolvedClassInfo outerClass) {
@@ -561,6 +568,33 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
     }
 
     /**
+     * 名前解決された情報を返す
+     * 
+     * @return 名前解決された情報
+     */
+    public Resolved getResolvedInfo() {
+        return this.resolvedInfo;
+    }
+
+    /**
+     * 名前解決された情報をセットする
+     * 
+     * @param resolvedInfo 名前解決された情報
+     */
+    public void setResolvedInfo(final Resolved resolvedInfo) {
+
+        if (null == resolvedInfo) {
+            throw new NullPointerException();
+        }
+        
+        if (!(resolvedInfo instanceof ClassInfo)){
+            throw new IllegalArgumentException();
+        }
+
+        this.resolvedInfo = resolvedInfo;
+    }
+
+    /**
      * 名前空間名を保存するための変数
      */
     private String[] namespace;
@@ -649,4 +683,9 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      * 開始列を保存するための変数
      */
     private int toColumn;
+
+    /**
+     * 名前解決された情報を格納するための変数
+     */
+    private Resolved resolvedInfo;
 }
