@@ -527,6 +527,10 @@ public final class NameResolver {
                             .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
                     classInfoManager.add((ExternalClassInfo) elementType);
                     parameterType = ArrayTypeInfo.getType(elementType, dimension);
+                } else {
+                  err.println("Can't resolve parameter type : "
+                            + unresolvedParameterType.toString());
+                    parameterType = NullTypeInfo.getInstance();
                 }
             }
             parameterTypes.add(parameterType);
