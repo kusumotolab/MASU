@@ -57,7 +57,7 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
             int count = buildManager.getAnonymousClassCount(enumClass);
             enumAnonymous.setClassName(enumClass.getClassName() + JavaAnonymousClassBuilder.JAVA_ANONYMOUSCLASS_NAME_MARKER + count );
             
-            UnresolvedReferenceTypeInfo superClassReference = new UnresolvedReferenceTypeInfo(buildManager.getAvailableNameSpaceSet(),
+            UnresolvedReferenceTypeInfo superClassReference = new UnresolvedReferenceTypeInfo(buildManager.getAllAvaliableNames(),
                     enumClass.getFullQualifiedName());
             
             enumAnonymous.addSuperClass(superClassReference);

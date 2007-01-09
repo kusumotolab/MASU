@@ -29,7 +29,7 @@ public class FieldOrMethodElement implements IdentifierElement{
     }
     
     public UnresolvedTypeInfo resolveAsAssignmetedVariable(BuildDataManager buildDataManager) {
-        UnresolvedFieldUsage usage = new UnresolvedFieldUsage(buildDataManager.getAvailableNameSpaceSet(),ownerType,name);
+        UnresolvedFieldUsage usage = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),ownerType,name);
         buildDataManager.addFieldAssignment(usage);
         return usage;
     }
@@ -39,7 +39,7 @@ public class FieldOrMethodElement implements IdentifierElement{
     }
 
     public UnresolvedTypeInfo resolveAsReferencedVariable(BuildDataManager buildDataManager) {
-        UnresolvedFieldUsage usage = new UnresolvedFieldUsage(buildDataManager.getAvailableNameSpaceSet(),ownerType,name);
+        UnresolvedFieldUsage usage = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),ownerType,name);
         buildDataManager.addFieldReference(usage);
         return usage;
     }

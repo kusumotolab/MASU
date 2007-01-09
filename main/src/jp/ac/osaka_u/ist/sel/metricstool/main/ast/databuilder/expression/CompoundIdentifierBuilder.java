@@ -60,7 +60,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder{
                         //スコープ内に変数がみつかった
                         if (variable instanceof UnresolvedFieldInfo){
                             //実はフィールドでした
-                            leftElementType = new UnresolvedFieldUsage(buildDataManager.getAvailableNameSpaceSet(),
+                            leftElementType = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),
                                     buildDataManager.getCurrentClass(),leftName);
                         } else {
                             leftElementType = variable.getType();
@@ -68,9 +68,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder{
                     }
                 } else if (left.equals(InstanceSpecificElement.THIS)){
                     //左側がthisなら右側はこのクラスのフィールド名かメソッド名
-                    if (null != buildDataManager){
-                        leftElementType = buildDataManager.getCurrentClass();
-                    }
+                    leftElementType = buildDataManager.getCurrentClass();
                 } else {
                     leftElementType = left.getType();
                 }

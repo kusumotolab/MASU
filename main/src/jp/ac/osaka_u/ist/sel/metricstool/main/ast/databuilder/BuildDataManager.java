@@ -35,6 +35,9 @@ public interface BuildDataManager{
     public void enterMethodBlock();
     
     public AvailableNamespaceInfoSet getAvailableNameSpaceSet();
+    public AvailableNamespaceInfoSet getAvailableAliasSet();
+    public AvailableNamespaceInfoSet getAllAvaliableNames();
+    
     public String[] getAliasedName(String name);
     public int getAnonymousClassCount(UnresolvedClassInfo classInfo);
     
@@ -56,4 +59,5 @@ public interface BuildDataManager{
     
     public void startClassDefinition(UnresolvedClassInfo classInfo);
     public void startMethodDefinition(UnresolvedMethodInfo methodInfo);
+    
 }

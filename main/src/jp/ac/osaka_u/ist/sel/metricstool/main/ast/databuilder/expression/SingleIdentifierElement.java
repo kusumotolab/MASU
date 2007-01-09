@@ -36,7 +36,7 @@ public class SingleIdentifierElement implements IdentifierElement{
         
         if (null == variable || variable instanceof UnresolvedFieldInfo){
             //変数がみつからないので多分どこかのフィールド or 見つかった変数がフィールドだった
-            UnresolvedFieldUsage usage = new UnresolvedFieldUsage(buildDataManager.getAvailableNameSpaceSet(),owner,name);
+            UnresolvedFieldUsage usage = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),owner,name);
             buildDataManager.addFieldAssignment(usage);
             return usage;
         } else {
@@ -55,7 +55,7 @@ public class SingleIdentifierElement implements IdentifierElement{
         
         if (null == variable || variable instanceof UnresolvedFieldInfo){
             //変数がみつからないので多分どこかのフィールド or 見つかった変数がフィールドだった
-            UnresolvedFieldUsage usage = new UnresolvedFieldUsage(buildDataManager.getAvailableNameSpaceSet(),owner,name);
+            UnresolvedFieldUsage usage = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),owner,name);
             buildDataManager.addFieldReference(usage);
             return usage;
         } else {

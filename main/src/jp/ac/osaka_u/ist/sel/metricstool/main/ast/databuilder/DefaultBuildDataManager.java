@@ -167,6 +167,14 @@ public class DefaultBuildDataManager implements BuildDataManager{
     public void enterMethodBlock(){
         
     }
+    
+    public AvailableNamespaceInfoSet getAllAvaliableNames(){
+        AvailableNamespaceInfoSet resultSet = getAvailableAliasSet();
+        for(AvailableNamespaceInfo info : getAvailableAliasSet()){
+            resultSet.add(info);
+        }
+        return resultSet;
+    }
 
     public AvailableNamespaceInfoSet getAvailableNameSpaceSet() {
         final AvailableNamespaceInfoSet result = new AvailableNamespaceInfoSet();
@@ -174,6 +182,20 @@ public class DefaultBuildDataManager implements BuildDataManager{
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
             final BlockScope scope = this.scopeStack.get(i);
             final AvailableNamespaceInfoSet scopeLocalNameSpaceSet = scope.getAvailableNameSpaces();
+            for (final AvailableNamespaceInfo info : scopeLocalNameSpaceSet) {
+                result.add(info);
+            }
+        }
+        result.add(new AvailableNamespaceInfo(getCurrentNameSpace(),true));
+        return result;
+    }
+    
+    public AvailableNamespaceInfoSet getAvailableAliasSet(){
+        final AvailableNamespaceInfoSet result = new AvailableNamespaceInfoSet();
+        final int size = this.scopeStack.size();
+        for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
+            final BlockScope scope = this.scopeStack.get(i);
+            final AvailableNamespaceInfoSet scopeLocalNameSpaceSet = scope.getAvailableAliases();
             for (final AvailableNamespaceInfo info : scopeLocalNameSpaceSet) {
                 result.add(info);
             }
@@ -315,8 +337,12 @@ public class DefaultBuildDataManager implements BuildDataManager{
     }
     
     public String[] resolveAliase(String[] name){
-        if (name == null || 0 == name.length){
+        if (name == null){
             throw new NullPointerException("empty name.");
+        }
+        
+        if (0 == name.length){
+            throw new IllegalArgumentException("empty name.");
         }
         
         List<String> resolvedName = new ArrayList<String>();
@@ -387,7 +413,8 @@ public class DefaultBuildDataManager implements BuildDataManager{
     protected static class BlockScope {
         private final Map<String,UnresolvedVariableInfo> variables = new LinkedHashMap<String,UnresolvedVariableInfo>();
 
-        private final Map<String, String[]> nameAliases = new LinkedHashMap<String, String[]>();
+//        private final Map<String, String[]> nameAliases = new LinkedHashMap<String, String[]>();
+        private final Map<String,AvailableNamespaceInfo> nameAliases = new LinkedHashMap<String,AvailableNamespaceInfo>();
 
         private final AvailableNamespaceInfoSet availableNameSpaces = new AvailableNamespaceInfoSet();
         
@@ -402,7 +429,10 @@ public class DefaultBuildDataManager implements BuildDataManager{
 
             final String[] tmp = new String[name.length];
             System.arraycopy(name, 0, tmp, 0, name.length);
-            this.nameAliases.put(alias, tmp);
+            
+            AvailableNamespaceInfo info = new AvailableNamespaceInfo(tmp,false);
+            
+            this.nameAliases.put(alias, info);
         }
 
         public void addUsingNameSpace(final String[] name) {
@@ -414,6 +444,14 @@ public class DefaultBuildDataManager implements BuildDataManager{
 
         public AvailableNamespaceInfoSet getAvailableNameSpaces() {
             return this.availableNameSpaces;
+        }
+        
+        public AvailableNamespaceInfoSet getAvailableAliases(){
+            AvailableNamespaceInfoSet resultSet = new AvailableNamespaceInfoSet();
+            for(AvailableNamespaceInfo info : this.nameAliases.values()){
+                resultSet.add(info);
+            }
+            return resultSet;
         }
         
         public UnresolvedVariableInfo getVariable(String name){
@@ -433,13 +471,13 @@ public class DefaultBuildDataManager implements BuildDataManager{
 
             String aliasString = alias;
             if (this.nameAliases.containsKey(aliasString)) {
-                String[] result = this.nameAliases.get(aliasString);
+                String[] result = this.nameAliases.get(aliasString).getImportName();
                 cycleCheckSet.add(result);
 
                 if (result.length == 1) {
                     aliasString = result[0];
                     while (this.nameAliases.containsKey(aliasString)) {
-                        result = this.nameAliases.get(aliasString);
+                        result = this.nameAliases.get(aliasString).getImportName();
                         if (result.length == 1) {
                             if (cycleCheckSet.contains(result)) {
                                 return result;

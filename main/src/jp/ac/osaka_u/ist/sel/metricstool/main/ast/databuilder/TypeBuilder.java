@@ -1,7 +1,5 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.TypeDescriptionStateManager;
