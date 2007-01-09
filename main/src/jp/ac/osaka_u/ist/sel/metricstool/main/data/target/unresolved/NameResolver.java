@@ -5,11 +5,13 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Members;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
@@ -528,8 +530,8 @@ public final class NameResolver {
                     classInfoManager.add((ExternalClassInfo) elementType);
                     parameterType = ArrayTypeInfo.getType(elementType, dimension);
                 } else {
-                    err.println("Can't resolve parameter type : "
-                            + unresolvedParameterType.toString());
+                    // err.println("Can't resolve parameter type : "
+                    // + unresolvedParameterType.toString());
                     parameterType = NullTypeInfo.getInstance();
                 }
             }
@@ -718,11 +720,11 @@ public final class NameResolver {
         // エンティティ参照名を取得
         final String[] name = entityUsage.getName();
 
-        // 利用可能なフィールド名からエンティティ名を検索
+        // 利用可能なインスタンスフィールド名からエンティティ名を検索
         {
-            // このクラスで利用可能なフィールド一覧を取得
-            final List<TargetFieldInfo> availableFieldsOfThisClass = NameResolver
-                    .getAvailableFields(usingClass);
+            // このクラスで利用可能なインスタンスフィールド一覧を取得
+            final List<TargetFieldInfo> availableFieldsOfThisClass = Members
+                    .getInstanceMembers(NameResolver.getAvailableFields(usingClass));
 
             for (TargetFieldInfo availableFieldOfThisClass : availableFieldsOfThisClass) {
 
@@ -749,10 +751,10 @@ public final class NameResolver {
                             // まずは利用可能なフィールド一覧を取得
                             boolean found = false;
                             {
-                                // 利用可能なフィールド一覧を取得
-                                final List<TargetFieldInfo> availableFields = NameResolver
-                                        .getAvailableFields((TargetClassInfo) ownerTypeInfo,
-                                                usingClass);
+                                // 利用可能なインスタンスフィールド一覧を取得
+                                final List<TargetFieldInfo> availableFields = Members
+                                        .getInstanceMembers(NameResolver.getAvailableFields(
+                                                (TargetClassInfo) ownerTypeInfo, usingClass));
 
                                 for (TargetFieldInfo availableField : availableFields) {
 
@@ -763,6 +765,136 @@ public final class NameResolver {
 
                                         ownerTypeInfo = availableField.getType();
                                         found = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // 利用可能なフィールドが見つからなかった場合は，外部クラスである親クラスがあるはず．
+                            // そのクラスのフィールドを使用しているとみなす
+                            {
+                                if (!found) {
+
+                                    final ExternalClassInfo externalSuperClass = NameResolver
+                                            .getExternalSuperClass((TargetClassInfo) ownerTypeInfo);
+                                    if (!(ownerTypeInfo instanceof TargetInnerClassInfo)
+                                            && (null != externalSuperClass)) {
+
+                                        final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
+                                                name[i], externalSuperClass);
+
+                                        usingMethod.addReferencee(fieldInfo);
+                                        fieldInfo.addReferencer(usingMethod);
+                                        fieldInfoManager.add(fieldInfo);
+
+                                        ownerTypeInfo = null;
+                                    }
+
+                                    // 見つからなかった処理を行う
+                                    usingMethod.addUnresolvedUsage(entityUsage);
+
+                                    // 解決済みキャッシュに登録
+                                    resolvedCache.put(entityUsage, null);
+
+                                    return null;
+                                }
+                            }
+
+                            // 親が外部クラス(ExternalClassInfo)の場合
+                        } else if (ownerTypeInfo instanceof ExternalClassInfo) {
+
+                            final ExternalClassInfo externalSuperClass = NameResolver
+                                    .getExternalSuperClass((TargetClassInfo) ownerTypeInfo);
+                            if (!(ownerTypeInfo instanceof TargetInnerClassInfo)
+                                    && (null != externalSuperClass)) {
+
+                                final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(name[i],
+                                        externalSuperClass);
+
+                                usingMethod.addReferencee(fieldInfo);
+                                fieldInfo.addReferencer(usingMethod);
+                                fieldInfoManager.add(fieldInfo);
+
+                                ownerTypeInfo = null;
+                            }
+                        }
+                    }
+
+                    // 解決済みキャッシュに登録
+                    resolvedCache.put(entityUsage, ownerTypeInfo);
+
+                    return ownerTypeInfo;
+                }
+            }
+        }
+
+        // 利用可能なスタティックフィールド名からエンティティ名を検索
+        {
+            // このクラスで利用可能なスタティックフィールド一覧を取得
+            final List<TargetFieldInfo> availableFieldsOfThisClass = Members
+                    .getStaticMembers(NameResolver.getAvailableFields(usingClass));
+
+            for (TargetFieldInfo availableFieldOfThisClass : availableFieldsOfThisClass) {
+
+                // 一致するフィールド名が見つかった場合
+                if (name[0].equals(availableFieldOfThisClass.getName())) {
+                    usingMethod.addReferencee(availableFieldOfThisClass);
+                    availableFieldOfThisClass.addReferencer(usingMethod);
+
+                    // availableField.getType() から次のword(name[i])を名前解決
+                    TypeInfo ownerTypeInfo = availableFieldOfThisClass.getType();
+                    for (int i = 1; i < name.length; i++) {
+
+                        // 親が null だったら，どうしようもない
+                        if (null == ownerTypeInfo) {
+
+                            // 解決済みキャッシュに登録
+                            resolvedCache.put(entityUsage, null);
+
+                            return ownerTypeInfo;
+
+                            // 親が対象クラス(TargetClassInfo)の場合
+                        } else if (ownerTypeInfo instanceof TargetClassInfo) {
+
+                            // まずは利用可能なフィールド一覧を取得
+                            boolean found = false;
+                            {
+                                // 利用可能なスタティックフィールド一覧を取得
+                                final List<TargetFieldInfo> availableFields = Members
+                                        .getStaticMembers(NameResolver.getAvailableFields(
+                                                (TargetClassInfo) ownerTypeInfo, usingClass));
+
+                                for (TargetFieldInfo availableField : availableFields) {
+
+                                    // 一致するフィールド名が見つかった場合
+                                    if (name[i].equals(availableField.getName())) {
+                                        usingMethod.addReferencee(availableField);
+                                        availableField.addReferencer(usingMethod);
+
+                                        ownerTypeInfo = availableField.getType();
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // スタティックフィールドで見つからなかった場合は，インナークラスから探す
+                            {
+                                if (!found) {
+                                    // インナークラス一覧を取得
+                                    final SortedSet<TargetInnerClassInfo> innerClasses = ((TargetClassInfo) ownerTypeInfo)
+                                            .getInnerClasses();
+
+                                    for (TargetInnerClassInfo innerClass : innerClasses) {
+
+                                        // 一致するクラス名が見つかった場合
+                                        if (name[i].equals(innerClass.getClassName())) {
+                                            // TODO 利用関係を構築するコードが必要？
+
+                                            ownerTypeInfo = innerClass;
+                                            found = true;
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -855,9 +987,9 @@ public final class NameResolver {
                             boolean found = false;
                             {
                                 // 利用可能なフィールド一覧を取得
-                                final List<TargetFieldInfo> availableFields = NameResolver
-                                        .getAvailableFields((TargetClassInfo) ownerTypeInfo,
-                                                usingClass);
+                                final List<TargetFieldInfo> availableFields = Members
+                                        .getStaticMembers(NameResolver.getAvailableFields(
+                                                (TargetClassInfo) ownerTypeInfo, usingClass));
 
                                 for (TargetFieldInfo availableField : availableFields) {
 
@@ -868,6 +1000,28 @@ public final class NameResolver {
 
                                         ownerTypeInfo = availableField.getType();
                                         found = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // スタティックフィールドで見つからなかった場合は，インナークラスから探す
+                            {
+                                if (!found) {
+                                    // インナークラス一覧を取得
+                                    final SortedSet<TargetInnerClassInfo> innerClasses = ((TargetClassInfo) ownerTypeInfo)
+                                            .getInnerClasses();
+
+                                    for (TargetInnerClassInfo innerClass : innerClasses) {
+
+                                        // 一致するクラス名が見つかった場合
+                                        if (name[i].equals(innerClass.getClassName())) {
+                                            // TODO 利用関係を構築するコードが必要？
+
+                                            ownerTypeInfo = innerClass;
+                                            found = true;
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -976,10 +1130,32 @@ public final class NameResolver {
 
                                                 ownerTypeInfo = availableField.getType();
                                                 found = true;
+                                                break;
                                             }
                                         }
                                     }
 
+                                    // スタティックフィールドで見つからなかった場合は，インナークラスから探す
+                                    {
+                                        if (!found) {
+                                            // インナークラス一覧を取得
+                                            final SortedSet<TargetInnerClassInfo> innerClasses = ((TargetClassInfo) ownerTypeInfo)
+                                                    .getInnerClasses();
+
+                                            for (TargetInnerClassInfo innerClass : innerClasses) {
+
+                                                // 一致するクラス名が見つかった場合
+                                                if (name[i].equals(innerClass.getClassName())) {
+                                                    // TODO 利用関係を構築するコードが必要？
+
+                                                    ownerTypeInfo = innerClass;
+                                                    found = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
                                     // 利用可能なフィールドが見つからなかった場合は，外部クラスである親クラスがあるはず．
                                     // そのクラスのフィールドを使用しているとみなす
                                     {
@@ -1014,7 +1190,7 @@ public final class NameResolver {
                                 } else if (ownerTypeInfo instanceof ExternalClassInfo) {
 
                                     final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
-                                            name[i], (ExternalClassInfo)ownerTypeInfo);
+                                            name[i], (ExternalClassInfo) ownerTypeInfo);
 
                                     usingMethod.addReferencee(fieldInfo);
                                     fieldInfo.addReferencer(usingMethod);
@@ -1079,6 +1255,28 @@ public final class NameResolver {
 
                                             ownerTypeInfo = availableField.getType();
                                             found = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                
+                                // スタティックフィールドで見つからなかった場合は，インナークラスから探す
+                                {
+                                    if (!found) {
+                                        // インナークラス一覧を取得
+                                        final SortedSet<TargetInnerClassInfo> innerClasses = ((TargetClassInfo) ownerTypeInfo)
+                                                .getInnerClasses();
+
+                                        for (TargetInnerClassInfo innerClass : innerClasses) {
+
+                                            // 一致するクラス名が見つかった場合
+                                            if (name[i].equals(innerClass.getClassName())) {
+                                                // TODO 利用関係を構築するコードが必要？
+
+                                                ownerTypeInfo = innerClass;
+                                                found = true;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
