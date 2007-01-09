@@ -20,7 +20,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.SyntaxToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.VisitControlToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15TokenTypes;
 
@@ -116,10 +115,10 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             result = SyntaxToken.ARRAY;
             break;
         case Java15TokenTypes.EXTENDS_CLAUSE:
-            result = DescriptionToken.EXTEND;
+            result = DescriptionToken.INHERITANCE;
             break;
         case Java15TokenTypes.IMPLEMENTS_CLAUSE:
-            result = DescriptionToken.EXTEND;
+            result = DescriptionToken.INHERITANCE;
             break;
         case Java15TokenTypes.TYPE_ARGUMENTS:
         case Java15TokenTypes.TYPE_ARGUMENT:

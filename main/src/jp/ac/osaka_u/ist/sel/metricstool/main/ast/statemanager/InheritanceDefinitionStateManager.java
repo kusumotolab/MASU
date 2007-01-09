@@ -23,7 +23,7 @@ public class InheritanceDefinitionStateManager extends EnterExitStateManager {
 
     @Override
     protected boolean isStateChangeTriggerToken(final AstToken token) {
-        return token.isExtendDefinition();
+        return token.isInheritanceDescription();
     }
 
 }

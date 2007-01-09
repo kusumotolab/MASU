@@ -5,13 +5,13 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 public class DescriptionToken extends AstTokenAdapter{
 
     public static final DescriptionToken TYPE = new DescriptionToken("TYPE"){
-        public boolean isTypeDefinition() {
+        public boolean isTypeDescription() {
             return true;
         }
     };
     
-    public static final DescriptionToken EXTEND = new DescriptionToken("EXTNED"){
-        public boolean isExtendDefinition(){
+    public static final DescriptionToken INHERITANCE = new DescriptionToken("INHERITANCE"){
+        public boolean isInheritanceDescription(){
             return true;
         }
     };

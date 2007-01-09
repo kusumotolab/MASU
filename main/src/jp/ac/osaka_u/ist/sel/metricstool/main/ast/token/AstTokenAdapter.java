@@ -5,10 +5,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
 public class AstTokenAdapter implements AstToken{
+    
     public AstTokenAdapter(String text){
         this.text = text;
     }
-
+    
     public boolean isAccessModifier() {
         return false;
     }
@@ -16,32 +17,24 @@ public class AstTokenAdapter implements AstToken{
     public boolean isArrayDeclarator() {
         return false;
     }
-    
+
     public boolean isAssignmentOperator() {
         return false;
     }
-
+    
     public boolean isBlock() {
         return false;
     }
-    
+
     public boolean isClassBlock() {
         return false;
     }
-
+    
     public boolean isClassDefinition() {
         return false;
     }
     
-//    public boolean isConstructorCall() {
-//        return false;
-//    }
-    
     public boolean isConstructorDefinition() {
-        return false;
-    }
-    
-    public boolean isExtendDefinition(){
         return false;
     }
     
@@ -49,19 +42,39 @@ public class AstTokenAdapter implements AstToken{
         return false;
     }
     
+    public boolean isInheritanceDescription(){
+        return false;
+    }
+    
     public boolean isFieldDefinition(){
         return false;
     }
     
-    public boolean isInstantiation() {
-        return false;
-    }
-    
-    public boolean isMethodCall() {
+    public boolean isIdentifier() {
         return false;
     }
 
+    public boolean isInstantiation() {
+        return false;
+    }
+
+    public boolean isLocalParameterDefinition() {
+        return false;
+    }
+    
+    public boolean isLocalVariableDefinition(){
+        return false;
+    }
+
+    public boolean isMethodCall() {
+        return false;
+    }
+    
     public boolean isMethodDefinition() {
+        return false;
+    }
+
+    public boolean isMethodParameterDefinition() {
         return false;
     }
 
@@ -72,12 +85,8 @@ public class AstTokenAdapter implements AstToken{
     public boolean isModifiersDefinition() {
         return false;
     }
-
-    public boolean isNameDescription() {
-        return false;
-    }
     
-    public boolean isNameSpaceDefinition() {
+    public boolean isNameDescription() {
         return false;
     }
 
@@ -85,7 +94,11 @@ public class AstTokenAdapter implements AstToken{
         return false;
     }
 
-    public boolean isIdentifier() {
+    public boolean isNameSpaceDefinition() {
+        return false;
+    }
+    
+    public boolean isNameUsingDefinition() {
         return false;
     }
     
@@ -93,27 +106,11 @@ public class AstTokenAdapter implements AstToken{
         return false;
     }
     
-    public boolean isMethodParameterDefinition() {
-        return false;
-    }
-
     public boolean isPrimitiveType() {
         return false;
     }
-
-    public boolean isNameUsingDefinition() {
-        return false;
-    }
     
-    public boolean isTypeDefinition() {
-        return false;
-    }
-    
-    public boolean isLocalParameterDefinition() {
-        return false;
-    }
-    
-    public boolean isLocalVariableDefinition(){
+    public boolean isTypeDescription() {
         return false;
     }
     
@@ -126,4 +123,5 @@ public class AstTokenAdapter implements AstToken{
     }
     
     private final String text;
+
 }

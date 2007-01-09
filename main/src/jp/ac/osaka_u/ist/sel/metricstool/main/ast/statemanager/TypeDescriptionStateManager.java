@@ -21,7 +21,7 @@ public class TypeDescriptionStateManager extends EnterExitStateManager{
 
     @Override
     protected boolean isStateChangeTriggerToken(AstToken token) {
-        return token.isTypeDefinition();
+        return token.isTypeDescription();
     }
 
 }

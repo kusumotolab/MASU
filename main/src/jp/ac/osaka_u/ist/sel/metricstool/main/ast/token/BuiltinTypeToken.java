@@ -26,7 +26,7 @@ public class BuiltinTypeToken extends AstTokenAdapter{
     }
     
     public boolean isPrimitiveType(){
-        return !voidType;
+        return !isVoidType();
     }
     
     public boolean isVoidType(){
