@@ -33,7 +33,7 @@ public class FieldBuilder extends VariableBuilder<UnresolvedFieldInfo>{
             }
             
             if (null != interpriter){
-                interpriter.interprit(modifiers, field);
+                interpriter.interprit(modifiers, field,field);
             }
             
             buildDataManager.addField(field);

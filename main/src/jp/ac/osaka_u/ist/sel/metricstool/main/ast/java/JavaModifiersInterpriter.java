@@ -2,16 +2,23 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersInterpriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.MemberSetting;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.VisualizableSetting;
 
 public class JavaModifiersInterpriter implements ModifiersInterpriter{
-    public void interprit(ModifierInfo[] modifiers, VisualizableSetting element) {
+    public void interprit(ModifierInfo[] modifiers, VisualizableSetting visualizable,MemberSetting member){
         analyze(modifiers);
         
-        element.setPublicVisible(isPublicAccessible());
-        element.setInheritanceVisible(isInheritanceAccessible());
-        element.setNamespaceVisible(isNameSpaceAccessible());
-        element.setPrivateVibible(isOnlyClassInsideAccessible());
+        if (null != visualizable){
+            visualizable.setPublicVisible(isPublicAccessible());
+            visualizable.setInheritanceVisible(isInheritanceAccessible());
+            visualizable.setNamespaceVisible(isNameSpaceAccessible());
+            visualizable.setPrivateVibible(isOnlyClassInsideAccessible());
+        }
+        
+        if (null != member){
+            member.setInstanceMember(!isStaticMember());
+        }
     }
     
     private void analyze(ModifierInfo[] modifiers){

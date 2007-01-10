@@ -78,7 +78,7 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
             String elementName = name[0];
             UnresolvedClassInfo enumClass = enumClassStack.peek();
             UnresolvedFieldInfo element = new UnresolvedFieldInfo(elementName,enumClass,enumClass);
-            modifierInterpriter.interprit(defaultModifiers, element);
+            modifierInterpriter.interprit(defaultModifiers, element,element);
             
             element.setFromLine(startLine);
             element.setFromColumn(startColumn);

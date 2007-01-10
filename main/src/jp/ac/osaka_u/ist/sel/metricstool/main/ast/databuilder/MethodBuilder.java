@@ -127,7 +127,7 @@ public class MethodBuilder extends CompoundDataBuilder<UnresolvedMethodInfo>{
             }
             
             if (null != this.modifiersInterpriter){
-                modifiersInterpriter.interprit(modifiers,buildingMethod);
+                modifiersInterpriter.interprit(modifiers,buildingMethod,buildingMethod);
             }
         }
     }

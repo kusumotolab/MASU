@@ -121,7 +121,7 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
             }
             
             if (null != interpriter){
-                interpriter.interprit(modifiers, buildingclass);
+                interpriter.interprit(modifiers, buildingclass,null);
             }
         }
     }
