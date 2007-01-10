@@ -274,6 +274,10 @@ public final class NameResolver {
                 final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
                         (TargetClassInfo) fieldOwnerClassType, usingClass);
 
+                if (fieldName.equals("METHOD_NAME")){
+                    err.println(fieldName);
+                }
+                
                 // 利用可能なフィールドを，未解決フィールド名で検索
                 for (TargetFieldInfo availableField : availableFields) {
 
@@ -458,6 +462,8 @@ public final class NameResolver {
 
             // 見つからなかった処理を行う
             {
+                err.println("Can't resolve field assignment : " + fieldAssignment.getTypeName());
+                
                 usingMethod.addUnresolvedUsage(fieldAssignment);
 
                 // 解決済みキャッシュに登録
@@ -625,6 +631,8 @@ public final class NameResolver {
 
             // 見つからなかった処理を行う
             {
+                err.println("Can't resolve method Call : " + methodCall.getTypeName());
+                
                 usingMethod.addUnresolvedUsage(methodCall);
 
                 // 解決済みキャッシュに登録
