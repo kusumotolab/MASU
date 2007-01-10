@@ -212,6 +212,9 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             break;
             
         case Java15TokenTypes.ASSIGN:
+            result = OperatorToken.ASSIGNMENT;
+            return result;
+            
         case Java15TokenTypes.PLUS_ASSIGN:
         case Java15TokenTypes.MINUS_ASSIGN:
         case Java15TokenTypes.STAR_ASSIGN:
@@ -223,7 +226,7 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.BAND_ASSIGN:
         case Java15TokenTypes.BXOR_ASSIGN:
         case Java15TokenTypes.BOR_ASSIGN:
-            result = OperatorToken.ASSIGN;
+            result = OperatorToken.COMPOUND_ASSIGNMENT;
             break;
             
         case Java15TokenTypes.LOR:

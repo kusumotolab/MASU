@@ -27,8 +27,13 @@ public class OperatorToken extends AstTokenAdapter {
     /**
      * 代入演算子を表す定数インスタンス
      */
-    public static final OperatorToken ASSIGN = new OperatorToken("ASSIGN", 2, true, false, null);
+    public static final OperatorToken ASSIGNMENT = new OperatorToken("ASSIGN", 2, true, false, null);
 
+    /**
+     * 複合代入演算子を表す定数インスタンス
+     */
+    public static final OperatorToken COMPOUND_ASSIGNMENT = new OperatorToken("COMPOUND_ASSIGNMENT",2,true,true,null);
+    
     /**
      * 二項演算子を表す定数インスタンス
      */
