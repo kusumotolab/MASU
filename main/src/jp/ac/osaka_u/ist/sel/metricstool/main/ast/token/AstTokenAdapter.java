@@ -17,7 +17,7 @@ public class AstTokenAdapter implements AstToken {
      * @throws IllegalArgumentException text‚ª‹ó•¶š—ñ‚Ìê‡
      */
     public AstTokenAdapter(final String text) {
-        if (null != text){
+        if (null == text){
             throw new NullPointerException("text is null");
         }
         
