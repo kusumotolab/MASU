@@ -126,7 +126,11 @@ public class DefaultBuildDataManager implements BuildDataManager{
             return null;
         } else {
             final UnresolvedClassInfo classInfo = this.classStack.pop();
-            UnresolvedClassInfoManager.getInstance().addClass(classInfo);
+            
+            //外側のクラスがない場合にだけ登録を行う
+            if (this.classStack.isEmpty()){
+                UnresolvedClassInfoManager.getInstance().addClass(classInfo);
+            }
             
             if (!this.methodStack.isEmpty()) {
                 //TODO methodStack.peek().addInnerClass(classInfo);
