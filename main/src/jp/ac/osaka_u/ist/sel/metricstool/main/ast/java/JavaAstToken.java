@@ -20,6 +20,12 @@ public class JavaAstToken extends AstTokenAdapter{
     
     public static final JavaAstToken CLASS = new JavaAstToken("CLASS");
     
+    public static final JavaAstToken INTERFACE_DEFINITION = new JavaAstToken("INTERFACE_DEFINITION"){
+        public boolean isClassDefinition(){
+            return true;
+        }
+    };
+    
     public JavaAstToken(String text) {
         super(text);
     }

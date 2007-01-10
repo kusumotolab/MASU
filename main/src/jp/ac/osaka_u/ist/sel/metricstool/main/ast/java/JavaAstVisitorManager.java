@@ -37,6 +37,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new InheritanceBuilder(buildDataManager));
         this.builders.add(new JavaAnonymousClassBuilder(buildDataManager));
         this.builders.add(new JavaEnumElementBuilder(buildDataManager));
+        this.builders.add(new JavaIntefaceMarker(buildDataManager));
         //this.builders.add(new JavaGenericsBuilder());
 
         this.builders.add(new MethodBuilder(buildDataManager, modifiersInterpriter));
@@ -95,7 +96,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
     
     private final AstVisitor<T> visitor;
     
-    private final BuildDataManager buildDataManager = new JavaBuildManager();
+    private final JavaBuildManager buildDataManager = new JavaBuildManager();
     private final ExpressionElementManager expressionManager = new ExpressionElementManager();
     private final Set<DataBuilder> builders = new LinkedHashSet<DataBuilder>();
 }

@@ -55,6 +55,7 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             //アノテーション関連は全部無視
             break;
         case Java15TokenTypes.IMPORT:
+//        case Java15TokenTypes.STATIC_IMPORT:
             result = JavaAstToken.IMPORT;
             break;
         case Java15TokenTypes.DOT:
@@ -73,7 +74,7 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             result = DefinitionToken.CLASS_DEFINITION;
             break;
         case Java15TokenTypes.INTERFACE_DEF://インタフェースはクラス
-            result = DefinitionToken.CLASS_DEFINITION;
+            result = JavaAstToken.INTERFACE_DEFINITION;
             break;
         case Java15TokenTypes.ENUM_DEF://enumもクラス
             result = DefinitionToken.CLASS_DEFINITION;
