@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
@@ -31,6 +32,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
@@ -312,6 +314,8 @@ public final class NameResolver {
 
             // 見つからなかった処理を行う
             {
+                err.println("Can't resolve field reference : " + fieldReference.getTypeName());
+
                 usingMethod.addUnresolvedUsage(fieldReference);
 
                 // 解決済みキャッシュに登録
@@ -334,6 +338,17 @@ public final class NameResolver {
 
             // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
             return null;
+
+        } else if (fieldOwnerClassType instanceof ArrayTypeInfo) {
+
+            // TODO ここは言語依存にするしかないのか？ 配列.length など
+
+            // Java 言語で フィールド名が length だった場合は int 型を返す
+            if (Settings.getLanguage().equals(LANGUAGE.JAVA) && fieldName.equals("length")) {
+
+                resolvedCache.put(fieldReference, PrimitiveTypeInfo.INT);
+                return PrimitiveTypeInfo.INT;
+            }
         }
 
         err.println("resolveFieldReference2: Here shouldn't be reached!");
@@ -635,6 +650,30 @@ public final class NameResolver {
 
             // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
             return null;
+
+            // 親が配列だった場合
+        } else if (methodOwnerClassType instanceof ArrayTypeInfo) {
+
+            // Java 言語であれば， java.lang.Object に対する呼び出し
+            if (Settings.getLanguage().equals(LANGUAGE.JAVA)) {
+                final ClassInfo ownerClass = classInfoManager.getClassInfo(new String[] { "java",
+                        "lang", "Object" });
+                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(methodName,
+                        (ExternalClassInfo) ownerClass, false);
+                final List<ParameterInfo> parameters = NameResolver
+                        .createParameters(parameterTypes);
+                methodInfo.addParameters(parameters);
+
+                usingMethod.addCallee(methodInfo);
+                methodInfo.addCaller(usingMethod);
+                methodInfoManager.add(methodInfo);
+
+                // 解決済みキャッシュに登録
+                resolvedCache.put(methodCall, null);
+
+                // 外部クラスに新規で外部メソッドを追加したので型は不明
+                return null;
+            }
         }
 
         err.println("resolveMethodCall3: Here shouldn't be reached!");
@@ -675,14 +714,37 @@ public final class NameResolver {
 
         // 要素使用がくっついている未定義型を取得
         final UnresolvedTypeInfo unresolvedOwnerArrayType = arrayElement.getOwnerArrayType();
-        final TypeInfo ownerArrayType = NameResolver.resolveTypeInfo(unresolvedOwnerArrayType,
-                usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
-                resolvedCache);
+        final ArrayTypeInfo ownerArrayType = (ArrayTypeInfo) NameResolver.resolveTypeInfo(
+                unresolvedOwnerArrayType, usingClass, usingMethod, classInfoManager,
+                fieldInfoManager, methodInfoManager, resolvedCache);
 
-        // 解決済みキャッシュに登録
-        resolvedCache.put(arrayElement, ownerArrayType);
+        // 未定義型の名前解決ができなかった場合
+        if (null == ownerArrayType) {
 
-        return ownerArrayType;
+            err.println("Can't resolve array type : " + arrayElement.getTypeName());
+
+            usingMethod.addUnresolvedUsage(arrayElement);
+            resolvedCache.put(arrayElement, null);
+            return null;
+        }
+
+        // 配列の次元に応じて型を生成
+        final int ownerArrayDimension = ownerArrayType.getDimension();
+        final TypeInfo ownerElementType = ownerArrayType.getElementType();
+
+        // 配列が二次元以上の場合は，次元を一つ落とした配列を返す
+        if (1 < ownerArrayDimension) {
+
+            final TypeInfo type = ArrayTypeInfo.getType(ownerElementType, ownerArrayDimension - 1);
+            resolvedCache.put(arrayElement, type);
+            return type;
+
+            // 配列が一次元の場合は，要素の型を返す
+        } else {
+
+            resolvedCache.put(arrayElement, ownerElementType);
+            return ownerElementType;
+        }
     }
 
     /**
@@ -1155,7 +1217,7 @@ public final class NameResolver {
                                             }
                                         }
                                     }
-                                    
+
                                     // 利用可能なフィールドが見つからなかった場合は，外部クラスである親クラスがあるはず．
                                     // そのクラスのフィールドを使用しているとみなす
                                     {
@@ -1203,7 +1265,6 @@ public final class NameResolver {
                             // 解決済みキャッシュに登録
                             resolvedCache.put(entityUsage, ownerTypeInfo);
 
-                            err.println("test1 :");
                             return ownerTypeInfo;
                         }
                     }
@@ -1259,7 +1320,7 @@ public final class NameResolver {
                                         }
                                     }
                                 }
-                                
+
                                 // スタティックフィールドで見つからなかった場合は，インナークラスから探す
                                 {
                                     if (!found) {
@@ -1334,7 +1395,6 @@ public final class NameResolver {
                         // 解決済みキャッシュに登録
                         resolvedCache.put(entityUsage, ownerTypeInfo);
 
-                        err.println("test2 :");
                         return ownerTypeInfo;
                     }
                 }
@@ -1458,22 +1518,7 @@ public final class NameResolver {
             throw new NullPointerException();
         }
 
-        final List<TargetFieldInfo> availableFields = new LinkedList<TargetFieldInfo>();
-
-        // このクラスで定義されているフィールド一覧を取得する
-        availableFields.addAll(thisClass.getDefinedFields());
-
-        // 親クラスで定義されており，このクラスからアクセスが可能なフィールドを取得
-        for (ClassInfo superClass : thisClass.getSuperClasses()) {
-
-            if (superClass instanceof TargetClassInfo) {
-                final List<TargetFieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
-                        .getAvailableFieldsInSubClasses((TargetClassInfo) superClass);
-                availableFields.addAll(availableFieldsDefinedInSuperClasses);
-            }
-        }
-
-        return Collections.unmodifiableList(availableFields);
+        return NameResolver.getAvailableFields(thisClass, thisClass);
     }
 
     /**
@@ -1490,22 +1535,7 @@ public final class NameResolver {
             throw new NullPointerException();
         }
 
-        final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
-
-        // このクラスで定義されているメソッド一覧を取得する
-        availableMethods.addAll(thisClass.getDefinedMethods());
-
-        // 親クラスで定義されており，このクラスからアクセスが可能なメソッドを取得
-        for (ClassInfo superClass : thisClass.getSuperClasses()) {
-
-            if (superClass instanceof TargetClassInfo) {
-                final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
-                        .getAvailableMethodsInSubClasses((TargetClassInfo) superClass);
-                availableMethods.addAll(availableMethodsDefinedInSuperClasses);
-            }
-        }
-
-        return Collections.unmodifiableList(availableMethods);
+        return NameResolver.getAvailableMethods(thisClass, thisClass);
     }
 
     /**
@@ -1528,8 +1558,13 @@ public final class NameResolver {
         final List<TargetFieldInfo> availableFields = new LinkedList<TargetFieldInfo>();
 
         // このクラスで定義されているフィールドのうち，使用するクラスで利用可能なフィールドを取得する
-        // 2つのクラスが同じ名前空間を持っている場合
-        if (usedClass.getNamespace().equals(usingClass.getNamespace())) {
+        // 2つのクラスが同じ場合
+        if (usedClass.equals(usingClass)) {
+
+            availableFields.addAll(usedClass.getDefinedFields());
+
+            // 2つのクラスが同じ名前空間を持っている場合
+        } else if (usedClass.getNamespace().equals(usingClass.getNamespace())) {
 
             for (TargetFieldInfo field : usedClass.getDefinedFields()) {
                 if (field.isNamespaceVisible()) {
@@ -1580,8 +1615,13 @@ public final class NameResolver {
         final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
 
         // このクラスで定義されているメソッドのうち，使用するクラスで利用可能なメソッドを取得する
-        // 2つのクラスが同じ名前空間を持っている場合
-        if (usedClass.getNamespace().equals(usingClass.getNamespace())) {
+        // 2つのクラスが同じ場合
+        if (usedClass.equals(usingClass)) {
+
+            availableMethods.addAll(usedClass.getDefinedMethods());
+
+            // 2つのクラスが同じ名前空間を持っている場合
+        } else if (usedClass.getNamespace().equals(usingClass.getNamespace())) {
 
             for (TargetMethodInfo method : usedClass.getDefinedMethods()) {
                 if (method.isNamespaceVisible()) {
