@@ -13,6 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ConstantToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.DefinitionToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.DescriptionToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.IdentifierToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.MemberTypeModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.InstanceToken;
@@ -21,10 +22,24 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.VisitControlToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15TokenTypes;
 
 
+/**
+ * {@link Java15Parser}から生成されるASTノードを {@link AstToken}に変換するクラス.
+ * 
+ * @author kou-tngt
+ *
+ */
 public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
+    
+    /**
+     *  {@link Java15Parser}から生成されるASTノードを {@link AstToken}に変換する.
+     *  
+     *  @param node 変換対象のノード
+     *  @return 変換結果のAstToken
+     */
     public AstToken translate(AST node) {
         int type = node.getType();
         AstToken result = null;
@@ -73,10 +88,10 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.CLASS_DEF:
             result = DefinitionToken.CLASS_DEFINITION;
             break;
-        case Java15TokenTypes.INTERFACE_DEF://インタフェースはクラス
+        case Java15TokenTypes.INTERFACE_DEF:
             result = JavaAstToken.INTERFACE_DEFINITION;
             break;
-        case Java15TokenTypes.ENUM_DEF://enumもクラス
+        case Java15TokenTypes.ENUM_DEF://enumはクラスとして扱う
             result = DefinitionToken.CLASS_DEFINITION;
             break;
         case Java15TokenTypes.ENUM_CONSTANT_DEF:
@@ -85,9 +100,6 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.FIELD_DEF:
             result = DefinitionToken.FIELD_DEFINITION;
             break;
-//        case Java15TokenTypes.PARAMETERS:
-//            result = DefinitionToken.METHOD_PARAMETER_DEFINITION;
-//            break;
         case Java15TokenTypes.METHOD_PARAMETER_DEF:
             result = DefinitionToken.METHOD_PARAMETER_DEFINITION;
             break;
@@ -141,7 +153,7 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             result = new AccessModifierToken("protected",false,true,true);
             break;
         case Java15TokenTypes.LITERAL_static:
-            result = ModifierToken.STATIC;
+            result = MemberTypeModifierToken.STATIC;
             break;
         case Java15TokenTypes.LITERAL_synchronized:
             result = new ModifierToken("synchronized");
@@ -321,6 +333,7 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
 //            break;
             
         default :
+            //変換できなかったノードは取りあえずその子供に進む
             result = VisitControlToken.ENTER;
             break;
         }
@@ -330,6 +343,13 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         return result;
     }
     
+    /**
+     * トークンのキャッシュ
+     */
     private final Map<Integer,AstToken> tokenMap = new HashMap<Integer, AstToken>();
+    
+    /**
+     * 識別子トークンのキャッシュ
+     */
     private final Map<String,AstToken> identifierTokenMap = new HashMap<String, AstToken>();
 }
