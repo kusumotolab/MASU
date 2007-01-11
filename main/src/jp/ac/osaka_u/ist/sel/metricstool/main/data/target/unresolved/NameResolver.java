@@ -536,7 +536,6 @@ public final class NameResolver {
         // メソッドの未解決引数を解決
         final List<TypeInfo> parameterTypes = new LinkedList<TypeInfo>();
         for (UnresolvedTypeInfo unresolvedParameterType : unresolvedParameterTypes) {
-
             TypeInfo parameterType = NameResolver.resolveTypeInfo(unresolvedParameterType,
                     usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
                     resolvedCache);
@@ -1300,13 +1299,8 @@ public final class NameResolver {
                     // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
                     if (importName[importName.length - 1].equals(name[0])) {
 
-                        final String[] namespace = availableNamespace.getNamespace();
-                        final String[] fullQualifiedName = new String[namespace.length
-                                + name.length];
-                        System.arraycopy(namespace, 0, fullQualifiedName, 0, namespace.length);
-                        System.arraycopy(name, 0, fullQualifiedName, namespace.length, name.length);
                         final ClassInfo specifiedClassInfo = classInfoManager
-                                .getClassInfo(fullQualifiedName);
+                                .getClassInfo(importName);
 
                         TypeInfo ownerTypeInfo = specifiedClassInfo;
                         for (int i = 1; i < name.length; i++) {
