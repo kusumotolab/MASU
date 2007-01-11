@@ -174,7 +174,7 @@ public class DefaultBuildDataManager implements BuildDataManager{
     
     public AvailableNamespaceInfoSet getAllAvaliableNames(){
         AvailableNamespaceInfoSet resultSet = getAvailableAliasSet();
-        for(AvailableNamespaceInfo info : getAvailableAliasSet()){
+        for(AvailableNamespaceInfo info : getAvailableNameSpaceSet()){
             resultSet.add(info);
         }
         return resultSet;
@@ -204,7 +204,6 @@ public class DefaultBuildDataManager implements BuildDataManager{
                 result.add(info);
             }
         }
-        result.add(new AvailableNamespaceInfo(getCurrentNameSpace(),true));
         return result;
     }
 
