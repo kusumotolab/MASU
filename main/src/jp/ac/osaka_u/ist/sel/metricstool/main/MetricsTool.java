@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,6 +31,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
@@ -888,6 +891,8 @@ public class MetricsTool {
                             .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
                     classInfoManager.add((ExternalClassInfo) elementType);
                     fieldType = ArrayTypeInfo.getType(elementType, dimension);
+                } else{
+                    err.println("Can't resolve field type : " + unresolvedFieldType.getTypeName());
                 }
             }
             final boolean privateVisible = unresolvedFieldInfo.isPrivateVisible();
@@ -900,10 +905,6 @@ public class MetricsTool {
             final int toLine = unresolvedFieldInfo.getToLine();
             final int toColumn = unresolvedFieldInfo.getToColumn();
 
-            if (fieldName.equals("ENTER_ENUM_ANONYMOUS_CLASS")){
-                err.println();
-            }
-            
             // フィールドオブジェクトを生成
             final TargetFieldInfo fieldInfo = new TargetFieldInfo(modifiers, fieldName, fieldType,
                     ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
@@ -1025,7 +1026,7 @@ public class MetricsTool {
                         classInfoManager.add((ExternalClassInfo) elementType);
                         parameterType = ArrayTypeInfo.getType(elementType, dimension);
                     } else {
-                        err.println("Can't resolve method parameter type : "
+                        err.println("Can't resolve dummy parameter type : "
                                 + unresolvedParameterType.getTypeName());
                     }
                 }
@@ -1090,7 +1091,7 @@ public class MetricsTool {
             // 未解決メソッド情報にも追加
             unresolvedMethodInfo.setResolvedInfo(methodInfo);
         }
-        
+
         // 各 Unresolvedクラスに対して
         for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo.getInnerClasses()) {
             registMethodInfos(unresolvedInnerClassInfo, classInfoManager, methodInfoManager);
@@ -1150,13 +1151,22 @@ public class MetricsTool {
 
         for (TargetMethodInfo methodInfo : ((TargetClassInfo) classInfo).getDefinedMethods()) {
 
-            if (methodInfo.isSameSignature(overrider)) {
-                overrider.addOverridee(methodInfo);
-                methodInfo.addOverrider(overrider);
-
-                // 直接のオーバーライド関係しか抽出しないので，このクラスの親クラスは調査しない
-                return;
+            // コンストラクタはオーバーライドされない
+            if (methodInfo.isConstuructor()) {
+                continue;
             }
+
+            // メソッド名が違う場合はオーバーライドされない
+            if (!methodInfo.getMethodName().equals(overrider.getMethodName())) {
+                continue;
+            }
+
+            // オーバーライド関係を登録する
+            overrider.addOverridee(methodInfo);
+            methodInfo.addOverrider(overrider);
+
+            // 直接のオーバーライド関係しか抽出しないので，このクラスの親クラスは調査しない
+            return;
         }
 
         // 親クラス群に対して再帰的に処理
@@ -1207,7 +1217,7 @@ public class MetricsTool {
             // 未解決メソッド情報から，解決済みメソッド情報を取得
             final TargetMethodInfo caller = (TargetMethodInfo) unresolvedMethodInfo
                     .getResolvedInfo();
-            if (null == caller){
+            if (null == caller) {
                 throw new NullPointerException("UnresolvedMethodInfo#getResolvedInfo is null!");
             }
 

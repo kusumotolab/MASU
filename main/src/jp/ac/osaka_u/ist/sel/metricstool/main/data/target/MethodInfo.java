@@ -109,16 +109,18 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
      * 
      * @param methodName メソッド名
      * @param parameterTypes 引数の型のリスト
+     * @param constructor コンストラクタかどうか
      * @return 呼び出せる場合は true，そうでない場合は false
      */
-    public final boolean canCalledWith(final String methodName, final List<TypeInfo> parameterTypes) {
+    public final boolean canCalledWith(final String methodName,
+            final List<TypeInfo> parameterTypes, final boolean constructor) {
 
         if ((null == methodName) || (null == parameterTypes)) {
             throw new NullPointerException();
         }
 
-        // メソッド名が等しくない場合は該当しない
-        if (!methodName.equals(this.getMethodName())) {
+        // コンストラクタでない場合は，メソッド名が等しくない場合は該当しない
+        if (!constructor && !methodName.equals(this.getMethodName())) {
             return false;
         }
 
@@ -131,45 +133,13 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
         // 引数の型を先頭からチェック等しくない場合は該当しない
         final Iterator<ParameterInfo> parameterIterator = parameters.iterator();
         final Iterator<TypeInfo> typeIterator = parameterTypes.iterator();
-        while (parameterIterator.hasNext() && (typeIterator.hasNext())) {
+        while (parameterIterator.hasNext() && typeIterator.hasNext()) {
             final ParameterInfo parameter = parameterIterator.next();
             final TypeInfo type = typeIterator.next();
             if (!parameter.getType().getTypeName().equals(type.getTypeName())) {
                 return false;
             }
             // TODO クラス階層を使って判定をする必要がある
-        }
-
-        return true;
-    }
-
-    public final boolean isSameSignature(final MethodInfo methodInfo) {
-
-        if (null == methodInfo) {
-            throw new NullPointerException();
-        }
-
-        // メソッド名が等しいかをチェック
-        if (!this.getMethodName().equals(methodInfo.getMethodName())) {
-            return false;
-        }
-
-        // 引数の数が等しいかをチェック
-        if (this.getParameterNumber() != methodInfo.getParameterNumber()) {
-            return false;
-        }
-
-        // 引数の型をチェック
-        Iterator<ParameterInfo> parameterIterator = this.getParameters().iterator();
-        Iterator<ParameterInfo> correspondParameterIterator = methodInfo.getParameters().iterator();
-        while (parameterIterator.hasNext() && (correspondParameterIterator.hasNext())) {
-            ParameterInfo parameter = parameterIterator.next();
-            ParameterInfo correspondParameter = correspondParameterIterator.next();
-            String typeName = parameter.getName();
-            String correspondTypeName = correspondParameter.getName();
-            if (!typeName.equals(correspondTypeName)) {
-                return false;
-            }
         }
 
         return true;
@@ -231,8 +201,8 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
      * 
      * @param parameters 追加する引数群
      */
-    public void addParameters(final List<ParameterInfo> parameters){
-        
+    public void addParameters(final List<ParameterInfo> parameters) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == parameters) {
             throw new NullPointerException();
@@ -240,7 +210,7 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
 
         this.parameters.addAll(parameters);
     }
-    
+
     /**
      * このメソッドの引数の数を返す
      * 

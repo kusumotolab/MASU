@@ -87,61 +87,69 @@ public final class NameResolver {
             // 未解決参照型の場合
         } else if (unresolvedTypeInfo instanceof UnresolvedReferenceTypeInfo) {
 
-            // 利用可能な名前空間から，型名を探す
             final String[] referenceName = ((UnresolvedReferenceTypeInfo) unresolvedTypeInfo)
                     .getReferenceName();
-            for (AvailableNamespaceInfo availableNamespace : ((UnresolvedReferenceTypeInfo) unresolvedTypeInfo)
-                    .getAvailableNamespaces()) {
 
-                // 名前空間名.* となっている場合
-                if (availableNamespace.isAllClasses()) {
-                    final String[] namespace = availableNamespace.getNamespace();
+            // 参照名が完全限定名であるとして検索
+            {
+                final ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
+                if (null != classInfo) {
+                    return classInfo;
+                }
+            }
 
-                    // 名前空間の下にある各クラスに対して
-                    for (ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
-                        final String className = classInfo.getClassName();
+            // 利用可能な名前空間から，型名を探す
+            {
+                for (AvailableNamespaceInfo availableNamespace : ((UnresolvedReferenceTypeInfo) unresolvedTypeInfo)
+                        .getAvailableNamespaces()) {
+
+                    // 名前空間名.* となっている場合
+                    if (availableNamespace.isAllClasses()) {
+                        final String[] namespace = availableNamespace.getNamespace();
+
+                        // 名前空間の下にある各クラスに対して
+                        for (ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
+                            final String className = classInfo.getClassName();
+
+                            // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
+                            if (className.equals(referenceName[0])) {
+
+                                // キャッシュ用ハッシュテーブルがる場合はキャッシュを追加
+                                if (null != resolvedCache) {
+                                    resolvedCache.put(unresolvedTypeInfo, classInfo);
+                                }
+
+                                return classInfo;
+                            }
+                        }
+
+                        // 名前空間.クラス名 となっている場合
+                    } else {
+
+                        final String[] importName = availableNamespace.getImportName();
 
                         // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
-                        if (className.equals(referenceName[0])) {
+                        if (importName[importName.length - 1].equals(referenceName[0])) {
 
-                            // キャッシュ用ハッシュテーブルがる場合はキャッシュを追加
-                            if (null != resolvedCache) {
-                                resolvedCache.put(unresolvedTypeInfo, classInfo);
+                            final String[] namespace = availableNamespace.getNamespace();
+                            final String[] fullQualifiedName = new String[namespace.length
+                                    + referenceName.length];
+                            System.arraycopy(namespace, 0, fullQualifiedName, 0, namespace.length);
+                            System.arraycopy(referenceName, 0, fullQualifiedName, namespace.length,
+                                    referenceName.length);
+                            final ClassInfo classInfo = classInfoManager
+                                    .getClassInfo(fullQualifiedName);
+
+                            // クラスが見つかった場合は，それを返す
+                            if (null != classInfo) {
+                                return classInfo;
                             }
-
-                            return classInfo;
                         }
-                    }
-
-                    // 名前空間.クラス名 となっている場合
-                } else {
-
-                    final String[] importName = availableNamespace.getImportName();
-
-                    // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
-                    if (importName[importName.length - 1].equals(referenceName[0])) {
-
-                        final String[] namespace = availableNamespace.getNamespace();
-                        final String[] fullQualifiedName = new String[namespace.length
-                                + referenceName.length];
-                        System.arraycopy(namespace, 0, fullQualifiedName, 0, namespace.length);
-                        System.arraycopy(referenceName, 0, fullQualifiedName, namespace.length,
-                                referenceName.length);
-                        final ClassInfo specifiedClassInfo = classInfoManager
-                                .getClassInfo(fullQualifiedName);
-
-                        // キャッシュ用ハッシュテーブルがる場合はキャッシュを追加
-                        if (null != resolvedCache) {
-                            resolvedCache.put(unresolvedTypeInfo, specifiedClassInfo);
-                        }
-
-                        // クラスが見つからなかった場合は null が返される
-                        return specifiedClassInfo;
                     }
                 }
             }
 
-            // 見つからなかった場合は null を返す
+            // 見つからなかった場合は，null を返す
             return null;
 
             // 未解決配列型の場合
@@ -459,7 +467,7 @@ public final class NameResolver {
             // 見つからなかった処理を行う
             {
                 err.println("Can't resolve field assignment : " + fieldAssignment.getFieldName());
-                
+
                 usingMethod.addUnresolvedUsage(fieldAssignment);
 
                 // 解決済みキャッシュに登録
@@ -547,8 +555,8 @@ public final class NameResolver {
                     classInfoManager.add((ExternalClassInfo) elementType);
                     parameterType = ArrayTypeInfo.getType(elementType, dimension);
                 } else {
-                    // err.println("Can't resolve parameter type : "
-                    // + unresolvedParameterType.toString());
+                    err.println("Can't resolve actual parameter type : "
+                            + unresolvedParameterType.getTypeName());
                     parameterType = NullTypeInfo.getInstance();
                 }
             }
@@ -587,7 +595,7 @@ public final class NameResolver {
                 for (TargetMethodInfo availableMethod : availableMethods) {
 
                     // 呼び出し可能なメソッドが見つかった場合
-                    if (availableMethod.canCalledWith(methodName, parameterTypes)) {
+                    if (availableMethod.canCalledWith(methodName, parameterTypes, constructor)) {
                         usingMethod.addCallee(availableMethod);
                         availableMethod.addCaller(usingMethod);
 
@@ -628,7 +636,7 @@ public final class NameResolver {
             // 見つからなかった処理を行う
             {
                 err.println("Can't resolve method Call : " + methodCall.getMethodName());
-                
+
                 usingMethod.addUnresolvedUsage(methodCall);
 
                 // 解決済みキャッシュに登録
@@ -717,19 +725,30 @@ public final class NameResolver {
         }
 
         // 要素使用がくっついている未定義型を取得
-        final UnresolvedTypeInfo unresolvedOwnerArrayType = arrayElement.getOwnerArrayType();
-        final ArrayTypeInfo ownerArrayType = (ArrayTypeInfo) NameResolver.resolveTypeInfo(
-                unresolvedOwnerArrayType, usingClass, usingMethod, classInfoManager,
-                fieldInfoManager, methodInfoManager, resolvedCache);
+        final UnresolvedTypeInfo unresolvedOwnerType = arrayElement.getOwnerArrayType();
+        ArrayTypeInfo ownerArrayType = (ArrayTypeInfo) NameResolver.resolveTypeInfo(
+                unresolvedOwnerType, usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager, resolvedCache);
 
         // 未定義型の名前解決ができなかった場合
         if (null == ownerArrayType) {
+            if (unresolvedOwnerType instanceof UnresolvedArrayTypeInfo) {
+                final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedOwnerType)
+                        .getElementType();
+                final int dimension = ((UnresolvedArrayTypeInfo) unresolvedOwnerType)
+                        .getDimension();
+                final TypeInfo elementType = NameResolver
+                        .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
+                classInfoManager.add((ExternalClassInfo) elementType);
+                ownerArrayType = ArrayTypeInfo.getType(elementType, dimension);
+            } else {
 
-            err.println("Can't resolve array type : " + arrayElement.getTypeName());
+                err.println("Can't resolve array type : " + arrayElement.getTypeName());
 
-            usingMethod.addUnresolvedUsage(arrayElement);
-            resolvedCache.put(arrayElement, null);
-            return null;
+                usingMethod.addUnresolvedUsage(arrayElement);
+                resolvedCache.put(arrayElement, null);
+                return null;
+            }
         }
 
         // 配列の次元に応じて型を生成

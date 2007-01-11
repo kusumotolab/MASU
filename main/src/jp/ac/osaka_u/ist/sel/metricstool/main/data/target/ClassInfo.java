@@ -24,8 +24,7 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Reso
      * @param className クラス名
      * 
      */
-    public ClassInfo(final NamespaceInfo namespace,
-            final String className) {
+    public ClassInfo(final NamespaceInfo namespace, final String className) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -222,6 +221,56 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Reso
         }
     }
 
+    /**
+     * このクラスが引数で与えられたクラスの親クラスであるかを判定する
+     * 
+     * @param classInfo 対象クラス
+     * @return このクラスが引数で与えられたクラスの親クラスである場合は true，そうでない場合は false
+     */
+    public final boolean isSuperClass(final ClassInfo classInfo) {
+
+        // 引数の直接の親クラスに対して
+        for (final ClassInfo superClassInfo : classInfo.getSuperClasses()) {
+
+            // 対象クラスの直接の親クラスがこのクラスと等しい場合は true を返す
+            if (this.equals(superClassInfo)) {
+                return true;
+            }
+
+            // 対象クラスの親クラスに対して再帰的に処理，true が返された場合は，このメソッドも true を返す
+            if (this.isSuperClass(superClassInfo)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * このクラスが引数で与えられたクラスの子クラスであるかを判定する
+     * 
+     * @param classInfo 対象クラス
+     * @return このクラスが引数で与えられたクラスの子クラスである場合は true，そうでない場合は false
+     */
+    public final boolean isSubClass(final ClassInfo classInfo) {
+
+        // 引数の直接の子クラスに対して
+        for (final ClassInfo subClassInfo : classInfo.getSubClasses()) {
+
+            // 対象クラスの直接の親クラスがこのクラスと等しい場合は true を返す
+            if (this.equals(subClassInfo)) {
+                return true;
+            }
+
+            // 対象クラスの親クラスに対して再帰的に処理，true が返された場合は，このメソッドも true を返す
+            if (this.isSubClass(subClassInfo)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
     /**
      * クラス名を保存するための変数
      */
