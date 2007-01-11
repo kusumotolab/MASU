@@ -22,6 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VoidTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalFieldInfo;
@@ -36,7 +37,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
- * Unresolved * Info から * Info を得るための名前解決ユーティリティクラス
+ * 未解決型情報を解決するためのユーティリティクラス
  * 
  * @author y-higo
  * 
@@ -44,7 +45,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 public final class NameResolver {
 
     /**
-     * 未解決型情報（UnresolvedTypeInfo）から解決済み型情報（TypeInfo）を返す． 対応する解決済み型情報がない場合は null を返す．
+     * 未解決型情報（UnresolvedTypeInfo）から解決済み型情報（TypeInfo）を返す． 対応する解決済み型情報がない場合は UnknownTypeInfo を返す．
      * 
      * @param unresolvedTypeInfo 名前解決したい型情報
      * @param usingClass この未解決型が存在しているクラス
@@ -149,8 +150,8 @@ public final class NameResolver {
                 }
             }
 
-            // 見つからなかった場合は，null を返す
-            return null;
+            // 見つからなかった場合は，UknownTypeInfo を返す
+            return UnknownTypeInfo.getInstance();
 
             // 未解決配列型の場合
         } else if (unresolvedTypeInfo instanceof UnresolvedArrayTypeInfo) {
@@ -162,15 +163,17 @@ public final class NameResolver {
             final TypeInfo elementType = NameResolver.resolveTypeInfo(unresolvedElementType,
                     usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
                     resolvedCache);
+            assert elementType != null : "resolveTypeInfo returned null!";
+            
+            // 要素の型が不明のときは UnnownTypeInfo を返す
+            if (elementType instanceof UnknownTypeInfo) {
+                return UnknownTypeInfo.getInstance();
 
-            if (elementType != null) {
-
+                // 要素の型が解決できた場合はその配列型を作成し返す
+            } else {
                 final ArrayTypeInfo arrayType = ArrayTypeInfo.getType(elementType, dimension);
                 return arrayType;
             }
-
-            // 要素の型が不明なときは null を返す
-            return null;
 
             // 未解決クラス情報の場合
         } else if (unresolvedTypeInfo instanceof UnresolvedClassInfo) {
@@ -260,18 +263,19 @@ public final class NameResolver {
         final TypeInfo fieldOwnerClassType = NameResolver.resolveTypeInfo(
                 unresolvedFieldOwnerClassType, usingClass, usingMethod, classInfoManager,
                 fieldInfoManager, methodInfoManager, resolvedCache);
-
+        assert fieldOwnerClassType != null : "resolveTypeInfo returned null!";
+        
         // -----ここから親のTypeInfo に応じて処理を分岐
         // 親が解決できなかった場合はどうしようもない
-        if (null == fieldOwnerClassType) {
+        if (fieldOwnerClassType instanceof UnknownTypeInfo) {
 
             // 見つからなかった処理を行う
             usingMethod.addUnresolvedUsage(fieldReference);
 
             // 解決済みキャッシュに登録
-            resolvedCache.put(fieldReference, null);
+            resolvedCache.put(fieldReference, UnknownTypeInfo.getInstance());
 
-            return null;
+            return UnknownTypeInfo.getInstance();
 
             // 親が対象クラス(TargetClassInfo)だった場合
         } else if (fieldOwnerClassType instanceof TargetClassInfo) {
@@ -313,10 +317,10 @@ public final class NameResolver {
                     fieldInfoManager.add(fieldInfo);
 
                     // 解決済みキャッシュに登録
-                    resolvedCache.put(fieldReference, null);
+                    resolvedCache.put(fieldReference, fieldInfo.getType());
 
                     // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
-                    return null;
+                    return fieldInfo.getType();
                 }
             }
 
@@ -327,9 +331,9 @@ public final class NameResolver {
                 usingMethod.addUnresolvedUsage(fieldReference);
 
                 // 解決済みキャッシュに登録
-                resolvedCache.put(fieldReference, null);
+                resolvedCache.put(fieldReference, UnknownTypeInfo.getInstance());
 
-                return null;
+                return UnknownTypeInfo.getInstance();
             }
 
             // 親が外部クラス（ExternalClassInfo）だった場合
@@ -342,10 +346,10 @@ public final class NameResolver {
             fieldInfoManager.add(fieldInfo);
 
             // 解決済みキャッシュに登録
-            resolvedCache.put(fieldReference, null);
+            resolvedCache.put(fieldReference, fieldInfo.getType());
 
             // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
-            return null;
+            return fieldInfo.getType();
 
         } else if (fieldOwnerClassType instanceof ArrayTypeInfo) {
 
@@ -360,7 +364,7 @@ public final class NameResolver {
         }
 
         err.println("resolveFieldReference2: Here shouldn't be reached!");
-        return null;
+        return UnknownTypeInfo.getInstance();
     }
 
     /**
@@ -404,18 +408,19 @@ public final class NameResolver {
         final TypeInfo fieldOwnerClassType = NameResolver.resolveTypeInfo(
                 unresolvedFieldOwnerClassType, usingClass, usingMethod, classInfoManager,
                 fieldInfoManager, methodInfoManager, resolvedCache);
-
+        assert fieldOwnerClassType != null : "resolveTypeInfo returned null!";
+        
         // -----ここから親のTypeInfo に応じて処理を分岐
         // 親が解決できなかった場合はどうしようもない
-        if (null == fieldOwnerClassType) {
+        if (fieldOwnerClassType instanceof UnknownTypeInfo) {
 
             // 見つからなかった処理を行う
             usingMethod.addUnresolvedUsage(fieldAssignment);
 
             // 解決済みキャッシュに登録
-            resolvedCache.put(fieldAssignment, null);
+            resolvedCache.put(fieldAssignment, UnknownTypeInfo.getInstance());
 
-            return null;
+            return UnknownTypeInfo.getInstance();
 
             // 親が対象クラス(TargetClassInfo)だった場合
         } else if (fieldOwnerClassType instanceof TargetClassInfo) {
@@ -457,10 +462,10 @@ public final class NameResolver {
                     fieldInfoManager.add(fieldInfo);
 
                     // 解決済みキャッシュに登録
-                    resolvedCache.put(fieldAssignment, null);
+                    resolvedCache.put(fieldAssignment, fieldInfo.getType());
 
                     // 外部クラスに新規で外部変数（ExternalFieldInfo）を追加したので型は不明
-                    return null;
+                    return fieldInfo.getType();
                 }
             }
 
@@ -471,9 +476,9 @@ public final class NameResolver {
                 usingMethod.addUnresolvedUsage(fieldAssignment);
 
                 // 解決済みキャッシュに登録
-                resolvedCache.put(fieldAssignment, null);
+                resolvedCache.put(fieldAssignment, UnknownTypeInfo.getInstance());
 
-                return null;
+                return UnknownTypeInfo.getInstance();
             }
 
             // 親が外部クラス（ExternalClassInfo）だった場合
@@ -486,14 +491,14 @@ public final class NameResolver {
             fieldInfoManager.add(fieldInfo);
 
             // 解決済みキャッシュに登録
-            resolvedCache.put(fieldAssignment, null);
+            resolvedCache.put(fieldAssignment, fieldInfo.getType());
 
             // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
-            return null;
+            return fieldInfo.getType();
         }
 
         err.println("resolveFieldAssignment2: Here shouldn't be reached!");
-        return null;
+        return UnknownTypeInfo.getInstance();
     }
 
     /**
@@ -539,7 +544,8 @@ public final class NameResolver {
             TypeInfo parameterType = NameResolver.resolveTypeInfo(unresolvedParameterType,
                     usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
                     resolvedCache);
-            if (null == parameterType) {
+            assert parameterType != null : "resolveTypeInfo returned null!";
+            if (parameterType instanceof UnknownTypeInfo) {
                 if (unresolvedParameterType instanceof UnresolvedReferenceTypeInfo) {
                     parameterType = NameResolver
                             .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedParameterType);
@@ -553,10 +559,6 @@ public final class NameResolver {
                             .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
                     classInfoManager.add((ExternalClassInfo) elementType);
                     parameterType = ArrayTypeInfo.getType(elementType, dimension);
-                } else {
-                    err.println("Can't resolve actual parameter type : "
-                            + unresolvedParameterType.getTypeName());
-                    parameterType = NullTypeInfo.getInstance();
                 }
             }
             parameterTypes.add(parameterType);
@@ -567,18 +569,19 @@ public final class NameResolver {
         final TypeInfo methodOwnerClassType = NameResolver.resolveTypeInfo(
                 unresolvedMethodOwnerClassType, usingClass, usingMethod, classInfoManager,
                 fieldInfoManager, methodInfoManager, resolvedCache);
-
+        assert methodOwnerClassType != null : "resolveTypeInfo returned null!";
+        
         // -----ここから親のTypeInfo に応じて処理を分岐
         // 親が解決できなかった場合はどうしようもない
-        if (null == methodOwnerClassType) {
+        if (methodOwnerClassType instanceof UnknownTypeInfo) {
 
             // 見つからなかった処理を行う
             usingMethod.addUnresolvedUsage(methodCall);
 
             // 解決済みキャッシュに登録
-            resolvedCache.put(methodCall, null);
+            resolvedCache.put(methodCall, UnknownTypeInfo.getInstance());
 
-            return null;
+            return UnknownTypeInfo.getInstance();
 
             // 親が対象クラス(TargetClassInfo)だった場合
         } else if (methodOwnerClassType instanceof TargetClassInfo) {
@@ -625,10 +628,10 @@ public final class NameResolver {
                     methodInfoManager.add(methodInfo);
 
                     // 解決済みキャッシュに登録
-                    resolvedCache.put(methodCall, null);
+                    resolvedCache.put(methodCall, methodInfo.getReturnType());
 
                     // 外部クラスに新規で外部変数（ExternalFieldInfo）を追加したので型は不明
-                    return null;
+                    return methodInfo.getReturnType();
                 }
             }
 
@@ -639,9 +642,9 @@ public final class NameResolver {
                 usingMethod.addUnresolvedUsage(methodCall);
 
                 // 解決済みキャッシュに登録
-                resolvedCache.put(methodCall, null);
+                resolvedCache.put(methodCall, UnknownTypeInfo.getInstance());
 
-                return null;
+                return UnknownTypeInfo.getInstance();
             }
 
             // 親が外部クラス（ExternalClassInfo）だった場合
@@ -657,10 +660,10 @@ public final class NameResolver {
             methodInfoManager.add(methodInfo);
 
             // 解決済みキャッシュに登録
-            resolvedCache.put(methodCall, null);
+            resolvedCache.put(methodCall, methodInfo.getReturnType());
 
             // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
-            return null;
+            return methodInfo.getReturnType();
 
             // 親が配列だった場合
         } else if (methodOwnerClassType instanceof ArrayTypeInfo) {
@@ -680,15 +683,15 @@ public final class NameResolver {
                 methodInfoManager.add(methodInfo);
 
                 // 解決済みキャッシュに登録
-                resolvedCache.put(methodCall, null);
+                resolvedCache.put(methodCall, methodInfo.getReturnType());
 
                 // 外部クラスに新規で外部メソッドを追加したので型は不明
-                return null;
+                return methodInfo.getReturnType();
             }
         }
 
         err.println("resolveMethodCall3: Here shouldn't be reached!");
-        return null;
+        return UnknownTypeInfo.getInstance();
     }
 
     /**
@@ -725,12 +728,12 @@ public final class NameResolver {
 
         // 要素使用がくっついている未定義型を取得
         final UnresolvedTypeInfo unresolvedOwnerType = arrayElement.getOwnerArrayType();
-        ArrayTypeInfo ownerArrayType = (ArrayTypeInfo) NameResolver.resolveTypeInfo(
-                unresolvedOwnerType, usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager, resolvedCache);
-
+        TypeInfo ownerArrayType = NameResolver.resolveTypeInfo(unresolvedOwnerType, usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+        assert ownerArrayType != null : "resolveTypeInfo returned null!";
+        
         // 未定義型の名前解決ができなかった場合
-        if (null == ownerArrayType) {
+        if (ownerArrayType instanceof UnknownTypeInfo) {
             if (unresolvedOwnerType instanceof UnresolvedArrayTypeInfo) {
                 final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedOwnerType)
                         .getElementType();
@@ -745,14 +748,14 @@ public final class NameResolver {
                 err.println("Can't resolve array type : " + arrayElement.getTypeName());
 
                 usingMethod.addUnresolvedUsage(arrayElement);
-                resolvedCache.put(arrayElement, null);
-                return null;
+                resolvedCache.put(arrayElement, UnknownTypeInfo.getInstance());
+                return UnknownTypeInfo.getInstance();
             }
         }
 
         // 配列の次元に応じて型を生成
-        final int ownerArrayDimension = ownerArrayType.getDimension();
-        final TypeInfo ownerElementType = ownerArrayType.getElementType();
+        final int ownerArrayDimension = ((ArrayTypeInfo) ownerArrayType).getDimension();
+        final TypeInfo ownerElementType = ((ArrayTypeInfo) ownerArrayType).getElementType();
 
         // 配列が二次元以上の場合は，次元を一つ落とした配列を返す
         if (1 < ownerArrayDimension) {
@@ -798,6 +801,7 @@ public final class NameResolver {
         // 既に解決済みであれば，そこから型を取得
         if (resolvedCache.containsKey(entityUsage)) {
             final TypeInfo type = resolvedCache.get(entityUsage);
+            assert null != type : "resolveEntityUsage returned null!";
             return type;
         }
 
@@ -821,13 +825,13 @@ public final class NameResolver {
                     TypeInfo ownerTypeInfo = availableFieldOfThisClass.getType();
                     for (int i = 1; i < name.length; i++) {
 
-                        // 親が null だったら，どうしようもない
-                        if (null == ownerTypeInfo) {
+                        // 親が UnknownTypeInfo だったら，どうしようもない
+                        if (ownerTypeInfo instanceof UnknownTypeInfo) {
 
                             // 解決済みキャッシュに登録
-                            resolvedCache.put(entityUsage, null);
+                            resolvedCache.put(entityUsage, UnknownTypeInfo.getInstance());
 
-                            return ownerTypeInfo;
+                            return UnknownTypeInfo.getInstance();
 
                             // 親が対象クラス(TargetClassInfo)の場合
                         } else if (ownerTypeInfo instanceof TargetClassInfo) {
@@ -871,16 +875,12 @@ public final class NameResolver {
                                         fieldInfo.addReferencer(usingMethod);
                                         fieldInfoManager.add(fieldInfo);
 
-                                        ownerTypeInfo = null;
+                                        ownerTypeInfo = fieldInfo.getType();
+
+                                    } else {
+                                        err.println("Can't resolve entity usage1 : "
+                                                + entityUsage.getTypeName());
                                     }
-
-                                    // 見つからなかった処理を行う
-                                    usingMethod.addUnresolvedUsage(entityUsage);
-
-                                    // 解決済みキャッシュに登録
-                                    resolvedCache.put(entityUsage, null);
-
-                                    return null;
                                 }
                             }
 
@@ -899,14 +899,14 @@ public final class NameResolver {
                                 fieldInfo.addReferencer(usingMethod);
                                 fieldInfoManager.add(fieldInfo);
 
-                                ownerTypeInfo = null;
+                                ownerTypeInfo = fieldInfo.getType();
                             }
                         }
                     }
 
                     // 解決済みキャッシュに登録
                     resolvedCache.put(entityUsage, ownerTypeInfo);
-
+                    assert null != ownerTypeInfo : "resolveEntityUsage returned null!";
                     return ownerTypeInfo;
                 }
             }
@@ -929,13 +929,13 @@ public final class NameResolver {
                     TypeInfo ownerTypeInfo = availableFieldOfThisClass.getType();
                     for (int i = 1; i < name.length; i++) {
 
-                        // 親が null だったら，どうしようもない
-                        if (null == ownerTypeInfo) {
+                        // 親が UnknownTypeInfo だったら，どうしようもない
+                        if (ownerTypeInfo instanceof UnknownTypeInfo) {
 
                             // 解決済みキャッシュに登録
-                            resolvedCache.put(entityUsage, null);
+                            resolvedCache.put(entityUsage, UnknownTypeInfo.getInstance());
 
-                            return ownerTypeInfo;
+                            return UnknownTypeInfo.getInstance();
 
                             // 親が対象クラス(TargetClassInfo)の場合
                         } else if (ownerTypeInfo instanceof TargetClassInfo) {
@@ -1000,16 +1000,12 @@ public final class NameResolver {
                                         fieldInfo.addReferencer(usingMethod);
                                         fieldInfoManager.add(fieldInfo);
 
-                                        ownerTypeInfo = null;
+                                        ownerTypeInfo = fieldInfo.getType();
+
+                                    } else {
+                                        err.println("Can't resolve entity usage2 : "
+                                                + entityUsage.getTypeName());
                                     }
-
-                                    // 見つからなかった処理を行う
-                                    usingMethod.addUnresolvedUsage(entityUsage);
-
-                                    // 解決済みキャッシュに登録
-                                    resolvedCache.put(entityUsage, null);
-
-                                    return null;
                                 }
                             }
 
@@ -1028,14 +1024,14 @@ public final class NameResolver {
                                 fieldInfo.addReferencer(usingMethod);
                                 fieldInfoManager.add(fieldInfo);
 
-                                ownerTypeInfo = null;
+                                ownerTypeInfo = fieldInfo.getType();
                             }
                         }
                     }
 
                     // 解決済みキャッシュに登録
                     resolvedCache.put(entityUsage, ownerTypeInfo);
-
+                    assert null != ownerTypeInfo : "resolveEntityUsage returned null!";
                     return ownerTypeInfo;
                 }
             }
@@ -1056,13 +1052,13 @@ public final class NameResolver {
                     TypeInfo ownerTypeInfo = searchingClass;
                     for (int i = length; i < name.length; i++) {
 
-                        // 親が null だったら，どうしようもない
-                        if (null == ownerTypeInfo) {
+                        // 親が UnknownTypeInfo だったら，どうしようもない
+                        if (ownerTypeInfo instanceof UnknownTypeInfo) {
 
                             // 解決済みキャッシュに登録
-                            resolvedCache.put(entityUsage, null);
+                            resolvedCache.put(entityUsage, UnknownTypeInfo.getInstance());
 
-                            return ownerTypeInfo;
+                            return UnknownTypeInfo.getInstance();
 
                             // 親が対象クラス(TargetClassInfo)の場合
                         } else if (ownerTypeInfo instanceof TargetClassInfo) {
@@ -1127,16 +1123,12 @@ public final class NameResolver {
                                         fieldInfo.addReferencer(usingMethod);
                                         fieldInfoManager.add(fieldInfo);
 
-                                        ownerTypeInfo = null;
+                                        ownerTypeInfo = fieldInfo.getType();
+
+                                    } else {
+                                        err.println("Can't resolve entity usage3 : "
+                                                + entityUsage.getTypeName());
                                     }
-
-                                    // 見つからなかった処理を行う
-                                    usingMethod.addUnresolvedUsage(entityUsage);
-
-                                    // 解決済みキャッシュに登録
-                                    resolvedCache.put(entityUsage, null);
-
-                                    return null;
                                 }
                             }
 
@@ -1155,14 +1147,14 @@ public final class NameResolver {
                                 fieldInfo.addReferencer(usingMethod);
                                 fieldInfoManager.add(fieldInfo);
 
-                                ownerTypeInfo = null;
+                                ownerTypeInfo = fieldInfo.getType();
                             }
                         }
                     }
 
                     // 解決済みキャッシュに登録
                     resolvedCache.put(entityUsage, ownerTypeInfo);
-
+                    assert null != ownerTypeInfo : "resolveEntityUsage returned null!";
                     return ownerTypeInfo;
                 }
             }
@@ -1186,13 +1178,13 @@ public final class NameResolver {
                             TypeInfo ownerTypeInfo = classInfo;
                             for (int i = 1; i < name.length; i++) {
 
-                                // 親が null だったら，どうしようもない
-                                if (null == ownerTypeInfo) {
+                                // 親が UnknownTypeInfo だったら，どうしようもない
+                                if (ownerTypeInfo instanceof UnknownTypeInfo) {
 
                                     // 解決済みキャッシュに登録
-                                    resolvedCache.put(entityUsage, null);
+                                    resolvedCache.put(entityUsage, UnknownTypeInfo.getInstance());
 
-                                    return ownerTypeInfo;
+                                    return UnknownTypeInfo.getInstance();
 
                                     // 親が対象クラス(TargetClassInfo)の場合
                                 } else if (ownerTypeInfo instanceof TargetClassInfo) {
@@ -1257,16 +1249,12 @@ public final class NameResolver {
                                                 fieldInfo.addReferencer(usingMethod);
                                                 fieldInfoManager.add(fieldInfo);
 
-                                                ownerTypeInfo = null;
+                                                ownerTypeInfo = fieldInfo.getType();
+
+                                            } else {
+                                                err.println("Can't resolve entity usage4 : "
+                                                        + entityUsage.getTypeName());
                                             }
-
-                                            // 見つからなかった処理を行う
-                                            usingMethod.addUnresolvedUsage(entityUsage);
-
-                                            // 解決済みキャッシュに登録
-                                            resolvedCache.put(entityUsage, null);
-
-                                            return null;
                                         }
                                     }
 
@@ -1280,13 +1268,13 @@ public final class NameResolver {
                                     fieldInfo.addReferencer(usingMethod);
                                     fieldInfoManager.add(fieldInfo);
 
-                                    ownerTypeInfo = null;
+                                    ownerTypeInfo = fieldInfo.getType();
                                 }
                             }
 
                             // 解決済みキャッシュに登録
                             resolvedCache.put(entityUsage, ownerTypeInfo);
-
+                            assert null != ownerTypeInfo : "resolveEntityUsage returned null!";
                             return ownerTypeInfo;
                         }
                     }
@@ -1299,19 +1287,23 @@ public final class NameResolver {
                     // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
                     if (importName[importName.length - 1].equals(name[0])) {
 
-                        final ClassInfo specifiedClassInfo = classInfoManager
+                        ClassInfo specifiedClassInfo = classInfoManager
                                 .getClassInfo(importName);
-
+                        if (null == specifiedClassInfo){
+                            specifiedClassInfo = new ExternalClassInfo(importName);
+                            classInfoManager.add((ExternalClassInfo)specifiedClassInfo);
+                        }
+                        
                         TypeInfo ownerTypeInfo = specifiedClassInfo;
                         for (int i = 1; i < name.length; i++) {
 
-                            // 親が null だったら，どうしようもない
-                            if (null == ownerTypeInfo) {
+                            // 親が UnknownTypeInfo だったら，どうしようもない
+                            if (ownerTypeInfo instanceof UnknownTypeInfo) {
 
                                 // 解決済みキャッシュに登録
-                                resolvedCache.put(entityUsage, null);
+                                resolvedCache.put(entityUsage, UnknownTypeInfo.getInstance());
 
-                                return ownerTypeInfo;
+                                return UnknownTypeInfo.getInstance();
 
                                 // 親が対象クラス(TargetClassInfo)の場合
                             } else if (ownerTypeInfo instanceof TargetClassInfo) {
@@ -1376,16 +1368,12 @@ public final class NameResolver {
                                             fieldInfo.addReferencer(usingMethod);
                                             fieldInfoManager.add(fieldInfo);
 
-                                            ownerTypeInfo = null;
+                                            ownerTypeInfo = fieldInfo.getType();
+
+                                        } else {
+                                            err.println("Can't resolve entity usage5 : "
+                                                    + entityUsage.getTypeName());
                                         }
-
-                                        // 見つからなかった処理を行う
-                                        usingMethod.addUnresolvedUsage(entityUsage);
-
-                                        // 解決済みキャッシュに登録
-                                        resolvedCache.put(entityUsage, null);
-
-                                        return null;
                                     }
                                 }
 
@@ -1404,27 +1392,29 @@ public final class NameResolver {
                                     fieldInfo.addReferencer(usingMethod);
                                     fieldInfoManager.add(fieldInfo);
 
-                                    ownerTypeInfo = null;
+                                    ownerTypeInfo = fieldInfo.getType();
                                 }
                             }
                         }
 
                         // 解決済みキャッシュに登録
                         resolvedCache.put(entityUsage, ownerTypeInfo);
-
+                        assert null != ownerTypeInfo : "resolveEntityUsage returned null!";
                         return ownerTypeInfo;
                     }
                 }
             }
         }
 
+        err.println("Can't resolve entity usage6 : " + entityUsage.getTypeName());
+        
         // 見つからなかった処理を行う
         usingMethod.addUnresolvedUsage(entityUsage);
 
         // 解決済みキャッシュに登録
-        resolvedCache.put(entityUsage, null);
+        resolvedCache.put(entityUsage, UnknownTypeInfo.getInstance());
 
-        return null;
+        return UnknownTypeInfo.getInstance();
     }
 
     /**

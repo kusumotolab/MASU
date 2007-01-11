@@ -8,8 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,7 +29,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
@@ -40,6 +37,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.NameResolver;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
@@ -816,19 +814,19 @@ public class MetricsTool {
 
         // 各親クラス名に対して
         for (UnresolvedTypeInfo unresolvedSuperClassType : unresolvedClassInfo.getSuperClasses()) {
-            ClassInfo superClass = (ClassInfo) NameResolver.resolveTypeInfo(
-                    unresolvedSuperClassType, (TargetClassInfo) classInfo, null, classInfoManager,
-                    null, null, null);
-
+            TypeInfo superClass = NameResolver.resolveTypeInfo(unresolvedSuperClassType,
+                    (TargetClassInfo) classInfo, null, classInfoManager, null, null, null);
+            assert superClass != null : "resolveTypeInfo returned null!";
+            
             // 見つからなかった場合は名前空間名がUNKNOWNなクラスを登録する
-            if (null == superClass) {
+            if (superClass instanceof UnknownTypeInfo) {
                 superClass = NameResolver
                         .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedSuperClassType);
                 classInfoManager.add((ExternalClassInfo) superClass);
             }
 
-            classInfo.addSuperClass(superClass);
-            superClass.addSubClass(classInfo);
+            classInfo.addSuperClass((ClassInfo)superClass);
+            ((ClassInfo)superClass).addSubClass(classInfo);
         }
 
         // 各インナークラスに対して
@@ -877,7 +875,8 @@ public class MetricsTool {
             final UnresolvedTypeInfo unresolvedFieldType = unresolvedFieldInfo.getType();
             TypeInfo fieldType = NameResolver.resolveTypeInfo(unresolvedFieldType,
                     (TargetClassInfo) ownerClass, null, classInfoManager, null, null, null);
-            if (null == fieldType) {
+            assert fieldType != null : "resolveTypeInfo returned null!";
+            if (fieldType instanceof UnknownTypeInfo) {
                 if (unresolvedFieldType instanceof UnresolvedReferenceTypeInfo) {
                     fieldType = NameResolver
                             .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedFieldType);
@@ -891,7 +890,7 @@ public class MetricsTool {
                             .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
                     classInfoManager.add((ExternalClassInfo) elementType);
                     fieldType = ArrayTypeInfo.getType(elementType, dimension);
-                } else{
+                } else {
                     err.println("Can't resolve field type : " + unresolvedFieldType.getTypeName());
                 }
             }
@@ -964,7 +963,8 @@ public class MetricsTool {
                     .getReturnType();
             TypeInfo methodReturnType = NameResolver.resolveTypeInfo(unresolvedMethodReturnType,
                     (TargetClassInfo) ownerClass, null, classInfoManager, null, null, null);
-            if (null == methodReturnType) {
+            assert methodReturnType != null : "resolveTypeInfo returned null!";
+            if (methodReturnType instanceof UnknownTypeInfo) {
                 if (unresolvedMethodReturnType instanceof UnresolvedReferenceTypeInfo) {
                     methodReturnType = NameResolver
                             .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedMethodReturnType);
@@ -1011,7 +1011,8 @@ public class MetricsTool {
                 TypeInfo parameterType = NameResolver.resolveTypeInfo(unresolvedParameterType,
                         (TargetClassInfo) ownerClass, methodInfo, classInfoManager, null, null,
                         null);
-                if (null == parameterType) {
+                assert parameterType != null : "resolveTypeInfo returned null!";
+                if (parameterType instanceof UnknownTypeInfo) {
                     if (unresolvedParameterType instanceof UnresolvedReferenceTypeInfo) {
                         parameterType = NameResolver
                                 .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedParameterType);
@@ -1053,7 +1054,8 @@ public class MetricsTool {
                 TypeInfo variableType = NameResolver.resolveTypeInfo(unresolvedVariableType,
                         (TargetClassInfo) ownerClass, methodInfo, classInfoManager, null, null,
                         null);
-                if (null == variableType) {
+                assert variableType != null : "resolveTypeInfo returned null!";
+                if (variableType instanceof UnknownTypeInfo) {
                     if (unresolvedVariableType instanceof UnresolvedReferenceTypeInfo) {
                         variableType = NameResolver
                                 .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedVariableType);
