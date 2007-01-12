@@ -16,14 +16,14 @@ public class Members {
 
     /**
      * 引数で与えられたメンバーのうち，スタティックなものだけを抽出して返す．
-     * 
+     * @param <T> メンバーの型 
      * @param members メンバーの List
      * @return スタティックなメンバーの List
      */
-    public static final List getInstanceMembers(final List<? extends Member> members){
+    public static final <T extends Member> List<T> getInstanceMembers(final List<T> members){
         
-        final List<Member> instanceMembers = new ArrayList<Member>();
-        for (Member member : members){
+        final List<T> instanceMembers = new ArrayList<T>();
+        for (T member : members){
             if (member.isInstanceMember()){
                 instanceMembers.add(member);
             }
@@ -35,13 +35,14 @@ public class Members {
     /**
      * 引数で与えられたメンバーのうち，インスタンスなものだけを抽出して返す．
      * 
+     * @param <T> メンバーの型 
      * @param members メンバーの List
      * @return インスタンスメンバーの List
      */
-    public static final List getStaticMembers(final List<? extends Member> members){
+    public static final <T extends Member> List<T> getStaticMembers(final List<T> members){
         
-        final List<Member> staticMembers = new ArrayList<Member>();
-        for (Member member : members){
+        final List<T> staticMembers = new ArrayList<T>();
+        for (T member : members){
             if (member.isStaticMember()){
                 staticMembers.add(member);
             }
@@ -53,13 +54,14 @@ public class Members {
     /**
      * 引数で与えられたメンバーのうち，スタティックなものだけを抽出して返す．
      * 
+     * @param <T> メンバーの型 
      * @param members メンバーの SortedSet
      * @return スタティックなメンバーの SortedSet
      */
-    public static final SortedSet getInstanceMembers(final SortedSet<? extends Member> members){
+    public static final <T extends Member> SortedSet<T> getInstanceMembers(final SortedSet<T> members){
         
-        final SortedSet<Member> instanceMembers = new TreeSet<Member>();
-        for (Member member : members){
+        final SortedSet<T> instanceMembers = new TreeSet<T>();
+        for (T member : members){
             if (member.isInstanceMember()){
                 instanceMembers.add(member);
             }
@@ -71,13 +73,14 @@ public class Members {
     /**
      * 引数で与えられたメンバーのうち，インスタンスなものだけを抽出して返す．
      * 
+     * @param <T> メンバーの型 
      * @param members メンバーの SortedSet
      * @return インスタンスメンバーの SortedSet
      */
-    public static final SortedSet getStaticMembers(final SortedSet<? extends Member> members){
+    public static final <T extends Member> SortedSet<T> getStaticMembers(final SortedSet<T> members){
         
-        final SortedSet<Member> staticMembers = new TreeSet<Member>();
-        for (Member member : members){
+        final SortedSet<T> staticMembers = new TreeSet<T>();
+        for (T member : members){
             if (member.isStaticMember()){
                 staticMembers.add(member);
             }

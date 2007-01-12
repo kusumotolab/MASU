@@ -812,7 +812,7 @@ public final class NameResolver {
         {
             // このクラスで利用可能なインスタンスフィールド一覧を取得
             final List<TargetFieldInfo> availableFieldsOfThisClass = Members
-                    .getInstanceMembers(NameResolver.getAvailableFields(usingClass));
+                    .<TargetFieldInfo>getInstanceMembers(NameResolver.getAvailableFields(usingClass));
 
             for (TargetFieldInfo availableFieldOfThisClass : availableFieldsOfThisClass) {
 
@@ -916,7 +916,7 @@ public final class NameResolver {
         {
             // このクラスで利用可能なスタティックフィールド一覧を取得
             final List<TargetFieldInfo> availableFieldsOfThisClass = Members
-                    .getStaticMembers(NameResolver.getAvailableFields(usingClass));
+                    .<TargetFieldInfo>getStaticMembers(NameResolver.getAvailableFields(usingClass));
 
             for (TargetFieldInfo availableFieldOfThisClass : availableFieldsOfThisClass) {
 
