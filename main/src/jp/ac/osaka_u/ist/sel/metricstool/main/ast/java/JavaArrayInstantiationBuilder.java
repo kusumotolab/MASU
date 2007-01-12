@@ -15,9 +15,10 @@ public class JavaArrayInstantiationBuilder extends ExpressionBuilder{
     @Override
     protected void afterExited(AstVisitEvent event) {
         AstToken token = event.getToken();
-        if (token.isArrayDeclarator()){
+        if (token.equals(JavaAstToken.ARRAY_INSTANTIATION)){
             ExpressionElement[] elements = getAvailableElements();
             JavaArrayInstantiationElement array = JavaArrayInstantiationElement.getInstance();
+            
             for(ExpressionElement element : elements){
                 if (element.equals(array)){
                     pushElement(array);
@@ -30,6 +31,6 @@ public class JavaArrayInstantiationBuilder extends ExpressionBuilder{
 
     @Override
     protected boolean isTriggerToken(AstToken token) {
-        return token.equals(JavaAstToken.ARRAY_INIT) || token.isArrayDeclarator();
+        return token.equals(JavaAstToken.ARRAY_INIT) || token.equals(JavaAstToken.ARRAY_INSTANTIATION);
     }
 }

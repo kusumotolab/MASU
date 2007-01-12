@@ -127,6 +127,9 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.ARRAY_DECLARATOR:
             result = SyntaxToken.ARRAY;
             break;
+        case Java15TokenTypes.ARRAY_INSTANTIATION:
+            result = JavaAstToken.ARRAY_INSTANTIATION;
+            break;
         case Java15TokenTypes.EXTENDS_CLAUSE:
             result = DescriptionToken.INHERITANCE;
             break;
