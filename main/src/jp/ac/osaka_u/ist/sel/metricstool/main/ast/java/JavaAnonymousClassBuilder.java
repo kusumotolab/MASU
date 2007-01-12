@@ -60,8 +60,9 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
             endAnonymousClassDef();
         } else if (type.equals(ANONYMOUSCLASS_STATE.ENTER_INSTANTIATION)) {
             builtIdentifierCountStack.push(identifierBuilder.getBuiltDataCount());
-
             identifierBuilder.activate();
+        } else if (type.equals(ANONYMOUSCLASS_STATE.EXIT_INSTANTIATION)){
+            identifierBuilder.deactivate();
         }
     }
 

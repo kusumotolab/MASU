@@ -17,7 +17,8 @@ public class JavaAnonymousClassStateManager extends StackedAstVisitStateManager<
     public static enum ANONYMOUSCLASS_STATE implements StateChangeEventType {
         ENTER_INSTANTIATION,
         ENTER_ANONYMOUSCLASS,
-        EXIT_ANONYMOUSCLASS;
+        EXIT_ANONYMOUSCLASS,
+        EXIT_INSTANTIATION;
     }
 
     public void entered(AstVisitEvent event){
@@ -34,8 +35,10 @@ public class JavaAnonymousClassStateManager extends StackedAstVisitStateManager<
     
     public void exited(AstVisitEvent event){
         super.exited(event);
-        
-        if (event.getToken().isClassBlock() && this.inInstantiation){
+        AstToken token = event.getToken();
+        if (token.isInstantiation()){
+            fireStateChangeEvent(ANONYMOUSCLASS_STATE.EXIT_INSTANTIATION, event);
+        } else if (event.getToken().isClassBlock() && this.inInstantiation){
             fireStateChangeEvent(ANONYMOUSCLASS_STATE.EXIT_ANONYMOUSCLASS,event);
         }
     }
