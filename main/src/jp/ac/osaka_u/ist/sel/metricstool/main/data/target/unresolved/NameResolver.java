@@ -597,7 +597,7 @@ public final class NameResolver {
                 for (TargetMethodInfo availableMethod : availableMethods) {
 
                     // 呼び出し可能なメソッドが見つかった場合
-                    if (availableMethod.canCalledWith(methodName, parameterTypes, constructor)) {
+                    if (availableMethod.canCalledWith(methodName, parameterTypes)) {
                         usingMethod.addCallee(availableMethod);
                         availableMethod.addCaller(usingMethod);
 

@@ -108,38 +108,76 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
      * このメソッドが，引数で与えられた情報を使って呼び出すことができるかどうかを判定する．
      * 
      * @param methodName メソッド名
-     * @param parameterTypes 引数の型のリスト
-     * @param constructor コンストラクタかどうか
+     * @param actualParameterTypes 引数の型のリスト
      * @return 呼び出せる場合は true，そうでない場合は false
      */
     public final boolean canCalledWith(final String methodName,
-            final List<TypeInfo> parameterTypes, final boolean constructor) {
+            final List<TypeInfo> actualParameterTypes) {
 
-        if ((null == methodName) || (null == parameterTypes)) {
+        if ((null == methodName) || (null == actualParameterTypes)) {
             throw new NullPointerException();
         }
 
-        // コンストラクタでない場合は，メソッド名が等しくない場合は該当しない
-        if (!constructor && !methodName.equals(this.getMethodName())) {
+        // メソッド名が等しくない場合は該当しない
+        if (!methodName.equals(this.getMethodName())) {
             return false;
         }
 
         // 引数の数が等しくない場合は該当しない
-        final List<ParameterInfo> parameters = this.getParameters();
-        if (parameters.size() != parameterTypes.size()) {
+        final List<ParameterInfo> dummyParameters = this.getParameters();
+        if (dummyParameters.size() != actualParameterTypes.size()) {
             return false;
         }
 
         // 引数の型を先頭からチェック等しくない場合は該当しない
-        final Iterator<ParameterInfo> parameterIterator = parameters.iterator();
-        final Iterator<TypeInfo> typeIterator = parameterTypes.iterator();
-        while (parameterIterator.hasNext() && typeIterator.hasNext()) {
-            final ParameterInfo parameter = parameterIterator.next();
-            final TypeInfo type = typeIterator.next();
-            if (!parameter.getType().getTypeName().equals(type.getTypeName())) {
-                return false;
+        final Iterator<ParameterInfo> dummyParameterIterator = dummyParameters.iterator();
+        final Iterator<TypeInfo> actualParameterTypeIterator = actualParameterTypes.iterator();
+        while (dummyParameterIterator.hasNext() && actualParameterTypeIterator.hasNext()) {
+            final ParameterInfo dummyParameter = dummyParameterIterator.next();
+            final TypeInfo actualParameterType = actualParameterTypeIterator.next();
+
+            // 実引数が参照型の場合
+            if (actualParameterType instanceof ClassInfo) {
+
+                // 仮引数が参照型でない場合は該当しない
+                if (!(dummyParameter.getType() instanceof ClassInfo)) {
+                    return false;
+                }
+
+                // 実引数が仮引数と同じ参照型（クラス）でもなく，仮引数のサブクラスでもない場合は該当しない
+                if (actualParameterType.equals(dummyParameter.getType())) {
+
+                } else if (((ClassInfo) actualParameterType).isSubClass((ClassInfo) dummyParameter
+                        .getType())) {
+
+                }else{
+                    return false;
+                }
+
+                // 実引数がプリミティブ型の場合
+            } else if (actualParameterType instanceof PrimitiveTypeInfo) {
+
+                // PrimitiveTypeInfo#equals を使って等価性の判定．
+                // 等しくない場合は該当しない
+                if (!actualParameterType.equals(dummyParameter.getType())) {
+                    return false;
+                }
+
+                // 実引数が null の場合
+            } else if (actualParameterType instanceof NullTypeInfo) {
+
+                // 仮引数が参照型でない場合は該当しない
+                if (!(dummyParameter.getType() instanceof ClassInfo)) {
+                    return false;
+                }
+
+                // 実引数の型が解決できなかった場合
+            } else if (actualParameterType instanceof UnknownTypeInfo) {
+                // 実引数の型が不明な場合は，仮引数の型が何であろうともOKにしている
+            
+            }else {
+                assert false : "Here shouldn't be reached!";
             }
-            // TODO クラス階層を使って判定をする必要がある
         }
 
         return true;
