@@ -32,6 +32,8 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
         this.buildDataManager = buildManager;
         this.identifierBuilder = identifierBuilder;
 
+        this.identifierBuilder.deactivate();
+        
         addStateManager(stateManager);
 
         addInnerBuilder(identifierBuilder);
