@@ -111,7 +111,7 @@ public final class ArrayTypeInfo implements TypeInfo {
         if (null == type) {
             throw new NullPointerException();
         }
-        if (1 < dimension) {
+        if (1 > dimension) {
             throw new IllegalArgumentException("Array dimension must be 1 or more!");
         }
 
@@ -162,7 +162,7 @@ public final class ArrayTypeInfo implements TypeInfo {
             if (null == type) {
                 throw new NullPointerException();
             }
-            if (1 < dimension) {
+            if (1 > dimension) {
                 throw new IllegalArgumentException("Array dimension must be 1 or more!");
             }
 
