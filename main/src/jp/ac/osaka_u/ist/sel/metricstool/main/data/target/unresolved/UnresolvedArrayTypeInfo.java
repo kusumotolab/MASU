@@ -77,6 +77,13 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
     public int getDimension() {
         return this.dimension;
     }
+    
+    /**
+     * 配列の次元を1大きくする
+     */
+    public void inclementDimension(){
+        this.dimension++;
+    }
 
     /**
      * UnresolvedArrayTypeInfo のインスタンスを返すためのファクトリメソッド．
@@ -132,7 +139,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
     /**
      * 配列の次元を保存する変数
      */
-    private final int dimension;
+    private int dimension;
 
     /**
      * UnresolvedArrayTypeInfo オブジェクトを一元管理するための Map．オブジェクトはファクトリメソッドで生成される．
