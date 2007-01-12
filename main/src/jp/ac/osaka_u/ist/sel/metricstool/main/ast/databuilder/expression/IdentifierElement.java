@@ -11,4 +11,6 @@ public interface IdentifierElement extends ExpressionElement{
     public UnresolvedTypeInfo resolveAsReferencedVariable(BuildDataManager buildDataManager);
     public UnresolvedTypeInfo resolveAsAssignmetedVariable(BuildDataManager buildDataManager);
     public IdentifierElement resolveAsCalledMethod(BuildDataManager buildDataManager);
+    
+    public UnresolvedTypeInfo resolveReferencedEntityIfPossible(BuildDataManager buildDataManager);
 }

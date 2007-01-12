@@ -24,8 +24,7 @@ public class FieldOrMethodElement implements IdentifierElement{
     }
     
     public String[] getQualifiedName() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
     
     public UnresolvedTypeInfo resolveAsAssignmetedVariable(BuildDataManager buildDataManager) {
@@ -44,6 +43,12 @@ public class FieldOrMethodElement implements IdentifierElement{
         return usage;
     }
     
+    public UnresolvedTypeInfo resolveReferencedEntityIfPossible(BuildDataManager buildDataManager) {
+        throw new UnsupportedOperationException();
+    }
+    
     private final UnresolvedTypeInfo ownerType;
     private final String name;
+    
+    
 }

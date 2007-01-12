@@ -49,23 +49,22 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder{
                 if (left instanceof FieldOrMethodElement){
                     IdentifierElement leftIdentifier = (IdentifierElement)left;
                     leftElementType = leftIdentifier.resolveAsReferencedVariable(buildDataManager);
-                }
-                else if (left instanceof SingleIdentifierElement){
-                    //左側も単一の識別子なら、そいつは変数かもしれない
-                    SingleIdentifierElement leftIdentifier = (SingleIdentifierElement)left;
-                    String leftName = leftIdentifier.getName();
-                    UnresolvedVariableInfo variable = buildDataManager.getCurrentScopeVariable(leftName);
-                    
-                    if (null != variable){
-                        //スコープ内に変数がみつかった
-                        if (variable instanceof UnresolvedFieldInfo){
-                            //実はフィールドでした
-                            leftElementType = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),
-                                    buildDataManager.getCurrentClass(),leftName);
-                        } else {
-                            leftElementType = variable.getType();
-                        }
-                    }
+//                }  else if (left instanceof SingleIdentifierElement){
+//                    //左側も単一の識別子なら、そいつは変数かもしれない
+//                    SingleIdentifierElement leftIdentifier = (SingleIdentifierElement)left;
+//                    String leftName = leftIdentifier.getName();
+//                    UnresolvedVariableInfo variable = buildDataManager.getCurrentScopeVariable(leftName);
+//                    
+//                    if (null != variable){
+//                        //スコープ内に変数がみつかった
+//                        if (variable instanceof UnresolvedFieldInfo){
+//                            //実はフィールドでした
+//                            leftElementType = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),
+//                                    buildDataManager.getCurrentClass(),leftName);
+//                        } else {
+//                            leftElementType = variable.getType();
+//                        }
+//                    }
                 } else if (left.equals(InstanceSpecificElement.THIS)){
                     //左側がthisなら右側はこのクラスのフィールド名かメソッド名
                     leftElementType = buildDataManager.getCurrentClass();
@@ -77,7 +76,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder{
                     //左側の型が決定できたので右側はフィールド名かメソッド名だろう
                     pushElement(new FieldOrMethodElement(leftElementType,rightName));
                 } else if (left instanceof IdentifierElement){
-                    //左側の型が分からないので全体をなんかよく分からん識別子として扱う
+                    //全体をなんかよく分からん識別子として扱う
                     pushElement(new CompoundIdentifierElement((IdentifierElement)left,rightName));
                 } else {
                     assert(false) : "Illegal state: unknown left element type.";

@@ -16,6 +16,8 @@ public class SingleIdentifierBuilder extends ExpressionBuilder{
     protected void afterExited(AstVisitEvent event) {
         AstToken token = event.getToken();
         if (token.isIdentifier()){
+//            AvailableNamespaceInfoSet nameSpaceset = buildDataManager.getAllAvaliableNames();
+//            UnresolvedReferenceTypeInfo unresolvedReference = new UnresolvedReferenceTypeInfo(nameSpaceset,new String[]{token.toString()});
             pushElement(new SingleIdentifierElement(token.toString(),buildDataManager.getCurrentClass()));
         }
     }

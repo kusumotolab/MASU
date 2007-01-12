@@ -60,10 +60,28 @@ public class CompoundIdentifierElement implements IdentifierElement {
         buildDataManager.addFieldReference(fieldUsage);
         return fieldUsage;
     }
+    
+    public UnresolvedTypeInfo resolveReferencedEntityIfPossible(BuildDataManager buildDataManager) {
+        this.ownerType = owner.resolveReferencedEntityIfPossible(buildDataManager);
+        
+        if (ownerType != null){
+            final UnresolvedFieldUsage fieldUsage = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),
+                    ownerType,this.name);
+            buildDataManager.addFieldReference(fieldUsage);
+            return fieldUsage;
+        } else {
+            return null;
+        }
+    }
 
-    protected UnresolvedEntityUsage resolveOwner(final BuildDataManager buildDataManager) {
-        return new UnresolvedEntityUsage(buildDataManager.getAllAvaliableNames(), this.owner
+    protected UnresolvedTypeInfo resolveOwner(final BuildDataManager buildDataManager) {
+        this.ownerType = resolveReferencedEntityIfPossible(buildDataManager);
+        if (null != ownerType){
+            return ownerType;
+        } else {
+            return new UnresolvedEntityUsage(buildDataManager.getAllAvaliableNames(), this.owner
                 .getQualifiedName());
+        }
     }
 
     private final String name;
@@ -73,4 +91,6 @@ public class CompoundIdentifierElement implements IdentifierElement {
     private final IdentifierElement owner;
 
     private UnresolvedTypeInfo ownerType;
+
+    
 }

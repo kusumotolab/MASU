@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsage;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
@@ -9,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
 
 public class SingleIdentifierElement implements IdentifierElement{
     
-    public SingleIdentifierElement(String name, UnresolvedClassInfo owner){
+    public SingleIdentifierElement(String name, UnresolvedTypeInfo owner){
         this.name = name;
         this.qualifiedName = new String[]{name};
         this.owner = owner;
@@ -63,9 +62,23 @@ public class SingleIdentifierElement implements IdentifierElement{
         }
     }
     
+    public UnresolvedTypeInfo resolveReferencedEntityIfPossible(BuildDataManager buildDataManager) {
+        UnresolvedVariableInfo variable = buildDataManager.getCurrentScopeVariable(name);
+        if (null != variable){
+            if (variable instanceof UnresolvedFieldInfo){
+                UnresolvedFieldUsage fieldUsage = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),owner,name);
+                buildDataManager.addFieldReference(fieldUsage);
+                return fieldUsage;
+            } else {
+                return variable.getType();
+            }
+        } else {
+            return null;
+        }
+    }
+    
+    
     private final String name;
     private final String[] qualifiedName;
-    private final UnresolvedClassInfo owner;
-    
-    
+    private final UnresolvedTypeInfo owner;
 }
