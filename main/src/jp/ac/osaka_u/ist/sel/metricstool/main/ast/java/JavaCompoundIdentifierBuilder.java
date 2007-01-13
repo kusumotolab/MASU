@@ -7,7 +7,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.Express
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.IdentifierElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.InstanceSpecificElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElement;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsage;
 
 public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
     public JavaCompoundIdentifierBuilder(ExpressionElementManager expressionManager, BuildDataManager buildManager) {
@@ -24,7 +26,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
         ExpressionElement left = elements[0];
         ExpressionElement right = elements[1];
         if (elements[1].equals(JavaExpressionElement.CLASS)){
-            pushElement(new TypeElement(classType));
+            pushElement(new TypeElement(JAVA_LANG_CLASS));
         } else if (right.equals(InstanceSpecificElement.THIS)){
             
             IdentifierElement leftIdentifier = (IdentifierElement)left;
@@ -45,15 +47,9 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
         }
     }
     
-    private final static UnresolvedClassInfo classType = new UnresolvedClassInfo();
-    
-    static {
-        classType.setClassName("Class");
-        classType.setNamespace(new String[]{"java", "lang"});
-        classType.setPublicVisible(true);
-        classType.setInheritanceVisible(true);
-        classType.setNamespaceVisible(true);
-    }
+    private final static UnresolvedEntityUsage JAVA_LANG_CLASS =
+        new UnresolvedEntityUsage(new AvailableNamespaceInfoSet(),
+                new String[]{"java","lang","Class"});
     
     private final BuildDataManager buildDataManager;
     
