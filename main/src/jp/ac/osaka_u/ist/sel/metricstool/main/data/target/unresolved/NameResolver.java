@@ -164,7 +164,7 @@ public final class NameResolver {
                     usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
                     resolvedCache);
             assert elementType != null : "resolveTypeInfo returned null!";
-            
+
             // 要素の型が不明のときは UnnownTypeInfo を返す
             if (elementType instanceof UnknownTypeInfo) {
                 return UnknownTypeInfo.getInstance();
@@ -264,7 +264,7 @@ public final class NameResolver {
                 unresolvedFieldOwnerClassType, usingClass, usingMethod, classInfoManager,
                 fieldInfoManager, methodInfoManager, resolvedCache);
         assert fieldOwnerClassType != null : "resolveTypeInfo returned null!";
-        
+
         // -----ここから親のTypeInfo に応じて処理を分岐
         // 親が解決できなかった場合はどうしようもない
         if (fieldOwnerClassType instanceof UnknownTypeInfo) {
@@ -363,7 +363,7 @@ public final class NameResolver {
             }
         }
 
-        err.println("resolveFieldReference2: Here shouldn't be reached!");
+        assert false : "Here shouldn't be reached!";
         return UnknownTypeInfo.getInstance();
     }
 
@@ -409,7 +409,7 @@ public final class NameResolver {
                 unresolvedFieldOwnerClassType, usingClass, usingMethod, classInfoManager,
                 fieldInfoManager, methodInfoManager, resolvedCache);
         assert fieldOwnerClassType != null : "resolveTypeInfo returned null!";
-        
+
         // -----ここから親のTypeInfo に応じて処理を分岐
         // 親が解決できなかった場合はどうしようもない
         if (fieldOwnerClassType instanceof UnknownTypeInfo) {
@@ -497,7 +497,7 @@ public final class NameResolver {
             return fieldInfo.getType();
         }
 
-        err.println("resolveFieldAssignment2: Here shouldn't be reached!");
+        assert false : "Here shouldn't be reached!";
         return UnknownTypeInfo.getInstance();
     }
 
@@ -570,7 +570,7 @@ public final class NameResolver {
                 unresolvedMethodOwnerClassType, usingClass, usingMethod, classInfoManager,
                 fieldInfoManager, methodInfoManager, resolvedCache);
         assert methodOwnerClassType != null : "resolveTypeInfo returned null!";
-        
+
         // -----ここから親のTypeInfo に応じて処理を分岐
         // 親が解決できなかった場合はどうしようもない
         if (methodOwnerClassType instanceof UnknownTypeInfo) {
@@ -690,7 +690,7 @@ public final class NameResolver {
             }
         }
 
-        err.println("resolveMethodCall3: Here shouldn't be reached!");
+        assert false : "Here shouldn't be reached!";
         return UnknownTypeInfo.getInstance();
     }
 
@@ -731,7 +731,7 @@ public final class NameResolver {
         TypeInfo ownerArrayType = NameResolver.resolveTypeInfo(unresolvedOwnerType, usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
         assert ownerArrayType != null : "resolveTypeInfo returned null!";
-        
+
         // 未定義型の名前解決ができなかった場合
         if (ownerArrayType instanceof UnknownTypeInfo) {
             if (unresolvedOwnerType instanceof UnresolvedArrayTypeInfo) {
@@ -812,7 +812,8 @@ public final class NameResolver {
         {
             // このクラスで利用可能なインスタンスフィールド一覧を取得
             final List<TargetFieldInfo> availableFieldsOfThisClass = Members
-                    .<TargetFieldInfo>getInstanceMembers(NameResolver.getAvailableFields(usingClass));
+                    .<TargetFieldInfo> getInstanceMembers(NameResolver
+                            .getAvailableFields(usingClass));
 
             for (TargetFieldInfo availableFieldOfThisClass : availableFieldsOfThisClass) {
 
@@ -887,20 +888,18 @@ public final class NameResolver {
                             // 親が外部クラス(ExternalClassInfo)の場合
                         } else if (ownerTypeInfo instanceof ExternalClassInfo) {
 
-                            final ExternalClassInfo externalSuperClass = NameResolver
-                                    .getExternalSuperClass((TargetClassInfo) ownerTypeInfo);
-                            if (!(ownerTypeInfo instanceof TargetInnerClassInfo)
-                                    && (null != externalSuperClass)) {
+                            final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(name[i],
+                                    (ExternalClassInfo) ownerTypeInfo);
 
-                                final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(name[i],
-                                        externalSuperClass);
+                            usingMethod.addReferencee(fieldInfo);
+                            fieldInfo.addReferencer(usingMethod);
+                            fieldInfoManager.add(fieldInfo);
 
-                                usingMethod.addReferencee(fieldInfo);
-                                fieldInfo.addReferencer(usingMethod);
-                                fieldInfoManager.add(fieldInfo);
+                            ownerTypeInfo = fieldInfo.getType();
 
-                                ownerTypeInfo = fieldInfo.getType();
-                            }
+                        } else {
+                            err.println("here shouldn't be reached!");
+                            assert false;
                         }
                     }
 
@@ -916,7 +915,7 @@ public final class NameResolver {
         {
             // このクラスで利用可能なスタティックフィールド一覧を取得
             final List<TargetFieldInfo> availableFieldsOfThisClass = Members
-                    .<TargetFieldInfo>getStaticMembers(NameResolver.getAvailableFields(usingClass));
+                    .<TargetFieldInfo> getStaticMembers(NameResolver.getAvailableFields(usingClass));
 
             for (TargetFieldInfo availableFieldOfThisClass : availableFieldsOfThisClass) {
 
@@ -1012,20 +1011,17 @@ public final class NameResolver {
                             // 親が外部クラス(ExternalClassInfo)の場合
                         } else if (ownerTypeInfo instanceof ExternalClassInfo) {
 
-                            final ExternalClassInfo externalSuperClass = NameResolver
-                                    .getExternalSuperClass((TargetClassInfo) ownerTypeInfo);
-                            if (!(ownerTypeInfo instanceof TargetInnerClassInfo)
-                                    && (null != externalSuperClass)) {
+                            final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(name[i],
+                                    (ExternalClassInfo) ownerTypeInfo);
 
-                                final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(name[i],
-                                        externalSuperClass);
+                            usingMethod.addReferencee(fieldInfo);
+                            fieldInfo.addReferencer(usingMethod);
+                            fieldInfoManager.add(fieldInfo);
 
-                                usingMethod.addReferencee(fieldInfo);
-                                fieldInfo.addReferencer(usingMethod);
-                                fieldInfoManager.add(fieldInfo);
+                            ownerTypeInfo = fieldInfo.getType();
 
-                                ownerTypeInfo = fieldInfo.getType();
-                            }
+                        } else {
+                            assert false : "Here shouldn't be reached!";
                         }
                     }
 
@@ -1135,20 +1131,17 @@ public final class NameResolver {
                             // 親が外部クラス(ExternalClassInfo)の場合
                         } else if (ownerTypeInfo instanceof ExternalClassInfo) {
 
-                            final ExternalClassInfo externalSuperClass = NameResolver
-                                    .getExternalSuperClass((TargetClassInfo) ownerTypeInfo);
-                            if (!(ownerTypeInfo instanceof TargetInnerClassInfo)
-                                    && (null != externalSuperClass)) {
+                            final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(name[i],
+                                    (ExternalClassInfo) ownerTypeInfo);
 
-                                final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(name[i],
-                                        externalSuperClass);
+                            usingMethod.addReferencee(fieldInfo);
+                            fieldInfo.addReferencer(usingMethod);
+                            fieldInfoManager.add(fieldInfo);
 
-                                usingMethod.addReferencee(fieldInfo);
-                                fieldInfo.addReferencer(usingMethod);
-                                fieldInfoManager.add(fieldInfo);
+                            ownerTypeInfo = fieldInfo.getType();
 
-                                ownerTypeInfo = fieldInfo.getType();
-                            }
+                        } else {
+                            assert false : "Here shouldn't be reached!";
                         }
                     }
 
@@ -1269,6 +1262,9 @@ public final class NameResolver {
                                     fieldInfoManager.add(fieldInfo);
 
                                     ownerTypeInfo = fieldInfo.getType();
+
+                                } else {
+                                    assert false : "Here should be reached!";
                                 }
                             }
 
@@ -1287,13 +1283,12 @@ public final class NameResolver {
                     // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
                     if (importName[importName.length - 1].equals(name[0])) {
 
-                        ClassInfo specifiedClassInfo = classInfoManager
-                                .getClassInfo(importName);
-                        if (null == specifiedClassInfo){
+                        ClassInfo specifiedClassInfo = classInfoManager.getClassInfo(importName);
+                        if (null == specifiedClassInfo) {
                             specifiedClassInfo = new ExternalClassInfo(importName);
-                            classInfoManager.add((ExternalClassInfo)specifiedClassInfo);
+                            classInfoManager.add((ExternalClassInfo) specifiedClassInfo);
                         }
-                        
+
                         TypeInfo ownerTypeInfo = specifiedClassInfo;
                         for (int i = 1; i < name.length; i++) {
 
@@ -1380,20 +1375,17 @@ public final class NameResolver {
                                 // 親が外部クラス(ExternalClassInfo)の場合
                             } else if (ownerTypeInfo instanceof ExternalClassInfo) {
 
-                                final ExternalClassInfo externalSuperClass = NameResolver
-                                        .getExternalSuperClass((TargetClassInfo) ownerTypeInfo);
-                                if (!(ownerTypeInfo instanceof TargetInnerClassInfo)
-                                        && (null != externalSuperClass)) {
+                                final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(name[i],
+                                        (ExternalClassInfo) ownerTypeInfo);
 
-                                    final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
-                                            name[i], externalSuperClass);
+                                usingMethod.addReferencee(fieldInfo);
+                                fieldInfo.addReferencer(usingMethod);
+                                fieldInfoManager.add(fieldInfo);
 
-                                    usingMethod.addReferencee(fieldInfo);
-                                    fieldInfo.addReferencer(usingMethod);
-                                    fieldInfoManager.add(fieldInfo);
+                                ownerTypeInfo = fieldInfo.getType();
 
-                                    ownerTypeInfo = fieldInfo.getType();
-                                }
+                            }else {
+                                assert false : "Here shouldn't be reached!";
                             }
                         }
 
@@ -1407,7 +1399,7 @@ public final class NameResolver {
         }
 
         err.println("Can't resolve entity usage6 : " + entityUsage.getTypeName());
-        
+
         // 見つからなかった処理を行う
         usingMethod.addUnresolvedUsage(entityUsage);
 
