@@ -150,7 +150,7 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
                 } else if (((ClassInfo) actualParameterType).isSubClass((ClassInfo) dummyParameter
                         .getType())) {
 
-                }else{
+                } else {
                     return false;
                 }
 
@@ -163,6 +163,29 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
                     return false;
                 }
 
+                // 実引数が配列型の場合
+            } else if (actualParameterType instanceof ArrayTypeInfo) {
+
+                if (!(dummyParameter.getType() instanceof ArrayTypeInfo)) {
+                    return false;
+                }
+
+                final int actualArrayDimension = ((ArrayTypeInfo) actualParameterType)
+                        .getDimension();
+                final int dummyArrayDimension = ((ArrayTypeInfo) dummyParameter.getType())
+                        .getDimension();
+                final TypeInfo actualArrayElementType = ((ArrayTypeInfo) actualParameterType)
+                        .getElementType();
+                final TypeInfo dummyArrayElementType = ((ArrayTypeInfo) dummyParameter.getType())
+                        .getElementType();
+                if (actualArrayDimension != dummyArrayDimension) {
+                    return false;
+                } else if (!actualArrayElementType.equals(dummyArrayElementType)) {
+                    return false;
+                }
+
+                // TODO Java言語の場合は，仮引数が java.lang.object でもOKな処理が必要
+
                 // 実引数が null の場合
             } else if (actualParameterType instanceof NullTypeInfo) {
 
@@ -171,11 +194,13 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
                     return false;
                 }
 
+                // TODO Java言語の場合は，仮引数が配列型の場合でもOKな処理が必要
+
                 // 実引数の型が解決できなかった場合
             } else if (actualParameterType instanceof UnknownTypeInfo) {
                 // 実引数の型が不明な場合は，仮引数の型が何であろうともOKにしている
-            
-            }else {
+
+            } else {
                 assert false : "Here shouldn't be reached!";
             }
         }
