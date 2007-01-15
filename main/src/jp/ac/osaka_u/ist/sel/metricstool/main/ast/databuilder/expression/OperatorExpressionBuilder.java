@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
@@ -7,75 +8,86 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsage;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
-public class OperatorExpressionBuilder extends ExpressionBuilder{
 
-    public OperatorExpressionBuilder(ExpressionElementManager expressionManager,BuildDataManager buildManager) {
+public class OperatorExpressionBuilder extends ExpressionBuilder {
+
+    public OperatorExpressionBuilder(final ExpressionElementManager expressionManager,
+            final BuildDataManager buildManager) {
         super(expressionManager);
         this.buildDataManager = buildManager;
     }
 
     @Override
-    protected void afterExited(AstVisitEvent event) {
-        AstToken token = event.getToken();
-        if (token instanceof OperatorToken){
-            buildOperatorElement((OperatorToken)token);
+    protected void afterExited(final AstVisitEvent event) {
+        final AstToken token = event.getToken();
+        if (token instanceof OperatorToken) {
+            this.buildOperatorElement((OperatorToken) token);
         }
     }
-    
-    protected void buildOperatorElement(OperatorToken token){
-        int term = token.getTermCount();
-        boolean assignmentLeft = token.isAssignmentOperator();
-        boolean referenceLeft = token.isLeftTermIsReferencee();
-        UnresolvedTypeInfo type = token.getSpecifiedResultType();
-        
-        ExpressionElement[] elements = getAvailableElements();
-        
+
+    protected void buildOperatorElement(final OperatorToken token) {
+        final int term = token.getTermCount();
+        final boolean assignmentLeft = token.isAssignmentOperator();
+        final boolean referenceLeft = token.isLeftTermIsReferencee();
+        final UnresolvedTypeInfo type = token.getSpecifiedResultType();
+
+        final ExpressionElement[] elements = this.getAvailableElements();
+
         assert (term > 0 && term == elements.length) : "Illegal state: unexpected element count.";
-        
-        UnresolvedTypeInfo leftTermType = null;
-        
-        if (elements[0] instanceof IdentifierElement){
-            IdentifierElement leftElement = (IdentifierElement)elements[0];
-            if (referenceLeft){
-                leftTermType = leftElement.resolveAsReferencedVariable(buildDataManager);
+
+        final UnresolvedTypeInfo[] termTypes = new UnresolvedTypeInfo[elements.length];
+
+        if (elements[0] instanceof IdentifierElement) {
+            final IdentifierElement leftElement = (IdentifierElement) elements[0];
+            if (referenceLeft) {
+                termTypes[0] = leftElement.resolveAsReferencedVariable(this.buildDataManager);
             }
-            
-            if (assignmentLeft){
-                leftTermType = leftElement.resolveAsAssignmetedVariable(buildDataManager);
+
+            if (assignmentLeft) {
+                termTypes[0] = leftElement.resolveAsAssignmetedVariable(this.buildDataManager);
+            }
+        } else {
+            termTypes[0] = elements[0].getType();
+        }
+
+        for (int i = 1; i < term; i++) {
+            if (elements[i] instanceof IdentifierElement) {
+                termTypes[i] = ((IdentifierElement) elements[i])
+                        .resolveAsReferencedVariable(this.buildDataManager);
+            } else {
+                termTypes[i] = elements[i].getType();
             }
         }
-        
-        for(int i=1; i < term; i++){
-            if (elements[i] instanceof IdentifierElement){
-                ((IdentifierElement)elements[i]).resolveAsReferencedVariable(buildDataManager);
-            }
-        }
-        
+
         UnresolvedTypeInfo resultType = null;
-        if (null != type){
+        if (null != type) {
             resultType = type;
-        } else if (token.equals(OperatorToken.ARRAY)){
+        } else if (token.equals(OperatorToken.ARRAY)) {
             UnresolvedTypeInfo ownerType;
-            if (elements[0] instanceof IdentifierElement){
-                ownerType = ((IdentifierElement)elements[0]).resolveAsReferencedVariable(buildDataManager);
+            if (elements[0] instanceof IdentifierElement) {
+                ownerType = ((IdentifierElement) elements[0])
+                        .resolveAsReferencedVariable(this.buildDataManager);
             } else {
                 ownerType = elements[0].getType();
             }
             resultType = new UnresolvedArrayElementUsage(ownerType);
-        } else if (null != leftTermType){
-            resultType = leftTermType;  
-        } else{
+        } else if (token.equals(OperatorToken.THREE_TERM) && termTypes.length > 0
+                && null != termTypes[1]) {
+            resultType = termTypes[1];
+        } else if (termTypes.length >= 0 && null != termTypes[0]) {
+            resultType = termTypes[0];
+        } else {
             resultType = elements[0].getType();
         }
-        
-        pushElement(new TypeElement(resultType));
+
+        this.pushElement(new TypeElement(resultType));
     }
 
     @Override
-    protected boolean isTriggerToken(AstToken token) {
+    protected boolean isTriggerToken(final AstToken token) {
         return token instanceof OperatorToken;
     }
-    
+
     private final BuildDataManager buildDataManager;
 
 }
