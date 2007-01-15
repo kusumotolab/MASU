@@ -150,9 +150,25 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Reso
     }
 
     /**
+     * このクラスの完全限定名を返す
+     * 
+     * @return このクラスの完全限定名
+     */
+    public final String[] getFullQualifiedName(){
+        
+        final String[] namespace = this.getNamespace().getName();
+        final String[] fullQualifiedName = new String[namespace.length + 1];
+        System.arraycopy(namespace, 0, fullQualifiedName, 0, namespace.length);
+        fullQualifiedName[fullQualifiedName.length - 1] = this.getClassName();
+        
+        return fullQualifiedName;
+    }
+    
+    /**
      * このクラスの完全限定名を返す．完全限定名は引数で与えられた文字列により連結され，返される．
      * 
      * @param 区切り文字
+     * @return このクラスの完全限定名
      */
     public final String getFullQualifiedtName(final String delimiter) {
 

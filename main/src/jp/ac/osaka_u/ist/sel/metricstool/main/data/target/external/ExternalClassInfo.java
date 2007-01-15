@@ -41,7 +41,7 @@ public class ExternalClassInfo extends ClassInfo {
      */
     public ExternalClassInfo(final String className) {
 
-        super(NamespaceInfo.UNNKNOWN, className);
+        super(NamespaceInfo.UNKNOWN, className);
     }
 
     /**

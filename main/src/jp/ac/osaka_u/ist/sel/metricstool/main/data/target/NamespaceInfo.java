@@ -83,7 +83,7 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo> {
     /**
      * 不明な名前空間名を表す定数
      */
-    public final static NamespaceInfo UNNKNOWN = new NamespaceInfo(new String[] { "unknown" });
+    public final static NamespaceInfo UNKNOWN = new NamespaceInfo(new String[] { "unknown" });
 
     /**
      * 名前空間名を返す
