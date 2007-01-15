@@ -10,6 +10,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 public class CompoundIdentifierElement implements IdentifierElement {
 
     public CompoundIdentifierElement(final IdentifierElement owner, final String name) {
+        if (null == owner) {
+            throw new NullPointerException("owner is null.");
+        }
+        if (null == name) {
+            throw new NullPointerException("name is null.");
+        }
+
         this.name = name;
         this.owner = owner;
 
@@ -60,13 +67,13 @@ public class CompoundIdentifierElement implements IdentifierElement {
         buildDataManager.addFieldReference(fieldUsage);
         return fieldUsage;
     }
-    
-    public UnresolvedTypeInfo resolveReferencedEntityIfPossible(BuildDataManager buildDataManager) {
-        this.ownerType = owner.resolveReferencedEntityIfPossible(buildDataManager);
-        
-        if (ownerType != null){
-            final UnresolvedFieldUsage fieldUsage = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),
-                    ownerType,this.name);
+
+    public UnresolvedTypeInfo resolveReferencedEntityIfPossible(final BuildDataManager buildDataManager) {
+        this.ownerType = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
+
+        if (this.ownerType != null) {
+            final UnresolvedFieldUsage fieldUsage = new UnresolvedFieldUsage(buildDataManager
+                    .getAllAvaliableNames(), this.ownerType, this.name);
             buildDataManager.addFieldReference(fieldUsage);
             return fieldUsage;
         } else {
@@ -75,12 +82,12 @@ public class CompoundIdentifierElement implements IdentifierElement {
     }
 
     protected UnresolvedTypeInfo resolveOwner(final BuildDataManager buildDataManager) {
-        this.ownerType = resolveReferencedEntityIfPossible(buildDataManager);
-        if (null != ownerType){
-            return ownerType;
+        this.ownerType = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
+        if (null != this.ownerType) {
+            return this.ownerType;
         } else {
             return new UnresolvedEntityUsage(buildDataManager.getAllAvaliableNames(), this.owner
-                .getQualifiedName());
+                    .getQualifiedName());
         }
     }
 
@@ -92,5 +99,4 @@ public class CompoundIdentifierElement implements IdentifierElement {
 
     private UnresolvedTypeInfo ownerType;
 
-    
 }
