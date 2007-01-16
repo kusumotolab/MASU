@@ -219,7 +219,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * @return 子クラスから参照可能な場合は true, そうでない場合は false
      */
     public boolean isInheritanceVisible() {
-        return this.privateVisible;
+        return this.inheritanceVisible;
     }
 
     /**
@@ -237,7 +237,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
      */
     public boolean isPrivateVisible() {
-        return this.inheritanceVisible;
+        return this.privateVisible;
     }
 
     /**
