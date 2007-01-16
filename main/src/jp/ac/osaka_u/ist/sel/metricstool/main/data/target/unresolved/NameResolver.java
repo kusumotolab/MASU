@@ -1496,7 +1496,9 @@ public final class NameResolver {
             }
         }
 
-        err.println("Can't resolve entity usage6 : " + entityUsage.getTypeName());
+        err.println("Remain unresolved \"" + entityUsage.getTypeName() + "\"" + " on \""
+                + usingClass.getFullQualifiedtName(LANGUAGE.JAVA.getNamespaceDelimiter()) + "#"
+                + usingMethod.getMethodName() + "\".");
 
         // 見つからなかった処理を行う
         usingMethod.addUnresolvedUsage(entityUsage);
@@ -1661,10 +1663,10 @@ public final class NameResolver {
             availableFields.addAll(usedClass.getDefinedFields());
 
             //使用するクラスが使用されるクラスのインナークラスである場合，全てのフィールドが利用可能
-        } else if (usingClass.isInnerClass(usedClass)){
-            
+        } else if (usingClass.isInnerClass(usedClass)) {
+
             availableFields.addAll(usedClass.getDefinedFields());
-            
+
             // 2つのクラスが同じ名前空間を持っている場合
         } else if (usedClass.getNamespace().equals(usingClass.getNamespace())) {
 
@@ -1732,10 +1734,10 @@ public final class NameResolver {
             availableMethods.addAll(usedClass.getDefinedMethods());
 
             //使用するクラスが使用されるクラスのインナークラスである場合，全てのメソッドが利用可能
-        } else if (usingClass.isInnerClass(usedClass)){
-            
+        } else if (usingClass.isInnerClass(usedClass)) {
+
             availableMethods.addAll(usedClass.getDefinedMethods());
-            
+
             // 2つのクラスが同じ名前空間を持っている場合
         } else if (usedClass.getNamespace().equals(usingClass.getNamespace())) {
 
