@@ -64,7 +64,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder{
         assert(null != superClassName) : "Illegal state: unexpected ownerClass type.";
         
         UnresolvedMethodCall constructorCall = new UnresolvedMethodCall(ownerClass,superClassName,true);
-        resolveParameters(constructorCall, elements);
+        resolveParameters(constructorCall, elements,0);
         pushElement(new MethodCallElement(constructorCall));
         buildDataManager.addMethodCall(constructorCall);
     }

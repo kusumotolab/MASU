@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCall;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
@@ -36,14 +35,14 @@ public class ConstructorCallBuilder extends ExpressionBuilder{
         String[] name = type.getReferenceName();
         
         UnresolvedMethodCall constructorCall = new UnresolvedMethodCall(type,name[name.length-1],true);
-        resolveParameters(constructorCall, elements);
+        resolveParameters(constructorCall, elements,1);
         pushElement(new MethodCallElement(constructorCall));
         buildManager.addMethodCall(constructorCall);
         
     }
     
-    protected void resolveParameters(UnresolvedMethodCall constructorCall,ExpressionElement[] elements){
-        for(int i=1; i < elements.length; i++){
+    protected void resolveParameters(UnresolvedMethodCall constructorCall,ExpressionElement[] elements, int startIndex){
+        for(int i=startIndex; i < elements.length; i++){
             ExpressionElement element = elements[i];
             UnresolvedTypeInfo type;
             if (element instanceof IdentifierElement){
