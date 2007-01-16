@@ -103,7 +103,6 @@ public class MethodBuilder extends CompoundDataBuilder<UnresolvedMethodInfo>{
             } else if (type.equals(VariableDefinitionStateManager.VARIABLE_STATE.EXIT_VARIABLE_DEF)){
                 if (null != methodParameterBuilder){
                     methodParameterBuilder.deactivate();
-                    registParameter();
                 }
             }
         }
@@ -146,13 +145,6 @@ public class MethodBuilder extends CompoundDataBuilder<UnresolvedMethodInfo>{
             if (name.length > 0){
                 buildingMethod.setMethodName(name[0]);
             }
-        }
-    }
-    
-    private void registParameter(){
-        if (!buildingMethodStack.isEmpty()){
-            UnresolvedMethodInfo buildingMethod = buildingMethodStack.peek();
-            buildingMethod.adParameter(methodParameterBuilder.popLastBuiltData());
         }
     }
     
