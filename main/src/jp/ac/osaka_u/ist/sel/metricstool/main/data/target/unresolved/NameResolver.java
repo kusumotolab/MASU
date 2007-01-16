@@ -1655,11 +1655,16 @@ public final class NameResolver {
         final List<TargetFieldInfo> availableFields = new LinkedList<TargetFieldInfo>();
 
         // このクラスで定義されているフィールドのうち，使用するクラスで利用可能なフィールドを取得する
-        // 2つのクラスが同じ場合
+        // 2つのクラスが同じ場合，全てのフィールドが利用可能
         if (usedClass.equals(usingClass)) {
 
             availableFields.addAll(usedClass.getDefinedFields());
 
+            //使用するクラスが使用されるクラスのインナークラスである場合，全てのフィールドが利用可能
+        } else if (usingClass.isInnerClass(usedClass)){
+            
+            availableFields.addAll(usedClass.getDefinedFields());
+            
             // 2つのクラスが同じ名前空間を持っている場合
         } else if (usedClass.getNamespace().equals(usingClass.getNamespace())) {
 
@@ -1721,11 +1726,16 @@ public final class NameResolver {
         final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
 
         // このクラスで定義されているメソッドのうち，使用するクラスで利用可能なメソッドを取得する
-        // 2つのクラスが同じ場合
+        // 2つのクラスが同じ場合，全てのメソッドが利用可能
         if (usedClass.equals(usingClass)) {
 
             availableMethods.addAll(usedClass.getDefinedMethods());
 
+            //使用するクラスが使用されるクラスのインナークラスである場合，全てのメソッドが利用可能
+        } else if (usingClass.isInnerClass(usedClass)){
+            
+            availableMethods.addAll(usedClass.getDefinedMethods());
+            
             // 2つのクラスが同じ名前空間を持っている場合
         } else if (usedClass.getNamespace().equals(usingClass.getNamespace())) {
 
@@ -1755,6 +1765,14 @@ public final class NameResolver {
             }
         }
 
+        // 使用されるクラスがインナークラスである場合，その外部クラスのメソッドまた利用可能である．
+        if (usedClass instanceof TargetInnerClassInfo) {
+
+            final TargetClassInfo outerClass = ((TargetInnerClassInfo) usedClass).getOuterClass();
+            final List<TargetMethodInfo> availableFieldsOfOuterClass = NameResolver
+                    .getAvailableMethods(outerClass, usingClass);
+            availableMethods.addAll(availableFieldsOfOuterClass);
+        }
         return Collections.unmodifiableList(availableMethods);
     }
 

@@ -154,16 +154,16 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Reso
      * 
      * @return このクラスの完全限定名
      */
-    public final String[] getFullQualifiedName(){
-        
+    public final String[] getFullQualifiedName() {
+
         final String[] namespace = this.getNamespace().getName();
         final String[] fullQualifiedName = new String[namespace.length + 1];
         System.arraycopy(namespace, 0, fullQualifiedName, 0, namespace.length);
         fullQualifiedName[fullQualifiedName.length - 1] = this.getClassName();
-        
+
         return fullQualifiedName;
     }
-    
+
     /**
      * このクラスの完全限定名を返す．完全限定名は引数で与えられた文字列により連結され，返される．
      * 
@@ -286,7 +286,37 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Reso
 
         return false;
     }
-    
+
+    /**
+     * このクラスが引数で与えられたクラスのインナークラスであるかを判定する
+     * 
+     * @param classInfo 対象クラス
+     * @return このクラスが引数で与えられたクラスのインナークラスである場合は true，そうでない場合は false
+     */
+    public final boolean isInnerClass(final ClassInfo classInfo) {
+
+        //引数で与えられたクラスが TargetClassInfo 出ない場合は false
+        if (!(classInfo instanceof TargetClassInfo)) {
+            return false;
+        }
+
+        for (final ClassInfo innerClassInfo : ((TargetClassInfo) classInfo).getInnerClasses()) {
+
+            //このクラスが引数の直接の子クラスと等しい場合は true を返す
+            if (innerClassInfo.equals(this)) {
+                return true;
+            }
+
+            //このクラスが引数の間接的な子クラスである場合も true を返す
+            if (this.isInnerClass(innerClassInfo)) {
+                return true;
+            }
+        }
+
+        //子クラスを再帰的に調べた結果，このクラスと一致するクラスが見つからなかったので false を返す
+        return false;
+    }
+
     /**
      * クラス名を保存するための変数
      */
