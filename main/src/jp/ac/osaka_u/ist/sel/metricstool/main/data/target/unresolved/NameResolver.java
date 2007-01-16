@@ -14,7 +14,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Members;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
@@ -182,6 +181,10 @@ public final class NameResolver {
             final MethodInfoManager methodInfoManager,
             final Map<UnresolvedTypeInfo, TypeInfo> resolvedCache) {
 
+        if ((null == reference) || (null == classInfoManager)) {
+            throw new NullPointerException();
+        }
+
         final String[] referenceName = reference.getReferenceName();
 
         // 参照名が完全限定名であるとして検索
@@ -194,6 +197,7 @@ public final class NameResolver {
 
         // 利用可能な名前空間から型名を探す
         {
+
             for (AvailableNamespaceInfo availableNamespace : reference.getAvailableNamespaces()) {
 
                 // 名前空間名.* となっている場合
@@ -202,9 +206,9 @@ public final class NameResolver {
 
                     // 名前空間の下にある各クラスに対して
                     for (ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
-                        final String className = classInfo.getClassName();
 
                         // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
+                        final String className = classInfo.getClassName();
                         if (className.equals(referenceName[0])) {
 
                             // availableField.getType() から次のword(name[i])を名前解決
@@ -222,7 +226,6 @@ public final class NameResolver {
                                     // インナークラスから探すので一覧を取得
                                     final SortedSet<TargetInnerClassInfo> innerClasses = ((TargetClassInfo) ownerTypeInfo)
                                             .getInnerClasses();
-
                                     for (TargetInnerClassInfo innerClass : innerClasses) {
 
                                         // 一致するクラス名が見つかった場合
@@ -246,7 +249,7 @@ public final class NameResolver {
 
                             // キャッシュ用ハッシュテーブルがる場合はキャッシュを追加
                             if (null != resolvedCache) {
-                                resolvedCache.put(reference, classInfo);
+                                resolvedCache.put(reference, ownerTypeInfo);
                             }
 
                             return ownerTypeInfo;
