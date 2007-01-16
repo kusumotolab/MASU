@@ -712,8 +712,7 @@ public final class NameResolver {
             {
                 final ExternalClassInfo externalSuperClass = NameResolver
                         .getExternalSuperClass((TargetClassInfo) methodOwnerClassType);
-                if (!(methodOwnerClassType instanceof TargetInnerClassInfo)
-                        && (null != externalSuperClass)) {
+                if (null != externalSuperClass) {
 
                     final ExternalMethodInfo methodInfo = new ExternalMethodInfo(methodName,
                             externalSuperClass, constructor);
@@ -731,6 +730,8 @@ public final class NameResolver {
                     // 外部クラスに新規で外部変数（ExternalFieldInfo）を追加したので型は不明
                     return methodInfo.getReturnType();
                 }
+
+                assert false : "Here shouldn't be reached!";
             }
 
             // 見つからなかった処理を行う
@@ -1597,7 +1598,11 @@ public final class NameResolver {
                 return (ExternalClassInfo) superClassInfo;
             }
 
-            NameResolver.getExternalSuperClass((TargetClassInfo) superClassInfo);
+            final ExternalClassInfo superSuperClassInfo = NameResolver
+                    .getExternalSuperClass((TargetClassInfo) superClassInfo);
+            if (null != superSuperClassInfo){
+                return superSuperClassInfo;
+            }
         }
 
         return null;
