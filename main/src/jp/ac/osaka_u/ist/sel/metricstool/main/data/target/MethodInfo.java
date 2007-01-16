@@ -132,7 +132,8 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
         // 引数の型を先頭からチェック等しくない場合は該当しない
         final Iterator<ParameterInfo> dummyParameterIterator = dummyParameters.iterator();
         final Iterator<TypeInfo> actualParameterTypeIterator = actualParameterTypes.iterator();
-        while (dummyParameterIterator.hasNext() && actualParameterTypeIterator.hasNext()) {
+        NEXT_PARAMETER: while (dummyParameterIterator.hasNext()
+                && actualParameterTypeIterator.hasNext()) {
             final ParameterInfo dummyParameter = dummyParameterIterator.next();
             final TypeInfo actualParameterType = actualParameterTypeIterator.next();
 
@@ -144,14 +145,26 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
                     return false;
                 }
 
-                // 実引数が仮引数と同じ参照型（クラス）でもなく，仮引数のサブクラスでもない場合は該当しない
-                if (actualParameterType.equals(dummyParameter.getType())) {
+                // 仮引数，実引数共に対象クラスである場合は，その継承関係を考慮する．つまり，実引数が駆り引数のサブクラスでない場合は，呼び出し可能ではない
+                if ((actualParameterType instanceof TargetClassInfo)
+                        && (dummyParameter.getType() instanceof TargetClassInfo)) {
 
-                } else if (((ClassInfo) actualParameterType).isSubClass((ClassInfo) dummyParameter
-                        .getType())) {
+                    // 実引数が仮引数と同じ参照型（クラス）でもなく，仮引数のサブクラスでもない場合は該当しない
+                    if (actualParameterType.equals(dummyParameter.getType())) {
+                        continue NEXT_PARAMETER;
 
+                    } else if (((ClassInfo) actualParameterType)
+                            .isSubClass((ClassInfo) dummyParameter.getType())) {
+                        continue NEXT_PARAMETER;
+
+                    } else {
+                        return false;
+                    }
+
+                    // 仮引数，実引数のどちらか，あるいは両方が外部クラスである場合は，継承関係から呼び出し可能かどうかを判断することができない
+                    // この場合は，全て呼び出し可能であるとする
                 } else {
-                    return false;
+                    continue NEXT_PARAMETER;
                 }
 
                 // 実引数がプリミティブ型の場合
@@ -159,7 +172,9 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
 
                 // PrimitiveTypeInfo#equals を使って等価性の判定．
                 // 等しくない場合は該当しない
-                if (!actualParameterType.equals(dummyParameter.getType())) {
+                if (actualParameterType.equals(dummyParameter.getType())) {
+                    continue NEXT_PARAMETER;
+                }else{
                     return false;
                 }
 
@@ -184,6 +199,7 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
                     return false;
                 }
 
+                continue NEXT_PARAMETER;
                 // TODO Java言語の場合は，仮引数が java.lang.object でもOKな処理が必要
 
                 // 実引数が null の場合
@@ -194,12 +210,15 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
                     return false;
                 }
 
+                continue NEXT_PARAMETER;
                 // TODO Java言語の場合は，仮引数が配列型の場合でもOKな処理が必要
 
                 // 実引数の型が解決できなかった場合
             } else if (actualParameterType instanceof UnknownTypeInfo) {
-                // 実引数の型が不明な場合は，仮引数の型が何であろうともOKにしている
 
+                // 実引数の型が不明な場合は，仮引数の型が何であろうともOKにしている
+                continue NEXT_PARAMETER;
+                
             } else {
                 assert false : "Here shouldn't be reached!";
             }
