@@ -120,6 +120,7 @@ public class UnresolvedClassInfoManager {
          * @param o 比較対象オブジェクト
          * @return 等しい場合は true，等しくない場合は false
          */
+        @Override
         public boolean equals(Object o) {
 
             if (null == o){
@@ -127,7 +128,7 @@ public class UnresolvedClassInfoManager {
             }
             
             String[] fullQualifiedName = this.getFullQualifiedName();
-            String[] correspondFullQualifiedName = ((UnresolvedClassInfo) o).getFullQualifiedName();
+            String[] correspondFullQualifiedName = ((ClassKey) o).getFullQualifiedName();
 
             if (fullQualifiedName.length != correspondFullQualifiedName.length) {
                 return false;
@@ -147,6 +148,7 @@ public class UnresolvedClassInfoManager {
          * 
          * @return このクラスのハッシュコード
          */
+        @Override
         public int hashCode() {
 
             StringBuffer buffer = new StringBuffer();
