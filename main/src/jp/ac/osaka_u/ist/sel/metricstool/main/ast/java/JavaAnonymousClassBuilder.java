@@ -88,6 +88,12 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
                     buildDataManager.getAvailableNameSpaceSet(), trueName);
             anonymous.addSuperClass(superType);
         }
+        
+        anonymous.setInheritanceVisible(false);
+        anonymous.setPublicVisible(false);
+        anonymous.setNamespaceVisible(false);
+        anonymous.setPrivateVibible(true);
+        anonymous.setInstanceMember(true);
 
         return anonymous;
     }
