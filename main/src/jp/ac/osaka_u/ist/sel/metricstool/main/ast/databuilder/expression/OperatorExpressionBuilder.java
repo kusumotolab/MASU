@@ -1,10 +1,13 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
+import java.util.Comparator;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsage;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
@@ -30,6 +33,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
         final boolean assignmentLeft = token.isAssignmentOperator();
         final boolean referenceLeft = token.isLeftTermIsReferencee();
         final UnresolvedTypeInfo type = token.getSpecifiedResultType();
+        final int[] typeSpecifiedTermIndexes = token.getTypeSpecifiedTermIndexes();
 
         final ExpressionElement[] elements = this.getAvailableElements();
 
@@ -71,14 +75,16 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 ownerType = elements[0].getType();
             }
             resultType = new UnresolvedArrayElementUsage(ownerType);
-        } else if (token.equals(OperatorToken.THREE_TERM) && termTypes.length > 0
-                && null != termTypes[1]) {
-            resultType = termTypes[1];
-        } else if (termTypes.length >= 0 && null != termTypes[0]) {
-            resultType = termTypes[0];
         } else {
-            resultType = elements[0].getType();
+            for (int i = 0; i < typeSpecifiedTermIndexes.length; i++) {
+                resultType = termTypes[typeSpecifiedTermIndexes[i]];
+                if (null != resultType){
+                    break;
+                }
+            }
         }
+        
+        assert (null != resultType) : "Illegal state: operation resultType was not decided.";
 
         this.pushElement(new TypeElement(resultType));
     }
@@ -89,5 +95,5 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
     }
 
     private final BuildDataManager buildDataManager;
-
+ 
 }

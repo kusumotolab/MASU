@@ -16,57 +16,60 @@ public class OperatorToken extends AstTokenAdapter {
     /**
      * キャストは演算子を表す定数インスタンス
      */
-    public static final OperatorToken CAST = new OperatorToken("CAST", 2, false, false, null);
+    public static final OperatorToken CAST = new OperatorToken("CAST", 2, false, false, null,new int[]{0});
 
     /**
      * インクリメント演算子とデクリメント演算子を表す定数インスタンス
      */
     public static final OperatorToken INCL_AND_DECL = new OperatorToken("INCLEMENT", 1, true, true,
-            null);
+            null,new int[]{0});
 
     /**
      * 代入演算子を表す定数インスタンス
      */
-    public static final OperatorToken ASSIGNMENT = new OperatorToken("ASSIGN", 2, true, false, null);
+    public static final OperatorToken ASSIGNMENT = new OperatorToken("ASSIGN", 2, true, false, null,
+            new int[]{0});
 
     /**
      * 複合代入演算子を表す定数インスタンス
      */
-    public static final OperatorToken COMPOUND_ASSIGNMENT = new OperatorToken("COMPOUND_ASSIGNMENT",2,true,true,null);
+    public static final OperatorToken COMPOUND_ASSIGNMENT = new OperatorToken("COMPOUND_ASSIGNMENT",2,true,true,null,
+            new int[]{0});
     
     /**
      * 二項演算子を表す定数インスタンス
      */
-    public static final OperatorToken TWO_TERM = new OperatorToken("TWO_TERM", 2, false, true, null);
+    public static final OperatorToken TWO_TERM = new OperatorToken("TWO_TERM", 2, false, true, null,
+            new int[]{0,1});
 
     /**
      * 単項演算子を表す定数インスタンス
      */
     public static final OperatorToken SINGLE_TERM = new OperatorToken("SINGLE_TERM", 1, false,
-            true, null);
+            true, null,new int[]{0});
 
     /**
      * 三項演算子を表す定数インスタンス
      */
     public static final OperatorToken THREE_TERM = new OperatorToken("THREE_TERM", 3, false, true,
-            null);
+            null,new int[]{1,2});
 
     /**
      * 比較演算子を表す定数インスタンス
      */
     public static final OperatorToken COMPARE = new OperatorToken("COMPARE", 2, false, true,
-            PrimitiveTypeInfo.BOOLEAN);
+            PrimitiveTypeInfo.BOOLEAN,new int[]{});
 
     /**
      * 否定演算子を表す定数インスタンス
      */
     public static final OperatorToken NOT = new OperatorToken("NOT", 1, false, true,
-            PrimitiveTypeInfo.BOOLEAN);
+            PrimitiveTypeInfo.BOOLEAN,new int[]{});
 
     /**
      * 配列記述子を表す定数インスタンス
      */
-    public static final OperatorToken ARRAY = new OperatorToken("ARRAY", 2, false, true, null);
+    public static final OperatorToken ARRAY = new OperatorToken("ARRAY", 2, false, true, null,new int[]{});
 
     /**
      * 演算子の文字列，扱う項の数，左辺値への参照と代入を行うかどうか，演算結果の型を指定するコンストラクタ.
@@ -79,7 +82,8 @@ public class OperatorToken extends AstTokenAdapter {
      * @throws IllegalArgumentException termCountが0以下の場合
      */
     public OperatorToken(final String text, final int termCount, final boolean leftIsAssignmentee,
-            final boolean leftIsReferencee, final UnresolvedTypeInfo specifiedResultType) {
+            final boolean leftIsReferencee, final UnresolvedTypeInfo specifiedResultType,
+            final int[] typeSpecifiedTermIndexes) {
         super(text);
 
         if (termCount <= 0) {
@@ -90,6 +94,7 @@ public class OperatorToken extends AstTokenAdapter {
         this.leftIsReferencee = leftIsReferencee;
         this.termCount = termCount;
         this.specifiedResultType = specifiedResultType;
+        this.typeSpecifiedTermIndexes = typeSpecifiedTermIndexes;
     }
 
     /**
@@ -133,6 +138,15 @@ public class OperatorToken extends AstTokenAdapter {
     public UnresolvedTypeInfo getSpecifiedResultType() {
         return this.specifiedResultType;
     }
+    
+    /**
+     * 演算結果の型を決定される際に考慮される項のインデックスの配列を返す.
+     * 項の型とは関係なく型が決定される場合は空の配列を返す.
+     * @return 演算結果の型を決定される際に考慮される項のインデックスの配列
+     */
+    public int[] getTypeSpecifiedTermIndexes(){
+        return this.typeSpecifiedTermIndexes;
+    }
 
     /**
      * 左辺値への代入があるかどうかを表す
@@ -154,5 +168,9 @@ public class OperatorToken extends AstTokenAdapter {
      * 決まっていない場合はnull.
      */
     private final UnresolvedTypeInfo specifiedResultType;
-
+    
+    /**
+     * 演算結果の型を決定される際に考慮される項のインデックスの配列
+     */
+    private final int[] typeSpecifiedTermIndexes;
 }
