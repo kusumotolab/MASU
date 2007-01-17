@@ -9,7 +9,6 @@ import java.util.Set;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Resolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -33,7 +32,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 public final class UnresolvedClassInfo implements UnresolvedTypeInfo, VisualizableSetting,
-        MemberSetting, PositionSetting, Unresolved {
+        MemberSetting, PositionSetting, Unresolved<ClassInfo> {
 
     /**
      * 引数なしコンストラクタ
@@ -572,7 +571,7 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      * 
      * @return 名前解決された情報
      */
-    public Resolved getResolvedInfo() {
+    public ClassInfo getResolvedInfo() {
         return this.resolvedInfo;
     }
 
@@ -581,14 +580,10 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      * 
      * @param resolvedInfo 名前解決された情報
      */
-    public void setResolvedInfo(final Resolved resolvedInfo) {
+    public void setResolvedInfo(final ClassInfo resolvedInfo) {
 
         if (null == resolvedInfo) {
             throw new NullPointerException();
-        }
-        
-        if (!(resolvedInfo instanceof ClassInfo)){
-            throw new IllegalArgumentException();
         }
 
         this.resolvedInfo = resolvedInfo;
@@ -687,5 +682,5 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
     /**
      * 名前解決された情報を格納するための変数
      */
-    private Resolved resolvedInfo;
+    private ClassInfo resolvedInfo;
 }

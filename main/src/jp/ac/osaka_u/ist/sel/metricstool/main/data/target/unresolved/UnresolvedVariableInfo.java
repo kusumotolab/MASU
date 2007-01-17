@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Resolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -23,7 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public abstract class UnresolvedVariableInfo implements PositionSetting, Unresolved {
+public abstract class UnresolvedVariableInfo implements PositionSetting, Unresolved<VariableInfo> {
 
     /**
      * •Ï”–¼‚ğ•Ô‚·
@@ -191,7 +190,7 @@ public abstract class UnresolvedVariableInfo implements PositionSetting, Unresol
      * 
      * @return –¼‘O‰ğŒˆ‚³‚ê‚½î•ñ
      */
-    public Resolved getResolvedInfo() {
+    public VariableInfo getResolvedInfo() {
         return this.resolvedInfo;
     }
 
@@ -200,14 +199,10 @@ public abstract class UnresolvedVariableInfo implements PositionSetting, Unresol
      * 
      * @param resolvedInfo –¼‘O‰ğŒˆ‚³‚ê‚½î•ñ
      */
-    public void setResolvedInfo(final Resolved resolvedInfo) {
+    public void setResolvedInfo(final VariableInfo resolvedInfo) {
 
         if (null == resolvedInfo) {
             throw new NullPointerException();
-        }
-
-        if (!(resolvedInfo instanceof VariableInfo)) {
-            throw new IllegalArgumentException();
         }
 
         this.resolvedInfo = resolvedInfo;
@@ -287,5 +282,5 @@ public abstract class UnresolvedVariableInfo implements PositionSetting, Unresol
     /**
      * –¼‘O‰ğŒˆ‚³‚ê‚½î•ñ‚ğŠi”[‚·‚é‚½‚ß‚Ì•Ï”
      */
-    private Resolved resolvedInfo;
+    private VariableInfo resolvedInfo;
 }

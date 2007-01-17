@@ -9,7 +9,6 @@ import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Resolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -21,7 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting, PositionSetting,
-        Unresolved {
+        Unresolved<MethodInfo> {
 
     /**
      * 未解決メソッド定義情報オブジェクトを初期化
@@ -547,7 +546,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * 
      * @return 名前解決された情報
      */
-    public Resolved getResolvedInfo() {
+    public MethodInfo getResolvedInfo() {
         return this.resolvedInfo;
     }
 
@@ -556,14 +555,10 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * 
      * @param resolvedInfo 名前解決された情報
      */
-    public void setResolvedInfo(final Resolved resolvedInfo) {
+    public void setResolvedInfo(final MethodInfo resolvedInfo) {
 
         if (null == resolvedInfo) {
             throw new NullPointerException();
-        }
-
-        if (!(resolvedInfo instanceof MethodInfo)) {
-            throw new IllegalArgumentException();
         }
 
         this.resolvedInfo = resolvedInfo;
@@ -672,5 +667,5 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
     /**
      * 名前解決された情報を格納するための変数
      */
-    private Resolved resolvedInfo;
+    private MethodInfo resolvedInfo;
 }
