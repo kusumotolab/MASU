@@ -50,7 +50,7 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
      * @return 子クラスから参照可能な場合は true, そうでない場合は false
      */
     public boolean isInheritanceVisible() {
-        return this.privateVisible;
+        return this.inheritanceVisible;
     }
 
     /**
@@ -68,7 +68,7 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
      * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
      */
     public boolean isPrivateVisible() {
-        return this.inheritanceVisible;
+        return this.privateVisible;
     }
 
     /**

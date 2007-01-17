@@ -233,7 +233,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
      * @return 子クラスから参照可能な場合は true, そうでない場合は false
      */
     public final boolean isInheritanceVisible() {
-        return this.privateVisible;
+        return this.inheritanceVisible;
     }
 
     /**
@@ -251,7 +251,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
      * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
      */
     public final boolean isPrivateVisible() {
-        return this.inheritanceVisible;
+        return this.privateVisible;
     }
 
     /**
