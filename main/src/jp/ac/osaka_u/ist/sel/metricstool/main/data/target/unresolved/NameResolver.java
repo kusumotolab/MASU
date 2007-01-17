@@ -664,10 +664,17 @@ public final class NameResolver {
 
         // 親の型を解決
         final UnresolvedTypeInfo unresolvedMethodOwnerClassType = methodCall.getOwnerClassType();
-        final TypeInfo methodOwnerClassType = NameResolver.resolveTypeInfo(
+        TypeInfo methodOwnerClassType = NameResolver.resolveTypeInfo(
                 unresolvedMethodOwnerClassType, usingClass, usingMethod, classInfoManager,
                 fieldInfoManager, methodInfoManager, resolvedCache);
         assert methodOwnerClassType != null : "resolveTypeInfo returned null!";
+        if (methodOwnerClassType instanceof UnknownTypeInfo) {
+            if (unresolvedMethodOwnerClassType instanceof UnresolvedReferenceTypeInfo) {
+                methodOwnerClassType = NameResolver
+                        .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedMethodOwnerClassType);
+                classInfoManager.add((ExternalClassInfo) methodOwnerClassType);
+            }
+        }
 
         // -----ここから親のTypeInfo に応じて処理を分岐
         // 親が解決できなかった場合はどうしようもない
@@ -831,8 +838,10 @@ public final class NameResolver {
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
         assert ownerArrayType != null : "resolveTypeInfo returned null!";
 
-        // 未定義型の名前解決ができなかった場合
+        // 未解決型の名前解決ができなかった場合
         if (ownerArrayType instanceof UnknownTypeInfo) {
+
+            // 未解決型が配列型である場合は，型を作成する
             if (unresolvedOwnerType instanceof UnresolvedArrayTypeInfo) {
                 final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedOwnerType)
                         .getElementType();
@@ -842,9 +851,9 @@ public final class NameResolver {
                         .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
                 classInfoManager.add((ExternalClassInfo) elementType);
                 ownerArrayType = ArrayTypeInfo.getType(elementType, dimension);
-            } else {
 
-                err.println("Can't resolve array type : " + arrayElement.getTypeName());
+                // 配列型以外の場合はどうしようもない
+            } else {
 
                 usingMethod.addUnresolvedUsage(arrayElement);
                 resolvedCache.put(arrayElement, UnknownTypeInfo.getInstance());
@@ -1600,7 +1609,7 @@ public final class NameResolver {
 
             final ExternalClassInfo superSuperClassInfo = NameResolver
                     .getExternalSuperClass((TargetClassInfo) superClassInfo);
-            if (null != superSuperClassInfo){
+            if (null != superSuperClassInfo) {
                 return superSuperClassInfo;
             }
         }
@@ -1671,6 +1680,16 @@ public final class NameResolver {
         } else if (usingClass.isInnerClass(usedClass)) {
 
             availableFields.addAll(usedClass.getDefinedFields());
+
+            // 使用されるクラスの他のインナークラスのフィールドも，使用するクラスでは使用可能
+            for (TargetInnerClassInfo innerClassInfo : usedClass.getInnerClasses()) {
+
+                if (!innerClassInfo.equals(usingClass)) {
+                    final List<TargetFieldInfo> availableFieldsInOtherInnerClass = NameResolver
+                            .getAvailableFieldsInOtherInnerClasses(innerClassInfo);
+                    availableFields.addAll(availableFieldsInOtherInnerClass);
+                }
+            }
 
             // 2つのクラスが同じ名前空間を持っている場合
         } else if (usedClass.getNamespace().equals(usingClass.getNamespace())) {
@@ -1743,6 +1762,16 @@ public final class NameResolver {
 
             availableMethods.addAll(usedClass.getDefinedMethods());
 
+            // 使用されるクラスの他のインナークラスのフィールドも，使用するクラスでは使用可能
+            for (TargetInnerClassInfo innerClassInfo : usedClass.getInnerClasses()) {
+
+                if (!innerClassInfo.equals(usingClass)) {
+                    final List<TargetMethodInfo> availableMethodsInOtherInnerClass = NameResolver
+                            .getAvailableMethodsInOtherInnerClasses(innerClassInfo);
+                    availableMethods.addAll(availableMethodsInOtherInnerClass);
+                }
+            }
+            
             // 2つのクラスが同じ名前空間を持っている場合
         } else if (usedClass.getNamespace().equals(usingClass.getNamespace())) {
 
@@ -1784,7 +1813,7 @@ public final class NameResolver {
     }
 
     /**
-     * 「使用されるクラス」の子クラス使用される場合に，利用可能なフィールド一覧を返す．
+     * 「使用されるクラス」の子クラスから使用される場合に，利用可能なフィールド一覧を返す．
      * ここで，「利用可能なフィールド」とは，「使用されるクラス」もしくはその親クラスで定義されているフィールドのうち，子クラスからアクセスが可能なフィールドである．
      * 子クラスで利用可能なフィールド一覧は List に格納されている．
      * リストの先頭から優先順位の高いフィールド（つまり，クラス階層において下位のクラスに定義されているフィールド）が格納されている．
@@ -1817,6 +1846,38 @@ public final class NameResolver {
                         .getAvailableFieldsInSubClasses((TargetClassInfo) superClassInfo);
                 availableFields.addAll(availableFieldsDefinedInSuperClasses);
             }
+        }
+
+        return Collections.unmodifiableList(availableFields);
+    }
+
+    /**
+     * 使用されるインナークラス内に定義されているフィールドのうち，同じ外部クラスに定義されている他のインナークラスから利用可能なものを返す
+     * 
+     * @param classInfo 使用されるインナークラス
+     * @return 利用可能なフィールドの List
+     */
+    private static List<TargetFieldInfo> getAvailableFieldsInOtherInnerClasses(
+            final TargetInnerClassInfo classInfo) {
+
+        if (null == classInfo) {
+            throw new NullPointerException();
+        }
+
+        final List<TargetFieldInfo> availableFields = new LinkedList<TargetFieldInfo>();
+
+        // このクラスで定義されており，名前空間可視性をもつフィールドを取得
+        for (final TargetFieldInfo field : classInfo.getDefinedFields()) {
+            if (field.isNamespaceVisible()) {
+                availableFields.add(field);
+            }
+        }
+
+        // このクラスのインナークラスに対して再帰的に処理
+        for (final TargetInnerClassInfo innerClass : classInfo.getInnerClasses()) {
+            final List<TargetFieldInfo> availableInnerClassFields = NameResolver
+                    .getAvailableFieldsInOtherInnerClasses(innerClass);
+            availableFields.addAll(availableInnerClassFields);
         }
 
         return Collections.unmodifiableList(availableFields);
@@ -1856,6 +1917,38 @@ public final class NameResolver {
                         .getAvailableMethodsInSubClasses((TargetClassInfo) superClassInfo);
                 availableMethods.addAll(availableMethodsDefinedInSuperClasses);
             }
+        }
+
+        return Collections.unmodifiableList(availableMethods);
+    }
+    
+    /**
+     * 使用されるインナークラス内に定義されているメソッドのうち，同じ外部クラスに定義されている他のインナークラスから利用可能なものを返す
+     * 
+     * @param classInfo 使用されるインナークラス
+     * @return 利用可能なメソッドの List
+     */
+    private static List<TargetMethodInfo> getAvailableMethodsInOtherInnerClasses(
+            final TargetInnerClassInfo classInfo) {
+
+        if (null == classInfo) {
+            throw new NullPointerException();
+        }
+
+        final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
+
+        // このクラスで定義されており，名前空間可視性をもつフィールドを取得
+        for (final TargetMethodInfo method : classInfo.getDefinedMethods()) {
+            if (method.isNamespaceVisible()) {
+                availableMethods.add(method);
+            }
+        }
+
+        // このクラスのインナークラスに対して再帰的に処理
+        for (final TargetInnerClassInfo innerClass : classInfo.getInnerClasses()) {
+            final List<TargetMethodInfo> availableInnerClassMethods = NameResolver
+                    .getAvailableMethodsInOtherInnerClasses(innerClass);
+            availableMethods.addAll(availableInnerClassMethods);
         }
 
         return Collections.unmodifiableList(availableMethods);
