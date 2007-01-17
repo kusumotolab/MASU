@@ -46,9 +46,9 @@ public class OperatorToken extends AstTokenAdapter {
             true, null);
 
     /**
-     * 参考演算子を表す定数インスタンス
+     * 三項演算子を表す定数インスタンス
      */
-    public static final OperatorToken THREE_TERM = new OperatorToken("THREE_TERM", 3, true, false,
+    public static final OperatorToken THREE_TERM = new OperatorToken("THREE_TERM", 3, false, true,
             null);
 
     /**
