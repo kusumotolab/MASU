@@ -6,6 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ConstantToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VoidTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 
@@ -34,6 +35,8 @@ public class TypeElementBuilder extends ExpressionBuilder {
         AstToken token = event.getToken();
         if (token.isPrimitiveType()) {
             buildPrimitiveType(token.toString());
+        } else if (token.isVoidType()){
+            buildVoidType();
         } else if (token.isTypeDescription()) {
             buildType();
         } else if (token.isArrayDeclarator()){
@@ -92,10 +95,14 @@ public class TypeElementBuilder extends ExpressionBuilder {
     protected void buildConstantElement(ConstantToken token) {
         pushElement(new TypeElement(token.getType()));
     }
+    
+    protected void buildVoidType(){
+        pushElement(new TypeElement(VoidTypeInfo.getInstance()));
+    }
 
     @Override
     protected boolean isTriggerToken(AstToken token) {
-        return token.isPrimitiveType() || token.isTypeDescription()
+        return token.isPrimitiveType() || token.isVoidType() || token.isTypeDescription()
                 || (token instanceof ConstantToken) || token.isArrayDeclarator();
     }
 
