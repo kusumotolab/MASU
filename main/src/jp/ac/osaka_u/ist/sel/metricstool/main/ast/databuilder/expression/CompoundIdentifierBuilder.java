@@ -39,7 +39,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder{
             ExpressionElement right = elements[1];
             
             if (right instanceof SingleIdentifierElement){
-                //右側は単一の識別子のはず
+                //右側は普通は単一の識別子のはず
                 
                 SingleIdentifierElement rightIdentifier = (SingleIdentifierElement)right;
                 String rightName = rightIdentifier.getName();
@@ -81,8 +81,10 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder{
                 } else {
                     assert(false) : "Illegal state: unknown left element type.";
                 }
-            }
-            else {
+            } else if (right instanceof MethodCallElement){
+                //a.new X というJavaの内部クラスのnew文っぽいケースの場合
+                pushElement(right);
+            } else {
                 assert(false) : "Illegal state: unexpected element type.";
             }
         } else {
