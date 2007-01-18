@@ -43,6 +43,10 @@ public class JavaAnonymousClassStateManager extends StackedAstVisitStateManager<
         }
     }
     
+    public boolean isInInstantiation(){
+        return inInstantiation;
+    }
+    
     @Override
     protected Boolean getState() {
         return this.inInstantiation;

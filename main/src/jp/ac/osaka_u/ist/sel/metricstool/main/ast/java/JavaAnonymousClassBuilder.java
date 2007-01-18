@@ -57,7 +57,9 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
             for(int i=0; i<builtIdentifierCount;i++){
                 identifierBuilder.popLastBuiltData();
             }
-            identifierBuilder.deactivate();
+            if (!stateManager.isInInstantiation()){
+                identifierBuilder.deactivate();
+            }
         }
     }
 
