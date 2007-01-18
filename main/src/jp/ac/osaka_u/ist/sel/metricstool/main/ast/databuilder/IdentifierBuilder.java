@@ -28,7 +28,10 @@ public class IdentifierBuilder extends DataBuilderAdapter<String[]>{
                 }
                 
                 if (0 == this.separatorCount){
-                    registBuiltData(buildIdentifier());
+                    String[] buitIdentifier = buildIdentifier();
+                    if (null != buildingIdentifiers){
+                        registBuiltData(buitIdentifier);
+                    }
                 } else if (0 > this.separatorCount){
                     //activateされるタイミングによっては負値になる
                     this.separatorCount = 0;
@@ -36,14 +39,22 @@ public class IdentifierBuilder extends DataBuilderAdapter<String[]>{
             }
         }
     }
+    
+    public void reset(){
+        super.reset();
+        buildingIdentifiers.clear();
+        separatorCount = 0;
+    }
 
     private String[] buildIdentifier(){
-        assert(!buildingIdentifiers.isEmpty()) : "Illegal state: identifier tokens were not found.";
-        
-        String[] result = new String[buildingIdentifiers.size()];
-        buildingIdentifiers.toArray(result);
-        buildingIdentifiers.clear();
-        return result;
+        if (!buildingIdentifiers.isEmpty()){
+            String[] result = new String[buildingIdentifiers.size()];
+            buildingIdentifiers.toArray(result);
+            buildingIdentifiers.clear();
+            return result;
+        } else {
+            return null;
+        }
     }
     
     private int separatorCount;

@@ -5,7 +5,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BlockScopeBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ClassBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.FieldBuilder;

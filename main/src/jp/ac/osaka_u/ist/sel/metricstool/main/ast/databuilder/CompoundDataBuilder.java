@@ -37,5 +37,12 @@ public abstract class CompoundDataBuilder<T> extends StateDrivenDataBuilder<T>{
         this.builders.remove(builder);
     }
     
+    public void reset(){
+        super.reset();
+        for(DataBuilder builder : builders){
+            builder.reset();
+        }
+    }
+    
     private final Set<DataBuilder> builders = new LinkedHashSet<DataBuilder>();
 }

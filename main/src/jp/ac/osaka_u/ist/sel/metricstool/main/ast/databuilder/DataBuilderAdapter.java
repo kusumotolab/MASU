@@ -36,7 +36,7 @@ public class DataBuilderAdapter<T> implements DataBuilder<T>{
         return Collections.unmodifiableList(builtDataStack);
     }
     
-    public final int getBuiltDataCount(){
+    public int getBuiltDataCount(){
         return builtDataStack.size();
     }
     
@@ -56,10 +56,6 @@ public class DataBuilderAdapter<T> implements DataBuilder<T>{
         }
     }
     
-    public void init(){
-        this.clearBuiltData();
-    }
-
     public final T popLastBuiltData() {
         if (!builtDataStack.isEmpty()){
             return builtDataStack.pop();
@@ -77,7 +73,7 @@ public class DataBuilderAdapter<T> implements DataBuilder<T>{
     }
     
     public void reset() {
-        this.builtDataStack.clear();
+        clearBuiltData();
     }
     
     public final void visited(AstVisitEvent e) {

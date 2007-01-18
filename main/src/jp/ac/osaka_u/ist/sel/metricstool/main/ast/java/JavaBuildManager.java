@@ -27,7 +27,35 @@ public class JavaBuildManager extends DefaultBuildDataManager{
     
     @Override
     public UnresolvedClassInfo endClassDefinition(){
+//        UnresolvedClassInfo currentClass = getCurrentClass();
+//        String currentClassName = currentClass.getClassName();
+//        
+//        if (!isInInterface()){
+//            boolean hasConstructor = false;
+//            for(UnresolvedMethodInfo methodInfo : currentClass.getDefinedMethods()){
+//                if (methodInfo.isConstructor()){
+//                    hasConstructor = true;
+//                    break;
+//                }
+//            }
+//            
+//            if (!hasConstructor && ! currentClassName.contains(JavaAnonymousClassBuilder.JAVA_ANONYMOUSCLASS_NAME_MARKER)){
+//                //コンストラクタを持っていない　かつ　匿名クラスではない場合
+//                //デフォルトコンストラクタを作成して追加する.
+//                UnresolvedMethodInfo defaultCostructor = new UnresolvedMethodInfo(currentClassName,currentClass,currentClass,true);
+//                defaultCostructor.setInheritanceVisible(true);
+//                defaultCostructor.setNamespaceVisible(true);
+//                defaultCostructor.setPublicVisible(true);
+//                defaultCostructor.setPrivateVibible(false);
+//                defaultCostructor.setInstanceMember(true);
+//                startMethodDefinition(defaultCostructor);
+//                enterMethodBlock();
+//                endMethodDefinition();
+//            }
+//        }
+        
         classOrInterfaceStack.pop();
+        
         return super.endClassDefinition();
     }
     

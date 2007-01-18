@@ -44,24 +44,19 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
         final StateChangeEventType type = event.getType();
         if (type.equals(ANONYMOUSCLASS_STATE.ENTER_ANONYMOUSCLASS)) {
             identifierBuilder.deactivate();
-            final int builtIdentifierCount = identifierBuilder.getBuiltDataCount()
-                    - builtIdentifierCountStack.pop();
-            
-            AstVisitEvent trigger = event.getTrigger();
-            
-            UnresolvedClassInfo anonymousClass = buildAnonymousClass(builtIdentifierCount);
-            anonymousClass.setFromLine(trigger.getStartLine());
-            anonymousClass.setFromColumn(trigger.getStartColumn());
-            anonymousClass.setToLine(trigger.getEndLine());
-            anonymousClass.setToColumn(trigger.getEndColumn());
-            regist(anonymousClass);
-            buildDataManager.enterClassBlock();
+            startAnonymousClassDef(event.getTrigger());
         } else if (type.equals(ANONYMOUSCLASS_STATE.EXIT_ANONYMOUSCLASS)) {
             endAnonymousClassDef();
+            identifierBuilder.activate();
         } else if (type.equals(ANONYMOUSCLASS_STATE.ENTER_INSTANTIATION)) {
             builtIdentifierCountStack.push(identifierBuilder.getBuiltDataCount());
             identifierBuilder.activate();
         } else if (type.equals(ANONYMOUSCLASS_STATE.EXIT_INSTANTIATION)){
+            final int builtIdentifierCount = identifierBuilder.getBuiltDataCount()
+                - builtIdentifierCountStack.pop();
+            for(int i=0; i<builtIdentifierCount;i++){
+                identifierBuilder.popLastBuiltData();
+            }
             identifierBuilder.deactivate();
         }
     }
@@ -105,6 +100,19 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
 
     protected void endAnonymousClassDef() {
         buildDataManager.endClassDefinition();
+    }
+    
+    protected void startAnonymousClassDef(AstVisitEvent trigger){
+        final int builtIdentifierCount = identifierBuilder.getBuiltDataCount()
+            - builtIdentifierCountStack.peek();
+
+        UnresolvedClassInfo anonymousClass = buildAnonymousClass(builtIdentifierCount);
+        anonymousClass.setFromLine(trigger.getStartLine());
+        anonymousClass.setFromColumn(trigger.getStartColumn());
+        anonymousClass.setToLine(trigger.getEndLine());
+        anonymousClass.setToColumn(trigger.getEndColumn());
+        regist(anonymousClass);
+        buildDataManager.enterClassBlock();
     }
 
     public final static String JAVA_ANONYMOUSCLASS_NAME_MARKER = "$";
