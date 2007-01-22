@@ -29,7 +29,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
@@ -818,7 +817,7 @@ public class MetricsTool {
             TypeInfo superClass = NameResolver.resolveTypeInfo(unresolvedSuperClassType,
                     (TargetClassInfo) classInfo, null, classInfoManager, null, null, null);
             assert superClass != null : "resolveTypeInfo returned null!";
-            
+
             // 見つからなかった場合は名前空間名がUNKNOWNなクラスを登録する
             if (superClass instanceof UnknownTypeInfo) {
                 superClass = NameResolver
@@ -826,8 +825,8 @@ public class MetricsTool {
                 classInfoManager.add((ExternalClassInfo) superClass);
             }
 
-            classInfo.addSuperClass((ClassInfo)superClass);
-            ((ClassInfo)superClass).addSubClass(classInfo);
+            classInfo.addSuperClass((ClassInfo) superClass);
+            ((ClassInfo) superClass).addSubClass(classInfo);
         }
 
         // 各インナークラスに対して
