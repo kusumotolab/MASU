@@ -1807,15 +1807,153 @@ public final class NameResolver {
      * @param thisClass 現在のクラス
      * @return 利用可能なメソッド一覧
      */
-    private static List<TargetMethodInfo> getAvailableMethods(final TargetClassInfo thisClass) {
+    private static List<TargetMethodInfo> getAvailableMethods(final TargetClassInfo currentClass) {
 
-        if (null == thisClass) {
+
+        if (null == currentClass) {
             throw new NullPointerException();
         }
 
-        return NameResolver.getAvailableMethods(thisClass, thisClass);
+        // チェックしたクラスを入れるためのキャッシュ，キャッシュにあるクラスは二度目はフィールド取得しない（ループ構造対策）
+        final Set<TargetClassInfo> checkedClasses = new HashSet<TargetClassInfo>();
+
+        // 最も外側のクラスを取得
+        final TargetClassInfo outestClass;
+        if (currentClass instanceof TargetInnerClassInfo) {
+            outestClass = NameResolver.getOuterstClass((TargetInnerClassInfo) currentClass);
+        } else {
+            outestClass = currentClass;
+        }
+
+        final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
+
+        // 自クラスで定義されたメソッドを追加
+        availableMethods.addAll(outestClass.getDefinedMethods());
+        checkedClasses.add(outestClass);
+
+        // 内部クラスで定義されたメソッドを追加
+        for (final TargetInnerClassInfo innerClass : outestClass.getInnerClasses()) {
+            final List<TargetMethodInfo> availableMethodsDefinedInInnerClasses = NameResolver
+                    .getAvailableMethodsDefinedInInnerClasses(innerClass, checkedClasses);
+            availableMethods.addAll(availableMethodsDefinedInInnerClasses);
+        }
+
+        // 親クラスで定義されたメソッドを追加
+        for (final ClassInfo superClass : outestClass.getSuperClasses()) {
+            if (superClass instanceof TargetClassInfo) {
+                final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
+                        .getAvailableMethodsDefinedInSuperClasses((TargetClassInfo) superClass,
+                                checkedClasses);
+                availableMethods.addAll(availableMethodsDefinedInSuperClasses);
+            }
+        }
+
+        return Collections.unmodifiableList(availableMethods);
     }
 
+    /**
+     * 引数で与えられたクラスとその内部クラスで定義されたメソッドのうち，外側のクラスで利用可能なメソッドの List を返す
+     * 
+     * @param classInfo クラス
+     * @param checkedClasses 既にチェックしたクラスのキャッシュ
+     * @return 外側のクラスで利用可能なメソッドの List
+     */
+    private static List<TargetMethodInfo> getAvailableMethodsDefinedInInnerClasses(
+            final TargetInnerClassInfo classInfo, final Set<TargetClassInfo> checkedClasses) {
+
+        if ((null == classInfo) || (null == checkedClasses)) {
+            throw new NullPointerException();
+        }
+
+        // 既にチェックしたクラスである場合は何もせずに終了する
+        if (checkedClasses.contains(classInfo)) {
+            return new LinkedList<TargetMethodInfo>();
+        }
+
+        final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
+
+        //自クラスで定義されており，名前空間可視性を持つメソッドを追加
+        //        for (final TargetFieldInfo definedField : classInfo.getDefinedFields()) {
+        //            if (definedField.isNamespaceVisible()) {
+        //                availableFields.add(definedField);
+        //            }
+        //        }
+        availableMethods.addAll(classInfo.getDefinedMethods());
+        checkedClasses.add(classInfo);
+
+        // 内部クラスで定義されたメソッドを追加
+        for (final TargetInnerClassInfo innerClass : classInfo.getInnerClasses()) {
+            final List<TargetMethodInfo> availableMethodsDefinedInInnerClasses = NameResolver
+                    .getAvailableMethodsDefinedInInnerClasses(innerClass, checkedClasses);
+            availableMethods.addAll(availableMethodsDefinedInInnerClasses);
+        }
+
+        // 親クラスで定義されたメソッドを追加
+        for (final ClassInfo superClass : classInfo.getSuperClasses()) {
+            if (superClass instanceof TargetClassInfo) {
+                final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
+                        .getAvailableMethodsDefinedInSuperClasses((TargetClassInfo) superClass,
+                                checkedClasses);
+                availableMethods.addAll(availableMethodsDefinedInSuperClasses);
+            }
+        }
+
+        return Collections.unmodifiableList(availableMethods);
+    }
+    
+    /**
+     * 引数で与えられたクラスとその親クラスで定義されたメソッドのうち，子クラスで利用可能なメソッドの List を返す
+     * 
+     * @param classInfo クラス
+     * @param checkedClasses 既にチェックしたクラスのキャッシュ
+     * @return 子クラスで利用可能なメソッドの List
+     */
+    private static List<TargetMethodInfo> getAvailableMethodsDefinedInSuperClasses(
+            final TargetClassInfo classInfo, final Set<TargetClassInfo> checkedClasses) {
+
+        if ((null == classInfo) || (null == checkedClasses)) {
+            throw new NullPointerException();
+        }
+
+        // 既にチェックしたクラスである場合は何もせずに終了する
+        if (checkedClasses.contains(classInfo)) {
+            return new LinkedList<TargetMethodInfo>();
+        }
+
+        final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
+
+        // 自クラスで定義されており，クラス階層可視性を持つメソッドを追加
+        for (final TargetMethodInfo definedMethod : classInfo.getDefinedMethods()) {
+            if (definedMethod.isInheritanceVisible()) {
+                availableMethods.add(definedMethod);
+            }
+        }
+        checkedClasses.add(classInfo);
+
+        // 内部クラスで定義されたメソッドを追加
+        for (final TargetInnerClassInfo innerClass : classInfo.getInnerClasses()) {
+            final List<TargetMethodInfo> availableMethodsDefinedInInnerClasses = NameResolver
+                    .getAvailableMethodsDefinedInInnerClasses(innerClass, checkedClasses);
+            for (final TargetMethodInfo method : availableMethodsDefinedInInnerClasses) {
+                if (method.isInheritanceVisible()) {
+                    availableMethods.add(method);
+                }
+            }
+        }
+
+        // 親クラスで定義されたメソッドを追加
+        for (final ClassInfo superClass : classInfo.getSuperClasses()) {
+            if (superClass instanceof TargetClassInfo) {
+                final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
+                        .getAvailableMethodsDefinedInSuperClasses((TargetClassInfo) superClass,
+                                checkedClasses);
+                availableMethods.addAll(availableMethodsDefinedInSuperClasses);
+            }
+        }
+
+        return Collections.unmodifiableList(availableMethods);
+    }
+    
     /**
      * 「使用されるクラス」が「使用するクラス」において使用される場合に，利用可能なフィールド一覧を返す．
      * ここで，「利用可能なフィールド」とは，「使用されるクラス」で定義されているフィールド，及びその親クラスで定義されているフィールドのうち子クラスからアクセスが可能なフィールドである．
@@ -1902,138 +2040,56 @@ public final class NameResolver {
             throw new NullPointerException();
         }
 
-        final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
+        // 使用されるクラスの最も外側のクラスを取得
+        final TargetClassInfo usedOutestClass;
+        if (usedClass instanceof TargetInnerClassInfo) {
+            usedOutestClass = NameResolver.getOuterstClass((TargetInnerClassInfo) usedClass);
+        } else {
+            usedOutestClass = usedClass;
+        }
+
+        // 使用するクラスの最も外側のクラスを取得
+        final TargetClassInfo usingOutestClass;
+        if (usingClass instanceof TargetInnerClassInfo) {
+            usingOutestClass = NameResolver.getOuterstClass((TargetInnerClassInfo) usingClass);
+        } else {
+            usingOutestClass = usingClass;
+        }
 
         // このクラスで定義されているメソッドのうち，使用するクラスで利用可能なメソッドを取得する
         // 2つのクラスが同じ場合，全てのメソッドが利用可能
-        if (usedClass.equals(usingClass)) {
+        if (usedOutestClass.equals(usingOutestClass)) {
 
-            availableMethods.addAll(usedClass.getDefinedMethods());
-
-            //使用するクラスが使用されるクラスのインナークラスである場合，全てのメソッドが利用可能
-        } else if (usingClass.isInnerClass(usedClass)) {
-
-            availableMethods.addAll(usedClass.getDefinedMethods());
-
-            // 使用されるクラスの他のインナークラスのフィールドも，使用するクラスでは使用可能
-            for (TargetInnerClassInfo innerClassInfo : usedClass.getInnerClasses()) {
-
-                if (!innerClassInfo.equals(usingClass)) {
-                    final List<TargetMethodInfo> availableMethodsInOtherInnerClass = NameResolver
-                            .getAvailableMethodsInOtherInnerClasses(innerClassInfo);
-                    availableMethods.addAll(availableMethodsInOtherInnerClass);
-                }
-            }
+            return NameResolver.getAvailableMethods(usedOutestClass);
 
             // 2つのクラスが同じ名前空間を持っている場合
-        } else if (usedClass.getNamespace().equals(usingClass.getNamespace())) {
+        } else if (usedOutestClass.getNamespace().equals(usingOutestClass.getNamespace())) {
 
-            for (TargetMethodInfo method : usedClass.getDefinedMethods()) {
+            final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
+
+            // 名前空間可視性を持ったメソッドのみが利用可能
+            for (final TargetMethodInfo method : NameResolver.getAvailableMethods(usedOutestClass)) {
                 if (method.isNamespaceVisible()) {
                     availableMethods.add(method);
                 }
             }
 
+            return Collections.unmodifiableList(availableMethods);
+
             // 違う名前空間を持っている場合
         } else {
-            for (TargetMethodInfo method : usedClass.getDefinedMethods()) {
+
+            final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
+
+            // 全可視性を持つメソッドのみが利用可能
+            for (final TargetMethodInfo method : NameResolver.getAvailableMethods(usedOutestClass)) {
                 if (method.isPublicVisible()) {
                     availableMethods.add(method);
                 }
             }
+
+            return Collections.unmodifiableList(availableMethods);
         }
-
-        // 親クラスで定義されており，子クラスからアクセスが可能なメソッドを取得
-        // List に入れるので，親クラスのメソッドの後に add しなければならない
-        for (ClassInfo superClassInfo : usedClass.getSuperClasses()) {
-
-            if (superClassInfo instanceof TargetClassInfo) {
-                final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
-                        .getAvailableMethodsInSubClasses((TargetClassInfo) superClassInfo);
-                availableMethods.addAll(availableMethodsDefinedInSuperClasses);
-            }
-        }
-
-        // 使用されるクラスがインナークラスである場合，その外部クラスのメソッドまた利用可能である．
-        if (usedClass instanceof TargetInnerClassInfo) {
-
-            final TargetClassInfo outerClass = ((TargetInnerClassInfo) usedClass).getOuterClass();
-            final List<TargetMethodInfo> availableFieldsOfOuterClass = NameResolver
-                    .getAvailableMethods(outerClass, usingClass);
-            availableMethods.addAll(availableFieldsOfOuterClass);
-        }
-        return Collections.unmodifiableList(availableMethods);
-    }
-
-    /**
-     * 「使用されるクラス」の子クラス使用される場合に，利用可能なメソッド一覧を返す．
-     * ここで，「利用可能なメソッド」とは，「使用されるメソッド」もしくはその親クラスで定義されているメソッドのうち，子クラスからアクセスが可能なメソッドである．
-     * 子クラスで利用可能なメソッド一覧は List に格納されている．
-     * リストの先頭から優先順位の高いメソッド（つまり，クラス階層において下位のクラスに定義されているメソッド）が格納されている．
-     * 
-     * @param usedClass 使用されるクラス
-     * @return 利用可能なメソッド一覧
-     */
-    private static List<TargetMethodInfo> getAvailableMethodsInSubClasses(
-            final TargetClassInfo usedClass) {
-
-        if (null == usedClass) {
-            throw new NullPointerException();
-        }
-
-        final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
-
-        // このクラスで定義されており，子クラスからアクセス可能なメソッドを取得
-        for (TargetMethodInfo method : usedClass.getDefinedMethods()) {
-            if (method.isInheritanceVisible()) {
-                availableMethods.add(method);
-            }
-        }
-
-        // 親クラスで定義されており，子クラスからアクセスが可能なメソッドを取得
-        // List に入れるので，親クラスのメソッドの後に add しなければならない
-        for (ClassInfo superClassInfo : usedClass.getSuperClasses()) {
-
-            if (superClassInfo instanceof TargetClassInfo) {
-                final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
-                        .getAvailableMethodsInSubClasses((TargetClassInfo) superClassInfo);
-                availableMethods.addAll(availableMethodsDefinedInSuperClasses);
-            }
-        }
-
-        return Collections.unmodifiableList(availableMethods);
-    }
-
-    /**
-     * 使用されるインナークラス内に定義されているメソッドのうち，同じ外部クラスに定義されている他のインナークラスから利用可能なものを返す
-     * 
-     * @param classInfo 使用されるインナークラス
-     * @return 利用可能なメソッドの List
-     */
-    private static List<TargetMethodInfo> getAvailableMethodsInOtherInnerClasses(
-            final TargetInnerClassInfo classInfo) {
-
-        if (null == classInfo) {
-            throw new NullPointerException();
-        }
-
-        final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
-
-        // このクラスで定義されており，名前空間可視性をもつフィールドを取得
-        for (final TargetMethodInfo method : classInfo.getDefinedMethods()) {
-            if (method.isNamespaceVisible()) {
-                availableMethods.add(method);
-            }
-        }
-
-        // このクラスのインナークラスに対して再帰的に処理
-        for (final TargetInnerClassInfo innerClass : classInfo.getInnerClasses()) {
-            final List<TargetMethodInfo> availableInnerClassMethods = NameResolver
-                    .getAvailableMethodsInOtherInnerClasses(innerClass);
-            availableMethods.addAll(availableInnerClassMethods);
-        }
-
-        return Collections.unmodifiableList(availableMethods);
     }
 
     /**
