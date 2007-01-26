@@ -51,7 +51,6 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
                 pushElement(new FieldOrMethodElement(superClassType,((IdentifierElement)right).getName()));
             }
         } else if (right.equals(JavaExpressionElement.SUPER)){
-            System.out.println("test");
             //‰½‚à‚µ‚È‚¢
         } else {
             super.buildCompoundIdentifierElement();
