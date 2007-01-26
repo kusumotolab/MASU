@@ -3,11 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 public class JavaExpressionElementBuilder extends ExpressionBuilder{
 
@@ -27,9 +24,7 @@ public class JavaExpressionElementBuilder extends ExpressionBuilder{
     protected void afterExited(AstVisitEvent event) {
         AstToken token = event.getToken();
         if (token.equals(JavaAstToken.SUPER)){
-            UnresolvedClassInfo classInfo = buildManager.getCurrentClass();
-            UnresolvedTypeInfo superClassType = classInfo.getSuperClasses().iterator().next();
-            pushElement(new TypeElement(superClassType));
+            pushElement(JavaExpressionElement.SUPER);
         } else if (token.equals(JavaAstToken.CLASS)){
             pushElement(JavaExpressionElement.CLASS);
         }

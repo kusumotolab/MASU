@@ -7,6 +7,8 @@ public class JavaExpressionElement implements ExpressionElement{
 
     public static final JavaExpressionElement CLASS = new JavaExpressionElement();
     
+    public static final JavaExpressionElement SUPER = new JavaExpressionElement();
+    
     public UnresolvedTypeInfo getType() {
         return null;
     }
