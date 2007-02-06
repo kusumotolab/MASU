@@ -30,19 +30,10 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
         if (right.equals(JavaExpressionElement.CLASS)){
             pushElement(new TypeElement(JAVA_LANG_CLASS));
         } else if (right.equals(InstanceSpecificElement.THIS)){
-            
-            IdentifierElement leftIdentifier = (IdentifierElement)left;
-            String name = leftIdentifier.getName();
-            
-            UnresolvedClassInfo classInfo = buildDataManager.getCurrentClass();
-            while(null != classInfo && !name.equals(classInfo.getClassName())){
-                classInfo = classInfo.getOuterClass();
-            }
+            UnresolvedClassInfo classInfo = getSpecifiedOuterClass((IdentifierElement)left);
             
             if (classInfo != null){
                 pushElement(new TypeElement(classInfo));
-            } else {
-                assert(false) : "Illegal state: unknown class was specified by this.";
             }
         } else if (left.equals(JavaExpressionElement.SUPER)){
             if (right instanceof IdentifierElement){
@@ -51,10 +42,34 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
                 pushElement(new FieldOrMethodElement(superClassType,((IdentifierElement)right).getName()));
             }
         } else if (right.equals(JavaExpressionElement.SUPER)){
-            //‰½‚à‚µ‚È‚¢
+            UnresolvedClassInfo classInfo = null;
+            if (left instanceof IdentifierElement){
+                classInfo = getSpecifiedOuterClass((IdentifierElement)left);
+            } else if (left instanceof TypeElement && left.getType() instanceof UnresolvedClassInfo) {
+                classInfo = (UnresolvedClassInfo)left.getType();
+            } else{
+                assert(false) : "Illegal state: current class  is illegal type.";
+            }
+            
+            UnresolvedTypeInfo superClassType = classInfo.getSuperClasses().iterator().next();
+            if (classInfo != null){
+                pushElement(new TypeElement(superClassType));
+            }
         } else {
             super.buildCompoundIdentifierElement();
         }
+    }
+    
+    private UnresolvedClassInfo getSpecifiedOuterClass(IdentifierElement identifier){
+        String name = identifier.getName();
+        UnresolvedClassInfo classInfo = buildDataManager.getCurrentClass();
+        while(null != classInfo && !name.equals(classInfo.getClassName())){
+            classInfo = classInfo.getOuterClass();
+        }
+        
+        assert(null != classInfo) : "Illegal state: unknown class was specified.";
+        
+        return classInfo;
     }
     
     private final static UnresolvedEntityUsage JAVA_LANG_CLASS =

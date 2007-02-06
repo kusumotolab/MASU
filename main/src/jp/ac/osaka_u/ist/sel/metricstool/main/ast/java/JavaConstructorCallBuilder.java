@@ -29,7 +29,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder{
         if (token.equals(JavaAstToken.CONSTRUCTOR_CALL)){
             buildInnerConstructorCall(buildDataManager.getCurrentClass());
         } else if (token.equals(JavaAstToken.SUPER_CONSTRUCTOR_CALL)){
-            buildInnerConstructorCall(buildDataManager.getCurrentClass().getSuperClasses().iterator().next());
+            buildSuperConstructorCall(buildDataManager.getCurrentClass().getSuperClasses().iterator().next());
         }
     }
     
@@ -41,32 +41,63 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder{
         assert(elements[0] instanceof TypeElement) : "Illegal state: constructor owner is not type.";
         
         if (isJavaArrayInstantiation(elements)){
+            //配列のnew文はこっちで処理する
             UnresolvedTypeInfo type = (UnresolvedTypeInfo)elements[0].getType();
-            
             pushElement(new TypeElement(resolveArrayElement(type,elements)));
         } else {
+            //それ以外は普通に処理する
             super.buildNewConstructorCall();
         }
     }
     
-    protected void buildInnerConstructorCall(UnresolvedTypeInfo ownerClass){
+    protected void buildInnerConstructorCall(UnresolvedClassInfo currentClass){
         ExpressionElement[] elements = getAvailableElements();
+        String className = currentClass.getClassName();
         
-        String superClassName = "";
-        
-        if (ownerClass instanceof UnresolvedClassInfo){
-            superClassName = ((UnresolvedClassInfo)ownerClass).getClassName();
-        } else if (ownerClass instanceof UnresolvedReferenceTypeInfo){
-            String[] referenceName = ((UnresolvedReferenceTypeInfo)ownerClass).getReferenceName();
-            superClassName = referenceName[referenceName.length-1];
-        }
-        
-        assert(null != superClassName) : "Illegal state: unexpected ownerClass type.";
-        
-        UnresolvedMethodCall constructorCall = new UnresolvedMethodCall(ownerClass,superClassName,true);
-        resolveParameters(constructorCall, elements,0);
+        UnresolvedMethodCall constructorCall = new UnresolvedMethodCall(currentClass,className,true);
+        resolveParameters(constructorCall, elements, 0);
         pushElement(new MethodCallElement(constructorCall));
         buildDataManager.addMethodCall(constructorCall);
+    }
+    
+    protected void buildSuperConstructorCall(UnresolvedTypeInfo superClass){
+        ExpressionElement[] elements = getAvailableElements();
+        
+        UnresolvedReferenceTypeInfo superClassInfo = (UnresolvedReferenceTypeInfo)superClass;
+        
+        int argStartIndex = 0;
+        
+        String[] referenceName = superClassInfo.getReferenceName();
+        String className = referenceName[referenceName.length-1];
+        
+        if (elements.length > 0 && elements[0] instanceof TypeElement){
+            //苦し紛れの特別処理
+            //elementsの1個目がUnresolvedReferenceTypeInfoでありかつsuperClassのアウタークラスであるなら
+            //それはOuterClass.this.super()という呼び出し形式であるとみなす
+            
+            UnresolvedTypeInfo type = ((TypeElement)elements[0]).getType();
+            if (type instanceof UnresolvedReferenceTypeInfo){
+                String[] referenceName2 = ((UnresolvedReferenceTypeInfo)type).getReferenceName();
+                boolean match = true;
+                for(int i=0; i < referenceName2.length; i++){
+                    if (!referenceName2[i].equals(referenceName[i])){
+                        match = false;
+                        break;
+                    }
+                }
+                if (match){
+                    argStartIndex = 1;
+                }
+            }
+        }
+        
+        assert(null != className) : "Illegal state: unexpected ownerClass type.";
+        
+        UnresolvedMethodCall constructorCall = new UnresolvedMethodCall(superClass,className,true);
+        resolveParameters(constructorCall, elements, argStartIndex);
+        pushElement(new MethodCallElement(constructorCall));
+        buildDataManager.addMethodCall(constructorCall);
+        
     }
 
     

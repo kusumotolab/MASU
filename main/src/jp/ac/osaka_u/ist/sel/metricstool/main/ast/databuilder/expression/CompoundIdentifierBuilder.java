@@ -3,10 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsage;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
 
 /**
  * 
@@ -49,22 +46,6 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder{
                 if (left instanceof FieldOrMethodElement){
                     IdentifierElement leftIdentifier = (IdentifierElement)left;
                     leftElementType = leftIdentifier.resolveAsReferencedVariable(buildDataManager);
-//                }  else if (left instanceof SingleIdentifierElement){
-//                    //左側も単一の識別子なら、そいつは変数かもしれない
-//                    SingleIdentifierElement leftIdentifier = (SingleIdentifierElement)left;
-//                    String leftName = leftIdentifier.getName();
-//                    UnresolvedVariableInfo variable = buildDataManager.getCurrentScopeVariable(leftName);
-//                    
-//                    if (null != variable){
-//                        //スコープ内に変数がみつかった
-//                        if (variable instanceof UnresolvedFieldInfo){
-//                            //実はフィールドでした
-//                            leftElementType = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),
-//                                    buildDataManager.getCurrentClass(),leftName);
-//                        } else {
-//                            leftElementType = variable.getType();
-//                        }
-//                    }
                 } else if (left.equals(InstanceSpecificElement.THIS)){
                     //左側がthisなら右側はこのクラスのフィールド名かメソッド名
                     leftElementType = buildDataManager.getCurrentClass();
