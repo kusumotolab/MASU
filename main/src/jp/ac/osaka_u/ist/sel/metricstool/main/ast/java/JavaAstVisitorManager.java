@@ -48,7 +48,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new LocalParameterBuilder(buildDataManager,modifiersInterpriter));
 
         // for expressions
-        this.builders.add(new ExpressionDescriptionBuilder(expressionManager));
+        this.builders.add(new ExpressionDescriptionBuilder(expressionManager,buildDataManager));
         this.builders.add(new SingleIdentifierBuilder(expressionManager, buildDataManager));
         this.builders.add(new JavaCompoundIdentifierBuilder(expressionManager, buildDataManager));
         this.builders.add(new TypeElementBuilder(expressionManager, buildDataManager));
@@ -75,7 +75,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
     public void visitStart(T node){
         this.reset();
         
-        visitor.visit(node);
+        visitor.startVisiting(node);
     }
     
     /* (non-Javadoc)
