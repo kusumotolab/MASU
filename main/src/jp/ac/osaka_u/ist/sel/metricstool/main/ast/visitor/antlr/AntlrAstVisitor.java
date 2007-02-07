@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.antlr;
 
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Stack;
@@ -61,13 +60,13 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
      */
     public AntlrAstVisitor(final AstTokenTranslator<AST> translator,
             final AstVisitStrategy<AST> strategy) {
-        if (null == translator){
+        if (null == translator) {
             throw new NullPointerException("translator is null.");
         }
-        if (null == strategy){
+        if (null == strategy) {
             throw new NullPointerException("starategy is null.");
         }
-        
+
         this.visitStrategy = strategy;
         this.translator = translator;
     }
@@ -79,43 +78,13 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
      * @throws NullPointerException listenerがnullの場合
      */
     public void addVisitListener(final AstVisitListener listener) {
-        if (null == listener){
+        if (null == listener) {
             throw new NullPointerException("listener is null.");
         }
-        
+
         this.listeners.add(listener);
     }
-    
-    /**
-     * 直前に {@link #visit(T)} メソッドによって到達したノードの中に入る.
-     */
-    public void enter() {
-        if (null != currentEvent){
-            //イベントを送る
-            this.fireEnterEvent(this.eventStack.push(this.currentEvent));
-        }
-    }
 
-    /**
-     * 現在のノードの中から外に出る.
-     */
-    public void exit() {
-        if (!eventStack.isEmpty()){
-            //イベントを送る
-            this.fireExitEvent(this.eventStack.pop());
-        }
-    }
-    
-    /**
-     * 引数で与えられたノードに既に到達済みかどうかを返す.
-     * 
-     * @param node　到達済みかどうかを判定したいノード
-     * @return　到達済みであればtrue, そうでなかればfalse.
-     */
-    public boolean isVisited(final AST node) {
-        return this.visitedNode.contains(node);
-    }
-    
     /**
      * このビジターが発行する各 {@link AstVisitEvent} の通知を受けるリスナを削除する.
      * 
@@ -131,9 +100,8 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
      * イベントリスナは削除されない.
      */
     public void reset() {
-        this.currentEvent = null;
         this.eventStack.clear();
-        this.visitedNode.clear();
+        this.nodeStack.clear();
     }
 
     /**
@@ -145,54 +113,60 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
         this.positionManager = lineColumn;
     }
 
-    /**
-     * 引数で与えられたノードを訪問する.
-     * nodeがnullの場合は何もしない.
-     * 
-     * @param node 訪問するノード.
+    /* (non-Javadoc)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitor#startVisiting(java.lang.Object)
      */
-    public void visit(final AST node) {
-        if (null == node) {
-            return;
-        }
-        
-        //訪問済みのノードに登録
-        this.visitedNode.add(node);
+    public void startVisiting(final AST startNode) {
+        AST nextNode = startNode;
 
-        //このノードのトークンからAstTokenに変換する
-        final AstToken token = this.translator.translate(node);
+        while (null != nextNode) {
+            //このノードのトークンからAstTokenに変換する
+            final AstToken token = this.translator.translate(nextNode);
 
-        //位置情報が利用できるなら取得する.
-        int startLine = 0;
-        int startColumn = 0;
-        int endLine = 0;
-        int endColumn = 0;
-        if (null != this.positionManager) {
-            startLine = this.positionManager.getStartLine(node);
-            startColumn = this.positionManager.getStartColumn(node);
-            endLine = this.positionManager.getEndLine(node);
-            endColumn = this.positionManager.getEndColumn(node);
-        }
+            //位置情報が利用できるなら取得する.
+            int startLine = 0;
+            int startColumn = 0;
+            int endLine = 0;
+            int endColumn = 0;
+            if (null != this.positionManager) {
+                startLine = this.positionManager.getStartLine(nextNode);
+                startColumn = this.positionManager.getStartColumn(nextNode);
+                endLine = this.positionManager.getEndLine(nextNode);
+                endColumn = this.positionManager.getEndColumn(nextNode);
+            }
 
-        //イベントを作成してカレントイベントとして登録
-        final AstVisitEvent event = new AstVisitEvent(this, token, startLine, startColumn, endLine,
-                endColumn);
-        this.currentEvent = event;
+            //訪問イベントを作成
+            final AstVisitEvent event = new AstVisitEvent(this, token, startLine, startColumn,
+                    endLine, endColumn);
 
-        //イベントを送る 
-        this.fireVisitEvent(event);
+            this.fireVisitEvent(event);
 
-        //次のノードへ誘導してもらう
-        this.visitStrategy.guide(this, node, token);
-    }
+            if (this.visitStrategy.needToVisitChildren(nextNode, event.getToken())) {
+                //子ノードを訪問する場合
 
-    /**
-     * 到達イベントを発行する
-     * @param event 発行するイベント
-     */
-    private void fireVisitEvent(final AstVisitEvent event) {
-        for (final AstVisitListener listener : this.listeners) {
-            listener.visited(event);
+                this.fireEnterEvent(event);
+                this.eventStack.push(event);
+                this.nodeStack.push(nextNode);
+                nextNode = nextNode.getFirstChild();
+
+            } else {
+                //次の兄弟に進む場合
+                nextNode = nextNode.getNextSibling();
+            }
+
+            if (null == nextNode) {
+                //次の行き先がない
+
+                //まだスタックを遡ってまだ辿ってない兄弟を探す
+                while (!this.nodeStack.isEmpty()
+                        && null == (nextNode = this.nodeStack.pop().getNextSibling())) {
+                    this.fireExitEvent(this.eventStack.pop());
+                }
+
+                if (!this.eventStack.isEmpty()) {
+                    this.fireExitEvent(this.eventStack.pop());
+                }
+            }
         }
     }
 
@@ -217,6 +191,16 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
     }
 
     /**
+     * ノードに訪問するイベントを発行する
+     * @param event　発行するイベント
+     */
+    private void fireVisitEvent(final AstVisitEvent event) {
+        for (final AstVisitListener listener : this.listeners) {
+            listener.visited(event);
+        }
+    }
+
+    /**
      * このビジターの訪問先を誘導する.
      */
     private final AstVisitStrategy<AST> visitStrategy;
@@ -232,22 +216,18 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
     private PositionManager positionManager;
 
     /**
-     * 現在のノードに関連する訪問イベント
-     */
-    private AstVisitEvent currentEvent;
-
-    /**
      * イベントを管理するスタック
      */
     private final Stack<AstVisitEvent> eventStack = new Stack<AstVisitEvent>();
 
     /**
-     * 到達済みのノードのセット
+     * ノードを管理するスタック
      */
-    private final Set<AST> visitedNode = new HashSet<AST>();
+    private final Stack<AST> nodeStack = new Stack<AST>();
 
     /**
      * イベント通知を受け取るリスナーのセット
      */
     private final Set<AstVisitListener> listeners = new LinkedHashSet<AstVisitListener>();
+
 }

@@ -14,12 +14,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 public interface AstVisitStrategy<T> {
 
     /**
-     * ビジターが次に訪問すべきノードを選択し，その選択に応じて {@link AstVisitor#visit(T)}，
-     * {@link AstVisitor#enter()}， {@link AstVisitor#exit()}の3つのメソッドを適切に呼び出す.
+     * ビジターが現在のノードの子ノードを訪問する必要があるかどうかを返す.
      * 
-     * @param visitor 訪問先を指示する対象のビジター
      * @param node ビジターが現在到達しているノード
      * @param token ビジターが現在到達しているノードの種類を表すトークン
      */
-    public void guide(AstVisitor<T> visitor, T node, AstToken token);
+    public boolean needToVisitChildren(T node, AstToken token);
+
 }

@@ -26,24 +26,6 @@ public interface AstVisitor<T> {
     public void addVisitListener(AstVisitListener listener);
 
     /**
-     * 直前に {@link #visit(T)} メソッドによって到達したノードの中に入る.
-     */
-    public void enter();
-
-    /**
-     * 現在のノードの中から外に出る.
-     */
-    public void exit();
-
-    /**
-     * 引数で与えられたノードに既に到達済みかどうかを返す.
-     * 
-     * @param node　到達済みかどうかを判定したいノード
-     * @return　到達済みであればtrue, そうでなかればfalse.
-     */
-    public boolean isVisited(T node);
-
-    /**
      * このビジターが発行する各 {@link AstVisitEvent} の通知を受けるリスナを削除する.
      * 
      * @param listener　削除するリスナ
@@ -65,9 +47,8 @@ public interface AstVisitor<T> {
     public void setPositionManager(PositionManager position);
 
     /**
-     * 引数で与えられたノードを訪問する.
-     * 
-     * @param node 訪問するノード.
+     * ビジターの訪問を開始する
+     * @param startNode　最初に訪問するASTノード
      */
-    public void visit(T node);
+    public void startVisiting(T startNode);
 }
