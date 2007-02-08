@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.StringArrayComparator;
 
 
 /**
@@ -38,9 +39,7 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo> {
             throw new NullPointerException();
         }
 
-        String name = this.getName(".");
-        String correspondName = namespace.getName(".");
-        return name.compareTo(correspondName);
+        return StringArrayComparator.SINGLETON.compare(this.getName(), namespace.getName());
     }
 
     /**
