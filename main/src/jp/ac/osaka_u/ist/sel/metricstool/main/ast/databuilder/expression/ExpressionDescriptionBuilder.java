@@ -31,7 +31,7 @@ public class ExpressionDescriptionBuilder extends ExpressionBuilder {
         if (elements[0] instanceof IdentifierElement) {
             final UnresolvedTypeInfo type = ((IdentifierElement) elements[0])
                     .resolveAsReferencedVariable(this.buildDataManager);
-            this.pushElement(new TypeElement(type));
+            this.pushElement(TypeElement.getInstance(type));
         } else {
             this.pushElement(elements[0]);
         }

@@ -43,7 +43,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder{
         if (isJavaArrayInstantiation(elements)){
             //”z—ñ‚Ìnew•¶‚Í‚±‚Á‚¿‚Åˆ—‚·‚é
             UnresolvedTypeInfo type = (UnresolvedTypeInfo)elements[0].getType();
-            pushElement(new TypeElement(resolveArrayElement(type,elements)));
+            pushElement(TypeElement.getInstance(resolveArrayElement(type,elements)));
         } else {
             //‚»‚êˆÈŠO‚Í•’Ê‚Éˆ—‚·‚é
             super.buildNewConstructorCall();

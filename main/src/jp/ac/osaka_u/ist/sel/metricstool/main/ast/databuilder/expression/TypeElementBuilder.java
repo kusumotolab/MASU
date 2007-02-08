@@ -55,7 +55,7 @@ public class TypeElementBuilder extends ExpressionBuilder {
         if (elements.length == 1) {
             if (elements[0] instanceof IdentifierElement) {
                 UnresolvedReferenceTypeInfo referenceType = buildReferenceType((IdentifierElement)elements[0]);
-                typeElement = new TypeElement(UnresolvedArrayTypeInfo.getType(referenceType,1));
+                typeElement = TypeElement.getInstance(UnresolvedArrayTypeInfo.getType(referenceType,1));
             } else if (elements[0] instanceof TypeElement) {
                 typeElement = (TypeElement)elements[0];
                 typeElement.arrayDimensionIncl();
@@ -74,7 +74,7 @@ public class TypeElementBuilder extends ExpressionBuilder {
         
         if (elements.length == 1) {
             if (elements[0] instanceof IdentifierElement) {
-                pushElement(new TypeElement(buildReferenceType((IdentifierElement)elements[0])));
+                pushElement(TypeElement.getInstance(buildReferenceType((IdentifierElement)elements[0])));
             } else if (elements[0] instanceof TypeElement) {
                 pushElement(elements[0]);
             }
@@ -89,15 +89,15 @@ public class TypeElementBuilder extends ExpressionBuilder {
     }
 
     protected void buildPrimitiveType(String name) {
-        pushElement(new TypeElement(PrimitiveTypeInfo.getType(name)));
+        pushElement(TypeElement.getInstance(PrimitiveTypeInfo.getType(name)));
     }
 
     protected void buildConstantElement(ConstantToken token) {
-        pushElement(new TypeElement(token.getType()));
+        pushElement(TypeElement.getInstance(token.getType()));
     }
     
     protected void buildVoidType(){
-        pushElement(new TypeElement(VoidTypeInfo.getInstance()));
+        pushElement(TypeElement.getInstance(VoidTypeInfo.getInstance()));
     }
 
     @Override

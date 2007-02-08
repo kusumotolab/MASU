@@ -28,12 +28,12 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
         ExpressionElement left = elements[0];
         ExpressionElement right = elements[1];
         if (right.equals(JavaExpressionElement.CLASS)){
-            pushElement(new TypeElement(JAVA_LANG_CLASS));
+            pushElement(TypeElement.getInstance(JAVA_LANG_CLASS));
         } else if (right.equals(InstanceSpecificElement.THIS)){
             UnresolvedClassInfo classInfo = getSpecifiedOuterClass((IdentifierElement)left);
             
             if (classInfo != null){
-                pushElement(new TypeElement(classInfo));
+                pushElement(TypeElement.getInstance(classInfo));
             }
         } else if (left.equals(JavaExpressionElement.SUPER)){
             if (right instanceof IdentifierElement){
@@ -53,7 +53,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
             
             UnresolvedTypeInfo superClassType = classInfo.getSuperClasses().iterator().next();
             if (classInfo != null){
-                pushElement(new TypeElement(superClassType));
+                pushElement(TypeElement.getInstance(superClassType));
             }
         } else {
             super.buildCompoundIdentifierElement();

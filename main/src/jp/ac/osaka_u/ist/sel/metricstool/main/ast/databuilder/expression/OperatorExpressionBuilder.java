@@ -83,7 +83,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
         
         assert (null != resultType) : "Illegal state: operation resultType was not decided.";
 
-        this.pushElement(new TypeElement(resultType));
+        this.pushElement(TypeElement.getInstance(resultType));
     }
 
     @Override
