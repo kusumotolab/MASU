@@ -1,99 +1,230 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.parse;
 
-import java.util.HashMap;
+
 import java.util.Map;
+import java.util.WeakHashMap;
 
+
+/**
+ * AST上の各要素の開始行，開始列，終了行，終了列を管理するクラス.
+ * 
+ * @author kou-tngt
+ *
+ */
 public class DefaultPositionManager implements PositionManager {
-    public static class Position{
-        public int getEndLine() {
-            return endLine;
+
+    /**
+     * 引数keyの開始行を返す.
+     * 登録されていない場合は0を返す.
+     * @param key 開始行を取得したい要素
+     */
+    public int getStartLine(final Object key) {
+        if (this.dataMap.containsKey(key)) {
+            return this.getLineColumn(key).getStartLine();
+        } else {
+            return 0;
         }
-        public void setEndLine(int endLine) {
-            this.endLine = endLine;
-        }
-        public int getStartLine() {
-            return startLine;
-        }
-        public void setStartLine(int startLine) {
-            this.startLine = startLine;
-        }
-        public int getEndColumn() {
-            return endColumn;
-        }
-        public void setEndColumn(int endColumn) {
-            this.endColumn = endColumn;
-        }
-        public int getStartColumn() {
-            return startColumn;
-        }
-        public void setStartColumn(int startColumn) {
-            this.startColumn = startColumn;
-        }
-        
-        public String toString(){
-            return startLine + "." + startColumn + " - " + endLine + "." + endColumn;
-        }
-        
-        private int startLine;
-        private int startColumn;
-        private int endLine;
-        private int endColumn;
     }
 
+    /**
+     * 引数keyの開始列を返す.
+     * 登録されていない場合は0を返す.
+     * @param key 開始列を取得したい要素
+     */
+    public int getStartColumn(final Object key) {
+        if (this.dataMap.containsKey(key)) {
+            return this.getLineColumn(key).getStartColumn();
+        } else {
+            return 0;
+        }
+    }
 
-    public int getStartLine(Object key) {
-        return getLineColumn(key).getStartLine();
-    }
-    
-    public int getStartColumn(Object key){
-        return getLineColumn(key).getStartColumn();
+    /**
+     * 引数keyの終了行を返す.
+     * 登録されていない場合は0を返す.
+     * @param key 終了行を取得したい要素
+     */
+    public int getEndLine(final Object key) {
+        if (this.dataMap.containsKey(key)) {
+            return this.getLineColumn(key).getEndLine();
+        } else {
+            return 0;
+        }
     }
 
-    public int getEndLine(Object key) {
-        return getLineColumn(key).getEndLine();
+    /**
+     * 引数keyの終了列を返す.
+     * 登録されていない場合は0を返す.
+     * @param key 終了列を取得したい要素
+     */
+    public int getEndColumn(final Object key) {
+        if (this.dataMap.containsKey(key)) {
+            return this.getLineColumn(key).getEndColumn();
+        } else {
+            return 0;
+        }
     }
-    
-    public int getEndColumn(Object key){
-        return getLineColumn(key).getEndColumn();
+
+    /* (non-Javadoc)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.parse.PositionManager#setStartLine(java.lang.Object, int)
+     */
+    public void setStartLine(final Object key, final int line) {
+        this.getLineColumn(key).setStartLine(line);
     }
-    
-    public void setStartLine(Object key, int line){
-        getLineColumn(key).setStartLine(line);
+
+    /* (non-Javadoc)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.parse.PositionManager#setStartColumn(java.lang.Object, int)
+     */
+    public void setStartColumn(final Object key, final int column) {
+        this.getLineColumn(key).setStartLine(column);
     }
-    
-    public void setStartColumn(Object key, int column){
-        getLineColumn(key).setStartLine(column);
+
+    /* (non-Javadoc)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.parse.PositionManager#setEndLine(java.lang.Object, int)
+     */
+    public void setEndLine(final Object key, final int line) {
+        this.getLineColumn(key).setEndLine(line);
     }
-    
-    public void setEndLine(Object key, int line){
-        getLineColumn(key).setEndLine(line);
+
+    /* (non-Javadoc)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.parse.PositionManager#setEndColumn(java.lang.Object, int)
+     */
+    public void setEndColumn(final Object key, final int column) {
+        this.getLineColumn(key).setEndLine(column);
     }
-    
-    public void setEndColumn(Object key, int column){
-        getLineColumn(key).setEndLine(column);
-    }
-    
-    public void setPosition(Object key, int startLine, int startColumn, int endLine, int endColumn){
-        Position position = getLineColumn(key);
+
+    /* (non-Javadoc)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.parse.PositionManager#setPosition(java.lang.Object, int, int, int, int)
+     */
+    public void setPosition(final Object key, final int startLine, final int startColumn,
+            final int endLine, final int endColumn) {
+        final Position position = this.getLineColumn(key);
         position.setStartLine(startLine);
         position.setStartColumn(startColumn);
         position.setEndLine(endLine);
         position.setEndColumn(endColumn);
     }
-    
-    private Position getLineColumn(Object key){
-        if (null == key){
+
+    /**
+     * 引数keyの行番号情報を記録するインスタンスを返す.
+     * すでにkeyに対応するインスタンスが作成されていればそれを返し，まだ作成されていなければ新たに作成して返す.
+     * @param key 情報を記録するインスタンスを作成したい要素
+     * @return 引数keyに対応する行番号情報記録インスタンス
+     */
+    private Position getLineColumn(final Object key) {
+        if (null == key) {
             throw new NullPointerException("key is null");
         }
-        
-        if (dataMap.containsKey(key)){
-            return dataMap.get(key);
+
+        if (this.dataMap.containsKey(key)) {
+            return this.dataMap.get(key);
         } else {
-            Position newLine = new Position();
-            dataMap.put(key, newLine);
-            return newLine;
+            final Position newInstance = new Position();
+            this.dataMap.put(key, newInstance);
+            return newInstance;
         }
     }
-    
-    private final Map<Object,Position> dataMap = new HashMap<Object, Position>();
+
+    /**
+     * 行と列の情報を記録する内部クラス
+     * 
+     * @author kou-tngt
+     *
+     */
+    private static class Position {
+        /**
+         * 終了列を返す.
+         * @return 終了列
+         */
+        public int getEndColumn() {
+            return this.endColumn;
+        }
+
+        /**
+         * 終了行を返す
+         * @return　終了行
+         */
+        public int getEndLine() {
+            return this.endLine;
+        }
+
+        /**
+         * 開始列を返す
+         * @return　開始列
+         */
+        public int getStartColumn() {
+            return this.startColumn;
+        }
+
+        /**
+         * 開始行を返す
+         * @return　開始行
+         */
+        public int getStartLine() {
+            return this.startLine;
+        }
+
+        /**
+         * 終了列をセットする
+         * @param endColumn　終了列
+         */
+        public void setEndColumn(final int endColumn) {
+            this.endColumn = endColumn;
+        }
+
+        /**
+         * 終了行をセットする
+         * @param endLine　終了行
+         */
+        public void setEndLine(final int endLine) {
+            this.endLine = endLine;
+        }
+
+        /**
+         * 開始列をセットする
+         * @param startColumn　開始列
+         */
+        public void setStartColumn(final int startColumn) {
+            this.startColumn = startColumn;
+        }
+
+        /**
+         * 開始行をセットする
+         * @param startLine　開始行
+         */
+        public void setStartLine(final int startLine) {
+            this.startLine = startLine;
+        }
+
+        /* (non-Javadoc)
+         * @see java.lang.Object#toString()
+         */
+        @Override
+        public String toString() {
+            return this.startLine + "." + this.startColumn + " - " + this.endLine + "."
+                    + this.endColumn;
+        }
+
+        /**
+         * 開始行
+         */
+        private int startLine;
+
+        /**
+         * 開始列
+         */
+        private int startColumn;
+
+        /**
+         * 終了行
+         */
+        private int endLine;
+
+        /**
+         * 終了列
+         */
+        private int endColumn;
+    }
+
+    private final Map<Object, Position> dataMap = new WeakHashMap<Object, Position>();
 }
