@@ -239,6 +239,8 @@ public final class NameResolver {
                                         }
                                     }
 
+                                    assert false : "Here should be reached!";
+                                    
                                     // 親が外部クラス(ExternalClassInfo)の場合
                                 } else if (ownerTypeInfo instanceof ExternalClassInfo) {
 
