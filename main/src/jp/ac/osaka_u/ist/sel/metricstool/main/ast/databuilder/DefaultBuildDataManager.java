@@ -23,6 +23,19 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedP
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
 
 
+/**
+ * ビルダーが構築する情報を管理して，情報全体の整合性を取るクラス.
+ * 以下の3種類の機能を連携して行う.
+ * 
+ * 1. 構築中のデータに関する情報の管理，提供及び構築状態の管理
+ * 
+ * 2. 名前空間，エイリアス，変数などのスコープ管理
+ * 
+ * 3. クラス情報，メソッド情報，変数代入，変数参照，メソッド呼び出し情報などの登録作業の代行
+ * 
+ * @author kou-tngt
+ *
+ */
 public class DefaultBuildDataManager implements BuildDataManager{
 
     public DefaultBuildDataManager() {
@@ -102,6 +115,10 @@ public class DefaultBuildDataManager implements BuildDataManager{
         if (!this.scopeStack.isEmpty()) {
             final BlockScope scope = this.scopeStack.peek();
             scope.addAlias(aliase, realName);
+            
+            //名前のエイリアス情報が変化したのでキャッシュをリセット
+            aliaseNameSetCache = null;
+            allAvaliableNameSetCache = null;
         }
     }
 
@@ -109,6 +126,10 @@ public class DefaultBuildDataManager implements BuildDataManager{
         if (!this.scopeStack.isEmpty()) {
             final BlockScope scope = this.scopeStack.peek();
             scope.addUsingNameSpace(nameSpace);
+            
+            //名前空間情報が変化したのでキャッシュをリセット
+            availableNameSpaceSetCache = null;
+            allAvaliableNameSetCache = null;
         }
     }
 
@@ -116,6 +137,11 @@ public class DefaultBuildDataManager implements BuildDataManager{
         if (!this.scopeStack.isEmpty()) {
             this.scopeStack.pop();
             nextScopedVariables.clear();
+            
+            //名前情報キャッシュをリセット
+            aliaseNameSetCache = null;
+            availableNameSpaceSetCache = null;
+            allAvaliableNameSetCache = null;
         }
     }
 
@@ -173,14 +199,27 @@ public class DefaultBuildDataManager implements BuildDataManager{
     }
     
     public AvailableNamespaceInfoSet getAllAvaliableNames(){
+//      nullじゃなければ変化してないのでキャッシュ使いまわし
+        if (null != allAvaliableNameSetCache){
+            return allAvaliableNameSetCache;
+        }
+        
         AvailableNamespaceInfoSet resultSet = getAvailableAliasSet();
         for(AvailableNamespaceInfo info : getAvailableNameSpaceSet()){
             resultSet.add(info);
         }
+        
+        allAvaliableNameSetCache = resultSet;
+        
         return resultSet;
     }
 
     public AvailableNamespaceInfoSet getAvailableNameSpaceSet() {
+        //nullじゃなければ変化してないのでキャッシュ使いまわし
+        if (null != availableNameSpaceSetCache){
+            return availableNameSpaceSetCache;
+        }
+        
         final AvailableNamespaceInfoSet result = new AvailableNamespaceInfoSet();
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
@@ -191,10 +230,18 @@ public class DefaultBuildDataManager implements BuildDataManager{
             }
         }
         result.add(new AvailableNamespaceInfo(getCurrentNameSpace(),true));
+        
+        availableNameSpaceSetCache = result;
+        
         return result;
     }
     
     public AvailableNamespaceInfoSet getAvailableAliasSet(){
+        //nullじゃなければ変化してないのでキャッシュ使いまわし
+        if (null != aliaseNameSetCache){
+            return aliaseNameSetCache;
+        }
+        
         final AvailableNamespaceInfoSet result = new AvailableNamespaceInfoSet();
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
@@ -204,6 +251,9 @@ public class DefaultBuildDataManager implements BuildDataManager{
                 result.add(info);
             }
         }
+        
+        aliaseNameSetCache = result;
+        
         return result;
     }
 
@@ -498,7 +548,6 @@ public class DefaultBuildDataManager implements BuildDataManager{
             }
             return EMPTY_NAME;
         }
-
     }
     
     private void innerInit(){
@@ -512,6 +561,10 @@ public class DefaultBuildDataManager implements BuildDataManager{
 
     private static final String[] EMPTY_NAME = new String[0];
 
+    private AvailableNamespaceInfoSet aliaseNameSetCache = null;
+    private AvailableNamespaceInfoSet availableNameSpaceSetCache = null;
+    private AvailableNamespaceInfoSet allAvaliableNameSetCache = null;
+    
     private final Stack<BlockScope> scopeStack = new Stack<BlockScope>();
 
     private final Stack<String[]> nameSpaceStack = new Stack<String[]>();
