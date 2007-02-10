@@ -17,6 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Members;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -1524,6 +1525,142 @@ public final class NameResolver {
     }
 
     /**
+     * 未解決二項演算を解決し，その型を返す．
+     * 
+     * @param binominalOperation 未解決二項演算
+     * @param usingClass 二項演算が行われているクラス
+     * @param usingMethod 二項演算が行われているメソッド
+     * @param classInfoManager 用いるクラスマネージャ
+     * @param fieldInfoManager 用いるフィールドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
+     * @param resolvedCache 解決済みUnresolvedTypeInfoのキャッシュ
+     * @return 解決済み二項演算の型（つまり，演算結果の型）
+     */
+    public static TypeInfo resolveBinomialOperation(
+            final UnresolvedBinominalOperation binominalOperation,
+            final TargetClassInfo usingClass, final TargetMethodInfo usingMethod,
+            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
+            final MethodInfoManager methodInfoManager,
+            final Map<UnresolvedTypeInfo, TypeInfo> resolvedCache) {
+
+        final OPERATOR operator = binominalOperation.getOperator();
+        final UnresolvedTypeInfo unresolvedFirstOperandType = binominalOperation.getFirstOperand();
+        final UnresolvedTypeInfo unresolvedSecondOperandType = binominalOperation
+                .getSecondOperand();
+        final TypeInfo firstOperandType = NameResolver.resolveTypeInfo(unresolvedFirstOperandType,
+                usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
+                resolvedCache);
+        final TypeInfo secondOperandType = NameResolver.resolveTypeInfo(
+                unresolvedSecondOperandType, usingClass, usingMethod, classInfoManager,
+                fieldInfoManager, methodInfoManager, resolvedCache);
+
+        switch (Settings.getLanguage()) {
+        case JAVA:
+
+            switch (operator) {
+            case ARITHMETIC:
+                final ExternalClassInfo STRING = (ExternalClassInfo) classInfoManager
+                        .getClassInfo(new String[] { "java", "lang", "String" });
+                final ExternalClassInfo DOUBLE = (ExternalClassInfo) classInfoManager
+                        .getClassInfo(new String[] { "java", "lang", "Double" });
+                final ExternalClassInfo FLOAT = (ExternalClassInfo) classInfoManager
+                        .getClassInfo(new String[] { "java", "lang", "Float" });
+                final ExternalClassInfo LONG = (ExternalClassInfo) classInfoManager
+                        .getClassInfo(new String[] { "java", "lang", "Long" });
+                final ExternalClassInfo INTEGER = (ExternalClassInfo) classInfoManager
+                        .getClassInfo(new String[] { "java", "lang", "Integer" });
+                final ExternalClassInfo SHORT = (ExternalClassInfo) classInfoManager
+                        .getClassInfo(new String[] { "java", "lang", "Short" });
+                final ExternalClassInfo CHARACTOR = (ExternalClassInfo) classInfoManager
+                        .getClassInfo(new String[] { "java", "lang", "Charactor" });
+                final ExternalClassInfo BYTE = (ExternalClassInfo) classInfoManager
+                        .getClassInfo(new String[] { "java", "lang", "Byte" });
+
+                if ((firstOperandType.equals(STRING) || (secondOperandType.equals(STRING)))) {
+                    resolvedCache.put(binominalOperation, STRING);
+                    return STRING;
+
+                } else if (firstOperandType.equals(DOUBLE)
+                        || firstOperandType.equals(PrimitiveTypeInfo.DOUBLE)
+                        || secondOperandType.equals(DOUBLE)
+                        || secondOperandType.equals(PrimitiveTypeInfo.DOUBLE)) {
+                    resolvedCache.put(binominalOperation, PrimitiveTypeInfo.DOUBLE);
+                    return PrimitiveTypeInfo.DOUBLE;
+
+                } else if (firstOperandType.equals(FLOAT)
+                        || firstOperandType.equals(PrimitiveTypeInfo.FLOAT)
+                        || secondOperandType.equals(FLOAT)
+                        || secondOperandType.equals(PrimitiveTypeInfo.FLOAT)) {
+                    resolvedCache.put(binominalOperation, PrimitiveTypeInfo.FLOAT);
+                    return PrimitiveTypeInfo.FLOAT;
+
+                } else if (firstOperandType.equals(LONG)
+                        || firstOperandType.equals(PrimitiveTypeInfo.LONG)
+                        || secondOperandType.equals(LONG)
+                        || secondOperandType.equals(PrimitiveTypeInfo.LONG)) {
+                    resolvedCache.put(binominalOperation, PrimitiveTypeInfo.LONG);
+                    return PrimitiveTypeInfo.LONG;
+
+                } else if (firstOperandType.equals(INTEGER)
+                        || firstOperandType.equals(PrimitiveTypeInfo.INT)
+                        || secondOperandType.equals(INTEGER)
+                        || secondOperandType.equals(PrimitiveTypeInfo.INT)) {
+                    resolvedCache.put(binominalOperation, PrimitiveTypeInfo.INT);
+                    return PrimitiveTypeInfo.INT;
+
+                } else if (firstOperandType.equals(SHORT)
+                        || firstOperandType.equals(PrimitiveTypeInfo.SHORT)
+                        || secondOperandType.equals(SHORT)
+                        || secondOperandType.equals(PrimitiveTypeInfo.SHORT)) {
+                    resolvedCache.put(binominalOperation, PrimitiveTypeInfo.SHORT);
+                    return PrimitiveTypeInfo.SHORT;
+
+                } else if (firstOperandType.equals(CHARACTOR)
+                        || firstOperandType.equals(PrimitiveTypeInfo.CHAR)
+                        || secondOperandType.equals(CHARACTOR)
+                        || secondOperandType.equals(PrimitiveTypeInfo.CHAR)) {
+                    resolvedCache.put(binominalOperation, PrimitiveTypeInfo.CHAR);
+                    return PrimitiveTypeInfo.CHAR;
+
+                } else if (firstOperandType.equals(BYTE)
+                        || firstOperandType.equals(PrimitiveTypeInfo.BYTE)
+                        || secondOperandType.equals(BYTE)
+                        || secondOperandType.equals(PrimitiveTypeInfo.BYTE)) {
+                    resolvedCache.put(binominalOperation, PrimitiveTypeInfo.BYTE);
+                    return PrimitiveTypeInfo.BYTE;
+
+                } else {
+                    assert false : "Here shouldn't be reached!";
+                }
+
+                break;
+
+            case COMPARATIVE:
+                resolvedCache.put(binominalOperation, PrimitiveTypeInfo.BOOLEAN);
+                return PrimitiveTypeInfo.BOOLEAN;
+            case LOGICAL:
+                resolvedCache.put(binominalOperation, PrimitiveTypeInfo.BOOLEAN);
+                return PrimitiveTypeInfo.BOOLEAN;
+            case SHIFT:
+                resolvedCache.put(binominalOperation, firstOperandType);
+                return firstOperandType;
+            case ASSIGNMENT:
+                resolvedCache.put(binominalOperation, firstOperandType);
+                return firstOperandType;
+            default:
+                assert false : "Here shouldn't be reached";
+            }
+
+            break;
+
+        default:
+            assert false : "Here shouldn't be reached";
+        }
+
+        return null;
+    }
+
+    /**
      * 引数で与えられた未解決型情報を表す解決済み型情報クラスを生成する． ここで引数として与えられるのは，ソースコードがパースされていない型であるので，生成する解決済み型情報クラスは
      * ExternalClassInfo となる．
      * 
@@ -1648,9 +1785,8 @@ public final class NameResolver {
     /**
      * 「現在のクラス」で利用可能なフィールド一覧を返す．
      * ここで，「利用可能なフィールド」とは，「現在のクラス」で定義されているフィールド，「現在のクラス」のインナークラスで定義されているフィールド，
-     * 及びその親クラスで定義されているフィールドのうち子クラスからアクセスが可能なフィールドである．
-     * 利用可能なフィールドは List に格納されている． リストの先頭から優先順位の高いフィールド（つまり，
-     * クラス階層において下位のクラスに定義されているフィールド）が格納されている．
+     * 及びその親クラスで定義されているフィールドのうち子クラスからアクセスが可能なフィールドである． 利用可能なフィールドは List に格納されている．
+     * リストの先頭から優先順位の高いフィールド（つまり， クラス階層において下位のクラスに定義されているフィールド）が格納されている．
      * 
      * @param currentClass 現在のクラス
      * @return 利用可能なフィールド一覧
@@ -1719,12 +1855,12 @@ public final class NameResolver {
 
         final List<TargetFieldInfo> availableFields = new LinkedList<TargetFieldInfo>();
 
-        //自クラスで定義されており，名前空間可視性を持つフィールドを追加
-        //        for (final TargetFieldInfo definedField : classInfo.getDefinedFields()) {
-        //            if (definedField.isNamespaceVisible()) {
-        //                availableFields.add(definedField);
-        //            }
-        //        }
+        // 自クラスで定義されており，名前空間可視性を持つフィールドを追加
+        // for (final TargetFieldInfo definedField : classInfo.getDefinedFields()) {
+        // if (definedField.isNamespaceVisible()) {
+        // availableFields.add(definedField);
+        // }
+        // }
         availableFields.addAll(classInfo.getDefinedFields());
         checkedClasses.add(classInfo);
 
@@ -1811,7 +1947,6 @@ public final class NameResolver {
      */
     private static List<TargetMethodInfo> getAvailableMethods(final TargetClassInfo currentClass) {
 
-
         if (null == currentClass) {
             throw new NullPointerException();
         }
@@ -1874,12 +2009,12 @@ public final class NameResolver {
 
         final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
 
-        //自クラスで定義されており，名前空間可視性を持つメソッドを追加
-        //        for (final TargetFieldInfo definedField : classInfo.getDefinedFields()) {
-        //            if (definedField.isNamespaceVisible()) {
-        //                availableFields.add(definedField);
-        //            }
-        //        }
+        // 自クラスで定義されており，名前空間可視性を持つメソッドを追加
+        // for (final TargetFieldInfo definedField : classInfo.getDefinedFields()) {
+        // if (definedField.isNamespaceVisible()) {
+        // availableFields.add(definedField);
+        // }
+        // }
         availableMethods.addAll(classInfo.getDefinedMethods());
         checkedClasses.add(classInfo);
 
@@ -1902,7 +2037,7 @@ public final class NameResolver {
 
         return Collections.unmodifiableList(availableMethods);
     }
-    
+
     /**
      * 引数で与えられたクラスとその親クラスで定義されたメソッドのうち，子クラスで利用可能なメソッドの List を返す
      * 
@@ -1955,7 +2090,7 @@ public final class NameResolver {
 
         return Collections.unmodifiableList(availableMethods);
     }
-    
+
     /**
      * 「使用されるクラス」が「使用するクラス」において使用される場合に，利用可能なフィールド一覧を返す．
      * ここで，「利用可能なフィールド」とは，「使用されるクラス」で定義されているフィールド，及びその親クラスで定義されているフィールドのうち子クラスからアクセスが可能なフィールドである．
