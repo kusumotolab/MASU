@@ -13,7 +13,7 @@ public interface MessagePrinter {
      * @author kou-tngt
      */
     public static enum MESSAGE_TYPE {
-        OUT, ERROR
+        OUT, INFO, WARNING, ERROR
     };
 
     /**
