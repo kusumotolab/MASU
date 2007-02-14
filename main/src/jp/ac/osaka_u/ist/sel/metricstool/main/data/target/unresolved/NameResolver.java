@@ -150,7 +150,7 @@ public final class NameResolver {
                     (UnresolvedBinominalOperation) unresolvedTypeInfo, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
             return operationResultType;
-            
+
             // 未解決エンティティ使用の場合
         } else if (unresolvedTypeInfo instanceof UnresolvedEntityUsage) {
 
@@ -808,6 +808,38 @@ public final class NameResolver {
 
                 // 外部クラスに新規で外部メソッドを追加したので型は不明
                 return methodInfo.getReturnType();
+            }
+
+            // 親がプリミティブ型だった場合
+        } else if (methodOwnerClassType instanceof PrimitiveTypeInfo) {
+
+            switch (Settings.getLanguage()) {
+            // Java の場合はオートボクシングでのメソッド呼び出しが可能
+            // TODO 将来的にはこの switch文はとる．なぜなら TypeConverter.getTypeConverter(LANGUAGE)があるから．
+            case JAVA:
+
+                final ExternalClassInfo wrapperClass = TypeConverter.getTypeConverter(
+                        Settings.getLanguage()).getWrapperClass(
+                        (PrimitiveTypeInfo) methodOwnerClassType);
+                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(methodName,
+                        wrapperClass, constructor);
+                final List<ParameterInfo> parameters = NameResolver
+                        .createParameters(parameterTypes);
+                methodInfo.addParameters(parameters);
+
+                usingMethod.addCallee(methodInfo);
+                methodInfo.addCaller(usingMethod);
+                methodInfoManager.add(methodInfo);
+
+                // 解決済みキャッシュに登録
+                resolvedCache.put(methodCall, methodInfo.getReturnType());
+
+                // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
+                return methodInfo.getReturnType();
+
+            default:
+                assert false : "Here shouldn't be reached!";
+                return UnknownTypeInfo.getInstance();
             }
         }
 
