@@ -33,7 +33,7 @@ final public class JavaTypeConverter extends TypeConverter {
             return byteClass;
         case CHAR:
             final ExternalClassInfo charClass = (ExternalClassInfo) ClassInfoManager.getInstance()
-                    .getClassInfo(new String[] { "java", "lang", "Charactr" });
+                    .getClassInfo(new String[] { "java", "lang", "Character" });
             return charClass;
         case DOUBLE:
             final ExternalClassInfo doubleClass = (ExternalClassInfo) ClassInfoManager
