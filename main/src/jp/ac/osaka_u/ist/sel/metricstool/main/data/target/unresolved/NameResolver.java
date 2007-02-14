@@ -1596,27 +1596,28 @@ public final class NameResolver {
                 unresolvedSecondOperandType, usingClass, usingMethod, classInfoManager,
                 fieldInfoManager, methodInfoManager, resolvedCache);
 
+        final ExternalClassInfo DOUBLE = TypeConverter.getTypeConverter(Settings.getLanguage())
+                .getWrapperClass(PrimitiveTypeInfo.DOUBLE);
+        final ExternalClassInfo FLOAT = TypeConverter.getTypeConverter(Settings.getLanguage())
+                .getWrapperClass(PrimitiveTypeInfo.FLOAT);
+        final ExternalClassInfo LONG = TypeConverter.getTypeConverter(Settings.getLanguage())
+                .getWrapperClass(PrimitiveTypeInfo.LONG);
+        final ExternalClassInfo INTEGER = TypeConverter.getTypeConverter(Settings.getLanguage())
+                .getWrapperClass(PrimitiveTypeInfo.INT);
+        final ExternalClassInfo SHORT = TypeConverter.getTypeConverter(Settings.getLanguage())
+                .getWrapperClass(PrimitiveTypeInfo.SHORT);
+        final ExternalClassInfo CHARACTER = TypeConverter.getTypeConverter(Settings.getLanguage())
+                .getWrapperClass(PrimitiveTypeInfo.CHAR);
+        final ExternalClassInfo BYTE = TypeConverter.getTypeConverter(Settings.getLanguage())
+                .getWrapperClass(PrimitiveTypeInfo.BYTE);
+        final ExternalClassInfo BOOLEAN = TypeConverter.getTypeConverter(Settings.getLanguage())
+                .getWrapperClass(PrimitiveTypeInfo.BOOLEAN);
+
         switch (Settings.getLanguage()) {
         case JAVA:
 
             final ExternalClassInfo STRING = (ExternalClassInfo) classInfoManager
                     .getClassInfo(new String[] { "java", "lang", "String" });
-            final ExternalClassInfo DOUBLE = (ExternalClassInfo) classInfoManager
-                    .getClassInfo(new String[] { "java", "lang", "Double" });
-            final ExternalClassInfo FLOAT = (ExternalClassInfo) classInfoManager
-                    .getClassInfo(new String[] { "java", "lang", "Float" });
-            final ExternalClassInfo LONG = (ExternalClassInfo) classInfoManager
-                    .getClassInfo(new String[] { "java", "lang", "Long" });
-            final ExternalClassInfo INTEGER = (ExternalClassInfo) classInfoManager
-                    .getClassInfo(new String[] { "java", "lang", "Integer" });
-            final ExternalClassInfo SHORT = (ExternalClassInfo) classInfoManager
-                    .getClassInfo(new String[] { "java", "lang", "Short" });
-            final ExternalClassInfo CHARACTOR = (ExternalClassInfo) classInfoManager
-                    .getClassInfo(new String[] { "java", "lang", "Charactor" });
-            final ExternalClassInfo BYTE = (ExternalClassInfo) classInfoManager
-                    .getClassInfo(new String[] { "java", "lang", "Byte" });
-            final ExternalClassInfo BOOLEAN = (ExternalClassInfo) classInfoManager
-                    .getClassInfo(new String[] { "java", "lang", "Boolean" });
 
             switch (operator) {
             case ARITHMETIC:
@@ -1660,9 +1661,9 @@ public final class NameResolver {
                     resolvedCache.put(binominalOperation, PrimitiveTypeInfo.SHORT);
                     return PrimitiveTypeInfo.SHORT;
 
-                } else if (firstOperandType.equals(CHARACTOR)
+                } else if (firstOperandType.equals(CHARACTER)
                         || firstOperandType.equals(PrimitiveTypeInfo.CHAR)
-                        || secondOperandType.equals(CHARACTOR)
+                        || secondOperandType.equals(CHARACTER)
                         || secondOperandType.equals(PrimitiveTypeInfo.CHAR)) {
                     resolvedCache.put(binominalOperation, PrimitiveTypeInfo.CHAR);
                     return PrimitiveTypeInfo.CHAR;
@@ -1673,6 +1674,12 @@ public final class NameResolver {
                         || secondOperandType.equals(PrimitiveTypeInfo.BYTE)) {
                     resolvedCache.put(binominalOperation, PrimitiveTypeInfo.BYTE);
                     return PrimitiveTypeInfo.BYTE;
+
+                } else if ((firstOperandType instanceof UnknownTypeInfo)
+                        || (secondOperandType instanceof UnknownTypeInfo)) {
+
+                    resolvedCache.put(binominalOperation, UnknownTypeInfo.getInstance());
+                    return UnknownTypeInfo.getInstance();
 
                 } else {
                     assert false : "Here shouldn't be reached!";
@@ -1722,6 +1729,12 @@ public final class NameResolver {
                         || secondOperandType.equals(PrimitiveTypeInfo.BOOLEAN)) {
                     resolvedCache.put(binominalOperation, PrimitiveTypeInfo.BOOLEAN);
                     return PrimitiveTypeInfo.BOOLEAN;
+
+                } else if ((firstOperandType instanceof UnknownTypeInfo)
+                        || (secondOperandType instanceof UnknownTypeInfo)) {
+
+                    resolvedCache.put(binominalOperation, UnknownTypeInfo.getInstance());
+                    return UnknownTypeInfo.getInstance();
 
                 } else {
                     assert false : "Here shouldn't be reached!";
