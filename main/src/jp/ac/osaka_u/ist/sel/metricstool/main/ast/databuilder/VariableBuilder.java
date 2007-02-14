@@ -8,7 +8,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.VariableDefinitio
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
 
@@ -28,6 +27,14 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends 
         
         if (null == stateManager){
             throw new NullPointerException("stateManager is null.");
+        }
+        
+        if (null == typeBuilder){
+            throw new NullPointerException("typeBuilder is null.");
+        }
+        
+        if (null == nameBuilder){
+            throw new NullPointerException("nameBuilder is null.");
         }
         
         this.stateManager = stateManager;
@@ -67,21 +74,13 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends 
                     modifiersBuilder.deactivate();
                 }
             } else if (eventType.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)){
-                if (null != typeBuilder){
-                    typeBuilder.activate();
-                }
+                typeBuilder.activate();
             } else if (eventType.equals(TypeDescriptionStateManager.TYPE_STATE.EXIT_TYPE)){
-                if (null != typeBuilder){
-                    typeBuilder.deactivate();
-                }
+                typeBuilder.deactivate();
             } else if (eventType.equals(NameStateManager.NAME_STATE.ENTER_NAME)){
-                if (null != nameBuilder){
-                    nameBuilder.activate();
-                }
+                nameBuilder.activate();
             } else if (eventType.equals(NameStateManager.NAME_STATE.EXIT_NAME)){
-                if (null != nameBuilder){
-                    nameBuilder.deactivate();
-                }
+                nameBuilder.deactivate();
             }
         } 
     }
@@ -98,11 +97,7 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends 
     }
     
     private String[] getName(){
-        if (null != nameBuilder){
-            return nameBuilder.popLastBuiltData();
-        } else {
-            return EMPTY_NAME;
-        }
+        return nameBuilder.popLastBuiltData();
     }
     
     private ModifierInfo[] getModifiers(){
@@ -114,12 +109,7 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends 
     }
     
     private UnresolvedTypeInfo getType(){
-        if (null != typeBuilder){
-            return typeBuilder.popLastBuiltData();
-        } else {
-            throw new IllegalStateException();
-            //return UNKNOWN_TYPE;
-        }
+        return typeBuilder.popLastBuiltData();
     }
     
     private final VariableDefinitionStateManager stateManager;
@@ -128,7 +118,5 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends 
     private final TypeBuilder typeBuilder;
     private final NameBuilder nameBuilder;
     
-    private static final String[] EMPTY_NAME = new String[0];
     private static final ModifierInfo[] EMPTY_MODIFIERS = new ModifierInfo[0];
-    //private static final UnresolvedTypeInfo UNKNOWN_TYPE = PrimitiveTypeInfo.UNKNOWN;
 }
