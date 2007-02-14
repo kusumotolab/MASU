@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.lcom1;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.ClassInfoAccessor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricAlreadyRegisteredException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
@@ -34,6 +36,7 @@ public class Lcom1Plugin extends AbstractPlugin {
     @Override
     protected void execute() {
         final List<TargetMethodInfo> methods = new ArrayList<TargetMethodInfo>(100);
+        final Set<TargetFieldInfo> instanceFields = new HashSet<TargetFieldInfo>();
         final Set<FieldInfo> usedFields = new HashSet<FieldInfo>();
 
         //クラス情報アクセサを取得
@@ -48,6 +51,15 @@ public class Lcom1Plugin extends AbstractPlugin {
             int q = 0;
 
             methods.addAll(cl.getDefinedMethods());
+            
+            //このクラスのインスタンスフィールドのセットを取得
+            instanceFields.addAll(cl.getDefinedFields());
+            for(Iterator<TargetFieldInfo> it = instanceFields.iterator(); it.hasNext();){
+                if (it.next().isStaticMember()){
+                    it.remove();
+                }
+            }
+            
             final int methodCount = methods.size();
 
             //フィールドを利用するメソッドが1つもないかどうか
@@ -59,6 +71,9 @@ public class Lcom1Plugin extends AbstractPlugin {
                 final TargetMethodInfo firstMethod = methods.get(i);
                 usedFields.addAll(firstMethod.getAssignmentees());
                 usedFields.addAll(firstMethod.getReferencees());
+                
+                //自クラスのインスタンスフィールドだけを残す
+                usedFields.retainAll(instanceFields);
 
                 if (allMethodsDontUseAnyField) {
                     //まだどのメソッドも1つもフィールドを利用していない場合
@@ -110,8 +125,10 @@ public class Lcom1Plugin extends AbstractPlugin {
                 this.err.println(e);
             }
 
-            //1クラスごとに%で進捗報告
             methods.clear();
+            instanceFields.clear();
+            
+            //1クラスごとに%で進捗報告
             this.reportProgress(++measuredClassCount * 100 / maxClassCount);
         }
     }
