@@ -65,7 +65,7 @@ public class OperatorToken extends AstTokenAdapter {
      * 単項ビット演算子を表す定数インスタンス
      */
     public static final OperatorToken BIT_UNARY = new OperatorToken(OPERATOR.BITS,"BIT_UNARY", 1, false, true,
-            null,new int[]{});
+            null,new int[]{0});
     
     /**
      * 二項ビット演算子を表す定数インスタンス
