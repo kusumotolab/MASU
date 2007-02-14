@@ -117,7 +117,8 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends 
         if (null != typeBuilder){
             return typeBuilder.popLastBuiltData();
         } else {
-            return UNKNOWN_TYPE;
+            throw new IllegalStateException();
+            //return UNKNOWN_TYPE;
         }
     }
     
@@ -129,5 +130,5 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends 
     
     private static final String[] EMPTY_NAME = new String[0];
     private static final ModifierInfo[] EMPTY_MODIFIERS = new ModifierInfo[0];
-    private static final UnresolvedTypeInfo UNKNOWN_TYPE = PrimitiveTypeInfo.UNKNOWN;
+    //private static final UnresolvedTypeInfo UNKNOWN_TYPE = PrimitiveTypeInfo.UNKNOWN;
 }
