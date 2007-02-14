@@ -5,6 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsage;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBinominalOperation;
@@ -57,17 +58,25 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 //‘ã“ü‚È‚ç”í‘ã“ü•Ï”‚Æ‚µ‚Ä‰ğŒˆ‚µ‚ÄŒ‹‰Ê‚ÌŒ^‚ğæ“¾‚·‚é
                 termTypes[0] = leftElement.resolveAsAssignmetedVariable(this.buildDataManager);
             }
+        } else if (elements[0].equals(InstanceSpecificElement.THIS)){
+            termTypes[0] = buildDataManager.getCurrentClass();
+        } else if (elements[0].equals(InstanceSpecificElement.NULL)){
+            termTypes[0] = NullTypeInfo.getInstance();
         } else {
             //‚»‚êˆÈŠO‚Ìê‡‚Í’¼ÚŒ^‚ğæ“¾‚·‚é
             termTypes[0] = elements[0].getType();
         }
 
-        //2€–Ú‚¢‚±‚¤‚É‚Â‚¢‚Ä
+        //2€–ÚˆÈ~‚É‚Â‚¢‚Ä
         for (int i = 1; i < term; i++) {
             if (elements[i] instanceof IdentifierElement) {
                 //¯•Êq‚È‚çŸè‚ÉQÆ‚Æ‚µ‚Ä‰ğŒˆ‚µ‚Ä•û‚ğæ“¾‚·‚é
                 termTypes[i] = ((IdentifierElement) elements[i])
                         .resolveAsReferencedVariable(this.buildDataManager);
+            } else if (elements[i].equals(InstanceSpecificElement.THIS)){
+                termTypes[i] = buildDataManager.getCurrentClass();
+            } else if (elements[i].equals(InstanceSpecificElement.NULL)){
+                termTypes[i] = NullTypeInfo.getInstance();
             } else {
                 //‚»‚êˆÈŠO‚È‚ç’¼ÚŒ^‚ğæ“¾‚·‚é
                 termTypes[i] = elements[i].getType();
