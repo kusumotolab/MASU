@@ -33,7 +33,7 @@ public class JavaImportBuilder extends CompoundDataBuilder<Object>{
         super.entered(event);
         
         if (this.isActive() && stateManager.isEntered()){
-            if (event.getToken().equals(OperatorToken.TWO_TERM)){//*‚ª—ˆ‚½
+            if (event.getToken().equals(OperatorToken.ARITHMETICH_BINOMIAL)){//*‚ª—ˆ‚½
                 lastTokenIsAsterisk = true;
             } else{
                 lastTokenIsAsterisk = false;

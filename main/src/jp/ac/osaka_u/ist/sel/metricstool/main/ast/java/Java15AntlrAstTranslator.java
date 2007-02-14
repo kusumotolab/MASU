@@ -241,21 +241,27 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.LITERAL_instanceof:
         case Java15TokenTypes.LT:
         case Java15TokenTypes.GT:
-            result = OperatorToken.COMPARE;
+            result = OperatorToken.COMPARATIVE;
             break;
             
         case Java15TokenTypes.SL:
         case Java15TokenTypes.SR:
         case Java15TokenTypes.BSR:
+            result = OperatorToken.SHIFT;
+            break;
+        
         case Java15TokenTypes.BAND:
         case Java15TokenTypes.BOR:
         case Java15TokenTypes.BXOR:
+            result = OperatorToken.LOGICAL_BINOMIAL;
+            break;
+            
         case Java15TokenTypes.PLUS:
         case Java15TokenTypes.MINUS:
         case Java15TokenTypes.DIV:
         case Java15TokenTypes.MOD:
         case Java15TokenTypes.STAR:
-            result = OperatorToken.TWO_TERM;
+            result = OperatorToken.ARITHMETICH_BINOMIAL;
             break;
             
         case Java15TokenTypes.INC:
@@ -266,17 +272,20 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             break;
             
         case Java15TokenTypes.LNOT:
-            result = OperatorToken.NOT;
+            result = OperatorToken.LOGICAL_UNARY;
             break;
             
         case Java15TokenTypes.BNOT:
+            result = OperatorToken.BIT_UNARY;
+            break;
+            
         case Java15TokenTypes.UNARY_MINUS:
         case Java15TokenTypes.UNARY_PLUS:
-            result = OperatorToken.SINGLE_TERM;
+            result = OperatorToken.ARITHMETHIC_UNARY;
             break;
             
         case Java15TokenTypes.QUESTION:
-            result = OperatorToken.THREE_TERM;
+            result = OperatorToken.TERNARY;
             break;
             
         case Java15TokenTypes.LITERAL_true:

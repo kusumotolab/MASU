@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
@@ -16,60 +17,84 @@ public class OperatorToken extends AstTokenAdapter {
     /**
      * キャストは演算子を表す定数インスタンス
      */
-    public static final OperatorToken CAST = new OperatorToken("CAST", 2, false, false, null,new int[]{0});
+    public static final OperatorToken CAST = new OperatorToken(null,"CAST", 2, false, false, null,new int[]{0});
 
     /**
      * インクリメント演算子とデクリメント演算子を表す定数インスタンス
      */
-    public static final OperatorToken INCL_AND_DECL = new OperatorToken("INCLEMENT", 1, true, true,
+    public static final OperatorToken INCL_AND_DECL = new OperatorToken(null,"INCLEMENT", 1, true, true,
             null,new int[]{0});
 
     /**
      * 代入演算子を表す定数インスタンス
      */
-    public static final OperatorToken ASSIGNMENT = new OperatorToken("ASSIGN", 2, true, false, null,
+    public static final OperatorToken ASSIGNMENT = new OperatorToken(OPERATOR.ASSIGNMENT,"ASSIMENT", 2, true, false, null,
             new int[]{0});
 
     /**
      * 複合代入演算子を表す定数インスタンス
      */
-    public static final OperatorToken COMPOUND_ASSIGNMENT = new OperatorToken("COMPOUND_ASSIGNMENT",2,true,true,null,
+    public static final OperatorToken COMPOUND_ASSIGNMENT = new OperatorToken(OPERATOR.ASSIGNMENT,"COMPOUND_ASSIGNMENT",2,true,true,null,
             new int[]{0});
     
     /**
-     * 二項演算子を表す定数インスタンス
+     * 単項算術演算子を表す定数インスタンス
      */
-    public static final OperatorToken TWO_TERM = new OperatorToken("TWO_TERM", 2, false, true, null,
+    public static final OperatorToken ARITHMETHIC_UNARY = new OperatorToken(OPERATOR.ARITHMETIC,"ARITHMETIC_UNARY", 1, false,
+            true, null,new int[]{0});
+    
+    /**
+     * 二項算術演算子を表す定数インスタンス
+     */
+    public static final OperatorToken ARITHMETICH_BINOMIAL = new OperatorToken(OPERATOR.ARITHMETIC,"ARITHMETIC_BINOMIAL", 2, false, true, null,
+            new int[]{0,1});
+    
+    /**
+     * 単項論理演算子を表す定数インスタンス
+     */
+    public static final OperatorToken LOGICAL_UNARY = new OperatorToken(OPERATOR.LOGICAL,"NOT_UNARY", 1, false, true,
+            PrimitiveTypeInfo.BOOLEAN,new int[]{});
+    
+    /**
+     * 二項論理演算子を表す定数インスタンス
+     */
+    public static final OperatorToken LOGICAL_BINOMIAL = new OperatorToken(OPERATOR.LOGICAL,"LOGICAL_BINOMIAL", 2, false, true,
+            PrimitiveTypeInfo.BOOLEAN,new int[]{0,1});
+    
+    /**
+     * 単項ビット演算子を表す定数インスタンス
+     */
+    public static final OperatorToken BIT_UNARY = new OperatorToken(OPERATOR.BITS,"BIT_UNARY", 1, false, true,
+            null,new int[]{});
+    
+    /**
+     * 二項ビット演算子を表す定数インスタンス
+     */
+    public static final OperatorToken BIT_BINOMIAL = new OperatorToken(OPERATOR.BITS,"BIT_BINOMIAL", 2, false, true, null,
+            new int[]{0,1});
+    
+    /**
+     * 二項シフト演算子を表す定数インスタンス
+     */
+    public static final OperatorToken SHIFT = new OperatorToken(OPERATOR.SHIFT,"SHIFT", 2, false, true, null,
             new int[]{0,1});
 
     /**
-     * 単項演算子を表す定数インスタンス
+     * 二項比較演算子を表す定数インスタンス
      */
-    public static final OperatorToken SINGLE_TERM = new OperatorToken("SINGLE_TERM", 1, false,
-            true, null,new int[]{0});
-
+    public static final OperatorToken COMPARATIVE = new OperatorToken(OPERATOR.COMPARATIVE,"COMPARATIVE", 2, false, true,
+            PrimitiveTypeInfo.BOOLEAN,new int[]{});
+    
     /**
      * 三項演算子を表す定数インスタンス
      */
-    public static final OperatorToken THREE_TERM = new OperatorToken("THREE_TERM", 3, false, true,
+    public static final OperatorToken TERNARY= new OperatorToken(null,"TERNARY", 3, false, true,
             null,new int[]{1,2});
-
-    /**
-     * 比較演算子を表す定数インスタンス
-     */
-    public static final OperatorToken COMPARE = new OperatorToken("COMPARE", 2, false, true,
-            PrimitiveTypeInfo.BOOLEAN,new int[]{});
-
-    /**
-     * 否定演算子を表す定数インスタンス
-     */
-    public static final OperatorToken NOT = new OperatorToken("NOT", 1, false, true,
-            PrimitiveTypeInfo.BOOLEAN,new int[]{});
 
     /**
      * 配列記述子を表す定数インスタンス
      */
-    public static final OperatorToken ARRAY = new OperatorToken("ARRAY", 2, false, true, null,new int[]{});
+    public static final OperatorToken ARRAY = new OperatorToken(null,"ARRAY", 2, false, true, null,new int[]{});
 
     /**
      * 演算子の文字列，扱う項の数，左辺値への参照と代入を行うかどうか，演算結果の型を指定するコンストラクタ.
@@ -81,7 +106,7 @@ public class OperatorToken extends AstTokenAdapter {
      * @param specifiedResultType 演算結果の型が決まっている場合はその型を，決まっていない場合はnullを指定する
      * @throws IllegalArgumentException termCountが0以下の場合
      */
-    public OperatorToken(final String text, final int termCount, final boolean leftIsAssignmentee,
+    public OperatorToken(final OPERATOR operator,final String text, final int termCount, final boolean leftIsAssignmentee,
             final boolean leftIsReferencee, final UnresolvedTypeInfo specifiedResultType,
             final int[] typeSpecifiedTermIndexes) {
         super(text);
@@ -90,6 +115,7 @@ public class OperatorToken extends AstTokenAdapter {
             throw new IllegalArgumentException("Operator must treat one or more terms.");
         }
 
+        this.operator = operator;
         this.leftIsAssignmentee = leftIsAssignmentee;
         this.leftIsReferencee = leftIsReferencee;
         this.termCount = termCount;
@@ -114,8 +140,10 @@ public class OperatorToken extends AstTokenAdapter {
         return this.leftIsAssignmentee;
     }
 
-    /* (non-Javadoc)
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstTokenAdapter#isOperator()
+    /**
+     * 演算子を表すトークンかどうかを返す.
+     * 
+     * @return　true
      */
     @Override
     public boolean isOperator() {
@@ -128,6 +156,15 @@ public class OperatorToken extends AstTokenAdapter {
      */
     public boolean isLeftTermIsReferencee() {
         return this.leftIsReferencee;
+    }
+    
+    /**
+     * 名前解決部が利用するEnum OPERATORの要素を返す．
+     * 名前解決部に型解決を委譲しない種類の演算子の場合はnullを返す．
+     * @return 名前解決部が利用するEnum OPERATORの要素，名前解決部に型解決を委譲しない種類の演算子の場合はnull
+     */
+    public OPERATOR getOperator(){
+        return this.operator;
     }
 
     /**
@@ -163,6 +200,11 @@ public class OperatorToken extends AstTokenAdapter {
      */
     private final int termCount;
 
+    /**
+     * 演算子
+     */
+    private final OPERATOR operator;
+    
     /**
      * 演算結果の型を表す.
      * 決まっていない場合はnull.

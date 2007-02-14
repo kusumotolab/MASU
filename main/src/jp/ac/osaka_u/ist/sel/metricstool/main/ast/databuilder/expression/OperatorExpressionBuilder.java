@@ -5,7 +5,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsage;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBinominalOperation;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -20,75 +22,109 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
     @Override
     protected void afterExited(final AstVisitEvent event) {
         final AstToken token = event.getToken();
-        if (token instanceof OperatorToken) {
+        if (isTriggerToken(token)) {
             this.buildOperatorElement((OperatorToken) token);
         }
     }
 
     protected void buildOperatorElement(final OperatorToken token) {
+        //演算子が必要とする項の数
         final int term = token.getTermCount();
+        //左辺値への代入があるかどうか
         final boolean assignmentLeft = token.isAssignmentOperator();
+        //左辺値への参照があるかどうか
         final boolean referenceLeft = token.isLeftTermIsReferencee();
-        final UnresolvedTypeInfo type = token.getSpecifiedResultType();
+        //型決定に関わる項のインデックスの配列
         final int[] typeSpecifiedTermIndexes = token.getTypeSpecifiedTermIndexes();
 
         final ExpressionElement[] elements = this.getAvailableElements();
 
         assert (term > 0 && term == elements.length) : "Illegal state: unexpected element count.";
-
+        
+        //各項の型を記録する配列
         final UnresolvedTypeInfo[] termTypes = new UnresolvedTypeInfo[elements.length];
 
+        //最左辺値について
         if (elements[0] instanceof IdentifierElement) {
+            //識別子の場合
             final IdentifierElement leftElement = (IdentifierElement) elements[0];
             if (referenceLeft) {
+                //参照なら被参照変数として解決して結果の型を取得する
                 termTypes[0] = leftElement.resolveAsReferencedVariable(this.buildDataManager);
             }
 
             if (assignmentLeft) {
+                //代入なら被代入変数として解決して結果の型を取得する
                 termTypes[0] = leftElement.resolveAsAssignmetedVariable(this.buildDataManager);
             }
         } else {
+            //それ以外の場合は直接型を取得する
             termTypes[0] = elements[0].getType();
         }
 
+        //2項目いこうについて
         for (int i = 1; i < term; i++) {
             if (elements[i] instanceof IdentifierElement) {
+                //識別子なら勝手に参照として解決して方を取得する
                 termTypes[i] = ((IdentifierElement) elements[i])
                         .resolveAsReferencedVariable(this.buildDataManager);
             } else {
+                //それ以外なら直接型を取得する
                 termTypes[i] = elements[i].getType();
             }
         }
 
-        UnresolvedTypeInfo resultType = null;
-        if (null != type) {
-            resultType = type;
-        } else if (token.equals(OperatorToken.ARRAY)) {
-            UnresolvedTypeInfo ownerType;
-            if (elements[0] instanceof IdentifierElement) {
-                ownerType = ((IdentifierElement) elements[0])
-                        .resolveAsReferencedVariable(this.buildDataManager);
+        
+        
+        final OPERATOR operator = token.getOperator();
+        
+        if (2 == term && null != operator){
+            //オペレーターインスタンスがセットされている2項演算子＝名前解決部に型決定処理を委譲する
+            assert(null != termTypes[0]) : "Illega state: first term type was not decided.";
+            assert(null != termTypes[1]) : "Illega state: second term type was not decided.";
+            
+            UnresolvedBinominalOperation operation = new UnresolvedBinominalOperation(operator,termTypes[0],termTypes[1]);
+            pushElement(TypeElement.getInstance(operation));
+            
+        } else{
+            //自分で型決定する
+            UnresolvedTypeInfo resultType = null;
+            
+            //オペレータによってすでに決定している戻り値の型，確定していなければnull
+            final UnresolvedTypeInfo type = token.getSpecifiedResultType();
+            
+            if (null != type) {
+                //オペレータによってすでに結果の型が決定している
+                resultType = type;
+            } else if (token.equals(OperatorToken.ARRAY)) {
+                //配列記述子の場合は特別処理
+                UnresolvedTypeInfo ownerType;
+                if (elements[0] instanceof IdentifierElement) {
+                    ownerType = ((IdentifierElement) elements[0])
+                            .resolveAsReferencedVariable(this.buildDataManager);
+                } else {
+                    ownerType = elements[0].getType();
+                }
+                resultType = new UnresolvedArrayElementUsage(ownerType);
             } else {
-                ownerType = elements[0].getType();
-            }
-            resultType = new UnresolvedArrayElementUsage(ownerType);
-        } else {
-            for (int i = 0; i < typeSpecifiedTermIndexes.length; i++) {
-                resultType = termTypes[typeSpecifiedTermIndexes[i]];
-                if (null != resultType){
-                    break;
+                //型決定に関連する項を左から順番に漁っていって最初に決定できた奴に勝手に決める
+                for (int i = 0; i < typeSpecifiedTermIndexes.length; i++) {
+                    resultType = termTypes[typeSpecifiedTermIndexes[i]];
+                    if (null != resultType){
+                        break;
+                    }
                 }
             }
+            
+            assert (null != resultType) : "Illegal state: operation resultType was not decided.";
+            
+            this.pushElement(TypeElement.getInstance(resultType));
         }
-        
-        assert (null != resultType) : "Illegal state: operation resultType was not decided.";
-
-        this.pushElement(TypeElement.getInstance(resultType));
     }
 
     @Override
     protected boolean isTriggerToken(final AstToken token) {
-        return token instanceof OperatorToken;
+        return token.isOperator();
     }
 
     private final BuildDataManager buildDataManager;
