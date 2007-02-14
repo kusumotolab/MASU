@@ -136,12 +136,21 @@ public final class NameResolver {
             // 未解決メソッド呼び出しの場合
         } else if (unresolvedTypeInfo instanceof UnresolvedMethodCall) {
 
-            // (c)のクラス定義を取得
+            // クラス定義を取得
             final TypeInfo classInfo = NameResolver.resolveMethodCall(
                     (UnresolvedMethodCall) unresolvedTypeInfo, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
             return classInfo;
 
+            // 未解決に項演算子の場合
+        } else if (unresolvedTypeInfo instanceof UnresolvedBinominalOperation) {
+
+            // 二項演算の型を解決
+            final TypeInfo operationResultType = NameResolver.resolveBinomialOperation(
+                    (UnresolvedBinominalOperation) unresolvedTypeInfo, usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+            return operationResultType;
+            
             // 未解決エンティティ使用の場合
         } else if (unresolvedTypeInfo instanceof UnresolvedEntityUsage) {
 
@@ -401,6 +410,7 @@ public final class NameResolver {
                         resolvedCache.put(fieldReference, availableField.getType());
 
                         return availableField.getType();
+
                     }
                 }
             }
