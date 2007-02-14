@@ -241,7 +241,7 @@ public final class NameResolver {
                                     }
 
                                     assert false : "Here should be reached!";
-                                    
+
                                     // 親が外部クラス(ExternalClassInfo)の場合
                                 } else if (ownerTypeInfo instanceof ExternalClassInfo) {
 
@@ -1557,24 +1557,27 @@ public final class NameResolver {
         switch (Settings.getLanguage()) {
         case JAVA:
 
+            final ExternalClassInfo STRING = (ExternalClassInfo) classInfoManager
+                    .getClassInfo(new String[] { "java", "lang", "String" });
+            final ExternalClassInfo DOUBLE = (ExternalClassInfo) classInfoManager
+                    .getClassInfo(new String[] { "java", "lang", "Double" });
+            final ExternalClassInfo FLOAT = (ExternalClassInfo) classInfoManager
+                    .getClassInfo(new String[] { "java", "lang", "Float" });
+            final ExternalClassInfo LONG = (ExternalClassInfo) classInfoManager
+                    .getClassInfo(new String[] { "java", "lang", "Long" });
+            final ExternalClassInfo INTEGER = (ExternalClassInfo) classInfoManager
+                    .getClassInfo(new String[] { "java", "lang", "Integer" });
+            final ExternalClassInfo SHORT = (ExternalClassInfo) classInfoManager
+                    .getClassInfo(new String[] { "java", "lang", "Short" });
+            final ExternalClassInfo CHARACTOR = (ExternalClassInfo) classInfoManager
+                    .getClassInfo(new String[] { "java", "lang", "Charactor" });
+            final ExternalClassInfo BYTE = (ExternalClassInfo) classInfoManager
+                    .getClassInfo(new String[] { "java", "lang", "Byte" });
+            final ExternalClassInfo BOOLEAN = (ExternalClassInfo) classInfoManager
+                    .getClassInfo(new String[] { "java", "lang", "Boolean" });
+
             switch (operator) {
             case ARITHMETIC:
-                final ExternalClassInfo STRING = (ExternalClassInfo) classInfoManager
-                        .getClassInfo(new String[] { "java", "lang", "String" });
-                final ExternalClassInfo DOUBLE = (ExternalClassInfo) classInfoManager
-                        .getClassInfo(new String[] { "java", "lang", "Double" });
-                final ExternalClassInfo FLOAT = (ExternalClassInfo) classInfoManager
-                        .getClassInfo(new String[] { "java", "lang", "Float" });
-                final ExternalClassInfo LONG = (ExternalClassInfo) classInfoManager
-                        .getClassInfo(new String[] { "java", "lang", "Long" });
-                final ExternalClassInfo INTEGER = (ExternalClassInfo) classInfoManager
-                        .getClassInfo(new String[] { "java", "lang", "Integer" });
-                final ExternalClassInfo SHORT = (ExternalClassInfo) classInfoManager
-                        .getClassInfo(new String[] { "java", "lang", "Short" });
-                final ExternalClassInfo CHARACTOR = (ExternalClassInfo) classInfoManager
-                        .getClassInfo(new String[] { "java", "lang", "Charactor" });
-                final ExternalClassInfo BYTE = (ExternalClassInfo) classInfoManager
-                        .getClassInfo(new String[] { "java", "lang", "Byte" });
 
                 if ((firstOperandType.equals(STRING) || (secondOperandType.equals(STRING)))) {
                     resolvedCache.put(binominalOperation, STRING);
@@ -1641,6 +1644,47 @@ public final class NameResolver {
             case LOGICAL:
                 resolvedCache.put(binominalOperation, PrimitiveTypeInfo.BOOLEAN);
                 return PrimitiveTypeInfo.BOOLEAN;
+            case BITS:
+
+                if (firstOperandType.equals(LONG)
+                        || firstOperandType.equals(PrimitiveTypeInfo.LONG)
+                        || secondOperandType.equals(LONG)
+                        || secondOperandType.equals(PrimitiveTypeInfo.LONG)) {
+                    resolvedCache.put(binominalOperation, PrimitiveTypeInfo.LONG);
+                    return PrimitiveTypeInfo.LONG;
+
+                } else if (firstOperandType.equals(INTEGER)
+                        || firstOperandType.equals(PrimitiveTypeInfo.INT)
+                        || secondOperandType.equals(INTEGER)
+                        || secondOperandType.equals(PrimitiveTypeInfo.INT)) {
+                    resolvedCache.put(binominalOperation, PrimitiveTypeInfo.INT);
+                    return PrimitiveTypeInfo.INT;
+
+                } else if (firstOperandType.equals(SHORT)
+                        || firstOperandType.equals(PrimitiveTypeInfo.SHORT)
+                        || secondOperandType.equals(SHORT)
+                        || secondOperandType.equals(PrimitiveTypeInfo.SHORT)) {
+                    resolvedCache.put(binominalOperation, PrimitiveTypeInfo.SHORT);
+                    return PrimitiveTypeInfo.SHORT;
+
+                } else if (firstOperandType.equals(BYTE)
+                        || firstOperandType.equals(PrimitiveTypeInfo.BYTE)
+                        || secondOperandType.equals(BYTE)
+                        || secondOperandType.equals(PrimitiveTypeInfo.BYTE)) {
+                    resolvedCache.put(binominalOperation, PrimitiveTypeInfo.BYTE);
+                    return PrimitiveTypeInfo.BYTE;
+
+                } else if (firstOperandType.equals(BOOLEAN)
+                        || firstOperandType.equals(PrimitiveTypeInfo.BOOLEAN)
+                        || secondOperandType.equals(BOOLEAN)
+                        || secondOperandType.equals(PrimitiveTypeInfo.BOOLEAN)) {
+                    resolvedCache.put(binominalOperation, PrimitiveTypeInfo.BOOLEAN);
+                    return PrimitiveTypeInfo.BOOLEAN;
+
+                } else {
+                    assert false : "Here shouldn't be reached!";
+                }
+
             case SHIFT:
                 resolvedCache.put(binominalOperation, firstOperandType);
                 return firstOperandType;
