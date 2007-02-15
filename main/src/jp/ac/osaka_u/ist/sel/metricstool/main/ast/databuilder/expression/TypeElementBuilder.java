@@ -3,10 +3,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BuiltinTypeToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ConstantToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VoidTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 
@@ -20,8 +19,8 @@ public class TypeElementBuilder extends ExpressionBuilder {
     /**
      * @param expressionManager
      */
-    public TypeElementBuilder(ExpressionElementManager expressionManager,
-            BuildDataManager buildManager) {
+    public TypeElementBuilder(final ExpressionElementManager expressionManager,
+            final BuildDataManager buildManager) {
         super(expressionManager);
 
         if (null == buildManager) {
@@ -31,78 +30,75 @@ public class TypeElementBuilder extends ExpressionBuilder {
         this.buildManager = buildManager;
     }
 
-    protected void afterExited(AstVisitEvent event) {
-        AstToken token = event.getToken();
-        if (token.isPrimitiveType()) {
-            buildPrimitiveType(token.toString());
-        } else if (token.isVoidType()){
-            buildVoidType();
+    @Override
+    protected void afterExited(final AstVisitEvent event) {
+        final AstToken token = event.getToken();
+        if (token instanceof BuiltinTypeToken) {
+            this.buildBuiltinType((BuiltinTypeToken) token);
         } else if (token.isTypeDescription()) {
-            buildType();
-        } else if (token.isArrayDeclarator()){
-            buildArrayType();
+            this.buildType();
+        } else if (token.isArrayDeclarator()) {
+            this.buildArrayType();
         } else if (token instanceof ConstantToken) {
-            buildConstantElement((ConstantToken) token);
+            this.buildConstantElement((ConstantToken) token);
         }
     }
-    
-    protected void buildArrayType(){
-        ExpressionElement[] elements = getAvailableElements();
-        
+
+    protected void buildArrayType() {
+        final ExpressionElement[] elements = this.getAvailableElements();
+
         assert (elements.length == 1) : "Illegal state: type description was not found.";
 
         TypeElement typeElement = null;
         if (elements.length == 1) {
             if (elements[0] instanceof IdentifierElement) {
-                UnresolvedReferenceTypeInfo referenceType = buildReferenceType((IdentifierElement)elements[0]);
-                typeElement = TypeElement.getInstance(UnresolvedArrayTypeInfo.getType(referenceType,1));
+                final UnresolvedReferenceTypeInfo referenceType = this.buildReferenceType((IdentifierElement) elements[0]);
+                typeElement = TypeElement.getInstance(UnresolvedArrayTypeInfo.getType(
+                        referenceType, 1));
             } else if (elements[0] instanceof TypeElement) {
-                typeElement = (TypeElement)elements[0];
+                typeElement = (TypeElement) elements[0];
                 typeElement.arrayDimensionIncl();
             }
         }
-        
-        if (null != typeElement){
-            pushElement(typeElement);
+
+        if (null != typeElement) {
+            this.pushElement(typeElement);
         }
     }
 
     protected void buildType() {
-        ExpressionElement[] elements = getAvailableElements();
+        final ExpressionElement[] elements = this.getAvailableElements();
 
         assert (elements.length == 1) : "Illegal state: type description was not found.";
-        
+
         if (elements.length == 1) {
             if (elements[0] instanceof IdentifierElement) {
-                pushElement(TypeElement.getInstance(buildReferenceType((IdentifierElement)elements[0])));
+                this.pushElement(TypeElement
+                        .getInstance(this.buildReferenceType((IdentifierElement) elements[0])));
             } else if (elements[0] instanceof TypeElement) {
-                pushElement(elements[0]);
+                this.pushElement(elements[0]);
             }
         }
     }
-    
-    protected UnresolvedReferenceTypeInfo buildReferenceType(IdentifierElement element){
-        String[] typeName = element.getQualifiedName();
-        String[] trueTypeName = buildManager.resolveAliase(typeName);
-        return new UnresolvedReferenceTypeInfo(buildManager
-                .getAvailableNameSpaceSet(), trueTypeName);
+
+    protected UnresolvedReferenceTypeInfo buildReferenceType(final IdentifierElement element) {
+        final String[] typeName = element.getQualifiedName();
+        final String[] trueTypeName = this.buildManager.resolveAliase(typeName);
+        return new UnresolvedReferenceTypeInfo(this.buildManager.getAvailableNameSpaceSet(),
+                trueTypeName);
     }
 
-    protected void buildPrimitiveType(String name) {
-        pushElement(TypeElement.getInstance(PrimitiveTypeInfo.getType(name)));
+    protected void buildBuiltinType(final BuiltinTypeToken token) {
+        this.pushElement(TypeElement.getInstance(token.getType()));
     }
 
-    protected void buildConstantElement(ConstantToken token) {
-        pushElement(TypeElement.getInstance(token.getType()));
-    }
-    
-    protected void buildVoidType(){
-        pushElement(TypeElement.getInstance(VoidTypeInfo.getInstance()));
+    protected void buildConstantElement(final ConstantToken token) {
+        this.pushElement(TypeElement.getInstance(token.getType()));
     }
 
     @Override
-    protected boolean isTriggerToken(AstToken token) {
-        return token.isPrimitiveType() || token.isVoidType() || token.isTypeDescription()
+    protected boolean isTriggerToken(final AstToken token) {
+        return token instanceof BuiltinTypeToken || token.isTypeDescription()
                 || (token instanceof ConstantToken) || token.isArrayDeclarator();
     }
 

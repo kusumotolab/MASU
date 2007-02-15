@@ -194,41 +194,6 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
     }
 
     /**
-     * {@link PrimitiveTypeInfo}のファクトリメソッド．
-     * 
-     * @param typeName 作成する型の名前
-     * @return 指定された方を表す {@link PrimitiveTypeInfo} のインスタンス．
-     */
-    public static PrimitiveTypeInfo getType(final String typeName) {
-
-        if (null == typeName) {
-            throw new NullPointerException();
-        }
-
-        if (typeName.equals(BOOLEAN_STRING)) {
-            return BOOLEAN;
-        } else if (typeName.equals(BYTE_STRING)) {
-            return BYTE;
-        } else if (typeName.equals(CHAR_STRING)) {
-            return CHAR;
-        } else if (typeName.equals(SHORT_STRING)) {
-            return SHORT;
-        } else if (typeName.equals(INT_STRING)) {
-            return INT;
-        } else if (typeName.equals(LONG_STRING)) {
-            return LONG;
-        } else if (typeName.equals(FLOAT_STRING)) {
-            return FLOAT;
-        } else if (typeName.equals(DOUBLE_STRING)) {
-            return DOUBLE;
-        } else {
-            assert (false) : "Illegal state: primitive type " + typeName + " is unknown.";
-        }
-
-        throw new IllegalArgumentException();
-    }
-
-    /**
      * 型を返す．
      * 
      * @return 型
