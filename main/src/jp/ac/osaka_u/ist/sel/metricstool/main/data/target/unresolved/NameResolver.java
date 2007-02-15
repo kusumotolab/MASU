@@ -369,7 +369,7 @@ public final class NameResolver {
 
         // フィールド名を取得
         final String fieldName = fieldReference.getFieldName();
-
+        
         // 親の型を解決
         final UnresolvedTypeInfo unresolvedFieldOwnerClassType = fieldReference.getOwnerClassType();
         final TypeInfo fieldOwnerClassType = NameResolver.resolveTypeInfo(
@@ -892,7 +892,7 @@ public final class NameResolver {
             final TypeInfo type = resolvedCache.get(arrayElement);
             return type;
         }
-
+        
         // 要素使用がくっついている未定義型を取得
         final UnresolvedTypeInfo unresolvedOwnerType = arrayElement.getOwnerArrayType();
         TypeInfo ownerArrayType = NameResolver.resolveTypeInfo(unresolvedOwnerType, usingClass,
@@ -1913,17 +1913,40 @@ public final class NameResolver {
         // チェックしたクラスを入れるためのキャッシュ，キャッシュにあるクラスは二度目はフィールド取得しない（ループ構造対策）
         final Set<TargetClassInfo> checkedClasses = new HashSet<TargetClassInfo>();
 
+        // 利用可能な変数を代入するためのリスト
+        final List<TargetFieldInfo> availableFields = new LinkedList<TargetFieldInfo>();
+
         // 最も外側のクラスを取得
         final TargetClassInfo outestClass;
         if (currentClass instanceof TargetInnerClassInfo) {
             outestClass = NameResolver.getOuterstClass((TargetInnerClassInfo) currentClass);
+            
+            // 自クラスで定義されたメソッドを追加
+            availableFields.addAll(currentClass.getDefinedFields());
+            checkedClasses.add(currentClass);
+
+            // 内部クラスで定義されたフィールドを追加
+            for (final TargetInnerClassInfo innerClass : currentClass.getInnerClasses()) {
+                final List<TargetFieldInfo> availableFieldsDefinedInInnerClasses = NameResolver
+                        .getAvailableFieldsDefinedInInnerClasses(innerClass, checkedClasses);
+                availableFields.addAll(availableFieldsDefinedInInnerClasses);
+            }
+
+            // 親クラスで定義されたフィールドを追加
+            for (final ClassInfo superClass : currentClass.getSuperClasses()) {
+                if (superClass instanceof TargetClassInfo) {
+                    final List<TargetFieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
+                            .getAvailableFieldsDefinedInSuperClasses((TargetClassInfo) superClass,
+                                    checkedClasses);
+                    availableFields.addAll(availableFieldsDefinedInSuperClasses);
+                }
+            }
+
         } else {
             outestClass = currentClass;
         }
 
-        final List<TargetFieldInfo> availableFields = new LinkedList<TargetFieldInfo>();
-
-        // 自クラスで定義されたフィールドを追加
+        // 最も外側のクラスで定義されたフィールドを追加
         availableFields.addAll(outestClass.getDefinedFields());
         checkedClasses.add(outestClass);
 
@@ -2067,17 +2090,40 @@ public final class NameResolver {
         // チェックしたクラスを入れるためのキャッシュ，キャッシュにあるクラスは二度目はフィールド取得しない（ループ構造対策）
         final Set<TargetClassInfo> checkedClasses = new HashSet<TargetClassInfo>();
 
+        // 利用可能な変数を代入するためのリスト
+        final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
+        
         // 最も外側のクラスを取得
         final TargetClassInfo outestClass;
         if (currentClass instanceof TargetInnerClassInfo) {
             outestClass = NameResolver.getOuterstClass((TargetInnerClassInfo) currentClass);
+
+            // 自クラスで定義されたメソッドを追加
+            availableMethods.addAll(currentClass.getDefinedMethods());
+            checkedClasses.add(currentClass);
+            
+            // 内部クラスで定義されたメソッドを追加
+            for (final TargetInnerClassInfo innerClass : currentClass.getInnerClasses()) {
+                final List<TargetMethodInfo> availableMethodsDefinedInInnerClasses = NameResolver
+                        .getAvailableMethodsDefinedInInnerClasses(innerClass, checkedClasses);
+                availableMethods.addAll(availableMethodsDefinedInInnerClasses);
+            }
+
+            // 親クラスで定義されたメソッドを追加
+            for (final ClassInfo superClass : currentClass.getSuperClasses()) {
+                if (superClass instanceof TargetClassInfo) {
+                    final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
+                            .getAvailableMethodsDefinedInSuperClasses((TargetClassInfo) superClass,
+                                    checkedClasses);
+                    availableMethods.addAll(availableMethodsDefinedInSuperClasses);
+                }
+            }
+            
         } else {
             outestClass = currentClass;
         }
 
-        final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
-
-        // 自クラスで定義されたメソッドを追加
+        // 最も外側のクラスで定義されたメソッドを追加
         availableMethods.addAll(outestClass.getDefinedMethods());
         checkedClasses.add(outestClass);
 
@@ -2241,7 +2287,7 @@ public final class NameResolver {
         // 2つのクラスが同じ場合，全てのフィールドが利用可能
         if (usedOutestClass.equals(usingOutestClass)) {
 
-            return NameResolver.getAvailableFields(usedOutestClass);
+            return NameResolver.getAvailableFields(usedClass);
 
             // 2つのクラスが同じ名前空間を持っている場合
         } else if (usedOutestClass.getNamespace().equals(usingOutestClass.getNamespace())) {
@@ -2249,7 +2295,7 @@ public final class NameResolver {
             final List<TargetFieldInfo> availableFields = new LinkedList<TargetFieldInfo>();
 
             // 名前空間可視性を持ったフィールドのみが利用可能
-            for (final TargetFieldInfo field : NameResolver.getAvailableFields(usedOutestClass)) {
+            for (final TargetFieldInfo field : NameResolver.getAvailableFields(usedClass)) {
                 if (field.isNamespaceVisible()) {
                     availableFields.add(field);
                 }
@@ -2263,7 +2309,7 @@ public final class NameResolver {
             final List<TargetFieldInfo> availableFields = new LinkedList<TargetFieldInfo>();
 
             // 全可視性を持つフィールドのみが利用可能
-            for (final TargetFieldInfo field : NameResolver.getAvailableFields(usedOutestClass)) {
+            for (final TargetFieldInfo field : NameResolver.getAvailableFields(usedClass)) {
                 if (field.isPublicVisible()) {
                     availableFields.add(field);
                 }
@@ -2310,7 +2356,7 @@ public final class NameResolver {
         // 2つのクラスが同じ場合，全てのメソッドが利用可能
         if (usedOutestClass.equals(usingOutestClass)) {
 
-            return NameResolver.getAvailableMethods(usedOutestClass);
+            return NameResolver.getAvailableMethods(usedClass);
 
             // 2つのクラスが同じ名前空間を持っている場合
         } else if (usedOutestClass.getNamespace().equals(usingOutestClass.getNamespace())) {
@@ -2318,7 +2364,7 @@ public final class NameResolver {
             final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
 
             // 名前空間可視性を持ったメソッドのみが利用可能
-            for (final TargetMethodInfo method : NameResolver.getAvailableMethods(usedOutestClass)) {
+            for (final TargetMethodInfo method : NameResolver.getAvailableMethods(usedClass)) {
                 if (method.isNamespaceVisible()) {
                     availableMethods.add(method);
                 }
@@ -2332,7 +2378,7 @@ public final class NameResolver {
             final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
 
             // 全可視性を持つメソッドのみが利用可能
-            for (final TargetMethodInfo method : NameResolver.getAvailableMethods(usedOutestClass)) {
+            for (final TargetMethodInfo method : NameResolver.getAvailableMethods(usedClass)) {
                 if (method.isPublicVisible()) {
                     availableMethods.add(method);
                 }
