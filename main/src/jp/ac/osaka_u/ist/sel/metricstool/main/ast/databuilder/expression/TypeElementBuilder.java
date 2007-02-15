@@ -56,8 +56,7 @@ public class TypeElementBuilder extends ExpressionBuilder {
                 typeElement = TypeElement.getInstance(UnresolvedArrayTypeInfo.getType(
                         referenceType, 1));
             } else if (elements[0] instanceof TypeElement) {
-                typeElement = (TypeElement) elements[0];
-                typeElement.arrayDimensionIncl();
+                typeElement = ((TypeElement) elements[0]).getArrayDimensionInclementedInstance();
             }
         }
 
