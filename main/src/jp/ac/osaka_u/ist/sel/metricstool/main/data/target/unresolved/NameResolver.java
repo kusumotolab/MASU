@@ -418,22 +418,29 @@ public final class NameResolver {
             // 利用可能なフィールドが見つからなかった場合は，外部クラスである親クラスがあるはず
             // そのクラスの変数を使用しているとみなす
             {
-                final ExternalClassInfo externalSuperClass = NameResolver
-                        .getExternalSuperClass((TargetClassInfo) fieldOwnerClassType);
-                if (!(fieldOwnerClassType instanceof TargetInnerClassInfo)
-                        && (null != externalSuperClass)) {
+                for (TargetClassInfo classInfo = (TargetClassInfo) fieldOwnerClassType; true; classInfo = ((TargetInnerClassInfo) classInfo)
+                        .getOuterClass()) {
 
-                    final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName,
-                            externalSuperClass);
-                    usingMethod.addReferencee(fieldInfo);
-                    fieldInfo.addReferencer(usingMethod);
-                    fieldInfoManager.add(fieldInfo);
+                    final ExternalClassInfo externalSuperClass = NameResolver
+                            .getExternalSuperClass(classInfo);
+                    if (null != externalSuperClass) {
 
-                    // 解決済みキャッシュに登録
-                    resolvedCache.put(fieldReference, fieldInfo.getType());
+                        final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName,
+                                externalSuperClass);
+                        usingMethod.addReferencee(fieldInfo);
+                        fieldInfo.addReferencer(usingMethod);
+                        fieldInfoManager.add(fieldInfo);
 
-                    // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
-                    return fieldInfo.getType();
+                        // 解決済みキャッシュに登録
+                        resolvedCache.put(fieldReference, fieldInfo.getType());
+
+                        // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
+                        return fieldInfo.getType();
+                    }
+
+                    if (!(classInfo instanceof TargetInnerClassInfo)) {
+                        break;
+                    }
                 }
             }
 
@@ -563,22 +570,29 @@ public final class NameResolver {
             // 利用可能なフィールドが見つからなかった場合は，外部クラスである親クラスがあるはず．
             // そのクラスの変数を使用しているとみなす
             {
-                final ExternalClassInfo externalSuperClass = NameResolver
-                        .getExternalSuperClass((TargetClassInfo) fieldOwnerClassType);
-                if (!(fieldOwnerClassType instanceof TargetInnerClassInfo)
-                        && (null != externalSuperClass)) {
+                for (TargetClassInfo classInfo = (TargetClassInfo) fieldOwnerClassType; true; classInfo = ((TargetInnerClassInfo) classInfo)
+                        .getOuterClass()) {
 
-                    final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName,
-                            externalSuperClass);
-                    usingMethod.addAssignmentee(fieldInfo);
-                    fieldInfo.addAssignmenter(usingMethod);
-                    fieldInfoManager.add(fieldInfo);
+                    final ExternalClassInfo externalSuperClass = NameResolver
+                            .getExternalSuperClass(classInfo);
+                    if (null != externalSuperClass) {
 
-                    // 解決済みキャッシュに登録
-                    resolvedCache.put(fieldAssignment, fieldInfo.getType());
+                        final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName,
+                                externalSuperClass);
+                        usingMethod.addAssignmentee(fieldInfo);
+                        fieldInfo.addAssignmenter(usingMethod);
+                        fieldInfoManager.add(fieldInfo);
 
-                    // 外部クラスに新規で外部変数（ExternalFieldInfo）を追加したので型は不明
-                    return fieldInfo.getType();
+                        // 解決済みキャッシュに登録
+                        resolvedCache.put(fieldAssignment, fieldInfo.getType());
+
+                        // 外部クラスに新規で外部変数（ExternalFieldInfo）を追加したので型は不明
+                        return fieldInfo.getType();
+                    }
+
+                    if (!(classInfo instanceof TargetInnerClassInfo)) {
+                        break;
+                    }
                 }
             }
 
