@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
@@ -236,9 +237,9 @@ public final class NameResolver {
                                 } else if (ownerTypeInfo instanceof TargetClassInfo) {
 
                                     // インナークラスから探すので一覧を取得
-                                    final SortedSet<TargetInnerClassInfo> innerClasses = ((TargetClassInfo) ownerTypeInfo)
-                                            .getInnerClasses();
-                                    for (TargetInnerClassInfo innerClass : innerClasses) {
+                                    final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                            .getAvailableDirectInnerClasses((TargetClassInfo) ownerTypeInfo);
+                                    for (final TargetInnerClassInfo innerClass : innerClasses) {
 
                                         // 一致するクラス名が見つかった場合
                                         if (referenceName[i].equals(innerClass.getClassName())) {
@@ -296,10 +297,9 @@ public final class NameResolver {
                             } else if (ownerTypeInfo instanceof TargetClassInfo) {
 
                                 // インナークラス一覧を取得
-                                final SortedSet<TargetInnerClassInfo> innerClasses = ((TargetClassInfo) ownerTypeInfo)
-                                        .getInnerClasses();
-
-                                for (TargetInnerClassInfo innerClass : innerClasses) {
+                                final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                        .getAvailableDirectInnerClasses((TargetClassInfo) ownerTypeInfo);
+                                for (final TargetInnerClassInfo innerClass : innerClasses) {
 
                                     // 一致するクラス名が見つかった場合
                                     if (referenceName[i].equals(innerClass.getClassName())) {
@@ -369,7 +369,7 @@ public final class NameResolver {
 
         // フィールド名を取得
         final String fieldName = fieldReference.getFieldName();
-        
+
         // 親の型を解決
         final UnresolvedTypeInfo unresolvedFieldOwnerClassType = fieldReference.getOwnerClassType();
         final TypeInfo fieldOwnerClassType = NameResolver.resolveTypeInfo(
@@ -892,7 +892,7 @@ public final class NameResolver {
             final TypeInfo type = resolvedCache.get(arrayElement);
             return type;
         }
-        
+
         // 要素使用がくっついている未定義型を取得
         final UnresolvedTypeInfo unresolvedOwnerType = arrayElement.getOwnerArrayType();
         TypeInfo ownerArrayType = NameResolver.resolveTypeInfo(unresolvedOwnerType, usingClass,
@@ -1134,10 +1134,9 @@ public final class NameResolver {
                             {
                                 if (!found) {
                                     // インナークラス一覧を取得
-                                    final SortedSet<TargetInnerClassInfo> innerClasses = ((TargetClassInfo) ownerTypeInfo)
-                                            .getInnerClasses();
-
-                                    for (TargetInnerClassInfo innerClass : innerClasses) {
+                                    final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                            .getAvailableDirectInnerClasses((TargetClassInfo) ownerTypeInfo);
+                                    for (final TargetInnerClassInfo innerClass : innerClasses) {
 
                                         // 一致するクラス名が見つかった場合
                                         if (name[i].equals(innerClass.getClassName())) {
@@ -1254,10 +1253,9 @@ public final class NameResolver {
                             {
                                 if (!found) {
                                     // インナークラス一覧を取得
-                                    final SortedSet<TargetInnerClassInfo> innerClasses = ((TargetClassInfo) ownerTypeInfo)
-                                            .getInnerClasses();
-
-                                    for (TargetInnerClassInfo innerClass : innerClasses) {
+                                    final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                            .getAvailableDirectInnerClasses((TargetClassInfo) ownerTypeInfo);
+                                    for (final TargetInnerClassInfo innerClass : innerClasses) {
 
                                         // 一致するクラス名が見つかった場合
                                         if (name[i].equals(innerClass.getClassName())) {
@@ -1377,10 +1375,9 @@ public final class NameResolver {
                                     {
                                         if (!found) {
                                             // インナークラス一覧を取得
-                                            final SortedSet<TargetInnerClassInfo> innerClasses = ((TargetClassInfo) ownerTypeInfo)
-                                                    .getInnerClasses();
-
-                                            for (TargetInnerClassInfo innerClass : innerClasses) {
+                                            final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                                    .getAvailableDirectInnerClasses((TargetClassInfo) ownerTypeInfo);
+                                            for (final TargetInnerClassInfo innerClass : innerClasses) {
 
                                                 // 一致するクラス名が見つかった場合
                                                 if (name[i].equals(innerClass.getClassName())) {
@@ -1498,10 +1495,9 @@ public final class NameResolver {
                                 {
                                     if (!found) {
                                         // インナークラス一覧を取得
-                                        final SortedSet<TargetInnerClassInfo> innerClasses = ((TargetClassInfo) ownerTypeInfo)
-                                                .getInnerClasses();
-
-                                        for (TargetInnerClassInfo innerClass : innerClasses) {
+                                        final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                                .getAvailableDirectInnerClasses((TargetClassInfo) ownerTypeInfo);
+                                        for (final TargetInnerClassInfo innerClass : innerClasses) {
 
                                             // 一致するクラス名が見つかった場合
                                             if (name[i].equals(innerClass.getClassName())) {
@@ -1920,7 +1916,7 @@ public final class NameResolver {
         final TargetClassInfo outestClass;
         if (currentClass instanceof TargetInnerClassInfo) {
             outestClass = NameResolver.getOuterstClass((TargetInnerClassInfo) currentClass);
-            
+
             // 自クラスで定義されたメソッドを追加
             availableFields.addAll(currentClass.getDefinedFields());
             checkedClasses.add(currentClass);
@@ -2092,7 +2088,7 @@ public final class NameResolver {
 
         // 利用可能な変数を代入するためのリスト
         final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
-        
+
         // 最も外側のクラスを取得
         final TargetClassInfo outestClass;
         if (currentClass instanceof TargetInnerClassInfo) {
@@ -2101,7 +2097,7 @@ public final class NameResolver {
             // 自クラスで定義されたメソッドを追加
             availableMethods.addAll(currentClass.getDefinedMethods());
             checkedClasses.add(currentClass);
-            
+
             // 内部クラスで定義されたメソッドを追加
             for (final TargetInnerClassInfo innerClass : currentClass.getInnerClasses()) {
                 final List<TargetMethodInfo> availableMethodsDefinedInInnerClasses = NameResolver
@@ -2118,7 +2114,7 @@ public final class NameResolver {
                     availableMethods.addAll(availableMethodsDefinedInSuperClasses);
                 }
             }
-            
+
         } else {
             outestClass = currentClass;
         }
@@ -2386,6 +2382,37 @@ public final class NameResolver {
 
             return Collections.unmodifiableList(availableMethods);
         }
+    }
+
+    /**
+     * 引数で与えられたクラスの直接のインナークラスを返す．親クラスで定義されたインナークラスも含まれる．
+     * 
+     * @param classInfo クラス
+     * @return 引数で与えられたクラスの直接のインナークラス，親クラスで定義されたインナークラスも含まれる．
+     */
+    private static final SortedSet<TargetInnerClassInfo> getAvailableDirectInnerClasses(
+            final TargetClassInfo classInfo) {
+
+        if (null == classInfo) {
+            throw new NullPointerException();
+        }
+
+        final SortedSet<TargetInnerClassInfo> availableDirectInnerClasses = new TreeSet<TargetInnerClassInfo>();
+
+        // 引数で与えられたクラスの直接のインナークラスを追加
+        availableDirectInnerClasses.addAll(classInfo.getInnerClasses());
+
+        // 親クラスに対して再帰的に処理
+        for (final ClassInfo superClassInfo : classInfo.getSuperClasses()) {
+
+            if (superClassInfo instanceof TargetClassInfo) {
+                final SortedSet<TargetInnerClassInfo> availableDirectInnerClassesInSuperClass = NameResolver
+                        .getAvailableDirectInnerClasses((TargetClassInfo) superClassInfo);
+                availableDirectInnerClasses.addAll(availableDirectInnerClassesInSuperClass);
+            }
+        }
+
+        return Collections.unmodifiableSortedSet(availableDirectInnerClasses);
     }
 
     /**
