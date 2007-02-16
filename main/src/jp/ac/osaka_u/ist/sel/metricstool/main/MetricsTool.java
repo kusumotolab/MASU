@@ -197,12 +197,12 @@ public class MetricsTool {
         out.println("Resolve Definitions and Usages.");
         out.println("STEP1 : resolve class definitions.");
         registClassInfos();
-        out.println("STEP2 : resolve field definitions.");
-        registFieldInfos();
-        out.println("STEP3 : resolve method definitions.");
-        registMethodInfos();
-        out.println("STEP4 : resolve class inheritances.");
+        out.println("STEP2 : resolve class inheritances.");
         addInheritanceInformationToClassInfos();
+        out.println("STEP3 : resolve field definitions.");
+        registFieldInfos();
+        out.println("STEP4 : resolve method definitions.");
+        registMethodInfos();
         out.println("STEP5 : resolve method overrides.");
         addOverrideRelation();
         out.println("STEP6 : resolve field and method usages.");
@@ -704,7 +704,7 @@ public class MetricsTool {
 
         // 各 Unresolvedクラスに対して
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
-
+            
             // 修飾子，完全限定名，行数，可視性，インスタンスメンバーかどうかを取得
             final Set<ModifierInfo> modifiers = unresolvedClassInfo.getModifiers();
             final String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
