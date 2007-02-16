@@ -32,7 +32,7 @@
 		
 	<target name="compile" depends="antlr">
 		<mkdir dir="${cls.dir}" />
-		<javac classpath="${jargp.jar};${antlr.jar}" srcdir="${src.dir}" destdir="${cls.dir}" />
+		<javac classpath="${jargp.jar};${antlr.jar}" srcdir="${src.dir}" destdir="${cls.dir}" encoding="Windows-31J" />
 	</target>
 
 
