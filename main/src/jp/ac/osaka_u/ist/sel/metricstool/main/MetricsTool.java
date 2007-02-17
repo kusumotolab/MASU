@@ -160,37 +160,53 @@ public class MetricsTool {
                     new Java15AntlrAstTranslator()));
         }
 
-        out.println("Parse all target files.");
-        for (TargetFile targetFile : TargetFileManager.getInstance()) {
-            try {
-                String name = targetFile.getName();
+        // 対象ファイルのASTから未解決クラス，フィールド，メソッド情報を取得
+        {
+            out.println("Parse all target files.");
+            final int totalFileNumber = TargetFileManager.getInstance().size();
+            int currentFileNumber = 1;
+            final StringBuffer fileInformationBuffer = new StringBuffer();
+            
+            for (TargetFile targetFile : TargetFileManager.getInstance()) {
+                try {
+                    final String name = targetFile.getName();
 
-                FileInfo fileInfo = new FileInfo(name);
-                FileInfoManager.getInstance().add(fileInfo);
+                    final FileInfo fileInfo = new FileInfo(name);
+                    FileInfoManager.getInstance().add(fileInfo);
 
-                out.println("parsing " + name);
-                Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
-                Java15Parser parser = new Java15Parser(lexer);
-                parser.compilationUnit();
-                targetFile.setCorrectSytax(true);
+                    fileInformationBuffer.delete(0, fileInformationBuffer.length());
+                    fileInformationBuffer.append("parsing ");
+                    fileInformationBuffer.append(name);
+                    fileInformationBuffer.append(" [");
+                    fileInformationBuffer.append(currentFileNumber++);
+                    fileInformationBuffer.append("/");
+                    fileInformationBuffer.append(totalFileNumber);
+                    fileInformationBuffer.append("]");
+                    out.println(fileInformationBuffer.toString());
 
-                if (visitorManager != null) {
-                    visitorManager.setPositionManager(parser.getPositionManger());
-                    visitorManager.visitStart(parser.getAST());
+                    final Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
+                    final Java15Parser parser = new Java15Parser(lexer);
+                    parser.compilationUnit();
+                    targetFile.setCorrectSytax(true);
+
+                    if (visitorManager != null) {
+                        visitorManager.setPositionManager(parser.getPositionManger());
+                        visitorManager.visitStart(parser.getAST());
+                    }
+
+                    fileInfo.setLOC(lexer.getLine());
+
+                } catch (FileNotFoundException e) {
+                    err.println(e.getMessage());
+                } catch (RecognitionException e) {
+                    targetFile.setCorrectSytax(false);
+                    err.println(e.getMessage());
+                    // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
+                } catch (TokenStreamException e) {
+                    targetFile.setCorrectSytax(false);
+                    err.println(e.getMessage());
+                    // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
                 }
-
-                fileInfo.setLOC(lexer.getLine());
-
-            } catch (FileNotFoundException e) {
-                err.println(e.getMessage());
-            } catch (RecognitionException e) {
-                targetFile.setCorrectSytax(false);
-                err.println(e.getMessage());
-                // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
-            } catch (TokenStreamException e) {
-                targetFile.setCorrectSytax(false);
-                err.println(e.getMessage());
-                // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
             }
         }
 
@@ -704,7 +720,7 @@ public class MetricsTool {
 
         // 各 Unresolvedクラスに対して
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
-            
+
             // 修飾子，完全限定名，行数，可視性，インスタンスメンバーかどうかを取得
             final Set<ModifierInfo> modifiers = unresolvedClassInfo.getModifiers();
             final String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
