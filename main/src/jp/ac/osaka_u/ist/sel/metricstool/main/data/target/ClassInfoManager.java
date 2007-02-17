@@ -11,6 +11,10 @@ import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
@@ -36,37 +40,60 @@ public final class ClassInfoManager {
      * 対象クラスを追加する
      * 
      * @param classInfo 追加するクラス情報
+     * @return 引数クラスを追加した場合は true,しなかった場合はfalse
      */
-    public void add(final TargetClassInfo classInfo) {
+    public boolean add(final TargetClassInfo classInfo) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfo) {
             throw new NullPointerException();
         }
 
+        // 二重登録チェック
+        if (this.targetClassInfos.contains(classInfo)){
+            err.println(classInfo.getFullQualifiedtName(".") + " is already registered!");
+            return false;
+        } else if(this.externalClassInfos.contains(classInfo)) {
+            // 外部クラスと重複している場合はエラー出力しない
+            return false;
+        }
+
         this.targetClassInfos.add(classInfo);
         this.packageInfo.add(classInfo);
-        
+
         // 内部クラスに対して再帰的に処理
-        for (TargetInnerClassInfo innerClassInfo : classInfo.getInnerClasses()){
+        for (final TargetInnerClassInfo innerClassInfo : classInfo.getInnerClasses()) {
             this.add(innerClassInfo);
         }
+        
+        return true;
     }
 
     /**
      * 外部クラスを追加する
      * 
      * @param classInfo 追加するクラス情報
+     * @return 引数クラスを追加した場合は true,しなかった場合はfalse
      */
-    public void add(final ExternalClassInfo classInfo) {
+    public boolean add(final ExternalClassInfo classInfo) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfo) {
             throw new NullPointerException();
         }
 
+        // 二重登録チェック
+        if (this.targetClassInfos.contains(classInfo)
+                || (this.externalClassInfos.contains(classInfo))) {
+            // 外部クラスの場合は二重登録エラーは出力しない
+            //err.println(classInfo.getFullQualifiedtName(".") + " is already registered!");
+            return false;
+        }
+        
         this.externalClassInfos.add(classInfo);
         this.packageInfo.add(classInfo);
+        
+        return true;
     }
 
     /**
@@ -136,6 +163,15 @@ public final class ClassInfoManager {
     }
 
     /**
+     * エラーメッセージ出力用のプリンタ
+     */
+    private static final MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
+        public String getMessageSourceName() {
+            return "main";
+        }
+    }, MESSAGE_TYPE.ERROR);
+    
+    /**
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */
@@ -144,9 +180,9 @@ public final class ClassInfoManager {
         this.externalClassInfos = new TreeSet<ExternalClassInfo>();
         this.packageInfo = new PackageInfo("DEFAULT", 0);
 
-        //java言語の場合は，暗黙にインポートされるクラスを追加しておく
-        if (Settings.getLanguage().equals(LANGUAGE.JAVA)){
-            for (int i = 0 ; i < ExternalClassInfo.JAVA_PREIMPORTED_CLASSES.length ; i++){
+        // java言語の場合は，暗黙にインポートされるクラスを追加しておく
+        if (Settings.getLanguage().equals(LANGUAGE.JAVA)) {
+            for (int i = 0; i < ExternalClassInfo.JAVA_PREIMPORTED_CLASSES.length; i++) {
                 this.add(ExternalClassInfo.JAVA_PREIMPORTED_CLASSES[i]);
             }
         }
@@ -227,10 +263,10 @@ public final class ClassInfoManager {
             } else if (this.getDepth() == packageNames.length) {
                 this.classInfos.put(classInfo.getClassName(), classInfo);
 
-                final PackageInfo innerPackage = new PackageInfo(classInfo.getClassName(), this.getDepth() + 1);
+                final PackageInfo innerPackage = new PackageInfo(classInfo.getClassName(), this
+                        .getDepth() + 1);
                 this.subPackages.put(classInfo.getClassName(), innerPackage);
-                
-                
+
                 // 追加するクラス情報の名前空間階層が，この名前空間階層よりも浅い場合は，エラー
             } else {
                 throw new IllegalArgumentException("Illegal class Info: " + classInfo.toString());
