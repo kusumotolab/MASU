@@ -50,6 +50,15 @@ public final class TargetFileManager implements Iterable<TargetFile> {
     }
 
     /**
+     * 対象ファイルの数を返す
+     * 
+     * @return 対象ファイルの数
+     */
+    public int size(){
+        return this.targetFiles.size();
+    }
+    
+    /**
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている
      * 以前は HashSet を用いていたが，同じディレクトリのファイルはまとめて返すほうがよいので，TreeSet に変更した．
