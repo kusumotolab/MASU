@@ -234,6 +234,9 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             
         case Java15TokenTypes.LOR:
         case Java15TokenTypes.LAND:
+            result = OperatorToken.LOGICAL_BINOMIAL;
+            break;
+            
         case Java15TokenTypes.NOT_EQUAL:
         case Java15TokenTypes.EQUAL:
         case Java15TokenTypes.LE:
@@ -253,7 +256,7 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.BAND:
         case Java15TokenTypes.BOR:
         case Java15TokenTypes.BXOR:
-            result = OperatorToken.LOGICAL_BINOMIAL;
+            result = OperatorToken.BIT_BINOMIAL;
             break;
             
         case Java15TokenTypes.PLUS:
