@@ -48,7 +48,7 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
         if (null == typeParameterUsage) {
             throw new NullPointerException();
         }
-        
+
         this.typeParameterUsages.add(typeParameterUsage);
     }
 
@@ -57,10 +57,10 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 
      * @return このクラス参照で使用されている型パラメータの List
      */
-    public List<UnresolvedTypeParameterUsage> getTypeParameterUsages(){
+    public List<UnresolvedTypeParameterUsage> getTypeParameterUsages() {
         return Collections.unmodifiableList(this.typeParameterUsages);
     }
-    
+
     /**
      * この参照型の名前を返す
      * 
@@ -78,6 +78,27 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      */
     public String[] getReferenceName() {
         return this.referenceName;
+    }
+
+    /**
+     * この参照型の参照名を引数で与えられた文字で結合して返す
+     * 
+     * @param delimiter 結合に用いる文字
+     * @return この参照型の参照名を引数で与えられた文字で結合した文字列
+     */
+    public String getReferenceName(final String delimiter) {
+
+        if (null == delimiter) {
+            throw new NullPointerException();
+        }
+
+        final StringBuilder sb = new StringBuilder(this.referenceName[0]);
+        for (int i = 1; i < this.referenceName.length; i++) {
+            sb.append(delimiter);
+            sb.append(this.referenceName[i]);
+        }
+
+        return sb.toString();
     }
 
     /**
