@@ -1,8 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
- * 型パラメータを表す抽象クラス
+ * 未解決型パラメータを表す抽象クラス
  * 
  * @author y-higo
  * 
@@ -16,6 +18,7 @@ public abstract class UnresolvedTypeParameterInfo implements UnresolvedTypeInfo 
      */
     public UnresolvedTypeParameterInfo(final String name) {
 
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == name) {
             throw new NullPointerException();
         }

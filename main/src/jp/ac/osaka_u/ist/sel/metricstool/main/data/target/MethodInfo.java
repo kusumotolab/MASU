@@ -17,9 +17,9 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
      * メソッドオブジェクトを初期化する
      * 
      * @param methodName メソッド名
-     * @param 返り値の型
-     * @param メソッドを定義しているクラス
-     * @param コンストラクタかどうか
+     * @param returnType 返り値の型
+     * @param ownerClass メソッドを定義しているクラス
+     * @param constructor コンストラクタかどうか
      */
     public MethodInfo(final String methodName, final TypeInfo returnType,
             final ClassInfo ownerClass, final boolean constructor) {

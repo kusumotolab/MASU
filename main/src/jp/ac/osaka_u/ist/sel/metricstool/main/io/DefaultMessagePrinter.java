@@ -21,7 +21,7 @@ public class DefaultMessagePrinter implements MessagePrinter {
 
     /**
      * メッセージをそのまま出力する
-     * @param message 出力するメッセージ
+     * @param o 出力するメッセージ
      */
     public void print(final Object o) {
         this.pool.sendMessage(this.source, String.valueOf(o));
@@ -36,7 +36,7 @@ public class DefaultMessagePrinter implements MessagePrinter {
 
     /**
      * メッセージを出力して改行する
-     * @param message 出力するメッセージ
+     * @param o 出力するメッセージ
      */
     public void println(final Object o) {
         this.print(String.valueOf(o) + LINE_SEPARATOR);
@@ -44,7 +44,7 @@ public class DefaultMessagePrinter implements MessagePrinter {
 
     /**
      * 複数行のメッセージの間に，他のメッセージの割り込みがないように出力する.
-     * @param messages 出力するメッセージの配列
+     * @param objects 出力するメッセージの配列
      */
     public void println(final Object[] objects) {
         final StringBuilder builder = new StringBuilder();

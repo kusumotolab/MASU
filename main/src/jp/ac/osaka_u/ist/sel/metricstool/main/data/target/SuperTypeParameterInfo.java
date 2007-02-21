@@ -7,7 +7,7 @@ public final class SuperTypeParameterInfo extends TypeParameterInfo {
      * 型パラメータ名，派生クラス型を与えてオブジェクトを初期化
      * 
      * @param name 型パラメータ名
-     * @param extendsType 派生クラス型
+     * @param superType 派生クラス型
      */
     public SuperTypeParameterInfo(final String name, final ClassInfo superType) {
 

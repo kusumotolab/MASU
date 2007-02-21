@@ -17,21 +17,21 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
 
     /**
-     * 名前空間名，参照名を与えて初期化
+     * 利用可能な名前空間名，参照名を与えて初期化
      * 
-     * @param namespace 名前空間名
+     * @param availableNamespaces 名前空間名
      * @param referenceName 参照名
      */
-    public UnresolvedReferenceTypeInfo(final AvailableNamespaceInfoSet availableNamespaceSet,
+    public UnresolvedReferenceTypeInfo(final AvailableNamespaceInfoSet availableNamespaces,
             final String[] referenceName) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == availableNamespaceSet) || (null == referenceName)) {
+        if ((null == availableNamespaces) || (null == referenceName)) {
             throw new NullPointerException();
         }
 
-        this.availableNamespaceSet = availableNamespaceSet;
+        this.availableNamespaceSet = availableNamespaces;
         this.referenceName = referenceName;
         this.typeParameterUsages = new LinkedList<UnresolvedTypeParameterUsage>();
     }
