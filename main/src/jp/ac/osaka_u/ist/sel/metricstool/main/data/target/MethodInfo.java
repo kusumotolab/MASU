@@ -226,6 +226,41 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
 
         return true;
     }
+    
+    /**
+     * このメソッドが引数で与えられたオブジェクト（メソッド）と等しいかどうかを判定する
+     * 
+     * @param o 比較対象オブジェクト（メソッド）
+     * @return 等しい場合は true, 等しくない場合は false
+     */
+    @Override
+    public boolean equals(Object o){
+        
+        if (null == o){
+            return false;
+        }
+        
+        if (!(o instanceof MethodInfo)){
+            return false;
+        }
+        
+        return 0 == this.compareTo((MethodInfo)o)? true : false;
+    }
+    
+    /**
+     * このメソッドのハッシュコードを返す
+     * 
+     * @return このメソッドのハッシュコード
+     */
+    @Override
+    public int hashCode(){
+        
+        final StringBuilder sb = new StringBuilder();
+        sb.append(this.ownerClass.getFullQualifiedName());
+        sb.append(this.methodName);
+        
+        return sb.toString().hashCode();
+    }
 
     /**
      * このメソッドの名前を返す
