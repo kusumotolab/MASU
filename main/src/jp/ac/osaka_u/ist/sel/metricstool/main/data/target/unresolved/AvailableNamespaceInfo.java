@@ -40,6 +40,7 @@ public final class AvailableNamespaceInfo {
      * @param o 対象オブジェクト
      * @return 等しい場合 true，そうでない場合 false
      */
+    @Override
     public boolean equals(Object o) {
 
         if (null == o) {
@@ -96,6 +97,7 @@ public final class AvailableNamespaceInfo {
      * 
      * @return このオブジェクトのハッシュコード
      */
+    @Override
     public int hashCode() {
 
         int hash = 0;
