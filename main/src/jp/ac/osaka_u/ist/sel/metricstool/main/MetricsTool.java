@@ -488,7 +488,7 @@ public class MetricsTool {
                         // メトリクスが指定されているのでこのプラグインと一致するかチェック
                         final String pluginMetricName = info.getMetricName();
                         for (final String metric : metrics) {
-                            if (metric.equals(pluginMetricName)) {
+                            if (metric.equalsIgnoreCase(pluginMetricName)) {
                                 pluginManager.addPlugin(plugin);
                                 break;
                             }
