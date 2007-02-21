@@ -45,7 +45,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * <li>行数</li>
      * </ul>
      * 
-     * @param modifier 修飾子
+     * @param modifiers 修飾子
      * @param name メソッド名
      * @param returnType 返り値の型．コンストラクタの場合は，そのクラスの型を与える．
      * @param ownerClass 所有しているクラス

@@ -57,7 +57,7 @@ public final class NameResolver {
      * @param classInfoManager 型解決に用いるクラス情報データベース
      * @param fieldInfoManager 型解決に用いるフィールド情報データベース
      * @param methodInfoManager 型解決に用いるメソッド情報データベース
-     * @param resolvCache 解決済みUnresolvedTypeInfoのキャッシュ
+     * @param resolvedCache 解決済みUnresolvedTypeInfoのキャッシュ
      * @return 名前解決された型情報
      */
     public static TypeInfo resolveTypeInfo(final UnresolvedTypeInfo unresolvedTypeInfo,

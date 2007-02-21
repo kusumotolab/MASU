@@ -137,7 +137,7 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
     /**
      * このクラスのハッシュコードを返す
      * 
-     * @param このクラスのハッシュコード
+     * @return このクラスのハッシュコード
      */
     @Override
     public int hashCode() {

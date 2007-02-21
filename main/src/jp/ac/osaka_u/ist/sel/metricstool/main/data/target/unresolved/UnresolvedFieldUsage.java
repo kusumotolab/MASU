@@ -13,9 +13,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedFieldUsage implements UnresolvedTypeInfo {
 
     /**
-     * フィールド使用が実行される変数の型名と変数名を与えてオブジェクトを初期化
+     * フィールド使用が実行される変数の型名と変数名，利用可能な名前空間を与えてオブジェクトを初期化
      * 
-     * @param ownerClassName フィールド使用が実行される変数の型名
+     * @param availableNamespace 利用可能な名前空間
+     * @param ownerClassType フィールド使用が実行される変数の型名
      * @param fieldName 変数名
      */
     public UnresolvedFieldUsage(final AvailableNamespaceInfoSet availableNamespaces,

@@ -112,7 +112,7 @@ public final class AvailableNamespaceInfo {
     /**
      * 全てのクラスが利用可能かどうか
      * 
-     * @return
+     * @return 利用可能である場合は true, そうでない場合は false
      */
     public boolean isAllClasses() {
         return this.allClasses;

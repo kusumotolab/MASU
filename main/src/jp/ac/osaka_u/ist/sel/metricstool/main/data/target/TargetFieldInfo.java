@@ -14,7 +14,7 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
     /**
      * フィールド情報オブジェクトを初期化
      * 
-     * @param modidiers 修飾子の Set
+     * @param modifiers 修飾子の Set
      * @param name 名前
      * @param type 型
      * @param ownerClass このフィールドを定義しているクラス

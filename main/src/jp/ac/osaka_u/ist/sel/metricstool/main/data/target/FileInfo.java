@@ -49,7 +49,7 @@ public final class FileInfo implements Comparable<FileInfo> {
 
     /**
      * このクラスのインスタンス同士を比較するメソッド
-     * @param 比較対象のインスタンス
+     * @param o 比較対象のインスタンス
      * @return このインスタンスが比較対象のインスタンスより順序的に小さければ負の数，等しければ0，大きければ正の数.
      */
     public int compareTo(FileInfo o) {

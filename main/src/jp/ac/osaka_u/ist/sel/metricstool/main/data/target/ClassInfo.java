@@ -167,7 +167,7 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Reso
     /**
      * このクラスの完全限定名を返す．完全限定名は引数で与えられた文字列により連結され，返される．
      * 
-     * @param 区切り文字
+     * @param delimiter 区切り文字
      * @return このクラスの完全限定名
      */
     public final String getFullQualifiedtName(final String delimiter) {

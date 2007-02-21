@@ -30,7 +30,7 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo> {
     /**
      * 名前空間名の順序を定義するメソッド．現在は名前空間を表す String クラスの compareTo を用いている．
      * 
-     * @param namaspace 比較対象名前空間名
+     * @param namespace 比較対象名前空間名
      * @return 名前空間の順序
      */
     public int compareTo(final NamespaceInfo namespace) {

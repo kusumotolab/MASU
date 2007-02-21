@@ -79,9 +79,9 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
     }
 
     /**
-     * 外側のクラスのオブジェクトを返す
+     * 外側のクラスを返す
      * 
-     * @return
+     * @return 外側のクラス
      */
     public TargetClassInfo getOuterClass() {
         return this.outerClass;
