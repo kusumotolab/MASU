@@ -133,6 +133,31 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
     }
 
     /**
+     * 未解決型パラメータの List を返す
+     * 
+     * @return 未解決型パラメータの List
+     */
+    public List<UnresolvedTypeParameterInfo> getTypeParameters() {
+        return Collections.unmodifiableList(this.typeParameters);
+    }
+
+    /**
+     * 未解決型パラメータを追加する
+     * 
+     * @param typeParameter 追加する未解決型パラメータ
+     */
+    public void addTypeParameter(final UnresolvedTypeParameterInfo typeParameter) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == typeParameter) {
+            throw new NullPointerException();
+        }
+
+        this.typeParameters.add(typeParameter);
+    }
+
+    /**
      * メソッド名を返す
      * 
      * @return メソッド名
@@ -568,6 +593,11 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * 修飾子を保存する
      */
     private Set<ModifierInfo> modifiers;
+
+    /**
+     * 未解決型パラメータ名を保存するための変数
+     */
+    private List<UnresolvedTypeParameterInfo> typeParameters;
 
     /**
      * メソッド名を保存するための変数

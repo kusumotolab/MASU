@@ -4,6 +4,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
@@ -18,6 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * <ul>
  * <li>修飾子</li>
  * <li>未解決名前空間</li>
+ * <li>型パラメータ名一覧</li>
  * <li>クラス名</li>
  * <li>行数</li>
  * <li>未解決親クラス名一覧</li>
@@ -46,6 +49,7 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
         this.loc = 0;
 
         this.modifiers = new HashSet<ModifierInfo>();
+        this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
         this.superClasses = new LinkedHashSet<UnresolvedTypeInfo>();
         this.innerClasses = new HashSet<UnresolvedClassInfo>();
         this.definedMethods = new HashSet<UnresolvedMethodInfo>();
@@ -80,6 +84,21 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
         }
 
         this.modifiers.add(modifier);
+    }
+    
+    /**
+     * 未解決型パラメータを追加する
+     * 
+     * @param typeParameter 追加する未解決型パラメータ名
+     */
+    public void addTypeParameter(final UnresolvedTypeParameterInfo typeParameter){
+        
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == typeParameter){
+            throw new NullPointerException();
+        }
+        
+        this.typeParameters.add(typeParameter);
     }
 
     /**
@@ -177,6 +196,14 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
         return Collections.unmodifiableSet(this.modifiers);
     }
 
+    /**
+     * 未解決型パラメータの List を返す
+     * @return 未解決型パラメータの List
+     */
+    public List<UnresolvedTypeParameterInfo> getTypeParameters(){
+        return Collections.unmodifiableList(this.typeParameters);
+    }
+    
     /**
      * 名前空間名を保存する.名前空間名がない場合は長さ0の配列を与えること．
      * 
@@ -609,6 +636,11 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      */
     private final Set<ModifierInfo> modifiers;
 
+    /**
+     * 型パラメータを保存するための変数
+     */
+    private final List<UnresolvedTypeParameterInfo> typeParameters;
+    
     /**
      * 親クラスを保存するためのセット
      */
