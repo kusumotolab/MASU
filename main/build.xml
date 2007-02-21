@@ -3,18 +3,10 @@
 
 	<tstamp />
 
-	<property name="tool.name" value="masu" />
-	<property name="src.dir" value="src" />
-	<property name="cls.dir" value="cls" />
-	<property name="grammer.dir" value="${src.dir}/jp/ac/osaka_u/ist/sel/metricstool/main/parse" />
-	
-	<property name="package.name" value="${tool.name}" />
-	<property name="package.dir" value="${package.name}" />
-	<property name="package.bin.dir" value="${package.dir}/bin" />
-	<property name="package.plugin.dir" value="${package.bin.dir}/plugins" />
-	<property name="package.api.dir" value="${package.dir}/api" />
-	<property name="package.doc.dir" value="${package.dir}/doc" />
+	<property file="build.properties" />
 
+	<property name="grammer.dir" value="${SRC.DIR}/jp/ac/osaka_u/ist/sel/metricstool/main/parse" />
+	
 	<property name="java15grammer" value="${grammer.dir}/java15.g" />
 	<!-- property name="cppgrammer" value="${grammer}/cpp.g" / -->
 	<!-- property name="csharpgrammer" value="${grammer}/sharp.g" / -->
@@ -22,7 +14,7 @@
 	<property name="antlr.jar" value="lib/antlr.jar" />
 	<property name="jargp.jar" value="lib/jargp.jar" />
 	<property name="manifest.mf" value="resource/manifest.mf" />
-	<property name="zip.name" value="${tool.name}${DSTAMP}${TSTAMP}.zip" />
+	<property name="zip.name" value="${TOOL.NAME}${DSTAMP}${TSTAMP}.zip" />
 	
 	<target name="antlr">
 		<antlr target="${java15grammer}">
@@ -31,32 +23,32 @@
 	</target>
 		
 	<target name="compile" depends="antlr">
-		<mkdir dir="${cls.dir}" />
-		<javac classpath="${jargp.jar};${antlr.jar}" srcdir="${src.dir}" destdir="${cls.dir}" encoding="Windows-31J" />
+		<mkdir dir="${CLS.DIR}" />
+		<javac classpath="${jargp.jar};${antlr.jar}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" />
 	</target>
 
 
 	<target name="build" depends="compile">
-		<mkdir dir="${package.dir}" />
-		<mkdir dir="${package.bin.dir}" />
-		<mkdir dir="${package.plugin.dir}" />
-		<mkdir dir="${package.doc.dir}" />
+		<mkdir dir="${PACKAGE.DIR}" />
+		<mkdir dir="${PACKAGE.BIN.DIR}" />
+		<mkdir dir="${PACKAGE.PLUGIN.DIR}" />
+		<mkdir dir="${PACKAGE.DOC.DIR}" />
 
-		<jar basedir="${cls.dir}" jarfile="${package.bin.dir}/${tool.name}.jar" manifest="${manifest.mf}" />
-		<copy file="${jargp.jar}" todir="${package.bin.dir}" />
-		<copy file="${antlr.jar}" todir="${package.bin.dir}" />
+		<jar basedir="${CLS.DIR}" jarfile="${PACKAGE.BIN.DIR}/${TOOL.NAME}.jar" manifest="${manifest.mf}" />
+		<copy file="${jargp.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${antlr.jar}" todir="${PACKAGE.BIN.DIR}" />
 	</target>
 	
 	<target name="package" depends="build">
-		<javadoc packagenames="jp.ac.osaka_u.ist.sel.metricstool.*" sourcepath="${src.dir}" destdir="${package.api.dir}" public="true" />
+		<javadoc packagenames="jp.ac.osaka_u.ist.sel.metricstool.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" />
 		
-		<zip destfile="${zip.name}" basedir="${package.dir}" />
+		<zip destfile="${zip.name}" basedir="${PACKAGE.DIR}" />
 	</target>
 
 	
 	<target name="clean">
-		<delete dir="${cls.dir}" />
-		<delete dir="${package.dir}" />
+		<delete dir="${CLS.DIR}" />
+		<delete dir="${PACKAGE.DIR}" />
 		<delete verbose="true">
 			<fileset dir="${grammer.dir}" includes="*Lexer.java" />
 		</delete>	
@@ -73,7 +65,7 @@
 			<fileset dir="${grammer.dir}" includes="*.txt" />
 		</delete>	
 		<delete verbose="true">
-			<fileset dir="." includes="${tool.name}*.zip" />
+			<fileset dir="." includes="${TOOL.NAME}*.zip" />
 		</delete>
 	</target>
 		
