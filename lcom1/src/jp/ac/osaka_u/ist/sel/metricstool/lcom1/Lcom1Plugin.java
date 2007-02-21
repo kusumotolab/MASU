@@ -4,7 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.lcom1;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.LanguageUtil;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 
 
@@ -161,15 +161,7 @@ public class Lcom1Plugin extends AbstractPlugin {
      */
     @Override
     protected LANGUAGE[] getMeasurableLanguages() {
-        final LANGUAGE[] allLanguages = LANGUAGE.values();
-        final Set<LANGUAGE> resultSet = new LinkedHashSet<LANGUAGE>();
-        for (final LANGUAGE language : allLanguages) {
-            if (language.isObjectOrientedLanguage()) {
-                resultSet.add(language);
-            }
-        }
-        final LANGUAGE[] resultArray = new LANGUAGE[resultSet.size()];
-        return resultSet.toArray(resultArray);
+        return LanguageUtil.getObjectOrientedLanguages();
     }
 
     /**
