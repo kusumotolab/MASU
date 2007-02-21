@@ -1,6 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -29,8 +33,34 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
 
         this.availableNamespaceSet = availableNamespaceSet;
         this.referenceName = referenceName;
+        this.typeParameterUsages = new LinkedList<UnresolvedTypeParameterUsage>();
     }
 
+    /**
+     * 型パラメータ使用を追加する
+     * 
+     * @param typeParameterUsage 追加する型パラメータ使用
+     */
+    public void addTypeParameterUsage(final UnresolvedTypeParameterUsage typeParameterUsage) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == typeParameterUsage) {
+            throw new NullPointerException();
+        }
+        
+        this.typeParameterUsages.add(typeParameterUsage);
+    }
+
+    /**
+     * このクラス参照で使用されている型パラメータの List を返す
+     * 
+     * @return このクラス参照で使用されている型パラメータの List
+     */
+    public List<UnresolvedTypeParameterUsage> getTypeParameterUsages(){
+        return Collections.unmodifiableList(this.typeParameterUsages);
+    }
+    
     /**
      * この参照型の名前を返す
      * 
@@ -68,4 +98,9 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 参照名を保存する変数
      */
     private final String[] referenceName;
+
+    /**
+     * 未解決型パラメータ使用を保存するための変数
+     */
+    private final List<UnresolvedTypeParameterUsage> typeParameterUsages;
 }

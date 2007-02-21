@@ -33,7 +33,23 @@ public final class UnresolvedMethodCall implements UnresolvedTypeInfo {
         this.ownerClassType = ownerClassType;
         this.methodName = methodName;
         this.constructor = constructor;
+        this.typeParameterUsages = new LinkedList<UnresolvedTypeParameterUsage>();
         this.parameterTypes = new LinkedList<UnresolvedTypeInfo>();
+    }
+
+    /**
+     * 型パラメータ使用を追加する
+     * 
+     * @param typeParameterUsage 追加する型パラメータ使用
+     */
+    public void addTypeParameterUsage(final UnresolvedTypeParameterUsage typeParameterUsage) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == typeParameterUsage) {
+            throw new NullPointerException();
+        }
+
+        this.typeParameterUsages.add(typeParameterUsage);
     }
 
     /**
@@ -53,12 +69,21 @@ public final class UnresolvedMethodCall implements UnresolvedTypeInfo {
     }
 
     /**
-     * 引数のリストを返す
+     * 引数の List を返す
      * 
-     * @return 引数のリスト
+     * @return 引数の List
      */
     public List<UnresolvedTypeInfo> getParameterTypes() {
         return Collections.unmodifiableList(this.parameterTypes);
+    }
+
+    /**
+     * 型パラメータ使用の List を返す
+     * 
+     * @return 型パラメータ使用の List
+     */
+    public List<UnresolvedTypeParameterUsage> getTypeParameterUsages() {
+        return Collections.unmodifiableList(this.typeParameterUsages);
     }
 
     /**
@@ -106,6 +131,11 @@ public final class UnresolvedMethodCall implements UnresolvedTypeInfo {
      * メソッド名を保存するための変数
      */
     private final String methodName;
+
+    /**
+     * 型パラメータ使用を保存するための変数
+     */
+    private final List<UnresolvedTypeParameterUsage> typeParameterUsages;
 
     /**
      * 引数を保存するための変数
