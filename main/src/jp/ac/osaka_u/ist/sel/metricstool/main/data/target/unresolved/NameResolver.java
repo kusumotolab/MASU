@@ -2416,15 +2416,6 @@ public final class NameResolver {
     }
 
     /**
-     * 出力メッセージ出力用のプリンタ
-     */
-    private static final MessagePrinter out = new DefaultMessagePrinter(new MessageSource() {
-        public String getMessageSourceName() {
-            return "NameResolver";
-        }
-    }, MESSAGE_TYPE.OUT);
-
-    /**
      * エラーメッセージ出力用のプリンタ
      */
     private static final MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
