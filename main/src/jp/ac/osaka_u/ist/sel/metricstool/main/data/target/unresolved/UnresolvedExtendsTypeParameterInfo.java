@@ -26,7 +26,7 @@ public final class UnresolvedExtendsTypeParameterInfo extends UnresolvedTypePara
      * 
      * @return –¢‰ðŒˆŠî’êƒNƒ‰ƒXŒ^
      */
-    public UnresolvedTypeInfo getExtendsName() {
+    public UnresolvedTypeInfo getExtendsType() {
         return this.extendsType;
     }
 
