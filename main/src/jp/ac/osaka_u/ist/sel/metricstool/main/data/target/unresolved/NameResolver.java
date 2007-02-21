@@ -392,6 +392,7 @@ public final class NameResolver {
             }
         }
 
+        /*
         if (null == usingMethod) {
             err.println("Remain unresolved \""
                     + reference.getReferenceName(Settings.getLanguage().getNamespaceDelimiter())
@@ -403,7 +404,7 @@ public final class NameResolver {
                     + "\"" + " on \""
                     + usingClass.getFullQualifiedtName(LANGUAGE.JAVA.getNamespaceDelimiter()) + "#"
                     + usingMethod.getMethodName() + "\".");
-        }
+        }*/
 
         // å©Ç¬Ç©ÇÁÇ»Ç©Ç¡ÇΩèÍçáÇÕÅCUknownTypeInfo Çï‘Ç∑
         return UnknownTypeInfo.getInstance();
