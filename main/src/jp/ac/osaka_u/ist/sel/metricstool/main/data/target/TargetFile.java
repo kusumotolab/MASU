@@ -56,6 +56,7 @@ public final class TargetFile implements Comparable<TargetFile> {
      * この対象ファイルのファイルパスと，引数で与えられた対象ファイルのパスが等しいかをチェックする．等しい場合は true を返し，そうでない場合は false を返す．
      * 
      */
+    @Override
     public boolean equals(Object o) {
 
         if (null == o) {
@@ -87,6 +88,7 @@ public final class TargetFile implements Comparable<TargetFile> {
      * @return 対象ファイルのハッシュコード
      * 
      */
+    @Override
     public int hashCode() {
         String name = this.getName();
         return name.hashCode();

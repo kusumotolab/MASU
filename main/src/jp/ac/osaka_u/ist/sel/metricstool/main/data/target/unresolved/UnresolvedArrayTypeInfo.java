@@ -186,6 +186,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
         /**
          * このオブジェクトのハッシュコードを返す．
          */
+        @Override
         public int hashCode() {
             final StringBuffer buffer = new StringBuffer();
             buffer.append(this.type.getTypeName());
@@ -215,6 +216,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
         /**
          * このオブジェクトと引数で指定されたオブジェクトが等しいかを返す．
          */
+        @Override
         public boolean equals(Object o) {
 
             if (null == o) {

@@ -173,6 +173,7 @@ public final class ArrayTypeInfo implements TypeInfo {
         /**
          * このオブジェクトのハッシュコードを返す．
          */
+        @Override
         public int hashCode() {
             StringBuffer buffer = new StringBuffer();
             buffer.append(this.type.getTypeName());
@@ -202,6 +203,7 @@ public final class ArrayTypeInfo implements TypeInfo {
         /**
          * このオブジェクトと引数で指定されたオブジェクトが等しいかを返す．
          */
+        @Override
         public boolean equals(Object o) {
 
             if (null == o) {

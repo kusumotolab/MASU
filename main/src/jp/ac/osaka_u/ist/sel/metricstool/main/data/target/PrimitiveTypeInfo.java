@@ -56,18 +56,21 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
                 return "int";
             }
         },
+        
         LONG {
             @Override
             public String getName() {
                 return "long";
             }
         },
+        
         FLOAT {
             @Override
             public String getName() {
                 return "float";
             }
         },
+        
         DOUBLE {
             @Override
             public String getName() {

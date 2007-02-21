@@ -39,6 +39,7 @@ public class ProgressEvent extends EventObject {
      * 
      * @see java.util.EventObject#getSource()
      */
+    @Override
     public ProgressSource getSource(){
         return this.source;
     }

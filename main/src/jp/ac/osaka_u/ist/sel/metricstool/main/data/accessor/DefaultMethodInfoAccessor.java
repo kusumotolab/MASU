@@ -4,7 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor;
 import java.util.Iterator;
 import java.util.SortedSet;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 
