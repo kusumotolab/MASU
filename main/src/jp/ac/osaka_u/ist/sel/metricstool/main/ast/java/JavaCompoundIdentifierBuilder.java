@@ -11,6 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeEle
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsage;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
@@ -44,7 +45,39 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
         } else if (right.equals(JavaExpressionElement.SUPER)){
             UnresolvedClassInfo classInfo = null;
             if (left instanceof IdentifierElement){
-                classInfo = getSpecifiedOuterClass((IdentifierElement)left);
+                //まず変数名.super()というコンストラクタ呼び出しかどうかを確認する
+                IdentifierElement identifier = (IdentifierElement)left;
+                UnresolvedTypeInfo identifierType = identifier.resolveReferencedEntityIfPossible(buildDataManager);
+                if (null != identifierType){
+                    //変数が見つかった
+                    boolean match = false;
+                    UnresolvedClassInfo currentClass = buildDataManager.getCurrentClass();
+                    UnresolvedTypeInfo currentSuperClass = currentClass.getSuperClasses().iterator().next();
+                    String[] names = null;
+                    if (currentSuperClass instanceof UnresolvedReferenceTypeInfo){
+                        names = ((UnresolvedReferenceTypeInfo)currentSuperClass).getReferenceName();
+                    } else if (currentSuperClass instanceof UnresolvedClassInfo){
+                        names = ((UnresolvedClassInfo)currentSuperClass).getFullQualifiedName();
+                    }
+                    if (null != names){
+                        for(String name : names){
+                            if (name.equals(identifierType.getTypeName())){
+                                match = true;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (match){
+                        classInfo = currentClass;
+                    }
+                }
+                
+                if (null == classInfo){
+                    //変数名.superという呼び出しとして解決しようとしてみたけど無理だったので
+                    //OuterClass.super.method()というメソッド呼び出しのようだ
+                    classInfo = getSpecifiedOuterClass((IdentifierElement)left);
+                }
             } else if (left instanceof TypeElement && left.getType() instanceof UnresolvedClassInfo) {
                 classInfo = (UnresolvedClassInfo)left.getType();
             } else{
@@ -66,9 +99,6 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
         while(null != classInfo && !name.equals(classInfo.getClassName())){
             classInfo = classInfo.getOuterClass();
         }
-        
-        assert(null != classInfo) : "Illegal state: unknown class was specified.";
-        
         return classInfo;
     }
     
