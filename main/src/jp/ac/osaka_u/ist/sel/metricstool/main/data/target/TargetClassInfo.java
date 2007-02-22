@@ -3,6 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -66,6 +68,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
 
         this.loc = loc;
         this.modifiers = new HashSet<ModifierInfo>();
+        this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
@@ -118,6 +121,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
 
         this.loc = loc;
         this.modifiers = new HashSet<ModifierInfo>();
+        this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
@@ -192,6 +196,30 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
         }
 
         this.definedMethods.add(definedMethod);
+    }
+
+    /**
+     * 引数で指定された型パラメータを追加する
+     * 
+     * @param typeParameter 追加する型パラメータ
+     */
+    public final void addTypeParameter(final TypeParameterInfo typeParameter) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == typeParameter) {
+            throw new NullPointerException();
+        }
+
+        this.typeParameters.add(typeParameter);
+    }
+
+    /**
+     * このクラスの型パラメータの List を返す．
+     * 
+     * @return このクラスの型パラメータの List
+     */
+    public final List<TypeParameterInfo> getTypeParameters() {
+        return Collections.unmodifiableList(this.typeParameters);
     }
 
     /**
@@ -326,6 +354,11 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
      * 修飾子を保存する変数
      */
     private final Set<ModifierInfo> modifiers;
+
+    /**
+     * 型パラメータを保存する変数
+     */
+    private final List<TypeParameterInfo> typeParameters;
 
     /**
      * このクラスの内部クラス一覧を保存するための変数．直接の内部クラスのみを保有する．
