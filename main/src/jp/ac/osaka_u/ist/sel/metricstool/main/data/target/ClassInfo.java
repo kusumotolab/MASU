@@ -170,7 +170,7 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Reso
      * @param delimiter ‹æØ‚è•¶š
      * @return ‚±‚ÌƒNƒ‰ƒX‚ÌŠ®‘SŒÀ’è–¼
      */
-    public final String getFullQualifiedtName(final String delimiter) {
+    public final String getFullQualifiedName(final String delimiter) {
 
         if (null == delimiter) {
             throw new NullPointerException();
