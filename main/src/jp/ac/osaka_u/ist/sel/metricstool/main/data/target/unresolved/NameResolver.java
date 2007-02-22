@@ -14,6 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExtendsTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Members;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -21,6 +22,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SimpleTypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SuperTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
@@ -96,6 +99,14 @@ public final class NameResolver {
                     (UnresolvedReferenceTypeInfo) unresolvedTypeInfo, usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
             return classInfo;
+
+            // 未解決型パラメータの場合
+        } else if (unresolvedTypeInfo instanceof UnresolvedTypeParameterInfo) {
+
+            final TypeInfo typeParameterInfo = NameResolver.resolveTypeParameter(
+                    (UnresolvedTypeParameterInfo) unresolvedTypeInfo, usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
+            return typeParameterInfo;
 
             // 未解決配列型の場合
         } else if (unresolvedTypeInfo instanceof UnresolvedArrayTypeInfo) {
@@ -201,21 +212,21 @@ public final class NameResolver {
         final String[] referenceName = reference.getReferenceName();
 
         // 未解決参照型が UnresolvedFullQualifiedNameReferenceTypeInfo ならば，完全限定名参照であると判断できる
-        if (reference instanceof UnresolvedFullQualifiedNameReferenceTypeInfo){
-            
+        if (reference instanceof UnresolvedFullQualifiedNameReferenceTypeInfo) {
+
             ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
-            if (null == classInfo){
+            if (null == classInfo) {
                 classInfo = new ExternalClassInfo(referenceName);
-                classInfoManager.add((ExternalClassInfo)classInfo);
+                classInfoManager.add((ExternalClassInfo) classInfo);
             }
-            
+
             // キャッシュ用ハッシュテーブルがる場合はキャッシュを追加
             if (null != resolvedCache) {
                 resolvedCache.put(reference, classInfo);
             }
             return classInfo;
         }
-        
+
         // 参照名が完全限定名であるとして検索
         {
             final ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
@@ -409,20 +420,95 @@ public final class NameResolver {
         }
 
         /*
-        if (null == usingMethod) {
-            err.println("Remain unresolved \""
-                    + reference.getReferenceName(Settings.getLanguage().getNamespaceDelimiter())
-                    + "\"" + " on \""
-                    + usingClass.getFullQualifiedtName(LANGUAGE.JAVA.getNamespaceDelimiter()));
-        } else {
-            err.println("Remain unresolved \""
-                    + reference.getReferenceName(Settings.getLanguage().getNamespaceDelimiter())
-                    + "\"" + " on \""
-                    + usingClass.getFullQualifiedtName(LANGUAGE.JAVA.getNamespaceDelimiter()) + "#"
-                    + usingMethod.getMethodName() + "\".");
-        }*/
+         * if (null == usingMethod) { err.println("Remain unresolved \"" +
+         * reference.getReferenceName(Settings.getLanguage().getNamespaceDelimiter()) + "\"" + " on
+         * \"" + usingClass.getFullQualifiedtName(LANGUAGE.JAVA.getNamespaceDelimiter())); } else {
+         * err.println("Remain unresolved \"" +
+         * reference.getReferenceName(Settings.getLanguage().getNamespaceDelimiter()) + "\"" + " on
+         * \"" + usingClass.getFullQualifiedtName(LANGUAGE.JAVA.getNamespaceDelimiter()) + "#" +
+         * usingMethod.getMethodName() + "\"."); }
+         */
 
         // 見つからなかった場合は，UknownTypeInfo を返す
+        return UnknownTypeInfo.getInstance();
+    }
+
+    /**
+     * 未解決型パラメータを解決し，解決済み型パラメータを返す
+     * 
+     * @param typeParameter 未解決型パラメータ
+     * @param usingClass 型パラメータが宣言されているクラス
+     * @param usingMethod 型パラメータが宣言されているメソッド
+     * @param classInfoManager 用いるクラスマネージャ
+     * @param fieldInfoManager 用いるフィールドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
+     * @param resolvedCache 解決済みUnresolvedTypeInfoのキャッシュ
+     * @return 解決済み型パラメータ
+     */
+    public static TypeInfo resolveTypeParameter(final UnresolvedTypeParameterInfo typeParameter,
+            final TargetClassInfo usingClass, final TargetMethodInfo usingMethod,
+            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
+            final MethodInfoManager methodInfoManager,
+            final Map<UnresolvedTypeInfo, TypeInfo> resolvedCache) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == typeParameter) || (null == classInfoManager)) {
+            throw new NullPointerException();
+        }
+
+        // シンプル型パラメータ(<T>) の場合
+        if (typeParameter instanceof UnresolvedSimpleTypeParameterInfo) {
+
+            final String name = typeParameter.getName();
+            final SimpleTypeParameterInfo simpleTypeParameter = new SimpleTypeParameterInfo(name);
+
+            if (null != resolvedCache) {
+                resolvedCache.put(typeParameter, simpleTypeParameter);
+            }
+
+            return simpleTypeParameter;
+
+            // 基底クラス型パラメータ(<T extends A>)の場合
+        } else if (typeParameter instanceof UnresolvedExtendsTypeParameterInfo) {
+
+            final String name = typeParameter.getName();
+            final UnresolvedTypeInfo unresolvedExtendsType = ((UnresolvedExtendsTypeParameterInfo) typeParameter)
+                    .getExtendsType();
+            final TypeInfo extendsType = NameResolver.resolveTypeInfo(unresolvedExtendsType,
+                    usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
+                    resolvedCache);
+
+            final ExtendsTypeParameterInfo extendsTypeParameter = new ExtendsTypeParameterInfo(
+                    name, extendsType);
+
+            if (null != resolvedCache) {
+                resolvedCache.put(typeParameter, extendsTypeParameter);
+            }
+
+            return extendsTypeParameter;
+
+            // 派生クラス型パラメータ(<T super A>)の場合
+        } else if (typeParameter instanceof UnresolvedSuperTypeParameterInfo) {
+
+            final String name = typeParameter.getName();
+            final UnresolvedTypeInfo unresolvedSuperType = ((UnresolvedSuperTypeParameterInfo) typeParameter)
+                    .getSuperType();
+            final TypeInfo superType = NameResolver.resolveTypeInfo(unresolvedSuperType,
+                    usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
+                    resolvedCache);
+
+            final SuperTypeParameterInfo superTypeParameter = new SuperTypeParameterInfo(name,
+                    superType);
+
+            if (null != resolvedCache) {
+                resolvedCache.put(typeParameter, superTypeParameter);
+            }
+
+            return superTypeParameter;
+        }
+
+        assert false : "here shouldn't be reached!";
         return UnknownTypeInfo.getInstance();
     }
 
@@ -718,7 +804,7 @@ public final class NameResolver {
         assert false : "Here shouldn't be reached!";
         return UnknownTypeInfo.getInstance();
     }
-
+    
     /**
      * 未解決メソッド呼び出し情報を解決し，メソッド呼び出し処理が行われているメソッドに登録する．また，メソッドの返り値の型を返す．
      * 
@@ -1790,7 +1876,7 @@ public final class NameResolver {
         }
 
         err.println("Remain unresolved \"" + entityUsage.getTypeName() + "\"" + " on \""
-                + usingClass.getFullQualifiedtName(LANGUAGE.JAVA.getNamespaceDelimiter()) + "#"
+                + usingClass.getFullQualifiedName(LANGUAGE.JAVA.getNamespaceDelimiter()) + "#"
                 + usingMethod.getMethodName() + "\".");
 
         // 見つからなかった処理を行う

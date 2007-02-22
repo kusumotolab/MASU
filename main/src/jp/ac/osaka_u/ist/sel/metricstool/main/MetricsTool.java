@@ -37,6 +37,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.NameResolver;
@@ -51,6 +52,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedM
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVClassMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVFileMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVMethodMetricsWriter;
@@ -166,7 +168,7 @@ public class MetricsTool {
             final int totalFileNumber = TargetFileManager.getInstance().size();
             int currentFileNumber = 1;
             final StringBuffer fileInformationBuffer = new StringBuffer();
-            
+
             for (TargetFile targetFile : TargetFileManager.getInstance()) {
                 try {
                     final String name = targetFile.getName();
@@ -213,15 +215,17 @@ public class MetricsTool {
         out.println("Resolve Definitions and Usages.");
         out.println("STEP1 : resolve class definitions.");
         registClassInfos();
-        out.println("STEP2 : resolve class inheritances.");
+        out.println("STEP2 : resolve type parameters of classes.");
+        resolveTypeParameterOfClassInfos();
+        out.println("STEP3 : resolve class inheritances.");
         addInheritanceInformationToClassInfos();
-        out.println("STEP3 : resolve field definitions.");
+        out.println("STEP4 : resolve field definitions.");
         registFieldInfos();
-        out.println("STEP4 : resolve method definitions.");
+        out.println("STEP5 : resolve method definitions.");
         registMethodInfos();
-        out.println("STEP5 : resolve method overrides.");
+        out.println("STEP6 : resolve method overrides.");
         addOverrideRelation();
-        out.println("STEP6 : resolve field and method usages.");
+        out.println("STEP7 : resolve field and method usages.");
         addReferenceAssignmentCallRelateion();
 
         // 文法誤りのあるファイル一覧を表示
@@ -234,6 +238,13 @@ public class MetricsTool {
         }
 
         out.println("finished.");
+
+        {
+            for (final ClassInfo classInfo : ClassInfoManager.getInstance().getExternalClassInfos()) {
+                out.println(classInfo.getFullQualifiedName(Settings.getLanguage()
+                        .getNamespaceDelimiter()));
+            }
+        }
     }
 
     /**
@@ -798,6 +809,54 @@ public class MetricsTool {
 
         // このクラスの ClassInfo を返す
         return classInfo;
+    }
+
+    /**
+     * クラスの型パラメータを名前解決する．registClassInfos の後， 且つaddInheritanceInformationToClassInfo
+     * の前に呼び出さなければならない．
+     * 
+     */
+    private static void resolveTypeParameterOfClassInfos() {
+
+        // 未解決クラス情報マネージャ， 解決済みクラスマネージャを取得
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
+                .getInstance();
+        final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+
+        // 各未解決クラスに対して
+        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+                .getClassInfos()) {
+            resolveTypeParameterOfClassInfos(unresolvedClassInfo, classInfoManager);
+        }
+    }
+
+    /**
+     * クラスの型パラメータを名前解決する． resolveTypeParameterOfClassInfo() 中からのみ呼び出されるべき
+     * 
+     * @param unresolvedClassInfo 名前解決する型パラメータを持つクラス
+     * @param classInfoManager 名前解決に用いるクラスマネージャ
+     */
+    private static void resolveTypeParameterOfClassInfos(
+            final UnresolvedClassInfo unresolvedClassInfo, final ClassInfoManager classInfoManager) {
+
+        // 解決済みクラス情報を取得
+        final TargetClassInfo classInfo = unresolvedClassInfo.getResolvedInfo();
+
+        // 未解決クラス情報から未解決型パラメータを取得し，型解決を行った後，解決済みクラス情報に付与する
+        for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : unresolvedClassInfo
+                .getTypeParameters()) {
+
+            final TypeParameterInfo typeParameter = (TypeParameterInfo) NameResolver
+                    .resolveTypeParameter(unresolvedTypeParameter, classInfo, null,
+                            classInfoManager, null, null, null);
+            classInfo.addTypeParameter(typeParameter);
+        }
+
+        // 各未解決インナークラスに対して
+        for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
+                .getInnerClasses()) {
+            resolveTypeParameterOfClassInfos(unresolvedInnerClassInfo, classInfoManager);
+        }
     }
 
     /**

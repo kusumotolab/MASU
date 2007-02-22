@@ -51,7 +51,7 @@ public final class ClassInfoManager {
 
         // 二重登録チェック
         if (this.targetClassInfos.contains(classInfo)){
-            err.println(classInfo.getFullQualifiedtName(".") + " is already registered!");
+            err.println(classInfo.getFullQualifiedName(".") + " is already registered!");
             return false;
         } else if(this.externalClassInfos.contains(classInfo)) {
             // 外部クラスと重複している場合はエラー出力しない

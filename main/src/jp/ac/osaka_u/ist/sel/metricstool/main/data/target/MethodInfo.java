@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -256,7 +257,7 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
     public int hashCode(){
         
         final StringBuilder sb = new StringBuilder();
-        sb.append(this.ownerClass.getFullQualifiedName());
+        sb.append(this.ownerClass.getFullQualifiedName(Settings.getLanguage().getNamespaceDelimiter()));
         sb.append(this.methodName);
         
         return sb.toString().hashCode();
