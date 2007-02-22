@@ -49,7 +49,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * 
      * @param modifiers 修飾子
      * @param name メソッド名
-     * @param returnType 返り値の型．コンストラクタの場合は，そのクラスの型を与える．
      * @param ownerClass 所有しているクラス
      * @param constructor コンストラクタかどうか．コンストラクタの場合は true,そうでない場合は false．
      * @param loc メソッドの行数
@@ -64,12 +63,12 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * @param toColumn 終了列
      */
     public TargetMethodInfo(final Set<ModifierInfo> modifiers, final String name,
-            final TypeInfo returnType, final ClassInfo ownerClass, final boolean constructor,
-            final int loc, final boolean privateVisible, final boolean namespaceVisible,
+            final ClassInfo ownerClass, final boolean constructor, final int loc,
+            final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(name, returnType, ownerClass, constructor);
+        super(name, ownerClass, constructor);
 
         if (null == modifiers) {
             throw new NullPointerException();
@@ -95,7 +94,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
         this.publicVisible = publicVisible;
 
         this.instance = instance;
-        
+
         this.fromLine = fromLine;
         this.fromColumn = fromColumn;
         this.toLine = toLine;
@@ -162,7 +161,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
         this.typeParameters.add(typeParameter);
     }
 
-    
     /**
      * このメソッド内で，名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しを追加する． プラグインから呼ぶとランタイムエラー．
      * 
@@ -232,7 +230,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
         return Collections.unmodifiableList(this.typeParameters);
     }
 
-    
     /**
      * このメソッド内で，名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しの Set を返す．
      * 
@@ -341,7 +338,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * 修飾子を保存するための変数
      */
     private final Set<ModifierInfo> modifiers;
-    
+
     /**
      * 型パラメータを保存する変数
      */

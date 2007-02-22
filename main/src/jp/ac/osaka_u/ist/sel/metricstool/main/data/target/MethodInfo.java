@@ -18,22 +18,20 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
      * メソッドオブジェクトを初期化する
      * 
      * @param methodName メソッド名
-     * @param returnType 返り値の型
      * @param ownerClass メソッドを定義しているクラス
      * @param constructor コンストラクタかどうか
      */
-    public MethodInfo(final String methodName, final TypeInfo returnType,
-            final ClassInfo ownerClass, final boolean constructor) {
+    public MethodInfo(final String methodName, final ClassInfo ownerClass, final boolean constructor) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == methodName) || (null == returnType) || (null == ownerClass)) {
+        if ((null == methodName) || (null == ownerClass)) {
             throw new NullPointerException();
         }
 
         this.methodName = methodName;
-        this.returnType = returnType;
         this.ownerClass = ownerClass;
         this.constructor = constructor;
+        this.returnType = null;
 
         this.parameters = new LinkedList<ParameterInfo>();
         this.callees = new TreeSet<MethodInfo>();
@@ -175,7 +173,7 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
                 // 等しくない場合は該当しない
                 if (actualParameterType.equals(dummyParameter.getType())) {
                     continue NEXT_PARAMETER;
-                }else{
+                } else {
                     return false;
                 }
 
@@ -219,7 +217,7 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
 
                 // 実引数の型が不明な場合は，仮引数の型が何であろうともOKにしている
                 continue NEXT_PARAMETER;
-                
+
             } else {
                 assert false : "Here shouldn't be reached!";
             }
@@ -227,7 +225,7 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
 
         return true;
     }
-    
+
     /**
      * このメソッドが引数で与えられたオブジェクト（メソッド）と等しいかどうかを判定する
      * 
@@ -235,31 +233,32 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
      * @return 等しい場合は true, 等しくない場合は false
      */
     @Override
-    public boolean equals(Object o){
-        
-        if (null == o){
+    public boolean equals(Object o) {
+
+        if (null == o) {
             return false;
         }
-        
-        if (!(o instanceof MethodInfo)){
+
+        if (!(o instanceof MethodInfo)) {
             return false;
         }
-        
-        return 0 == this.compareTo((MethodInfo)o)? true : false;
+
+        return 0 == this.compareTo((MethodInfo) o) ? true : false;
     }
-    
+
     /**
      * このメソッドのハッシュコードを返す
      * 
      * @return このメソッドのハッシュコード
      */
     @Override
-    public int hashCode(){
-        
+    public int hashCode() {
+
         final StringBuilder sb = new StringBuilder();
-        sb.append(this.ownerClass.getFullQualifiedName(Settings.getLanguage().getNamespaceDelimiter()));
+        sb.append(this.ownerClass.getFullQualifiedName(Settings.getLanguage()
+                .getNamespaceDelimiter()));
         sb.append(this.methodName);
-        
+
         return sb.toString().hashCode();
     }
 
@@ -287,6 +286,11 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
      * @return 返り値の型
      */
     public final TypeInfo getReturnType() {
+
+        if (null == this.returnType) {
+            throw new NullPointerException();
+        }
+
         return this.returnType;
     }
 
@@ -327,6 +331,21 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
         }
 
         this.parameters.addAll(parameters);
+    }
+
+    /**
+     * このメソッドの返り値をセットする．
+     * 
+     * @param returnType このメソッドの返り値
+     */
+    public void setReturnType(final TypeInfo returnType) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == returnType) {
+            throw new NullPointerException();
+        }
+
+        this.returnType = returnType;
     }
 
     /**
@@ -457,7 +476,7 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
     /**
      * 返り値の型を保存するための変数
      */
-    private final TypeInfo returnType;
+    private TypeInfo returnType;
 
     /**
      * このメソッドがコンストラクタかどうかを保存するための変数

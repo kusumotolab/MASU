@@ -23,7 +23,9 @@ public final class ExternalMethodInfo extends MethodInfo {
     public ExternalMethodInfo(final String methodName, final ClassInfo ownerClass,
             final boolean constructor) {
 
-        super(methodName, UnknownTypeInfo.getInstance(), ownerClass, constructor);
+        super(methodName, ownerClass, constructor);
+
+        this.setReturnType(UnknownTypeInfo.getInstance());
     }
 
 }
