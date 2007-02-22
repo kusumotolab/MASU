@@ -1155,10 +1155,6 @@ public final class NameResolver {
         // エンティティ参照名を取得
         final String[] name = entityUsage.getName();
 
-        if (name[0].equals("NAME_STATE")) {
-            System.err.println();
-        }
-
         // 利用可能なインスタンスフィールド名からエンティティ名を検索
         {
             // このクラスで利用可能なインスタンスフィールド一覧を取得

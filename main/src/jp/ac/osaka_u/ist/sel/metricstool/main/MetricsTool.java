@@ -240,10 +240,10 @@ public class MetricsTool {
         out.println("finished.");
 
         {
-            for (final ClassInfo classInfo : ClassInfoManager.getInstance().getExternalClassInfos()) {
+            /*for (final ClassInfo classInfo : ClassInfoManager.getInstance().getExternalClassInfos()) {
                 out.println(classInfo.getFullQualifiedName(Settings.getLanguage()
                         .getNamespaceDelimiter()));
-            }
+            }*/
         }
     }
 
@@ -1026,7 +1026,7 @@ public class MetricsTool {
             final ClassInfoManager classInfoManager, final MethodInfoManager methodInfoManager) {
 
         // ClassInfo を取得
-        final ClassInfo ownerClass = (ClassInfo) unresolvedClassInfo.getResolvedInfo();
+        final TargetClassInfo ownerClass = unresolvedClassInfo.getResolvedInfo();
 
         // 各未解決メソッドに対して
         for (UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo.getDefinedMethods()) {
@@ -1034,6 +1034,36 @@ public class MetricsTool {
             // 修飾子，名前，返り値，行数，コンストラクタかどうか，可視性，インスタンスメンバーかどうかを取得
             final Set<ModifierInfo> methodModifiers = unresolvedMethodInfo.getModifiers();
             final String methodName = unresolvedMethodInfo.getMethodName();
+
+            final int methodLOC = unresolvedMethodInfo.getLOC();
+            final boolean constructor = unresolvedMethodInfo.isConstructor();
+            final boolean privateVisible = unresolvedMethodInfo.isPrivateVisible();
+            final boolean namespaceVisible = unresolvedMethodInfo.isNamespaceVisible();
+            final boolean inheritanceVisible = unresolvedMethodInfo.isInheritanceVisible();
+            final boolean publicVisible = unresolvedMethodInfo.isPublicVisible();
+            final boolean instance = unresolvedMethodInfo.isInstanceMember();
+            final int methodFromLine = unresolvedMethodInfo.getFromLine();
+            final int methodFromColumn = unresolvedMethodInfo.getFromColumn();
+            final int methodToLine = unresolvedMethodInfo.getToLine();
+            final int methodToColumn = unresolvedMethodInfo.getToColumn();
+
+            // MethodInfo オブジェクトを生成する．
+            final TargetMethodInfo methodInfo = new TargetMethodInfo(methodModifiers, methodName,
+                    ownerClass, constructor, methodLOC, privateVisible, namespaceVisible,
+                    inheritanceVisible, publicVisible, instance, methodFromLine, methodFromColumn,
+                    methodToLine, methodToColumn);
+
+            // 型パラメータを解決し，解決済みメソッド情報に追加する
+            for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : unresolvedMethodInfo
+                    .getTypeParameters()) {
+
+                final TypeParameterInfo typeParameter = (TypeParameterInfo) NameResolver
+                        .resolveTypeInfo(unresolvedTypeParameter, ownerClass, methodInfo,
+                                classInfoManager, null, null, null);
+                methodInfo.addTypeParameter(typeParameter);
+            }
+
+            // 返り値をセットする
             final UnresolvedTypeInfo unresolvedMethodReturnType = unresolvedMethodInfo
                     .getReturnType();
             TypeInfo methodReturnType = NameResolver.resolveTypeInfo(unresolvedMethodReturnType,
@@ -1058,24 +1088,10 @@ public class MetricsTool {
                             + unresolvedMethodReturnType.getTypeName());
                 }
             }
-            final int methodLOC = unresolvedMethodInfo.getLOC();
-            final boolean constructor = unresolvedMethodInfo.isConstructor();
-            final boolean privateVisible = unresolvedMethodInfo.isPrivateVisible();
-            final boolean namespaceVisible = unresolvedMethodInfo.isNamespaceVisible();
-            final boolean inheritanceVisible = unresolvedMethodInfo.isInheritanceVisible();
-            final boolean publicVisible = unresolvedMethodInfo.isPublicVisible();
-            final boolean instance = unresolvedMethodInfo.isInstanceMember();
-            final int methodFromLine = unresolvedMethodInfo.getFromLine();
-            final int methodFromColumn = unresolvedMethodInfo.getFromColumn();
-            final int methodToLine = unresolvedMethodInfo.getToLine();
-            final int methodToColumn = unresolvedMethodInfo.getToColumn();
+            methodInfo.setReturnType(methodReturnType);
 
-            // MethodInfo オブジェクトを生成し，引数を追加していく
-            final TargetMethodInfo methodInfo = new TargetMethodInfo(methodModifiers, methodName,
-                    methodReturnType, ownerClass, constructor, methodLOC, privateVisible,
-                    namespaceVisible, inheritanceVisible, publicVisible, instance, methodFromLine,
-                    methodFromColumn, methodToLine, methodToColumn);
-            for (UnresolvedParameterInfo unresolvedParameterInfo : unresolvedMethodInfo
+            // 引数を追加する
+            for (final UnresolvedParameterInfo unresolvedParameterInfo : unresolvedMethodInfo
                     .getParameterInfos()) {
 
                 // 修飾子，パラメータ名，型，位置情報を取得

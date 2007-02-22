@@ -9,6 +9,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -144,7 +145,7 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
                     return false;
                 }
 
-                // 仮引数，実引数共に対象クラスである場合は，その継承関係を考慮する．つまり，実引数が駆り引数のサブクラスでない場合は，呼び出し可能ではない
+                // 仮引数，実引数共に対象クラスである場合は，その継承関係を考慮する．つまり，実引数が仮引数のサブクラスでない場合は，呼び出し可能ではない
                 if ((actualParameterType instanceof TargetClassInfo)
                         && (dummyParameter.getType() instanceof TargetClassInfo)) {
 
@@ -160,10 +161,32 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
                         return false;
                     }
 
-                    // 仮引数，実引数のどちらか，あるいは両方が外部クラスである場合は，継承関係から呼び出し可能かどうかを判断することができない
-                    // この場合は，全て呼び出し可能であるとする
+                    // 仮引数，実引数共に外部クラスである場合は，等しい場合のみ呼び出し可能とする
+                } else if ((actualParameterType instanceof ExternalClassInfo)
+                        && (dummyParameter.getType() instanceof ExternalClassInfo)) {
+
+                    if (actualParameterType.equals(dummyParameter.getType())) {
+                        continue NEXT_PARAMETER;
+
+                    } else {
+                        return false;
+                    }
+
+                    // 仮引数が外部クラス，実引数が対象クラスの場合は，実引数が仮引数のサブクラスである場合，呼び出し可能とする
+                } else if ((actualParameterType instanceof TargetClassInfo)
+                        && (dummyParameter.getType() instanceof ExternalClassInfo)) {
+
+                    if (((ClassInfo) actualParameterType).isSubClass((ClassInfo) dummyParameter
+                            .getType())) {
+                        continue NEXT_PARAMETER;
+
+                    } else {
+                        return false;
+                    }
+
+                    // 仮引数が対象クラス，実引数が外部クラスの場合は，呼び出し不可能とする
                 } else {
-                    continue NEXT_PARAMETER;
+                    return false;
                 }
 
                 // 実引数がプリミティブ型の場合
