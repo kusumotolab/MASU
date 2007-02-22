@@ -200,6 +200,22 @@ public final class NameResolver {
 
         final String[] referenceName = reference.getReferenceName();
 
+        // 未解決参照型が UnresolvedFullQualifiedNameReferenceTypeInfo ならば，完全限定名参照であると判断できる
+        if (reference instanceof UnresolvedFullQualifiedNameReferenceTypeInfo){
+            
+            ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
+            if (null == classInfo){
+                classInfo = new ExternalClassInfo(referenceName);
+                classInfoManager.add((ExternalClassInfo)classInfo);
+            }
+            
+            // キャッシュ用ハッシュテーブルがる場合はキャッシュを追加
+            if (null != resolvedCache) {
+                resolvedCache.put(reference, classInfo);
+            }
+            return classInfo;
+        }
+        
         // 参照名が完全限定名であるとして検索
         {
             final ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
