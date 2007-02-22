@@ -187,6 +187,10 @@ header {
  *    o Line and column registration actions were inserted.
  *    o Modified to a node of CTOR_CALL and SUPER_CTOR_CALL into EXPR node.
  *
+ * Version 1.22.52 (for MASU) (February 22, 2007)
+ *    Small bux fix
+ *    o Fixed bug that a const of HEXADECIMAL float and double could not be parsed.
+ *
  * This grammar is in the PUBLIC DOMAIN
  */
 
@@ -689,10 +693,14 @@ typeParameterBounds
 
 // This is the body of a class. You can have classFields and extra semicolons.
 classBlock
-	:	LCURLY!
+	:
+		{pushStartLineColumn();}
+		LCURLY!
 			( classField | SEMI! )*
 		RCURLY!
 		{#classBlock = #([OBJBLOCK, "OBJBLOCK"], #classBlock);}
+		
+		{registLineColumnInfo(#classBlock);}
 	;
 
 // This is the body of an interface. You can have interfaceField and extra semicolons.
@@ -1496,6 +1504,7 @@ unaryExpressionNotPlusMinus
 // qualified names, array expressions, method invocation, post inc/dec
 postfixExpression
 	:
+	
 		primaryExpression
 
 		(
@@ -1660,7 +1669,7 @@ identPrimary
  *
  */
 newExpression
-	:	"new"^ (typeArguments)? type
+	:		"new"^ (typeArguments)? type
 		(	LPAREN! argList RPAREN! (classBlock)?
 
 			//java 1.1
@@ -1905,6 +1914,12 @@ protected
 HEX_DIGIT
 	:	('0'..'9'|'A'..'F'|'a'..'f')
 	;
+	
+// hexadecimal_fp
+protected
+HEXADECIMAL_FP
+	:	('p'|'P') ('+'|'-')? ('0'..'9')+
+	;
 
 
 // a dummy rule to force vocabulary to be all characters (except special
@@ -1964,9 +1979,27 @@ NUM_INT
 					options {
 						warnWhenFollowAmbig=false;
 					}
-				:	HEX_DIGIT
+				:	HEX_DIGIT | '.'
 				)+
-
+				
+				(
+					HEXADECIMAL_FP
+					{isDecimal = true;}
+					
+					(
+						f:FLOAT_SUFFIX
+						{t=f;}
+					)?
+					{
+						if (null != t){
+							_ttype = NUM_FLOAT;
+						} else {
+							_ttype = NUM_DOUBLE;
+						}
+					}
+				)?
+				
+				
 			|	//float or double with leading zero
 				(('0'..'9')+ ('.'|EXPONENT|FLOAT_SUFFIX)) => ('0'..'9')+
 
