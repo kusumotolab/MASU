@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
+public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
 
     /**
      * 利用可能な名前空間名，参照名を与えて初期化
@@ -41,7 +41,7 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 
      * @param typeParameterUsage 追加する型パラメータ使用
      */
-    public void addTypeParameterUsage(final UnresolvedTypeParameterUsage typeParameterUsage) {
+    public final void addTypeParameterUsage(final UnresolvedTypeParameterUsage typeParameterUsage) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -57,7 +57,7 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 
      * @return このクラス参照で使用されている型パラメータの List
      */
-    public List<UnresolvedTypeParameterUsage> getTypeParameterUsages() {
+    public final List<UnresolvedTypeParameterUsage> getTypeParameterUsages() {
         return Collections.unmodifiableList(this.typeParameterUsages);
     }
 
@@ -66,7 +66,7 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 
      * @return この参照型の名前を返す
      */
-    public String getTypeName() {
+    public final String getTypeName() {
         final String[] referenceName = this.getReferenceName();
         return referenceName[referenceName.length - 1];
     }
@@ -76,7 +76,7 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 
      * @return この参照型の参照名を返す
      */
-    public String[] getReferenceName() {
+    public final String[] getReferenceName() {
         return this.referenceName;
     }
 
@@ -86,7 +86,7 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * @param delimiter 結合に用いる文字
      * @return この参照型の参照名を引数で与えられた文字で結合した文字列
      */
-    public String getReferenceName(final String delimiter) {
+    public final String getReferenceName(final String delimiter) {
 
         if (null == delimiter) {
             throw new NullPointerException();
@@ -106,7 +106,7 @@ public final class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 
      * @return この参照型の完全限定名として可能性のある名前空間名の一覧
      */
-    public AvailableNamespaceInfoSet getAvailableNamespaces() {
+    public final AvailableNamespaceInfoSet getAvailableNamespaces() {
         return this.availableNamespaceSet;
     }
 
