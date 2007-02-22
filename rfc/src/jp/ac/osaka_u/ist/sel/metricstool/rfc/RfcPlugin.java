@@ -48,7 +48,7 @@ public class RfcPlugin extends AbstractPlugin {
             // 現在のクラスで定義されているメソッド
             final Set<TargetMethodInfo> localMethods = targetClass.getDefinedMethods();
             rfcMethods.addAll(localMethods);
-            
+
             // localMethods で呼ばれているメソッド
             for (final TargetMethodInfo m : localMethods) {
                 rfcMethods.addAll(m.getCallees());
@@ -156,10 +156,12 @@ public class RfcPlugin extends AbstractPlugin {
             StringWriter buffer = new StringWriter();
             PrintWriter writer = new PrintWriter(buffer);
 
-            writer.println("This plugin measures the RFC metric.");
+            writer.println("This plugin measures the RFC (Response for a Class) metric.");
             writer.println();
-            writer.println("RFC = number of local methods");
-            writer.println("    + number of methods called by local methods");
+            writer.println("RFC = number of local methods in a class");
+            writer.println("    + number of remote methods called by local methods");
+            writer.println();
+            writer.println("A given remote method is counted by once.");
             writer.println();
             writer.flush();
 
