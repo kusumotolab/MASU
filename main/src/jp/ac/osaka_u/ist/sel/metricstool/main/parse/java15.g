@@ -190,7 +190,7 @@ header {
  * Version 1.22.52 (for MASU) (February 22, 2007)
  *    Small bux fix
  *    o Fixed bug that a const of HEXADECIMAL float and double could not be parsed.
- *
+ *    o Fixed bug that the lexer loops infinitely when an eof is encountered in a line comment.
  * This grammar is in the PUBLIC DOMAIN
  */
 
@@ -1806,7 +1806,6 @@ BAND_ASSIGN		:	"&="	;
 LAND			:	"&&"	;
 SEMI			:	';'		;
 
-
 // Whitespace -- ignored
 WS	:	(	' '
 		|	'\t'
@@ -1820,13 +1819,25 @@ WS	:	(	' '
 			{ newline(); }
 		)+
 		{ _ttype = Token.SKIP; }
+		//{System.out.println(inputState.getTokenStartLine());}//to check wheare does lexer reach.
 	;
 
 // Single-line comments
 SL_COMMENT
 	:	"//"
-		(~('\n'|'\r'))* ('\n'|'\r'('\n')?)
-		{$setType(Token.SKIP); newline();}
+			(
+				~('\n'|'\r')
+				{
+					if (LA(1) == EOF_CHAR){
+						$setType(Token.SKIP);
+						newline();
+						return;
+					}
+				}
+			)* 
+			
+			("\r\n" |'\n'|'\r')
+			{$setType(Token.SKIP); newline();}
 	;
 
 // multiple-line comments
