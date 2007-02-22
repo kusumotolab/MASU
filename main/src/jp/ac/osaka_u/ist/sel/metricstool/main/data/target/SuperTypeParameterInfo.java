@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 public final class SuperTypeParameterInfo extends TypeParameterInfo {
 
@@ -9,10 +11,11 @@ public final class SuperTypeParameterInfo extends TypeParameterInfo {
      * @param name Œ^ƒpƒ‰ƒ[ƒ^–¼
      * @param superType ”h¶ƒNƒ‰ƒXŒ^
      */
-    public SuperTypeParameterInfo(final String name, final ClassInfo superType) {
+    public SuperTypeParameterInfo(final String name, final TypeInfo superType) {
 
         super(name);
 
+        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == superType) {
             throw new NullPointerException();
         }
@@ -25,12 +28,12 @@ public final class SuperTypeParameterInfo extends TypeParameterInfo {
      * 
      * @return ”h¶ƒNƒ‰ƒXŒ^
      */
-    public ClassInfo getSuperType() {
+    public TypeInfo getSuperType() {
         return this.superType;
     }
 
     /**
      * –¢‰ğŒˆ”h¶ƒNƒ‰ƒXŒ^‚ğ•Û‘¶‚·‚é
      */
-    private final ClassInfo superType;
+    private final TypeInfo superType;
 }
