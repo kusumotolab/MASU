@@ -299,14 +299,15 @@ public final class NameResolver {
 
         // 利用可能な名前空間から型名を探す
         {
-            for (AvailableNamespaceInfo availableNamespace : reference.getAvailableNamespaces()) {
+            for (final AvailableNamespaceInfo availableNamespace : reference
+                    .getAvailableNamespaces()) {
 
                 // 名前空間名.* となっている場合
                 if (availableNamespace.isAllClasses()) {
                     final String[] namespace = availableNamespace.getNamespace();
 
                     // 名前空間の下にある各クラスに対して
-                    for (ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
+                    for (final ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
 
                         // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
                         final String className = classInfo.getClassName();
@@ -804,7 +805,7 @@ public final class NameResolver {
         assert false : "Here shouldn't be reached!";
         return UnknownTypeInfo.getInstance();
     }
-    
+
     /**
      * 未解決メソッド呼び出し情報を解決し，メソッド呼び出し処理が行われているメソッドに登録する．また，メソッドの返り値の型を返す．
      * 
