@@ -33,6 +33,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         this.constructor = false;
 
         this.modifiers = new HashSet<ModifierInfo>();
+        this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
         this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
         this.methodCalls = new HashSet<UnresolvedMethodCall>();
         this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
@@ -77,6 +78,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         this.constructor = constructor;
 
         this.modifiers = new HashSet<ModifierInfo>();
+        this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
         this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
         this.methodCalls = new HashSet<UnresolvedMethodCall>();
         this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
@@ -597,7 +599,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
     /**
      * 未解決型パラメータ名を保存するための変数
      */
-    private List<UnresolvedTypeParameterInfo> typeParameters;
+    private final List<UnresolvedTypeParameterInfo> typeParameters;
 
     /**
      * メソッド名を保存するための変数
