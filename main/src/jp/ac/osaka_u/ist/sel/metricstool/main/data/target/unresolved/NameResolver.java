@@ -506,8 +506,7 @@ public final class NameResolver {
                         usingClass, usingMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager, resolvedCache);
 
-                final TypeParameterInfo typeParameter = new TypeParameterInfo(name,
-                        extendsType);
+                final TypeParameterInfo typeParameter = new TypeParameterInfo(name, extendsType);
                 if (null != resolvedCache) {
                     resolvedCache.put(unresolvedTypeParameter, typeParameter);
                 }
@@ -2262,9 +2261,13 @@ public final class NameResolver {
         if (currentClass instanceof TargetInnerClassInfo) {
             outestClass = NameResolver.getOuterstClass((TargetInnerClassInfo) currentClass);
 
-            // 自クラスで定義されたメソッドを追加
-            availableFields.addAll(currentClass.getDefinedFields());
-            checkedClasses.add(currentClass);
+            for (TargetClassInfo outerClass = currentClass; !outerClass.equals(outestClass); outerClass = ((TargetInnerClassInfo) outerClass)
+                    .getOuterClass()) {
+
+                // 自クラスおよび，外部クラスで定義されたメソッドを追加
+                availableFields.addAll(outerClass.getDefinedFields());
+                checkedClasses.add(outerClass);                
+            }
 
             // 内部クラスで定義されたフィールドを追加
             for (final TargetInnerClassInfo innerClass : currentClass.getInnerClasses()) {
