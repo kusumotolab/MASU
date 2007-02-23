@@ -6,15 +6,10 @@ import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.ClassInfoAccessor;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricAlreadyRegisteredException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.LanguageUtil;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractClassMetricPlugin;
 
 
 /**
@@ -22,47 +17,32 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
  * 
  * @author rniitani
  */
-public class RfcPlugin extends AbstractPlugin {
+public class RfcPlugin extends AbstractClassMetricPlugin {
     /**
      * 詳細説明文字列定数
      */
     private final static String DETAIL_DESCRIPTION;
 
     /**
-     * メトリクス計測を開始する．
+     * メトリクスの計測.
+     * 
+     * @param targetClass 対象のクラス
      */
     @Override
-    protected void execute() {
-        // クラス情報アクセサを取得
-        final ClassInfoAccessor classAccessor = this.getClassInfoAccessor();
+    protected float measureClassMetric(TargetClassInfo targetClass) {
+        // この数が RFC
+        final Set<MethodInfo> rfcMethods = new HashSet<MethodInfo>();
 
-        // 進捗報告用
-        int measuredClassCount = 0;
-        final int maxClassCount = classAccessor.getClassCount();
+        // 現在のクラスで定義されているメソッド
+        final Set<TargetMethodInfo> localMethods = targetClass.getDefinedMethods();
+        rfcMethods.addAll(localMethods);
 
-        //全クラスについて
-        for (final TargetClassInfo targetClass : classAccessor) {
-            // この数が RFC
-            final Set<MethodInfo> rfcMethods = new HashSet<MethodInfo>();
-
-            // 現在のクラスで定義されているメソッド
-            final Set<TargetMethodInfo> localMethods = targetClass.getDefinedMethods();
-            rfcMethods.addAll(localMethods);
-
-            // localMethods で呼ばれているメソッド
-            for (final TargetMethodInfo m : localMethods) {
-                rfcMethods.addAll(m.getCallees());
-            }
-
-            try {
-                this.registMetric(targetClass, rfcMethods.size());
-            } catch (final MetricAlreadyRegisteredException e) {
-                this.err.println(e);
-            }
-
-            //1クラスごとに%で進捗報告
-            this.reportProgress(++measuredClassCount * 100 / maxClassCount);
+        // localMethods で呼ばれているメソッド
+        for (final TargetMethodInfo m : localMethods) {
+            rfcMethods.addAll(m.getCallees());
         }
+
+        return rfcMethods.size();
     }
 
     /**
@@ -84,19 +64,6 @@ public class RfcPlugin extends AbstractPlugin {
     }
 
     /**
-     * このプラグインがメトリクスを計測できる言語を返す．
-     * 
-     * 計測対象の全言語の中でオブジェクト指向言語であるものの配列を返す．
-     * 
-     * @return オブジェクト指向言語の配列
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE
-     */
-    @Override
-    protected LANGUAGE[] getMeasurableLanguages() {
-        return LanguageUtil.getObjectOrientedLanguages();
-    }
-
-    /**
      * メトリクス名を返す．
      * 
      * @return メトリクス名
@@ -104,28 +71,6 @@ public class RfcPlugin extends AbstractPlugin {
     @Override
     protected String getMetricName() {
         return "RFC";
-    }
-
-    /**
-     * このプラグインが計測するメトリクスのタイプを返す．
-     * 
-     * @return メトリクスタイプ
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE
-     */
-    @Override
-    protected METRIC_TYPE getMetricType() {
-        return METRIC_TYPE.CLASS_METRIC;
-    }
-
-    /**
-     * このプラグインがクラスに関する情報を利用するかどうかを返すメソッド．
-     * trueを返す．
-     * 
-     * @return true．
-     */
-    @Override
-    protected boolean useClassInfo() {
-        return true;
     }
 
     /**

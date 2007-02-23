@@ -7,16 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.ClassInfoAccessor;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricAlreadyRegisteredException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.LanguageUtil;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractClassMetricPlugin;
 
 
 /**
@@ -28,108 +23,130 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
  * @author kou-tngt
  *
  */
-public class Lcom1Plugin extends AbstractPlugin {
+public class Lcom1Plugin extends AbstractClassMetricPlugin {
+    //  オブジェクトを何度も生成するのを回避するためにフィールドとして生成する
+    /**
+     * 対象クラスのメソッド一覧.
+     * このオブジェクトは再利用される.
+     */
+    final List<TargetMethodInfo> methods = new ArrayList<TargetMethodInfo>(100);
+
+    /** 
+     * 対象クラスのインスタンスフィールド一覧.
+     * このオブジェクトは再利用される.
+     */
+    final Set<TargetFieldInfo> instanceFields = new HashSet<TargetFieldInfo>();
 
     /**
-     * メトリクス計測を開始する．
+     * 使用されたフィールド一覧
+     * このオブジェクトは再利用される.
+     */
+    final Set<FieldInfo> usedFields = new HashSet<FieldInfo>();
+
+    /**
+     * 再利用しているオブジェクトを空にする.
+     */
+    protected void clearReusedObjects() {
+        methods.clear();
+        instanceFields.clear();
+        usedFields.clear();
+    }
+
+    /**
+     * オブジェクト再利用のための準備.
      */
     @Override
-    protected void execute() {
-        final List<TargetMethodInfo> methods = new ArrayList<TargetMethodInfo>(100);
-        final Set<TargetFieldInfo> instanceFields = new HashSet<TargetFieldInfo>();
-        final Set<FieldInfo> usedFields = new HashSet<FieldInfo>();
+    protected void beforeMeasure() {
+        clearReusedObjects();
+    }
 
-        //クラス情報アクセサを取得
-        final ClassInfoAccessor accessor = this.getClassInfoAccessor();
+    /**
+     * オブジェクト再利用の後始末.
+     */
+    @Override
+    protected void afterMeasure() {
+        clearReusedObjects();
+    }
 
-        int measuredClassCount = 0;
-        final int maxClassCount = accessor.getClassCount();
+    /**
+     * メトリクスの計測.
+     * 
+     * @param targetClass 対象のクラス
+     */
+    @Override
+    protected float measureClassMetric(TargetClassInfo targetClass) {
+        int p = 0;
+        int q = 0;
 
-        //全クラスについて
-        for (final TargetClassInfo cl : accessor) {
-            int p = 0;
-            int q = 0;
+        methods.addAll(targetClass.getDefinedMethods());
 
-            methods.addAll(cl.getDefinedMethods());
-            
-            //このクラスのインスタンスフィールドのセットを取得
-            instanceFields.addAll(cl.getDefinedFields());
-            for(Iterator<TargetFieldInfo> it = instanceFields.iterator(); it.hasNext();){
-                if (it.next().isStaticMember()){
-                    it.remove();
-                }
+        //このクラスのインスタンスフィールドのセットを取得
+        instanceFields.addAll(targetClass.getDefinedFields());
+        for (Iterator<TargetFieldInfo> it = instanceFields.iterator(); it.hasNext();) {
+            if (it.next().isStaticMember()) {
+                it.remove();
             }
-            
-            final int methodCount = methods.size();
+        }
 
-            //フィールドを利用するメソッドが1つもないかどうか
-            boolean allMethodsDontUseAnyField = true;
+        final int methodCount = methods.size();
 
-            //全メソッドi対して
-            for (int i = 0; i < methodCount; i++) {
-                //メソッドiを取得して，代入or参照しているフィールドを全てsetに入れる
-                final TargetMethodInfo firstMethod = methods.get(i);
-                usedFields.addAll(firstMethod.getAssignmentees());
-                usedFields.addAll(firstMethod.getReferencees());
-                
-                //自クラスのインスタンスフィールドだけを残す
-                usedFields.retainAll(instanceFields);
+        //フィールドを利用するメソッドが1つもないかどうか
+        boolean allMethodsDontUseAnyField = true;
 
-                if (allMethodsDontUseAnyField) {
-                    //まだどのメソッドも1つもフィールドを利用していない場合
-                    allMethodsDontUseAnyField = usedFields.isEmpty();
+        //全メソッドi対して
+        for (int i = 0; i < methodCount; i++) {
+            //メソッドiを取得して，代入or参照しているフィールドを全てsetに入れる
+            final TargetMethodInfo firstMethod = methods.get(i);
+            usedFields.addAll(firstMethod.getAssignmentees());
+            usedFields.addAll(firstMethod.getReferencees());
+
+            //自クラスのインスタンスフィールドだけを残す
+            usedFields.retainAll(instanceFields);
+
+            if (allMethodsDontUseAnyField) {
+                //まだどのメソッドも1つもフィールドを利用していない場合
+                allMethodsDontUseAnyField = usedFields.isEmpty();
+            }
+
+            //i以降のメソッドjについて
+            for (int j = i + 1; j < methodCount; j++) {
+                //メソッドjを取得して，参照しているフィールドが１つでもsetにあるかどうかを調べる
+                final TargetMethodInfo secondMethod = methods.get(j);
+                boolean isSharing = false;
+                for (final FieldInfo secondUsedField : secondMethod.getReferencees()) {
+                    if (usedFields.contains(secondUsedField)) {
+                        isSharing = true;
+                        break;
+                    }
                 }
 
-                //i以降のメソッドjについて
-                for (int j = i + 1; j < methodCount; j++) {
-                    //メソッドjを取得して，参照しているフィールドが１つでもsetにあるかどうかを調べる
-                    final TargetMethodInfo secondMethod = methods.get(j);
-                    boolean isSharing = false;
-                    for (final FieldInfo secondUsedField : secondMethod.getReferencees()) {
+                //代入しているフィールドが１つでもsetにあるかどうかを調べる
+                if (!isSharing) {
+                    for (final FieldInfo secondUsedField : secondMethod.getAssignmentees()) {
                         if (usedFields.contains(secondUsedField)) {
                             isSharing = true;
                             break;
                         }
                     }
-
-                    //代入しているフィールドが１つでもsetにあるかどうかを調べる
-                    if (!isSharing) {
-                        for (final FieldInfo secondUsedField : secondMethod.getAssignmentees()) {
-                            if (usedFields.contains(secondUsedField)) {
-                                isSharing = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    //共有しているフィールドがあればqを，なければpを増やす
-                    if (isSharing) {
-                        q++;
-                    } else {
-                        p++;
-                    }
                 }
 
-                usedFields.clear();
-            }
-
-            try {
-                if (p <= q || allMethodsDontUseAnyField) {
-                    //pがq以下，または全てのメソッドがフィールドを利用しない場合lcomは0
-                    this.registMetric(cl, 0);
+                //共有しているフィールドがあればqを，なければpを増やす
+                if (isSharing) {
+                    q++;
                 } else {
-                    //そうでないならp-qがlcom
-                    this.registMetric(cl, p - q);
+                    p++;
                 }
-            } catch (final MetricAlreadyRegisteredException e) {
-                this.err.println(e);
             }
 
-            methods.clear();
-            instanceFields.clear();
-            
-            //1クラスごとに%で進捗報告
-            this.reportProgress(++measuredClassCount * 100 / maxClassCount);
+            usedFields.clear();
+        }
+
+        if (p <= q || allMethodsDontUseAnyField) {
+            //pがq以下，または全てのメソッドがフィールドを利用しない場合lcomは0
+            return 0;
+        } else {
+            //そうでないならp-qがlcom
+            return p - q;
         }
     }
 
@@ -152,19 +169,6 @@ public class Lcom1Plugin extends AbstractPlugin {
     }
 
     /**
-     * このプラグインがメトリクスを計測できる言語を返す．
-     * 
-     * 計測対象の全言語の中でオブジェクト指向言語であるものの配列を返す．
-     * 
-     * @return オブジェクト指向言語の配列
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE
-     */
-    @Override
-    protected LANGUAGE[] getMeasurableLanguages() {
-        return LanguageUtil.getObjectOrientedLanguages();
-    }
-
-    /**
      * メトリクス名を返す．
      * 
      * @return メトリクス名
@@ -172,28 +176,6 @@ public class Lcom1Plugin extends AbstractPlugin {
     @Override
     protected String getMetricName() {
         return "LCOM1";
-    }
-
-    /**
-     * このプラグインが計測するメトリクスのタイプを返す．
-     * 
-     * @return メトリクスタイプ
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE
-     */
-    @Override
-    protected METRIC_TYPE getMetricType() {
-        return METRIC_TYPE.CLASS_METRIC;
-    }
-
-    /**
-     * このプラグインがクラスに関する情報を利用するかどうかを返すメソッド．
-     * trueを返す．
-     * 
-     * @return true．
-     */
-    @Override
-    protected boolean useClassInfo() {
-        return true;
     }
 
     /**
