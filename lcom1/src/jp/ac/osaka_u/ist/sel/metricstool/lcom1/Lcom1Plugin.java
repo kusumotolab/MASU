@@ -56,7 +56,7 @@ public class Lcom1Plugin extends AbstractClassMetricPlugin {
      * オブジェクト再利用の後始末.
      */
     @Override
-    protected void afterMeasure() {
+    protected void teardownExecute() {
         clearReusedObjects();
     }
 

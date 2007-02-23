@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
  * {@link AbstractPlugin} の一部のメソッドがオーバーライドされている.
  * 
  * このクラスを継承するクラスは {@link #measureClassMetric(TargetClassInfo)} を実装する必要がある. 
- * 必要があれば {@link #beforeMeasure()}, {@link #afterMeasure()} をオーバーライドする.
+ * 必要があれば {@link #setupExecute()}, {@link #teardownExecute()} をオーバーライドする.
  * 
  * @author rniitani
  */
@@ -32,7 +32,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
      */
     @Override
     protected void execute() {
-        beforeMeasure();
+        setupExecute();
         try {
             // クラス情報アクセサを取得
             final ClassInfoAccessor classAccessor = this.getClassInfoAccessor();
@@ -50,7 +50,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
                 this.reportProgress(++measuredClassCount * 100 / maxClassCount);
             }
         } finally {
-            afterMeasure();
+            teardownExecute();
         }
     }
 
@@ -59,7 +59,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
      * 
      * 必要があればオーバーライドする.
      */
-    protected void beforeMeasure() {
+    protected void setupExecute() {
     }
 
     /**
@@ -67,7 +67,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
      * 
      * 必要があればオーバーライドする.
      */
-    protected void afterMeasure() {
+    protected void teardownExecute() {
     }
 
     /**
