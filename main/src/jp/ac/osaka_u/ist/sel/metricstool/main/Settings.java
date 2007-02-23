@@ -39,6 +39,15 @@ public class Settings {
     }
 
     /**
+     * 冗長出力を行うかどうかを返す
+     * 
+     * @return 行う場合は true, 行わない場合は false
+     */
+    public static boolean isVerbose() {
+        return verbose;
+    }
+
+    /**
      * 
      * @return 解析対象ディレクトリ
      * 
@@ -164,6 +173,11 @@ public class Settings {
      * 情報表示モードであるか，そうでないかを記録するための変数
      */
     private static boolean displayMode = false;
+
+    /**
+     * 冗長出力モードかどうかを記録するための変数
+     */
+    private static boolean verbose = false;
 
     /**
      * 解析対象ディレクトリを記録するための変数
