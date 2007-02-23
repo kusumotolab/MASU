@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="Windows-31J"?>
+
+<plugin class = "jp.ac.osaka_u.ist.sel.metricstool.noa.NoaPlugin">
+  <classpath>
+     <file path = "noa.jar"/>
+  </classpath>
+</plugin>
