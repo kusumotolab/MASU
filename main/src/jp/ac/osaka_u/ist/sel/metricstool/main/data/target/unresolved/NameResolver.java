@@ -14,7 +14,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExtendsTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Members;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -22,13 +21,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SimpleTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SuperTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VoidTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
@@ -437,7 +436,7 @@ public final class NameResolver {
     /**
      * 未解決型パラメータを解決し，解決済み型パラメータを返す
      * 
-     * @param typeParameter 未解決型パラメータ
+     * @param unresolvedTypeParameter 未解決型パラメータ
      * @param usingClass 型パラメータが宣言されているクラス
      * @param usingMethod 型パラメータが宣言されているメソッド
      * @param classInfoManager 用いるクラスマネージャ
@@ -446,7 +445,8 @@ public final class NameResolver {
      * @param resolvedCache 解決済みUnresolvedTypeInfoのキャッシュ
      * @return 解決済み型パラメータ
      */
-    public static TypeInfo resolveTypeParameter(final UnresolvedTypeParameterInfo typeParameter,
+    public static TypeInfo resolveTypeParameter(
+            final UnresolvedTypeParameterInfo unresolvedTypeParameter,
             final TargetClassInfo usingClass, final TargetMethodInfo usingMethod,
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
             final MethodInfoManager methodInfoManager,
@@ -454,63 +454,74 @@ public final class NameResolver {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == typeParameter) || (null == classInfoManager)) {
+        if ((null == unresolvedTypeParameter) || (null == classInfoManager)) {
             throw new NullPointerException();
         }
 
-        // シンプル型パラメータ(<T>) の場合
-        if (typeParameter instanceof UnresolvedSimpleTypeParameterInfo) {
+        // 派生クラス型パラメータ<T super B>の場合
+        if (unresolvedTypeParameter instanceof UnresolvedSuperTypeParameterInfo) {
 
-            final String name = typeParameter.getName();
-            final SimpleTypeParameterInfo simpleTypeParameter = new SimpleTypeParameterInfo(name);
-
-            if (null != resolvedCache) {
-                resolvedCache.put(typeParameter, simpleTypeParameter);
-            }
-
-            return simpleTypeParameter;
-
-            // 基底クラス型パラメータ(<T extends A>)の場合
-        } else if (typeParameter instanceof UnresolvedExtendsTypeParameterInfo) {
-
-            final String name = typeParameter.getName();
-            final UnresolvedTypeInfo unresolvedExtendsType = ((UnresolvedExtendsTypeParameterInfo) typeParameter)
-                    .getExtendsType();
-            final TypeInfo extendsType = NameResolver.resolveTypeInfo(unresolvedExtendsType,
-                    usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
-                    resolvedCache);
-
-            final ExtendsTypeParameterInfo extendsTypeParameter = new ExtendsTypeParameterInfo(
-                    name, extendsType);
-
-            if (null != resolvedCache) {
-                resolvedCache.put(typeParameter, extendsTypeParameter);
-            }
-
-            return extendsTypeParameter;
-
-            // 派生クラス型パラメータ(<T super A>)の場合
-        } else if (typeParameter instanceof UnresolvedSuperTypeParameterInfo) {
-
-            final String name = typeParameter.getName();
-            final UnresolvedTypeInfo unresolvedSuperType = ((UnresolvedSuperTypeParameterInfo) typeParameter)
+            final String name = unresolvedTypeParameter.getName();
+            final UnresolvedTypeInfo unresolvedSuperType = ((UnresolvedSuperTypeParameterInfo) unresolvedTypeParameter)
                     .getSuperType();
             final TypeInfo superType = NameResolver.resolveTypeInfo(unresolvedSuperType,
                     usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
                     resolvedCache);
 
-            final SuperTypeParameterInfo superTypeParameter = new SuperTypeParameterInfo(name,
-                    superType);
+            if (unresolvedTypeParameter.hasExtendsType()) {
 
-            if (null != resolvedCache) {
-                resolvedCache.put(typeParameter, superTypeParameter);
+                final UnresolvedTypeInfo unresolvedExtendsType = unresolvedTypeParameter
+                        .getExtendsType();
+                final TypeInfo extendsType = NameResolver.resolveTypeInfo(unresolvedExtendsType,
+                        usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                        methodInfoManager, resolvedCache);
+
+                final SuperTypeParameterInfo superTypeParameter = new SuperTypeParameterInfo(name,
+                        extendsType, superType);
+                if (null != resolvedCache) {
+                    resolvedCache.put(unresolvedTypeParameter, superTypeParameter);
+                }
+                return superTypeParameter;
+
+            } else {
+
+                final SuperTypeParameterInfo superTypeParameter = new SuperTypeParameterInfo(name,
+                        null, superType);
+                if (null != resolvedCache) {
+                    resolvedCache.put(unresolvedTypeParameter, superTypeParameter);
+                }
+                return superTypeParameter;
             }
 
-            return superTypeParameter;
-        }
+            // その他の場合
+        } else {
 
-        assert false : "here shouldn't be reached!";
-        return UnknownTypeInfo.getInstance();
+            final String name = unresolvedTypeParameter.getName();
+
+            if (unresolvedTypeParameter.hasExtendsType()) {
+
+                final UnresolvedTypeInfo unresolvedExtendsType = unresolvedTypeParameter
+                        .getExtendsType();
+                final TypeInfo extendsType = NameResolver.resolveTypeInfo(unresolvedExtendsType,
+                        usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                        methodInfoManager, resolvedCache);
+
+                final TypeParameterInfo typeParameter = new TypeParameterInfo(name,
+                        extendsType);
+                if (null != resolvedCache) {
+                    resolvedCache.put(unresolvedTypeParameter, typeParameter);
+                }
+                return typeParameter;
+
+            } else {
+
+                final TypeParameterInfo typeParameter = new TypeParameterInfo(name, null);
+                if (null != resolvedCache) {
+                    resolvedCache.put(unresolvedTypeParameter, typeParameter);
+                }
+                return typeParameter;
+            }
+        }
     }
 
     /**

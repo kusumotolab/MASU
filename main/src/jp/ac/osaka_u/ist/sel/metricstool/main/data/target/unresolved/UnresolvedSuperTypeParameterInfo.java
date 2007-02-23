@@ -7,12 +7,13 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
      * 型パラメータ名，未解決派生クラス型を与えてオブジェクトを初期化
      * 
      * @param name 型パラメータ名
+     * @param extendsType 未解決基底クラス型
      * @param superType 未解決派生クラス型
      */
     public UnresolvedSuperTypeParameterInfo(final String name,
-            final UnresolvedTypeInfo superType) {
+            final UnresolvedTypeInfo extendsType, final UnresolvedTypeInfo superType) {
 
-        super(name);
+        super(name, extendsType);
 
         if (null == superType) {
             throw new NullPointerException();

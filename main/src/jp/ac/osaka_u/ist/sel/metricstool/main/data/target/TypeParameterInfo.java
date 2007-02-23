@@ -10,14 +10,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public abstract class TypeParameterInfo implements TypeInfo {
+public class TypeParameterInfo implements TypeInfo {
 
     /**
      * 型パラメータ名を与えてオブジェクトを初期化する
      * 
      * @param name 型パラメータ名
      */
-    public TypeParameterInfo(final String name) {
+    public TypeParameterInfo(final String name, final TypeInfo extendsType) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == name) {
@@ -25,6 +25,7 @@ public abstract class TypeParameterInfo implements TypeInfo {
         }
 
         this.name = name;
+        this.extendsType = extendsType;
     }
 
     /**
@@ -65,7 +66,30 @@ public abstract class TypeParameterInfo implements TypeInfo {
     }
 
     /**
+     * 基底クラス型を返す
+     * 
+     * @return 基底クラス型
+     */
+    public final TypeInfo getExtendsType() {
+        return this.extendsType;
+    }
+
+    /**
+     * * 基底クラスを持つかどうかを返す
+     * 
+     * @return 基底クラスを持つ場合は true,持たない場合は false
+     */
+    public final boolean hasExtendsType() {
+        return null != this.extendsType;
+    }
+
+    /**
      * 型パラメータ名を保存するための変数
      */
     private final String name;
+
+    /**
+     * 未解決基底クラス型を保存するための変数
+     */
+    private final TypeInfo extendsType;
 }
