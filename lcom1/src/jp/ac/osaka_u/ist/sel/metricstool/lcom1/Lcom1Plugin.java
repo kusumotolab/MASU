@@ -53,14 +53,6 @@ public class Lcom1Plugin extends AbstractClassMetricPlugin {
     }
 
     /**
-     * オブジェクト再利用のための準備.
-     */
-    @Override
-    protected void beforeMeasure() {
-        clearReusedObjects();
-    }
-
-    /**
      * オブジェクト再利用の後始末.
      */
     @Override
@@ -75,6 +67,9 @@ public class Lcom1Plugin extends AbstractClassMetricPlugin {
      */
     @Override
     protected float measureClassMetric(TargetClassInfo targetClass) {
+        // オブジェクト再利用のための準備
+        clearReusedObjects();
+
         int p = 0;
         int q = 0;
 
