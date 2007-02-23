@@ -147,7 +147,7 @@ public class RfcPlugin extends AbstractPlugin {
      */
     @Override
     protected boolean useMethodLocalInfo() {
-        return false;
+        return true;
     }
 
     static {
