@@ -996,7 +996,7 @@ public final class NameResolver {
                 final ClassInfo ownerClass = classInfoManager.getClassInfo(new String[] { "java",
                         "lang", "Object" });
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(methodName,
-                        (ExternalClassInfo) ownerClass, false);
+                        ownerClass, false);
                 final List<ParameterInfo> parameters = NameResolver
                         .createParameters(parameterTypes);
                 methodInfo.addParameters(parameters);
@@ -2203,11 +2203,8 @@ public final class NameResolver {
         }
 
         final TargetClassInfo outerClass = innerClass.getOuterClass();
-        if (outerClass instanceof TargetInnerClassInfo) {
-            return NameResolver.getOuterstClass((TargetInnerClassInfo) outerClass);
-        } else {
-            return outerClass;
-        }
+        return outerClass instanceof TargetInnerClassInfo ? NameResolver
+                .getOuterstClass((TargetInnerClassInfo) outerClass) : outerClass;
     }
 
     /**
@@ -2266,7 +2263,7 @@ public final class NameResolver {
 
                 // 自クラスおよび，外部クラスで定義されたメソッドを追加
                 availableFields.addAll(outerClass.getDefinedFields());
-                checkedClasses.add(outerClass);                
+                checkedClasses.add(outerClass);
             }
 
             // 内部クラスで定義されたフィールドを追加
