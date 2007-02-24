@@ -89,7 +89,7 @@ public final class FileInfo implements Comparable<FileInfo> {
      * @return 行数
      */
     public int getLOC() {
-        return loc;
+        return this.loc;
     }
 
     /**
@@ -98,7 +98,7 @@ public final class FileInfo implements Comparable<FileInfo> {
      * @return ファイル名
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
