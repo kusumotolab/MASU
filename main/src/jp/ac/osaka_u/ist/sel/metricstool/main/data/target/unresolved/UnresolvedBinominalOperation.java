@@ -94,7 +94,7 @@ public class UnresolvedBinominalOperation implements UnresolvedTypeInfo{
      */
     public void setFirstOperand(final UnresolvedTypeInfo firstOperand) {
 
-        if (null == operator) {
+        if (null == firstOperand) {
             throw new NullPointerException();
         }
 
@@ -108,7 +108,7 @@ public class UnresolvedBinominalOperation implements UnresolvedTypeInfo{
      */
     public void setSecondOperand(final UnresolvedTypeInfo secondOperand) {
 
-        if (null == operator) {
+        if (null == secondOperand) {
             throw new NullPointerException();
         }
 
