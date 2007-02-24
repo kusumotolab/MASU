@@ -50,10 +50,10 @@ public final class ClassInfoManager {
         }
 
         // 二重登録チェック
-        if (this.targetClassInfos.contains(classInfo)){
+        if (this.targetClassInfos.contains(classInfo)) {
             err.println(classInfo.getFullQualifiedName(".") + " is already registered!");
             return false;
-        } else if(this.externalClassInfos.contains(classInfo)) {
+        } else if (this.externalClassInfos.contains(classInfo)) {
             // 外部クラスと重複している場合はエラー出力しない
             return false;
         }
@@ -65,7 +65,7 @@ public final class ClassInfoManager {
         for (final TargetInnerClassInfo innerClassInfo : classInfo.getInnerClasses()) {
             this.add(innerClassInfo);
         }
-        
+
         return true;
     }
 
@@ -89,10 +89,10 @@ public final class ClassInfoManager {
             //err.println(classInfo.getFullQualifiedtName(".") + " is already registered!");
             return false;
         }
-        
+
         this.externalClassInfos.add(classInfo);
         this.packageInfo.add(classInfo);
-        
+
         return true;
     }
 
@@ -170,7 +170,7 @@ public final class ClassInfoManager {
             return "main";
         }
     }, MESSAGE_TYPE.ERROR);
-    
+
     /**
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
@@ -307,16 +307,13 @@ public final class ClassInfoManager {
 
             // ほしいクラス情報の名前空間階層が，この名前空間階層よりも深い場合は，該当するサブ名前空間を呼び出す
             if (this.getDepth() < namespaceLength) {
-                PackageInfo subPackage = this.subPackages.get(fullQualifiedName[this.getDepth()]);
-                if (null == subPackage) {
-                    return null;
-                } else {
-                    return subPackage.getClassInfo(fullQualifiedName);
-                }
+                final PackageInfo subPackage = this.subPackages.get(fullQualifiedName[this
+                        .getDepth()]);
+                return null == subPackage ? null : subPackage.getClassInfo(fullQualifiedName);
 
                 // ほしいクラス情報の名前空間層が，この名前空間階層と同じ場合は，クラス情報を返す
             } else if (this.getDepth() == namespaceLength) {
-                ClassInfo classInfo = this.classInfos.get(fullQualifiedName[namespaceLength]);
+                final ClassInfo classInfo = this.classInfos.get(fullQualifiedName[namespaceLength]);
                 return classInfo;
 
                 // ほしいクラス情報の名前空間階層が，この名前空間階層よりも浅い場合は，エラー
@@ -340,12 +337,10 @@ public final class ClassInfoManager {
 
             // ほしいクラス情報の名前空間層が，この名前空間層よりも深い場合は，該当するサブ名前空間名を呼び出す
             if (this.getDepth() < namespace.length) {
-                PackageInfo subPackage = this.subPackages.get(namespace[this.getDepth()]);
-                if (null == subPackage) {
-                    return Collections.unmodifiableCollection(new HashSet<ClassInfo>());
-                } else {
-                    return subPackage.getClassInfos(namespace);
-                }
+                final PackageInfo subPackage = this.subPackages.get(namespace[this.getDepth()]);
+                return null == subPackage ? Collections
+                        .unmodifiableCollection(new HashSet<ClassInfo>()) : subPackage
+                        .getClassInfos(namespace);
 
                 // ほしいクラス情報の名前空間層が，この名前空間層と同じ場合は，クラス情報を返す
             } else if (this.getDepth() == namespace.length) {
