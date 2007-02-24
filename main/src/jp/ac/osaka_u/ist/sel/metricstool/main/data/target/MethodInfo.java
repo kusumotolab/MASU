@@ -58,49 +58,46 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
 
         // クラスオブジェクトの compareTo を用いる．
         // クラスの名前空間名，クラス名が比較に用いられている．
-        ClassInfo ownerClass = this.getOwnerClass();
-        ClassInfo correspondOwnerClass = method.getOwnerClass();
+        final ClassInfo ownerClass = this.getOwnerClass();
+        final ClassInfo correspondOwnerClass = method.getOwnerClass();
         final int classOrder = ownerClass.compareTo(correspondOwnerClass);
         if (classOrder != 0) {
             return classOrder;
+        }
+
+        // メソッド名で比較
+        final String name = this.getMethodName();
+        final String correspondName = method.getMethodName();
+        final int methodNameOrder = name.compareTo(correspondName);
+        if (methodNameOrder != 0) {
+            return methodNameOrder;
+        }
+
+        // 引数の個数で比較
+        final int parameterNumber = this.getParameterNumber();
+        final int correspondParameterNumber = method.getParameterNumber();
+        if (parameterNumber < correspondParameterNumber) {
+            return 1;
+        } else if (parameterNumber > correspondParameterNumber) {
+            return -1;
         } else {
 
-            // メソッド名で比較
-            String name = this.getMethodName();
-            String correspondName = method.getMethodName();
-            final int methodNameOrder = name.compareTo(correspondName);
-            if (methodNameOrder != 0) {
-                return methodNameOrder;
-            } else {
-
-                // 引数の個数で比較
-                final int parameterNumber = this.getParameterNumber();
-                final int correspondParameterNumber = method.getParameterNumber();
-                if (parameterNumber < correspondParameterNumber) {
-                    return 1;
-                } else if (parameterNumber > correspondParameterNumber) {
-                    return -1;
-                } else {
-
-                    // 引数の型で比較．第一引数から順番に．
-                    Iterator<ParameterInfo> parameterIterator = this.getParameters().iterator();
-                    Iterator<ParameterInfo> correspondParameterIterator = method.getParameters()
-                            .iterator();
-                    while (parameterIterator.hasNext() && correspondParameterIterator.hasNext()) {
-                        ParameterInfo parameter = parameterIterator.next();
-                        ParameterInfo correspondParameter = correspondParameterIterator.next();
-                        String typeName = parameter.getName();
-                        String correspondTypeName = correspondParameter.getName();
-                        final int typeOrder = typeName.compareTo(correspondTypeName);
-                        if (typeOrder != 0) {
-                            return typeOrder;
-                        }
-                    }
-
-                    return 0;
+            // 引数の型で比較．第一引数から順番に．
+            final Iterator<ParameterInfo> parameterIterator = this.getParameters().iterator();
+            final Iterator<ParameterInfo> correspondParameterIterator = method.getParameters()
+                    .iterator();
+            while (parameterIterator.hasNext() && correspondParameterIterator.hasNext()) {
+                final ParameterInfo parameter = parameterIterator.next();
+                final ParameterInfo correspondParameter = correspondParameterIterator.next();
+                final String typeName = parameter.getName();
+                final String correspondTypeName = correspondParameter.getName();
+                final int typeOrder = typeName.compareTo(correspondTypeName);
+                if (typeOrder != 0) {
+                    return typeOrder;
                 }
-
             }
+
+            return 0;
         }
     }
 
@@ -167,10 +164,9 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
 
                     if (actualParameterType.equals(dummyParameter.getType())) {
                         continue NEXT_PARAMETER;
-
-                    } else {
-                        return false;
                     }
+
+                    return false;
 
                     // 仮引数が外部クラス，実引数が対象クラスの場合は，実引数が仮引数のサブクラスである場合，呼び出し可能とする
                 } else if ((actualParameterType instanceof TargetClassInfo)
@@ -179,10 +175,9 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
                     if (((ClassInfo) actualParameterType).isSubClass((ClassInfo) dummyParameter
                             .getType())) {
                         continue NEXT_PARAMETER;
-
-                    } else {
-                        return false;
                     }
+
+                    return false;
 
                     // 仮引数が対象クラス，実引数が外部クラスの場合は，呼び出し不可能とする
                 } else {
@@ -196,9 +191,9 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
                 // 等しくない場合は該当しない
                 if (actualParameterType.equals(dummyParameter.getType())) {
                     continue NEXT_PARAMETER;
-                } else {
-                    return false;
                 }
+
+                return false;
 
                 // 実引数が配列型の場合
             } else if (actualParameterType instanceof ArrayTypeInfo) {

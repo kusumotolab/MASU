@@ -85,11 +85,11 @@ public final class AvailableNamespaceInfo {
         final String[] importName = this.getImportName();
         if (this.isAllClasses()) {
             return importName;
-        } else {
-            final String[] namespace = new String[importName.length - 1];
-            System.arraycopy(importName, 0, namespace, 0, importName.length - 1);
-            return namespace;
         }
+
+        final String[] namespace = new String[importName.length - 1];
+        System.arraycopy(importName, 0, namespace, 0, importName.length - 1);
+        return namespace;
     }
 
     /**

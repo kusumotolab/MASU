@@ -56,18 +56,20 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo> {
             return false;
         }
 
+        // –¼‘O‹óŠÔ‚Ì’·‚³‚Å”äŠr
         final String[] name = this.getName();
         final String[] correspondName = ((NamespaceInfo) o).getName();
         if (name.length != correspondName.length) {
             return false;
-        } else {
-            for (int i = 0; i < name.length; i++) {
-                if (!name[i].equals(correspondName[i])) {
-                    return false;
-                }
-            }
-            return true;
         }
+
+        // Še—v‘f‚ðŒÂ•Ê‚É”äŠr
+        for (int i = 0; i < name.length; i++) {
+            if (!name[i].equals(correspondName[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
