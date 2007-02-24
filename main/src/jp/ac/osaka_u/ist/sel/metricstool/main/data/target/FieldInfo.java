@@ -91,14 +91,10 @@ public abstract class FieldInfo extends VariableInfo {
             throw new NullPointerException();
         }
 
-        ClassInfo classInfo = this.getOwnerClass();
-        ClassInfo correspondClassInfo = this.getOwnerClass();
-        int classOrder = classInfo.compareTo(correspondClassInfo);
-        if (classOrder != 0) {
-            return classOrder;
-        } else {
-            return super.compareTo(fieldInfo);
-        }
+        final ClassInfo classInfo = this.getOwnerClass();
+        final ClassInfo correspondClassInfo = this.getOwnerClass();
+        final int classOrder = classInfo.compareTo(correspondClassInfo);
+        return 0 != classOrder? classOrder : super.compareTo(fieldInfo);
     }
 
     /**
