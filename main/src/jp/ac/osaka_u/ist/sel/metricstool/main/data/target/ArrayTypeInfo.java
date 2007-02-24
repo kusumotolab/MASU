@@ -43,16 +43,15 @@ public final class ArrayTypeInfo implements TypeInfo {
             return false;
         }
 
-        TypeInfo elementTypeInfo = this.getElementType();
-        TypeInfo correspondElementTypeInfo = ((ArrayTypeInfo) typeInfo).getElementType();
+        final TypeInfo elementTypeInfo = this.getElementType();
+        final TypeInfo correspondElementTypeInfo = ((ArrayTypeInfo) typeInfo).getElementType();
         if (!elementTypeInfo.equals(correspondElementTypeInfo)) {
             return false;
-        } else {
-
-            int dimension = this.getDimension();
-            int correspondDimension = ((ArrayTypeInfo) typeInfo).getDimension();
-            return dimension == correspondDimension;
         }
+
+        final int dimension = this.getDimension();
+        final int correspondDimension = ((ArrayTypeInfo) typeInfo).getDimension();
+        return dimension == correspondDimension;
     }
 
     /**
@@ -209,16 +208,20 @@ public final class ArrayTypeInfo implements TypeInfo {
             if (null == o) {
                 throw new NullPointerException();
             }
+            
+            if (!(o instanceof Key)){
+                return false;
+            }
 
-            String firstKey = this.getFirstKey();
-            String correspondFirstKey = ((Key) o).getFirstKey();
+            final String firstKey = this.getFirstKey();
+            final String correspondFirstKey = ((Key) o).getFirstKey();
             if (!firstKey.equals(correspondFirstKey)) {
                 return false;
-            } else {
-                int secondKey = this.getSecondKey();
-                int correspondSecondKey = ((Key) o).getSecondKey();
-                return secondKey == correspondSecondKey;
             }
+
+            final int secondKey = this.getSecondKey();
+            final int correspondSecondKey = ((Key) o).getSecondKey();
+            return secondKey == correspondSecondKey;
         }
     }
 }

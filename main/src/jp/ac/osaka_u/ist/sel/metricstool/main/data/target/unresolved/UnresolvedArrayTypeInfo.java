@@ -52,12 +52,11 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
                 .getElementType();
         if (!elementTypeInfo.equals(correspondElementTypeInfo)) {
             return false;
-        } else {
-
-            final int dimension = this.getDimension();
-            final int correspondDimension = ((UnresolvedArrayTypeInfo) typeInfo).getDimension();
-            return dimension == correspondDimension;
         }
+
+        final int dimension = this.getDimension();
+        final int correspondDimension = ((UnresolvedArrayTypeInfo) typeInfo).getDimension();
+        return dimension == correspondDimension;
     }
 
     /**
@@ -227,11 +226,11 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
             final UnresolvedTypeInfo correspondFirstKey = ((Key) o).getFirstKey();
             if (!firstKey.equals(correspondFirstKey)) {
                 return false;
-            } else {
-                final int secondKey = this.getSecondKey();
-                final int correspondSecondKey = ((Key) o).getSecondKey();
-                return secondKey == correspondSecondKey;
             }
+
+            final int secondKey = this.getSecondKey();
+            final int correspondSecondKey = ((Key) o).getSecondKey();
+            return secondKey == correspondSecondKey;
         }
     }
 }
