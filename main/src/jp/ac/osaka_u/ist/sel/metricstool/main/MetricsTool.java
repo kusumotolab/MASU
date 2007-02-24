@@ -905,7 +905,7 @@ public class MetricsTool {
             final UnresolvedClassInfo unresolvedClassInfo, final ClassInfoManager classInfoManager) {
 
         // ClassInfo を取得
-        final ClassInfo classInfo = (ClassInfo) unresolvedClassInfo.getResolvedInfo();
+        final ClassInfo classInfo = unresolvedClassInfo.getResolvedInfo();
 
         // 各親クラス名に対して
         for (UnresolvedTypeInfo unresolvedSuperClassType : unresolvedClassInfo.getSuperClasses()) {
@@ -959,7 +959,7 @@ public class MetricsTool {
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager) {
 
         // ClassInfo を取得
-        final ClassInfo ownerClass = (ClassInfo) unresolvedClassInfo.getResolvedInfo();
+        final ClassInfo ownerClass = unresolvedClassInfo.getResolvedInfo();
 
         // 各未解決フィールドに対して
         for (UnresolvedFieldInfo unresolvedFieldInfo : unresolvedClassInfo.getDefinedFields()) {
@@ -1087,7 +1087,7 @@ public class MetricsTool {
             final UnresolvedTypeInfo unresolvedMethodReturnType = unresolvedMethodInfo
                     .getReturnType();
             TypeInfo methodReturnType = NameResolver.resolveTypeInfo(unresolvedMethodReturnType,
-                    (TargetClassInfo) ownerClass, null, classInfoManager, null, null, null);
+                    ownerClass, null, classInfoManager, null, null, null);
             assert methodReturnType != null : "resolveTypeInfo returned null!";
             if (methodReturnType instanceof UnknownTypeInfo) {
                 if (unresolvedMethodReturnType instanceof UnresolvedReferenceTypeInfo) {
@@ -1120,8 +1120,7 @@ public class MetricsTool {
                 final UnresolvedTypeInfo unresolvedParameterType = unresolvedParameterInfo
                         .getType();
                 TypeInfo parameterType = NameResolver.resolveTypeInfo(unresolvedParameterType,
-                        (TargetClassInfo) ownerClass, methodInfo, classInfoManager, null, null,
-                        null);
+                        ownerClass, methodInfo, classInfoManager, null, null, null);
                 assert parameterType != null : "resolveTypeInfo returned null!";
                 if (parameterType instanceof UnknownTypeInfo) {
                     if (unresolvedParameterType instanceof UnresolvedReferenceTypeInfo) {
@@ -1163,8 +1162,7 @@ public class MetricsTool {
                 final String variableName = unresolvedLocalVariable.getName();
                 final UnresolvedTypeInfo unresolvedVariableType = unresolvedLocalVariable.getType();
                 TypeInfo variableType = NameResolver.resolveTypeInfo(unresolvedVariableType,
-                        (TargetClassInfo) ownerClass, methodInfo, classInfoManager, null, null,
-                        null);
+                        ownerClass, methodInfo, classInfoManager, null, null, null);
                 assert variableType != null : "resolveTypeInfo returned null!";
                 if (variableType instanceof UnknownTypeInfo) {
                     if (unresolvedVariableType instanceof UnresolvedReferenceTypeInfo) {
@@ -1198,7 +1196,7 @@ public class MetricsTool {
             }
 
             // メソッド情報をメソッド情報マネージャに追加
-            ((TargetClassInfo) ownerClass).addDefinedMethod(methodInfo);
+            ownerClass.addDefinedMethod(methodInfo);
             methodInfoManager.add(methodInfo);
 
             // 未解決メソッド情報にも追加
@@ -1322,7 +1320,7 @@ public class MetricsTool {
             final Map<UnresolvedTypeInfo, TypeInfo> resolvedCache) {
 
         // 未解決クラス情報から，解決済みクラス情報を取得
-        final TargetClassInfo userClass = (TargetClassInfo) unresolvedClassInfo.getResolvedInfo();
+        final TargetClassInfo userClass = unresolvedClassInfo.getResolvedInfo();
 
         // 各未解決メソッド情報に対して
         for (UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo.getDefinedMethods()) {
