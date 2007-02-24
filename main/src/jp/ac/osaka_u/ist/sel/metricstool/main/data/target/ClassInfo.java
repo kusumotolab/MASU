@@ -89,16 +89,17 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Reso
             throw new NullPointerException();
         }
 
-        NamespaceInfo namespace = this.getNamespace();
-        NamespaceInfo correspondNamespace = classInfo.getNamespace();
-        int namespaceOrder = namespace.compareTo(correspondNamespace);
+        final NamespaceInfo namespace = this.getNamespace();
+        final NamespaceInfo correspondNamespace = classInfo.getNamespace();
+        final int namespaceOrder = namespace.compareTo(correspondNamespace);
         if (namespaceOrder != 0) {
             return namespaceOrder;
-        } else {
-            String name = this.getClassName();
-            String correspondName = classInfo.getClassName();
-            return name.compareTo(correspondName);
         }
+
+        final String name = this.getClassName();
+        final String correspondName = classInfo.getClassName();
+        return name.compareTo(correspondName);
+
     }
 
     /**
@@ -216,25 +217,19 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Reso
             throw new NullPointerException();
         }
 
-        if (typeInfo instanceof ClassInfo) {
-
-            NamespaceInfo namespace = this.getNamespace();
-            NamespaceInfo correspondNamespace = ((ClassInfo) typeInfo).getNamespace();
-            if (!namespace.equals(correspondNamespace)) {
-                return false;
-            } else {
-                String className = this.getClassName();
-                String correspondClassName = ((ClassInfo) typeInfo).getClassName();
-                if (!className.equals(correspondClassName)) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-
-        } else {
+        if (!(typeInfo instanceof ClassInfo)) {
             return false;
         }
+
+        final NamespaceInfo namespace = this.getNamespace();
+        final NamespaceInfo correspondNamespace = ((ClassInfo) typeInfo).getNamespace();
+        if (!namespace.equals(correspondNamespace)) {
+            return false;
+        }
+
+        final String className = this.getClassName();
+        final String correspondClassName = ((ClassInfo) typeInfo).getClassName();
+        return className.equals(correspondClassName);
     }
 
     /**
