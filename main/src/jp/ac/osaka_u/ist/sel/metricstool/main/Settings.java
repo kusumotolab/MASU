@@ -66,16 +66,17 @@ public class Settings {
      * 
      */
     public static LANGUAGE getLanguage() throws UnavailableLanguageException {
+
         if (language.equalsIgnoreCase("java")) {
             return LANGUAGE.JAVA;
             // }else if (language.equalsIgnoreCase("cpp")) {
             // return LANGUAGE.C_PLUS_PLUS;
             // }else if (language.equalsIgnoreCase("csharp")) {
             // return LANGUAGE.C_SHARP
-        } else {
-            throw new UnavailableLanguageException("\"" + language
-                    + "\" is not an available programming language!");
         }
+
+        throw new UnavailableLanguageException("\"" + language
+                + "\" is not an available programming language!");
     }
 
     /**
