@@ -9,14 +9,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author y-higo
  */
-public class UnresolvedCaseEntry extends UnresolvedBlock {
+public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo {
 
     /**
      * 対応する switch ブロック情報を与えて case エントリを初期化
      * 
      * @param correspondingSwitchBlock
      */
-    public UnresolvedCaseEntry(final UnresolvedSwitchBlock correspondingSwitchBlock) {
+    public UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo correspondingSwitchBlock) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == correspondingSwitchBlock) {
@@ -32,7 +32,7 @@ public class UnresolvedCaseEntry extends UnresolvedBlock {
      * 
      * @return この case エントリが属する switch ブロック
      */
-    public final UnresolvedSwitchBlock getCorrespondingSwitchBlock() {
+    public final UnresolvedSwitchBlockInfo getCorrespondingSwitchBlock() {
         return this.correspondingSwitchBlock;
     }
 
@@ -57,7 +57,7 @@ public class UnresolvedCaseEntry extends UnresolvedBlock {
     /**
      * この case エントリが属する switch ブロックを保存するための変数
      */
-    private final UnresolvedSwitchBlock correspondingSwitchBlock;
+    private final UnresolvedSwitchBlockInfo correspondingSwitchBlock;
 
     /**
      * この case エントリが break 文を持つかどうかを保存する変数

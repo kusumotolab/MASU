@@ -5,16 +5,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * 未解決 単純ブロック({})を表すクラス
+ * 未解決 do ブロックを表すクラス
  * 
  * @author y-higo
  */
-public final class UnresolvedSimpleBlock extends UnresolvedBlock {
+public final class UnresolvedDoBlockInfo extends UnresolvedBlockInfo {
 
     /**
-     * 単純ブロック情報を初期化
+     * do ブロック情報を初期化
      */
-    public UnresolvedSimpleBlock() {
+    public UnresolvedDoBlockInfo() {
         MetricsToolSecurityManager.getInstance().checkAccess();
     }
 }

@@ -5,16 +5,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * 未解決 do ブロックを表すクラス
+ * 未解決 synchronized 文を表すクラス
  * 
  * @author y-higo
  */
-public final class UnresolvedDoBlock extends UnresolvedBlock {
+public final class UnresolvedSynchronizedBlockInfo extends UnresolvedBlockInfo {
 
     /**
-     * do ブロック情報を初期化
+     * synchronized ブロック情報を初期化
      */
-    public UnresolvedDoBlock() {
+    public UnresolvedSynchronizedBlockInfo() {
         MetricsToolSecurityManager.getInstance().checkAccess();
     }
 }

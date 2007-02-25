@@ -39,7 +39,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
         this.fieldAssignments = new HashSet<UnresolvedFieldUsage>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
-        this.innerBlocks = new HashSet<UnresolvedBlock>();
+        this.innerBlocks = new HashSet<UnresolvedBlockInfo>();
 
         this.privateVisible = false;
         this.inheritanceVisible = false;
@@ -85,7 +85,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
         this.fieldAssignments = new HashSet<UnresolvedFieldUsage>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
-        this.innerBlocks = new HashSet<UnresolvedBlock>();
+        this.innerBlocks = new HashSet<UnresolvedBlockInfo>();
 
         this.privateVisible = false;
         this.inheritanceVisible = false;
@@ -375,7 +375,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * 
      * @return 内部ブロックの Set
      */
-    public Set<UnresolvedBlock> getInnerBlock() {
+    public Set<UnresolvedBlockInfo> getInnerBlock() {
         return Collections.unmodifiableSet(this.innerBlocks);
     }
 
@@ -669,7 +669,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
     /**
      * このメソッドの内部ブロックを保存する変数
      */
-    private final Set<UnresolvedBlock> innerBlocks;
+    private final Set<UnresolvedBlockInfo> innerBlocks;
 
     /**
      * メソッドの行数を保存するための変数

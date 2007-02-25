@@ -10,13 +10,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public class UnresolvedSwitchBlock extends UnresolvedBlock {
+public class UnresolvedSwitchBlockInfo extends UnresolvedBlockInfo {
 
     /**
      * switch ブロック情報を初期化
      * 
      */
-    public UnresolvedSwitchBlock() {
+    public UnresolvedSwitchBlockInfo() {
         MetricsToolSecurityManager.getInstance().checkAccess();
     }
 
@@ -26,14 +26,14 @@ public class UnresolvedSwitchBlock extends UnresolvedBlock {
      * @param innerBlock 追加する case エントリ
      */
     @Override
-    public final void addInnerBlock(final UnresolvedBlock innerBlock) {
+    public final void addInnerBlock(final UnresolvedBlockInfo innerBlock) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == innerBlock) {
             throw new NullPointerException();
         }
 
-        if (!(innerBlock instanceof UnresolvedCaseEntry)) {
+        if (!(innerBlock instanceof UnresolvedCaseEntryInfo)) {
             throw new IllegalArgumentException(
                     "Inner block of switch statement must be case or default entry!");
         }

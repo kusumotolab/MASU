@@ -14,13 +14,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public abstract class UnresolvedBlock implements PositionSetting {
+public abstract class UnresolvedBlockInfo implements PositionSetting {
 
     /**
      * ブロック構造を表すオブジェクトを初期化する
      * 
      */
-    public UnresolvedBlock() {
+    public UnresolvedBlockInfo() {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
@@ -28,7 +28,7 @@ public abstract class UnresolvedBlock implements PositionSetting {
         this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
         this.fieldAssignments = new HashSet<UnresolvedFieldUsage>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
-        this.innerBlocks = new HashSet<UnresolvedBlock>();
+        this.innerBlocks = new HashSet<UnresolvedBlockInfo>();
 
         this.fromLine = 0;
         this.fromColumn = 0;
@@ -105,7 +105,7 @@ public abstract class UnresolvedBlock implements PositionSetting {
      * 
      * @param innerBlock ローカル変数
      */
-    public void addInnerBlock(final UnresolvedBlock innerBlock) {
+    public void addInnerBlock(final UnresolvedBlockInfo innerBlock) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -251,7 +251,7 @@ public abstract class UnresolvedBlock implements PositionSetting {
     /**
      * このブロックの内側で定義されたブロックを保存する変数
      */
-    private final Set<UnresolvedBlock> innerBlocks;
+    private final Set<UnresolvedBlockInfo> innerBlocks;
 
     /**
      * 開始行を保存するための変数

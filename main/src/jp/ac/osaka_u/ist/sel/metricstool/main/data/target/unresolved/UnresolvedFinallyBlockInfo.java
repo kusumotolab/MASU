@@ -7,14 +7,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author y-higo
  */
-public final class UnresolvedFinallyBlock extends UnresolvedBlock {
+public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo {
 
     /**
      * 対応する try ブロック情報を与えて finally ブロックを初期化
      * 
      * @param correspondingTryBlock
      */
-    public UnresolvedFinallyBlock(final UnresolvedTryBlock correspondingTryBlock) {
+    public UnresolvedFinallyBlockInfo(final UnresolvedTryBlockInfo correspondingTryBlock) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == correspondingTryBlock) {
@@ -29,9 +29,9 @@ public final class UnresolvedFinallyBlock extends UnresolvedBlock {
      * 
      * @return 対応する try ブロック
      */
-    public UnresolvedTryBlock getCorrespondingTryBlock() {
+    public UnresolvedTryBlockInfo getCorrespondingTryBlock() {
         return this.correspondingTryBlock;
     }
 
-    private final UnresolvedTryBlock correspondingTryBlock;
+    private final UnresolvedTryBlockInfo correspondingTryBlock;
 }

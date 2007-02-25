@@ -9,14 +9,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author y-higo
  */
-public final class UnresolvedCatchBlock extends UnresolvedBlock {
+public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo {
 
     /**
      * 対応する try ブロック情報を与えて catch ブロックを初期化
      * 
      * @param correspondingTryBlock
      */
-    public UnresolvedCatchBlock(final UnresolvedTryBlock correspondingTryBlock) {
+    public UnresolvedCatchBlockInfo(final UnresolvedTryBlockInfo correspondingTryBlock) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == correspondingTryBlock) {
@@ -31,9 +31,9 @@ public final class UnresolvedCatchBlock extends UnresolvedBlock {
      * 
      * @return 対応する try ブロック
      */
-    public UnresolvedTryBlock getCorrespondingTryBlock() {
+    public UnresolvedTryBlockInfo getCorrespondingTryBlock() {
         return this.correspondingTryBlock;
     }
 
-    private final UnresolvedTryBlock correspondingTryBlock;
+    private final UnresolvedTryBlockInfo correspondingTryBlock;
 }

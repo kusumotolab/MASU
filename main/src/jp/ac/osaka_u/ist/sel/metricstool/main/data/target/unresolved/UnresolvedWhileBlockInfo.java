@@ -5,16 +5,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * 未解決 for ブロックを表すクラス
+ * 未解決 while ブロックを表すクラス
  * 
  * @author y-higo
+ * 
  */
-public final class UnresolvedForBlock extends UnresolvedBlock {
+public final class UnresolvedWhileBlockInfo extends UnresolvedBlockInfo{
 
     /**
-     * for ブロック情報を初期化
+     * while ブロック情報を初期化
      */
-    public UnresolvedForBlock() {
+    public UnresolvedWhileBlockInfo() {
         MetricsToolSecurityManager.getInstance().checkAccess();
     }
 }

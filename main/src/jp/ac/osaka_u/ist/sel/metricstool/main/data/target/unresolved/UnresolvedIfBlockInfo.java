@@ -5,16 +5,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * 未解決 try ブロックを表すクラス
+ * 未解決ifブロックを表すクラス
  * 
  * @author y-higo
+ * 
  */
-public final class UnresolvedTryBlock extends UnresolvedBlock {
+public final class UnresolvedIfBlockInfo extends UnresolvedBlockInfo {
 
     /**
-     * try ブロック情報を初期化
+     * if ブロック情報を初期化
      */
-    public UnresolvedTryBlock() {
+    public UnresolvedIfBlockInfo() {
         MetricsToolSecurityManager.getInstance().checkAccess();
     }
 }
