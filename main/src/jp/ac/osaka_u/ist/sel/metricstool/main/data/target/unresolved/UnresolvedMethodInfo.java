@@ -91,6 +91,15 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         this.inheritanceVisible = false;
         this.namespaceVisible = false;
         this.publicVisible = false;
+        
+        this.instance = true;
+
+        this.fromLine = 0;
+        this.fromColumn = 0;
+        this.toLine = 0;
+        this.toColumn = 0;
+
+        this.resolvedInfo = null;
     }
 
     /**
