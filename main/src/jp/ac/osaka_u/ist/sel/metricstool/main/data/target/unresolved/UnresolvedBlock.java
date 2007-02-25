@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public abstract class UnresolvedBlock {
+public abstract class UnresolvedBlock implements PositionSetting {
 
     /**
      * ブロック構造を表すオブジェクトを初期化する
