@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author y-higo
  * 
  */
-public class ForBlockInfo extends BlockInfo {
+public final class ForBlockInfo extends BlockInfo {
 
     /**
      * 位置情報を与えて for ブロックを初期化

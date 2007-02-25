@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author y-higo
  * 
  */
-public class SimpleBlockInfo extends BlockInfo {
+public final class SimpleBlockInfo extends BlockInfo {
 
     /**
      * 位置情報を与えて simple ブロックを初期化

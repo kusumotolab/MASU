@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author y-higo
  * 
  */
-public class IfBlockInfo extends BlockInfo {
+public final class IfBlockInfo extends BlockInfo {
 
     /**
      * 位置情報を与えて if ブロックを初期化

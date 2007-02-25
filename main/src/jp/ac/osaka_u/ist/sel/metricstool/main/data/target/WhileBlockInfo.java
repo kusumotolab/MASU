@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author y-higo
  * 
  */
-public class WhileBlockInfo extends BlockInfo {
+public final class WhileBlockInfo extends BlockInfo {
 
     /**
      * 位置情報を与えて while ブロックを初期化

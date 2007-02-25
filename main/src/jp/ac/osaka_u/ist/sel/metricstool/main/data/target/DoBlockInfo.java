@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author y-higo
  * 
  */
-public class DoBlockInfo extends BlockInfo {
+public final class DoBlockInfo extends BlockInfo {
 
     /**
      * 位置情報を与えて do ブロックを初期化

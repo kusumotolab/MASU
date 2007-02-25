@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public class SwitchBlockInfo extends BlockInfo {
+public final class SwitchBlockInfo extends BlockInfo {
 
     /**
      * switch ブロック情報を初期化
@@ -24,7 +24,7 @@ public class SwitchBlockInfo extends BlockInfo {
      * @param innerBlock 追加する case エントリ
      */
     @Override
-    public final void addInnerBlock(final BlockInfo innerBlock) {
+    public void addInnerBlock(final BlockInfo innerBlock) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == innerBlock) {

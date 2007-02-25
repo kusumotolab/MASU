@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author y-higo
  * 
  */
-public class SynchronizedBlockInfo extends BlockInfo {
+public final class SynchronizedBlockInfo extends BlockInfo {
 
     /**
      * 位置情報を与えて synchronized ブロックを初期化
