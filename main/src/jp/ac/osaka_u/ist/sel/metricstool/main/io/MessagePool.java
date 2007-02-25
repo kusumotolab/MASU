@@ -79,7 +79,7 @@ public class MessagePool {
         if (null == message) {
             throw new NullPointerException("message is null.");
         }
-        if (null == message) {
+        if (null == source) {
             throw new NullPointerException("source is null.");
         }
 
