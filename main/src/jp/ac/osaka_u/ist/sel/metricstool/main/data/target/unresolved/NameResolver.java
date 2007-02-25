@@ -122,18 +122,16 @@ public final class NameResolver {
             // 要素の型が不明のときは UnnownTypeInfo を返す
             if (elementType instanceof UnknownTypeInfo) {
                 return UnknownTypeInfo.getInstance();
-
-                // 要素の型が解決できた場合はその配列型を作成し返す
-            } else {
-                final ArrayTypeInfo arrayType = ArrayTypeInfo.getType(elementType, dimension);
-                return arrayType;
             }
+
+            // 要素の型が解決できた場合はその配列型を作成し返す
+            final ArrayTypeInfo arrayType = ArrayTypeInfo.getType(elementType, dimension);
+            return arrayType;
 
             // 未解決クラス情報の場合
         } else if (unresolvedTypeInfo instanceof UnresolvedClassInfo) {
 
-            final TypeInfo classInfo = (ClassInfo) ((UnresolvedClassInfo) unresolvedTypeInfo)
-                    .getResolvedInfo();
+            final TypeInfo classInfo = ((UnresolvedClassInfo) unresolvedTypeInfo).getResolvedInfo();
             return classInfo;
 
             // 未解決フィールド使用の場合
@@ -468,6 +466,7 @@ public final class NameResolver {
                     usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager,
                     resolvedCache);
 
+            // extends 節 がある場合
             if (unresolvedTypeParameter.hasExtendsType()) {
 
                 final UnresolvedTypeInfo unresolvedExtendsType = unresolvedTypeParameter
@@ -2112,25 +2111,23 @@ public final class NameResolver {
             // 名前空間名.* となっている場合は，見つけることができない
             if (availableNamespace.isAllClasses()) {
                 continue;
+            }
 
-                // 名前空間.クラス名 となっている場合
-            } else {
+            // 名前空間.クラス名 となっている場合
+            final String[] importName = availableNamespace.getImportName();
 
-                final String[] importName = availableNamespace.getImportName();
+            // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
+            if (importName[importName.length - 1].equals(referenceName[0])) {
 
-                // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
-                if (importName[importName.length - 1].equals(referenceName[0])) {
+                final String[] namespace = availableNamespace.getNamespace();
+                final String[] fullQualifiedName = new String[namespace.length
+                        + referenceName.length];
+                System.arraycopy(namespace, 0, fullQualifiedName, 0, namespace.length);
+                System.arraycopy(referenceName, 0, fullQualifiedName, namespace.length,
+                        referenceName.length);
 
-                    final String[] namespace = availableNamespace.getNamespace();
-                    final String[] fullQualifiedName = new String[namespace.length
-                            + referenceName.length];
-                    System.arraycopy(namespace, 0, fullQualifiedName, 0, namespace.length);
-                    System.arraycopy(referenceName, 0, fullQualifiedName, namespace.length,
-                            referenceName.length);
-
-                    final ExternalClassInfo classInfo = new ExternalClassInfo(fullQualifiedName);
-                    return classInfo;
-                }
+                final ExternalClassInfo classInfo = new ExternalClassInfo(fullQualifiedName);
+                return classInfo;
             }
         }
 
