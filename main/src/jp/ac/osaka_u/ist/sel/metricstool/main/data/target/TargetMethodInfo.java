@@ -84,6 +84,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
         this.localVariables = new TreeSet<LocalVariableInfo>();
         this.referencees = new TreeSet<FieldInfo>();
         this.assignmentees = new TreeSet<FieldInfo>();
+        this.innerBlocks = new TreeSet<BlockInfo>();
         this.unresolvedUsage = new HashSet<UnresolvedTypeInfo>();
 
         this.modifiers.addAll(modifiers);
@@ -147,11 +148,26 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
     }
 
     /**
+     * このメソッドの直内ブロックを追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param innerBlock 追加する直内ブロック
+     */
+    public void addInnerBlock(final BlockInfo innerBlock) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == innerBlock) {
+            throw new NullPointerException();
+        }
+
+        this.innerBlocks.add(innerBlock);
+    }
+
+    /**
      * 引数で指定された型パラメータを追加する
      * 
      * @param typeParameter 追加する型パラメータ
      */
-    public final void addTypeParameter(final TypeParameterInfo typeParameter) {
+    public void addTypeParameter(final TypeParameterInfo typeParameter) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == typeParameter) {
@@ -222,11 +238,20 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
     }
 
     /**
+     * このメソッドの直内ブロックの SortedSet を返す．
+     * 
+     * @return このメソッドの直内ブロックの SortedSet を返す．
+     */
+    public SortedSet<BlockInfo> getInnerBlocks() {
+        return Collections.unmodifiableSortedSet(this.innerBlocks);
+    }
+
+    /**
      * このクラスの型パラメータの List を返す．
      * 
      * @return このクラスの型パラメータの List
      */
-    public final List<TypeParameterInfo> getTypeParameters() {
+    public List<TypeParameterInfo> getTypeParameters() {
         return Collections.unmodifiableList(this.typeParameters);
     }
 
@@ -358,6 +383,11 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * 代入しているフィールド一覧を保存するための変数
      */
     private final SortedSet<FieldInfo> assignmentees;
+
+    /**
+     * このメソッド直内のブロック一覧を保存するための変数
+     */
+    private final SortedSet<BlockInfo> innerBlocks;
 
     /**
      * 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しなどを保存するための変数
