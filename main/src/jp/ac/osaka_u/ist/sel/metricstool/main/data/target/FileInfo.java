@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricMeasurable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -14,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * ファイルの情報を表すクラス．
  */
-public final class FileInfo implements Comparable<FileInfo> {
+public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable {
 
     /**
      * 指定されたファイル名のオブジェクトを初期化する．
@@ -49,6 +50,7 @@ public final class FileInfo implements Comparable<FileInfo> {
 
     /**
      * このクラスのインスタンス同士を比較するメソッド
+     * 
      * @param o 比較対象のインスタンス
      * @return このインスタンスが比較対象のインスタンスより順序的に小さければ負の数，等しければ0，大きければ正の数.
      */
@@ -90,6 +92,15 @@ public final class FileInfo implements Comparable<FileInfo> {
      */
     public int getLOC() {
         return this.loc;
+    }
+
+    /**
+     * メトリクス計測対象としての名前を返す
+     * 
+     * @return メトリクス計測対象としての名前
+     */
+    public String getMeasuredUnitName() {
+        return this.getName();
     }
 
     /**

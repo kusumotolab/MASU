@@ -9,11 +9,12 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricMeasurable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
-public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
+public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved, MetricMeasurable {
 
     /**
      * メソッドオブジェクトを初期化する
@@ -251,7 +252,7 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
      * @return 等しい場合は true, 等しくない場合は false
      */
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
 
         if (null == o) {
             return false;
@@ -270,7 +271,7 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
      * @return このメソッドのハッシュコード
      */
     @Override
-    public int hashCode() {
+    public final int hashCode() {
 
         final StringBuilder sb = new StringBuilder();
         sb.append(this.ownerClass.getFullQualifiedName(Settings.getLanguage()
@@ -278,6 +279,20 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved {
         sb.append(this.methodName);
 
         return sb.toString().hashCode();
+    }
+
+    /**
+     * メトリクス計測対象としての名前を返す
+     * 
+     * @return メトリクス計測対象としての名前
+     */
+    public final String getMeasuredUnitName() {
+
+        final StringBuilder sb = new StringBuilder(this.getMethodName());
+        sb.append("#");
+        sb.append(this.getOwnerClass().getFullQualifiedName(
+                Settings.getLanguage().getNamespaceDelimiter()));
+        return sb.toString();
     }
 
     /**

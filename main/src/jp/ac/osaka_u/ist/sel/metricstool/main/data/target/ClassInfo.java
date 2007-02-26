@@ -6,6 +6,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricMeasurable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -15,7 +16,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Resolved {
+public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Resolved,
+        MetricMeasurable {
 
     /**
      * 名前空間名とクラス名からオブジェクトを生成する
@@ -100,6 +102,15 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Reso
         final String correspondName = classInfo.getClassName();
         return name.compareTo(correspondName);
 
+    }
+
+    /**
+     * メトリクス計測対象としての名前を返す
+     * 
+     * @return メトリクス計測対象としての名前
+     */
+    public final String getMeasuredUnitName() {
+        return this.getFullQualifiedName(Settings.getLanguage().getNamespaceDelimiter());
     }
 
     /**
@@ -290,25 +301,25 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Reso
      */
     public final boolean isInnerClass(final ClassInfo classInfo) {
 
-        //引数で与えられたクラスが TargetClassInfo 出ない場合は false
+        // 引数で与えられたクラスが TargetClassInfo 出ない場合は false
         if (!(classInfo instanceof TargetClassInfo)) {
             return false;
         }
 
         for (final ClassInfo innerClassInfo : ((TargetClassInfo) classInfo).getInnerClasses()) {
 
-            //このクラスが引数の直接の子クラスと等しい場合は true を返す
+            // このクラスが引数の直接の子クラスと等しい場合は true を返す
             if (innerClassInfo.equals(this)) {
                 return true;
             }
 
-            //このクラスが引数の間接的な子クラスである場合も true を返す
+            // このクラスが引数の間接的な子クラスである場合も true を返す
             if (this.isInnerClass(innerClassInfo)) {
                 return true;
             }
         }
 
-        //子クラスを再帰的に調べた結果，このクラスと一致するクラスが見つからなかったので false を返す
+        // 子クラスを再帰的に調べた結果，このクラスと一致するクラスが見つからなかったので false を返す
         return false;
     }
 
