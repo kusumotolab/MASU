@@ -96,8 +96,19 @@ import antlr.collections.AST;
  */
 public class MetricsTool {
 
-    static {
-        // 情報表示用のリスナを作成
+    /**
+     * 
+     * @param args 対象ファイルのファイルパス
+     * 
+     * 現在仮実装． 対象ファイルのデータを格納した後，構文解析を行う．
+     */
+    public static void main(String[] args) {
+        
+        MetricsTool metricsTool = new MetricsTool();
+        
+        ArgumentProcessor.processArgs(args, parameterDefs, new Settings());
+        
+        //情報表示用のリスナを作成
         MessagePool.getInstance(MESSAGE_TYPE.OUT).addMessageListener(new MessageListener() {
             public void messageReceived(MessageEvent event) {
                 System.out.print(event.getSource().getMessageSourceName() + " > "
@@ -111,49 +122,45 @@ public class MetricsTool {
                         + event.getMessage());
             }
         });
-    }
-
-    /**
-     * 
-     * @param args 対象ファイルのファイルパス
-     * 
-     * 現在仮実装． 対象ファイルのデータを格納した後，構文解析を行う．
-     */
-    public static void main(String[] args) {
-        initSecurityManager();
-
-        ArgumentProcessor.processArgs(args, parameterDefs, new Settings());
-
+        
         // ヘルプモードと情報表示モードが同時にオンになっている場合は不正
         if (Settings.isHelpMode() && Settings.isDisplayMode()) {
             err.println("-h and -x can\'t be set at the same time!");
-            printUsage();
+            metricsTool.printUsage();
             System.exit(0);
         }
 
         if (Settings.isHelpMode()) {
             // ヘルプモードの場合
-            doHelpMode();
+            metricsTool.doHelpMode();
         } else {
-            LANGUAGE language = getLanguage();
-            loadPlugins(language, Settings.getMetricStrings());
+            LANGUAGE language = metricsTool.getLanguage();
+            metricsTool.loadPlugins(language, Settings.getMetricStrings());
 
             if (Settings.isDisplayMode()) {
                 // 情報表示モードの場合
-                doDisplayMode(language);
+                metricsTool.doDisplayMode(language);
             } else {
                 // 解析モード
-                doAnalysisMode(language);
+                metricsTool.doAnalysisMode(language);
             }
         }
     }
+    
+    /**
+     * 引数無しコンストラクタ．
+     * セキュリティマネージャの初期化を行う．
+     */
+    public MetricsTool(){
+        initSecurityManager();
+    }
 
     /**
-     * 読み込んだ対象ファイル群を解析する.
+     * {@link #readTargetFiles()} で読み込んだ対象ファイル群を解析する.
      * 
      * @param language 解析対象の言語
      */
-    private static void analyzeTargetFiles(final LANGUAGE language) {
+    public void analyzeTargetFiles(final LANGUAGE language) {
         // 対象ファイルを解析
 
         AstVisitorManager<AST> visitorManager = null;
@@ -266,11 +273,152 @@ public class MetricsTool {
     }
 
     /**
+     * 対象言語を取得する.
+     * 
+     * @return 指定された対象言語.指定されなかった場合はnull
+     */
+    public LANGUAGE getLanguage() {
+        if (Settings.getLanguageString().equals(Settings.INIT)) {
+            return null;
+        }
+
+        return Settings.getLanguage();
+    }
+    
+    /**
+     * プラグインをロードする. 指定された言語，指定されたメトリクスに関連するプラグインのみを {@link PluginManager}に登録する.
+     * 
+     * @param language 指定する言語.
+     * @param metrics 指定するメトリクスの配列，指定しない場合はnullまたは空の配列
+     */
+    public void loadPlugins(final LANGUAGE language, final String[] metrics) {
+        // 指定言語に対応するプラグインで指定されたメトリクスを計測するプラグインをロードして登録
+
+        // metrics[]が０個じゃないかつ，2つ以上指定されている or １つだけどデフォルトの文字列じゃない
+        boolean metricsSpecified = null != metrics && metrics.length != 0
+                && (1 < metrics.length || !metrics[0].equals(Settings.INIT));
+
+        final PluginManager pluginManager = PluginManager.getInstance();
+        try {
+            for (final AbstractPlugin plugin : (new DefaultPluginLoader()).loadPlugins()) {// プラグインを全ロード
+                final PluginInfo info = plugin.getPluginInfo();
+                if (null == language || info.isMeasurable(language)) {
+                    // 対象言語が指定されていない or 対象言語を計測可能
+                    if (metricsSpecified) {
+                        // メトリクスが指定されているのでこのプラグインと一致するかチェック
+                        final String pluginMetricName = info.getMetricName();
+                        for (final String metric : metrics) {
+                            if (metric.equalsIgnoreCase(pluginMetricName)) {
+                                pluginManager.addPlugin(plugin);
+                                break;
+                            }
+                        }
+                    } else {
+                        // メトリクスが指定されていないのでとりあえず全部登録
+                        pluginManager.addPlugin(plugin);
+                    }
+                }
+            }
+        } catch (PluginLoadException e) {
+            err.println(e.getMessage());
+            System.exit(0);
+        }
+    }
+
+    /**
+     * ロード済みのプラグインを実行する.
+     */
+    public void launchPlugins() {
+        PluginLauncher launcher = new DefaultPluginLauncher();
+        launcher.setMaximumLaunchingNum(1);
+        launcher.launchAll(PluginManager.getInstance().getPlugins());
+
+        do {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // 気にしない
+            }
+        } while (0 < launcher.getCurrentLaunchingNum() + launcher.getLaunchWaitingTaskNum());
+
+        launcher.stopLaunching();
+    }
+
+    /**
+     * {@link Settings}に指定された場所から解析対象ファイルを読み込んで登録する
+     */
+    public void readTargetFiles() {
+
+        out.println("building target file list.");
+
+        // ディレクトリから読み込み
+        if (!Settings.getTargetDirectory().equals(Settings.INIT)) {
+            registerFilesFromDirectory();
+
+            // リストファイルから読み込み
+        } else if (!Settings.getListFile().equals(Settings.INIT)) {
+            registerFilesFromListFile();
+        }
+    }
+    
+    /**
+     * メトリクス情報を {@link Settings} に指定されたファイルに出力する.
+     */
+    public void writeMetrics() {
+        if (!Settings.getFileMetricsFile().equals(Settings.INIT)) {
+
+            try {
+                FileMetricsInfoManager manager = FileMetricsInfoManager.getInstance();
+                manager.checkMetrics();
+
+                String fileName = Settings.getFileMetricsFile();
+                CSVFileMetricsWriter writer = new CSVFileMetricsWriter(fileName);
+                writer.write();
+
+            } catch (MetricNotRegisteredException e) {
+                System.exit(0);
+            }
+        }
+
+        if (!Settings.getClassMetricsFile().equals(Settings.INIT)) {
+
+            try {
+                ClassMetricsInfoManager manager = ClassMetricsInfoManager.getInstance();
+                manager.checkMetrics();
+
+                String fileName = Settings.getClassMetricsFile();
+                CSVClassMetricsWriter writer = new CSVClassMetricsWriter(fileName);
+                writer.write();
+
+            } catch (MetricNotRegisteredException e) {
+                System.exit(0);
+            }
+        }
+
+        if (!Settings.getMethodMetricsFile().equals(Settings.INIT)) {
+
+            try {
+                MethodMetricsInfoManager manager = MethodMetricsInfoManager.getInstance();
+                manager.checkMetrics();
+
+                String fileName = Settings.getMethodMetricsFile();
+                CSVMethodMetricsWriter writer = new CSVMethodMetricsWriter(fileName);
+                writer.write();
+
+            } catch (MetricNotRegisteredException e) {
+                System.exit(0);
+            }
+
+        }
+    }
+
+    
+    /**
      * 
      * ヘルプモードの引数の整合性を確認するためのメソッド． 不正な引数が指定されていた場合，main メソッドには戻らず，この関数内でプログラムを終了する．
      * 
      */
-    private static void checkHelpModeParameterValidation() {
+    private void checkHelpModeParameterValidation() {
         // -h は他のオプションと同時指定できない
         if ((!Settings.getTargetDirectory().equals(Settings.INIT))
                 || (!Settings.getListFile().equals(Settings.INIT))
@@ -290,7 +438,7 @@ public class MetricsTool {
      * 情報表示モードの引数の整合性を確認するためのメソッド． 不正な引数が指定されていた場合，main メソッドには戻らず，この関数内でプログラムを終了する．
      * 
      */
-    private static void checkDisplayModeParameterValidation() {
+    private void checkDisplayModeParameterValidation() {
         // -d は使えない
         if (!Settings.getTargetDirectory().equals(Settings.INIT)) {
             err.println("-d can\'t be specified in the display mode!");
@@ -334,7 +482,7 @@ public class MetricsTool {
      * @param 指定された言語
      * 
      */
-    private static void checkAnalysisModeParameterValidation(LANGUAGE language) {
+    private void checkAnalysisModeParameterValidation(LANGUAGE language) {
         // -d と -i のどちらも指定されているのは不正
         if (Settings.getTargetDirectory().equals(Settings.INIT)
                 && Settings.getListFile().equals(Settings.INIT)) {
@@ -399,7 +547,7 @@ public class MetricsTool {
      * 
      * @param language 対象言語
      */
-    private static void doAnalysisMode(LANGUAGE language) {
+    private void doAnalysisMode(LANGUAGE language) {
         checkAnalysisModeParameterValidation(language);
 
         readTargetFiles();
@@ -413,7 +561,7 @@ public class MetricsTool {
      * 
      * @param language 対象言語
      */
-    private static void doDisplayMode(LANGUAGE language) {
+    private void doDisplayMode(LANGUAGE language) {
         checkDisplayModeParameterValidation();
 
         // -l で言語が指定されていない場合は，解析可能言語一覧を表示
@@ -441,29 +589,16 @@ public class MetricsTool {
     /**
      * ヘルプモードを実行する.
      */
-    private static void doHelpMode() {
+    private void doHelpMode() {
         checkHelpModeParameterValidation();
 
         printUsage();
     }
 
     /**
-     * 対象言語を取得する.
-     * 
-     * @return 指定された対象言語.指定されなかった場合はnull
-     */
-    private static LANGUAGE getLanguage() {
-        if (Settings.getLanguageString().equals(Settings.INIT)) {
-            return null;
-        }
-
-        return Settings.getLanguage();
-    }
-
-    /**
      * {@link MetricsToolSecurityManager} の初期化を行う. システムに登録できれば，システムのセキュリティマネージャにも登録する.
      */
-    private static void initSecurityManager() {
+    private final void initSecurityManager() {
         try {
             // MetricsToolSecurityManagerのシングルトンインスタンスを構築し，初期特別権限スレッドになる
             System.setSecurityManager(MetricsToolSecurityManager.getInstance());
@@ -476,69 +611,11 @@ public class MetricsTool {
     }
 
     /**
-     * ロード済みのプラグインを実行する.
-     */
-    private static void launchPlugins() {
-        PluginLauncher launcher = new DefaultPluginLauncher();
-        launcher.setMaximumLaunchingNum(1);
-        launcher.launchAll(PluginManager.getInstance().getPlugins());
-
-        do {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                // 気にしない
-            }
-        } while (0 < launcher.getCurrentLaunchingNum() + launcher.getLaunchWaitingTaskNum());
-
-        launcher.stopLaunching();
-    }
-
-    /**
-     * プラグインをロードする. 指定された言語，指定されたメトリクスに関連するプラグインのみを {@link PluginManager}に登録する.
-     * 
-     * @param language 指定しされた言語.
-     */
-    private static void loadPlugins(final LANGUAGE language, final String[] metrics) {
-        // 指定言語に対応するプラグインで指定されたメトリクスを計測するプラグインをロードして登録
-
-        // metrics[]が０個じゃないかつ，2つ以上指定されている or １つだけどデフォルトの文字列じゃない
-        boolean metricsSpecified = metrics.length != 0
-                && (1 < metrics.length || !metrics[0].equals(Settings.INIT));
-
-        final PluginManager pluginManager = PluginManager.getInstance();
-        try {
-            for (final AbstractPlugin plugin : (new DefaultPluginLoader()).loadPlugins()) {// プラグインを全ロード
-                final PluginInfo info = plugin.getPluginInfo();
-                if (null == language || info.isMeasurable(language)) {
-                    // 対象言語が指定されていない or 対象言語を計測可能
-                    if (metricsSpecified) {
-                        // メトリクスが指定されているのでこのプラグインと一致するかチェック
-                        final String pluginMetricName = info.getMetricName();
-                        for (final String metric : metrics) {
-                            if (metric.equalsIgnoreCase(pluginMetricName)) {
-                                pluginManager.addPlugin(plugin);
-                                break;
-                            }
-                        }
-                    } else {
-                        // メトリクスが指定されていないのでとりあえず全部登録
-                        pluginManager.addPlugin(plugin);
-                    }
-                }
-            }
-        } catch (PluginLoadException e) {
-            err.println(e.getMessage());
-            System.exit(0);
-        }
-    }
-
-    /**
      * 
      * ツールの使い方（コマンドラインオプション）を表示する．
      * 
      */
-    private static void printUsage() {
+    private void printUsage() {
 
         err.println();
         err.println("Available options:");
@@ -568,27 +645,10 @@ public class MetricsTool {
     }
 
     /**
-     * 解析対象ファイルを登録
-     */
-    private static void readTargetFiles() {
-
-        out.println("building target file list.");
-
-        // ディレクトリから読み込み
-        if (!Settings.getTargetDirectory().equals(Settings.INIT)) {
-            registerFilesFromDirectory();
-
-            // リストファイルから読み込み
-        } else if (!Settings.getListFile().equals(Settings.INIT)) {
-            registerFilesFromListFile();
-        }
-    }
-
-    /**
      * 
      * リストファイルから対象ファイルを登録する． 読み込みエラーが発生した場合は，このメソッド内でプログラムを終了する．
      */
-    private static void registerFilesFromListFile() {
+    private void registerFilesFromListFile() {
 
         try {
 
@@ -615,7 +675,7 @@ public class MetricsTool {
      * するのが気持ち悪かったため作成．
      * 
      */
-    private static void registerFilesFromDirectory() {
+    private void registerFilesFromDirectory() {
 
         File targetDirectory = new File(Settings.getTargetDirectory());
         registerFilesFromDirectory(targetDirectory);
@@ -627,7 +687,7 @@ public class MetricsTool {
      * 
      * 対象がディレクトリの場合は，その子に対して再帰的に処理をする． 対象がファイルの場合は，対象言語のソースファイルであれば，登録処理を行う．
      */
-    private static void registerFilesFromDirectory(File file) {
+    private void registerFilesFromDirectory(File file) {
 
         // ディレクトリならば，再帰的に処理
         if (file.isDirectory()) {
@@ -652,57 +712,6 @@ public class MetricsTool {
         } else {
             err.println("\"" + file.getAbsolutePath() + "\" is not a vaild file!");
             System.exit(0);
-        }
-    }
-
-    /**
-     * メトリクス情報をファイルに出力.
-     */
-    private static void writeMetrics() {
-        if (!Settings.getFileMetricsFile().equals(Settings.INIT)) {
-
-            try {
-                FileMetricsInfoManager manager = FileMetricsInfoManager.getInstance();
-                manager.checkMetrics();
-
-                String fileName = Settings.getFileMetricsFile();
-                CSVFileMetricsWriter writer = new CSVFileMetricsWriter(fileName);
-                writer.write();
-
-            } catch (MetricNotRegisteredException e) {
-                System.exit(0);
-            }
-        }
-
-        if (!Settings.getClassMetricsFile().equals(Settings.INIT)) {
-
-            try {
-                ClassMetricsInfoManager manager = ClassMetricsInfoManager.getInstance();
-                manager.checkMetrics();
-
-                String fileName = Settings.getClassMetricsFile();
-                CSVClassMetricsWriter writer = new CSVClassMetricsWriter(fileName);
-                writer.write();
-
-            } catch (MetricNotRegisteredException e) {
-                System.exit(0);
-            }
-        }
-
-        if (!Settings.getMethodMetricsFile().equals(Settings.INIT)) {
-
-            try {
-                MethodMetricsInfoManager manager = MethodMetricsInfoManager.getInstance();
-                manager.checkMetrics();
-
-                String fileName = Settings.getMethodMetricsFile();
-                CSVMethodMetricsWriter writer = new CSVMethodMetricsWriter(fileName);
-                writer.write();
-
-            } catch (MetricNotRegisteredException e) {
-                System.exit(0);
-            }
-
         }
     }
 
@@ -742,7 +751,7 @@ public class MetricsTool {
     /**
      * クラスの定義を ClassInfoManager に登録する．AST パースの後に呼び出さなければならない．
      */
-    private static void registClassInfos() {
+    private void registClassInfos() {
 
         // Unresolved クラス情報マネージャ， クラス情報マネージャを取得
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
@@ -793,7 +802,7 @@ public class MetricsTool {
      * @param classInfoManager インナークラスを登録するクラスマネージャ
      * @return 生成したインナークラスの ClassInfo
      */
-    private static TargetInnerClassInfo registInnerClassInfo(
+    private TargetInnerClassInfo registInnerClassInfo(
             final UnresolvedClassInfo unresolvedClassInfo, final TargetClassInfo outerClass,
             final ClassInfoManager classInfoManager) {
 
@@ -836,7 +845,7 @@ public class MetricsTool {
      * の前に呼び出さなければならない．
      * 
      */
-    private static void resolveTypeParameterOfClassInfos() {
+    private void resolveTypeParameterOfClassInfos() {
 
         // 未解決クラス情報マネージャ， 解決済みクラスマネージャを取得
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
@@ -856,7 +865,7 @@ public class MetricsTool {
      * @param unresolvedClassInfo 名前解決する型パラメータを持つクラス
      * @param classInfoManager 名前解決に用いるクラスマネージャ
      */
-    private static void resolveTypeParameterOfClassInfos(
+    private void resolveTypeParameterOfClassInfos(
             final UnresolvedClassInfo unresolvedClassInfo, final ClassInfoManager classInfoManager) {
 
         // 解決済みクラス情報を取得
@@ -882,7 +891,7 @@ public class MetricsTool {
     /**
      * クラスの継承情報を ClassInfo に追加する．一度目の AST パースの後，かつ registClassInfos の後によびださなければならない．
      */
-    private static void addInheritanceInformationToClassInfos() {
+    private void addInheritanceInformationToClassInfos() {
 
         // Unresolved クラス情報マネージャ， クラス情報マネージャを取得
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
@@ -901,7 +910,7 @@ public class MetricsTool {
      * @param unresolvedClassInfo 継承関係を追加する（未解決）クラス情報
      * @param classInfoManager 名前解決に用いるクラスマネージャ
      */
-    private static void addInheritanceInformationToClassInfo(
+    private void addInheritanceInformationToClassInfo(
             final UnresolvedClassInfo unresolvedClassInfo, final ClassInfoManager classInfoManager) {
 
         // ClassInfo を取得
@@ -934,7 +943,7 @@ public class MetricsTool {
      * フィールドの定義を FieldInfoManager に登録する． registClassInfos の後に呼び出さなければならない
      * 
      */
-    private static void registFieldInfos() {
+    private void registFieldInfos() {
 
         // Unresolved クラス情報マネージャ，クラス情報マネージャ，フィールド情報マネージャを取得
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
@@ -955,7 +964,7 @@ public class MetricsTool {
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
      */
-    private static void registFieldInfos(final UnresolvedClassInfo unresolvedClassInfo,
+    private void registFieldInfos(final UnresolvedClassInfo unresolvedClassInfo,
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager) {
 
         // ClassInfo を取得
@@ -1021,7 +1030,7 @@ public class MetricsTool {
     /**
      * メソッドの定義を MethodInfoManager に登録する．registClassInfos の後に呼び出さなければならない．
      */
-    private static void registMethodInfos() {
+    private void registMethodInfos() {
 
         // Unresolved クラス情報マネージャ， クラス情報マネージャ，メソッド情報マネージャを取得
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
@@ -1042,7 +1051,7 @@ public class MetricsTool {
      * @param classInfoManager 用いるクラスマネージャ
      * @param methodInfoManager 用いるメソッドマネージャ
      */
-    private static void registMethodInfos(final UnresolvedClassInfo unresolvedClassInfo,
+    private void registMethodInfos(final UnresolvedClassInfo unresolvedClassInfo,
             final ClassInfoManager classInfoManager, final MethodInfoManager methodInfoManager) {
 
         // ClassInfo を取得
@@ -1213,7 +1222,7 @@ public class MetricsTool {
      * メソッドオーバーライド情報を各MethodInfoに追加する．addInheritanceInfomationToClassInfos の後 かつ registMethodInfos
      * の後に呼び出さなければならない
      */
-    private static void addOverrideRelation() {
+    private void addOverrideRelation() {
 
         // 全ての対象クラスに対して
         for (TargetClassInfo classInfo : ClassInfoManager.getInstance().getTargetClassInfos()) {
@@ -1226,7 +1235,7 @@ public class MetricsTool {
      * 
      * @param classInfo 対象クラス
      */
-    private static void addOverrideRelation(final TargetClassInfo classInfo) {
+    private void addOverrideRelation(final TargetClassInfo classInfo) {
 
         // 各親クラスに対して
         for (ClassInfo superClassInfo : classInfo.getSuperClasses()) {
@@ -1250,7 +1259,7 @@ public class MetricsTool {
      * @param classInfo クラス情報
      * @param overrider オーバーライド対象のメソッド
      */
-    private static void addOverrideRelation(final ClassInfo classInfo, final MethodInfo overrider) {
+    private void addOverrideRelation(final ClassInfo classInfo, final MethodInfo overrider) {
 
         if ((null == classInfo) || (null == overrider)) {
             throw new NullPointerException();
@@ -1289,7 +1298,7 @@ public class MetricsTool {
     /**
      * エンティティ（フィールドやクラス）の代入・参照，メソッドの呼び出し関係を追加する．
      */
-    private static void addReferenceAssignmentCallRelateion() {
+    private void addReferenceAssignmentCallRelateion() {
 
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
@@ -1314,7 +1323,7 @@ public class MetricsTool {
      * @param methodInfoManager 用いるメソッドマネージャ
      * @param resolvedCache 解決済み呼び出し情報のキャッシュ
      */
-    private static void addReferenceAssignmentCallRelation(
+    private void addReferenceAssignmentCallRelation(
             final UnresolvedClassInfo unresolvedClassInfo, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager,
             final Map<UnresolvedTypeInfo, TypeInfo> resolvedCache) {
