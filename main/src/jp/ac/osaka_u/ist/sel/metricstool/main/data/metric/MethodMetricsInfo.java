@@ -77,6 +77,11 @@ public final class MethodMetricsInfo implements MessageSource {
      */
     public void putMetric(final AbstractPlugin key, final int value)
             throws MetricAlreadyRegisteredException {
+
+        if (null == key) {
+            throw new NullPointerException();
+        }
+
         this.putMetric(key, Float.valueOf(value));
     }
 
@@ -89,6 +94,11 @@ public final class MethodMetricsInfo implements MessageSource {
      */
     public void putMetric(final AbstractPlugin key, final float value)
             throws MetricAlreadyRegisteredException {
+
+        if (null == key) {
+            throw new NullPointerException();
+        }
+
         this.putMetric(key, Float.valueOf(value));
     }
 
