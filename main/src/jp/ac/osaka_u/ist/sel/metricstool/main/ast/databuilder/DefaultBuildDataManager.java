@@ -20,6 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedL
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCall;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
 
 
@@ -109,6 +110,18 @@ public class DefaultBuildDataManager implements BuildDataManager{
      */
     private void addNextScopedVariable(UnresolvedVariableInfo var) {
         nextScopedVariables.add(var);
+    }
+    
+    public void addTypeParameger(UnresolvedTypeParameterInfo typeParameter){
+        if (!this.modeStack.isEmpty() && MODE.CLASS == this.mode){
+            if (!this.classStack.isEmpty()){
+                classStack.peek().addTypeParameter(typeParameter);
+            }
+        } else if (!this.modeStack.isEmpty() && MODE.METHOD == this.mode){
+            if (!this.methodStack.isEmpty()){
+                methodStack.peek().addTypeParameter(typeParameter);
+            }
+        }
     }
 
     public void addUsingAliase(final String aliase, final String[] realName) {
@@ -221,6 +234,12 @@ public class DefaultBuildDataManager implements BuildDataManager{
         }
         
         final AvailableNamespaceInfoSet result = new AvailableNamespaceInfoSet();
+        //まず先にの名前空間を登録
+        if (null == currentNameSpaceCache){
+            currentNameSpaceCache = new AvailableNamespaceInfo(getCurrentNameSpace(),true);
+        }
+        result.add(currentNameSpaceCache);
+        
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
             final BlockScope scope = this.scopeStack.get(i);
@@ -229,8 +248,6 @@ public class DefaultBuildDataManager implements BuildDataManager{
                 result.add(info);
             }
         }
-        result.add(new AvailableNamespaceInfo(getCurrentNameSpace(),true));
-        
         availableNameSpaceSetCache = result;
         
         return result;
@@ -299,6 +316,11 @@ public class DefaultBuildDataManager implements BuildDataManager{
         }
     }
 
+    /**
+     * 現在の名前空間名を返す．
+     * 
+     * @return
+     */
     public String[] getCurrentNameSpace() {
         final List<String> nameSpaceList = new ArrayList<String>();
 
@@ -419,7 +441,7 @@ public class DefaultBuildDataManager implements BuildDataManager{
         if (null == classInfo) {
             throw new NullPointerException("class info was null.");
         }
-
+        
         classInfo.setNamespace(this.getCurrentFullNameSpace());
 
         this.classStack.push(classInfo);
@@ -557,6 +579,11 @@ public class DefaultBuildDataManager implements BuildDataManager{
         this.scopeStack.clear();
 
         this.scopeStack.add(new BlockScope());
+        
+        aliaseNameSetCache = null;
+        availableNameSpaceSetCache = null;
+        allAvaliableNameSetCache = null;
+        currentNameSpaceCache = null;
     }
 
     private static final String[] EMPTY_NAME = new String[0];
@@ -564,6 +591,7 @@ public class DefaultBuildDataManager implements BuildDataManager{
     private AvailableNamespaceInfoSet aliaseNameSetCache = null;
     private AvailableNamespaceInfoSet availableNameSpaceSetCache = null;
     private AvailableNamespaceInfoSet allAvaliableNameSetCache = null;
+    private AvailableNamespaceInfo currentNameSpaceCache = null;
     
     private final Stack<BlockScope> scopeStack = new Stack<BlockScope>();
 

@@ -53,7 +53,9 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
            
         } else if (type.equals(CLASS_STATE_CHANGE.EXIT_CLASS_DEF)) {
             endClassDefinition();
+            isClassNameBuit = false;
         } else if (type.equals(CLASS_STATE_CHANGE.ENTER_CLASS_BLOCK)){
+            isClassNameBuit = false;
             if (null != buildManager){
                 buildManager.enterClassBlock();
             }
@@ -63,11 +65,14 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
             } else if (type.equals(ModifiersDefinitionStateManager.MODIFIERS_STATE.EXIT_MODIFIERS_DEF)) {
                 modifiersBuilder.deactivate();
                 registModifiers(modifiersBuilder.popLastBuiltData());
-            } else if (type.equals(NameStateManager.NAME_STATE.ENTER_NAME)) {
+                modifiersBuilder.clearBuiltData();
+            } else if (type.equals(NameStateManager.NAME_STATE.ENTER_NAME) && !isClassNameBuit) {
                 nameBuilder.activate();
-            } else if (type.equals(NameStateManager.NAME_STATE.EXIT_NAME)) {
+            } else if (type.equals(NameStateManager.NAME_STATE.EXIT_NAME) && !isClassNameBuit) {
                 nameBuilder.deactivate();
-                registClassName(nameBuilder.popLastBuiltData());
+                registClassName(nameBuilder.getFirstBuiltData());
+                nameBuilder.clearBuiltData();
+                isClassNameBuit = true;
             }
         }
     }
@@ -137,4 +142,6 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
     private final ModifiersInterpriter interpriter;
 
     private final Stack<UnresolvedClassInfo> buildingClassStack = new Stack<UnresolvedClassInfo>();
+    
+    private boolean isClassNameBuit = false;
 }

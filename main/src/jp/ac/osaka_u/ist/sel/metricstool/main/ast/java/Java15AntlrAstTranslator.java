@@ -136,16 +136,31 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.IMPLEMENTS_CLAUSE:
             result = DescriptionToken.INHERITANCE;
             break;
+            
+//        case Java15TokenTypes.TYPE_PARAMETERS:
+//            result = DefinitionToken.TYPE_PARAMETERS_DEFINITION;
+//            break;
+            
+        case Java15TokenTypes.TYPE_PARAMETER:
+            result = DefinitionToken.TYPE_PARAMETER_DEFINITION;
+            break;
+        
+        case Java15TokenTypes.TYPE_UPPER_BOUNDS:
+            result = DescriptionToken.TYPE_UPPER_BOUNDS;
+            break;
+            
+        case Java15TokenTypes.TYPE_LOWER_BOUNDS:
+            result = DescriptionToken.TYPE_LOWER_BOUNDS;
+            break;
+            
+            
         case Java15TokenTypes.TYPE_ARGUMENTS:
         case Java15TokenTypes.TYPE_ARGUMENT:
-        case Java15TokenTypes.TYPE_PARAMETERS:
-        case Java15TokenTypes.TYPE_PARAMETER:
         case Java15TokenTypes.WILDCARD_TYPE:
-        case Java15TokenTypes.TYPE_UPPER_BOUNDS:
-        case Java15TokenTypes.TYPE_LOWER_BOUNDS:
+        
             result = VisitControlToken.SKIP;
-            //ジェネリクス関連は全部無視
             break;
+            
         case Java15TokenTypes.LITERAL_public:
             result = new AccessModifierToken("public",true,true,true);
             break;
