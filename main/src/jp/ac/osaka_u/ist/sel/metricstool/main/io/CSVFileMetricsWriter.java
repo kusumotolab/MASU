@@ -60,10 +60,10 @@ public final class CSVFileMetricsWriter implements FileMetricsWriter, CSVWriter,
             writer.newLine();
             
             // メトリクス値を書き出し
-            for (FileMetricsInfo fileMetricsInfo : FILE_METRICS_MANAGER) {
-                FileInfo fileInfo = fileMetricsInfo.getFileInfo();
+            for (final FileMetricsInfo fileMetricsInfo : FILE_METRICS_MANAGER) {
+                final FileInfo fileInfo = fileMetricsInfo.getMeasuredObject();
 
-                String fileName = fileInfo.getName();
+                final String fileName = fileInfo.getName();
                 writer.write(fileName);
                 for (AbstractPlugin plugin : PLUGIN_MANAGER.getPlugins()) {
                     PluginInfo pluginInfo = plugin.getPluginInfo();
@@ -71,7 +71,7 @@ public final class CSVFileMetricsWriter implements FileMetricsWriter, CSVWriter,
 
                         try {
                             writer.write(SEPARATOR);
-                            Float value = fileMetricsInfo.getMetric(plugin);
+                            final Number value = fileMetricsInfo.getMetric(plugin);
                             writer.write(value.toString());
                         } catch (MetricNotRegisteredException e) {
                             writer.write(NO_METRIC);

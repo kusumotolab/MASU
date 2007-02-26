@@ -56,22 +56,22 @@ public final class CSVClassMetricsWriter implements ClassMetricsWriter, CSVWrite
                     writer.write(metricName);
                 }
             }
-            
+
             writer.newLine();
 
             // メトリクス値を書き出し
-            for (ClassMetricsInfo classMetricsInfo : CLASS_METRICS_MANAGER) {
-                ClassInfo classInfo = classMetricsInfo.getClassInfo();
+            for (final ClassMetricsInfo classMetricsInfo : CLASS_METRICS_MANAGER) {
+                final ClassInfo classInfo = classMetricsInfo.getMeasuredObject();
 
-                String className = classInfo.getFullQualifiedName(".");
+                final String className = classInfo.getFullQualifiedName(".");
                 writer.write(className);
-                for (AbstractPlugin plugin : PLUGIN_MANAGER.getPlugins()) {
-                    PluginInfo pluginInfo = plugin.getPluginInfo();
+                for (final AbstractPlugin plugin : PLUGIN_MANAGER.getPlugins()) {
+                    final PluginInfo pluginInfo = plugin.getPluginInfo();
                     if (METRIC_TYPE.CLASS_METRIC == pluginInfo.getMetricType()) {
 
                         try {
                             writer.write(SEPARATOR);
-                            Float value = classMetricsInfo.getMetric(plugin);
+                            final Number value = classMetricsInfo.getMetric(plugin);
                             writer.write(value.toString());
                         } catch (MetricNotRegisteredException e) {
                             writer.write(NO_METRIC);

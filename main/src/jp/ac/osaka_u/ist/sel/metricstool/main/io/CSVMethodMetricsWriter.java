@@ -60,10 +60,10 @@ public final class CSVMethodMetricsWriter implements MethodMetricsWriter, CSVWri
             writer.newLine();
 
             // メトリクス値を書き出し
-            for (MethodMetricsInfo methodMetricsInfo : METHOD_METRICS_MANAGER) {
-                MethodInfo methodInfo = methodMetricsInfo.getMethodInfo();
+            for (final MethodMetricsInfo methodMetricsInfo : METHOD_METRICS_MANAGER) {
+                final MethodInfo methodInfo = methodMetricsInfo.getMeasuredObject();
 
-                String methodName = methodInfo.getMethodName();
+                final String methodName = methodInfo.getMethodName();
                 writer.write(methodName);
                 for (AbstractPlugin plugin : PLUGIN_MANAGER.getPlugins()) {
                     PluginInfo pluginInfo = plugin.getPluginInfo();
@@ -71,7 +71,7 @@ public final class CSVMethodMetricsWriter implements MethodMetricsWriter, CSVWri
 
                         try {
                             writer.write(SEPARATOR);
-                            Float value = methodMetricsInfo.getMetric(plugin);
+                            Number value = methodMetricsInfo.getMetric(plugin);
                             writer.write(value.toString());
                         } catch (MetricNotRegisteredException e) {
                             writer.write(NO_METRIC);
