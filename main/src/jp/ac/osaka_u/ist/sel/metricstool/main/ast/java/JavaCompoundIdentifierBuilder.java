@@ -82,8 +82,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
                 }
             } else if (left instanceof TypeElement && left.getType() instanceof UnresolvedClassInfo) {
                 classInfo = (UnresolvedClassInfo)left.getType();
-            } else{
-                assert(false) : "Illegal state: current class  is illegal type.";
+            } else {
+                classInfo = buildDataManager.getCurrentClass();
             }
             
             UnresolvedTypeInfo superClassType = classInfo.getSuperClasses().iterator().next();
