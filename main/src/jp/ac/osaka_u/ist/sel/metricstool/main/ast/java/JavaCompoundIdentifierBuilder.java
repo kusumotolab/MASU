@@ -35,6 +35,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
             
             if (classInfo != null){
                 pushElement(TypeElement.getInstance(classInfo));
+            } else {
+                assert(false) : "Illegal state: specified this class " + ((IdentifierElement)left).getName() + " was not found from outer classes.";
             }
         } else if (left.equals(JavaExpressionElement.SUPER)){
             if (right instanceof IdentifierElement){
