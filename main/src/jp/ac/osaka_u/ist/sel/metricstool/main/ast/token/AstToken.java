@@ -33,6 +33,12 @@ public interface AstToken {
      * @return ブロックを表すトークンならtrue
      */
     public boolean isBlock();
+    
+    /**
+     * トークンが組み込み型であるかどうかを返す．
+     * @return 組み込み型ならtrue
+     */
+    public boolean isBuiltinType();
 
     /**
      * トークンがクラス定義部を表すかどうかを返す.
@@ -46,7 +52,13 @@ public interface AstToken {
      * @return クラスブロックを表すトークンならtrue
      */
     public boolean isClassBlock();
-
+    
+    /**
+     * トークンが定数を表すかどうかを返す．
+     * @return 定数を表すトークンならtrue
+     */
+    public boolean isConstant();
+    
     /**
      * トークンがコンストラクタ定義部を表すかどうかを返す.
      * @return コンストラクタ定義部を表すトークンならtrue
@@ -166,7 +178,25 @@ public interface AstToken {
      * @return 型記述部を表すトークンならtrue
      */
     public boolean isTypeDescription();
+    
+    /**
+     * トークンが型上限の制約記述部であるかどうかを返す．
+     * @return 型上限の制約記述部であればtrue
+     */
+    public boolean isTypeUpperBoundsDescription();
+    
+    /**
+     * トークンが型パラメータを表すかどうかを返す．
+     * @return 型パラメータを表すトークンならtrue
+     */
+    public boolean isTypeParameterDefinition();
 
+    /**
+     * トークンが型下限の制約記述部であるかどうかを返す．
+     * @return 型下限の制約記述部であればtrue
+     */
+    public boolean isTypeLowerBoundsDescription();
+    
     /**
      * トークンがvoid型を表すかどうかを返す.
      * @return void型を表すトークンならtrue

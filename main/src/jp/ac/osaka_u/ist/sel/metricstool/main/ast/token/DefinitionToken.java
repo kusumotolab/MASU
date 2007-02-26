@@ -98,6 +98,16 @@ public class DefinitionToken extends AstTokenAdapter {
             return true;
         }
     };
+    
+    /**
+     * 型パラメータの定義部を表す定数インスタンス.
+     */
+    public static final DefinitionToken TYPE_PARAMETER_DEFINITION = new DefinitionToken("TYPE_PARAMETER_DEFINITION"){
+        @Override
+        public boolean isTypeParameterDefinition(){
+            return true;
+        }
+    };
 
     /**
      * 指定された文字列で初期化するコンストラクタ.

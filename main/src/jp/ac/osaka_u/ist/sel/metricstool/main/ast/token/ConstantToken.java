@@ -27,13 +27,21 @@ public class ConstantToken extends AstTokenAdapter {
         }
         this.type = type;
     }
-
+    
     /**
      * このトークンが表す定数の型を返す.
      * @return このトークンが表す定数の型
      */
     public UnresolvedTypeInfo getType() {
         return this.type;
+    }
+    
+    /**
+     * 定数を表すトークンかどうかを返す．
+     * @return true
+     */
+    public boolean isConstant(){
+        return true;
     }
 
     /**

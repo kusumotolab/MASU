@@ -33,12 +33,12 @@ public class TypeElementBuilder extends ExpressionBuilder {
     @Override
     protected void afterExited(final AstVisitEvent event) {
         final AstToken token = event.getToken();
-        if (token instanceof BuiltinTypeToken) {
-            this.buildBuiltinType((BuiltinTypeToken) token);
-        } else if (token.isTypeDescription()) {
+        if (token.isTypeDescription()) {
             this.buildType();
         } else if (token.isArrayDeclarator()) {
             this.buildArrayType();
+        } else if (token instanceof BuiltinTypeToken) {
+            this.buildBuiltinType((BuiltinTypeToken) token);
         } else if (token instanceof ConstantToken) {
             this.buildConstantElement((ConstantToken) token);
         }
@@ -97,8 +97,8 @@ public class TypeElementBuilder extends ExpressionBuilder {
 
     @Override
     protected boolean isTriggerToken(final AstToken token) {
-        return token instanceof BuiltinTypeToken || token.isTypeDescription()
-                || (token instanceof ConstantToken) || token.isArrayDeclarator();
+        return token.isBuiltinType() || token.isTypeDescription()
+                || token.isConstant() || token.isArrayDeclarator();
     }
 
     private final BuildDataManager buildManager;

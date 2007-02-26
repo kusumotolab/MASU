@@ -60,6 +60,28 @@ public class DescriptionToken extends AstTokenAdapter {
     };
 
     /**
+     * 型下限記述部を表す定数インスタンス.
+     */
+    public static final DescriptionToken TYPE_LOWER_BOUNDS = new DescriptionToken(
+            "TYPE_LOWER_BOUNDS") {
+        @Override
+        public boolean isTypeLowerBoundsDescription() {
+            return true;
+        }
+    };
+
+    /**
+     * 型上限記述部を表す定数インスタンス.
+     */
+    public static final DescriptionToken TYPE_UPPER_BOUNDS = new DescriptionToken(
+            "TYPE_UPPER_BOUNDS") {
+        @Override
+        public boolean isTypeUpperBoundsDescription() {
+            return true;
+        }
+    };
+
+    /**
      * 名前空間利用宣言記述部を表す定数インスタンス.
      */
     public static final DescriptionToken USING = new DescriptionToken("USING") {

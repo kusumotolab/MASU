@@ -42,12 +42,20 @@ public class AstTokenAdapter implements AstToken {
     public boolean isBlock() {
         return false;
     }
+    
+    public boolean isBuiltinType(){
+        return isPrimitiveType() || isVoidType();
+    }
 
     public boolean isClassBlock() {
         return false;
     }
 
     public boolean isClassDefinition() {
+        return false;
+    }
+    
+    public boolean isConstant(){
         return false;
     }
 
@@ -130,6 +138,18 @@ public class AstTokenAdapter implements AstToken {
     public boolean isTypeDescription() {
         return false;
     }
+    
+    public boolean isTypeLowerBoundsDescription(){
+        return false;
+    }
+
+    public boolean isTypeParameterDefinition() {
+        return false;
+    }
+    
+    public boolean isTypeUpperBoundsDescription(){
+        return false;
+    }
 
     public boolean isVoidType() {
         return false;
@@ -144,5 +164,4 @@ public class AstTokenAdapter implements AstToken {
      * Ç±ÇÃÉgÅ[ÉNÉìÇÃï∂éöóÒ
      */
     private final String text;
-
 }
