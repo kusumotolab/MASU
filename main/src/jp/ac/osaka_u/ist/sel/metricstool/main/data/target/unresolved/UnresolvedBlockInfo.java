@@ -234,7 +234,7 @@ public abstract class UnresolvedBlockInfo implements PositionSetting, NameResolv
      * 
      * @return この未解決ブロック情報の解決済み情報
      */
-    public BlockInfo getResolvedInfo() {
+    public final BlockInfo getResolvedInfo() {
         return this.resolvedBlock;
     }
 
@@ -243,7 +243,7 @@ public abstract class UnresolvedBlockInfo implements PositionSetting, NameResolv
      * 
      * @param resolvedInfo この未解決ブロック情報の解決済み情報
      */
-    public void setResolvedInfo(final BlockInfo resolvedInfo) {
+    public final void setResolvedInfo(final BlockInfo resolvedInfo) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == resolvedInfo) {
@@ -251,6 +251,15 @@ public abstract class UnresolvedBlockInfo implements PositionSetting, NameResolv
         }
 
         this.resolvedBlock = resolvedInfo;
+    }
+
+    /**
+     * 既に名前解決されたかどうかを返す
+     * 
+     * @return 名前解決されている場合は true，そうでない場合は false
+     */
+    public final boolean alreadyResolved() {
+        return null != this.resolvedBlock;
     }
 
     /**

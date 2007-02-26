@@ -91,7 +91,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         this.inheritanceVisible = false;
         this.namespaceVisible = false;
         this.publicVisible = false;
-        
+
         this.instance = true;
 
         this.fromLine = 0;
@@ -609,6 +609,15 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         }
 
         this.resolvedInfo = resolvedInfo;
+    }
+
+    /**
+     * Šù‚É–¼‘O‰ğŒˆ‚³‚ê‚½‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * 
+     * @return –¼‘O‰ğŒˆ‚³‚ê‚Ä‚¢‚éê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     */
+    public final boolean alreadyResolved() {
+        return null != this.resolvedInfo;
     }
 
     /**

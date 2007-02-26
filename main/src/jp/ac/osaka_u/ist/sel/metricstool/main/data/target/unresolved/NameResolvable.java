@@ -23,4 +23,11 @@ public interface NameResolvable<T> {
      * @return 名前解決された情報
      */
     T getResolvedInfo();
+    
+    /**
+     * 既に名前解決されたかどうかを返す
+     * 
+     * @return 名前解決されている場合は true，そうでない場合は false
+     */
+    boolean alreadyResolved();
 }

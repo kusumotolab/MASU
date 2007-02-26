@@ -615,6 +615,15 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
 
         this.resolvedInfo = resolvedInfo;
     }
+    
+    /**
+     * 既に名前解決されたかどうかを返す
+     * 
+     * @return 名前解決されている場合は true，そうでない場合は false
+     */
+    public final boolean alreadyResolved() {
+        return null != this.resolvedInfo;
+    }
 
     /**
      * 名前空間名を保存するための変数

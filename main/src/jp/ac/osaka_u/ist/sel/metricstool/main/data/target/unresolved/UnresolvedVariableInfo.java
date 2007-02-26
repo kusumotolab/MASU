@@ -22,7 +22,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public abstract class UnresolvedVariableInfo implements PositionSetting, NameResolvable<VariableInfo> {
+public abstract class UnresolvedVariableInfo implements PositionSetting,
+        NameResolvable<VariableInfo> {
 
     /**
      * •Ï”–¼‚ğ•Ô‚·
@@ -206,6 +207,15 @@ public abstract class UnresolvedVariableInfo implements PositionSetting, NameRes
         }
 
         this.resolvedInfo = resolvedInfo;
+    }
+
+    /**
+     * Šù‚É–¼‘O‰ğŒˆ‚³‚ê‚½‚©‚Ç‚¤‚©‚ğ•Ô‚·
+     * 
+     * @return –¼‘O‰ğŒˆ‚³‚ê‚Ä‚¢‚éê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
+     */
+    public final boolean alreadyResolved() {
+        return null != this.resolvedInfo;
     }
 
     /**
