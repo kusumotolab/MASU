@@ -20,7 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting, PositionSetting,
-        Unresolved<MethodInfo> {
+        NameResolvable<MethodInfo> {
 
     /**
      * 未解決メソッド定義情報オブジェクトを初期化

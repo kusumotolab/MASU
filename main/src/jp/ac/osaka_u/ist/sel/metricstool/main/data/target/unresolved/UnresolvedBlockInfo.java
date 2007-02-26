@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -14,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public abstract class UnresolvedBlockInfo implements PositionSetting {
+public abstract class UnresolvedBlockInfo implements PositionSetting, NameResolvable<BlockInfo> {
 
     /**
      * ブロック構造を表すオブジェクトを初期化する
@@ -229,6 +230,30 @@ public abstract class UnresolvedBlockInfo implements PositionSetting {
     }
 
     /**
+     * この未解決ブロック情報の解決済み情報を返す
+     * 
+     * @return この未解決ブロック情報の解決済み情報
+     */
+    public BlockInfo getResolvedInfo() {
+        return this.resolvedBlock;
+    }
+
+    /**
+     * この未解決ブロック情報の解決済み情報をセットする
+     * 
+     * @param resolvedInfo この未解決ブロック情報の解決済み情報
+     */
+    public void setResolvedInfo(final BlockInfo resolvedInfo) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == resolvedInfo) {
+            throw new NullPointerException();
+        }
+
+        this.resolvedBlock = resolvedInfo;
+    }
+
+    /**
      * メソッド呼び出しを保存する変数
      */
     private final Set<UnresolvedMethodCall> methodCalls;
@@ -272,4 +297,6 @@ public abstract class UnresolvedBlockInfo implements PositionSetting {
      * 開始列を保存するための変数
      */
     private int toColumn;
+
+    private BlockInfo resolvedBlock;
 }
