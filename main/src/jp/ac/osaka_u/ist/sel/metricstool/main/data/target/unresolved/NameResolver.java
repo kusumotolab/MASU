@@ -336,7 +336,9 @@ public final class NameResolver {
                                         }
                                     }
 
-                                    assert false : "Here should be reached!";
+                                    // 見つからなかったので null を返す．
+                                    // 現在の想定では，この部分に到着しうるのは継承関係の名前解決が完全に終わっていない段階のみのはず．
+                                    return null;
 
                                     // 親が外部クラス(ExternalClassInfo)の場合
                                 } else if (ownerTypeInfo instanceof ExternalClassInfo) {
