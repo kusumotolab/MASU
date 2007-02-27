@@ -138,10 +138,10 @@ public class Lcom1Plugin extends AbstractClassMetricPlugin {
 
         if (p <= q || allMethodsDontUseAnyField) {
             //pがq以下，または全てのメソッドがフィールドを利用しない場合lcomは0
-            return new Integer(0);
+            return Integer.valueOf(0);
         } else {
             //そうでないならp-qがlcom
-            return new Integer(p - q);
+            return Integer.valueOf(p - q);
         }
     }
 
