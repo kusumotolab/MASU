@@ -208,172 +208,99 @@ public final class NameResolver {
 
         final String[] referenceName = reference.getReferenceName();
 
-        // 未解決参照型が UnresolvedFullQualifiedNameReferenceTypeInfo ならば，完全限定名参照であると判断できる
-        if (reference instanceof UnresolvedFullQualifiedNameReferenceTypeInfo) {
+        if (reference.hasOwnerReference()) {
 
-            ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
-            if (null == classInfo) {
-                classInfo = new ExternalClassInfo(referenceName);
-                classInfoManager.add((ExternalClassInfo) classInfo);
+            final UnresolvedReferenceTypeInfo unresolvedOwnerType = reference.getOwnerType();
+            TypeInfo ownerType = NameResolver.resolveClassReference(
+                    unresolvedOwnerType, usingClass, usingMethod, classInfoManager,
+                    fieldInfoManager, methodInfoManager, resolvedCache);
+            assert null != ownerType : "null is returned!" ;
+
+            NEXT_NAME: for (int i = 0; i < referenceName.length; i++) {
+
+                // 親が UnknownTypeInfo だったら，どうしようもない
+                if (ownerType instanceof UnknownTypeInfo) {
+
+                    return UnknownTypeInfo.getInstance();
+
+                    // 親が対象クラス(TargetClassInfo)の場合
+                } else if (ownerType instanceof TargetClassInfo) {
+
+                    // インナークラスから探すので一覧を取得
+                    final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                            .getAvailableDirectInnerClasses((TargetClassInfo) ownerType);
+                    for (final TargetInnerClassInfo innerClass : innerClasses) {
+
+                        // 一致するクラス名が見つかった場合
+                        if (referenceName[i].equals(innerClass.getClassName())) {
+                            // TODO 利用関係を構築するコードが必要？
+
+                            ownerType = innerClass;
+                            continue NEXT_NAME;
+                        }
+                    }
+
+                    assert false : "Here should be reached!";
+
+                    // 親が外部クラス(ExternalClassInfo)の場合
+                } else if (ownerType instanceof ExternalClassInfo) {
+
+                    ownerType = UnknownTypeInfo.getInstance();
+                    continue NEXT_NAME;
+                }
+
+                assert false : "Here should be reached!";
             }
 
             // キャッシュ用ハッシュテーブルがる場合はキャッシュを追加
             if (null != resolvedCache) {
-                resolvedCache.put(reference, classInfo);
+                resolvedCache.put(reference, ownerType);
             }
-            return classInfo;
-        }
 
-        // 参照名が完全限定名であるとして検索
-        {
-            final ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
-            if (null != classInfo) {
+            return ownerType;
+
+        } else {
+
+            // 未解決参照型が UnresolvedFullQualifiedNameReferenceTypeInfo ならば，完全限定名参照であると判断できる
+            if (reference instanceof UnresolvedFullQualifiedNameReferenceTypeInfo) {
+
+                ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
+                if (null == classInfo) {
+                    classInfo = new ExternalClassInfo(referenceName);
+                    classInfoManager.add((ExternalClassInfo) classInfo);
+                }
+
+                // キャッシュ用ハッシュテーブルがる場合はキャッシュを追加
+                if (null != resolvedCache) {
+                    resolvedCache.put(reference, classInfo);
+                }
                 return classInfo;
             }
-        }
 
-        // 利用可能なインナークラス名から探す
-        {
-            final TargetClassInfo outestClass;
-            if (usingClass instanceof TargetInnerClassInfo) {
-                outestClass = NameResolver.getOuterstClass((TargetInnerClassInfo) usingClass);
-            } else {
-                outestClass = usingClass;
-            }
-
-            for (final TargetInnerClassInfo innerClassInfo : NameResolver
-                    .getAvailableInnerClasses(outestClass)) {
-
-                if (innerClassInfo.getClassName().equals(referenceName[0])) {
-
-                    // availableField.getType() から次のword(name[i])を名前解決
-                    TypeInfo ownerTypeInfo = innerClassInfo;
-                    NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
-
-                        // 親が UnknownTypeInfo だったら，どうしようもない
-                        if (ownerTypeInfo instanceof UnknownTypeInfo) {
-
-                            return UnknownTypeInfo.getInstance();
-
-                            // 親が対象クラス(TargetClassInfo)の場合
-                        } else if (ownerTypeInfo instanceof TargetClassInfo) {
-
-                            // インナークラスから探すので一覧を取得
-                            final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
-                                    .getAvailableDirectInnerClasses((TargetClassInfo) ownerTypeInfo);
-                            for (final TargetInnerClassInfo innerClass : innerClasses) {
-
-                                // 一致するクラス名が見つかった場合
-                                if (referenceName[i].equals(innerClass.getClassName())) {
-                                    // TODO 利用関係を構築するコードが必要？
-
-                                    ownerTypeInfo = innerClass;
-                                    continue NEXT_NAME;
-                                }
-                            }
-
-                            assert false : "Here should be reached!";
-
-                            // 親が外部クラス(ExternalClassInfo)の場合
-                        } else if (ownerTypeInfo instanceof ExternalClassInfo) {
-
-                            ownerTypeInfo = UnknownTypeInfo.getInstance();
-                            continue NEXT_NAME;
-                        }
-
-                        assert false : "Here should be reached!";
-                    }
-
-                    // キャッシュ用ハッシュテーブルがる場合はキャッシュを追加
-                    if (null != resolvedCache) {
-                        resolvedCache.put(reference, ownerTypeInfo);
-                    }
-
-                    return ownerTypeInfo;
+            // 参照名が完全限定名であるとして検索
+            {
+                final ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
+                if (null != classInfo) {
+                    return classInfo;
                 }
             }
-        }
 
-        // 利用可能な名前空間から型名を探す
-        {
-            for (final AvailableNamespaceInfo availableNamespace : reference
-                    .getAvailableNamespaces()) {
-
-                // 名前空間名.* となっている場合
-                if (availableNamespace.isAllClasses()) {
-                    final String[] namespace = availableNamespace.getNamespace();
-
-                    // 名前空間の下にある各クラスに対して
-                    for (final ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
-
-                        // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
-                        final String className = classInfo.getClassName();
-                        if (className.equals(referenceName[0])) {
-
-                            // availableField.getType() から次のword(name[i])を名前解決
-                            TypeInfo ownerTypeInfo = classInfo;
-                            NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
-
-                                // 親が UnknownTypeInfo だったら，どうしようもない
-                                if (ownerTypeInfo instanceof UnknownTypeInfo) {
-
-                                    return UnknownTypeInfo.getInstance();
-
-                                    // 親が対象クラス(TargetClassInfo)の場合
-                                } else if (ownerTypeInfo instanceof TargetClassInfo) {
-
-                                    // インナークラスから探すので一覧を取得
-                                    final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
-                                            .getAvailableDirectInnerClasses((TargetClassInfo) ownerTypeInfo);
-                                    for (final TargetInnerClassInfo innerClass : innerClasses) {
-
-                                        // 一致するクラス名が見つかった場合
-                                        if (referenceName[i].equals(innerClass.getClassName())) {
-                                            // TODO 利用関係を構築するコードが必要？
-
-                                            ownerTypeInfo = innerClass;
-                                            continue NEXT_NAME;
-                                        }
-                                    }
-
-                                    // 見つからなかったので null を返す．
-                                    // 現在の想定では，この部分に到着しうるのは継承関係の名前解決が完全に終わっていない段階のみのはず．
-                                    return null;
-
-                                    // 親が外部クラス(ExternalClassInfo)の場合
-                                } else if (ownerTypeInfo instanceof ExternalClassInfo) {
-
-                                    ownerTypeInfo = UnknownTypeInfo.getInstance();
-                                    continue NEXT_NAME;
-                                }
-
-                                assert false : "Here should be reached!";
-                            }
-
-                            // キャッシュ用ハッシュテーブルがる場合はキャッシュを追加
-                            if (null != resolvedCache) {
-                                resolvedCache.put(reference, ownerTypeInfo);
-                            }
-
-                            return ownerTypeInfo;
-                        }
-                    }
-
-                    // 名前空間.クラス名 となっている場合
+            // 利用可能なインナークラス名から探す
+            {
+                final TargetClassInfo outestClass;
+                if (usingClass instanceof TargetInnerClassInfo) {
+                    outestClass = NameResolver.getOuterstClass((TargetInnerClassInfo) usingClass);
                 } else {
+                    outestClass = usingClass;
+                }
 
-                    final String[] importName = availableNamespace.getImportName();
+                for (final TargetInnerClassInfo innerClassInfo : NameResolver
+                        .getAvailableInnerClasses(outestClass)) {
 
-                    // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
-                    if (importName[importName.length - 1].equals(referenceName[0])) {
+                    if (innerClassInfo.getClassName().equals(referenceName[0])) {
 
-                        ClassInfo specifiedClassInfo = classInfoManager.getClassInfo(importName);
-                        if (null == specifiedClassInfo) {
-                            specifiedClassInfo = new ExternalClassInfo(importName);
-                            classInfoManager.add((ExternalClassInfo) specifiedClassInfo);
-                        }
-
-                        TypeInfo ownerTypeInfo = specifiedClassInfo;
+                        // availableField.getType() から次のword(name[i])を名前解決
+                        TypeInfo ownerTypeInfo = innerClassInfo;
                         NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
                             // 親が UnknownTypeInfo だったら，どうしようもない
@@ -384,7 +311,7 @@ public final class NameResolver {
                                 // 親が対象クラス(TargetClassInfo)の場合
                             } else if (ownerTypeInfo instanceof TargetClassInfo) {
 
-                                // インナークラス一覧を取得
+                                // インナークラスから探すので一覧を取得
                                 final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
                                         .getAvailableDirectInnerClasses((TargetClassInfo) ownerTypeInfo);
                                 for (final TargetInnerClassInfo innerClass : innerClasses) {
@@ -398,6 +325,8 @@ public final class NameResolver {
                                     }
                                 }
 
+                                assert false : "Here should be reached!";
+
                                 // 親が外部クラス(ExternalClassInfo)の場合
                             } else if (ownerTypeInfo instanceof ExternalClassInfo) {
 
@@ -405,15 +334,141 @@ public final class NameResolver {
                                 continue NEXT_NAME;
                             }
 
-                            assert false : "Here shouldn't be reached!";
+                            assert false : "Here should be reached!";
                         }
 
-                        // 解決済みキャッシュに登録
+                        // キャッシュ用ハッシュテーブルがる場合はキャッシュを追加
                         if (null != resolvedCache) {
                             resolvedCache.put(reference, ownerTypeInfo);
                         }
 
                         return ownerTypeInfo;
+                    }
+                }
+            }
+
+            // 利用可能な名前空間から型名を探す
+            {
+                for (final AvailableNamespaceInfo availableNamespace : reference
+                        .getAvailableNamespaces()) {
+
+                    // 名前空間名.* となっている場合
+                    if (availableNamespace.isAllClasses()) {
+                        final String[] namespace = availableNamespace.getNamespace();
+
+                        // 名前空間の下にある各クラスに対して
+                        for (final ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
+
+                            // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
+                            final String className = classInfo.getClassName();
+                            if (className.equals(referenceName[0])) {
+
+                                // availableField.getType() から次のword(name[i])を名前解決
+                                TypeInfo ownerTypeInfo = classInfo;
+                                NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
+
+                                    // 親が UnknownTypeInfo だったら，どうしようもない
+                                    if (ownerTypeInfo instanceof UnknownTypeInfo) {
+
+                                        return UnknownTypeInfo.getInstance();
+
+                                        // 親が対象クラス(TargetClassInfo)の場合
+                                    } else if (ownerTypeInfo instanceof TargetClassInfo) {
+
+                                        // インナークラスから探すので一覧を取得
+                                        final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                                .getAvailableDirectInnerClasses((TargetClassInfo) ownerTypeInfo);
+                                        for (final TargetInnerClassInfo innerClass : innerClasses) {
+
+                                            // 一致するクラス名が見つかった場合
+                                            if (referenceName[i].equals(innerClass.getClassName())) {
+                                                // TODO 利用関係を構築するコードが必要？
+
+                                                ownerTypeInfo = innerClass;
+                                                continue NEXT_NAME;
+                                            }
+                                        }
+
+                                        // 見つからなかったので null を返す．
+                                        // 現在の想定では，この部分に到着しうるのは継承関係の名前解決が完全に終わっていない段階のみのはず．
+                                        return null;
+
+                                        // 親が外部クラス(ExternalClassInfo)の場合
+                                    } else if (ownerTypeInfo instanceof ExternalClassInfo) {
+
+                                        ownerTypeInfo = UnknownTypeInfo.getInstance();
+                                        continue NEXT_NAME;
+                                    }
+
+                                    assert false : "Here should be reached!";
+                                }
+
+                                // キャッシュ用ハッシュテーブルがる場合はキャッシュを追加
+                                if (null != resolvedCache) {
+                                    resolvedCache.put(reference, ownerTypeInfo);
+                                }
+
+                                return ownerTypeInfo;
+                            }
+                        }
+
+                        // 名前空間.クラス名 となっている場合
+                    } else {
+
+                        final String[] importName = availableNamespace.getImportName();
+
+                        // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
+                        if (importName[importName.length - 1].equals(referenceName[0])) {
+
+                            ClassInfo specifiedClassInfo = classInfoManager
+                                    .getClassInfo(importName);
+                            if (null == specifiedClassInfo) {
+                                specifiedClassInfo = new ExternalClassInfo(importName);
+                                classInfoManager.add((ExternalClassInfo) specifiedClassInfo);
+                            }
+
+                            TypeInfo ownerTypeInfo = specifiedClassInfo;
+                            NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
+
+                                // 親が UnknownTypeInfo だったら，どうしようもない
+                                if (ownerTypeInfo instanceof UnknownTypeInfo) {
+
+                                    return UnknownTypeInfo.getInstance();
+
+                                    // 親が対象クラス(TargetClassInfo)の場合
+                                } else if (ownerTypeInfo instanceof TargetClassInfo) {
+
+                                    // インナークラス一覧を取得
+                                    final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                            .getAvailableDirectInnerClasses((TargetClassInfo) ownerTypeInfo);
+                                    for (final TargetInnerClassInfo innerClass : innerClasses) {
+
+                                        // 一致するクラス名が見つかった場合
+                                        if (referenceName[i].equals(innerClass.getClassName())) {
+                                            // TODO 利用関係を構築するコードが必要？
+
+                                            ownerTypeInfo = innerClass;
+                                            continue NEXT_NAME;
+                                        }
+                                    }
+
+                                    // 親が外部クラス(ExternalClassInfo)の場合
+                                } else if (ownerTypeInfo instanceof ExternalClassInfo) {
+
+                                    ownerTypeInfo = UnknownTypeInfo.getInstance();
+                                    continue NEXT_NAME;
+                                }
+
+                                assert false : "Here shouldn't be reached!";
+                            }
+
+                            // 解決済みキャッシュに登録
+                            if (null != resolvedCache) {
+                                resolvedCache.put(reference, ownerTypeInfo);
+                            }
+
+                            return ownerTypeInfo;
+                        }
                     }
                 }
             }
