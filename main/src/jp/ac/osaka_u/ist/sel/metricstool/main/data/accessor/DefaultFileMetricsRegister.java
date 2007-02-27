@@ -26,7 +26,7 @@ public class DefaultFileMetricsRegister implements FileMetricsRegister {
         if (null == plugin) {
             throw new NullPointerException();
         }
-        PluginInfo pluginInfo = plugin.getPluginInfo();
+        final PluginInfo pluginInfo = plugin.getPluginInfo();
         if (METRIC_TYPE.FILE_METRIC != pluginInfo.getMetricType()) {
             throw new IllegalArgumentException("plugin must be file type!");
         }
@@ -37,18 +37,14 @@ public class DefaultFileMetricsRegister implements FileMetricsRegister {
     /**
      * 第一引数のファイルのメトリクス値（第二引数）を登録する
      */
-    public void registMetric(final FileInfo fileInfo, final int value)
+    public void registMetric(final FileInfo fileInfo, final Number value)
             throws MetricAlreadyRegisteredException {
-        FileMetricsInfoManager manager = FileMetricsInfoManager.getInstance();
-        manager.putMetric(fileInfo, this.plugin, value);
-    }
 
-    /**
-     * 第一引数のファイルのメトリクス値（第二引数）を登録する
-     */
-    public void registMetric(final FileInfo fileInfo, final float value)
-            throws MetricAlreadyRegisteredException {
-        FileMetricsInfoManager manager = FileMetricsInfoManager.getInstance();
+        if ((null == fileInfo) || (null == value)) {
+            throw new NullPointerException();
+        }
+
+        final FileMetricsInfoManager manager = FileMetricsInfoManager.getInstance();
         manager.putMetric(fileInfo, this.plugin, value);
     }
 

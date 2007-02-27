@@ -32,6 +32,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
      */
     @Override
     protected void execute() {
+
         setupExecute();
         try {
             // クラス情報アクセサを取得
@@ -43,6 +44,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
 
             // 全クラスについて
             for (final TargetClassInfo targetClass : classAccessor) {
+                
                 // クラスのメトリクスを登録する
                 registClassMetric(targetClass);
 
@@ -91,7 +93,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
      * 
      * @param targetClass 対象のクラス
      */
-    abstract protected float measureClassMetric(TargetClassInfo targetClass);
+    abstract protected Number measureClassMetric(TargetClassInfo targetClass);
 
     /**
      * このプラグインがメトリクスを計測できる言語を返す.

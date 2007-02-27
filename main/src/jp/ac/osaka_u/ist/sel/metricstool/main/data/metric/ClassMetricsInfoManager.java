@@ -69,20 +69,7 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
      * @param value メトリクス値
      * @throws MetricAlreadyRegisteredException 登録しようとしているメトリクスが既に登録されている
      */
-    public void putMetric(final ClassInfo classInfo, final AbstractPlugin plugin, final int value)
-            throws MetricAlreadyRegisteredException {
-        this.putMetric(classInfo, plugin, (float) value);
-    }
-
-    /**
-     * メトリクスを登録する
-     * 
-     * @param classInfo メトリクス計測対象のクラスオブジェクト
-     * @param plugin メトリクスのプラグイン
-     * @param value メトリクス値
-     * @throws MetricAlreadyRegisteredException 登録しようとしているメトリクスが既に登録されている
-     */
-    public void putMetric(final ClassInfo classInfo, final AbstractPlugin plugin, final float value)
+    public void putMetric(final ClassInfo classInfo, final AbstractPlugin plugin, final Number value)
             throws MetricAlreadyRegisteredException {
 
         ClassMetricsInfo classMetricsInfo = this.classMetricsInfos.get(classInfo);

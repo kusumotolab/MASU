@@ -69,20 +69,7 @@ public final class FileMetricsInfoManager implements Iterable<FileMetricsInfo>, 
      * @param value メトリクス値
      * @throws MetricAlreadyRegisteredException 登録しようとしているメトリクスが既に登録されている
      */
-    public void putMetric(final FileInfo fileInfo, final AbstractPlugin plugin, final int value)
-            throws MetricAlreadyRegisteredException {
-        putMetric(fileInfo, plugin, (float) value);
-    }
-
-    /**
-     * メトリクスを登録する
-     * 
-     * @param fileInfo メトリクス計測対象のファイルオブジェクト
-     * @param plugin メトリクスのプラグイン
-     * @param value メトリクス値
-     * @throws MetricAlreadyRegisteredException 登録しようとしているメトリクスが既に登録されている
-     */
-    public void putMetric(final FileInfo fileInfo, final AbstractPlugin plugin, final float value)
+    public void putMetric(final FileInfo fileInfo, final AbstractPlugin plugin, final Number value)
             throws MetricAlreadyRegisteredException {
 
         FileMetricsInfo fileMetricsInfo = this.fileMetricsInfos.get(fileInfo);

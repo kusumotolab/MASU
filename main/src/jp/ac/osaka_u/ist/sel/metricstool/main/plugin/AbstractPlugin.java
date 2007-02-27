@@ -78,9 +78,9 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
         }
 
         /**
-         * このプラグインの簡易説明を１行で返す（できれば英語で）.
-         * デフォルトの実装では "Measure メトリクス名 metrics." と返す
+         * このプラグインの簡易説明を１行で返す（できれば英語で）. デフォルトの実装では "Measure メトリクス名 metrics." と返す
          * 各プラグインはこのメソッドを任意にオーバーライドする.
+         * 
          * @return 簡易説明文字列
          */
         public String getDescription() {
@@ -88,9 +88,8 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
         }
 
         /**
-         * このプラグインの詳細説明を返す（できれば英語で）.
-         * デフォルトの実装では空文字列を返す
-         * 各プラグインはこのメソッドを任意にオーバーライドする.
+         * このプラグインの詳細説明を返す（できれば英語で）. デフォルトの実装では空文字列を返す 各プラグインはこのメソッドを任意にオーバーライドする.
+         * 
          * @return 詳細説明文字列
          */
         public String getDetailDescription() {
@@ -208,22 +207,21 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * プラグインの実行時に許可されるパーミッションを追加する.
-     * 特別権限を持つスレッドからしか呼び出せない.
+     * プラグインの実行時に許可されるパーミッションを追加する. 特別権限を持つスレッドからしか呼び出せない.
+     * 
      * @param permission 許可するパーミッション
      * @throws AccessControlException 特別権限を持たないスレッドから呼び出した場合
      */
-    public final void addPermission(final Permission permission){
+    public final void addPermission(final Permission permission) {
         MetricsToolSecurityManager.getInstance().checkAccess();
         this.permissions.add(permission);
     }
-    
+
     /**
-     * プラグインインスタンス同士を比較する.
-     * クラスの標準名が取れるならそれを用いて比較する.
-     * 取れない場合は， {@link Class}インスタンスのを比較する.
+     * プラグインインスタンス同士を比較する. クラスの標準名が取れるならそれを用いて比較する. 取れない場合は， {@link Class}インスタンスのを比較する.
      * ただし，通常の機能を用いてロードされるプラグインが匿名クラスであることはありえない.
      * よって，同一プラグインクラスのインスタンスは別のクラスローダからロードされても同一であると判定される.
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      * @see #hashCode()
      */
@@ -233,13 +231,13 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
             final String myClassName = this.getClass().getCanonicalName();
             final String otherClassName = o.getClass().getCanonicalName();
             if (null != myClassName && null != otherClassName) {
-                //どちらも匿名クラスじゃない場合
+                // どちらも匿名クラスじゃない場合
                 return myClassName.equals(otherClassName);
             } else if (null != myClassName || null != otherClassName) {
-                //どっちかは匿名クラスだけど，どっちかは違う
+                // どっちかは匿名クラスだけど，どっちかは違う
                 return false;
             } else {
-                //両方とも匿名クラス
+                // 両方とも匿名クラス
                 return this.getClass().equals(o.getClass());
             }
         }
@@ -248,11 +246,10 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * プラグインインスタンスのハッシュコードを返す.
-     * クラスの標準名が取れるならそのハッシュコードを使う.
-     * 取れない場合は， {@link Class}インスタンスのハッシュコードを使う.
+     * プラグインインスタンスのハッシュコードを返す. クラスの標準名が取れるならそのハッシュコードを使う. 取れない場合は， {@link Class}インスタンスのハッシュコードを使う.
      * ただし，通常の機能を用いていロードされるプラグインが匿名クラスであることはありえない.
      * よって，同一プラグインクラスのインスタンスは別のクラスローダからロードされても同一のハッシュコードを返す.
+     * 
      * @see java.lang.Object#hashCode()(java.lang.Object)
      * @see #equals(Object)
      */
@@ -260,16 +257,12 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     public final int hashCode() {
         final Class myClass = this.getClass();
         final String myClassName = myClass.getCanonicalName();
-        if (myClassName != null) {
-            return myClassName.hashCode();
-        } else {
-            return myClass.hashCode();
-        }
+        return myClassName != null ? myClassName.hashCode() : myClass.hashCode();
     }
 
     /**
-     * プラグインのルートディレクトリをセットする
-     * 一度セットされた値を変更することは出来ない.
+     * プラグインのルートディレクトリをセットする 一度セットされた値を変更することは出来ない.
+     * 
      * @param rootDir ルートディレクトリ
      * @throws NullPointerException rootDirがnullの場合
      * @throws IllegalStateException rootDirが既にセットされている場合
@@ -289,6 +282,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
     /**
      * メッセージ送信者としての名前を返す
+     * 
      * @return 送信者としての名前
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.plugin.connection.MessageSource#getMessageSourceName()
      */
@@ -298,18 +292,20 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
     /**
      * このプラグインに許可されているパーミッションの不変な集合を返す.
+     * 
      * @return このプラグインに許可されているパーミッションの集合.
      */
-    public final Permissions getPermissions(){
+    public final Permissions getPermissions() {
         final Permissions permissions = new Permissions();
-        
-        for(final Enumeration<Permission> enumeration = this.permissions.elements(); enumeration.hasMoreElements();){
+
+        for (final Enumeration<Permission> enumeration = this.permissions.elements(); enumeration
+                .hasMoreElements();) {
             permissions.add(enumeration.nextElement());
         }
         permissions.setReadOnly();
         return permissions;
     }
-    
+
     /**
      * プラグイン情報を保存している{@link PluginInfo}クラスのインスタンスを返す．
      * 同一のAbstractPluginインスタンスに対するこのメソッドは必ず同一のインスタンスを返し， その内部に保存されている情報は不変である．
@@ -330,6 +326,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
     /**
      * プラグインのルートディレクトリを返す
+     * 
      * @return プラグインのルートディレクトリ
      */
     public final File getPluginRootDir() {
@@ -338,6 +335,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
     /**
      * 進捗情報送信者としての名前を返す
+     * 
      * @return 進捗情報送信者としての名前
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.plugin.connection.ProgressSource#getProgressSourceName()
      */
@@ -347,6 +345,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
     /**
      * プラグイン情報が既に構築済みかどうかを返す
+     * 
      * @return プラグイン情報が既に構築済みならtrue,そうでなければfalse
      */
     public final boolean isPluginInfoCreated() {
@@ -360,6 +359,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
     /**
      * ファイル情報にアクセスするデフォルトのアクセサを取得する.
+     * 
      * @return ファイル情報にアクセスするデフォルトのアクセサ.
      */
     protected final FileInfoAccessor getFileInfoAccessor() {
@@ -368,7 +368,8 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
     /**
      * クラス情報にアクセスするデフォルトのアクセサを取得する.
-     * @return　クラス情報にアクセスするデフォルトのアクセサ.
+     * 
+     * @return クラス情報にアクセスするデフォルトのアクセサ.
      */
     protected final ClassInfoAccessor getClassInfoAccessor() {
         return this.classInfoAccessor;
@@ -376,6 +377,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
     /**
      * メソッド情報にアクセスするデフォルトのアクセサを取得する.
+     * 
      * @return メソッド情報にアクセスするデフォルトのアクセサ.
      */
     protected final MethodInfoAccessor getMethodInfoAccessor() {
@@ -383,9 +385,9 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * このプラグインの簡易説明を１行で返す（できれば英語で）
-     * デフォルトの実装では "Measuring the メトリクス名 metric." と返す
+     * このプラグインの簡易説明を１行で返す（できれば英語で） デフォルトの実装では "Measuring the メトリクス名 metric." と返す
      * 各プラグインはこのメソッドを任意にオーバーライドする.
+     * 
      * @return 簡易説明文字列
      */
     protected String getDescription() {
@@ -393,9 +395,8 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
     }
 
     /**
-     * このプラグインの詳細説明を返す（できれば英語で）
-     * デフォルト実装では空文字列を返す.
-     * 各プラグインはこのメソッドを任意にオーバーライドする.
+     * このプラグインの詳細説明を返す（できれば英語で） デフォルト実装では空文字列を返す. 各プラグインはこのメソッドを任意にオーバーライドする.
+     * 
      * @return
      */
     protected String getDetailDescription() {
@@ -434,8 +435,13 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * @param value メトリクス値
      * @throws MetricAlreadyRegisteredException 既にこのプラグインからこのファイルに関するメトリクス値の報告がされている場合.
      */
-    protected final void registMetric(final FileInfo fileInfo, final float value)
+    protected final void registMetric(final FileInfo fileInfo, final Number value)
             throws MetricAlreadyRegisteredException {
+
+        if ((null == fileInfo) || (null == value)) {
+            throw new NullPointerException();
+        }
+
         if (null == this.fileMetricsRegister) {
             synchronized (this) {
                 if (null == this.fileMetricsRegister) {
@@ -453,8 +459,13 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * @param value メトリクス値
      * @throws MetricAlreadyRegisteredException 既にこのプラグインからこのクラスに関するメトリクス値の報告がされている場合.
      */
-    protected final void registMetric(final ClassInfo classInfo, final float value)
+    protected final void registMetric(final ClassInfo classInfo, final Number value)
             throws MetricAlreadyRegisteredException {
+
+        if ((null == classInfo) || (null == value)) {
+            throw new NullPointerException();
+        }
+
         if (null == this.classMetricsRegister) {
             synchronized (this) {
                 if (null == this.classMetricsRegister) {
@@ -472,8 +483,13 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * @param value メトリクス値
      * @throws MetricAlreadyRegisteredException 既にこのプラグインからこのメソッドに関するメトリクス値の報告がされている場合.
      */
-    protected final void registMetric(final MethodInfo methodInfo, final float value)
+    protected final void registMetric(final MethodInfo methodInfo, final Number value)
             throws MetricAlreadyRegisteredException {
+
+        if ((null == methodInfo) || (null == value)) {
+            throw new NullPointerException();
+        }
+
         if (null == this.methodMetricsRegister) {
             synchronized (this) {
                 if (null == this.methodMetricsRegister) {
@@ -486,6 +502,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
     /**
      * このプラグインからの進捗情報を送るメソッド
+     * 
      * @param percentage 進捗情報値
      */
     protected final void reportProgress(final int percentage) {
@@ -555,7 +572,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
             assert (null == this.reporter) : "Illegal state : previous reporter was still connected.";
         }
 
-        //このスレッドにパーミッションを許可するように要請
+        // このスレッドにパーミッションを許可するように要請
         MetricsToolSecurityManager.getInstance().requestPluginPermission(this);
 
         try {
@@ -565,13 +582,13 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
         }
 
         if (null != this.reporter) {
-            //進捗報告の終了イベントを送る
-            //プラグイン側で既に送られていたら何もせずに返ってくる
+            // 進捗報告の終了イベントを送る
+            // プラグイン側で既に送られていたら何もせずに返ってくる
             this.reporter.reportProgressEnd();
             this.reporter = null;
         }
 
-        //このスレッドからパーミッションを解除するように要請
+        // このスレッドからパーミッションを解除するように要請
         MetricsToolSecurityManager.getInstance().removePluginPermission(this);
     }
 
@@ -624,7 +641,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * このプラグインの実行時の許可されるパーミッション
      */
     private final Permissions permissions = new Permissions();
-    
+
     /**
      * プラグインの情報を保存する{@link PluginInfo}クラスのインスタンス getPluginInfoメソッドの初回の呼び出しによって作成され．
      * それ以降、このフィールドは常に同じインスタンスを参照する．

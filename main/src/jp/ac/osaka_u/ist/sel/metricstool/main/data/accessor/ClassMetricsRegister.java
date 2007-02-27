@@ -20,14 +20,5 @@ public interface ClassMetricsRegister {
      * @param value メトリクス値
      * @throws 登録しようとしているメトリクスが既に登録されている場合にスローされる
      */
-    void registMetric(ClassInfo classInfo, int value) throws MetricAlreadyRegisteredException;
-
-    /**
-     * 第一引数のクラスのメトリクス値（第二引数）を登録する
-     * 
-     * @param classInfo メトリクスの計測対象クラス
-     * @param value メトリクス値
-     * @throws 登録しようとしているメトリクスが既に登録されている場合にスローされる
-     */
-    void registMetric(ClassInfo classInfo, float value) throws MetricAlreadyRegisteredException;
+    void registMetric(ClassInfo classInfo, Number value) throws MetricAlreadyRegisteredException;
 }

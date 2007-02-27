@@ -26,7 +26,7 @@ public class DefaultClassMetricsRegister implements ClassMetricsRegister {
         if (null == plugin) {
             throw new NullPointerException();
         }
-        PluginInfo pluginInfo = plugin.getPluginInfo();
+        final PluginInfo pluginInfo = plugin.getPluginInfo();
         if (METRIC_TYPE.CLASS_METRIC != pluginInfo.getMetricType()) {
             throw new IllegalArgumentException("plugin must be class type!");
         }
@@ -37,23 +37,16 @@ public class DefaultClassMetricsRegister implements ClassMetricsRegister {
     /**
      * 第一引数のクラスのメトリクス値（第二引数）を登録する
      */
-    public void registMetric(final ClassInfo classInfo, final int value)
+    public void registMetric(final ClassInfo classInfo, final Number value)
             throws MetricAlreadyRegisteredException {
-        ClassMetricsInfoManager manager = ClassMetricsInfoManager.getInstance();
+
+        if ((null == classInfo) || (null == value)) {
+            throw new NullPointerException();
+        }
+
+        final ClassMetricsInfoManager manager = ClassMetricsInfoManager.getInstance();
         manager.putMetric(classInfo, this.plugin, value);
     }
 
-    /**
-     * 第一引数のクラスのメトリクス値（第二引数）を登録する
-     */
-    public void registMetric(final ClassInfo classInfo, final float value)
-            throws MetricAlreadyRegisteredException {
-        ClassMetricsInfoManager manager = ClassMetricsInfoManager.getInstance();
-        manager.putMetric(classInfo, this.plugin, value);
-    }
-
-    /**
-     * プラグインオブジェクトを保存しておくための変数
-     */
     private final AbstractPlugin plugin;
 }

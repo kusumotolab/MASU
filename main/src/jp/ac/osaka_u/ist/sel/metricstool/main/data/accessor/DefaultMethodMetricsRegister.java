@@ -37,18 +37,14 @@ public class DefaultMethodMetricsRegister implements MethodMetricsRegister {
     /**
      * 第一引数のメソッドのメトリクス値（第二引数）を登録する
      */
-    public void registMetric(final MethodInfo methodInfo, final int value)
+    public void registMetric(final MethodInfo methodInfo, final Number value)
             throws MetricAlreadyRegisteredException {
-        MethodMetricsInfoManager manager = MethodMetricsInfoManager.getInstance();
-        manager.putMetric(methodInfo, this.plugin, value);
-    }
 
-    /**
-     * 第一引数のメソッドのメトリクス値（第二引数）を登録する
-     */
-    public void registMetric(MethodInfo methodInfo, float value)
-            throws MetricAlreadyRegisteredException {
-        MethodMetricsInfoManager manager = MethodMetricsInfoManager.getInstance();
+        if ((null == methodInfo) || (null == value)) {
+            throw new NullPointerException();
+        }
+
+        final MethodMetricsInfoManager manager = MethodMetricsInfoManager.getInstance();
         manager.putMetric(methodInfo, this.plugin, value);
     }
 
