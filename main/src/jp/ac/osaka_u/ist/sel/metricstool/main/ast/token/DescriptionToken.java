@@ -80,6 +80,33 @@ public class DescriptionToken extends AstTokenAdapter {
             return true;
         }
     };
+    
+    /**
+     * 型引数記述部を表す定数インスタンス
+     */
+    public static final DescriptionToken TYPE_ARGUMENT = new DescriptionToken("TYPE_ARGUMENT"){
+        public boolean isTypeArgument(){
+            return true;
+        }
+    };
+    
+    /**
+     * 型引数記述部の列を表す定数インスタンス
+     */
+    public static final DescriptionToken TYPE_ARGUMENTS = new DescriptionToken("TYPE_ARGUMENTS"){
+        public boolean isTypeArguments(){
+            return true;
+        }
+    };
+    
+    /**
+     * ワイルドカード型引数を表す定数インスタンス
+     */
+    public static final DescriptionToken TYPE_WILDCARD = new DescriptionToken("TYPE_WILDCARD"){
+        public boolean isTypeWildcard(){
+            return true;
+        }
+    };
 
     /**
      * 名前空間利用宣言記述部を表す定数インスタンス.

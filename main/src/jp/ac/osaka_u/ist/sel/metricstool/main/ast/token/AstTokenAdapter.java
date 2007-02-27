@@ -134,6 +134,14 @@ public class AstTokenAdapter implements AstToken {
     public boolean isPrimitiveType() {
         return false;
     }
+    
+    public boolean isTypeArgument(){
+        return false;
+    }
+    
+    public boolean isTypeArguments(){
+        return false;
+    }
 
     public boolean isTypeDescription() {
         return false;
@@ -148,6 +156,10 @@ public class AstTokenAdapter implements AstToken {
     }
     
     public boolean isTypeUpperBoundsDescription(){
+        return false;
+    }
+    
+    public boolean isTypeWildcard(){
         return false;
     }
 

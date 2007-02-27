@@ -174,6 +174,18 @@ public interface AstToken {
     public boolean isPrimitiveType();
 
     /**
+     * トークンが型引数記述部を表すかどうかを返す．
+     * @return 型引数記述部を表すならtrue
+     */
+    public boolean isTypeArgument();
+    
+    /**
+     * トークンが型引数記述部の列を表すかどうかを返す．
+     * @return 型引数記述部の列を表すならtrue
+     */
+    public boolean isTypeArguments();
+    
+    /**
      * トークンが型記述部を表すかどうかを返す.
      * @return 型記述部を表すトークンならtrue
      */
@@ -196,6 +208,12 @@ public interface AstToken {
      * @return 型下限の制約記述部であればtrue
      */
     public boolean isTypeLowerBoundsDescription();
+    
+    /**
+     * トークンがワイルドカード型引数を表すかどうかを返す．
+     * @return ワイルドカード型引数を表すならtrue
+     */
+    public boolean isTypeWildcard();
     
     /**
      * トークンがvoid型を表すかどうかを返す.
