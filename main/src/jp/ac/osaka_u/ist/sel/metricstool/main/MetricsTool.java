@@ -7,7 +7,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -103,12 +107,12 @@ public class MetricsTool {
      * 現在仮実装． 対象ファイルのデータを格納した後，構文解析を行う．
      */
     public static void main(String[] args) {
-        
+
         MetricsTool metricsTool = new MetricsTool();
-        
+
         ArgumentProcessor.processArgs(args, parameterDefs, new Settings());
-        
-        //情報表示用のリスナを作成
+
+        // 情報表示用のリスナを作成
         MessagePool.getInstance(MESSAGE_TYPE.OUT).addMessageListener(new MessageListener() {
             public void messageReceived(MessageEvent event) {
                 System.out.print(event.getSource().getMessageSourceName() + " > "
@@ -122,7 +126,7 @@ public class MetricsTool {
                         + event.getMessage());
             }
         });
-        
+
         // ヘルプモードと情報表示モードが同時にオンになっている場合は不正
         if (Settings.isHelpMode() && Settings.isDisplayMode()) {
             err.println("-h and -x can\'t be set at the same time!");
@@ -146,12 +150,11 @@ public class MetricsTool {
             }
         }
     }
-    
+
     /**
-     * 引数無しコンストラクタ．
-     * セキュリティマネージャの初期化を行う．
+     * 引数無しコンストラクタ． セキュリティマネージャの初期化を行う．
      */
-    public MetricsTool(){
+    public MetricsTool() {
         initSecurityManager();
     }
 
@@ -284,7 +287,7 @@ public class MetricsTool {
 
         return Settings.getLanguage();
     }
-    
+
     /**
      * プラグインをロードする. 指定された言語，指定されたメトリクスに関連するプラグインのみを {@link PluginManager}に登録する.
      * 
@@ -360,7 +363,7 @@ public class MetricsTool {
             registerFilesFromListFile();
         }
     }
-    
+
     /**
      * メトリクス情報を {@link Settings} に指定されたファイルに出力する.
      */
@@ -412,7 +415,6 @@ public class MetricsTool {
         }
     }
 
-    
     /**
      * 
      * ヘルプモードの引数の整合性を確認するためのメソッド． 不正な引数が指定されていた場合，main メソッドには戻らず，この関数内でプログラムを終了する．
@@ -759,7 +761,8 @@ public class MetricsTool {
         final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
 
         // 各 Unresolvedクラスに対して
-        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
+        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+                .getClassInfos()) {
 
             // 修飾子，完全限定名，行数，可視性，インスタンスメンバーかどうかを取得
             final Set<ModifierInfo> modifiers = unresolvedClassInfo.getModifiers();
@@ -865,8 +868,8 @@ public class MetricsTool {
      * @param unresolvedClassInfo 名前解決する型パラメータを持つクラス
      * @param classInfoManager 名前解決に用いるクラスマネージャ
      */
-    private void resolveTypeParameterOfClassInfos(
-            final UnresolvedClassInfo unresolvedClassInfo, final ClassInfoManager classInfoManager) {
+    private void resolveTypeParameterOfClassInfos(final UnresolvedClassInfo unresolvedClassInfo,
+            final ClassInfoManager classInfoManager) {
 
         // 解決済みクラス情報を取得
         final TargetClassInfo classInfo = unresolvedClassInfo.getResolvedInfo();
@@ -898,9 +901,61 @@ public class MetricsTool {
                 .getInstance();
         final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
 
+        // 名前解決不可能クラスを保存するためのリスト
+        final List<UnresolvedClassInfo> unresolvableClasses = new LinkedList<UnresolvedClassInfo>();
+
         // 各 Unresolvedクラスに対して
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
-            addInheritanceInformationToClassInfo(unresolvedClassInfo, classInfoManager);
+            addInheritanceInformationToClassInfo(unresolvedClassInfo, classInfoManager,
+                    unresolvableClasses);
+        }
+
+        // 名前解決不可能クラスを解析する
+        for (int i = 0; i < 100; i++) {
+            
+            CLASSLOOP: for (final Iterator<UnresolvedClassInfo> classIterator = unresolvableClasses
+                    .iterator(); classIterator.hasNext();) {
+
+                // ClassInfo を取得
+                final UnresolvedClassInfo unresolvedClassInfo = classIterator.next();
+                final ClassInfo classInfo = unresolvedClassInfo.getResolvedInfo();
+
+                // 各親クラス名に対して
+                for (final UnresolvedTypeInfo unresolvedSuperClassType : unresolvedClassInfo
+                        .getSuperClasses()) {
+                    TypeInfo superClass = NameResolver.resolveTypeInfo(unresolvedSuperClassType,
+                            (TargetClassInfo) classInfo, null, classInfoManager, null, null, null);
+
+                    // null でない場合は名前解決に成功したとみなす
+                    if (null != superClass) {
+
+                        // 見つからなかった場合は名前空間名がUNKNOWNなクラスを登録する
+                        if (superClass instanceof UnknownTypeInfo) {
+                            superClass = NameResolver
+                                    .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedSuperClassType);
+                            classInfoManager.add((ExternalClassInfo) superClass);
+                        }
+
+                        classInfo.addSuperClass((ClassInfo) superClass);
+                        ((ClassInfo) superClass).addSubClass(classInfo);
+
+                        // null な場合は名前解決に失敗したとみなすので unresolvedClassInfo は unresolvableClasses
+                        // から削除しない
+                    } else {
+                        continue CLASSLOOP;
+                    }
+                }
+
+                classIterator.remove();
+            }
+
+            // 無作為に unresolvableClasses を入れ替え
+            Collections.shuffle(unresolvableClasses);
+        }
+
+        if (0 < unresolvableClasses.size()) {
+            err.println("There are " + unresolvableClasses.size()
+                    + " unresolvable class inheritance");
         }
     }
 
@@ -911,7 +966,8 @@ public class MetricsTool {
      * @param classInfoManager 名前解決に用いるクラスマネージャ
      */
     private void addInheritanceInformationToClassInfo(
-            final UnresolvedClassInfo unresolvedClassInfo, final ClassInfoManager classInfoManager) {
+            final UnresolvedClassInfo unresolvedClassInfo, final ClassInfoManager classInfoManager,
+            final List<UnresolvedClassInfo> unresolvableClasses) {
 
         // ClassInfo を取得
         final ClassInfo classInfo = unresolvedClassInfo.getResolvedInfo();
@@ -920,22 +976,30 @@ public class MetricsTool {
         for (UnresolvedTypeInfo unresolvedSuperClassType : unresolvedClassInfo.getSuperClasses()) {
             TypeInfo superClass = NameResolver.resolveTypeInfo(unresolvedSuperClassType,
                     (TargetClassInfo) classInfo, null, classInfoManager, null, null, null);
-            assert superClass != null : "resolveTypeInfo returned null!";
 
-            // 見つからなかった場合は名前空間名がUNKNOWNなクラスを登録する
-            if (superClass instanceof UnknownTypeInfo) {
-                superClass = NameResolver
-                        .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedSuperClassType);
-                classInfoManager.add((ExternalClassInfo) superClass);
+            // null だった場合は解決不可能リストに一時的に格納
+            if (null == superClass) {
+
+                unresolvableClasses.add(unresolvedClassInfo);
+
+            } else {
+
+                // 見つからなかった場合は名前空間名がUNKNOWNなクラスを登録する
+                if (superClass instanceof UnknownTypeInfo) {
+                    superClass = NameResolver
+                            .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedSuperClassType);
+                    classInfoManager.add((ExternalClassInfo) superClass);
+                }
+
+                classInfo.addSuperClass((ClassInfo) superClass);
+                ((ClassInfo) superClass).addSubClass(classInfo);
             }
-
-            classInfo.addSuperClass((ClassInfo) superClass);
-            ((ClassInfo) superClass).addSubClass(classInfo);
         }
 
         // 各インナークラスに対して
         for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo.getInnerClasses()) {
-            addInheritanceInformationToClassInfo(unresolvedInnerClassInfo, classInfoManager);
+            addInheritanceInformationToClassInfo(unresolvedInnerClassInfo, classInfoManager,
+                    unresolvableClasses);
         }
     }
 
@@ -1323,9 +1387,9 @@ public class MetricsTool {
      * @param methodInfoManager 用いるメソッドマネージャ
      * @param resolvedCache 解決済み呼び出し情報のキャッシュ
      */
-    private void addReferenceAssignmentCallRelation(
-            final UnresolvedClassInfo unresolvedClassInfo, final ClassInfoManager classInfoManager,
-            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager,
+    private void addReferenceAssignmentCallRelation(final UnresolvedClassInfo unresolvedClassInfo,
+            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
+            final MethodInfoManager methodInfoManager,
             final Map<UnresolvedTypeInfo, TypeInfo> resolvedCache) {
 
         // 未解決クラス情報から，解決済みクラス情報を取得
