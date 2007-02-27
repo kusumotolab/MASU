@@ -29,7 +29,7 @@ public class RfcPlugin extends AbstractClassMetricPlugin {
      * @param targetClass ‘ÎÛ‚ÌƒNƒ‰ƒX
      */
     @Override
-    protected float measureClassMetric(TargetClassInfo targetClass) {
+    protected Number measureClassMetric(TargetClassInfo targetClass) {
         // ‚±‚Ì”‚ª RFC
         final Set<MethodInfo> rfcMethods = new HashSet<MethodInfo>();
 
@@ -42,7 +42,7 @@ public class RfcPlugin extends AbstractClassMetricPlugin {
             rfcMethods.addAll(m.getCallees());
         }
 
-        return rfcMethods.size();
+        return new Integer(rfcMethods.size());
     }
 
     /**

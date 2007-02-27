@@ -27,8 +27,8 @@ public class NomPlugin extends AbstractClassMetricPlugin {
      * @param targetClass ‘ÎÛ‚ÌƒNƒ‰ƒX
      */
     @Override
-    protected float measureClassMetric(TargetClassInfo targetClass) {
-        return targetClass.getDefinedMethods().size();
+    protected Number measureClassMetric(TargetClassInfo targetClass) {
+        return new Integer(targetClass.getDefinedMethods().size());
     }
 
     /**

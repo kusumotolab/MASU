@@ -27,8 +27,8 @@ public class NoaPlugin extends AbstractClassMetricPlugin {
      * @param targetClass ‘ÎÛ‚ÌƒNƒ‰ƒX
      */
     @Override
-    protected float measureClassMetric(TargetClassInfo targetClass) {
-        return targetClass.getDefinedFields().size();
+    protected Number measureClassMetric(TargetClassInfo targetClass) {
+        return new Integer(targetClass.getDefinedFields().size());
     }
 
     /**

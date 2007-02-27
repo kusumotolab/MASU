@@ -66,7 +66,7 @@ public class Lcom1Plugin extends AbstractClassMetricPlugin {
      * @param targetClass 対象のクラス
      */
     @Override
-    protected float measureClassMetric(TargetClassInfo targetClass) {
+    protected Number measureClassMetric(TargetClassInfo targetClass) {
         // オブジェクト再利用のための準備
         clearReusedObjects();
 
@@ -138,10 +138,10 @@ public class Lcom1Plugin extends AbstractClassMetricPlugin {
 
         if (p <= q || allMethodsDontUseAnyField) {
             //pがq以下，または全てのメソッドがフィールドを利用しない場合lcomは0
-            return 0;
+            return new Integer(0);
         } else {
             //そうでないならp-qがlcom
-            return p - q;
+            return new Integer(p - q);
         }
     }
 
