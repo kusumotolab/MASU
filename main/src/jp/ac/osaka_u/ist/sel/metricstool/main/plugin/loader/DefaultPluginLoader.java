@@ -269,7 +269,7 @@ public class DefaultPluginLoader implements PluginLoader {
             
             //プラグインディレクトリ以下へのアクセスパーミッションをセット
             try{
-                String filePath = plugin.getPluginRootDir().getAbsolutePath() + File.separator+ "-";
+                String filePath = pluginRootDir.getAbsolutePath() + File.separator+ "-";
                 plugin.addPermission(new FilePermission(filePath, "read"));
                 plugin.addPermission(new FilePermission(filePath, "write"));
                 plugin.addPermission(new FilePermission(filePath, "delete"));
@@ -491,7 +491,7 @@ public class DefaultPluginLoader implements PluginLoader {
      * プラグイン情報を別スレッドで構築する.
      * 指定時間以内に構築できなかった場合は諦める.
      * @param plugin 情報を構築するプラグイン.
-     * @return プラグイン情報を指定時間以内に構築できたからtrue，できなかったらfalse.
+     * @return プラグイン情報を指定時間以内に構築できたらtrue，できなかったらfalse.
      */
     private boolean createPluginInfo(final AbstractPlugin plugin) {
         final Thread creationThread = new Thread() {
