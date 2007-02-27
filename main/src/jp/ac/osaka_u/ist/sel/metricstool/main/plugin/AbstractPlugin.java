@@ -577,7 +577,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
 
         try {
             this.execute();
-        } catch (final Exception e) {
+        } catch (final Throwable e) {
             this.err.println(e);
         }
 
