@@ -205,19 +205,35 @@ public final class MetricsToolSecurityManager extends SecurityManager {
         if (null == perm) {
             throw new NullPointerException("Permission is null.");
         }
+        
         if (this.isPrivilegeThread()) {
             return;
         } else if (this.globalPermissions.implies(perm)) {
             return;
         } else {
             final Thread current = Thread.currentThread();
-            if (this.threadPermissions.containsKey(current)) {
+            
+            //このメソッド内から呼び出されて，自分が所属しているスレッドグループの親グループがnullかどうかを調べに来たスレッドだけ許可する
+            if (perm.getName().equals("modifyThreadGroup") && groupParentCheckingThread.contains(current)){
+                return;
+            } 
+            
+            //自分が所属しているスレッドグループの親グループがnullかどうかを調べにいく
+            //nullならシステムスレッドである．
+            groupParentCheckingThread.add(current);
+            boolean isSystemThread = null == current.getThreadGroup().getParent();
+            groupParentCheckingThread.remove(current);
+            
+            if (isSystemThread){
+                //システムスレッドの場合は全てを許可してしまう．
+                return;
+            } else if (this.threadPermissions.containsKey(current)) {
                 final Permissions permissions = this.threadPermissions.get(current);
                 if (permissions.implies(perm)) {
                     return;
                 }
             }
-
+            
             super.checkPermission(perm);
         }
     }
@@ -361,6 +377,12 @@ public final class MetricsToolSecurityManager extends SecurityManager {
      */
     private final Set<ThreadGroup> pluginThreadGroups = Collections
             .synchronizedSet(new WeakHashSet<ThreadGroup>());
+    
+    /**
+     * {@link #checkPermission(Permission)}メソッドにおいて利用される {@link ThreadGroup#getParent()} メソッドの呼び出しを
+     * 実行したスレッドを一時的に保存しておくためのセット．
+     */
+    private final Set<Thread> groupParentCheckingThread = new WeakHashSet<Thread>();
 
     /**
      * シングルトンインスタンス．
