@@ -234,7 +234,7 @@ public class DefaultBuildDataManager implements BuildDataManager{
         }
         
         final AvailableNamespaceInfoSet result = new AvailableNamespaceInfoSet();
-        //‚Ü‚¸æ‚É‚Ì–¼‘O‹óŠÔ‚ğ“o˜^
+        //‚Ü‚¸æ‚É¡‚Ì–¼‘O‹óŠÔ‚ğ“o˜^
         if (null == currentNameSpaceCache){
             currentNameSpaceCache = new AvailableNamespaceInfo(getCurrentNameSpace(),true);
         }

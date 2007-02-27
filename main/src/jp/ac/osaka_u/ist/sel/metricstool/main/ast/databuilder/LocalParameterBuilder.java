@@ -8,8 +8,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
 
 public class LocalParameterBuilder extends VariableBuilder<UnresolvedVariableInfo>{
     
-    public LocalParameterBuilder(BuildDataManager buildDataManager,ModifiersInterpriter interpriter) {
-        super(buildDataManager,new LocalParameterStateManager());
+    public LocalParameterBuilder(BuildDataManager buildDataManager,ModifiersInterpriter interpriter){
+        this(buildDataManager,new ModifiersBuilder(),new TypeBuilder(buildDataManager),
+                new NameBuilder(),interpriter);
+    }
+    
+    public LocalParameterBuilder(BuildDataManager buildDataManager,ModifiersBuilder modifiersBuilder,
+            TypeBuilder typeBuilder, NameBuilder nameBuilder, ModifiersInterpriter interpriter){
+        super(new LocalParameterStateManager(),modifiersBuilder,typeBuilder,nameBuilder);
+        
+        if (null == buildDataManager){
+            throw new NullPointerException("builderManager is null.");
+        }
         
         this.buildDataManager = buildDataManager;
         this.interpriter = interpriter;

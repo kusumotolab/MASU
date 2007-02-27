@@ -21,8 +21,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
     }
     
     @Override
-    protected void buildCompoundIdentifierElement() {
-        ExpressionElement[] elements = getAvailableElements();
+    protected void buildCompoundIdentifierElement(ExpressionElement[] elements) {
         
         assert(2 == elements.length) : "Illega state: two element must be usable.";
         
@@ -57,7 +56,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
                     UnresolvedTypeInfo currentSuperClass = currentClass.getSuperClasses().iterator().next();
                     String[] names = null;
                     if (currentSuperClass instanceof UnresolvedReferenceTypeInfo){
-                        names = ((UnresolvedReferenceTypeInfo)currentSuperClass).getReferenceName();
+                        names = ((UnresolvedReferenceTypeInfo)currentSuperClass).getFullReferenceName();
                     } else if (currentSuperClass instanceof UnresolvedClassInfo){
                         names = ((UnresolvedClassInfo)currentSuperClass).getFullQualifiedName();
                     }
@@ -91,7 +90,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
                 pushElement(TypeElement.getInstance(superClassType));
             }
         } else {
-            super.buildCompoundIdentifierElement();
+            super.buildCompoundIdentifierElement(elements);
         }
     }
     

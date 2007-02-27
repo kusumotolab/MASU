@@ -1,10 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.TypeParameterBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsage;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 /**
@@ -22,7 +20,7 @@ public class JavaTypeParameterBuilder extends TypeParameterBuilder{
      * @param buildDataManager
      */
     public JavaTypeParameterBuilder(BuildDataManager buildDataManager) {
-        super(buildDataManager);
+        super(buildDataManager,new NameBuilder(),new JavaTypeBuilder(buildDataManager));
     }
 
     /**
@@ -35,16 +33,9 @@ public class JavaTypeParameterBuilder extends TypeParameterBuilder{
     protected UnresolvedTypeInfo getUpperBounds(){
         UnresolvedTypeInfo extendsTypeInfo = super.getUpperBounds();
         if (null == extendsTypeInfo){
-            return JAVA_LANG_OBJECT;
+            return JavaTypeBuilder.JAVA_LANG_OBJECT;
         } else {
             return extendsTypeInfo;
         }
     }
-    
-    /**
-     * java.lang.ObjectÇï\Ç∑å^éQè∆
-     */
-    private final static UnresolvedReferenceTypeInfo JAVA_LANG_OBJECT =
-        new UnresolvedReferenceTypeInfo(new AvailableNamespaceInfoSet(),
-                new String[]{"java","lang","Object"});
 }

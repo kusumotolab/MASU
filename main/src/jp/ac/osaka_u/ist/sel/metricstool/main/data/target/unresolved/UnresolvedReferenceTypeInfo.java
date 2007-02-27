@@ -33,6 +33,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
 
         this.availableNamespaceSet = availableNamespaces;
         this.referenceName = referenceName;
+        this.fullReferenceName = referenceName;
         this.ownerType = null;
         this.typeParameterUsages = new LinkedList<UnresolvedTypeParameterUsage>();
     }
@@ -53,6 +54,11 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
         }
 
         this.availableNamespaceSet = availableNamespaces;
+        String[] ownerReferenceName = ownerType.getFullReferenceName();
+        String[] fullReferenceName = new String[referenceName.length+ownerReferenceName.length];
+        System.arraycopy(ownerReferenceName, 0, fullReferenceName, 0, ownerReferenceName.length);
+        System.arraycopy(referenceName, 0, fullReferenceName, ownerReferenceName.length, referenceName.length);
+        this.fullReferenceName = fullReferenceName;
         this.referenceName = referenceName;
         this.ownerType = ownerType;
         this.typeParameterUsages = new LinkedList<UnresolvedTypeParameterUsage>();
@@ -93,6 +99,15 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
         return referenceName[referenceName.length - 1];
     }
 
+    /**
+     * この参照型のownerも含めた参照名を返す
+     * 
+     * @return この参照型のownerも含めた参照名を返す
+     */
+    public final String[] getFullReferenceName() {
+        return this.fullReferenceName;
+    }
+    
     /**
      * この参照型の参照名を返す
      * 
@@ -159,6 +174,11 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 参照名を保存する変数
      */
     private final String[] referenceName;
+    
+    /**
+     * ownerも含めた参照名を保存する変数
+     */
+    private final String[] fullReferenceName;
 
     /**
      * この参照がくっついている未解決参照型を保存する変数

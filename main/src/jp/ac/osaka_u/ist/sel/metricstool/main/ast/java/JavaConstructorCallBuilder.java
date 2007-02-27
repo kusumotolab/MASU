@@ -72,7 +72,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
         int argStartIndex = 0;
 
-        String[] superClassReferenceName = superClassInfo.getReferenceName();
+        String[] superClassReferenceName = superClassInfo.getFullReferenceName();
         String className = superClassReferenceName[superClassReferenceName.length - 1];
 
         if (elements.length > 0 && elements[0] instanceof TypeElement) {
@@ -83,7 +83,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
             UnresolvedTypeInfo type = ((TypeElement) elements[0]).getType();
             if (type instanceof UnresolvedReferenceTypeInfo) {
                 String[] firstElementReference = ((UnresolvedReferenceTypeInfo) type)
-                        .getReferenceName();
+                        .getFullReferenceName();
                 if (firstElementReference.length < superClassReferenceName.length) {
                     boolean match = true;
                     for (int i = 0; i < firstElementReference.length; i++) {

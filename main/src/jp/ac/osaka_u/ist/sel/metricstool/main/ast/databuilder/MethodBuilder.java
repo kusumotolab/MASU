@@ -9,6 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ModifiersDefiniti
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.MethodParameterStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.TypeDescriptionStateManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.TypeParameterStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.VariableDefinitionStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.MethodDefinitionStateManager.METHOD_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
@@ -46,8 +47,9 @@ public class MethodBuilder extends CompoundDataBuilder<UnresolvedMethodInfo>{
         
         addStateManager(this.methodStateManager);
         addStateManager(this.parameterStateManager);
+        addStateManager(this.typeStateManager);
+        addStateManager(this.typeParameterStateManager);
         addStateManager(new ModifiersDefinitionStateManager());
-        addStateManager(new TypeDescriptionStateManager());
         addStateManager(new NameStateManager());
     }
     
@@ -75,15 +77,6 @@ public class MethodBuilder extends CompoundDataBuilder<UnresolvedMethodInfo>{
                         modifierBuilder.deactivate();
                         registModifiers();
                     }
-                } else if (type.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)){
-                    if (null != typeBuilder){
-                        typeBuilder.activate();
-                    }
-                } else if (type.equals(TypeDescriptionStateManager.TYPE_STATE.EXIT_TYPE)){
-                    if (null != typeBuilder){
-                        typeBuilder.deactivate();
-                        registType();
-                    }
                 } else if (type.equals(NameStateManager.NAME_STATE.ENTER_NAME)){
                     if (null != nameBuilder){
                         nameBuilder.activate();
@@ -92,6 +85,17 @@ public class MethodBuilder extends CompoundDataBuilder<UnresolvedMethodInfo>{
                     if (null != nameBuilder){
                         nameBuilder.deactivate();
                         registName();
+                    }
+                } else if (!typeParameterStateManager.isInTypeParameterDefinition()){
+                    if (type.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)){
+                        if (null != typeBuilder){
+                            typeBuilder.activate();
+                        }
+                    } else if (type.equals(TypeDescriptionStateManager.TYPE_STATE.EXIT_TYPE)){
+                        if (null != typeBuilder && !typeStateManager.isEntered()){
+                            typeBuilder.deactivate();
+                            registType();
+                        }
                     }
                 }
             }
@@ -181,4 +185,6 @@ public class MethodBuilder extends CompoundDataBuilder<UnresolvedMethodInfo>{
     
     private final MethodDefinitionStateManager methodStateManager =  new MethodDefinitionStateManager();
     private final MethodParameterStateManager parameterStateManager = new MethodParameterStateManager();
+    private final TypeDescriptionStateManager typeStateManager = new TypeDescriptionStateManager();
+    private final TypeParameterStateManager typeParameterStateManager = new TypeParameterStateManager();
 }

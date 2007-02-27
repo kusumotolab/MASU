@@ -7,8 +7,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 
 public class MethodParameterBuilder extends VariableBuilder<UnresolvedParameterInfo>{
     
-    public MethodParameterBuilder(BuildDataManager buildDataManager,ModifiersInterpriter interpriter) {
-        super(buildDataManager,new MethodParameterStateManager());
+    public MethodParameterBuilder(BuildDataManager buildDataManager,ModifiersInterpriter interpriter){
+        this(buildDataManager,new ModifiersBuilder(),new TypeBuilder(buildDataManager),
+                new NameBuilder(),interpriter);
+    }
+    
+    public MethodParameterBuilder(BuildDataManager buildDataManager,ModifiersBuilder modifiersBuilder,
+            TypeBuilder typeBuilder, NameBuilder nameBuilder, ModifiersInterpriter interpriter){
+        super(new MethodParameterStateManager(),modifiersBuilder,typeBuilder,nameBuilder);
+        
+        if (null == buildDataManager){
+            throw new NullPointerException("builderManager is null.");
+        }
         
         this.buildDataManager = buildDataManager;
         this.interpriter = interpriter;

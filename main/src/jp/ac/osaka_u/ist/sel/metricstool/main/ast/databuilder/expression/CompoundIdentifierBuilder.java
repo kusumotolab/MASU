@@ -24,12 +24,37 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder{
         
         AstToken token = event.getToken();
         if (token.isNameSeparator()){
-            buildCompoundIdentifierElement();
+            buildCompoundIdentifierElementAvoidTypeArguments();
         }
     }
     
-    protected void buildCompoundIdentifierElement(){
+    protected void buildCompoundIdentifierElementAvoidTypeArguments(){
         ExpressionElement[] elements = getAvailableElements();
+        
+        if (2 == elements.length){
+            buildCompoundIdentifierElement(elements);
+        } else {
+            ExpressionElement[] typeArgumentAvoidedElements = new ExpressionElement[2];
+            
+            for(int i=0,j=0; i < elements.length; i++){
+                if (!(elements[i] instanceof TypeArgumentElement)){
+                    typeArgumentAvoidedElements[j++] = elements[i];
+                }
+                
+                assert(j != 3) : "Illega state: too many non argument elements.";
+            }
+            
+            buildCompoundIdentifierElement(typeArgumentAvoidedElements);
+            
+            for(int i=0; i < elements.length; i++){
+                if (elements[i] instanceof TypeArgumentElement){
+                    pushElement(elements[i]);
+                }
+            }
+        }
+    }
+    
+    protected void buildCompoundIdentifierElement(ExpressionElement[] elements){
         
         if (elements.length == 2){
             ExpressionElement left = elements[0];

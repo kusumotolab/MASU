@@ -37,8 +37,10 @@ public class InheritanceBuilder extends CompoundDataBuilder<UnresolvedReferenceT
             if (type.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)){
                 typeBuilder.activate();
             } else if (type.equals(TypeDescriptionStateManager.TYPE_STATE.EXIT_TYPE)){
-                typeBuilder.deactivate();
-                buildInheritance();
+                if (!typeStateManager.isEntered()){
+                    typeBuilder.deactivate();
+                    buildInheritance();
+                }
             }
         }
     }

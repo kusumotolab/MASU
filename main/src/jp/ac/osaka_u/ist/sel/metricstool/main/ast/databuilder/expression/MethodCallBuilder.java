@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCall;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSimpleTypeParameterUsage;
 
 public class MethodCallBuilder extends ExpressionBuilder{
 
@@ -36,16 +36,15 @@ public class MethodCallBuilder extends ExpressionBuilder{
                 UnresolvedMethodCall methodCall = new UnresolvedMethodCall(callee.getOwnerType(),callee.getName(),false);
                 for(int i=1; i < elements.length; i++){
                     ExpressionElement argment = elements[i];
-                    UnresolvedTypeInfo argmentType;
                     if (argment instanceof IdentifierElement){
-                        argmentType = ((IdentifierElement)argment).resolveAsReferencedVariable(buildDataManager);
+                        methodCall.addParameterType(((IdentifierElement)argment).resolveAsReferencedVariable(buildDataManager));
                     } else if (argment.equals(InstanceSpecificElement.THIS)){
-                        argmentType = InstanceSpecificElement.getThisInstanceType(buildDataManager);
+                        methodCall.addParameterType(InstanceSpecificElement.getThisInstanceType(buildDataManager));
+                    } else if (argment instanceof TypeArgumentElement){
+                        methodCall.addTypeParameterUsage(new UnresolvedSimpleTypeParameterUsage(argment.getType()));
                     } else {
-                        argmentType = argment.getType();
+                        methodCall.addParameterType(argment.getType());
                     }
-                     
-                    methodCall.addParameterType(argmentType);
                 }
                 
                 pushElement(new MethodCallElement(methodCall));

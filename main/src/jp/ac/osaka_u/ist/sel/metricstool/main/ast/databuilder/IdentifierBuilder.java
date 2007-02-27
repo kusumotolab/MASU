@@ -15,6 +15,11 @@ public class IdentifierBuilder extends DataBuilderAdapter<String[]>{
                 buildingIdentifiers.add(token.toString());
             } else if (token.isNameSeparator()){
                 this.separatorCount++;
+            } else {
+                String[] buitIdentifier = buildIdentifier();
+                if (null != buitIdentifier){
+                    registBuiltData(buitIdentifier);
+                }
             }
         }
     }
@@ -29,14 +34,42 @@ public class IdentifierBuilder extends DataBuilderAdapter<String[]>{
                 
                 if (0 == this.separatorCount){
                     String[] buitIdentifier = buildIdentifier();
-                    if (null != buildingIdentifiers){
+                    if (null != buitIdentifier){
                         registBuiltData(buitIdentifier);
                     }
                 } else if (0 > this.separatorCount){
                     //activateされるタイミングによっては負値になる
                     this.separatorCount = 0;
                 }
+            } else {
+                String[] buitIdentifier = buildIdentifier();
+                if (null != buitIdentifier){
+                    registBuiltData(buitIdentifier);
+                }
             }
+        }
+    }
+    
+    
+    public boolean hasBuiltData(){
+        return super.hasBuiltData() || !buildingIdentifiers.isEmpty();
+    }
+    
+    public String[] getLastBuildData(){
+        String[] result = super.getLastBuildData();
+        if (null != result){
+            return result;
+        } else {
+            return buildIdentifier();
+        }
+    }
+
+    public String[] popLastBuiltData(){
+        String[] result = super.popLastBuiltData();
+        if (null != result){
+            return result;
+        } else {
+            return buildIdentifier();
         }
     }
     
@@ -45,7 +78,7 @@ public class IdentifierBuilder extends DataBuilderAdapter<String[]>{
         buildingIdentifiers.clear();
         separatorCount = 0;
     }
-
+    
     private String[] buildIdentifier(){
         if (!buildingIdentifiers.isEmpty()){
             String[] result = new String[buildingIdentifiers.size()];

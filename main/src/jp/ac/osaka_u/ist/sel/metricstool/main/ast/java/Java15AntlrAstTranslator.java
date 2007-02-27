@@ -153,12 +153,16 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             result = DescriptionToken.TYPE_LOWER_BOUNDS;
             break;
             
-            
         case Java15TokenTypes.TYPE_ARGUMENTS:
+            result = DescriptionToken.TYPE_ARGUMENTS;
+            break;
+            
         case Java15TokenTypes.TYPE_ARGUMENT:
+            result = DescriptionToken.TYPE_ARGUMENT;
+            break;
+            
         case Java15TokenTypes.WILDCARD_TYPE:
-        
-            result = VisitControlToken.SKIP;
+            result = DescriptionToken.TYPE_WILDCARD;
             break;
             
         case Java15TokenTypes.LITERAL_public:

@@ -66,7 +66,15 @@ public class TypeParameterStateManager extends StackedAstVisitStateManager<TypeP
             fireStateChangeEvent(TYPE_PARAMETER.EXIT_TYPE_UPPER_BOUNDS, event);
         }
     }
-
+    
+    /**
+     * ビジターの現在位置が型パラメータ定義部の中かどうかを返す
+     * @return　ビジターの現在位置が型パラメータ定義部の中であればtrue
+     */
+    public boolean isInTypeParameterDefinition(){
+        return STATE.OUT != this.state;
+    }
+    
     /**
      * 型パラメータ定義部に関連するノードかどうかを判定する
      * 
@@ -77,7 +85,7 @@ public class TypeParameterStateManager extends StackedAstVisitStateManager<TypeP
         return token.isTypeParameterDefinition() || token.isTypeLowerBoundsDescription()
             || token.isTypeUpperBoundsDescription();
     }
-
+    
     /**
      * 現在の状態を返す．
      * @return 現在の状態．
