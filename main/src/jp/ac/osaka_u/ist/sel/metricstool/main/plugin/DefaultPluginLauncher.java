@@ -41,7 +41,7 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
         }
 
         if (this.futureMap.containsKey(plugin)) {
-            final Future<Boolean> future = this.futureMap.get(plugin);
+            final Future future = this.futureMap.get(plugin);
             this.futureMap.remove(plugin);
             ProgressConnector.getConnector(plugin).disconnect();
             return future.cancel(true);
