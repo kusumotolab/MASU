@@ -33,6 +33,28 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
 
         this.availableNamespaceSet = availableNamespaces;
         this.referenceName = referenceName;
+        this.ownerType = null;
+        this.typeParameterUsages = new LinkedList<UnresolvedTypeParameterUsage>();
+    }
+
+    /**
+     * 利用可能な名前空間名，参照名を与えて初期化
+     * 
+     * @param availableNamespaces 名前空間名
+     * @param referenceName 参照名
+     */
+    public UnresolvedReferenceTypeInfo(final AvailableNamespaceInfoSet availableNamespaces,
+            final String[] referenceName, final UnresolvedReferenceTypeInfo ownerType) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == availableNamespaces) || (null == referenceName) || (null == ownerType)) {
+            throw new NullPointerException();
+        }
+
+        this.availableNamespaceSet = availableNamespaces;
+        this.referenceName = referenceName;
+        this.ownerType = ownerType;
         this.typeParameterUsages = new LinkedList<UnresolvedTypeParameterUsage>();
     }
 
@@ -81,6 +103,24 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
     }
 
     /**
+     * この参照型がくっついている未解決参照型を返す
+     * 
+     * @return この参照型がくっついている未解決参照型
+     */
+    public final UnresolvedReferenceTypeInfo getOwnerType() {
+        return this.ownerType;
+    }
+
+    /**
+     * この参照型が，他の参照型にくっついているかどうかを返す
+     * 
+     * @return くっついている場合は true，くっついていない場合は false
+     */
+    public final boolean hasOwnerReference() {
+        return null != this.ownerType;
+    }
+
+    /**
      * この参照型の参照名を引数で与えられた文字で結合して返す
      * 
      * @param delimiter 結合に用いる文字
@@ -119,6 +159,11 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 参照名を保存する変数
      */
     private final String[] referenceName;
+
+    /**
+     * この参照がくっついている未解決参照型を保存する変数
+     */
+    private final UnresolvedReferenceTypeInfo ownerType;
 
     /**
      * 未解決型パラメータ使用を保存するための変数
