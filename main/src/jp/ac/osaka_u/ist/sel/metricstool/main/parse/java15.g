@@ -322,11 +322,11 @@ protected typeDefinitionInternal[AST mods]
 
 // A declaration is the creation of a reference or primitive-type variable
 // Create a separate Type/Var tree for each var in the var list.
-declaration!
+declaration![boolean isParameter]
 	:
 		{pushStartLineColumn();}
 		
-		m:modifiers t:typeSpec[false] v:variableDefinitions[#m,#t]
+		m:modifiers t:typeSpec[false] v:variableDefinitions[#m,#t,isParameter]
 		{#declaration = #v;}
 		
 		{registLineColumnInfo(#declaration);}
@@ -756,7 +756,7 @@ annotationField!
     						 #(#[TYPE,"TYPE"],rt),
     						 i,amvi
     						 );}
-    			|	v:variableDefinitions[#mods,#t] SEMI	// variable
+    			|	v:variableDefinitions[#mods,#t,false] SEMI	// variable
     				{#annotationField = #v;}
     			)
     		)
@@ -1000,12 +1000,12 @@ fieldDeclarator![AST mods, AST t]
 	;
 
 
-variableDefinitions[AST mods, AST t]
+variableDefinitions[AST mods, AST t, boolean isParameter]
 	:	variableDeclarator[getASTFactory().dupTree(mods),
-							getASTFactory().dupList(t)] //dupList as this also copies siblings (like TYPE_ARGUMENTS)
+							getASTFactory().dupList(t),isParameter] //dupList as this also copies siblings (like TYPE_ARGUMENTS)
 		(	COMMA!
 			variableDeclarator[getASTFactory().dupTree(mods),
-							getASTFactory().dupList(t)] //dupList as this also copies siblings (like TYPE_ARGUMENTS)
+							getASTFactory().dupList(t),isParameter] //dupList as this also copies siblings (like TYPE_ARGUMENTS)
 		)*
 	;
 
@@ -1013,9 +1013,16 @@ variableDefinitions[AST mods, AST t]
  *  or a local variable in a method
  *  It can also include possible initialization.
  */
-variableDeclarator![AST mods, AST t]
+variableDeclarator![AST mods, AST t, boolean isParameter]
 	:	id:name d:declaratorBrackets[t] v:varInitializer
-		{#variableDeclarator = #(#[LOCAL_VARIABLE_DEF,"LOCAL_VARIABLE_DEF"], mods, #(#[TYPE,"TYPE"],d), id, v);}
+		
+		{
+			if (isParameter){
+				#variableDeclarator = #(#[LOCAL_PARAMETER_DEF,"LOCAL_PARAMETER_DEF"], mods, #(#[TYPE,"TYPE"],d), id, v);									
+    		} else {
+    			#variableDeclarator = #(#[LOCAL_VARIABLE_DEF,"LOCAL_VARIABLE_DEF"], mods, #(#[TYPE,"TYPE"],d), id, v);
+    		}
+		}
 	;
 
 declaratorBrackets[AST typ]
@@ -1147,7 +1154,7 @@ statement
 	// statements. Must backtrack to be sure. Could use a semantic
 	// predicate to test symbol table to see what the type was coming
 	// up, but that's pretty hard without a symbol table ;)
-	|	(declaration)=> declaration SEMI!
+	|	(declaration[false])=> declaration[false] SEMI!
 
 	// An expression statement. This could be a method call,
 	// assignment statement, or any other expression evaluated for
@@ -1289,7 +1296,7 @@ caseSList
 // The initializer for a for loop
 forInit
 		// if it looks like a declaration, it is
-	:	((declaration)=> declaration
+	:	((declaration[true])=> declaration[true]
 		// otherwise it could be an expression list...
 		|	expressionList
 		)?
