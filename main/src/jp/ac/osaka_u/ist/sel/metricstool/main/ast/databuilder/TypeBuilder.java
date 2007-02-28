@@ -17,6 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedA
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSimpleTypeParameterUsage;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterUsage;
 
 
@@ -179,24 +180,40 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
             final String[] identifier = this.identifierBuilder.popLastBuiltData();
 
             assert (0 != identifier.length) : "Illegal state: identifier was not built.";
-
-            //名前置換を解決しておく
-            final String[] trueName = this.buildDataManager.resolveAliase(identifier);
-
-            //参照型を作成
-            final UnresolvedReferenceTypeInfo referenceType = new UnresolvedReferenceTypeInfo(
-                    this.buildDataManager.getAvailableNameSpaceSet(), trueName);
-
-            //使える型引数があれば登録してしまう．
-            if (null != this.availableTypeArugments) {
-                for (final UnresolvedTypeInfo type : this.availableTypeArugments) {
-                    referenceType
-                            .addTypeParameterUsage(new UnresolvedSimpleTypeParameterUsage(type));
-                }
-
-                this.availableTypeArugments = null;
+            
+            UnresolvedTypeParameterInfo typeParameter = null;
+            
+            //この名前で型パラメータを探してみる
+            if (identifier.length == 1){
+                typeParameter = this.buildDataManager.getTypeParameter(identifier[0]);
             }
-            resultType = referenceType;
+            
+            if (null != typeParameter){
+                //見つかったので型パラメータ
+                resultType = typeParameter;
+                
+                //TODO 型パラメータに型引数が付く言語があったらそれを登録する仕組みを作る必要があるかも
+                
+            } else {
+                //見つからなかったので参照型
+                //名前置換を解決しておく
+                final String[] trueName = this.buildDataManager.resolveAliase(identifier);
+    
+                //参照型を作成
+                final UnresolvedReferenceTypeInfo referenceType = new UnresolvedReferenceTypeInfo(
+                        this.buildDataManager.getAvailableNameSpaceSet(), trueName);
+    
+                //使える型引数があれば登録してしまう．
+                if (null != this.availableTypeArugments) {
+                    for (final UnresolvedTypeInfo type : this.availableTypeArugments) {
+                        referenceType
+                                .addTypeParameterUsage(new UnresolvedSimpleTypeParameterUsage(type));
+                    }
+    
+                    this.availableTypeArugments = null;
+                }
+                resultType = referenceType;
+            }
 
         } else if (this.hasBuiltData()) {
             //識別子が新しく作られて足りはしないけど過去に構築したデータがあったので，それを使っておく

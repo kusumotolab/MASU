@@ -371,6 +371,36 @@ public class DefaultBuildDataManager implements BuildDataManager{
         }
         return null;
     }
+    
+    public UnresolvedTypeParameterInfo getTypeParameter(String name){
+        for(int i = modeStack.size()-1, cli = classStack.size() -1, mei = methodStack.size()-1 ; i >= 0; i--){
+            MODE mode = modeStack.get(i);
+            
+            if (MODE.CLASS == mode){
+                assert(cli >= 0);
+                if (cli >= 0){
+                    UnresolvedClassInfo classInfo = classStack.get(cli--);
+                    for(UnresolvedTypeParameterInfo param : classInfo.getTypeParameters()){
+                        if (param.getName().equals(name)){
+                            return param;
+                        }
+                    }
+                }
+            } else if (MODE.METHOD == mode){
+                assert(mei >= 0);
+                if (mei >= 0){
+                    UnresolvedMethodInfo methodInfo = methodStack.get(mei--);
+                    for(UnresolvedTypeParameterInfo param : methodInfo.getTypeParameters()){
+                        if (param.getName().equals(name)){
+                            return param;
+                        }
+                    }
+                }
+            } 
+        }
+        
+        return null;
+    }
 
     public boolean hasAlias(final String name) {
         final int size = this.scopeStack.size();

@@ -133,6 +133,8 @@ public interface BuildDataManager {
     public UnresolvedMethodInfo getCurrentMethod();
 
     public UnresolvedVariableInfo getCurrentScopeVariable(String name);
+    
+    public UnresolvedTypeParameterInfo getTypeParameter(String name);
 
     public boolean hasAlias(String name);
 

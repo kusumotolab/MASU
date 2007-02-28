@@ -109,6 +109,7 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends
                 if (null != this.modifiersBuilder) {
                     this.modifiersBuilder.deactivate();
                     this.builtModifiersStack.push(this.modifiersBuilder.popLastBuiltData());
+                    modifiersBuilder.clearBuiltData();
                 }
             } else if (eventType.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)) {
                 //型情報構築開始
@@ -120,6 +121,7 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends
                     //構築した型情報をすぐに取得してスタックへ
                     this.typeBuilder.deactivate();
                     this.builtTypeStack.push(this.typeBuilder.popLastBuiltData());
+                    this.typeBuilder.clearBuiltData();
                 }
             } else if (eventType.equals(NameStateManager.NAME_STATE.ENTER_NAME)) {
                 //名前構築開始
@@ -129,6 +131,7 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends
                 //同じくさっさと取得してすぐにスタックへ
                 this.nameBuilder.deactivate();
                 this.builtNameStack.push(this.nameBuilder.popLastBuiltData());
+                this.nameBuilder.clearBuiltData();
             }
         }
     }

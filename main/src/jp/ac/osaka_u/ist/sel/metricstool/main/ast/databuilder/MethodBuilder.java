@@ -76,6 +76,7 @@ public class MethodBuilder extends CompoundDataBuilder<UnresolvedMethodInfo>{
                     if (null != modifierBuilder){
                         modifierBuilder.deactivate();
                         registModifiers();
+                        modifierBuilder.clearBuiltData();
                     }
                 } else if (type.equals(NameStateManager.NAME_STATE.ENTER_NAME)){
                     if (null != nameBuilder){
@@ -85,6 +86,7 @@ public class MethodBuilder extends CompoundDataBuilder<UnresolvedMethodInfo>{
                     if (null != nameBuilder){
                         nameBuilder.deactivate();
                         registName();
+                        nameBuilder.clearBuiltData();
                     }
                 } else if (!typeParameterStateManager.isInTypeParameterDefinition()){
                     if (type.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)){
@@ -95,6 +97,7 @@ public class MethodBuilder extends CompoundDataBuilder<UnresolvedMethodInfo>{
                         if (null != typeBuilder && !typeStateManager.isEntered()){
                             typeBuilder.deactivate();
                             registType();
+                            typeBuilder.clearBuiltData();
                         }
                     }
                 }

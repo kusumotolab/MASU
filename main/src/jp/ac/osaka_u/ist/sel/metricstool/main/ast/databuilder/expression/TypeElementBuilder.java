@@ -6,10 +6,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BuiltinTypeToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ConstantToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSimpleTypeParameterUsage;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 
 
 /**
@@ -58,7 +60,7 @@ public class TypeElementBuilder extends ExpressionBuilder {
         TypeElement typeElement = null;
         if (elements.length > 0) {
             if (elements[0] instanceof IdentifierElement) {
-                final UnresolvedReferenceTypeInfo referenceType = this.buildReferenceType(elements);
+                final UnresolvedTypeInfo referenceType = this.buildReferenceType(elements);
                 typeElement = TypeElement.getInstance(UnresolvedArrayTypeInfo.getType(
                         referenceType, 1));
             } else if (elements[0] instanceof TypeElement) {
@@ -152,12 +154,24 @@ public class TypeElementBuilder extends ExpressionBuilder {
         return resultType;
     }
     
-    protected UnresolvedReferenceTypeInfo buildReferenceType(final ExpressionElement[] elements) {
+    protected UnresolvedTypeInfo buildReferenceType(final ExpressionElement[] elements) {
         assert(elements.length > 0);
         assert(elements[0] instanceof IdentifierElement);
         
         IdentifierElement element = (IdentifierElement)elements[0];
         final String[] typeName = element.getQualifiedName();
+        
+        UnresolvedTypeParameterInfo typeParameter = null;
+        if (typeName.length == 1){
+            typeParameter = this.buildManager.getTypeParameter(typeName[0]);
+        }
+        
+        if (null != typeParameter){
+            return typeParameter;
+        }
+        
+        //TODO 型パラメータに型引数が付く言語があったらそれを登録する仕組みを作る必要があるかも
+        
         final String[] trueTypeName = this.buildManager.resolveAliase(typeName);
         UnresolvedReferenceTypeInfo resultType = new UnresolvedReferenceTypeInfo(this.buildManager.getAvailableNameSpaceSet(),
                 trueTypeName);
