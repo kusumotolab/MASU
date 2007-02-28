@@ -42,92 +42,92 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
 
         assert (term > 0 && term == elements.length) : "Illegal state: unexpected element count.";
         
-        //各項の型を記録する配列
-        final UnresolvedTypeInfo[] termTypes = new UnresolvedTypeInfo[elements.length];
-
-        //最左辺値について
-        if (elements[0] instanceof IdentifierElement) {
-            //識別子の場合
-            final IdentifierElement leftElement = (IdentifierElement) elements[0];
-            if (referenceLeft) {
-                //参照なら被参照変数として解決して結果の型を取得する
-                termTypes[0] = leftElement.resolveAsReferencedVariable(this.buildDataManager);
-            }
-
-            if (assignmentLeft) {
-                //代入なら被代入変数として解決して結果の型を取得する
-                termTypes[0] = leftElement.resolveAsAssignmetedVariable(this.buildDataManager);
-            }
-        } else if (elements[0].equals(InstanceSpecificElement.THIS)){
-            termTypes[0] = buildDataManager.getCurrentClass();
-        } else if (elements[0].equals(InstanceSpecificElement.NULL)){
-            termTypes[0] = NullTypeInfo.getInstance();
-        } else {
-            //それ以外の場合は直接型を取得する
-            termTypes[0] = elements[0].getType();
-        }
-
-        //2項目以降について
-        for (int i = 1; i < term; i++) {
-            if (elements[i] instanceof IdentifierElement) {
-                //識別子なら勝手に参照として解決して方を取得する
-                termTypes[i] = ((IdentifierElement) elements[i])
-                        .resolveAsReferencedVariable(this.buildDataManager);
-            } else if (elements[i].equals(InstanceSpecificElement.THIS)){
-                termTypes[i] = buildDataManager.getCurrentClass();
-            } else if (elements[i].equals(InstanceSpecificElement.NULL)){
-                termTypes[i] = NullTypeInfo.getInstance();
-            } else {
-                //それ以外なら直接型を取得する
-                termTypes[i] = elements[i].getType();
-            }
-        }
-
-        
-        
-        final OPERATOR operator = token.getOperator();
-        
-        if (2 == term && null != operator){
-            //オペレーターインスタンスがセットされている2項演算子＝名前解決部に型決定処理を委譲する
-            assert(null != termTypes[0]) : "Illega state: first term type was not decided.";
-            assert(null != termTypes[1]) : "Illega state: second term type was not decided.";
-            
-            UnresolvedBinominalOperation operation = new UnresolvedBinominalOperation(operator,termTypes[0],termTypes[1]);
-            pushElement(TypeElement.getInstance(operation));
-            
-        } else{
-            //自分で型決定する
-            UnresolvedTypeInfo resultType = null;
-            
-            //オペレータによってすでに決定している戻り値の型，確定していなければnull
-            final UnresolvedTypeInfo type = token.getSpecifiedResultType();
-            
-            if (null != type) {
-                //オペレータによってすでに結果の型が決定している
-                resultType = type;
-            } else if (token.equals(OperatorToken.ARRAY)) {
-                //配列記述子の場合は特別処理
-                UnresolvedTypeInfo ownerType;
-                if (elements[0] instanceof IdentifierElement) {
-                    ownerType = ((IdentifierElement) elements[0])
-                            .resolveAsReferencedVariable(this.buildDataManager);
-                } else {
-                    ownerType = elements[0].getType();
+        if (term > 0 && term == elements.length){
+            //各項の型を記録する配列
+            final UnresolvedTypeInfo[] termTypes = new UnresolvedTypeInfo[elements.length];
+    
+            //最左辺値について
+            if (elements[0] instanceof IdentifierElement) {
+                //識別子の場合
+                final IdentifierElement leftElement = (IdentifierElement) elements[0];
+                if (referenceLeft) {
+                    //参照なら被参照変数として解決して結果の型を取得する
+                    termTypes[0] = leftElement.resolveAsReferencedVariable(this.buildDataManager);
                 }
-                resultType = new UnresolvedArrayElementUsage(ownerType);
+    
+                if (assignmentLeft) {
+                    //代入なら被代入変数として解決して結果の型を取得する
+                    termTypes[0] = leftElement.resolveAsAssignmetedVariable(this.buildDataManager);
+                }
+            } else if (elements[0].equals(InstanceSpecificElement.THIS)){
+                termTypes[0] = buildDataManager.getCurrentClass();
+            } else if (elements[0].equals(InstanceSpecificElement.NULL)){
+                termTypes[0] = NullTypeInfo.getInstance();
             } else {
-                //型決定に関連する項を左から順番に漁っていって最初に決定できた奴に勝手に決める
-                for (int i = 0; i < typeSpecifiedTermIndexes.length; i++) {
-                    resultType = termTypes[typeSpecifiedTermIndexes[i]];
-                    if (null != resultType){
-                        break;
+                //それ以外の場合は直接型を取得する
+                termTypes[0] = elements[0].getType();
+            }
+    
+            //2項目以降について
+            for (int i = 1; i < term; i++) {
+                if (elements[i] instanceof IdentifierElement) {
+                    //識別子なら勝手に参照として解決して方を取得する
+                    termTypes[i] = ((IdentifierElement) elements[i])
+                            .resolveAsReferencedVariable(this.buildDataManager);
+                } else if (elements[i].equals(InstanceSpecificElement.THIS)){
+                    termTypes[i] = buildDataManager.getCurrentClass();
+                } else if (elements[i].equals(InstanceSpecificElement.NULL)){
+                    termTypes[i] = NullTypeInfo.getInstance();
+                } else {
+                    //それ以外なら直接型を取得する
+                    termTypes[i] = elements[i].getType();
+                }
+            }
+            
+            final OPERATOR operator = token.getOperator();
+            
+            if (2 == term && null != operator){
+                //オペレーターインスタンスがセットされている2項演算子＝名前解決部に型決定処理を委譲する
+                assert(null != termTypes[0]) : "Illega state: first term type was not decided.";
+                assert(null != termTypes[1]) : "Illega state: second term type was not decided.";
+                
+                UnresolvedBinominalOperation operation = new UnresolvedBinominalOperation(operator,termTypes[0],termTypes[1]);
+                pushElement(TypeElement.getInstance(operation));
+                
+            } else{
+                //自分で型決定する
+                UnresolvedTypeInfo resultType = null;
+                
+                //オペレータによってすでに決定している戻り値の型，確定していなければnull
+                final UnresolvedTypeInfo type = token.getSpecifiedResultType();
+                
+                if (null != type) {
+                    //オペレータによってすでに結果の型が決定している
+                    resultType = type;
+                } else if (token.equals(OperatorToken.ARRAY)) {
+                    //配列記述子の場合は特別処理
+                    UnresolvedTypeInfo ownerType;
+                    if (elements[0] instanceof IdentifierElement) {
+                        ownerType = ((IdentifierElement) elements[0])
+                                .resolveAsReferencedVariable(this.buildDataManager);
+                    } else {
+                        ownerType = elements[0].getType();
+                    }
+                    resultType = new UnresolvedArrayElementUsage(ownerType);
+                } else {
+                    //型決定に関連する項を左から順番に漁っていって最初に決定できた奴に勝手に決める
+                    for (int i = 0; i < typeSpecifiedTermIndexes.length; i++) {
+                        resultType = termTypes[typeSpecifiedTermIndexes[i]];
+                        if (null != resultType){
+                            break;
+                        }
                     }
                 }
+                
+                assert (null != resultType) : "Illegal state: operation resultType was not decided.";
+                
+                this.pushElement(TypeElement.getInstance(resultType));
             }
-            
-            assert (null != resultType) : "Illegal state: operation resultType was not decided.";
-            
-            this.pushElement(TypeElement.getInstance(resultType));
         }
     }
 

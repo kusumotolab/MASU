@@ -143,7 +143,7 @@ public class TypeElementBuilder extends ExpressionBuilder {
             }
         }
         
-        //ˆê‰žŠî‚É–ß‚µ‚Ä‚Ý‚é
+        //ˆê‰žŒ³‚É–ß‚µ‚Ä‚Ý‚é
         int size = elements.length -1;
         for(int i=0; i < size; i++){
             pushElement(elements[i]);
@@ -155,6 +155,7 @@ public class TypeElementBuilder extends ExpressionBuilder {
     protected UnresolvedReferenceTypeInfo buildReferenceType(final ExpressionElement[] elements) {
         assert(elements.length > 0);
         assert(elements[0] instanceof IdentifierElement);
+        
         IdentifierElement element = (IdentifierElement)elements[0];
         final String[] typeName = element.getQualifiedName();
         final String[] trueTypeName = this.buildManager.resolveAliase(typeName);

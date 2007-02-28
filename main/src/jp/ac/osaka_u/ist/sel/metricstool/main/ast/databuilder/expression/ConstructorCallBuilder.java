@@ -30,17 +30,17 @@ public class ConstructorCallBuilder extends ExpressionBuilder{
         ExpressionElement[] elements = getAvailableElements();
         
         assert(elements.length > 0) : "Illegal state: constructor element not found.";
-        
         assert(elements[0] instanceof TypeElement) : "Illegal state: constructor owner is not type.";
         
-        UnresolvedReferenceTypeInfo type = (UnresolvedReferenceTypeInfo)elements[0].getType();
-        String[] name = type.getFullReferenceName();
-        
-        UnresolvedMethodCall constructorCall = new UnresolvedMethodCall(type,name[name.length-1],true);
-        resolveParameters(constructorCall, elements,1);
-        pushElement(new MethodCallElement(constructorCall));
-        buildManager.addMethodCall(constructorCall);
-        
+        if (elements.length > 0 && elements[0] instanceof TypeElement){
+            UnresolvedReferenceTypeInfo type = (UnresolvedReferenceTypeInfo)elements[0].getType();
+            String[] name = type.getFullReferenceName();
+            
+            UnresolvedMethodCall constructorCall = new UnresolvedMethodCall(type,name[name.length-1],true);
+            resolveParameters(constructorCall, elements,1);
+            pushElement(new MethodCallElement(constructorCall));
+            buildManager.addMethodCall(constructorCall);
+        }
     }
     
     protected void resolveParameters(UnresolvedMethodCall constructorCall,ExpressionElement[] elements, int startIndex){

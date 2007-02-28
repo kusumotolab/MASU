@@ -26,14 +26,16 @@ public class ExpressionDescriptionBuilder extends ExpressionBuilder {
     protected void afterExited(final AstVisitEvent event) {
         final ExpressionElement[] elements = this.getAvailableElements();
 
-        assert (elements.length == 1) : "Illegal state: too many elements was remained.";
+        assert (elements.length == 1) : "Illegal state: too many elements were remained.";
 
-        if (elements[0] instanceof IdentifierElement) {
-            final UnresolvedTypeInfo type = ((IdentifierElement) elements[0])
-                    .resolveAsReferencedVariable(this.buildDataManager);
-            this.pushElement(TypeElement.getInstance(type));
-        } else {
-            this.pushElement(elements[0]);
+        if (elements.length == 1) {
+            if (elements[0] instanceof IdentifierElement) {
+                final UnresolvedTypeInfo type = ((IdentifierElement) elements[0])
+                        .resolveAsReferencedVariable(this.buildDataManager);
+                this.pushElement(TypeElement.getInstance(type));
+            } else {
+                this.pushElement(elements[0]);
+            }
         }
     }
 
