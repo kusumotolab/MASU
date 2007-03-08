@@ -16,7 +16,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, MetricMeasurable {
+public abstract class ClassInfo implements UnitInfo, TypeInfo, Comparable<ClassInfo>,
+        MetricMeasurable {
 
     /**
      * 名前空間名とクラス名からオブジェクトを生成する
@@ -124,7 +125,7 @@ public abstract class ClassInfo implements TypeInfo, Comparable<ClassInfo>, Metr
             throw new NullPointerException();
         }
 
-        this.superClasses.add((ClassInfo)superClassReference.getType());
+        this.superClasses.add((ClassInfo) superClassReference.getType());
     }
 
     /**

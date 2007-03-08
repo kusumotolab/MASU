@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClass
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
-public abstract class MethodInfo implements Comparable<MethodInfo>, MetricMeasurable {
+public abstract class MethodInfo implements UnitInfo, Comparable<MethodInfo>, MetricMeasurable {
 
     /**
      * メソッドオブジェクトを初期化する

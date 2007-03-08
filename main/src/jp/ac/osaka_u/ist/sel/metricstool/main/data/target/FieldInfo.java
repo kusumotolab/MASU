@@ -94,7 +94,7 @@ public abstract class FieldInfo extends VariableInfo {
         final ClassInfo classInfo = this.getOwnerClass();
         final ClassInfo correspondClassInfo = this.getOwnerClass();
         final int classOrder = classInfo.compareTo(correspondClassInfo);
-        return 0 != classOrder? classOrder : super.compareTo(fieldInfo);
+        return 0 != classOrder ? classOrder : super.compareTo(fieldInfo);
     }
 
     /**

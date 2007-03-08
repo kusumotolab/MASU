@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author y-higo
  */
-public abstract class BlockInfo implements Position, Comparable<BlockInfo> {
+public abstract class BlockInfo implements UnitInfo, Position, Comparable<BlockInfo> {
 
     /**
      * ˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»

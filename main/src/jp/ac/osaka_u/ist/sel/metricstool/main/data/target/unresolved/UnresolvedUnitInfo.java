@@ -6,6 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 
 
 /**
@@ -15,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
  * 
  * @param <T> 解決済みユニットの型
  */
-public interface UnresolvedUnitInfo<T> {
+public interface UnresolvedUnitInfo<T extends UnitInfo> {
 
     /**
      * 名前解決を行い，解決済みユニットを返す
