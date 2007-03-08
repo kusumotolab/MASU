@@ -72,8 +72,8 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
         final Set<ModifierInfo> modifiers = this.getModifiers();
         final String fieldName = this.getName();
         final UnresolvedTypeInfo unresolvedFieldType = this.getType();
-        TypeInfo fieldType = NameResolver.resolveTypeInfo(unresolvedFieldType, usingClass, null,
-                classInfoManager, fieldInfoManager, null, null);
+        TypeInfo fieldType = unresolvedFieldType.resolveType(usingClass, null, classInfoManager,
+                fieldInfoManager, null);
         assert fieldType != null : "resolveTypeInfo returned null!";
         if (fieldType instanceof UnknownTypeInfo) {
             if (unresolvedFieldType instanceof UnresolvedClassReferenceInfo) {
@@ -83,7 +83,8 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
             } else if (unresolvedFieldType instanceof UnresolvedArrayTypeInfo) {
                 final UnresolvedEntityUsageInfo unresolvedArrayElement = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
                         .getElementType();
-                final int dimension = ((UnresolvedArrayTypeInfo) unresolvedFieldType).getDimension();
+                final int dimension = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
+                        .getDimension();
                 final ExternalClassInfo elementType = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedArrayElement);
                 classInfoManager.add(elementType);

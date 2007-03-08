@@ -11,6 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -117,6 +118,34 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
         // 要素の型が解決できた場合はその配列型を作成し返す
         this.resolvedInfo = ArrayTypeInfo.getType(element, dimension);
         return this.resolvedInfo;
+    }
+
+    /**
+     * 解決済み配列型を返す
+     * 
+     * @return 解決済み配列型
+     * @throws NotResolvedException 未解決の場合にスローされる
+     */
+    public TypeInfo getResolvedType() {
+        return (TypeInfo) this.getResolvedEntityUsage();
+    }
+
+    /**
+     * 未解決配列型を解決し，解決済み配列型を返す．
+     * 
+     * @param usingClass 未解決配列型が存在するクラス
+     * @param usingMethod 未解決配列型が存在するメソッド
+     * @param classInfoManager 用いるクラスマネージャ
+     * @param fieldInfoManager 用いるフィールドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
+     * @return 解決済み配列型
+     */
+    public TypeInfo resolveType(final TargetClassInfo usingClass,
+            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        return (TypeInfo) this.resolveEntityUsage(usingClass, usingMethod, classInfoManager,
+                fieldInfoManager, methodInfoManager);
     }
 
     /**

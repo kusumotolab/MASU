@@ -184,16 +184,15 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         // 型パラメータを解決し，解決済みメソッド情報に追加する
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
-            final TypeParameterInfo typeParameter = (TypeParameterInfo) NameResolver
-                    .resolveTypeInfo(unresolvedTypeParameter, usingClass, this.resolvedInfo,
-                            classInfoManager, null, null, null);
+            final TypeParameterInfo typeParameter = (TypeParameterInfo) unresolvedTypeParameter
+                    .resolveType(usingClass, this.resolvedInfo, classInfoManager, null, null);
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
 
         // 返り値をセットする
         final UnresolvedTypeInfo unresolvedMethodReturnType = this.getReturnType();
-        TypeInfo methodReturnType = NameResolver.resolveTypeInfo(unresolvedMethodReturnType,
-                usingClass, null, classInfoManager, null, null, null);
+        TypeInfo methodReturnType = unresolvedMethodReturnType.resolveType(usingClass, null,
+                classInfoManager, null, null);
         assert methodReturnType != null : "resolveTypeInfo returned null!";
         if (methodReturnType instanceof UnknownTypeInfo) {
             if (unresolvedMethodReturnType instanceof UnresolvedClassReferenceInfo) {

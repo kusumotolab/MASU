@@ -235,13 +235,45 @@ public final class PrimitiveTypeInfo extends EntityUsageInfo implements TypeInfo
     }
 
     /**
-     * この基本型を名前解決する
+     * 名前解決を行う
      * 
-     * @return 自分自身が返される
+     * @param usingClass 名前解決を行うエンティティがあるクラス
+     * @param usingMethod 名前解決を行うエンティティがあるメソッド
+     * @param classInfoManager 用いるクラスマネージャ
+     * @param fieldInfoManager 用いるフィールドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
+     * 
+     * @return 解決済みの型（自分自身）
      */
     public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+        return this;
+    }
+
+    /**
+     * 型解決された情報を返す
+     * 
+     * @return 自分自身を返す
+     */
+    public TypeInfo getResolvedType() {
+        return this;
+    }
+
+    /**
+     * 名前解決を行う
+     * 
+     * @param usingClass 名前解決を行うエンティティがあるクラス
+     * @param usingMethod 名前解決を行うエンティティがあるメソッド
+     * @param classInfoManager 用いるクラスマネージャ
+     * @param fieldInfoManager 用いるフィールドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
+     * 
+     * @return 解決済みの型（自分自身）
+     */
+    public TypeInfo resolveType(final TargetClassInfo usingClass, final TargetMethodInfo usingMethod,
+            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
+            final MethodInfoManager methodInfoManager) {
         return this;
     }
 

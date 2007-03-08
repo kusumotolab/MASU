@@ -35,8 +35,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.NameResolver;
@@ -832,10 +832,9 @@ public class MetricsTool {
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : unresolvedClassInfo
                 .getTypeParameters()) {
 
-            final TypeParameterInfo typeParameter = (TypeParameterInfo) NameResolver
-                    .resolveTypeParameter(unresolvedTypeParameter, classInfo, null,
-                            classInfoManager, null, null, null);
-            classInfo.addTypeParameter(typeParameter);
+            final TypeInfo typeParameter = unresolvedTypeParameter.resolveType(classInfo, null,
+                    classInfoManager, null, null);
+            classInfo.addTypeParameter((TypeParameterInfo) typeParameter);
         }
 
         // 各未解決インナークラスに対して

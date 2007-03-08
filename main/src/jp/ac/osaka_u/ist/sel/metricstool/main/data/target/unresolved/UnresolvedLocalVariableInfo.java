@@ -69,8 +69,8 @@ public final class UnresolvedLocalVariableInfo extends UnresolvedVariableInfo<Lo
         final Set<ModifierInfo> localModifiers = this.getModifiers();
         final String variableName = this.getName();
         final UnresolvedTypeInfo unresolvedVariableType = this.getType();
-        TypeInfo variableType = NameResolver.resolveTypeInfo(unresolvedVariableType, usingClass,
-                usingMethod, classInfoManager, null, null, null);
+        TypeInfo variableType = unresolvedVariableType.resolveType(usingClass, usingMethod,
+                classInfoManager, null, null);
         assert variableType != null : "resolveTypeInfo returned null!";
         if (variableType instanceof UnknownTypeInfo) {
             if (unresolvedVariableType instanceof UnresolvedClassReferenceInfo) {

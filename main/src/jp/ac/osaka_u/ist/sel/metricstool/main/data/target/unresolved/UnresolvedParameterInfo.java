@@ -66,8 +66,8 @@ public final class UnresolvedParameterInfo extends UnresolvedVariableInfo<Target
         final Set<ModifierInfo> parameterModifiers = this.getModifiers();
         final String parameterName = this.getName();
         final UnresolvedTypeInfo unresolvedParameterType = this.getType();
-        TypeInfo parameterType = NameResolver.resolveTypeInfo(unresolvedParameterType, usingClass,
-                usingMethod, classInfoManager, null, null, null);
+        TypeInfo parameterType = unresolvedParameterType.resolveType(usingClass,
+                usingMethod, classInfoManager, null, null);
         assert parameterType != null : "resolveTypeInfo returned null!";
         if (parameterType instanceof UnknownTypeInfo) {
             if (unresolvedParameterType instanceof UnresolvedClassReferenceInfo) {

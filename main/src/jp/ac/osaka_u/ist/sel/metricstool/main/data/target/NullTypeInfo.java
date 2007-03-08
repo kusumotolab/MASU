@@ -41,6 +41,41 @@ public final class NullTypeInfo implements TypeInfo, UnresolvedTypeInfo {
     }
 
     /**
+     * 名前解決されているかどうかを返す．
+     * 
+     * @return 常に true を返す
+     */
+    public boolean alreadyResolved() {
+        return true;
+    }
+
+    /**
+     * 名前解決された情報を返す
+     * 
+     * @return 自分自身を返す
+     */
+    public TypeInfo getResolvedType() {
+        return this;
+    }
+
+    /**
+     * 名前解決を行う
+     * 
+     * @param usingClass 名前解決を行うエンティティがあるクラス
+     * @param usingMethod 名前解決を行うエンティティがあるメソッド
+     * @param classInfoManager 用いるクラスマネージャ
+     * @param fieldInfoManager 用いるフィールドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
+     * 
+     * @return 解決済みの型（自分自身）
+     */
+    public TypeInfo resolveType(final TargetClassInfo usingClass,
+            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+        return this;
+    }
+
+    /**
      * null 型の型名を表す定数
      */
     public static final String NULL_STRING = new String("null");
