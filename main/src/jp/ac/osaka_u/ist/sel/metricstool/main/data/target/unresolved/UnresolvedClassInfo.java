@@ -9,8 +9,13 @@ import java.util.List;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -35,7 +40,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 public final class UnresolvedClassInfo implements UnresolvedTypeInfo, VisualizableSetting,
-        MemberSetting, PositionSetting, NameResolvable<TargetClassInfo> {
+        MemberSetting, PositionSetting, UnresolvedUnitInfo<TargetClassInfo> {
 
     /**
      * 引数なしコンストラクタ
@@ -46,11 +51,10 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
 
         this.namespace = null;
         this.className = null;
-        this.loc = 0;
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
-        this.superClasses = new LinkedHashSet<UnresolvedTypeInfo>();
+        this.superClasses = new LinkedHashSet<UnresolvedClassReferenceInfo>();
         this.innerClasses = new HashSet<UnresolvedClassInfo>();
         this.definedMethods = new HashSet<UnresolvedMethodInfo>();
         this.definedFields = new HashSet<UnresolvedFieldInfo>();
@@ -85,19 +89,19 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
 
         this.modifiers.add(modifier);
     }
-    
+
     /**
      * 未解決型パラメータを追加する
      * 
      * @param typeParameter 追加する未解決型パラメータ名
      */
-    public void addTypeParameter(final UnresolvedTypeParameterInfo typeParameter){
-        
+    public void addTypeParameter(final UnresolvedTypeParameterInfo typeParameter) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == typeParameter){
+        if (null == typeParameter) {
             throw new NullPointerException();
         }
-        
+
         this.typeParameters.add(typeParameter);
     }
 
@@ -198,12 +202,13 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
 
     /**
      * 未解決型パラメータの List を返す
+     * 
      * @return 未解決型パラメータの List
      */
-    public List<UnresolvedTypeParameterInfo> getTypeParameters(){
+    public List<UnresolvedTypeParameterInfo> getTypeParameters() {
         return Collections.unmodifiableList(this.typeParameters);
     }
-    
+
     /**
      * 名前空間名を保存する.名前空間名がない場合は長さ0の配列を与えること．
      * 
@@ -242,23 +247,7 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      * @return 行数
      */
     public int getLOC() {
-        return this.loc;
-    }
-
-    /**
-     * 行数を保存する
-     * 
-     * @param loc 行数
-     */
-    public void setLOC(final int loc) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (loc < 0) {
-            throw new IllegalArgumentException("LOC must be o or more!");
-        }
-
-        this.loc = loc;
+        return this.getToLine() - this.getFromLine() + 1;
     }
 
     /**
@@ -266,7 +255,7 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      * 
      * @param superClass 親クラス名
      */
-    public void addSuperClass(final UnresolvedReferenceTypeInfo superClass) {
+    public void addSuperClass(final UnresolvedClassReferenceInfo superClass) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -330,7 +319,7 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      * 
      * @return 親クラス名のセット
      */
-    public Set<UnresolvedTypeInfo> getSuperClasses() {
+    public Set<UnresolvedClassReferenceInfo> getSuperClasses() {
         return Collections.unmodifiableSet(this.superClasses);
     }
 
@@ -598,24 +587,10 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      * 
      * @return 名前解決された情報
      */
-    public TargetClassInfo getResolvedInfo() {
+    public TargetClassInfo getResolvedUnit() {
         return this.resolvedInfo;
     }
 
-    /**
-     * 名前解決された情報をセットする
-     * 
-     * @param resolvedInfo 名前解決された情報
-     */
-    public void setResolvedInfo(final TargetClassInfo resolvedInfo) {
-
-        if (null == resolvedInfo) {
-            throw new NullPointerException();
-        }
-
-        this.resolvedInfo = resolvedInfo;
-    }
-    
     /**
      * 既に名前解決されたかどうかを返す
      * 
@@ -623,6 +598,67 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      */
     public final boolean alreadyResolved() {
         return null != this.resolvedInfo;
+    }
+
+    /**
+     * この未解決 finally 節を解決する
+     * 
+     * @param usingClass 所属クラス，このメソッド呼び出しの際は null さセットされていると思われる．
+     * @param usingMethod 所属メソッド，このメソッド呼び出しの際は null さセットされていると思われる．
+     * @param classInfoManager 用いるクラスマネージャ
+     * @param fieldInfoManager 用いるフィールドマネージャ
+     * @param methodInfoManger 用いるメソッドマネージャ
+     */
+    public TargetClassInfo resolveUnit(final TargetClassInfo usingClass,
+            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == classInfoManager) {
+            throw new NullPointerException();
+        }
+
+        // 既に解決済みである場合は，キャッシュを返す
+        if (this.alreadyResolved()) {
+            return this.getResolvedUnit();
+        }
+
+        // 修飾子，完全限定名，行数，可視性，インスタンスメンバーかどうかを取得
+        final Set<ModifierInfo> modifiers = this.getModifiers();
+        final String[] fullQualifiedName = this.getFullQualifiedName();
+        final boolean privateVisible = this.isPrivateVisible();
+        final boolean namespaceVisible = this.isNamespaceVisible();
+        final boolean inheritanceVisible = this.isInheritanceVisible();
+        final boolean publicVisible = this.isPublicVisible();
+        final boolean instance = this.isInstanceMember();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
+        this.resolvedInfo = null != this.outerClass ? new TargetClassInfo(modifiers,
+                fullQualifiedName, privateVisible, namespaceVisible, inheritanceVisible,
+                publicVisible, instance, fromLine, fromColumn, toLine, toColumn)
+                : new TargetInnerClassInfo(modifiers, fullQualifiedName, usingClass,
+                        privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
+                        instance, fromLine, fromColumn, toLine, toColumn);
+        classInfoManager.add(this.resolvedInfo);
+        return this.resolvedInfo;
+    }
+
+    /**
+     * この未解決クラス定義情報の未解決参照型を返す
+     * 
+     * @return この未解決クラス定義情報の未解決参照型
+     */
+    public UnresolvedClassReferenceInfo getClassReference() {
+
+        final String[] fullQualifiedName = this.getFullQualifiedName();
+        final UnresolvedFullQualifiedNameClassReferenceInfo classReference = new UnresolvedFullQualifiedNameClassReferenceInfo(
+                new AvailableNamespaceInfoSet(), fullQualifiedName);
+        return classReference;
     }
 
     /**
@@ -636,11 +672,6 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
     private String className;
 
     /**
-     * 行数を保存するための変数
-     */
-    private int loc;
-
-    /**
      * 修飾子を保存するための変数
      */
     private final Set<ModifierInfo> modifiers;
@@ -649,11 +680,11 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      * 型パラメータを保存するための変数
      */
     private final List<UnresolvedTypeParameterInfo> typeParameters;
-    
+
     /**
      * 親クラスを保存するためのセット
      */
-    private final Set<UnresolvedTypeInfo> superClasses;
+    private final Set<UnresolvedClassReferenceInfo> superClasses;
 
     /**
      * インナークラスを保存するためのセット

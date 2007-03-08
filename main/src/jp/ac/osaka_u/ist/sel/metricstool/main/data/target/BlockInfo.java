@@ -18,15 +18,23 @@ public abstract class BlockInfo implements Position, Comparable<BlockInfo> {
     /**
      * 位置情報を与えて初期化
      * 
+     * @param ownerClass このブロックを所有するクラス
+     * @param ownerMethod このブロックを所有するメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    BlockInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+    BlockInfo(final TargetClassInfo ownerClass, final TargetMethodInfo ownerMethod,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == ownerClass) || (null == ownerMethod)) {
+            throw new NullPointerException();
+        }
 
+        this.ownerClass = ownerClass;
+        this.ownerMethod = ownerMethod;
         this.fromLine = fromLine;
         this.fromColumn = fromColumn;
         this.toLine = toLine;
@@ -83,6 +91,24 @@ public abstract class BlockInfo implements Position, Comparable<BlockInfo> {
     @Override
     public final int hashCode() {
         return this.getFromLine() + this.getFromColumn() + this.getToLine() + this.getToColumn();
+    }
+
+    /**
+     * このブロックを所有するクラスを返す
+     * 
+     * @return このブロックを所有するクラス
+     */
+    public final TargetClassInfo getOwnerClass() {
+        return this.ownerClass;
+    }
+
+    /**
+     * このブロックを所有するを返す
+     * 
+     * @return このブロックを所有するメソッド
+     */
+    public final TargetMethodInfo getOwnerMethod() {
+        return this.ownerMethod;
     }
 
     /**
@@ -265,6 +291,16 @@ public abstract class BlockInfo implements Position, Comparable<BlockInfo> {
      * このブロックの直下のブロックを保存するための変数
      */
     private final SortedSet<BlockInfo> innerBlocks;
+
+    /**
+     * このブロックを所有するクラスを保存するための変数
+     */
+    private final TargetClassInfo ownerClass;
+
+    /**
+     * このブロックを所有するメソッドを保存するための変数
+     */
+    private final TargetMethodInfo ownerMethod;
 
     /**
      * 開始行を保存するための変数

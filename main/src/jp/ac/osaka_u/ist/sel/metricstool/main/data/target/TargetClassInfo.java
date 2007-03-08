@@ -39,7 +39,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
      * @param modifiers 修飾子の Set
      * @param namespace 名前空間名
      * @param className クラス名
-     * @param loc 行数
      * @param privateVisible クラス内からのみ参照可能
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
@@ -51,10 +50,9 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
      * @param toColumn 終了列
      */
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
-            final String className, final int loc, final boolean privateVisible,
-            final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final boolean instance, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final String className, final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(namespace, className);
 
@@ -62,11 +60,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
             throw new NullPointerException();
         }
 
-        if (loc < 0) {
-            throw new IllegalAccessError("LOC is must be 0 or more!");
-        }
-
-        this.loc = loc;
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
@@ -105,7 +98,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
      * @param toColumn 終了列
      */
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
-            final int loc, final boolean privateVisible, final boolean namespaceVisible,
+            final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
@@ -115,11 +108,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
             throw new NullPointerException();
         }
 
-        if (loc < 0) {
-            throw new IllegalAccessError("LOC is must be 0 or more!");
-        }
-
-        this.loc = loc;
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
@@ -162,7 +150,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
      * @return このクラスの行数
      */
     public final int getLOC() {
-        return this.loc;
+        return this.getToLine() - this.getFromLine() + 1;
     }
 
     /**
@@ -344,11 +332,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
     public final int getToColumn() {
         return this.toColumn;
     }
-
-    /**
-     * 行数を保存するための変数
-     */
-    private final int loc;
 
     /**
      * 修飾子を保存する変数

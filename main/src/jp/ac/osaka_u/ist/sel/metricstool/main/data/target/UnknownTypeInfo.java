@@ -11,6 +11,7 @@ public class UnknownTypeInfo implements TypeInfo {
 
     /**
      * このクラスの単一オブジェクトを返す
+     * 
      * @return このクラスの単一オブジェクト
      */
     public static UnknownTypeInfo getInstance() {
@@ -34,6 +35,12 @@ public class UnknownTypeInfo implements TypeInfo {
         }
 
         return typeInfo instanceof UnknownTypeInfo;
+    }
+
+    /**
+     * 外のクラスからアクセス不可にする
+     */
+    private UnknownTypeInfo() {
     }
 
     /**

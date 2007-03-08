@@ -8,12 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java15AntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.JavaAstVisitorManager;
@@ -23,39 +20,34 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManage
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredException;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.NameResolver;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsage;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCall;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVClassMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVFileMetricsWriter;
@@ -755,40 +747,20 @@ public class MetricsTool {
      */
     private void registClassInfos() {
 
-        // Unresolved クラス情報マネージャ， クラス情報マネージャを取得
+        // 未解決クラス情報マネージャ， クラス情報マネージャを取得
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
         final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
 
-        // 各 Unresolvedクラスに対して
+        // 各未解決クラスに対して
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
 
-            // 修飾子，完全限定名，行数，可視性，インスタンスメンバーかどうかを取得
-            final Set<ModifierInfo> modifiers = unresolvedClassInfo.getModifiers();
-            final String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
-            final int loc = unresolvedClassInfo.getLOC();
-            final boolean privateVisible = unresolvedClassInfo.isPrivateVisible();
-            final boolean namespaceVisible = unresolvedClassInfo.isNamespaceVisible();
-            final boolean inheritanceVisible = unresolvedClassInfo.isInheritanceVisible();
-            final boolean publicVisible = unresolvedClassInfo.isPublicVisible();
-            final boolean instance = unresolvedClassInfo.isInstanceMember();
-            final int fromLine = unresolvedClassInfo.getFromLine();
-            final int fromColumn = unresolvedClassInfo.getFromColumn();
-            final int toLine = unresolvedClassInfo.getToLine();
-            final int toColumn = unresolvedClassInfo.getToColumn();
-
-            // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
-            final TargetClassInfo classInfo = new TargetClassInfo(modifiers, fullQualifiedName,
-                    loc, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
-                    instance, fromLine, fromColumn, toLine, toColumn);
-            classInfoManager.add(classInfo);
-
-            // 未解決クラス情報に解決済みクラス情報を追加しておく
-            unresolvedClassInfo.setResolvedInfo(classInfo);
+            final TargetClassInfo classInfo = unresolvedClassInfo.resolveUnit(null, null,
+                    classInfoManager, null, null);
 
             // 各インナークラスに対して処理
-            for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
+            for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
                     .getInnerClasses()) {
                 final TargetInnerClassInfo innerClass = registInnerClassInfo(
                         unresolvedInnerClassInfo, classInfo, classInfoManager);
@@ -809,31 +781,12 @@ public class MetricsTool {
             final UnresolvedClassInfo unresolvedClassInfo, final TargetClassInfo outerClass,
             final ClassInfoManager classInfoManager) {
 
-        // 修飾子，完全限定名，行数，可視性を取得
-        final Set<ModifierInfo> modifiers = unresolvedClassInfo.getModifiers();
-        final String[] fullQualifiedName = unresolvedClassInfo.getFullQualifiedName();
-        final int loc = unresolvedClassInfo.getLOC();
-        final boolean privateVisible = unresolvedClassInfo.isPrivateVisible();
-        final boolean namespaceVisible = unresolvedClassInfo.isNamespaceVisible();
-        final boolean inheritanceVisible = unresolvedClassInfo.isInheritanceVisible();
-        final boolean publicVisible = unresolvedClassInfo.isPublicVisible();
-        final boolean instance = unresolvedClassInfo.isInstanceMember();
-        final int fromLine = unresolvedClassInfo.getFromLine();
-        final int fromColumn = unresolvedClassInfo.getFromColumn();
-        final int toLine = unresolvedClassInfo.getToLine();
-        final int toColumn = unresolvedClassInfo.getToColumn();
-
-        // ClassInfo オブジェクトを生成し，ClassInfoマネージャに登録
-        TargetInnerClassInfo classInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
-                outerClass, loc, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible, instance, fromLine, fromColumn, toLine, toColumn);
-        classInfoManager.add(classInfo);
-
-        // 未解決クラス情報に解決済みクラス情報を追加しておく
-        unresolvedClassInfo.setResolvedInfo(classInfo);
+        final TargetInnerClassInfo classInfo = (TargetInnerClassInfo) unresolvedClassInfo
+                .resolveUnit(null, null, classInfoManager, null, null);
 
         // このクラスのインナークラスに対して再帰的に処理
-        for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo.getInnerClasses()) {
+        for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
+                .getInnerClasses()) {
             final TargetInnerClassInfo innerClass = registInnerClassInfo(unresolvedInnerClassInfo,
                     classInfo, classInfoManager);
             classInfo.addInnerClass(innerClass);
@@ -872,7 +825,8 @@ public class MetricsTool {
             final ClassInfoManager classInfoManager) {
 
         // 解決済みクラス情報を取得
-        final TargetClassInfo classInfo = unresolvedClassInfo.getResolvedInfo();
+        final TargetClassInfo classInfo = unresolvedClassInfo.getResolvedUnit();
+        assert null != classInfo : "classInfo shouldn't be null!";
 
         // 未解決クラス情報から未解決型パラメータを取得し，型解決を行った後，解決済みクラス情報に付与する
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : unresolvedClassInfo
@@ -912,32 +866,34 @@ public class MetricsTool {
 
         // 名前解決不可能クラスを解析する
         for (int i = 0; i < 100; i++) {
-            
+
             CLASSLOOP: for (final Iterator<UnresolvedClassInfo> classIterator = unresolvableClasses
                     .iterator(); classIterator.hasNext();) {
 
                 // ClassInfo を取得
                 final UnresolvedClassInfo unresolvedClassInfo = classIterator.next();
-                final ClassInfo classInfo = unresolvedClassInfo.getResolvedInfo();
+                final TargetClassInfo classInfo = unresolvedClassInfo.getResolvedUnit();
+                assert null != classInfo : "classInfo shouldn't be null!";
 
                 // 各親クラス名に対して
-                for (final UnresolvedTypeInfo unresolvedSuperClassType : unresolvedClassInfo
+                for (final UnresolvedClassReferenceInfo unresolvedSuperClassReference : unresolvedClassInfo
                         .getSuperClasses()) {
-                    TypeInfo superClass = NameResolver.resolveTypeInfo(unresolvedSuperClassType,
-                            (TargetClassInfo) classInfo, null, classInfoManager, null, null, null);
+                    EntityUsageInfo superClassReference = unresolvedSuperClassReference
+                            .resolveEntityUsage(classInfo, null, classInfoManager, null, null);
 
                     // null でない場合は名前解決に成功したとみなす
-                    if (null != superClass) {
+                    if (null != superClassReference) {
 
                         // 見つからなかった場合は名前空間名がUNKNOWNなクラスを登録する
-                        if (superClass instanceof UnknownTypeInfo) {
-                            superClass = NameResolver
-                                    .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedSuperClassType);
-                            classInfoManager.add((ExternalClassInfo) superClass);
+                        if (superClassReference.getType() instanceof UnknownTypeInfo) {
+                            final ExternalClassInfo superClass = NameResolver
+                                    .createExternalClassInfo(unresolvedSuperClassReference);
+                            classInfoManager.add(superClass);
+                            superClassReference = new ClassReferenceInfo(superClass);
                         }
 
-                        classInfo.addSuperClass((ClassInfo) superClass);
-                        ((ClassInfo) superClass).addSubClass(classInfo);
+                        classInfo.addSuperClass((ClassReferenceInfo) superClassReference);
+                        ((ClassInfo) superClassReference.getType()).addSubClass(classInfo);
 
                         // null な場合は名前解決に失敗したとみなすので unresolvedClassInfo は unresolvableClasses
                         // から削除しない
@@ -970,34 +926,38 @@ public class MetricsTool {
             final List<UnresolvedClassInfo> unresolvableClasses) {
 
         // ClassInfo を取得
-        final ClassInfo classInfo = unresolvedClassInfo.getResolvedInfo();
+        final TargetClassInfo classInfo = unresolvedClassInfo.getResolvedUnit();
+        assert null != classInfo : "classInfo shouldn't be null!";
 
         // 各親クラス名に対して
-        for (UnresolvedTypeInfo unresolvedSuperClassType : unresolvedClassInfo.getSuperClasses()) {
-            TypeInfo superClass = NameResolver.resolveTypeInfo(unresolvedSuperClassType,
-                    (TargetClassInfo) classInfo, null, classInfoManager, null, null, null);
+        for (final UnresolvedClassReferenceInfo unresolvedSuperClassReference : unresolvedClassInfo
+                .getSuperClasses()) {
+            EntityUsageInfo superClassReference = unresolvedSuperClassReference.resolveEntityUsage(
+                    classInfo, null, classInfoManager, null, null);
 
             // null だった場合は解決不可能リストに一時的に格納
-            if (null == superClass) {
+            if (null == superClassReference) {
 
                 unresolvableClasses.add(unresolvedClassInfo);
 
             } else {
 
                 // 見つからなかった場合は名前空間名がUNKNOWNなクラスを登録する
-                if (superClass instanceof UnknownTypeInfo) {
-                    superClass = NameResolver
-                            .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedSuperClassType);
-                    classInfoManager.add((ExternalClassInfo) superClass);
+                if (superClassReference.getType() instanceof UnknownTypeInfo) {
+                    final ExternalClassInfo superClass = NameResolver
+                            .createExternalClassInfo(unresolvedSuperClassReference);
+                    classInfoManager.add(superClass);
+                    superClassReference = new ClassReferenceInfo(superClass);
                 }
 
-                classInfo.addSuperClass((ClassInfo) superClass);
-                ((ClassInfo) superClass).addSubClass(classInfo);
+                classInfo.addSuperClass((ClassReferenceInfo) superClassReference);
+                ((ClassInfo) superClassReference.getType()).addSubClass(classInfo);
             }
         }
 
         // 各インナークラスに対して
-        for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo.getInnerClasses()) {
+        for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
+                .getInnerClasses()) {
             addInheritanceInformationToClassInfo(unresolvedInnerClassInfo, classInfoManager,
                     unresolvableClasses);
         }
@@ -1016,7 +976,8 @@ public class MetricsTool {
         final FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
 
         // 各 Unresolvedクラスに対して
-        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
+        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+                .getClassInfos()) {
             registFieldInfos(unresolvedClassInfo, classInfoManager, fieldInfoManager);
         }
     }
@@ -1032,61 +993,19 @@ public class MetricsTool {
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager) {
 
         // ClassInfo を取得
-        final ClassInfo ownerClass = unresolvedClassInfo.getResolvedInfo();
+        final TargetClassInfo ownerClass = unresolvedClassInfo.getResolvedUnit();
+        assert null != ownerClass : "ownerClass shouldn't be null!";
 
         // 各未解決フィールドに対して
-        for (UnresolvedFieldInfo unresolvedFieldInfo : unresolvedClassInfo.getDefinedFields()) {
+        for (final UnresolvedFieldInfo unresolvedFieldInfo : unresolvedClassInfo.getDefinedFields()) {
 
-            // 修飾子，名前，型，可視性，インスタンスメンバーかどうかを取得
-            final Set<ModifierInfo> modifiers = unresolvedFieldInfo.getModifiers();
-            final String fieldName = unresolvedFieldInfo.getName();
-            final UnresolvedTypeInfo unresolvedFieldType = unresolvedFieldInfo.getType();
-            TypeInfo fieldType = NameResolver.resolveTypeInfo(unresolvedFieldType,
-                    (TargetClassInfo) ownerClass, null, classInfoManager, null, null, null);
-            assert fieldType != null : "resolveTypeInfo returned null!";
-            if (fieldType instanceof UnknownTypeInfo) {
-                if (unresolvedFieldType instanceof UnresolvedReferenceTypeInfo) {
-                    fieldType = NameResolver
-                            .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedFieldType);
-                    classInfoManager.add((ExternalClassInfo) fieldType);
-                } else if (unresolvedFieldType instanceof UnresolvedArrayTypeInfo) {
-                    final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
-                            .getElementType();
-                    final int dimension = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
-                            .getDimension();
-                    final TypeInfo elementType = NameResolver
-                            .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
-                    classInfoManager.add((ExternalClassInfo) elementType);
-                    fieldType = ArrayTypeInfo.getType(elementType, dimension);
-                } else {
-                    err.println("Can't resolve field type : " + unresolvedFieldType.getTypeName());
-                }
-            }
-            final boolean privateVisible = unresolvedFieldInfo.isPrivateVisible();
-            final boolean namespaceVisible = unresolvedFieldInfo.isNamespaceVisible();
-            final boolean inheritanceVisible = unresolvedFieldInfo.isInheritanceVisible();
-            final boolean publicVisible = unresolvedFieldInfo.isPublicVisible();
-            final boolean instance = unresolvedFieldInfo.isInstanceMember();
-            final int fromLine = unresolvedFieldInfo.getFromLine();
-            final int fromColumn = unresolvedFieldInfo.getFromColumn();
-            final int toLine = unresolvedFieldInfo.getToLine();
-            final int toColumn = unresolvedFieldInfo.getToColumn();
-
-            // フィールドオブジェクトを生成
-            final TargetFieldInfo fieldInfo = new TargetFieldInfo(modifiers, fieldName, fieldType,
-                    ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
-                    publicVisible, instance, fromLine, fromColumn, toLine, toColumn);
-
-            // フィールド情報をクラスとフィールド情報マネージャに追加
-            ((TargetClassInfo) ownerClass).addDefinedField(fieldInfo);
-            fieldInfoManager.add(fieldInfo);
-
-            // 未解決フィールド情報にも追加
-            unresolvedFieldInfo.setResolvedInfo(fieldInfo);
+            unresolvedFieldInfo.resolveUnit(ownerClass, null, classInfoManager, fieldInfoManager,
+                    null);
         }
 
         // 各インナークラスに対して
-        for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo.getInnerClasses()) {
+        for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
+                .getInnerClasses()) {
             registFieldInfos(unresolvedInnerClassInfo, classInfoManager, fieldInfoManager);
         }
     }
@@ -1103,7 +1022,8 @@ public class MetricsTool {
         final MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
 
         // 各 Unresolvedクラスに対して
-        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
+        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+                .getClassInfos()) {
             registMethodInfos(unresolvedClassInfo, classInfoManager, methodInfoManager);
         }
     }
@@ -1119,167 +1039,58 @@ public class MetricsTool {
             final ClassInfoManager classInfoManager, final MethodInfoManager methodInfoManager) {
 
         // ClassInfo を取得
-        final TargetClassInfo ownerClass = unresolvedClassInfo.getResolvedInfo();
+        final TargetClassInfo ownerClass = unresolvedClassInfo.getResolvedUnit();
 
         // 各未解決メソッドに対して
-        for (UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo.getDefinedMethods()) {
+        for (final UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo
+                .getDefinedMethods()) {
 
-            // 修飾子，名前，返り値，行数，コンストラクタかどうか，可視性，インスタンスメンバーかどうかを取得
-            final Set<ModifierInfo> methodModifiers = unresolvedMethodInfo.getModifiers();
-            final String methodName = unresolvedMethodInfo.getMethodName();
+            // メソッド情報を解決
+            final TargetMethodInfo methodInfo = unresolvedMethodInfo.resolveUnit(ownerClass, null,
+                    classInfoManager, null, methodInfoManager);
 
-            final int methodLOC = unresolvedMethodInfo.getLOC();
-            final boolean constructor = unresolvedMethodInfo.isConstructor();
-            final boolean privateVisible = unresolvedMethodInfo.isPrivateVisible();
-            final boolean namespaceVisible = unresolvedMethodInfo.isNamespaceVisible();
-            final boolean inheritanceVisible = unresolvedMethodInfo.isInheritanceVisible();
-            final boolean publicVisible = unresolvedMethodInfo.isPublicVisible();
-            final boolean instance = unresolvedMethodInfo.isInstanceMember();
-            final int methodFromLine = unresolvedMethodInfo.getFromLine();
-            final int methodFromColumn = unresolvedMethodInfo.getFromColumn();
-            final int methodToLine = unresolvedMethodInfo.getToLine();
-            final int methodToColumn = unresolvedMethodInfo.getToColumn();
+            // メソッド内ブロック構造を解決
+            for (final UnresolvedBlockInfo<?> unresolvedInnerBlockInfo : unresolvedMethodInfo
+                    .getInnerBlocks()) {
 
-            // MethodInfo オブジェクトを生成する．
-            final TargetMethodInfo methodInfo = new TargetMethodInfo(methodModifiers, methodName,
-                    ownerClass, constructor, methodLOC, privateVisible, namespaceVisible,
-                    inheritanceVisible, publicVisible, instance, methodFromLine, methodFromColumn,
-                    methodToLine, methodToColumn);
-
-            // 型パラメータを解決し，解決済みメソッド情報に追加する
-            for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : unresolvedMethodInfo
-                    .getTypeParameters()) {
-
-                final TypeParameterInfo typeParameter = (TypeParameterInfo) NameResolver
-                        .resolveTypeInfo(unresolvedTypeParameter, ownerClass, methodInfo,
-                                classInfoManager, null, null, null);
-                methodInfo.addTypeParameter(typeParameter);
+                final BlockInfo innerBlockInfo = registBlockInfos(ownerClass, methodInfo,
+                        unresolvedInnerBlockInfo, classInfoManager);
+                methodInfo.addInnerBlock(innerBlockInfo);
             }
-
-            // 返り値をセットする
-            final UnresolvedTypeInfo unresolvedMethodReturnType = unresolvedMethodInfo
-                    .getReturnType();
-            TypeInfo methodReturnType = NameResolver.resolveTypeInfo(unresolvedMethodReturnType,
-                    ownerClass, null, classInfoManager, null, null, null);
-            assert methodReturnType != null : "resolveTypeInfo returned null!";
-            if (methodReturnType instanceof UnknownTypeInfo) {
-                if (unresolvedMethodReturnType instanceof UnresolvedReferenceTypeInfo) {
-                    methodReturnType = NameResolver
-                            .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedMethodReturnType);
-                    classInfoManager.add((ExternalClassInfo) methodReturnType);
-                } else if (unresolvedMethodReturnType instanceof UnresolvedArrayTypeInfo) {
-                    final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
-                            .getElementType();
-                    final int dimension = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
-                            .getDimension();
-                    final TypeInfo elementType = NameResolver
-                            .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
-                    classInfoManager.add((ExternalClassInfo) elementType);
-                    methodReturnType = ArrayTypeInfo.getType(elementType, dimension);
-                } else {
-                    err.println("Can't resolve method return type : "
-                            + unresolvedMethodReturnType.getTypeName());
-                }
-            }
-            methodInfo.setReturnType(methodReturnType);
-
-            // 引数を追加する
-            for (final UnresolvedParameterInfo unresolvedParameterInfo : unresolvedMethodInfo
-                    .getParameterInfos()) {
-
-                // 修飾子，パラメータ名，型，位置情報を取得
-                final Set<ModifierInfo> parameterModifiers = unresolvedParameterInfo.getModifiers();
-                final String parameterName = unresolvedParameterInfo.getName();
-                final UnresolvedTypeInfo unresolvedParameterType = unresolvedParameterInfo
-                        .getType();
-                TypeInfo parameterType = NameResolver.resolveTypeInfo(unresolvedParameterType,
-                        ownerClass, methodInfo, classInfoManager, null, null, null);
-                assert parameterType != null : "resolveTypeInfo returned null!";
-                if (parameterType instanceof UnknownTypeInfo) {
-                    if (unresolvedParameterType instanceof UnresolvedReferenceTypeInfo) {
-                        parameterType = NameResolver
-                                .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedParameterType);
-                        classInfoManager.add((ExternalClassInfo) parameterType);
-                    } else if (unresolvedParameterType instanceof UnresolvedArrayTypeInfo) {
-                        final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedParameterType)
-                                .getElementType();
-                        final int dimension = ((UnresolvedArrayTypeInfo) unresolvedParameterType)
-                                .getDimension();
-                        final TypeInfo elementType = NameResolver
-                                .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
-                        classInfoManager.add((ExternalClassInfo) elementType);
-                        parameterType = ArrayTypeInfo.getType(elementType, dimension);
-                    } else {
-                        err.println("Can't resolve dummy parameter type : "
-                                + unresolvedParameterType.getTypeName());
-                    }
-                }
-                final int parameterFromLine = unresolvedParameterInfo.getFromLine();
-                final int parameterFromColumn = unresolvedParameterInfo.getFromColumn();
-                final int parameterToLine = unresolvedParameterInfo.getToLine();
-                final int parameterToColumn = unresolvedParameterInfo.getToColumn();
-
-                // パラメータオブジェクトを生成し，メソッドに追加
-                final TargetParameterInfo parameterInfo = new TargetParameterInfo(
-                        parameterModifiers, parameterName, parameterType, parameterFromLine,
-                        parameterFromColumn, parameterToLine, parameterToColumn);
-                methodInfo.addParameter(parameterInfo);
-            }
-
-            // メソッド内で定義されている各未解決ローカル変数に対して
-            for (UnresolvedLocalVariableInfo unresolvedLocalVariable : unresolvedMethodInfo
-                    .getLocalVariables()) {
-
-                // 修飾子，変数名，型を取得
-                final Set<ModifierInfo> localModifiers = unresolvedLocalVariable.getModifiers();
-                final String variableName = unresolvedLocalVariable.getName();
-                final UnresolvedTypeInfo unresolvedVariableType = unresolvedLocalVariable.getType();
-                TypeInfo variableType = NameResolver.resolveTypeInfo(unresolvedVariableType,
-                        ownerClass, methodInfo, classInfoManager, null, null, null);
-                assert variableType != null : "resolveTypeInfo returned null!";
-                if (variableType instanceof UnknownTypeInfo) {
-                    if (unresolvedVariableType instanceof UnresolvedReferenceTypeInfo) {
-                        variableType = NameResolver
-                                .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedVariableType);
-                        classInfoManager.add((ExternalClassInfo) variableType);
-                    } else if (unresolvedVariableType instanceof UnresolvedArrayTypeInfo) {
-                        final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedVariableType)
-                                .getElementType();
-                        final int dimension = ((UnresolvedArrayTypeInfo) unresolvedVariableType)
-                                .getDimension();
-                        final TypeInfo elementType = NameResolver
-                                .createExternalClassInfo((UnresolvedReferenceTypeInfo) unresolvedElementType);
-                        classInfoManager.add((ExternalClassInfo) elementType);
-                        variableType = ArrayTypeInfo.getType(elementType, dimension);
-                    } else {
-                        err.println("Can't resolve method local variable type : "
-                                + unresolvedVariableType.getTypeName());
-                    }
-                }
-                final int localFromLine = unresolvedLocalVariable.getFromLine();
-                final int localFromColumn = unresolvedLocalVariable.getFromColumn();
-                final int localToLine = unresolvedLocalVariable.getToLine();
-                final int localToColumn = unresolvedLocalVariable.getToColumn();
-
-                // ローカル変数オブジェクトを生成し，MethodInfoに追加
-                final LocalVariableInfo localVariable = new LocalVariableInfo(localModifiers,
-                        variableName, variableType, localFromLine, localFromColumn, localToLine,
-                        localToColumn);
-                methodInfo.addLocalVariable(localVariable);
-            }
-
-            // メソッド情報をメソッド情報マネージャに追加
-            ownerClass.addDefinedMethod(methodInfo);
-            methodInfoManager.add(methodInfo);
-
-            // 未解決メソッド情報にも追加
-            unresolvedMethodInfo.setResolvedInfo(methodInfo);
         }
 
         // 各 Unresolvedクラスに対して
-        for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo.getInnerClasses()) {
+        for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
+                .getInnerClasses()) {
             registMethodInfos(unresolvedInnerClassInfo, classInfoManager, methodInfoManager);
         }
+    }
+
+    /**
+     * 未解決ブロック情報を解決し，外側のブロックの内部ブロックとして登録する
+     * 
+     * @param ownerClass 所有クラス
+     * @param ownerMethod 所有メソッド
+     * @param unresolvedBlockInfo 未解決ブロック情報
+     * @param classInfoManager 用いるクラスマネージャ
+     * @return 解決済みブロック情報
+     */
+    private BlockInfo registBlockInfos(final TargetClassInfo ownerClass,
+            final TargetMethodInfo ownerMethod, final UnresolvedBlockInfo<?> unresolvedBlockInfo,
+            final ClassInfoManager classInfoManager) {
+
+        final BlockInfo blockInfo = unresolvedBlockInfo.resolveUnit(ownerClass, ownerMethod,
+                classInfoManager, null, null);
+
+        for (final UnresolvedBlockInfo<?> unresolvedInnerBlockInfo : unresolvedBlockInfo
+                .getInnerBlocks()) {
+
+            final BlockInfo innerBlockInfo = registBlockInfos(ownerClass, ownerMethod,
+                    unresolvedInnerBlockInfo, classInfoManager);
+            blockInfo.addInnerBlock(innerBlockInfo);
+        }
+
+        return blockInfo;
     }
 
     /**
@@ -1369,12 +1180,12 @@ public class MetricsTool {
         final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
         final FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
         final MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
-        final Map<UnresolvedTypeInfo, TypeInfo> resolvedCache = new HashMap<UnresolvedTypeInfo, TypeInfo>();
 
         // 各未解決クラス情報 に対して
-        for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
+        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+                .getClassInfos()) {
             addReferenceAssignmentCallRelation(unresolvedClassInfo, classInfoManager,
-                    fieldInfoManager, methodInfoManager, resolvedCache);
+                    fieldInfoManager, methodInfoManager);
         }
     }
 
@@ -1389,52 +1200,43 @@ public class MetricsTool {
      */
     private void addReferenceAssignmentCallRelation(final UnresolvedClassInfo unresolvedClassInfo,
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
-            final MethodInfoManager methodInfoManager,
-            final Map<UnresolvedTypeInfo, TypeInfo> resolvedCache) {
+            final MethodInfoManager methodInfoManager) {
 
         // 未解決クラス情報から，解決済みクラス情報を取得
-        final TargetClassInfo userClass = unresolvedClassInfo.getResolvedInfo();
+        final TargetClassInfo ownerClass = unresolvedClassInfo.getResolvedUnit();
 
         // 各未解決メソッド情報に対して
-        for (UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo.getDefinedMethods()) {
+        for (final UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo
+                .getDefinedMethods()) {
 
             // 未解決メソッド情報から，解決済みメソッド情報を取得
-            final TargetMethodInfo caller = (TargetMethodInfo) unresolvedMethodInfo
-                    .getResolvedInfo();
-            if (null == caller) {
-                throw new NullPointerException("UnresolvedMethodInfo#getResolvedInfo is null!");
+            final TargetMethodInfo ownerMethod = unresolvedMethodInfo.getResolvedUnit();
+            assert null != ownerMethod : "UnresolvedMethodInfo#getResolvedInfo is null!";
+
+            // 各未解決フィールド使用の名前解決処理
+            for (final UnresolvedFieldUsageInfo unresolvedFieldUsage : unresolvedMethodInfo
+                    .getFieldUsages()) {
+
+                final EntityUsageInfo fieldUsage = unresolvedFieldUsage.resolveEntityUsage(
+                        ownerClass, ownerMethod, classInfoManager, fieldInfoManager,
+                        methodInfoManager);
             }
 
-            // 各未解決参照エンティティの名前解決処理
-            for (UnresolvedFieldUsage referencee : unresolvedMethodInfo.getFieldReferences()) {
+            // 各未解決メソッド呼び出しの解決処理
+            for (final UnresolvedMethodCallInfo unresolvedMethodCall : unresolvedMethodInfo
+                    .getMethodCalls()) {
 
-                // 未解決参照処理を解決
-                NameResolver.resolveFieldReference(referencee, userClass, caller, classInfoManager,
-                        fieldInfoManager, methodInfoManager, resolvedCache);
-            }
-
-            // 未解決代入エンティティの名前解決処理
-            for (UnresolvedFieldUsage assignmentee : unresolvedMethodInfo.getFieldAssignments()) {
-
-                // 未解決代入処理を解決
-                NameResolver.resolveFieldAssignment(assignmentee, userClass, caller,
-                        classInfoManager, fieldInfoManager, methodInfoManager, resolvedCache);
-            }
-
-            // 各未解決メソッド呼び出し処理の解決処理
-            for (UnresolvedMethodCall methodCall : unresolvedMethodInfo.getMethodCalls()) {
-
-                // 各未解決メソッド呼び出し処理を解決
-                NameResolver.resolveMethodCall(methodCall, userClass, caller, classInfoManager,
-                        fieldInfoManager, methodInfoManager, resolvedCache);
-
+                final EntityUsageInfo methodCall = unresolvedMethodCall.resolveEntityUsage(
+                        ownerClass, ownerMethod, classInfoManager, fieldInfoManager,
+                        methodInfoManager);
             }
         }
 
         // 各インナークラスに対して
-        for (UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo.getInnerClasses()) {
+        for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
+                .getInnerClasses()) {
             addReferenceAssignmentCallRelation(unresolvedInnerClassInfo, classInfoManager,
-                    fieldInfoManager, methodInfoManager, resolvedCache);
+                    fieldInfoManager, methodInfoManager);
         }
     }
 }

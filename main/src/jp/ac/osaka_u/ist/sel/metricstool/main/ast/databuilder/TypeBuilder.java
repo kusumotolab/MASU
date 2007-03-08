@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedR
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSimpleTypeParameterUsage;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterUsage;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterUsageInfo;
 
 
 /**
@@ -256,7 +256,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
                         (UnresolvedReferenceTypeInfo) first);
 
                 //Œ^ˆø”î•ñ‚ğƒZƒbƒg‚·‚é
-                for (final UnresolvedTypeParameterUsage usage : secondReference.getTypeParameterUsages()) {
+                for (final UnresolvedTypeParameterUsageInfo usage : secondReference.getTypeParameterUsages()) {
                     result.addTypeParameterUsage(usage);
                 }
 

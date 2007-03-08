@@ -11,18 +11,25 @@ public final class ElseBlockInfo extends BlockInfo {
     /**
      * 対応する if ブロックを与えて，else ブロック情報を初期化
      * 
-     * @param correspondingIfBlock
+     * @param ownerClass 所有クラス
+     * @param ownerMethod 所有メソッド
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
+     * @param ownerIfBlock 対応するifブロック
      */
-    ElseBlockInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn,
-            final IfBlockInfo correspondingIfBlock) {
+    public ElseBlockInfo(final TargetClassInfo ownerClass, final TargetMethodInfo ownerMethod,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
+            final IfBlockInfo ownerIfBlock) {
 
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerClass, ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
-        if (null == correspondingIfBlock) {
+        if (null == ownerIfBlock) {
             throw new NullPointerException();
         }
 
-        this.correspondingIfBlock = correspondingIfBlock;
+        this.ownerIfBlock = ownerIfBlock;
     }
 
     /**
@@ -30,12 +37,12 @@ public final class ElseBlockInfo extends BlockInfo {
      * 
      * @return この else ブロックと対応する if ブロック
      */
-    public IfBlockInfo getCorrespondingIfBlock() {
-        return this.correspondingIfBlock;
+    public IfBlockInfo getOwnerIfBlock() {
+        return this.ownerIfBlock;
     }
 
     /**
      * この else ブロックと対応する if ブロックを保存するための変数
      */
-    private final IfBlockInfo correspondingIfBlock;
+    private final IfBlockInfo ownerIfBlock;
 }

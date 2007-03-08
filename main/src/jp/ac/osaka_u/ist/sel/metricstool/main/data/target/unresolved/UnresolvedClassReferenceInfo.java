@@ -1,0 +1,525 @@
+package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
+
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.SortedSet;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
+
+/**
+ * 未解決参照型を表すクラス
+ * 
+ * @author y-higo
+ * 
+ */
+public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
+
+    /**
+     * 利用可能な名前空間名，参照名を与えて初期化
+     * 
+     * @param availableNamespaces 名前空間名
+     * @param referenceName 参照名
+     */
+    public UnresolvedClassReferenceInfo(final AvailableNamespaceInfoSet availableNamespaces,
+            final String[] referenceName) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == availableNamespaces) || (null == referenceName)) {
+            throw new NullPointerException();
+        }
+
+        this.availableNamespaceSet = availableNamespaces;
+        this.referenceName = referenceName;
+        this.fullReferenceName = referenceName;
+        this.ownerUsage = null;
+        this.typeParameterUsages = new LinkedList<UnresolvedTypeParameterUsageInfo>();
+    }
+
+    /**
+     * 利用可能な名前空間名，参照名を与えて初期化
+     * 
+     * @param availableNamespaces 名前空間名
+     * @param referenceName 参照名
+     * @param ownerUsage 親参照
+     */
+    public UnresolvedClassReferenceInfo(final AvailableNamespaceInfoSet availableNamespaces,
+            final String[] referenceName, final UnresolvedClassReferenceInfo ownerUsage) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == availableNamespaces) || (null == referenceName) || (null == ownerUsage)) {
+            throw new NullPointerException();
+        }
+
+        this.availableNamespaceSet = availableNamespaces;
+        String[] ownerReferenceName = ownerUsage.getFullReferenceName();
+        String[] fullReferenceName = new String[referenceName.length + ownerReferenceName.length];
+        System.arraycopy(ownerReferenceName, 0, fullReferenceName, 0, ownerReferenceName.length);
+        System.arraycopy(referenceName, 0, fullReferenceName, ownerReferenceName.length,
+                referenceName.length);
+        this.fullReferenceName = fullReferenceName;
+        this.referenceName = referenceName;
+        this.ownerUsage = ownerUsage;
+        this.typeParameterUsages = new LinkedList<UnresolvedTypeParameterUsageInfo>();
+    }
+
+    /**
+     * 既に解決済みかどうかを返す．
+     * 
+     * @return 解決済みである場合は true，そうでない場合は false
+     */
+    public boolean alreadyResolved() {
+        return null != this.resolvedInfo;
+    }
+
+    /**
+     * 解決済みクラス参照を返す
+     * 
+     * @return 解決済みクラス参照
+     * @throws NotResolvedException 解決されていない場合にスローされる
+     */
+    public EntityUsageInfo getResolvedEntityUsage() {
+
+        if (!this.alreadyResolved()) {
+            throw new NotResolvedException();
+        }
+
+        return this.resolvedInfo;
+    }
+
+    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == usingClass) || (null == classInfoManager)) {
+            throw new NullPointerException();
+        }
+
+        // 既に解決済みである場合は，キャッシュを返す
+        if (this.alreadyResolved()) {
+            return this.getResolvedEntityUsage();
+        }
+
+        final String[] referenceName = this.getReferenceName();
+
+        if (this.hasOwnerReference()) {
+
+            final UnresolvedClassReferenceInfo unresolvedClassReference = this.getOwnerUsage();
+            EntityUsageInfo classReference = unresolvedClassReference.resolveEntityUsage(
+                    usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            assert null != classReference : "null is returned!";
+
+            NEXT_NAME: for (int i = 0; i < referenceName.length; i++) {
+
+                // 親が UnknownTypeInfo だったら，どうしようもない
+                if (classReference.getType() instanceof UnknownTypeInfo) {
+
+                    this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+                    return this.resolvedInfo;
+
+                    // 親が対象クラス(TargetClassInfo)の場合
+                } else if (classReference.getType() instanceof TargetClassInfo) {
+
+                    // インナークラスから探すので一覧を取得
+                    final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                            .getAvailableDirectInnerClasses((TargetClassInfo) classReference
+                                    .getType());
+                    for (final TargetInnerClassInfo innerClass : innerClasses) {
+
+                        // 一致するクラス名が見つかった場合
+                        if (referenceName[i].equals(innerClass.getClassName())) {
+                            // TODO 利用関係を構築するコードが必要？
+
+                            classReference = new ClassReferenceInfo(innerClass);
+                            continue NEXT_NAME;
+                        }
+                    }
+
+                    assert false : "Here shouldn't be reached!";
+
+                    // 親が外部クラス(ExternalClassInfo)の場合
+                } else if (classReference.getType() instanceof ExternalClassInfo) {
+
+                    classReference = UnknownEntityUsageInfo.getInstance();
+                    continue NEXT_NAME;
+                }
+
+                assert false : "Here shouldn't be reached!";
+            }
+
+            this.resolvedInfo = classReference;
+            return this.resolvedInfo;
+
+        } else {
+
+            // 未解決参照型が UnresolvedFullQualifiedNameReferenceTypeInfo ならば，完全限定名参照であると判断できる
+            if (this instanceof UnresolvedFullQualifiedNameClassReferenceInfo) {
+
+                ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
+                if (null == classInfo) {
+                    classInfo = new ExternalClassInfo(referenceName);
+                    classInfoManager.add((ExternalClassInfo) classInfo);
+                }
+
+                this.resolvedInfo = new ClassReferenceInfo(classInfo);
+                return this.resolvedInfo;
+            }
+
+            // 参照名が完全限定名であるとして検索
+            {
+                final ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
+                if (null != classInfo) {
+                    this.resolvedInfo = new ClassReferenceInfo(classInfo);
+                    return this.resolvedInfo;
+                }
+            }
+
+            // 利用可能なインナークラス名から探す
+            {
+                final TargetClassInfo outestClass;
+                if (usingClass instanceof TargetInnerClassInfo) {
+                    outestClass = NameResolver.getOuterstClass((TargetInnerClassInfo) usingClass);
+                } else {
+                    outestClass = usingClass;
+                }
+
+                for (final TargetInnerClassInfo innerClassInfo : NameResolver
+                        .getAvailableInnerClasses(outestClass)) {
+
+                    if (innerClassInfo.getClassName().equals(referenceName[0])) {
+
+                        // availableField.getType() から次のword(name[i])を名前解決
+                        EntityUsageInfo classReference = new ClassReferenceInfo(innerClassInfo);
+                        NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
+
+                            // 親が UnknownTypeInfo だったら，どうしようもない
+                            if (classReference.getType() instanceof UnknownTypeInfo) {
+
+                                this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+                                return this.resolvedInfo;
+
+                                // 親が対象クラス(TargetClassInfo)の場合
+                            } else if (classReference.getType() instanceof TargetClassInfo) {
+
+                                // インナークラスから探すので一覧を取得
+                                final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                        .getAvailableDirectInnerClasses((TargetClassInfo) classReference
+                                                .getType());
+                                for (final TargetInnerClassInfo innerClass : innerClasses) {
+
+                                    // 一致するクラス名が見つかった場合
+                                    if (referenceName[i].equals(innerClass.getClassName())) {
+                                        // TODO 利用関係を構築するコードが必要？
+
+                                        classReference = new ClassReferenceInfo(innerClass);
+                                        continue NEXT_NAME;
+                                    }
+                                }
+
+                                assert false : "Here shouldn't be reached!";
+
+                                // 親が外部クラス(ExternalClassInfo)の場合
+                            } else if (classReference.getType() instanceof ExternalClassInfo) {
+
+                                classReference = UnknownEntityUsageInfo.getInstance();
+                                continue NEXT_NAME;
+                            }
+
+                            assert false : "Here shouldn't be reached!";
+                        }
+
+                        this.resolvedInfo = classReference;
+                        return this.resolvedInfo;
+                    }
+                }
+            }
+
+            // 利用可能な名前空間から型名を探す
+            {
+                for (final AvailableNamespaceInfo availableNamespace : this
+                        .getAvailableNamespaces()) {
+
+                    // 名前空間名.* となっている場合
+                    if (availableNamespace.isAllClasses()) {
+                        final String[] namespace = availableNamespace.getNamespace();
+
+                        // 名前空間の下にある各クラスに対して
+                        for (final ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
+
+                            // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
+                            final String className = classInfo.getClassName();
+                            if (className.equals(referenceName[0])) {
+
+                                // availableField.getType() から次のword(name[i])を名前解決
+                                EntityUsageInfo classReference = new ClassReferenceInfo(classInfo);
+                                NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
+
+                                    // 親が UnknownTypeInfo だったら，どうしようもない
+                                    if (classReference.getType() instanceof UnknownTypeInfo) {
+
+                                        this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+                                        return this.resolvedInfo;
+
+                                        // 親が対象クラス(TargetClassInfo)の場合
+                                    } else if (classReference.getType() instanceof TargetClassInfo) {
+
+                                        // インナークラスから探すので一覧を取得
+                                        final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                                .getAvailableDirectInnerClasses((TargetClassInfo) classReference
+                                                        .getType());
+                                        for (final TargetInnerClassInfo innerClass : innerClasses) {
+
+                                            // 一致するクラス名が見つかった場合
+                                            if (referenceName[i].equals(innerClass.getClassName())) {
+                                                // TODO 利用関係を構築するコードが必要？
+
+                                                classReference = new ClassReferenceInfo(innerClass);
+                                                continue NEXT_NAME;
+                                            }
+                                        }
+
+                                        // 見つからなかったので null を返す．
+                                        // 現在の想定では，この部分に到着しうるのは継承関係の名前解決が完全に終わっていない段階のみのはず．
+                                        return null;
+
+                                        // 親が外部クラス(ExternalClassInfo)の場合
+                                    } else if (classReference.getType() instanceof ExternalClassInfo) {
+
+                                        classReference = UnknownEntityUsageInfo.getInstance();
+                                        continue NEXT_NAME;
+                                    }
+
+                                    assert false : "Here shouldn't be reached!";
+                                }
+
+                                this.resolvedInfo = classReference;
+                                return this.resolvedInfo;
+                            }
+                        }
+
+                        // 名前空間.クラス名 となっている場合
+                    } else {
+
+                        final String[] importName = availableNamespace.getImportName();
+
+                        // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
+                        if (importName[importName.length - 1].equals(referenceName[0])) {
+
+                            ClassInfo specifiedClassInfo = classInfoManager
+                                    .getClassInfo(importName);
+                            if (null == specifiedClassInfo) {
+                                specifiedClassInfo = new ExternalClassInfo(importName);
+                                classInfoManager.add((ExternalClassInfo) specifiedClassInfo);
+                            }
+
+                            EntityUsageInfo classReference = new ClassReferenceInfo(
+                                    specifiedClassInfo);
+                            NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
+
+                                // 親が UnknownTypeInfo だったら，どうしようもない
+                                if (classReference.getType() instanceof UnknownTypeInfo) {
+
+                                    this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+                                    return this.resolvedInfo;
+
+                                    // 親が対象クラス(TargetClassInfo)の場合
+                                } else if (classReference.getType() instanceof TargetClassInfo) {
+
+                                    // インナークラス一覧を取得
+                                    final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                            .getAvailableDirectInnerClasses((TargetClassInfo) classReference
+                                                    .getType());
+                                    for (final TargetInnerClassInfo innerClass : innerClasses) {
+
+                                        // 一致するクラス名が見つかった場合
+                                        if (referenceName[i].equals(innerClass.getClassName())) {
+                                            // TODO 利用関係を構築するコードが必要？
+
+                                            classReference = new ClassReferenceInfo(innerClass);
+                                            continue NEXT_NAME;
+                                        }
+                                    }
+
+                                    // 親が外部クラス(ExternalClassInfo)の場合
+                                } else if (classReference.getType() instanceof ExternalClassInfo) {
+
+                                    classReference = UnknownEntityUsageInfo.getInstance();
+                                    continue NEXT_NAME;
+                                }
+
+                                assert false : "Here shouldn't be reached!";
+                            }
+
+                            this.resolvedInfo = classReference;
+                            return this.resolvedInfo;
+                        }
+                    }
+                }
+            }
+        }
+
+        /*
+         * if (null == usingMethod) { err.println("Remain unresolved \"" +
+         * reference.getReferenceName(Settings.getLanguage().getNamespaceDelimiter()) + "\"" + " on
+         * \"" + usingClass.getFullQualifiedtName(LANGUAGE.JAVA.getNamespaceDelimiter())); } else {
+         * err.println("Remain unresolved \"" +
+         * reference.getReferenceName(Settings.getLanguage().getNamespaceDelimiter()) + "\"" + " on
+         * \"" + usingClass.getFullQualifiedtName(LANGUAGE.JAVA.getNamespaceDelimiter()) + "#" +
+         * usingMethod.getMethodName() + "\"."); }
+         */
+
+        // 見つからなかった場合は，UknownTypeInfo を返す
+        this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+        return this.resolvedInfo;
+    }
+
+    /**
+     * 型パラメータ使用を追加する
+     * 
+     * @param typeParameterUsage 追加する型パラメータ使用
+     */
+    public final void addTypeParameterUsage(
+            final UnresolvedTypeParameterUsageInfo typeParameterUsage) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == typeParameterUsage) {
+            throw new NullPointerException();
+        }
+
+        this.typeParameterUsages.add(typeParameterUsage);
+    }
+
+    /**
+     * このクラス参照で使用されている型パラメータの List を返す
+     * 
+     * @return このクラス参照で使用されている型パラメータの List
+     */
+    public final List<UnresolvedTypeParameterUsageInfo> getTypeParameterUsages() {
+        return Collections.unmodifiableList(this.typeParameterUsages);
+    }
+
+    /**
+     * この参照型の名前を返す
+     * 
+     * @return この参照型の名前を返す
+     */
+    public final String getTypeName() {
+        final String[] referenceName = this.getReferenceName();
+        return referenceName[referenceName.length - 1];
+    }
+
+    /**
+     * この参照型のownerも含めた参照名を返す
+     * 
+     * @return この参照型のownerも含めた参照名を返す
+     */
+    public final String[] getFullReferenceName() {
+        return this.fullReferenceName;
+    }
+
+    /**
+     * この参照型の参照名を返す
+     * 
+     * @return この参照型の参照名を返す
+     */
+    public final String[] getReferenceName() {
+        return this.referenceName;
+    }
+
+    /**
+     * この参照型がくっついている未解決参照型を返す
+     * 
+     * @return この参照型がくっついている未解決参照型
+     */
+    public final UnresolvedClassReferenceInfo getOwnerUsage() {
+        return this.ownerUsage;
+    }
+
+    /**
+     * この参照型が，他の参照型にくっついているかどうかを返す
+     * 
+     * @return くっついている場合は true，くっついていない場合は false
+     */
+    public final boolean hasOwnerReference() {
+        return null != this.ownerUsage;
+    }
+
+    /**
+     * この参照型の参照名を引数で与えられた文字で結合して返す
+     * 
+     * @param delimiter 結合に用いる文字
+     * @return この参照型の参照名を引数で与えられた文字で結合した文字列
+     */
+    public final String getReferenceName(final String delimiter) {
+
+        if (null == delimiter) {
+            throw new NullPointerException();
+        }
+
+        final StringBuilder sb = new StringBuilder(this.referenceName[0]);
+        for (int i = 1; i < this.referenceName.length; i++) {
+            sb.append(delimiter);
+            sb.append(this.referenceName[i]);
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * この参照型の完全限定名として可能性のある名前空間名の一覧を返す
+     * 
+     * @return この参照型の完全限定名として可能性のある名前空間名の一覧
+     */
+    public final AvailableNamespaceInfoSet getAvailableNamespaces() {
+        return this.availableNamespaceSet;
+    }
+
+    /**
+     * 利用可能な名前空間名を保存するための変数，名前解決処理の際に用いる
+     */
+    private final AvailableNamespaceInfoSet availableNamespaceSet;
+
+    /**
+     * 参照名を保存する変数
+     */
+    private final String[] referenceName;
+
+    /**
+     * ownerも含めた参照名を保存する変数
+     */
+    private final String[] fullReferenceName;
+
+    /**
+     * この参照がくっついている未解決参照型を保存する変数
+     */
+    private final UnresolvedClassReferenceInfo ownerUsage;
+
+    /**
+     * 未解決型パラメータ使用を保存するための変数
+     */
+    private final List<UnresolvedTypeParameterUsageInfo> typeParameterUsages;
+
+    /**
+     * 解決済みクラス参照を保存するための変数
+     */
+    private EntityUsageInfo resolvedInfo;
+}

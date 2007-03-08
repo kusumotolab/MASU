@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsage;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnknownUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsage;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
@@ -86,7 +86,7 @@ public class CompoundIdentifierElement implements IdentifierElement {
         if (null != this.ownerType) {
             return this.ownerType;
         } else {
-            return new UnresolvedEntityUsage(buildDataManager.getAllAvaliableNames(), this.owner
+            return new UnresolvedUnknownUsageInfo(buildDataManager.getAllAvaliableNames(), this.owner
                     .getQualifiedName());
         }
     }

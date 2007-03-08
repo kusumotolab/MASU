@@ -7,8 +7,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsage;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBinominalOperation;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBinominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -91,7 +91,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 assert(null != termTypes[0]) : "Illega state: first term type was not decided.";
                 assert(null != termTypes[1]) : "Illega state: second term type was not decided.";
                 
-                UnresolvedBinominalOperation operation = new UnresolvedBinominalOperation(operator,termTypes[0],termTypes[1]);
+                UnresolvedBinominalOperationInfo operation = new UnresolvedBinominalOperationInfo(operator,termTypes[0],termTypes[1]);
                 pushElement(TypeElement.getInstance(operation));
                 
             } else{
@@ -113,7 +113,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     } else {
                         ownerType = elements[0].getType();
                     }
-                    resultType = new UnresolvedArrayElementUsage(ownerType);
+                    resultType = new UnresolvedArrayElementUsageInfo(ownerType);
                 } else {
                     //Œ^Œˆ’è‚ÉŠÖ˜A‚·‚é€‚ğ¶‚©‚ç‡”Ô‚É‹™‚Á‚Ä‚¢‚Á‚ÄÅ‰‚ÉŒˆ’è‚Å‚«‚½“z‚ÉŸè‚ÉŒˆ‚ß‚é
                     for (int i = 0; i < typeSpecifiedTermIndexes.length; i++) {

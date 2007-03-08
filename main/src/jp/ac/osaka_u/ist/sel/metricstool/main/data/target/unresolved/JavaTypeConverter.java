@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClass
 final public class JavaTypeConverter extends TypeConverter {
 
     static final JavaTypeConverter SINGLETON = new JavaTypeConverter();
-    
+
     @Override
     public ExternalClassInfo getWrapperClass(final PrimitiveTypeInfo primitiveType) {
 
@@ -22,7 +22,7 @@ final public class JavaTypeConverter extends TypeConverter {
             throw new NullPointerException();
         }
 
-        switch (primitiveType.getType()) {
+        switch (primitiveType.getPrimitiveType()) {
         case BOOLEAN:
             final ExternalClassInfo booleanClass = (ExternalClassInfo) ClassInfoManager
                     .getInstance().getClassInfo(new String[] { "java", "lang", "Boolean" });
@@ -55,6 +55,10 @@ final public class JavaTypeConverter extends TypeConverter {
             final ExternalClassInfo shortClass = (ExternalClassInfo) ClassInfoManager.getInstance()
                     .getClassInfo(new String[] { "java", "lang", "Short" });
             return shortClass;
+        case STRING:
+            final ExternalClassInfo stringClass = (ExternalClassInfo) ClassInfoManager
+                    .getInstance().getClassInfo(new String[] { "java", "lang", "String" });
+            return stringClass;
         default:
             throw new IllegalArgumentException();
         }

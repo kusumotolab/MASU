@@ -7,8 +7,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -20,7 +32,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting, PositionSetting,
-        NameResolvable<MethodInfo> {
+        UnresolvedUnitInfo<TargetMethodInfo> {
 
     /**
      * 未解決メソッド定義情報オブジェクトを初期化
@@ -35,11 +47,10 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
         this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
-        this.methodCalls = new HashSet<UnresolvedMethodCall>();
-        this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
-        this.fieldAssignments = new HashSet<UnresolvedFieldUsage>();
+        this.methodCalls = new HashSet<UnresolvedMethodCallInfo>();
+        this.fieldUsages = new HashSet<UnresolvedFieldUsageInfo>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
-        this.innerBlocks = new HashSet<UnresolvedBlockInfo>();
+        this.innerBlocks = new HashSet<UnresolvedBlockInfo<?>>();
 
         this.privateVisible = false;
         this.inheritanceVisible = false;
@@ -81,11 +92,10 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
         this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
-        this.methodCalls = new HashSet<UnresolvedMethodCall>();
-        this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
-        this.fieldAssignments = new HashSet<UnresolvedFieldUsage>();
+        this.methodCalls = new HashSet<UnresolvedMethodCallInfo>();
+        this.fieldUsages = new HashSet<UnresolvedFieldUsageInfo>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
-        this.innerBlocks = new HashSet<UnresolvedBlockInfo>();
+        this.innerBlocks = new HashSet<UnresolvedBlockInfo<?>>();
 
         this.privateVisible = false;
         this.inheritanceVisible = false;
@@ -100,6 +110,134 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         this.toColumn = 0;
 
         this.resolvedInfo = null;
+    }
+
+    /**
+     * この未解決メソッド情報が解決されているかどうかを返す
+     * 
+     * @return 解決済みの場合は true，そうでない場合は false
+     */
+    public boolean alreadyResolved() {
+        return null != this.resolvedInfo;
+    }
+
+    /**
+     * 解決済みメソッド情報を返す
+     * 
+     * @return 解決済みメソッド情報
+     * @throws まだ解決されていない場合にスローされる
+     */
+    public TargetMethodInfo getResolvedUnit() {
+
+        if (!this.alreadyResolved()) {
+            throw new NotResolvedException();
+        }
+
+        return this.resolvedInfo;
+    }
+
+    /**
+     * 未解決メソッド情報を解決し，解決済み参照を返す．
+     * 
+     * @param usingClass 未解決メソッド情報の定義があるクラス
+     * @param usingMethod 未解決メソッド情報の定義があるメソッド（このメソッドが呼ばれる場合は通常 null がセットされているはず）
+     * @param classInfoManager 用いるクラスマネージャ
+     * @param fieldInfoManager 用いるフィールドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
+     * @return 解決済みメソッド情報
+     */
+    public TargetMethodInfo resolveUnit(final TargetClassInfo usingClass,
+            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == usingClass) || (null == classInfoManager) || (null == methodInfoManager)) {
+            throw new NullPointerException();
+        }
+
+        // 既に解決済みである場合は，キャッシュを返す
+        if (this.alreadyResolved()) {
+            return this.getResolvedUnit();
+        }
+
+        // 修飾子，名前，返り値，行数，コンストラクタかどうか，可視性，インスタンスメンバーかどうかを取得
+        final Set<ModifierInfo> methodModifiers = this.getModifiers();
+        final String methodName = this.getMethodName();
+
+        final boolean constructor = this.isConstructor();
+        final boolean privateVisible = this.isPrivateVisible();
+        final boolean namespaceVisible = this.isNamespaceVisible();
+        final boolean inheritanceVisible = this.isInheritanceVisible();
+        final boolean publicVisible = this.isPublicVisible();
+        final boolean instance = this.isInstanceMember();
+        final int methodFromLine = this.getFromLine();
+        final int methodFromColumn = this.getFromColumn();
+        final int methodToLine = this.getToLine();
+        final int methodToColumn = this.getToColumn();
+
+        // MethodInfo オブジェクトを生成する．
+        this.resolvedInfo = new TargetMethodInfo(methodModifiers, methodName, usingClass,
+                constructor, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
+                instance, methodFromLine, methodFromColumn, methodToLine, methodToColumn);
+
+        // 型パラメータを解決し，解決済みメソッド情報に追加する
+        for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
+
+            final TypeParameterInfo typeParameter = (TypeParameterInfo) NameResolver
+                    .resolveTypeInfo(unresolvedTypeParameter, usingClass, this.resolvedInfo,
+                            classInfoManager, null, null, null);
+            this.resolvedInfo.addTypeParameter(typeParameter);
+        }
+
+        // 返り値をセットする
+        final UnresolvedTypeInfo unresolvedMethodReturnType = this.getReturnType();
+        TypeInfo methodReturnType = NameResolver.resolveTypeInfo(unresolvedMethodReturnType,
+                usingClass, null, classInfoManager, null, null, null);
+        assert methodReturnType != null : "resolveTypeInfo returned null!";
+        if (methodReturnType instanceof UnknownTypeInfo) {
+            if (unresolvedMethodReturnType instanceof UnresolvedClassReferenceInfo) {
+                methodReturnType = NameResolver
+                        .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedMethodReturnType);
+                classInfoManager.add((ExternalClassInfo) methodReturnType);
+            } else if (unresolvedMethodReturnType instanceof UnresolvedArrayTypeInfo) {
+                final UnresolvedEntityUsageInfo unresolvedArrayElement = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
+                        .getElementType();
+                final int dimension = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
+                        .getDimension();
+                final ExternalClassInfo elementType = NameResolver
+                        .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedArrayElement);
+                classInfoManager.add(elementType);
+                methodReturnType = ArrayTypeInfo.getType(new ClassReferenceInfo(elementType),
+                        dimension);
+            } else {
+                assert false : "Can't resolve method return type : "
+                        + unresolvedMethodReturnType.getTypeName();
+            }
+        }
+        this.resolvedInfo.setReturnType(methodReturnType);
+
+        // 引数を追加する
+        for (final UnresolvedParameterInfo unresolvedParameterInfo : this.getParameterInfos()) {
+
+            final TargetParameterInfo parameterInfo = unresolvedParameterInfo.resolveUnit(
+                    usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
+                    methodInfoManager);
+            this.resolvedInfo.addParameter(parameterInfo);
+        }
+
+        // メソッド内で定義されている各未解決ローカル変数に対して
+        for (final UnresolvedLocalVariableInfo unresolvedLocalVariable : this.getLocalVariables()) {
+
+            final LocalVariableInfo localVariable = unresolvedLocalVariable.resolveUnit(usingClass,
+                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addLocalVariable(localVariable);
+        }
+
+        // メソッド情報をメソッド情報マネージャに追加
+        usingClass.addDefinedMethod(this.resolvedInfo);
+        methodInfoManager.add(this.resolvedInfo);
+        return this.resolvedInfo;
     }
 
     /**
@@ -266,7 +404,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * 
      * @param methodCall メソッド呼び出し
      */
-    public void addMethodCall(final UnresolvedMethodCall methodCall) {
+    public void addMethodCall(final UnresolvedMethodCallInfo methodCall) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -278,11 +416,11 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
     }
 
     /**
-     * フィールド参照を追加する
+     * フィールド使用を追加する
      * 
-     * @param fieldUsage フィールド参照
+     * @param fieldUsage フィールド使用
      */
-    public void addFieldReference(final UnresolvedFieldUsage fieldUsage) {
+    public void addFieldUsage(final UnresolvedFieldUsageInfo fieldUsage) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -290,23 +428,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
             throw new NullPointerException();
         }
 
-        this.fieldReferences.add(fieldUsage);
-    }
-
-    /**
-     * フィールド代入を追加する
-     * 
-     * @param fieldUsage フィールド代入
-     */
-    public void addFieldAssignment(final UnresolvedFieldUsage fieldUsage) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == fieldUsage) {
-            throw new NullPointerException();
-        }
-
-        this.fieldAssignments.add(fieldUsage);
+        this.fieldUsages.add(fieldUsage);
     }
 
     /**
@@ -339,26 +461,17 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * 
      * @return メソッド呼び出しの Set
      */
-    public Set<UnresolvedMethodCall> getMethodCalls() {
+    public Set<UnresolvedMethodCallInfo> getMethodCalls() {
         return Collections.unmodifiableSet(this.methodCalls);
     }
 
     /**
-     * フィールド参照の Set を返す
+     * フィールド使用の Set を返す
      * 
      * @return フィールド参照の Set
      */
-    public Set<UnresolvedFieldUsage> getFieldReferences() {
-        return Collections.unmodifiableSet(this.fieldReferences);
-    }
-
-    /**
-     * フィールド代入の Set を返す
-     * 
-     * @return フィールド代入の Set
-     */
-    public Set<UnresolvedFieldUsage> getFieldAssignments() {
-        return Collections.unmodifiableSet(this.fieldAssignments);
+    public Set<UnresolvedFieldUsageInfo> getFieldUsages() {
+        return Collections.unmodifiableSet(this.fieldUsages);
     }
 
     /**
@@ -375,7 +488,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * 
      * @return 内部ブロックの Set
      */
-    public Set<UnresolvedBlockInfo> getInnerBlock() {
+    public Set<UnresolvedBlockInfo<?>> getInnerBlocks() {
         return Collections.unmodifiableSet(this.innerBlocks);
     }
 
@@ -385,16 +498,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * @return メソッドの行数
      */
     public int getLOC() {
-        return this.loc;
-    }
-
-    /**
-     * このメソッドの行数を保存する
-     * 
-     * @param loc このメソッドの行数
-     */
-    public void setLOC(final int loc) {
-        this.loc = loc;
+        return this.getToLine() - this.getFromLine() + 1;
     }
 
     /**
@@ -589,38 +693,6 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
     }
 
     /**
-     * 名前解決された情報を返す
-     * 
-     * @return 名前解決された情報
-     */
-    public MethodInfo getResolvedInfo() {
-        return this.resolvedInfo;
-    }
-
-    /**
-     * 名前解決された情報をセットする
-     * 
-     * @param resolvedInfo 名前解決された情報
-     */
-    public void setResolvedInfo(final MethodInfo resolvedInfo) {
-
-        if (null == resolvedInfo) {
-            throw new NullPointerException();
-        }
-
-        this.resolvedInfo = resolvedInfo;
-    }
-
-    /**
-     * 既に名前解決されたかどうかを返す
-     * 
-     * @return 名前解決されている場合は true，そうでない場合は false
-     */
-    public final boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    /**
      * 修飾子を保存する
      */
     private Set<ModifierInfo> modifiers;
@@ -658,17 +730,12 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
     /**
      * メソッド呼び出しを保存する変数
      */
-    private final Set<UnresolvedMethodCall> methodCalls;
+    private final Set<UnresolvedMethodCallInfo> methodCalls;
 
     /**
-     * フィールド参照を保存する変数
+     * フィールド使用参照を保存する変数
      */
-    private final Set<UnresolvedFieldUsage> fieldReferences;
-
-    /**
-     * フィールド代入を保存する変数
-     */
-    private final Set<UnresolvedFieldUsage> fieldAssignments;
+    private final Set<UnresolvedFieldUsageInfo> fieldUsages;
 
     /**
      * このメソッド内で定義されているローカル変数を保存する変数
@@ -678,12 +745,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
     /**
      * このメソッドの内部ブロックを保存する変数
      */
-    private final Set<UnresolvedBlockInfo> innerBlocks;
-
-    /**
-     * メソッドの行数を保存するための変数
-     */
-    private int loc;
+    private final Set<UnresolvedBlockInfo<?>> innerBlocks;
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数
@@ -733,5 +795,5 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
     /**
      * 名前解決された情報を格納するための変数
      */
-    private MethodInfo resolvedInfo;
+    private TargetMethodInfo resolvedInfo;
 }

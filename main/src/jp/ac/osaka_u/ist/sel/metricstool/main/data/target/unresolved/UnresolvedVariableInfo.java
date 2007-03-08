@@ -22,8 +22,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public abstract class UnresolvedVariableInfo implements PositionSetting,
-        NameResolvable<VariableInfo> {
+public abstract class UnresolvedVariableInfo<T extends VariableInfo> implements PositionSetting,
+        UnresolvedUnitInfo<T> {
 
     /**
      * 変数名を返す
@@ -76,7 +76,7 @@ public abstract class UnresolvedVariableInfo implements PositionSetting,
      * 
      * @return 修飾子の Set
      */
-    public Set<ModifierInfo> getModifiers() {
+    public final Set<ModifierInfo> getModifiers() {
         return Collections.unmodifiableSet(this.modifiers);
     }
 
@@ -85,7 +85,7 @@ public abstract class UnresolvedVariableInfo implements PositionSetting,
      * 
      * @param modifier 追加する修飾子
      */
-    public void addModifiar(final ModifierInfo modifier) {
+    public final void addModifiar(final ModifierInfo modifier) {
 
         if (null == modifier) {
             throw new NullPointerException();
@@ -99,7 +99,7 @@ public abstract class UnresolvedVariableInfo implements PositionSetting,
      * 
      * @param fromLine 開始行
      */
-    public void setFromLine(final int fromLine) {
+    public final void setFromLine(final int fromLine) {
 
         if (fromLine < 0) {
             throw new IllegalArgumentException();
@@ -113,7 +113,7 @@ public abstract class UnresolvedVariableInfo implements PositionSetting,
      * 
      * @param fromColumn 開始列
      */
-    public void setFromColumn(final int fromColumn) {
+    public final void setFromColumn(final int fromColumn) {
 
         if (fromColumn < 0) {
             throw new IllegalArgumentException();
@@ -127,7 +127,7 @@ public abstract class UnresolvedVariableInfo implements PositionSetting,
      * 
      * @param toLine 終了行
      */
-    public void setToLine(final int toLine) {
+    public final void setToLine(final int toLine) {
 
         if (toLine < 0) {
             throw new IllegalArgumentException();
@@ -141,7 +141,7 @@ public abstract class UnresolvedVariableInfo implements PositionSetting,
      * 
      * @param toColumn 終了列
      */
-    public void setToColumn(final int toColumn) {
+    public final void setToColumn(final int toColumn) {
 
         if (toColumn < 0) {
             throw new IllegalArgumentException();
@@ -155,7 +155,7 @@ public abstract class UnresolvedVariableInfo implements PositionSetting,
      * 
      * @return 開始行
      */
-    public int getFromLine() {
+    public final int getFromLine() {
         return this.fromLine;
     }
 
@@ -164,7 +164,7 @@ public abstract class UnresolvedVariableInfo implements PositionSetting,
      * 
      * @return 開始列
      */
-    public int getFromColumn() {
+    public final int getFromColumn() {
         return this.fromColumn;
     }
 
@@ -173,7 +173,7 @@ public abstract class UnresolvedVariableInfo implements PositionSetting,
      * 
      * @return 終了行
      */
-    public int getToLine() {
+    public final int getToLine() {
         return this.toLine;
     }
 
@@ -182,7 +182,7 @@ public abstract class UnresolvedVariableInfo implements PositionSetting,
      * 
      * @return 終了列
      */
-    public int getToColumn() {
+    public final int getToColumn() {
         return this.toColumn;
     }
 
@@ -191,22 +191,8 @@ public abstract class UnresolvedVariableInfo implements PositionSetting,
      * 
      * @return 名前解決された情報
      */
-    public VariableInfo getResolvedInfo() {
+    public final T getResolvedUnit() {
         return this.resolvedInfo;
-    }
-
-    /**
-     * 名前解決された情報をセットする
-     * 
-     * @param resolvedInfo 名前解決された情報
-     */
-    public void setResolvedInfo(final VariableInfo resolvedInfo) {
-
-        if (null == resolvedInfo) {
-            throw new NullPointerException();
-        }
-
-        this.resolvedInfo = resolvedInfo;
     }
 
     /**
@@ -292,5 +278,5 @@ public abstract class UnresolvedVariableInfo implements PositionSetting,
     /**
      * 名前解決された情報を格納するための変数
      */
-    private VariableInfo resolvedInfo;
+    protected T resolvedInfo;
 }

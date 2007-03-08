@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClass
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
-public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved, MetricMeasurable {
+public abstract class MethodInfo implements Comparable<MethodInfo>, MetricMeasurable {
 
     /**
      * メソッドオブジェクトを初期化する
@@ -203,17 +203,7 @@ public abstract class MethodInfo implements Comparable<MethodInfo>, Resolved, Me
                     return false;
                 }
 
-                final int actualArrayDimension = ((ArrayTypeInfo) actualParameterType)
-                        .getDimension();
-                final int dummyArrayDimension = ((ArrayTypeInfo) dummyParameter.getType())
-                        .getDimension();
-                final TypeInfo actualArrayElementType = ((ArrayTypeInfo) actualParameterType)
-                        .getElementType();
-                final TypeInfo dummyArrayElementType = ((ArrayTypeInfo) dummyParameter.getType())
-                        .getElementType();
-                if (actualArrayDimension != dummyArrayDimension) {
-                    return false;
-                } else if (!actualArrayElementType.equals(dummyArrayElementType)) {
+                if (!actualParameterType.equals(dummyParameter.getType())) {
                     return false;
                 }
 

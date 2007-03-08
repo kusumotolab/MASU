@@ -18,7 +18,6 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * @param namespace 名前空間
      * @param className クラス名
      * @param outerClass 外側のクラス
-     * @param loc 行数
      * @param privateVisible クラス内からのみ参照可能
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
@@ -30,12 +29,12 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * @param toColumn 終了列
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
-            final String className, final TargetClassInfo outerClass, final int loc,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final String className, final TargetClassInfo outerClass, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final boolean instance, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super(modifiers, namespace, className, loc, privateVisible, namespaceVisible,
+        super(modifiers, namespace, className, privateVisible, namespaceVisible,
                 inheritanceVisible, publicVisible, instance, fromLine, fromColumn, toLine, toColumn);
 
         if (null == outerClass) {
@@ -63,13 +62,13 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * @param toColumn 終了列
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers,
-            final String[] fullQualifiedName, final TargetClassInfo outerClass, final int loc,
+            final String[] fullQualifiedName, final TargetClassInfo outerClass,
             final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(modifiers, fullQualifiedName, loc, privateVisible, namespaceVisible,
-                inheritanceVisible, publicVisible, instance, fromLine, fromColumn, toLine, toColumn);
+        super(modifiers, fullQualifiedName, privateVisible, namespaceVisible, inheritanceVisible,
+                publicVisible, instance, fromLine, fromColumn, toLine, toColumn);
 
         if (null == outerClass) {
             throw new NullPointerException();

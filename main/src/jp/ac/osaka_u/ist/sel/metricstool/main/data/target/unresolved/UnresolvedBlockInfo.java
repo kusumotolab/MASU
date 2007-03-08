@@ -15,7 +15,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public abstract class UnresolvedBlockInfo implements PositionSetting, NameResolvable<BlockInfo> {
+public abstract class UnresolvedBlockInfo<T extends BlockInfo> implements PositionSetting,
+        UnresolvedUnitInfo<T> {
 
     /**
      * ブロック構造を表すオブジェクトを初期化する
@@ -25,11 +26,10 @@ public abstract class UnresolvedBlockInfo implements PositionSetting, NameResolv
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        this.methodCalls = new HashSet<UnresolvedMethodCall>();
-        this.fieldReferences = new HashSet<UnresolvedFieldUsage>();
-        this.fieldAssignments = new HashSet<UnresolvedFieldUsage>();
+        this.methodCalls = new HashSet<UnresolvedMethodCallInfo>();
+        this.fieldUsages = new HashSet<UnresolvedFieldUsageInfo>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
-        this.innerBlocks = new HashSet<UnresolvedBlockInfo>();
+        this.innerBlocks = new HashSet<UnresolvedBlockInfo<?>>();
 
         this.fromLine = 0;
         this.fromColumn = 0;
@@ -38,11 +38,29 @@ public abstract class UnresolvedBlockInfo implements PositionSetting, NameResolv
     }
 
     /**
+     * このブロックが既に解決されているかどうかをかえす
+     * 
+     * @return 既に解決されている場合は true, そうでない場合は false
+     */
+    public final boolean alreadyResolved() {
+        return null != this.resolvedInfo;
+    }
+
+    public final T getResolvedUnit() {
+
+        if (!this.alreadyResolved()) {
+            throw new NotResolvedException();
+        }
+
+        return this.resolvedInfo;
+    }
+
+    /**
      * メソッド呼び出しを追加する
      * 
      * @param methodCall メソッド呼び出し
      */
-    public final void addMethodCall(final UnresolvedMethodCall methodCall) {
+    public final void addMethodCall(final UnresolvedMethodCallInfo methodCall) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -54,11 +72,11 @@ public abstract class UnresolvedBlockInfo implements PositionSetting, NameResolv
     }
 
     /**
-     * フィールド参照を追加する
+     * フィールド使用を追加する
      * 
-     * @param fieldUsage フィールド参照
+     * @param fieldUsage フィールド使用
      */
-    public final void addFieldReference(final UnresolvedFieldUsage fieldUsage) {
+    public final void addFieldUsage(final UnresolvedFieldUsageInfo fieldUsage) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -66,23 +84,7 @@ public abstract class UnresolvedBlockInfo implements PositionSetting, NameResolv
             throw new NullPointerException();
         }
 
-        this.fieldReferences.add(fieldUsage);
-    }
-
-    /**
-     * フィールド代入を追加する
-     * 
-     * @param fieldUsage フィールド代入
-     */
-    public final void addFieldAssignment(final UnresolvedFieldUsage fieldUsage) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == fieldUsage) {
-            throw new NullPointerException();
-        }
-
-        this.fieldAssignments.add(fieldUsage);
+        this.fieldUsages.add(fieldUsage);
     }
 
     /**
@@ -106,7 +108,7 @@ public abstract class UnresolvedBlockInfo implements PositionSetting, NameResolv
      * 
      * @param innerBlock ローカル変数
      */
-    public void addInnerBlock(final UnresolvedBlockInfo innerBlock) {
+    public void addInnerBlock(final UnresolvedBlockInfo<?> innerBlock) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -117,20 +119,40 @@ public abstract class UnresolvedBlockInfo implements PositionSetting, NameResolv
         this.innerBlocks.add(innerBlock);
     }
 
-    public final Set<UnresolvedMethodCall> getMethodCalls() {
+    /**
+     * このブロック内で行われている未解決メソッド呼び出しの Set を返す
+     * 
+     * @return このブロック内で行われている未解決メソッド呼び出しの Set
+     */
+    public final Set<UnresolvedMethodCallInfo> getMethodCalls() {
         return Collections.unmodifiableSet(this.methodCalls);
     }
 
-    public final Set<UnresolvedFieldUsage> getFieldReferences() {
-        return Collections.unmodifiableSet(this.fieldReferences);
+    /**
+     * このブロック内で行われている未解決フィールド使用の Set を返す
+     * 
+     * @return このブロック内で行われている未解決フィールド使用の Set
+     */
+    public final Set<UnresolvedFieldUsageInfo> getFieldUsages() {
+        return Collections.unmodifiableSet(this.fieldUsages);
     }
 
-    public final Set<UnresolvedFieldUsage> getFieldAssignments() {
-        return Collections.unmodifiableSet(this.fieldAssignments);
-    }
-
+    /**
+     * このブロック内で定義されている未解決ローカル変数の Set を返す
+     * 
+     * @return このブロック内で定義されている未解決ローカル変数の Set
+     */
     public final Set<UnresolvedLocalVariableInfo> getLocalVariables() {
         return Collections.unmodifiableSet(this.localVariables);
+    }
+
+    /**
+     * このブロック内の未解決内部ブロックの Set を返す
+     * 
+     * @return このブロック内の未解決内部ブロックの Set
+     */
+    public final Set<UnresolvedBlockInfo<?>> getInnerBlocks() {
+        return Collections.unmodifiableSet(this.innerBlocks);
     }
 
     /**
@@ -230,52 +252,14 @@ public abstract class UnresolvedBlockInfo implements PositionSetting, NameResolv
     }
 
     /**
-     * この未解決ブロック情報の解決済み情報を返す
-     * 
-     * @return この未解決ブロック情報の解決済み情報
-     */
-    public final BlockInfo getResolvedInfo() {
-        return this.resolvedBlock;
-    }
-
-    /**
-     * この未解決ブロック情報の解決済み情報をセットする
-     * 
-     * @param resolvedInfo この未解決ブロック情報の解決済み情報
-     */
-    public final void setResolvedInfo(final BlockInfo resolvedInfo) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == resolvedInfo) {
-            throw new NullPointerException();
-        }
-
-        this.resolvedBlock = resolvedInfo;
-    }
-
-    /**
-     * 既に名前解決されたかどうかを返す
-     * 
-     * @return 名前解決されている場合は true，そうでない場合は false
-     */
-    public final boolean alreadyResolved() {
-        return null != this.resolvedBlock;
-    }
-
-    /**
      * メソッド呼び出しを保存する変数
      */
-    private final Set<UnresolvedMethodCall> methodCalls;
+    private final Set<UnresolvedMethodCallInfo> methodCalls;
 
     /**
-     * フィールド参照を保存する変数
+     * フィールド使用を保存する変数
      */
-    private final Set<UnresolvedFieldUsage> fieldReferences;
-
-    /**
-     * フィールド代入を保存する変数
-     */
-    private final Set<UnresolvedFieldUsage> fieldAssignments;
+    private final Set<UnresolvedFieldUsageInfo> fieldUsages;
 
     /**
      * このメソッド内で定義されているローカル変数を保存する変数
@@ -285,7 +269,7 @@ public abstract class UnresolvedBlockInfo implements PositionSetting, NameResolv
     /**
      * このブロックの内側で定義されたブロックを保存する変数
      */
-    private final Set<UnresolvedBlockInfo> innerBlocks;
+    private final Set<UnresolvedBlockInfo<?>> innerBlocks;
 
     /**
      * 開始行を保存するための変数
@@ -307,5 +291,8 @@ public abstract class UnresolvedBlockInfo implements PositionSetting, NameResolv
      */
     private int toColumn;
 
-    private BlockInfo resolvedBlock;
+    /**
+     * 解決済みブロック情報を保存するための変数
+     */
+    protected T resolvedInfo;
 }

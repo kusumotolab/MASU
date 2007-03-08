@@ -1,14 +1,14 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-public final class UnresolvedSimpleTypeParameterUsage extends UnresolvedTypeParameterUsage {
+public final class UnresolvedSimpleTypeParameterUsageInfo extends UnresolvedTypeParameterUsageInfo {
 
     /**
      * –¢‰ğŒˆŒ^‚ğ—^‚¦‚ÄƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰»
      * 
      * @param type –¢‰ğŒˆŒ^
      */
-    public UnresolvedSimpleTypeParameterUsage(final UnresolvedTypeInfo type) {
+    public UnresolvedSimpleTypeParameterUsageInfo(final UnresolvedEntityUsageInfo type) {
 
         if (null == type) {
             throw new NullPointerException();
@@ -22,12 +22,12 @@ public final class UnresolvedSimpleTypeParameterUsage extends UnresolvedTypePara
      * 
      * @return –¢‰ğŒˆŒ^
      */
-    public UnresolvedTypeInfo getType() {
+    public UnresolvedEntityUsageInfo getType() {
         return this.type;
     }
 
     /**
      * –¢‰ğŒˆŒ^‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
      */
-    private final UnresolvedTypeInfo type;
+    private final UnresolvedEntityUsageInfo type;
 }

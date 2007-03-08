@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -38,20 +38,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class TargetMethodInfo extends MethodInfo implements Visualizable, Member, Position {
 
     /**
-     * メソッドオブジェクトを初期化する． 以下の情報が引数として与えられなければならない．
-     * <ul>
-     * <li>メソッド名</li>
-     * <li>シグネチャ</li>
-     * <li>所有しているクラス</li>
-     * <li>コンストラクタかどうか</li>
-     * <li>行数</li>
-     * </ul>
+     * メソッドオブジェクトを初期化する．
      * 
      * @param modifiers 修飾子
      * @param name メソッド名
      * @param ownerClass 所有しているクラス
      * @param constructor コンストラクタかどうか．コンストラクタの場合は true,そうでない場合は false．
-     * @param loc メソッドの行数
      * @param privateVisible クラス内からのみ参照可能
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
@@ -63,7 +55,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * @param toColumn 終了列
      */
     public TargetMethodInfo(final Set<ModifierInfo> modifiers, final String name,
-            final ClassInfo ownerClass, final boolean constructor, final int loc,
+            final ClassInfo ownerClass, final boolean constructor,
             final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
@@ -74,18 +66,13 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
             throw new NullPointerException();
         }
 
-        if (loc < 0) {
-            throw new IllegalArgumentException("LOC must be 0 or more!");
-        }
-
-        this.loc = loc;
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.localVariables = new TreeSet<LocalVariableInfo>();
         this.referencees = new TreeSet<FieldInfo>();
         this.assignmentees = new TreeSet<FieldInfo>();
         this.innerBlocks = new TreeSet<BlockInfo>();
-        this.unresolvedUsage = new HashSet<UnresolvedTypeInfo>();
+        this.unresolvedUsage = new HashSet<UnresolvedEntityUsageInfo>();
 
         this.modifiers.addAll(modifiers);
 
@@ -180,16 +167,16 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
     /**
      * このメソッド内で，名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しを追加する． プラグインから呼ぶとランタイムエラー．
      * 
-     * @param unresolvedType 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出し
+     * @param entityUsage 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出し
      */
-    public void addUnresolvedUsage(final UnresolvedTypeInfo unresolvedType) {
+    public void addUnresolvedUsage(final UnresolvedEntityUsageInfo entityUsage) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == unresolvedType) {
+        if (null == entityUsage) {
             throw new NullPointerException();
         }
 
-        this.unresolvedUsage.add(unresolvedType);
+        this.unresolvedUsage.add(entityUsage);
     }
 
     /**
@@ -216,7 +203,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * @return このメソッドの行数
      */
     public int getLOC() {
-        return this.loc;
+        return this.getToLine() - this.getFromLine() + 1;
     }
 
     /**
@@ -260,7 +247,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * 
      * @return このメソッド内で，名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しの Set
      */
-    public Set<UnresolvedTypeInfo> getUnresolvedUsages() {
+    public Set<UnresolvedEntityUsageInfo> getUnresolvedUsages() {
         return Collections.unmodifiableSet(this.unresolvedUsage);
     }
 
@@ -355,11 +342,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
     }
 
     /**
-     * 行数を保存するための変数
-     */
-    private final int loc;
-
-    /**
      * 修飾子を保存するための変数
      */
     private final Set<ModifierInfo> modifiers;
@@ -392,7 +374,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
     /**
      * 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しなどを保存するための変数
      */
-    private final Set<UnresolvedTypeInfo> unresolvedUsage;
+    private final Set<UnresolvedEntityUsageInfo> unresolvedUsage;
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数

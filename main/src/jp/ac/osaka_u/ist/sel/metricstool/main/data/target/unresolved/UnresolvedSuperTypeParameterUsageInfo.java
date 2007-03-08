@@ -7,14 +7,14 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
  * @author y-higo
  * 
  */
-public class UnresolvedSuperTypeParameterUsage extends UnresolvedTypeParameterUsage {
+public class UnresolvedSuperTypeParameterUsageInfo extends UnresolvedTypeParameterUsageInfo {
 
     /**
      * 未解決派生クラス参照を与えてオブジェクトを初期化
      * 
      * @param superType 未解決派生クラス参照
      */
-    public UnresolvedSuperTypeParameterUsage(final UnresolvedReferenceTypeInfo superType) {
+    public UnresolvedSuperTypeParameterUsageInfo(final UnresolvedClassReferenceInfo superType) {
 
         if (null == superType) {
             throw new NullPointerException();
@@ -28,12 +28,12 @@ public class UnresolvedSuperTypeParameterUsage extends UnresolvedTypeParameterUs
      * 
      * @return 未解決派生クラス参照
      */
-    public UnresolvedReferenceTypeInfo getSuperType() {
+    public UnresolvedClassReferenceInfo getSuperType() {
         return this.superType;
     }
 
     /**
      * 未解決派生クラス参照を保存するための変数
      */
-    private UnresolvedReferenceTypeInfo superType;
+    private UnresolvedClassReferenceInfo superType;
 }

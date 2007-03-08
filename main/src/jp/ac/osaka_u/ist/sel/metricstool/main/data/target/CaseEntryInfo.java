@@ -11,19 +11,27 @@ public class CaseEntryInfo extends BlockInfo {
     /**
      * 対応する switch ブロック情報を与えて case エントリを初期化
      * 
-     * @param correspondingSwitchBlock
+     * @param ownerClass 所有クラス
+     * @param ownerMethod 所有メソッド
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
+     * @param ownerSwitchBlock この case エントリが属する switch ブロック
+     * @param breakStatement この case エントリが break 文を持つかどうか
      */
-    public CaseEntryInfo(final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn, final SwitchBlockInfo correspondingSwitchBlock) {
+    public CaseEntryInfo(final TargetClassInfo ownerClass, final TargetMethodInfo ownerMethod,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
+            final SwitchBlockInfo ownerSwitchBlock, final boolean breakStatement) {
 
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerClass, ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
-        if (null == correspondingSwitchBlock) {
+        if (null == ownerSwitchBlock) {
             throw new NullPointerException();
         }
 
-        this.correspondingSwitchBlock = correspondingSwitchBlock;
-        this.breakStatement = false;
+        this.ownerSwitchBlock = ownerSwitchBlock;
+        this.breakStatement = breakStatement;
     }
 
     /**
@@ -31,17 +39,8 @@ public class CaseEntryInfo extends BlockInfo {
      * 
      * @return この case エントリが属する switch ブロック
      */
-    public final SwitchBlockInfo getCorrespondingSwitchBlock() {
-        return this.correspondingSwitchBlock;
-    }
-
-    /**
-     * この case エントリが break 文を持つかどうかを設定する
-     * 
-     * @param breakStatement break 文を持つ場合は true, 持たない場合は false
-     */
-    public final void setHasBreak(final boolean breakStatement) {
-        this.breakStatement = breakStatement;
+    public final SwitchBlockInfo getOwnerSwitchBlock() {
+        return this.ownerSwitchBlock;
     }
 
     /**
@@ -56,7 +55,7 @@ public class CaseEntryInfo extends BlockInfo {
     /**
      * この case エントリが属する switch ブロックを保存するための変数
      */
-    private final SwitchBlockInfo correspondingSwitchBlock;
+    private final SwitchBlockInfo ownerSwitchBlock;
 
     /**
      * この case エントリが break 文を持つかどうかを保存する変数

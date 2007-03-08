@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+
 /**
  * Unresolvedな型を表すインターフェース．
  * 

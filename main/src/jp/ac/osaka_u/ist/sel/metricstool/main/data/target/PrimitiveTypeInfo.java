@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -11,7 +12,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  * @author y-higo
  * 
  */
-public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
+public final class PrimitiveTypeInfo extends EntityUsageInfo implements TypeInfo,
+        UnresolvedTypeInfo, UnresolvedEntityUsageInfo {
 
     /**
      * プリミティブ型の各要素を表すための列挙型
@@ -56,28 +58,34 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
                 return "int";
             }
         },
-        
+
         LONG {
             @Override
             public String getName() {
                 return "long";
             }
         },
-        
+
         FLOAT {
             @Override
             public String getName() {
                 return "float";
             }
         },
-        
+
         DOUBLE {
             @Override
             public String getName() {
                 return "double";
             }
         },
-        ;
+
+        STRING {
+            @Override
+            public String getName() {
+                return "string";
+            }
+        };
 
         public abstract String getName();
     }
@@ -123,6 +131,11 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
     public static final String DOUBLE_STRING = TYPE.DOUBLE.getName();
 
     /**
+     * string を表す定数
+     */
+    public static final String STRING_STRING = TYPE.STRING.getName();
+
+    /**
      * boolean 型を表すための定数．
      */
     public static final PrimitiveTypeInfo BOOLEAN = new PrimitiveTypeInfo(TYPE.BOOLEAN);
@@ -163,6 +176,11 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
     public static final PrimitiveTypeInfo DOUBLE = new PrimitiveTypeInfo(TYPE.DOUBLE);
 
     /**
+     * string 型を表すための定数
+     */
+    public static final PrimitiveTypeInfo STRING = new PrimitiveTypeInfo(TYPE.STRING);
+
+    /**
      * {@link PrimitiveTypeInfo}のファクトリメソッド．
      * 
      * @param type 作成する型の列挙型
@@ -191,9 +209,40 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             return LONG;
         case SHORT:
             return SHORT;
+        case STRING:
+            return STRING;
         default:
             throw new IllegalArgumentException();
         }
+    }
+
+    /**
+     * 既に解決済みかどうかを返す
+     * 
+     * @return 常に true が返される
+     */
+    public boolean alreadyResolved() {
+        return true;
+    }
+
+    /**
+     * この基本型の解決済み情報を返す
+     * 
+     * @return 自分自身が返される
+     */
+    public EntityUsageInfo getResolvedEntityUsage() {
+        return this;
+    }
+
+    /**
+     * この基本型を名前解決する
+     * 
+     * @return 自分自身が返される
+     */
+    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+        return this;
     }
 
     /**
@@ -201,7 +250,17 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
      * 
      * @return 型
      */
-    public TYPE getType() {
+    @Override
+    public TypeInfo getType() {
+        return this;
+    }
+
+    /**
+     * この型のプリミティブ型を返す
+     * 
+     * @return この型のプリミティブ型
+     */
+    public TYPE getPrimitiveType() {
         return this.type;
     }
 

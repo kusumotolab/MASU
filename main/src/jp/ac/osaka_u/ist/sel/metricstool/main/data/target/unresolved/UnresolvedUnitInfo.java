@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -7,17 +8,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 
 
-
-
 /**
- * 名前解決されていない情報であることを表すインターフェース
+ * 未解決プログラムユニットを表すクラス
  * 
  * @author y-higo
+ * 
+ * @param <T> 解決済みユニットの型
  */
-public interface NameResolvable<T> {
+public interface UnresolvedUnitInfo<T> {
 
     /**
-     * 名前解決を行う
+     * 名前解決を行い，解決済みユニットを返す
      * 
      * @param usingClass 名前解決を行うエンティティがあるクラス
      * @param usingMethod 名前解決を行うエンティティがあるメソッド
@@ -27,7 +28,7 @@ public interface NameResolvable<T> {
      * 
      * @return 解決済みのエンティティ
      */
-    T resolve(TargetClassInfo usingClass, TargetMethodInfo usingMethod,
+    T resolveUnit(TargetClassInfo usingClass, TargetMethodInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager);
 
@@ -36,8 +37,8 @@ public interface NameResolvable<T> {
      * 
      * @return 名前解決された情報
      */
-    T getResolvedInfo();
-    
+    T getResolvedUnit();
+
     /**
      * 既に名前解決されたかどうかを返す
      * 

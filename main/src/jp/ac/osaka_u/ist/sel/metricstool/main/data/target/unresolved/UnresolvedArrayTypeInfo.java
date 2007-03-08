@@ -4,6 +4,14 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -17,13 +25,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * @see UnresolvedTypeInfo
  */
-public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
+public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, UnresolvedEntityUsageInfo {
 
     /**
      * 型名を返す
      */
     public String getTypeName() {
-        final UnresolvedTypeInfo elementType = this.getElementType();
+        final UnresolvedEntityUsageInfo elementType = this.getElementType();
         final int dimension = this.getDimension();
 
         final StringBuffer buffer = new StringBuffer();
@@ -34,29 +42,96 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
         return buffer.toString();
     }
 
-    /**
-     * 等しいかどうかのチェックを行う
-     */
-    public boolean equals(final UnresolvedTypeInfo typeInfo) {
+    // /**
+    // * 等しいかどうかのチェックを行う
+    // */
+    // public boolean equals(final UnresolvedEntityUsage entityUsage) {
+    //
+    // if (null == entityUsage) {
+    // throw new NullPointerException();
+    // }
+    //
+    // if (!(entityUsage instanceof UnresolvedArrayUsage)) {
+    // return false;
+    // }
+    //
+    // final UnresolvedEntityUsage elementTypeInfo = this.getElementType();
+    // final UnresolvedEntityUsage correspondElementTypeInfo = ((UnresolvedArrayUsage) entityUsage)
+    // .getElementType();
+    // if (!elementTypeInfo.equals(correspondElementTypeInfo)) {
+    // return false;
+    // }
+    //
+    // final int dimension = this.getDimension();
+    // final int correspondDimension = ((UnresolvedArrayUsage) entityUsage).getDimension();
+    // return dimension == correspondDimension;
+    // }
 
-        if (null == typeInfo) {
+    /**
+     * この未解決配列使用が解決済みかどうか返す
+     * 
+     * @return 解決済みの場合は true, そうでない場合は false
+     */
+    public boolean alreadyResolved() {
+        return null != this.resolvedInfo;
+    }
+
+    /**
+     * 解決済み配列使用を返す
+     * 
+     * @return 解決済み配列使用
+     * @throws NotResolvedException 未解決の場合にスローされる
+     */
+    public EntityUsageInfo getResolvedEntityUsage() {
+
+        if (!this.alreadyResolved()) {
+            throw new NotResolvedException();
+        }
+
+        return this.resolvedInfo;
+    }
+
+    /**
+     * 未解決配列使用を解決し，解決済み参照を返す．
+     * 
+     * @param usingClass 未解決配列使用が行われているクラス
+     * @param usingMethod 未解決配列使用が行われているメソッド
+     * @param classInfoManager 用いるクラスマネージャ
+     * @param fieldInfoManager 用いるフィールドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
+     * @return 解決済み配列使用
+     */
+    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == usingClass) || (null == classInfoManager)) {
             throw new NullPointerException();
         }
 
-        if (!(typeInfo instanceof UnresolvedArrayTypeInfo)) {
-            return false;
+        // 既に解決済みである場合は，キャッシュを返す
+        if (this.alreadyResolved()) {
+            return this.getResolvedEntityUsage();
         }
 
-        final UnresolvedTypeInfo elementTypeInfo = this.getElementType();
-        final UnresolvedTypeInfo correspondElementTypeInfo = ((UnresolvedArrayTypeInfo) typeInfo)
-                .getElementType();
-        if (!elementTypeInfo.equals(correspondElementTypeInfo)) {
-            return false;
-        }
-
+        final UnresolvedEntityUsageInfo unresolvedElement = this.getElementType();
         final int dimension = this.getDimension();
-        final int correspondDimension = ((UnresolvedArrayTypeInfo) typeInfo).getDimension();
-        return dimension == correspondDimension;
+
+        final EntityUsageInfo element = unresolvedElement.resolveEntityUsage(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+         assert element != null : "resolveEntityUsage returned null!";
+
+        // 要素の型が不明のときは UnnownTypeInfo を返す
+        if (element instanceof UnknownEntityUsageInfo) {
+            this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+            return this.resolvedInfo;
+        }
+
+        // 要素の型が解決できた場合はその配列型を作成し返す
+        this.resolvedInfo = ArrayTypeInfo.getType(element, dimension);
+        return this.resolvedInfo;
     }
 
     /**
@@ -64,7 +139,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
      * 
      * @return 配列の要素の未解決型
      */
-    public UnresolvedTypeInfo getElementType() {
+    public UnresolvedEntityUsageInfo getElementType() {
         return this.type;
     }
 
@@ -79,6 +154,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
 
     /**
      * このインスタンスが表す配列の次元を1大きくした配列を表すインスタンスを返す．
+     * 
      * @return このインスタンスが表す配列の次元を1大きくした配列
      */
     public UnresolvedArrayTypeInfo getDimensionInclementedArrayType() {
@@ -92,7 +168,8 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
      * @param dimension 次元を表す変数
      * @return 生成した UnresolvedArrayTypeInfo オブジェクト
      */
-    public static UnresolvedArrayTypeInfo getType(final UnresolvedTypeInfo type, final int dimension) {
+    public static UnresolvedArrayTypeInfo getType(final UnresolvedEntityUsageInfo type,
+            final int dimension) {
 
         if (null == type) {
             throw new NullPointerException();
@@ -102,13 +179,13 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
         }
 
         final Key key = new Key(type, dimension);
-        UnresolvedArrayTypeInfo arrayType = ARRAY_TYPE_MAP.get(key);
-        if (arrayType == null) {
-            arrayType = new UnresolvedArrayTypeInfo(type, dimension);
-            ARRAY_TYPE_MAP.put(key, arrayType);
+        UnresolvedArrayTypeInfo arrayUsage = ARRAY_TYPE_MAP.get(key);
+        if (arrayUsage == null) {
+            arrayUsage = new UnresolvedArrayTypeInfo(type, dimension);
+            ARRAY_TYPE_MAP.put(key, arrayUsage);
         }
 
-        return arrayType;
+        return arrayUsage;
     }
 
     /**
@@ -117,7 +194,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
      * @param type 配列の要素の未解決型
      * @param dimension 配列の次元
      */
-    private UnresolvedArrayTypeInfo(final UnresolvedTypeInfo type, final int dimension) {
+    private UnresolvedArrayTypeInfo(final UnresolvedEntityUsageInfo type, final int dimension) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == type) {
@@ -129,17 +206,23 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
 
         this.type = type;
         this.dimension = dimension;
+        this.resolvedInfo = null;
     }
 
     /**
      * 配列の要素の型を保存する変数
      */
-    private final UnresolvedTypeInfo type;
+    private final UnresolvedEntityUsageInfo type;
 
     /**
      * 配列の次元を保存する変数
      */
     private final int dimension;
+
+    /**
+     * 解決済み配列使用を保存するための変数
+     */
+    private EntityUsageInfo resolvedInfo;
 
     /**
      * UnresolvedArrayTypeInfo オブジェクトを一元管理するための Map．オブジェクトはファクトリメソッドで生成される．
@@ -156,7 +239,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
         /**
          * 第一キー
          */
-        private final UnresolvedTypeInfo type;
+        private final UnresolvedEntityUsageInfo type;
 
         /**
          * 第二キー
@@ -169,7 +252,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
          * @param type 第一キー
          * @param dimension 第二キー
          */
-        Key(final UnresolvedTypeInfo type, final int dimension) {
+        Key(final UnresolvedEntityUsageInfo type, final int dimension) {
 
             if (null == type) {
                 throw new NullPointerException();
@@ -187,11 +270,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
          */
         @Override
         public int hashCode() {
-            final StringBuffer buffer = new StringBuffer();
-            buffer.append(this.type.getTypeName());
-            buffer.append(this.dimension);
-            final String hashString = buffer.toString();
-            return hashString.hashCode();
+            return this.type.hashCode() + this.dimension;
         }
 
         /**
@@ -199,7 +278,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
          * 
          * @return 第一キー
          */
-        public UnresolvedTypeInfo getFirstKey() {
+        public UnresolvedEntityUsageInfo getFirstKey() {
             return this.type;
         }
 
@@ -222,8 +301,8 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
                 throw new NullPointerException();
             }
 
-            final UnresolvedTypeInfo firstKey = this.getFirstKey();
-            final UnresolvedTypeInfo correspondFirstKey = ((Key) o).getFirstKey();
+            final UnresolvedEntityUsageInfo firstKey = this.getFirstKey();
+            final UnresolvedEntityUsageInfo correspondFirstKey = ((Key) o).getFirstKey();
             if (!firstKey.equals(correspondFirstKey)) {
                 return false;
             }

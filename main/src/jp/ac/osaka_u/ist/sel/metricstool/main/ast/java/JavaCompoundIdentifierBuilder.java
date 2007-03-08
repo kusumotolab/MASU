@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.Instanc
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsage;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnknownUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
@@ -103,8 +103,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
         return classInfo;
     }
     
-    private final static UnresolvedEntityUsage JAVA_LANG_CLASS =
-        new UnresolvedEntityUsage(new AvailableNamespaceInfoSet(),
+    private final static UnresolvedUnknownUsageInfo JAVA_LANG_CLASS =
+        new UnresolvedUnknownUsageInfo(new AvailableNamespaceInfoSet(),
                 new String[]{"java","lang","Class"});
     
     private final BuildDataManager buildDataManager;
