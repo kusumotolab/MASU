@@ -128,16 +128,6 @@ public class UnresolvedArrayElementUsageInfo implements UnresolvedEntityUsageInf
     }
 
     /**
-     * 未解決配列要素使用の型名を返す
-     * 
-     * @return 未解決配列要素使用の型名
-     */
-    public String getTypeName() {
-        final String ownerTypeName = this.getOwnerArrayType().getTypeName();
-        return "An element usage of " + ownerTypeName;
-    }
-
-    /**
      * 要素が参照された配列の型を返す
      * 
      * @return 要素が参照された配列の型

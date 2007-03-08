@@ -229,15 +229,6 @@ public final class UnresolvedFieldUsageInfo implements UnresolvedEntityUsageInfo
     }
 
     /**
-     * この未解決フィールド使用の型名を返す
-     * 
-     * @return この未解決フィールド使用の型名
-     */
-    public String getTypeName() {
-        return this.getFieldName();
-    }
-
-    /**
      * 使用可能な名前空間を返す
      * 
      * @return 使用可能な名前空間を返す

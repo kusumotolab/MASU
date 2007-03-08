@@ -44,6 +44,4 @@ public interface UnresolvedEntityUsageInfo {
      * @return –¼‘O‰ğŒˆ‚³‚ê‚Ä‚¢‚éê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
      */
     boolean alreadyResolved();
-
-    String getTypeName();
 }

@@ -360,15 +360,6 @@ public final class UnresolvedMethodCallInfo implements UnresolvedEntityUsageInfo
     }
 
     /**
-     * このメソッド呼び出しの返り値の型を返す
-     * 
-     * @return このメソッド呼び出しの返り値の型
-     */
-    public String getTypeName() {
-        return UnresolvedTypeInfo.UNRESOLVED;
-    }
-
-    /**
      * メソッド呼び出しが実行される変数の型を保存するための変数
      */
     private final UnresolvedEntityUsageInfo ownerClassType;

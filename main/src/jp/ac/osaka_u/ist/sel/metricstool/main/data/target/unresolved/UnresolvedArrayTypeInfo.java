@@ -27,21 +27,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, UnresolvedEntityUsageInfo {
 
-    /**
-     * 型名を返す
-     */
-    public String getTypeName() {
-        final UnresolvedEntityUsageInfo elementType = this.getElementType();
-        final int dimension = this.getDimension();
-
-        final StringBuffer buffer = new StringBuffer();
-        buffer.append(elementType.getTypeName());
-        for (int i = 0; i < dimension; i++) {
-            buffer.append("[]");
-        }
-        return buffer.toString();
-    }
-
     // /**
     // * 等しいかどうかのチェックを行う
     // */
@@ -121,7 +106,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
 
         final EntityUsageInfo element = unresolvedElement.resolveEntityUsage(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-         assert element != null : "resolveEntityUsage returned null!";
+        assert element != null : "resolveEntityUsage returned null!";
 
         // 要素の型が不明のときは UnnownTypeInfo を返す
         if (element instanceof UnknownEntityUsageInfo) {

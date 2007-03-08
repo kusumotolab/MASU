@@ -360,29 +360,6 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
     }
 
     /**
-     * 型名を返す
-     * 
-     * @return 型名
-     */
-    public String getTypeName() {
-
-        final String delimiter = Settings.getLanguage().getNamespaceDelimiter();
-        final StringBuffer buffer = new StringBuffer();
-
-        for (final String name : this.getFullQualifiedName()) {
-            buffer.append(name);
-            buffer.append(delimiter);
-        }
-
-        int delimiterLength = 0;
-        if (null != delimiter) {
-            delimiterLength = delimiter.length();
-        }
-
-        return buffer.substring(0, buffer.length() - delimiterLength);
-    }
-
-    /**
      * 子クラスから参照可能かどうかを設定する
      * 
      * @param inheritanceVisible 子クラスから参照可能な場合は true，そうでない場合は false

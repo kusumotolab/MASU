@@ -4,7 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import java.util.List;
 import java.util.SortedSet;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
@@ -168,7 +167,7 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
 
                                     } else {
                                         assert false : "Can't resolve entity usage1 : "
-                                                + this.getTypeName();
+                                                + this.toString();
                                     }
                                 }
                             }
@@ -289,7 +288,7 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
 
                                     } else {
                                         assert false : "Can't resolve entity usage2 : "
-                                                + this.getTypeName();
+                                                + this.toString();
                                     }
                                 }
                             }
@@ -407,7 +406,7 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
 
                                     } else {
                                         assert false : "Can't resolve entity usage3 : "
-                                                + this.getTypeName();
+                                                + this.toString();
                                     }
                                 }
                             }
@@ -531,7 +530,7 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
 
                                         } else {
                                             assert false : "Can't resolve entity usage3.5 : "
-                                                    + this.getTypeName();
+                                                    + this.toString();
                                         }
                                     }
                                 }
@@ -656,7 +655,7 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
 
                                                 } else {
                                                     assert false : "Can't resolve entity usage4 : "
-                                                            + this.getTypeName();
+                                                            + this.toString();
                                                 }
                                             }
                                         }
@@ -776,7 +775,7 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
 
                                             } else {
                                                 assert false : "Can't resolve entity usage5 : "
-                                                        + this.getTypeName();
+                                                        + this.toString();
                                             }
                                         }
                                     }
@@ -806,7 +805,7 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
             }
         }
 
-        err.println("Remain unresolved \"" + this.getTypeName() + "\"" + " on \""
+        err.println("Remain unresolved \"" + this.toString() + "\"" + " on \""
                 + usingClass.getFullQualifiedName(LANGUAGE.JAVA.getNamespaceDelimiter()) + "#"
                 + usingMethod.getMethodName() + "\".");
 
@@ -815,21 +814,6 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
 
         this.resolvedIndo = UnknownEntityUsageInfo.getInstance();
         return this.resolvedIndo;
-    }
-
-    /**
-     * å^ñºÇï‘Ç∑. Ç±ÇÃÉNÉâÉXÇÕ UnresolvedTypeInfo Çé¿ëïÇµÇƒÇ¢ÇÈÇÃÇ≈ï÷ãXè„ë∂ç›ÇµÇƒÇ¢ÇÈÇæÇØÅD
-     */
-    public String getTypeName() {
-
-        final String delimiter = Settings.getLanguage().getNamespaceDelimiter();
-        final StringBuffer buffer = new StringBuffer();
-        for (int i = 0; i < (this.name.length - 1); i++) {
-            buffer.append(this.name[i]);
-            buffer.append(delimiter);
-        }
-        buffer.append(this.name[this.name.length - 1]);
-        return buffer.toString();
     }
 
     /**

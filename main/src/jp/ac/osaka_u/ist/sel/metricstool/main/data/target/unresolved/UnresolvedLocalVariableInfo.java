@@ -89,7 +89,7 @@ public final class UnresolvedLocalVariableInfo extends UnresolvedVariableInfo<Lo
                         .getType(new ClassReferenceInfo(elementType), dimension);
             } else {
                 assert false : "Can't resolve method local variable type : "
-                        + unresolvedVariableType.getTypeName();
+                        + unresolvedVariableType.toString();
             }
         }
         final int localFromLine = this.getFromLine();

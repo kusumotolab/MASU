@@ -418,16 +418,6 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
     }
 
     /**
-     * この参照型の名前を返す
-     * 
-     * @return この参照型の名前を返す
-     */
-    public final String getTypeName() {
-        final String[] referenceName = this.getReferenceName();
-        return referenceName[referenceName.length - 1];
-    }
-
-    /**
      * この参照型のownerも含めた参照名を返す
      * 
      * @return この参照型のownerも含めた参照名を返す

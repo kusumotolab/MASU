@@ -9,11 +9,4 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
  * 
  */
 public interface UnresolvedTypeInfo {
-
-    String UNRESOLVED = "unresolved";
-    
-    /**
-     * Œ^–¼‚ð•Ô‚·
-     */
-    String getTypeName();
 }

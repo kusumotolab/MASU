@@ -99,10 +99,6 @@ public class UnresolvedBinominalOperationInfo implements UnresolvedEntityUsageIn
         return this.resolvedInfo;
     }
 
-    public String getTypeName() {
-        return null;
-    }
-
     /**
      * ‰‰ŽZŽq‚ðŽæ“¾‚·‚é
      * 

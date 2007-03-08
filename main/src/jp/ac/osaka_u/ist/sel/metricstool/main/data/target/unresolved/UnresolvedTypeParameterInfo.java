@@ -39,15 +39,6 @@ public class UnresolvedTypeParameterInfo implements UnresolvedTypeInfo {
     }
 
     /**
-     * 型名（実際には型パラメータ名）を返す．
-     * 
-     * @return 型名
-     */
-    public final String getTypeName() {
-        return this.name;
-    }
-
-    /**
      * 基底クラスの未解決型情報を返す
      * 
      * @return 基底クラスの未解決型情報

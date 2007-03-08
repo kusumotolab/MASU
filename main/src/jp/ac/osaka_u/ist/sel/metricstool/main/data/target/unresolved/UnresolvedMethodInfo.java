@@ -212,7 +212,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
                         dimension);
             } else {
                 assert false : "Can't resolve method return type : "
-                        + unresolvedMethodReturnType.getTypeName();
+                        + unresolvedMethodReturnType.toString();
             }
         }
         this.resolvedInfo.setReturnType(methodReturnType);

@@ -86,7 +86,7 @@ public final class UnresolvedParameterInfo extends UnresolvedVariableInfo<Target
                         dimension);
             } else {
                 assert false : "Can't resolve dummy parameter type : "
-                        + unresolvedParameterType.getTypeName();
+                        + unresolvedParameterType.toString();
             }
         }
         final int parameterFromLine = this.getFromLine();

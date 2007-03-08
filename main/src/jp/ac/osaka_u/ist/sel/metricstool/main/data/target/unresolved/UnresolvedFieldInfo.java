@@ -89,7 +89,7 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
                 classInfoManager.add(elementType);
                 fieldType = ArrayTypeInfo.getType(new ClassReferenceInfo(elementType), dimension);
             } else {
-                assert false : "Can't resolve field type : " + unresolvedFieldType.getTypeName();
+                assert false : "Can't resolve field type : " + unresolvedFieldType.toString();
             }
         }
         final boolean privateVisible = this.isPrivateVisible();
