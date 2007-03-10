@@ -18,54 +18,55 @@ public class BuiltinTypeToken extends AstTokenAdapter {
      * bool型を表す定数インスタンス.
      */
     public static final BuiltinTypeToken BOOLEAN = new BuiltinTypeToken(PrimitiveTypeInfo
-            .getType(PrimitiveTypeInfo.TYPE.BOOLEAN));
+            .getType(PrimitiveTypeInfo.TYPE.BOOLEAN), PrimitiveTypeInfo.BOOLEAN_STRING);
 
     /**
      * byte型を表す定数インスタンス.
      */
     public static final BuiltinTypeToken BYTE = new BuiltinTypeToken(PrimitiveTypeInfo
-            .getType(PrimitiveTypeInfo.TYPE.BYTE));
+            .getType(PrimitiveTypeInfo.TYPE.BYTE), PrimitiveTypeInfo.BYTE_STRING);
 
     /**
      * char型を表す定数インスタンス.
      */
     public static final BuiltinTypeToken CHAR = new BuiltinTypeToken(PrimitiveTypeInfo
-            .getType(PrimitiveTypeInfo.TYPE.CHAR));
+            .getType(PrimitiveTypeInfo.TYPE.CHAR), PrimitiveTypeInfo.CHAR_STRING);
 
     /**
      * short型を表す定数インスタンス.
      */
     public static final BuiltinTypeToken SHORT = new BuiltinTypeToken(PrimitiveTypeInfo
-            .getType(PrimitiveTypeInfo.TYPE.SHORT));
+            .getType(PrimitiveTypeInfo.TYPE.SHORT), PrimitiveTypeInfo.SHORT_STRING);
 
     /**
      * int型を表す定数インスタンス.
      */
     public static final BuiltinTypeToken INT = new BuiltinTypeToken(PrimitiveTypeInfo
-            .getType(PrimitiveTypeInfo.TYPE.INT));
+            .getType(PrimitiveTypeInfo.TYPE.INT), PrimitiveTypeInfo.INT_STRING);
 
     /**
      * long型を表す定数インスタンス.
      */
     public static final BuiltinTypeToken LONG = new BuiltinTypeToken(PrimitiveTypeInfo
-            .getType(PrimitiveTypeInfo.TYPE.LONG));
+            .getType(PrimitiveTypeInfo.TYPE.LONG), PrimitiveTypeInfo.LONG_STRING);
 
     /**
      * float型を表す定数インスタンス.
      */
     public static final BuiltinTypeToken FLOAT = new BuiltinTypeToken(PrimitiveTypeInfo
-            .getType(PrimitiveTypeInfo.TYPE.FLOAT));
+            .getType(PrimitiveTypeInfo.TYPE.FLOAT), PrimitiveTypeInfo.FLOAT_STRING);
 
     /**
      * double型を表す定数インスタンス.
      */
     public static final BuiltinTypeToken DOUBLE = new BuiltinTypeToken(PrimitiveTypeInfo
-            .getType(PrimitiveTypeInfo.TYPE.DOUBLE));
+            .getType(PrimitiveTypeInfo.TYPE.DOUBLE), PrimitiveTypeInfo.DOUBLE_STRING);
 
     /**
      * void型を表す定数インスタンス.
      */
-    public static final BuiltinTypeToken VOID = new BuiltinTypeToken(VoidTypeInfo.getInstance());
+    public static final BuiltinTypeToken VOID = new BuiltinTypeToken(VoidTypeInfo.getInstance(),
+            VoidTypeInfo.VOID_STRING);
 
     public UnresolvedTypeInfo getType() {
         return this.type;
@@ -92,8 +93,8 @@ public class BuiltinTypeToken extends AstTokenAdapter {
      * 
      * @param text　この組み込み型を表す文字列
      */
-    protected BuiltinTypeToken(final UnresolvedTypeInfo type) {
-        super(type.getTypeName());
+    protected BuiltinTypeToken(final UnresolvedTypeInfo type, final String name) {
+        super(name);
 
         this.type = type;
     }
