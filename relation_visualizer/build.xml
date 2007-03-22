@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="Windows-31J"?>
+
+<project name="relation_visualizer" default="deploy">
+	<property name="masu.dir" location="../main" />
+	<property file="${masu.dir}/build.properties" />
+
+	<property name="masu.cls.dir" location="${masu.dir}/${CLS.DIR}" />
+	<property name="deploy.target.dir" location="${masu.dir}/${PACKAGE.PLUGIN.DIR}/${ant.project.name}" />
+
+	<property name="src.dir" location="src" />
+	<property name="cls.dir" location="cls" />
+	<property name="resource.dir" location="resource" />
+	<property name="build.root.dir" location="plugins" />
+	<property name="build.target.dir" location="${build.root.dir}/${ant.project.name}" />
+	<property name="jar.file" value="${build.target.dir}/${ant.project.name}.jar" />
+
+	<target name="compile">
+		<mkdir dir="${cls.dir}" />
+		<javac classpath="${masu.cls.dir}" srcdir="${src.dir}" destdir="${cls.dir}" encoding="Windows-31J" />
+	</target>
+
+	<target name="jar" depends="compile">
+		<mkdir dir="${build.target.dir}" />
+		<jar basedir="${cls.dir}" destfile="${jar.file}" />
+	</target>
+
+	<target name="build" depends="jar" />
+
+	<target name="deploy" depends="build">
+		<mkdir dir="${deploy.target.dir}" />
+		<copy todir="${build.target.dir}">
+			<fileset dir="${resource.dir}" />
+		</copy>
+		<copy todir="${deploy.target.dir}">
+			<fileset dir="${build.target.dir}" />
+		</copy>
+	</target>
+
+	<target name="clean">
+		<delete dir="${cls.dir}" />
+		<delete dir="${build.root.dir}" />
+	</target>
+</project>
