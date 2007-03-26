@@ -23,7 +23,8 @@ public class ClassLocPlugin extends AbstractClassMetricPlugin {
      */
 	@Override
 	protected Number measureClassMetric(TargetClassInfo targetClass) {
-		return targetClass.getLOC();
+		int cloc = targetClass.getToLine() - targetClass.getFromLine() + 1;
+		return cloc;
 	}
 
 	/**

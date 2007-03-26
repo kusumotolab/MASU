@@ -31,7 +31,8 @@ public class MethodLocPlugin extends AbstractPlugin {
 		while (mit.hasNext()) {
 			TargetMethodInfo mi = mit.next();
 			try {
-				this.registMetric(mi, mi.getLOC());
+				int mloc = mi.getToLine() - mi.getFromLine() + 1;
+				this.registMetric(mi, mloc);
 			} catch (MetricAlreadyRegisteredException e) {
 				e.printStackTrace();
 			}
