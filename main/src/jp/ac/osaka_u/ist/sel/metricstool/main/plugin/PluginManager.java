@@ -11,10 +11,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.ConcurrentHashSet;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 
 
 /**
  * プラグインインスタンスを管理するクラス．
+ * シングルトンパターンで実装されている．
  * 
  * @author kou-tngt
  */
@@ -46,6 +48,19 @@ public class PluginManager {
         final PluginInfo info = plugin.getPluginInfo();
         this.pluginInfos.add(info);
         this.info2pluginMap.put(info, plugin);
+        
+        METRIC_TYPE type = plugin.getMetricType();
+        switch(type){
+            case FILE_METRIC :
+                filePlugins.add(plugin);
+                break;
+            case CLASS_METRIC :
+                classPlugins.add(plugin);
+                break;
+            case METHOD_METRIC :
+                methodPlugins.add(plugin);
+                break;
+        }
     }
 
     /**
@@ -88,7 +103,7 @@ public class PluginManager {
     }
 
     /**
-     * プラグインの編集不可なSetを返す
+     * 全てのプラグインを含んだ編集不可なSetを返す
      * 特別権限を持つスレッド以外からは呼び出せない
      * @return プラグインのSet
      * @throws AccessControlException 特別権限を持っていないスレッドからの呼び出しの場合
@@ -96,6 +111,39 @@ public class PluginManager {
     public Set<AbstractPlugin> getPlugins() {
         MetricsToolSecurityManager.getInstance().checkAccess();
         return Collections.unmodifiableSet(this.plugins);
+    }
+    
+    /**
+     * ファイル単位のメトリクスを計測するプラグインの編集不可なSetを返す
+     * 特別権限を持つスレッド以外からは呼び出せない
+     * @return ファイル単位のメトリクスを計測するプラグインのSet
+     * @throws AccessControlException 特別権限を持っていないスレッドからの呼び出しの場合
+     */
+    public Set<AbstractPlugin> getFileMetricPlugins(){
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        return Collections.unmodifiableSet(this.filePlugins);
+    }
+    
+    /**
+     * クラス単位のメトリクスを計測するプラグインの編集不可なSetを返す
+     * 特別権限を持つスレッド以外からは呼び出せない
+     * @return クラス単位のメトリクスを計測するプラグインのSet
+     * @throws AccessControlException 特別権限を持っていないスレッドからの呼び出しの場合
+     */
+    public Set<AbstractPlugin> getClassMetricPlugins(){
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        return Collections.unmodifiableSet(this.classPlugins);
+    }
+    
+    /**
+     * メソッド単位のメトリクスを計測するプラグインの編集不可なSetを返す
+     * 特別権限を持つスレッド以外からは呼び出せない
+     * @return メソッド単位のメトリクスを計測するプラグインのSet
+     * @throws AccessControlException 特別権限を持っていないスレッドからの呼び出しの場合
+     */
+    public Set<AbstractPlugin> getMethodMetricPlugins(){
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        return Collections.unmodifiableSet(this.methodPlugins);
     }
 
     /**
@@ -120,6 +168,18 @@ public class PluginManager {
             final PluginInfo info = plugin.getPluginInfo();
             this.pluginInfos.remove(info);
             this.info2pluginMap.remove(info);
+            
+            switch(plugin.getMetricType()){
+                case FILE_METRIC :
+                    filePlugins.remove(plugin);
+                    break;
+                case CLASS_METRIC :
+                    classPlugins.remove(plugin);
+                    break;
+                case METHOD_METRIC :
+                    methodPlugins.remove(plugin);
+                    break;
+            }
         }
     }
 
@@ -147,6 +207,9 @@ public class PluginManager {
     public void removeAllPlugins() {
         MetricsToolSecurityManager.getInstance().checkAccess();
         this.plugins.clear();
+        this.filePlugins.clear();
+        this.classPlugins.clear();
+        this.methodPlugins.clear();
     }
 
     /**
@@ -156,12 +219,27 @@ public class PluginManager {
     };
 
     /**
-     * プラグインのSet
+     * 全てのプラグインのSet
      */
     private final Set<AbstractPlugin> plugins = new ConcurrentHashSet<AbstractPlugin>();
+    
+    /**
+     * ファイル単位のメトリクスを計測するプラグインのセット
+     */
+    private final Set<AbstractPlugin> filePlugins = new ConcurrentHashSet<AbstractPlugin>();
+    
+    /**
+     * クラス単位のメトリクスを計測するプラグインのセット
+     */
+    private final Set<AbstractPlugin> classPlugins = new ConcurrentHashSet<AbstractPlugin>();
+    
+    /**
+     * メソッド単位のメトリクスを計測するプラグインのセット
+     */
+    private final Set<AbstractPlugin> methodPlugins = new ConcurrentHashSet<AbstractPlugin>();
 
     /**
-     * プラグイン情報のSet
+     * 全てのプラグイン情報のSet
      */
     private final Set<PluginInfo> pluginInfos = new ConcurrentHashSet<PluginInfo>();
 
