@@ -23,7 +23,6 @@ public class FileLocPlugin extends AbstractPlugin {
 
 	/**
 	 * メトリクス値を計測する
-	 * @throws MetricAlreadyRegisteredException 
 	 * 
 	 */
 	@Override
@@ -84,7 +83,7 @@ public class FileLocPlugin extends AbstractPlugin {
      */
 	@Override
 	protected String getMetricName() {
-		return "floc";
+		return "FLOC";
 	}
 
 	/**
