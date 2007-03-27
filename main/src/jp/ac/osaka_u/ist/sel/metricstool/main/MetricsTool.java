@@ -360,7 +360,9 @@ public class MetricsTool {
      * メトリクス情報を {@link Settings} に指定されたファイルに出力する.
      */
     public void writeMetrics() {
-        if (!Settings.getFileMetricsFile().equals(Settings.INIT)) {
+
+        // ファイルメトリクスを計測する場合
+        if (0 < PluginManager.getInstance().getFileMetricPlugins().size()) {
 
             try {
                 FileMetricsInfoManager manager = FileMetricsInfoManager.getInstance();
@@ -375,6 +377,7 @@ public class MetricsTool {
             }
         }
 
+        // クラスメトリクスを計測する場合
         if (!Settings.getClassMetricsFile().equals(Settings.INIT)) {
 
             try {
@@ -390,6 +393,7 @@ public class MetricsTool {
             }
         }
 
+        // メソッドメトリクスを計測する場合
         if (!Settings.getMethodMetricsFile().equals(Settings.INIT)) {
 
             try {
