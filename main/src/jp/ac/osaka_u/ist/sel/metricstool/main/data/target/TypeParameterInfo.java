@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * 型パラメータを表す抽象クラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public class TypeParameterInfo implements TypeInfo {

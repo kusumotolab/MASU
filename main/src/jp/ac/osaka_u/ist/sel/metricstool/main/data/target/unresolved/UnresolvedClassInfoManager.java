@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * UnresolvedClassInfoManager を管理するクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public class UnresolvedClassInfoManager {
@@ -56,7 +56,7 @@ public class UnresolvedClassInfoManager {
     /**
      * クラス情報を Map に保存するためのキー
      * 
-     * @author y-higo
+     * @author higo
      * 
      */
     class ClassKey implements Comparable<ClassKey> {

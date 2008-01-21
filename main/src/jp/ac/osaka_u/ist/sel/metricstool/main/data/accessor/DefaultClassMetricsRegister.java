@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 /**
  * プラグインがクラスメトリクスを登録するために用いるクラス．
  * 
- * @author y-higo
+ * @author higo
  */
 public class DefaultClassMetricsRegister implements ClassMetricsRegister {
 

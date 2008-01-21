@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 /**
  * –¢‰ğŒˆ“ñ€‰‰Z‚ğŠi”[‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public class UnresolvedBinominalOperationInfo implements UnresolvedEntityUsageInfo {

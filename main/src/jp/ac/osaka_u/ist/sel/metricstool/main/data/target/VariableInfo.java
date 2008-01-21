@@ -16,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * <li>Cüq</li>
  * <li>ˆÊ’uî•ñ</li>
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public abstract class VariableInfo implements UnitInfo, Comparable<VariableInfo> {

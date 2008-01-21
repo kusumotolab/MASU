@@ -36,7 +36,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * <li>ファイル内位置</li>
  * </ul>
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class UnresolvedClassInfo implements UnresolvedTypeInfo, VisualizableSetting,

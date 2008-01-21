@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Member;
 /**
  * ソフトウェアの単位がインスタンスなのかスタティックなのかを定義するインターフェース
  * 
- * @author y-higo
+ * @author higo
  */
 public interface MemberSetting extends Member {
 

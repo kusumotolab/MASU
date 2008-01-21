@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 /**
  * synchronized ブロックを表すクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class SynchronizedBlockInfo extends BlockInfo {

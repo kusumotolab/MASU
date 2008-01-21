@@ -24,7 +24,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * 未解決参照型を表すクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {

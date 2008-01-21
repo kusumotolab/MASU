@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 /**
  * このインターフェースは，クラス情報を取得するためのメソッド郡を提供する．
  * 
- * @author y-higo
+ * @author higo
  *
  */
 public interface ClassInfoAccessor extends Iterable<TargetClassInfo> {

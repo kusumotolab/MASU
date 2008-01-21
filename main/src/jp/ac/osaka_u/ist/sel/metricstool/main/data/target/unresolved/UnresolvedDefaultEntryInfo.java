@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * switch 文の default エントリを表すクラス
  * 
- * @author y-higo
+ * @author higo
  */
 public final class UnresolvedDefaultEntryInfo extends UnresolvedCaseEntryInfo {
 

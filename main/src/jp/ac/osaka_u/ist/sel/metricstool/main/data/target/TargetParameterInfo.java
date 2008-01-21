@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * 対象メソッドの引数を表すクラス
  * 
- * @author y-higo
+ * @author higo
  *
  */
 public final class TargetParameterInfo extends ParameterInfo {

@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * 未解決型パラメータを表す抽象クラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public class UnresolvedTypeParameterInfo implements UnresolvedTypeInfo {

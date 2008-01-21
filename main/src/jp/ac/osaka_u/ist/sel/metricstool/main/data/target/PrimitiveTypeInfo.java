@@ -9,7 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  * プリミティブ型を表すためのクラス．プリミティブ型はプログラミング言語によって提唱されている型であるため， ユーザが新たらしい型を作ることができないよう，コンストラクタは private
  * にしている．
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class PrimitiveTypeInfo extends EntityUsageInfo implements TypeInfo,
@@ -18,7 +18,7 @@ public final class PrimitiveTypeInfo extends EntityUsageInfo implements TypeInfo
     /**
      * プリミティブ型の各要素を表すための列挙型
      * 
-     * @author y-higo
+     * @author higo
      * 
      */
     public enum TYPE {

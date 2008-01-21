@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 /**
  * 配列型の length フィールド使用を表すクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class ArrayLengthUsageInfo extends EntityUsageInfo {

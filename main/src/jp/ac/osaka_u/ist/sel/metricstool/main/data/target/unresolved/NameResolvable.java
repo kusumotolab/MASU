@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 /**
  * 名前解決されていない情報であることを表すインターフェース
  * 
- * @author y-higo
+ * @author higo
  */
 public interface NameResolvable<T> {
 

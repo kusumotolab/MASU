@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManage
 /**
  * クラスメトリクスをファイルに書き出すクラスが実装しなければならないインターフェース
  * 
- * @author y-higo
+ * @author higo
  */
 public interface ClassMetricsWriter extends MetricsWriter {
 

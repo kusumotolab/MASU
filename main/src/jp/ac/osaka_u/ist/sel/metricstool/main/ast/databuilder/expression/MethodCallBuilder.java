@@ -4,8 +4,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCall;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSimpleTypeParameterUsage;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSimpleTypeParameterUsageInfo;
 
 public class MethodCallBuilder extends ExpressionBuilder{
 
@@ -33,7 +33,7 @@ public class MethodCallBuilder extends ExpressionBuilder{
                 
                 callee = callee.resolveAsCalledMethod(buildDataManager);
                 
-                UnresolvedMethodCall methodCall = new UnresolvedMethodCall(callee.getOwnerType(),callee.getName(),false);
+                UnresolvedMethodCallInfo methodCall = new UnresolvedMethodCallInfo(callee.getOwnerType(),callee.getName(),false);
                 for(int i=1; i < elements.length; i++){
                     ExpressionElement argment = elements[i];
                     if (argment instanceof IdentifierElement){

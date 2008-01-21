@@ -9,7 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnavailableLanguageException;
 
 /**
  * 
- * @author y-higo
+ * @author higo
  * 
  * Às‚Ìˆø”î•ñ‚ğŠi”[‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
  * 

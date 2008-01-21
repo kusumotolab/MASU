@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * クラス情報を格納するための抽象クラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public abstract class ClassInfo implements UnitInfo, TypeInfo, Comparable<ClassInfo>,

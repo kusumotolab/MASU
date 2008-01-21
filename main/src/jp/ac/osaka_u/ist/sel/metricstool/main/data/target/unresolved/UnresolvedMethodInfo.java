@@ -28,7 +28,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 一度目のASTパースで取得したメソッド情報を一時的に格納するためのクラス．
  * 
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting, PositionSetting,

@@ -31,7 +31,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 /**
  * 未解決エンティティ使用を保存するためのクラス． 未解決エンティティ使用とは，パッケージ名やクラス名の参照 を表す．
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageInfo {

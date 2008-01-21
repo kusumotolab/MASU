@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.StringArrayComparator;
 /**
  * 名前空間名を表すクラス
  * 
- * @author y-higo
+ * @author higo
  */
 public final class NamespaceInfo implements Comparable<NamespaceInfo> {
 

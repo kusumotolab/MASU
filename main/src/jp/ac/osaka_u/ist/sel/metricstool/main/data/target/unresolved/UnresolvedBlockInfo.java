@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * if文やwhile文などのメソッド内の構造（ブロック）を表すためのクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public abstract class UnresolvedBlockInfo<T extends BlockInfo> implements PositionSetting,

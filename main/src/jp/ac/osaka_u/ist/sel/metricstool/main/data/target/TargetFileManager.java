@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 /**
  * 
- * @author y-higo
+ * @author higo
  * 
  * 対象ファイルを格納するためのクラス． TargetFile を要素として持つ．
  * 

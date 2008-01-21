@@ -22,7 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 /**
  * クラス情報を管理するクラス．
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class ClassInfoManager {
@@ -213,7 +213,7 @@ public final class ClassInfoManager {
     /**
      * クラス一覧を階層的名前空間（パッケージ階層）で持つデータクラス
      * 
-     * @author y-higo
+     * @author higo
      */
     class PackageInfo {
 

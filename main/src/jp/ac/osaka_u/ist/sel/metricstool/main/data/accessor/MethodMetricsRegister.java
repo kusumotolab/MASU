@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 /**
  * このインターフェースは，メソッドメトリクスを登録するためのメソッド群を提供する．
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public interface MethodMetricsRegister {

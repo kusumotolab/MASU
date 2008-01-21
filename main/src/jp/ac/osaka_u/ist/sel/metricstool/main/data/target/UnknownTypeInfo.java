@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 /**
  * 名前解決できない型を表すクラス．
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public class UnknownTypeInfo implements TypeInfo {

@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * ローカル変数を表すクラス．型を提供するのみ．
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class LocalVariableInfo extends VariableInfo {

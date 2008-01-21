@@ -32,7 +32,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * <li>代入しているフィールド</li>
  * </ul>
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class TargetMethodInfo extends MethodInfo implements Visualizable, Member, Position {

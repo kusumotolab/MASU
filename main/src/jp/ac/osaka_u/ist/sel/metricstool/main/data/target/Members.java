@@ -11,7 +11,7 @@ import java.util.TreeSet;
 /**
  * Member インターフェースを利用した処理を行うクラス．
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public class Members {

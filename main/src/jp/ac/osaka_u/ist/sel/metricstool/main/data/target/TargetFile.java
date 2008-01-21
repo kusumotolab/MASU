@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 /**
  * 
- * @author y-higo
+ * @author higo
  * 
  * 対象ファイルのデータを格納するクラス
  * 

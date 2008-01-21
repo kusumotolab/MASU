@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 /**
  * プラグインが FileInfo にアクセスするために用いるインターフェース
  * 
- * @author y-higo
+ * @author higo
  *
  */
 public class DefaultFileInfoAccessor implements FileInfoAccessor {

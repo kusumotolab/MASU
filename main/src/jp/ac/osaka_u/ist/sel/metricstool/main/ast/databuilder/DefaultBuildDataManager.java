@@ -15,9 +15,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNa
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsage;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCall;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
@@ -54,15 +54,15 @@ public class DefaultBuildDataManager implements BuildDataManager{
         }
     }
     
-    public void addFieldAssignment(UnresolvedFieldUsage usage) {
+    public void addFieldAssignment(UnresolvedFieldUsageInfo usage) {
         if (!this.methodStack.isEmpty()&& MODE.METHOD == this.mode){
-            this.methodStack.peek().addFieldAssignment(usage);
+            this.methodStack.peek().addFieldUsage(usage);
         }
     }
 
-    public void addFieldReference(UnresolvedFieldUsage usage) {
+    public void addFieldReference(UnresolvedFieldUsageInfo usage) {
         if (!this.methodStack.isEmpty()&& MODE.METHOD == this.mode){
-            this.methodStack.peek().addFieldReference(usage);
+            this.methodStack.peek().addFieldUsage(usage);
         }
     }
 
@@ -80,7 +80,7 @@ public class DefaultBuildDataManager implements BuildDataManager{
         }
     }
     
-    public void addMethodCall(UnresolvedMethodCall methodCall) {
+    public void addMethodCall(UnresolvedMethodCallInfo methodCall) {
         if (!this.methodStack.isEmpty() && MODE.METHOD == this.mode){
             this.methodStack.peek().addMethodCall(methodCall);
         }

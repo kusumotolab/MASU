@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * 配列型を表すためのクラス．
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class ArrayTypeInfo extends EntityUsageInfo implements TypeInfo {
@@ -141,7 +141,7 @@ public final class ArrayTypeInfo extends EntityUsageInfo implements TypeInfo {
     /**
      * 変数の型と次元を用いてキーとなるクラス．
      * 
-     * @author y-higo
+     * @author higo
      */
     static class Key {
 

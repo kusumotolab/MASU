@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * switch 文の case エントリを表すクラス
  * 
- * @author y-higo
+ * @author higo
  */
 public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> {
 

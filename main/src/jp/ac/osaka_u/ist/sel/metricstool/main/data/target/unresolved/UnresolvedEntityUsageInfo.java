@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 /**
  * 未解決のクラス参照，メソッド呼び出し，フィールド使用などを現すクラスの共通の基底クラス
  * 
- * @author y-higo
+ * @author higo
  */
 public interface UnresolvedEntityUsageInfo {
 

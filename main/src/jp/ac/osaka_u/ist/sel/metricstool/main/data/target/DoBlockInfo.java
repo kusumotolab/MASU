@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 /**
  * do ブロックを表すクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class DoBlockInfo extends BlockInfo {

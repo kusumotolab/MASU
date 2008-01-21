@@ -6,7 +6,7 @@ import java.util.Comparator;
 /**
  * String‚Ì”z—ñ‚ð”äŠr‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
  * 
- * @author y-higo
+ * @author higo
  */
 public class StringArrayComparator implements Comparator<String[]> {
 

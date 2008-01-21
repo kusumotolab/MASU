@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * <li>ˆÊ’uî•ñ</li>
  * </ul>
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public abstract class UnresolvedVariableInfo<T extends VariableInfo> implements PositionSetting,

@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 /**
  * ソフトウェアの単位がインスタンスなのかスタティックなのかを定義するインターフェース
  * 
- * @author y-higo
+ * @author higo
  */
 public interface Member {
 

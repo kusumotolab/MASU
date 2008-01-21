@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
 /**
  * ファイル内での位置情報をセットするためのインターフェース
  * 
- * @author y-higo
+ * @author higo
  */
 public interface PositionSetting extends Position {
 

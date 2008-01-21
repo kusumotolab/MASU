@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 /**
  * ファイル内での位置を表すためのインターフェース．
  * 
- * @author y-higo
+ * @author higo
  */
 public interface Position {
 

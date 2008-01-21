@@ -83,7 +83,7 @@ import antlr.collections.AST;
 
 /**
  * 
- * @author y-higo
+ * @author higo
  * 
  * MetricsToolのメインクラス． 現在は仮実装．
  * 

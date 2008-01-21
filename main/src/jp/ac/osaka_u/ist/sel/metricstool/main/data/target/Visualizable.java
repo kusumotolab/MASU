@@ -11,7 +11,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * <li>‚Ç‚±‚©‚ç‚Å‚àQÆ‰Â”\</li>
  * </ul>
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public interface Visualizable {

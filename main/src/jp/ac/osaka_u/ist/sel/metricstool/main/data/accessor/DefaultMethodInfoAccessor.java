@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 /**
  * プラグインが MethodInfo にアクセスするために用いるインターフェース
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public class DefaultMethodInfoAccessor implements MethodInfoAccessor {

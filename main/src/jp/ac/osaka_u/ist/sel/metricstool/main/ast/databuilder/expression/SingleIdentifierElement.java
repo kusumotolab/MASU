@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsage;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
 
@@ -35,7 +35,7 @@ public class SingleIdentifierElement implements IdentifierElement{
         
         if (null == variable || variable instanceof UnresolvedFieldInfo){
             //変数がみつからないので多分どこかのフィールド or 見つかった変数がフィールドだった
-            UnresolvedFieldUsage usage = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),owner,name);
+            UnresolvedFieldUsageInfo usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),owner,name);
             buildDataManager.addFieldAssignment(usage);
             return usage;
         } else {
@@ -54,7 +54,7 @@ public class SingleIdentifierElement implements IdentifierElement{
         
         if (null == variable || variable instanceof UnresolvedFieldInfo){
             //変数がみつからないので多分どこかのフィールド or 見つかった変数がフィールドだった
-            UnresolvedFieldUsage usage = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),owner,name);
+            UnresolvedFieldUsageInfo usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),owner,name);
             buildDataManager.addFieldReference(usage);
             return usage;
         } else {
@@ -66,7 +66,7 @@ public class SingleIdentifierElement implements IdentifierElement{
         UnresolvedVariableInfo variable = buildDataManager.getCurrentScopeVariable(name);
         if (null != variable){
             if (variable instanceof UnresolvedFieldInfo){
-                UnresolvedFieldUsage fieldUsage = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),owner,name);
+                UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),owner,name);
                 buildDataManager.addFieldReference(fieldUsage);
                 return fieldUsage;
             } else {

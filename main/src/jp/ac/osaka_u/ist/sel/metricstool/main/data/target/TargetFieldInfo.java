@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * 対象クラスに定義されているフィールドの情報を現すクラス．
  * 
- * @author y-higo
+ * @author higo
  */
 public final class TargetFieldInfo extends FieldInfo implements Visualizable, Member {
 

@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 /**
  * 外部メソッドの引数情報を保存するためのクラス
  * 
- * @author y-higo
+ * @author higo
  */
 public final class ExternalParameterInfo extends ParameterInfo {
 

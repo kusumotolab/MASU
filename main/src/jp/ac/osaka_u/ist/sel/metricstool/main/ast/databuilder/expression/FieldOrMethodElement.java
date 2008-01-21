@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsage;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 public class FieldOrMethodElement implements IdentifierElement{
@@ -28,7 +28,7 @@ public class FieldOrMethodElement implements IdentifierElement{
     }
     
     public UnresolvedTypeInfo resolveAsAssignmetedVariable(BuildDataManager buildDataManager) {
-        UnresolvedFieldUsage usage = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),ownerType,name);
+        UnresolvedFieldUsageInfo usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),ownerType,name);
         buildDataManager.addFieldAssignment(usage);
         return usage;
     }
@@ -38,7 +38,7 @@ public class FieldOrMethodElement implements IdentifierElement{
     }
 
     public UnresolvedTypeInfo resolveAsReferencedVariable(BuildDataManager buildDataManager) {
-        UnresolvedFieldUsage usage = new UnresolvedFieldUsage(buildDataManager.getAllAvaliableNames(),ownerType,name);
+        UnresolvedFieldUsageInfo usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),ownerType,name);
         buildDataManager.addFieldReference(usage);
         return usage;
     }

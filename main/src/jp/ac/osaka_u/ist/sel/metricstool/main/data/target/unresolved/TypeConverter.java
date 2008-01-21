@@ -9,7 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 /**
  * 型変換ユーティリティ．名前解決に用いる．
  * 
- * @author y-higo
+ * @author higo
  */
 public abstract class TypeConverter {
 

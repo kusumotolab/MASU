@@ -20,7 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * ファイルメトリクスを管理するクラス．
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class FileMetricsInfoManager implements Iterable<FileMetricsInfo>, MessageSource {

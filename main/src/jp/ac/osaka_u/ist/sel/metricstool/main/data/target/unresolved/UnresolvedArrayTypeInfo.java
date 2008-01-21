@@ -23,7 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * <li>次元 (int)</li>
  * </ul>
  * 
- * @author y-higo
+ * @author higo
  * @see UnresolvedTypeInfo
  */
 public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, UnresolvedEntityUsageInfo {
@@ -246,7 +246,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
     /**
      * 変数の型と次元を用いてキーとなるクラス．
      * 
-     * @author y-higo
+     * @author higo
      */
     static class Key {
 

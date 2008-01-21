@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * 未解決ifブロックを表すクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class UnresolvedIfBlockInfo extends UnresolvedBlockInfo<IfBlockInfo> {

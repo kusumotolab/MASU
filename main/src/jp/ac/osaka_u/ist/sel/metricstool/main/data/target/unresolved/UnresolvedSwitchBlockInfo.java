@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * switch ブロックを表すクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class UnresolvedSwitchBlockInfo extends UnresolvedBlockInfo<SwitchBlockInfo> {

@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * 利用可能な名前空間名の集合を現すクラス．
  * AvailableNamespaceInfoを要素として持つ
- * @author y-higo
+ * @author higo
  *
  */
 public final class AvailableNamespaceInfoSet implements Iterable<AvailableNamespaceInfo> {

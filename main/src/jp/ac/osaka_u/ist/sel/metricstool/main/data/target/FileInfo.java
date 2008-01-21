@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 /**
  * 
- * @author y-higo
+ * @author higo
  * 
  * ファイルの情報を表すクラス．
  */

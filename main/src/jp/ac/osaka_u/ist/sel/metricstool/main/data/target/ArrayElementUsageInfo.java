@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 /**
  * 配列要素の使用を表すクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public class ArrayElementUsageInfo extends EntityUsageInfo {

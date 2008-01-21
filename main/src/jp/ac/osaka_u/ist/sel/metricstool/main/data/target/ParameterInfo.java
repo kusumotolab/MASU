@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * 引数を表すためのクラス． 型を提供するのみ．
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public abstract class ParameterInfo extends VariableInfo {

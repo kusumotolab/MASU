@@ -26,7 +26,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 /**
  * 未解決フィールド使用を保存するためのクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class UnresolvedFieldUsageInfo implements UnresolvedEntityUsageInfo {

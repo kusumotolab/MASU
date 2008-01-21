@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 /**
  * 未解決プログラムユニットを表すクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  * @param <T> 解決済みユニットの型
  */

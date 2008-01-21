@@ -21,7 +21,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * 引数を表すためのクラス． 型を提供するのみ．
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class UnresolvedParameterInfo extends UnresolvedVariableInfo<TargetParameterInfo> {

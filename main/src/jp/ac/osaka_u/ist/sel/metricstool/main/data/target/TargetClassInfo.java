@@ -28,7 +28,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * <li>このクラス内で定義されているフィールド</li>
  * </ul>
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public class TargetClassInfo extends ClassInfo implements Visualizable, Member, Position {

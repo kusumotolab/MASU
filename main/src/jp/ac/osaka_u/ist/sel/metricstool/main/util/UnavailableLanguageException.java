@@ -3,7 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.util;
 
 /**
  * 
- * @author y-higo
+ * @author higo
  * 
  * 利用可能でないプログラミング言語が指定された場合に用いられる．
  * 

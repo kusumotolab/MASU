@@ -22,7 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * ASTパースで取得したフィールド情報を一時的に格納するためのクラス．
  * 
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFieldInfo> implements

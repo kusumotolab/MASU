@@ -27,7 +27,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 /**
  * 未解決型情報を解決するためのユーティリティクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class NameResolver {

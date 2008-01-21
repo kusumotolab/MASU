@@ -3,7 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnknownUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsage;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -49,7 +49,7 @@ public class CompoundIdentifierElement implements IdentifierElement {
 
     public UnresolvedTypeInfo resolveAsAssignmetedVariable(final BuildDataManager buildDataManager) {
         this.ownerType = this.resolveOwner(buildDataManager);
-        final UnresolvedFieldUsage fieldUsage = new UnresolvedFieldUsage(buildDataManager
+        final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
                 .getAllAvaliableNames(), this.ownerType, this.name);
         buildDataManager.addFieldAssignment(fieldUsage);
         return fieldUsage;
@@ -62,7 +62,7 @@ public class CompoundIdentifierElement implements IdentifierElement {
 
     public UnresolvedTypeInfo resolveAsReferencedVariable(final BuildDataManager buildDataManager) {
         this.ownerType = this.resolveOwner(buildDataManager);
-        final UnresolvedFieldUsage fieldUsage = new UnresolvedFieldUsage(buildDataManager
+        final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
                 .getAllAvaliableNames(), this.ownerType, this.name);
         buildDataManager.addFieldReference(fieldUsage);
         return fieldUsage;
@@ -72,7 +72,7 @@ public class CompoundIdentifierElement implements IdentifierElement {
         this.ownerType = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
 
         if (this.ownerType != null) {
-            final UnresolvedFieldUsage fieldUsage = new UnresolvedFieldUsage(buildDataManager
+            final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
                     .getAllAvaliableNames(), this.ownerType, this.name);
             buildDataManager.addFieldReference(fieldUsage);
             return fieldUsage;

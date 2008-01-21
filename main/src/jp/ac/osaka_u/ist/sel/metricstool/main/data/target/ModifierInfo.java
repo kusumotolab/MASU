@@ -14,7 +14,7 @@ import java.util.Map;
  * <li>
  * </ul>
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class ModifierInfo {

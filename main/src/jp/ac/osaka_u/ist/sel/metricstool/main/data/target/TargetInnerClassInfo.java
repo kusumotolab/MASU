@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * インナークラスを表すクラス．
  * 
- * @author y-higo
+ * @author higo
  */
 public final class TargetInnerClassInfo extends TargetClassInfo {
 

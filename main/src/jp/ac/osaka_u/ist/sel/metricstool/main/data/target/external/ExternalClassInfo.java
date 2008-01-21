@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NamespaceInfo;
 /**
  * 外部クラス情報を表すクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public class ExternalClassInfo extends ClassInfo {

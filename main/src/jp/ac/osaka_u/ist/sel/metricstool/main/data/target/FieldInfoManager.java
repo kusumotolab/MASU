@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * フィールド情報を管理するクラス． FieldInfo を要素として持つ．
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class FieldInfoManager {

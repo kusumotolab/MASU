@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * if ブロックや for ブロックなど メソッド内の構造的なまとまりの単位を表す抽象クラス
  * 
- * @author y-higo
+ * @author higo
  */
 public abstract class BlockInfo implements UnitInfo, Position, Comparable<BlockInfo> {
 

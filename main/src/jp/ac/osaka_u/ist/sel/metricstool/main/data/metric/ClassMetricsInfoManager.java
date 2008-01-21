@@ -20,7 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * クラスメトリクスを管理するクラス．
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>, MessageSource {

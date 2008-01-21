@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * ファイル情報を管理するクラス． FileInfo を要素として持つ．
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class FileInfoManager {

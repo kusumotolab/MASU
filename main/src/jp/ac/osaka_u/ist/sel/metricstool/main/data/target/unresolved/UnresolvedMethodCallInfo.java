@@ -34,7 +34,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 /**
  * 未解決メソッド呼び出しを保存するためのクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class UnresolvedMethodCallInfo implements UnresolvedEntityUsageInfo {

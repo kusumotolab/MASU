@@ -20,7 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * <li>フィールドに対して代入を行っているメソッド群</li>
  * </ul>
  * 
- * @author y-higo
+ * @author higo
  */
 public abstract class FieldInfo extends VariableInfo {
 

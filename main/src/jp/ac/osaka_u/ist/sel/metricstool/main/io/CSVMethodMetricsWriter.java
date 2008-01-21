@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 /**
  * メソッドメトリクスをCSVァイルに書き出すクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class CSVMethodMetricsWriter implements MethodMetricsWriter, CSVWriter, MessageSource {

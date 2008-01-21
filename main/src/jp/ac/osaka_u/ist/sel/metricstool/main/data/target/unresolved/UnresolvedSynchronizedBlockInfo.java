@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * –¢‰ðŒˆ synchronized •¶‚ð•\‚·ƒNƒ‰ƒX
  * 
- * @author y-higo
+ * @author higo
  */
 public final class UnresolvedSynchronizedBlockInfo extends
         UnresolvedBlockInfo<SynchronizedBlockInfo> {

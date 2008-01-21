@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 /**
  * catch ブロック情報を表すクラス
  * 
- * @author y-higo
+ * @author higo
  */
 public final class CatchBlockInfo extends BlockInfo {
 

@@ -4,9 +4,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsage;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCall;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
@@ -40,14 +40,14 @@ public interface BuildDataManager {
      * 
      * @param usage
      */
-    public void addFieldAssignment(UnresolvedFieldUsage usage);
+    public void addFieldAssignment(UnresolvedFieldUsageInfo usage);
 
     /**
      * 構築中のメソッドにフィールド参照情報を追加する
      * 
      * @param usage
      */
-    public void addFieldReference(UnresolvedFieldUsage usage);
+    public void addFieldReference(UnresolvedFieldUsageInfo usage);
 
     /**
      * 構築中のメソッドにローカルパラメータ（for文中で宣言される変数のように，
@@ -68,7 +68,7 @@ public interface BuildDataManager {
      * 構築中のメソッドにメソッド呼び出し情報を追加する
      * @param methodCall
      */
-    public void addMethodCall(UnresolvedMethodCall methodCall);
+    public void addMethodCall(UnresolvedMethodCallInfo methodCall);
 
     /**
      * 構築中のメソッドに引数情報を追加する

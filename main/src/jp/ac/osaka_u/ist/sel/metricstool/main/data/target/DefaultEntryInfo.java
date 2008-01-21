@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 /**
  * switch 文の default エントリを表すクラス
  * 
- * @author y-higo
+ * @author higo
  */
 public final class DefaultEntryInfo extends CaseEntryInfo {
 

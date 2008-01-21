@@ -3,7 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 /**
  * <? extends A>のような型パラメータの使用を表すクラス
  * 
- * @author y-higo
+ * @author higo
  *
  */
 public class UnresolvedExtendsTypeParameterUsageInfo extends UnresolvedTypeParameterUsageInfo {

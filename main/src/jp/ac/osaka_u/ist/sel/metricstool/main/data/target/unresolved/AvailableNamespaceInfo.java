@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * ASTパースの際，参照型変数の利用可能な名前空間名，または完全限定名を表すクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class AvailableNamespaceInfo {

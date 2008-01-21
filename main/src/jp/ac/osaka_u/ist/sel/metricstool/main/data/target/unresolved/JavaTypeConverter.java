@@ -9,7 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClass
 /**
  * Java言語用の型変換ユーティリティ
  * 
- * @author y-higo
+ * @author higo
  */
 final public class JavaTypeConverter extends TypeConverter {
 

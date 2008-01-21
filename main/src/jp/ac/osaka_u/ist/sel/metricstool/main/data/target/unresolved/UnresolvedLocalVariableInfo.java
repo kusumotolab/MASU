@@ -25,7 +25,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * <li>–¢‰ðŒˆŒ^–¼</li>
  * </ul>
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public final class UnresolvedLocalVariableInfo extends UnresolvedVariableInfo<LocalVariableInfo> {
