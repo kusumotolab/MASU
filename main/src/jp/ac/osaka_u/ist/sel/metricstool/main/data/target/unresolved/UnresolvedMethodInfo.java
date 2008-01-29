@@ -204,16 +204,14 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
                 classInfoManager.add(classInfo);
 
             } else if (unresolvedMethodReturnType instanceof UnresolvedArrayTypeInfo) {
-                final UnresolvedEntityUsageInfo unresolvedArrayElement = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
+
+                // TODO Œ^ƒpƒ‰ƒ[ƒ^‚Ìî•ñ‚ğŠi”[‚·‚é
+                final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
                         .getDimension();
-                final ExternalClassInfo element = NameResolver
-                        .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedArrayElement);
-                classInfoManager.add(element);
-
-                // TODO Œ^ƒpƒ‰ƒ[ƒ^‚Ìî•ñ‚ğŠi”[‚·‚é
-                final ReferenceTypeInfo elementType = new ReferenceTypeInfo(element);
+                final TypeInfo elementType = unresolvedElementType.resolveType(usingClass,
+                        usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
                 methodReturnType = ArrayTypeInfo.getType(elementType, dimension);
 
             } else {

@@ -3,10 +3,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
@@ -77,12 +77,15 @@ public class UnresolvedArrayElementUsageInfo implements UnresolvedEntityUsageInf
             if (unresolvedOwnerUsage instanceof UnresolvedArrayTypeInfo) {
                 final UnresolvedEntityUsageInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedOwnerUsage)
                         .getElementType();
-                final int dimension = ((UnresolvedArrayTypeInfo) unresolvedOwnerUsage).getDimension();
+                final int dimension = ((UnresolvedArrayTypeInfo) unresolvedOwnerUsage)
+                        .getDimension();
                 final ExternalClassInfo externalClassInfo = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedElementType);
                 classInfoManager.add(externalClassInfo);
-                ownerUsage = ArrayTypeInfo.getType(new ClassReferenceInfo(externalClassInfo),
-                        dimension);
+
+                // TODO å^ÉpÉâÉÅÅ[É^ÇÃèÓïÒÇäiî[Ç∑ÇÈ
+                final ReferenceTypeInfo reference = new ReferenceTypeInfo(externalClassInfo);
+                ownerUsage = ArrayTypeInfo.getType(reference, dimension);
 
                 // îzóÒå^à»äOÇÃèÍçáÇÕÇ«Ç§ÇµÇÊÇ§Ç‡Ç»Ç¢
             } else {

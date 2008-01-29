@@ -86,16 +86,14 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
 
             } else if (unresolvedFieldType instanceof UnresolvedArrayTypeInfo) {
 
-                final UnresolvedEntityUsageInfo unresolvedArrayElement = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
+                final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
                         .getDimension();
-                final ExternalClassInfo elementType = NameResolver
-                        .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedArrayElement);
-                classInfoManager.add(elementType);
+                final TypeInfo elementType = unresolvedElementType.resolveType(usingClass,
+                        usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                fieldType = ArrayTypeInfo.getType(elementType, dimension);
 
-                final ReferenceTypeInfo elementTypeReference = new ReferenceTypeInfo(elementType);
-                fieldType = ArrayTypeInfo.getType(elementTypeReference, dimension);
             } else {
                 assert false : "Can't resolve field type : " + unresolvedFieldType.toString();
             }

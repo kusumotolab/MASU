@@ -5,11 +5,11 @@ import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
@@ -74,19 +74,24 @@ public final class UnresolvedLocalVariableInfo extends UnresolvedVariableInfo<Lo
         assert variableType != null : "resolveTypeInfo returned null!";
         if (variableType instanceof UnknownTypeInfo) {
             if (unresolvedVariableType instanceof UnresolvedClassReferenceInfo) {
-                variableType = NameResolver
+
+                // TODO Œ^ƒpƒ‰ƒ[ƒ^‚Ìî•ñ‚ðŠi”[‚·‚é
+                final ExternalClassInfo externalClass = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedVariableType);
-                classInfoManager.add((ExternalClassInfo) variableType);
+                variableType = new ReferenceTypeInfo(externalClass);
+                classInfoManager.add(externalClass);
+
             } else if (unresolvedVariableType instanceof UnresolvedArrayTypeInfo) {
-                final UnresolvedEntityUsageInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedVariableType)
+
+                // TODO Œ^ƒpƒ‰ƒ[ƒ^‚Ìî•ñ‚ðŠi”[‚·‚é
+                final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedVariableType)
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedVariableType)
                         .getDimension();
-                final ExternalClassInfo elementType = NameResolver
-                        .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedElementType);
-                classInfoManager.add(elementType);
-                variableType = ArrayTypeInfo
-                        .getType(new ClassReferenceInfo(elementType), dimension);
+                final TypeInfo elementType = unresolvedElementType.resolveType(usingClass,
+                        usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                variableType = ArrayTypeInfo.getType(elementType, dimension);
+                
             } else {
                 assert false : "Can't resolve method local variable type : "
                         + unresolvedVariableType.toString();
