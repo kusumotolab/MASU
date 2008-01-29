@@ -6,13 +6,12 @@ import java.util.Map;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -26,7 +25,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * @see UnresolvedTypeInfo
  */
-public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, UnresolvedEntityUsageInfo {
+public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
 
     // /**
     // * 等しいかどうかのチェックを行う
@@ -63,71 +62,13 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
     }
 
     /**
-     * 解決済み配列使用を返す
-     * 
-     * @return 解決済み配列使用
-     * @throws NotResolvedException 未解決の場合にスローされる
-     */
-    public EntityUsageInfo getResolvedEntityUsage() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolvedInfo;
-    }
-
-    /**
-     * 未解決配列使用を解決し，解決済み参照を返す．
-     * 
-     * @param usingClass 未解決配列使用が行われているクラス
-     * @param usingMethod 未解決配列使用が行われているメソッド
-     * @param classInfoManager 用いるクラスマネージャ
-     * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManager 用いるメソッドマネージャ
-     * @return 解決済み配列使用
-     */
-    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
-            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
-            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == classInfoManager)) {
-            throw new NullPointerException();
-        }
-
-        // 既に解決済みである場合は，キャッシュを返す
-        if (this.alreadyResolved()) {
-            return this.getResolvedEntityUsage();
-        }
-
-        final UnresolvedEnityUsageInfo unresolvedElement = this.getElementType();
-        final int dimension = this.getDimension();
-
-        final EntityUsageInfo element = unresolvedElement.resolveEntityUsage(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-        assert element != null : "resolveEntityUsage returned null!";
-
-        // 要素の型が不明のときは UnnownTypeInfo を返す
-        if (element instanceof UnknownEntityUsageInfo) {
-            this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
-            return this.resolvedInfo;
-        }
-
-        // 要素の型が解決できた場合はその配列型を作成し返す
-        this.resolvedInfo = ArrayTypeInfo.getType(element, dimension);
-        return this.resolvedInfo;
-    }
-
-    /**
      * 解決済み配列型を返す
      * 
      * @return 解決済み配列型
      * @throws NotResolvedException 未解決の場合にスローされる
      */
     public TypeInfo getResolvedType() {
-        return (TypeInfo) this.getResolvedEntityUsage();
+        return this.resolvedInfo;
     }
 
     /**
@@ -144,8 +85,33 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        return (TypeInfo) this.resolveEntityUsage(usingClass, usingMethod, classInfoManager,
-                fieldInfoManager, methodInfoManager);
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == usingClass) || (null == classInfoManager)) {
+            throw new NullPointerException();
+        }
+
+        // 既に解決済みである場合は，キャッシュを返す
+        if (this.alreadyResolved()) {
+            return this.getResolvedType();
+        }
+
+        final UnresolvedTypeInfo unresolvedElementType = this.getElementType();
+        final int dimension = this.getDimension();
+
+        final TypeInfo elementType = unresolvedElementType.resolveType(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+        assert elementType != null : "resolveEntityUsage returned null!";
+
+        // 要素の型が不明のときは UnnownTypeInfo を返す
+        if (elementType instanceof UnknownTypeInfo) {
+            this.resolvedInfo = UnknownTypeInfo.getInstance();
+            return this.resolvedInfo;
+        }
+
+        // 要素の型が解決できた場合はその配列型を作成し返す
+        this.resolvedInfo = ArrayTypeInfo.getType(elementType, dimension);
+        return this.resolvedInfo;
     }
 
     /**
@@ -182,8 +148,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
      * @param dimension 次元を表す変数
      * @return 生成した UnresolvedArrayTypeInfo オブジェクト
      */
-    public static UnresolvedArrayTypeInfo getType(final UnresolvedTypeInfo type,
-            final int dimension) {
+    public static UnresolvedArrayTypeInfo getType(final UnresolvedTypeInfo type, final int dimension) {
 
         if (null == type) {
             throw new NullPointerException();
@@ -236,7 +201,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
     /**
      * 解決済み配列使用を保存するための変数
      */
-    private EntityUsageInfo resolvedInfo;
+    private TypeInfo resolvedInfo;
 
     /**
      * UnresolvedArrayTypeInfo オブジェクトを一元管理するための Map．オブジェクトはファクトリメソッドで生成される．
