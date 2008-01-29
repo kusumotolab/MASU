@@ -1,16 +1,17 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
 public interface IdentifierElement extends ExpressionElement{
     public String[] getQualifiedName();
     public String getName();
-    public UnresolvedTypeInfo getOwnerType();
+    public UnresolvedEntityUsageInfo getOwnerUsage();
     
-    public UnresolvedTypeInfo resolveAsReferencedVariable(BuildDataManager buildDataManager);
-    public UnresolvedTypeInfo resolveAsAssignmetedVariable(BuildDataManager buildDataManager);
+    public UnresolvedVariableUsageInfo resolveAsReferencedVariable(BuildDataManager buildDataManager);
+    public UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(BuildDataManager buildDataManager);
     public IdentifierElement resolveAsCalledMethod(BuildDataManager buildDataManager);
     
-    public UnresolvedTypeInfo resolveReferencedEntityIfPossible(BuildDataManager buildDataManager);
+    public UnresolvedEntityUsageInfo resolveReferencedEntityIfPossible(BuildDataManager buildDataManager);
 }

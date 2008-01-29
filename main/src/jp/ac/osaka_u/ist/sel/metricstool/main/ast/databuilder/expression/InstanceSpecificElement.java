@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 public class InstanceSpecificElement implements ExpressionElement{
@@ -13,8 +14,8 @@ public class InstanceSpecificElement implements ExpressionElement{
         this.type = type;
     }
     
-    public static UnresolvedTypeInfo getThisInstanceType(BuildDataManager buildManager){
-        return buildManager.getCurrentClass();
+    public static UnresolvedClassReferenceInfo getThisInstanceType(BuildDataManager buildManager){
+        return UnresolvedClassReferenceInfo.createClassReference(buildManager.getCurrentClass());
     }
 
     public UnresolvedTypeInfo getType() {

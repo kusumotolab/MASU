@@ -9,11 +9,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.Identif
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.InstanceSpecificElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnknownUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassReferenceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
+/**
+ * @author kou-tngt, t-miyake
+ *
+ */
 public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
     public JavaCompoundIdentifierBuilder(ExpressionElementManager expressionManager, BuildDataManager buildManager) {
         super(expressionManager, buildManager);
@@ -40,29 +47,30 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
         } else if (left.equals(JavaExpressionElement.SUPER)){
             if (right instanceof IdentifierElement){
                 UnresolvedClassInfo classInfo = buildDataManager.getCurrentClass();
-                UnresolvedTypeInfo superClassType = classInfo.getSuperClasses().iterator().next();
-                pushElement(new FieldOrMethodElement(superClassType,((IdentifierElement)right).getName()));
+                UnresolvedReferenceTypeInfo superClassType = classInfo.getSuperClasses().iterator().next();
+                UnresolvedClassReferenceInfo superClassReference = UnresolvedClassReferenceInfo.createClassReference(superClassType);
+                pushElement(new FieldOrMethodElement(superClassReference,((IdentifierElement)right).getName()));
             }
         } else if (right.equals(JavaExpressionElement.SUPER)){
             UnresolvedClassInfo classInfo = null;
             if (left instanceof IdentifierElement){
                 //まず変数名.super()というコンストラクタ呼び出しかどうかを確認する
                 IdentifierElement identifier = (IdentifierElement)left;
-                UnresolvedTypeInfo identifierType = identifier.resolveReferencedEntityIfPossible(buildDataManager);
-                if (null != identifierType){
+                UnresolvedEntityUsageInfo identifierType = identifier.resolveReferencedEntityIfPossible(buildDataManager);
+                if (null != identifierType && identifier instanceof UnresolvedVariableUsageInfo){
                     //変数が見つかった
+                    UnresolvedVariableInfo variable = ((UnresolvedVariableUsageInfo) identifierType).getReferencedVariable();
                     boolean match = false;
                     UnresolvedClassInfo currentClass = buildDataManager.getCurrentClass();
-                    UnresolvedTypeInfo currentSuperClass = currentClass.getSuperClasses().iterator().next();
+                    UnresolvedReferenceTypeInfo currentSuperClass = currentClass.getSuperClasses().iterator().next();
                     String[] names = null;
-                    if (currentSuperClass instanceof UnresolvedReferenceTypeInfo){
-                        names = ((UnresolvedReferenceTypeInfo)currentSuperClass).getFullReferenceName();
-                    } else if (currentSuperClass instanceof UnresolvedClassInfo){
-                        names = ((UnresolvedClassInfo)currentSuperClass).getFullQualifiedName();
+                    if ( null != currentSuperClass ){
+                        names = currentSuperClass.getFullReferenceName();
                     }
-                    if (null != names){
+                    if (null != names && variable.getType() instanceof UnresolvedReferenceTypeInfo){
+                    	UnresolvedReferenceTypeInfo variableType = (UnresolvedReferenceTypeInfo) variable.getType();
                         for(String name : names){
-                            if (name.equals(identifierType.getTypeName())){
+                            if (name.equals(variableType.getTypeName())){
                                 match = true;
                                 break;
                             }
@@ -103,8 +111,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
         return classInfo;
     }
     
-    private final static UnresolvedUnknownUsageInfo JAVA_LANG_CLASS =
-        new UnresolvedUnknownUsageInfo(new AvailableNamespaceInfoSet(),
+    private final static UnresolvedReferenceTypeInfo JAVA_LANG_CLASS =
+        new UnresolvedReferenceTypeInfo(new AvailableNamespaceInfoSet(),
                 new String[]{"java","lang","Class"});
     
     private final BuildDataManager buildDataManager;

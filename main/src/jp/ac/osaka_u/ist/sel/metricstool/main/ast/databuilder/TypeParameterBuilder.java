@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 /**
  * 型パラメータ情報を構築するビルダー
  * 
- * @author kou-tngt
+ * @author kou-tngt, t-miyake
  *
  */
 public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypeParameterInfo> {

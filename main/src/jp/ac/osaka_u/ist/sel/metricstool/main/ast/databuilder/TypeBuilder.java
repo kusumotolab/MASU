@@ -13,18 +13,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BuiltinTypeToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSimpleTypeParameterUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterUsageInfo;
 
 
 /**
  * ®’†ˆÈŠO‚Å‚ÌŒ^QÆ‚Ìî•ñ‚ğ\’z‚·‚éƒrƒ‹ƒ_[D
  * 
- * @author kou-tngt
+ * @author kou-tngt, t-miyake
  *
  */
 public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
@@ -206,8 +204,12 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
                 //g‚¦‚éŒ^ˆø”‚ª‚ ‚ê‚Î“o˜^‚µ‚Ä‚µ‚Ü‚¤D
                 if (null != this.availableTypeArugments) {
                     for (final UnresolvedTypeInfo type : this.availableTypeArugments) {
+                    	
+                    	// C#‚È‚Ç‚ÍQÆŒ^ˆÈŠO‚àŒ^ˆø”‚Éw’è‰Â”\‚È‚Ì‚Å‘Îˆ‚·‚é‚Ğ‚Â‚æ‚¤‚ª‚ ‚é‚©‚à
+                    	if (type instanceof UnresolvedReferenceTypeInfo) {
                         referenceType
-                                .addTypeParameterUsage(new UnresolvedSimpleTypeParameterUsageInfo(type));
+                                .addTypeArgument((UnresolvedReferenceTypeInfo) type);
+                    	}
                     }
     
                     this.availableTypeArugments = null;
@@ -256,8 +258,8 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
                         (UnresolvedReferenceTypeInfo) first);
 
                 //Œ^ˆø”î•ñ‚ğƒZƒbƒg‚·‚é
-                for (final UnresolvedTypeParameterUsageInfo usage : secondReference.getTypeParameterUsages()) {
-                    result.addTypeParameterUsage(usage);
+                for (final UnresolvedReferenceTypeInfo usage : secondReference.getTypeArguments()) {
+                    result.addTypeArgument(usage);
                 }
 
                 //Œ‹‰Ê‚ğ\’zÏ‚İ‚ÌŒ^‚Æ‚µ‚Ä“o˜^

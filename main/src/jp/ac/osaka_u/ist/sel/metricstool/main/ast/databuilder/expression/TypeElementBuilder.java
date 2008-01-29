@@ -6,10 +6,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BuiltinTypeToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ConstantToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSimpleTypeParameterUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 
@@ -178,7 +176,11 @@ public class TypeElementBuilder extends ExpressionBuilder {
         
         for(int i=1; i < elements.length; i++){
             assert(elements[i] instanceof TypeArgumentElement) : "Illegal state: type argument was unexpected type";
-            resultType.addTypeParameterUsage(new UnresolvedSimpleTypeParameterUsageInfo(elements[i].getType()));
+            TypeArgumentElement typeArugument = (TypeArgumentElement) elements[i];
+            
+            // TODO C#などは参照型以でも型引数を指定できるので、その対処が必要かも           
+            assert typeArugument.getType() instanceof UnresolvedReferenceTypeInfo : "Illegal state: type argument was not reference type.";
+            resultType.addTypeArgument((UnresolvedReferenceTypeInfo) typeArugument.getType());
         }
         
         return resultType;

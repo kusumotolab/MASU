@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  * 
  * {@link TypeParameterBuilder}　の {@link #getUpperBounds()}メソッドをオーバーライドして，
  * 上限クラスが指定されていない場合は，java.lang.Objectを表す型情報を構築する．
- * @author kou-tngt
+ * @author kou-tngt, t-miyake
  *
  */
 public class JavaTypeParameterBuilder extends TypeParameterBuilder{
