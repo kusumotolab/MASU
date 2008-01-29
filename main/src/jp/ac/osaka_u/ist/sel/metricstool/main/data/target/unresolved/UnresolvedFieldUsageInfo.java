@@ -29,7 +29,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
  * @author higo
  * 
  */
-public final class UnresolvedFieldUsageInfo implements UnresolvedEntityUsageInfo {
+public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo {
 
     /**
      * フィールド使用が実行される変数の型名と変数名，利用可能な名前空間を与えてオブジェクトを初期化
