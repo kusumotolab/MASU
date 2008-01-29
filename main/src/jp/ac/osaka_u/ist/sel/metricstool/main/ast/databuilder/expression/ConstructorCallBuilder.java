@@ -3,11 +3,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMemberCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSimpleTypeParameterUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterUsageInfo;
 
 public class ConstructorCallBuilder extends ExpressionBuilder{
 
@@ -36,24 +35,25 @@ public class ConstructorCallBuilder extends ExpressionBuilder{
             UnresolvedReferenceTypeInfo type = (UnresolvedReferenceTypeInfo)elements[0].getType();
             String[] name = type.getFullReferenceName();
             
-            UnresolvedMethodCallInfo constructorCall = new UnresolvedMethodCallInfo(type,name[name.length-1],true);
+            UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(type);
             resolveParameters(constructorCall, elements,1);
             pushElement(new MethodCallElement(constructorCall));
             buildManager.addMethodCall(constructorCall);
         }
     }
     
-    protected void resolveParameters(UnresolvedMethodCallInfo constructorCall,ExpressionElement[] elements, int startIndex){
+    protected void resolveParameters(UnresolvedConstructorCallInfo constructorCall,ExpressionElement[] elements, int startIndex){
         for(int i=startIndex; i < elements.length; i++){
             ExpressionElement element = elements[i];
             if (element instanceof IdentifierElement){
-                constructorCall.addParameterType(((IdentifierElement)element).resolveAsReferencedVariable(buildManager));
+                constructorCall.addParameter(((IdentifierElement)element).resolveAsReferencedVariable(buildManager));
             } else if (element.equals(InstanceSpecificElement.THIS)){
-                constructorCall.addParameterType(InstanceSpecificElement.getThisInstanceType(buildManager));
-            } else if (element instanceof TypeArgumentElement){
-                constructorCall.addTypeParameterUsage(new UnresolvedSimpleTypeParameterUsageInfo(element.getType()));
+                constructorCall.addParameter(InstanceSpecificElement.getThisInstanceType(buildManager));
+            } else if (element instanceof TypeArgumentElement) {
+            	assert element.getType() instanceof UnresolvedReferenceTypeInfo : "Illegal state; type argument was not reference type.";
+                constructorCall.addTypeArgument((UnresolvedReferenceTypeInfo) element.getType());
             } else {
-                constructorCall.addParameterType(element.getType());
+                constructorCall.addParameter(element.getType());
             }
         }
     }

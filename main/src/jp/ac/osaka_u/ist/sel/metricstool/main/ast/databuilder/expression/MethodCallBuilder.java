@@ -4,8 +4,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCallInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSimpleTypeParameterUsageInfo;
 
 public class MethodCallBuilder extends ExpressionBuilder{
 
@@ -33,17 +33,19 @@ public class MethodCallBuilder extends ExpressionBuilder{
                 
                 callee = callee.resolveAsCalledMethod(buildDataManager);
                 
-                UnresolvedMethodCallInfo methodCall = new UnresolvedMethodCallInfo(callee.getOwnerType(),callee.getName(),false);
+                UnresolvedMethodCallInfo methodCall = new UnresolvedMethodCallInfo(callee.getOwnerUsage(),callee.getName());
                 for(int i=1; i < elements.length; i++){
                     ExpressionElement argment = elements[i];
                     if (argment instanceof IdentifierElement){
-                        methodCall.addParameterType(((IdentifierElement)argment).resolveAsReferencedVariable(buildDataManager));
+                        methodCall.addParameter(((IdentifierElement)argment).resolveAsReferencedVariable(buildDataManager));
                     } else if (argment.equals(InstanceSpecificElement.THIS)){
-                        methodCall.addParameterType(InstanceSpecificElement.getThisInstanceType(buildDataManager));
-                    } else if (argment instanceof TypeArgumentElement){
-                        methodCall.addTypeParameterUsage(new UnresolvedSimpleTypeParameterUsage(argment.getType()));
+                        methodCall.addParameter(InstanceSpecificElement.getThisInstanceType(buildDataManager));
+                    } else if (argment instanceof TypeArgumentElement) {
+                    	// TODO C#などの場合は型引数に参照型以外も指定できるので対処が必要かも
+                    	assert argment.getType() instanceof UnresolvedReferenceTypeInfo : "type argument was not reference type.";
+                        methodCall.addTypeArgument((UnresolvedReferenceTypeInfo) argment.getType());
                     } else {
-                        methodCall.addParameterType(argment.getType());
+                        methodCall.addParameter(argment.getType());
                     }
                 }
                 

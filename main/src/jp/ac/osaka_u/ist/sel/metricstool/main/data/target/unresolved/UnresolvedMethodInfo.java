@@ -47,7 +47,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
         this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
-        this.methodCalls = new HashSet<UnresolvedMethodCallInfo>();
+        this.methodCalls = new HashSet<UnresolvedMemberCallInfo>();
         this.fieldUsages = new HashSet<UnresolvedFieldUsageInfo>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
         this.innerBlocks = new HashSet<UnresolvedBlockInfo<?>>();
@@ -92,7 +92,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
         this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
-        this.methodCalls = new HashSet<UnresolvedMethodCallInfo>();
+        this.methodCalls = new HashSet<UnresolvedMemberCallInfo>();
         this.fieldUsages = new HashSet<UnresolvedFieldUsageInfo>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
         this.innerBlocks = new HashSet<UnresolvedBlockInfo<?>>();
@@ -408,7 +408,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * 
      * @param methodCall メソッド呼び出し
      */
-    public void addMethodCall(final UnresolvedMethodCallInfo methodCall) {
+    public void addMethodCall(final UnresolvedMemberCallInfo methodCall) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -465,7 +465,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * 
      * @return メソッド呼び出しの Set
      */
-    public Set<UnresolvedMethodCallInfo> getMethodCalls() {
+    public Set<UnresolvedMemberCallInfo> getMethodCalls() {
         return Collections.unmodifiableSet(this.methodCalls);
     }
 
@@ -734,7 +734,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
     /**
      * メソッド呼び出しを保存する変数
      */
-    private final Set<UnresolvedMethodCallInfo> methodCalls;
+    private final Set<UnresolvedMemberCallInfo> methodCalls;
 
     /**
      * フィールド使用参照を保存する変数

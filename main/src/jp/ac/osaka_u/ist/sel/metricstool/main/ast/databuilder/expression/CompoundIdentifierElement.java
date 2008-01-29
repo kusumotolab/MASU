@@ -2,11 +2,18 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnknownUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnknownUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
 
+/**
+ * 
+ * @author kou-tngt, t-miyake
+ *
+ */
 public class CompoundIdentifierElement implements IdentifierElement {
 
     public CompoundIdentifierElement(final IdentifierElement owner, final String name) {
@@ -43,14 +50,14 @@ public class CompoundIdentifierElement implements IdentifierElement {
         return null;
     }
 
-    public UnresolvedTypeInfo getOwnerType() {
+    public UnresolvedEntityUsageInfo getOwnerUsage() {
         return this.ownerType;
     }
 
-    public UnresolvedTypeInfo resolveAsAssignmetedVariable(final BuildDataManager buildDataManager) {
+    public UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(final BuildDataManager buildDataManager) {
         this.ownerType = this.resolveOwner(buildDataManager);
         final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
-                .getAllAvaliableNames(), this.ownerType, this.name);
+                .getAllAvaliableNames(), this.ownerType, this.name, false);
         buildDataManager.addFieldAssignment(fieldUsage);
         return fieldUsage;
     }
@@ -60,20 +67,20 @@ public class CompoundIdentifierElement implements IdentifierElement {
         return this;
     }
 
-    public UnresolvedTypeInfo resolveAsReferencedVariable(final BuildDataManager buildDataManager) {
+    public UnresolvedVariableUsageInfo resolveAsReferencedVariable(final BuildDataManager buildDataManager) {
         this.ownerType = this.resolveOwner(buildDataManager);
         final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
-                .getAllAvaliableNames(), this.ownerType, this.name);
+                .getAllAvaliableNames(), this.ownerType, this.name, true);
         buildDataManager.addFieldReference(fieldUsage);
         return fieldUsage;
     }
 
-    public UnresolvedTypeInfo resolveReferencedEntityIfPossible(final BuildDataManager buildDataManager) {
+    public UnresolvedEntityUsageInfo resolveReferencedEntityIfPossible(final BuildDataManager buildDataManager) {
         this.ownerType = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
 
         if (this.ownerType != null) {
             final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
-                    .getAllAvaliableNames(), this.ownerType, this.name);
+                    .getAllAvaliableNames(), this.ownerType, this.name, true);
             buildDataManager.addFieldReference(fieldUsage);
             return fieldUsage;
         } else {
@@ -81,7 +88,7 @@ public class CompoundIdentifierElement implements IdentifierElement {
         }
     }
 
-    protected UnresolvedTypeInfo resolveOwner(final BuildDataManager buildDataManager) {
+    protected UnresolvedEntityUsageInfo resolveOwner(final BuildDataManager buildDataManager) {
         this.ownerType = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
         if (null != this.ownerType) {
             return this.ownerType;
@@ -97,6 +104,6 @@ public class CompoundIdentifierElement implements IdentifierElement {
 
     private final IdentifierElement owner;
 
-    private UnresolvedTypeInfo ownerType;
+    private UnresolvedEntityUsageInfo ownerType;
 
 }

@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,10 +23,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalMethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
@@ -38,53 +33,28 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
  * @author higo
  * 
  */
-public final class UnresolvedMethodCallInfo implements UnresolvedEntityUsageInfo {
+public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
 
     /**
      * メソッド呼び出しが実行される変数の型，メソッド名を与えてオブジェクトを初期化
      * 
-     * @param ownerClassType メソッド呼び出しが実行される変数の型
+     * @param ownerUsage メソッド呼び出しが実行される変数の型
      * @param methodName メソッド名
      */
-    public UnresolvedMethodCallInfo(final UnresolvedEntityUsageInfo ownerClassType,
-            final String methodName, final boolean constructor) {
+    public UnresolvedMethodCallInfo(final UnresolvedEntityUsageInfo ownerUsage,
+            final String methodName) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == ownerClassType) || (null == methodName)) {
+        if ((null == ownerUsage) || (null == methodName)) {
             throw new NullPointerException();
         }
 
-        this.ownerClassType = ownerClassType;
-        this.methodName = methodName;
-        this.constructor = constructor;
-        this.typeParameterUsages = new LinkedList<UnresolvedTypeParameterUsageInfo>();
+        this.ownerUsage = ownerUsage;
+        this.memberName = methodName;
+        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
         this.parameterTypes = new LinkedList<UnresolvedEntityUsageInfo>();
 
         this.resolvedInfo = null;
-    }
-
-    /**
-     * この未解決メソッド呼び出しがすでに解決されているかどうかを返す
-     * 
-     * @return 既に解決されている場合は true，そうでない場合は false
-     */
-    public boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    /**
-     * 解決済みメソッド呼び出し情報を返す
-     * 
-     * @return 解決済みメソッド呼び出し情報
-     * @throw 解決されていない場合にスローされる
-     */
-    public EntityUsageInfo getResolvedEntityUsage() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolvedInfo;
     }
 
     public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
@@ -104,7 +74,7 @@ public final class UnresolvedMethodCallInfo implements UnresolvedEntityUsageInfo
         }
 
         // メソッドのシグネチャを取得
-        final String methodName = this.getMethodName();
+        final String memberName = this.getMemberName();
         final boolean constructor = this.isConstructor();
         final List<UnresolvedEntityUsageInfo> unresolvedParameters = this.getParameters();
 
@@ -172,7 +142,7 @@ public final class UnresolvedMethodCallInfo implements UnresolvedEntityUsageInfo
                 for (final TargetMethodInfo availableMethod : availableMethods) {
 
                     // 呼び出し可能なメソッドが見つかった場合
-                    if (availableMethod.canCalledWith(methodName, parameterTypes)) {
+                    if (availableMethod.canCalledWith(memberName, parameterTypes)) {
                         usingMethod.addCallee(availableMethod);
                         availableMethod.addCaller(usingMethod);
 
@@ -189,7 +159,7 @@ public final class UnresolvedMethodCallInfo implements UnresolvedEntityUsageInfo
                         .getExternalSuperClass((TargetClassInfo) ownerUsage.getType());
                 if (null != externalSuperClass) {
 
-                    final ExternalMethodInfo methodInfo = new ExternalMethodInfo(methodName,
+                    final ExternalMethodInfo methodInfo = new ExternalMethodInfo(memberName,
                             externalSuperClass, constructor);
                     final List<ParameterInfo> parameters = NameResolver
                             .createParameters(parameterTypes);
@@ -209,7 +179,7 @@ public final class UnresolvedMethodCallInfo implements UnresolvedEntityUsageInfo
 
             // 見つからなかった処理を行う
             {
-                err.println("Can't resolve method Call : " + this.getMethodName());
+                err.println("Can't resolve method Call : " + this.getMemberName());
 
                 usingMethod.addUnresolvedUsage(this);
 
@@ -220,7 +190,7 @@ public final class UnresolvedMethodCallInfo implements UnresolvedEntityUsageInfo
             // 親が外部クラス（ExternalClassInfo）だった場合
         } else if (ownerUsage.getType() instanceof ExternalClassInfo) {
 
-            final ExternalMethodInfo methodInfo = new ExternalMethodInfo(methodName,
+            final ExternalMethodInfo methodInfo = new ExternalMethodInfo(memberName,
                     (ExternalClassInfo) ownerUsage.getType(), constructor);
             final List<ParameterInfo> parameters = NameResolver.createParameters(parameterTypes);
             methodInfo.addParameters(parameters);
@@ -240,7 +210,7 @@ public final class UnresolvedMethodCallInfo implements UnresolvedEntityUsageInfo
             if (Settings.getLanguage().equals(LANGUAGE.JAVA)) {
                 final ClassInfo ownerClass = classInfoManager.getClassInfo(new String[] { "java",
                         "lang", "Object" });
-                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(methodName,
+                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(memberName,
                         ownerClass, false);
                 final List<ParameterInfo> parameters = NameResolver
                         .createParameters(parameterTypes);
@@ -265,7 +235,7 @@ public final class UnresolvedMethodCallInfo implements UnresolvedEntityUsageInfo
                 final ExternalClassInfo wrapperClass = TypeConverter.getTypeConverter(
                         Settings.getLanguage()).getWrapperClass(
                         (PrimitiveTypeInfo) ownerUsage.getType());
-                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(methodName,
+                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(memberName,
                         wrapperClass, constructor);
                 final List<ParameterInfo> parameters = NameResolver
                         .createParameters(parameterTypes);
@@ -290,63 +260,14 @@ public final class UnresolvedMethodCallInfo implements UnresolvedEntityUsageInfo
         this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
         return this.resolvedInfo;
     }
-
-    /**
-     * 型パラメータ使用を追加する
-     * 
-     * @param typeParameterUsage 追加する型パラメータ使用
-     */
-    public void addTypeParameterUsage(final UnresolvedTypeParameterUsageInfo typeParameterUsage) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == typeParameterUsage) {
-            throw new NullPointerException();
-        }
-
-        this.typeParameterUsages.add(typeParameterUsage);
-    }
-
-    /**
-     * 引数を追加
-     * 
-     * @param typeInfo
-     */
-    public void addParameter(final UnresolvedEntityUsageInfo typeInfo) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == typeInfo) {
-            throw new NullPointerException();
-        }
-
-        this.parameterTypes.add(typeInfo);
-    }
-
-    /**
-     * 引数の List を返す
-     * 
-     * @return 引数の List
-     */
-    public List<UnresolvedEntityUsageInfo> getParameters() {
-        return Collections.unmodifiableList(this.parameterTypes);
-    }
-
-    /**
-     * 型パラメータ使用の List を返す
-     * 
-     * @return 型パラメータ使用の List
-     */
-    public List<UnresolvedTypeParameterUsageInfo> getTypeParameterUsages() {
-        return Collections.unmodifiableList(this.typeParameterUsages);
-    }
-
+    
     /**
      * メソッド呼び出しが実行される変数の型を返す
      * 
      * @return メソッド呼び出しが実行される変数の型
      */
     public UnresolvedEntityUsageInfo getOwnerClassType() {
-        return this.ownerClassType;
+        return this.ownerUsage;
     }
 
     /**
@@ -355,54 +276,13 @@ public final class UnresolvedMethodCallInfo implements UnresolvedEntityUsageInfo
      * @return コンストラクタである場合は true，そうでない場合は false
      */
     public boolean isConstructor() {
-        return this.constructor;
+        return false;
     }
 
     /**
-     * メソッド名を返す
-     * 
-     * @return メソッド名
+     * メソッド呼び出しが実行される変数の参照を保存するための変数
      */
-    public String getMethodName() {
-        return this.methodName;
-    }
+    private final UnresolvedEntityUsageInfo ownerUsage;
 
-    /**
-     * メソッド呼び出しが実行される変数の型を保存するための変数
-     */
-    private final UnresolvedEntityUsageInfo ownerClassType;
-
-    /**
-     * メソッド名を保存するための変数
-     */
-    private final String methodName;
-
-    /**
-     * 型パラメータ使用を保存するための変数
-     */
-    private final List<UnresolvedTypeParameterUsageInfo> typeParameterUsages;
-
-    /**
-     * 引数を保存するための変数
-     */
-    private final List<UnresolvedEntityUsageInfo> parameterTypes;
-
-    /**
-     * 呼び出しがコンストラクタかどうかを保存するための変数
-     */
-    private final boolean constructor;
-
-    /**
-     * 解決済みメソッド呼び出し情報を保存するための変数
-     */
-    private EntityUsageInfo resolvedInfo;
-
-    /**
-     * エラーメッセージ出力用のプリンタ
-     */
-    private static final MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
-        public String getMessageSourceName() {
-            return "UnresolvedMethodCall";
-        }
-    }, MESSAGE_TYPE.ERROR);
+    
 }

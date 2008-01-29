@@ -49,7 +49,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
         this.referenceName = referenceName;
         this.fullReferenceName = referenceName;
         this.ownerUsage = null;
-        this.typeParameterUsages = new LinkedList<UnresolvedTypeParameterUsageInfo>();
+        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
     }
 
     /**
@@ -77,7 +77,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
         this.fullReferenceName = fullReferenceName;
         this.referenceName = referenceName;
         this.ownerUsage = ownerUsage;
-        this.typeParameterUsages = new LinkedList<UnresolvedTypeParameterUsageInfo>();
+        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
     }
 
     /**
@@ -413,18 +413,18 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
     /**
      * 型パラメータ使用を追加する
      * 
-     * @param typeParameterUsage 追加する型パラメータ使用
+     * @param typeArgument 追加する型パラメータ使用
      */
-    public final void addTypeParameterUsage(
-            final UnresolvedTypeParameterUsageInfo typeParameterUsage) {
+    public final void addTypeArgument(
+            final UnresolvedReferenceTypeInfo typeArgument) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == typeParameterUsage) {
+        if (null == typeArgument) {
             throw new NullPointerException();
         }
 
-        this.typeParameterUsages.add(typeParameterUsage);
+        this.typeArguments.add(typeArgument);
     }
 
     /**
@@ -432,8 +432,8 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
      * 
      * @return このクラス参照で使用されている型パラメータの List
      */
-    public final List<UnresolvedTypeParameterUsageInfo> getTypeParameterUsages() {
-        return Collections.unmodifiableList(this.typeParameterUsages);
+    public final List<UnresolvedReferenceTypeInfo> getTypeArguments() {
+        return Collections.unmodifiableList(this.typeArguments);
     }
 
     /**
@@ -501,6 +501,24 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
     public final AvailableNamespaceInfoSet getAvailableNamespaces() {
         return this.availableNamespaceSet;
     }
+    
+	public final static UnresolvedClassReferenceInfo createClassReference(
+			UnresolvedClassInfo referencedClassInfo) {
+
+		AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(
+				referencedClassInfo.getNamespace(), false);
+		AvailableNamespaceInfoSet namespaces = new AvailableNamespaceInfoSet();
+		namespaces.add(namespace);
+
+		String[] className = new String[] { referencedClassInfo.getClassName() };
+
+		return new UnresolvedClassReferenceInfo(namespaces, className);
+	}
+	
+	public final static UnresolvedClassReferenceInfo createClassReference(
+			UnresolvedReferenceTypeInfo referenceType) {
+		return new UnresolvedClassReferenceInfo(referenceType.getAvailableNamespaces(), referenceType.getReferenceName());
+	}
 
     /**
      * 利用可能な名前空間名を保存するための変数，名前解決処理の際に用いる
@@ -525,7 +543,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
     /**
      * 未解決型パラメータ使用を保存するための変数
      */
-    private final List<UnresolvedTypeParameterUsageInfo> typeParameterUsages;
+    private final List<UnresolvedReferenceTypeInfo> typeArguments;
 
     /**
      * 解決済みクラス参照を保存するための変数

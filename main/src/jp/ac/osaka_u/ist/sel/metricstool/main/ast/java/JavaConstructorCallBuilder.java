@@ -9,10 +9,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.MethodC
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCall;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -56,23 +58,24 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
     protected void buildInnerConstructorCall(UnresolvedClassInfo currentClass) {
         ExpressionElement[] elements = getAvailableElements();
-        String className = currentClass.getClassName();
+        
+        AvailableNamespaceInfoSet namespaces = new AvailableNamespaceInfoSet();
+        AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(currentClass.getNamespace(), false);
+        namespaces.add(namespace);
+        UnresolvedReferenceTypeInfo referenceType = new UnresolvedReferenceTypeInfo(namespaces, currentClass.getFullQualifiedName());
 
-        UnresolvedMethodCall constructorCall = new UnresolvedMethodCall(currentClass, className,
-                true);
+        UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(referenceType);
         resolveParameters(constructorCall, elements, 0);
         pushElement(new MethodCallElement(constructorCall));
         buildDataManager.addMethodCall(constructorCall);
     }
 
-    protected void buildSuperConstructorCall(UnresolvedTypeInfo superClass) {
+    protected void buildSuperConstructorCall(UnresolvedReferenceTypeInfo superClass) {
         ExpressionElement[] elements = getAvailableElements();
-
-        UnresolvedReferenceTypeInfo superClassInfo = (UnresolvedReferenceTypeInfo) superClass;
 
         int argStartIndex = 0;
 
-        String[] superClassReferenceName = superClassInfo.getFullReferenceName();
+        String[] superClassReferenceName = superClass.getFullReferenceName();
         String className = superClassReferenceName[superClassReferenceName.length - 1];
 
         if (elements.length > 0 && elements[0] instanceof TypeElement) {
@@ -101,7 +104,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
         assert (null != className) : "Illegal state: unexpected ownerClass type.";
 
-        UnresolvedMethodCall constructorCall = new UnresolvedMethodCall(superClass, className, true);
+        UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(superClass);
         resolveParameters(constructorCall, elements, argStartIndex);
         pushElement(new MethodCallElement(constructorCall));
         buildDataManager.addMethodCall(constructorCall);

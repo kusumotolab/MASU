@@ -4,7 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 import java.util.HashMap;
 import java.util.Map;
 
-import antlr.collections.AST;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AccessModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstTokenTranslator;
@@ -13,10 +12,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ConstantToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.DefinitionToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.DescriptionToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.IdentifierToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.InstanceToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.MemberTypeModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.InstanceToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.SyntaxToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.VisitControlToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
@@ -24,6 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNa
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15TokenTypes;
+import antlr.collections.AST;
 
 
 /**

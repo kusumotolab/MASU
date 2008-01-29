@@ -1,13 +1,19 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
+/**
+ * @author kou-tngt, t-miyake
+ *
+ */
 public class FieldOrMethodElement implements IdentifierElement{
 
-    public FieldOrMethodElement(UnresolvedTypeInfo ownerType, String name){
-        this.ownerType = ownerType;
+    public FieldOrMethodElement(UnresolvedEntityUsageInfo ownerUsage, String name){
+        this.ownerUsage = ownerUsage;
         this.name = name;
     }
     
@@ -15,8 +21,8 @@ public class FieldOrMethodElement implements IdentifierElement{
         return name;
     }
     
-    public UnresolvedTypeInfo getOwnerType() {
-        return ownerType;
+    public UnresolvedEntityUsageInfo getOwnerUsage() {
+        return ownerUsage;
     }
     
     public UnresolvedTypeInfo getType() {
@@ -27,8 +33,8 @@ public class FieldOrMethodElement implements IdentifierElement{
         throw new UnsupportedOperationException();
     }
     
-    public UnresolvedTypeInfo resolveAsAssignmetedVariable(BuildDataManager buildDataManager) {
-        UnresolvedFieldUsageInfo usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),ownerType,name);
+    public UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(BuildDataManager buildDataManager) {
+        UnresolvedFieldUsageInfo usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),ownerUsage,name, false);
         buildDataManager.addFieldAssignment(usage);
         return usage;
     }
@@ -37,17 +43,17 @@ public class FieldOrMethodElement implements IdentifierElement{
         return this;
     }
 
-    public UnresolvedTypeInfo resolveAsReferencedVariable(BuildDataManager buildDataManager) {
-        UnresolvedFieldUsageInfo usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),ownerType,name);
+    public UnresolvedVariableUsageInfo resolveAsReferencedVariable(BuildDataManager buildDataManager) {
+        UnresolvedFieldUsageInfo usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),ownerUsage,name, true);
         buildDataManager.addFieldReference(usage);
         return usage;
     }
     
-    public UnresolvedTypeInfo resolveReferencedEntityIfPossible(BuildDataManager buildDataManager) {
+    public UnresolvedEntityUsageInfo resolveReferencedEntityIfPossible(BuildDataManager buildDataManager) {
         throw new UnsupportedOperationException();
     }
     
-    private final UnresolvedTypeInfo ownerType;
+    private final UnresolvedEntityUsageInfo ownerUsage;
     private final String name;
     
     
