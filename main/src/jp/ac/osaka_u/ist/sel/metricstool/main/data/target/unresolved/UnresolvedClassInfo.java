@@ -54,7 +54,7 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
-        this.superClasses = new LinkedHashSet<UnresolvedClassReferenceInfo>();
+        this.superClasses = new LinkedHashSet<FUnresolvedReferenceTypeInfo>();
         this.innerClasses = new HashSet<UnresolvedClassInfo>();
         this.definedMethods = new HashSet<UnresolvedMethodInfo>();
         this.definedFields = new HashSet<UnresolvedFieldInfo>();
@@ -255,7 +255,7 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      * 
      * @param superClass 親クラス名
      */
-    public void addSuperClass(final UnresolvedClassReferenceInfo superClass) {
+    public void addSuperClass(final FUnresolvedReferenceTypeInfo superClass) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -319,7 +319,7 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
      * 
      * @return 親クラス名のセット
      */
-    public Set<UnresolvedClassReferenceInfo> getSuperClasses() {
+    public Set<FUnresolvedReferenceTypeInfo> getSuperClasses() {
         return Collections.unmodifiableSet(this.superClasses);
     }
 
@@ -693,7 +693,7 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
     /**
      * 親クラスを保存するためのセット
      */
-    private final Set<UnresolvedClassReferenceInfo> superClasses;
+    private final Set<FUnresolvedReferenceTypeInfo> superClasses;
 
     /**
      * インナークラスを保存するためのセット
