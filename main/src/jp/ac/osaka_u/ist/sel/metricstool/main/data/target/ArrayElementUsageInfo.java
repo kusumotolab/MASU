@@ -38,11 +38,11 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
 
         // 配列の次元に応じて型を生成
         final int ownerArrayDimension = ((ArrayTypeInfo) ownerType).getDimension();
-        final EntityUsageInfo ownerArrayElement = ((ArrayTypeInfo) ownerType).getElement();
+        final TypeInfo ownerArrayElement = ((ArrayTypeInfo) ownerType).getElementType();
 
         // 配列が二次元以上の場合は，次元を一つ落とした配列を返し，一次元の場合は，要素の型を返す．
         return 1 < ownerArrayDimension ? ArrayTypeInfo.getType(ownerArrayElement,
-                ownerArrayDimension - 1).getType() : ownerArrayElement.getType();
+                ownerArrayDimension - 1) : ownerArrayElement;
     }
 
     /**

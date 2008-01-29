@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public class TypeParameterInfo implements TypeInfo {
+public class TypeParameterInfo {
 
     /**
      * 型パラメータ名を与えてオブジェクトを初期化する
@@ -31,20 +31,20 @@ public class TypeParameterInfo implements TypeInfo {
     /**
      * この型パラメータが引数で与えられた型と等しいかどうかを判定する
      * 
-     * @param typeInfo 比較対象型情報
+     * @param o 比較対象型情報
      * @return 等しい場合は true，等しくない場合は false;
      */
-    public boolean equals(final TypeInfo typeInfo) {
+    public boolean equals(final Object o) {
 
-        if (null == typeInfo) {
+        if (null == o) {
             return false;
         }
 
-        if (!(typeInfo instanceof TypeParameterInfo)) {
+        if (!(o instanceof TypeParameterInfo)) {
             return false;
         }
 
-        return this.getName().equals(((TypeParameterInfo) typeInfo).getName());
+        return this.getName().equals(((TypeParameterInfo) o).getName());
     }
 
     /**
@@ -53,15 +53,6 @@ public class TypeParameterInfo implements TypeInfo {
      * @return 型パラメータ名
      */
     public final String getName() {
-        return this.name;
-    }
-
-    /**
-     * 型名（実際には型パラメータ名）を返す．
-     * 
-     * @return 型名
-     */
-    public final String getTypeName() {
         return this.name;
     }
 

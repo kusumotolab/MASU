@@ -20,7 +20,7 @@ public final class ArrayLengthUsageInfo extends EntityUsageInfo {
             throw new NullPointerException();
         }
 
-        if (!(ownerEntityUsage instanceof ArrayTypeInfo)) {
+        if (!(ownerEntityUsage.getType() instanceof ArrayTypeInfo)) {
             throw new IllegalArgumentException();
         }
 

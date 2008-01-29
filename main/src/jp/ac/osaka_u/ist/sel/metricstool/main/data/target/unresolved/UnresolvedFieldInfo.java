@@ -5,10 +5,10 @@ import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
@@ -77,10 +77,15 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
         assert fieldType != null : "resolveTypeInfo returned null!";
         if (fieldType instanceof UnknownTypeInfo) {
             if (unresolvedFieldType instanceof UnresolvedClassReferenceInfo) {
-                fieldType = NameResolver
+
+                // TODO Œ^ƒpƒ‰ƒ[ƒ^‚ÌŠi”[ˆ—‚ª•K—v
+                final ExternalClassInfo classInfo = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedFieldType);
-                classInfoManager.add((ExternalClassInfo) fieldType);
+                fieldType = new ReferenceTypeInfo(classInfo);
+                classInfoManager.add(classInfo);
+
             } else if (unresolvedFieldType instanceof UnresolvedArrayTypeInfo) {
+
                 final UnresolvedEntityUsageInfo unresolvedArrayElement = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
@@ -88,7 +93,9 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
                 final ExternalClassInfo elementType = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedArrayElement);
                 classInfoManager.add(elementType);
-                fieldType = ArrayTypeInfo.getType(new ClassReferenceInfo(elementType), dimension);
+
+                final ReferenceTypeInfo elementTypeReference = new ReferenceTypeInfo(elementType);
+                fieldType = ArrayTypeInfo.getType(elementTypeReference, dimension);
             } else {
                 assert false : "Can't resolve field type : " + unresolvedFieldType.toString();
             }

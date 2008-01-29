@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public class UnresolvedTypeParameterInfo implements UnresolvedTypeInfo {
+public class UnresolvedTypeParameterInfo {
 
     /**
      * 型パラメータ名を与えてオブジェクトを初期化する
@@ -37,30 +37,6 @@ public class UnresolvedTypeParameterInfo implements UnresolvedTypeInfo {
     }
 
     /**
-     * 既に名前解決されているかどうかを返す
-     * 
-     * @return 既に名前解決されている場合は true, そうでない場合は false
-     */
-    public final boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    /**
-     * 名前解決された情報を返す
-     * 
-     * @return 名前解決された情報
-     * @throws NotResolvedException
-     */
-    public final TypeInfo getResolvedType() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolvedInfo;
-    }
-
-    /**
      * 名前解決を行う
      * 
      * @param usingClass 名前解決を行うエンティティがあるクラス
@@ -69,9 +45,9 @@ public class UnresolvedTypeParameterInfo implements UnresolvedTypeInfo {
      * @param fieldInfoManager 用いるフィールドマネージャ
      * @param methodInfoManager 用いるメソッドマネージャ
      * 
-     * @return 解決済みのエンティティ
+     * @return 解決済みの型パラメータ
      */
-    public TypeInfo resolveType(final TargetClassInfo usingClass,
+    public TypeParameterInfo resolve(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -89,14 +65,14 @@ public class UnresolvedTypeParameterInfo implements UnresolvedTypeInfo {
             final TypeInfo extendsType = unresolvedExtendsType.resolveType(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
 
-            this.resolvedInfo = new TypeParameterInfo(name, extendsType);
+            this.resolved = new TypeParameterInfo(name, extendsType);
 
         } else {
 
-            this.resolvedInfo = new TypeParameterInfo(name, null);
+            this.resolved = new TypeParameterInfo(name, null);
         }
-        
-        return this.resolvedInfo;
+
+        return this.resolved;
     }
 
     /**
@@ -139,5 +115,5 @@ public class UnresolvedTypeParameterInfo implements UnresolvedTypeInfo {
     /**
      * 名前解決された情報を保存するための変数
      */
-    protected TypeParameterInfo resolvedInfo;
+    protected TypeParameterInfo resolved;
 }

@@ -12,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
@@ -148,7 +149,9 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                         if (referenceName[i].equals(innerClass.getClassName())) {
                             // TODO 利用関係を構築するコードが必要？
 
-                            classReference = new ClassReferenceInfo(innerClass);
+                            // TODO 型パラメータ情報を追記する処理が必要
+                            final ReferenceTypeInfo reference = new ReferenceTypeInfo(innerClass);
+                            classReference = new ClassReferenceInfo(reference);
                             continue NEXT_NAME;
                         }
                     }
@@ -179,7 +182,9 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                     classInfoManager.add((ExternalClassInfo) classInfo);
                 }
 
-                this.resolvedInfo = new ClassReferenceInfo(classInfo);
+                // TODO 型パラメータ情報を追記する処理が必要
+                final ReferenceTypeInfo reference = new ReferenceTypeInfo(classInfo);
+                this.resolvedInfo = new ClassReferenceInfo(reference);
                 return this.resolvedInfo;
             }
 
@@ -187,7 +192,10 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
             {
                 final ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
                 if (null != classInfo) {
-                    this.resolvedInfo = new ClassReferenceInfo(classInfo);
+
+                    // TODO　型パラメータ情報を追記する処理が必要
+                    final ReferenceTypeInfo reference = new ReferenceTypeInfo(classInfo);
+                    this.resolvedInfo = new ClassReferenceInfo(reference);
                     return this.resolvedInfo;
                 }
             }
@@ -207,7 +215,9 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                     if (innerClassInfo.getClassName().equals(referenceName[0])) {
 
                         // availableField.getType() から次のword(name[i])を名前解決
-                        EntityUsageInfo classReference = new ClassReferenceInfo(innerClassInfo);
+                        // TODO 型パラメータ情報を格納する処理が必要
+                        ReferenceTypeInfo reference = new ReferenceTypeInfo(innerClassInfo);
+                        EntityUsageInfo classReference = new ClassReferenceInfo(reference);
                         NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
                             // 親が UnknownTypeInfo だったら，どうしようもない
@@ -229,7 +239,9 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                                     if (referenceName[i].equals(innerClass.getClassName())) {
                                         // TODO 利用関係を構築するコードが必要？
 
-                                        classReference = new ClassReferenceInfo(innerClass);
+                                        // TODO　型パラメータ情報を格納する処理が必要
+                                        reference = new ReferenceTypeInfo(innerClass);
+                                        classReference = new ClassReferenceInfo(reference);
                                         continue NEXT_NAME;
                                     }
                                 }
@@ -269,7 +281,9 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                             if (className.equals(referenceName[0])) {
 
                                 // availableField.getType() から次のword(name[i])を名前解決
-                                EntityUsageInfo classReference = new ClassReferenceInfo(classInfo);
+                                // TODO 型パラメータ情報を格納する処理が必要
+                                ReferenceTypeInfo reference = new ReferenceTypeInfo(classInfo);
+                                EntityUsageInfo classReference = new ClassReferenceInfo(reference);
                                 NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
                                     // 親が UnknownTypeInfo だったら，どうしようもない
@@ -291,7 +305,9 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                                             if (referenceName[i].equals(innerClass.getClassName())) {
                                                 // TODO 利用関係を構築するコードが必要？
 
-                                                classReference = new ClassReferenceInfo(innerClass);
+                                                // TODO 型パラメータ情報を格納する処理が必要
+                                                reference = new ReferenceTypeInfo(innerClass);
+                                                classReference = new ClassReferenceInfo(reference);
                                                 continue NEXT_NAME;
                                             }
                                         }
@@ -330,8 +346,9 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                                 classInfoManager.add((ExternalClassInfo) specifiedClassInfo);
                             }
 
-                            EntityUsageInfo classReference = new ClassReferenceInfo(
-                                    specifiedClassInfo);
+                            // TODO 型パラメータ情報を格納する処理が必要
+                            ReferenceTypeInfo reference = new ReferenceTypeInfo(specifiedClassInfo);
+                            EntityUsageInfo classReference = new ClassReferenceInfo(reference);
                             NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
                                 // 親が UnknownTypeInfo だったら，どうしようもない
@@ -353,7 +370,9 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                                         if (referenceName[i].equals(innerClass.getClassName())) {
                                             // TODO 利用関係を構築するコードが必要？
 
-                                            classReference = new ClassReferenceInfo(innerClass);
+                                            // TODO 型パラメータ情報を格納する処理が必要
+                                            reference = new ReferenceTypeInfo(innerClass);
+                                            classReference = new ClassReferenceInfo(reference);
                                             continue NEXT_NAME;
                                         }
                                     }

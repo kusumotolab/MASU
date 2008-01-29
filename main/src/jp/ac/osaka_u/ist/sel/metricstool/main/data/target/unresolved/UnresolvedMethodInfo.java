@@ -9,11 +9,11 @@ import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
@@ -185,7 +185,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
             final TypeParameterInfo typeParameter = (TypeParameterInfo) unresolvedTypeParameter
-                    .resolveType(usingClass, this.resolvedInfo, classInfoManager, null, null);
+                    .resolve(usingClass, this.resolvedInfo, classInfoManager, null, null);
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
 
@@ -196,19 +196,26 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         assert methodReturnType != null : "resolveTypeInfo returned null!";
         if (methodReturnType instanceof UnknownTypeInfo) {
             if (unresolvedMethodReturnType instanceof UnresolvedClassReferenceInfo) {
-                methodReturnType = NameResolver
+
+                // TODO å^ÉpÉâÉÅÅ[É^ÇÃèÓïÒÇäiî[Ç∑ÇÈ
+                final ExternalClassInfo classInfo = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedMethodReturnType);
-                classInfoManager.add((ExternalClassInfo) methodReturnType);
+                methodReturnType = new ReferenceTypeInfo(classInfo);
+                classInfoManager.add(classInfo);
+
             } else if (unresolvedMethodReturnType instanceof UnresolvedArrayTypeInfo) {
                 final UnresolvedEntityUsageInfo unresolvedArrayElement = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
                         .getDimension();
-                final ExternalClassInfo elementType = NameResolver
+                final ExternalClassInfo element = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedArrayElement);
-                classInfoManager.add(elementType);
-                methodReturnType = ArrayTypeInfo.getType(new ClassReferenceInfo(elementType),
-                        dimension);
+                classInfoManager.add(element);
+
+                // TODO å^ÉpÉâÉÅÅ[É^ÇÃèÓïÒÇäiî[Ç∑ÇÈ
+                final ReferenceTypeInfo elementType = new ReferenceTypeInfo(element);
+                methodReturnType = ArrayTypeInfo.getType(elementType, dimension);
+
             } else {
                 assert false : "Can't resolve method return type : "
                         + unresolvedMethodReturnType.toString();

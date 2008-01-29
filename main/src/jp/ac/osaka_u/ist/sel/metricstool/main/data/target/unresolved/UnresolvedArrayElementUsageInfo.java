@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * 未解決配列に対する要素の参照を表すためのクラス．以下の情報を持つ．
  * 
- * @author kou-tngt
+ * @author kou-tngt, higo
  * @see UnresolvedEntityUsageInfo
  */
 public class UnresolvedArrayElementUsageInfo implements UnresolvedEntityUsageInfo {

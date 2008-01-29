@@ -16,8 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public abstract class ClassInfo implements UnitInfo, TypeInfo, Comparable<ClassInfo>,
-        MetricMeasurable {
+public abstract class ClassInfo implements UnitInfo, Comparable<ClassInfo>, MetricMeasurable {
 
     /**
      * 名前空間名とクラス名からオブジェクトを生成する
@@ -36,7 +35,7 @@ public abstract class ClassInfo implements UnitInfo, TypeInfo, Comparable<ClassI
 
         this.namespace = namespace;
         this.className = className;
-        this.superClasses = new TreeSet<ClassInfo>();
+        this.superClasses = new TreeSet<ReferenceTypeInfo>();
         this.subClasses = new TreeSet<ClassInfo>();
     }
 
@@ -60,7 +59,7 @@ public abstract class ClassInfo implements UnitInfo, TypeInfo, Comparable<ClassI
         System.arraycopy(fullQualifiedName, 0, namespace, 0, fullQualifiedName.length - 1);
         this.namespace = new NamespaceInfo(namespace);
         this.className = fullQualifiedName[fullQualifiedName.length - 1];
-        this.superClasses = new TreeSet<ClassInfo>();
+        this.superClasses = new TreeSet<ReferenceTypeInfo>();
         this.subClasses = new TreeSet<ClassInfo>();
     }
 
@@ -114,18 +113,18 @@ public abstract class ClassInfo implements UnitInfo, TypeInfo, Comparable<ClassI
     }
 
     /**
-     * このクラスに親クラスを追加する．プラグインから呼ぶとランタイムエラー．
+     * このクラスに親クラス（の型）を追加する．プラグインから呼ぶとランタイムエラー．
      * 
-     * @param superClassReference 追加する親クラスの参照
+     * @param referenceType 追加する親クラスの型
      */
-    public void addSuperClass(final ClassReferenceInfo superClassReference) {
+    public void addSuperClass(final ReferenceTypeInfo referenceType) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == superClassReference) {
+        if (null == referenceType) {
             throw new NullPointerException();
         }
 
-        this.superClasses.add((ClassInfo) superClassReference.getType());
+        this.superClasses.add(referenceType);
     }
 
     /**
@@ -148,7 +147,7 @@ public abstract class ClassInfo implements UnitInfo, TypeInfo, Comparable<ClassI
      * 
      * @return スーパークラスの SortedSet
      */
-    public SortedSet<ClassInfo> getSuperClasses() {
+    public SortedSet<ReferenceTypeInfo> getSuperClasses() {
         return Collections.unmodifiableSortedSet(this.superClasses);
     }
 
@@ -199,47 +198,29 @@ public abstract class ClassInfo implements UnitInfo, TypeInfo, Comparable<ClassI
     }
 
     /**
-     * このクラスの型名を返す
-     * 
-     * @return このクラスの型名を返す
-     */
-    public final String getTypeName() {
-
-        final String delimiter = Settings.getLanguage().getNamespaceDelimiter();
-        final StringBuffer buffer = new StringBuffer();
-        final String[] namespace = this.getNamespace().getName();
-        for (int i = 0; i < namespace.length; i++) {
-            buffer.append(namespace[i]);
-            buffer.append(delimiter);
-        }
-        buffer.append(this.getClassName());
-
-        return buffer.toString();
-    }
-
-    /**
      * 等しいかどうかのチェック
      * 
      * @return 等しい場合は true, 等しくない場合は false
      */
-    public final boolean equals(final TypeInfo typeInfo) {
+    @Override
+    public final boolean equals(final Object o) {
 
-        if (null == typeInfo) {
+        if (null == o) {
             throw new NullPointerException();
         }
 
-        if (!(typeInfo instanceof ClassInfo)) {
+        if (!(o instanceof ClassInfo)) {
             return false;
         }
 
         final NamespaceInfo namespace = this.getNamespace();
-        final NamespaceInfo correspondNamespace = ((ClassInfo) typeInfo).getNamespace();
+        final NamespaceInfo correspondNamespace = ((ClassInfo) o).getNamespace();
         if (!namespace.equals(correspondNamespace)) {
             return false;
         }
 
         final String className = this.getClassName();
-        final String correspondClassName = ((ClassInfo) typeInfo).getClassName();
+        final String correspondClassName = ((ClassInfo) o).getClassName();
         return className.equals(correspondClassName);
     }
 
@@ -252,15 +233,15 @@ public abstract class ClassInfo implements UnitInfo, TypeInfo, Comparable<ClassI
     public final boolean isSuperClass(final ClassInfo classInfo) {
 
         // 引数の直接の親クラスに対して
-        for (final ClassInfo superClassInfo : classInfo.getSuperClasses()) {
+        for (final ClassInfo superClass : ReferenceTypeInfo.convert(classInfo.getSuperClasses())) {
 
             // 対象クラスの直接の親クラスがこのクラスと等しい場合は true を返す
-            if (this.equals(superClassInfo)) {
+            if (this.equals(superClass)) {
                 return true;
             }
 
             // 対象クラスの親クラスに対して再帰的に処理，true が返された場合は，このメソッドも true を返す
-            if (this.isSuperClass(superClassInfo)) {
+            if (this.isSuperClass(superClass)){
                 return true;
             }
         }
@@ -336,7 +317,7 @@ public abstract class ClassInfo implements UnitInfo, TypeInfo, Comparable<ClassI
     /**
      * このクラスが継承しているクラス一覧を保存するための変数． 直接の親クラスのみを保有するが，多重継承を考えて Set にしている．
      */
-    private final SortedSet<ClassInfo> superClasses;
+    private final SortedSet<ReferenceTypeInfo> superClasses;
 
     /**
      * このクラスを継承しているクラス一覧を保存するための変数．直接の子クラスのみを保有する．

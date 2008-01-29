@@ -30,6 +30,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
@@ -892,7 +893,8 @@ public class MetricsTool {
                             final ExternalClassInfo superClass = NameResolver
                                     .createExternalClassInfo(unresolvedSuperClassReference);
                             classInfoManager.add(superClass);
-                            superClassReference = new ClassReferenceInfo(superClass);
+                            superClassReference = new ClassReferenceInfo(new ReferenceTypeInfo(
+                                    superClass));
                         }
 
                         classInfo.addSuperClass((ClassReferenceInfo) superClassReference);
@@ -950,7 +952,7 @@ public class MetricsTool {
                     final ExternalClassInfo superClass = NameResolver
                             .createExternalClassInfo(unresolvedSuperClassReference);
                     classInfoManager.add(superClass);
-                    superClassReference = new ClassReferenceInfo(superClass);
+                    superClassReference = new ClassReferenceInfo(new ReferenceTypeInfo(superClass));
                 }
 
                 classInfo.addSuperClass((ClassReferenceInfo) superClassReference);
@@ -1116,10 +1118,10 @@ public class MetricsTool {
     private void addOverrideRelation(final TargetClassInfo classInfo) {
 
         // 各親クラスに対して
-        for (ClassInfo superClassInfo : classInfo.getSuperClasses()) {
+        for (final ClassInfo superClassInfo : ReferenceTypeInfo.convert(classInfo.getSuperClasses())) {
 
             // 各対象クラスの各メソッドについて，親クラスのメソッドをオーバーライドしているかを調査
-            for (MethodInfo methodInfo : classInfo.getDefinedMethods()) {
+            for (final MethodInfo methodInfo : classInfo.getDefinedMethods()) {
                 addOverrideRelation(superClassInfo, methodInfo);
             }
         }
@@ -1168,7 +1170,7 @@ public class MetricsTool {
         }
 
         // 親クラス群に対して再帰的に処理
-        for (ClassInfo superClassInfo : classInfo.getSuperClasses()) {
+        for (final ClassInfo superClassInfo : ReferenceTypeInfo.convert(classInfo.getSuperClasses())) {
             addOverrideRelation(superClassInfo, overrider);
         }
     }

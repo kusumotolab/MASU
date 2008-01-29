@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SuperTypeParameterInfo
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -41,10 +42,10 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
      * @param fieldInfoManager 用いるフィールドマネージャ
      * @param methodInfoManager 用いるメソッドマネージャ
      * 
-     * @return 解決済みのエンティティ
+     * @return 解決済みの型パラメータ
      */
     @Override
-    public TypeInfo resolveType(final TargetClassInfo usingClass,
+    public TypeParameterInfo resolve(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -66,14 +67,14 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
             final TypeInfo extendsType = unresolvedExtendsType.resolveType(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
 
-            this.resolvedInfo = new SuperTypeParameterInfo(name, extendsType, superType);
+            this.resolved = new SuperTypeParameterInfo(name, extendsType, superType);
 
         } else {
 
-            this.resolvedInfo = new SuperTypeParameterInfo(name, null, superType);
+            this.resolved = new SuperTypeParameterInfo(name, null, superType);
         }
 
-        return this.resolvedInfo;
+        return this.resolved;
     }
 
     /**

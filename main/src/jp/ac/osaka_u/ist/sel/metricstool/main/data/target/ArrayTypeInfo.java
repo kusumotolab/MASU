@@ -13,13 +13,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class ArrayTypeInfo extends EntityUsageInfo implements TypeInfo {
+public final class ArrayTypeInfo implements TypeInfo {
 
     /**
      * 型名を返す
      */
     public String getTypeName() {
-        final TypeInfo elementType = this.getElement().getType();
+        final TypeInfo elementType = this.getElementType();
         final int dimension = this.getDimension();
 
         final StringBuffer buffer = new StringBuffer();
@@ -28,11 +28,6 @@ public final class ArrayTypeInfo extends EntityUsageInfo implements TypeInfo {
             buffer.append("[]");
         }
         return buffer.toString();
-    }
-
-    @Override
-    public TypeInfo getType() {
-        return this;
     }
 
     /**
@@ -48,9 +43,9 @@ public final class ArrayTypeInfo extends EntityUsageInfo implements TypeInfo {
             return false;
         }
 
-        final EntityUsageInfo element = this.getElement();
-        final EntityUsageInfo correspondElement = ((ArrayTypeInfo) typeInfo).getElement();
-        if (!element.getType().equals(correspondElement.getType())) {
+        final TypeInfo element = this.getElementType();
+        final TypeInfo correspondElement = ((ArrayTypeInfo) typeInfo).getElementType();
+        if (!element.equals(correspondElement)) {
             return false;
         }
 
@@ -64,7 +59,7 @@ public final class ArrayTypeInfo extends EntityUsageInfo implements TypeInfo {
      * 
      * @return 配列の要素の型
      */
-    public EntityUsageInfo getElement() {
+    public TypeInfo getElementType() {
         return this.element;
     }
 
@@ -80,11 +75,11 @@ public final class ArrayTypeInfo extends EntityUsageInfo implements TypeInfo {
     /**
      * ArrayTypeInfo のインスタンスを返すためのファクトリメソッド．
      * 
-     * @param type 型を表す変数
+     * @param element 型を表す変数
      * @param dimension 次元を表す変数
      * @return 生成した ArrayTypeInfo オブジェクト
      */
-    public static ArrayTypeInfo getType(final EntityUsageInfo element, final int dimension) {
+    public static ArrayTypeInfo getType(final TypeInfo element, final int dimension) {
 
         if (null == element) {
             throw new NullPointerException();
@@ -93,7 +88,7 @@ public final class ArrayTypeInfo extends EntityUsageInfo implements TypeInfo {
             throw new IllegalArgumentException("Array dimension must be 1 or more!");
         }
 
-        Key key = new Key(element.getType(), dimension);
+        Key key = new Key(element, dimension);
         ArrayTypeInfo arrayType = ARRAY_TYPE_MAP.get(key);
         if (arrayType == null) {
             arrayType = new ArrayTypeInfo(element, dimension);
@@ -109,7 +104,7 @@ public final class ArrayTypeInfo extends EntityUsageInfo implements TypeInfo {
      * @param element 配列の要素
      * @param dimension 配列の事件
      */
-    private ArrayTypeInfo(final EntityUsageInfo element, final int dimension) {
+    private ArrayTypeInfo(final TypeInfo element, final int dimension) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == element) {
@@ -126,7 +121,7 @@ public final class ArrayTypeInfo extends EntityUsageInfo implements TypeInfo {
     /**
      * 配列の要素を保存する変数
      */
-    private final EntityUsageInfo element;
+    private final TypeInfo element;
 
     /**
      * 配列の次元を保存する変数
