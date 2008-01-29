@@ -102,7 +102,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
             return this.getResolvedEntityUsage();
         }
 
-        final UnresolvedEntityUsageInfo unresolvedElement = this.getElementType();
+        final UnresolvedEnityUsageInfo unresolvedElement = this.getElementType();
         final int dimension = this.getDimension();
 
         final EntityUsageInfo element = unresolvedElement.resolveEntityUsage(usingClass,
@@ -153,7 +153,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
      * 
      * @return 配列の要素の未解決型
      */
-    public UnresolvedEntityUsageInfo getElementType() {
+    public UnresolvedTypeInfo getElementType() {
         return this.type;
     }
 
@@ -182,7 +182,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
      * @param dimension 次元を表す変数
      * @return 生成した UnresolvedArrayTypeInfo オブジェクト
      */
-    public static UnresolvedArrayTypeInfo getType(final UnresolvedEntityUsageInfo type,
+    public static UnresolvedArrayTypeInfo getType(final UnresolvedTypeInfo type,
             final int dimension) {
 
         if (null == type) {
@@ -208,7 +208,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
      * @param type 配列の要素の未解決型
      * @param dimension 配列の次元
      */
-    private UnresolvedArrayTypeInfo(final UnresolvedEntityUsageInfo type, final int dimension) {
+    private UnresolvedArrayTypeInfo(final UnresolvedTypeInfo type, final int dimension) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == type) {
@@ -226,7 +226,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
     /**
      * 配列の要素の型を保存する変数
      */
-    private final UnresolvedEntityUsageInfo type;
+    private final UnresolvedTypeInfo type;
 
     /**
      * 配列の次元を保存する変数
@@ -253,7 +253,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
         /**
          * 第一キー
          */
-        private final UnresolvedEntityUsageInfo type;
+        private final UnresolvedTypeInfo type;
 
         /**
          * 第二キー
@@ -266,7 +266,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
          * @param type 第一キー
          * @param dimension 第二キー
          */
-        Key(final UnresolvedEntityUsageInfo type, final int dimension) {
+        Key(final UnresolvedTypeInfo type, final int dimension) {
 
             if (null == type) {
                 throw new NullPointerException();
@@ -292,7 +292,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
          * 
          * @return 第一キー
          */
-        public UnresolvedEntityUsageInfo getFirstKey() {
+        public UnresolvedTypeInfo getFirstKey() {
             return this.type;
         }
 
@@ -315,8 +315,8 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo, Unreso
                 throw new NullPointerException();
             }
 
-            final UnresolvedEntityUsageInfo firstKey = this.getFirstKey();
-            final UnresolvedEntityUsageInfo correspondFirstKey = ((Key) o).getFirstKey();
+            final UnresolvedTypeInfo firstKey = this.getFirstKey();
+            final UnresolvedTypeInfo correspondFirstKey = ((Key) o).getFirstKey();
             if (!firstKey.equals(correspondFirstKey)) {
                 return false;
             }
