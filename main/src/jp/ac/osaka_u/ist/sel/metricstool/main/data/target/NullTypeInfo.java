@@ -1,16 +1,17 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
 /**
  * void 型を表すクラス．
  * 
- * @author higo
+ * @author higo, t-miyake
  * 
  */
-public final class NullTypeInfo implements TypeInfo, UnresolvedTypeInfo {
+public final class NullTypeInfo extends EntityUsageInfo implements UnresolvedEntityUsageInfo, TypeInfo, UnresolvedTypeInfo {
 
     /**
      * このクラスの単一オブジェクトを返す
@@ -50,7 +51,7 @@ public final class NullTypeInfo implements TypeInfo, UnresolvedTypeInfo {
     }
 
     /**
-     * 名前解決された情報を返す
+     * 名前解決された型情報を返す
      * 
      * @return 自分自身を返す
      */
@@ -59,6 +60,40 @@ public final class NullTypeInfo implements TypeInfo, UnresolvedTypeInfo {
     }
 
     /**
+     * 名前解決された使用情報を返す
+     * 
+     * @return 自分自身を返す
+     */
+    @Override
+	public EntityUsageInfo getResolvedEntityUsage() {
+		return this;
+	}
+
+    /**
+     * 使用情報の名前解決する
+     * nullは既に解決済みなので自分自身をそのまま返す
+     * 
+     * @return 解決済みの使用情報（自分自身）
+     */
+	@Override
+	public EntityUsageInfo resolveEntityUsage(TargetClassInfo usingClass,
+			TargetMethodInfo usingMethod, ClassInfoManager classInfoManager,
+			FieldInfoManager fieldInfoManager,
+			MethodInfoManager methodInfoManager) {
+		return this;
+	}
+
+	/**
+	 * 名前解決された型を返す
+	 * 
+	 * @return 自分自身
+	 */
+	@Override
+	public TypeInfo getType() {
+		return this;
+	}
+
+	/**
      * 名前解決を行う
      * 
      * @param usingClass 名前解決を行うエンティティがあるクラス
