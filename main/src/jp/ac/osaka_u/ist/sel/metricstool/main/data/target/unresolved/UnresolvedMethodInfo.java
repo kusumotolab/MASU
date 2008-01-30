@@ -185,7 +185,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
             final TypeParameterInfo typeParameter = (TypeParameterInfo) unresolvedTypeParameter
-                    .resolve(usingClass, this.resolvedInfo, classInfoManager, null, null);
+                    .resolveType(usingClass, this.resolvedInfo, classInfoManager, null, null);
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
 
