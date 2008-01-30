@@ -15,7 +15,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -39,8 +38,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class UnresolvedClassInfo implements UnresolvedTypeInfo, VisualizableSetting,
-        MemberSetting, PositionSetting, UnresolvedUnitInfo<TargetClassInfo> {
+public final class UnresolvedClassInfo implements VisualizableSetting, MemberSetting,
+        PositionSetting, UnresolvedUnitInfo<TargetClassInfo> {
 
     /**
      * 引数なしコンストラクタ
@@ -629,32 +628,6 @@ public final class UnresolvedClassInfo implements UnresolvedTypeInfo, Visualizab
                         instance, fromLine, fromColumn, toLine, toColumn);
         classInfoManager.add(this.resolvedInfo);
         return this.resolvedInfo;
-    }
-
-    /**
-     * 名前解決された情報を返す
-     * 
-     * @return 名前解決された情報
-     */
-    public TypeInfo getResolvedType() {
-        return this.getResolvedUnit();
-    }
-
-    /**
-     * この未解決クラス情報を解決する
-     * 
-     * @param usingClass 所属クラス，このメソッド呼び出しの際は null さセットされていると思われる．
-     * @param usingMethod 所属メソッド，このメソッド呼び出しの際は null さセットされていると思われる．
-     * @param classInfoManager 用いるクラスマネージャ
-     * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManger 用いるメソッドマネージャ
-     */
-    public TypeInfo resolveType(final TargetClassInfo usingClass,
-            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
-            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
-
-        return this.resolveUnit(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);
     }
 
     /**
