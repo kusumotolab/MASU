@@ -241,7 +241,8 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
      */
     protected void combineBuiltTypes() {
         if (this.hasBuiltData() && this.getBuiltDataCount() == 2) {
-            final UnresolvedTypeInfo second = this.popLastBuiltData();
+            assert false : "Illegal state:";
+            /*final UnresolvedTypeInfo second = this.popLastBuiltData();
             final UnresolvedTypeInfo first = this.popLastBuiltData();
 
             //‚Ç‚¿‚ç‚àQÆŒ^‚Å‚ ‚é‚Í‚¸
@@ -264,7 +265,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
 
                 //Œ‹‰Ê‚ğ\’zÏ‚İ‚ÌŒ^‚Æ‚µ‚Ä“o˜^
                 this.registBuiltData(result);
-            }
+            }*/
         }
     }
 

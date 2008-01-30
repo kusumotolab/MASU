@@ -33,17 +33,26 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
 
         this.availableNamespaceSet = availableNamespaces;
         this.referenceName = referenceName;
-        this.fullReferenceName = referenceName;
+        //this.fullReferenceName = referenceName;
         this.ownerType = null;
         this.typeParameterUsages = new LinkedList<UnresolvedReferenceTypeInfo>();
     }
-
+    
     /**
-     * 利用可能な名前空間名，参照名を与えて初期化
-     * 
-     * @param availableNamespaces 名前空間名
-     * @param referenceName 参照名
+     * 利用可能な名前空間，型の完全修飾名を与えて初期化
+     * @param referenceName 型の完全修飾名
      */
+    public UnresolvedReferenceTypeInfo(final String[] referenceName) {
+    	this(new AvailableNamespaceInfoSet(), referenceName);
+    }
+
+    ///**
+    // * 利用可能な名前空間名，参照名を与えて初期化
+    // * 
+    // * @param availableNamespaces 名前空間名
+    // * @param referenceName 参照名
+    // */
+    /*
     public UnresolvedReferenceTypeInfo(final AvailableNamespaceInfoSet availableNamespaces,
             final String[] referenceName, final UnresolvedReferenceTypeInfo ownerType) {
 
@@ -63,7 +72,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
         this.ownerType = ownerType;
         this.typeParameterUsages = new LinkedList<UnresolvedReferenceTypeInfo>();
     }
-
+*/
     /**
      * 型パラメータ使用を追加する
      * 
@@ -99,14 +108,14 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
         return referenceName[referenceName.length - 1];
     }
 
-    /**
-     * この参照型のownerも含めた参照名を返す
-     * 
-     * @return この参照型のownerも含めた参照名を返す
-     */
-    public final String[] getFullReferenceName() {
+    ///**
+    // * この参照型のownerも含めた参照名を返す
+    // * 
+    // * @return この参照型のownerも含めた参照名を返す
+    // */
+    /*public final String[] getFullReferenceName() {
         return this.fullReferenceName;
-    }
+    }*/
     
     /**
      * この参照型の参照名を返す
@@ -164,6 +173,10 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
     public final AvailableNamespaceInfoSet getAvailableNamespaces() {
         return this.availableNamespaceSet;
     }
+    
+    public final static UnresolvedReferenceTypeInfo getInstance(UnresolvedClassInfo referencedClass) {
+        return new UnresolvedReferenceTypeInfo(referencedClass.getFullQualifiedName());
+    }
 
     /**
      * 利用可能な名前空間名を保存するための変数，名前解決処理の際に用いる
@@ -175,10 +188,10 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      */
     private final String[] referenceName;
     
-    /**
-     * ownerも含めた参照名を保存する変数
-     */
-    private final String[] fullReferenceName;
+    ///**
+    // * ownerも含めた参照名を保存する変数
+    // */
+    //private final String[] fullReferenceName;
 
     /**
      * この参照がくっついている未解決参照型を保存する変数
