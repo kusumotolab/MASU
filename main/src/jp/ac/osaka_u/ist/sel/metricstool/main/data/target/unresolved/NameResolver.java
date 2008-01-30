@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
@@ -116,7 +117,8 @@ public final class NameResolver {
             throw new NullPointerException();
         }
 
-        for (final ClassInfo superClassInfo : classInfo.getSuperClasses()) {
+        for (final ClassInfo superClassInfo : ReferenceTypeInfo
+                .convert(classInfo.getSuperClasses())) {
 
             if (superClassInfo instanceof ExternalClassInfo) {
                 return (ExternalClassInfo) superClassInfo;
@@ -216,7 +218,8 @@ public final class NameResolver {
             }
 
             // 親クラスで定義されたフィールドを追加
-            for (final ClassInfo superClass : currentClass.getSuperClasses()) {
+            for (final ClassInfo superClass : ReferenceTypeInfo.convert(currentClass
+                    .getSuperClasses())) {
                 if (superClass instanceof TargetClassInfo) {
                     final List<TargetFieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
                             .getAvailableFieldsDefinedInSuperClasses((TargetClassInfo) superClass,
@@ -241,7 +244,7 @@ public final class NameResolver {
         }
 
         // 親クラスで定義されたフィールドを追加
-        for (final ClassInfo superClass : outestClass.getSuperClasses()) {
+        for (final ClassInfo superClass : ReferenceTypeInfo.convert(outestClass.getSuperClasses())) {
             if (superClass instanceof TargetClassInfo) {
                 final List<TargetFieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
                         .getAvailableFieldsDefinedInSuperClasses((TargetClassInfo) superClass,
@@ -291,7 +294,7 @@ public final class NameResolver {
         }
 
         // 親クラスで定義されたフィールドを追加
-        for (final ClassInfo superClass : classInfo.getSuperClasses()) {
+        for (final ClassInfo superClass : ReferenceTypeInfo.convert(classInfo.getSuperClasses())) {
             if (superClass instanceof TargetClassInfo) {
                 final List<TargetFieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
                         .getAvailableFieldsDefinedInSuperClasses((TargetClassInfo) superClass,
@@ -344,7 +347,7 @@ public final class NameResolver {
         }
 
         // 親クラスで定義されたフィールドを追加
-        for (final ClassInfo superClass : classInfo.getSuperClasses()) {
+        for (final ClassInfo superClass : ReferenceTypeInfo.convert(classInfo.getSuperClasses())) {
             if (superClass instanceof TargetClassInfo) {
                 final List<TargetFieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
                         .getAvailableFieldsDefinedInSuperClasses((TargetClassInfo) superClass,
@@ -393,7 +396,8 @@ public final class NameResolver {
             }
 
             // 親クラスで定義されたメソッドを追加
-            for (final ClassInfo superClass : currentClass.getSuperClasses()) {
+            for (final ClassInfo superClass : ReferenceTypeInfo.convert(currentClass
+                    .getSuperClasses())) {
                 if (superClass instanceof TargetClassInfo) {
                     final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
                             .getAvailableMethodsDefinedInSuperClasses((TargetClassInfo) superClass,
@@ -418,7 +422,7 @@ public final class NameResolver {
         }
 
         // 親クラスで定義されたメソッドを追加
-        for (final ClassInfo superClass : outestClass.getSuperClasses()) {
+        for (final ClassInfo superClass : ReferenceTypeInfo.convert(outestClass.getSuperClasses())) {
             if (superClass instanceof TargetClassInfo) {
                 final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
                         .getAvailableMethodsDefinedInSuperClasses((TargetClassInfo) superClass,
@@ -468,7 +472,7 @@ public final class NameResolver {
         }
 
         // 親クラスで定義されたメソッドを追加
-        for (final ClassInfo superClass : classInfo.getSuperClasses()) {
+        for (final ClassInfo superClass : ReferenceTypeInfo.convert(classInfo.getSuperClasses())) {
             if (superClass instanceof TargetClassInfo) {
                 final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
                         .getAvailableMethodsDefinedInSuperClasses((TargetClassInfo) superClass,
@@ -521,7 +525,7 @@ public final class NameResolver {
         }
 
         // 親クラスで定義されたメソッドを追加
-        for (final ClassInfo superClass : classInfo.getSuperClasses()) {
+        for (final ClassInfo superClass : ReferenceTypeInfo.convert(classInfo.getSuperClasses())) {
             if (superClass instanceof TargetClassInfo) {
                 final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
                         .getAvailableMethodsDefinedInSuperClasses((TargetClassInfo) superClass,
@@ -690,7 +694,8 @@ public final class NameResolver {
         availableDirectInnerClasses.addAll(classInfo.getInnerClasses());
 
         // 親クラスに対して再帰的に処理
-        for (final ClassInfo superClassInfo : classInfo.getSuperClasses()) {
+        for (final ClassInfo superClassInfo : ReferenceTypeInfo
+                .convert(classInfo.getSuperClasses())) {
 
             if (superClassInfo instanceof TargetClassInfo) {
                 final SortedSet<TargetInnerClassInfo> availableDirectInnerClassesInSuperClass = NameResolver
