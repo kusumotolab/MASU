@@ -45,7 +45,7 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
      * @return âåàçœÇ›ÇÃå^ÉpÉâÉÅÅ[É^
      */
     @Override
-    public TypeParameterInfo resolve(final TargetClassInfo usingClass,
+    public TypeParameterInfo resolveType(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -67,14 +67,14 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
             final TypeInfo extendsType = unresolvedExtendsType.resolveType(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
 
-            this.resolved = new SuperTypeParameterInfo(name, extendsType, superType);
+            this.resolvedInfo = new SuperTypeParameterInfo(name, extendsType, superType);
 
         } else {
 
-            this.resolved = new SuperTypeParameterInfo(name, null, superType);
+            this.resolvedInfo = new SuperTypeParameterInfo(name, null, superType);
         }
 
-        return this.resolved;
+        return this.resolvedInfo;
     }
 
     /**
