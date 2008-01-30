@@ -1,17 +1,15 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -73,36 +71,33 @@ public class UnresolvedArrayElementUsageInfo implements UnresolvedEntityUsageInf
         // –¢‰ğŒˆŒ^‚Ì–¼‘O‰ğŒˆ‚ª‚Å‚«‚È‚©‚Á‚½ê‡
         if (ownerUsage.getType() instanceof UnknownTypeInfo) {
 
-            // –¢‰ğŒˆŒ^‚ª”z—ñŒ^‚Å‚ ‚éê‡‚ÍCŒ^‚ğì¬‚·‚é
-            if (unresolvedOwnerUsage instanceof UnresolvedArrayTypeInfo) {
-                final UnresolvedEntityUsageInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedOwnerUsage)
-                        .getElementType();
-                final int dimension = ((UnresolvedArrayTypeInfo) unresolvedOwnerUsage)
-                        .getDimension();
-                final ExternalClassInfo externalClassInfo = NameResolver
-                        .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedElementType);
-                classInfoManager.add(externalClassInfo);
-
-                // TODO Œ^ƒpƒ‰ƒ[ƒ^‚Ìî•ñ‚ğŠi”[‚·‚é
-                final ReferenceTypeInfo reference = new ReferenceTypeInfo(externalClassInfo);
-                ownerUsage = ArrayTypeInfo.getType(reference, dimension);
-
-                // ”z—ñŒ^ˆÈŠO‚Ìê‡‚Í‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
-            } else {
-
-                usingMethod.addUnresolvedUsage(this);
-                this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
-                return this.resolvedInfo;
-            }
+            //            // –¢‰ğŒˆŒ^‚ª”z—ñŒ^‚Å‚ ‚éê‡‚ÍCŒ^‚ğì¬‚·‚é
+            //            if (unresolvedOwnerUsage instanceof UnresolvedArrayTypeInfo) {
+            //                final UnresolvedEntityUsageInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedOwnerUsage)
+            //                        .getElementType();
+            //                final int dimension = ((UnresolvedArrayTypeInfo) unresolvedOwnerUsage)
+            //                        .getDimension();
+            //                final ExternalClassInfo externalClassInfo = NameResolver
+            //                        .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedElementType);
+            //                classInfoManager.add(externalClassInfo);
+            //
+            //                // TODO Œ^ƒpƒ‰ƒ[ƒ^‚Ìî•ñ‚ğŠi”[‚·‚é
+            //                final ReferenceTypeInfo reference = new ReferenceTypeInfo(externalClassInfo);
+            //                ownerUsage = ArrayTypeInfo.getType(reference, dimension);
+            //
+            //                // ”z—ñŒ^ˆÈŠO‚Ìê‡‚Í‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
+            //            } else {
+            //
+            //                usingMethod.addUnresolvedUsage(this);
+            //                this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+            //                return this.resolvedInfo;
+            //            }
+            usingMethod.addUnresolvedUsage(this);
+            this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+            return this.resolvedInfo;
         }
 
-        // ”z—ñ‚ÌŸŒ³‚É‰‚¶‚ÄŒ^‚ğ¶¬
-        final int ownerArrayDimension = ((ArrayTypeInfo) ownerUsage).getDimension();
-        final EntityUsageInfo ownerArrayElement = ((ArrayTypeInfo) ownerUsage).getElement();
-
-        // ”z—ñ‚ª“ñŸŒ³ˆÈã‚Ìê‡‚ÍCŸŒ³‚ğˆê‚Â—‚Æ‚µ‚½”z—ñ‚ğ•Ô‚µC”z—ñ‚ªˆêŸŒ³‚Ìê‡‚Í—v‘f‚ÌŒ^‚ğ•Ô‚·
-        this.resolvedInfo = 1 < ownerArrayDimension ? ArrayTypeInfo.getType(ownerArrayElement,
-                ownerArrayDimension - 1) : ownerArrayElement;
+        this.resolvedInfo = new ArrayElementUsageInfo(ownerUsage);
         return this.resolvedInfo;
     }
 
