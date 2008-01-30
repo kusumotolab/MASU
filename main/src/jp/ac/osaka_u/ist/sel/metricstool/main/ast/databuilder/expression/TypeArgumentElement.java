@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 /**
@@ -26,6 +27,10 @@ public class TypeArgumentElement implements ExpressionElement{
      */
     public UnresolvedTypeInfo getType() {
         return type;
+    }
+    
+    public UnresolvedEntityUsageInfo getUsage() {
+        return null;
     }
     
     /**

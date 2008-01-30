@@ -7,9 +7,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBinominalOperationInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 
 
 public class OperatorExpressionBuilder extends ExpressionBuilder {
@@ -44,7 +45,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
         
         if (term > 0 && term == elements.length){
             //各項の型を記録する配列
-            final UnresolvedTypeInfo[] termTypes = new UnresolvedTypeInfo[elements.length];
+            final UnresolvedEntityUsageInfo[] termTypes = new UnresolvedEntityUsageInfo[elements.length];
     
             //最左辺値について
             if (elements[0] instanceof IdentifierElement) {
@@ -60,12 +61,12 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     termTypes[0] = leftElement.resolveAsAssignmetedVariable(this.buildDataManager);
                 }
             } else if (elements[0].equals(InstanceSpecificElement.THIS)){
-                termTypes[0] = buildDataManager.getCurrentClass();
+                termTypes[0] = InstanceSpecificElement.getThisInstanceType(buildDataManager);
             } else if (elements[0].equals(InstanceSpecificElement.NULL)){
                 termTypes[0] = NullTypeInfo.getInstance();
             } else {
                 //それ以外の場合は直接型を取得する
-                termTypes[0] = elements[0].getType();
+                termTypes[0] = elements[0].getUsage();
             }
     
             //2項目以降について
@@ -75,12 +76,12 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     termTypes[i] = ((IdentifierElement) elements[i])
                             .resolveAsReferencedVariable(this.buildDataManager);
                 } else if (elements[i].equals(InstanceSpecificElement.THIS)){
-                    termTypes[i] = buildDataManager.getCurrentClass();
+                    termTypes[i] = InstanceSpecificElement.getThisInstanceType(buildDataManager);
                 } else if (elements[i].equals(InstanceSpecificElement.NULL)){
                     termTypes[i] = NullTypeInfo.getInstance();
                 } else {
                     //それ以外なら直接型を取得する
-                    termTypes[i] = elements[i].getType();
+                    termTypes[i] = elements[i].getUsage();
                 }
             }
             
@@ -92,26 +93,26 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 assert(null != termTypes[1]) : "Illega state: second term type was not decided.";
                 
                 UnresolvedBinominalOperationInfo operation = new UnresolvedBinominalOperationInfo(operator,termTypes[0],termTypes[1]);
-                pushElement(TypeElement.getInstance(operation));
+                pushElement(UsageElement.getInstance(operation));
                 
             } else{
                 //自分で型決定する
-                UnresolvedTypeInfo resultType = null;
+                UnresolvedEntityUsageInfo resultType = null;
                 
                 //オペレータによってすでに決定している戻り値の型，確定していなければnull
-                final UnresolvedTypeInfo type = token.getSpecifiedResultType();
+                final PrimitiveTypeInfo type = token.getSpecifiedResultType();
                 
                 if (null != type) {
                     //オペレータによってすでに結果の型が決定している
                     resultType = type;
                 } else if (token.equals(OperatorToken.ARRAY)) {
                     //配列記述子の場合は特別処理
-                    UnresolvedTypeInfo ownerType;
+                    UnresolvedEntityUsageInfo ownerType;
                     if (elements[0] instanceof IdentifierElement) {
                         ownerType = ((IdentifierElement) elements[0])
                                 .resolveAsReferencedVariable(this.buildDataManager);
                     } else {
-                        ownerType = elements[0].getType();
+                        ownerType = elements[0].getUsage();
                     }
                     resultType = new UnresolvedArrayElementUsageInfo(ownerType);
                 } else {
@@ -123,10 +124,10 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                         }
                     }
                 }
-                
+
                 assert (null != resultType) : "Illegal state: operation resultType was not decided.";
                 
-                this.pushElement(TypeElement.getInstance(resultType));
+                this.pushElement(UsageElement.getInstance(resultType));
             }
         }
     }

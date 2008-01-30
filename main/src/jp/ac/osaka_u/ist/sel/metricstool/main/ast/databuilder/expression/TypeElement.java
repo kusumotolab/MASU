@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -36,6 +37,10 @@ public class TypeElement implements ExpressionElement {
 
     public UnresolvedTypeInfo getType() {
         return this.type;
+    }
+    
+    public UnresolvedEntityUsageInfo getUsage() {
+        return null;
     }
 
     private TypeElement(final UnresolvedTypeInfo type) {

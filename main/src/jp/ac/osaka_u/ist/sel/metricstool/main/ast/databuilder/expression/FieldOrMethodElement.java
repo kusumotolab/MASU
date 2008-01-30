@@ -29,6 +29,13 @@ public class FieldOrMethodElement implements IdentifierElement{
         return null;
     }
     
+    /**
+     * ‚±‚ÌƒNƒ‰ƒX‚ªŠi”[‚·‚é
+     */
+    public UnresolvedEntityUsageInfo getUsage() {
+        return null;
+    }
+    
     public String[] getQualifiedName() {
         throw new UnsupportedOperationException();
     }

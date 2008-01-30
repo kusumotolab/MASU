@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
 /**
@@ -110,7 +109,7 @@ public class OperatorToken extends AstTokenAdapter {
      */
     public OperatorToken(final OPERATOR operator, final String text, final int termCount,
             final boolean leftIsAssignmentee, final boolean leftIsReferencee,
-            final UnresolvedTypeInfo specifiedResultType, final int[] typeSpecifiedTermIndexes) {
+            final PrimitiveTypeInfo specifiedResultType, final int[] typeSpecifiedTermIndexes) {
         super(text);
 
         if (termCount <= 0) {
@@ -174,7 +173,7 @@ public class OperatorToken extends AstTokenAdapter {
      * Œˆ‚Ü‚Á‚Ä‚¢‚È‚¢ê‡‚Ínull‚ð•Ô‚·.
      * @return ‰‰ŽZŒ‹‰Ê‚ÌŒ^‚ªŒˆ‚Ü‚Á‚Ä‚¢‚éê‡‚Í‚»‚ÌŒ^CŒˆ‚Ü‚Á‚Ä‚¢‚È‚¢ê‡‚Ínull
      */
-    public UnresolvedTypeInfo getSpecifiedResultType() {
+    public PrimitiveTypeInfo getSpecifiedResultType() {
         return this.specifiedResultType;
     }
 
@@ -211,7 +210,7 @@ public class OperatorToken extends AstTokenAdapter {
      * ‰‰ŽZŒ‹‰Ê‚ÌŒ^‚ð•\‚·.
      * Œˆ‚Ü‚Á‚Ä‚¢‚È‚¢ê‡‚Ínull.
      */
-    private final UnresolvedTypeInfo specifiedResultType;
+    private final PrimitiveTypeInfo specifiedResultType;
 
     /**
      * ‰‰ŽZŒ‹‰Ê‚ÌŒ^‚ðŒˆ’è‚³‚ê‚éÛ‚Él—¶‚³‚ê‚é€‚ÌƒCƒ“ƒfƒbƒNƒX‚Ì”z—ñ

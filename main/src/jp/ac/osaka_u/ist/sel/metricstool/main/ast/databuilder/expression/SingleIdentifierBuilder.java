@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassReferenceInfo;
 
 public class SingleIdentifierBuilder extends ExpressionBuilder{
 
@@ -18,7 +19,8 @@ public class SingleIdentifierBuilder extends ExpressionBuilder{
         if (token.isIdentifier()){
 //            AvailableNamespaceInfoSet nameSpaceset = buildDataManager.getAllAvaliableNames();
 //            UnresolvedReferenceTypeInfo unresolvedReference = new UnresolvedReferenceTypeInfo(nameSpaceset,new String[]{token.toString()});
-            pushElement(new SingleIdentifierElement(token.toString(),buildDataManager.getCurrentClass()));
+        	UnresolvedClassReferenceInfo currentClassReference = InstanceSpecificElement.getThisInstanceType(buildDataManager);
+            pushElement(new SingleIdentifierElement(token.toString(), currentClassReference));
         }
     }
 

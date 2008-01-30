@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.FieldOr
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.IdentifierElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.InstanceSpecificElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElement;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
@@ -40,7 +41,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
             UnresolvedClassInfo classInfo = getSpecifiedOuterClass((IdentifierElement)left);
             
             if (classInfo != null){
-                pushElement(TypeElement.getInstance(classInfo));
+                pushElement(UsageElement.getInstance(classInfo.getClassReference()));
             } else {
                 assert(false) : "Illegal state: specified this class " + ((IdentifierElement)left).getName() + " was not found from outer classes.";
             }
@@ -65,7 +66,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
                     UnresolvedReferenceTypeInfo currentSuperClass = currentClass.getSuperClasses().iterator().next();
                     String[] names = null;
                     if ( null != currentSuperClass ){
-                        names = currentSuperClass.getFullReferenceName();
+                        //names = currentSuperClass.getFullReferenceName();
+                        names = currentSuperClass.getReferenceName();
                     }
                     if (null != names && variable.getType() instanceof UnresolvedReferenceTypeInfo){
                     	UnresolvedReferenceTypeInfo variableType = (UnresolvedReferenceTypeInfo) variable.getType();

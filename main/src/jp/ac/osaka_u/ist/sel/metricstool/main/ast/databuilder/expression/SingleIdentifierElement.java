@@ -24,6 +24,10 @@ public class SingleIdentifierElement implements IdentifierElement{
         return null;
     }
     
+    public UnresolvedEntityUsageInfo getUsage() {
+        return null;
+    }
+    
     public String[] getQualifiedName() {
         return qualifiedName;
     }

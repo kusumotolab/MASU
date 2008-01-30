@@ -3,7 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 
 /**
  * 
@@ -66,16 +66,16 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder{
                 SingleIdentifierElement rightIdentifier = (SingleIdentifierElement)right;
                 String rightName = rightIdentifier.getName();
                 
-                UnresolvedTypeInfo leftElementType = null;
+                UnresolvedEntityUsageInfo leftElementType = null;
                 
                 if (left instanceof FieldOrMethodElement){
                     IdentifierElement leftIdentifier = (IdentifierElement)left;
                     leftElementType = leftIdentifier.resolveAsReferencedVariable(buildDataManager);
                 } else if (left.equals(InstanceSpecificElement.THIS)){
                     //左側がthisなら右側はこのクラスのフィールド名かメソッド名
-                    leftElementType = buildDataManager.getCurrentClass();
+                    leftElementType = InstanceSpecificElement.getThisInstanceType(buildDataManager);
                 } else {
-                    leftElementType = left.getType();
+                    leftElementType = left.getUsage();
                 }
                 
                 if (null != leftElementType){
@@ -87,7 +87,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder{
                 } else {
                     assert(false) : "Illegal state: unknown left element type.";
                 }
-            } else if (right instanceof MethodCallElement){
+            } else if (right instanceof UsageElement && ((UsageElement) right).isMemberCall()){
                 //a.new X というJavaの内部クラスのnew文っぽいケースの場合
                 pushElement(right);
             } else {

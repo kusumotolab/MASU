@@ -5,16 +5,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ConstructorCallBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.MethodCallElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElement;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -45,10 +45,10 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         assert (elements.length > 0) : "Illegal state: constructor element not found.";
 
         assert (elements[0] instanceof TypeElement) : "Illegal state: constructor owner is not type.";
-
+        TypeElement typeElement = (TypeElement) elements[0];
         if (isJavaArrayInstantiation(elements)) {
             //”z—ñ‚Ìnew•¶‚Í‚±‚Á‚¿‚Åˆ—‚·‚é
-            UnresolvedTypeInfo type = (UnresolvedTypeInfo) elements[0].getType();
+            UnresolvedTypeInfo type = typeElement.getType();
             pushElement(TypeElement.getInstance(resolveArrayElement(type, elements)));
         } else {
             //‚»‚êˆÈŠO‚Í•’Ê‚Éˆ—‚·‚é
@@ -66,7 +66,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
         UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(referenceType);
         resolveParameters(constructorCall, elements, 0);
-        pushElement(new MethodCallElement(constructorCall));
+        pushElement(UsageElement.getInstance(constructorCall));
         buildDataManager.addMethodCall(constructorCall);
     }
 
@@ -75,7 +75,8 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
         int argStartIndex = 0;
 
-        String[] superClassReferenceName = superClass.getFullReferenceName();
+        //String[] superClassReferenceName = superClass.getFullReferenceName();
+        String[] superClassReferenceName = superClass.getReferenceName();
         String className = superClassReferenceName[superClassReferenceName.length - 1];
 
         if (elements.length > 0 && elements[0] instanceof TypeElement) {
@@ -85,8 +86,8 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
             UnresolvedTypeInfo type = ((TypeElement) elements[0]).getType();
             if (type instanceof UnresolvedReferenceTypeInfo) {
-                String[] firstElementReference = ((UnresolvedReferenceTypeInfo) type)
-                        .getFullReferenceName();
+                String[] firstElementReference = ((UnresolvedReferenceTypeInfo) type).getReferenceName();
+                        //.getFullReferenceName();
                 if (firstElementReference.length < superClassReferenceName.length) {
                     boolean match = true;
                     for (int i = 0; i < firstElementReference.length; i++) {
@@ -106,7 +107,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
         UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(superClass);
         resolveParameters(constructorCall, elements, argStartIndex);
-        pushElement(new MethodCallElement(constructorCall));
+        pushElement(UsageElement.getInstance(constructorCall));
         buildDataManager.addMethodCall(constructorCall);
 
     }

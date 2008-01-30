@@ -49,6 +49,10 @@ public class CompoundIdentifierElement implements IdentifierElement {
     public UnresolvedTypeInfo getType() {
         return null;
     }
+    
+    public UnresolvedEntityUsageInfo getUsage() {
+        return null;
+    }
 
     public UnresolvedEntityUsageInfo getOwnerUsage() {
         return this.ownerType;

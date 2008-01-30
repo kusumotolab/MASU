@@ -104,8 +104,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * @return ‚±‚ÌQÆŒ^‚Ì–¼‘O‚ğ•Ô‚·
      */
     public final String getTypeName() {
-        final String[] referenceName = this.getReferenceName();
-        return referenceName[referenceName.length - 1];
+        return this.referenceName[this.referenceName.length - 1];
     }
 
     ///**
