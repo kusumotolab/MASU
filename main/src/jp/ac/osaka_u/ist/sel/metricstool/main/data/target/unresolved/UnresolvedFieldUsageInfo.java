@@ -57,27 +57,6 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
     }
 
     /**
-     * この未解決フィールド使用が既に解決されているかどうかを返す
-     * 
-     * @return 既に解決されている場合は true, そうでない場合は false
-     */
-    public boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    /**
-     * 解決済みフィールド使用を返す
-     */
-    public EntityUsageInfo getResolvedEntityUsage() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolvedInfo;
-    }
-
-    /**
      * 未解決フィールド使用を解決し，その型を返す．
      * 
      * @param usingClass 未解決フィールド使用が行われているクラス
@@ -256,24 +235,6 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
     }
 
     /**
-     * このフィールド使用が参照であるかどうかを返す
-     * 
-     * @return 参照である場合は true，代入である場合は false
-     */
-    public boolean isReference() {
-        return this.reference;
-    }
-
-    /**
-     * このフィールド使用が代入であるかどうかを返す
-     * 
-     * @return 代入である場合は true，参照である場合は false
-     */
-    public boolean isAssignment() {
-        return !this.reference;
-    }
-
-    /**
      * 使用可能な名前空間を保存するための変数
      */
     private final AvailableNamespaceInfoSet availableNamespaces;
@@ -287,11 +248,6 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
      * フィールド名を保存するための変数
      */
     private final String fieldName;
-
-    /**
-     * フィールド使用の参照・代入を表す変数
-     */
-    private final boolean reference;
 
     /**
      * 解決済みフィールド使用を保存するための変数
