@@ -34,7 +34,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
         this.availableNamespaceSet = availableNamespaces;
         this.referenceName = referenceName;
         //this.fullReferenceName = referenceName;
-        this.ownerType = null;
+        //this.ownerType = null;
         this.typeParameterUsages = new LinkedList<UnresolvedReferenceTypeInfo>();
     }
     
@@ -126,23 +126,23 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
         return this.referenceName;
     }
 
-    /**
-     * この参照型がくっついている未解決参照型を返す
-     * 
-     * @return この参照型がくっついている未解決参照型
-     */
-    public final UnresolvedReferenceTypeInfo getOwnerType() {
+    ///**
+    // * この参照型がくっついている未解決参照型を返す
+    // * 
+    // * @return この参照型がくっついている未解決参照型
+    // */
+    /*public final UnresolvedReferenceTypeInfo getOwnerType() {
         return this.ownerType;
-    }
+    }*/
 
-    /**
-     * この参照型が，他の参照型にくっついているかどうかを返す
-     * 
-     * @return くっついている場合は true，くっついていない場合は false
-     */
-    public final boolean hasOwnerReference() {
+    ///**
+    // * この参照型が，他の参照型にくっついているかどうかを返す
+    // * 
+    // * @return くっついている場合は true，くっついていない場合は false
+    // */
+    /*public final boolean hasOwnerReference() {
         return null != this.ownerType;
-    }
+    }*/
 
     /**
      * この参照型の参照名を引数で与えられた文字で結合して返す
@@ -193,10 +193,10 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
     // */
     //private final String[] fullReferenceName;
 
-    /**
-     * この参照がくっついている未解決参照型を保存する変数
-     */
-    private final UnresolvedReferenceTypeInfo ownerType;
+    ///**
+    // * この参照がくっついている未解決参照型を保存する変数
+    // */
+    //private final UnresolvedReferenceTypeInfo ownerType;
 
     /**
      * 型引数参照を保存するための変数
