@@ -636,10 +636,8 @@ public final class UnresolvedClassInfo implements VisualizableSetting, MemberSet
      * @return この未解決クラス定義情報の未解決参照型
      */
     public UnresolvedClassReferenceInfo getClassReference() {
-
-        final String[] fullQualifiedName = this.getFullQualifiedName();
-        final UnresolvedFullQualifiedNameClassReferenceInfo classReference = new UnresolvedFullQualifiedNameClassReferenceInfo(
-                new AvailableNamespaceInfoSet(), fullQualifiedName);
+        final UnresolvedClassReferenceInfo classReference = new UnresolvedFullQualifiedNameClassReferenceInfo(
+                this);
         return classReference;
     }
 

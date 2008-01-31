@@ -10,6 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.Instanc
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFullQualifiedNameClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassReferenceInfo;
@@ -57,10 +58,10 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
             if (left instanceof IdentifierElement){
                 //まず変数名.super()というコンストラクタ呼び出しかどうかを確認する
                 IdentifierElement identifier = (IdentifierElement)left;
-                UnresolvedEntityUsageInfo identifierType = identifier.resolveReferencedEntityIfPossible(buildDataManager);
-                if (null != identifierType && identifier instanceof UnresolvedVariableUsageInfo){
+                UnresolvedEntityUsageInfo ownerUsage = identifier.resolveReferencedEntityIfPossible(buildDataManager);
+                if (null != ownerUsage && ownerUsage instanceof UnresolvedVariableUsageInfo){
                     //変数が見つかった
-                    UnresolvedVariableInfo variable = ((UnresolvedVariableUsageInfo) identifierType).getReferencedVariable();
+                    UnresolvedVariableInfo variable = ((UnresolvedVariableUsageInfo) ownerUsage).getReferencedVariable();
                     boolean match = false;
                     UnresolvedClassInfo currentClass = buildDataManager.getCurrentClass();
                     UnresolvedReferenceTypeInfo currentSuperClass = currentClass.getSuperClasses().iterator().next();
@@ -89,8 +90,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
                     //OuterClass.super.method()というメソッド呼び出しのようだ
                     classInfo = getSpecifiedOuterClass((IdentifierElement)left);
                 }
-            } else if (left instanceof TypeElement && left.getType() instanceof UnresolvedClassInfo) {
-                classInfo = (UnresolvedClassInfo)left.getType();
+            } else if (left.getUsage() instanceof UnresolvedFullQualifiedNameClassReferenceInfo) {
+                classInfo = ((UnresolvedFullQualifiedNameClassReferenceInfo) left.getUsage()).getReferencedClass();
             } else {
                 classInfo = buildDataManager.getCurrentClass();
             }
