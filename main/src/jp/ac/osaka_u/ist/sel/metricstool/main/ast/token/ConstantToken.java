@@ -40,6 +40,7 @@ public class ConstantToken extends AstTokenAdapter {
      * 定数を表すトークンかどうかを返す．
      * @return true
      */
+    @Override
     public boolean isConstant(){
         return true;
     }

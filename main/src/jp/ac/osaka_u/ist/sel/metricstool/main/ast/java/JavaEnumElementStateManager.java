@@ -13,6 +13,7 @@ public class JavaEnumElementStateManager extends StackedAstVisitStateManager<Jav
         EXIT_ENUM_ELEMENT
     }
     
+    @Override
     public void entered(AstVisitEvent event){
         super.entered(event);
         
@@ -26,6 +27,7 @@ public class JavaEnumElementStateManager extends StackedAstVisitStateManager<Jav
         }
     }
     
+    @Override
     public void exited(AstVisitEvent event){
         super.exited(event);
         

@@ -21,6 +21,7 @@ public class JavaAnonymousClassStateManager extends StackedAstVisitStateManager<
         EXIT_INSTANTIATION;
     }
 
+    @Override
     public void entered(AstVisitEvent event){
         super.entered(event);
         AstToken token = event.getToken();
@@ -33,6 +34,7 @@ public class JavaAnonymousClassStateManager extends StackedAstVisitStateManager<
         }
     }
     
+    @Override
     public void exited(AstVisitEvent event){
         super.exited(event);
         AstToken token = event.getToken();

@@ -20,6 +20,7 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
         this.addStateManager(this.expressionStateManger);
     }
 
+    @Override
     public final void entered(AstVisitEvent e) {
         super.entered(e);
 
@@ -27,26 +28,27 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
 
         if (isActive() && isInExpression() && isTriggerToken(token)
                 || isExpressionDelimiterToken(token)) {
-            expressionStackCountStack.push(expressionManager.getExpressionStackSize());
+            this.expressionStackCountStack.push(this.expressionManager.getExpressionStackSize());
         }
     }
 
+    @Override
     public void exited(AstVisitEvent e) {
         AstToken token = e.getToken();
 
         boolean isRelated = isActive() && isInExpression() && isTriggerToken(token);
         if (isRelated || isExpressionDelimiterToken(token)) {
-            assert (!expressionStackCountStack.isEmpty()) : "Illegal state: illegal stack size.";
+            assert (!this.expressionStackCountStack.isEmpty()) : "Illegal state: illegal stack size.";
 
-            int availableElementCount = expressionManager.getExpressionStackSize()
-                    - expressionStackCountStack.pop();
+            int availableElementCount = this.expressionManager.getExpressionStackSize()
+                    - this.expressionStackCountStack.pop();
 
             assert (0 <= availableElementCount) : "Illegal state: illegal stack size.";
 
-            elementBuffer.clear();
+            this.elementBuffer.clear();
 
             for (int i = 0; i < availableElementCount; i++) {
-                elementBuffer.add(0, expressionManager.popExpressionElement());
+                this.elementBuffer.add(0, this.expressionManager.popExpressionElement());
             }
         }
 
@@ -65,17 +67,17 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
     protected abstract void afterExited(AstVisitEvent event);
 
     protected boolean isInExpression() {
-        return expressionStateManger.inExpression();
+        return this.expressionStateManger.inExpression();
     }
 
     protected abstract boolean isTriggerToken(AstToken token);
 
     protected final ExpressionElement[] getAvailableElements() {
-        return elementBuffer.toArray(new ExpressionElement[elementBuffer.size()]);
+        return this.elementBuffer.toArray(new ExpressionElement[this.elementBuffer.size()]);
     }
 
     protected final void pushElement(ExpressionElement element) {
-        expressionManager.pushExpressionElement(element);
+        this.expressionManager.pushExpressionElement(element);
     }
 
     private boolean isExpressionDelimiterToken(AstToken token) {

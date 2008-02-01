@@ -26,6 +26,7 @@ public class JavaTypeElementBuilder extends TypeElementBuilder{
      * @return å^óvëfÇÃå^ÇÃè„å¿
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElementBuilder#getTypeUpperBounds()
      */
+    @Override
     protected UnresolvedTypeInfo getTypeUpperBounds(){
         UnresolvedTypeInfo type = super.getTypeUpperBounds();
         if (null == type){

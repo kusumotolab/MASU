@@ -17,6 +17,7 @@ public class MethodCallBuilder extends ExpressionBuilder{
         this.buildDataManager = buildDataManager;
     }
 
+    @Override
     protected void afterExited(AstVisitEvent event){
         AstToken token = event.getToken();
         if (token.isMethodCall()){
@@ -31,15 +32,15 @@ public class MethodCallBuilder extends ExpressionBuilder{
             if (elements[0] instanceof IdentifierElement){
                 IdentifierElement callee = (IdentifierElement)elements[0];
                 
-                callee = callee.resolveAsCalledMethod(buildDataManager);
+                callee = callee.resolveAsCalledMethod(this.buildDataManager);
                 
                 UnresolvedMethodCallInfo methodCall = new UnresolvedMethodCallInfo(callee.getOwnerUsage(),callee.getName());
                 for(int i=1; i < elements.length; i++){
                     ExpressionElement argment = elements[i];
                     if (argment instanceof IdentifierElement){
-                        methodCall.addParameter(((IdentifierElement)argment).resolveAsReferencedVariable(buildDataManager));
+                        methodCall.addParameter(((IdentifierElement)argment).resolveAsReferencedVariable(this.buildDataManager));
                     } else if (argment.equals(InstanceSpecificElement.THIS)){
-                        methodCall.addParameter(InstanceSpecificElement.getThisInstanceType(buildDataManager));
+                        methodCall.addParameter(InstanceSpecificElement.getThisInstanceType(this.buildDataManager));
                     } else if (argment instanceof TypeArgumentElement) {
                     	// TODO C#などの場合は型引数に参照型以外も指定できるので対処が必要かも
                         TypeArgumentElement typeArgument = (TypeArgumentElement) argment;
@@ -51,7 +52,7 @@ public class MethodCallBuilder extends ExpressionBuilder{
                 }
                 
                 pushElement(UsageElement.getInstance(methodCall));
-                buildDataManager.addMethodCall(methodCall);
+                this.buildDataManager.addMethodCall(methodCall);
             }
             
         } else {

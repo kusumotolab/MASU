@@ -39,6 +39,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         }
     }
 
+    @Override
     protected void buildNewConstructorCall() {
         ExpressionElement[] elements = getAvailableElements();
 

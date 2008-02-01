@@ -30,6 +30,7 @@ public class JavaTypeParameterBuilder extends TypeParameterBuilder{
      * @return 親クラスで上限の型が決定できればその情報，できなければjava.lang.Objectを表す型情報
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.TypeParameterBuilder#getUpperBounds()
      */
+    @Override
     protected UnresolvedTypeInfo getUpperBounds(){
         UnresolvedTypeInfo extendsTypeInfo = super.getUpperBounds();
         if (null == extendsTypeInfo){

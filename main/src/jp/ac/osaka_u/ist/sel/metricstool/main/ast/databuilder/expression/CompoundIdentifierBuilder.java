@@ -20,6 +20,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder{
         this.buildDataManager = buildManager;
     }
     
+    @Override
     protected void afterExited(AstVisitEvent event){
         
         AstToken token = event.getToken();
@@ -70,10 +71,10 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder{
                 
                 if (left instanceof FieldOrMethodElement){
                     IdentifierElement leftIdentifier = (IdentifierElement)left;
-                    leftElementType = leftIdentifier.resolveAsReferencedVariable(buildDataManager);
+                    leftElementType = leftIdentifier.resolveAsReferencedVariable(this.buildDataManager);
                 } else if (left.equals(InstanceSpecificElement.THIS)){
                     //左側がthisなら右側はこのクラスのフィールド名かメソッド名
-                    leftElementType = InstanceSpecificElement.getThisInstanceType(buildDataManager);
+                    leftElementType = InstanceSpecificElement.getThisInstanceType(this.buildDataManager);
                 } else {
                     leftElementType = left.getUsage();
                 }

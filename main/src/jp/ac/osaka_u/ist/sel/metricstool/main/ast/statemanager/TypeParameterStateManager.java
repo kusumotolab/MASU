@@ -30,6 +30,7 @@ public class TypeParameterStateManager extends StackedAstVisitStateManager<TypeP
      * 
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#entered(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
+    @Override
     public void entered(AstVisitEvent event){
         super.entered(event);
         
@@ -53,6 +54,7 @@ public class TypeParameterStateManager extends StackedAstVisitStateManager<TypeP
      * 
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#exited(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
+    @Override
     public void exited(AstVisitEvent event){
         super.exited(event);
         

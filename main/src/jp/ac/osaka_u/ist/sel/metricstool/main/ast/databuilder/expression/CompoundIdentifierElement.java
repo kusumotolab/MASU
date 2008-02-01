@@ -49,7 +49,7 @@ public class CompoundIdentifierElement implements IdentifierElement {
     public UnresolvedTypeInfo getType() {
         return null;
     }
-    
+
     public UnresolvedEntityUsageInfo getUsage() {
         return null;
     }
@@ -58,7 +58,8 @@ public class CompoundIdentifierElement implements IdentifierElement {
         return this.ownerType;
     }
 
-    public UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(final BuildDataManager buildDataManager) {
+    public UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(
+            final BuildDataManager buildDataManager) {
         this.ownerType = this.resolveOwner(buildDataManager);
         final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
                 .getAllAvaliableNames(), this.ownerType, this.name, false);
@@ -71,7 +72,8 @@ public class CompoundIdentifierElement implements IdentifierElement {
         return this;
     }
 
-    public UnresolvedVariableUsageInfo resolveAsReferencedVariable(final BuildDataManager buildDataManager) {
+    public UnresolvedVariableUsageInfo resolveAsReferencedVariable(
+            final BuildDataManager buildDataManager) {
         this.ownerType = this.resolveOwner(buildDataManager);
         final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
                 .getAllAvaliableNames(), this.ownerType, this.name, true);
@@ -79,27 +81,25 @@ public class CompoundIdentifierElement implements IdentifierElement {
         return fieldUsage;
     }
 
-    public UnresolvedEntityUsageInfo resolveReferencedEntityIfPossible(final BuildDataManager buildDataManager) {
+    public UnresolvedEntityUsageInfo resolveReferencedEntityIfPossible(
+            final BuildDataManager buildDataManager) {
         this.ownerType = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
 
         if (this.ownerType != null) {
-            final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
-                    .getAllAvaliableNames(), this.ownerType, this.name, true);
+            final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(
+                    buildDataManager.getAllAvaliableNames(), this.ownerType, this.name, true);
             buildDataManager.addFieldReference(fieldUsage);
             return fieldUsage;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     protected UnresolvedEntityUsageInfo resolveOwner(final BuildDataManager buildDataManager) {
         this.ownerType = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
-        if (null != this.ownerType) {
-            return this.ownerType;
-        } else {
-            return new UnresolvedUnknownUsageInfo(buildDataManager.getAllAvaliableNames(), this.owner
-                    .getQualifiedName());
-        }
+
+        return null != this.ownerType ? this.ownerType : new UnresolvedUnknownUsageInfo(
+                buildDataManager.getAllAvaliableNames(), this.owner.getQualifiedName());
     }
 
     private final String name;
