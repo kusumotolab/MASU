@@ -32,14 +32,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * <li>未解決インナークラス一覧</li>
  * <li>未解決定義メソッド一覧</li>
  * <li>未解決定義フィールド一覧</li>
- * <li>ファイル内位置</li>
  * </ul>
  * 
  * @author higo
  * 
  */
 public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInfo> implements
-        VisualizableSetting, MemberSetting, PositionSetting {
+        VisualizableSetting, MemberSetting {
 
     /**
      * 引数なしコンストラクタ
