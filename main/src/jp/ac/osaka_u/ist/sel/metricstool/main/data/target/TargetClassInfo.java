@@ -31,7 +31,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public class TargetClassInfo extends ClassInfo implements Visualizable, Member, Position {
+public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
 
     /**
      * 名前空間名，クラス名を与えてクラス情報オブジェクトを初期化
@@ -54,7 +54,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
             final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(namespace, className);
+        super(namespace, className, fromLine, fromColumn, toLine, toColumn);
 
         if (null == modifiers) {
             throw new NullPointerException();
@@ -74,11 +74,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
         this.publicVisible = publicVisible;
 
         this.instance = instance;
-
-        this.fromLine = fromLine;
-        this.fromColumn = fromColumn;
-        this.toLine = toLine;
-        this.toColumn = toColumn;
     }
 
     /**
@@ -102,7 +97,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
             final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(fullQualifiedName);
+        super(fullQualifiedName, fromLine, fromColumn, toLine, toColumn);
 
         if (null == modifiers) {
             throw new NullPointerException();
@@ -122,11 +117,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
         this.publicVisible = publicVisible;
 
         this.instance = instance;
-
-        this.fromLine = fromLine;
-        this.fromColumn = fromColumn;
-        this.toLine = toLine;
-        this.toColumn = toColumn;
     }
 
     /**
@@ -298,42 +288,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
     }
 
     /**
-     * 開始行を返す
-     * 
-     * @return 開始行
-     */
-    public final int getFromLine() {
-        return this.fromLine;
-    }
-
-    /**
-     * 開始列を返す
-     * 
-     * @return 開始列
-     */
-    public final int getFromColumn() {
-        return this.fromColumn;
-    }
-
-    /**
-     * 終了行を返す
-     * 
-     * @return 終了行
-     */
-    public final int getToLine() {
-        return this.toLine;
-    }
-
-    /**
-     * 終了列を返す
-     * 
-     * @return 終了列
-     */
-    public final int getToColumn() {
-        return this.toColumn;
-    }
-
-    /**
      * 修飾子を保存する変数
      */
     private final Set<ModifierInfo> modifiers;
@@ -382,24 +336,4 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member, 
      * インスタンスメンバーかどうかを保存するための変数
      */
     private final boolean instance;
-
-    /**
-     * 開始行を保存するための変数
-     */
-    private final int fromLine;
-
-    /**
-     * 開始列を保存するための変数
-     */
-    private final int fromColumn;
-
-    /**
-     * 終了行を保存するための変数
-     */
-    private final int toLine;
-
-    /**
-     * 開始列を保存するための変数
-     */
-    private final int toColumn;
 }

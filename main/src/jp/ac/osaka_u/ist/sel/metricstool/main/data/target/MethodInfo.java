@@ -23,8 +23,16 @@ public abstract class MethodInfo extends LocalSpaceInfo implements Comparable<Me
      * @param methodName メソッド名
      * @param ownerClass メソッドを定義しているクラス
      * @param constructor コンストラクタかどうか
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
-    public MethodInfo(final String methodName, final ClassInfo ownerClass, final boolean constructor) {
+    public MethodInfo(final String methodName, final ClassInfo ownerClass,
+            final boolean constructor, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
+
+        super(fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == methodName) || (null == ownerClass)) {

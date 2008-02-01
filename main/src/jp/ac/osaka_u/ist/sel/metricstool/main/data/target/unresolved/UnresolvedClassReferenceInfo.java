@@ -9,10 +9,10 @@ import java.util.SortedSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
@@ -137,32 +137,37 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                     return this.resolvedInfo;
 
                     // 親が対象クラス(TargetClassInfo)の場合
-                } else if (classReference.getType() instanceof TargetClassInfo) {
+                } else if (classReference.getType() instanceof ClassTypeInfo) {
 
-                    // インナークラスから探すので一覧を取得
-                    final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
-                            .getAvailableDirectInnerClasses((TargetClassInfo) classReference
-                                    .getType());
-                    for (final TargetInnerClassInfo innerClass : innerClasses) {
+                    final ClassInfo ownerClass = ((ClassTypeInfo) classReference.getType())
+                            .getReferencedClass();
+                    if (ownerClass instanceof TargetClassInfo) {
 
-                        // 一致するクラス名が見つかった場合
-                        if (referenceName[i].equals(innerClass.getClassName())) {
-                            // TODO 利用関係を構築するコードが必要？
+                        // インナークラスから探すので一覧を取得
+                        final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                .getAvailableDirectInnerClasses((TargetClassInfo) classReference
+                                        .getType());
+                        for (final TargetInnerClassInfo innerClass : innerClasses) {
 
-                            // TODO 型パラメータ情報を追記する処理が必要
-                            final ClassTypeInfo reference = new ClassTypeInfo(innerClass);
-                            classReference = new ClassReferenceInfo(reference);
-                            continue NEXT_NAME;
+                            // 一致するクラス名が見つかった場合
+                            if (referenceName[i].equals(innerClass.getClassName())) {
+                                // TODO 利用関係を構築するコードが必要？
+
+                                // TODO 型パラメータ情報を追記する処理が必要
+                                final ClassTypeInfo reference = new ClassTypeInfo(innerClass);
+                                classReference = new ClassReferenceInfo(reference);
+                                continue NEXT_NAME;
+                            }
                         }
+
+                        assert false : "Here shouldn't be reached!";
+
+                        // 親が外部クラス(ExternalClassInfo)の場合
+                    } else if (ownerClass instanceof ExternalClassInfo) {
+
+                        classReference = UnknownEntityUsageInfo.getInstance();
+                        continue NEXT_NAME;
                     }
-
-                    assert false : "Here shouldn't be reached!";
-
-                    // 親が外部クラス(ExternalClassInfo)の場合
-                } else if (classReference.getType() instanceof ExternalClassInfo) {
-
-                    classReference = UnknownEntityUsageInfo.getInstance();
-                    continue NEXT_NAME;
                 }
 
                 assert false : "Here shouldn't be reached!";
@@ -226,33 +231,40 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                                 this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
                                 return this.resolvedInfo;
 
+                                // 親がクラス型の場合
+                            } else if (classReference.getType() instanceof ClassTypeInfo) {
+
+                                final ClassInfo ownerClass = ((ClassTypeInfo) classReference
+                                        .getType()).getReferencedClass();
+
                                 // 親が対象クラス(TargetClassInfo)の場合
-                            } else if (classReference.getType() instanceof TargetClassInfo) {
+                                if (ownerClass instanceof TargetClassInfo) {
 
-                                // インナークラスから探すので一覧を取得
-                                final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
-                                        .getAvailableDirectInnerClasses((TargetClassInfo) classReference
-                                                .getType());
-                                for (final TargetInnerClassInfo innerClass : innerClasses) {
+                                    // インナークラスから探すので一覧を取得
+                                    final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                            .getAvailableDirectInnerClasses((TargetClassInfo) classReference
+                                                    .getType());
+                                    for (final TargetInnerClassInfo innerClass : innerClasses) {
 
-                                    // 一致するクラス名が見つかった場合
-                                    if (referenceName[i].equals(innerClass.getClassName())) {
-                                        // TODO 利用関係を構築するコードが必要？
+                                        // 一致するクラス名が見つかった場合
+                                        if (referenceName[i].equals(innerClass.getClassName())) {
+                                            // TODO 利用関係を構築するコードが必要？
 
-                                        // TODO　型パラメータ情報を格納する処理が必要
-                                        reference = new ClassTypeInfo(innerClass);
-                                        classReference = new ClassReferenceInfo(reference);
-                                        continue NEXT_NAME;
+                                            // TODO　型パラメータ情報を格納する処理が必要
+                                            reference = new ClassTypeInfo(innerClass);
+                                            classReference = new ClassReferenceInfo(reference);
+                                            continue NEXT_NAME;
+                                        }
                                     }
+
+                                    assert false : "Here shouldn't be reached!";
+
+                                    // 親が外部クラス(ExternalClassInfo)の場合
+                                } else if (ownerClass instanceof ExternalClassInfo) {
+
+                                    classReference = UnknownEntityUsageInfo.getInstance();
+                                    continue NEXT_NAME;
                                 }
-
-                                assert false : "Here shouldn't be reached!";
-
-                                // 親が外部クラス(ExternalClassInfo)の場合
-                            } else if (classReference.getType() instanceof ExternalClassInfo) {
-
-                                classReference = UnknownEntityUsageInfo.getInstance();
-                                continue NEXT_NAME;
                             }
 
                             assert false : "Here shouldn't be reached!";
@@ -292,35 +304,44 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                                         this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
                                         return this.resolvedInfo;
 
-                                        // 親が対象クラス(TargetClassInfo)の場合
-                                    } else if (classReference.getType() instanceof TargetClassInfo) {
+                                        // 親がクラス型の場合
+                                    } else if (classReference.getType() instanceof ClassTypeInfo) {
 
-                                        // インナークラスから探すので一覧を取得
-                                        final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
-                                                .getAvailableDirectInnerClasses((TargetClassInfo) classReference
-                                                        .getType());
-                                        for (final TargetInnerClassInfo innerClass : innerClasses) {
+                                        final ClassInfo ownerClass = ((ClassTypeInfo) classReference
+                                                .getType()).getReferencedClass();
 
-                                            // 一致するクラス名が見つかった場合
-                                            if (referenceName[i].equals(innerClass.getClassName())) {
-                                                // TODO 利用関係を構築するコードが必要？
+                                        // 親が対象クラス(TargetClassInfo)の場合                                         
+                                        if (ownerClass instanceof TargetClassInfo) {
 
-                                                // TODO 型パラメータ情報を格納する処理が必要
-                                                reference = new ClassTypeInfo(innerClass);
-                                                classReference = new ClassReferenceInfo(reference);
-                                                continue NEXT_NAME;
+                                            // インナークラスから探すので一覧を取得
+                                            final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                                    .getAvailableDirectInnerClasses((TargetClassInfo) classReference
+                                                            .getType());
+                                            for (final TargetInnerClassInfo innerClass : innerClasses) {
+
+                                                // 一致するクラス名が見つかった場合
+                                                if (referenceName[i].equals(innerClass
+                                                        .getClassName())) {
+                                                    // TODO 利用関係を構築するコードが必要？
+
+                                                    // TODO 型パラメータ情報を格納する処理が必要
+                                                    reference = new ClassTypeInfo(innerClass);
+                                                    classReference = new ClassReferenceInfo(
+                                                            reference);
+                                                    continue NEXT_NAME;
+                                                }
                                             }
+
+                                            // 見つからなかったので null を返す．
+                                            // 現在の想定では，この部分に到着しうるのは継承関係の名前解決が完全に終わっていない段階のみのはず．
+                                            return null;
+
+                                            // 親が外部クラス(ExternalClassInfo)の場合
+                                        } else if (ownerClass instanceof ExternalClassInfo) {
+
+                                            classReference = UnknownEntityUsageInfo.getInstance();
+                                            continue NEXT_NAME;
                                         }
-
-                                        // 見つからなかったので null を返す．
-                                        // 現在の想定では，この部分に到着しうるのは継承関係の名前解決が完全に終わっていない段階のみのはず．
-                                        return null;
-
-                                        // 親が外部クラス(ExternalClassInfo)の場合
-                                    } else if (classReference.getType() instanceof ExternalClassInfo) {
-
-                                        classReference = UnknownEntityUsageInfo.getInstance();
-                                        continue NEXT_NAME;
                                     }
 
                                     assert false : "Here shouldn't be reached!";
@@ -357,31 +378,38 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                                     this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
                                     return this.resolvedInfo;
 
+                                    // 親がクラス型の場合
+                                } else if (classReference.getType() instanceof ClassTypeInfo) {
+
+                                    final ClassInfo ownerClass = ((ClassTypeInfo) classReference
+                                            .getType()).getReferencedClass();
+
                                     // 親が対象クラス(TargetClassInfo)の場合
-                                } else if (classReference.getType() instanceof TargetClassInfo) {
+                                    if (ownerClass instanceof TargetClassInfo) {
 
-                                    // インナークラス一覧を取得
-                                    final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
-                                            .getAvailableDirectInnerClasses((TargetClassInfo) classReference
-                                                    .getType());
-                                    for (final TargetInnerClassInfo innerClass : innerClasses) {
+                                        // インナークラス一覧を取得
+                                        final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                                .getAvailableDirectInnerClasses((TargetClassInfo) classReference
+                                                        .getType());
+                                        for (final TargetInnerClassInfo innerClass : innerClasses) {
 
-                                        // 一致するクラス名が見つかった場合
-                                        if (referenceName[i].equals(innerClass.getClassName())) {
-                                            // TODO 利用関係を構築するコードが必要？
+                                            // 一致するクラス名が見つかった場合
+                                            if (referenceName[i].equals(innerClass.getClassName())) {
+                                                // TODO 利用関係を構築するコードが必要？
 
-                                            // TODO 型パラメータ情報を格納する処理が必要
-                                            reference = new ClassTypeInfo(innerClass);
-                                            classReference = new ClassReferenceInfo(reference);
-                                            continue NEXT_NAME;
+                                                // TODO 型パラメータ情報を格納する処理が必要
+                                                reference = new ClassTypeInfo(innerClass);
+                                                classReference = new ClassReferenceInfo(reference);
+                                                continue NEXT_NAME;
+                                            }
                                         }
+
+                                        // 親が外部クラス(ExternalClassInfo)の場合
+                                    } else if (ownerClass instanceof ExternalClassInfo) {
+
+                                        classReference = UnknownEntityUsageInfo.getInstance();
+                                        continue NEXT_NAME;
                                     }
-
-                                    // 親が外部クラス(ExternalClassInfo)の場合
-                                } else if (classReference.getType() instanceof ExternalClassInfo) {
-
-                                    classReference = UnknownEntityUsageInfo.getInstance();
-                                    continue NEXT_NAME;
                                 }
 
                                 assert false : "Here shouldn't be reached!";
@@ -415,8 +443,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
      * 
      * @param typeArgument 追加する型パラメータ使用
      */
-    public final void addTypeArgument(
-            final UnresolvedClassTypeInfo typeArgument) {
+    public final void addTypeArgument(final UnresolvedClassTypeInfo typeArgument) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -501,24 +528,25 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
     public final AvailableNamespaceInfoSet getAvailableNamespaces() {
         return this.availableNamespaceSet;
     }
-    
-	public final static UnresolvedClassReferenceInfo createClassReference(
-			UnresolvedClassInfo referencedClassInfo) {
 
-		AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(
-				referencedClassInfo.getNamespace(), false);
-		AvailableNamespaceInfoSet namespaces = new AvailableNamespaceInfoSet();
-		namespaces.add(namespace);
+    public final static UnresolvedClassReferenceInfo createClassReference(
+            UnresolvedClassInfo referencedClassInfo) {
 
-		String[] className = new String[] { referencedClassInfo.getClassName() };
+        AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(referencedClassInfo
+                .getNamespace(), false);
+        AvailableNamespaceInfoSet namespaces = new AvailableNamespaceInfoSet();
+        namespaces.add(namespace);
 
-		return new UnresolvedClassReferenceInfo(namespaces, className);
-	}
-	
-	public final static UnresolvedClassReferenceInfo createClassReference(
-			UnresolvedClassTypeInfo referenceType) {
-		return new UnresolvedClassReferenceInfo(referenceType.getAvailableNamespaces(), referenceType.getReferenceName());
-	}
+        String[] className = new String[] { referencedClassInfo.getClassName() };
+
+        return new UnresolvedClassReferenceInfo(namespaces, className);
+    }
+
+    public final static UnresolvedClassReferenceInfo createClassReference(
+            UnresolvedClassTypeInfo referenceType) {
+        return new UnresolvedClassReferenceInfo(referenceType.getAvailableNamespaces(),
+                referenceType.getReferenceName());
+    }
 
     /**
      * 利用可能な名前空間名を保存するための変数，名前解決処理の際に用いる

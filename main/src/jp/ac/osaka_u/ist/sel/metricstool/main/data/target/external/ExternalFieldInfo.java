@@ -27,4 +27,35 @@ public final class ExternalFieldInfo extends FieldInfo {
                 0, 0);
     }
 
+    /**
+     * ExternalFieldInfo では利用できない
+     */
+    @Override
+    public int getFromLine() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalFieldInfo では利用できない
+     */
+    @Override
+    public int getFromColumn() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalFieldInfo では利用できない
+     */
+    @Override
+    public int getToLine() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalFieldInfo では利用できない
+     */
+    @Override
+    public int getToColumn() {
+        throw new CannotUseException();
+    }
 }

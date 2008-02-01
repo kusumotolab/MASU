@@ -25,6 +25,38 @@ public final class ExternalParameterInfo extends ParameterInfo {
     }
 
     /**
+     * ExternalParameterInfo では利用できない
+     */
+    @Override
+    public int getFromLine() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalParameterInfo では利用できない
+     */
+    @Override
+    public int getFromColumn() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalParameterInfo では利用できない
+     */
+    @Override
+    public int getToLine() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalParameterInfo では利用できない
+     */
+    @Override
+    public int getToColumn() {
+        throw new CannotUseException();
+    }
+
+    /**
      * 不明な引数名を表す定数
      */
     public final static String UNKNOWN_NAME = "unknown";

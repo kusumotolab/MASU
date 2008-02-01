@@ -60,7 +60,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
             final boolean publicVisible, final boolean instance, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
-        super(name, ownerClass, constructor);
+        super(name, ownerClass, constructor, fromLine, fromColumn, toLine, toColumn);
 
         if (null == modifiers) {
             throw new NullPointerException();
@@ -78,11 +78,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
         this.publicVisible = publicVisible;
 
         this.instance = instance;
-
-        this.fromLine = fromLine;
-        this.fromColumn = fromColumn;
-        this.toLine = toLine;
-        this.toColumn = toColumn;
     }
 
     /**
@@ -239,42 +234,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
     }
 
     /**
-     * 開始行を返す
-     * 
-     * @return 開始行
-     */
-    public int getFromLine() {
-        return this.fromLine;
-    }
-
-    /**
-     * 開始列を返す
-     * 
-     * @return 開始列
-     */
-    public int getFromColumn() {
-        return this.fromColumn;
-    }
-
-    /**
-     * 終了行を返す
-     * 
-     * @return 終了行
-     */
-    public int getToLine() {
-        return this.toLine;
-    }
-
-    /**
-     * 終了列を返す
-     * 
-     * @return 終了列
-     */
-    public int getToColumn() {
-        return this.toColumn;
-    }
-
-    /**
      * 修飾子を保存するための変数
      */
     private final Set<ModifierInfo> modifiers;
@@ -313,24 +272,4 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * インスタンスメンバーかどうかを保存するための変数
      */
     private final boolean instance;
-
-    /**
-     * 開始行を保存するための変数
-     */
-    private final int fromLine;
-
-    /**
-     * 開始列を保存するための変数
-     */
-    private final int fromColumn;
-
-    /**
-     * 終了行を保存するための変数
-     */
-    private final int toLine;
-
-    /**
-     * 開始列を保存するための変数
-     */
-    private final int toColumn;
 }

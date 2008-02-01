@@ -6,7 +6,9 @@ import java.util.List;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayLengthUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
@@ -102,72 +104,77 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
             this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
             return this.resolvedInfo;
 
+            //親がクラス型の場合
+        } else if (ownerUsage.getType() instanceof ClassTypeInfo) {
+
+            final ClassInfo ownerClass = ((ClassTypeInfo) ownerUsage.getType())
+                    .getReferencedClass();
             // 親が対象クラス(TargetClassInfo)だった場合
-        } else if (ownerUsage.getType() instanceof TargetClassInfo) {
+            if (ownerClass instanceof TargetClassInfo) {
 
-            // まずは利用可能なフィールドから検索
-            {
-                // 利用可能なフィールド一覧を取得
-                final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
-                        (TargetClassInfo) ownerUsage.getType(), usingClass);
+                // まずは利用可能なフィールドから検索
+                {
+                    // 利用可能なフィールド一覧を取得
+                    final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
+                            (TargetClassInfo) ownerUsage.getType(), usingClass);
 
-                // 利用可能なフィールドを，未解決フィールド名で検索
-                for (final TargetFieldInfo availableField : availableFields) {
+                    // 利用可能なフィールドを，未解決フィールド名で検索
+                    for (final TargetFieldInfo availableField : availableFields) {
 
-                    // 一致するフィールド名が見つかった場合
-                    if (fieldName.equals(availableField.getName())) {
+                        // 一致するフィールド名が見つかった場合
+                        if (fieldName.equals(availableField.getName())) {
 
-                        this.resolvedInfo = new FieldUsageInfo(availableField, reference);
-                        return this.resolvedInfo;
+                            this.resolvedInfo = new FieldUsageInfo(availableField, reference);
+                            return this.resolvedInfo;
+                        }
                     }
                 }
-            }
 
-            // 利用可能なフィールドが見つからなかった場合は，外部クラスである親クラスがあるはず
-            // そのクラスの変数を使用しているとみなす
-            {
-                for (TargetClassInfo classInfo = (TargetClassInfo) ownerUsage.getType(); true; classInfo = ((TargetInnerClassInfo) classInfo)
-                        .getOuterClass()) {
+                // 利用可能なフィールドが見つからなかった場合は，外部クラスである親クラスがあるはず
+                // そのクラスの変数を使用しているとみなす
+                {
+                    for (TargetClassInfo classInfo = (TargetClassInfo) ownerUsage.getType(); true; classInfo = ((TargetInnerClassInfo) classInfo)
+                            .getOuterClass()) {
 
-                    final ExternalClassInfo externalSuperClass = NameResolver
-                            .getExternalSuperClass(classInfo);
-                    if (null != externalSuperClass) {
+                        final ExternalClassInfo externalSuperClass = NameResolver
+                                .getExternalSuperClass(classInfo);
+                        if (null != externalSuperClass) {
 
-                        final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName,
-                                externalSuperClass);
-                        fieldInfoManager.add(fieldInfo);
+                            final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName,
+                                    externalSuperClass);
+                            fieldInfoManager.add(fieldInfo);
 
-                        // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
-                        this.resolvedInfo = new FieldUsageInfo(fieldInfo, reference);
-                        return this.resolvedInfo;
-                    }
+                            // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
+                            this.resolvedInfo = new FieldUsageInfo(fieldInfo, reference);
+                            return this.resolvedInfo;
+                        }
 
-                    if (!(classInfo instanceof TargetInnerClassInfo)) {
-                        break;
+                        if (!(classInfo instanceof TargetInnerClassInfo)) {
+                            break;
+                        }
                     }
                 }
-            }
 
-            // 見つからなかった処理を行う
-            {
-                assert false : "Can't resolve field reference : " + this.getFieldName();
+                // 見つからなかった処理を行う
+                {
+                    assert false : "Can't resolve field reference : " + this.getFieldName();
 
-                usingMethod.addUnresolvedUsage(this);
+                    usingMethod.addUnresolvedUsage(this);
 
-                this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+                    this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+                    return this.resolvedInfo;
+                }
+
+                // 親が外部クラス（ExternalClassInfo）だった場合
+            } else if (ownerClass instanceof ExternalClassInfo) {
+
+                final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName, ownerClass);
+                fieldInfoManager.add(fieldInfo);
+
+                // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
+                this.resolvedInfo = new FieldUsageInfo(fieldInfo, reference);
                 return this.resolvedInfo;
             }
-
-            // 親が外部クラス（ExternalClassInfo）だった場合
-        } else if (ownerUsage.getType() instanceof ExternalClassInfo) {
-
-            final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName,
-                    (ExternalClassInfo) ownerUsage.getType());
-            fieldInfoManager.add(fieldInfo);
-
-            // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
-            this.resolvedInfo = new FieldUsageInfo(fieldInfo, reference);
-            return this.resolvedInfo;
 
         } else if (ownerUsage.getType() instanceof ArrayTypeInfo) {
 

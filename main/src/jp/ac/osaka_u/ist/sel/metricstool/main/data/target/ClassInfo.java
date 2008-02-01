@@ -16,16 +16,22 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public abstract class ClassInfo implements UnitInfo, Comparable<ClassInfo>, MetricMeasurable {
+public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo>, MetricMeasurable {
 
     /**
      * 名前空間名とクラス名からオブジェクトを生成する
      * 
      * @param namespace 名前空間名
      * @param className クラス名
-     * 
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn　終了行
      */
-    public ClassInfo(final NamespaceInfo namespace, final String className) {
+    public ClassInfo(final NamespaceInfo namespace, final String className, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
+
+        super(fromLine, fromColumn, toLine, toColumn);
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -43,8 +49,15 @@ public abstract class ClassInfo implements UnitInfo, Comparable<ClassInfo>, Metr
      * 完全限定名からクラス情報オブジェクトを生成する
      * 
      * @param fullQualifiedName 完全限定名
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn　終了行
      */
-    public ClassInfo(final String[] fullQualifiedName) {
+    public ClassInfo(final String[] fullQualifiedName, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
+
+        super(fromLine, fromColumn, toLine, toColumn);
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -241,7 +254,7 @@ public abstract class ClassInfo implements UnitInfo, Comparable<ClassInfo>, Metr
             }
 
             // 対象クラスの親クラスに対して再帰的に処理，true が返された場合は，このメソッドも true を返す
-            if (this.isSuperClass(superClass)){
+            if (this.isSuperClass(superClass)) {
                 return true;
             }
         }

@@ -30,7 +30,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     public ExternalMethodInfo(final String methodName, final ClassInfo ownerClass,
             final boolean constructor) {
 
-        super(methodName, ownerClass, constructor);
+        super(methodName, ownerClass, constructor, 0, 0, 0, 0);
 
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
@@ -72,6 +72,38 @@ public final class ExternalMethodInfo extends MethodInfo {
      */
     @Override
     public SortedSet<BlockInfo> getInnerBlocks() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalMethodInfo では利用できない
+     */
+    @Override
+    public int getFromLine() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalMethodInfo では利用できない
+     */
+    @Override
+    public int getFromColumn() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalMethodInfo では利用できない
+     */
+    @Override
+    public int getToLine() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalMethodInfo では利用できない
+     */
+    @Override
+    public int getToColumn() {
         throw new CannotUseException();
     }
 }

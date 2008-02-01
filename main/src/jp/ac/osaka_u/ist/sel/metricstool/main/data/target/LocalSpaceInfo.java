@@ -16,9 +16,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  *
  */
-public abstract class LocalSpaceInfo implements UnitInfo {
+public abstract class LocalSpaceInfo extends UnitInfo {
 
-    LocalSpaceInfo() {
+    LocalSpaceInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+
+        super(fromLine, fromColumn, toLine, toColumn);
+
         this.localVariables = new TreeSet<LocalVariableInfo>();
         this.fieldUsages = new HashSet<FieldUsageInfo>();
         this.innerBlocks = new TreeSet<BlockInfo>();

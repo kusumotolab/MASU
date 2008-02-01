@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NamespaceInfo;
  * @author higo
  * 
  */
-public class ExternalClassInfo extends ClassInfo {
+public final class ExternalClassInfo extends ClassInfo {
 
     /**
      * 名前空間名とクラス名を与えて，オブジェクトを初期化
@@ -21,7 +21,7 @@ public class ExternalClassInfo extends ClassInfo {
      */
     public ExternalClassInfo(final NamespaceInfo namespace, final String className) {
 
-        super(namespace, className);
+        super(namespace, className, 0, 0, 0, 0);
     }
 
     /**
@@ -31,7 +31,7 @@ public class ExternalClassInfo extends ClassInfo {
      */
     public ExternalClassInfo(final String[] fullQualifiedName) {
 
-        super(fullQualifiedName);
+        super(fullQualifiedName, 0, 0, 0, 0);
     }
 
     /**
@@ -41,7 +41,39 @@ public class ExternalClassInfo extends ClassInfo {
      */
     public ExternalClassInfo(final String className) {
 
-        super(NamespaceInfo.UNKNOWN, className);
+        super(NamespaceInfo.UNKNOWN, className, 0, 0, 0, 0);
+    }
+
+    /**
+     * ExternalClassInfo では利用できない
+     */
+    @Override
+    public int getFromLine() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalClassInfo では利用できない
+     */
+    @Override
+    public int getFromColumn() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalClassInfo では利用できない
+     */
+    @Override
+    public int getToLine() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalClassInfo では利用できない
+     */
+    @Override
+    public int getToColumn() {
+        throw new CannotUseException();
     }
 
     /**
