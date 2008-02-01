@@ -26,7 +26,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public class UnresolvedClassTypeInfo implements UnresolvedTypeInfo {
+public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
 
     /**
      * 利用可能な名前空間名，参照名を与えて初期化

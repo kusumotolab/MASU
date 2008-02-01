@@ -25,7 +25,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * @see UnresolvedTypeInfo
  */
-public final class UnresolvedArrayTypeInfo implements UnresolvedTypeInfo {
+public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo {
 
     // /**
     // * 等しいかどうかのチェックを行う
