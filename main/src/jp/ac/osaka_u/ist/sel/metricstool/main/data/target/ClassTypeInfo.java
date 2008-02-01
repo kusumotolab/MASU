@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class ClassTypeInfo implements TypeInfo {
+public final class ClassTypeInfo implements ReferenceTypeInfo {
 
     /**
      * 参照型のListをクラスのListに変換する
@@ -95,16 +95,14 @@ public final class ClassTypeInfo implements TypeInfo {
 
         // 型パラメータの数が異なる場合は，等しくない
         final List<ClassTypeInfo> thisTypeParameters = this.typeParameters;
-        final List<ClassTypeInfo> targetTypeParameters = targetReferenceType
-                .getTypeParameters();
+        final List<ClassTypeInfo> targetTypeParameters = targetReferenceType.getTypeParameters();
         if (thisTypeParameters.size() != targetTypeParameters.size()) {
             return false;
         }
 
         // 全ての型パラメータが等しくなければ，等しくない
         final Iterator<ClassTypeInfo> thisTypeParameterIterator = thisTypeParameters.iterator();
-        final Iterator<ClassTypeInfo> targetTypeParameterIterator = targetTypeParameters
-                .iterator();
+        final Iterator<ClassTypeInfo> targetTypeParameterIterator = targetTypeParameters.iterator();
         while (thisTypeParameterIterator.hasNext()) {
             final ClassTypeInfo thisTypeParameter = thisTypeParameterIterator.next();
             final ClassTypeInfo targetTypeParameter = targetTypeParameterIterator.next();

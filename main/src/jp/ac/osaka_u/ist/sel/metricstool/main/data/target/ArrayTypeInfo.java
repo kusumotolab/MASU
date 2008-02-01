@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class ArrayTypeInfo implements TypeInfo {
+public final class ArrayTypeInfo implements ReferenceTypeInfo {
 
     /**
      * Œ^–¼‚ð•Ô‚·
