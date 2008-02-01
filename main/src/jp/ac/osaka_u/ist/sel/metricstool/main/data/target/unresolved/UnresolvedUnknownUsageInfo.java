@@ -12,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Members;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
@@ -150,10 +151,11 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                             {
                                 if (!found) {
 
+                                    final ClassInfo referencedClass = ((ReferenceTypeInfo) entityUsage
+                                            .getType()).getReferencedClass();
                                     final ExternalClassInfo externalSuperClass = NameResolver
-                                            .getExternalSuperClass((TargetClassInfo) entityUsage
-                                                    .getType());
-                                    if (!(entityUsage.getType() instanceof TargetInnerClassInfo)
+                                            .getExternalSuperClass((TargetClassInfo) referencedClass);
+                                    if (!(referencedClass instanceof TargetInnerClassInfo)
                                             && (null != externalSuperClass)) {
 
                                         final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -258,7 +260,9 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                                         if (name[i].equals(innerClass.getClassName())) {
                                             // TODO 利用関係を構築するコードが必要？
 
-                                            entityUsage = new ClassReferenceInfo(innerClass);
+                                            final ReferenceTypeInfo referenceType = new ReferenceTypeInfo(
+                                                    innerClass);
+                                            entityUsage = new ClassReferenceInfo(referenceType);
                                             found = true;
                                             break;
                                         }
@@ -271,10 +275,11 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                             {
                                 if (!found) {
 
+                                    final ClassInfo referencedClass = ((ReferenceTypeInfo) entityUsage
+                                            .getType()).getReferencedClass();
                                     final ExternalClassInfo externalSuperClass = NameResolver
-                                            .getExternalSuperClass((TargetClassInfo) entityUsage
-                                                    .getType());
-                                    if (!(entityUsage.getType() instanceof TargetInnerClassInfo)
+                                            .getExternalSuperClass((TargetClassInfo) referencedClass);
+                                    if (!(referencedClass instanceof TargetInnerClassInfo)
                                             && (null != externalSuperClass)) {
 
                                         final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -328,7 +333,8 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                 final ClassInfo searchingClass = classInfoManager.getClassInfo(searchingName);
                 if (null != searchingClass) {
 
-                    EntityUsageInfo entityUsage = new ClassReferenceInfo(searchingClass);
+                    EntityUsageInfo entityUsage = new ClassReferenceInfo(new ReferenceTypeInfo(
+                            searchingClass));
                     for (int i = length; i < name.length; i++) {
 
                         // 親が UnknownTypeInfo だったら，どうしようもない
@@ -376,7 +382,9 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                                         if (name[i].equals(innerClass.getClassName())) {
                                             // TODO 利用関係を構築するコードが必要？
 
-                                            entityUsage = new ClassReferenceInfo(innerClass);
+                                            final ReferenceTypeInfo referenceType = new ReferenceTypeInfo(
+                                                    innerClass);
+                                            entityUsage = new ClassReferenceInfo(referenceType);
                                             found = true;
                                             break;
                                         }
@@ -389,10 +397,11 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                             {
                                 if (!found) {
 
+                                    final ClassInfo referencedClass = ((ReferenceTypeInfo) entityUsage
+                                            .getType()).getReferencedClass();
                                     final ExternalClassInfo externalSuperClass = NameResolver
-                                            .getExternalSuperClass((TargetClassInfo) entityUsage
-                                                    .getType());
-                                    if (!(entityUsage.getType() instanceof TargetInnerClassInfo)
+                                            .getExternalSuperClass((TargetClassInfo) referencedClass);
+                                    if (!(referencedClass instanceof TargetInnerClassInfo)
                                             && (null != externalSuperClass)) {
 
                                         final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -453,7 +462,8 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                     final String innerClassName = innerClassInfo.getClassName();
                     if (innerClassName.equals(name[0])) {
 
-                        EntityUsageInfo entityUsage = new ClassReferenceInfo(innerClassInfo);
+                        EntityUsageInfo entityUsage = new ClassReferenceInfo(new ReferenceTypeInfo(
+                                innerClassInfo));
                         for (int i = 1; i < name.length; i++) {
 
                             // 親が UnknownTypeInfo だったら，どうしようもない
@@ -500,7 +510,9 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                                             if (name[i].equals(innerClass.getClassName())) {
                                                 // TODO 利用関係を構築するコードが必要？
 
-                                                entityUsage = new ClassReferenceInfo(innerClassInfo);
+                                                final ReferenceTypeInfo referenceType = new ReferenceTypeInfo(
+                                                        innerClassInfo);
+                                                entityUsage = new ClassReferenceInfo(referenceType);
                                                 found = true;
                                                 break;
                                             }
@@ -513,10 +525,11 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                                 {
                                     if (!found) {
 
+                                        final ClassInfo referencedClass = ((ReferenceTypeInfo) entityUsage
+                                                .getType()).getReferencedClass();
                                         final ExternalClassInfo externalSuperClass = NameResolver
-                                                .getExternalSuperClass((TargetClassInfo) entityUsage
-                                                        .getType());
-                                        if (!(entityUsage.getType() instanceof TargetInnerClassInfo)
+                                                .getExternalSuperClass((TargetClassInfo) referencedClass);
+                                        if (!(referencedClass instanceof TargetInnerClassInfo)
                                                 && (null != externalSuperClass)) {
 
                                             final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -574,7 +587,8 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                             // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
                             if (className.equals(name[0])) {
 
-                                EntityUsageInfo entityUsage = new ClassReferenceInfo(classInfo);
+                                EntityUsageInfo entityUsage = new ClassReferenceInfo(
+                                        new ReferenceTypeInfo(classInfo));
                                 for (int i = 1; i < name.length; i++) {
 
                                     // 親が UnknownTypeInfo だったら，どうしようもない
@@ -623,8 +637,10 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                                                     if (name[i].equals(innerClass.getClassName())) {
                                                         // TODO 利用関係を構築するコードが必要？
 
-                                                        entityUsage = new ClassReferenceInfo(
+                                                        final ReferenceTypeInfo referenceType = new ReferenceTypeInfo(
                                                                 innerClass);
+                                                        entityUsage = new ClassReferenceInfo(
+                                                                referenceType);
                                                         found = true;
                                                         break;
                                                     }
@@ -637,10 +653,11 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                                         {
                                             if (!found) {
 
+                                                final ClassInfo referencedClass = ((ReferenceTypeInfo) entityUsage
+                                                        .getType()).getReferencedClass();
                                                 final ExternalClassInfo externalSuperClass = NameResolver
-                                                        .getExternalSuperClass((TargetClassInfo) entityUsage
-                                                                .getType());
-                                                if (!(entityUsage.getType() instanceof TargetInnerClassInfo)
+                                                        .getExternalSuperClass((TargetClassInfo) referencedClass);
+                                                if (!(referencedClass instanceof TargetInnerClassInfo)
                                                         && (null != externalSuperClass)) {
 
                                                     final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -697,7 +714,8 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                                 classInfoManager.add((ExternalClassInfo) specifiedClassInfo);
                             }
 
-                            EntityUsageInfo entityUsage = new ClassReferenceInfo(specifiedClassInfo);
+                            EntityUsageInfo entityUsage = new ClassReferenceInfo(
+                                    new ReferenceTypeInfo(specifiedClassInfo));
                             for (int i = 1; i < name.length; i++) {
 
                                 // 親が UnknownTypeInfo だったら，どうしようもない
@@ -745,7 +763,10 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                                                 if (name[i].equals(innerClass.getClassName())) {
                                                     // TODO 利用関係を構築するコードが必要？
 
-                                                    entityUsage = new ClassReferenceInfo(innerClass);
+                                                    final ReferenceTypeInfo referenceType = new ReferenceTypeInfo(
+                                                            innerClass);
+                                                    entityUsage = new ClassReferenceInfo(
+                                                            referenceType);
                                                     found = true;
                                                     break;
                                                 }
@@ -758,10 +779,11 @@ public final class UnresolvedUnknownUsageInfo implements UnresolvedEntityUsageIn
                                     {
                                         if (!found) {
 
+                                            final ClassInfo referencedClass = ((ReferenceTypeInfo) entityUsage
+                                                    .getType()).getReferencedClass();
                                             final ExternalClassInfo externalSuperClass = NameResolver
-                                                    .getExternalSuperClass((TargetClassInfo) entityUsage
-                                                            .getType());
-                                            if (!(entityUsage.getType() instanceof TargetInnerClassInfo)
+                                                    .getExternalSuperClass((TargetClassInfo) referencedClass);
+                                            if (!(referencedClass instanceof TargetInnerClassInfo)
                                                     && (null != externalSuperClass)) {
 
                                                 final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
