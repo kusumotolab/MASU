@@ -50,6 +50,7 @@ public final class UnresolvedLocalVariableInfo extends UnresolvedVariableInfo<Lo
      * @param methodInfoManager 用いるメソッドマネージャ
      * @return 解決済みローカル変数情報
      */
+    @Override
     public LocalVariableInfo resolveUnit(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {

@@ -46,6 +46,7 @@ public final class UnresolvedParameterInfo extends UnresolvedVariableInfo<Target
      * @param methodInfoManager 用いるメソッドマネージャ
      * @return 解決済み引数情報
      */
+    @Override
     public TargetParameterInfo resolveUnit(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {

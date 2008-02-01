@@ -34,6 +34,7 @@ public final class UnresolvedWhileBlockInfo extends UnresolvedBlockInfo<WhileBlo
      * @param fieldInfoManager 用いるフィールドマネージャ
      * @param methodInfoManger 用いるメソッドマネージャ
      */
+    @Override
     public WhileBlockInfo resolveUnit(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {

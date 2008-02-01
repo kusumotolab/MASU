@@ -15,8 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public abstract class UnresolvedBlockInfo<T extends BlockInfo> implements PositionSetting,
-        UnresolvedUnitInfo<T> {
+public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends UnresolvedUnitInfo<T> {
 
     /**
      * ブロック構造を表すオブジェクトを初期化する
@@ -30,11 +29,6 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> implements Positi
         this.fieldUsages = new HashSet<UnresolvedFieldUsageInfo>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
         this.innerBlocks = new HashSet<UnresolvedBlockInfo<?>>();
-
-        this.fromLine = 0;
-        this.fromColumn = 0;
-        this.toLine = 0;
-        this.toColumn = 0;
     }
 
     /**
@@ -42,10 +36,12 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> implements Positi
      * 
      * @return 既に解決されている場合は true, そうでない場合は false
      */
+    @Override
     public final boolean alreadyResolved() {
         return null != this.resolvedInfo;
     }
 
+    @Override
     public final T getResolvedUnit() {
 
         if (!this.alreadyResolved()) {
@@ -156,102 +152,6 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> implements Positi
     }
 
     /**
-     * 開始行をセットする
-     * 
-     * @param fromLine 開始行
-     */
-    public final void setFromLine(final int fromLine) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (fromLine < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        this.fromLine = fromLine;
-    }
-
-    /**
-     * 開始列をセットする
-     * 
-     * @param fromColumn 開始列
-     */
-    public final void setFromColumn(final int fromColumn) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (fromColumn < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        this.fromColumn = fromColumn;
-    }
-
-    /**
-     * 終了行をセットする
-     * 
-     * @param toLine 終了行
-     */
-    public final void setToLine(final int toLine) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (toLine < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        this.toLine = toLine;
-    }
-
-    /**
-     * 終了列をセットする
-     * 
-     * @param toColumn 終了列
-     */
-    public final void setToColumn(final int toColumn) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (toColumn < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        this.toColumn = toColumn;
-    }
-
-    /**
-     * 開始行を返す
-     * 
-     * @return 開始行
-     */
-    public final int getFromLine() {
-        return this.fromLine;
-    }
-
-    /**
-     * 開始列を返す
-     * 
-     * @return 開始列
-     */
-    public final int getFromColumn() {
-        return this.fromColumn;
-    }
-
-    /**
-     * 終了行を返す
-     * 
-     * @return 終了行
-     */
-    public final int getToLine() {
-        return this.toLine;
-    }
-
-    /**
-     * 終了列を返す
-     * 
-     * @return 終了列
-     */
-    public final int getToColumn() {
-        return this.toColumn;
-    }
-
-    /**
      * メソッド呼び出しを保存する変数
      */
     private final Set<UnresolvedMethodCallInfo> methodCalls;
@@ -270,26 +170,6 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> implements Positi
      * このブロックの内側で定義されたブロックを保存する変数
      */
     private final Set<UnresolvedBlockInfo<?>> innerBlocks;
-
-    /**
-     * 開始行を保存するための変数
-     */
-    private int fromLine;
-
-    /**
-     * 開始列を保存するための変数
-     */
-    private int fromColumn;
-
-    /**
-     * 終了行を保存するための変数
-     */
-    private int toLine;
-
-    /**
-     * 開始列を保存するための変数
-     */
-    private int toColumn;
 
     /**
      * 解決済みブロック情報を保存するための変数

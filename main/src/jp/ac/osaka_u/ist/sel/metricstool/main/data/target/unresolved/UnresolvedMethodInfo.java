@@ -9,11 +9,11 @@ import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
@@ -31,8 +31,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting, PositionSetting,
-        UnresolvedUnitInfo<TargetMethodInfo> {
+public final class UnresolvedMethodInfo extends UnresolvedUnitInfo<TargetMethodInfo> implements
+        VisualizableSetting, MemberSetting {
 
     /**
      * 未解決メソッド定義情報オブジェクトを初期化
@@ -58,11 +58,6 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
         this.publicVisible = false;
 
         this.instance = true;
-
-        this.fromLine = 0;
-        this.fromColumn = 0;
-        this.toLine = 0;
-        this.toColumn = 0;
 
         this.resolvedInfo = null;
     }
@@ -104,11 +99,6 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
 
         this.instance = true;
 
-        this.fromLine = 0;
-        this.fromColumn = 0;
-        this.toLine = 0;
-        this.toColumn = 0;
-
         this.resolvedInfo = null;
     }
 
@@ -117,6 +107,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * 
      * @return 解決済みの場合は true，そうでない場合は false
      */
+    @Override
     public boolean alreadyResolved() {
         return null != this.resolvedInfo;
     }
@@ -127,6 +118,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * @return 解決済みメソッド情報
      * @throws まだ解決されていない場合にスローされる
      */
+    @Override
     public TargetMethodInfo getResolvedUnit() {
 
         if (!this.alreadyResolved()) {
@@ -146,6 +138,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * @param methodInfoManager 用いるメソッドマネージャ
      * @return 解決済みメソッド情報
      */
+    @Override
     public TargetMethodInfo resolveUnit(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
@@ -605,98 +598,6 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
     }
 
     /**
-     * 開始行をセットする
-     * 
-     * @param fromLine 開始行
-     */
-    public void setFromLine(final int fromLine) {
-
-        if (fromLine < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        this.fromLine = fromLine;
-    }
-
-    /**
-     * 開始列をセットする
-     * 
-     * @param fromColumn 開始列
-     */
-    public void setFromColumn(final int fromColumn) {
-
-        if (fromColumn < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        this.fromColumn = fromColumn;
-    }
-
-    /**
-     * 終了行をセットする
-     * 
-     * @param toLine 終了行
-     */
-    public void setToLine(final int toLine) {
-
-        if (toLine < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        this.toLine = toLine;
-    }
-
-    /**
-     * 終了列をセットする
-     * 
-     * @param toColumn 終了列
-     */
-    public void setToColumn(final int toColumn) {
-
-        if (toColumn < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        this.toColumn = toColumn;
-    }
-
-    /**
-     * 開始行を返す
-     * 
-     * @return 開始行
-     */
-    public int getFromLine() {
-        return this.fromLine;
-    }
-
-    /**
-     * 開始列を返す
-     * 
-     * @return 開始列
-     */
-    public int getFromColumn() {
-        return this.fromColumn;
-    }
-
-    /**
-     * 終了行を返す
-     * 
-     * @return 終了行
-     */
-    public int getToLine() {
-        return this.toLine;
-    }
-
-    /**
-     * 終了列を返す
-     * 
-     * @return 終了列
-     */
-    public int getToColumn() {
-        return this.toColumn;
-    }
-
-    /**
      * 修飾子を保存する
      */
     private Set<ModifierInfo> modifiers;
@@ -775,26 +676,6 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
      * インスタンスメンバーかどうかを保存するための変数
      */
     private boolean instance;
-
-    /**
-     * 開始行を保存するための変数
-     */
-    private int fromLine;
-
-    /**
-     * 開始列を保存するための変数
-     */
-    private int fromColumn;
-
-    /**
-     * 終了行を保存するための変数
-     */
-    private int toLine;
-
-    /**
-     * 開始列を保存するための変数
-     */
-    private int toColumn;
 
     /**
      * 名前解決された情報を格納するための変数

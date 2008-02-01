@@ -34,6 +34,7 @@ public final class UnresolvedIfBlockInfo extends UnresolvedBlockInfo<IfBlockInfo
      * @param fieldInfoManager 用いるフィールドマネージャ
      * @param methodInfoManger 用いるメソッドマネージャ
      */
+    @Override
     public IfBlockInfo resolveUnit(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {

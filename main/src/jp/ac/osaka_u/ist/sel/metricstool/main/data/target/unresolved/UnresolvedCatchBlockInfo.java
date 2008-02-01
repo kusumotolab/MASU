@@ -42,6 +42,7 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
      * @param fieldInfoManager 用いるフィールドマネージャ
      * @param methodInfoManger 用いるメソッドマネージャ
      */
+    @Override
     public CatchBlockInfo resolveUnit(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {

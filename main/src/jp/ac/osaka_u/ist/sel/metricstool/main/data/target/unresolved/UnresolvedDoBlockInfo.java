@@ -33,6 +33,7 @@ public final class UnresolvedDoBlockInfo extends UnresolvedBlockInfo<DoBlockInfo
      * @param fieldInfoManager 用いるフィールドマネージャ
      * @param methodInfoManger 用いるメソッドマネージャ
      */
+    @Override
     public DoBlockInfo resolveUnit(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {

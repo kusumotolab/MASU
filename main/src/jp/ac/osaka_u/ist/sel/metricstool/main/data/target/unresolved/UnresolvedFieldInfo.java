@@ -54,6 +54,7 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
         this.instance = true;
     }
 
+    @Override
     public TargetFieldInfo resolveUnit(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
