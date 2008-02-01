@@ -1,10 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.Collections;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -13,7 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  */
-public abstract class BlockInfo implements LocalSpaceInfo, Position, Comparable<BlockInfo> {
+public abstract class BlockInfo extends LocalSpaceInfo implements Position, Comparable<BlockInfo> {
 
     /**
      * 位置情報を与えて初期化
@@ -39,12 +35,6 @@ public abstract class BlockInfo implements LocalSpaceInfo, Position, Comparable<
         this.fromColumn = fromColumn;
         this.toLine = toLine;
         this.toColumn = toColumn;
-
-        this.assignmentees = new TreeSet<FieldInfo>();
-        this.referencees = new TreeSet<FieldInfo>();
-        this.localVariables = new TreeSet<LocalVariableInfo>();
-        this.callees = new TreeSet<MethodInfo>();
-        this.innerBlocks = new TreeSet<BlockInfo>();
     }
 
     public final int compareTo(BlockInfo o) {
@@ -146,151 +136,6 @@ public abstract class BlockInfo implements LocalSpaceInfo, Position, Comparable<
     public final int getToColumn() {
         return this.toColumn;
     }
-
-    /**
-     * このブロックで定義されているローカル変数を追加する． public 宣言してあるが， プラグインからの呼び出しははじく．
-     * 
-     * @param localVariable 追加する引数
-     */
-    public final void addLocalVariable(final LocalVariableInfo localVariable) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == localVariable) {
-            throw new NullPointerException();
-        }
-
-        this.localVariables.add(localVariable);
-    }
-
-    /**
-     * このブロックが参照している変数を追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param referencee 追加する参照されている変数
-     */
-    public final void addReferencee(final FieldInfo referencee) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == referencee) {
-            throw new NullPointerException();
-        }
-
-        this.referencees.add(referencee);
-    }
-
-    /**
-     * このブロックが代入を行っている変数を追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param assignmentee 追加する代入されている変数
-     */
-    public final void addAssignmentee(final FieldInfo assignmentee) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == assignmentee) {
-            throw new NullPointerException();
-        }
-
-        this.assignmentees.add(assignmentee);
-    }
-
-    /**
-     * このブロックが呼び出しているメソッドを追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param callee 追加する呼び出されるメソッド
-     */
-    public final void addCallee(final MethodInfo callee) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == callee) {
-            throw new NullPointerException();
-        }
-
-        this.callees.add(callee);
-    }
-
-    /**
-     * このブロックの直内のブロックを追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param innerBlock 追加する直内ブロック
-     */
-    public void addInnerBlock(final BlockInfo innerBlock) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == innerBlock) {
-            throw new NullPointerException();
-        }
-
-        this.innerBlocks.add(innerBlock);
-    }
-
-    /**
-     * このブロックが参照しているフィールドの SortedSet を返す．
-     * 
-     * @return このブロックが参照しているフィールドの SortedSet
-     */
-    public final SortedSet<FieldInfo> getReferencees() {
-        return Collections.unmodifiableSortedSet(this.referencees);
-    }
-
-    /**
-     * このブロックが代入しているフィールドの SortedSet を返す．
-     * 
-     * @return このブロックが代入しているフィールドの SortedSet
-     */
-    public final SortedSet<FieldInfo> getAssignmentees() {
-        return Collections.unmodifiableSortedSet(this.assignmentees);
-    }
-
-    /**
-     * このブロックで定義されているローカル変数の SortedSet を返す．
-     * 
-     * @return このブロックで定義されているローカル変数の SortedSet
-     */
-    public final SortedSet<LocalVariableInfo> getLocalVariables() {
-        return Collections.unmodifiableSortedSet(this.localVariables);
-    }
-
-    /**
-     * このブロック内で呼び出されているメソッドの SortedSet を返す．
-     * 
-     * @return このブロック内で呼び出されているメソッドの SortedSet
-     */
-    public final SortedSet<MethodInfo> getCallees() {
-        return Collections.unmodifiableSortedSet(this.callees);
-    }
-
-    /**
-     * このブロックの直内のブロックの SortedSet を返す．
-     * 
-     * @return このブロックの直内のブロックの SortedSet
-     */
-    public final SortedSet<BlockInfo> getInnerBlocks() {
-        return Collections.unmodifiableSortedSet(this.innerBlocks);
-    }
-
-    /**
-     * このブロックの内部で定義されているローカル変数
-     */
-    private final SortedSet<LocalVariableInfo> localVariables;
-
-    /**
-     * 参照しているフィールド一覧を保存するための変数
-     */
-    private final SortedSet<FieldInfo> referencees;
-
-    /**
-     * 代入しているフィールド一覧を保存するための変数
-     */
-    private final SortedSet<FieldInfo> assignmentees;
-
-    /**
-     * 呼び出しているメソッド一覧を保存するための変数
-     */
-    private final SortedSet<MethodInfo> callees;
-
-    /**
-     * このブロックの直下のブロックを保存するための変数
-     */
-    private final SortedSet<BlockInfo> innerBlocks;
 
     /**
      * このブロックを所有するクラスを保存するための変数

@@ -2,11 +2,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -16,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClass
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
-public abstract class MethodInfo implements LocalSpaceInfo, Comparable<MethodInfo>,
+public abstract class MethodInfo extends LocalSpaceInfo implements Comparable<MethodInfo>,
         MetricMeasurable {
 
     /**
@@ -39,7 +37,7 @@ public abstract class MethodInfo implements LocalSpaceInfo, Comparable<MethodInf
         this.returnType = null;
 
         this.parameters = new LinkedList<ParameterInfo>();
-        this.callees = new HashSet<MemberCallInfo>();
+
         this.callers = new TreeSet<MethodInfo>();
         this.overridees = new TreeSet<MethodInfo>();
         this.overriders = new TreeSet<MethodInfo>();
@@ -399,21 +397,6 @@ public abstract class MethodInfo implements LocalSpaceInfo, Comparable<MethodInf
     }
 
     /**
-     * メソッドおよびコンストラクタ呼び出しを追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param callee 追加する呼び出されるメソッド
-     */
-    public void addCallee(final MemberCallInfo memberCall) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == memberCall) {
-            throw new NullPointerException();
-        }
-
-        this.callees.add(memberCall);
-    }
-
-    /**
      * このメソッドを呼び出しているメソッドを追加する．プラグインから呼ぶとランタイムエラー．
      * 
      * @param caller 追加する呼び出すメソッド
@@ -457,27 +440,6 @@ public abstract class MethodInfo implements LocalSpaceInfo, Comparable<MethodInf
         }
 
         this.overriders.add(overrider);
-    }
-
-    /**
-     * メソッドおよびコンストラクタ呼び出し一覧を返す
-     */
-    public Set<MemberCallInfo> getMemberCalls() {
-        return Collections.unmodifiableSet(this.callees);
-
-    }
-
-    /**
-     * このメソッドが呼び出しているメソッドおよびコンストラクタの SortedSet を返す．
-     * 
-     * @return このメソッドが呼び出しているメソッドの SortedSet
-     */
-    public SortedSet<MethodInfo> getCallees() {
-        final SortedSet<MethodInfo> callees = new TreeSet<MethodInfo>();
-        for (final MemberCallInfo memberCall : this.getMemberCalls()) {
-            callees.add(memberCall.getCallee());
-        }
-        return Collections.unmodifiableSortedSet(callees);
     }
 
     /**
@@ -531,11 +493,6 @@ public abstract class MethodInfo implements LocalSpaceInfo, Comparable<MethodInf
      * 引数のリストの保存するための変数
      */
     protected final List<ParameterInfo> parameters;
-
-    /**
-     * メソッド呼び出し一覧を保存するための変数
-     */
-    protected final Set<MemberCallInfo> callees;
 
     /**
      * このメソッドを呼び出しているメソッド一覧を保存するための変数

@@ -68,9 +68,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<TypeParameterInfo>();
-        this.localVariables = new TreeSet<LocalVariableInfo>();
-        this.fieldUsages = new HashSet<FieldUsageInfo>();
-        this.innerBlocks = new TreeSet<BlockInfo>();
         this.unresolvedUsage = new HashSet<UnresolvedEntityUsageInfo>();
 
         this.modifiers.addAll(modifiers);
@@ -86,51 +83,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
         this.fromColumn = fromColumn;
         this.toLine = toLine;
         this.toColumn = toColumn;
-    }
-
-    /**
-     * このメソッドで定義されているローカル変数を追加する． public 宣言してあるが， プラグインからの呼び出しははじく．
-     * 
-     * @param localVariable 追加する引数
-     */
-    public void addLocalVariable(final LocalVariableInfo localVariable) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == localVariable) {
-            throw new NullPointerException();
-        }
-
-        this.localVariables.add(localVariable);
-    }
-
-    /**
-     * このメソッドが参照している変数を追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param fieldUsage 追加するフィールド利用
-     */
-    public void addFieldUsage(final FieldUsageInfo fieldUsage) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == fieldUsage) {
-            throw new NullPointerException();
-        }
-
-        this.fieldUsages.add(fieldUsage);
-    }
-
-    /**
-     * このメソッドの直内ブロックを追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param innerBlock 追加する直内ブロック
-     */
-    public void addInnerBlock(final BlockInfo innerBlock) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == innerBlock) {
-            throw new NullPointerException();
-        }
-
-        this.innerBlocks.add(innerBlock);
     }
 
     /**
@@ -164,15 +116,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
     }
 
     /**
-     * このメソッドで定義されているローカル変数の SortedSet を返す．
-     * 
-     * @return このメソッドで定義されているローカル変数の SortedSet
-     */
-    public SortedSet<LocalVariableInfo> getLocalVariables() {
-        return Collections.unmodifiableSortedSet(this.localVariables);
-    }
-
-    /**
      * 修飾子の Set を返す
      * 
      * @return 修飾子の Set
@@ -188,13 +131,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      */
     public int getLOC() {
         return this.getToLine() - this.getFromLine() + 1;
-    }
-
-    /**
-     * このメソッドのフィールド利用のSetを返す
-     */
-    public Set<FieldUsageInfo> getFieldUsages() {
-        return Collections.unmodifiableSet(this.fieldUsages);
     }
 
     /**
@@ -228,15 +164,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
         }
 
         return Collections.unmodifiableSortedSet(assignmentees);
-    }
-
-    /**
-     * このメソッドの直内ブロックの SortedSet を返す．
-     * 
-     * @return このメソッドの直内ブロックの SortedSet を返す．
-     */
-    public SortedSet<BlockInfo> getInnerBlocks() {
-        return Collections.unmodifiableSortedSet(this.innerBlocks);
     }
 
     /**
@@ -356,21 +283,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * 型パラメータを保存する変数
      */
     private final List<TypeParameterInfo> typeParameters;
-
-    /**
-     * このメソッドの内部で定義されているローカル変数
-     */
-    private final SortedSet<LocalVariableInfo> localVariables;
-
-    /**
-     * 利用しているフィールド一覧を保存するための変数
-     */
-    private final Set<FieldUsageInfo> fieldUsages;
-
-    /**
-     * このメソッド直内のブロック一覧を保存するための変数
-     */
-    private final SortedSet<BlockInfo> innerBlocks;
 
     /**
      * 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しなどを保存するための変数
