@@ -4,7 +4,19 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -37,13 +49,187 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
         //this.ownerType = null;
         this.typeParameterUsages = new LinkedList<UnresolvedReferenceTypeInfo>();
     }
-    
+
+    @Override
+    public boolean alreadyResolved() {
+        return null != this.resolvedInfo;
+    }
+
+    @Override
+    public TypeInfo getResolvedType() {
+
+        if (!this.alreadyResolved()) {
+            throw new NotResolvedException();
+        }
+
+        return this.resolvedInfo;
+    }
+
+    @Override
+    public TypeInfo resolveType(TargetClassInfo usingClass, TargetMethodInfo usingMethod,
+            ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
+            MethodInfoManager methodInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == classInfoManager) {
+            throw new NullPointerException();
+        }
+
+        // 既に解決済みである場合は，キャッシュを返す
+        if (this.alreadyResolved()) {
+            return this.getResolvedType();
+        }
+
+        //　単項参照の場合
+        if (this.isMoniminalReference()) {
+
+            //　インポートされているパッケージ内のクラスから検索
+            for (final AvailableNamespaceInfo availableNamespace : this.getAvailableNamespaces()) {
+
+                // import aaa.bbb.*の場合 (クラス名の部分が*)
+                if (availableNamespace.isAllClasses()) {
+
+                    //　利用可能なクラス一覧を取得し，そこから検索
+                    final String[] namespace = availableNamespace.getNamespace();
+                    for (final ClassInfo availableClass : classInfoManager.getClassInfos(namespace)) {
+
+                        //　参照されているクラスが見つかった
+                        if (this.referenceName[0].equals(availableClass.getClassName())) {
+                            // TODO 型パラメータの情報を保存する処理が必要
+                            this.resolvedInfo = new ReferenceTypeInfo(availableClass);
+                            return this.resolvedInfo;
+                        }
+                    }
+
+                    // import aaa.bbb.CCCの場合　(クラス名まで記述されている)
+                } else {
+
+                    ClassInfo referencedClass = classInfoManager.getClassInfo(availableNamespace
+                            .getImportName());
+                    // null の場合は外部クラスの参照とみなす
+                    if (null == referencedClass) {
+                        referencedClass = new ExternalClassInfo(availableNamespace.getImportName());
+                        classInfoManager.add((ExternalClassInfo) referencedClass);
+                    }
+
+                    // TODO　型パラメータの情報を格納する処理が必要
+                    this.resolvedInfo = new ReferenceTypeInfo(referencedClass);
+                    return this.resolvedInfo;
+                }
+            }
+
+            // デフォルトパッケージからクラスを検索
+            for (final ClassInfo availableClass : classInfoManager.getClassInfos(new String[0])) {
+
+                // 参照されているクラスが見つかった
+                if (this.referenceName[0].equals(availableClass.getClassName())) {
+                    // TODO　型パラメータの情報を保存する処理が必要
+                    this.resolvedInfo = new ReferenceTypeInfo(availableClass);
+                    return this.resolvedInfo;
+                }
+            }
+
+            // 複数項参照の場合
+        } else {
+
+            //　インポートされているクラスの子クラスから検索
+            AVAILABLENAMESPACE: for (final AvailableNamespaceInfo availableNamespace : this
+                    .getAvailableNamespaces()) {
+
+                // import aaa.bbb.*の場合 (クラス名の部分が*)
+                if (availableNamespace.isAllClasses()) {
+
+                    // 利用可能なクラス一覧を取得し，そこから検索
+                    final String[] namespace = availableNamespace.getNamespace();
+                    for (final ClassInfo availableClass : classInfoManager.getClassInfos(namespace)) {
+
+                        //　参照されているクラスが見つかった
+                        if (this.referenceName[0].equals(availableClass.getClassName())) {
+
+                            // 対象クラスでない場合は内部クラス情報はわからないのでスキップ
+                            if (!(availableClass instanceof TargetClassInfo)) {
+                                continue AVAILABLENAMESPACE;
+                            }
+
+                            // 対象クラスの場合は，順に内部クラスをたどって行く
+                            TargetClassInfo currentClass = (TargetClassInfo) availableClass;
+                            INDEX: for (int index = 1; index < this.referenceName.length; index++) {
+                                final SortedSet<TargetInnerClassInfo> innerClasses = currentClass
+                                        .getInnerClasses();
+                                for (final TargetInnerClassInfo innerClass : innerClasses) {
+
+                                    if (this.referenceName[index].equals(innerClass.getClassName())) {
+                                        currentClass = innerClass;
+                                        continue INDEX;
+                                    }
+
+                                    // ここに到達するのは，クラスが見つからなかった場合
+                                    this.resolvedInfo = UnknownTypeInfo.getInstance();
+                                    return this.resolvedInfo;
+                                }
+                            }
+
+                            //　ここに到達するのは，クラスが見つかった場合
+                            this.resolvedInfo = new ReferenceTypeInfo(currentClass);
+                            // TODO 型パラメータの処理が必要
+                            return this.resolvedInfo;
+                        }
+                    }
+
+                    // import aaa.bbb.CCCの場合 (クラス名まで記述されている)
+                } else {
+
+                    ClassInfo importClass = classInfoManager.getClassInfo(availableNamespace
+                            .getImportName());
+
+                    //　null の場合はその(外部)クラスを表すオブジェクトを作成 
+                    if (null == importClass) {
+                        importClass = new ExternalClassInfo(availableNamespace.getImportName());
+                        classInfoManager.add((ExternalClassInfo) importClass);
+                    }
+
+                    // importClassが対象クラスでない場合は内部クラス情報がわからないのでスキップ
+                    if (!(importClass instanceof TargetClassInfo)) {
+                        continue AVAILABLENAMESPACE;
+                    }
+
+                    // 対象クラスの場合は，順に内部クラスをたどって行く
+                    TargetClassInfo currentClass = (TargetClassInfo) importClass;
+                    INDEX: for (int index = 1; index < this.referenceName.length; index++) {
+                        final SortedSet<TargetInnerClassInfo> innerClasses = currentClass
+                                .getInnerClasses();
+                        for (final TargetInnerClassInfo innerClass : innerClasses) {
+
+                            if (this.referenceName[index].equals(innerClass.getClassName())) {
+                                currentClass = innerClass;
+                                continue INDEX;
+                            }
+
+                            // ここに到達するのは，クラスが見つからなかった場合
+                            this.resolvedInfo = UnknownTypeInfo.getInstance();
+                            return this.resolvedInfo;
+                        }
+                    }
+
+                    //　ここに到達するのは，クラスが見つかった場合
+                    this.resolvedInfo = new ReferenceTypeInfo(currentClass);
+                    // TODO 型パラメータの処理が必要
+                    return this.resolvedInfo;
+                }
+            }
+        }
+
+        this.resolvedInfo = UnknownTypeInfo.getInstance();
+        return this.resolvedInfo;
+    }
+
     /**
      * 利用可能な名前空間，型の完全修飾名を与えて初期化
      * @param referenceName 型の完全修飾名
      */
     public UnresolvedReferenceTypeInfo(final String[] referenceName) {
-    	this(new AvailableNamespaceInfoSet(), referenceName);
+        this(new AvailableNamespaceInfoSet(), referenceName);
     }
 
     ///**
@@ -72,7 +258,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
         this.ownerType = ownerType;
         this.typeParameterUsages = new LinkedList<UnresolvedReferenceTypeInfo>();
     }
-*/
+    */
     /**
      * 型パラメータ使用を追加する
      * 
@@ -115,7 +301,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
     /*public final String[] getFullReferenceName() {
         return this.fullReferenceName;
     }*/
-    
+
     /**
      * この参照型の参照名を返す
      * 
@@ -172,7 +358,16 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
     public final AvailableNamespaceInfoSet getAvailableNamespaces() {
         return this.availableNamespaceSet;
     }
-    
+
+    /**
+     * この参照が単項かどうかを返す
+     * 
+     * @return　単項である場合はtrue，そうでない場合はfalse
+     */
+    public final boolean isMoniminalReference() {
+        return 1 == this.referenceName.length;
+    }
+
     public final static UnresolvedReferenceTypeInfo getInstance(UnresolvedClassInfo referencedClass) {
         return new UnresolvedReferenceTypeInfo(referencedClass.getFullQualifiedName());
     }
@@ -186,7 +381,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 参照名を保存する変数
      */
     private final String[] referenceName;
-    
+
     ///**
     // * ownerも含めた参照名を保存する変数
     // */
@@ -201,5 +396,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 型引数参照を保存するための変数
      */
     private final List<UnresolvedReferenceTypeInfo> typeParameterUsages;
-    
+
+    private TypeInfo resolvedInfo;
+
 }
