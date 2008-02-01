@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
@@ -49,7 +49,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
         this.referenceName = referenceName;
         this.fullReferenceName = referenceName;
         this.ownerUsage = null;
-        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
+        this.typeArguments = new LinkedList<UnresolvedClassTypeInfo>();
     }
 
     /**
@@ -77,7 +77,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
         this.fullReferenceName = fullReferenceName;
         this.referenceName = referenceName;
         this.ownerUsage = ownerUsage;
-        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
+        this.typeArguments = new LinkedList<UnresolvedClassTypeInfo>();
     }
 
     /**
@@ -150,7 +150,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                             // TODO 利用関係を構築するコードが必要？
 
                             // TODO 型パラメータ情報を追記する処理が必要
-                            final ReferenceTypeInfo reference = new ReferenceTypeInfo(innerClass);
+                            final ClassTypeInfo reference = new ClassTypeInfo(innerClass);
                             classReference = new ClassReferenceInfo(reference);
                             continue NEXT_NAME;
                         }
@@ -183,7 +183,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                 }
 
                 // TODO 型パラメータ情報を追記する処理が必要
-                final ReferenceTypeInfo reference = new ReferenceTypeInfo(classInfo);
+                final ClassTypeInfo reference = new ClassTypeInfo(classInfo);
                 this.resolvedInfo = new ClassReferenceInfo(reference);
                 return this.resolvedInfo;
             }
@@ -194,7 +194,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                 if (null != classInfo) {
 
                     // TODO　型パラメータ情報を追記する処理が必要
-                    final ReferenceTypeInfo reference = new ReferenceTypeInfo(classInfo);
+                    final ClassTypeInfo reference = new ClassTypeInfo(classInfo);
                     this.resolvedInfo = new ClassReferenceInfo(reference);
                     return this.resolvedInfo;
                 }
@@ -216,7 +216,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
 
                         // availableField.getType() から次のword(name[i])を名前解決
                         // TODO 型パラメータ情報を格納する処理が必要
-                        ReferenceTypeInfo reference = new ReferenceTypeInfo(innerClassInfo);
+                        ClassTypeInfo reference = new ClassTypeInfo(innerClassInfo);
                         EntityUsageInfo classReference = new ClassReferenceInfo(reference);
                         NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
@@ -240,7 +240,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                                         // TODO 利用関係を構築するコードが必要？
 
                                         // TODO　型パラメータ情報を格納する処理が必要
-                                        reference = new ReferenceTypeInfo(innerClass);
+                                        reference = new ClassTypeInfo(innerClass);
                                         classReference = new ClassReferenceInfo(reference);
                                         continue NEXT_NAME;
                                     }
@@ -282,7 +282,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
 
                                 // availableField.getType() から次のword(name[i])を名前解決
                                 // TODO 型パラメータ情報を格納する処理が必要
-                                ReferenceTypeInfo reference = new ReferenceTypeInfo(classInfo);
+                                ClassTypeInfo reference = new ClassTypeInfo(classInfo);
                                 EntityUsageInfo classReference = new ClassReferenceInfo(reference);
                                 NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
@@ -306,7 +306,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                                                 // TODO 利用関係を構築するコードが必要？
 
                                                 // TODO 型パラメータ情報を格納する処理が必要
-                                                reference = new ReferenceTypeInfo(innerClass);
+                                                reference = new ClassTypeInfo(innerClass);
                                                 classReference = new ClassReferenceInfo(reference);
                                                 continue NEXT_NAME;
                                             }
@@ -347,7 +347,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                             }
 
                             // TODO 型パラメータ情報を格納する処理が必要
-                            ReferenceTypeInfo reference = new ReferenceTypeInfo(specifiedClassInfo);
+                            ClassTypeInfo reference = new ClassTypeInfo(specifiedClassInfo);
                             EntityUsageInfo classReference = new ClassReferenceInfo(reference);
                             NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
@@ -371,7 +371,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
                                             // TODO 利用関係を構築するコードが必要？
 
                                             // TODO 型パラメータ情報を格納する処理が必要
-                                            reference = new ReferenceTypeInfo(innerClass);
+                                            reference = new ClassTypeInfo(innerClass);
                                             classReference = new ClassReferenceInfo(reference);
                                             continue NEXT_NAME;
                                         }
@@ -416,7 +416,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
      * @param typeArgument 追加する型パラメータ使用
      */
     public final void addTypeArgument(
-            final UnresolvedReferenceTypeInfo typeArgument) {
+            final UnresolvedClassTypeInfo typeArgument) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -432,7 +432,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
      * 
      * @return このクラス参照で使用されている型パラメータの List
      */
-    public final List<UnresolvedReferenceTypeInfo> getTypeArguments() {
+    public final List<UnresolvedClassTypeInfo> getTypeArguments() {
         return Collections.unmodifiableList(this.typeArguments);
     }
 
@@ -516,7 +516,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
 	}
 	
 	public final static UnresolvedClassReferenceInfo createClassReference(
-			UnresolvedReferenceTypeInfo referenceType) {
+			UnresolvedClassTypeInfo referenceType) {
 		return new UnresolvedClassReferenceInfo(referenceType.getAvailableNamespaces(), referenceType.getReferenceName());
 	}
 
@@ -543,7 +543,7 @@ public class UnresolvedClassReferenceInfo implements UnresolvedEntityUsageInfo {
     /**
      * 未解決型パラメータ使用を保存するための変数
      */
-    private final List<UnresolvedReferenceTypeInfo> typeArguments;
+    private final List<UnresolvedClassTypeInfo> typeArguments;
 
     /**
      * 解決済みクラス参照を保存するための変数

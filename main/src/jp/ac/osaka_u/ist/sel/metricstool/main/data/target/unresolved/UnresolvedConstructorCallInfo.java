@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
@@ -29,7 +29,7 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedMemberCallInf
      * 
      * @param unresolvedClassType コンストラクタ呼び出しが実行される型
      */
-    public UnresolvedConstructorCallInfo(final UnresolvedReferenceTypeInfo unresolvedClassType) {
+    public UnresolvedConstructorCallInfo(final UnresolvedClassTypeInfo unresolvedClassType) {
 
         super();
 
@@ -66,11 +66,11 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedMemberCallInf
         //　コンストラクタの型を解決
         final TypeInfo classType = this.getClassType().resolveType(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-        if (!(classType instanceof ReferenceTypeInfo)) {
+        if (!(classType instanceof ClassTypeInfo)) {
             assert false : "Error handling must be inserted!";
         }
 
-        final ClassInfo referencedClass = ((ReferenceTypeInfo) classType).getReferencedClass();
+        final ClassInfo referencedClass = ((ClassTypeInfo) classType).getReferencedClass();
         if (referencedClass instanceof TargetClassInfo) {
 
         } else if (referencedClass instanceof ExternalClassInfo) {
@@ -81,10 +81,10 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedMemberCallInf
         return null;
     }
 
-    public UnresolvedReferenceTypeInfo getClassType() {
+    public UnresolvedClassTypeInfo getClassType() {
         return this.unresolvedClassType;
     }
 
-    private final UnresolvedReferenceTypeInfo unresolvedClassType;
+    private final UnresolvedClassTypeInfo unresolvedClassType;
 
 }

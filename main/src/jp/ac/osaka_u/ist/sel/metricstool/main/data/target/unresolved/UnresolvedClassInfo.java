@@ -53,7 +53,7 @@ public final class UnresolvedClassInfo implements VisualizableSetting, MemberSet
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
-        this.superClasses = new LinkedHashSet<UnresolvedReferenceTypeInfo>();
+        this.superClasses = new LinkedHashSet<UnresolvedClassTypeInfo>();
         this.innerClasses = new HashSet<UnresolvedClassInfo>();
         this.definedMethods = new HashSet<UnresolvedMethodInfo>();
         this.definedFields = new HashSet<UnresolvedFieldInfo>();
@@ -254,7 +254,7 @@ public final class UnresolvedClassInfo implements VisualizableSetting, MemberSet
      * 
      * @param superClass 親クラス名
      */
-    public void addSuperClass(final UnresolvedReferenceTypeInfo superClass) {
+    public void addSuperClass(final UnresolvedClassTypeInfo superClass) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -318,7 +318,7 @@ public final class UnresolvedClassInfo implements VisualizableSetting, MemberSet
      * 
      * @return 親クラス名のセット
      */
-    public Set<UnresolvedReferenceTypeInfo> getSuperClasses() {
+    public Set<UnresolvedClassTypeInfo> getSuperClasses() {
         return Collections.unmodifiableSet(this.superClasses);
     }
 
@@ -664,7 +664,7 @@ public final class UnresolvedClassInfo implements VisualizableSetting, MemberSet
     /**
      * 親クラスを保存するためのセット
      */
-    private final Set<UnresolvedReferenceTypeInfo> superClasses;
+    private final Set<UnresolvedClassTypeInfo> superClasses;
 
     /**
      * インナークラスを保存するためのセット

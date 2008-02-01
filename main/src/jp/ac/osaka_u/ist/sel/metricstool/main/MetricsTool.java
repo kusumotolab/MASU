@@ -32,7 +32,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MemberCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
@@ -49,7 +49,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedF
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMemberCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVClassMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVFileMetricsWriter;
@@ -881,7 +881,7 @@ public class MetricsTool {
                 assert null != classInfo : "classInfo shouldn't be null!";
 
                 // 各親クラス名に対して
-                for (final UnresolvedReferenceTypeInfo unresolvedSuperClassType : unresolvedClassInfo
+                for (final UnresolvedClassTypeInfo unresolvedSuperClassType : unresolvedClassInfo
                         .getSuperClasses()) {
 
                     TypeInfo superClassType = unresolvedSuperClassType.resolveType(classInfo, null,
@@ -895,11 +895,11 @@ public class MetricsTool {
                             final ExternalClassInfo superClass = new ExternalClassInfo(
                                     unresolvedSuperClassType.getTypeName());
                             classInfoManager.add(superClass);
-                            superClassType = new ReferenceTypeInfo(superClass);
+                            superClassType = new ClassTypeInfo(superClass);
                         }
 
-                        classInfo.addSuperClass((ReferenceTypeInfo) superClassType);
-                        ((ReferenceTypeInfo) superClassType).getReferencedClass().addSubClass(
+                        classInfo.addSuperClass((ClassTypeInfo) superClassType);
+                        ((ClassTypeInfo) superClassType).getReferencedClass().addSubClass(
                                 classInfo);
 
                         // null な場合は名前解決に失敗したとみなすので unresolvedClassInfo は unresolvableClasses
@@ -937,7 +937,7 @@ public class MetricsTool {
         assert null != classInfo : "classInfo shouldn't be null!";
 
         // 各親クラス名に対して
-        for (final UnresolvedReferenceTypeInfo unresolvedSuperClassType : unresolvedClassInfo
+        for (final UnresolvedClassTypeInfo unresolvedSuperClassType : unresolvedClassInfo
                 .getSuperClasses()) {
 
             TypeInfo superClassType = unresolvedSuperClassType.resolveType(classInfo, null,
@@ -957,8 +957,8 @@ public class MetricsTool {
                     classInfoManager.add(superClass);
                 }
 
-                classInfo.addSuperClass((ReferenceTypeInfo) superClassType);
-                ((ReferenceTypeInfo) superClassType).getReferencedClass().addSubClass(classInfo);
+                classInfo.addSuperClass((ClassTypeInfo) superClassType);
+                ((ClassTypeInfo) superClassType).getReferencedClass().addSubClass(classInfo);
             }
         }
 
@@ -1120,7 +1120,7 @@ public class MetricsTool {
     private void addOverrideRelation(final TargetClassInfo classInfo) {
 
         // 各親クラスに対して
-        for (final ClassInfo superClassInfo : ReferenceTypeInfo
+        for (final ClassInfo superClassInfo : ClassTypeInfo
                 .convert(classInfo.getSuperClasses())) {
 
             // 各対象クラスの各メソッドについて，親クラスのメソッドをオーバーライドしているかを調査
@@ -1173,7 +1173,7 @@ public class MetricsTool {
         }
 
         // 親クラス群に対して再帰的に処理
-        for (final ClassInfo superClassInfo : ReferenceTypeInfo
+        for (final ClassInfo superClassInfo : ClassTypeInfo
                 .convert(classInfo.getSuperClasses())) {
             addOverrideRelation(superClassInfo, overrider);
         }

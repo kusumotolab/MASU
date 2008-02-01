@@ -16,7 +16,7 @@ public final class ClassReferenceInfo extends EntityUsageInfo {
      * 
      * @param referenceType　このクラス参照の参照型
      */
-    public ClassReferenceInfo(final ReferenceTypeInfo referenceType) {
+    public ClassReferenceInfo(final ClassTypeInfo referenceType) {
 
         super();
 
@@ -49,5 +49,5 @@ public final class ClassReferenceInfo extends EntityUsageInfo {
     /**
      * このクラス参照の参照型を保存する変数
      */
-    private final ReferenceTypeInfo referenceType;
+    private final ClassTypeInfo referenceType;
 }

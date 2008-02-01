@@ -5,7 +5,7 @@ import java.util.Stack;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DefaultBuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
@@ -113,7 +113,7 @@ public class JavaBuildManager extends DefaultBuildDataManager{
 
     private static final AvailableNamespaceInfo JAVA_LANG = new AvailableNamespaceInfo(new String[]{"java","lang"},true);
     
-    private static final UnresolvedReferenceTypeInfo OBJECT = new UnresolvedReferenceTypeInfo(
+    private static final UnresolvedClassTypeInfo OBJECT = new UnresolvedClassTypeInfo(
             new AvailableNamespaceInfoSet(),new String[]{"java","lang","Object"});
     
     private static enum CLASS_OR_INTERFACE{CLASS,INTERFACE}

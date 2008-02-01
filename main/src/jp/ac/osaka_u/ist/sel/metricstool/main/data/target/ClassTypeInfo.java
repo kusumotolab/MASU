@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class ReferenceTypeInfo implements TypeInfo {
+public final class ClassTypeInfo implements TypeInfo {
 
     /**
      * 参照型のListをクラスのListに変換する
@@ -26,10 +26,10 @@ public final class ReferenceTypeInfo implements TypeInfo {
      * @param references 参照型のList
      * @return クラスのList
      */
-    public static List<ClassInfo> convert(final List<ReferenceTypeInfo> references) {
+    public static List<ClassInfo> convert(final List<ClassTypeInfo> references) {
 
         final List<ClassInfo> classInfos = new LinkedList<ClassInfo>();
-        for (final ReferenceTypeInfo reference : references) {
+        for (final ClassTypeInfo reference : references) {
             classInfos.add(reference.getReferencedClass());
         }
 
@@ -42,10 +42,10 @@ public final class ReferenceTypeInfo implements TypeInfo {
      * @param references 参照型のSortedSet
      * @return クラスのSortedSet
      */
-    public static SortedSet<ClassInfo> convert(final SortedSet<ReferenceTypeInfo> references) {
+    public static SortedSet<ClassInfo> convert(final SortedSet<ClassTypeInfo> references) {
 
         final SortedSet<ClassInfo> classInfos = new TreeSet<ClassInfo>();
-        for (final ReferenceTypeInfo reference : references) {
+        for (final ClassTypeInfo reference : references) {
             classInfos.add(reference.getReferencedClass());
         }
 
@@ -57,7 +57,7 @@ public final class ReferenceTypeInfo implements TypeInfo {
      * 
      * @param referencedClass 参照されるクラス
      */
-    public ReferenceTypeInfo(final ClassInfo referencedClass) {
+    public ClassTypeInfo(final ClassInfo referencedClass) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == referencedClass) {
@@ -65,7 +65,7 @@ public final class ReferenceTypeInfo implements TypeInfo {
         }
 
         this.referencedClass = referencedClass;
-        this.typeParameters = new ArrayList<ReferenceTypeInfo>();
+        this.typeParameters = new ArrayList<ClassTypeInfo>();
     }
 
     /**
@@ -82,32 +82,32 @@ public final class ReferenceTypeInfo implements TypeInfo {
         }
 
         // 引数が参照型でなければ，等しくない
-        if (!(typeInfo instanceof ReferenceTypeInfo)) {
+        if (!(typeInfo instanceof ClassTypeInfo)) {
             return false;
         }
 
         // 引数が参照型の場合，
         // 参照されているクラスが等しくない場合は，参照型は等しくない
-        final ReferenceTypeInfo targetReferenceType = (ReferenceTypeInfo) typeInfo;
+        final ClassTypeInfo targetReferenceType = (ClassTypeInfo) typeInfo;
         if (!this.referencedClass.equals(targetReferenceType)) {
             return false;
         }
 
         // 型パラメータの数が異なる場合は，等しくない
-        final List<ReferenceTypeInfo> thisTypeParameters = this.typeParameters;
-        final List<ReferenceTypeInfo> targetTypeParameters = targetReferenceType
+        final List<ClassTypeInfo> thisTypeParameters = this.typeParameters;
+        final List<ClassTypeInfo> targetTypeParameters = targetReferenceType
                 .getTypeParameters();
         if (thisTypeParameters.size() != targetTypeParameters.size()) {
             return false;
         }
 
         // 全ての型パラメータが等しくなければ，等しくない
-        final Iterator<ReferenceTypeInfo> thisTypeParameterIterator = thisTypeParameters.iterator();
-        final Iterator<ReferenceTypeInfo> targetTypeParameterIterator = targetTypeParameters
+        final Iterator<ClassTypeInfo> thisTypeParameterIterator = thisTypeParameters.iterator();
+        final Iterator<ClassTypeInfo> targetTypeParameterIterator = targetTypeParameters
                 .iterator();
         while (thisTypeParameterIterator.hasNext()) {
-            final ReferenceTypeInfo thisTypeParameter = thisTypeParameterIterator.next();
-            final ReferenceTypeInfo targetTypeParameter = targetTypeParameterIterator.next();
+            final ClassTypeInfo thisTypeParameter = thisTypeParameterIterator.next();
+            final ClassTypeInfo targetTypeParameter = targetTypeParameterIterator.next();
             if (!thisTypeParameter.equals(targetTypeParameter)) {
                 return false;
             }
@@ -129,7 +129,7 @@ public final class ReferenceTypeInfo implements TypeInfo {
 
         if (0 <= this.typeParameters.size()) {
             sb.append("<");
-            for (final ReferenceTypeInfo typeParameter : this.typeParameters) {
+            for (final ClassTypeInfo typeParameter : this.typeParameters) {
                 sb.append(typeParameter.getTypeName());
             }
             sb.append(">");
@@ -152,7 +152,7 @@ public final class ReferenceTypeInfo implements TypeInfo {
      * 
      * @return この参照型に用いられている型パラメータのリストを返す
      */
-    public List<ReferenceTypeInfo> getTypeParameters() {
+    public List<ClassTypeInfo> getTypeParameters() {
         return Collections.unmodifiableList(this.typeParameters);
     }
 
@@ -164,6 +164,6 @@ public final class ReferenceTypeInfo implements TypeInfo {
     /**
      * この参照型の型パラメータを保存するための変数
      */
-    private final List<ReferenceTypeInfo> typeParameters;
+    private final List<ClassTypeInfo> typeParameters;
 
 }

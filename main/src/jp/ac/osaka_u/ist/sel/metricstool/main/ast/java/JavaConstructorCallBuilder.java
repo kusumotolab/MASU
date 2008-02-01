@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNa
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorCallInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -62,7 +62,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         AvailableNamespaceInfoSet namespaces = new AvailableNamespaceInfoSet();
         AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(currentClass.getNamespace(), false);
         namespaces.add(namespace);
-        UnresolvedReferenceTypeInfo referenceType = new UnresolvedReferenceTypeInfo(namespaces, currentClass.getFullQualifiedName());
+        UnresolvedClassTypeInfo referenceType = new UnresolvedClassTypeInfo(namespaces, currentClass.getFullQualifiedName());
 
         UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(referenceType);
         resolveParameters(constructorCall, elements, 0);
@@ -70,7 +70,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         buildDataManager.addMethodCall(constructorCall);
     }
 
-    protected void buildSuperConstructorCall(UnresolvedReferenceTypeInfo superClass) {
+    protected void buildSuperConstructorCall(UnresolvedClassTypeInfo superClass) {
         ExpressionElement[] elements = getAvailableElements();
 
         int argStartIndex = 0;
@@ -85,8 +85,8 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
             //ÇªÇÍÇÕOuterClass.this.super()Ç∆Ç¢Ç§åƒÇ—èoÇµå`éÆÇ≈Ç†ÇÈÇ∆Ç›Ç»Ç∑
 
             UnresolvedTypeInfo type = ((TypeElement) elements[0]).getType();
-            if (type instanceof UnresolvedReferenceTypeInfo) {
-                String[] firstElementReference = ((UnresolvedReferenceTypeInfo) type).getReferenceName();
+            if (type instanceof UnresolvedClassTypeInfo) {
+                String[] firstElementReference = ((UnresolvedClassTypeInfo) type).getReferenceName();
                         //.getFullReferenceName();
                 if (firstElementReference.length < superClassReferenceName.length) {
                     boolean match = true;

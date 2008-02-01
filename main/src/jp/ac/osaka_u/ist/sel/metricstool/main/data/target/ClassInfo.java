@@ -35,7 +35,7 @@ public abstract class ClassInfo implements UnitInfo, Comparable<ClassInfo>, Metr
 
         this.namespace = namespace;
         this.className = className;
-        this.superClasses = new TreeSet<ReferenceTypeInfo>();
+        this.superClasses = new TreeSet<ClassTypeInfo>();
         this.subClasses = new TreeSet<ClassInfo>();
     }
 
@@ -59,7 +59,7 @@ public abstract class ClassInfo implements UnitInfo, Comparable<ClassInfo>, Metr
         System.arraycopy(fullQualifiedName, 0, namespace, 0, fullQualifiedName.length - 1);
         this.namespace = new NamespaceInfo(namespace);
         this.className = fullQualifiedName[fullQualifiedName.length - 1];
-        this.superClasses = new TreeSet<ReferenceTypeInfo>();
+        this.superClasses = new TreeSet<ClassTypeInfo>();
         this.subClasses = new TreeSet<ClassInfo>();
     }
 
@@ -117,7 +117,7 @@ public abstract class ClassInfo implements UnitInfo, Comparable<ClassInfo>, Metr
      * 
      * @param referenceType 追加する親クラスの型
      */
-    public void addSuperClass(final ReferenceTypeInfo referenceType) {
+    public void addSuperClass(final ClassTypeInfo referenceType) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == referenceType) {
@@ -147,7 +147,7 @@ public abstract class ClassInfo implements UnitInfo, Comparable<ClassInfo>, Metr
      * 
      * @return スーパークラスの SortedSet
      */
-    public SortedSet<ReferenceTypeInfo> getSuperClasses() {
+    public SortedSet<ClassTypeInfo> getSuperClasses() {
         return Collections.unmodifiableSortedSet(this.superClasses);
     }
 
@@ -233,7 +233,7 @@ public abstract class ClassInfo implements UnitInfo, Comparable<ClassInfo>, Metr
     public final boolean isSuperClass(final ClassInfo classInfo) {
 
         // 引数の直接の親クラスに対して
-        for (final ClassInfo superClass : ReferenceTypeInfo.convert(classInfo.getSuperClasses())) {
+        for (final ClassInfo superClass : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
 
             // 対象クラスの直接の親クラスがこのクラスと等しい場合は true を返す
             if (this.equals(superClass)) {
@@ -317,7 +317,7 @@ public abstract class ClassInfo implements UnitInfo, Comparable<ClassInfo>, Metr
     /**
      * このクラスが継承しているクラス一覧を保存するための変数． 直接の親クラスのみを保有するが，多重継承を考えて Set にしている．
      */
-    private final SortedSet<ReferenceTypeInfo> superClasses;
+    private final SortedSet<ClassTypeInfo> superClasses;
 
     /**
      * このクラスを継承しているクラス一覧を保存するための変数．直接の子クラスのみを保有する．

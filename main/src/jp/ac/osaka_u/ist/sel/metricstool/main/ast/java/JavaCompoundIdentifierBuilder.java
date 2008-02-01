@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeEle
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFullQualifiedNameClassReferenceInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
@@ -49,7 +49,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
         } else if (left.equals(JavaExpressionElement.SUPER)){
             if (right instanceof IdentifierElement){
                 UnresolvedClassInfo classInfo = buildDataManager.getCurrentClass();
-                UnresolvedReferenceTypeInfo superClassType = classInfo.getSuperClasses().iterator().next();
+                UnresolvedClassTypeInfo superClassType = classInfo.getSuperClasses().iterator().next();
                 UnresolvedClassReferenceInfo superClassReference = UnresolvedClassReferenceInfo.createClassReference(superClassType);
                 pushElement(new FieldOrMethodElement(superClassReference,((IdentifierElement)right).getName()));
             }
@@ -64,14 +64,14 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
                     UnresolvedVariableInfo variable = ((UnresolvedVariableUsageInfo) ownerUsage).getReferencedVariable();
                     boolean match = false;
                     UnresolvedClassInfo currentClass = buildDataManager.getCurrentClass();
-                    UnresolvedReferenceTypeInfo currentSuperClass = currentClass.getSuperClasses().iterator().next();
+                    UnresolvedClassTypeInfo currentSuperClass = currentClass.getSuperClasses().iterator().next();
                     String[] names = null;
                     if ( null != currentSuperClass ){
                         //names = currentSuperClass.getFullReferenceName();
                         names = currentSuperClass.getReferenceName();
                     }
-                    if (null != names && variable.getType() instanceof UnresolvedReferenceTypeInfo){
-                    	UnresolvedReferenceTypeInfo variableType = (UnresolvedReferenceTypeInfo) variable.getType();
+                    if (null != names && variable.getType() instanceof UnresolvedClassTypeInfo){
+                    	UnresolvedClassTypeInfo variableType = (UnresolvedClassTypeInfo) variable.getType();
                         for(String name : names){
                             if (name.equals(variableType.getTypeName())){
                                 match = true;
@@ -114,8 +114,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
         return classInfo;
     }
     
-    private final static UnresolvedReferenceTypeInfo JAVA_LANG_CLASS =
-        new UnresolvedReferenceTypeInfo(new AvailableNamespaceInfoSet(),
+    private final static UnresolvedClassTypeInfo JAVA_LANG_CLASS =
+        new UnresolvedClassTypeInfo(new AvailableNamespaceInfoSet(),
                 new String[]{"java","lang","Class"});
     
     private final BuildDataManager buildDataManager;

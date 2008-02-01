@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
@@ -200,7 +200,7 @@ public class UnresolvedMethodInfo implements VisualizableSetting, MemberSetting,
                 // TODO å^ÉpÉâÉÅÅ[É^ÇÃèÓïÒÇäiî[Ç∑ÇÈ
                 final ExternalClassInfo classInfo = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedMethodReturnType);
-                methodReturnType = new ReferenceTypeInfo(classInfo);
+                methodReturnType = new ClassTypeInfo(classInfo);
                 classInfoManager.add(classInfo);
 
             } else if (unresolvedMethodReturnType instanceof UnresolvedArrayTypeInfo) {

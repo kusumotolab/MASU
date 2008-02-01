@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
@@ -34,7 +34,7 @@ public abstract class UnresolvedMemberCallInfo implements UnresolvedEntityUsageI
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
+        this.typeArguments = new LinkedList<UnresolvedClassTypeInfo>();
         this.parameterTypes = new LinkedList<UnresolvedEntityUsageInfo>();
 
         this.resolvedInfo = null;
@@ -70,7 +70,7 @@ public abstract class UnresolvedMemberCallInfo implements UnresolvedEntityUsageI
      * 
      * @param typeParameterUsage 追加する型パラメータ使用
      */
-    public final void addTypeArgument(final UnresolvedReferenceTypeInfo typeParameterUsage) {
+    public final void addTypeArgument(final UnresolvedClassTypeInfo typeParameterUsage) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == typeParameterUsage) {
@@ -110,7 +110,7 @@ public abstract class UnresolvedMemberCallInfo implements UnresolvedEntityUsageI
      * 
      * @return 型パラメータ使用の List
      */
-    public final List<UnresolvedReferenceTypeInfo> getTypeArguments() {
+    public final List<UnresolvedClassTypeInfo> getTypeArguments() {
         return Collections.unmodifiableList(this.typeArguments);
     }
 
@@ -151,7 +151,7 @@ public abstract class UnresolvedMemberCallInfo implements UnresolvedEntityUsageI
                     final ExternalClassInfo externalClassInfo = NameResolver
                             .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedParameter);
                     classInfoManager.add(externalClassInfo);
-                    final ReferenceTypeInfo referenceType = new ReferenceTypeInfo(externalClassInfo);
+                    final ClassTypeInfo referenceType = new ClassTypeInfo(externalClassInfo);
                     parameter = new ClassReferenceInfo(referenceType);
 
                 } else {
@@ -172,7 +172,7 @@ public abstract class UnresolvedMemberCallInfo implements UnresolvedEntityUsageI
     /**
      * 型パラメータ使用を保存するための変数
      */
-    protected List<UnresolvedReferenceTypeInfo> typeArguments;
+    protected List<UnresolvedClassTypeInfo> typeArguments;
 
     /**
      * 引数を保存するための変数

@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BuiltinTypeToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
@@ -198,7 +198,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
                 final String[] trueName = this.buildDataManager.resolveAliase(identifier);
     
                 //QÆŒ^‚ğì¬
-                final UnresolvedReferenceTypeInfo referenceType = new UnresolvedReferenceTypeInfo(
+                final UnresolvedClassTypeInfo referenceType = new UnresolvedClassTypeInfo(
                         this.buildDataManager.getAvailableNameSpaceSet(), trueName);
     
                 //g‚¦‚éŒ^ˆø”‚ª‚ ‚ê‚Î“o˜^‚µ‚Ä‚µ‚Ü‚¤D
@@ -206,9 +206,9 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
                     for (final UnresolvedTypeInfo type : this.availableTypeArugments) {
                     	
                     	// C#‚È‚Ç‚ÍQÆŒ^ˆÈŠO‚àŒ^ˆø”‚Éw’è‰Â”\‚È‚Ì‚Å‘Îˆ‚·‚é‚Ğ‚Â‚æ‚¤‚ª‚ ‚é‚©‚à
-                    	if (type instanceof UnresolvedReferenceTypeInfo) {
+                    	if (type instanceof UnresolvedClassTypeInfo) {
                         referenceType
-                                .addTypeArgument((UnresolvedReferenceTypeInfo) type);
+                                .addTypeArgument((UnresolvedClassTypeInfo) type);
                     	}
                     }
     

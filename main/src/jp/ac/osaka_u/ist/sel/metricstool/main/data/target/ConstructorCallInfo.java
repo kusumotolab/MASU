@@ -25,7 +25,7 @@ public final class ConstructorCallInfo extends MemberCallInfo {
     public TypeInfo getType() {
 
         final ClassInfo ownerClass = this.getCallee().getOwnerClass();
-        final ReferenceTypeInfo reference = new ReferenceTypeInfo(ownerClass);
+        final ClassTypeInfo reference = new ClassTypeInfo(ownerClass);
         return reference;
     }
 

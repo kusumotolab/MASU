@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.TypeDescriptionStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  * @author kou-tngt, t-miyake
  *
  */
-public class InheritanceBuilder extends CompoundDataBuilder<UnresolvedReferenceTypeInfo> {
+public class InheritanceBuilder extends CompoundDataBuilder<UnresolvedClassTypeInfo> {
     
     public InheritanceBuilder(BuildDataManager buildManager){
         this(buildManager,new TypeBuilder(buildManager));
@@ -52,8 +52,8 @@ public class InheritanceBuilder extends CompoundDataBuilder<UnresolvedReferenceT
     private void buildInheritance(){
         UnresolvedTypeInfo type = typeBuilder.popLastBuiltData();
         
-        if (type instanceof UnresolvedReferenceTypeInfo){
-            UnresolvedReferenceTypeInfo referenceType = (UnresolvedReferenceTypeInfo)type;
+        if (type instanceof UnresolvedClassTypeInfo){
+            UnresolvedClassTypeInfo referenceType = (UnresolvedClassTypeInfo)type;
             registBuiltData(referenceType);
             
             if (null != buildDataManager){

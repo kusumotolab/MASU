@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
@@ -26,7 +26,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author y-higo
  * 
  */
-public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
+public class UnresolvedClassTypeInfo implements UnresolvedTypeInfo {
 
     /**
      * 利用可能な名前空間名，参照名を与えて初期化
@@ -34,7 +34,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * @param availableNamespaces 名前空間名
      * @param referenceName 参照名
      */
-    public UnresolvedReferenceTypeInfo(final AvailableNamespaceInfoSet availableNamespaces,
+    public UnresolvedClassTypeInfo(final AvailableNamespaceInfoSet availableNamespaces,
             final String[] referenceName) {
 
         // 不正な呼び出しでないかをチェック
@@ -47,7 +47,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
         this.referenceName = referenceName;
         //this.fullReferenceName = referenceName;
         //this.ownerType = null;
-        this.typeParameterUsages = new LinkedList<UnresolvedReferenceTypeInfo>();
+        this.typeParameterUsages = new LinkedList<UnresolvedClassTypeInfo>();
     }
 
     @Override
@@ -97,7 +97,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
                         //　参照されているクラスが見つかった
                         if (this.referenceName[0].equals(availableClass.getClassName())) {
                             // TODO 型パラメータの情報を保存する処理が必要
-                            this.resolvedInfo = new ReferenceTypeInfo(availableClass);
+                            this.resolvedInfo = new ClassTypeInfo(availableClass);
                             return this.resolvedInfo;
                         }
                     }
@@ -114,7 +114,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
                     }
 
                     // TODO　型パラメータの情報を格納する処理が必要
-                    this.resolvedInfo = new ReferenceTypeInfo(referencedClass);
+                    this.resolvedInfo = new ClassTypeInfo(referencedClass);
                     return this.resolvedInfo;
                 }
             }
@@ -125,7 +125,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
                 // 参照されているクラスが見つかった
                 if (this.referenceName[0].equals(availableClass.getClassName())) {
                     // TODO　型パラメータの情報を保存する処理が必要
-                    this.resolvedInfo = new ReferenceTypeInfo(availableClass);
+                    this.resolvedInfo = new ClassTypeInfo(availableClass);
                     return this.resolvedInfo;
                 }
             }
@@ -171,7 +171,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
                             }
 
                             //　ここに到達するのは，クラスが見つかった場合
-                            this.resolvedInfo = new ReferenceTypeInfo(currentClass);
+                            this.resolvedInfo = new ClassTypeInfo(currentClass);
                             // TODO 型パラメータの処理が必要
                             return this.resolvedInfo;
                         }
@@ -213,7 +213,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
                     }
 
                     //　ここに到達するのは，クラスが見つかった場合
-                    this.resolvedInfo = new ReferenceTypeInfo(currentClass);
+                    this.resolvedInfo = new ClassTypeInfo(currentClass);
                     // TODO 型パラメータの処理が必要
                     return this.resolvedInfo;
                 }
@@ -228,7 +228,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 利用可能な名前空間，型の完全修飾名を与えて初期化
      * @param referenceName 型の完全修飾名
      */
-    public UnresolvedReferenceTypeInfo(final String[] referenceName) {
+    public UnresolvedClassTypeInfo(final String[] referenceName) {
         this(new AvailableNamespaceInfoSet(), referenceName);
     }
 
@@ -264,7 +264,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 
      * @param typeParameterUsage 追加する型パラメータ使用
      */
-    public final void addTypeArgument(final UnresolvedReferenceTypeInfo typeParameterUsage) {
+    public final void addTypeArgument(final UnresolvedClassTypeInfo typeParameterUsage) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -280,7 +280,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
      * 
      * @return このクラス参照で使用されている型パラメータの List
      */
-    public final List<UnresolvedReferenceTypeInfo> getTypeArguments() {
+    public final List<UnresolvedClassTypeInfo> getTypeArguments() {
         return Collections.unmodifiableList(this.typeParameterUsages);
     }
 
@@ -368,8 +368,8 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
         return 1 == this.referenceName.length;
     }
 
-    public final static UnresolvedReferenceTypeInfo getInstance(UnresolvedClassInfo referencedClass) {
-        return new UnresolvedReferenceTypeInfo(referencedClass.getFullQualifiedName());
+    public final static UnresolvedClassTypeInfo getInstance(UnresolvedClassInfo referencedClass) {
+        return new UnresolvedClassTypeInfo(referencedClass.getFullQualifiedName());
     }
 
     /**
@@ -395,7 +395,7 @@ public class UnresolvedReferenceTypeInfo implements UnresolvedTypeInfo {
     /**
      * 型引数参照を保存するための変数
      */
-    private final List<UnresolvedReferenceTypeInfo> typeParameterUsages;
+    private final List<UnresolvedClassTypeInfo> typeParameterUsages;
 
     private TypeInfo resolvedInfo;
 

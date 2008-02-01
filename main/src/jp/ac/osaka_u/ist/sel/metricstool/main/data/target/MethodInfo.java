@@ -138,19 +138,19 @@ public abstract class MethodInfo implements UnitInfo, Comparable<MethodInfo>, Me
             final EntityUsageInfo actualParameter = actualParameterIterator.next();
 
             // 実引数が参照型の場合
-            if (actualParameter.getType() instanceof ReferenceTypeInfo) {
+            if (actualParameter.getType() instanceof ClassTypeInfo) {
 
                 // 実引数の型のクラスを取得
-                final ClassInfo actualParameterClass = ((ReferenceTypeInfo) actualParameter
+                final ClassInfo actualParameterClass = ((ClassTypeInfo) actualParameter
                         .getType()).getReferencedClass();
 
                 // 仮引数が参照型でない場合は該当しない
-                if (!(dummyParameter.getType() instanceof ReferenceTypeInfo)) {
+                if (!(dummyParameter.getType() instanceof ClassTypeInfo)) {
                     return false;
                 }
 
                 // 仮引数の型のクラスを取得
-                final ClassInfo dummyParameterClass = ((ReferenceTypeInfo) dummyParameter.getType())
+                final ClassInfo dummyParameterClass = ((ClassTypeInfo) dummyParameter.getType())
                         .getReferencedClass();
 
                 // 仮引数，実引数共に対象クラスである場合は，その継承関係を考慮する．つまり，実引数が仮引数のサブクラスでない場合は，呼び出し可能ではない

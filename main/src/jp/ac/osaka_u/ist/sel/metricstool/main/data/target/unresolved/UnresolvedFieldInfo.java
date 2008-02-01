@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
@@ -81,7 +81,7 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
                 // TODO Œ^ƒpƒ‰ƒ[ƒ^‚ÌŠi”[ˆ—‚ª•K—v
                 final ExternalClassInfo classInfo = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedFieldType);
-                fieldType = new ReferenceTypeInfo(classInfo);
+                fieldType = new ClassTypeInfo(classInfo);
                 classInfoManager.add(classInfo);
 
             } else if (unresolvedFieldType instanceof UnresolvedArrayTypeInfo) {
