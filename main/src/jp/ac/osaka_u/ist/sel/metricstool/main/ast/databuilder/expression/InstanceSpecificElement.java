@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
@@ -12,8 +12,8 @@ public class InstanceSpecificElement implements ExpressionElement {
 
     public static final InstanceSpecificElement THIS = new InstanceSpecificElement(null, null);
 
-    public static final InstanceSpecificElement NULL = new InstanceSpecificElement(NullTypeInfo
-            .getInstance(), NullTypeInfo.getInstance());
+    public static final InstanceSpecificElement NULL = new InstanceSpecificElement(NullUsageInfo
+            .getInstance(), NullUsageInfo.getInstance());
 
     private InstanceSpecificElement(UnresolvedTypeInfo type, UnresolvedEntityUsageInfo usage) {
         this.type = type;

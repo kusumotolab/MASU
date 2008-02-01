@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsageInfo;
@@ -63,7 +63,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
             } else if (elements[0].equals(InstanceSpecificElement.THIS)){
                 termTypes[0] = InstanceSpecificElement.getThisInstanceType(buildDataManager);
             } else if (elements[0].equals(InstanceSpecificElement.NULL)){
-                termTypes[0] = NullTypeInfo.getInstance();
+                termTypes[0] = NullUsageInfo.getInstance();
             } else {
                 //‚»‚êˆÈŠO‚Ìê‡‚Í’¼ÚŒ^‚ğæ“¾‚·‚é
                 termTypes[0] = elements[0].getUsage();
@@ -78,7 +78,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 } else if (elements[i].equals(InstanceSpecificElement.THIS)){
                     termTypes[i] = InstanceSpecificElement.getThisInstanceType(buildDataManager);
                 } else if (elements[i].equals(InstanceSpecificElement.NULL)){
-                    termTypes[i] = NullTypeInfo.getInstance();
+                    termTypes[i] = NullUsageInfo.getInstance();
                 } else {
                     //‚»‚êˆÈŠO‚È‚ç’¼ÚŒ^‚ğæ“¾‚·‚é
                     termTypes[i] = elements[i].getUsage();

@@ -226,7 +226,7 @@ public abstract class MethodInfo extends LocalSpaceInfo implements Comparable<Me
                 // TODO JavaŒ¾Œê‚Ìê‡‚ÍC‰¼ˆø”‚ª java.lang.object ‚Å‚àOK‚Èˆ—‚ª•K—v
 
                 // ŽÀˆø”‚ª null ‚Ìê‡
-            } else if (actualParameter.getType() instanceof NullTypeInfo) {
+            } else if (actualParameter instanceof NullUsageInfo) {
 
                 // ‰¼ˆø”‚ªŽQÆŒ^‚Å‚È‚¢ê‡‚ÍŠY“–‚µ‚È‚¢
                 if (!(dummyParameter.getType() instanceof ClassInfo)) {
