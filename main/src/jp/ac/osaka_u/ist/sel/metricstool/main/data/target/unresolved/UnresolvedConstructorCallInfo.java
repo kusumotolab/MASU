@@ -31,18 +31,17 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedMemberCallInf
     /**
      * コンストラクタ呼び出しが実行される参照型と名前を与えてオブジェクトを初期化
      * 
-     * @param unresolvedClassType コンストラクタ呼び出しが実行される型
+     * @param unresolvedReferenceType コンストラクタ呼び出しが実行される型
      */
-    public UnresolvedConstructorCallInfo(final UnresolvedClassTypeInfo unresolvedClassType) {
+    public UnresolvedConstructorCallInfo(final UnresolvedReferenceTypeInfo unresolvedReferenceType) {
 
         super();
 
-        if (null == unresolvedClassType) {
+        if (null == unresolvedReferenceType) {
             throw new IllegalArgumentException();
         }
 
-        this.unresolvedClassType = unresolvedClassType;
-        this.memberName = unresolvedClassType.getTypeName();
+        this.unresolvedReferenceType = unresolvedReferenceType;
     }
 
     @Override
@@ -144,10 +143,10 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedMemberCallInf
         return null;
     }
 
-    public UnresolvedClassTypeInfo getClassType() {
-        return this.unresolvedClassType;
+    public UnresolvedReferenceTypeInfo getClassType() {
+        return this.unresolvedReferenceType;
     }
 
-    private final UnresolvedClassTypeInfo unresolvedClassType;
+    private final UnresolvedReferenceTypeInfo unresolvedReferenceType;
 
 }

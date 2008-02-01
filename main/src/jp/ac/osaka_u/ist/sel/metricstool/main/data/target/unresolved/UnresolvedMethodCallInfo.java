@@ -49,7 +49,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
         }
 
         this.ownerUsage = ownerUsage;
-        this.memberName = methodName;
+        this.methodName = methodName;
     }
 
     @Override
@@ -180,7 +180,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
             if (Settings.getLanguage().equals(LANGUAGE.JAVA)) {
                 final ClassInfo ownerClass = classInfoManager.getClassInfo(new String[] { "java",
                         "lang", "Object" });
-                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(memberName,
+                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(methodName,
                         ownerClass, false);
                 final List<ParameterInfo> parameters = NameResolver
                         .createParameters(actualParameters);
@@ -202,7 +202,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
                 final ExternalClassInfo wrapperClass = TypeConverter.getTypeConverter(
                         Settings.getLanguage()).getWrapperClass(
                         (PrimitiveTypeInfo) ownerUsage.getType());
-                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(memberName,
+                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(methodName,
                         wrapperClass, false);
                 final List<ParameterInfo> parameters = NameResolver
                         .createParameters(actualParameters);
@@ -234,6 +234,20 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
         return this.ownerUsage;
     }
 
+    /**
+     * メソッド名を返す
+     * 
+     * @return メソッド名
+     */
+    public final String getName() {
+        return this.methodName;
+    }
+    
+    /**
+     * メンバ名を保存するための変数
+     */
+    protected String methodName;
+    
     /**
      * メソッド呼び出しが実行される変数の参照を保存するための変数
      */

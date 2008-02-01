@@ -115,15 +115,6 @@ public abstract class UnresolvedMemberCallInfo implements UnresolvedEntityUsageI
     }
 
     /**
-     * メソッド名を返す
-     * 
-     * @return メソッド名
-     */
-    public final String getName() {
-        return this.memberName;
-    }
-
-    /**
      * 
      * @param unresolvedParameters
      * @return
@@ -164,10 +155,7 @@ public abstract class UnresolvedMemberCallInfo implements UnresolvedEntityUsageI
         return parameters;
     }
 
-    /**
-     * メンバ名を保存するための変数
-     */
-    protected String memberName;
+
 
     /**
      * 型パラメータ使用を保存するための変数
