@@ -16,7 +16,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClass
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
-public abstract class MethodInfo implements UnitInfo, Comparable<MethodInfo>, MetricMeasurable {
+public abstract class MethodInfo implements LocalSpaceInfo, Comparable<MethodInfo>,
+        MetricMeasurable {
 
     /**
      * メソッドオブジェクトを初期化する
@@ -141,8 +142,8 @@ public abstract class MethodInfo implements UnitInfo, Comparable<MethodInfo>, Me
             if (actualParameter.getType() instanceof ClassTypeInfo) {
 
                 // 実引数の型のクラスを取得
-                final ClassInfo actualParameterClass = ((ClassTypeInfo) actualParameter
-                        .getType()).getReferencedClass();
+                final ClassInfo actualParameterClass = ((ClassTypeInfo) actualParameter.getType())
+                        .getReferencedClass();
 
                 // 仮引数が参照型でない場合は該当しない
                 if (!(dummyParameter.getType() instanceof ClassTypeInfo)) {

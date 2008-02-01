@@ -31,8 +31,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class UnresolvedMethodInfo extends UnresolvedUnitInfo<TargetMethodInfo> implements
-        VisualizableSetting, MemberSetting {
+public final class UnresolvedMethodInfo extends UnresolvedLocalSpaceInfo<TargetMethodInfo>
+        implements VisualizableSetting, MemberSetting {
 
     /**
      * 未解決メソッド定義情報オブジェクトを初期化
@@ -47,10 +47,6 @@ public final class UnresolvedMethodInfo extends UnresolvedUnitInfo<TargetMethodI
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
         this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
-        this.methodCalls = new HashSet<UnresolvedMemberCallInfo>();
-        this.fieldUsages = new HashSet<UnresolvedFieldUsageInfo>();
-        this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
-        this.innerBlocks = new HashSet<UnresolvedBlockInfo<?>>();
 
         this.privateVisible = false;
         this.inheritanceVisible = false;
@@ -87,10 +83,6 @@ public final class UnresolvedMethodInfo extends UnresolvedUnitInfo<TargetMethodI
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
         this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
-        this.methodCalls = new HashSet<UnresolvedMemberCallInfo>();
-        this.fieldUsages = new HashSet<UnresolvedFieldUsageInfo>();
-        this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
-        this.innerBlocks = new HashSet<UnresolvedBlockInfo<?>>();
 
         this.privateVisible = false;
         this.inheritanceVisible = false;
@@ -397,96 +389,12 @@ public final class UnresolvedMethodInfo extends UnresolvedUnitInfo<TargetMethodI
     }
 
     /**
-     * メソッド呼び出しを追加する
-     * 
-     * @param methodCall メソッド呼び出し
-     */
-    public void addMethodCall(final UnresolvedMemberCallInfo methodCall) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == methodCall) {
-            throw new NullPointerException();
-        }
-
-        this.methodCalls.add(methodCall);
-    }
-
-    /**
-     * フィールド使用を追加する
-     * 
-     * @param fieldUsage フィールド使用
-     */
-    public void addFieldUsage(final UnresolvedFieldUsageInfo fieldUsage) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == fieldUsage) {
-            throw new NullPointerException();
-        }
-
-        this.fieldUsages.add(fieldUsage);
-    }
-
-    /**
-     * ローカル変数を追加する
-     * 
-     * @param localVariable ローカル変数
-     */
-    public void addLocalVariable(final UnresolvedLocalVariableInfo localVariable) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == localVariable) {
-            throw new NullPointerException();
-        }
-
-        this.localVariables.add(localVariable);
-    }
-
-    /**
      * メソッドの引数のリストを返す
      * 
      * @return メソッドの引数のリスト
      */
     public List<UnresolvedParameterInfo> getParameterInfos() {
         return Collections.unmodifiableList(this.parameterInfos);
-    }
-
-    /**
-     * メソッド呼び出しの Set を返す
-     * 
-     * @return メソッド呼び出しの Set
-     */
-    public Set<UnresolvedMemberCallInfo> getMethodCalls() {
-        return Collections.unmodifiableSet(this.methodCalls);
-    }
-
-    /**
-     * フィールド使用の Set を返す
-     * 
-     * @return フィールド参照の Set
-     */
-    public Set<UnresolvedFieldUsageInfo> getFieldUsages() {
-        return Collections.unmodifiableSet(this.fieldUsages);
-    }
-
-    /**
-     * 定義されているローカル変数の Set を返す
-     * 
-     * @return 定義されているローカル変数の Set
-     */
-    public Set<UnresolvedLocalVariableInfo> getLocalVariables() {
-        return Collections.unmodifiableSet(this.localVariables);
-    }
-
-    /**
-     * 内部ブロックの Set を返す
-     * 
-     * @return 内部ブロックの Set
-     */
-    public Set<UnresolvedBlockInfo<?>> getInnerBlocks() {
-        return Collections.unmodifiableSet(this.innerBlocks);
     }
 
     /**
@@ -631,26 +539,6 @@ public final class UnresolvedMethodInfo extends UnresolvedUnitInfo<TargetMethodI
      * コンストラクタかどうかを表す変数
      */
     private boolean constructor;
-
-    /**
-     * メソッド呼び出しを保存する変数
-     */
-    private final Set<UnresolvedMemberCallInfo> methodCalls;
-
-    /**
-     * フィールド使用参照を保存する変数
-     */
-    private final Set<UnresolvedFieldUsageInfo> fieldUsages;
-
-    /**
-     * このメソッド内で定義されているローカル変数を保存する変数
-     */
-    private final Set<UnresolvedLocalVariableInfo> localVariables;
-
-    /**
-     * このメソッドの内部ブロックを保存する変数
-     */
-    private final Set<UnresolvedBlockInfo<?>> innerBlocks;
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数
