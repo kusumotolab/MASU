@@ -117,14 +117,6 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
                     // 一致するフィールド名が見つかった場合
                     if (fieldName.equals(availableField.getName())) {
 
-                        if (reference) {
-                            usingMethod.addReferencee(availableField);
-                            availableField.addReferencer(usingMethod);
-                        } else {
-                            usingMethod.addAssignmentee(availableField);
-                            availableField.addAssignmenter(usingMethod);
-                        }
-
                         this.resolvedInfo = new FieldUsageInfo(availableField, reference);
                         return this.resolvedInfo;
                     }
@@ -143,13 +135,6 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
 
                         final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName,
                                 externalSuperClass);
-                        if (reference) {
-                            usingMethod.addReferencee(fieldInfo);
-                            fieldInfo.addReferencer(usingMethod);
-                        } else {
-                            usingMethod.addAssignmentee(fieldInfo);
-                            fieldInfo.addAssignmenter(usingMethod);
-                        }
                         fieldInfoManager.add(fieldInfo);
 
                         // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
@@ -178,13 +163,6 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
 
             final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName,
                     (ExternalClassInfo) ownerUsage.getType());
-            if (reference) {
-                usingMethod.addReferencee(fieldInfo);
-                fieldInfo.addReferencer(usingMethod);
-            } else {
-                usingMethod.addAssignmentee(fieldInfo);
-                fieldInfo.addAssignmenter(usingMethod);
-            }
             fieldInfoManager.add(fieldInfo);
 
             // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．

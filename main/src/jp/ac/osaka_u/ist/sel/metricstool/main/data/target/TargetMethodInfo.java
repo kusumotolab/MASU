@@ -55,10 +55,10 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * @param toColumn 終了列
      */
     public TargetMethodInfo(final Set<ModifierInfo> modifiers, final String name,
-            final ClassInfo ownerClass, final boolean constructor,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final ClassInfo ownerClass, final boolean constructor, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final boolean instance, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(name, ownerClass, constructor);
 
@@ -69,8 +69,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.localVariables = new TreeSet<LocalVariableInfo>();
-        this.referencees = new TreeSet<FieldInfo>();
-        this.assignmentees = new TreeSet<FieldInfo>();
+        this.fieldUsages = new HashSet<FieldUsageInfo>();
         this.innerBlocks = new TreeSet<BlockInfo>();
         this.unresolvedUsage = new HashSet<UnresolvedEntityUsageInfo>();
 
@@ -107,31 +106,16 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
     /**
      * このメソッドが参照している変数を追加する．プラグインから呼ぶとランタイムエラー．
      * 
-     * @param referencee 追加する参照されている変数
+     * @param fieldUsage 追加するフィールド利用
      */
-    public void addReferencee(final FieldInfo referencee) {
+    public void addFieldUsage(final FieldUsageInfo fieldUsage) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == referencee) {
+        if (null == fieldUsage) {
             throw new NullPointerException();
         }
 
-        this.referencees.add(referencee);
-    }
-
-    /**
-     * このメソッドが代入を行っている変数を追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param assignmentee 追加する代入されている変数
-     */
-    public void addAssignmentee(final FieldInfo assignmentee) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == assignmentee) {
-            throw new NullPointerException();
-        }
-
-        this.assignmentees.add(assignmentee);
+        this.fieldUsages.add(fieldUsage);
     }
 
     /**
@@ -207,12 +191,27 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
     }
 
     /**
+     * このメソッドのフィールド利用のSetを返す
+     */
+    public Set<FieldUsageInfo> getFieldUsages() {
+        return Collections.unmodifiableSet(this.fieldUsages);
+    }
+
+    /**
      * このメソッドが参照しているフィールドの SortedSet を返す．
      * 
      * @return このメソッドが参照しているフィールドの SortedSet
      */
     public SortedSet<FieldInfo> getReferencees() {
-        return Collections.unmodifiableSortedSet(this.referencees);
+
+        final SortedSet<FieldInfo> referencees = new TreeSet<FieldInfo>();
+        for (final FieldUsageInfo fieldUsage : this.getFieldUsages()) {
+            if (fieldUsage.isReference()) {
+                referencees.add(fieldUsage.getUsedField());
+            }
+        }
+
+        return Collections.unmodifiableSortedSet(referencees);
     }
 
     /**
@@ -221,7 +220,14 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * @return このメソッドが代入しているフィールドの SortedSet
      */
     public SortedSet<FieldInfo> getAssignmentees() {
-        return Collections.unmodifiableSortedSet(this.assignmentees);
+        final SortedSet<FieldInfo> assignmentees = new TreeSet<FieldInfo>();
+        for (final FieldUsageInfo fieldUsage : this.getFieldUsages()) {
+            if (fieldUsage.isAssignment()) {
+                assignmentees.add(fieldUsage.getUsedField());
+            }
+        }
+
+        return Collections.unmodifiableSortedSet(assignmentees);
     }
 
     /**
@@ -357,14 +363,9 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
     private final SortedSet<LocalVariableInfo> localVariables;
 
     /**
-     * 参照しているフィールド一覧を保存するための変数
+     * 利用しているフィールド一覧を保存するための変数
      */
-    private final SortedSet<FieldInfo> referencees;
-
-    /**
-     * 代入しているフィールド一覧を保存するための変数
-     */
-    private final SortedSet<FieldInfo> assignmentees;
+    private final Set<FieldUsageInfo> fieldUsages;
 
     /**
      * このメソッド直内のブロック一覧を保存するための変数

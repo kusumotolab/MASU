@@ -23,11 +23,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredExc
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MemberCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
@@ -40,15 +42,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.NameResolver;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMemberCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVClassMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVFileMetricsWriter;
@@ -880,25 +881,26 @@ public class MetricsTool {
                 assert null != classInfo : "classInfo shouldn't be null!";
 
                 // 各親クラス名に対して
-                for (final UnresolvedClassReferenceInfo unresolvedSuperClassReference : unresolvedClassInfo
+                for (final UnresolvedReferenceTypeInfo unresolvedSuperClassType : unresolvedClassInfo
                         .getSuperClasses()) {
-                    EntityUsageInfo superClassReference = unresolvedSuperClassReference
-                            .resolveEntityUsage(classInfo, null, classInfoManager, null, null);
+
+                    TypeInfo superClassType = unresolvedSuperClassType.resolveType(classInfo, null,
+                            classInfoManager, null, null);
 
                     // null でない場合は名前解決に成功したとみなす
-                    if (null != superClassReference) {
+                    if (null != superClassType) {
 
                         // 見つからなかった場合は名前空間名がUNKNOWNなクラスを登録する
-                        if (superClassReference.getType() instanceof UnknownTypeInfo) {
-                            final ExternalClassInfo superClass = NameResolver
-                                    .createExternalClassInfo(unresolvedSuperClassReference);
+                        if (superClassType instanceof UnknownTypeInfo) {
+                            final ExternalClassInfo superClass = new ExternalClassInfo(
+                                    unresolvedSuperClassType.getTypeName());
                             classInfoManager.add(superClass);
-                            superClassReference = new ClassReferenceInfo(new ReferenceTypeInfo(
-                                    superClass));
+                            superClassType = new ReferenceTypeInfo(superClass);
                         }
 
-                        classInfo.addSuperClass((ClassReferenceInfo) superClassReference);
-                        ((ClassInfo) superClassReference.getType()).addSubClass(classInfo);
+                        classInfo.addSuperClass((ReferenceTypeInfo) superClassType);
+                        ((ReferenceTypeInfo) superClassType).getReferencedClass().addSubClass(
+                                classInfo);
 
                         // null な場合は名前解決に失敗したとみなすので unresolvedClassInfo は unresolvableClasses
                         // から削除しない
@@ -935,28 +937,28 @@ public class MetricsTool {
         assert null != classInfo : "classInfo shouldn't be null!";
 
         // 各親クラス名に対して
-        for (final UnresolvedClassReferenceInfo unresolvedSuperClassReference : unresolvedClassInfo
+        for (final UnresolvedReferenceTypeInfo unresolvedSuperClassType : unresolvedClassInfo
                 .getSuperClasses()) {
-            EntityUsageInfo superClassReference = unresolvedSuperClassReference.resolveEntityUsage(
-                    classInfo, null, classInfoManager, null, null);
+
+            TypeInfo superClassType = unresolvedSuperClassType.resolveType(classInfo, null,
+                    classInfoManager, null, null);
 
             // null だった場合は解決不可能リストに一時的に格納
-            if (null == superClassReference) {
+            if (null == superClassType) {
 
                 unresolvableClasses.add(unresolvedClassInfo);
 
             } else {
 
                 // 見つからなかった場合は名前空間名がUNKNOWNなクラスを登録する
-                if (superClassReference.getType() instanceof UnknownTypeInfo) {
-                    final ExternalClassInfo superClass = NameResolver
-                            .createExternalClassInfo(unresolvedSuperClassReference);
+                if (superClassType instanceof UnknownTypeInfo) {
+                    final ExternalClassInfo superClass = new ExternalClassInfo(
+                            unresolvedSuperClassType.getTypeName());
                     classInfoManager.add(superClass);
-                    superClassReference = new ClassReferenceInfo(new ReferenceTypeInfo(superClass));
                 }
 
-                classInfo.addSuperClass((ClassReferenceInfo) superClassReference);
-                ((ClassInfo) superClassReference.getType()).addSubClass(classInfo);
+                classInfo.addSuperClass((ReferenceTypeInfo) superClassType);
+                ((ReferenceTypeInfo) superClassType).getReferencedClass().addSubClass(classInfo);
             }
         }
 
@@ -1118,7 +1120,8 @@ public class MetricsTool {
     private void addOverrideRelation(final TargetClassInfo classInfo) {
 
         // 各親クラスに対して
-        for (final ClassInfo superClassInfo : ReferenceTypeInfo.convert(classInfo.getSuperClasses())) {
+        for (final ClassInfo superClassInfo : ReferenceTypeInfo
+                .convert(classInfo.getSuperClasses())) {
 
             // 各対象クラスの各メソッドについて，親クラスのメソッドをオーバーライドしているかを調査
             for (final MethodInfo methodInfo : classInfo.getDefinedMethods()) {
@@ -1170,7 +1173,8 @@ public class MetricsTool {
         }
 
         // 親クラス群に対して再帰的に処理
-        for (final ClassInfo superClassInfo : ReferenceTypeInfo.convert(classInfo.getSuperClasses())) {
+        for (final ClassInfo superClassInfo : ReferenceTypeInfo
+                .convert(classInfo.getSuperClasses())) {
             addOverrideRelation(superClassInfo, overrider);
         }
     }
@@ -1225,15 +1229,35 @@ public class MetricsTool {
                 final EntityUsageInfo fieldUsage = unresolvedFieldUsage.resolveEntityUsage(
                         ownerClass, ownerMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager);
+
+                // フィールド利用が解決できた場合
+                if (fieldUsage instanceof FieldUsageInfo) {
+                    ownerMethod.addFieldUsage((FieldUsageInfo) fieldUsage);
+                    final boolean reference = ((FieldUsageInfo) fieldUsage).isReference();
+                    final FieldInfo usedField = ((FieldUsageInfo) fieldUsage).getUsedField();
+                    if (reference) {
+                        usedField.addReferencer(ownerMethod);
+                    } else {
+                        usedField.addAssignmenter(ownerMethod);
+                    }
+
+                }
             }
 
             // 各未解決メソッド呼び出しの解決処理
-            for (final UnresolvedMethodCallInfo unresolvedMethodCall : unresolvedMethodInfo
+            for (final UnresolvedMemberCallInfo unresolvedMethodCall : unresolvedMethodInfo
                     .getMethodCalls()) {
 
-                final EntityUsageInfo methodCall = unresolvedMethodCall.resolveEntityUsage(
+                final EntityUsageInfo memberCall = unresolvedMethodCall.resolveEntityUsage(
                         ownerClass, ownerMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager);
+
+                // メソッドおよびコンストラクタ呼び出しが解決できた場合
+                if (memberCall instanceof MemberCallInfo) {
+                    ownerMethod.addCallee((MemberCallInfo) memberCall);
+                    ((MemberCallInfo) memberCall).getCallee().addCaller(ownerMethod);
+                }
+
             }
         }
 

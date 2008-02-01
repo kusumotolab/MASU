@@ -1,29 +1,52 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
+
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
+
 /**
  * 未解決メンバ(メソッド，コンストラクタ)呼び出しを保存するためのクラス
  * 
- * @author t-miyake
+ * @author t-miyake, higo
  *
  */
-public abstract class UnresolvedMemberCallInfo  implements UnresolvedEntityUsageInfo {
+public abstract class UnresolvedMemberCallInfo implements UnresolvedEntityUsageInfo {
 
-	/**
+    public UnresolvedMemberCallInfo() {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+
+        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
+        this.parameterTypes = new LinkedList<UnresolvedEntityUsageInfo>();
+
+        this.resolvedInfo = null;
+
+    }
+
+    /**
      * この未解決メソッド呼び出しがすでに解決されているかどうかを返す
      * 
      * @return 既に解決されている場合は true，そうでない場合は false
      */
-    public boolean alreadyResolved() {
+    public final boolean alreadyResolved() {
         return null != this.resolvedInfo;
     }
 
@@ -33,7 +56,7 @@ public abstract class UnresolvedMemberCallInfo  implements UnresolvedEntityUsage
      * @return 解決済みメソッド呼び出し情報
      * @throw 解決されていない場合にスローされる
      */
-    public EntityUsageInfo getResolvedEntityUsage() {
+    public final EntityUsageInfo getResolvedEntityUsage() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
@@ -41,15 +64,13 @@ public abstract class UnresolvedMemberCallInfo  implements UnresolvedEntityUsage
 
         return this.resolvedInfo;
     }
-    
-    
-    
+
     /**
      * 型パラメータ使用を追加する
      * 
      * @param typeParameterUsage 追加する型パラメータ使用
      */
-    public void addTypeArgument(final UnresolvedReferenceTypeInfo typeParameterUsage) {
+    public final void addTypeArgument(final UnresolvedReferenceTypeInfo typeParameterUsage) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == typeParameterUsage) {
@@ -64,7 +85,7 @@ public abstract class UnresolvedMemberCallInfo  implements UnresolvedEntityUsage
      * 
      * @param typeInfo
      */
-    public void addParameter(final UnresolvedEntityUsageInfo typeInfo) {
+    public final void addParameter(final UnresolvedEntityUsageInfo typeInfo) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -80,7 +101,7 @@ public abstract class UnresolvedMemberCallInfo  implements UnresolvedEntityUsage
      * 
      * @return 引数の List
      */
-    public List<UnresolvedEntityUsageInfo> getParameters() {
+    public final List<UnresolvedEntityUsageInfo> getParameters() {
         return Collections.unmodifiableList(this.parameterTypes);
     }
 
@@ -89,19 +110,60 @@ public abstract class UnresolvedMemberCallInfo  implements UnresolvedEntityUsage
      * 
      * @return 型パラメータ使用の List
      */
-    public List<UnresolvedReferenceTypeInfo> getTypeArguments() {
+    public final List<UnresolvedReferenceTypeInfo> getTypeArguments() {
         return Collections.unmodifiableList(this.typeArguments);
     }
-    
+
     /**
      * メソッド名を返す
      * 
      * @return メソッド名
      */
-    public String getMemberName() {
+    public final String getName() {
         return this.memberName;
     }
-    
+
+    /**
+     * 
+     * @param unresolvedParameters
+     * @return
+     */
+    protected final List<EntityUsageInfo> resolveParameters(final TargetClassInfo usingClass,
+            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        //　解決済み実引数を格納するための変数
+        final List<EntityUsageInfo> parameters = new LinkedList<EntityUsageInfo>();
+
+        for (final UnresolvedEntityUsageInfo unresolvedParameter : this.getParameters()) {
+
+            EntityUsageInfo parameter = unresolvedParameter.resolveEntityUsage(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+
+            assert parameter != null : "resolveEntityUsage returned null!";
+
+            if (parameter instanceof UnknownEntityUsageInfo) {
+
+                // クラス参照だった場合
+                if (unresolvedParameter instanceof UnresolvedClassReferenceInfo) {
+
+                    // TODO 型パラメータの情報を格納する                    
+                    final ExternalClassInfo externalClassInfo = NameResolver
+                            .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedParameter);
+                    classInfoManager.add(externalClassInfo);
+                    final ReferenceTypeInfo referenceType = new ReferenceTypeInfo(externalClassInfo);
+                    parameter = new ClassReferenceInfo(referenceType);
+
+                } else {
+                    assert false : "Here shouldn't be reached!";
+                }
+            }
+            parameters.add(parameter);
+        }
+
+        return parameters;
+    }
+
     /**
      * メンバ名を保存するための変数
      */
@@ -116,12 +178,12 @@ public abstract class UnresolvedMemberCallInfo  implements UnresolvedEntityUsage
      * 引数を保存するための変数
      */
     protected List<UnresolvedEntityUsageInfo> parameterTypes;
-    
+
     /**
      * 解決済みメソッド呼び出し情報を保存するための変数
      */
     protected EntityUsageInfo resolvedInfo;
-    
+
     /**
      * エラーメッセージ出力用のプリンタ
      */

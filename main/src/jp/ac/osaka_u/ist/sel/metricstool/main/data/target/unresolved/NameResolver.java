@@ -10,6 +10,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -84,19 +85,20 @@ public final class NameResolver {
     }
 
     /**
-     * 引数で与えられた型の List から外部パラメータの List を作成し，返す
+     * 引数で与えられたエンティティの List から，引数の型の List を作成し，返す
      * 
-     * @param types 型のList
-     * @return 外部パラメータの List
+     * @param エンティティのList
+     * @return 引数の型の List
      */
-    public static List<ParameterInfo> createParameters(final List<TypeInfo> types) {
+    public static List<ParameterInfo> createParameters(final List<EntityUsageInfo> entities) {
 
-        if (null == types) {
+        if (null == entities) {
             throw new NullPointerException();
         }
 
         final List<ParameterInfo> parameters = new LinkedList<ParameterInfo>();
-        for (TypeInfo type : types) {
+        for (final EntityUsageInfo entity : entities) {
+            final TypeInfo type = entity.getType();
             final ExternalParameterInfo parameter = new ExternalParameterInfo(type);
             parameters.add(parameter);
         }

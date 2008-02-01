@@ -2,9 +2,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -36,7 +38,7 @@ public abstract class MethodInfo implements UnitInfo, Comparable<MethodInfo>, Me
         this.returnType = null;
 
         this.parameters = new LinkedList<ParameterInfo>();
-        this.callees = new TreeSet<MethodInfo>();
+        this.callees = new HashSet<MemberCallInfo>();
         this.callers = new TreeSet<MethodInfo>();
         this.overridees = new TreeSet<MethodInfo>();
         this.overriders = new TreeSet<MethodInfo>();
@@ -110,9 +112,9 @@ public abstract class MethodInfo implements UnitInfo, Comparable<MethodInfo>, Me
      * @return 呼び出せる場合は true，そうでない場合は false
      */
     public final boolean canCalledWith(final String methodName,
-            final List<TypeInfo> actualParameterTypes) {
+            final List<EntityUsageInfo> actualParameters) {
 
-        if ((null == methodName) || (null == actualParameterTypes)) {
+        if ((null == methodName) || (null == actualParameters)) {
             throw new NullPointerException();
         }
 
@@ -123,36 +125,43 @@ public abstract class MethodInfo implements UnitInfo, Comparable<MethodInfo>, Me
 
         // 引数の数が等しくない場合は該当しない
         final List<ParameterInfo> dummyParameters = this.getParameters();
-        if (dummyParameters.size() != actualParameterTypes.size()) {
+        if (dummyParameters.size() != actualParameters.size()) {
             return false;
         }
 
         // 引数の型を先頭からチェック等しくない場合は該当しない
         final Iterator<ParameterInfo> dummyParameterIterator = dummyParameters.iterator();
-        final Iterator<TypeInfo> actualParameterTypeIterator = actualParameterTypes.iterator();
+        final Iterator<EntityUsageInfo> actualParameterIterator = actualParameters.iterator();
         NEXT_PARAMETER: while (dummyParameterIterator.hasNext()
-                && actualParameterTypeIterator.hasNext()) {
+                && actualParameterIterator.hasNext()) {
             final ParameterInfo dummyParameter = dummyParameterIterator.next();
-            final TypeInfo actualParameterType = actualParameterTypeIterator.next();
+            final EntityUsageInfo actualParameter = actualParameterIterator.next();
 
             // 実引数が参照型の場合
-            if (actualParameterType instanceof ClassInfo) {
+            if (actualParameter.getType() instanceof ReferenceTypeInfo) {
+
+                // 実引数の型のクラスを取得
+                final ClassInfo actualParameterClass = ((ReferenceTypeInfo) actualParameter
+                        .getType()).getReferencedClass();
 
                 // 仮引数が参照型でない場合は該当しない
-                if (!(dummyParameter.getType() instanceof ClassInfo)) {
+                if (!(dummyParameter.getType() instanceof ReferenceTypeInfo)) {
                     return false;
                 }
 
+                // 仮引数の型のクラスを取得
+                final ClassInfo dummyParameterClass = ((ReferenceTypeInfo) dummyParameter.getType())
+                        .getReferencedClass();
+
                 // 仮引数，実引数共に対象クラスである場合は，その継承関係を考慮する．つまり，実引数が仮引数のサブクラスでない場合は，呼び出し可能ではない
-                if ((actualParameterType instanceof TargetClassInfo)
-                        && (dummyParameter.getType() instanceof TargetClassInfo)) {
+                if ((actualParameterClass instanceof TargetClassInfo)
+                        && (dummyParameterClass instanceof TargetClassInfo)) {
 
                     // 実引数が仮引数と同じ参照型（クラス）でもなく，仮引数のサブクラスでもない場合は該当しない
-                    if (actualParameterType.equals(dummyParameter.getType())) {
+                    if (actualParameterClass.equals(dummyParameterClass)) {
                         continue NEXT_PARAMETER;
 
-                    } else if (((ClassInfo) actualParameterType)
-                            .isSubClass((ClassInfo) dummyParameter.getType())) {
+                    } else if (actualParameterClass.isSubClass(dummyParameterClass)) {
                         continue NEXT_PARAMETER;
 
                     } else {
@@ -160,21 +169,20 @@ public abstract class MethodInfo implements UnitInfo, Comparable<MethodInfo>, Me
                     }
 
                     // 仮引数，実引数共に外部クラスである場合は，等しい場合のみ呼び出し可能とする
-                } else if ((actualParameterType instanceof ExternalClassInfo)
-                        && (dummyParameter.getType() instanceof ExternalClassInfo)) {
+                } else if ((actualParameterClass instanceof ExternalClassInfo)
+                        && (dummyParameterClass instanceof ExternalClassInfo)) {
 
-                    if (actualParameterType.equals(dummyParameter.getType())) {
+                    if (actualParameterClass.equals(dummyParameterClass)) {
                         continue NEXT_PARAMETER;
                     }
 
                     return false;
 
                     // 仮引数が外部クラス，実引数が対象クラスの場合は，実引数が仮引数のサブクラスである場合，呼び出し可能とする
-                } else if ((actualParameterType instanceof TargetClassInfo)
-                        && (dummyParameter.getType() instanceof ExternalClassInfo)) {
+                } else if ((actualParameterClass instanceof TargetClassInfo)
+                        && (dummyParameterClass instanceof ExternalClassInfo)) {
 
-                    if (((ClassInfo) actualParameterType).isSubClass((ClassInfo) dummyParameter
-                            .getType())) {
+                    if (actualParameterClass.isSubClass(dummyParameterClass)) {
                         continue NEXT_PARAMETER;
                     }
 
@@ -186,24 +194,24 @@ public abstract class MethodInfo implements UnitInfo, Comparable<MethodInfo>, Me
                 }
 
                 // 実引数がプリミティブ型の場合
-            } else if (actualParameterType instanceof PrimitiveTypeInfo) {
+            } else if (actualParameter.getType() instanceof PrimitiveTypeInfo) {
 
                 // PrimitiveTypeInfo#equals を使って等価性の判定．
                 // 等しくない場合は該当しない
-                if (actualParameterType.equals(dummyParameter.getType())) {
+                if (actualParameter.getType().equals(dummyParameter.getType())) {
                     continue NEXT_PARAMETER;
                 }
 
                 return false;
 
                 // 実引数が配列型の場合
-            } else if (actualParameterType instanceof ArrayTypeInfo) {
+            } else if (actualParameter.getType() instanceof ArrayTypeInfo) {
 
                 if (!(dummyParameter.getType() instanceof ArrayTypeInfo)) {
                     return false;
                 }
 
-                if (!actualParameterType.equals(dummyParameter.getType())) {
+                if (!actualParameter.getType().equals(dummyParameter.getType())) {
                     return false;
                 }
 
@@ -211,7 +219,7 @@ public abstract class MethodInfo implements UnitInfo, Comparable<MethodInfo>, Me
                 // TODO Java言語の場合は，仮引数が java.lang.object でもOKな処理が必要
 
                 // 実引数が null の場合
-            } else if (actualParameterType instanceof NullTypeInfo) {
+            } else if (actualParameter.getType() instanceof NullTypeInfo) {
 
                 // 仮引数が参照型でない場合は該当しない
                 if (!(dummyParameter.getType() instanceof ClassInfo)) {
@@ -222,7 +230,7 @@ public abstract class MethodInfo implements UnitInfo, Comparable<MethodInfo>, Me
                 // TODO Java言語の場合は，仮引数が配列型の場合でもOKな処理が必要
 
                 // 実引数の型が解決できなかった場合
-            } else if (actualParameterType instanceof UnknownTypeInfo) {
+            } else if (actualParameter.getType() instanceof UnknownTypeInfo) {
 
                 // 実引数の型が不明な場合は，仮引数の型が何であろうともOKにしている
                 continue NEXT_PARAMETER;
@@ -390,18 +398,18 @@ public abstract class MethodInfo implements UnitInfo, Comparable<MethodInfo>, Me
     }
 
     /**
-     * このメソッドが呼び出しているメソッドを追加する．プラグインから呼ぶとランタイムエラー．
+     * メソッドおよびコンストラクタ呼び出しを追加する．プラグインから呼ぶとランタイムエラー．
      * 
      * @param callee 追加する呼び出されるメソッド
      */
-    public void addCallee(final MethodInfo callee) {
+    public void addCallee(final MemberCallInfo memberCall) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == callee) {
+        if (null == memberCall) {
             throw new NullPointerException();
         }
 
-        this.callees.add(callee);
+        this.callees.add(memberCall);
     }
 
     /**
@@ -451,12 +459,24 @@ public abstract class MethodInfo implements UnitInfo, Comparable<MethodInfo>, Me
     }
 
     /**
-     * このメソッドが呼び出しているメソッドの SortedSet を返す．
+     * メソッドおよびコンストラクタ呼び出し一覧を返す
+     */
+    public Set<MemberCallInfo> getMemberCalls() {
+        return Collections.unmodifiableSet(this.callees);
+
+    }
+
+    /**
+     * このメソッドが呼び出しているメソッドおよびコンストラクタの SortedSet を返す．
      * 
      * @return このメソッドが呼び出しているメソッドの SortedSet
      */
     public SortedSet<MethodInfo> getCallees() {
-        return Collections.unmodifiableSortedSet(this.callees);
+        final SortedSet<MethodInfo> callees = new TreeSet<MethodInfo>();
+        for (final MemberCallInfo memberCall : this.getMemberCalls()) {
+            callees.add(memberCall.getCallee());
+        }
+        return Collections.unmodifiableSortedSet(callees);
     }
 
     /**
@@ -512,9 +532,9 @@ public abstract class MethodInfo implements UnitInfo, Comparable<MethodInfo>, Me
     protected final List<ParameterInfo> parameters;
 
     /**
-     * このメソッドが呼び出しているメソッド一覧を保存するための変数
+     * メソッド呼び出し一覧を保存するための変数
      */
-    protected final SortedSet<MethodInfo> callees;
+    protected final Set<MemberCallInfo> callees;
 
     /**
      * このメソッドを呼び出しているメソッド一覧を保存するための変数
