@@ -180,7 +180,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
             if (Settings.getLanguage().equals(LANGUAGE.JAVA)) {
                 final ClassInfo ownerClass = classInfoManager.getClassInfo(new String[] { "java",
                         "lang", "Object" });
-                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(methodName,
+                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
                         ownerClass, false);
                 final List<ParameterInfo> parameters = NameResolver
                         .createParameters(actualParameters);
@@ -202,7 +202,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
                 final ExternalClassInfo wrapperClass = TypeConverter.getTypeConverter(
                         Settings.getLanguage()).getWrapperClass(
                         (PrimitiveTypeInfo) ownerUsage.getType());
-                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(methodName,
+                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
                         wrapperClass, false);
                 final List<ParameterInfo> parameters = NameResolver
                         .createParameters(actualParameters);
@@ -244,7 +244,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
     }
     
     /**
-     * メンバ名を保存するための変数
+     * メソッド名を保存するための変数
      */
     protected String methodName;
     

@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import java.util.List;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
@@ -11,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
@@ -62,88 +64,96 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedMemberCallInf
         }
 
         // コンストラクタのシグネチャを取得
-        final String name = this.getName();
         final List<EntityUsageInfo> actualParameters = super.resolveParameters(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         //　コンストラクタの型を解決
-        final TypeInfo classType = this.getClassType().resolveType(usingClass, usingMethod,
+        final TypeInfo referenceType = this.getReferenceType().resolveType(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-        if (!(classType instanceof ClassTypeInfo)) {
+        if (!(referenceType instanceof ReferenceTypeInfo)) {
             assert false : "Error handling must be inserted!";
         }
 
-        final ClassInfo referencedClass = ((ClassTypeInfo) classType).getReferencedClass();
-        if (referencedClass instanceof TargetClassInfo) {
+        // クラス型のコンストラクタ呼び出しの場合
+        if (referenceType instanceof ClassTypeInfo) {
 
-            // まずは利用可能なメソッドから検索
-            {
-                // 利用可能なメソッド一覧を取得
-                final List<TargetMethodInfo> availableMethods = NameResolver.getAvailableMethods(
-                        (TargetClassInfo) referencedClass, usingClass);
+            final ClassInfo referencedClass = ((ClassTypeInfo) referenceType).getReferencedClass();
+            if (referencedClass instanceof TargetClassInfo) {
 
-                // 利用可能なメソッドから，未解決メソッドと一致するものを検索
-                // メソッド名，引数の型のリストを用いて，このメソッドの呼び出しであるかどうかを判定
-                for (final TargetMethodInfo availableMethod : availableMethods) {
+                // まずは利用可能なメソッドから検索
+                {
+                    // 利用可能なメソッド一覧を取得
+                    final List<TargetMethodInfo> availableMethods = NameResolver
+                            .getAvailableMethods((TargetClassInfo) referencedClass, usingClass);
 
-                    // 呼び出し可能なメソッドが見つかった場合
-                    if (availableMethod.canCalledWith(name, actualParameters)) {
-                        this.resolvedInfo = new ConstructorCallInfo(availableMethod);
-                        return this.resolvedInfo;
+                    // 利用可能なメソッド(コンストラクタ)から，未解決メソッドと一致するものを検索
+                    // 引数の型のリストを用いて，このコンストラクタメソッドの呼び出しであるかどうかを判定
+                    for (final TargetMethodInfo availableMethod : availableMethods) {
+
+                        // 呼び出し可能なメソッドが見つかった場合
+                        if (availableMethod.canCalledWith(actualParameters)) {
+                            this.resolvedInfo = new ConstructorCallInfo(availableMethod);
+                            return this.resolvedInfo;
+                        }
                     }
                 }
-            }
 
-            // 利用可能なメソッドが見つからなかった場合は，外部クラスである親クラスがあるはず．
-            // そのクラスのメソッドを使用しているとみなす
-            {
-                final ExternalClassInfo externalSuperClass = NameResolver
-                        .getExternalSuperClass((TargetClassInfo) referencedClass);
-                if (null != externalSuperClass) {
+                // 利用可能なメソッドが見つからなかった場合は，外部クラスである親クラスがあるはず．
+                // そのクラスのメソッドを使用しているとみなす
+                {
+                    final ExternalClassInfo externalSuperClass = NameResolver
+                            .getExternalSuperClass((TargetClassInfo) referencedClass);
+                    if (null != externalSuperClass) {
 
-                    final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
-                            externalSuperClass, true);
-                    final List<ParameterInfo> dummyParameters = NameResolver
-                            .createParameters(actualParameters);
-                    methodInfo.addParameters(dummyParameters);
-                    methodInfoManager.add(methodInfo);
+                        final ExternalMethodInfo methodInfo = new ExternalMethodInfo(
+                                externalSuperClass.getClassName(), externalSuperClass, true);
+                        final List<ParameterInfo> dummyParameters = NameResolver
+                                .createParameters(actualParameters);
+                        methodInfo.addParameters(dummyParameters);
+                        methodInfoManager.add(methodInfo);
 
-                    // 外部クラスに新規で外部メソッド変数（ExternalMethodInfo）を追加したので型は不明
-                    this.resolvedInfo = new ConstructorCallInfo(methodInfo);
+                        // 外部クラスに新規で外部メソッド変数（ExternalMethodInfo）を追加したので型は不明
+                        this.resolvedInfo = new ConstructorCallInfo(methodInfo);
+                        return this.resolvedInfo;
+                    }
+
+                    assert false : "Here shouldn't be reached!";
+                }
+
+                // 見つからなかった処理を行う
+                {
+                    err.println("Can't resolve method Call : " + this.toString());
+
+                    usingMethod.addUnresolvedUsage(this);
+
+                    this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
                     return this.resolvedInfo;
                 }
 
-                assert false : "Here shouldn't be reached!";
-            }
+            } else if (referencedClass instanceof ExternalClassInfo) {
 
-            // 見つからなかった処理を行う
-            {
-                err.println("Can't resolve method Call : " + this.getName());
+                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(referencedClass
+                        .getClassName(), referencedClass, true);
+                final List<ParameterInfo> parameters = NameResolver
+                        .createParameters(actualParameters);
+                methodInfo.addParameters(parameters);
+                methodInfoManager.add(methodInfo);
 
-                usingMethod.addUnresolvedUsage(this);
-
-                this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+                // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
+                this.resolvedInfo = new ConstructorCallInfo(methodInfo);
                 return this.resolvedInfo;
             }
 
-        } else if (referencedClass instanceof ExternalClassInfo) {
-
-            final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
-                    referencedClass, true);
-            final List<ParameterInfo> parameters = NameResolver.createParameters(actualParameters);
-            methodInfo.addParameters(parameters);
-            methodInfoManager.add(methodInfo);
-
-            // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
-            this.resolvedInfo = new ConstructorCallInfo(methodInfo);
-            return this.resolvedInfo;
+            //　配列型のコンストラクタ呼び出しの場合
+        } else if (referenceType instanceof ArrayTypeInfo) {
+            // TODO 配列のコンストラクタを表すクラスが必要
         }
 
         // TODO 
         return null;
     }
 
-    public UnresolvedReferenceTypeInfo getClassType() {
+    public UnresolvedReferenceTypeInfo getReferenceType() {
         return this.unresolvedReferenceType;
     }
 
