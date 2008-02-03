@@ -43,6 +43,11 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
     
+    @Override
+	public boolean isSpecificBlock() {
+		return false;
+	}
+    
     public boolean isBuiltinType(){
         return isPrimitiveType() || isVoidType();
     }

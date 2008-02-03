@@ -16,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class UnresolvedWhileBlockInfo extends UnresolvedBlockInfo<WhileBlockInfo> {
+public final class UnresolvedWhileBlockInfo extends UnresolvedConditionalBlockInfo<WhileBlockInfo> {
 
     /**
      * while ƒuƒƒbƒNî•ñ‚ğ‰Šú‰»

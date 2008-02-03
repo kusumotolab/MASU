@@ -35,6 +35,12 @@ public interface AstToken {
     public boolean isBlock();
     
     /**
+     * トークンが特殊なブロックを表すかどうか返す．
+     * @return 特殊なブロックを表すトークンあらtrue
+     */
+    public boolean isSpecificBlock();
+    
+    /**
      * トークンが組み込み型であるかどうかを返す．
      * @return 組み込み型ならtrue
      */

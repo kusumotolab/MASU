@@ -16,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.InstanceToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.MemberTypeModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.SpecificBlockToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.SyntaxToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.VisitControlToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
@@ -361,14 +362,40 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
 //        case Java15TokenTypes.PARAMETERS:
 //        case Java15TokenTypes.ELIST:
 //        case Java15TokenTypes.SLIST:
-//        case Java15TokenTypes.LITERAL_if:
-//        case Java15TokenTypes.LITERAL_for:
-//        case Java15TokenTypes.LITERAL_try:
+        case Java15TokenTypes.LITERAL_if:
+       		result = SpecificBlockToken.IF_BLOCK;
+        	break;
+        case Java15TokenTypes.LITERAL_else:
+        	result = SpecificBlockToken.ELSE_BLOCK;
+        	break;
+        case Java15TokenTypes.LITERAL_for:
+        	result = SpecificBlockToken.FOR_BLOCK;
+        	break;
+        case Java15TokenTypes.LITERAL_try:
+        	result = SpecificBlockToken.TRY_BLOCK;
+        	break;
+        case Java15TokenTypes.LITERAL_catch:
+        	result = SpecificBlockToken.CATCH_BLOCK;
+        	break;
+        case Java15TokenTypes.LITERAL_finally:
+        	result = SpecificBlockToken.FINALLY_BLOCK;
+        	break;
 //        case Java15TokenTypes.LITERAL_return:
-//        case Java15TokenTypes.LITERAL_do:
-//            result = VisitControlToken.ENTER;
-//            break;
-            
+        case Java15TokenTypes.LITERAL_do:
+        	result = SpecificBlockToken.DO_BLOCK;
+        	break;
+        case Java15TokenTypes.LITERAL_while:
+        	result = SpecificBlockToken.WHILE_BLOCK;
+            break;
+        case Java15TokenTypes.LITERAL_switch:
+        	result = SpecificBlockToken.SWITCH_BLOCK;
+        	break;
+        case Java15TokenTypes.LITERAL_case:
+        	result = SpecificBlockToken.CASE_ENTRY;
+        	break;
+        case Java15TokenTypes.LITERAL_default:
+        	result = SpecificBlockToken.DEFAULT_ENTRY;
+        	break;
         default :
             //変換できなかったノードは取りあえずその子供に進む
             result = VisitControlToken.ENTER;

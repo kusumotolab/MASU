@@ -23,7 +23,7 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
      * 
      * @param ownerIfBlock
      */
-    UnresolvedElseBlockInfo(final UnresolvedIfBlockInfo ownerIfBlock) {
+    public UnresolvedElseBlockInfo(final UnresolvedIfBlockInfo ownerIfBlock) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == ownerIfBlock) {

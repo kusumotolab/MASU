@@ -23,26 +23,26 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        this.methodCalls = new HashSet<UnresolvedMethodCallInfo>();
+        this.memberCalls = new HashSet<UnresolvedMemberCallInfo>();
         this.fieldUsages = new HashSet<UnresolvedFieldUsageInfo>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
         this.innerBlocks = new HashSet<UnresolvedBlockInfo<?>>();
     }
 
     /**
-     * メソッド呼び出しを追加する
+     * メソッドまたはコンストラクタ呼び出しを追加する
      * 
-     * @param methodCall メソッド呼び出し
+     * @param memberCall メソッドまたはコンストラクタ呼び出し
      */
-    public final void addMethodCall(final UnresolvedMethodCallInfo methodCall) {
+    public final void addMemberCall(final UnresolvedMemberCallInfo memberCall) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == methodCall) {
+        if (null == memberCall) {
             throw new NullPointerException();
         }
 
-        this.methodCalls.add(methodCall);
+        this.memberCalls.add(memberCall);
     }
 
     /**
@@ -93,13 +93,24 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
         this.innerBlocks.add(innerBlock);
     }
 
+    public void addChildSpaceInfo(final UnresolvedLocalSpaceInfo<?> childLocalInfo){
+    	MetricsToolSecurityManager.getInstance().checkAccess();
+    	if (null == childLocalInfo) {
+    		throw new NullPointerException();
+    	}
+    	
+    	this.fieldUsages.addAll(childLocalInfo.fieldUsages);
+    	this.localVariables.addAll(childLocalInfo.localVariables);
+    	this.memberCalls.addAll(childLocalInfo.memberCalls);
+    }
+    
     /**
      * このブロック内で行われている未解決メソッド呼び出しの Set を返す
      * 
      * @return このブロック内で行われている未解決メソッド呼び出しの Set
      */
-    public final Set<UnresolvedMethodCallInfo> getMethodCalls() {
-        return Collections.unmodifiableSet(this.methodCalls);
+    public final Set<UnresolvedMemberCallInfo> getMethodCalls() {
+        return Collections.unmodifiableSet(this.memberCalls);
     }
 
     /**
@@ -130,9 +141,9 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     }
 
     /**
-     * メソッド呼び出しを保存する変数
+     * メソッドまたはコンストラクタ呼び出しを保存する変数
      */
-    private final Set<UnresolvedMethodCallInfo> methodCalls;
+    private final Set<UnresolvedMemberCallInfo> memberCalls;
 
     /**
      * フィールド使用を保存する変数

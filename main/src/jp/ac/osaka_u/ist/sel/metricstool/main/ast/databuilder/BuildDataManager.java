@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
@@ -110,6 +111,8 @@ public interface BuildDataManager {
 
     public UnresolvedMethodInfo endMethodDefinition();
 
+    public UnresolvedBlockInfo endInnerBlockDefinition();
+    
     public void endScopedBlock();
 
     public void enterClassBlock();
@@ -151,5 +154,7 @@ public interface BuildDataManager {
     public void startClassDefinition(UnresolvedClassInfo classInfo);
 
     public void startMethodDefinition(UnresolvedMethodInfo methodInfo);
+    
+    public void startInnerBlockDefinition(UnresolvedBlockInfo blockInfo);
 
 }

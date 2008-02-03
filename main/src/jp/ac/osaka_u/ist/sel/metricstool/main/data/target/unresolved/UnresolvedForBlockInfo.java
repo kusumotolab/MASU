@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  */
-public final class UnresolvedForBlockInfo extends UnresolvedBlockInfo<ForBlockInfo> {
+public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo<ForBlockInfo> {
 
     /**
      * for ƒuƒƒbƒNî•ñ‚ğ‰Šú‰»

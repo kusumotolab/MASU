@@ -10,17 +10,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMemberCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
 
@@ -56,15 +59,19 @@ public class DefaultBuildDataManager implements BuildDataManager{
     }
     
     public void addFieldAssignment(UnresolvedFieldUsageInfo usage) {
-        if (!this.methodStack.isEmpty()&& MODE.METHOD == this.mode){
+    	if (!this.methodStack.isEmpty()&& MODE.METHOD == this.mode){
             this.methodStack.peek().addFieldUsage(usage);
-        }
+        }else if(!this.blockStack.isEmpty() && MODE.BLOCK == this.mode){
+    		this.blockStack.peek().addFieldUsage(usage);
+    	}
     }
 
     public void addFieldReference(UnresolvedFieldUsageInfo usage) {
         if (!this.methodStack.isEmpty()&& MODE.METHOD == this.mode){
             this.methodStack.peek().addFieldUsage(usage);
-        }
+        }else if(!this.blockStack.isEmpty() && MODE.BLOCK == this.mode){
+    		this.blockStack.peek().addFieldUsage(usage);
+    	}
     }
 
     public void addLocalParameter(final UnresolvedLocalVariableInfo localParameter){
@@ -78,12 +85,17 @@ public class DefaultBuildDataManager implements BuildDataManager{
         if (!this.methodStack.isEmpty() && MODE.METHOD == this.mode) {
             this.methodStack.peek().addLocalVariable(localVariable);
             addScopedVariable(localVariable);
+        } else if(!this.blockStack.isEmpty() && MODE.BLOCK == this.mode){
+        	this.blockStack.peek().addLocalVariable(localVariable);
+        	addScopedVariable(localVariable);
         }
     }
     
-    public void addMethodCall(UnresolvedMemberCallInfo methodCall) {
+    public void addMethodCall(UnresolvedMemberCallInfo memberCall) {
         if (!this.methodStack.isEmpty() && MODE.METHOD == this.mode){
-            this.methodStack.peek().addMethodCall(methodCall);
+            this.methodStack.peek().addMemberCall(memberCall);
+        } else if(!this.blockStack.isEmpty() && MODE.BLOCK == this.mode){
+        	this.blockStack.peek().addMemberCall(memberCall);
         }
     }
 
@@ -196,6 +208,30 @@ public class DefaultBuildDataManager implements BuildDataManager{
             
             return methodInfo;
         }
+    }
+    
+    public UnresolvedBlockInfo endInnerBlockDefinition(){
+    	this.restoreMode();
+    	
+    	if (this.blockStack.isEmpty()) {
+    		return null;
+    	} else {
+    		final UnresolvedBlockInfo blockInfo = this.blockStack.pop();
+    		UnresolvedLocalSpaceInfo parentInfo = null;
+    		if(this.blockStack.isEmpty()){
+    			if(!this.methodStack.isEmpty()){
+    				parentInfo = this.methodStack.peek();
+    			}
+    		}else{
+    			parentInfo = this.blockStack.peek();
+    		}
+    		
+    		if (null != parentInfo) {
+    			parentInfo.addChildSpaceInfo(blockInfo);
+    		}
+    		
+    		return blockInfo;
+    	}
     }
     
     public void enterClassBlock(){
@@ -500,6 +536,29 @@ public class DefaultBuildDataManager implements BuildDataManager{
 
     }
     
+    public void startInnerBlockDefinition(final UnresolvedBlockInfo blockInfo){
+    	if(null == blockInfo){
+    		throw new NullPointerException("block info was null.");
+    	}
+    	
+    	if(!this.methodStack.isEmpty()){
+    		// TODO ブロック文のownerブロックとownerメソッドを登録したほうが便利かも
+    		UnresolvedMethodInfo currentMethod = getCurrentMethod();
+    		//blockInfo.setOwnerMethod(currentMethod);
+	    	if(!this.blockStack.isEmpty()){
+	    		UnresolvedBlockInfo currentBlock = this.blockStack.peek();
+	    		currentBlock.addInnerBlock(blockInfo);
+	    		//blockInfo.setOwnerBlock(currentBlock);
+	    	}else{
+	    		currentMethod.addInnerBlock(blockInfo);
+	    	}
+    	}
+    	
+    	this.toBlockMode();
+    	
+    	this.blockStack.push(blockInfo);
+    }
+    
     protected void toClassMode(){
         this.modeStack.push(this.mode);
         this.mode = MODE.CLASS;
@@ -508,6 +567,11 @@ public class DefaultBuildDataManager implements BuildDataManager{
     protected void toMethodMode(){
         this.modeStack.push(this.mode);
         this.mode = MODE.METHOD;
+    }
+    
+    protected void toBlockMode(){
+    	this.modeStack.push(this.mode);
+    	this.mode = MODE.BLOCK;
     }
     
     protected void restoreMode(){
@@ -632,6 +696,8 @@ public class DefaultBuildDataManager implements BuildDataManager{
 
     private final Stack<UnresolvedMethodInfo> methodStack = new Stack<UnresolvedMethodInfo>();
     
+    private final Stack<UnresolvedBlockInfo> blockStack = new Stack<UnresolvedBlockInfo>();
+    
     private final Set<UnresolvedVariableInfo> nextScopedVariables = new HashSet<UnresolvedVariableInfo>();
 
     private final Map<UnresolvedClassInfo, Integer> anonymousClassCountMap = new HashMap<UnresolvedClassInfo, Integer>();
@@ -639,5 +705,5 @@ public class DefaultBuildDataManager implements BuildDataManager{
     private MODE mode = MODE.INIT;
     private Stack<MODE> modeStack = new Stack<MODE>();
     
-    private static enum MODE{INIT,METHOD,CLASS}
+    private static enum MODE{INIT,BLOCK,METHOD,CLASS}
 }

@@ -16,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class UnresolvedIfBlockInfo extends UnresolvedBlockInfo<IfBlockInfo> {
+public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<IfBlockInfo> {
 
     /**
      * if ƒuƒƒbƒNî•ñ‚ğ‰Šú‰»
