@@ -1,6 +1,5 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 
 
 /**
@@ -9,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedE
  * @author higo, t-miyake
  * 
  */
-public final class NullUsageInfo extends EntityUsageInfo implements UnresolvedEntityUsageInfo {
+public final class NullUsageInfo extends EntityUsageInfo {
 
     public NullUsageInfo() {
         super();
@@ -23,23 +22,6 @@ public final class NullUsageInfo extends EntityUsageInfo implements UnresolvedEn
     @Override
     public TypeInfo getType() {
         return NULLTYPE;
-    }
-
-    @Override
-    public boolean alreadyResolved() {
-        return true;
-    }
-
-    @Override
-    public EntityUsageInfo getResolvedEntityUsage() {
-        return this;
-    }
-
-    @Override
-    public EntityUsageInfo resolveEntityUsage(TargetClassInfo usingClass,
-            TargetMethodInfo usingMethod, ClassInfoManager classInfoManager,
-            FieldInfoManager fieldInfoManager, MethodInfoManager methodInfoManager) {
-        return this;
     }
 
     /**

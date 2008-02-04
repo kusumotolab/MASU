@@ -12,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedA
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBinominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedNullUsageInfo;
 
 
 public class OperatorExpressionBuilder extends ExpressionBuilder {
@@ -64,7 +65,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
             } else if (elements[0].equals(InstanceSpecificElement.THIS)){
                 termTypes[0] = InstanceSpecificElement.getThisInstanceType(buildDataManager);
             } else if (elements[0].equals(InstanceSpecificElement.NULL)){
-                termTypes[0] = new NullUsageInfo();
+                termTypes[0] = new UnresolvedNullUsageInfo();
             } else if (elements[0] instanceof TypeElement) {
                 TypeElement typeElement = (TypeElement) elements[0];
                 if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {
@@ -88,7 +89,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 } else if (elements[i].equals(InstanceSpecificElement.THIS)){
                     termTypes[i] = InstanceSpecificElement.getThisInstanceType(buildDataManager);
                 } else if (elements[i].equals(InstanceSpecificElement.NULL)){
-                    termTypes[i] = new NullUsageInfo();
+                    termTypes[i] = new UnresolvedNullUsageInfo();
                 } else if (elements[i] instanceof TypeElement) {
                     TypeElement typeElement = (TypeElement) elements[i];
                     if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {
