@@ -371,6 +371,14 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
     public final static UnresolvedClassTypeInfo getInstance(UnresolvedClassInfo referencedClass) {
         return new UnresolvedClassTypeInfo(referencedClass.getFullQualifiedName());
     }
+    
+    public final UnresolvedClassReferenceInfo getUsage() {
+        UnresolvedClassReferenceInfo usage = new UnresolvedClassReferenceInfo(this.availableNamespaceSet, referenceName);
+        for (UnresolvedReferenceTypeInfo typeArgument : this.typeParameterUsages) {
+            usage.addTypeArgument(typeArgument);
+        }
+        return usage;
+    }
 
     /**
      * 利用可能な名前空間名を保存するための変数，名前解決処理の際に用いる

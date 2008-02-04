@@ -12,8 +12,7 @@ public class InstanceSpecificElement implements ExpressionElement {
 
     public static final InstanceSpecificElement THIS = new InstanceSpecificElement(null, null);
 
-    public static final InstanceSpecificElement NULL = new InstanceSpecificElement(NullUsageInfo
-            .getInstance(), NullUsageInfo.getInstance());
+    public static final InstanceSpecificElement NULL = new InstanceSpecificElement(null , new NullUsageInfo());
 
     private InstanceSpecificElement(UnresolvedTypeInfo type, UnresolvedEntityUsageInfo usage) {
         this.type = type;

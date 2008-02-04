@@ -10,6 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBinominalOperationInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 
 
@@ -63,8 +64,17 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
             } else if (elements[0].equals(InstanceSpecificElement.THIS)){
                 termTypes[0] = InstanceSpecificElement.getThisInstanceType(buildDataManager);
             } else if (elements[0].equals(InstanceSpecificElement.NULL)){
-                termTypes[0] = NullUsageInfo.getInstance();
-            } else {
+                termTypes[0] = new NullUsageInfo();
+            } else if (elements[0] instanceof TypeElement) {
+                TypeElement typeElement = (TypeElement) elements[0];
+                if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {
+                    // キャストがあるとおそらくここに到達
+                    // TODO UnresolvedReferenceTypeInfoにすべき
+                    termTypes[0] = ((UnresolvedClassTypeInfo) typeElement.getType()).getUsage();
+                } else {
+                    termTypes[0] = elements[0].getUsage();
+                }
+            }  else {
                 //それ以外の場合は直接型を取得する
                 termTypes[0] = elements[0].getUsage();
             }
@@ -78,7 +88,16 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 } else if (elements[i].equals(InstanceSpecificElement.THIS)){
                     termTypes[i] = InstanceSpecificElement.getThisInstanceType(buildDataManager);
                 } else if (elements[i].equals(InstanceSpecificElement.NULL)){
-                    termTypes[i] = NullUsageInfo.getInstance();
+                    termTypes[i] = new NullUsageInfo();
+                } else if (elements[i] instanceof TypeElement) {
+                    TypeElement typeElement = (TypeElement) elements[i];
+                    if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {
+                        
+                        // TODO UnresolvedReferenceTypeInfoにすべき 
+                        termTypes[i] = ((UnresolvedClassTypeInfo) typeElement.getType()).getUsage();
+                    } else {
+                        termTypes[i] = elements[i].getUsage();
+                    }
                 } else {
                     //それ以外なら直接型を取得する
                     termTypes[i] = elements[i].getUsage();

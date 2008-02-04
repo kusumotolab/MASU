@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 

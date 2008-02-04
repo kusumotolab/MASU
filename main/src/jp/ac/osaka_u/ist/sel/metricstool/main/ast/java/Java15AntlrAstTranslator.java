@@ -338,9 +338,7 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             result = new ConstantToken("char",PrimitiveTypeInfo.CHAR);
             break;
         case Java15TokenTypes.STRING_LITERAL:
-            UnresolvedClassTypeInfo stringReference = new UnresolvedClassTypeInfo(
-                    new AvailableNamespaceInfoSet(),new String[]{"java","lang","String"});
-            result = new ConstantToken("String",stringReference);
+            result = new ConstantToken("String", PrimitiveTypeInfo.STRING);
             break;
         case Java15TokenTypes.NUM_FLOAT:
             result = new ConstantToken("float",PrimitiveTypeInfo.FLOAT);

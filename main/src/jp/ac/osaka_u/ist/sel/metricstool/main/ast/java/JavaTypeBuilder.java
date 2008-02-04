@@ -48,4 +48,7 @@ public class JavaTypeBuilder extends TypeBuilder {
      */
     public final static UnresolvedClassTypeInfo JAVA_LANG_OBJECT = new UnresolvedClassTypeInfo(
             new AvailableNamespaceInfoSet(), new String[] { "java", "lang", "Object" });
+    
+    public final static UnresolvedClassTypeInfo JAVA_LANG_STRIG = new UnresolvedClassTypeInfo(
+            new AvailableNamespaceInfoSet(),new String[]{"java","lang","String"});
 }
