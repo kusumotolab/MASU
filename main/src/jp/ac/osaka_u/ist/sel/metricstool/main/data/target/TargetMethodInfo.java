@@ -138,7 +138,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
         final SortedSet<FieldInfo> referencees = new TreeSet<FieldInfo>();
         for (final FieldUsageInfo fieldUsage : this.getFieldUsages()) {
             if (fieldUsage.isReference()) {
-                referencees.add(fieldUsage.getUsedField());
+                referencees.add(fieldUsage.getUsedVariable());
             }
         }
 
@@ -154,7 +154,7 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
         final SortedSet<FieldInfo> assignmentees = new TreeSet<FieldInfo>();
         for (final FieldUsageInfo fieldUsage : this.getFieldUsages()) {
             if (fieldUsage.isAssignment()) {
-                assignmentees.add(fieldUsage.getUsedField());
+                assignmentees.add(fieldUsage.getUsedVariable());
             }
         }
 

@@ -7,10 +7,10 @@ import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
@@ -28,7 +28,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake, higo
  *
  */
-public abstract class UnresolvedMemberCallInfo implements UnresolvedEntityUsageInfo {
+public abstract class UnresolvedMemberCallInfo extends UnresolvedEntityUsageInfo {
 
     public UnresolvedMemberCallInfo() {
 
@@ -46,6 +46,7 @@ public abstract class UnresolvedMemberCallInfo implements UnresolvedEntityUsageI
      * 
      * @return 既に解決されている場合は true，そうでない場合は false
      */
+    @Override
     public final boolean alreadyResolved() {
         return null != this.resolvedInfo;
     }
@@ -56,6 +57,7 @@ public abstract class UnresolvedMemberCallInfo implements UnresolvedEntityUsageI
      * @return 解決済みメソッド呼び出し情報
      * @throw 解決されていない場合にスローされる
      */
+    @Override
     public final EntityUsageInfo getResolvedEntityUsage() {
 
         if (!this.alreadyResolved()) {
@@ -143,7 +145,14 @@ public abstract class UnresolvedMemberCallInfo implements UnresolvedEntityUsageI
                             .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedParameter);
                     classInfoManager.add(externalClassInfo);
                     final ClassTypeInfo referenceType = new ClassTypeInfo(externalClassInfo);
-                    parameter = new ClassReferenceInfo(referenceType);
+                    
+                    // 使用位置を取得
+                    final int fromLine = this.getFromLine();
+                    final int fromColumn = this.getFromColumn();
+                    final int toLine = this.getToLine();
+                    final int toColumn = this.getToColumn();
+                    
+                    parameter = new ClassReferenceInfo(referenceType, fromLine, fromColumn, toLine, toColumn);
 
                 } else {
                     assert false : "Here shouldn't be reached!";

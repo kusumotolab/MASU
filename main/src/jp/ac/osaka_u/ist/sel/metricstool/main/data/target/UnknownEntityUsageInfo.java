@@ -1,27 +1,15 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-public class UnknownEntityUsageInfo extends EntityUsageInfo {
-
-    /**
-     * このクラスの単一オブジェクトを返す
-     * 
-     * @return このクラスの単一オブジェクト
-     */
-    public static UnknownEntityUsageInfo getInstance() {
-        return SINGLETON;
-    }
+public final class UnknownEntityUsageInfo extends EntityUsageInfo {
 
     @Override
     public TypeInfo getType() {
         return UnknownTypeInfo.getInstance();
     }
 
-    private UnknownEntityUsageInfo() {
+    public UnknownEntityUsageInfo(final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
+        super(fromLine, fromColumn, toLine, toColumn);
     }
-
-    /**
-     * このクラスの単一オブジェクトを保存するための定数
-     */
-    private static final UnknownEntityUsageInfo SINGLETON = new UnknownEntityUsageInfo();
 }

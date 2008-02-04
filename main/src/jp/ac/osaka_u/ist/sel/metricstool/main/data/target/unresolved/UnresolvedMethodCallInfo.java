@@ -69,6 +69,12 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
             return this.getResolvedEntityUsage();
         }
 
+        // 使用位置を取得
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
         // メソッドのシグネチャを取得
         final String name = this.getName();
         final List<EntityUsageInfo> actualParameters = super.resolveParameters(usingClass,
@@ -87,7 +93,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedOwnerUsage);
                 classInfoManager.add(externalClassInfo);
                 final ClassTypeInfo referenceType = new ClassTypeInfo(externalClassInfo);
-                ownerUsage = new ClassReferenceInfo(referenceType);
+                ownerUsage = new ClassReferenceInfo(referenceType, fromLine, fromColumn, toLine,
+                        toColumn);
             }
         }
 
@@ -98,7 +105,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
             // 見つからなかった処理を行う
             usingMethod.addUnresolvedUsage(this);
 
-            this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+            this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
             return this.resolvedInfo;
 
             // 親がクラス型だった場合
@@ -120,7 +127,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
 
                         // 呼び出し可能なメソッドが見つかった場合
                         if (availableMethod.canCalledWith(name, actualParameters)) {
-                            this.resolvedInfo = new MethodCallInfo(availableMethod);
+                            this.resolvedInfo = new MethodCallInfo(availableMethod, fromLine,
+                                    fromColumn, toLine, toColumn);
                             return this.resolvedInfo;
                         }
                     }
@@ -141,7 +149,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
                         methodInfoManager.add(methodInfo);
 
                         // 外部クラスに新規で外部メソッド変数（ExternalMethodInfo）を追加したので型は不明
-                        this.resolvedInfo = new MethodCallInfo(methodInfo);
+                        this.resolvedInfo = new MethodCallInfo(methodInfo, fromLine, fromColumn,
+                                toLine, toColumn);
                         return this.resolvedInfo;
                     }
 
@@ -154,7 +163,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
 
                     usingMethod.addUnresolvedUsage(this);
 
-                    this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+                    this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
                     return this.resolvedInfo;
                 }
 
@@ -169,7 +178,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
                 methodInfoManager.add(methodInfo);
 
                 // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
-                this.resolvedInfo = new MethodCallInfo(methodInfo);
+                this.resolvedInfo = new MethodCallInfo(methodInfo, fromLine, fromColumn, toLine,
+                        toColumn);
                 return this.resolvedInfo;
             }
 
@@ -188,7 +198,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
                 methodInfoManager.add(methodInfo);
 
                 // 外部クラスに新規で外部メソッドを追加したので型は不明
-                this.resolvedInfo = new MethodCallInfo(methodInfo);
+                this.resolvedInfo = new MethodCallInfo(methodInfo, fromLine, fromColumn, toLine,
+                        toColumn);
                 return this.resolvedInfo;
             }
 
@@ -210,18 +221,19 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
                 methodInfoManager.add(methodInfo);
 
                 // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
-                this.resolvedInfo = new MethodCallInfo(methodInfo);
+                this.resolvedInfo = new MethodCallInfo(methodInfo, fromLine, fromColumn, toLine,
+                        toColumn);
                 return this.resolvedInfo;
 
             default:
                 assert false : "Here shouldn't be reached!";
-                this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+                this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
                 return this.resolvedInfo;
             }
         }
 
         assert false : "Here shouldn't be reached!";
-        this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+        this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 
@@ -242,12 +254,12 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
     public final String getName() {
         return this.methodName;
     }
-    
+
     /**
      * メソッド名を保存するための変数
      */
     protected String methodName;
-    
+
     /**
      * メソッド呼び出しが実行される変数の参照を保存するための変数
      */

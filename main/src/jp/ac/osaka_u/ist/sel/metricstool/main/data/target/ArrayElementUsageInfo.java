@@ -14,9 +14,10 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
      * 
      * @param ownerEntityUsage 配列型のエンティティ使用
      */
-    public ArrayElementUsageInfo(final EntityUsageInfo ownerEntityUsage) {
+    public ArrayElementUsageInfo(final EntityUsageInfo ownerEntityUsage, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super();
+        super(fromLine, fromColumn, toLine, toColumn);
 
         if (null == ownerEntityUsage) {
             throw new NullPointerException();

@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
  * @author higo
  * 
  */
-public class UnresolvedBinominalOperationInfo implements UnresolvedEntityUsageInfo {
+public class UnresolvedBinominalOperationInfo extends UnresolvedEntityUsageInfo {
 
     /**
      * 引数なしコンストラクタ
@@ -51,6 +51,7 @@ public class UnresolvedBinominalOperationInfo implements UnresolvedEntityUsageIn
      * 
      * @return 解決済みである場合は true, そうでない場合は false
      */
+    @Override
     public boolean alreadyResolved() {
         return null != this.resolvedInfo;
     }
@@ -60,6 +61,7 @@ public class UnresolvedBinominalOperationInfo implements UnresolvedEntityUsageIn
      * 
      * @return 解決済みニ項演算
      */
+    @Override
     public EntityUsageInfo getResolvedEntityUsage() {
 
         if (!this.alreadyResolved()) {
@@ -79,6 +81,7 @@ public class UnresolvedBinominalOperationInfo implements UnresolvedEntityUsageIn
      * @param methodInfoManager 用いるメソッドマネージャ
      * @return 解決済み二項演算（つまり，演算結果の型）
      */
+    @Override
     public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
@@ -95,7 +98,15 @@ public class UnresolvedBinominalOperationInfo implements UnresolvedEntityUsageIn
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final EntityUsageInfo secondOperand = unresolvedSecondOperand.resolveEntityUsage(
                 usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-        this.resolvedInfo = new BinominalOperationInfo(operator, firstOperand, secondOperand);
+
+        //　位置情報を取得
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        this.resolvedInfo = new BinominalOperationInfo(operator, firstOperand, secondOperand,
+                fromLine, fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 

@@ -16,9 +16,10 @@ public final class ClassReferenceInfo extends EntityUsageInfo {
      * 
      * @param referenceType　このクラス参照の参照型
      */
-    public ClassReferenceInfo(final ClassTypeInfo referenceType) {
+    public ClassReferenceInfo(final ClassTypeInfo referenceType, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super();
+        super(fromLine, fromColumn, toLine, toColumn);
 
         if (null == referenceType) {
             throw new NullPointerException();

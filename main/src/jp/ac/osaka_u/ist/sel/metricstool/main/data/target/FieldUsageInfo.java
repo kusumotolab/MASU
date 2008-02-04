@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author higo
  * 
  */
-public final class FieldUsageInfo extends EntityUsageInfo {
+public final class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
 
     /**
      * 使用されているフィールドを与えてオブジェクトを初期化
@@ -15,46 +15,9 @@ public final class FieldUsageInfo extends EntityUsageInfo {
      * @param usedField 使用されているフィールド
      * @param reference 参照である場合は true, 代入である場合は false
      */
-    public FieldUsageInfo(final FieldInfo usedField, final boolean reference) {
+    public FieldUsageInfo(final FieldInfo usedField, final boolean reference, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super();
-
-        if (null == usedField) {
-            throw new NullPointerException();
-        }
-
-        this.usedField = usedField;
-        this.reference = reference;
+        super(usedField, reference, fromLine, fromColumn, toLine, toColumn);
     }
-
-    @Override
-    public TypeInfo getType() {
-        return this.getUsedField().getType();
-    }
-
-    public FieldInfo getUsedField() {
-        return this.usedField;
-    }
-
-    /**
-     * このフィールド使用が参照であるかどうかを返す
-     * 
-     * @return 参照である場合は true，代入の場合は false
-     */
-    public boolean isReference() {
-        return this.reference;
-    }
-
-    /**
-     * このフィールド使用が代入であるかどうかを返す
-     * 
-     * @return 代入である場合は true，参照である場合は false
-     */
-    public boolean isAssignment() {
-        return !this.reference;
-    }
-
-    private final FieldInfo usedField;
-
-    private final boolean reference;
 }

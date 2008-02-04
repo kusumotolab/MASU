@@ -14,8 +14,9 @@ public final class ConstructorCallInfo extends MemberCallInfo {
      * 
      * @param callee 呼び出されるコンストラクタ
      */
-    public ConstructorCallInfo(final MethodInfo callee) {
-        super(callee);
+    public ConstructorCallInfo(final MethodInfo callee, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
+        super(callee, fromLine, fromColumn, toLine, toColumn);
     }
 
     /**

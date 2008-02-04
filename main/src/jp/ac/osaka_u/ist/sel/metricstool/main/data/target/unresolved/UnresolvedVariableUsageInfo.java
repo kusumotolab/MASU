@@ -7,17 +7,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 /**
  * 未解決変数使用を保存するためのクラス
  * 
- * @author t-miyake
+ * @author t-miyake, higo
  *
  */
-public abstract class UnresolvedVariableUsageInfo implements UnresolvedEntityUsageInfo {
+public abstract class UnresolvedVariableUsageInfo extends UnresolvedEntityUsageInfo {
 
-    /**
-     * 使用されている変数の未解決情報を返す
-     * @return 使用されている変数の未解決情報
-     */
-    public final UnresolvedVariableInfo<?> getReferencedVariable() {
-        return this.referencedVariable;
+    public UnresolvedVariableUsageInfo(final boolean reference) {
+        this.reference = reference;
     }
 
     /**
@@ -43,6 +39,7 @@ public abstract class UnresolvedVariableUsageInfo implements UnresolvedEntityUsa
      * 
      * @return 既に解決されている場合は true, そうでない場合は false
      */
+    @Override
     public final boolean alreadyResolved() {
         return null != this.resolvedInfo;
     }
@@ -50,6 +47,7 @@ public abstract class UnresolvedVariableUsageInfo implements UnresolvedEntityUsa
     /**
      * 解決済み変数使用を返す
      */
+    @Override
     public final EntityUsageInfo getResolvedEntityUsage() {
 
         if (!this.alreadyResolved()) {
@@ -58,8 +56,6 @@ public abstract class UnresolvedVariableUsageInfo implements UnresolvedEntityUsa
 
         return this.resolvedInfo;
     }
-
-    protected UnresolvedVariableInfo<?> referencedVariable;
 
     protected boolean reference;
 

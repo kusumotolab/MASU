@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-
 /**
  * null使用を表すクラス．
  * 
@@ -10,8 +9,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  */
 public final class NullUsageInfo extends EntityUsageInfo {
 
-    public NullUsageInfo() {
-        super();
+    public NullUsageInfo(final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
+        super(fromLine, fromColumn, toLine, toColumn);
     }
 
     /**

@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -12,8 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  * @author higo
  * 
  */
-public final class PrimitiveTypeInfo extends EntityUsageInfo implements TypeInfo,
-        UnresolvedTypeInfo, UnresolvedEntityUsageInfo {
+public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
 
     /**
      * プリミティブ型の各要素を表すための列挙型
@@ -226,32 +224,6 @@ public final class PrimitiveTypeInfo extends EntityUsageInfo implements TypeInfo
     }
 
     /**
-     * この基本型の解決済み情報を返す
-     * 
-     * @return 自分自身が返される
-     */
-    public EntityUsageInfo getResolvedEntityUsage() {
-        return this;
-    }
-
-    /**
-     * 名前解決を行う
-     * 
-     * @param usingClass 名前解決を行うエンティティがあるクラス
-     * @param usingMethod 名前解決を行うエンティティがあるメソッド
-     * @param classInfoManager 用いるクラスマネージャ
-     * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManager 用いるメソッドマネージャ
-     * 
-     * @return 解決済みの型（自分自身）
-     */
-    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
-            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
-            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
-        return this;
-    }
-
-    /**
      * 型解決された情報を返す
      * 
      * @return 自分自身を返す
@@ -271,19 +243,9 @@ public final class PrimitiveTypeInfo extends EntityUsageInfo implements TypeInfo
      * 
      * @return 解決済みの型（自分自身）
      */
-    public TypeInfo resolveType(final TargetClassInfo usingClass, final TargetMethodInfo usingMethod,
-            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
-            final MethodInfoManager methodInfoManager) {
-        return this;
-    }
-
-    /**
-     * 型を返す．
-     * 
-     * @return 型
-     */
-    @Override
-    public TypeInfo getType() {
+    public TypeInfo resolveType(final TargetClassInfo usingClass,
+            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
         return this;
     }
 
@@ -320,28 +282,6 @@ public final class PrimitiveTypeInfo extends EntityUsageInfo implements TypeInfo
 
         return this.getTypeName().equals(typeInfo.getTypeName());
     }
-
-    /*
-     * オブジェクトの等価性のチェックを行う
-     * 
-     * public boolean equals(final UnresolvedTypeInfo typeInfo) {
-     * 
-     * if (null == typeInfo) { throw new NullPointerException(); }
-     * 
-     * if (!(typeInfo instanceof PrimitiveTypeInfo)) { return false; }
-     * 
-     * return this.getTypeName().equals(typeInfo.getTypeName()); }
-     */
-
-    /*
-     * 順序関係を定義する
-     * 
-     * public int compareTo(final UnresolvedTypeInfo typeInfo) {
-     * 
-     * if (null == typeInfo) { throw new NullPointerException(); }
-     * 
-     * return this.getTypeName().compareTo(typeInfo.getTypeName()); }
-     */
 
     /**
      * オブジェクトに型を与えて初期化する． 型名は固定であるため，外部からはオブジェクトを生成できないようにしている．

@@ -45,6 +45,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
             final UnresolvedEntityUsageInfo ownerClassType, final String fieldName,
             final boolean reference) {
 
+        super(reference);
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == availableNamespaces) || (null == ownerClassType) || (null == fieldName)) {
             throw new NullPointerException();
@@ -68,6 +70,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
      * @param methodInfoManager 用いるメソッドマネージャ
      * @return 解決済みフィールド使用
      */
+    @Override
     public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
@@ -88,6 +91,12 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
         final String fieldName = this.getFieldName();
         final boolean reference = this.isReference();
 
+        // 使用位置を取得
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
         // 親の型を解決
         final UnresolvedEntityUsageInfo unresolvedOwnerUsage = this.getOwnerClassType();
         final EntityUsageInfo ownerUsage = unresolvedOwnerUsage.resolveEntityUsage(usingClass,
@@ -101,7 +110,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
             // 見つからなかった処理を行う
             usingMethod.addUnresolvedUsage(this);
 
-            this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+            this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
             return this.resolvedInfo;
 
             //親がクラス型の場合
@@ -124,7 +133,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
                         // 一致するフィールド名が見つかった場合
                         if (fieldName.equals(availableField.getName())) {
 
-                            this.resolvedInfo = new FieldUsageInfo(availableField, reference);
+                            this.resolvedInfo = new FieldUsageInfo(availableField, reference,
+                                    fromLine, fromColumn, toLine, toColumn);
                             return this.resolvedInfo;
                         }
                     }
@@ -145,7 +155,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
                             fieldInfoManager.add(fieldInfo);
 
                             // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
-                            this.resolvedInfo = new FieldUsageInfo(fieldInfo, reference);
+                            this.resolvedInfo = new FieldUsageInfo(fieldInfo, reference, fromLine,
+                                    fromColumn, toLine, toColumn);
                             return this.resolvedInfo;
                         }
 
@@ -161,7 +172,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
 
                     usingMethod.addUnresolvedUsage(this);
 
-                    this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+                    this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
                     return this.resolvedInfo;
                 }
 
@@ -172,7 +183,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
                 fieldInfoManager.add(fieldInfo);
 
                 // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
-                this.resolvedInfo = new FieldUsageInfo(fieldInfo, reference);
+                this.resolvedInfo = new FieldUsageInfo(fieldInfo, reference, fromLine, fromColumn, toLine, toColumn);
                 return this.resolvedInfo;
             }
 
@@ -182,13 +193,13 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
 
             // Java 言語で フィールド名が length だった場合は int 型を返す
             if (Settings.getLanguage().equals(LANGUAGE.JAVA) && fieldName.equals("length")) {
-                this.resolvedInfo = new ArrayLengthUsageInfo(ownerUsage);
+                this.resolvedInfo = new ArrayLengthUsageInfo(ownerUsage, fromLine, fromColumn, toLine, toColumn);
                 return this.resolvedInfo;
             }
         }
 
         assert false : "Here shouldn't be reached!";
-        this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+        this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 

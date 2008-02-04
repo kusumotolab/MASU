@@ -63,6 +63,13 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedMemberCallInf
             return this.getResolvedEntityUsage();
         }
 
+        
+        //　位置情報を取得
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
         // コンストラクタのシグネチャを取得
         final List<EntityUsageInfo> actualParameters = super.resolveParameters(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -92,7 +99,7 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedMemberCallInf
 
                         // 呼び出し可能なメソッドが見つかった場合
                         if (availableMethod.canCalledWith(actualParameters)) {
-                            this.resolvedInfo = new ConstructorCallInfo(availableMethod);
+                            this.resolvedInfo = new ConstructorCallInfo(availableMethod, fromLine, fromColumn, toLine, toColumn);
                             return this.resolvedInfo;
                         }
                     }
@@ -113,7 +120,7 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedMemberCallInf
                         methodInfoManager.add(methodInfo);
 
                         // 外部クラスに新規で外部メソッド変数（ExternalMethodInfo）を追加したので型は不明
-                        this.resolvedInfo = new ConstructorCallInfo(methodInfo);
+                        this.resolvedInfo = new ConstructorCallInfo(methodInfo, fromLine, fromColumn, toLine, toColumn);
                         return this.resolvedInfo;
                     }
 
@@ -126,7 +133,7 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedMemberCallInf
 
                     usingMethod.addUnresolvedUsage(this);
 
-                    this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
+                    this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
                     return this.resolvedInfo;
                 }
 
@@ -140,7 +147,7 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedMemberCallInf
                 methodInfoManager.add(methodInfo);
 
                 // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
-                this.resolvedInfo = new ConstructorCallInfo(methodInfo);
+                this.resolvedInfo = new ConstructorCallInfo(methodInfo, fromLine, fromColumn, toLine, toColumn);
                 return this.resolvedInfo;
             }
 
