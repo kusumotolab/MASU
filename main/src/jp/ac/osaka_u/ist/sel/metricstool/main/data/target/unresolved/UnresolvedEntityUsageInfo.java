@@ -27,7 +27,7 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * 
      * @return 解決済みのエンティティ
      */
-    abstract EntityUsageInfo resolveEntityUsage(TargetClassInfo usingClass, TargetMethodInfo usingMethod,
+    public abstract EntityUsageInfo resolveEntityUsage(TargetClassInfo usingClass, TargetMethodInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager);
 

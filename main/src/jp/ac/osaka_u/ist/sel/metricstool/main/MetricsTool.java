@@ -1234,7 +1234,7 @@ public class MetricsTool {
                 if (fieldUsage instanceof FieldUsageInfo) {
                     ownerMethod.addFieldUsage((FieldUsageInfo) fieldUsage);
                     final boolean reference = ((FieldUsageInfo) fieldUsage).isReference();
-                    final FieldInfo usedField = ((FieldUsageInfo) fieldUsage).getUsedField();
+                    final FieldInfo usedField = ((FieldUsageInfo) fieldUsage).getUsedVariable();
                     if (reference) {
                         usedField.addReferencer(ownerMethod);
                     } else {

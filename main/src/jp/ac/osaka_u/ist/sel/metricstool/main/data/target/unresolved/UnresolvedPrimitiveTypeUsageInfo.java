@@ -50,7 +50,7 @@ public final class UnresolvedPrimitiveTypeUsageInfo extends UnresolvedEntityUsag
     }
 
     @Override
-    EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
             final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
