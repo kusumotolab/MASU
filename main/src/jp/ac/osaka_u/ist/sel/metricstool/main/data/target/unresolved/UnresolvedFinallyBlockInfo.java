@@ -1,9 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
@@ -44,7 +47,7 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
      */
     @Override
     public FinallyBlockInfo resolveUnit(final TargetClassInfo usingClass,
-            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 不正な呼び出しでないかをチェック
@@ -70,8 +73,23 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new FinallyBlockInfo(usingClass, usingMethod, fromLine, fromColumn,
-                toLine, toColumn, ownerTryBlock);
+        this.resolvedInfo = new FinallyBlockInfo(usingClass, (TargetMethodInfo) usingMethod,
+                fromLine, fromColumn, toLine, toColumn, ownerTryBlock);
+        
+        //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
+        for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
+            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addInnerBlock(innerBlock);
+        }
+
+        // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
+        for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
+            final LocalVariableInfo variable = unresolvedVariable.resolveUnit(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addLocalVariable(variable);
+        }
+        
         return this.resolvedInfo;
     }
 

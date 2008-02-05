@@ -6,37 +6,31 @@ import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 
 
 /**
- * 外部クラスに定義されているメソッド情報を保存するためのクラス
+ * 外部クラスに定義されているコンストラクタ情報を保存するためのクラス
  * 
  * @author higo
  */
-public final class ExternalMethodInfo extends MethodInfo {
+public final class ExternalConstructorInfo extends ConstructorInfo {
 
     /**
-     * 外部クラスに定義されているメソッドオブジェクトを初期化する
+     * 外部クラスに定義されているコンストラクタオブジェクトを初期化する
      * 
-     * @param methodName メソッド名
      * @param ownerClass このメソッドを定義しているクラス
-     * @param constructor コンストラクタかどうか
      */
-    public ExternalMethodInfo(final String methodName, final ClassInfo ownerClass,
-            final boolean constructor) {
-
-        super(methodName, ownerClass, constructor, 0, 0, 0, 0);
-
-        this.setReturnType(UnknownTypeInfo.getInstance());
+    public ExternalConstructorInfo(final ClassInfo ownerClass) {
+        super(ownerClass, 0, 0, 0, 0);
     }
 
     /**
-     * ExternalMethodInfoでは利用できない
+     * ExternalConstructorInfoでは利用できない
      */
     @Override
     public Set<CallInfo> getCalls() {
@@ -44,7 +38,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ExternalMethodInfoでは利用できない
+     * ExternalConstructorInfoでは利用できない
      */
     @Override
     public final SortedSet<MethodInfo> getCallees() {
@@ -52,7 +46,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ExternalMethodInfoでは利用できない
+     * ExternalConstructorInfoでは利用できない
      */
     @Override
     public SortedSet<LocalVariableInfo> getLocalVariables() {
@@ -60,7 +54,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ExternalMethodInfoでは利用できない
+     * ExternalConstructorInfoでは利用できない
      */
     @Override
     public Set<FieldUsageInfo> getFieldUsages() {
@@ -68,7 +62,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ExternalMethodInfoでは利用できない
+     * ExternalConstructorInfoでは利用できない
      */
     @Override
     public SortedSet<BlockInfo> getInnerBlocks() {
@@ -76,7 +70,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ExternalMethodInfo では利用できない
+     * ExternalConstructorInfo では利用できない
      */
     @Override
     public int getFromLine() {
@@ -84,7 +78,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ExternalMethodInfo では利用できない
+     * ExternalConstructorInfo では利用できない
      */
     @Override
     public int getFromColumn() {
@@ -92,7 +86,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ExternalMethodInfo では利用できない
+     * ExternalConstructorInfo では利用できない
      */
     @Override
     public int getToLine() {
@@ -100,7 +94,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ExternalMethodInfo では利用できない
+     * ExternalConstructorInfo では利用できない
      */
     @Override
     public int getToColumn() {

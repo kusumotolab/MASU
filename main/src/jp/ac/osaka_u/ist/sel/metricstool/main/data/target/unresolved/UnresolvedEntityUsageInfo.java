@@ -1,12 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 
 
 /**
@@ -27,9 +27,9 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * 
      * @return 解決済みのエンティティ
      */
-    public abstract EntityUsageInfo resolveEntityUsage(TargetClassInfo usingClass, TargetMethodInfo usingMethod,
-            ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
-            MethodInfoManager methodInfoManager);
+    public abstract EntityUsageInfo resolveEntityUsage(TargetClassInfo usingClass,
+            CallableUnitInfo usingMethod, ClassInfoManager classInfoManager,
+            FieldInfoManager fieldInfoManager, MethodInfoManager methodInfoManager);
 
     /**
      * 名前解決された情報を返す
@@ -44,7 +44,7 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * @return 名前解決されている場合は true，そうでない場合は false
      */
     abstract boolean alreadyResolved();
-    
+
     /**
      * 開始行をセットする
      * 

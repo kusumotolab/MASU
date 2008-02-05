@@ -1,13 +1,13 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -58,7 +58,7 @@ public final class UnresolvedNullUsageInfo extends UnresolvedEntityUsageInfo {
      */
     @Override
     public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
-            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 不正な呼び出しでないかをチェック
@@ -77,7 +77,7 @@ public final class UnresolvedNullUsageInfo extends UnresolvedEntityUsageInfo {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        
+
         this.resolvedInfo = new NullUsageInfo(fromLine, fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }

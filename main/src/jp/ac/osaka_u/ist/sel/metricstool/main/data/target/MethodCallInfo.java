@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author higo
  *
  */
-public final class MethodCallInfo extends MemberCallInfo {
+public final class MethodCallInfo extends CallInfo {
 
     /**
      * 呼び出されるメソッドを与えてオブジェクトを初期化
@@ -16,7 +16,14 @@ public final class MethodCallInfo extends MemberCallInfo {
      */
     public MethodCallInfo(final MethodInfo callee, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
-        super(callee, fromLine, fromColumn, toLine, toColumn);
+
+        super(fromLine, fromColumn, toLine, toColumn);
+
+        if (null == callee) {
+            throw new NullPointerException();
+        }
+
+        this.callee = callee;
     }
 
     /**
@@ -24,7 +31,17 @@ public final class MethodCallInfo extends MemberCallInfo {
      */
     @Override
     public TypeInfo getType() {
-        final MethodInfo callee = super.getCallee();
+        final MethodInfo callee = this.getCallee();
         return callee.getReturnType();
     }
+
+    /**
+     * このメソッド呼び出しで呼び出されているメソッドを返す
+     * @return
+     */
+    public MethodInfo getCallee() {
+        return this.callee;
+    }
+
+    private final MethodInfo callee;
 }

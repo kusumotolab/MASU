@@ -8,13 +8,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -55,6 +55,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         this.superClasses = new LinkedHashSet<UnresolvedClassTypeInfo>();
         this.innerClasses = new HashSet<UnresolvedClassInfo>();
         this.definedMethods = new HashSet<UnresolvedMethodInfo>();
+        this.definedConstructors = new HashSet<UnresolvedConstructorInfo>();
         this.definedFields = new HashSet<UnresolvedFieldInfo>();
 
         this.privateVisible = false;
@@ -235,15 +236,6 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * 行数を取得する
-     * 
-     * @return 行数
-     */
-    public int getLOC() {
-        return this.getToLine() - this.getFromLine() + 1;
-    }
-
-    /**
      * 親クラスを追加する
      * 
      * @param superClass 親クラス名
@@ -289,6 +281,22 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         }
 
         this.definedMethods.add(definedMethod);
+    }
+
+    /**
+     * 定義しているコンストラクタを追加する
+     * 
+     * @param definedConstructor 定義しているコンストラクタメソッド
+     */
+    public void addDefinedConstructor(final UnresolvedConstructorInfo definedConstructor) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == definedConstructor) {
+            throw new NullPointerException();
+        }
+
+        this.definedConstructors.add(definedConstructor);
     }
 
     /**
@@ -341,6 +349,15 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      */
     public Set<UnresolvedMethodInfo> getDefinedMethods() {
         return Collections.unmodifiableSet(this.definedMethods);
+    }
+
+    /**
+     * 定義しているコンストラクタのセットを返す
+     * 
+     * @return 定義しているコンストラクタのセット
+     */
+    public Set<UnresolvedConstructorInfo> getDefinedConstructors() {
+        return Collections.unmodifiableSet(this.definedConstructors);
     }
 
     /**
@@ -497,7 +514,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      */
     @Override
     public TargetClassInfo resolveUnit(final TargetClassInfo usingClass,
-            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 不正な呼び出しでないかをチェック
@@ -585,6 +602,11 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 定義しているメソッドを保存するためのセット
      */
     private final Set<UnresolvedMethodInfo> definedMethods;
+
+    /**
+     * 定義しているコンストラクタを保存するためのセット
+     */
+    private final Set<UnresolvedConstructorInfo> definedConstructors;
 
     /**
      * 定義しているフィールドを保存するためのセット

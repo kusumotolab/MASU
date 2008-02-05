@@ -13,16 +13,16 @@ public class CaseEntryInfo extends BlockInfo {
      * 
      * @param ownerClass 所有クラス
      * @param ownerMethod 所有メソッド
+     * @param ownerSwitchBlock この case エントリが属する switch ブロック
+     * @param breakStatement この case エントリが break 文を持つかどうか
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
-     * @param ownerSwitchBlock この case エントリが属する switch ブロック
-     * @param breakStatement この case エントリが break 文を持つかどうか
      */
-    public CaseEntryInfo(final TargetClassInfo ownerClass, final TargetMethodInfo ownerMethod,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
-            final SwitchBlockInfo ownerSwitchBlock, final boolean breakStatement) {
+    public CaseEntryInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
+            final SwitchBlockInfo ownerSwitchBlock, final boolean breakStatement,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(ownerClass, ownerMethod, fromLine, fromColumn, toLine, toColumn);
 

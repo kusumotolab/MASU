@@ -23,7 +23,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        this.memberCalls = new HashSet<UnresolvedMemberCallInfo>();
+        this.memberCalls = new HashSet<UnresolvedCallInfo>();
         this.fieldUsages = new HashSet<UnresolvedFieldUsageInfo>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
         this.innerBlocks = new HashSet<UnresolvedBlockInfo<?>>();
@@ -34,7 +34,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
      * 
      * @param memberCall メソッドまたはコンストラクタ呼び出し
      */
-    public final void addMemberCall(final UnresolvedMemberCallInfo memberCall) {
+    public final void addMemberCall(final UnresolvedCallInfo memberCall) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -109,7 +109,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
      * 
      * @return このブロック内で行われている未解決メソッド呼び出しの Set
      */
-    public final Set<UnresolvedMemberCallInfo> getMethodCalls() {
+    public final Set<UnresolvedCallInfo> getMethodCalls() {
         return Collections.unmodifiableSet(this.memberCalls);
     }
 
@@ -143,7 +143,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     /**
      * メソッドまたはコンストラクタ呼び出しを保存する変数
      */
-    private final Set<UnresolvedMemberCallInfo> memberCalls;
+    private final Set<UnresolvedCallInfo> memberCalls;
 
     /**
      * フィールド使用を保存する変数

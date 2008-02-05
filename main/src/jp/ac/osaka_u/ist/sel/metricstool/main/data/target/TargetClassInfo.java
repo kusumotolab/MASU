@@ -64,6 +64,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
+        this.definedConstructors = new TreeSet<TargetConstructorInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
 
         this.modifiers.addAll(modifiers);
@@ -107,6 +108,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
+        this.definedConstructors = new TreeSet<TargetConstructorInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
 
         this.modifiers.addAll(modifiers);
@@ -132,15 +134,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         }
 
         this.innerClasses.add(innerClass);
-    }
-
-    /**
-     * このクラスの行数を返す
-     * 
-     * @return このクラスの行数
-     */
-    public final int getLOC() {
-        return this.getToLine() - this.getFromLine() + 1;
     }
 
     /**
@@ -174,6 +167,21 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         }
 
         this.definedMethods.add(definedMethod);
+    }
+
+    /**
+     * このクラスに定義されたコンストラクタ情報を追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param definedConstructor 追加する定義されたコンストラクタ
+     */
+    public final void addDefinedConstructor(final TargetConstructorInfo definedConstructor) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == definedConstructor) {
+            throw new NullPointerException();
+        }
+
+        this.definedConstructors.add(definedConstructor);
     }
 
     /**
@@ -222,6 +230,15 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      */
     public final SortedSet<TargetMethodInfo> getDefinedMethods() {
         return Collections.unmodifiableSortedSet(this.definedMethods);
+    }
+
+    /**
+     * このクラスに定義されているコンストラクタの SortedSet を返す．
+     * 
+     * @return 定義されているメソッドの SortedSet
+     */
+    public final SortedSet<TargetConstructorInfo> getDefinedConstructors() {
+        return Collections.unmodifiableSortedSet(this.definedConstructors);
     }
 
     /**
@@ -306,6 +323,11 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * このクラスで定義されているメソッド一覧を保存するための変数．
      */
     private final SortedSet<TargetMethodInfo> definedMethods;
+
+    /**
+     * このクラスで定義されているコンストラクタ一覧を保存するための変数．
+     */
+    private final SortedSet<TargetConstructorInfo> definedConstructors;
 
     /**
      * このクラスで定義されているフィールド一覧を保存するための変数．

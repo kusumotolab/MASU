@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -53,7 +54,35 @@ public final class MethodInfoManager {
 
         this.externalMethodInfos.add(methodInfo);
     }
-    
+
+    /**
+     * 
+     * @param constructorInfo 追加するコンストラクタ情報
+     */
+    public void add(final TargetConstructorInfo constructorInfo) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == constructorInfo) {
+            throw new NullPointerException();
+        }
+
+        this.targetConstructorInfos.add(constructorInfo);
+    }
+
+    /**
+     * 
+     * @param constructorInfo 追加するコンストラクタ情報
+     */
+    public void add(final ExternalConstructorInfo constructorInfo) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == constructorInfo) {
+            throw new NullPointerException();
+        }
+
+        this.externalConstructorInfos.add(constructorInfo);
+    }
+
     /**
      * 対象メソッド情報のSortedSetを返す．
      * 
@@ -71,7 +100,7 @@ public final class MethodInfoManager {
     public SortedSet<ExternalMethodInfo> getExternalMethodInfos() {
         return Collections.unmodifiableSortedSet(this.externalMethodInfos);
     }
-    
+
     /**
      * 持っている対象メソッド情報の個数を返す.
      * 
@@ -89,7 +118,43 @@ public final class MethodInfoManager {
     public int getExternalMethodCount() {
         return this.externalMethodInfos.size();
     }
-    
+
+    /**
+     * 対象コンストラクタ情報のSortedSetを返す．
+     * 
+     * @return 対象コンストラクタ情報のSortedSet
+     */
+    public SortedSet<TargetConstructorInfo> getTargetConstructorInfos() {
+        return Collections.unmodifiableSortedSet(this.targetConstructorInfos);
+    }
+
+    /**
+     * 外部コンストラクタ情報のSortedSetを返す．
+     * 
+     * @return 外部コンストラクタ情報のSortedSet
+     */
+    public SortedSet<ExternalConstructorInfo> getExternalConstructorInfos() {
+        return Collections.unmodifiableSortedSet(this.externalConstructorInfos);
+    }
+
+    /**
+     * 対象コンストラクタ情報の個数を返す.
+     * 
+     * @return 対象コンストラクタの個数
+     */
+    public int getTargetConstructorCount() {
+        return this.targetConstructorInfos.size();
+    }
+
+    /**
+     * 外部コンストラクタ情報の個数を返す.
+     * 
+     * @return 外部コンストラクタの個数
+     */
+    public int getExternalConstructorCount() {
+        return this.externalConstructorInfos.size();
+    }
+
     /**
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
@@ -97,6 +162,8 @@ public final class MethodInfoManager {
     private MethodInfoManager() {
         this.targetMethodInfos = new TreeSet<TargetMethodInfo>();
         this.externalMethodInfos = new TreeSet<ExternalMethodInfo>();
+        this.targetConstructorInfos = new TreeSet<TargetConstructorInfo>();
+        this.externalConstructorInfos = new TreeSet<ExternalConstructorInfo>();
     }
 
     /**
@@ -110,10 +177,20 @@ public final class MethodInfoManager {
      * 対象メソッド情報を格納する変数．
      */
     private final SortedSet<TargetMethodInfo> targetMethodInfos;
-    
+
     /**
      * 
      * 外部メソッド情報を格納する変数．
      */
     private final SortedSet<ExternalMethodInfo> externalMethodInfos;
+
+    /**
+     * 対象コンストラクタ情報を格納する変数
+     */
+    private final SortedSet<TargetConstructorInfo> targetConstructorInfos;
+
+    /**
+     * 外部コンストラクタ情報を格納する変数
+     */
+    private final SortedSet<ExternalConstructorInfo> externalConstructorInfos;
 }

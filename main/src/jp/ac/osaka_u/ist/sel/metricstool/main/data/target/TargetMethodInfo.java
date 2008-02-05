@@ -3,14 +3,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
 /**
@@ -35,7 +30,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class TargetMethodInfo extends MethodInfo implements Visualizable, Member, Position {
+public final class TargetMethodInfo extends MethodInfo implements Visualizable, Member {
 
     /**
      * メソッドオブジェクトを初期化する．
@@ -67,8 +62,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
         }
 
         this.modifiers = new HashSet<ModifierInfo>();
-        this.typeParameters = new LinkedList<TypeParameterInfo>();
-        this.unresolvedUsage = new HashSet<UnresolvedEntityUsageInfo>();
 
         this.modifiers.addAll(modifiers);
 
@@ -81,51 +74,12 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
     }
 
     /**
-     * 引数で指定された型パラメータを追加する
-     * 
-     * @param typeParameter 追加する型パラメータ
-     */
-    public void addTypeParameter(final TypeParameterInfo typeParameter) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == typeParameter) {
-            throw new NullPointerException();
-        }
-
-        this.typeParameters.add(typeParameter);
-    }
-
-    /**
-     * このメソッド内で，名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しを追加する． プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param entityUsage 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出し
-     */
-    public void addUnresolvedUsage(final UnresolvedEntityUsageInfo entityUsage) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == entityUsage) {
-            throw new NullPointerException();
-        }
-
-        this.unresolvedUsage.add(entityUsage);
-    }
-
-    /**
      * 修飾子の Set を返す
      * 
      * @return 修飾子の Set
      */
     public Set<ModifierInfo> getModifiers() {
         return Collections.unmodifiableSet(this.modifiers);
-    }
-
-    /**
-     * このメソッドの行数を返す
-     * 
-     * @return このメソッドの行数
-     */
-    public int getLOC() {
-        return this.getToLine() - this.getFromLine() + 1;
     }
 
     /**
@@ -159,24 +113,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
         }
 
         return Collections.unmodifiableSortedSet(assignmentees);
-    }
-
-    /**
-     * このクラスの型パラメータの List を返す．
-     * 
-     * @return このクラスの型パラメータの List
-     */
-    public List<TypeParameterInfo> getTypeParameters() {
-        return Collections.unmodifiableList(this.typeParameters);
-    }
-
-    /**
-     * このメソッド内で，名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しの Set を返す．
-     * 
-     * @return このメソッド内で，名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しの Set
-     */
-    public Set<UnresolvedEntityUsageInfo> getUnresolvedUsages() {
-        return Collections.unmodifiableSet(this.unresolvedUsage);
     }
 
     /**
@@ -237,16 +173,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * 修飾子を保存するための変数
      */
     private final Set<ModifierInfo> modifiers;
-
-    /**
-     * 型パラメータを保存する変数
-     */
-    private final List<TypeParameterInfo> typeParameters;
-
-    /**
-     * 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しなどを保存するための変数
-     */
-    private final Set<UnresolvedEntityUsageInfo> unresolvedUsage;
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数

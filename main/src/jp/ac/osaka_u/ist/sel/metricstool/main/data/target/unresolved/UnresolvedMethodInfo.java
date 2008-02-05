@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
@@ -132,7 +133,7 @@ public final class UnresolvedMethodInfo extends UnresolvedLocalSpaceInfo<TargetM
      */
     @Override
     public TargetMethodInfo resolveUnit(final TargetClassInfo usingClass,
-            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 不正な呼び出しでないかをチェック
@@ -395,15 +396,6 @@ public final class UnresolvedMethodInfo extends UnresolvedLocalSpaceInfo<TargetM
      */
     public List<UnresolvedParameterInfo> getParameterInfos() {
         return Collections.unmodifiableList(this.parameterInfos);
-    }
-
-    /**
-     * このメソッドの行数を返す
-     * 
-     * @return メソッドの行数
-     */
-    public int getLOC() {
-        return this.getToLine() - this.getFromLine() + 1;
     }
 
     /**

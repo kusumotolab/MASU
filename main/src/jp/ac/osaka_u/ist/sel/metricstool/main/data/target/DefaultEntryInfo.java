@@ -13,10 +13,10 @@ public final class DefaultEntryInfo extends CaseEntryInfo {
      * 
      * @param ownerSwitchBlock
      */
-    public DefaultEntryInfo(final TargetClassInfo ownerClass, final TargetMethodInfo ownerMethod,
+    public DefaultEntryInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn,
             final SwitchBlockInfo ownerSwitchBlock, final boolean breakStatement) {
-        super(ownerClass, ownerMethod, fromLine, fromColumn, toLine, toColumn, ownerSwitchBlock,
-                breakStatement);
+        super(ownerClass, ownerMethod, ownerSwitchBlock, breakStatement, fromLine, fromColumn,
+                toLine, toColumn);
     }
 }

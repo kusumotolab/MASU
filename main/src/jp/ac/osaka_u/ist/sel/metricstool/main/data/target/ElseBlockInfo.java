@@ -19,7 +19,7 @@ public final class ElseBlockInfo extends BlockInfo {
      * @param toColumn 終了列
      * @param ownerIfBlock 対応するifブロック
      */
-    public ElseBlockInfo(final TargetClassInfo ownerClass, final TargetMethodInfo ownerMethod,
+    public ElseBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn,
             final IfBlockInfo ownerIfBlock) {
 

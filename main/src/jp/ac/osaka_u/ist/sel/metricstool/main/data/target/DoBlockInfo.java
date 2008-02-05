@@ -19,7 +19,7 @@ public final class DoBlockInfo extends BlockInfo {
      * @param toLine èIóπçs
      * @param toColumn èIóπóÒ
      */
-    public DoBlockInfo(final TargetClassInfo ownerClass, final TargetMethodInfo ownerMethod,
+    public DoBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         super(ownerClass, ownerMethod, fromLine, fromColumn, toLine, toColumn);
     }

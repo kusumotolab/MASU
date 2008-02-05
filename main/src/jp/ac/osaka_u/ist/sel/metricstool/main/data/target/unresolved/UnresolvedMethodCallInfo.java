@@ -5,6 +5,7 @@ import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
@@ -31,7 +32,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
  * @author higo
  * 
  */
-public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
+public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
 
     /**
      * メソッド呼び出しが実行される変数の型，メソッド名を与えてオブジェクトを初期化
@@ -54,7 +55,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
 
     @Override
     public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
-            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 不正な呼び出しでないかをチェック
@@ -129,6 +130,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
                         if (availableMethod.canCalledWith(name, actualParameters)) {
                             this.resolvedInfo = new MethodCallInfo(availableMethod, fromLine,
                                     fromColumn, toLine, toColumn);
+                            ((MethodCallInfo) this.resolvedInfo).addParameters(actualParameters);
                             return this.resolvedInfo;
                         }
                     }
@@ -151,6 +153,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
                         // 外部クラスに新規で外部メソッド変数（ExternalMethodInfo）を追加したので型は不明
                         this.resolvedInfo = new MethodCallInfo(methodInfo, fromLine, fromColumn,
                                 toLine, toColumn);
+                        ((MethodCallInfo) this.resolvedInfo).addParameters(actualParameters);
                         return this.resolvedInfo;
                     }
 
@@ -163,7 +166,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
 
                     usingMethod.addUnresolvedUsage(this);
 
-                    this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
+                    this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine,
+                            toColumn);
                     return this.resolvedInfo;
                 }
 
@@ -180,6 +184,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
                 // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
                 this.resolvedInfo = new MethodCallInfo(methodInfo, fromLine, fromColumn, toLine,
                         toColumn);
+                ((MethodCallInfo) this.resolvedInfo).addParameters(actualParameters);
                 return this.resolvedInfo;
             }
 
@@ -200,6 +205,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
                 // 外部クラスに新規で外部メソッドを追加したので型は不明
                 this.resolvedInfo = new MethodCallInfo(methodInfo, fromLine, fromColumn, toLine,
                         toColumn);
+                ((MethodCallInfo) this.resolvedInfo).addParameters(actualParameters);
                 return this.resolvedInfo;
             }
 
@@ -223,11 +229,13 @@ public final class UnresolvedMethodCallInfo extends UnresolvedMemberCallInfo {
                 // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
                 this.resolvedInfo = new MethodCallInfo(methodInfo, fromLine, fromColumn, toLine,
                         toColumn);
+                ((MethodCallInfo) this.resolvedInfo).addParameters(actualParameters);
                 return this.resolvedInfo;
 
             default:
                 assert false : "Here shouldn't be reached!";
-                this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
+                this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine,
+                        toColumn);
                 return this.resolvedInfo;
             }
         }

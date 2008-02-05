@@ -1,11 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 
 
@@ -29,7 +29,7 @@ public abstract class UnresolvedUnitInfo<T extends UnitInfo> implements Position
      * 
      * @return 解決済みのエンティティ
      */
-    public abstract T resolveUnit(TargetClassInfo usingClass, TargetMethodInfo usingMethod,
+    public abstract T resolveUnit(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager);
 
@@ -137,6 +137,15 @@ public abstract class UnresolvedUnitInfo<T extends UnitInfo> implements Position
      */
     public final int getToColumn() {
         return this.toColumn;
+    }
+
+    /**
+     * このユニットの行数を返す
+     * 
+     * @return ユニットの行数
+     */
+    public final int getLOC() {
+        return this.getToLine() - this.getFromLine() + 1;
     }
 
     /**

@@ -23,16 +23,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredExc
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MemberCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
@@ -45,11 +46,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClass
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMemberCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVClassMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVFileMetricsWriter;
@@ -899,8 +900,8 @@ public class MetricsTool {
                         }
 
                         classInfo.addSuperClass((ClassTypeInfo) superClassType);
-                        ((ClassTypeInfo) superClassType).getReferencedClass().addSubClass(
-                                classInfo);
+                        ((ClassTypeInfo) superClassType).getReferencedClass()
+                                .addSubClass(classInfo);
 
                         // null な場合は名前解決に失敗したとみなすので unresolvedClassInfo は unresolvableClasses
                         // から削除しない
@@ -1120,8 +1121,7 @@ public class MetricsTool {
     private void addOverrideRelation(final TargetClassInfo classInfo) {
 
         // 各親クラスに対して
-        for (final ClassInfo superClassInfo : ClassTypeInfo
-                .convert(classInfo.getSuperClasses())) {
+        for (final ClassInfo superClassInfo : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
 
             // 各対象クラスの各メソッドについて，親クラスのメソッドをオーバーライドしているかを調査
             for (final MethodInfo methodInfo : classInfo.getDefinedMethods()) {
@@ -1152,12 +1152,7 @@ public class MetricsTool {
             return;
         }
 
-        for (TargetMethodInfo methodInfo : ((TargetClassInfo) classInfo).getDefinedMethods()) {
-
-            // コンストラクタはオーバーライドされない
-            if (methodInfo.isConstuructor()) {
-                continue;
-            }
+        for (final TargetMethodInfo methodInfo : ((TargetClassInfo) classInfo).getDefinedMethods()) {
 
             // メソッド名が違う場合はオーバーライドされない
             if (!methodInfo.getMethodName().equals(overrider.getMethodName())) {
@@ -1173,8 +1168,7 @@ public class MetricsTool {
         }
 
         // 親クラス群に対して再帰的に処理
-        for (final ClassInfo superClassInfo : ClassTypeInfo
-                .convert(classInfo.getSuperClasses())) {
+        for (final ClassInfo superClassInfo : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
             addOverrideRelation(superClassInfo, overrider);
         }
     }
@@ -1245,7 +1239,7 @@ public class MetricsTool {
             }
 
             // 各未解決メソッド呼び出しの解決処理
-            for (final UnresolvedMemberCallInfo unresolvedMethodCall : unresolvedMethodInfo
+            for (final UnresolvedCallInfo unresolvedMethodCall : unresolvedMethodInfo
                     .getMethodCalls()) {
 
                 final EntityUsageInfo memberCall = unresolvedMethodCall.resolveEntityUsage(
@@ -1253,11 +1247,12 @@ public class MetricsTool {
                         methodInfoManager);
 
                 // メソッドおよびコンストラクタ呼び出しが解決できた場合
-                if (memberCall instanceof MemberCallInfo) {
-                    ownerMethod.addCallee((MemberCallInfo) memberCall);
-                    ((MemberCallInfo) memberCall).getCallee().addCaller(ownerMethod);
+                if (memberCall instanceof MethodCallInfo) {
+                    ownerMethod.addCall((MethodCallInfo) memberCall);
+                    ((MethodCallInfo) memberCall).getCallee().addCaller(ownerMethod);
+                } else if (memberCall instanceof ConstructorCallInfo) {
+                    ownerMethod.addCall((ConstructorCallInfo) memberCall);
                 }
-
             }
         }
 

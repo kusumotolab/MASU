@@ -1,12 +1,14 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SwitchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -16,7 +18,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class UnresolvedSwitchBlockInfo extends UnresolvedConditionalBlockInfo<SwitchBlockInfo> {
+public final class UnresolvedSwitchBlockInfo extends
+        UnresolvedConditionalBlockInfo<SwitchBlockInfo> {
 
     /**
      * switch ブロック情報を初期化
@@ -37,7 +40,7 @@ public final class UnresolvedSwitchBlockInfo extends UnresolvedConditionalBlockI
      */
     @Override
     public SwitchBlockInfo resolveUnit(final TargetClassInfo usingClass,
-            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 不正な呼び出しでないかをチェック
@@ -60,6 +63,21 @@ public final class UnresolvedSwitchBlockInfo extends UnresolvedConditionalBlockI
 
         this.resolvedInfo = new SwitchBlockInfo(usingClass, usingMethod, fromLine, fromColumn,
                 toLine, toColumn);
+
+        //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
+        for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
+            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addInnerBlock(innerBlock);
+        }
+
+        // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
+        for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
+            final LocalVariableInfo variable = unresolvedVariable.resolveUnit(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addLocalVariable(variable);
+        }
+
         return this.resolvedInfo;
     }
 

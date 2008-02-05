@@ -69,7 +69,7 @@ public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo {
      * @return âåàçœÇ›voidèÓïÒ
      */
     public TypeInfo resolveType(final TargetClassInfo usingClass,
-            final TargetMethodInfo usingMethod, final ClassInfoManager classInfoManager,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
         return this;
     }

@@ -7,16 +7,24 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author higo
  *
  */
-public final class ConstructorCallInfo extends MemberCallInfo {
+public final class ConstructorCallInfo extends CallInfo {
 
     /**
      * 呼び出されるコンストラクタを与えてオブジェクトを初期化
      * 
      * @param callee 呼び出されるコンストラクタ
      */
-    public ConstructorCallInfo(final MethodInfo callee, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
-        super(callee, fromLine, fromColumn, toLine, toColumn);
+    public ConstructorCallInfo(final ReferenceTypeInfo referenceType, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
+
+        super(fromLine, fromColumn, toLine, toColumn);
+
+        if (null == referenceType) {
+            throw new NullPointerException();
+        }
+
+        this.referenceType = referenceType;
+
     }
 
     /**
@@ -24,10 +32,9 @@ public final class ConstructorCallInfo extends MemberCallInfo {
      */
     @Override
     public TypeInfo getType() {
-
-        final ClassInfo ownerClass = this.getCallee().getOwnerClass();
-        final ClassTypeInfo reference = new ClassTypeInfo(ownerClass);
-        return reference;
+        return this.referenceType;
     }
+
+    private final ReferenceTypeInfo referenceType;
 
 }

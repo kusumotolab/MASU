@@ -18,29 +18,31 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 public abstract class LocalSpaceInfo extends UnitInfo {
 
-    LocalSpaceInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+    LocalSpaceInfo(final ClassInfo ownerClass, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
+        this.ownerClass = ownerClass;
         this.localVariables = new TreeSet<LocalVariableInfo>();
         this.fieldUsages = new HashSet<FieldUsageInfo>();
         this.innerBlocks = new TreeSet<BlockInfo>();
-        this.callees = new HashSet<MemberCallInfo>();
+        this.calls = new HashSet<CallInfo>();
     }
 
     /**
      * メソッドおよびコンストラクタ呼び出しを追加する．プラグインから呼ぶとランタイムエラー．
      * 
-     * @param callee 追加する呼び出されるメソッド
+     * @param memberCall 追加するメソッドおよびコンストラクタ呼び出し
      */
-    public final void addCallee(final MemberCallInfo memberCall) {
+    public final void addCall(final CallInfo memberCall) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == memberCall) {
             throw new NullPointerException();
         }
 
-        this.callees.add(memberCall);
+        this.calls.add(memberCall);
     }
 
     /**
@@ -48,7 +50,7 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * 
      * @param localVariable 追加する引数
      */
-    public void addLocalVariable(final LocalVariableInfo localVariable) {
+    public final void addLocalVariable(final LocalVariableInfo localVariable) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == localVariable) {
@@ -63,7 +65,7 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * 
      * @param fieldUsage 追加するフィールド利用
      */
-    public void addFieldUsage(final FieldUsageInfo fieldUsage) {
+    public final void addFieldUsage(final FieldUsageInfo fieldUsage) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == fieldUsage) {
@@ -91,20 +93,22 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     /**
      * メソッドおよびコンストラクタ呼び出し一覧を返す
      */
-    public Set<MemberCallInfo> getMemberCalls() {
-        return Collections.unmodifiableSet(this.callees);
+    public Set<CallInfo> getCalls() {
+        return Collections.unmodifiableSet(this.calls);
 
     }
 
     /**
-     * このメソッドが呼び出しているメソッドおよびコンストラクタの SortedSet を返す．
+     * このメソッドが呼び出しているメソッドの一覧を返す
      * 
      * @return このメソッドが呼び出しているメソッドの SortedSet
      */
     public SortedSet<MethodInfo> getCallees() {
         final SortedSet<MethodInfo> callees = new TreeSet<MethodInfo>();
-        for (final MemberCallInfo memberCall : this.getMemberCalls()) {
-            callees.add(memberCall.getCallee());
+        for (final CallInfo call : this.getCalls()) {
+            if (call instanceof MethodCallInfo) {
+                callees.add(((MethodCallInfo) call).getCallee());
+            }
         }
         return Collections.unmodifiableSortedSet(callees);
     }
@@ -135,9 +139,18 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     }
 
     /**
+     * 所属しているクラスを返す
+     * 
+     * @return 所属しているクラス
+     */
+    public final ClassInfo getOwnerClass() {
+        return this.ownerClass;
+    }
+
+    /**
      * メソッド呼び出し一覧を保存するための変数
      */
-    protected final Set<MemberCallInfo> callees;
+    protected final Set<CallInfo> calls;
 
     /**
      * このメソッドの内部で定義されているローカル変数
@@ -153,4 +166,9 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * このメソッド直内のブロック一覧を保存するための変数
      */
     private final SortedSet<BlockInfo> innerBlocks;
+
+    /**
+     * 所属しているクラスを保存するための変数
+     */
+    private final ClassInfo ownerClass;
 }

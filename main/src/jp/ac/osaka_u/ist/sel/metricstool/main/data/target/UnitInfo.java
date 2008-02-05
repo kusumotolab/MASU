@@ -49,6 +49,15 @@ public abstract class UnitInfo implements Position {
     }
 
     /**
+     * このユニットの行数を返す
+     * 
+     * @return　このユニットの行数
+     */
+    public final int getLOC() {
+        return this.getToLine() - this.getFromLine() + 1;
+    }
+
+    /**
      * 終了列を返す
      * 
      * @return 終了列
