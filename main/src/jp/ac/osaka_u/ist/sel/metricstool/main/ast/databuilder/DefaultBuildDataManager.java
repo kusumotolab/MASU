@@ -10,18 +10,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalClauseInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
@@ -41,7 +43,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
  * @author kou-tngt
  *
  */
-public class DefaultBuildDataManager implements BuildDataManager{
+public class DefaultBuildDataManager implements BuildDataManager {
 
     public DefaultBuildDataManager() {
         innerInit();
@@ -57,11 +59,11 @@ public class DefaultBuildDataManager implements BuildDataManager{
             addScopedVariable(field);
         }
     }
-    
+
     public void addFieldAssignment(UnresolvedFieldUsageInfo usage) {
     	if (!this.methodStack.isEmpty()&& MODE.METHOD == this.mode){
             this.methodStack.peek().addVariableUsage(usage);
-        }else if(!this.blockStack.isEmpty() && MODE.BLOCK == this.mode){
+        }else if(!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode){
     		this.blockStack.peek().addVariableUsage(usage);
     	}
     }
@@ -69,12 +71,12 @@ public class DefaultBuildDataManager implements BuildDataManager{
     public void addFieldReference(UnresolvedFieldUsageInfo usage) {
         if (!this.methodStack.isEmpty()&& MODE.METHOD == this.mode){
             this.methodStack.peek().addVariableUsage(usage);
-        }else if(!this.blockStack.isEmpty() && MODE.BLOCK == this.mode){
+        }else if(!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode){
     		this.blockStack.peek().addVariableUsage(usage);
     	}
     }
 
-    public void addLocalParameter(final UnresolvedLocalVariableInfo localParameter){
+    public void addLocalParameter(final UnresolvedLocalVariableInfo localParameter) {
         if (!this.methodStack.isEmpty() && MODE.METHOD == this.mode) {
             this.methodStack.peek().addLocalVariable(localParameter);
             addNextScopedVariable(localParameter);
@@ -85,24 +87,24 @@ public class DefaultBuildDataManager implements BuildDataManager{
         if (!this.methodStack.isEmpty() && MODE.METHOD == this.mode) {
             this.methodStack.peek().addLocalVariable(localVariable);
             addScopedVariable(localVariable);
-        } else if(!this.blockStack.isEmpty() && MODE.BLOCK == this.mode){
-        	this.blockStack.peek().addLocalVariable(localVariable);
-        	addScopedVariable(localVariable);
+        } else if (!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode) {
+            this.blockStack.peek().addLocalVariable(localVariable);
+            addScopedVariable(localVariable);
         }
     }
-    
+
     public void addMethodCall(UnresolvedCallInfo memberCall) {
         if (!this.methodStack.isEmpty() && MODE.METHOD == this.mode){
             this.methodStack.peek().addCall(memberCall);
-        } else if(!this.blockStack.isEmpty() && MODE.BLOCK == this.mode){
+        } else if(!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode){
         	this.blockStack.peek().addCall(memberCall);
         }
     }
 
     public void addMethodParameter(final UnresolvedParameterInfo parameter) {
-        if (!this.methodStack.isEmpty()&& MODE.METHOD == this.mode) {
-            final UnresolvedMethodInfo method = this.methodStack.peek();
-            method.adParameter(parameter);
+        if (!this.methodStack.isEmpty() && MODE.METHOD == this.mode) {
+            final UnresolvedCallableUnitInfo method = this.methodStack.peek();
+            method.addParameter(parameter);
             addNextScopedVariable(parameter);
         }
     }
@@ -124,14 +126,14 @@ public class DefaultBuildDataManager implements BuildDataManager{
     private void addNextScopedVariable(UnresolvedVariableInfo var) {
         nextScopedVariables.add(var);
     }
-    
-    public void addTypeParameger(UnresolvedTypeParameterInfo typeParameter){
-        if (!this.modeStack.isEmpty() && MODE.CLASS == this.mode){
-            if (!this.classStack.isEmpty()){
+
+    public void addTypeParameger(UnresolvedTypeParameterInfo typeParameter) {
+        if (!this.modeStack.isEmpty() && MODE.CLASS == this.mode) {
+            if (!this.classStack.isEmpty()) {
                 classStack.peek().addTypeParameter(typeParameter);
             }
-        } else if (!this.modeStack.isEmpty() && MODE.METHOD == this.mode){
-            if (!this.methodStack.isEmpty()){
+        } else if (!this.modeStack.isEmpty() && MODE.METHOD == this.mode) {
+            if (!this.methodStack.isEmpty()) {
                 methodStack.peek().addTypeParameter(typeParameter);
             }
         }
@@ -141,7 +143,7 @@ public class DefaultBuildDataManager implements BuildDataManager{
         if (!this.scopeStack.isEmpty()) {
             final BlockScope scope = this.scopeStack.peek();
             scope.addAlias(aliase, realName);
-            
+
             //名前のエイリアス情報が変化したのでキャッシュをリセット
             aliaseNameSetCache = null;
             allAvaliableNameSetCache = null;
@@ -152,7 +154,7 @@ public class DefaultBuildDataManager implements BuildDataManager{
         if (!this.scopeStack.isEmpty()) {
             final BlockScope scope = this.scopeStack.peek();
             scope.addUsingNameSpace(nameSpace);
-            
+
             //名前空間情報が変化したのでキャッシュをリセット
             availableNameSpaceSetCache = null;
             allAvaliableNameSetCache = null;
@@ -163,7 +165,7 @@ public class DefaultBuildDataManager implements BuildDataManager{
         if (!this.scopeStack.isEmpty()) {
             this.scopeStack.pop();
             nextScopedVariables.clear();
-            
+
             //名前情報キャッシュをリセット
             aliaseNameSetCache = null;
             availableNameSpaceSetCache = null;
@@ -173,110 +175,134 @@ public class DefaultBuildDataManager implements BuildDataManager{
 
     public UnresolvedClassInfo endClassDefinition() {
         this.restoreMode();
-        
+
         if (this.classStack.isEmpty()) {
             return null;
         } else {
             final UnresolvedClassInfo classInfo = this.classStack.pop();
-            
+
             //外側のクラスがない場合にだけ登録を行う
-            if (this.classStack.isEmpty()){
+            if (this.classStack.isEmpty()) {
                 UnresolvedClassInfoManager.getInstance().addClass(classInfo);
             }
-            
+
             if (!this.methodStack.isEmpty()) {
                 //TODO methodStack.peek().addInnerClass(classInfo);
             }
-            
+
             return classInfo;
         }
     }
 
-    public UnresolvedMethodInfo endMethodDefinition() {
+    public UnresolvedCallableUnitInfo endMethodDefinition() {
         this.restoreMode();
-        
+
         if (this.methodStack.isEmpty()) {
             return null;
         } else {
-            final UnresolvedMethodInfo methodInfo = this.methodStack.pop();
+            final UnresolvedCallableUnitInfo methodInfo = this.methodStack.pop();
 
             nextScopedVariables.clear();
-            
-            if (!this.classStack.isEmpty()) {
-                this.classStack.peek().addDefinedMethod(methodInfo);
+
+            UnresolvedClassInfo currentClass = getCurrentClass();
+            if (null != currentClass) {
+                if (methodInfo instanceof UnresolvedMethodInfo) {
+                    currentClass.addDefinedMethod((UnresolvedMethodInfo) methodInfo);
+                } else {
+                    assert methodInfo instanceof UnresolvedConstructorInfo : "Illegal state:";
+                    currentClass.addDefinedConstructor((UnresolvedConstructorInfo) methodInfo);
+                }
             }
-            
+
             return methodInfo;
         }
     }
-    
-    public UnresolvedBlockInfo endInnerBlockDefinition(){
-    	this.restoreMode();
-    	
-    	if (this.blockStack.isEmpty()) {
-    		return null;
-    	} else {
-    		final UnresolvedBlockInfo blockInfo = this.blockStack.pop();
-    		UnresolvedLocalSpaceInfo parentInfo = null;
-    		if(this.blockStack.isEmpty()){
-    			if(!this.methodStack.isEmpty()){
-    				parentInfo = this.methodStack.peek();
-    			}
-    		}else{
-    			parentInfo = this.blockStack.peek();
-    		}
-    		
-    		if (null != parentInfo) {
-    			parentInfo.addChildSpaceInfo(blockInfo);
-    		}
-    		
-    		return blockInfo;
-    	}
+
+    public UnresolvedBlockInfo endInnerBlockDefinition() {
+        this.restoreMode();
+
+        if (this.blockStack.isEmpty()) {
+            return null;
+        } else {
+            final UnresolvedBlockInfo blockInfo = this.blockStack.pop();
+            UnresolvedLocalSpaceInfo parentInfo = null;
+            if (this.blockStack.isEmpty()) {
+                if (!this.methodStack.isEmpty()) {
+                    parentInfo = this.methodStack.peek();
+                }
+            } else {
+                parentInfo = this.blockStack.peek();
+            }
+
+            if (null != parentInfo) {
+                parentInfo.addChildSpaceInfo(blockInfo);
+            }
+
+            return blockInfo;
+        }
+    }
+
+    public UnresolvedConditionalClauseInfo endConditionalClause() {
+        this.restoreMode();
+
+        if (this.clauseStack.isEmpty()) {
+            return null;
+        } else {
+            final UnresolvedConditionalClauseInfo clauseInfo = this.clauseStack.pop();
+            
+            if (!this.blockStack.isEmpty()
+                    && this.blockStack.peek() instanceof UnresolvedConditionalBlockInfo) {
+                UnresolvedConditionalBlockInfo conditionalBlock = (UnresolvedConditionalBlockInfo) this.blockStack.peek();
+                conditionalBlock.addChildSpaceInfo(clauseInfo);
+            }
+            
+            return clauseInfo;
+        }
     }
     
-    public void enterClassBlock(){
+    public void enterClassBlock() {
         int size = classStack.size();
-        if (size > 1){
+        if (size > 1) {
             UnresolvedClassInfo current = classStack.peek();
-            UnresolvedClassInfo outer = classStack.get(size-2);
+            UnresolvedClassInfo outer = classStack.get(size - 2);
             outer.addInnerClass(current);
             current.setOuterClass(outer);
         }
     }
-    
-    public void enterMethodBlock(){
-        
+
+    public void enterMethodBlock() {
+
     }
-    
-    public AvailableNamespaceInfoSet getAllAvaliableNames(){
-//      nullじゃなければ変化してないのでキャッシュ使いまわし
-        if (null != allAvaliableNameSetCache){
+
+    public AvailableNamespaceInfoSet getAllAvaliableNames() {
+        //      nullじゃなければ変化してないのでキャッシュ使いまわし
+        if (null != allAvaliableNameSetCache) {
             return allAvaliableNameSetCache;
         }
-        
+
         AvailableNamespaceInfoSet resultSet = getAvailableAliasSet();
-        for(AvailableNamespaceInfo info : getAvailableNameSpaceSet()){
+        for (AvailableNamespaceInfo info : getAvailableNameSpaceSet()) {
             resultSet.add(info);
         }
-        
+
         allAvaliableNameSetCache = resultSet;
-        
+
         return resultSet;
     }
 
     public AvailableNamespaceInfoSet getAvailableNameSpaceSet() {
         //nullじゃなければ変化してないのでキャッシュ使いまわし
-        if (null != availableNameSpaceSetCache){
+        if (null != availableNameSpaceSetCache) {
             return availableNameSpaceSetCache;
         }
-        
+
         final AvailableNamespaceInfoSet result = new AvailableNamespaceInfoSet();
         //まず先に今の名前空間を登録
-        if (null == currentNameSpaceCache){
-            currentNameSpaceCache = new AvailableNamespaceInfo(getCurrentNameSpace(),true);
+        if (null == currentNameSpaceCache) {
+            currentNameSpaceCache = new AvailableNamespaceInfo(getCurrentNameSpace(), true);
         }
         result.add(currentNameSpaceCache);
-        
+
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
             final BlockScope scope = this.scopeStack.get(i);
@@ -286,16 +312,16 @@ public class DefaultBuildDataManager implements BuildDataManager{
             }
         }
         availableNameSpaceSetCache = result;
-        
+
         return result;
     }
-    
-    public AvailableNamespaceInfoSet getAvailableAliasSet(){
+
+    public AvailableNamespaceInfoSet getAvailableAliasSet() {
         //nullじゃなければ変化してないのでキャッシュ使いまわし
-        if (null != aliaseNameSetCache){
+        if (null != aliaseNameSetCache) {
             return aliaseNameSetCache;
         }
-        
+
         final AvailableNamespaceInfoSet result = new AvailableNamespaceInfoSet();
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
@@ -305,9 +331,9 @@ public class DefaultBuildDataManager implements BuildDataManager{
                 result.add(info);
             }
         }
-        
+
         aliaseNameSetCache = result;
-        
+
         return result;
     }
 
@@ -345,7 +371,7 @@ public class DefaultBuildDataManager implements BuildDataManager{
         }
     }
 
-    public UnresolvedMethodInfo getCurrentMethod() {
+    public UnresolvedCallableUnitInfo getCurrentMethod() {
         if (this.methodStack.isEmpty()) {
             return null;
         } else {
@@ -365,7 +391,7 @@ public class DefaultBuildDataManager implements BuildDataManager{
             for (final String nameSpaceString : nameSpace) {
                 nameSpaceList.add(nameSpaceString);
             }
-        } 
+        }
 
         return nameSpaceList.toArray(new String[nameSpaceList.size()]);
     }
@@ -390,52 +416,52 @@ public class DefaultBuildDataManager implements BuildDataManager{
 
         return nameSpaceList.toArray(new String[nameSpaceList.size()]);
     }
-    
-    public UnresolvedVariableInfo getCurrentScopeVariable(String name){
-        
-        for (UnresolvedVariableInfo var : nextScopedVariables){
-            if (name.equals(var.getName())){
+
+    public UnresolvedVariableInfo getCurrentScopeVariable(String name) {
+
+        for (UnresolvedVariableInfo var : nextScopedVariables) {
+            if (name.equals(var.getName())) {
                 return var;
             }
         }
-        
+
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {
             final BlockScope scope = this.scopeStack.get(i);
-            if (scope.hasVariable(name)){
+            if (scope.hasVariable(name)) {
                 return scope.getVariable(name);
             }
         }
         return null;
     }
-    
-    public UnresolvedTypeParameterInfo getTypeParameter(String name){
-        for(int i = modeStack.size()-1, cli = classStack.size() -1, mei = methodStack.size()-1 ; i >= 0; i--){
+
+    public UnresolvedTypeParameterInfo getTypeParameter(String name) {
+        for (int i = modeStack.size() - 1, cli = classStack.size() - 1, mei = methodStack.size() - 1; i >= 0; i--) {
             MODE mode = modeStack.get(i);
-            
-            if (MODE.CLASS == mode){
-                assert(cli >= 0);
-                if (cli >= 0){
+
+            if (MODE.CLASS == mode) {
+                assert (cli >= 0);
+                if (cli >= 0) {
                     UnresolvedClassInfo classInfo = classStack.get(cli--);
-                    for(UnresolvedTypeParameterInfo param : classInfo.getTypeParameters()){
-                        if (param.getName().equals(name)){
+                    for (UnresolvedTypeParameterInfo param : classInfo.getTypeParameters()) {
+                        if (param.getName().equals(name)) {
                             return param;
                         }
                     }
                 }
-            } else if (MODE.METHOD == mode){
-                assert(mei >= 0);
-                if (mei >= 0){
-                    UnresolvedMethodInfo methodInfo = methodStack.get(mei--);
-                    for(UnresolvedTypeParameterInfo param : methodInfo.getTypeParameters()){
-                        if (param.getName().equals(name)){
+            } else if (MODE.METHOD == mode) {
+                assert (mei >= 0);
+                if (mei >= 0) {
+                    UnresolvedCallableUnitInfo<?> methodInfo = methodStack.get(mei--);
+                    for (UnresolvedTypeParameterInfo param : methodInfo.getTypeParameters()) {
+                        if (param.getName().equals(name)) {
                             return param;
                         }
                     }
                 }
-            } 
+            }
         }
-        
+
         return null;
     }
 
@@ -453,8 +479,8 @@ public class DefaultBuildDataManager implements BuildDataManager{
     public void startScopedBlock() {
         BlockScope newScope = new BlockScope();
         this.scopeStack.push(newScope);
-        
-        for(UnresolvedVariableInfo var : nextScopedVariables){
+
+        for (UnresolvedVariableInfo var : nextScopedVariables) {
             newScope.addVariable(var);
         }
     }
@@ -477,119 +503,138 @@ public class DefaultBuildDataManager implements BuildDataManager{
             return this.nameSpaceStack.pop();
         }
     }
-    
-    public String[] resolveAliase(String[] name){
-        if (name == null){
+
+    public String[] resolveAliase(String[] name) {
+        if (name == null) {
             throw new NullPointerException("empty name.");
         }
-        
-        if (0 == name.length){
+
+        if (0 == name.length) {
             throw new IllegalArgumentException("empty name.");
         }
-        
+
         List<String> resolvedName = new ArrayList<String>();
         int startPoint = 0;
-        if (hasAlias(name[0])){
+        if (hasAlias(name[0])) {
             startPoint++;
             String[] aliasedName = getAliasedName(name[0]);
-            for(String str: aliasedName){
+            for (String str : aliasedName) {
                 resolvedName.add(str);
             }
         }
-        
-        for(int i=startPoint; i < name.length; i++){
+
+        for (int i = startPoint; i < name.length; i++) {
             resolvedName.add(name[i]);
         }
-        
+
         return resolvedName.toArray(new String[resolvedName.size()]);
     }
-    
+
     public void startClassDefinition(final UnresolvedClassInfo classInfo) {
         if (null == classInfo) {
             throw new NullPointerException("class info was null.");
         }
-        
+
         classInfo.setNamespace(this.getCurrentFullNameSpace());
 
         this.classStack.push(classInfo);
-        
+
         this.toClassMode();
     }
 
-    public void startMethodDefinition(final UnresolvedMethodInfo methodInfo) {
+    public void startMethodDefinition(final UnresolvedCallableUnitInfo methodInfo) {
         if (null == methodInfo) {
             throw new NullPointerException("method info was null.");
         }
 
-        if (!this.classStack.isEmpty()) {
-            UnresolvedClassInfo currentClass = this.classStack.peek();
-            currentClass.addDefinedMethod(methodInfo);
+        UnresolvedClassInfo currentClass = getCurrentClass();
+        if(null != currentClass) {
             methodInfo.setOwnerClass(currentClass);
-            if (methodInfo.isConstructor()){
-                methodInfo.setReturnType(UnresolvedClassTypeInfo.getInstance(currentClass));
-            }
         }
-        
+
         this.toMethodMode();
 
         this.methodStack.push(methodInfo);
 
     }
-    
-    public void startInnerBlockDefinition(final UnresolvedBlockInfo blockInfo){
-    	if(null == blockInfo){
-    		throw new NullPointerException("block info was null.");
-    	}
-    	
-    	if(!this.methodStack.isEmpty()){
-    		// TODO ブロック文のownerブロックとownerメソッドを登録したほうが便利かも
-    		UnresolvedMethodInfo currentMethod = getCurrentMethod();
-    		//blockInfo.setOwnerMethod(currentMethod);
-	    	if(!this.blockStack.isEmpty()){
-	    		UnresolvedBlockInfo currentBlock = this.blockStack.peek();
-	    		currentBlock.addInnerBlock(blockInfo);
-	    		//blockInfo.setOwnerBlock(currentBlock);
-	    	}else{
-	    		currentMethod.addInnerBlock(blockInfo);
-	    	}
-    	}
-    	
-    	this.toBlockMode();
-    	
-    	this.blockStack.push(blockInfo);
+
+    public void startInnerBlockDefinition(final UnresolvedBlockInfo blockInfo) {
+        if (null == blockInfo) {
+            throw new IllegalArgumentException("block info was null.");
+        }
+
+        if (!this.methodStack.isEmpty()) {
+            // TODO ブロック文のownerブロックとownerメソッドを登録したほうが便利かも
+            UnresolvedCallableUnitInfo currentMethod = getCurrentMethod();
+            //blockInfo.setOwnerMethod(currentMethod);
+            if (!this.blockStack.isEmpty()) {
+                UnresolvedBlockInfo currentBlock = this.blockStack.peek();
+                currentBlock.addInnerBlock(blockInfo);
+                //blockInfo.setOwnerBlock(currentBlock);
+            } else {
+                currentMethod.addInnerBlock(blockInfo);
+            }
+        }
+
+        this.toBlockMode();
+
+        this.blockStack.push(blockInfo);
     }
-    
-    protected void toClassMode(){
+
+    public void startConditionalClause(final UnresolvedConditionalClauseInfo clauseInfo) {
+        if (null == clauseInfo) {
+            throw new IllegalArgumentException("clause info was null.");
+        }
+
+        assert this.clauseStack.isEmpty() : "Illegal state: clause was nested.";
+
+        if (!this.blockStack.isEmpty()
+                && this.blockStack.peek() instanceof UnresolvedConditionalBlockInfo) {
+            UnresolvedConditionalBlockInfo conditionalBlock = (UnresolvedConditionalBlockInfo) this.blockStack.peek();
+            conditionalBlock.setConditionalSpace(clauseInfo);
+        }
+        
+        this.toClauseMode();
+        
+        this.clauseStack.push(clauseInfo);
+    }
+
+    protected void toClassMode() {
         this.modeStack.push(this.mode);
         this.mode = MODE.CLASS;
     }
-    
-    protected void toMethodMode(){
+
+    protected void toMethodMode() {
         this.modeStack.push(this.mode);
         this.mode = MODE.METHOD;
     }
-    
-    protected void toBlockMode(){
-    	this.modeStack.push(this.mode);
-    	this.mode = MODE.BLOCK;
+
+    protected void toBlockMode() {
+        this.modeStack.push(this.mode);
+        this.mode = MODE.INNER_BLOCK;
     }
-    
-    protected void restoreMode(){
-        if (!modeStack.isEmpty()){
+
+    protected void toClauseMode() {
+        this.modeStack.push(this.mode);
+        this.mode = MODE.CONDITIONAL_CLAUSE;
+    }
+
+    protected void restoreMode() {
+        if (!modeStack.isEmpty()) {
             this.mode = modeStack.pop();
         }
     }
-    
-    protected static class BlockScope {
-        private final Map<String,UnresolvedVariableInfo> variables = new LinkedHashMap<String,UnresolvedVariableInfo>();
 
-//        private final Map<String, String[]> nameAliases = new LinkedHashMap<String, String[]>();
-        private final Map<String,AvailableNamespaceInfo> nameAliases = new LinkedHashMap<String,AvailableNamespaceInfo>();
+    protected static class BlockScope {
+        private final Map<String, UnresolvedVariableInfo> variables = new LinkedHashMap<String, UnresolvedVariableInfo>();
+
+        //        private final Map<String, String[]> nameAliases = new LinkedHashMap<String, String[]>();
+        private final Map<String, AvailableNamespaceInfo> nameAliases = new LinkedHashMap<String, AvailableNamespaceInfo>();
 
         private final AvailableNamespaceInfoSet availableNameSpaces = new AvailableNamespaceInfoSet();
-        
+
         public void addVariable(final UnresolvedVariableInfo variable) {
-            this.variables.put(variable.getName(),variable);
+            this.variables.put(variable.getName(), variable);
         }
 
         public void addAlias(final String alias, final String[] name) {
@@ -599,9 +644,9 @@ public class DefaultBuildDataManager implements BuildDataManager{
 
             final String[] tmp = new String[name.length];
             System.arraycopy(name, 0, tmp, 0, name.length);
-            
-            AvailableNamespaceInfo info = new AvailableNamespaceInfo(tmp,false);
-            
+
+            AvailableNamespaceInfo info = new AvailableNamespaceInfo(tmp, false);
+
             this.nameAliases.put(alias, info);
         }
 
@@ -615,16 +660,16 @@ public class DefaultBuildDataManager implements BuildDataManager{
         public AvailableNamespaceInfoSet getAvailableNameSpaces() {
             return this.availableNameSpaces;
         }
-        
-        public AvailableNamespaceInfoSet getAvailableAliases(){
+
+        public AvailableNamespaceInfoSet getAvailableAliases() {
             AvailableNamespaceInfoSet resultSet = new AvailableNamespaceInfoSet();
-            for(AvailableNamespaceInfo info : this.nameAliases.values()){
+            for (AvailableNamespaceInfo info : this.nameAliases.values()) {
                 resultSet.add(info);
             }
             return resultSet;
         }
-        
-        public UnresolvedVariableInfo getVariable(String name){
+
+        public UnresolvedVariableInfo getVariable(String name) {
             return this.variables.get(name);
         }
 
@@ -666,15 +711,17 @@ public class DefaultBuildDataManager implements BuildDataManager{
             return EMPTY_NAME;
         }
     }
-    
-    private void innerInit(){
+
+    private void innerInit() {
         this.classStack.clear();
         this.methodStack.clear();
+        this.blockStack.clear();
+        this.clauseStack.clear();
         this.nameSpaceStack.clear();
         this.scopeStack.clear();
 
         this.scopeStack.add(new BlockScope());
-        
+
         aliaseNameSetCache = null;
         availableNameSpaceSetCache = null;
         allAvaliableNameSetCache = null;
@@ -684,26 +731,34 @@ public class DefaultBuildDataManager implements BuildDataManager{
     private static final String[] EMPTY_NAME = new String[0];
 
     private AvailableNamespaceInfoSet aliaseNameSetCache = null;
+
     private AvailableNamespaceInfoSet availableNameSpaceSetCache = null;
+
     private AvailableNamespaceInfoSet allAvaliableNameSetCache = null;
+
     private AvailableNamespaceInfo currentNameSpaceCache = null;
-    
+
     private final Stack<BlockScope> scopeStack = new Stack<BlockScope>();
 
     private final Stack<String[]> nameSpaceStack = new Stack<String[]>();
 
     private final Stack<UnresolvedClassInfo> classStack = new Stack<UnresolvedClassInfo>();
 
-    private final Stack<UnresolvedMethodInfo> methodStack = new Stack<UnresolvedMethodInfo>();
-    
+    private final Stack<UnresolvedCallableUnitInfo> methodStack = new Stack<UnresolvedCallableUnitInfo>();
+
     private final Stack<UnresolvedBlockInfo> blockStack = new Stack<UnresolvedBlockInfo>();
-    
+
+    private final Stack<UnresolvedConditionalClauseInfo> clauseStack = new Stack<UnresolvedConditionalClauseInfo>();
+
     private final Set<UnresolvedVariableInfo> nextScopedVariables = new HashSet<UnresolvedVariableInfo>();
 
     private final Map<UnresolvedClassInfo, Integer> anonymousClassCountMap = new HashMap<UnresolvedClassInfo, Integer>();
-    
+
     private MODE mode = MODE.INIT;
+
     private Stack<MODE> modeStack = new Stack<MODE>();
-    
-    private static enum MODE{INIT,BLOCK,METHOD,CLASS}
+
+    private static enum MODE {
+        INIT, CONDITIONAL_CLAUSE, INNER_BLOCK, METHOD, CLASS
+    }
 }
