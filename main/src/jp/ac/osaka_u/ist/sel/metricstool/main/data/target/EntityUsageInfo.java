@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  *
  */
-public abstract class EntityUsageInfo {
+public abstract class EntityUsageInfo implements Position{
 
     /**
      * オブジェクトを初期化 
@@ -37,6 +37,7 @@ public abstract class EntityUsageInfo {
      * 
      * @return 開始行
      */
+    @Override
     public final int getFromLine() {
         return this.fromLine;
     }
@@ -46,6 +47,7 @@ public abstract class EntityUsageInfo {
      * 
      * @return 開始列
      */
+    @Override
     public final int getFromColumn() {
         return this.fromColumn;
     }
@@ -55,6 +57,7 @@ public abstract class EntityUsageInfo {
      * 
      * @return 終了行
      */
+    @Override
     public final int getToLine() {
         return this.toLine;
     }
@@ -64,6 +67,7 @@ public abstract class EntityUsageInfo {
      * 
      * @return 終了列
      */
+    @Override
     public final int getToColumn() {
         return this.toColumn;
     }
