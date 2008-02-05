@@ -13,13 +13,19 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * 未解決パラーメータ使用を保存するためのクラス
+ * 未解決引数使用を保存するためのクラス
  * 
  * @author t-miyake, higo
  *
  */
 public final class UnresolvedParameterUsageInfo extends UnresolvedVariableUsageInfo {
 
+    /**
+     * 使用されている引数，参照かどうかを与えて初期化
+     * 
+     * @param usedVariable　使用されている引数
+     * @param reference　参照の場合は true，そうでない場合は false
+     */
     public UnresolvedParameterUsageInfo(final UnresolvedParameterInfo usedVariable,
             boolean reference) {
 
@@ -28,6 +34,9 @@ public final class UnresolvedParameterUsageInfo extends UnresolvedVariableUsageI
         this.usedVariable = usedVariable;
     }
 
+    /**
+     * この未解決引数使用を解決する
+     */
     @Override
     public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
@@ -41,8 +50,8 @@ public final class UnresolvedParameterUsageInfo extends UnresolvedVariableUsageI
             return this.getResolvedEntityUsage();
         }
 
-        final ParameterInfo usedVariable = (ParameterInfo) this.getUsedVariable().resolveUnit(
-                usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final ParameterInfo usedVariable = this.getUsedVariable().resolveUnit(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final boolean reference = this.isReference();
 
         final int fromLine = this.getFromLine();
@@ -55,6 +64,11 @@ public final class UnresolvedParameterUsageInfo extends UnresolvedVariableUsageI
         return this.resolvedInfo;
     }
 
+    /**
+     * 使用されている引数を返す
+     * 
+     * @return　使用されている引数
+     */
     public UnresolvedParameterInfo getUsedVariable() {
         return this.usedVariable;
     }

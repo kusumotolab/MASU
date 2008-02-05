@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 /**
- * 未解決クラス参照を表すクラス
+ * 未解決完全限定名クラス参照を表すクラス
  * 
  * @author higo, t-miyake
  *
@@ -24,7 +24,7 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends Unresol
      * @return 参照されているクラスの情報
      */
     public UnresolvedClassInfo getReferencedClass() {
-        return referencedClass;
+        return this.referencedClass;
     }
     
     /**

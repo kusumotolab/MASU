@@ -12,13 +12,30 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
+/**
+ * 未解決プリミティブ型使用を表すクラス
+ * 
+ * @author higo
+ *
+ */
 public final class UnresolvedPrimitiveTypeUsageInfo extends UnresolvedEntityUsageInfo {
 
+    /**
+     * 型とリテラルを与えて初期化
+     * 
+     * @param type　使用されている型
+     * @param literal　使用されているリテラル
+     */
     public UnresolvedPrimitiveTypeUsageInfo(final PrimitiveTypeInfo type, final String literal) {
         this.type = type;
         this.literal = literal;
     }
 
+    /**
+     * 使用されているリテラルを返す
+     * 
+     * @return　使用されているリテラル
+     */
     public String getLiteral() {
         return this.literal;
     }
@@ -49,6 +66,9 @@ public final class UnresolvedPrimitiveTypeUsageInfo extends UnresolvedEntityUsag
         return this.resolvedInfo;
     }
 
+    /**
+     * この未解決プリミティブ型使用を解決
+     */
     @Override
     public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,

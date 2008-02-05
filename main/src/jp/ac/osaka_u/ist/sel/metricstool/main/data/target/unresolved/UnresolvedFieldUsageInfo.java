@@ -56,8 +56,6 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
         this.ownerClassType = ownerClassType;
         this.fieldName = fieldName;
         this.reference = reference;
-
-        this.resolvedInfo = null;
     }
 
     /**
@@ -244,9 +242,4 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
      * フィールド名を保存するための変数
      */
     private final String fieldName;
-
-    /**
-     * 解決済みフィールド使用を保存するための変数
-     */
-    private EntityUsageInfo resolvedInfo;
 }

@@ -21,9 +21,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * 未解決参照型を表すクラス
+ * 未解決クラス型を表すクラス
  * 
- * @author y-higo
+ * @author higo
  * 
  */
 public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
@@ -45,16 +45,22 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
 
         this.availableNamespaceSet = availableNamespaces;
         this.referenceName = referenceName;
-        //this.fullReferenceName = referenceName;
-        //this.ownerType = null;
         this.typeParameterUsages = new LinkedList<UnresolvedClassTypeInfo>();
     }
 
+    /**
+     * この未解決クラス型がすでに解決済みかどうかを返す．
+     * 
+     * @return 解決済みの場合は true，解決されていない場合は false
+     */
     @Override
     public boolean alreadyResolved() {
         return null != this.resolvedInfo;
     }
 
+    /**
+     * この未解決クラス型の解決済みの型を返す
+     */
     @Override
     public TypeInfo getResolvedType() {
 
@@ -232,33 +238,6 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
         this(new AvailableNamespaceInfoSet(), referenceName);
     }
 
-    ///**
-    // * 利用可能な名前空間名，参照名を与えて初期化
-    // * 
-    // * @param availableNamespaces 名前空間名
-    // * @param referenceName 参照名
-    // */
-    /*
-    public UnresolvedReferenceTypeInfo(final AvailableNamespaceInfoSet availableNamespaces,
-            final String[] referenceName, final UnresolvedReferenceTypeInfo ownerType) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == availableNamespaces) || (null == referenceName) || (null == ownerType)) {
-            throw new NullPointerException();
-        }
-
-        this.availableNamespaceSet = availableNamespaces;
-        String[] ownerReferenceName = ownerType.getFullReferenceName();
-        String[] fullReferenceName = new String[referenceName.length+ownerReferenceName.length];
-        System.arraycopy(ownerReferenceName, 0, fullReferenceName, 0, ownerReferenceName.length);
-        System.arraycopy(referenceName, 0, fullReferenceName, ownerReferenceName.length, referenceName.length);
-        this.fullReferenceName = fullReferenceName;
-        this.referenceName = referenceName;
-        this.ownerType = ownerType;
-        this.typeParameterUsages = new LinkedList<UnresolvedReferenceTypeInfo>();
-    }
-    */
     /**
      * 型パラメータ使用を追加する
      * 
@@ -371,9 +350,10 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
     public final static UnresolvedClassTypeInfo getInstance(UnresolvedClassInfo referencedClass) {
         return new UnresolvedClassTypeInfo(referencedClass.getFullQualifiedName());
     }
-    
+
     public final UnresolvedClassReferenceInfo getUsage() {
-        UnresolvedClassReferenceInfo usage = new UnresolvedClassReferenceInfo(this.availableNamespaceSet, referenceName);
+        UnresolvedClassReferenceInfo usage = new UnresolvedClassReferenceInfo(
+                this.availableNamespaceSet, this.referenceName);
         for (UnresolvedReferenceTypeInfo typeArgument : this.typeParameterUsages) {
             usage.addTypeArgument(typeArgument);
         }
