@@ -18,7 +18,7 @@ public abstract class UnresolvedConditionalBlockInfo<T extends /*Conditional*/Bl
 	 * 未解決条件文を返す
 	 * @return 未解決条件文
 	 */
-	public UnresolvedConditionalSpaceInfo getConditionalSpace() {
+	public UnresolvedConditionalClauseInfo getConditionalSpace() {
 		return this.conditionalSpace;
 	}
 
@@ -26,7 +26,7 @@ public abstract class UnresolvedConditionalBlockInfo<T extends /*Conditional*/Bl
 	 * 未解決条件文をセットする
 	 * @param conditionalSpace 未解決条件文
 	 */
-	public void setConditionalSpace(UnresolvedConditionalSpaceInfo conditionalSpace) {
+	public void setConditionalSpace(UnresolvedConditionalClauseInfo conditionalSpace) {
 		// 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == conditionalSpace) {
@@ -39,7 +39,7 @@ public abstract class UnresolvedConditionalBlockInfo<T extends /*Conditional*/Bl
 	/**
 	 * 未解決条件文を保存するための変数
 	 */
-	private UnresolvedConditionalSpaceInfo conditionalSpace;
+	private UnresolvedConditionalClauseInfo conditionalSpace;
 
 	
 }

@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
-public abstract class UnresolvedConstructorInfo extends
+public class UnresolvedConstructorInfo extends
         UnresolvedCallableUnitInfo<TargetConstructorInfo> {
 
     public UnresolvedConstructorInfo(final UnresolvedClassInfo ownerClass) {
@@ -103,6 +103,21 @@ public abstract class UnresolvedConstructorInfo extends
         }
 
         return this.resolvedInfo;
+    }
+
+    @Override
+    public boolean isInstanceMember() {
+        return true;
+    }
+
+    @Override
+    public boolean isStaticMember() {
+        return false;
+    }
+
+    @Override
+    public void setInstanceMember(boolean instance) {
+
     }
 
     /**

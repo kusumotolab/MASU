@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> extends
-        UnresolvedLocalSpaceInfo<T> implements VisualizableSetting {
+        UnresolvedLocalSpaceInfo<T> implements VisualizableSetting, MemberSetting {
 
     UnresolvedCallableUnitInfo() {
 

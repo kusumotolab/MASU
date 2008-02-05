@@ -12,7 +12,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
  */
 public abstract class UnresolvedVariableUsageInfo extends UnresolvedEntityUsageInfo {
 
-    public UnresolvedVariableUsageInfo(final boolean reference) {
+    public UnresolvedVariableUsageInfo(final String usedVariableName, final boolean reference) {
+        this.usedVariableName = usedVariableName;
         this.reference = reference;
     }
 
@@ -56,11 +57,26 @@ public abstract class UnresolvedVariableUsageInfo extends UnresolvedEntityUsageI
 
         return this.resolvedInfo;
     }
+    
+    /**
+     * 使用されている変数の名前を返す
+     * @return 使用されている変数の名前
+     */
+    public String getUsedVariableName() {
+        return usedVariableName;
+    }
 
+    /**
+     * 使用されている変数の名前を保存する変数
+     */
+    protected final String usedVariableName;
+    
     protected boolean reference;
 
     /**
      * 解決済み変数使用を保存するための変数
      */
     protected EntityUsageInfo resolvedInfo;
+
+    
 }

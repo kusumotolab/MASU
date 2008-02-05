@@ -29,7 +29,7 @@ public final class UnresolvedParameterUsageInfo extends UnresolvedVariableUsageI
     public UnresolvedParameterUsageInfo(final UnresolvedParameterInfo usedVariable,
             boolean reference) {
 
-        super(reference);
+        super(usedVariable.getName(), reference);
 
         this.usedVariable = usedVariable;
     }

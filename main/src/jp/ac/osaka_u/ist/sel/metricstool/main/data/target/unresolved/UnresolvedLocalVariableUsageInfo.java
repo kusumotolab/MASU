@@ -23,7 +23,7 @@ public class UnresolvedLocalVariableUsageInfo extends UnresolvedVariableUsageInf
     public UnresolvedLocalVariableUsageInfo(final UnresolvedLocalVariableInfo usedVariable,
             boolean reference) {
 
-        super(reference);
+        super(usedVariable.getName(), reference);
 
         this.usedVariable = usedVariable;
     }
