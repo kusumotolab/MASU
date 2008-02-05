@@ -2,8 +2,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
@@ -34,7 +36,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
      * @param availableNamespaces 名前空間名
      * @param referenceName 参照名
      */
-    public UnresolvedClassTypeInfo(final AvailableNamespaceInfoSet availableNamespaces,
+    public UnresolvedClassTypeInfo(final Set<AvailableNamespaceInfo> availableNamespaces,
             final String[] referenceName) {
 
         // 不正な呼び出しでないかをチェック
@@ -43,7 +45,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
             throw new NullPointerException();
         }
 
-        this.availableNamespaceSet = availableNamespaces;
+        this.availableNamespaces = availableNamespaces;
         this.referenceName = referenceName;
         this.typeParameterUsages = new LinkedList<UnresolvedClassTypeInfo>();
     }
@@ -235,7 +237,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
      * @param referenceName 型の完全修飾名
      */
     public UnresolvedClassTypeInfo(final String[] referenceName) {
-        this(new AvailableNamespaceInfoSet(), referenceName);
+        this(new HashSet<AvailableNamespaceInfo>(), referenceName);
     }
 
     /**
@@ -272,15 +274,6 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
         return this.referenceName[this.referenceName.length - 1];
     }
 
-    ///**
-    // * この参照型のownerも含めた参照名を返す
-    // * 
-    // * @return この参照型のownerも含めた参照名を返す
-    // */
-    /*public final String[] getFullReferenceName() {
-        return this.fullReferenceName;
-    }*/
-
     /**
      * この参照型の参照名を返す
      * 
@@ -289,24 +282,6 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
     public final String[] getReferenceName() {
         return this.referenceName;
     }
-
-    ///**
-    // * この参照型がくっついている未解決参照型を返す
-    // * 
-    // * @return この参照型がくっついている未解決参照型
-    // */
-    /*public final UnresolvedReferenceTypeInfo getOwnerType() {
-        return this.ownerType;
-    }*/
-
-    ///**
-    // * この参照型が，他の参照型にくっついているかどうかを返す
-    // * 
-    // * @return くっついている場合は true，くっついていない場合は false
-    // */
-    /*public final boolean hasOwnerReference() {
-        return null != this.ownerType;
-    }*/
 
     /**
      * この参照型の参照名を引数で与えられた文字で結合して返す
@@ -334,8 +309,8 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
      * 
      * @return この参照型の完全限定名として可能性のある名前空間名の一覧
      */
-    public final AvailableNamespaceInfoSet getAvailableNamespaces() {
-        return this.availableNamespaceSet;
+    public final Set<AvailableNamespaceInfo> getAvailableNamespaces() {
+        return this.availableNamespaces;
     }
 
     /**
@@ -353,7 +328,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
 
     public final UnresolvedClassReferenceInfo getUsage() {
         UnresolvedClassReferenceInfo usage = new UnresolvedClassReferenceInfo(
-                this.availableNamespaceSet, this.referenceName);
+                this.availableNamespaces, this.referenceName);
         for (UnresolvedReferenceTypeInfo typeArgument : this.typeParameterUsages) {
             usage.addTypeArgument(typeArgument);
         }
@@ -363,22 +338,12 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
     /**
      * 利用可能な名前空間名を保存するための変数，名前解決処理の際に用いる
      */
-    private final AvailableNamespaceInfoSet availableNamespaceSet;
+    private final Set<AvailableNamespaceInfo> availableNamespaces;
 
     /**
      * 参照名を保存する変数
      */
     private final String[] referenceName;
-
-    ///**
-    // * ownerも含めた参照名を保存する変数
-    // */
-    //private final String[] fullReferenceName;
-
-    ///**
-    // * この参照がくっついている未解決参照型を保存する変数
-    // */
-    //private final UnresolvedReferenceTypeInfo ownerType;
 
     /**
      * 型引数参照を保存するための変数

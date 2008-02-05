@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
@@ -43,7 +44,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
      * @param availableNamespaces 利用可能な名前空間
      * @param name 未解決エンティティ使用名
      */
-    public UnresolvedUnknownUsageInfo(final AvailableNamespaceInfoSet availableNamespaces,
+    public UnresolvedUnknownUsageInfo(final Set<AvailableNamespaceInfo> availableNamespaces,
             final String[] name) {
 
         this.availableNamespaces = availableNamespaces;
@@ -937,14 +938,14 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
      * 
      * @return この未解決エンティティ使用が利用することのできる名前空間
      */
-    public AvailableNamespaceInfoSet getAvailableNamespaces() {
+    public Set<AvailableNamespaceInfo> getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
     /**
      * この未解決エンティティ使用が利用することのできる名前空間を保存するための変数
      */
-    private final AvailableNamespaceInfoSet availableNamespaces;
+    private final Set<AvailableNamespaceInfo> availableNamespaces;
 
     /**
      * この未解決エンティティ使用名を保存するための変数

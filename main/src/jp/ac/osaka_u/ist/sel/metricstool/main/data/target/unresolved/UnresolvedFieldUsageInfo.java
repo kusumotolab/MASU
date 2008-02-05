@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import java.util.List;
+import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayLengthUsageInfo;
@@ -41,7 +42,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
      * @param fieldName 変数名
      * @param reference フィールド使用が参照である場合は true，代入である場合は false を指定
      */
-    public UnresolvedFieldUsageInfo(final AvailableNamespaceInfoSet availableNamespaces,
+    public UnresolvedFieldUsageInfo(final Set<AvailableNamespaceInfo> availableNamespaces,
             final UnresolvedEntityUsageInfo ownerClassType, final String fieldName,
             final boolean reference) {
 
@@ -170,7 +171,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
 
                     usingMethod.addUnresolvedUsage(this);
 
-                    this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
+                    this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine,
+                            toColumn);
                     return this.resolvedInfo;
                 }
 
@@ -181,7 +183,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
                 fieldInfoManager.add(fieldInfo);
 
                 // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
-                this.resolvedInfo = new FieldUsageInfo(fieldInfo, reference, fromLine, fromColumn, toLine, toColumn);
+                this.resolvedInfo = new FieldUsageInfo(fieldInfo, reference, fromLine, fromColumn,
+                        toLine, toColumn);
                 return this.resolvedInfo;
             }
 
@@ -191,7 +194,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
 
             // Java 言語で フィールド名が length だった場合は int 型を返す
             if (Settings.getLanguage().equals(LANGUAGE.JAVA) && fieldName.equals("length")) {
-                this.resolvedInfo = new ArrayLengthUsageInfo(ownerUsage, fromLine, fromColumn, toLine, toColumn);
+                this.resolvedInfo = new ArrayLengthUsageInfo(ownerUsage, fromLine, fromColumn,
+                        toLine, toColumn);
                 return this.resolvedInfo;
             }
         }
@@ -206,7 +210,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
      * 
      * @return 使用可能な名前空間を返す
      */
-    public AvailableNamespaceInfoSet getAvailableNamespaces() {
+    public Set<AvailableNamespaceInfo> getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
@@ -231,7 +235,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
     /**
      * 使用可能な名前空間を保存するための変数
      */
-    private final AvailableNamespaceInfoSet availableNamespaces;
+    private final Set<AvailableNamespaceInfo> availableNamespaces;
 
     /**
      * フィールド使用が実行される変数の未解決型名を保存するための変数

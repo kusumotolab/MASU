@@ -2,8 +2,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
@@ -36,7 +38,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
      * @param availableNamespaces 名前空間名
      * @param referenceName 参照名
      */
-    public UnresolvedClassReferenceInfo(final AvailableNamespaceInfoSet availableNamespaces,
+    public UnresolvedClassReferenceInfo(final Set<AvailableNamespaceInfo> availableNamespaces,
             final String[] referenceName) {
 
         // 不正な呼び出しでないかをチェック
@@ -45,7 +47,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
             throw new NullPointerException();
         }
 
-        this.availableNamespaceSet = availableNamespaces;
+        this.availableNamespaces = availableNamespaces;
         this.referenceName = referenceName;
         this.fullReferenceName = referenceName;
         this.ownerUsage = null;
@@ -59,7 +61,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
      * @param referenceName 参照名
      * @param ownerUsage 親参照
      */
-    public UnresolvedClassReferenceInfo(final AvailableNamespaceInfoSet availableNamespaces,
+    public UnresolvedClassReferenceInfo(final Set<AvailableNamespaceInfo> availableNamespaces,
             final String[] referenceName, final UnresolvedClassReferenceInfo ownerUsage) {
 
         // 不正な呼び出しでないかをチェック
@@ -68,7 +70,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
             throw new NullPointerException();
         }
 
-        this.availableNamespaceSet = availableNamespaces;
+        this.availableNamespaces = availableNamespaces;
         String[] ownerReferenceName = ownerUsage.getFullReferenceName();
         String[] fullReferenceName = new String[referenceName.length + ownerReferenceName.length];
         System.arraycopy(ownerReferenceName, 0, fullReferenceName, 0, ownerReferenceName.length);
@@ -551,8 +553,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
      * 
      * @return この参照型の完全限定名として可能性のある名前空間名の一覧
      */
-    public final AvailableNamespaceInfoSet getAvailableNamespaces() {
-        return this.availableNamespaceSet;
+    public final Set<AvailableNamespaceInfo> getAvailableNamespaces() {
+        return this.availableNamespaces;
     }
 
     public final static UnresolvedClassReferenceInfo createClassReference(
@@ -560,7 +562,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
 
         AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(referencedClassInfo
                 .getNamespace(), false);
-        AvailableNamespaceInfoSet namespaces = new AvailableNamespaceInfoSet();
+        Set<AvailableNamespaceInfo> namespaces = new HashSet<AvailableNamespaceInfo>();
         namespaces.add(namespace);
 
         String[] className = new String[] { referencedClassInfo.getClassName() };
@@ -577,7 +579,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
     /**
      * 利用可能な名前空間名を保存するための変数，名前解決処理の際に用いる
      */
-    private final AvailableNamespaceInfoSet availableNamespaceSet;
+    private final Set<AvailableNamespaceInfo> availableNamespaces;
 
     /**
      * 参照名を保存する変数
