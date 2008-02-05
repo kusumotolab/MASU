@@ -26,6 +26,8 @@ public abstract class LocalSpaceInfo extends UnitInfo {
         this.ownerClass = ownerClass;
         this.localVariables = new TreeSet<LocalVariableInfo>();
         this.fieldUsages = new HashSet<FieldUsageInfo>();
+        this.localVariableUsages = new HashSet<LocalVariableUsageInfo>();
+        this.parameterUsages = new HashSet<ParameterUsageInfo>();
         this.innerBlocks = new TreeSet<BlockInfo>();
         this.calls = new HashSet<CallInfo>();
     }
@@ -65,14 +67,22 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * 
      * @param fieldUsage 追加するフィールド利用
      */
-    public final void addFieldUsage(final FieldUsageInfo fieldUsage) {
+    public final void addVariableUsage(final VariableUsageInfo<?> variableUsage) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == fieldUsage) {
+        if (null == variableUsage) {
             throw new NullPointerException();
         }
 
-        this.fieldUsages.add(fieldUsage);
+        if (variableUsage instanceof FieldUsageInfo) {
+            this.fieldUsages.add((FieldUsageInfo) variableUsage);
+        } else if (variableUsage instanceof LocalVariableUsageInfo) {
+            this.localVariableUsages.add((LocalVariableUsageInfo) variableUsage);
+        } else if (variableUsage instanceof ParameterUsageInfo) {
+            this.parameterUsages.add((ParameterUsageInfo) variableUsage);
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     /**
@@ -130,6 +140,20 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     }
 
     /**
+     * このメソッドのローカル変数利用のSetを返す
+     */
+    public Set<LocalVariableUsageInfo> getLocalVariableUsages() {
+        return Collections.unmodifiableSet(this.localVariableUsages);
+    }
+
+    /**
+     * このメソッドのフィールド利用のSetを返す
+     */
+    public Set<ParameterUsageInfo> getParameterUsages() {
+        return Collections.unmodifiableSet(this.parameterUsages);
+    }
+
+    /**
      * このメソッドの直内ブロックの SortedSet を返す．
      * 
      * @return このメソッドの直内ブロックの SortedSet を返す．
@@ -161,6 +185,16 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * 利用しているフィールド一覧を保存するための変数
      */
     private final Set<FieldUsageInfo> fieldUsages;
+
+    /**
+     * 利用しているローカル変数の一覧を保存するための変数
+     */
+    private final Set<LocalVariableUsageInfo> localVariableUsages;
+
+    /**
+     * 利用している引数の一覧を保存するための変数
+     */
+    private final Set<ParameterUsageInfo> parameterUsages;
 
     /**
      * このメソッド直内のブロック一覧を保存するための変数

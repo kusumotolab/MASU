@@ -1,13 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
@@ -32,30 +29,20 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class UnresolvedMethodInfo extends UnresolvedLocalSpaceInfo<TargetMethodInfo>
-        implements VisualizableSetting, MemberSetting {
+public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<TargetMethodInfo>
+        implements MemberSetting {
 
     /**
      * 未解決メソッド定義情報オブジェクトを初期化
      */
     public UnresolvedMethodInfo() {
 
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+
         this.methodName = null;
         this.returnType = null;
-        this.ownerClass = null;
-        this.constructor = false;
-
-        this.modifiers = new HashSet<ModifierInfo>();
-        this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
-        this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
-
-        this.privateVisible = false;
-        this.inheritanceVisible = false;
-        this.namespaceVisible = false;
-        this.publicVisible = false;
-
         this.instance = true;
-
         this.resolvedInfo = null;
     }
 
@@ -65,10 +52,9 @@ public final class UnresolvedMethodInfo extends UnresolvedLocalSpaceInfo<TargetM
      * @param methodName メソッド名
      * @param returnType 返り値の型
      * @param ownerClass このメソッドを定義しているクラス
-     * @param constructor コンストラクタかどうか
      */
     public UnresolvedMethodInfo(final String methodName, final UnresolvedTypeInfo returnType,
-            final UnresolvedClassInfo ownerClass, final boolean constructor) {
+            final UnresolvedClassInfo ownerClass) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -78,20 +64,7 @@ public final class UnresolvedMethodInfo extends UnresolvedLocalSpaceInfo<TargetM
 
         this.methodName = methodName;
         this.returnType = returnType;
-        this.ownerClass = ownerClass;
-        this.constructor = constructor;
-
-        this.modifiers = new HashSet<ModifierInfo>();
-        this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
-        this.parameterInfos = new LinkedList<UnresolvedParameterInfo>();
-
-        this.privateVisible = false;
-        this.inheritanceVisible = false;
-        this.namespaceVisible = false;
-        this.publicVisible = false;
-
         this.instance = true;
-
         this.resolvedInfo = null;
     }
 
@@ -151,21 +124,20 @@ public final class UnresolvedMethodInfo extends UnresolvedLocalSpaceInfo<TargetM
         final Set<ModifierInfo> methodModifiers = this.getModifiers();
         final String methodName = this.getMethodName();
 
-        final boolean constructor = this.isConstructor();
         final boolean privateVisible = this.isPrivateVisible();
         final boolean namespaceVisible = this.isNamespaceVisible();
         final boolean inheritanceVisible = this.isInheritanceVisible();
         final boolean publicVisible = this.isPublicVisible();
         final boolean instance = this.isInstanceMember();
-        final int methodFromLine = this.getFromLine();
-        final int methodFromColumn = this.getFromColumn();
-        final int methodToLine = this.getToLine();
-        final int methodToColumn = this.getToColumn();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
 
         // MethodInfo オブジェクトを生成する．
         this.resolvedInfo = new TargetMethodInfo(methodModifiers, methodName, usingClass,
-                constructor, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
-                instance, methodFromLine, methodFromColumn, methodToLine, methodToColumn);
+                privateVisible, namespaceVisible, inheritanceVisible, publicVisible, instance,
+                fromLine, fromColumn, toLine, toColumn);
 
         // 型パラメータを解決し，解決済みメソッド情報に追加する
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
@@ -208,12 +180,19 @@ public final class UnresolvedMethodInfo extends UnresolvedLocalSpaceInfo<TargetM
         this.resolvedInfo.setReturnType(methodReturnType);
 
         // 引数を追加する
-        for (final UnresolvedParameterInfo unresolvedParameterInfo : this.getParameterInfos()) {
+        for (final UnresolvedParameterInfo unresolvedParameterInfo : this.getParameters()) {
 
             final TargetParameterInfo parameterInfo = unresolvedParameterInfo.resolveUnit(
                     usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
                     methodInfoManager);
             this.resolvedInfo.addParameter(parameterInfo);
+        }
+
+        //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
+        for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
+            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addInnerBlock(innerBlock);
         }
 
         // メソッド内で定義されている各未解決ローカル変数に対して
@@ -224,78 +203,7 @@ public final class UnresolvedMethodInfo extends UnresolvedLocalSpaceInfo<TargetM
             this.resolvedInfo.addLocalVariable(localVariable);
         }
 
-        // メソッド情報をメソッド情報マネージャに追加
-        usingClass.addDefinedMethod(this.resolvedInfo);
-        methodInfoManager.add(this.resolvedInfo);
         return this.resolvedInfo;
-    }
-
-    /**
-     * コンストラクタかどうかを返す
-     * 
-     * @return コンストラクタの場合は true，そうでない場合は false
-     */
-    public boolean isConstructor() {
-        return this.constructor;
-    }
-
-    /**
-     * コンストラクタかどうかをセットする
-     * 
-     * @param constructor コンストラクタかどうか
-     */
-    public void setConstructor(final boolean constructor) {
-        this.constructor = constructor;
-    }
-
-    /**
-     * 修飾子の Set を返す
-     * 
-     * @return 修飾子の Set
-     */
-    public Set<ModifierInfo> getModifiers() {
-        return Collections.unmodifiableSet(this.modifiers);
-    }
-
-    /**
-     * 修飾子を追加する
-     * 
-     * @param modifier 追加する修飾子
-     */
-    public void addModifier(final ModifierInfo modifier) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == modifier) {
-            throw new NullPointerException();
-        }
-
-        this.modifiers.add(modifier);
-    }
-
-    /**
-     * 未解決型パラメータの List を返す
-     * 
-     * @return 未解決型パラメータの List
-     */
-    public List<UnresolvedTypeParameterInfo> getTypeParameters() {
-        return Collections.unmodifiableList(this.typeParameters);
-    }
-
-    /**
-     * 未解決型パラメータを追加する
-     * 
-     * @param typeParameter 追加する未解決型パラメータ
-     */
-    public void addTypeParameter(final UnresolvedTypeParameterInfo typeParameter) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == typeParameter) {
-            throw new NullPointerException();
-        }
-
-        this.typeParameters.add(typeParameter);
     }
 
     /**
@@ -349,128 +257,6 @@ public final class UnresolvedMethodInfo extends UnresolvedLocalSpaceInfo<TargetM
     }
 
     /**
-     * このメソッドを定義しているクラスを返す
-     * 
-     * @return このメソッドを定義しているクラス
-     */
-    public UnresolvedClassInfo getOwnerClass() {
-        return this.ownerClass;
-    }
-
-    /**
-     * メソッドを定義しているクラスをセットする
-     * 
-     * @param ownerClass メソッドを定義しているクラス
-     */
-    public void setOwnerClass(final UnresolvedClassInfo ownerClass) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == ownerClass) {
-            throw new NullPointerException();
-        }
-
-        this.ownerClass = ownerClass;
-    }
-
-    /**
-     * メソッドに引数を追加する
-     * 
-     * @param parameterInfo 追加する引数
-     */
-    public void adParameter(final UnresolvedParameterInfo parameterInfo) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == parameterInfo) {
-            throw new NullPointerException();
-        }
-
-        this.parameterInfos.add(parameterInfo);
-    }
-
-    /**
-     * メソッドの引数のリストを返す
-     * 
-     * @return メソッドの引数のリスト
-     */
-    public List<UnresolvedParameterInfo> getParameterInfos() {
-        return Collections.unmodifiableList(this.parameterInfos);
-    }
-
-    /**
-     * 子クラスから参照可能かどうかを設定する
-     * 
-     * @param inheritanceVisible 子クラスから参照可能な場合は true，そうでない場合は false
-     */
-    public void setInheritanceVisible(final boolean inheritanceVisible) {
-        this.inheritanceVisible = inheritanceVisible;
-    }
-
-    /**
-     * 同じ名前空間内から参照可能かどうかを設定する
-     * 
-     * @param namespaceVisible 同じ名前空間から参照可能な場合は true，そうでない場合は false
-     */
-    public void setNamespaceVisible(final boolean namespaceVisible) {
-        this.namespaceVisible = namespaceVisible;
-    }
-
-    /**
-     * クラス内からのみ参照可能かどうかを設定する
-     * 
-     * @param privateVisible クラス内からのみ参照可能な場合は true，そうでない場合は false
-     */
-    public void setPrivateVibible(final boolean privateVisible) {
-        this.privateVisible = privateVisible;
-    }
-
-    /**
-     * どこからでも参照可能かどうかを設定する
-     * 
-     * @param publicVisible どこからでも参照可能な場合は true，そうでない場合は false
-     */
-    public void setPublicVisible(final boolean publicVisible) {
-        this.publicVisible = publicVisible;
-    }
-
-    /**
-     * 子クラスから参照可能かどうかを返す
-     * 
-     * @return 子クラスから参照可能な場合は true, そうでない場合は false
-     */
-    public boolean isInheritanceVisible() {
-        return this.inheritanceVisible;
-    }
-
-    /**
-     * 同じ名前空間から参照可能かどうかを返す
-     * 
-     * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
-     */
-    public boolean isNamespaceVisible() {
-        return this.namespaceVisible;
-    }
-
-    /**
-     * クラス内からのみ参照可能かどうかを返す
-     * 
-     * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
-     */
-    public boolean isPrivateVisible() {
-        return this.privateVisible;
-    }
-
-    /**
-     * どこからでも参照可能かどうかを返す
-     * 
-     * @return どこからでも参照可能な場合は true, そうでない場合は false
-     */
-    public boolean isPublicVisible() {
-        return this.publicVisible;
-    }
-
-    /**
      * インスタンスメンバーかどうかを返す
      * 
      * @return インスタンスメンバーの場合 true，そうでない場合 false
@@ -498,59 +284,14 @@ public final class UnresolvedMethodInfo extends UnresolvedLocalSpaceInfo<TargetM
     }
 
     /**
-     * 修飾子を保存する
-     */
-    private Set<ModifierInfo> modifiers;
-
-    /**
-     * 未解決型パラメータ名を保存するための変数
-     */
-    private final List<UnresolvedTypeParameterInfo> typeParameters;
-
-    /**
      * メソッド名を保存するための変数
      */
     private String methodName;
 
     /**
-     * メソッド引数を保存するための変数
-     */
-    private final List<UnresolvedParameterInfo> parameterInfos;
-
-    /**
      * メソッドの返り値を保存するための変数
      */
     private UnresolvedTypeInfo returnType;
-
-    /**
-     * このメソッドを定義しているクラスを保存するための変数
-     */
-    private UnresolvedClassInfo ownerClass;
-
-    /**
-     * コンストラクタかどうかを表す変数
-     */
-    private boolean constructor;
-
-    /**
-     * クラス内からのみ参照可能かどうか保存するための変数
-     */
-    private boolean privateVisible;
-
-    /**
-     * 同じ名前空間から参照可能かどうか保存するための変数
-     */
-    private boolean namespaceVisible;
-
-    /**
-     * 子クラスから参照可能かどうか保存するための変数
-     */
-    private boolean inheritanceVisible;
-
-    /**
-     * どこからでも参照可能かどうか保存するための変数
-     */
-    private boolean publicVisible;
 
     /**
      * インスタンスメンバーかどうかを保存するための変数

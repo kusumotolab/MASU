@@ -23,8 +23,8 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        this.memberCalls = new HashSet<UnresolvedCallInfo>();
-        this.fieldUsages = new HashSet<UnresolvedFieldUsageInfo>();
+        this.calls = new HashSet<UnresolvedCallInfo>();
+        this.variableUsages = new HashSet<UnresolvedVariableUsageInfo>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
         this.innerBlocks = new HashSet<UnresolvedBlockInfo<?>>();
     }
@@ -32,25 +32,25 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     /**
      * メソッドまたはコンストラクタ呼び出しを追加する
      * 
-     * @param memberCall メソッドまたはコンストラクタ呼び出し
+     * @param call メソッドまたはコンストラクタ呼び出し
      */
-    public final void addMemberCall(final UnresolvedCallInfo memberCall) {
+    public final void addCall(final UnresolvedCallInfo call) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == memberCall) {
+        if (null == call) {
             throw new NullPointerException();
         }
 
-        this.memberCalls.add(memberCall);
+        this.calls.add(call);
     }
 
     /**
-     * フィールド使用を追加する
+     * 変数使用を追加する
      * 
      * @param fieldUsage フィールド使用
      */
-    public final void addFieldUsage(final UnresolvedFieldUsageInfo fieldUsage) {
+    public final void addVariableUsage(final UnresolvedFieldUsageInfo fieldUsage) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -58,7 +58,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
             throw new NullPointerException();
         }
 
-        this.fieldUsages.add(fieldUsage);
+        this.variableUsages.add(fieldUsage);
     }
 
     /**
@@ -93,33 +93,33 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
         this.innerBlocks.add(innerBlock);
     }
 
-    public void addChildSpaceInfo(final UnresolvedLocalSpaceInfo<?> childLocalInfo){
-    	MetricsToolSecurityManager.getInstance().checkAccess();
-    	if (null == childLocalInfo) {
-    		throw new NullPointerException();
-    	}
-    	
-    	this.fieldUsages.addAll(childLocalInfo.fieldUsages);
-    	this.localVariables.addAll(childLocalInfo.localVariables);
-    	this.memberCalls.addAll(childLocalInfo.memberCalls);
-    }
-    
-    /**
-     * このブロック内で行われている未解決メソッド呼び出しの Set を返す
-     * 
-     * @return このブロック内で行われている未解決メソッド呼び出しの Set
-     */
-    public final Set<UnresolvedCallInfo> getMethodCalls() {
-        return Collections.unmodifiableSet(this.memberCalls);
+    public void addChildSpaceInfo(final UnresolvedLocalSpaceInfo<?> childLocalInfo) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == childLocalInfo) {
+            throw new NullPointerException();
+        }
+
+        this.variableUsages.addAll(childLocalInfo.variableUsages);
+        this.localVariables.addAll(childLocalInfo.localVariables);
+        this.calls.addAll(childLocalInfo.calls);
     }
 
     /**
-     * このブロック内で行われている未解決フィールド使用の Set を返す
+     * このブロック内で行われている未解決メソッド呼び出しおよびコンストラクタ呼び出しの Set を返す
      * 
-     * @return このブロック内で行われている未解決フィールド使用の Set
+     * @return このブロック内で行われている未解決メソッド呼び出しおよびコンストラクタ呼び出しの Set
      */
-    public final Set<UnresolvedFieldUsageInfo> getFieldUsages() {
-        return Collections.unmodifiableSet(this.fieldUsages);
+    public final Set<UnresolvedCallInfo> getCalls() {
+        return Collections.unmodifiableSet(this.calls);
+    }
+
+    /**
+     * このブロック内で行われている未解決変数使用の Set を返す
+     * 
+     * @return このブロック内で行われている未解決変数使用の Set
+     */
+    public final Set<UnresolvedVariableUsageInfo> getVariableUsages() {
+        return Collections.unmodifiableSet(this.variableUsages);
     }
 
     /**
@@ -143,12 +143,12 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     /**
      * メソッドまたはコンストラクタ呼び出しを保存する変数
      */
-    private final Set<UnresolvedCallInfo> memberCalls;
+    private final Set<UnresolvedCallInfo> calls;
 
     /**
      * フィールド使用を保存する変数
      */
-    private final Set<UnresolvedFieldUsageInfo> fieldUsages;
+    private final Set<UnresolvedVariableUsageInfo> variableUsages;
 
     /**
      * このメソッド内で定義されているローカル変数を保存する変数

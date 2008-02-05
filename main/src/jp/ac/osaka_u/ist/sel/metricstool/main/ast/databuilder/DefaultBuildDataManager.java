@@ -60,17 +60,17 @@ public class DefaultBuildDataManager implements BuildDataManager{
     
     public void addFieldAssignment(UnresolvedFieldUsageInfo usage) {
     	if (!this.methodStack.isEmpty()&& MODE.METHOD == this.mode){
-            this.methodStack.peek().addFieldUsage(usage);
+            this.methodStack.peek().addVariableUsage(usage);
         }else if(!this.blockStack.isEmpty() && MODE.BLOCK == this.mode){
-    		this.blockStack.peek().addFieldUsage(usage);
+    		this.blockStack.peek().addVariableUsage(usage);
     	}
     }
 
     public void addFieldReference(UnresolvedFieldUsageInfo usage) {
         if (!this.methodStack.isEmpty()&& MODE.METHOD == this.mode){
-            this.methodStack.peek().addFieldUsage(usage);
+            this.methodStack.peek().addVariableUsage(usage);
         }else if(!this.blockStack.isEmpty() && MODE.BLOCK == this.mode){
-    		this.blockStack.peek().addFieldUsage(usage);
+    		this.blockStack.peek().addVariableUsage(usage);
     	}
     }
 
@@ -93,9 +93,9 @@ public class DefaultBuildDataManager implements BuildDataManager{
     
     public void addMethodCall(UnresolvedCallInfo memberCall) {
         if (!this.methodStack.isEmpty() && MODE.METHOD == this.mode){
-            this.methodStack.peek().addMemberCall(memberCall);
+            this.methodStack.peek().addCall(memberCall);
         } else if(!this.blockStack.isEmpty() && MODE.BLOCK == this.mode){
-        	this.blockStack.peek().addMemberCall(memberCall);
+        	this.blockStack.peek().addCall(memberCall);
         }
     }
 

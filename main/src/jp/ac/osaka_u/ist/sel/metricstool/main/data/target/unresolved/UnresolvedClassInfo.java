@@ -548,7 +548,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
                 : new TargetInnerClassInfo(modifiers, fullQualifiedName, usingClass,
                         privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
                         instance, fromLine, fromColumn, toLine, toColumn);
-        classInfoManager.add(this.resolvedInfo);
+
         return this.resolvedInfo;
     }
 

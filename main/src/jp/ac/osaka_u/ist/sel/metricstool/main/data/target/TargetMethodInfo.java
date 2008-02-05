@@ -50,12 +50,12 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * @param toColumn èIóπóÒ
      */
     public TargetMethodInfo(final Set<ModifierInfo> modifiers, final String name,
-            final ClassInfo ownerClass, final boolean constructor, final boolean privateVisible,
+            final ClassInfo ownerClass, final boolean privateVisible,
             final boolean namespaceVisible, final boolean inheritanceVisible,
             final boolean publicVisible, final boolean instance, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
-        super(name, ownerClass, constructor, fromLine, fromColumn, toLine, toColumn);
+        super(name, ownerClass, fromLine, fromColumn, toLine, toColumn);
 
         if (null == modifiers) {
             throw new NullPointerException();

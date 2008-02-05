@@ -21,6 +21,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
@@ -31,10 +32,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
@@ -42,16 +45,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVClassMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVFileMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVMethodMetricsWriter;
@@ -763,15 +768,24 @@ public class MetricsTool {
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
 
+            //　クラス情報を解決
             final TargetClassInfo classInfo = unresolvedClassInfo.resolveUnit(null, null,
                     classInfoManager, null, null);
+
+            // 解決されたクラス情報を登録
+            classInfoManager.add(classInfo);
 
             // 各インナークラスに対して処理
             for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
                     .getInnerClasses()) {
+
+                //　インナークラス情報を解決
                 final TargetInnerClassInfo innerClass = registInnerClassInfo(
                         unresolvedInnerClassInfo, classInfo, classInfoManager);
+
+                // 解決されたインナークラス情報を登録
                 classInfo.addInnerClass(innerClass);
+                classInfoManager.add(classInfo);
             }
         }
     }
@@ -794,9 +808,14 @@ public class MetricsTool {
         // このクラスのインナークラスに対して再帰的に処理
         for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
                 .getInnerClasses()) {
+
+            //　インナークラス情報を解決
             final TargetInnerClassInfo innerClass = registInnerClassInfo(unresolvedInnerClassInfo,
                     classInfo, classInfoManager);
+
+            // 解決されたインナークラス情報を登録
             classInfo.addInnerClass(innerClass);
+            classInfoManager.add(classInfo);
         }
 
         // このクラスの ClassInfo を返す
@@ -1057,14 +1076,24 @@ public class MetricsTool {
             final TargetMethodInfo methodInfo = unresolvedMethodInfo.resolveUnit(ownerClass, null,
                     classInfoManager, null, methodInfoManager);
 
-            // メソッド内ブロック構造を解決
-            for (final UnresolvedBlockInfo<?> unresolvedInnerBlockInfo : unresolvedMethodInfo
-                    .getInnerBlocks()) {
+            // メソッド情報を登録
+            ownerClass.addDefinedMethod(methodInfo);
+            methodInfoManager.add(methodInfo);
+        }
 
-                final BlockInfo innerBlockInfo = registBlockInfos(ownerClass, methodInfo,
-                        unresolvedInnerBlockInfo, classInfoManager);
-                methodInfo.addInnerBlock(innerBlockInfo);
-            }
+        // 各未解決コンストラクタに対して
+        for (final UnresolvedConstructorInfo unresolvedConstructorInfo : unresolvedClassInfo
+                .getDefinedConstructors()) {
+
+            //　コンストラクタ情報を解決
+            final TargetConstructorInfo constructorInfo = unresolvedConstructorInfo.resolveUnit(
+                    ownerClass, null, classInfoManager, null, methodInfoManager);
+            methodInfoManager.add(constructorInfo);
+
+            // コンストラクタ情報を登録            
+            ownerClass.addDefinedConstructor(constructorInfo);
+            methodInfoManager.add(constructorInfo);
+
         }
 
         // 各 Unresolvedクラスに対して
@@ -1072,33 +1101,6 @@ public class MetricsTool {
                 .getInnerClasses()) {
             registMethodInfos(unresolvedInnerClassInfo, classInfoManager, methodInfoManager);
         }
-    }
-
-    /**
-     * 未解決ブロック情報を解決し，外側のブロックの内部ブロックとして登録する
-     * 
-     * @param ownerClass 所有クラス
-     * @param ownerMethod 所有メソッド
-     * @param unresolvedBlockInfo 未解決ブロック情報
-     * @param classInfoManager 用いるクラスマネージャ
-     * @return 解決済みブロック情報
-     */
-    private BlockInfo registBlockInfos(final TargetClassInfo ownerClass,
-            final TargetMethodInfo ownerMethod, final UnresolvedBlockInfo<?> unresolvedBlockInfo,
-            final ClassInfoManager classInfoManager) {
-
-        final BlockInfo blockInfo = unresolvedBlockInfo.resolveUnit(ownerClass, ownerMethod,
-                classInfoManager, null, null);
-
-        for (final UnresolvedBlockInfo<?> unresolvedInnerBlockInfo : unresolvedBlockInfo
-                .getInnerBlocks()) {
-
-            final BlockInfo innerBlockInfo = registBlockInfos(ownerClass, ownerMethod,
-                    unresolvedInnerBlockInfo, classInfoManager);
-            blockInfo.addInnerBlock(innerBlockInfo);
-        }
-
-        return blockInfo;
     }
 
     /**
@@ -1217,34 +1219,37 @@ public class MetricsTool {
             assert null != ownerMethod : "UnresolvedMethodInfo#getResolvedInfo is null!";
 
             // 各未解決フィールド使用の名前解決処理
-            for (final UnresolvedFieldUsageInfo unresolvedFieldUsage : unresolvedMethodInfo
-                    .getFieldUsages()) {
+            for (final UnresolvedVariableUsageInfo unresolvedVariableUsage : unresolvedMethodInfo
+                    .getVariableUsages()) {
 
-                final EntityUsageInfo fieldUsage = unresolvedFieldUsage.resolveEntityUsage(
+                // 未解決変数使用を解決
+                final EntityUsageInfo variableUsage = unresolvedVariableUsage.resolveEntityUsage(
                         ownerClass, ownerMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager);
 
-                // フィールド利用が解決できた場合
-                if (fieldUsage instanceof FieldUsageInfo) {
-                    ownerMethod.addFieldUsage((FieldUsageInfo) fieldUsage);
-                    final boolean reference = ((FieldUsageInfo) fieldUsage).isReference();
-                    final FieldInfo usedField = ((FieldUsageInfo) fieldUsage).getUsedVariable();
-                    if (reference) {
-                        usedField.addReferencer(ownerMethod);
-                    } else {
-                        usedField.addAssignmenter(ownerMethod);
-                    }
+                // 名前解決でき場合は登録
+                if (variableUsage instanceof VariableUsageInfo) {
+                    ownerMethod.addVariableUsage((VariableUsageInfo<?>) variableUsage);
 
+                    // フィールドの場合は，利用関係情報を取る
+                    if (variableUsage instanceof FieldUsageInfo) {
+                        final boolean reference = ((FieldUsageInfo) variableUsage).isReference();
+                        final FieldInfo usedField = ((FieldUsageInfo) variableUsage)
+                                .getUsedVariable();
+                        if (reference) {
+                            usedField.addReferencer(ownerMethod);
+                        } else {
+                            usedField.addAssignmenter(ownerMethod);
+                        }
+                    }
                 }
             }
 
             // 各未解決メソッド呼び出しの解決処理
-            for (final UnresolvedCallInfo unresolvedMethodCall : unresolvedMethodInfo
-                    .getMethodCalls()) {
+            for (final UnresolvedCallInfo unresolvedCall : unresolvedMethodInfo.getCalls()) {
 
-                final EntityUsageInfo memberCall = unresolvedMethodCall.resolveEntityUsage(
-                        ownerClass, ownerMethod, classInfoManager, fieldInfoManager,
-                        methodInfoManager);
+                final EntityUsageInfo memberCall = unresolvedCall.resolveEntityUsage(ownerClass,
+                        ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
                 // メソッドおよびコンストラクタ呼び出しが解決できた場合
                 if (memberCall instanceof MethodCallInfo) {
@@ -1261,6 +1266,77 @@ public class MetricsTool {
                 .getInnerClasses()) {
             addReferenceAssignmentCallRelation(unresolvedInnerClassInfo, classInfoManager,
                     fieldInfoManager, methodInfoManager);
+        }
+    }
+
+    /**
+     * エンティティ（フィールドやクラス）の代入・参照，メソッドの呼び出し関係を追加する．
+     * 
+     * @param unresolvedClassInfo 解決対象クラス
+     * @param classInfoManager 用いるクラスマネージャ
+     * @param fieldInfoManager 用いるフィールドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
+     * @param resolvedCache 解決済み呼び出し情報のキャッシュ
+     */
+    private void addReferenceAssignmentCallRelation(
+            final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace,
+            final UnresolvedClassInfo unresolvedClassInfo, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        // 未解決メソッド情報から，解決済みメソッド情報を取得
+        final LocalSpaceInfo localSpace = unresolvedLocalSpace.getResolvedUnit();
+        assert null != localSpace : "UnresolvedLocalSpaceInfo#getResolvedInfo is null!";
+
+        // 所有クラスを取得
+        final TargetClassInfo ownerClass = (TargetClassInfo) localSpace.getOwnerClass();
+        final CallableUnitInfo ownerMethod;
+        if (localSpace instanceof CallableUnitInfo) {
+            ownerMethod = (CallableUnitInfo) localSpace;
+        } else if (localSpace instanceof BlockInfo) {
+            ownerMethod = ((BlockInfo) localSpace).getOwnerMethod();
+        } else {
+            ownerMethod = null;
+            assert false : "Here shouldn't be reached!";
+        }
+
+        // 各未解決フィールド使用の名前解決処理
+        for (final UnresolvedVariableUsageInfo unresolvedVariableUsage : unresolvedLocalSpace
+                .getVariableUsages()) {
+
+            // 未解決変数使用を解決
+            final EntityUsageInfo variableUsage = unresolvedVariableUsage.resolveEntityUsage(
+                    ownerClass, ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+
+            // 名前解決でき場合は登録
+            if (variableUsage instanceof VariableUsageInfo) {
+                ownerMethod.addVariableUsage((VariableUsageInfo<?>) variableUsage);
+
+                // フィールドの場合は，利用関係情報を取る
+                if (variableUsage instanceof FieldUsageInfo) {
+                    final boolean reference = ((FieldUsageInfo) variableUsage).isReference();
+                    final FieldInfo usedField = ((FieldUsageInfo) variableUsage).getUsedVariable();
+                    if (reference) {
+                        usedField.addReferencer(ownerMethod);
+                    } else {
+                        usedField.addAssignmenter(ownerMethod);
+                    }
+                }
+            }
+        }
+
+        // 各未解決メソッド呼び出しの解決処理
+        for (final UnresolvedCallInfo unresolvedCall : unresolvedLocalSpace.getCalls()) {
+
+            final EntityUsageInfo memberCall = unresolvedCall.resolveEntityUsage(ownerClass,
+                    ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+
+            // メソッドおよびコンストラクタ呼び出しが解決できた場合
+            if (memberCall instanceof MethodCallInfo) {
+                ownerMethod.addCall((MethodCallInfo) memberCall);
+                ((MethodCallInfo) memberCall).getCallee().addCaller(ownerMethod);
+            } else if (memberCall instanceof ConstructorCallInfo) {
+                ownerMethod.addCall((ConstructorCallInfo) memberCall);
+            }
         }
     }
 }

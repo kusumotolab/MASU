@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
@@ -17,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 public abstract class UnresolvedConstructorInfo extends
-        UnresolvedCallableUnitInfo<TargetConstructorInfo> implements VisualizableSetting {
+        UnresolvedCallableUnitInfo<TargetConstructorInfo> {
 
     public UnresolvedConstructorInfo(final UnresolvedClassInfo ownerClass) {
 
@@ -86,6 +87,13 @@ public abstract class UnresolvedConstructorInfo extends
             this.resolvedInfo.addParameter(parameterInfo);
         }
 
+        //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
+        for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
+            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addInnerBlock(innerBlock);
+        }
+
         // メソッド内で定義されている各未解決ローカル変数に対して
         for (final UnresolvedLocalVariableInfo unresolvedLocalVariable : this.getLocalVariables()) {
 
@@ -94,9 +102,6 @@ public abstract class UnresolvedConstructorInfo extends
             this.resolvedInfo.addLocalVariable(localVariable);
         }
 
-        // コンストラクタ情報をメソッド情報マネージャに追加
-        usingClass.addDefinedConstructor(this.resolvedInfo);
-        methodInfoManager.add(this.resolvedInfo);
         return this.resolvedInfo;
     }
 

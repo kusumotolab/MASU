@@ -46,16 +46,16 @@ public abstract class FieldInfo extends VariableInfo {
         }
 
         this.ownerClass = ownerClass;
-        this.referencers = new TreeSet<TargetMethodInfo>();
-        this.assignmenters = new TreeSet<TargetMethodInfo>();
+        this.referencers = new TreeSet<CallableUnitInfo>();
+        this.assignmenters = new TreeSet<CallableUnitInfo>();
     }
 
     /**
-     * このフィールドを参照しているメソッドを追加する
+     * このフィールドを参照しているメソッドまたはコンストラクタを追加する
      * 
-     * @param referencer このフィールドを参照しているメソッド
+     * @param referencer このフィールドを参照しているメソッドまたはコンストラクタ
      */
-    public final void addReferencer(final TargetMethodInfo referencer) {
+    public final void addReferencer(final CallableUnitInfo referencer) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == referencer) {
@@ -70,7 +70,7 @@ public abstract class FieldInfo extends VariableInfo {
      * 
      * @param assignmenter このフィールドに対して代入を行っているメソッド
      */
-    public final void addAssignmenter(final TargetMethodInfo assignmenter) {
+    public final void addAssignmenter(final CallableUnitInfo assignmenter) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == assignmenter) {
@@ -107,20 +107,20 @@ public abstract class FieldInfo extends VariableInfo {
     }
 
     /**
-     * このフィールドを参照しているメソッドの SortedSet を返す．
+     * このフィールドを参照しているメソッドまたはコンストラクタの SortedSet を返す．
      * 
-     * @return このフィールドを参照しているメソッドの SortedSet
+     * @return このフィールドを参照しているメソッドまたはコンストラクタの SortedSet
      */
-    public final SortedSet<TargetMethodInfo> getReferences() {
+    public final SortedSet<CallableUnitInfo> getReferences() {
         return Collections.unmodifiableSortedSet(this.referencers);
     }
 
     /**
-     * このフィールドに対して代入を行っているメソッドの SortedSet を返す．
+     * このフィールドに対して代入を行っているメソッドまたはコンストラクタの SortedSet を返す．
      * 
-     * @return このフィールドに対して代入を行っているメソッドの SortedSet
+     * @return このフィールドに対して代入を行っているメソッドまたはコンストラクタの SortedSet
      */
-    public final SortedSet<TargetMethodInfo> getAssignmenters() {
+    public final SortedSet<CallableUnitInfo> getAssignmenters() {
         return Collections.unmodifiableSortedSet(this.assignmenters);
     }
 
@@ -132,11 +132,11 @@ public abstract class FieldInfo extends VariableInfo {
     /**
      * このフィールドを参照しているメソッド群を保存するための変数
      */
-    protected final SortedSet<TargetMethodInfo> referencers;
+    protected final SortedSet<CallableUnitInfo> referencers;
 
     /**
      * このフィールドに対して代入を行っているメソッド群を保存するための変数
      */
-    protected final SortedSet<TargetMethodInfo> assignmenters;
+    protected final SortedSet<CallableUnitInfo> assignmenters;
 
 }

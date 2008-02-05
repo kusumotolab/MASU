@@ -5,10 +5,10 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 
@@ -25,12 +25,10 @@ public final class ExternalMethodInfo extends MethodInfo {
      * 
      * @param methodName メソッド名
      * @param ownerClass このメソッドを定義しているクラス
-     * @param constructor コンストラクタかどうか
      */
-    public ExternalMethodInfo(final String methodName, final ClassInfo ownerClass,
-            final boolean constructor) {
+    public ExternalMethodInfo(final String methodName, final ClassInfo ownerClass) {
 
-        super(methodName, ownerClass, constructor, 0, 0, 0, 0);
+        super(methodName, ownerClass, 0, 0, 0, 0);
 
         this.setReturnType(UnknownTypeInfo.getInstance());
     }

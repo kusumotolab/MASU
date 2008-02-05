@@ -144,7 +144,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                     if (null != externalSuperClass) {
 
                         final ExternalMethodInfo methodInfo = new ExternalMethodInfo(
-                                this.getName(), externalSuperClass, false);
+                                this.getName(), externalSuperClass);
                         final List<ParameterInfo> dummyParameters = NameResolver
                                 .createParameters(actualParameters);
                         methodInfo.addParameters(dummyParameters);
@@ -175,7 +175,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
             } else if (ownerClass instanceof ExternalClassInfo) {
 
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
-                        ownerClass, false);
+                        ownerClass);
                 final List<ParameterInfo> parameters = NameResolver
                         .createParameters(actualParameters);
                 methodInfo.addParameters(parameters);
@@ -196,7 +196,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                 final ClassInfo ownerClass = classInfoManager.getClassInfo(new String[] { "java",
                         "lang", "Object" });
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
-                        ownerClass, false);
+                        ownerClass);
                 final List<ParameterInfo> parameters = NameResolver
                         .createParameters(actualParameters);
                 methodInfo.addParameters(parameters);
@@ -220,7 +220,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                         Settings.getLanguage()).getWrapperClass(
                         (PrimitiveTypeInfo) ownerUsage.getType());
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
-                        wrapperClass, false);
+                        wrapperClass);
                 final List<ParameterInfo> parameters = NameResolver
                         .createParameters(actualParameters);
                 methodInfo.addParameters(parameters);

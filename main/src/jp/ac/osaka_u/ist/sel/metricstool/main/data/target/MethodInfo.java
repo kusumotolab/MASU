@@ -26,9 +26,8 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public MethodInfo(final String methodName, final ClassInfo ownerClass,
-            final boolean constructor, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+    public MethodInfo(final String methodName, final ClassInfo ownerClass, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(ownerClass, fromLine, fromColumn, toLine, toColumn);
 
@@ -42,7 +41,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
 
         this.parameters = new LinkedList<ParameterInfo>();
 
-        this.callers = new TreeSet<MethodInfo>();
+        this.callers = new TreeSet<CallableUnitInfo>();
         this.overridees = new TreeSet<MethodInfo>();
         this.overriders = new TreeSet<MethodInfo>();
     }
@@ -383,11 +382,11 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
     }
 
     /**
-     * このメソッドを呼び出しているメソッドを追加する．プラグインから呼ぶとランタイムエラー．
+     * このメソッドを呼び出しているメソッドまたはコンストラクタを追加する．プラグインから呼ぶとランタイムエラー．
      * 
      * @param caller 追加する呼び出すメソッド
      */
-    public void addCaller(final MethodInfo caller) {
+    public void addCaller(final CallableUnitInfo caller) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == caller) {
@@ -429,11 +428,11 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
     }
 
     /**
-     * このメソッドを呼び出しているメソッドの SortedSet を返す．
+     * このメソッドを呼び出しているメソッドまたはコンストラクタの SortedSet を返す．
      * 
      * @return このメソッドを呼び出しているメソッドの SortedSet
      */
-    public SortedSet<MethodInfo> getCallers() {
+    public SortedSet<CallableUnitInfo> getCallers() {
         return Collections.unmodifiableSortedSet(this.callers);
     }
 
@@ -473,7 +472,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
     /**
      * このメソッドを呼び出しているメソッド一覧を保存するための変数
      */
-    protected final SortedSet<MethodInfo> callers;
+    protected final SortedSet<CallableUnitInfo> callers;
 
     /**
      * このメソッドがオーバーライドしているメソッド一覧を保存するための変数
