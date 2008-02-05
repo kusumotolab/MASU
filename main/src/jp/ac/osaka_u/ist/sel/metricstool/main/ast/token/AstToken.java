@@ -38,7 +38,7 @@ public interface AstToken {
      * トークンが特殊なブロックを表すかどうか返す．
      * @return 特殊なブロックを表すトークンあらtrue
      */
-    public boolean isSpecificBlock();
+    public boolean isBlockName();
     
     /**
      * トークンが組み込み型であるかどうかを返す．
@@ -226,4 +226,72 @@ public interface AstToken {
      * @return void型を表すトークンならtrue
      */
     public boolean isVoidType();
+    
+    /**
+     * トークンがifを表すかどうかを返す
+     * @return ifを表すトークンならtrue
+     */
+    public boolean isIf();
+    
+    /**
+     * トークンがelseを表すかどうかを返す
+     * @return elseを表すトークンならtrue
+     */
+    public boolean isElse();
+    
+    /**
+     * トークンがwhileを表すかどうかを返す
+     * @return whileを表すトークンならtrue
+     */
+    public boolean isWhile();
+    
+    /**
+     * トークンがdoを表すかどうかを返す
+     * @return doを表すトークンならtrue
+     */
+    public boolean isDo();
+    
+    /**
+     * トークンがforを表すかどうかを返す
+     * @return forを表すトークンならtrue
+     */
+    public boolean isFor();
+    
+    /**
+     * トークンがtryを表すかどうかを返す
+     * @return tryを表すトークンならtrue
+     */
+    public boolean isTry();
+    
+    /**
+     * トークンがcatchを表すかどうかを返す
+     * @return catchを表すトークンならtrue
+     */
+    public boolean isCatch();
+    
+    /**
+     * トークンがfinallyを表すかどうかを返す
+     * @return finallyを表すトークンならtrue
+     */
+    public boolean isFinally();
+    
+    /**
+     * トークンがswitchを表すかどうかを返す
+     * @return switchを表すトークンならtrue
+     */
+    public boolean isSwitch();
+    
+    /**
+     * トークンがcaseを表すかどうかを返す
+     * @return caseを表すトークンならtrue
+     */
+    public boolean isCase();
+    
+    /**
+     * トークンがdefaultを表すかどうかを返す
+     * @return defaultを表すトークンならtrue
+     */
+    public boolean isDefault();
+    
+
 }

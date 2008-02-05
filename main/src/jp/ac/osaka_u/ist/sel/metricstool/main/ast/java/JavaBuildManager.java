@@ -5,6 +5,7 @@ import java.util.Stack;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DefaultBuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
@@ -64,8 +65,8 @@ public class JavaBuildManager extends DefaultBuildDataManager{
     }
     
     @Override
-    public UnresolvedMethodInfo endMethodDefinition() {
-        UnresolvedMethodInfo method = super.endMethodDefinition();
+    public UnresolvedCallableUnitInfo endMethodDefinition() {
+        UnresolvedCallableUnitInfo method = super.endMethodDefinition();
         if (isInInterface()){
             method.setPublicVisible(true);
             method.setInheritanceVisible(true);

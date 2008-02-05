@@ -356,6 +356,15 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
     }
 
+    public UnresolvedBlockInfo getPreBlock() {
+        // TODO 構文定義ファイルを書き換えたらここもかわるかも
+        if(this.blockStack.isEmpty()) {
+            return null;
+        } else {
+            return this.blockStack.peek();
+        }
+    }
+    
     public int getAnonymousClassCount(UnresolvedClassInfo classInfo) {
         if (null == classInfo) {
             throw new NullPointerException("classInfo is null.");

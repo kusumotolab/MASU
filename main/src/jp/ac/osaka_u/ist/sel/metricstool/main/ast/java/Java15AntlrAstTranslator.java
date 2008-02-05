@@ -7,6 +7,7 @@ import java.util.Map;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AccessModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstTokenTranslator;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BlockNameToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BuiltinTypeToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ConstantToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.DefinitionToken;
@@ -16,12 +17,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.InstanceToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.MemberTypeModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.SpecificBlockToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.SyntaxToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.VisitControlToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15TokenTypes;
 import antlr.collections.AST;
@@ -361,38 +359,38 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
 //        case Java15TokenTypes.ELIST:
 //        case Java15TokenTypes.SLIST:
         case Java15TokenTypes.LITERAL_if:
-       		result = SpecificBlockToken.IF_BLOCK;
+       		result = BlockNameToken.IF_BLOCK;
         	break;
         case Java15TokenTypes.LITERAL_else:
-        	result = SpecificBlockToken.ELSE_BLOCK;
+        	result = BlockNameToken.ELSE_BLOCK;
         	break;
         case Java15TokenTypes.LITERAL_for:
-        	result = SpecificBlockToken.FOR_BLOCK;
+        	result = BlockNameToken.FOR_BLOCK;
         	break;
         case Java15TokenTypes.LITERAL_try:
-        	result = SpecificBlockToken.TRY_BLOCK;
+        	result = BlockNameToken.TRY_BLOCK;
         	break;
         case Java15TokenTypes.LITERAL_catch:
-        	result = SpecificBlockToken.CATCH_BLOCK;
+        	result = BlockNameToken.CATCH_BLOCK;
         	break;
         case Java15TokenTypes.LITERAL_finally:
-        	result = SpecificBlockToken.FINALLY_BLOCK;
+        	result = BlockNameToken.FINALLY_BLOCK;
         	break;
 //        case Java15TokenTypes.LITERAL_return:
         case Java15TokenTypes.LITERAL_do:
-        	result = SpecificBlockToken.DO_BLOCK;
+        	result = BlockNameToken.DO_BLOCK;
         	break;
         case Java15TokenTypes.LITERAL_while:
-        	result = SpecificBlockToken.WHILE_BLOCK;
+        	result = BlockNameToken.WHILE_BLOCK;
             break;
         case Java15TokenTypes.LITERAL_switch:
-        	result = SpecificBlockToken.SWITCH_BLOCK;
+        	result = BlockNameToken.SWITCH_BLOCK;
         	break;
         case Java15TokenTypes.LITERAL_case:
-        	result = SpecificBlockToken.CASE_ENTRY;
+        	result = BlockNameToken.CASE_ENTRY;
         	break;
         case Java15TokenTypes.LITERAL_default:
-        	result = SpecificBlockToken.DEFAULT_ENTRY;
+        	result = BlockNameToken.DEFAULT_ENTRY;
         	break;
         default :
             //変換できなかったノードは取りあえずその子供に進む

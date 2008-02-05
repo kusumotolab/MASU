@@ -1,14 +1,16 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
@@ -109,9 +111,11 @@ public interface BuildDataManager {
      */
     public UnresolvedClassInfo endClassDefinition();
 
-    public UnresolvedMethodInfo endMethodDefinition();
+    public UnresolvedCallableUnitInfo endMethodDefinition();
 
     public UnresolvedBlockInfo endInnerBlockDefinition();
+    
+    public UnresolvedConditionalClauseInfo endConditionalClause();
     
     public void endScopedBlock();
 
@@ -133,9 +137,9 @@ public interface BuildDataManager {
 
     public String[] getCurrentNameSpace();
 
-    public UnresolvedMethodInfo getCurrentMethod();
+    public UnresolvedCallableUnitInfo getCurrentMethod();
 
-    public UnresolvedVariableInfo getCurrentScopeVariable(String name);
+    public UnresolvedVariableInfo<VariableInfo> getCurrentScopeVariable(String name);
     
     public UnresolvedTypeParameterInfo getTypeParameter(String name);
 
@@ -153,8 +157,12 @@ public interface BuildDataManager {
 
     public void startClassDefinition(UnresolvedClassInfo classInfo);
 
-    public void startMethodDefinition(UnresolvedMethodInfo methodInfo);
+    public void startMethodDefinition(UnresolvedCallableUnitInfo methodInfo);
     
     public void startInnerBlockDefinition(UnresolvedBlockInfo blockInfo);
+    
+    public void startConditionalClause(UnresolvedConditionalClauseInfo clauseInfo);
+    
+    public UnresolvedBlockInfo getPreBlock();
 
 }

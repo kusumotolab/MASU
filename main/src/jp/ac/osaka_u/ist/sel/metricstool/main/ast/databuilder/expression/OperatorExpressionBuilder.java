@@ -5,7 +5,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsageInfo;
@@ -13,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedB
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedNullUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedPrimitiveTypeUsageInfo;
 
 
 public class OperatorExpressionBuilder extends ExpressionBuilder {
@@ -121,10 +121,11 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 
                 //オペレータによってすでに決定している戻り値の型，確定していなければnull
                 final PrimitiveTypeInfo type = token.getSpecifiedResultType();
+                final UnresolvedPrimitiveTypeUsageInfo usage = new UnresolvedPrimitiveTypeUsageInfo(type);
                 
                 if (null != type) {
                     //オペレータによってすでに結果の型が決定している
-                    resultType = type;
+                    resultType = usage;
                 } else if (token.equals(OperatorToken.ARRAY)) {
                     //配列記述子の場合は特別処理
                     UnresolvedEntityUsageInfo ownerType;

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BlockScopeBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ClassBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ConstructorBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.FieldBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.InheritanceBuilder;
@@ -56,6 +57,12 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new JavaIntefaceMarker(this.buildDataManager));
         this.builders.add(new JavaTypeParameterBuilder(this.buildDataManager));
 
+        this.builders.add(new ConstructorBuilder(this.buildDataManager, modifiersInterpriter,
+                new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
+                new NameBuilder(), new MethodParameterBuilder(this.buildDataManager,
+                        new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
+                        new NameBuilder(), modifiersInterpriter)));
+        
         this.builders.add(new MethodBuilder(this.buildDataManager, modifiersInterpriter,
                 new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
                 new NameBuilder(), new MethodParameterBuilder(this.buildDataManager,

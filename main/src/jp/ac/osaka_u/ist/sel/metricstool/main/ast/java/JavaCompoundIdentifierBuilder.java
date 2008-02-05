@@ -9,12 +9,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.Identif
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.InstanceSpecificElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageElement;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFullQualifiedNameClassReferenceInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassReferenceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFullQualifiedNameClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
@@ -59,9 +60,15 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
                 //まず変数名.super()というコンストラクタ呼び出しかどうかを確認する
                 IdentifierElement identifier = (IdentifierElement)left;
                 UnresolvedEntityUsageInfo ownerUsage = identifier.resolveReferencedEntityIfPossible(buildDataManager);
+                UnresolvedVariableInfo<VariableInfo> variable = null;
                 if (null != ownerUsage && ownerUsage instanceof UnresolvedVariableUsageInfo){
+                    UnresolvedVariableUsageInfo variableUsage = (UnresolvedVariableUsageInfo) ownerUsage;
+                    variable = buildDataManager.getCurrentScopeVariable(variableUsage.getUsedVariableName());
+                }
+                
+                if(null != variable) {
                     //変数が見つかった
-                    UnresolvedVariableInfo variable = ((UnresolvedVariableUsageInfo) ownerUsage).getReferencedVariable();
+                    
                     boolean match = false;
                     UnresolvedClassInfo currentClass = buildDataManager.getCurrentClass();
                     UnresolvedClassTypeInfo currentSuperClass = currentClass.getSuperClasses().iterator().next();
