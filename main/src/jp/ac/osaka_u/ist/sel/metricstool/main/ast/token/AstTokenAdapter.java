@@ -226,6 +226,11 @@ public class AstTokenAdapter implements AstToken {
     public boolean isWhile() {
         return false;
     }
+    
+    @Override
+    public boolean isSynchronized() {
+        return false;
+    }
 
     @Override
     public String toString() {

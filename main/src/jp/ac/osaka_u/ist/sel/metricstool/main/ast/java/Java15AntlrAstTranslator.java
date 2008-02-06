@@ -177,7 +177,12 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             result = MemberTypeModifierToken.STATIC;
             break;
         case Java15TokenTypes.LITERAL_synchronized:
-            result = new ModifierToken("synchronized");
+            result = new ModifierToken("synchronized") {
+                @Override
+                public boolean isSynchronized() {
+                    return true;
+                }
+            };
             break;
         case Java15TokenTypes.FINAL:
             result = new ModifierToken("final");

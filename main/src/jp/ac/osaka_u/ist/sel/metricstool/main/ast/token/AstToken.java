@@ -276,6 +276,12 @@ public interface AstToken {
     public boolean isFinally();
     
     /**
+     * トークンがsynchronizedを表すかどうかを返す
+     * @return synchronizedを表すトークンならtrue
+     */
+    public boolean isSynchronized();
+    
+    /**
      * トークンがswitchを表すかどうかを返す
      * @return switchを表すトークンならtrue
      */
@@ -292,6 +298,8 @@ public interface AstToken {
      * @return defaultを表すトークンならtrue
      */
     public boolean isDefault();
+    
+    
     
 
 }

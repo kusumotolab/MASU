@@ -24,6 +24,7 @@ public abstract class InnerBlockBuilder extends CompoundDataBuilder<UnresolvedBl
 		addStateManager(blockStateManager);
 	}
 	
+	@Override
     public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
         StateChangeEventType type = event.getType();
         
