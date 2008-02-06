@@ -11,21 +11,22 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedE
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
-public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visualizable {
+public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visualizable, Modifier {
 
     /**
      * オブジェクトを初期化する
      * 
+     * @param modifiers 修飾子のSet
      * @param ownerClass 所有クラス
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    CallableUnitInfo(final ClassInfo ownerClass, final boolean privateVisible,
-            final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+    CallableUnitInfo(final Set<ModifierInfo> modifiers, final ClassInfo ownerClass,
+            final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(ownerClass, fromLine, fromColumn, toLine, toColumn);
 
@@ -36,6 +37,9 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.unresolvedUsage = new HashSet<UnresolvedEntityUsageInfo>();
+
+        this.modifiers = new HashSet<ModifierInfo>();
+        this.modifiers.addAll(modifiers);
     }
 
     /**
@@ -84,6 +88,15 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      */
     public Set<UnresolvedEntityUsageInfo> getUnresolvedUsages() {
         return Collections.unmodifiableSet(this.unresolvedUsage);
+    }
+
+    /**
+     * 修飾子の Set を返す
+     * 
+     * @return 修飾子の Set
+     */
+    public Set<ModifierInfo> getModifiers() {
+        return Collections.unmodifiableSet(this.modifiers);
     }
 
     /**
@@ -145,6 +158,11 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * どこからでも参照可能かどうか保存するための変数
      */
     private final boolean publicVisible;
+
+    /**
+     * 修飾子を保存するための変数
+     */
+    private final Set<ModifierInfo> modifiers;
 
     /**
      * 型パラメータを保存する変数

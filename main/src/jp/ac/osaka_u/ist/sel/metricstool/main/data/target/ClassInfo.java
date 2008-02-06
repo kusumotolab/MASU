@@ -2,6 +2,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -16,11 +18,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo>, MetricMeasurable {
+public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo>,
+        MetricMeasurable, Modifier {
 
     /**
      * 名前空間名とクラス名からオブジェクトを生成する
      * 
+     * @param modifiers　修飾子のSet
      * @param namespace 名前空間名
      * @param className クラス名
      * @param fromLine 開始行
@@ -28,8 +32,9 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
      * @param toLine 終了行
      * @param toColumn　終了行
      */
-    public ClassInfo(final NamespaceInfo namespace, final String className, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    public ClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
+            final String className, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
@@ -43,6 +48,9 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
         this.className = className;
         this.superClasses = new TreeSet<ClassTypeInfo>();
         this.subClasses = new TreeSet<ClassInfo>();
+
+        this.modifiers = new HashSet<ModifierInfo>();
+        this.modifiers.addAll(modifiers);
     }
 
     /**
@@ -54,8 +62,8 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
      * @param toLine 終了行
      * @param toColumn　終了行
      */
-    public ClassInfo(final String[] fullQualifiedName, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+    public ClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
@@ -74,6 +82,9 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
         this.className = fullQualifiedName[fullQualifiedName.length - 1];
         this.superClasses = new TreeSet<ClassTypeInfo>();
         this.subClasses = new TreeSet<ClassInfo>();
+
+        this.modifiers = new HashSet<ModifierInfo>();
+        this.modifiers.addAll(modifiers);
     }
 
     /**
@@ -123,6 +134,15 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
      */
     public final String getMeasuredUnitName() {
         return this.getFullQualifiedName(Settings.getLanguage().getNamespaceDelimiter());
+    }
+
+    /**
+     * このクラスの修飾子の Set を返す
+     * 
+     * @return このクラスの修飾子の Set
+     */
+    public Set<ModifierInfo> getModifiers() {
+        return Collections.unmodifiableSet(this.modifiers);
     }
 
     /**
@@ -326,6 +346,11 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
      * 名前空間名を保存するための変数
      */
     private final NamespaceInfo namespace;
+
+    /**
+     * 修飾子を保存する変数
+     */
+    private final Set<ModifierInfo> modifiers;
 
     /**
      * このクラスが継承しているクラス一覧を保存するための変数． 直接の親クラスのみを保有するが，多重継承を考えて Set にしている．

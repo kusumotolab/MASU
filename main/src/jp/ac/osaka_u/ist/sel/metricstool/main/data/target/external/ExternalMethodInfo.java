@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external;
 
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -10,6 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 
 
@@ -28,7 +30,8 @@ public final class ExternalMethodInfo extends MethodInfo {
      */
     public ExternalMethodInfo(final String methodName, final ClassInfo ownerClass) {
 
-        super(methodName, ownerClass, false, true, true, true, 0, 0, 0, 0);
+        super(new HashSet<ModifierInfo>(), methodName, ownerClass, false, true, true, true, 0, 0,
+                0, 0);
 
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
@@ -106,7 +109,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ExternalConstructorInfo では利用できない
+     * ExternalMethodInfo では利用できない
      */
     @Override
     public final boolean isInheritanceVisible() {
@@ -114,7 +117,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ExternalConstructorInfo では利用できない
+     * ExternalMethodInfo では利用できない
      */
     @Override
     public final boolean isNamespaceVisible() {
@@ -122,7 +125,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ExternalConstructorInfo では利用できない
+     * ExternalMethodInfo では利用できない
      */
     @Override
     public final boolean isPrivateVisible() {
@@ -130,10 +133,18 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ExternalConstructorInfo では利用できない
+     * ExternalMethodInfo では利用できない
      */
     @Override
     public final boolean isPublicVisible() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalMethodInfo では利用できない
+     */
+    @Override
+    public Set<ModifierInfo> getModifiers() {
         throw new CannotUseException();
     }
 }

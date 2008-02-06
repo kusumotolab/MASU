@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -55,26 +54,14 @@ public final class TargetMethodInfo extends MethodInfo implements Member {
             final boolean publicVisible, final boolean instance, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
-        super(name, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
+        super(modifiers, name, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
                 publicVisible, fromLine, fromColumn, toLine, toColumn);
 
         if (null == modifiers) {
             throw new NullPointerException();
         }
 
-        this.modifiers = new HashSet<ModifierInfo>();
-        this.modifiers.addAll(modifiers);
-
         this.instance = instance;
-    }
-
-    /**
-     * 修飾子の Set を返す
-     * 
-     * @return 修飾子の Set
-     */
-    public Set<ModifierInfo> getModifiers() {
-        return Collections.unmodifiableSet(this.modifiers);
     }
 
     /**
@@ -127,11 +114,6 @@ public final class TargetMethodInfo extends MethodInfo implements Member {
     public boolean isStaticMember() {
         return !this.instance;
     }
-
-    /**
-     * 修飾子を保存するための変数
-     */
-    private final Set<ModifierInfo> modifiers;
 
     /**
      * インスタンスメンバーかどうかを保存するための変数

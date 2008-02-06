@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -20,19 +21,21 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
     /**
      * メソッドオブジェクトを初期化する
      * 
+     * @param modifiers 修飾子のSet
      * @param methodName メソッド名
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public MethodInfo(final String methodName, final ClassInfo ownerClass,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    public MethodInfo(final Set<ModifierInfo> modifiers, final String methodName,
+            final ClassInfo ownerClass, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
-        super(ownerClass, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
-                fromLine, fromColumn, toLine, toColumn);
+        super(modifiers, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
+                publicVisible, fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == methodName) || (null == ownerClass)) {

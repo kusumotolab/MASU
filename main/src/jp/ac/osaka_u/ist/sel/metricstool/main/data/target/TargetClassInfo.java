@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -54,20 +53,17 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
             final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(namespace, className, fromLine, fromColumn, toLine, toColumn);
+        super(modifiers, namespace, className, fromLine, fromColumn, toLine, toColumn);
 
         if (null == modifiers) {
             throw new NullPointerException();
         }
 
-        this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedConstructors = new TreeSet<TargetConstructorInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
-
-        this.modifiers.addAll(modifiers);
 
         this.privateVisible = privateVisible;
         this.namespaceVisible = namespaceVisible;
@@ -98,20 +94,17 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
             final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(fullQualifiedName, fromLine, fromColumn, toLine, toColumn);
+        super(modifiers, fullQualifiedName, fromLine, fromColumn, toLine, toColumn);
 
         if (null == modifiers) {
             throw new NullPointerException();
         }
 
-        this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedConstructors = new TreeSet<TargetConstructorInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
-
-        this.modifiers.addAll(modifiers);
 
         this.privateVisible = privateVisible;
         this.namespaceVisible = namespaceVisible;
@@ -134,15 +127,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         }
 
         this.innerClasses.add(innerClass);
-    }
-
-    /**
-     * このクラスの修飾子の Set を返す
-     * 
-     * @return このクラスの修飾子の Set
-     */
-    public final Set<ModifierInfo> getModifiers() {
-        return Collections.unmodifiableSet(this.modifiers);
     }
 
     /**
@@ -303,11 +287,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
     public final boolean isStaticMember() {
         return !this.instance;
     }
-
-    /**
-     * 修飾子を保存する変数
-     */
-    private final Set<ModifierInfo> modifiers;
 
     /**
      * 型パラメータを保存する変数

@@ -38,7 +38,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInfo> implements
-        VisualizableSetting, MemberSetting {
+        VisualizableSetting, MemberSetting, ModifierSetting {
 
     /**
      * 引数なしコンストラクタ

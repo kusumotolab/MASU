@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -12,16 +13,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 public abstract class ConstructorInfo extends CallableUnitInfo {
 
-    public ConstructorInfo(final ClassInfo ownerClass, final boolean privateVisible,
-            final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+    public ConstructorInfo(final Set<ModifierInfo> modifiers, final ClassInfo ownerClass,
+            final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerClass, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
-                fromLine, fromColumn, toLine, toColumn);
+        super(modifiers, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
+                publicVisible, fromLine, fromColumn, toLine, toColumn);
 
         this.parameters = new LinkedList<ParameterInfo>();
-
     }
 
     /**

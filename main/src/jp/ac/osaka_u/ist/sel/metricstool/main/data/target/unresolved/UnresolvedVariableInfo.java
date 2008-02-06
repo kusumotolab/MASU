@@ -22,7 +22,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public abstract class UnresolvedVariableInfo<T extends VariableInfo> extends UnresolvedUnitInfo<T> {
+public abstract class UnresolvedVariableInfo<T extends VariableInfo> extends UnresolvedUnitInfo<T>
+        implements ModifierSetting {
 
     /**
      * ïœêîñºÇï‘Ç∑
@@ -84,7 +85,8 @@ public abstract class UnresolvedVariableInfo<T extends VariableInfo> extends Unr
      * 
      * @param modifier í«â¡Ç∑ÇÈèCè¸éq
      */
-    public final void addModifiar(final ModifierInfo modifier) {
+    @Override
+    public final void addModifier(final ModifierInfo modifier) {
 
         if (null == modifier) {
             throw new NullPointerException();

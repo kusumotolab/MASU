@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public abstract class VariableInfo extends UnitInfo implements Comparable<VariableInfo> {
+public abstract class VariableInfo extends UnitInfo implements Comparable<VariableInfo>, Modifier {
 
     /**
      * 変数の順序を定義するメソッド．変数名（String）に従う．
@@ -42,7 +42,7 @@ public abstract class VariableInfo extends UnitInfo implements Comparable<Variab
      * 
      * @return 修飾子の Set
      */
-    public final Set<ModifierInfo> getModifiers() {
+    public Set<ModifierInfo> getModifiers() {
         return Collections.unmodifiableSet(this.modifiers);
     }
 
