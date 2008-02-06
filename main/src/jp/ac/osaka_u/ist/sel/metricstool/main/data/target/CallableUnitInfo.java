@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedE
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
-public abstract class CallableUnitInfo extends LocalSpaceInfo {
+public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visualizable {
 
     /**
      * オブジェクトを初期化する
@@ -22,10 +22,17 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    CallableUnitInfo(final ClassInfo ownerClass, final int fromLine, final int fromColumn,
+    CallableUnitInfo(final ClassInfo ownerClass, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 
         super(ownerClass, fromLine, fromColumn, toLine, toColumn);
+
+        this.privateVisible = privateVisible;
+        this.namespaceVisible = namespaceVisible;
+        this.inheritanceVisible = inheritanceVisible;
+        this.publicVisible = publicVisible;
 
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.unresolvedUsage = new HashSet<UnresolvedEntityUsageInfo>();
@@ -78,6 +85,66 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo {
     public Set<UnresolvedEntityUsageInfo> getUnresolvedUsages() {
         return Collections.unmodifiableSet(this.unresolvedUsage);
     }
+
+    /**
+     * 子クラスから参照可能かどうかを返す
+     * 
+     * @return 子クラスから参照可能な場合は true, そうでない場合は false
+     */
+    @Override
+    public boolean isInheritanceVisible() {
+        return this.inheritanceVisible;
+    }
+
+    /**
+     * 同じ名前空間から参照可能かどうかを返す
+     * 
+     * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
+     */
+    @Override
+    public boolean isNamespaceVisible() {
+        return this.namespaceVisible;
+    }
+
+    /**
+     * クラス内からのみ参照可能かどうかを返す
+     * 
+     * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
+     */
+    @Override
+    public boolean isPrivateVisible() {
+        return this.privateVisible;
+    }
+
+    /**
+     * どこからでも参照可能かどうかを返す
+     * 
+     * @return どこからでも参照可能な場合は true, そうでない場合は false
+     */
+    @Override
+    public boolean isPublicVisible() {
+        return this.publicVisible;
+    }
+
+    /**
+     * クラス内からのみ参照可能かどうか保存するための変数
+     */
+    private final boolean privateVisible;
+
+    /**
+     * 同じ名前空間から参照可能かどうか保存するための変数
+     */
+    private final boolean namespaceVisible;
+
+    /**
+     * 子クラスから参照可能かどうか保存するための変数
+     */
+    private final boolean inheritanceVisible;
+
+    /**
+     * どこからでも参照可能かどうか保存するための変数
+     */
+    private final boolean publicVisible;
 
     /**
      * 型パラメータを保存する変数

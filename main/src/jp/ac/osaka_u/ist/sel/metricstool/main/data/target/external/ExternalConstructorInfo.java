@@ -5,11 +5,11 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 
 
@@ -26,7 +26,7 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
      * @param ownerClass このメソッドを定義しているクラス
      */
     public ExternalConstructorInfo(final ClassInfo ownerClass) {
-        super(ownerClass, 0, 0, 0, 0);
+        super(ownerClass, false, true, true, true, 0, 0, 0, 0);
     }
 
     /**
@@ -98,6 +98,38 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
      */
     @Override
     public int getToColumn() {
+        throw new CannotUseException();
+    }
+    
+    /**
+     * ExternalConstructorInfo では利用できない
+     */
+    @Override
+    public final boolean isInheritanceVisible() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalConstructorInfo では利用できない
+     */
+    @Override
+    public final boolean isNamespaceVisible() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalConstructorInfo では利用できない
+     */
+    @Override
+    public final boolean isPrivateVisible() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalConstructorInfo では利用できない
+     */
+    @Override
+    public final boolean isPublicVisible() {
         throw new CannotUseException();
     }
 }

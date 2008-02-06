@@ -28,7 +28,7 @@ public final class ExternalMethodInfo extends MethodInfo {
      */
     public ExternalMethodInfo(final String methodName, final ClassInfo ownerClass) {
 
-        super(methodName, ownerClass, 0, 0, 0, 0);
+        super(methodName, ownerClass, false, true, true, true, 0, 0, 0, 0);
 
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
@@ -102,6 +102,38 @@ public final class ExternalMethodInfo extends MethodInfo {
      */
     @Override
     public int getToColumn() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalConstructorInfo では利用できない
+     */
+    @Override
+    public final boolean isInheritanceVisible() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalConstructorInfo では利用できない
+     */
+    @Override
+    public final boolean isNamespaceVisible() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalConstructorInfo では利用できない
+     */
+    @Override
+    public final boolean isPrivateVisible() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalConstructorInfo では利用できない
+     */
+    @Override
+    public final boolean isPublicVisible() {
         throw new CannotUseException();
     }
 }

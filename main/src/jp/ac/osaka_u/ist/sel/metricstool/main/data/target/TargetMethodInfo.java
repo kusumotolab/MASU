@@ -30,7 +30,7 @@ import java.util.TreeSet;
  * @author higo
  * 
  */
-public final class TargetMethodInfo extends MethodInfo implements Visualizable, Member {
+public final class TargetMethodInfo extends MethodInfo implements Member {
 
     /**
      * メソッドオブジェクトを初期化する．
@@ -55,20 +55,15 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
             final boolean publicVisible, final boolean instance, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
-        super(name, ownerClass, fromLine, fromColumn, toLine, toColumn);
+        super(name, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
+                publicVisible, fromLine, fromColumn, toLine, toColumn);
 
         if (null == modifiers) {
             throw new NullPointerException();
         }
 
         this.modifiers = new HashSet<ModifierInfo>();
-
         this.modifiers.addAll(modifiers);
-
-        this.privateVisible = privateVisible;
-        this.namespaceVisible = namespaceVisible;
-        this.inheritanceVisible = inheritanceVisible;
-        this.publicVisible = publicVisible;
 
         this.instance = instance;
     }
@@ -116,42 +111,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
     }
 
     /**
-     * 子クラスから参照可能かどうかを返す
-     * 
-     * @return 子クラスから参照可能な場合は true, そうでない場合は false
-     */
-    public boolean isInheritanceVisible() {
-        return this.inheritanceVisible;
-    }
-
-    /**
-     * 同じ名前空間から参照可能かどうかを返す
-     * 
-     * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
-     */
-    public boolean isNamespaceVisible() {
-        return this.namespaceVisible;
-    }
-
-    /**
-     * クラス内からのみ参照可能かどうかを返す
-     * 
-     * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
-     */
-    public boolean isPrivateVisible() {
-        return this.privateVisible;
-    }
-
-    /**
-     * どこからでも参照可能かどうかを返す
-     * 
-     * @return どこからでも参照可能な場合は true, そうでない場合は false
-     */
-    public boolean isPublicVisible() {
-        return this.publicVisible;
-    }
-
-    /**
      * インスタンスメンバーかどうかを返す
      * 
      * @return インスタンスメンバーの場合 true，そうでない場合 false
@@ -173,26 +132,6 @@ public final class TargetMethodInfo extends MethodInfo implements Visualizable, 
      * 修飾子を保存するための変数
      */
     private final Set<ModifierInfo> modifiers;
-
-    /**
-     * クラス内からのみ参照可能かどうか保存するための変数
-     */
-    private final boolean privateVisible;
-
-    /**
-     * 同じ名前空間から参照可能かどうか保存するための変数
-     */
-    private final boolean namespaceVisible;
-
-    /**
-     * 子クラスから参照可能かどうか保存するための変数
-     */
-    private final boolean inheritanceVisible;
-
-    /**
-     * どこからでも参照可能かどうか保存するための変数
-     */
-    private final boolean publicVisible;
 
     /**
      * インスタンスメンバーかどうかを保存するための変数

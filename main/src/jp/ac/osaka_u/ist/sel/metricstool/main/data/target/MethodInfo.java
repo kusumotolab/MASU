@@ -26,10 +26,13 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
      * @param toLine I—¹s
      * @param toColumn I—¹—ñ
      */
-    public MethodInfo(final String methodName, final ClassInfo ownerClass, final int fromLine,
+    public MethodInfo(final String methodName, final ClassInfo ownerClass,
+            final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerClass, fromLine, fromColumn, toLine, toColumn);
+        super(ownerClass, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
+                fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == methodName) || (null == ownerClass)) {

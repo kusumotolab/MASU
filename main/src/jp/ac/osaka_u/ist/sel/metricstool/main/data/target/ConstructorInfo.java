@@ -12,10 +12,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 public abstract class ConstructorInfo extends CallableUnitInfo {
 
-    public ConstructorInfo(final ClassInfo ownerClass, final int fromLine, final int fromColumn,
+    public ConstructorInfo(final ClassInfo ownerClass, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 
-        super(ownerClass, fromLine, fromColumn, toLine, toColumn);
+        super(ownerClass, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
+                fromLine, fromColumn, toLine, toColumn);
 
         this.parameters = new LinkedList<ParameterInfo>();
 
