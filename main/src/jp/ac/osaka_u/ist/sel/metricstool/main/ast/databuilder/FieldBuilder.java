@@ -35,7 +35,7 @@ public class FieldBuilder extends VariableBuilder<UnresolvedFieldInfo>{
         if (null != classInfo){
             UnresolvedFieldInfo field = new UnresolvedFieldInfo(varName,type,classInfo);
             for(ModifierInfo modifier : modifiers){
-                field.addModifiar(modifier);
+                field.addModifier(modifier);
             }
             
             if (null != interpriter){

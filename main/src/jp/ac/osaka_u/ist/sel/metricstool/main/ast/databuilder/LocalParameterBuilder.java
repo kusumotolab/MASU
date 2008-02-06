@@ -34,7 +34,7 @@ public class LocalParameterBuilder extends VariableBuilder<UnresolvedVariableInf
         
         UnresolvedLocalVariableInfo local = new UnresolvedLocalVariableInfo(varName,type);
         for(ModifierInfo modifier : modifiers){
-            local.addModifiar(modifier);
+            local.addModifier(modifier);
         }
         
         if (null != interpriter){

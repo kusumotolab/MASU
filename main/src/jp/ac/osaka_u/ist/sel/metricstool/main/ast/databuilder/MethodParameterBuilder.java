@@ -33,7 +33,7 @@ public class MethodParameterBuilder extends VariableBuilder<UnresolvedParameterI
         
         UnresolvedParameterInfo parameter = new UnresolvedParameterInfo(varName,type);
         for(ModifierInfo modifier : modifiers){
-            parameter.addModifiar(modifier);
+            parameter.addModifier(modifier);
         }
         
         if (null != interpriter){

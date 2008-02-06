@@ -28,6 +28,16 @@ public final class UnresolvedPrimitiveTypeUsageInfo extends UnresolvedEntityUsag
      */
     public UnresolvedPrimitiveTypeUsageInfo(final PrimitiveTypeInfo type, final String literal) {
         this.type = type;
+        this.literal = literal;
+    }
+    
+    /**
+     * Œ^‚ğ—^‚¦‚Ä‰Šú‰»
+     * 
+     * @param type g—p‚³‚ê‚Ä‚¢‚éŒ^
+     */
+    public UnresolvedPrimitiveTypeUsageInfo(final PrimitiveTypeInfo type) {
+        this.type = type;
         this.literal = type.getTypeName();
     }
 

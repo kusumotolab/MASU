@@ -1,15 +1,15 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DefaultBuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 
 /**
  * @author kou-tang, t-miyake
@@ -106,8 +106,8 @@ public class JavaBuildManager extends DefaultBuildDataManager{
     }
     
     @Override
-    public AvailableNamespaceInfoSet getAvailableNameSpaceSet() {
-        AvailableNamespaceInfoSet result = super.getAvailableNameSpaceSet();
+    public Set<AvailableNamespaceInfo> getAvailableNameSpaceSet() {
+        Set<AvailableNamespaceInfo> result = super.getAvailableNameSpaceSet();
         result.add(JAVA_LANG);
         return result;
     }
@@ -115,7 +115,7 @@ public class JavaBuildManager extends DefaultBuildDataManager{
     private static final AvailableNamespaceInfo JAVA_LANG = new AvailableNamespaceInfo(new String[]{"java","lang"},true);
     
     private static final UnresolvedClassTypeInfo OBJECT = new UnresolvedClassTypeInfo(
-            new AvailableNamespaceInfoSet(),new String[]{"java","lang","Object"});
+            new HashSet<AvailableNamespaceInfo>(),new String[]{"java","lang","Object"});
     
     private static enum CLASS_OR_INTERFACE{CLASS,INTERFACE}
     

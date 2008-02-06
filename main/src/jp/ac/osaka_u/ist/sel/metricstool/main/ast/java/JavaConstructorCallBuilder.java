@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ConstructorCallBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElement;
@@ -10,11 +13,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageEl
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -61,7 +63,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
     protected void buildInnerConstructorCall(UnresolvedClassInfo currentClass) {
         ExpressionElement[] elements = getAvailableElements();
         
-        AvailableNamespaceInfoSet namespaces = new AvailableNamespaceInfoSet();
+        Set<AvailableNamespaceInfo> namespaces = new HashSet<AvailableNamespaceInfo>();
         AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(currentClass.getNamespace(), false);
         namespaces.add(namespace);
         UnresolvedClassTypeInfo referenceType = new UnresolvedClassTypeInfo(namespaces, currentClass.getFullQualifiedName());

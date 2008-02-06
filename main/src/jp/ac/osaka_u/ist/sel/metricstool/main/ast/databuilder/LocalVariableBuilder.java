@@ -32,7 +32,7 @@ public class LocalVariableBuilder extends VariableBuilder<UnresolvedLocalVariabl
         
         UnresolvedLocalVariableInfo var =  new UnresolvedLocalVariableInfo(varName,type);
         for(ModifierInfo modifier : modifiers){
-            var.addModifiar(modifier);
+            var.addModifier(modifier);
         }
         
         if (null != interpriter){

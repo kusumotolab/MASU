@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
+import java.util.HashSet;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.CompoundIdentifierBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElement;
@@ -10,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.Instanc
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
@@ -122,7 +124,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder{
     }
     
     private final static UnresolvedClassTypeInfo JAVA_LANG_CLASS =
-        new UnresolvedClassTypeInfo(new AvailableNamespaceInfoSet(),
+        new UnresolvedClassTypeInfo(new HashSet<AvailableNamespaceInfo>(),
                 new String[]{"java","lang","Class"});
     
     private final BuildDataManager buildDataManager;

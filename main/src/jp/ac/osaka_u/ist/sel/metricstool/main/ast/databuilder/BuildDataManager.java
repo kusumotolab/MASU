@@ -1,8 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 
+import java.util.Set;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
@@ -123,11 +125,11 @@ public interface BuildDataManager {
 
     public void enterMethodBlock();
 
-    public AvailableNamespaceInfoSet getAvailableNameSpaceSet();
+    public Set<AvailableNamespaceInfo> getAvailableNameSpaceSet();
 
-    public AvailableNamespaceInfoSet getAvailableAliasSet();
+    public Set<AvailableNamespaceInfo> getAvailableAliasSet();
 
-    public AvailableNamespaceInfoSet getAllAvaliableNames();
+    public Set<AvailableNamespaceInfo> getAllAvaliableNames();
 
     public String[] getAliasedName(String name);
 

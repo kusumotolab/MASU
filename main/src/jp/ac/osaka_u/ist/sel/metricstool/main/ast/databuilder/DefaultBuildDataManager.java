@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.Stack;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfoSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
@@ -274,13 +273,13 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     }
 
-    public AvailableNamespaceInfoSet getAllAvaliableNames() {
+    public Set<AvailableNamespaceInfo> getAllAvaliableNames() {
         //      nullじゃなければ変化してないのでキャッシュ使いまわし
         if (null != allAvaliableNameSetCache) {
             return allAvaliableNameSetCache;
         }
 
-        AvailableNamespaceInfoSet resultSet = getAvailableAliasSet();
+        Set<AvailableNamespaceInfo> resultSet = getAvailableAliasSet();
         for (AvailableNamespaceInfo info : getAvailableNameSpaceSet()) {
             resultSet.add(info);
         }
@@ -290,13 +289,13 @@ public class DefaultBuildDataManager implements BuildDataManager {
         return resultSet;
     }
 
-    public AvailableNamespaceInfoSet getAvailableNameSpaceSet() {
+    public Set<AvailableNamespaceInfo> getAvailableNameSpaceSet() {
         //nullじゃなければ変化してないのでキャッシュ使いまわし
         if (null != availableNameSpaceSetCache) {
             return availableNameSpaceSetCache;
         }
 
-        final AvailableNamespaceInfoSet result = new AvailableNamespaceInfoSet();
+        final Set<AvailableNamespaceInfo> result = new HashSet<AvailableNamespaceInfo>();
         //まず先に今の名前空間を登録
         if (null == currentNameSpaceCache) {
             currentNameSpaceCache = new AvailableNamespaceInfo(getCurrentNameSpace(), true);
@@ -306,7 +305,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
             final BlockScope scope = this.scopeStack.get(i);
-            final AvailableNamespaceInfoSet scopeLocalNameSpaceSet = scope.getAvailableNameSpaces();
+            final Set<AvailableNamespaceInfo> scopeLocalNameSpaceSet = scope.getAvailableNameSpaces();
             for (final AvailableNamespaceInfo info : scopeLocalNameSpaceSet) {
                 result.add(info);
             }
@@ -316,17 +315,17 @@ public class DefaultBuildDataManager implements BuildDataManager {
         return result;
     }
 
-    public AvailableNamespaceInfoSet getAvailableAliasSet() {
+    public Set<AvailableNamespaceInfo> getAvailableAliasSet() {
         //nullじゃなければ変化してないのでキャッシュ使いまわし
         if (null != aliaseNameSetCache) {
             return aliaseNameSetCache;
         }
 
-        final AvailableNamespaceInfoSet result = new AvailableNamespaceInfoSet();
+        final Set<AvailableNamespaceInfo> result = new HashSet<AvailableNamespaceInfo>();
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
             final BlockScope scope = this.scopeStack.get(i);
-            final AvailableNamespaceInfoSet scopeLocalNameSpaceSet = scope.getAvailableAliases();
+            final Set<AvailableNamespaceInfo> scopeLocalNameSpaceSet = scope.getAvailableAliases();
             for (final AvailableNamespaceInfo info : scopeLocalNameSpaceSet) {
                 result.add(info);
             }
@@ -640,7 +639,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         //        private final Map<String, String[]> nameAliases = new LinkedHashMap<String, String[]>();
         private final Map<String, AvailableNamespaceInfo> nameAliases = new LinkedHashMap<String, AvailableNamespaceInfo>();
 
-        private final AvailableNamespaceInfoSet availableNameSpaces = new AvailableNamespaceInfoSet();
+        private final Set<AvailableNamespaceInfo> availableNameSpaces = new HashSet<AvailableNamespaceInfo>();
 
         public void addVariable(final UnresolvedVariableInfo variable) {
             this.variables.put(variable.getName(), variable);
@@ -666,12 +665,12 @@ public class DefaultBuildDataManager implements BuildDataManager {
             this.availableNameSpaces.add(info);
         }
 
-        public AvailableNamespaceInfoSet getAvailableNameSpaces() {
+        public Set<AvailableNamespaceInfo> getAvailableNameSpaces() {
             return this.availableNameSpaces;
         }
 
-        public AvailableNamespaceInfoSet getAvailableAliases() {
-            AvailableNamespaceInfoSet resultSet = new AvailableNamespaceInfoSet();
+        public Set<AvailableNamespaceInfo> getAvailableAliases() {
+            Set<AvailableNamespaceInfo> resultSet = new HashSet<AvailableNamespaceInfo>();
             for (AvailableNamespaceInfo info : this.nameAliases.values()) {
                 resultSet.add(info);
             }
@@ -739,11 +738,11 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     private static final String[] EMPTY_NAME = new String[0];
 
-    private AvailableNamespaceInfoSet aliaseNameSetCache = null;
+    private Set<AvailableNamespaceInfo> aliaseNameSetCache = null;
 
-    private AvailableNamespaceInfoSet availableNameSpaceSetCache = null;
+    private Set<AvailableNamespaceInfo> availableNameSpaceSetCache = null;
 
-    private AvailableNamespaceInfoSet allAvaliableNameSetCache = null;
+    private Set<AvailableNamespaceInfo> allAvaliableNameSetCache = null;
 
     private AvailableNamespaceInfo currentNameSpaceCache = null;
 
