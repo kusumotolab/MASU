@@ -558,19 +558,6 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
     }
 
     public final static UnresolvedClassReferenceInfo createClassReference(
-            UnresolvedClassInfo referencedClassInfo) {
-
-        AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(referencedClassInfo
-                .getNamespace(), false);
-        Set<AvailableNamespaceInfo> namespaces = new HashSet<AvailableNamespaceInfo>();
-        namespaces.add(namespace);
-
-        String[] className = new String[] { referencedClassInfo.getClassName() };
-
-        return new UnresolvedClassReferenceInfo(namespaces, className);
-    }
-
-    public final static UnresolvedClassReferenceInfo createClassReference(
             UnresolvedClassTypeInfo referenceType) {
         return new UnresolvedClassReferenceInfo(referenceType.getAvailableNamespaces(),
                 referenceType.getReferenceName());

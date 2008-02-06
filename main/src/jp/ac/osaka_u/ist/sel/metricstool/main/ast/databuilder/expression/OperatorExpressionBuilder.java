@@ -9,10 +9,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBinominalOperationInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCastUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedNullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedPrimitiveTypeUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
 public class OperatorExpressionBuilder extends ExpressionBuilder {
@@ -135,6 +138,9 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                         ownerType = elements[0].getUsage();
                     }
                     resultType = new UnresolvedArrayElementUsageInfo(ownerType);
+                } else if(token.equals(OperatorToken.CAST) && elements[0] instanceof TypeElement) {
+                    UnresolvedTypeInfo castedType = ((TypeElement) elements[0]).getType();
+                    resultType = new UnresolvedCastUsageInfo(castedType);
                 } else {
                     //Œ^Œˆ’è‚ÉŠÖ˜A‚·‚é€‚ğ¶‚©‚ç‡”Ô‚É‹™‚Á‚Ä‚¢‚Á‚ÄÅ‰‚ÉŒˆ’è‚Å‚«‚½“z‚ÉŸè‚ÉŒˆ‚ß‚é
                     for (int i = 0; i < typeSpecifiedTermIndexes.length; i++) {
@@ -145,6 +151,9 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     }
                 }
 
+                if(null == resultType){
+                    System.out.println();;
+                }
                 assert (null != resultType) : "Illegal state: operation resultType was not decided.";
                 
                 this.pushElement(UsageElement.getInstance(resultType));
