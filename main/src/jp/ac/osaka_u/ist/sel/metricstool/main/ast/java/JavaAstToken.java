@@ -61,6 +61,11 @@ public class JavaAstToken extends AstTokenAdapter {
         public boolean isClassDefinition() {
             return true;
         }
+        
+        @Override
+        public boolean isBlockDefinition() {
+            return true;
+        }
     };
 
     /**

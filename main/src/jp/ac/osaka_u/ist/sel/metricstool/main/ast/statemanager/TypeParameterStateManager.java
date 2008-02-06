@@ -80,10 +80,11 @@ public class TypeParameterStateManager extends StackedAstVisitStateManager<TypeP
     /**
      * 型パラメータ定義部に関連するノードかどうかを判定する
      * 
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#isStateChangeTriggerToken(jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#isStateChangeTriggerEvent(jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken)
      */
     @Override
-    protected boolean isStateChangeTriggerToken(final AstToken token) {
+    protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
+        AstToken token = event.getToken();
         return token.isTypeParameterDefinition() || token.isTypeLowerBoundsDescription()
             || token.isTypeUpperBoundsDescription();
     }

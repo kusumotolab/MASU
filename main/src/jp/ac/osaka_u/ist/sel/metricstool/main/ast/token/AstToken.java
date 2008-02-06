@@ -35,6 +35,12 @@ public interface AstToken {
     public boolean isBlock();
     
     /**
+     * トークンがブロックの宣言を表すかどうかを返す．
+     * @return ブロックの宣言を表すトークンなら
+     */
+    public boolean isBlockDefinition();
+    
+    /**
      * トークンが特殊なブロックを表すかどうか返す．
      * @return 特殊なブロックを表すトークンあらtrue
      */

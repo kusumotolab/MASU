@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
@@ -42,14 +42,14 @@ public class ModifiersDefinitionStateManager extends EnterExitStateManager {
     }
 
     /**
-     * 引数で与えられたトークンが修飾子記述部を表すかどうかを返す.
+     * 引数で与えられたイベントが修飾子記述部を表すかどうかを返す.
      * 判定にはtoken.isModifiersDefinition()メソッドを用いる．
      * 
-     * @param token 修飾子記述部を表すかどうかを調べるトークン
+     * @param event 修飾子記述部を表すかどうかを調べるイベント
      * @return 修飾子記述部を表す場合はtrue
      */
     @Override
-    protected boolean isStateChangeTriggerToken(final AstToken token) {
-        return token.isModifiersDefinition();
+    protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
+        return event.getToken().isModifiersDefinition();
     }
 }

@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
+
 /**
  * {@link AstToken}のアダプタクラス.
  * AstTokenで宣言されている全てのメソッドについて，falseを返すだけのデフォルト実装を持つ.
@@ -43,7 +44,10 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
     
-    @Override
+    public boolean isBlockDefinition() {
+        return false;
+    }
+    
 	public boolean isBlockName() {
 		return false;
 	}

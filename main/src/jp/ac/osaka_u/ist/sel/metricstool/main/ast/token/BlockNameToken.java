@@ -12,6 +12,11 @@ public abstract class BlockNameToken extends AstTokenAdapter {
 		return true;
 	}
 	
+	@Override
+    public boolean isBlockDefinition() {
+        return true;
+    }
+	
 	public static BlockNameToken IF_BLOCK = new BlockNameToken("if"){
 
 		@Override

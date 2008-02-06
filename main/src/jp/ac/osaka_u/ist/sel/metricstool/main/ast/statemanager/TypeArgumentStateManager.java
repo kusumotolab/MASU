@@ -71,13 +71,14 @@ public class TypeArgumentStateManager extends
     }
 
     /**
-     * 引数tokenが状態遷移の引き金になるトークンかどうかを返す．
-     * @param 状態遷移の引き金になるかどうかを調べたいトークン
+     * 引数eventが状態遷移の引き金になるイベントかどうかを返す．
+     * @param event 状態遷移の引き金になるかどうかを調べたいイベント
      * @return 状態遷移の引き金になるトークンならtrue
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#isStateChangeTriggerToken(jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#isStateChangeTriggerEvent(jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken)
      */
     @Override
-    protected boolean isStateChangeTriggerToken(final AstToken token) {
+    protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
+        AstToken token = event.getToken();
         return token.isTypeArgument() || token.isTypeArguments() || token.isTypeWildcard();
     }
 

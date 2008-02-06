@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
@@ -43,15 +43,15 @@ public class BlockStateManager extends EnterExitStateManager {
     }
 
     /**
-     * 引数で与えられたトークンがブロックを表すかどうかを返す.
+     * 引数で与えられたイベントがブロックを表すかどうかを返す.
      * token.isBlock()がtrueの場合はtrue,falseの場合はfalseを返す．
      * 
-     * @param token ブロックを表すかどうかを調べるトークン
+     * @param event ブロックを表すかどうかを調べるイベント
      * @return token.isBlock()がtrueの場合はtrue,falseの場合はfalse
      */
     @Override
-    protected boolean isStateChangeTriggerToken(final AstToken token) {
-        return token.isBlock();
+    protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
+        return event.getToken().isBlock();
     }
 
 }

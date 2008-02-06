@@ -20,7 +20,7 @@ public class FieldStateManager extends VariableDefinitionStateManager {
      * @return tokenがフィールド定義部ならtrue
      */
     @Override
-    protected boolean isDefinitionToken(AstToken token) {
+    protected boolean isDefinitionToken(final AstToken token) {
         return token.isFieldDefinition();
     }
 

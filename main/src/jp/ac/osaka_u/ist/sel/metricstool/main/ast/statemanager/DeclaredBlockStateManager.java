@@ -22,7 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
  * BLOCK --> ... --（ブロックから出る）--> DEFINITION --（定義ノードから出る）--> BLOCK --（ブロックから出る）--> DEFINITION --（定義ノードから出る）--> INIT
  * <p>
  * このクラスのサブクラスは5つの抽象メソッド {@link #getBlockEnterEventType()}, {@link #getBlockExitEventType()}
- * {@link #getDefinitionEnterEventType()}, {@link #getDefinitionExitEventType()}, {@link #isDefinitionToken(AstToken)}
+ * {@link #getDefinitionEnterEventType()}, {@link #getDefinitionExitEventType()}, {@link #isDefinitionEvent(AstToken)}
  * を実装しなければならない．
  * また必要に応じて， {@link #isBlockToken(AstToken)}を任意にオーバーライドする必要がある．
  * 
@@ -35,7 +35,7 @@ public abstract class DeclaredBlockStateManager extends
      * ビジターがASTノードの中に入った時のイベント通知を受け取り，
      * そのノードが定義部やその後に続くブロックを表すものならば状態を遷移して状態変化イベントを発行する．
      * 
-     * どのノードが定義部やブロックを表すかは， {@link #isDefinitionToken(AstToken)}と {@link #isBlockToken(AstToken)}
+     * どのノードが定義部やブロックを表すかは， {@link #isDefinitionEvent(AstToken)}と {@link #isBlockToken(AstToken)}
      * をオーバーライドして指定する．
      * 
      * また，定義部やブロックに入った時に発行する状態変化イベントの種類は， {@link #getDefinitionEnterEventType()}と
@@ -47,13 +47,13 @@ public abstract class DeclaredBlockStateManager extends
     public void entered(final AstVisitEvent event) {
         final AstToken token = event.getToken();
 
-        if (this.isStateChangeTriggerToken(token)) {
+        if (this.isStateChangeTriggerEvent(event)) {
             //状態変化トリガなら
 
             //状態をスタックへ記録
             super.entered(event);
 
-            if (this.isDefinitionToken(token)) {
+            if (this.isDefinitionEvent(event)) {
                 //定義ノードなら状態遷移してイベントを発行
                 this.state = STATE.DECLARE;
                 this.fireStateChangeEvent(this.getDefinitionEnterEventType(), event);
@@ -69,7 +69,7 @@ public abstract class DeclaredBlockStateManager extends
      * ビジターがASTノードから出た時のイベント通知を受け取り，
      * そのノードが定義部やその後に続くブロックを表すものならば状態を戻して状態変化イベントを発行する．
      * 
-     *　どのノードが定義部やブロックを表すかは， {@link #isDefinitionToken(AstToken)}と {@link #isBlockToken(AstToken)}
+     *　どのノードが定義部やブロックを表すかは， {@link #isDefinitionEvent(AstToken)}と {@link #isBlockToken(AstToken)}
      * をオーバーライドして指定する．
      * 
      * また，定義部やブロックから出た時に発行する状態変化イベントの種類は， {@link #getDefinitionExitEventType()}と
@@ -81,13 +81,13 @@ public abstract class DeclaredBlockStateManager extends
     public void exited(final AstVisitEvent event) {
         final AstToken token = event.getToken();
 
-        if (this.isStateChangeTriggerToken(token)) {
+        if (this.isStateChangeTriggerEvent(event)) {
             //状態変化トリガなら
 
             //スタックの一番上の状態に戻す
             super.exited(event);
 
-            if (this.isDefinitionToken(token)) {
+            if (this.isDefinitionEvent(event)) {
                 //定義ノードならイベントを発行
                 this.fireStateChangeEvent(this.getDefinitionExitEventType(), event);
             } else if (this.isBlockToken(token) && STATE.DECLARE == this.state) {
@@ -126,13 +126,13 @@ public abstract class DeclaredBlockStateManager extends
     protected abstract StateChangeEventType getDefinitionExitEventType();
 
     /**
-     * 引数のトークンが対応する定義部を表すかどうかを返す抽象メソッド．
+     * 引数のイベントが対応する定義部を表すかどうかを返す抽象メソッド．
      * このメソッドをオーバーライドすることで，任意の定義部に対応するサブクラスを作成することができる．
      * 
-     * @param token　定義部を表すかどうかを調べたいASTトークン
+     * @param event　定義部を表すかどうかを調べたいASTイベント
      * @return 定義部を表すトークンであればtrue
      */
-    protected abstract boolean isDefinitionToken(AstToken token);
+    protected abstract boolean isDefinitionEvent(AstVisitEvent event);
 
     /**
      * 引数のトークンが対応するブロックを表すかどうかを返す．
@@ -179,15 +179,15 @@ public abstract class DeclaredBlockStateManager extends
     }
 
     /**
-     * 引数で与えられたトークンが状態変化のトリガになり得るかどうかを返す.
-     * 引数tokenが{@link #isBlockToken(AstToken)}または {@link #isDefinitionToken(AstToken)}のどちらかを満たせばtrueを返す．
+     * 引数で与えられたイベントが状態変化のトリガになり得るかどうかを返す.
+     * 引数eventが{@link #isBlockToken(AstToken)}または {@link #isDefinitionEvent(AstVisitEvent)}のどちらかを満たせばtrueを返す．
      * 
-     * @param token 状態変化のトリガとなり得るかどうかを調べるトークン
+     * @param event 状態変化のトリガとなり得るかどうかを調べるトークン
      * @return 状態変化のトリガになり得る場合はtrue
      */
     @Override
-    protected final boolean isStateChangeTriggerToken(final AstToken token) {
-        return this.isBlockToken(token) || this.isDefinitionToken(token);
+    protected final boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
+        return this.isBlockToken(event.getToken()) || this.isDefinitionEvent(event);
     }
 
     /* (non-Javadoc)

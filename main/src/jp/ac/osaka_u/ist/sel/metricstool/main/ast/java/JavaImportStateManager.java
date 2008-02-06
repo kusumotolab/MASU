@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.EnterExitStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 public class JavaImportStateManager extends EnterExitStateManager{
     public static enum IMPORT_STATE_CHANGE implements StateChangeEventType{
@@ -21,7 +21,7 @@ public class JavaImportStateManager extends EnterExitStateManager{
     }
 
     @Override
-    protected boolean isStateChangeTriggerToken(AstToken token) {
-        return token.equals(JavaAstToken.IMPORT);
+    protected boolean isStateChangeTriggerEvent(AstVisitEvent event) {
+        return event.getToken().equals(JavaAstToken.IMPORT);
     }
 }

@@ -1,12 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 public class IfBlockStateManager extends InnerBlockStateManager {
 
     @Override
-    protected boolean isDefinitionToken(AstToken token) {
-        return token.isIf();
+    protected boolean isDefinitionEvent(AstVisitEvent event) {
+        return event.getToken().isIf();
     }
 
     

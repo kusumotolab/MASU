@@ -55,7 +55,8 @@ public class JavaAnonymousClassStateManager extends StackedAstVisitStateManager<
     }
 
     @Override
-    protected boolean isStateChangeTriggerToken(AstToken token) {
+    protected boolean isStateChangeTriggerEvent(AstVisitEvent event) {
+        AstToken token = event.getToken();
         return token.isClassBlock() || token.isInstantiation();
     }
 

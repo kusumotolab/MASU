@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
@@ -38,15 +38,15 @@ public class NameStateManager extends EnterExitStateManager {
     }
 
     /**
-     * 引数で与えられたトークンが名前記述部を表すかどうかを返す.
+     * 引数で与えられたイベントが名前記述部を表すかどうかを返す.
      * token.isNameDescription()がtrueであればtrueを返す．
      * 
-     * @param token 名前記述部を表すかどうかを調べるトークン
+     * @param event 名前記述部を表すかどうかを調べるイベント
      * @return token.isNameDescription()がtrueであればtrue
      */
     @Override
-    protected boolean isStateChangeTriggerToken(final AstToken token) {
-        return token.isNameDescription();
+    protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
+        return event.getToken().isNameDescription();
     }
 
 }

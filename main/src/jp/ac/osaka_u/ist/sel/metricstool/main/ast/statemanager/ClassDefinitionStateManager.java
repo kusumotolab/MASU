@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
 /**
@@ -59,15 +60,15 @@ public class ClassDefinitionStateManager extends DeclaredBlockStateManager {
     }
 
     /**
-     * 引数のトークンがクラス定義部を表すかどうかを返す．
+     * 引数のイベントがクラス定義部を表すかどうかを返す．
      * token.isClassDefinition()メソッドを用いて判定する．
      * 
-     * @param token　クラス定義部を表すかどうかを調べたいASTトークン
+     * @param event　クラス定義部を表すかどうかを調べたいASTイベント
      * @return クラス定義部を表すトークンであればtrue
      */
     @Override
-    protected boolean isDefinitionToken(final AstToken token) {
-        return token.isClassDefinition();
+    protected boolean isDefinitionEvent(final AstVisitEvent event) {
+        return event.getToken().isClassDefinition();
     }
 
     /**

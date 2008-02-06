@@ -43,7 +43,7 @@ public abstract class InnerBlockBuilder extends CompoundDataBuilder<UnresolvedBl
         }
     }
     
-    private void endBlockDefinition(){
+    protected void endBlockDefinition(){
         UnresolvedBlockInfo buildBlock = buildingBlockStack.pop();
         
         if (null != buildManager && null != buildBlock){
@@ -52,7 +52,7 @@ public abstract class InnerBlockBuilder extends CompoundDataBuilder<UnresolvedBl
         }
     }
     
-    private void startBlockDefinition(AstVisitEvent triggerEvent){
+    protected void startBlockDefinition(AstVisitEvent triggerEvent){
         UnresolvedBlockInfo newBlock = createUnresolvedBlockInfo();
         
         this.buildingBlockStack.push(newBlock);

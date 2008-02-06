@@ -35,7 +35,7 @@ public abstract class VariableDefinitionStateManager extends
     public void entered(final AstVisitEvent event) {
         final AstToken token = event.getToken();
 
-        if (isStateChangeTriggerToken(token)) {
+        if (isStateChangeTriggerEvent(event)) {
             //現在の状態を保存
             super.entered(event);
 
@@ -58,7 +58,7 @@ public abstract class VariableDefinitionStateManager extends
     public void exited(final AstVisitEvent event) {
         final AstToken token = event.getToken();
 
-        if (isStateChangeTriggerToken(token)) {
+        if (isStateChangeTriggerEvent(event)) {
             //状態を復元
             super.exited(event);
 
@@ -111,10 +111,11 @@ public abstract class VariableDefinitionStateManager extends
      * 
      * @param 代入演算子，または変数定義部を表すトークンかどうかを判定するトークン
      * @return 代入演算子，または変数定義部を表すトークンであればtrueを返す
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#isStateChangeTriggerToken(jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#isStateChangeTriggerEvent(jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken)
      */
     @Override
-    protected boolean isStateChangeTriggerToken(final AstToken token) {
+    protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
+        AstToken token = event.getToken();
         return token.isAssignmentOperator() || this.isDefinitionToken(token);
     }
 

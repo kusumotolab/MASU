@@ -97,7 +97,8 @@ public class ExpressionStateManager extends
      * @return token.isExpression() Ç‹ÇΩÇÕ {@link #isExpressionInsulator(AstToken)}ÇÃÇ«ÇøÇÁÇ©ÇñûÇΩÇ∑èÍçátrue
      */
     @Override
-    protected boolean isStateChangeTriggerToken(final AstToken token) {
+    protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
+        AstToken token = event.getToken();
         return token.isExpression() || this.isExpressionInsulator(token);
     }
 

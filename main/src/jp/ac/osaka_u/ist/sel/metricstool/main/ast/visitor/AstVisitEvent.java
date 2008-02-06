@@ -23,11 +23,12 @@ public class AstVisitEvent extends EventObject {
      * @param exitLine 到達したノードが表す要素のソースコード上での終了行
      * @param exitColumn 到達したノードが表す要素のソースコード上での終了行
      */
-    public AstVisitEvent(final AstVisitor source, final AstToken token, final int enterLine,
-            final int enterColumn, final int exitLine, final int exitColumn) {
+    public AstVisitEvent(final AstVisitor source, final AstToken token, final AstToken parentToken,
+            final int enterLine, final int enterColumn, final int exitLine, final int exitColumn) {
         super(source);
         this.source = source;
         this.token = token;
+        this.parentToken = parentToken;
         this.startLine = enterLine;
         this.endLine = exitLine;
         this.startColumn = enterColumn;
@@ -49,6 +50,14 @@ public class AstVisitEvent extends EventObject {
      */
     public AstToken getToken() {
         return this.token;
+    }
+    
+    /**
+     * このイベントが関連するASTノードの親ノードの種類を表すトークンを返す．
+     * @return このイベントが関連するASTノードの親ノードの種類を表すトークン
+     */
+    public AstToken getParentToken() {
+        return this.parentToken;
     }
 
     /**
@@ -96,6 +105,11 @@ public class AstVisitEvent extends EventObject {
      * このイベントが関連するASTノードの種類を表すトークン
      */
     private final AstToken token;
+
+    /**
+     * このイベントが関連するASTノードの親ノードの種類を表すトークン
+     */
+    private final AstToken parentToken;
 
     /**
      * このイベントが関連するASTノードのソースコード上での開始行.

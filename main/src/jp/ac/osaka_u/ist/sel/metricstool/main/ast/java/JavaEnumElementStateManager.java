@@ -44,7 +44,8 @@ public class JavaEnumElementStateManager extends StackedAstVisitStateManager<Jav
     }
     
     @Override
-    protected boolean isStateChangeTriggerToken(AstToken token) {
+    protected boolean isStateChangeTriggerEvent(AstVisitEvent event) {
+        AstToken token = event.getToken();
         return token.equals(JavaAstToken.ENUM_CONSTANT) || token.isClassBlock();
     }
 

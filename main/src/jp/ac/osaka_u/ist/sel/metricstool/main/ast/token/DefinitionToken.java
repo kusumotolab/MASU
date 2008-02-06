@@ -17,6 +17,11 @@ public class DefinitionToken extends AstTokenAdapter {
         public boolean isClassDefinition() {
             return true;
         }
+        
+        @Override
+        public boolean isBlockDefinition() {
+            return true;
+        }
     };
 
     /**
@@ -31,6 +36,11 @@ public class DefinitionToken extends AstTokenAdapter {
 
         @Override
         public boolean isConstructorDefinition() {
+            return true;
+        }
+        
+        @Override
+        public boolean isBlockDefinition() {
             return true;
         }
     };
@@ -73,6 +83,11 @@ public class DefinitionToken extends AstTokenAdapter {
     public static final DefinitionToken METHOD_DEFINITION = new DefinitionToken("METHOD_DEFINITION") {
         @Override
         public boolean isMethodDefinition() {
+            return true;
+        }
+        
+        @Override
+        public boolean isBlockDefinition() {
             return true;
         }
     };

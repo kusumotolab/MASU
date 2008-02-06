@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
  * 記述部が再帰的な構造になっている場合にも対応しており，
  * ビジターがその記述部の何階層目にいるかという情報も管理する．
  * <p>
- * このクラスのサブクラスは， {@link #getEnterEventType()}, {@link #getExitEventType()}, {@link #isStateChangeTriggerToken(AstToken)}
+ * このクラスのサブクラスは， {@link #getEnterEventType()}, {@link #getExitEventType()}, {@link #isStateChangeTriggerEvent(AstToken)}
  * の3つの抽象メソッドを実装する必要がある
  * 
  * @author kou-tngt
@@ -24,7 +24,7 @@ public abstract class EnterExitStateManager extends StackedAstVisitStateManager 
      * ビジターがASTノードの中に入った時のイベント通知を受け取り，
      * それが状態変化のきっかけになるノードであれば，そのノード内に入るイベントを発行する．
      * 
-     * どのようなノードが状態変化のトリガとなるかは {@link #isStateChangeTriggerToken(AstToken)}メソッドによって決定される．
+     * どのようなノードが状態変化のトリガとなるかは {@link #isStateChangeTriggerEvent(AstToken)}メソッドによって決定される．
      * また，発行するイベントのタイプは {@link #getEnterEventType()}メソッドによって返されるものを用いる．
      * 
      * @param e ASTビジターのビジットイベント
@@ -33,7 +33,7 @@ public abstract class EnterExitStateManager extends StackedAstVisitStateManager 
     public void entered(final AstVisitEvent e) {
         super.entered(e);
 
-        if (this.isStateChangeTriggerToken(e.getToken())) {
+        if (this.isStateChangeTriggerEvent(e)) {
             this.enterDepthCount++;
             this.fireStateChangeEvent(this.getEnterEventType(), e);
         }
@@ -43,7 +43,7 @@ public abstract class EnterExitStateManager extends StackedAstVisitStateManager 
      * ビジターがASTノードの中から出た時のイベント通知を受け取り，
      * それが状態変化のきっかけになるノードであれば，そのノードから出るイベントを発行する．
      * 
-     * どのようなノードが状態変化のトリガとなるかは {@link #isStateChangeTriggerToken(AstToken)}メソッドによって決定される．
+     * どのようなノードが状態変化のトリガとなるかは {@link #isStateChangeTriggerEvent(AstToken)}メソッドによって決定される．
      * また，発行するイベントのタイプは {@link #getEnterEventType()}メソッドによって返されるものを用いる．
      * 
      * @param e ASTビジターのビジットイベント
@@ -52,7 +52,7 @@ public abstract class EnterExitStateManager extends StackedAstVisitStateManager 
     public void exited(final AstVisitEvent e) {
         super.exited(e);
 
-        if (this.isStateChangeTriggerToken(e.getToken())) {
+        if (this.isStateChangeTriggerEvent(e)) {
             this.enterDepthCount--;
             this.fireStateChangeEvent(this.getExitEventType(), e);
         }
@@ -101,14 +101,14 @@ public abstract class EnterExitStateManager extends StackedAstVisitStateManager 
     }
 
     /**
-     * 引数で与えられたトークンが対応する記述部へ出入りのトリガかどうかを返す抽象メソッド.
+     * 引数で与えられたイベントが対応する記述部へ出入りのトリガかどうかを返す抽象メソッド.
      * このメソッドをオーバーライドすることで，サブクラスがどの記述部への出入りに対応するかを指定することができる．
      * 
-     * @param token 記述部へ出入りのトリガかどうかを調べるトークン
+     * @param event 記述部へ出入りのトリガかどうかを調べるイベント
      * @return 記述部へ出入りのトリガの場合はtrue
      */
     @Override
-    protected abstract boolean isStateChangeTriggerToken(AstToken token);
+    protected abstract boolean isStateChangeTriggerEvent(AstVisitEvent event);
 
     /**
      * 引数で与えられた情報を基に状態を復元する.

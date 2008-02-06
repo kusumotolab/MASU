@@ -24,7 +24,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
  * そこで，型パラメータTを用いて任意に情報を保持する型を指定することで,状態の記録，復元時に参照する情報をサブクラス毎に指定することができるようにしている.
  * 
  * <p>
- * このクラスを継承するクラスは {@link #isStateChangeTriggerToken(AstToken)},{@link #getState()},
+ * このクラスを継承するクラスは {@link #isStateChangeTriggerEvent(AstToken)},{@link #getState()},
  * {@link #setState(T)}の3つの抽象メソッドを実装する必要がある.
  * <p>
  * 
@@ -47,8 +47,7 @@ public abstract class StackedAstVisitStateManager<T> implements AstVisitStateMan
      * @param event イベント
      */
     public void entered(final AstVisitEvent event) {
-        final AstToken token = event.getToken();
-        if (this.isStateChangeTriggerToken(token)) {
+        if (this.isStateChangeTriggerEvent(event)) {
             this.pushState();
         }
     }
@@ -59,8 +58,7 @@ public abstract class StackedAstVisitStateManager<T> implements AstVisitStateMan
      * @param event イベント
      */
     public void exited(final AstVisitEvent event) {
-        final AstToken token = event.getToken();
-        if (this.isStateChangeTriggerToken(token)) {
+        if (this.isStateChangeTriggerEvent(event)) {
             this.popState();
         }
     }
@@ -136,7 +134,7 @@ public abstract class StackedAstVisitStateManager<T> implements AstVisitStateMan
      * @param token 状態変化のトリガとなり得るかどうかを調べるトークン
      * @return 状態変化のトリガになり得る場合はtrue
      */
-    protected abstract boolean isStateChangeTriggerToken(AstToken token);
+    protected abstract boolean isStateChangeTriggerEvent(AstVisitEvent event);
 
     /**
      * 状態変化リスナのセット

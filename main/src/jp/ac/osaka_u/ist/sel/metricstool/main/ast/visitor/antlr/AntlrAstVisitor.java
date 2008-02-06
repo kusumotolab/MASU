@@ -118,7 +118,7 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
      */
     public void startVisiting(final AST startNode) {
         AST nextNode = startNode;
-
+        AstToken parentToken = null;
         while (null != nextNode) {
             //このノードのトークンからAstTokenに変換する
             final AstToken token = this.translator.translate(nextNode);
@@ -136,7 +136,7 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
             }
 
             //訪問イベントを作成
-            final AstVisitEvent event = new AstVisitEvent(this, token, startLine, startColumn,
+            final AstVisitEvent event = new AstVisitEvent(this, token, parentToken, startLine, startColumn,
                     endLine, endColumn);
 
             this.fireVisitEvent(event);
@@ -148,6 +148,9 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
                 this.eventStack.push(event);
                 this.nodeStack.push(nextNode);
                 nextNode = nextNode.getFirstChild();
+                
+                //子ノードを訪問するので，現在のノードが親ノードになる
+                parentToken = token;
 
             } else {
                 //次の兄弟に進む場合
@@ -157,14 +160,22 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
             if (null == nextNode) {
                 //次の行き先がない
 
+                AstVisitEvent exitedEvent = null;
+                
                 //まだスタックを遡ってまだ辿ってない兄弟を探す
                 while (!this.nodeStack.isEmpty()
                         && null == (nextNode = this.nodeStack.pop().getNextSibling())) {
-                    this.fireExitEvent(this.eventStack.pop());
+                    exitedEvent = this.eventStack.pop();
+                    this.fireExitEvent(exitedEvent);
                 }
 
                 if (!this.eventStack.isEmpty()) {
-                    this.fireExitEvent(this.eventStack.pop());
+                    exitedEvent = this.eventStack.pop();
+                    this.fireExitEvent(exitedEvent);
+                }
+                
+                if(null != exitedEvent) {
+                    parentToken = exitedEvent.getParentToken();
                 }
             }
         }

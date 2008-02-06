@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.DeclaredBlockStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 public class JavaInterfaceDefinitionStateManager extends DeclaredBlockStateManager{
     
@@ -34,8 +34,8 @@ public class JavaInterfaceDefinitionStateManager extends DeclaredBlockStateManag
     }
 
     @Override
-    protected boolean isDefinitionToken(AstToken token) {
-        return token.equals(JavaAstToken.INTERFACE_DEFINITION);
+    protected boolean isDefinitionEvent(AstVisitEvent event) {
+        return event.getToken().equals(JavaAstToken.INTERFACE_DEFINITION);
     }
 
 }
