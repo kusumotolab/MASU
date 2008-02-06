@@ -11,9 +11,8 @@ public class ConstructorBuilder extends CallableUnitBuilder<UnresolvedConstructo
             ModifiersBuilder modifiersBuilder,TypeBuilder typeBuilder,
             NameBuilder nameBuilder,MethodParameterBuilder parameterbuilder){
         
-        super(targetDataManager, interpriter, modifiersBuilder, typeBuilder, nameBuilder, parameterbuilder);
+        super(targetDataManager, new ConstructorStateManager(), interpriter, modifiersBuilder, typeBuilder, nameBuilder, parameterbuilder);
         
-        stateManager = new ConstructorStateManager();
     }
     
     @Override

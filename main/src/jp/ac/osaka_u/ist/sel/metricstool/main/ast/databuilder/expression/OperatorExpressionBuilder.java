@@ -121,11 +121,10 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 
                 //オペレータによってすでに決定している戻り値の型，確定していなければnull
                 final PrimitiveTypeInfo type = token.getSpecifiedResultType();
-                final UnresolvedPrimitiveTypeUsageInfo usage = new UnresolvedPrimitiveTypeUsageInfo(type);
                 
                 if (null != type) {
                     //オペレータによってすでに結果の型が決定している
-                    resultType = usage;
+                    resultType = new UnresolvedPrimitiveTypeUsageInfo(type);
                 } else if (token.equals(OperatorToken.ARRAY)) {
                     //配列記述子の場合は特別処理
                     UnresolvedEntityUsageInfo ownerType;

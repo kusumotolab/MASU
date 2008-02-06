@@ -10,9 +10,8 @@ public class MethodBuilder extends CallableUnitBuilder<UnresolvedMethodInfo>{
             ModifiersBuilder modifiersBuilder,TypeBuilder typeBuilder,
             NameBuilder nameBuilder,MethodParameterBuilder parameterbuilder){
         
-        super(targetDataManager, interpriter, modifiersBuilder, typeBuilder, nameBuilder, parameterbuilder);
+        super(targetDataManager, new MethodStateManager(), interpriter, modifiersBuilder, typeBuilder, nameBuilder, parameterbuilder);
         
-        stateManager = new MethodStateManager();
     }
        
     @Override

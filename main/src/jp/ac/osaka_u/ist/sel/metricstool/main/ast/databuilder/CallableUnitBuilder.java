@@ -14,24 +14,22 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.VariableDefinitio
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.CallableUnitStateManager.CALLABLE_UNIT_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 
 public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?>> extends CompoundDataBuilder<T>{
     
-    protected CallableUnitBuilder(BuildDataManager buildDataManager,ModifiersInterpriter interpriter) {
-       this(buildDataManager,interpriter,new ModifiersBuilder(),new TypeBuilder(buildDataManager),
+    protected CallableUnitBuilder(BuildDataManager buildDataManager, CallableUnitStateManager stateManager, ModifiersInterpriter interpriter) {
+       this(buildDataManager, stateManager, interpriter, new ModifiersBuilder(),new TypeBuilder(buildDataManager),
                new NameBuilder(),new MethodParameterBuilder(buildDataManager,interpriter));
     }
     
-    protected CallableUnitBuilder(BuildDataManager targetDataManager,ModifiersInterpriter interpriter,
+    protected CallableUnitBuilder(BuildDataManager targetDataManager, CallableUnitStateManager stateManager, ModifiersInterpriter interpriter,
             ModifiersBuilder modifiersBuilder,TypeBuilder typeBuilder,
             NameBuilder nameBuilder,MethodParameterBuilder parameterbuilder){
         
         this.buildManager = targetDataManager;
+        this.stateManager = stateManager;
         this.modifiersInterpriter = interpriter;
         this.modifierBuilder = modifiersBuilder;
         this.typeBuilder = typeBuilder;
@@ -172,7 +170,7 @@ public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?
     protected final NameBuilder nameBuilder;
     protected final MethodParameterBuilder methodParameterBuilder;
     
-    protected CallableUnitStateManager stateManager;
+    protected final CallableUnitStateManager stateManager;
     protected final MethodParameterStateManager parameterStateManager = new MethodParameterStateManager();
     protected final TypeDescriptionStateManager typeStateManager = new TypeDescriptionStateManager();
     protected final TypeParameterStateManager typeParameterStateManager = new TypeParameterStateManager();
