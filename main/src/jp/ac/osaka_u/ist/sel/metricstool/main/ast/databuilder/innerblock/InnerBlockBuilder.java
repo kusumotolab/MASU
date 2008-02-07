@@ -66,7 +66,7 @@ public abstract class InnerBlockBuilder extends CompoundDataBuilder<UnresolvedBl
     
     protected abstract UnresolvedBlockInfo createUnresolvedBlockInfo();
         
-    private Stack<UnresolvedBlockInfo> buildingBlockStack = new Stack<UnresolvedBlockInfo>();
+    protected Stack<UnresolvedBlockInfo> buildingBlockStack = new Stack<UnresolvedBlockInfo>();
     
     protected final BuildDataManager buildManager;
     

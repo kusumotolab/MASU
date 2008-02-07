@@ -599,7 +599,6 @@ public class DefaultBuildDataManager implements BuildDataManager {
         if (!this.blockStack.isEmpty()
                 && this.blockStack.peek() instanceof UnresolvedConditionalBlockInfo) {
             UnresolvedConditionalBlockInfo conditionalBlock = (UnresolvedConditionalBlockInfo) this.blockStack.peek();
-            conditionalBlock.setConditionalSpace(clauseInfo);
         }
         
         this.toClauseMode();

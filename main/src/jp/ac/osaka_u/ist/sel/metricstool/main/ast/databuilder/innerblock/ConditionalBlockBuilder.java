@@ -7,6 +7,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.InnerBlockStateManager.INNER_BLOCK_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalClauseInfo;
 
 public abstract class ConditionalBlockBuilder extends InnerBlockBuilder {
@@ -28,16 +30,19 @@ public abstract class ConditionalBlockBuilder extends InnerBlockBuilder {
     }
     
     private void startConditionalClause(AstVisitEvent triggerEvent) {
-        UnresolvedConditionalClauseInfo conditionalClause = new UnresolvedConditionalClauseInfo();
-        
-        this.buildingClauseStack.push(conditionalClause);
-        
-        conditionalClause.setFromLine(triggerEvent.getStartLine());
-        conditionalClause.setFromColumn(triggerEvent.getStartColumn());
-        conditionalClause.setToLine(triggerEvent.getEndLine());
-        conditionalClause.setToColumn(triggerEvent.getEndColumn());
-        
-        this.buildManager.startConditionalClause(conditionalClause);
+        if(!this.buildingBlockStack.isEmpty() && this.buildingBlockStack.peek() instanceof UnresolvedConditionalBlockInfo) {
+            UnresolvedConditionalBlockInfo currentBlock = (UnresolvedConditionalBlockInfo)this.buildingBlockStack.peek();
+            UnresolvedConditionalClauseInfo conditionalClause = currentBlock.getConditionalClause();
+            
+            this.buildingClauseStack.push(conditionalClause);
+            
+            conditionalClause.setFromLine(triggerEvent.getStartLine());
+            conditionalClause.setFromColumn(triggerEvent.getStartColumn());
+            conditionalClause.setToLine(triggerEvent.getEndLine());
+            conditionalClause.setToColumn(triggerEvent.getEndColumn());
+            
+            this.buildManager.startConditionalClause(conditionalClause);
+        }
     }
     
     private void endConditionalClause() {

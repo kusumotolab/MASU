@@ -20,7 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedConditionalClauseInfo extends
         UnresolvedLocalSpaceInfo<ConditionalClauseInfo> {
 
-    public UnresolvedConditionalClauseInfo() {
+    UnresolvedConditionalClauseInfo() {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         this.resolvedInfo = null;
