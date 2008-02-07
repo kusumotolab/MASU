@@ -41,20 +41,21 @@ public class SingleIdentifierElement implements IdentifierElement{
     }
     
     private UnresolvedVariableUsageInfo resolveAsVariableUsage(BuildDataManager buildDataManager, UnresolvedVariableInfo usedVariable, boolean reference) {
-
+        UnresolvedVariableUsageInfo usage;
         if (null == usedVariable || usedVariable instanceof UnresolvedFieldInfo){
             //変数がみつからないので多分どこかのフィールド or 見つかった変数がフィールドだった
-            UnresolvedFieldUsageInfo usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),ownerUsage,name, reference);
-            buildDataManager.addFieldAssignment(usage);
-            return usage;
+            usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),ownerUsage,name, reference);
         } else if( usedVariable instanceof UnresolvedParameterInfo) {
             UnresolvedParameterInfo parameter = (UnresolvedParameterInfo) usedVariable;
-            return new UnresolvedParameterUsageInfo(parameter, reference);
+            usage = new UnresolvedParameterUsageInfo(parameter, reference);
         } else {
             assert( usedVariable instanceof UnresolvedLocalVariableInfo) : "Illegal state: unexpected VariableInfo";
             UnresolvedLocalVariableInfo localVariable = (UnresolvedLocalVariableInfo) usedVariable;
-            return new UnresolvedLocalVariableUsageInfo(localVariable, reference);
+            usage = new UnresolvedLocalVariableUsageInfo(localVariable, reference);
         }
+        
+        buildDataManager.addVariableUsage(usage);
+        return usage;
     }
     
     public UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(BuildDataManager buildDataManager) {

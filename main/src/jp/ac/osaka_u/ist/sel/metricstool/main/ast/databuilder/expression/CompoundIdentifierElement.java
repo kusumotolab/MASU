@@ -63,7 +63,7 @@ public class CompoundIdentifierElement implements IdentifierElement {
         this.ownerType = this.resolveOwner(buildDataManager);
         final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
                 .getAllAvaliableNames(), this.ownerType, this.name, false);
-        buildDataManager.addFieldAssignment(fieldUsage);
+        buildDataManager.addVariableUsage(fieldUsage);
         return fieldUsage;
     }
 
@@ -77,7 +77,7 @@ public class CompoundIdentifierElement implements IdentifierElement {
         this.ownerType = this.resolveOwner(buildDataManager);
         final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
                 .getAllAvaliableNames(), this.ownerType, this.name, true);
-        buildDataManager.addFieldReference(fieldUsage);
+        buildDataManager.addVariableUsage(fieldUsage);
         return fieldUsage;
     }
 
@@ -88,7 +88,7 @@ public class CompoundIdentifierElement implements IdentifierElement {
         if (this.ownerType != null) {
             final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(
                     buildDataManager.getAllAvaliableNames(), this.ownerType, this.name, true);
-            buildDataManager.addFieldReference(fieldUsage);
+            buildDataManager.addVariableUsage(fieldUsage);
             return fieldUsage;
         }
 

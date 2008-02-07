@@ -42,7 +42,7 @@ public class FieldOrMethodElement implements IdentifierElement{
     
     public UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(BuildDataManager buildDataManager) {
         UnresolvedFieldUsageInfo usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),ownerUsage,name, false);
-        buildDataManager.addFieldAssignment(usage);
+        buildDataManager.addVariableUsage(usage);
         return usage;
     }
 
@@ -52,7 +52,7 @@ public class FieldOrMethodElement implements IdentifierElement{
 
     public UnresolvedVariableUsageInfo resolveAsReferencedVariable(BuildDataManager buildDataManager) {
         UnresolvedFieldUsageInfo usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),ownerUsage,name, true);
-        buildDataManager.addFieldReference(usage);
+        buildDataManager.addVariableUsage(usage);
         return usage;
     }
     

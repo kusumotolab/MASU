@@ -11,11 +11,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
 
 /**
@@ -41,18 +41,11 @@ public interface BuildDataManager {
     public void addField(UnresolvedFieldInfo field);
 
     /**
-     * 構築中のメソッドにフィールド代入情報を追加する
+     * 構築中のメソッドにフィールド使用情報を追加する
      * 
      * @param usage
      */
-    public void addFieldAssignment(UnresolvedFieldUsageInfo usage);
-
-    /**
-     * 構築中のメソッドにフィールド参照情報を追加する
-     * 
-     * @param usage
-     */
-    public void addFieldReference(UnresolvedFieldUsageInfo usage);
+    public void addVariableUsage(UnresolvedVariableUsageInfo usage);
 
     /**
      * 構築中のメソッドにローカルパラメータ（for文中で宣言される変数のように，

@@ -20,13 +20,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
 
 /**
@@ -59,15 +59,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
     }
 
-    public void addFieldAssignment(UnresolvedFieldUsageInfo usage) {
-    	if (!this.methodStack.isEmpty()&& MODE.METHOD == this.mode){
-            this.methodStack.peek().addVariableUsage(usage);
-        }else if(!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode){
-    		this.blockStack.peek().addVariableUsage(usage);
-    	}
-    }
-
-    public void addFieldReference(UnresolvedFieldUsageInfo usage) {
+    public void addVariableUsage(UnresolvedVariableUsageInfo usage) {
         if (!this.methodStack.isEmpty()&& MODE.METHOD == this.mode){
             this.methodStack.peek().addVariableUsage(usage);
         }else if(!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode){

@@ -50,7 +50,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
      * 
      * @param fieldUsage フィールド使用
      */
-    public final void addVariableUsage(final UnresolvedFieldUsageInfo fieldUsage) {
+    public final void addVariableUsage(final UnresolvedVariableUsageInfo fieldUsage) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
