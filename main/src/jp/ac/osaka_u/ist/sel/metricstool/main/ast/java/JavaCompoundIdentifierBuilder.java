@@ -10,7 +10,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.Express
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.FieldOrMethodElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.IdentifierElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.InstanceSpecificElement;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
@@ -19,7 +18,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFullQualifiedNameClassReferenceInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
@@ -121,9 +119,10 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                 classInfo = buildDataManager.getCurrentClass();
             }
 
-            UnresolvedTypeInfo superClassType = classInfo.getSuperClasses().iterator().next();
-            if (classInfo != null) {
-                pushElement(TypeElement.getInstance(superClassType));
+            UnresolvedClassTypeInfo superClassType = classInfo.getSuperClasses().iterator().next();
+            if (superClassType != null) {
+                
+                pushElement(UsageElement.getInstance(superClassType.getUsage()));
             }
         } else {
             super.buildCompoundIdentifierElement(elements);
