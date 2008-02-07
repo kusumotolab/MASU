@@ -124,7 +124,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
                 {
                     // 利用可能なフィールド一覧を取得
                     final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
-                            (TargetClassInfo) ownerUsage.getType(), usingClass);
+                            (TargetClassInfo) ownerClass, usingClass);
 
                     // 利用可能なフィールドを，未解決フィールド名で検索
                     for (final TargetFieldInfo availableField : availableFields) {
@@ -142,7 +142,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
                 // 利用可能なフィールドが見つからなかった場合は，外部クラスである親クラスがあるはず
                 // そのクラスの変数を使用しているとみなす
                 {
-                    for (TargetClassInfo classInfo = (TargetClassInfo) ownerUsage.getType(); true; classInfo = ((TargetInnerClassInfo) classInfo)
+                    for (TargetClassInfo classInfo = (TargetClassInfo) ownerClass; true; classInfo = ((TargetInnerClassInfo) classInfo)
                             .getOuterClass()) {
 
                         final ExternalClassInfo externalSuperClass = NameResolver

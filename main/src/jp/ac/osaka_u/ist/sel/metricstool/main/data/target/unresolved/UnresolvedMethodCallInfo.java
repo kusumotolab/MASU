@@ -120,7 +120,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                 {
                     // 利用可能なメソッド一覧を取得
                     final List<TargetMethodInfo> availableMethods = NameResolver
-                            .getAvailableMethods((TargetClassInfo) ownerUsage.getType(), usingClass);
+                            .getAvailableMethods((TargetClassInfo) ownerClass, usingClass);
 
                     // 利用可能なメソッドから，未解決メソッドと一致するものを検索
                     // メソッド名，引数の型のリストを用いて，このメソッドの呼び出しであるかどうかを判定
@@ -140,7 +140,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                 // そのクラスのメソッドを使用しているとみなす
                 {
                     final ExternalClassInfo externalSuperClass = NameResolver
-                            .getExternalSuperClass((TargetClassInfo) ownerUsage.getType());
+                            .getExternalSuperClass((TargetClassInfo) ownerClass);
                     if (null != externalSuperClass) {
 
                         final ExternalMethodInfo methodInfo = new ExternalMethodInfo(
