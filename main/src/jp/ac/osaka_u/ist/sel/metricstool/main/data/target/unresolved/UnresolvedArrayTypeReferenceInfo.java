@@ -6,6 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 /**
  * 未解決配列型参照を表すクラス
@@ -21,6 +22,11 @@ public class UnresolvedArrayTypeReferenceInfo extends UnresolvedEntityUsageInfo 
      * @param referencedType 参照されている未解決配列型
      */
     public UnresolvedArrayTypeReferenceInfo(final UnresolvedArrayTypeInfo referencedType) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if(null == referencedType) {
+            throw new IllegalArgumentException("referencedType is null");
+        }
+        
         this.referencedType = referencedType;
     }
 
