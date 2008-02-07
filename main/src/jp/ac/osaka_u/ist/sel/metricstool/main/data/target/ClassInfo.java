@@ -3,6 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -46,7 +48,7 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
 
         this.namespace = namespace;
         this.className = className;
-        this.superClasses = new TreeSet<ClassTypeInfo>();
+        this.superClasses = new LinkedList<ClassTypeInfo>();
         this.subClasses = new TreeSet<ClassInfo>();
 
         this.modifiers = new HashSet<ModifierInfo>();
@@ -80,7 +82,7 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
         System.arraycopy(fullQualifiedName, 0, namespace, 0, fullQualifiedName.length - 1);
         this.namespace = new NamespaceInfo(namespace);
         this.className = fullQualifiedName[fullQualifiedName.length - 1];
-        this.superClasses = new TreeSet<ClassTypeInfo>();
+        this.superClasses = new LinkedList<ClassTypeInfo>();
         this.subClasses = new TreeSet<ClassInfo>();
 
         this.modifiers = new HashSet<ModifierInfo>();
@@ -180,8 +182,8 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
      * 
      * @return スーパークラスの SortedSet
      */
-    public SortedSet<ClassTypeInfo> getSuperClasses() {
-        return Collections.unmodifiableSortedSet(this.superClasses);
+    public List<ClassTypeInfo> getSuperClasses() {
+        return Collections.unmodifiableList(this.superClasses);
     }
 
     /**
@@ -355,7 +357,7 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
     /**
      * このクラスが継承しているクラス一覧を保存するための変数． 直接の親クラスのみを保有するが，多重継承を考えて Set にしている．
      */
-    private final SortedSet<ClassTypeInfo> superClasses;
+    private final List<ClassTypeInfo> superClasses;
 
     /**
      * このクラスを継承しているクラス一覧を保存するための変数．直接の子クラスのみを保有する．

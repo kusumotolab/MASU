@@ -53,8 +53,7 @@ public final class UnresolvedParameterInfo extends UnresolvedVariableInfo<Target
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
-                || (null == fieldInfoManager) || (null == methodInfoManager)) {
+        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)) {
             throw new NullPointerException();
         }
 

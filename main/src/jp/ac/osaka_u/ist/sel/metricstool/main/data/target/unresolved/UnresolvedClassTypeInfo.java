@@ -17,7 +17,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -74,9 +73,9 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
     }
 
     @Override
-    public TypeInfo resolveType(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
-            ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
-            MethodInfoManager methodInfoManager) {
+    public TypeInfo resolveType(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -138,6 +137,13 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
                 }
             }
 
+            // 不明なクラス型である
+            final ExternalClassInfo unknownReferencedClass = new ExternalClassInfo(
+                    this.referenceName[0]);
+            this.resolvedInfo = new ClassTypeInfo(unknownReferencedClass);
+            return this.resolvedInfo;
+            
+         
             // 複数項参照の場合
         } else {
 
@@ -173,7 +179,9 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
                                     }
 
                                     // ここに到達するのは，クラスが見つからなかった場合
-                                    this.resolvedInfo = UnknownTypeInfo.getInstance();
+                                    final ExternalClassInfo unknownReferencedClass = new ExternalClassInfo(
+                                            this.referenceName[this.referenceName.length - 1]);
+                                    this.resolvedInfo = new ClassTypeInfo(unknownReferencedClass);
                                     return this.resolvedInfo;
                                 }
                             }
@@ -214,8 +222,10 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
                                 continue INDEX;
                             }
 
-                            // ここに到達するのは，クラスが見つからなかった場合
-                            this.resolvedInfo = UnknownTypeInfo.getInstance();
+                            // ここに到達するのは，クラスが見つからなかった場合           
+                            final ExternalClassInfo unknownReferencedClass = new ExternalClassInfo(
+                                    this.referenceName[this.referenceName.length - 1]);
+                            this.resolvedInfo = new ClassTypeInfo(unknownReferencedClass);
                             return this.resolvedInfo;
                         }
                     }
@@ -226,10 +236,13 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
                     return this.resolvedInfo;
                 }
             }
-        }
 
-        this.resolvedInfo = UnknownTypeInfo.getInstance();
-        return this.resolvedInfo;
+            // 不明なクラス型である
+            final ExternalClassInfo unknownReferencedClass = new ExternalClassInfo(
+                    this.referenceName[this.referenceName.length - 1]);
+            this.resolvedInfo = new ClassTypeInfo(unknownReferencedClass);
+            return this.resolvedInfo;
+        }
     }
 
     /**
