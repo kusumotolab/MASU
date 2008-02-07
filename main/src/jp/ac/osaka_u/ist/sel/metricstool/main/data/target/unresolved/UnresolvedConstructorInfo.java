@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
-public class UnresolvedConstructorInfo extends
+public final class UnresolvedConstructorInfo extends
         UnresolvedCallableUnitInfo<TargetConstructorInfo> {
 
     public UnresolvedConstructorInfo(final UnresolvedClassInfo ownerClass) {
@@ -27,14 +27,17 @@ public class UnresolvedConstructorInfo extends
 
     @Override
     public boolean alreadyResolved() {
-        // TODO Auto-generated method stub
-        return false;
+        return null != this.resolvedInfo;
     }
 
     @Override
     public TargetConstructorInfo getResolvedUnit() {
-        // TODO Auto-generated method stub
-        return null;
+
+        if (!this.alreadyResolved()) {
+            throw new NotResolvedException();
+        }
+
+        return this.resolvedInfo;
     }
 
     @Override
@@ -117,7 +120,6 @@ public class UnresolvedConstructorInfo extends
 
     @Override
     public void setInstanceMember(boolean instance) {
-
     }
 
     /**
