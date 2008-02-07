@@ -6,6 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 
 public class MethodCallBuilder extends ExpressionBuilder{
 
@@ -44,8 +45,8 @@ public class MethodCallBuilder extends ExpressionBuilder{
                     } else if (argment instanceof TypeArgumentElement) {
                     	// TODO C#などの場合は型引数に参照型以外も指定できるので対処が必要かも
                         TypeArgumentElement typeArgument = (TypeArgumentElement) argment;
-                    	assert typeArgument.getType() instanceof UnresolvedClassTypeInfo : "type argument was not reference type.";
-                        methodCall.addTypeArgument((UnresolvedClassTypeInfo) typeArgument.getType());
+                    	assert typeArgument.getType() instanceof UnresolvedReferenceTypeInfo : "type argument was not reference type.";
+                        methodCall.addTypeArgument((UnresolvedReferenceTypeInfo) typeArgument.getType());
                     } else {
                         methodCall.addParameter(argment.getUsage());
                     }

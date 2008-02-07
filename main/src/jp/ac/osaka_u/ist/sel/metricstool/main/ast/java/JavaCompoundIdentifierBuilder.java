@@ -93,6 +93,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                         names = currentSuperClass.getReferenceName();
                     }
                     if (null != names && variable.getType() instanceof UnresolvedClassTypeInfo) {
+                        // TODO UnresolvedReferenceTypeにすべきかも 要テスト
                         UnresolvedClassTypeInfo variableType = (UnresolvedClassTypeInfo) variable
                                 .getType();
                         for (String name : names) {

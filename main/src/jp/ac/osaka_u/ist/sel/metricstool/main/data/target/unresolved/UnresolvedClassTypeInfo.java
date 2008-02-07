@@ -47,7 +47,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
 
         this.availableNamespaces = availableNamespaces;
         this.referenceName = referenceName;
-        this.typeParameterUsages = new LinkedList<UnresolvedClassTypeInfo>();
+        this.typeParameterUsages = new LinkedList<UnresolvedReferenceTypeInfo>();
     }
 
     /**
@@ -245,7 +245,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
      * 
      * @param typeParameterUsage 追加する型パラメータ使用
      */
-    public final void addTypeArgument(final UnresolvedClassTypeInfo typeParameterUsage) {
+    public final void addTypeArgument(final UnresolvedReferenceTypeInfo typeParameterUsage) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -261,7 +261,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
      * 
      * @return このクラス参照で使用されている型パラメータの List
      */
-    public final List<UnresolvedClassTypeInfo> getTypeArguments() {
+    public final List<UnresolvedReferenceTypeInfo> getTypeArguments() {
         return Collections.unmodifiableList(this.typeParameterUsages);
     }
 
@@ -348,7 +348,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
     /**
      * 型引数参照を保存するための変数
      */
-    private final List<UnresolvedClassTypeInfo> typeParameterUsages;
+    private final List<UnresolvedReferenceTypeInfo> typeParameterUsages;
 
     private TypeInfo resolvedInfo;
 

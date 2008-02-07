@@ -90,6 +90,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
             UnresolvedTypeInfo type = ((TypeElement) elements[0]).getType();
             if (type instanceof UnresolvedClassTypeInfo) {
+                // TODO UnresolvedReferenceTypeにすべきかも 要テスト
                 String[] firstElementReference = ((UnresolvedClassTypeInfo) type).getReferenceName();
                         //.getFullReferenceName();
                 if (firstElementReference.length < superClassReferenceName.length) {

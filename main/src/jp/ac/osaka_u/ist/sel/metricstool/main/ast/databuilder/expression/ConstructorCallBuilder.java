@@ -3,8 +3,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 
 public class ConstructorCallBuilder extends ExpressionBuilder{
 
@@ -32,7 +33,7 @@ public class ConstructorCallBuilder extends ExpressionBuilder{
         if (elements.length > 0 && elements[0] instanceof TypeElement){
             // TODO 配列のnew文の対処をすべき
             TypeElement type = (TypeElement) elements[0];
-            UnresolvedClassTypeInfo referenceType = (UnresolvedClassTypeInfo)type.getType();
+            UnresolvedReferenceTypeInfo referenceType = (UnresolvedReferenceTypeInfo)type.getType();
             //String[] name = type.getFullReferenceName();
             
             UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(referenceType);
@@ -51,8 +52,10 @@ public class ConstructorCallBuilder extends ExpressionBuilder{
                 constructorCall.addParameter(InstanceSpecificElement.getThisInstanceType(buildManager));
             } else if (element instanceof TypeArgumentElement) {
                 TypeArgumentElement typeArgument = (TypeArgumentElement) element;
-            	assert typeArgument.getType() instanceof UnresolvedClassTypeInfo : "Illegal state; type argument was not reference type.";
-                constructorCall.addTypeArgument((UnresolvedClassTypeInfo) typeArgument.getType());
+                
+                // TODO C# などの場合はプリミティブ型も型引数に指定可能
+            	assert typeArgument.getType() instanceof UnresolvedReferenceTypeInfo : "Illegal state; type argument was not reference type.";
+                constructorCall.addTypeArgument((UnresolvedReferenceTypeInfo) typeArgument.getType());
             } else {
                 constructorCall.addParameter(element.getUsage());
             }

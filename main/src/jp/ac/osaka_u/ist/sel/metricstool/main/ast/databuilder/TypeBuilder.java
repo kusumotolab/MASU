@@ -13,8 +13,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BuiltinTypeToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 
@@ -206,9 +207,9 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
                     for (final UnresolvedTypeInfo type : this.availableTypeArugments) {
                     	
                     	// C#などは参照型以外も型引数に指定可能なので対処するひつようがあるかも
-                    	if (type instanceof UnresolvedClassTypeInfo) {
+                    	if (type instanceof UnresolvedReferenceTypeInfo) {
                         referenceType
-                                .addTypeArgument((UnresolvedClassTypeInfo) type);
+                                .addTypeArgument((UnresolvedReferenceTypeInfo) type);
                     	}
                     }
     

@@ -53,13 +53,13 @@ public class InheritanceBuilder extends CompoundDataBuilder<UnresolvedClassTypeI
         UnresolvedTypeInfo type = typeBuilder.popLastBuiltData();
         
         if (type instanceof UnresolvedClassTypeInfo){
-            UnresolvedClassTypeInfo referenceType = (UnresolvedClassTypeInfo)type;
-            registBuiltData(referenceType);
+            UnresolvedClassTypeInfo classType = (UnresolvedClassTypeInfo)type;
+            registBuiltData(classType);
             
             if (null != buildDataManager){
                 UnresolvedClassInfo classInfo = buildDataManager.getCurrentClass();
                 if (null != classInfo){
-                    classInfo.addSuperClass(referenceType);
+                    classInfo.addSuperClass(classType);
                 }
             }
         }
