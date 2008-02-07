@@ -30,11 +30,6 @@ public class DefinitionToken extends AstTokenAdapter {
     public static final DefinitionToken CONSTRUCTOR_DEFINITION = new DefinitionToken(
             "CONSTRUCTOR_DEFINITION") {
         @Override
-        public boolean isMethodDefinition() {
-            return true;
-        }
-
-        @Override
         public boolean isConstructorDefinition() {
             return true;
         }

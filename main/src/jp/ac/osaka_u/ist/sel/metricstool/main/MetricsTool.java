@@ -183,7 +183,7 @@ public class MetricsTool {
             for (TargetFile targetFile : TargetFileManager.getInstance()) {
                 try {
                     final String name = targetFile.getName();
-                    System.out.println("ƒtƒ@ƒCƒ‹–¼ : " + name);
+
                     final FileInfo fileInfo = new FileInfo(name);
                     FileInfoManager.getInstance().add(fileInfo);
 
