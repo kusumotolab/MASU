@@ -8,13 +8,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBinominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCastUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedNullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedPrimitiveTypeUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -75,7 +76,11 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     // キャストがあるとおそらくここに到達
                     // TODO UnresolvedReferenceTypeInfoにすべき
                     termTypes[0] = ((UnresolvedClassTypeInfo) typeElement.getType()).getUsage();
+                } else if(typeElement.getType() instanceof UnresolvedArrayTypeInfo) {
+                    UnresolvedArrayTypeInfo arrayType = (UnresolvedArrayTypeInfo) typeElement.getType();
+                    termTypes[0] = new UnresolvedArrayTypeReferenceInfo(arrayType);
                 } else {
+                
                     termTypes[0] = elements[0].getUsage();
                 }
             }  else {
@@ -96,9 +101,12 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 } else if (elements[i] instanceof TypeElement) {
                     TypeElement typeElement = (TypeElement) elements[i];
                     if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {
-                        
-                        // TODO UnresolvedReferenceTypeInfoにすべき 
                         termTypes[i] = ((UnresolvedClassTypeInfo) typeElement.getType()).getUsage();
+                    } else if(typeElement.getType() instanceof UnresolvedArrayTypeInfo) {
+                        // ここに到達するのはinstanceof type[]とき
+                        // TODO instanceofの使用を示すEntityUsageを生成したほうがいいかも
+                        UnresolvedArrayTypeInfo arrayType = (UnresolvedArrayTypeInfo) typeElement.getType();
+                        termTypes[i] = new UnresolvedArrayTypeReferenceInfo(arrayType);
                     } else {
                         termTypes[i] = elements[i].getUsage();
                     }
