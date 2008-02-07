@@ -542,7 +542,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         final int toColumn = this.getToColumn();
 
         // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
-        this.resolvedInfo = null != this.outerClass ? new TargetClassInfo(modifiers,
+        this.resolvedInfo = null == this.outerClass ? new TargetClassInfo(modifiers,
                 fullQualifiedName, privateVisible, namespaceVisible, inheritanceVisible,
                 publicVisible, instance, fromLine, fromColumn, toLine, toColumn)
                 : new TargetInnerClassInfo(modifiers, fullQualifiedName, usingClass,

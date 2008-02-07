@@ -804,7 +804,7 @@ public class MetricsTool {
             final ClassInfoManager classInfoManager) {
 
         final TargetInnerClassInfo classInfo = (TargetInnerClassInfo) unresolvedClassInfo
-                .resolveUnit(null, null, classInfoManager, null, null);
+                .resolveUnit(outerClass, null, classInfoManager, null, null);
 
         // このクラスのインナークラスに対して再帰的に処理
         for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
