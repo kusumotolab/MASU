@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -55,14 +56,20 @@ public final class UnresolvedSwitchBlockInfo extends
             return this.getResolvedUnit();
         }
 
-        // この for エントリの位置情報を取得
+        // このswitchオブジェクトの条件節を解決
+        final UnresolvedConditionalClauseInfo unresolvedConditionalClause = this
+                .getConditionalClause();
+        final ConditionalClauseInfo conditionalClause = unresolvedConditionalClause.resolveUnit(
+                usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+
+        // このswitchオブジェクトの位置情報を取得
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new SwitchBlockInfo(usingClass, usingMethod, fromLine, fromColumn,
-                toLine, toColumn);
+        this.resolvedInfo = new SwitchBlockInfo(usingClass, usingMethod, conditionalClause,
+                fromLine, fromColumn, toLine, toColumn);
 
         //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
