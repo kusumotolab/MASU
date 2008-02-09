@@ -9,6 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SuperTypeParameterInfo
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -17,14 +18,16 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
     /**
      * 型パラメータ名，未解決派生クラス型を与えてオブジェクトを初期化
      * 
+     * @param ownerUnit この型パラメータの所有ユニット(クラス or　メソッド)
      * @param name 型パラメータ名
      * @param extendsType 未解決基底クラス型
      * @param superType 未解決派生クラス型
      */
-    public UnresolvedSuperTypeParameterInfo(final String name,
-            final UnresolvedTypeInfo extendsType, final UnresolvedTypeInfo superType) {
+    public UnresolvedSuperTypeParameterInfo(final UnresolvedUnitInfo<?> ownerUnit,
+            final String name, final UnresolvedTypeInfo extendsType,
+            final UnresolvedTypeInfo superType) {
 
-        super(name, extendsType);
+        super(ownerUnit, name, extendsType);
 
         if (null == superType) {
             throw new NullPointerException();
@@ -60,6 +63,11 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
         final TypeInfo superType = unresolvedSuperType.resolveType(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
+        //　型パラメータの所有ユニットを解決
+        final UnresolvedUnitInfo<?> unresolvedOwnerUnit = this.getOwnerUnit();
+        final UnitInfo ownerUnit = unresolvedOwnerUnit.resolveUnit(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+        
         // extends 節 がある場合
         if (this.hasExtendsType()) {
 
@@ -67,11 +75,11 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
             final TypeInfo extendsType = unresolvedExtendsType.resolveType(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
 
-            this.resolvedInfo = new SuperTypeParameterInfo(name, extendsType, superType);
+            this.resolvedInfo = new SuperTypeParameterInfo(ownerUnit, name, extendsType, superType);
 
         } else {
 
-            this.resolvedInfo = new SuperTypeParameterInfo(name, null, superType);
+            this.resolvedInfo = new SuperTypeParameterInfo(ownerUnit, name, null, superType);
         }
 
         return this.resolvedInfo;
