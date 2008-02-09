@@ -15,15 +15,22 @@ public class TypeParameterInfo implements TypeInfo {
     /**
      * 型パラメータ名を与えてオブジェクトを初期化する
      * 
+     * @param ownerUnit 型パラメータを宣言しているユニット(クラス or メソッド)
      * @param name 型パラメータ名
+     * @param 継承している型
      */
-    public TypeParameterInfo(final String name, final TypeInfo extendsType) {
+    public TypeParameterInfo(final UnitInfo ownerUnit, final String name, final TypeInfo extendsType) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == name) {
+        if ((null == ownerUnit) || (null == name)) {
             throw new NullPointerException();
         }
 
+        if ((!(ownerUnit instanceof TargetClassInfo)) && (!(ownerUnit instanceof CallableUnitInfo))) {
+            throw new NullPointerException();
+        }
+
+        this.ownerUnit = ownerUnit;
         this.name = name;
         this.extendsType = extendsType;
     }
@@ -48,6 +55,15 @@ public class TypeParameterInfo implements TypeInfo {
     }
 
     /**
+     * 型パラメータを宣言しているユニット(クラス or メソッド)を返す
+     * 
+     * @param 型パラメータを宣言しているユニット(クラス or メソッド)
+     */
+    public final UnitInfo getOwnerUnit() {
+        return this.ownerUnit;
+    }
+
+    /**
      * 型パラメータ名を返す
      * 
      * @return 型パラメータ名
@@ -64,7 +80,7 @@ public class TypeParameterInfo implements TypeInfo {
     public final String getTypeName() {
         return this.name;
     }
-    
+
     /**
      * 基底クラス型を返す
      * 
@@ -82,6 +98,11 @@ public class TypeParameterInfo implements TypeInfo {
     public final boolean hasExtendsType() {
         return null != this.extendsType;
     }
+
+    /**
+     * 型パラメータを所有しているユニットを保存するための変数
+     */
+    private final UnitInfo ownerUnit;
 
     /**
      * 型パラメータ名を保存するための変数

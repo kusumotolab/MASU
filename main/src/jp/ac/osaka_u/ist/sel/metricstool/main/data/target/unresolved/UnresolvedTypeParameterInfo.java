@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -23,16 +24,25 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
     /**
      * 型パラメータ名を与えてオブジェクトを初期化する
      * 
+     * @param ownerUnit この型パラメータを定義しているユニット(クラス or メソッド)
      * @param name 型パラメータ名
      * @param extends 未解決基底クラス型
      */
-    public UnresolvedTypeParameterInfo(final String name, final UnresolvedTypeInfo extendsType) {
+    public UnresolvedTypeParameterInfo(final UnresolvedUnitInfo<?> ownerUnit, final String name,
+            final UnresolvedTypeInfo extendsType) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == name) {
-            throw new NullPointerException();
+        if ((null == ownerUnit) || (null == name)) {
+            throw new IllegalArgumentException();
         }
 
+        // ownerUnitがメソッドかクラスでない場合はエラー
+        if ((!(ownerUnit instanceof UnresolvedClassInfo))
+                && (!(ownerUnit instanceof UnresolvedCallableUnitInfo))) {
+            throw new IllegalArgumentException();
+        }
+
+        this.ownerUnit = ownerUnit;
         this.name = name;
         this.extendsType = extendsType;
     }
@@ -82,6 +92,11 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
             throw new NullPointerException();
         }
 
+        //　型パラメータの所有ユニットを解決
+        final UnresolvedUnitInfo<?> unresolvedOwnerUnit = this.getOwnerUnit();
+        final UnitInfo ownerUnit = unresolvedOwnerUnit.resolveUnit(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+
         final String name = this.getName();
 
         if (this.hasExtendsType()) {
@@ -90,14 +105,23 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
             final TypeInfo extendsType = unresolvedExtendsType.resolveType(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
 
-            this.resolvedInfo = new TypeParameterInfo(name, extendsType);
+            this.resolvedInfo = new TypeParameterInfo(ownerUnit, name, extendsType);
 
         } else {
 
-            this.resolvedInfo = new TypeParameterInfo(name, null);
+            this.resolvedInfo = new TypeParameterInfo(ownerUnit, name, null);
         }
 
         return this.resolvedInfo;
+    }
+
+    /**
+     * この型パラメータを宣言しているユニット(クラス or メソッド)を返す
+     * 
+     * @return この型パラメータを宣言しているユニット(クラス or メソッド)
+     */
+    public final UnresolvedUnitInfo<?> getOwnerUnit() {
+        return this.ownerUnit;
     }
 
     /**
@@ -126,6 +150,11 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
     public final boolean hasExtendsType() {
         return null != this.extendsType;
     }
+
+    /**
+     * 型パラメータを宣言しているユニットを保存するための変数
+     */
+    private final UnresolvedUnitInfo<?> ownerUnit;
 
     /**
      * 型パラメータ名を保存するための変数
