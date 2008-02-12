@@ -1183,7 +1183,7 @@ statement
 				warnWhenFollowAmbig = false;
 			}
 		:
-			"else"! statement
+			elseStatement
 		)?
 
 	// For statement
@@ -1224,6 +1224,10 @@ statement
 	// empty statement
 	|	s:SEMI {#s.setType(EMPTY_STAT);}
 	;
+
+elseStatement
+	:	"else"^ statement
+	;	
 
 forStatement!
 	:	f:"for"^
