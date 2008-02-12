@@ -18,6 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
@@ -100,8 +101,10 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
         }
 
         // -----ここから親の型に応じて処理を分岐
+        final TypeInfo ownerType = ownerUsage.getType();
+
         // 親が解決できなかった場合はどうしようもない
-        if (ownerUsage.getType() instanceof UnknownTypeInfo) {
+        if (ownerType instanceof UnknownTypeInfo) {
 
             // 見つからなかった処理を行う
             usingMethod.addUnresolvedUsage(this);
@@ -110,10 +113,9 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
             return this.resolvedInfo;
 
             // 親がクラス型だった場合
-        } else if (ownerUsage.getType() instanceof ClassTypeInfo) {
+        } else if (ownerType instanceof ClassTypeInfo) {
 
-            final ClassInfo ownerClass = ((ClassTypeInfo) ownerUsage.getType())
-                    .getReferencedClass();
+            final ClassInfo ownerClass = ((ClassTypeInfo) ownerType).getReferencedClass();
             if (ownerClass instanceof TargetClassInfo) {
 
                 // まずは利用可能なメソッドから検索
@@ -128,8 +130,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
 
                         // 呼び出し可能なメソッドが見つかった場合
                         if (availableMethod.canCalledWith(name, actualParameters)) {
-                            this.resolvedInfo = new MethodCallInfo(availableMethod, fromLine,
-                                    fromColumn, toLine, toColumn);
+                            this.resolvedInfo = new MethodCallInfo(ownerType, availableMethod,
+                                    fromLine, fromColumn, toLine, toColumn);
                             ((MethodCallInfo) this.resolvedInfo).addParameters(actualParameters);
                             return this.resolvedInfo;
                         }
@@ -151,8 +153,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                         methodInfoManager.add(methodInfo);
 
                         // 外部クラスに新規で外部メソッド変数（ExternalMethodInfo）を追加したので型は不明
-                        this.resolvedInfo = new MethodCallInfo(methodInfo, fromLine, fromColumn,
-                                toLine, toColumn);
+                        this.resolvedInfo = new MethodCallInfo(ownerType, methodInfo, fromLine,
+                                fromColumn, toLine, toColumn);
                         ((MethodCallInfo) this.resolvedInfo).addParameters(actualParameters);
                         return this.resolvedInfo;
                     }
@@ -182,14 +184,14 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                 methodInfoManager.add(methodInfo);
 
                 // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
-                this.resolvedInfo = new MethodCallInfo(methodInfo, fromLine, fromColumn, toLine,
-                        toColumn);
+                this.resolvedInfo = new MethodCallInfo(ownerType, methodInfo, fromLine, fromColumn,
+                        toLine, toColumn);
                 ((MethodCallInfo) this.resolvedInfo).addParameters(actualParameters);
                 return this.resolvedInfo;
             }
 
             // 親が配列だった場合
-        } else if (ownerUsage.getType() instanceof ArrayTypeInfo) {
+        } else if (ownerType instanceof ArrayTypeInfo) {
 
             // XXX Java言語であれば， java.lang.Object に対する呼び出し
             if (Settings.getLanguage().equals(LANGUAGE.JAVA)) {
@@ -203,22 +205,21 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                 methodInfoManager.add(methodInfo);
 
                 // 外部クラスに新規で外部メソッドを追加したので型は不明
-                this.resolvedInfo = new MethodCallInfo(methodInfo, fromLine, fromColumn, toLine,
-                        toColumn);
+                this.resolvedInfo = new MethodCallInfo(ownerType, methodInfo, fromLine, fromColumn,
+                        toLine, toColumn);
                 ((MethodCallInfo) this.resolvedInfo).addParameters(actualParameters);
                 return this.resolvedInfo;
             }
 
             // 親がプリミティブ型だった場合
-        } else if (ownerUsage.getType() instanceof PrimitiveTypeInfo) {
+        } else if (ownerType instanceof PrimitiveTypeInfo) {
 
             switch (Settings.getLanguage()) {
             // Java の場合はオートボクシングでのメソッド呼び出しが可能
             // TODO 将来的にはこの switch文はとる．なぜなら TypeConverter.getTypeConverter(LANGUAGE)があるから．
             case JAVA:
                 final ExternalClassInfo wrapperClass = TypeConverter.getTypeConverter(
-                        Settings.getLanguage()).getWrapperClass(
-                        (PrimitiveTypeInfo) ownerUsage.getType());
+                        Settings.getLanguage()).getWrapperClass((PrimitiveTypeInfo) ownerType);
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
                         wrapperClass);
                 final List<ParameterInfo> parameters = NameResolver
@@ -227,8 +228,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                 methodInfoManager.add(methodInfo);
 
                 // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
-                this.resolvedInfo = new MethodCallInfo(methodInfo, fromLine, fromColumn, toLine,
-                        toColumn);
+                this.resolvedInfo = new MethodCallInfo(ownerType, methodInfo, fromLine, fromColumn,
+                        toLine, toColumn);
                 ((MethodCallInfo) this.resolvedInfo).addParameters(actualParameters);
                 return this.resolvedInfo;
 

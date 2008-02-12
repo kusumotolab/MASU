@@ -35,11 +35,6 @@ public abstract class VariableUsageInfo<T extends VariableInfo> extends EntityUs
         return !this.reference;
     }
 
-    @Override
-    public final TypeInfo getType() {
-        return this.getUsedVariable().getType();
-    }
-
     private final T usedVariable;
 
     private final boolean reference;

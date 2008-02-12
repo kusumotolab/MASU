@@ -193,6 +193,16 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
     }
 
     /**
+     * 指定されたインデックスの型パラメータを返す
+     * 
+     * @param index 型パラメータのインデックス
+     * @return　指定されたインデックスの型パラメータ
+     */
+    public final TypeParameterInfo getIndex(final int index) {
+        return this.typeParameters.get(index);
+    }
+
+    /**
      * このクラスに定義されたフィールド情報を追加する．プラグインから呼ぶとランタイムエラー．
      * 
      * @param definedField 追加する定義されたフィールド

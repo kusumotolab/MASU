@@ -24,8 +24,20 @@ public final class TargetParameterInfo extends ParameterInfo {
      * @param toColumn 終了列
      */
     public TargetParameterInfo(final Set<ModifierInfo> modifiers, final String name,
-            final TypeInfo type, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+            final TypeInfo type, final int index, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
         super(modifiers, name, type, fromLine, fromColumn, toLine, toColumn);
+        this.index = index;
     }
+
+    /**
+     * 引数のインデックスを返す
+     * 
+     * @return　引数のインデックス
+     */
+    public final int getIndex() {
+        return this.index;
+    }
+
+    private final int index;
 }

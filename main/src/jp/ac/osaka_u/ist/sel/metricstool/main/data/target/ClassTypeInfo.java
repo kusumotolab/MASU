@@ -65,7 +65,7 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
         }
 
         this.referencedClass = referencedClass;
-        this.typeParameters = new ArrayList<ClassTypeInfo>();
+        this.typeArguments = new ArrayList<TypeInfo>();
     }
 
     /**
@@ -94,18 +94,18 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
         }
 
         // 型パラメータの数が異なる場合は，等しくない
-        final List<ClassTypeInfo> thisTypeParameters = this.typeParameters;
-        final List<ClassTypeInfo> targetTypeParameters = targetReferenceType.getTypeParameters();
+        final List<TypeInfo> thisTypeParameters = this.typeArguments;
+        final List<TypeInfo> targetTypeParameters = targetReferenceType.getTypeArguments();
         if (thisTypeParameters.size() != targetTypeParameters.size()) {
             return false;
         }
 
         // 全ての型パラメータが等しくなければ，等しくない
-        final Iterator<ClassTypeInfo> thisTypeParameterIterator = thisTypeParameters.iterator();
-        final Iterator<ClassTypeInfo> targetTypeParameterIterator = targetTypeParameters.iterator();
+        final Iterator<TypeInfo> thisTypeParameterIterator = thisTypeParameters.iterator();
+        final Iterator<TypeInfo> targetTypeParameterIterator = targetTypeParameters.iterator();
         while (thisTypeParameterIterator.hasNext()) {
-            final ClassTypeInfo thisTypeParameter = thisTypeParameterIterator.next();
-            final ClassTypeInfo targetTypeParameter = targetTypeParameterIterator.next();
+            final TypeInfo thisTypeParameter = thisTypeParameterIterator.next();
+            final TypeInfo targetTypeParameter = targetTypeParameterIterator.next();
             if (!thisTypeParameter.equals(targetTypeParameter)) {
                 return false;
             }
@@ -125,9 +125,9 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
         final StringBuilder sb = new StringBuilder();
         sb.append(this.referencedClass.getFullQualifiedName("."));
 
-        if (0 <= this.typeParameters.size()) {
+        if (0 <= this.typeArguments.size()) {
             sb.append("<");
-            for (final ClassTypeInfo typeParameter : this.typeParameters) {
+            for (final TypeInfo typeParameter : this.typeArguments) {
                 sb.append(typeParameter.getTypeName());
             }
             sb.append(">");
@@ -146,12 +146,31 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
     }
 
     /**
-     * この参照型に用いられている型パラメータのリストを返す
+     * この参照型に用いられている型引数のリストを返す
      * 
-     * @return この参照型に用いられている型パラメータのリストを返す
+     * @return この参照型に用いられている型引数のリストを返す
      */
-    public List<ClassTypeInfo> getTypeParameters() {
-        return Collections.unmodifiableList(this.typeParameters);
+    public List<TypeInfo> getTypeArguments() {
+        return Collections.unmodifiableList(this.typeArguments);
+    }
+
+    /**
+     * この参照型のインデックスで指定された型引数を返す
+     * 
+     * @param index　型引数のインデックス
+     * @return　この参照型のインデックスで指定された型引数
+     */
+    public TypeInfo getTypeArgument(final int index) {
+        return this.typeArguments.get(index);
+    }
+
+    /**
+     * この参照型に型引数を追加
+     * 
+     * @param argument 追加する型引数
+     */
+    public void addTypeArgument(final TypeInfo argument) {
+        this.typeArguments.add(argument);
     }
 
     /**
@@ -162,6 +181,6 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
     /**
      * この参照型の型パラメータを保存するための変数
      */
-    private final List<ClassTypeInfo> typeParameters;
+    private final List<TypeInfo> typeArguments;
 
 }

@@ -21,4 +21,11 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
 
         super(usedLocalVariable, reference, fromLine, fromColumn, toLine, toColumn);
     }
+
+    @Override
+    public TypeInfo getType() {
+        final LocalVariableInfo usedVariable = this.getUsedVariable();
+        final TypeInfo usedVariableType = usedVariable.getType();
+        return usedVariableType;
+    }
 }

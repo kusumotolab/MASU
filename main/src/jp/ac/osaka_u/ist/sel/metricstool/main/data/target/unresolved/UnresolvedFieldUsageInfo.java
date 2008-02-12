@@ -132,8 +132,9 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
                         // 一致するフィールド名が見つかった場合
                         if (fieldName.equals(availableField.getName())) {
 
-                            this.resolvedInfo = new FieldUsageInfo(availableField, reference,
-                                    fromLine, fromColumn, toLine, toColumn);
+                            this.resolvedInfo = new FieldUsageInfo(ownerUsage.getType(),
+                                    availableField, reference, fromLine, fromColumn, toLine,
+                                    toColumn);
                             return this.resolvedInfo;
                         }
                     }
@@ -154,8 +155,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
                             fieldInfoManager.add(fieldInfo);
 
                             // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
-                            this.resolvedInfo = new FieldUsageInfo(fieldInfo, reference, fromLine,
-                                    fromColumn, toLine, toColumn);
+                            this.resolvedInfo = new FieldUsageInfo(ownerUsage.getType(), fieldInfo,
+                                    reference, fromLine, fromColumn, toLine, toColumn);
                             return this.resolvedInfo;
                         }
 
@@ -183,8 +184,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
                 fieldInfoManager.add(fieldInfo);
 
                 // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
-                this.resolvedInfo = new FieldUsageInfo(fieldInfo, reference, fromLine, fromColumn,
-                        toLine, toColumn);
+                this.resolvedInfo = new FieldUsageInfo(ownerUsage.getType(), fieldInfo, reference,
+                        fromLine, fromColumn, toLine, toColumn);
                 return this.resolvedInfo;
             }
 

@@ -20,4 +20,11 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
 
         super(usedParameter, reference, fromLine, fromColumn, toLine, toColumn);
     }
+
+    @Override
+    public TypeInfo getType() {
+        final ParameterInfo parameter = this.getUsedVariable();
+        final TypeInfo usedVariableType = parameter.getType();
+        return usedVariableType;
+    }
 }

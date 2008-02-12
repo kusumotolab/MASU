@@ -41,7 +41,7 @@ public abstract class CallInfo extends EntityUsageInfo {
     }
 
     /**
-     * このメソッド呼び出しの実引数を追加．プラグインからは呼び出せない．
+     * この呼び出しの実引数を追加．プラグインからは呼び出せない．
      * 
      * @param parameters 追加する実引数
      */
@@ -56,7 +56,7 @@ public abstract class CallInfo extends EntityUsageInfo {
     }
 
     /**
-     * このコンストラクタ呼び出しの実引数のListを返す．
+     * この呼び出しの実引数のListを返す．
      * 
      * @return
      */

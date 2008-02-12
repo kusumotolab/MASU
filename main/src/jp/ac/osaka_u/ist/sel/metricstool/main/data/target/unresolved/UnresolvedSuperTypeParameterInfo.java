@@ -58,6 +58,7 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
             throw new NullPointerException();
         }
 
+        final int index = this.getIndex();
         final String name = this.getName();
         final UnresolvedTypeInfo unresolvedSuperType = this.getSuperType();
         final TypeInfo superType = unresolvedSuperType.resolveType(usingClass, usingMethod,
@@ -67,7 +68,7 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
         final UnresolvedUnitInfo<?> unresolvedOwnerUnit = this.getOwnerUnit();
         final UnitInfo ownerUnit = unresolvedOwnerUnit.resolveUnit(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-        
+
         // extends êﬂ Ç™Ç†ÇÈèÍçá
         if (this.hasExtendsType()) {
 
@@ -75,11 +76,12 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
             final TypeInfo extendsType = unresolvedExtendsType.resolveType(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
 
-            this.resolvedInfo = new SuperTypeParameterInfo(ownerUnit, name, extendsType, superType);
+            this.resolvedInfo = new SuperTypeParameterInfo(ownerUnit, name, index, extendsType,
+                    superType);
 
         } else {
 
-            this.resolvedInfo = new SuperTypeParameterInfo(ownerUnit, name, null, superType);
+            this.resolvedInfo = new SuperTypeParameterInfo(ownerUnit, name, index, null, superType);
         }
 
         return this.resolvedInfo;

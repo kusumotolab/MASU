@@ -19,7 +19,8 @@ public class TypeParameterInfo implements TypeInfo {
      * @param name 型パラメータ名
      * @param 継承している型
      */
-    public TypeParameterInfo(final UnitInfo ownerUnit, final String name, final TypeInfo extendsType) {
+    public TypeParameterInfo(final UnitInfo ownerUnit, final String name, final int index,
+            final TypeInfo extendsType) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == ownerUnit) || (null == name)) {
@@ -32,6 +33,7 @@ public class TypeParameterInfo implements TypeInfo {
 
         this.ownerUnit = ownerUnit;
         this.name = name;
+        this.index = index;
         this.extendsType = extendsType;
     }
 
@@ -73,12 +75,21 @@ public class TypeParameterInfo implements TypeInfo {
     }
 
     /**
-     * 型名（実際には型パラメータ名）を返す．
+     * 型名（実際には型パラメータ名）を返す
      * 
      * @return 型名
      */
     public final String getTypeName() {
         return this.name;
+    }
+
+    /**
+     * 型パラメータのインデックスを返す
+     * 
+     * @return　型パラメータのインデックス
+     */
+    public final int getIndex() {
+        return this.index;
     }
 
     /**
@@ -108,6 +119,11 @@ public class TypeParameterInfo implements TypeInfo {
      * 型パラメータ名を保存するための変数
      */
     private final String name;
+
+    /**
+     * この型パラメータが何番目のものかを表す変数
+     */
+    private final int index;
 
     /**
      * 未解決基底クラス型を保存するための変数

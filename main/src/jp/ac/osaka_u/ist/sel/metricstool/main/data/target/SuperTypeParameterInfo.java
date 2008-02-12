@@ -14,10 +14,10 @@ public final class SuperTypeParameterInfo extends TypeParameterInfo {
      * @param extendsType äÓíÍÉNÉâÉXå^
      * @param superType îhê∂ÉNÉâÉXå^
      */
-    public SuperTypeParameterInfo(final UnitInfo ownerUnit, final String name,
+    public SuperTypeParameterInfo(final UnitInfo ownerUnit, final String name, final int index,
             final TypeInfo extendsType, final TypeInfo superType) {
 
-        super(ownerUnit, name, extendsType);
+        super(ownerUnit, name, index, extendsType);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == superType) {
