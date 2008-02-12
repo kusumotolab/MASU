@@ -13,14 +13,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedB
 
 public abstract class InnerBlockBuilder extends CompoundDataBuilder<UnresolvedBlockInfo> {
 
-	protected InnerBlockBuilder(BuildDataManager targetDataManager){
+	protected InnerBlockBuilder(final BuildDataManager targetDataManager, final InnerBlockStateManager innerBlockStateManager){
 	    
 	    if(null == targetDataManager) {
 	        throw new IllegalArgumentException("targetDataManager is null.");
 	    }
 	    
 		this.buildManager = targetDataManager;
-		
+		this.blockStateManager = innerBlockStateManager;
 		addStateManager(blockStateManager);
 	}
 	
@@ -72,5 +72,5 @@ public abstract class InnerBlockBuilder extends CompoundDataBuilder<UnresolvedBl
     
     
     
-    protected InnerBlockStateManager blockStateManager;
+    protected final InnerBlockStateManager blockStateManager;
 }

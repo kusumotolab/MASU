@@ -6,10 +6,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedD
 
 public class DoBlockBuilder extends ConditionalBlockBuilder {
 
-    public DoBlockBuilder(BuildDataManager targetDataManager) {
-        super(targetDataManager);
-
-        this.blockStateManager = new DoBlockStateManager();
+    public DoBlockBuilder(final BuildDataManager targetDataManager) {
+        super(targetDataManager, new DoBlockStateManager());
     }
 
     @Override

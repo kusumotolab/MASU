@@ -6,10 +6,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedS
 
 public class SwitchBlockBuilder extends ConditionalBlockBuilder {
 
-    public SwitchBlockBuilder(BuildDataManager targetDataManager) {
-        super(targetDataManager);
-
-        this.blockStateManager = new SwitchBlockStateManager();
+    public SwitchBlockBuilder(final BuildDataManager targetDataManager) {
+        super(targetDataManager, new SwitchBlockStateManager());
     }
 
     @Override

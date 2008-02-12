@@ -8,10 +8,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedS
 
 public class CaseEntryBuilder extends InnerBlockBuilder {
 
-    public CaseEntryBuilder(BuildDataManager targetDataManager) {
-        super(targetDataManager);
-
-        this.blockStateManager = new CaseEntryStateManager();
+    public CaseEntryBuilder(final BuildDataManager targetDataManager) {
+        super(targetDataManager, new CaseEntryStateManager());
     }
 
     @Override

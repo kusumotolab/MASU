@@ -342,7 +342,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     public UnresolvedUnitInfo getCurrentUnit() {
         UnresolvedUnitInfo currentUnit = null;
-        if(MODE.METHOD == this.mode) {
+        if(MODE.METHOD == this.mode || MODE.CONDITIONAL_CLAUSE == this.mode || MODE.INNER_BLOCK == this.mode) {
             currentUnit = this.getCurrentMethod();
         } else if (MODE.CLASS == this.mode) {
             currentUnit = this.getCurrentClass();

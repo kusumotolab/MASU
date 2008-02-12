@@ -20,7 +20,7 @@ public abstract class BlockNameToken extends AstTokenAdapter {
 	public static BlockNameToken IF_BLOCK = new BlockNameToken("if"){
 
 		@Override
-		public boolean isFor() {
+		public boolean isIf() {
 		    return true;
 		}
 

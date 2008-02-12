@@ -8,10 +8,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedI
 
 public class ElseBlockBuilder extends InnerBlockBuilder {
 
-    public ElseBlockBuilder(BuildDataManager targetDataManager) {
-        super(targetDataManager);
-
-        this.blockStateManager = new ElseBlockStateManager();
+    public ElseBlockBuilder(final BuildDataManager targetDataManager) {
+        super(targetDataManager, new ElseBlockStateManager());
     }
 
     @Override

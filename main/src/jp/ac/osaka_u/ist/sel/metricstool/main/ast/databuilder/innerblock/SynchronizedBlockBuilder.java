@@ -7,9 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedS
 public class SynchronizedBlockBuilder extends InnerBlockBuilder {
 
     public SynchronizedBlockBuilder(BuildDataManager targetDataManager) {
-        super(targetDataManager);
-
-        this.blockStateManager = new SynchronizedBlockStateManager();
+        super(targetDataManager, new SynchronizedBlockStateManager());
     }
 
     @Override

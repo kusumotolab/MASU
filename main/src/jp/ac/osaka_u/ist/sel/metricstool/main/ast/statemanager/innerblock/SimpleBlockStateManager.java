@@ -10,7 +10,7 @@ public class SimpleBlockStateManager extends InnerBlockStateManager {
     @Override
     protected boolean isDefinitionEvent(final AstVisitEvent event) {
         AstToken parentToken = event.getParentToken();
-        return event.getToken().isBlock() && !parentToken.isBlockDefinition()
+        return  event.getToken().isBlock() && !parentToken.isBlockDefinition()
                 && !parentToken.isSynchronized();
     }
 

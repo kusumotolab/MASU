@@ -6,10 +6,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedS
 
 public class SimpleBlockBuilder extends InnerBlockBuilder {
 
-    public SimpleBlockBuilder(BuildDataManager targetDataManager) {
-        super(targetDataManager);
-
-        this.blockStateManager = new SimpleBlockStateManager();
+    public SimpleBlockBuilder(final BuildDataManager targetDataManager) {
+        super(targetDataManager, new SimpleBlockStateManager());
     }
     
     @Override

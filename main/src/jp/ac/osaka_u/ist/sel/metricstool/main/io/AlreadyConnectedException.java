@@ -1,6 +1,5 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.ConnectionException;
 
 
 /**

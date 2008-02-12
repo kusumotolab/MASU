@@ -8,10 +8,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 
 public class FinallyBlockBuilder extends InnerBlockBuilder {
 
-    public FinallyBlockBuilder(BuildDataManager targetDataManager) {
-        super(targetDataManager);
-        
-        this.blockStateManager = new FinallyBlockStateManager();
+    public FinallyBlockBuilder(final BuildDataManager targetDataManager) {
+        super(targetDataManager, new FinallyBlockStateManager());
     }
 
     @Override

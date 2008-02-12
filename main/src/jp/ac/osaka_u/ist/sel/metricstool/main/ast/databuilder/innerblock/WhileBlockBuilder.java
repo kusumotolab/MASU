@@ -7,9 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedW
 public class WhileBlockBuilder extends InnerBlockBuilder {
 
     public WhileBlockBuilder(BuildDataManager targetDataManager) {
-        super(targetDataManager);
-
-        this.blockStateManager = new WhileBlockStateManager();
+        super(targetDataManager, new WhileBlockStateManager());
     }
 
     @Override

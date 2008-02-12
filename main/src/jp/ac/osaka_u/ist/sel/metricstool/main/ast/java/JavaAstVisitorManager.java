@@ -36,7 +36,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.SwitchB
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.SynchronizedBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.TryBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.WhileBlockBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.ElseBlockStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitorManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.PositionManager;
@@ -135,7 +134,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new FinallyBlockBuilder(this.buildDataManager));
         this.builders.add(new ForBlockBuilder(this.buildDataManager));
         this.builders.add(new IfBlockBuilder(this.buildDataManager));
-        this.builders.add(new SimpleBlockBuilder(this.buildDataManager));
+        //this.builders.add(new SimpleBlockBuilder(this.buildDataManager));
         this.builders.add(new SwitchBlockBuilder(this.buildDataManager));
         this.builders.add(new SynchronizedBlockBuilder(this.buildDataManager));
         this.builders.add(new TryBlockBuilder(this.buildDataManager));
