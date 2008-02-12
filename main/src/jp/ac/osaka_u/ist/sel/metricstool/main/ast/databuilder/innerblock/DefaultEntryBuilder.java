@@ -16,10 +16,11 @@ public class DefaultEntryBuilder extends InnerBlockBuilder {
 
     @Override
     protected UnresolvedDefaultEntryInfo createUnresolvedBlockInfo() {
-        UnresolvedBlockInfo<?> preBlock = this.buildManager.getPreBlock();
+        final UnresolvedBlockInfo<?> preBlock = this.buildManager.getPreBlock();
         if(preBlock instanceof UnresolvedSwitchBlockInfo) {
             return new UnresolvedDefaultEntryInfo((UnresolvedSwitchBlockInfo) preBlock);
         } else {
+            assert false : "Illegal state : incorrect block structure";
             return null;
         }
     }

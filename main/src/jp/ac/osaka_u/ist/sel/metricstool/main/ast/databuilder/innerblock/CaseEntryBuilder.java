@@ -16,10 +16,11 @@ public class CaseEntryBuilder extends InnerBlockBuilder {
 
     @Override
     protected UnresolvedCaseEntryInfo createUnresolvedBlockInfo() {
-        UnresolvedBlockInfo<?> preBlock = buildManager.getPreBlock();
+        final UnresolvedBlockInfo<?> preBlock = buildManager.getPreBlock();
         if(preBlock instanceof UnresolvedSwitchBlockInfo) {
             return new UnresolvedCaseEntryInfo((UnresolvedSwitchBlockInfo) preBlock);
         } else {
+            assert false : "Illegal state : incorrect block structure";
             return null;
         }
     }

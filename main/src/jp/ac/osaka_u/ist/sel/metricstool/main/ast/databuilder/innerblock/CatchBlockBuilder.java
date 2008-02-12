@@ -15,10 +15,11 @@ public class CatchBlockBuilder extends InnerBlockBuilder {
 
     @Override
     protected UnresolvedCatchBlockInfo createUnresolvedBlockInfo() {
-        UnresolvedBlockInfo<?> preBlock = this.buildManager.getPreBlock();
+        final UnresolvedBlockInfo<?> preBlock = this.buildManager.getPreBlock();
         if(preBlock instanceof UnresolvedTryBlockInfo) {
             return new UnresolvedCatchBlockInfo((UnresolvedTryBlockInfo) preBlock);
         } else {
+            assert false : "Illegal state : incorrect block structure";
             return null;
         }
     }
