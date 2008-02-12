@@ -24,10 +24,10 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
      * @param superType ñ¢âåàîhê∂ÉNÉâÉXå^
      */
     public UnresolvedSuperTypeParameterInfo(final UnresolvedUnitInfo<?> ownerUnit,
-            final String name, final UnresolvedTypeInfo extendsType,
+            final String name, final int index, final UnresolvedTypeInfo extendsType,
             final UnresolvedTypeInfo superType) {
 
-        super(ownerUnit, name, extendsType);
+        super(ownerUnit, name, index, extendsType);
 
         if (null == superType) {
             throw new NullPointerException();

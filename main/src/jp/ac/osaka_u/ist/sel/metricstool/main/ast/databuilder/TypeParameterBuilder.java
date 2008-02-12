@@ -136,7 +136,7 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
             parameter = new UnresolvedTypeParameterInfo(ownerUnit, name[0], index, upperBounds);
         } else {
             //‰ºŒÀ‚ª‚ ‚éê‡‚Í‚±‚Á‚¿‚ðì‚é
-            parameter = new UnresolvedSuperTypeParameterInfo(ownerUnit, name[0], upperBounds, lowerBounds);
+            parameter = new UnresolvedSuperTypeParameterInfo(ownerUnit, name[0], index, upperBounds, lowerBounds);
         }
 
         //ÅŒã‚Éƒf[ƒ^ŠÇ—ŽÒ‚É“o˜^‚·‚é

@@ -41,6 +41,7 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
                 && (!(ownerUnit instanceof UnresolvedCallableUnitInfo))) {
             throw new IllegalArgumentException();
         }
+        
 
         this.ownerUnit = ownerUnit;
         this.name = name;
