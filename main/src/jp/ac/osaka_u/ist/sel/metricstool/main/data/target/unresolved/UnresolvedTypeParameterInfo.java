@@ -29,7 +29,7 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
      * @param extends 未解決基底クラス型
      */
     public UnresolvedTypeParameterInfo(final UnresolvedUnitInfo<?> ownerUnit, final String name,
-            final UnresolvedTypeInfo extendsType) {
+            final int index, final UnresolvedTypeInfo extendsType) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == ownerUnit) || (null == name)) {
@@ -44,6 +44,7 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
 
         this.ownerUnit = ownerUnit;
         this.name = name;
+        this.index = index;
         this.extendsType = extendsType;
     }
 
@@ -98,6 +99,7 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
         final String name = this.getName();
+        final int index = this.getIndex();
 
         if (this.hasExtendsType()) {
 
@@ -105,11 +107,11 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
             final TypeInfo extendsType = unresolvedExtendsType.resolveType(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
 
-            this.resolvedInfo = new TypeParameterInfo(ownerUnit, name, extendsType);
+            this.resolvedInfo = new TypeParameterInfo(ownerUnit, name, index, extendsType);
 
         } else {
 
-            this.resolvedInfo = new TypeParameterInfo(ownerUnit, name, null);
+            this.resolvedInfo = new TypeParameterInfo(ownerUnit, name, index, null);
         }
 
         return this.resolvedInfo;
@@ -131,6 +133,15 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
      */
     public final String getName() {
         return this.name;
+    }
+
+    /**
+     * 型パラメータのインデックスを返す
+     * 
+     * @return　型パラメータのインデックス
+     */
+    public final int getIndex() {
+        return this.index;
     }
 
     /**
@@ -165,6 +176,11 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
      * 基底クラスを保存するための変数
      */
     private final UnresolvedTypeInfo extendsType;
+
+    /**
+     * 型パラメータのインデックスを保存するための変数
+     */
+    private final int index;
 
     /**
      * 名前解決された情報を保存するための変数

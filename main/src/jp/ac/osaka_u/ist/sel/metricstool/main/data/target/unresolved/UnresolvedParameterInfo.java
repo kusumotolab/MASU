@@ -32,8 +32,9 @@ public final class UnresolvedParameterInfo extends UnresolvedVariableInfo<Target
      * @param name 引数名
      * @param type 引数の型
      */
-    public UnresolvedParameterInfo(final String name, final UnresolvedTypeInfo type) {
+    public UnresolvedParameterInfo(final String name, final UnresolvedTypeInfo type, final int index) {
         super(name, type);
+        this.index = index;
     }
 
     /**
@@ -65,6 +66,7 @@ public final class UnresolvedParameterInfo extends UnresolvedVariableInfo<Target
         // 修飾子，パラメータ名，型，位置情報を取得
         final Set<ModifierInfo> parameterModifiers = this.getModifiers();
         final String parameterName = this.getName();
+        final int index = this.getIndex();
         final UnresolvedTypeInfo unresolvedParameterType = this.getType();
         TypeInfo parameterType = unresolvedParameterType.resolveType(usingClass, usingMethod,
                 classInfoManager, null, null);
@@ -100,9 +102,23 @@ public final class UnresolvedParameterInfo extends UnresolvedVariableInfo<Target
 
         // パラメータオブジェクトを生成する
         this.resolvedInfo = new TargetParameterInfo(parameterModifiers, parameterName,
-                parameterType, parameterFromLine, parameterFromColumn, parameterToLine,
+                parameterType, index, parameterFromLine, parameterFromColumn, parameterToLine,
                 parameterToColumn);
         return this.resolvedInfo;
     }
+
+    /**
+     * 引数のインデックスを返す
+     * 
+     * @return　引数のインデックス
+     */
+    public int getIndex() {
+        return this.index;
+    }
+
+    /**
+     * 引数のインデックスを保存するための変数
+     */
+    private final int index;
 
 }
