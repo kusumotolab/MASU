@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSuperTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
 
 
 /**
@@ -123,17 +124,19 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
         //Œ^ƒpƒ‰ƒ[ƒ^‚Ì–¼‘O‚ª•¡”ŒÂ‚É•ª‚©‚ê‚Ä‚Ä‚à‚¨‚©‚µ‚¢
         assert (name.length == 1);
 
+        final UnresolvedUnitInfo ownerUnit = this.buildDataManager.getCurrentUnit();
         //Œ^‚ÌãŒÀî•ñ‰ºŒÀî•ñ‚ðŽæ“¾
         final UnresolvedTypeInfo upperBounds = this.getUpperBounds();
         final UnresolvedTypeInfo lowerBounds = this.getLowerBounds();
-
+        final int index = buildDataManager.getCurrentTypeParameterCount();
+        
         UnresolvedTypeParameterInfo parameter = null;
         if (null == lowerBounds) {
             //‰ºŒÀ‚ª‚È‚¯‚ê‚Î•’Ê‚Éì‚é
-            parameter = new UnresolvedTypeParameterInfo(name[0], upperBounds);
+            parameter = new UnresolvedTypeParameterInfo(ownerUnit, name[0], index, upperBounds);
         } else {
             //‰ºŒÀ‚ª‚ ‚éê‡‚Í‚±‚Á‚¿‚ðì‚é
-            parameter = new UnresolvedSuperTypeParameterInfo(name[0], upperBounds, lowerBounds);
+            parameter = new UnresolvedSuperTypeParameterInfo(ownerUnit, name[0], upperBounds, lowerBounds);
         }
 
         //ÅŒã‚Éƒf[ƒ^ŠÇ—ŽÒ‚É“o˜^‚·‚é

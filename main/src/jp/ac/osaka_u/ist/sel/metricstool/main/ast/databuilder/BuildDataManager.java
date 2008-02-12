@@ -14,6 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedF
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
@@ -128,6 +129,8 @@ public interface BuildDataManager {
 
     public int getAnonymousClassCount(UnresolvedClassInfo classInfo);
 
+    public UnresolvedUnitInfo getCurrentUnit();
+    
     public UnresolvedClassInfo getCurrentClass();
 
     public String[] getCurrentNameSpace();
@@ -159,5 +162,9 @@ public interface BuildDataManager {
     public void startConditionalClause(UnresolvedConditionalClauseInfo clauseInfo);
     
     public UnresolvedBlockInfo getPreBlock();
+    
+    public int getCurrentTypeParameterCount();
+    
+    public int getCurrentParameterCount();
 
 }

@@ -90,7 +90,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
                 this.arrayCount++;
             } else if (token.isNameSeparator()) {
                 //名前区切りに到達した時に可能なら過去に構築した型を連結する
-                this.combineBuiltTypes();
+                // TODO this.combineBuiltTypes();
             }
         }
     }

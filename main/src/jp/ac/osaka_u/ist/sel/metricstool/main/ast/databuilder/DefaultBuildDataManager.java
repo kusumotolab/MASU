@@ -25,6 +25,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedL
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
@@ -339,6 +340,16 @@ public class DefaultBuildDataManager implements BuildDataManager {
         return EMPTY_NAME;
     }
 
+    public UnresolvedUnitInfo getCurrentUnit() {
+        UnresolvedUnitInfo currentUnit = null;
+        if(MODE.METHOD == this.mode) {
+            currentUnit = this.getCurrentMethod();
+        } else if (MODE.CLASS == this.mode) {
+            currentUnit = this.getCurrentClass();
+        }
+        return currentUnit;
+    }
+    
     public UnresolvedClassInfo getCurrentClass() {
         if (this.classStack.isEmpty()) {
             return null;
@@ -465,6 +476,29 @@ public class DefaultBuildDataManager implements BuildDataManager {
         return null;
     }
 
+    public int getCurrentTypeParameterCount() {
+        int count = -1;
+        if (!this.modeStack.isEmpty() && MODE.CLASS == this.mode) {
+            if (!this.classStack.isEmpty()) {
+                count = classStack.peek().getTypeParameters().size();
+            }
+        } else if (!this.modeStack.isEmpty() && MODE.METHOD == this.mode) {
+            if (!this.methodStack.isEmpty()) {
+                count = methodStack.peek().getTypeParameters().size();
+            }
+        }
+        
+        return count;
+    }
+    
+    public int getCurrentParameterCount() {
+        int count = -1;
+        if (!this.methodStack.isEmpty()) {
+            count = methodStack.peek().getParameters().size();
+        }
+        return count;
+    }
+    
     public boolean hasAlias(final String name) {
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {

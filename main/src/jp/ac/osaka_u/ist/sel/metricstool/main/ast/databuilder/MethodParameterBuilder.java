@@ -31,7 +31,9 @@ public class MethodParameterBuilder extends VariableBuilder<UnresolvedParameterI
             varName = name[0];
         }
         
-        UnresolvedParameterInfo parameter = new UnresolvedParameterInfo(varName,type);
+        final int index = buildDataManager.getCurrentParameterCount();
+        UnresolvedParameterInfo parameter = new UnresolvedParameterInfo(varName, type, index);
+        
         for(ModifierInfo modifier : modifiers){
             parameter.addModifier(modifier);
         }
