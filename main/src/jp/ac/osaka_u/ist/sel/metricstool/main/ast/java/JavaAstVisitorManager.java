@@ -23,6 +23,20 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.Instanc
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.MethodCallBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.OperatorExpressionBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.SingleIdentifierBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.CaseEntryBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.CatchBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.DefaultEntryBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.DoBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.ElseBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.FinallyBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.ForBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.IfBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.SimpleBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.SwitchBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.SynchronizedBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.TryBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.WhileBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.ElseBlockStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitorManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.PositionManager;
@@ -103,12 +117,31 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new JavaExpressionElementBuilder(this.expressionManager,
                 this.buildDataManager));
 
+        this.addInnerBlockBuilder();
+        
         for (final DataBuilder builder : this.builders) {
             visitor.addVisitListener(builder);
         }
 
         this.visitor = visitor;
     }
+    
+    private void addInnerBlockBuilder() {
+        this.builders.add(new CaseEntryBuilder(this.buildDataManager));
+        this.builders.add(new CatchBlockBuilder(this.buildDataManager));
+        this.builders.add(new DefaultEntryBuilder(this.buildDataManager));
+        this.builders.add(new DoBlockBuilder(this.buildDataManager));
+        this.builders.add(new ElseBlockBuilder(this.buildDataManager));
+        this.builders.add(new FinallyBlockBuilder(this.buildDataManager));
+        this.builders.add(new ForBlockBuilder(this.buildDataManager));
+        this.builders.add(new IfBlockBuilder(this.buildDataManager));
+        this.builders.add(new SimpleBlockBuilder(this.buildDataManager));
+        this.builders.add(new SwitchBlockBuilder(this.buildDataManager));
+        this.builders.add(new SynchronizedBlockBuilder(this.buildDataManager));
+        this.builders.add(new TryBlockBuilder(this.buildDataManager));
+        this.builders.add(new WhileBlockBuilder(this.buildDataManager));
+    }
+    
 
     /* (non-Javadoc)
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.AstVisitorManager#visitStart(antlr.collections.AST)

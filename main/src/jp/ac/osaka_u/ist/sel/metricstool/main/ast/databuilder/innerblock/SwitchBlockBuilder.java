@@ -4,9 +4,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.SwitchBlockStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSwitchBlockInfo;
 
-public class SwtichBlockBuilder extends ConditionalBlockBuilder {
+public class SwitchBlockBuilder extends ConditionalBlockBuilder {
 
-    public SwtichBlockBuilder(BuildDataManager targetDataManager) {
+    public SwitchBlockBuilder(BuildDataManager targetDataManager) {
         super(targetDataManager);
 
         this.blockStateManager = new SwitchBlockStateManager();
