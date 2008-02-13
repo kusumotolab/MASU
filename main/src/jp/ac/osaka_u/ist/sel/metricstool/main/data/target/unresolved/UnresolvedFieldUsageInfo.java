@@ -18,6 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
@@ -102,9 +103,12 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         assert ownerUsage != null : "resolveEntityUsage returned null!";
 
+        // -----ここから親の型に応じて処理を分岐
+        final TypeInfo ownerType = ownerUsage.getType();
+        
         // -----ここから親の型 に応じて処理を分岐
         // 親が解決できなかった場合はどうしようもない
-        if (ownerUsage.getType() instanceof UnknownTypeInfo) {
+        if (ownerType instanceof UnknownTypeInfo) {
 
             // 見つからなかった処理を行う
             usingMethod.addUnresolvedUsage(this);
@@ -113,7 +117,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
             return this.resolvedInfo;
 
             //親がクラス型の場合
-        } else if (ownerUsage.getType() instanceof ClassTypeInfo) {
+        } else if (ownerType instanceof ClassTypeInfo) {
 
             final ClassInfo ownerClass = ((ClassTypeInfo) ownerUsage.getType())
                     .getReferencedClass();
@@ -189,7 +193,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
                 return this.resolvedInfo;
             }
 
-        } else if (ownerUsage.getType() instanceof ArrayTypeInfo) {
+        } else if (ownerType instanceof ArrayTypeInfo) {
 
             // TODO ここは言語依存にするしかないのか？ 配列.length など
 
