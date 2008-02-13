@@ -146,11 +146,24 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
             final ParameterInfo dummyParameter = dummyParameterIterator.next();
             final EntityUsageInfo actualParameter = actualParameterIterator.next();
 
+            TypeInfo actualParameterType = actualParameter.getType();
+
+            // Œ^ƒpƒ‰ƒ[ƒ^‚Ìê‡‚Í‚»‚ÌŒp³Œ^‚ð‹‚ß‚é
+            if (actualParameterType instanceof TypeParameterInfo) {
+                final TypeInfo extendsType = ((TypeParameterInfo) actualParameterType)
+                        .getExtendsType();
+                if (null != extendsType) {
+                    actualParameterType = extendsType;
+                } else {
+                    assert false : "Here should not be reached";
+                }
+            }
+
             // ŽÀˆø”‚ªŽQÆŒ^‚Ìê‡
-            if (actualParameter.getType() instanceof ClassTypeInfo) {
+            if (actualParameterType instanceof ClassTypeInfo) {
 
                 // ŽÀˆø”‚ÌŒ^‚ÌƒNƒ‰ƒX‚ðŽæ“¾
-                final ClassInfo actualParameterClass = ((ClassTypeInfo) actualParameter.getType())
+                final ClassInfo actualParameterClass = ((ClassTypeInfo) actualParameterType)
                         .getReferencedClass();
 
                 // ‰¼ˆø”‚ªŽQÆŒ^‚Å‚È‚¢ê‡‚ÍŠY“–‚µ‚È‚¢
@@ -203,18 +216,18 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
                 }
 
                 // ŽÀˆø”‚ªƒvƒŠƒ~ƒeƒBƒuŒ^‚Ìê‡
-            } else if (actualParameter.getType() instanceof PrimitiveTypeInfo) {
+            } else if (actualParameterType instanceof PrimitiveTypeInfo) {
 
                 // PrimitiveTypeInfo#equals ‚ðŽg‚Á‚Ä“™‰¿«‚Ì”»’èD
                 // “™‚µ‚­‚È‚¢ê‡‚ÍŠY“–‚µ‚È‚¢
-                if (actualParameter.getType().equals(dummyParameter.getType())) {
+                if (actualParameterType.equals(dummyParameter.getType())) {
                     continue NEXT_PARAMETER;
                 }
 
                 return false;
 
                 // ŽÀˆø”‚ª”z—ñŒ^‚Ìê‡
-            } else if (actualParameter.getType() instanceof ArrayTypeInfo) {
+            } else if (actualParameterType instanceof ArrayTypeInfo) {
 
                 if (!(dummyParameter.getType() instanceof ArrayTypeInfo)) {
                     return false;
@@ -239,7 +252,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
                 // TODO JavaŒ¾Œê‚Ìê‡‚ÍC‰¼ˆø”‚ª”z—ñŒ^‚Ìê‡‚Å‚àOK‚Èˆ—‚ª•K—v
 
                 // ŽÀˆø”‚ÌŒ^‚ª‰ðŒˆ‚Å‚«‚È‚©‚Á‚½ê‡
-            } else if (actualParameter.getType() instanceof UnknownTypeInfo) {
+            } else if (actualParameterType instanceof UnknownTypeInfo) {
 
                 // ŽÀˆø”‚ÌŒ^‚ª•s–¾‚Èê‡‚ÍC‰¼ˆø”‚ÌŒ^‚ª‰½‚Å‚ ‚ë‚¤‚Æ‚àOK‚É‚µ‚Ä‚¢‚é
                 continue NEXT_PARAMETER;
