@@ -143,14 +143,15 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
             final TypeParameterInfo typeParameter = (TypeParameterInfo) unresolvedTypeParameter
-                    .resolveType(usingClass, this.resolvedInfo, classInfoManager, null, null);
+                    .resolveType(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
+                            methodInfoManager);
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
 
         // 返り値をセットする
         final UnresolvedTypeInfo unresolvedMethodReturnType = this.getReturnType();
         TypeInfo methodReturnType = unresolvedMethodReturnType.resolveType(usingClass, null,
-                classInfoManager, null, null);
+                classInfoManager, fieldInfoManager, methodInfoManager);
         assert methodReturnType != null : "resolveTypeInfo returned null!";
         if (methodReturnType instanceof UnknownTypeInfo) {
             if (unresolvedMethodReturnType instanceof UnresolvedClassReferenceInfo) {
