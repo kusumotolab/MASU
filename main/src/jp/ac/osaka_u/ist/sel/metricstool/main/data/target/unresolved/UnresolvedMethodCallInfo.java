@@ -91,11 +91,16 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
         if (ownerUsage instanceof UnknownEntityUsageInfo) {
             if (unresolvedOwnerUsage instanceof UnresolvedClassReferenceInfo) {
 
-                // TODO å^ÉpÉâÉÅÅ[É^ÇÃèÓïÒÇäiî[Ç∑ÇÈ
                 final ExternalClassInfo externalClassInfo = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedOwnerUsage);
                 classInfoManager.add(externalClassInfo);
                 final ClassTypeInfo referenceType = new ClassTypeInfo(externalClassInfo);
+                for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedOwnerUsage)
+                        .getTypeArguments()) {
+                    final TypeInfo typeArgument = unresolvedTypeArgument.resolveType(usingClass,
+                            usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                    referenceType.addTypeArgument(typeArgument);
+                }
                 ownerUsage = new ClassReferenceInfo(referenceType, fromLine, fromColumn, toLine,
                         toColumn);
             }

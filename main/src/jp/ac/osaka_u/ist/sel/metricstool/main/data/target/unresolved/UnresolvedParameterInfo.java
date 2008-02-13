@@ -74,10 +74,15 @@ public final class UnresolvedParameterInfo extends UnresolvedVariableInfo<Target
         if (parameterType instanceof UnknownTypeInfo) {
             if (unresolvedParameterType instanceof UnresolvedClassReferenceInfo) {
 
-                // TODO Œ^ƒpƒ‰ƒ[ƒ^‚Ìî•ñ‚ðŠi”[‚·‚é
                 final ExternalClassInfo externalClass = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedParameterType);
                 parameterType = new ClassTypeInfo(externalClass);
+                for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedParameterType)
+                        .getTypeArguments()) {
+                    final TypeInfo typeArgument = unresolvedTypeArgument.resolveType(usingClass,
+                            usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                    ((ClassTypeInfo) parameterType).addTypeArgument(typeArgument);
+                }
                 classInfoManager.add(externalClass);
 
             } else if (unresolvedParameterType instanceof UnresolvedArrayTypeInfo) {

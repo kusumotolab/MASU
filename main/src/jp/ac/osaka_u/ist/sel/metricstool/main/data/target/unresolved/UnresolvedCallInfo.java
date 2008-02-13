@@ -13,6 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
@@ -140,11 +141,17 @@ public abstract class UnresolvedCallInfo extends UnresolvedEntityUsageInfo {
                 // クラス参照だった場合
                 if (unresolvedParameter instanceof UnresolvedClassReferenceInfo) {
 
-                    // TODO 型パラメータの情報を格納する                    
                     final ExternalClassInfo externalClassInfo = NameResolver
                             .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedParameter);
                     classInfoManager.add(externalClassInfo);
                     final ClassTypeInfo referenceType = new ClassTypeInfo(externalClassInfo);
+                    for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedParameter)
+                            .getTypeArguments()) {
+                        final TypeInfo typeArgument = unresolvedTypeArgument.resolveType(
+                                usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                                methodInfoManager);
+                        referenceType.addTypeArgument(typeArgument);
+                    }
 
                     // 使用位置を取得
                     final int fromLine = this.getFromLine();

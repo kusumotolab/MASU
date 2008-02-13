@@ -79,10 +79,15 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
         if (fieldType instanceof UnknownTypeInfo) {
             if (unresolvedFieldType instanceof UnresolvedClassReferenceInfo) {
 
-                // TODO Œ^ƒpƒ‰ƒ[ƒ^‚ÌŠi”[ˆ—‚ª•K—v
                 final ExternalClassInfo classInfo = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedFieldType);
                 fieldType = new ClassTypeInfo(classInfo);
+                for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedFieldType)
+                        .getTypeArguments()) {
+                    final TypeInfo typeArgument = unresolvedTypeArgument.resolveType(usingClass,
+                            usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                    ((ClassTypeInfo) fieldType).addTypeArgument(typeArgument);
+                }
                 classInfoManager.add(classInfo);
 
             } else if (unresolvedFieldType instanceof UnresolvedArrayTypeInfo) {

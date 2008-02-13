@@ -156,10 +156,15 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         if (methodReturnType instanceof UnknownTypeInfo) {
             if (unresolvedMethodReturnType instanceof UnresolvedClassReferenceInfo) {
 
-                // TODO Œ^ƒpƒ‰ƒ[ƒ^‚Ìî•ñ‚ðŠi”[‚·‚é
                 final ExternalClassInfo classInfo = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedMethodReturnType);
                 methodReturnType = new ClassTypeInfo(classInfo);
+                for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedMethodReturnType)
+                        .getTypeArguments()) {
+                    final TypeInfo typeArgument = unresolvedTypeArgument.resolveType(usingClass,
+                            usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                    ((ClassTypeInfo) methodReturnType).addTypeArgument(typeArgument);
+                }
                 classInfoManager.add(classInfo);
 
             } else if (unresolvedMethodReturnType instanceof UnresolvedArrayTypeInfo) {
