@@ -69,8 +69,10 @@ public class BinominalOperationInfo extends EntityUsageInfo {
             switch (this.getOperator()) {
             case ARITHMETIC:
 
-                if ((this.getFirstOperand().getType().equals(STRING) || (this.getSecondOperand()
-                        .getType().equals(STRING)))) {
+                if ((this.getFirstOperand().getType().equals(STRING)
+                        || this.getFirstOperand().getType().equals(PrimitiveTypeInfo.STRING) || (this
+                        .getSecondOperand().getType().equals(STRING) || (this.getSecondOperand()
+                        .getType().equals(PrimitiveTypeInfo.STRING))))) {
                     return STRING;
 
                 } else if (this.getFirstOperand().getType().equals(DOUBLE)
