@@ -19,6 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
@@ -101,7 +102,20 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
         }
 
         // -----‚±‚±‚©‚çe‚ÌŒ^‚É‰‚¶‚Äˆ—‚ğ•ªŠò
-        final TypeInfo ownerType = ownerUsage.getType();
+        TypeInfo ownerType = ownerUsage.getType();
+
+        // Œ^ƒpƒ‰ƒ[ƒ^‚Ìê‡‚Í‚»‚ÌŒp³Œ^‚ğ‹‚ß‚é
+        if (ownerType instanceof TypeParameterInfo) {
+            final TypeInfo extendsType = ((TypeParameterInfo) ownerType).getExtendsType();
+            if (null != extendsType) {
+                ownerType = extendsType;
+            } else {
+                assert false : "Here should not be reached";
+                this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine,
+                        toColumn);
+                return this.resolvedInfo;
+            }
+        }
 
         // e‚ª‰ğŒˆ‚Å‚«‚È‚©‚Á‚½ê‡‚Í‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢
         if (ownerType instanceof UnknownTypeInfo) {
