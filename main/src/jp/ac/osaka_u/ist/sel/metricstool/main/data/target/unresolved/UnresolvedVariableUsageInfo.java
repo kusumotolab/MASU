@@ -63,7 +63,7 @@ public abstract class UnresolvedVariableUsageInfo extends UnresolvedEntityUsageI
      * @return g—p‚³‚ê‚Ä‚¢‚é•Ï”‚Ì–¼‘O
      */
     public String getUsedVariableName() {
-        return usedVariableName;
+        return this.usedVariableName;
     }
 
     /**
