@@ -1,12 +1,16 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MonominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * 一項演算の内容を表すクラス
@@ -22,38 +26,67 @@ public class UnresolvedMonominalOperationInfo extends UnresolvedEntityUsageInfo 
      * @param term 項
      * @param type 一項演算の結果の型
      */
-    public UnresolvedMonominalOperationInfo(final UnresolvedEntityUsageInfo term, final PrimitiveTypeInfo type) {
+    public UnresolvedMonominalOperationInfo(final UnresolvedEntityUsageInfo term,
+            final PrimitiveTypeInfo type) {
         this.term = term;
         this.type = type;
     }
-    
+
     @Override
     boolean alreadyResolved() {
-        // TODO 自動生成されたメソッド・スタブ
-        return false;
+        return null != this.resolvedInfo;
     }
 
     @Override
     EntityUsageInfo getResolvedEntityUsage() {
-        // TODO 自動生成されたメソッド・スタブ
-        return null;
+
+        if (!this.alreadyResolved()) {
+            throw new NotResolvedException();
+        }
+
+        return this.resolvedInfo;
     }
 
     @Override
-    public EntityUsageInfo resolveEntityUsage(TargetClassInfo usingClass,
-            CallableUnitInfo usingMethod, ClassInfoManager classInfoManager,
-            FieldInfoManager fieldInfoManager, MethodInfoManager methodInfoManager) {
-        // TODO 自動生成されたメソッド・スタブ
-        return null;
+    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
+                || (null == methodInfoManager)) {
+            throw new NullPointerException();
+        }
+
+        // 既に解決済みである場合は，キャッシュを返す
+        if (this.alreadyResolved()) {
+            return this.getResolvedEntityUsage();
+        }
+
+        // 使用位置を取得
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final UnresolvedEntityUsageInfo unresolvedTerm = this.getTerm();
+        final EntityUsageInfo term = unresolvedTerm.resolveEntityUsage(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+        final PrimitiveTypeInfo type = this.getResultType();
+
+        this.resolvedInfo = new MonominalOperationInfo(term, type, fromLine, fromColumn, toLine,
+                toColumn);
+        return this.resolvedInfo;
     }
-    
+
     /**
      * 一項演算の項を返す
      * 
      * @return 一項演算の項
      */
     public UnresolvedEntityUsageInfo getTerm() {
-        return term;
+        return this.term;
     }
 
     /**
@@ -62,19 +95,18 @@ public class UnresolvedMonominalOperationInfo extends UnresolvedEntityUsageInfo 
      * @return 一項演算の結果の型
      */
     public PrimitiveTypeInfo getResultType() {
-        return type;
+        return this.type;
     }
-    
+
     /**
      * 一項演算の項
      */
     private final UnresolvedEntityUsageInfo term;
-    
+
     /**
      * 一項演算の結果の型
      */
     private final PrimitiveTypeInfo type;
 
-    
-
+    private EntityUsageInfo resolvedInfo;
 }
