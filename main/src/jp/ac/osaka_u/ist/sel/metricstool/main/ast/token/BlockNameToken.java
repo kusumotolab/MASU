@@ -98,12 +98,26 @@ public abstract class BlockNameToken extends AstTokenAdapter {
 
 	};
 	
+	public static BlockNameToken CASE_GROUP_DEFINITION = new BlockNameToken("CASE_GROUP") {
+	    
+	    @Override
+	    public boolean isCaseGroupDefinition() {
+	        return true;
+	    }
+	    
+	};
+	
 	public static BlockNameToken CASE_ENTRY = new BlockNameToken("case"){
 
 		@Override
 		public boolean isCase() {
 		    return true;
 		}
+		
+		@Override
+		public boolean isEntryDefinition() {
+		    return true;
+		}	    
 
 	};
 	
@@ -114,6 +128,10 @@ public abstract class BlockNameToken extends AstTokenAdapter {
 		    return true;
 		}
 
+		@Override
+        public boolean isEntryDefinition() {
+            return true;
+        }
 	};
 	
 }

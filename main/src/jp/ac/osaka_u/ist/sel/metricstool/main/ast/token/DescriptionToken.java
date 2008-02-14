@@ -121,6 +121,13 @@ public class DescriptionToken extends AstTokenAdapter {
         }
     };
 
+    public static final DescriptionToken SLIST = new DescriptionToken("SLIST") {
+        @Override
+        public boolean isSList() {
+            return true;
+        }
+    };
+    
     /**
      * 指定された文字列で初期化するコンストラクタ.
      * @param text このトークンを表す文字列.

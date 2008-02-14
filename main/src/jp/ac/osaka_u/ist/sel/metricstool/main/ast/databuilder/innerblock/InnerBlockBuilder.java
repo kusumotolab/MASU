@@ -55,12 +55,16 @@ public abstract class InnerBlockBuilder extends CompoundDataBuilder<UnresolvedBl
     protected void startBlockDefinition(AstVisitEvent triggerEvent){
         UnresolvedBlockInfo newBlock = createUnresolvedBlockInfo();
         
-        this.buildingBlockStack.push(newBlock);
-        
         newBlock.setFromLine(triggerEvent.getStartLine());
         newBlock.setFromColumn(triggerEvent.getStartColumn());
         newBlock.setToLine(triggerEvent.getEndLine());
         newBlock.setToColumn(triggerEvent.getEndColumn());
+        
+        startBlockDefinition(newBlock);
+    }
+    
+    protected void startBlockDefinition(UnresolvedBlockInfo newBlock) {
+        this.buildingBlockStack.push(newBlock);
         buildManager.startInnerBlockDefinition(newBlock);
     }
     

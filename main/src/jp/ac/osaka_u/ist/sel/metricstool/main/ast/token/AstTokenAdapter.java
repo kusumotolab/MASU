@@ -51,8 +51,8 @@ public class AstTokenAdapter implements AstToken {
 	public boolean isBlockName() {
 		return false;
 	}
-    
-    public boolean isBuiltinType(){
+	
+	public boolean isBuiltinType(){
         return isPrimitiveType() || isVoidType();
     }
 
@@ -73,6 +73,10 @@ public class AstTokenAdapter implements AstToken {
     }
 
     public boolean isExpression() {
+        return false;
+    }
+    
+    public boolean isSList() {
         return false;
     }
 
@@ -173,6 +177,15 @@ public class AstTokenAdapter implements AstToken {
     }
 
     public boolean isVoidType() {
+        return false;
+    }
+    
+    @Override
+    public boolean isCaseGroupDefinition() {
+        return false;
+    }
+    
+    public boolean isEntryDefinition() {
         return false;
     }
     

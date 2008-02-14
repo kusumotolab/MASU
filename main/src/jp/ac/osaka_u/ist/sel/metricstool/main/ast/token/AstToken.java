@@ -36,13 +36,13 @@ public interface AstToken {
     
     /**
      * トークンがブロックの宣言を表すかどうかを返す．
-     * @return ブロックの宣言を表すトークンなら
+     * @return ブロックの宣言を表すトークンならtrue
      */
     public boolean isBlockDefinition();
     
     /**
      * トークンが特殊なブロックを表すかどうか返す．
-     * @return 特殊なブロックを表すトークンあらtrue
+     * @return 特殊なブロックを表すトークンならtrue
      */
     public boolean isBlockName();
     
@@ -89,6 +89,12 @@ public interface AstToken {
      */
     public boolean isExpression();
 
+    /**
+     * トークンが文のリストを表すかどうか返す
+     * @return 文のリストを表すトークンならtrue
+     */
+    public boolean isSList();
+    
     /**
      * トークンがフィールド定義部を表すかどうかを返す.
      * @return フィールド定義部を表すトークンならtrue
@@ -292,6 +298,18 @@ public interface AstToken {
      * @return switchを表すトークンならtrue
      */
     public boolean isSwitch();
+    
+    /**
+     * このトークンがcaseグループ(caseやdefaultエントリ)の定義を表すかどうか返す
+     * @return caseグループの定義を表すならtrue
+     */
+    public boolean isCaseGroupDefinition();
+    
+    /**
+     * トークンがSwitch文のエントリの宣言を表すかどうか返す．
+     * @return Switch文のエントリの宣言をならtrue
+     */
+    public boolean isEntryDefinition();
     
     /**
      * トークンがcaseを表すかどうかを返す

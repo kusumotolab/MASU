@@ -23,15 +23,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.Instanc
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.MethodCallBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.OperatorExpressionBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.SingleIdentifierBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.CaseEntryBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.CaseGroupBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.CatchBlockBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.DefaultEntryBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.DoBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.ElseBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.FinallyBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.ForBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.IfBlockBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.SimpleBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.SwitchBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.SynchronizedBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.TryBlockBuilder;
@@ -126,9 +124,8 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
     }
     
     private void addInnerBlockBuilder() {
-        this.builders.add(new CaseEntryBuilder(this.buildDataManager));
+        this.builders.add(new CaseGroupBuilder(this.buildDataManager));
         this.builders.add(new CatchBlockBuilder(this.buildDataManager));
-        this.builders.add(new DefaultEntryBuilder(this.buildDataManager));
         this.builders.add(new DoBlockBuilder(this.buildDataManager));
         this.builders.add(new ElseBlockBuilder(this.buildDataManager));
         this.builders.add(new FinallyBlockBuilder(this.buildDataManager));

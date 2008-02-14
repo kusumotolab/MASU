@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager;
 
 
+import javax.lang.model.type.DeclaredType;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
@@ -29,7 +31,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
  * @author kou-tngt
  */
 public abstract class DeclaredBlockStateManager extends
-        StackedAstVisitStateManager<DeclaredBlockStateManager.STATE> {
+        StackedAstVisitStateManager<DeclaredBlockStateManager.DeclaredBlockState> {
 
     /**
      * ビジターがASTノードの中に入った時のイベント通知を受け取り，
@@ -174,7 +176,7 @@ public abstract class DeclaredBlockStateManager extends
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#getState()
      */
     @Override
-    protected STATE getState() {
+    public DeclaredBlockState getState() {
         return this.state;
     }
 
@@ -186,7 +188,7 @@ public abstract class DeclaredBlockStateManager extends
      * @return 状態変化のトリガになり得る場合はtrue
      */
     @Override
-    protected final boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
+    protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
         return this.isBlockToken(event.getToken()) || this.isDefinitionEvent(event);
     }
 
@@ -194,23 +196,26 @@ public abstract class DeclaredBlockStateManager extends
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#setState(java.lang.Object)
      */
     @Override
-    protected void setState(final STATE state) {
+    protected void setState(final DeclaredBlockState state) {
         this.state = state;
     };
 
+    public interface DeclaredBlockState {
+    }
+    
     /**
      * 状態を表すEnum
      * 
      * @author kou-tngt
      *
      */
-    protected static enum STATE {
+    public static enum STATE implements DeclaredBlockState {
         OUT, DECLARE, BLOCK
     }
 
     /**
      * 現在の状態
      */
-    private STATE state = STATE.OUT;
+    protected DeclaredBlockState state = STATE.OUT;
 
 }
