@@ -20,7 +20,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalFieldInfo;
@@ -114,8 +113,10 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
                 ownerType = extendsType;
             } else {
                 assert false : "Here should not be reached";
-                this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine,
-                        toColumn);
+
+                final ExternalFieldInfo unknownField = new ExternalFieldInfo(fieldName);
+                this.resolvedInfo = new FieldUsageInfo(UnknownTypeInfo.getInstance(), unknownField,
+                        reference, fromLine, fromColumn, toLine, toColumn);
                 return this.resolvedInfo;
             }
         }
@@ -124,10 +125,9 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
         // 親が解決できなかった場合はどうしようもない
         if (ownerType instanceof UnknownTypeInfo) {
 
-            // 見つからなかった処理を行う
-            usingMethod.addUnresolvedUsage(this);
-
-            this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
+            final ExternalFieldInfo unknownField = new ExternalFieldInfo(fieldName);
+            this.resolvedInfo = new FieldUsageInfo(UnknownTypeInfo.getInstance(), unknownField,
+                    reference, fromLine, fromColumn, toLine, toColumn);
             return this.resolvedInfo;
 
             //親がクラス型の場合
@@ -188,10 +188,9 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
                 {
                     assert false : "Can't resolve field reference : " + this.getFieldName();
 
-                    usingMethod.addUnresolvedUsage(this);
-
-                    this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine,
-                            toColumn);
+                    final ExternalFieldInfo unknownField = new ExternalFieldInfo(fieldName);
+                    this.resolvedInfo = new FieldUsageInfo(UnknownTypeInfo.getInstance(),
+                            unknownField, reference, fromLine, fromColumn, toLine, toColumn);
                     return this.resolvedInfo;
                 }
 
@@ -220,7 +219,9 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
         }
 
         assert false : "Here shouldn't be reached!";
-        this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
+        final ExternalFieldInfo unknownField = new ExternalFieldInfo(fieldName);
+        this.resolvedInfo = new FieldUsageInfo(UnknownTypeInfo.getInstance(), unknownField,
+                reference, fromLine, fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 

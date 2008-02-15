@@ -60,6 +60,9 @@ public class BinominalOperationInfo extends EntityUsageInfo {
         final ExternalClassInfo BOOLEAN = TypeConverter.getTypeConverter(Settings.getLanguage())
                 .getWrapperClass(PrimitiveTypeInfo.BOOLEAN);
 
+        final TypeInfo firstOperandType = this.getFirstOperand().getType();
+        final TypeInfo secondOperandType = this.getSecondOperand().getType();
+
         switch (Settings.getLanguage()) {
         case JAVA:
 
@@ -69,64 +72,57 @@ public class BinominalOperationInfo extends EntityUsageInfo {
             switch (this.getOperator()) {
             case ARITHMETIC:
 
-                if ((this.getFirstOperand().getType().equals(STRING)
-                        || this.getFirstOperand().getType().equals(PrimitiveTypeInfo.STRING) || (this
-                        .getSecondOperand().getType().equals(STRING) || (this.getSecondOperand()
-                        .getType().equals(PrimitiveTypeInfo.STRING))))) {
-                    return STRING;
-
-                } else if (this.getFirstOperand().getType().equals(DOUBLE)
-                        || this.getFirstOperand().getType().equals(PrimitiveTypeInfo.DOUBLE)
-                        || this.getSecondOperand().getType().equals(DOUBLE)
-                        || this.getSecondOperand().getType().equals(PrimitiveTypeInfo.DOUBLE)) {
+                if (firstOperandType.equals(DOUBLE)
+                        || firstOperandType.equals(PrimitiveTypeInfo.DOUBLE)
+                        || secondOperandType.equals(DOUBLE)
+                        || secondOperandType.equals(PrimitiveTypeInfo.DOUBLE)) {
                     return PrimitiveTypeInfo.DOUBLE;
 
-                } else if (this.getFirstOperand().getType().equals(FLOAT)
-                        || this.getFirstOperand().getType().equals(PrimitiveTypeInfo.FLOAT)
-                        || this.getSecondOperand().getType().equals(FLOAT)
-                        || this.getSecondOperand().getType().equals(PrimitiveTypeInfo.FLOAT)) {
+                } else if (firstOperandType.equals(FLOAT)
+                        || firstOperandType.equals(PrimitiveTypeInfo.FLOAT)
+                        || secondOperandType.equals(FLOAT)
+                        || secondOperandType.equals(PrimitiveTypeInfo.FLOAT)) {
                     return PrimitiveTypeInfo.FLOAT;
 
-                } else if (this.getFirstOperand().getType().equals(LONG)
-                        || this.getFirstOperand().getType().equals(PrimitiveTypeInfo.LONG)
-                        || this.getSecondOperand().getType().equals(LONG)
-                        || this.getSecondOperand().getType().equals(PrimitiveTypeInfo.LONG)) {
+                } else if (firstOperandType.equals(LONG)
+                        || firstOperandType.equals(PrimitiveTypeInfo.LONG)
+                        || secondOperandType.equals(LONG)
+                        || secondOperandType.equals(PrimitiveTypeInfo.LONG)) {
                     return PrimitiveTypeInfo.LONG;
 
-                } else if (this.getFirstOperand().getType().equals(INTEGER)
-                        || this.getFirstOperand().getType().equals(PrimitiveTypeInfo.INT)
-                        || this.getSecondOperand().getType().equals(INTEGER)
-                        || this.getSecondOperand().getType().equals(PrimitiveTypeInfo.INT)) {
+                } else if (firstOperandType.equals(INTEGER)
+                        || firstOperandType.equals(PrimitiveTypeInfo.INT)
+                        || secondOperandType.equals(INTEGER)
+                        || secondOperandType.equals(PrimitiveTypeInfo.INT)) {
                     return PrimitiveTypeInfo.INT;
 
-                } else if (this.getFirstOperand().getType().equals(SHORT)
-                        || this.getFirstOperand().getType().equals(PrimitiveTypeInfo.SHORT)
-                        || this.getSecondOperand().getType().equals(SHORT)
-                        || this.getSecondOperand().getType().equals(PrimitiveTypeInfo.SHORT)) {
+                } else if (firstOperandType.equals(SHORT)
+                        || firstOperandType.equals(PrimitiveTypeInfo.SHORT)
+                        || secondOperandType.equals(SHORT)
+                        || secondOperandType.equals(PrimitiveTypeInfo.SHORT)) {
                     return PrimitiveTypeInfo.SHORT;
 
-                } else if (this.getFirstOperand().getType().equals(CHARACTER)
-                        || this.getFirstOperand().getType().equals(PrimitiveTypeInfo.CHAR)
-                        || this.getSecondOperand().getType().equals(CHARACTER)
-                        || this.getSecondOperand().getType().equals(PrimitiveTypeInfo.CHAR)) {
+                } else if (firstOperandType.equals(CHARACTER)
+                        || firstOperandType.equals(PrimitiveTypeInfo.CHAR)
+                        || secondOperandType.equals(CHARACTER)
+                        || secondOperandType.equals(PrimitiveTypeInfo.CHAR)) {
                     return PrimitiveTypeInfo.CHAR;
 
-                } else if (this.getFirstOperand().getType().equals(BYTE)
-                        || this.getFirstOperand().getType().equals(PrimitiveTypeInfo.BYTE)
-                        || this.getSecondOperand().getType().equals(BYTE)
-                        || this.getSecondOperand().getType().equals(PrimitiveTypeInfo.BYTE)) {
+                } else if (firstOperandType.equals(BYTE)
+                        || firstOperandType.equals(PrimitiveTypeInfo.BYTE)
+                        || secondOperandType.equals(BYTE)
+                        || secondOperandType.equals(PrimitiveTypeInfo.BYTE)) {
                     return PrimitiveTypeInfo.BYTE;
 
-                } else if ((this.getFirstOperand().getType() instanceof UnknownTypeInfo)
-                        || (this.getSecondOperand().getType() instanceof UnknownTypeInfo)) {
+                } else if ((firstOperandType instanceof UnknownTypeInfo)
+                        || (secondOperandType instanceof UnknownTypeInfo)) {
 
                     return UnknownTypeInfo.getInstance();
-
-                } else {
-                    assert false : "Here shouldn't be reached!";
                 }
 
-                break;
+                //それ以外の時はjava.lang.String型になる
+                //"+"を定義した後は，+かどうかをチェックする必要あり
+                return STRING;
 
             case COMPARATIVE:
                 return PrimitiveTypeInfo.BOOLEAN;
@@ -134,38 +130,38 @@ public class BinominalOperationInfo extends EntityUsageInfo {
                 return PrimitiveTypeInfo.BOOLEAN;
             case BITS:
 
-                if (this.getFirstOperand().getType().equals(LONG)
-                        || this.getFirstOperand().getType().equals(PrimitiveTypeInfo.LONG)
-                        || this.getSecondOperand().getType().equals(LONG)
-                        || this.getSecondOperand().getType().equals(PrimitiveTypeInfo.LONG)) {
+                if (firstOperandType.equals(LONG)
+                        || firstOperandType.equals(PrimitiveTypeInfo.LONG)
+                        || secondOperandType.equals(LONG)
+                        || secondOperandType.equals(PrimitiveTypeInfo.LONG)) {
                     return PrimitiveTypeInfo.LONG;
 
-                } else if (this.getFirstOperand().getType().equals(INTEGER)
-                        || this.getFirstOperand().getType().equals(PrimitiveTypeInfo.INT)
-                        || this.getSecondOperand().getType().equals(INTEGER)
-                        || this.getSecondOperand().getType().equals(PrimitiveTypeInfo.INT)) {
+                } else if (firstOperandType.equals(INTEGER)
+                        || firstOperandType.equals(PrimitiveTypeInfo.INT)
+                        || secondOperandType.equals(INTEGER)
+                        || secondOperandType.equals(PrimitiveTypeInfo.INT)) {
                     return PrimitiveTypeInfo.INT;
 
-                } else if (this.getFirstOperand().getType().equals(SHORT)
-                        || this.getFirstOperand().getType().equals(PrimitiveTypeInfo.SHORT)
-                        || this.getSecondOperand().getType().equals(SHORT)
-                        || this.getSecondOperand().getType().equals(PrimitiveTypeInfo.SHORT)) {
+                } else if (firstOperandType.equals(SHORT)
+                        || firstOperandType.equals(PrimitiveTypeInfo.SHORT)
+                        || secondOperandType.equals(SHORT)
+                        || secondOperandType.equals(PrimitiveTypeInfo.SHORT)) {
                     return PrimitiveTypeInfo.SHORT;
 
-                } else if (this.getFirstOperand().getType().equals(BYTE)
-                        || this.getFirstOperand().getType().equals(PrimitiveTypeInfo.BYTE)
-                        || this.getSecondOperand().getType().equals(BYTE)
-                        || this.getSecondOperand().getType().equals(PrimitiveTypeInfo.BYTE)) {
+                } else if (firstOperandType.equals(BYTE)
+                        || firstOperandType.equals(PrimitiveTypeInfo.BYTE)
+                        || secondOperandType.equals(BYTE)
+                        || secondOperandType.equals(PrimitiveTypeInfo.BYTE)) {
                     return PrimitiveTypeInfo.BYTE;
 
-                } else if (this.getFirstOperand().getType().equals(BOOLEAN)
-                        || this.getFirstOperand().getType().equals(PrimitiveTypeInfo.BOOLEAN)
-                        || this.getSecondOperand().getType().equals(BOOLEAN)
-                        || this.getSecondOperand().getType().equals(PrimitiveTypeInfo.BOOLEAN)) {
+                } else if (firstOperandType.equals(BOOLEAN)
+                        || firstOperandType.equals(PrimitiveTypeInfo.BOOLEAN)
+                        || secondOperandType.equals(BOOLEAN)
+                        || secondOperandType.equals(PrimitiveTypeInfo.BOOLEAN)) {
                     return PrimitiveTypeInfo.BOOLEAN;
 
-                } else if ((this.getFirstOperand().getType() instanceof UnknownTypeInfo)
-                        || (this.getSecondOperand().getType() instanceof UnknownTypeInfo)) {
+                } else if ((firstOperandType instanceof UnknownTypeInfo)
+                        || (secondOperandType instanceof UnknownTypeInfo)) {
 
                     return UnknownTypeInfo.getInstance();
 
@@ -174,9 +170,9 @@ public class BinominalOperationInfo extends EntityUsageInfo {
                 }
 
             case SHIFT:
-                return this.getFirstOperand().getType();
+                return firstOperandType;
             case ASSIGNMENT:
-                return this.getFirstOperand().getType();
+                return firstOperandType;
             default:
                 assert false : "Here shouldn't be reached";
             }

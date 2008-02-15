@@ -28,6 +28,11 @@ public final class ExternalFieldInfo extends FieldInfo {
                 0, 0);
     }
 
+    public ExternalFieldInfo(final String name) {
+        super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(),
+                ExternalClassInfo.UNKNOWN, 0, 0, 0, 0);
+    }
+
     /**
      * ExternalFieldInfo ‚Å‚Í—˜—p‚Å‚«‚È‚¢
      */
