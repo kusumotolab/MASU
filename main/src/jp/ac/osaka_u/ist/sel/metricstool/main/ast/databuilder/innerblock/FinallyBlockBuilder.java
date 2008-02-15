@@ -16,7 +16,12 @@ public class FinallyBlockBuilder extends InnerBlockBuilder<UnresolvedFinallyBloc
     protected UnresolvedFinallyBlockInfo createUnresolvedBlockInfo() {
         final UnresolvedBlockInfo<?> preBlock = this.buildManager.getPreBlock();
         if(preBlock instanceof UnresolvedTryBlockInfo) {
-            return new UnresolvedFinallyBlockInfo((UnresolvedTryBlockInfo) preBlock);
+            final UnresolvedTryBlockInfo ownerTry = (UnresolvedTryBlockInfo) preBlock;
+            final UnresolvedFinallyBlockInfo finallyBlock = new UnresolvedFinallyBlockInfo(ownerTry);
+            
+            ownerTry.setSequentFinallyBlock(finallyBlock);
+            
+            return finallyBlock;
         } else {
             assert false : "Illegal state : incorrect block structure";
             return null;

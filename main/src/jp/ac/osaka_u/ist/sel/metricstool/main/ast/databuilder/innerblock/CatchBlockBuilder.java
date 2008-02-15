@@ -16,7 +16,12 @@ public class CatchBlockBuilder extends InnerBlockBuilder<UnresolvedCatchBlockInf
     protected UnresolvedCatchBlockInfo createUnresolvedBlockInfo() {
         final UnresolvedBlockInfo<?> preBlock = this.buildManager.getPreBlock();
         if(preBlock instanceof UnresolvedTryBlockInfo) {
-            return new UnresolvedCatchBlockInfo((UnresolvedTryBlockInfo) preBlock);
+            final UnresolvedTryBlockInfo ownerTry = (UnresolvedTryBlockInfo) preBlock;
+            final UnresolvedCatchBlockInfo catchBlock = new UnresolvedCatchBlockInfo(ownerTry);
+            
+            ownerTry.addSequentCatchBlock(catchBlock);
+            
+            return catchBlock;
         } else {
             assert false : "Illegal state : incorrect block structure";
             return null;

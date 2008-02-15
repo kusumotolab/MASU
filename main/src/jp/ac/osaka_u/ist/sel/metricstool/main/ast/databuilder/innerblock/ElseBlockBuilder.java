@@ -16,7 +16,12 @@ public class ElseBlockBuilder extends InnerBlockBuilder<UnresolvedElseBlockInfo>
     protected UnresolvedElseBlockInfo createUnresolvedBlockInfo() {
         final UnresolvedBlockInfo<?> preBlock = this.buildManager.getPreBlock();
         if(preBlock instanceof UnresolvedIfBlockInfo) {
-            return new UnresolvedElseBlockInfo((UnresolvedIfBlockInfo) preBlock);
+            final UnresolvedIfBlockInfo ownerIf = (UnresolvedIfBlockInfo) preBlock;
+            final UnresolvedElseBlockInfo elseBlock = new UnresolvedElseBlockInfo(ownerIf);
+            
+            ownerIf.setSequentElseBlock(elseBlock);
+            
+            return elseBlock;
         } else {
             assert false : "Illegal state : incorrect block structure";
             return null;
