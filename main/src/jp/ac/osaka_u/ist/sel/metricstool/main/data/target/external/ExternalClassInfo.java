@@ -190,4 +190,6 @@ public final class ExternalClassInfo extends ClassInfo {
             new ExternalClassInfo(new String[] { "java", "lang", "Deprecated" }),
             new ExternalClassInfo(new String[] { "java", "lang", "Override" }),
             new ExternalClassInfo(new String[] { "java", "lang", "SuppressWarnings" }) };
+
+    public static final ExternalClassInfo UNKNOWN = new ExternalClassInfo("UNKNOWN");
 }

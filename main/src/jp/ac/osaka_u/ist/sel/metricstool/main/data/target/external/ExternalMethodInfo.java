@@ -36,6 +36,13 @@ public final class ExternalMethodInfo extends MethodInfo {
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
 
+    public ExternalMethodInfo(final String methodName) {
+
+        super(new HashSet<ModifierInfo>(), methodName, ExternalClassInfo.UNKNOWN, false, true,
+                true, true, 0, 0, 0, 0);
+        this.setReturnType(UnknownTypeInfo.getInstance());
+    }
+
     /**
      * ExternalMethodInfo‚Å‚Í—˜—p‚Å‚«‚È‚¢
      */

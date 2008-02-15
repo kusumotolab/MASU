@@ -116,8 +116,9 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                 ownerType = extendsType;
             } else {
                 assert false : "Here should not be reached";
-                this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine,
-                        toColumn);
+                final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
+                this.resolvedInfo = new MethodCallInfo(ownerType, unknownMethod, fromLine,
+                        fromColumn, toLine, toColumn);
                 return this.resolvedInfo;
             }
         }
@@ -125,10 +126,9 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
         // 親が解決できなかった場合はどうしようもない
         if (ownerType instanceof UnknownTypeInfo) {
 
-            // 見つからなかった処理を行う
-            usingMethod.addUnresolvedUsage(this);
-
-            this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
+            final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
+            this.resolvedInfo = new MethodCallInfo(ownerType, unknownMethod, fromLine, fromColumn,
+                    toLine, toColumn);
             return this.resolvedInfo;
 
             // 親がクラス型だった場合
@@ -185,10 +185,9 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                 {
                     err.println("Can't resolve method Call : " + this.getName());
 
-                    usingMethod.addUnresolvedUsage(this);
-
-                    this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine,
-                            toColumn);
+                    final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
+                    this.resolvedInfo = new MethodCallInfo(ownerType, unknownMethod, fromLine,
+                            fromColumn, toLine, toColumn);
                     return this.resolvedInfo;
                 }
 
@@ -254,14 +253,17 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
 
             default:
                 assert false : "Here shouldn't be reached!";
-                this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine,
-                        toColumn);
+                final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
+                this.resolvedInfo = new MethodCallInfo(ownerType, unknownMethod, fromLine,
+                        fromColumn, toLine, toColumn);
                 return this.resolvedInfo;
             }
         }
 
         assert false : "Here shouldn't be reached!";
-        this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
+        final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
+        this.resolvedInfo = new MethodCallInfo(ownerType, unknownMethod, fromLine, fromColumn,
+                toLine, toColumn);
         return this.resolvedInfo;
     }
 
