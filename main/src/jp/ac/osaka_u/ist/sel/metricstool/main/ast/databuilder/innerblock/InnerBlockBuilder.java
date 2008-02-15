@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.InnerB
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 
-public abstract class InnerBlockBuilder extends CompoundDataBuilder<UnresolvedBlockInfo> {
+public abstract class InnerBlockBuilder<T extends UnresolvedBlockInfo> extends CompoundDataBuilder<T> {
 
 	protected InnerBlockBuilder(final BuildDataManager targetDataManager, final InnerBlockStateManager innerBlockStateManager){
 	    
@@ -44,7 +44,7 @@ public abstract class InnerBlockBuilder extends CompoundDataBuilder<UnresolvedBl
     }
     
     protected void endBlockDefinition(){
-        UnresolvedBlockInfo buildBlock = buildingBlockStack.pop();
+        T buildBlock = buildingBlockStack.pop();
         
         if (null != buildManager && null != buildBlock){
         	registBuiltData(buildBlock);
@@ -53,7 +53,7 @@ public abstract class InnerBlockBuilder extends CompoundDataBuilder<UnresolvedBl
     }
     
     protected void startBlockDefinition(AstVisitEvent triggerEvent){
-        UnresolvedBlockInfo newBlock = createUnresolvedBlockInfo();
+        T newBlock = createUnresolvedBlockInfo();
         
         newBlock.setFromLine(triggerEvent.getStartLine());
         newBlock.setFromColumn(triggerEvent.getStartColumn());
@@ -63,14 +63,14 @@ public abstract class InnerBlockBuilder extends CompoundDataBuilder<UnresolvedBl
         startBlockDefinition(newBlock);
     }
     
-    protected void startBlockDefinition(UnresolvedBlockInfo newBlock) {
+    protected void startBlockDefinition(T newBlock) {
         this.buildingBlockStack.push(newBlock);
         buildManager.startInnerBlockDefinition(newBlock);
     }
     
-    protected abstract UnresolvedBlockInfo createUnresolvedBlockInfo();
+    protected abstract T createUnresolvedBlockInfo();
         
-    protected Stack<UnresolvedBlockInfo> buildingBlockStack = new Stack<UnresolvedBlockInfo>();
+    protected Stack<T> buildingBlockStack = new Stack<T>();
     
     protected final BuildDataManager buildManager;
     

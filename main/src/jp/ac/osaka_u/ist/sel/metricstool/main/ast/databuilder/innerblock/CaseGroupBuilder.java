@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedDefaultEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSwitchBlockInfo;
 
-public class CaseGroupBuilder extends InnerBlockBuilder {
+public class CaseGroupBuilder extends InnerBlockBuilder<UnresolvedCaseEntryInfo> {
 
     public CaseGroupBuilder(final BuildDataManager targetDataManager){
         super(targetDataManager, new CaseGroupStateManager());
@@ -32,6 +32,10 @@ public class CaseGroupBuilder extends InnerBlockBuilder {
             this.startBlockDefinition(this.getLastBuildData());
         } else if (type.equals(INNER_BLOCK_STATE_CHANGE.EXIT_BLOCK_SCOPE)) {
             this.endBlockDefinition();
+        } else if (type.equals(CASE_GROUP_STATE_CHANGE.ENTER_BREAK_STATEMENT)) {
+            if(this.buildManager.getCurrentUnit().equals(this.buildingBlockStack.peek())) {
+               this.buildingBlockStack.peek().setHasBreak(true); 
+            }
         }
     }
     

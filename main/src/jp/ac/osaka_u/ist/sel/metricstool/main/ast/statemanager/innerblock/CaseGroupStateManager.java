@@ -1,6 +1,5 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.DeclaredBlockStateManager.DeclaredBlockState;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
@@ -9,6 +8,7 @@ public class CaseGroupStateManager extends InnerBlockStateManager {
 
     public static enum CASE_GROUP_STATE_CHANGE implements StateChangeEventType {
         ENTER_ENTRY_DEF, EXIT_ENTRY_DEF,
+        ENTER_BREAK_STATEMENT, EXIT_BREAK_STATEMENT
     }
     
     public static enum CASE_ENTRY_STATE implements DeclaredBlockState {
@@ -30,6 +30,8 @@ public class CaseGroupStateManager extends InnerBlockStateManager {
                 }
                 
                 this.fireStateChangeEvent(CASE_GROUP_STATE_CHANGE.ENTER_ENTRY_DEF, event);
+            } else if(this.isBreakStatement(token) && STATE.BLOCK == this.state) {
+                this.fireStateChangeEvent(CASE_GROUP_STATE_CHANGE.ENTER_BREAK_STATEMENT, event);
             }
         }
     }
@@ -43,6 +45,8 @@ public class CaseGroupStateManager extends InnerBlockStateManager {
 
             if (this.isEntryDefinitionToken(token) && STATE.DECLARE == this.state) {
                 this.fireStateChangeEvent(CASE_GROUP_STATE_CHANGE.EXIT_ENTRY_DEF, event);
+            } else if(STATE.BLOCK == this.state && this.isBreakStatement(token)) {
+                this.fireStateChangeEvent(CASE_GROUP_STATE_CHANGE.EXIT_BREAK_STATEMENT, event);
             }
         }
     }
@@ -51,9 +55,14 @@ public class CaseGroupStateManager extends InnerBlockStateManager {
         return token.isEntryDefinition();
     }
     
+    protected boolean isBreakStatement(final AstToken token) {
+        return token.isBreak();
+    }
+    
     @Override
     protected final boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
-        return super.isStateChangeTriggerEvent(event) || isEntryDefinitionToken(event.getToken());
+        final AstToken token = event.getToken();
+        return super.isStateChangeTriggerEvent(event) || isEntryDefinitionToken(token) || isBreakStatement(token);
     }
     
     @Override
