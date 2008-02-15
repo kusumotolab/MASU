@@ -26,6 +26,8 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
      */
     public UnresolvedIfBlockInfo() {
         MetricsToolSecurityManager.getInstance().checkAccess();
+        
+        this.sequentElseBlock = null;
     }
 
     /**
@@ -85,5 +87,40 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
 
         return this.resolvedInfo;
     }
+    
+    /**
+     * 対応するelseブロックを返す
+     * @return 対応するelseブロック．対応するelseブロックが存在しない場合はnull
+     */
+    public UnresolvedElseBlockInfo getSequentElseBlock() {
+        return this.sequentElseBlock;
+    }
 
+    /**
+     * 対応するelseブロックをセットする
+     * @param elseBlock 対応するelseブロック
+     */
+    public void setSequentElseBlock(UnresolvedElseBlockInfo elseBlock) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        
+        if(null == elseBlock) {
+            throw new IllegalArgumentException("elseBlock is null");
+        }
+        
+        this.sequentElseBlock = elseBlock;
+    }
+
+    /**
+     * 対応するelseブロックが存在するかどうか表す
+     * @return 対応するelseブロックが存在するならtrue
+     */
+    public boolean hasElseBlock() {
+        return null != this.sequentElseBlock;
+    }
+    
+    /**
+     * 対応するelseブロックを保存する変数
+     */
+    private UnresolvedElseBlockInfo sequentElseBlock;
+    
 }

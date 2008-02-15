@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
@@ -24,6 +27,9 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
      */
     public UnresolvedTryBlockInfo() {
         MetricsToolSecurityManager.getInstance().checkAccess();
+        
+        this.sequentCatchBlocks = new HashSet<UnresolvedCatchBlockInfo>();
+        this.sequentFinallyBlock = null;
     }
 
     /**
@@ -78,4 +84,66 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
         return this.resolvedInfo;
     }
 
+    /**
+     * 対応するcatchブロックを追加する
+     * @param catchBlock 対応するcatchブロック
+     */
+    public void addSequentCatchBlock(final UnresolvedCatchBlockInfo catchBlock) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        
+        if(null == catchBlock) {
+            throw new IllegalArgumentException("catchBlock is null");
+        }
+        
+        this.sequentCatchBlocks.add(catchBlock);
+    }
+    
+    /**
+     * 対応するcatchブロックのSetを返す
+     * @return 対応するcatchブロックのSet
+     */
+    public Set<UnresolvedCatchBlockInfo> getSequentCatchBlocks() {
+        return this.sequentCatchBlocks;
+    }
+    
+    /**
+     * 対応するfinallyブロックを返す
+     * @return 対応するfinallyブロック．finallyブロックが宣言されていないときはnull
+     */
+    public UnresolvedFinallyBlockInfo getSequentFinallyBlock() {
+        return this.sequentFinallyBlock;
+    }
+
+    /**
+     * 対応するfinallyブロックをセットする
+     * @param finallyBlock 対応するfinallyブロック
+     */
+    public void setSequentFinallyBlock(final UnresolvedFinallyBlockInfo finallyBlock) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        
+        if(null == finallyBlock) {
+            throw new IllegalArgumentException("finallyBlock is null");
+        }
+        this.sequentFinallyBlock = finallyBlock;
+    }
+    
+    /**
+     * 対応するfinallyブロックが存在するかどうか返す
+     * @return 対応するfinallyブロックが存在するならtrue
+     */
+    public boolean hasFinally() {
+        return null != this.sequentFinallyBlock;
+    }
+    
+    /**
+     * 対応するcatchブロックを保存する変数
+     */
+    private Set<UnresolvedCatchBlockInfo> sequentCatchBlocks;
+    
+    /**
+     * 対応するfinallyブロックを保存する変数
+     */
+    private UnresolvedFinallyBlockInfo sequentFinallyBlock;
+
+    
 }
