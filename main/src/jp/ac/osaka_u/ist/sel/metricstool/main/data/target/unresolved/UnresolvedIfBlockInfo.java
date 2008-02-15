@@ -45,7 +45,7 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
-                || (null == fieldInfoManager) || (null == methodInfoManager)) {
+                || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
@@ -69,14 +69,14 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
         this.resolvedInfo = new IfBlockInfo(usingClass, usingMethod, conditionalClause, fromLine,
                 fromColumn, toLine, toColumn);
 
-        //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
+        //　内部ブロック情報を解決し，解決済みifブロックオブジェクトに追加
         for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
             final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addInnerBlock(innerBlock);
         }
 
-        // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
+        // ローカル変数情報を解決し，解決済みifブロックオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
             final LocalVariableInfo variable = unresolvedVariable.resolveUnit(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);

@@ -52,7 +52,7 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
-                || (null == fieldInfoManager) || (null == methodInfoManager)) {
+                || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 

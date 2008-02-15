@@ -53,7 +53,7 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
-                || (null == fieldInfoManager) || (null == methodInfoManager)) {
+                || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
@@ -74,9 +74,9 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
         final int toColumn = this.getToColumn();
 
         //　解決済み catchブロックオブジェクトを作成
-        this.resolvedInfo = new CatchBlockInfo(usingClass, (TargetMethodInfo)usingMethod, fromLine, fromColumn,
-                toLine, toColumn, ownerTryBlock);
-        
+        this.resolvedInfo = new CatchBlockInfo(usingClass, usingMethod,
+                fromLine, fromColumn, toLine, toColumn, ownerTryBlock);
+
         //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
             final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
@@ -90,7 +90,7 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
-        
+
         return this.resolvedInfo;
     }
 

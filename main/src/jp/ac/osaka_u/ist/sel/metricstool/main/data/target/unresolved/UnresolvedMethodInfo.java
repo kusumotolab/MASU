@@ -196,8 +196,8 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
 
         //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
-            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
+            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass,
+                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addInnerBlock(innerBlock);
         }
 

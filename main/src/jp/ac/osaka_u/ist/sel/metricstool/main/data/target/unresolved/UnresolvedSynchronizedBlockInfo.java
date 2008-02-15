@@ -44,7 +44,7 @@ public final class UnresolvedSynchronizedBlockInfo extends
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
-                || (null == fieldInfoManager) || (null == methodInfoManager)) {
+                || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
@@ -61,7 +61,7 @@ public final class UnresolvedSynchronizedBlockInfo extends
 
         this.resolvedInfo = new SynchronizedBlockInfo(usingClass, usingMethod, fromLine,
                 fromColumn, toLine, toColumn);
-        
+
         //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
             final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
@@ -75,7 +75,7 @@ public final class UnresolvedSynchronizedBlockInfo extends
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
-        
+
         return this.resolvedInfo;
     }
 

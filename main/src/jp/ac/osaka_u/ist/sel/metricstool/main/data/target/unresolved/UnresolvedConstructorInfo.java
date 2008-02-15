@@ -90,10 +90,10 @@ public final class UnresolvedConstructorInfo extends
             this.resolvedInfo.addParameter(parameterInfo);
         }
 
-        //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
+        //　内部ブロック情報を解決し，解決済みコンストラクタオブジェクトに追加
         for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
-            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
+            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass,
+                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addInnerBlock(innerBlock);
         }
 

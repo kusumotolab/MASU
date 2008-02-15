@@ -19,7 +19,7 @@ public final class CatchBlockInfo extends BlockInfo {
      * @param toColumn 終了列
      * @param ownerTryBlock このcatch節が属するtryブロック
      */
-    public CatchBlockInfo(final TargetClassInfo ownerClass, final TargetMethodInfo ownerMethod,
+    public CatchBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn,
             final TryBlockInfo ownerTryBlock) {
 
