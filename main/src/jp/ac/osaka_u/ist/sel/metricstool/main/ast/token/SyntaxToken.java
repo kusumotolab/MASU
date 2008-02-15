@@ -74,6 +74,13 @@ public class SyntaxToken extends AstTokenAdapter {
         }
     };
 
+    public static final SyntaxToken BREAK = new SyntaxToken("BREAK") {
+        @Override
+        public boolean isBreak() {
+            return true;
+        }
+    };
+    
     /**
      * 指定された文字列で表されるトークンを作成するコンストラクタ
      * @param text トークンを表す文字列

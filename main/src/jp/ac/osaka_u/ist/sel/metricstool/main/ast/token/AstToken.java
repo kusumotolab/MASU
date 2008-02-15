@@ -323,7 +323,10 @@ public interface AstToken {
      */
     public boolean isDefault();
     
-    
-    
+    /**
+     * トークンがbreak文をあらわすかどうか返す
+     * @return break文を表すトークンならtrue
+     */
+    public boolean isBreak();
 
 }

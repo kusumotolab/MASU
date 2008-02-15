@@ -362,10 +362,11 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.LITERAL_throws:
             result = VisitControlToken.SKIP;
             break;
-            
+        case Java15TokenTypes.LITERAL_break:
+            result = SyntaxToken.BREAK;
+            break;
 //        case Java15TokenTypes.PARAMETERS:
 //        case Java15TokenTypes.ELIST:
-//        case Java15TokenTypes.SLIST:
         case Java15TokenTypes.LITERAL_if:
        		result = BlockNameToken.IF_BLOCK;
         	break;

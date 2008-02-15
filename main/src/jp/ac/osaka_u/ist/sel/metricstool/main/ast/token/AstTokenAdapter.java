@@ -249,6 +249,10 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
 
+    public boolean isBreak() {
+        return false;
+    }
+    
     @Override
     public String toString() {
         return this.text;
