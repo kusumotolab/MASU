@@ -8,7 +8,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -99,8 +98,11 @@ public final class UnresolvedArrayElementUsageInfo extends UnresolvedEntityUsage
             //                this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
             //                return this.resolvedInfo;
             //            }
-            usingMethod.addUnresolvedUsage(this);
-            this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
+
+            // 親が特定できない場合も配列の要素使用を作成して返す
+            // もしかすると，UnknownEntityUsageInfoを返す方が適切かもしれない
+            this.resolvedInfo = new ArrayElementUsageInfo(ownerUsage, fromLine, fromColumn, toLine,
+                    toColumn);
             return this.resolvedInfo;
         }
 

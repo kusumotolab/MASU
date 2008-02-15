@@ -35,15 +35,22 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
     public TypeInfo getType() {
 
         final TypeInfo ownerType = this.getOwnerEntityUsage().getType();
-        assert ownerType instanceof ArrayTypeInfo : "ArrayElementUsage attaches unappropriate type!";
 
-        // 配列の次元に応じて型を生成
-        final int ownerArrayDimension = ((ArrayTypeInfo) ownerType).getDimension();
-        final TypeInfo ownerArrayElement = ((ArrayTypeInfo) ownerType).getElementType();
+        // 親が配列型である，と解決できている場合
+        if (ownerType instanceof ArrayTypeInfo) {
+            // 配列の次元に応じて型を生成
+            final int ownerArrayDimension = ((ArrayTypeInfo) ownerType).getDimension();
+            final TypeInfo ownerArrayElement = ((ArrayTypeInfo) ownerType).getElementType();
 
-        // 配列が二次元以上の場合は，次元を一つ落とした配列を返し，一次元の場合は，要素の型を返す．
-        return 1 < ownerArrayDimension ? ArrayTypeInfo.getType(ownerArrayElement,
-                ownerArrayDimension - 1) : ownerArrayElement;
+            // 配列が二次元以上の場合は，次元を一つ落とした配列を返し，一次元の場合は，要素の型を返す．
+            return 1 < ownerArrayDimension ? ArrayTypeInfo.getType(ownerArrayElement,
+                    ownerArrayDimension - 1) : ownerArrayElement;
+        }
+
+        // 配列型でない，かつ不明型でない場合はおかしい
+        assert ownerType instanceof UnknownTypeInfo : "ArrayElementUsage attaches unappropriate type!";
+
+        return ownerType;
     }
 
     /**
