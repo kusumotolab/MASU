@@ -76,10 +76,15 @@ public final class UnresolvedLocalVariableInfo extends UnresolvedVariableInfo<Lo
         if (variableType instanceof UnknownTypeInfo) {
             if (unresolvedVariableType instanceof UnresolvedClassReferenceInfo) {
 
-                // TODO Œ^ƒpƒ‰ƒ[ƒ^‚Ìî•ñ‚ðŠi”[‚·‚é
                 final ExternalClassInfo externalClass = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedVariableType);
                 variableType = new ClassTypeInfo(externalClass);
+                for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedVariableType)
+                        .getTypeArguments()) {
+                    final TypeInfo typeArgument = unresolvedTypeArgument.resolveType(usingClass,
+                            usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                    ((ClassTypeInfo) variableType).addTypeArgument(typeArgument);
+                }
                 classInfoManager.add(externalClass);
 
             } else if (unresolvedVariableType instanceof UnresolvedArrayTypeInfo) {

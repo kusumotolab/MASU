@@ -165,7 +165,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
                                 // TODO 利用関係を構築するコードが必要？
 
                                 // TODO 型パラメータ情報を追記する処理が必要
-                                final ClassTypeInfo reference = new ClassTypeInfo(innerClass);        
+                                final ClassTypeInfo reference = new ClassTypeInfo(innerClass);
                                 classReference = new ClassReferenceInfo(reference, fromLine,
                                         fromColumn, toLine, toColumn);
                                 continue NEXT_NAME;
@@ -590,5 +590,5 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
     /**
      * 解決済みクラス参照を保存するための変数
      */
-    private EntityUsageInfo resolvedInfo;
+    protected EntityUsageInfo resolvedInfo;
 }
