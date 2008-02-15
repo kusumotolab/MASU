@@ -156,8 +156,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
 
                         // インナークラスから探すので一覧を取得
                         final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
-                                .getAvailableDirectInnerClasses((TargetClassInfo) classReference
-                                        .getType());
+                                .getAvailableDirectInnerClasses((TargetClassInfo) ((ClassTypeInfo) classReference
+                                        .getType()).getReferencedClass());
                         for (final TargetInnerClassInfo innerClass : innerClasses) {
 
                             // 一致するクラス名が見つかった場合
@@ -259,8 +259,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
 
                                     // インナークラスから探すので一覧を取得
                                     final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
-                                            .getAvailableDirectInnerClasses((TargetClassInfo) classReference
-                                                    .getType());
+                                            .getAvailableDirectInnerClasses((TargetClassInfo) ((ClassTypeInfo) classReference
+                                                    .getType()).getReferencedClass());
                                     for (final TargetInnerClassInfo innerClass : innerClasses) {
 
                                         // 一致するクラス名が見つかった場合
@@ -336,8 +336,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
 
                                             // インナークラスから探すので一覧を取得
                                             final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
-                                                    .getAvailableDirectInnerClasses((TargetClassInfo) classReference
-                                                            .getType());
+                                                    .getAvailableDirectInnerClasses((TargetClassInfo) ((ClassTypeInfo) classReference
+                                                            .getType()).getReferencedClass());
                                             for (final TargetInnerClassInfo innerClass : innerClasses) {
 
                                                 // 一致するクラス名が見つかった場合
@@ -414,8 +414,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
 
                                         // インナークラス一覧を取得
                                         final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
-                                                .getAvailableDirectInnerClasses((TargetClassInfo) classReference
-                                                        .getType());
+                                                .getAvailableDirectInnerClasses((TargetClassInfo) ((ClassTypeInfo) classReference
+                                                        .getType()).getReferencedClass());
                                         for (final TargetInnerClassInfo innerClass : innerClasses) {
 
                                             // 一致するクラス名が見つかった場合
