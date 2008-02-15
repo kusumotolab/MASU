@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedB
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedElseBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedIfBlockInfo;
 
-public class ElseBlockBuilder extends InnerBlockBuilder {
+public class ElseBlockBuilder extends InnerBlockBuilder<UnresolvedElseBlockInfo> {
 
     public ElseBlockBuilder(final BuildDataManager targetDataManager) {
         super(targetDataManager, new ElseBlockStateManager());

@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedB
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFinallyBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTryBlockInfo;
 
-public class FinallyBlockBuilder extends InnerBlockBuilder {
+public class FinallyBlockBuilder extends InnerBlockBuilder<UnresolvedFinallyBlockInfo> {
 
     public FinallyBlockBuilder(final BuildDataManager targetDataManager) {
         super(targetDataManager, new FinallyBlockStateManager());
