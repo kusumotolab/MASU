@@ -67,7 +67,7 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
         final TryBlockInfo ownerTryBlock = unresolvedOwnerTryBlock.resolveUnit(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // この case エントリの位置情報を取得
+        // この finally 節の位置情報を取得
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();

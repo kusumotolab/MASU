@@ -62,14 +62,14 @@ public final class UnresolvedSynchronizedBlockInfo extends
         this.resolvedInfo = new SynchronizedBlockInfo(usingClass, usingMethod, fromLine,
                 fromColumn, toLine, toColumn);
 
-        //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
+        //　内部ブロック情報を解決し，解決済みsynchronizedブロックオブジェクトに追加
         for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
             final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addInnerBlock(innerBlock);
         }
 
-        // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
+        // ローカル変数情報を解決し，解決済みsynchronizedブロックオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
             final LocalVariableInfo variable = unresolvedVariable.resolveUnit(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);

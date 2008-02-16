@@ -9,7 +9,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -74,17 +73,17 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
         final int toColumn = this.getToColumn();
 
         //　解決済み catchブロックオブジェクトを作成
-        this.resolvedInfo = new CatchBlockInfo(usingClass, usingMethod,
-                fromLine, fromColumn, toLine, toColumn, ownerTryBlock);
+        this.resolvedInfo = new CatchBlockInfo(usingClass, usingMethod, fromLine, fromColumn,
+                toLine, toColumn, ownerTryBlock);
 
-        //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
+        //　内部ブロック情報を解決し，解決済みcatchブロックオブジェクトに追加
         for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
             final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addInnerBlock(innerBlock);
         }
 
-        // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
+        // ローカル変数情報を解決し，解決済みcatchブロックオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
             final LocalVariableInfo variable = unresolvedVariable.resolveUnit(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
