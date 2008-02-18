@@ -6,8 +6,10 @@ import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -27,7 +29,7 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
      */
     public UnresolvedTryBlockInfo() {
         MetricsToolSecurityManager.getInstance().checkAccess();
-        
+
         this.sequentCatchBlocks = new HashSet<UnresolvedCatchBlockInfo>();
         this.sequentFinallyBlock = null;
     }
@@ -64,17 +66,34 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new TryBlockInfo(usingClass, usingMethod, fromLine, fromColumn, toLine,
-                toColumn);
+        // 対応するfinally節を解決
+        final FinallyBlockInfo finallyBlock;
+        if (this.hasFinallyBlock()) {
+            final UnresolvedFinallyBlockInfo unresolvedFinallyBlock = this.getSequentFinallyBlock();
+            finallyBlock = unresolvedFinallyBlock.resolveUnit(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+        } else {
+            finallyBlock = null;
+        }
 
-        //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
+        this.resolvedInfo = new TryBlockInfo(usingClass, usingMethod, finallyBlock, fromLine,
+                fromColumn, toLine, toColumn);
+
+        // 対応するcatch節を解決し，解決済みtryブロックオブジェクトに追加
+        for (final UnresolvedCatchBlockInfo unresolvedCatchBlock : this.getSequentCatchBlocks()) {
+            final CatchBlockInfo catchBlock = unresolvedCatchBlock.resolveUnit(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addSequentCatchBlock(catchBlock);
+        }
+
+        //　内部ブロック情報を解決し，解決済みtryブロックオブジェクトに追加
         for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
             final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addInnerBlock(innerBlock);
         }
 
-        // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
+        // ローカル変数情報を解決し，解決済みtryブロックオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
             final LocalVariableInfo variable = unresolvedVariable.resolveUnit(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -90,14 +109,14 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
      */
     public void addSequentCatchBlock(final UnresolvedCatchBlockInfo catchBlock) {
         MetricsToolSecurityManager.getInstance().checkAccess();
-        
-        if(null == catchBlock) {
+
+        if (null == catchBlock) {
             throw new IllegalArgumentException("catchBlock is null");
         }
-        
+
         this.sequentCatchBlocks.add(catchBlock);
     }
-    
+
     /**
      * 対応するcatchブロックのSetを返す
      * @return 対応するcatchブロックのSet
@@ -105,7 +124,7 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
     public Set<UnresolvedCatchBlockInfo> getSequentCatchBlocks() {
         return this.sequentCatchBlocks;
     }
-    
+
     /**
      * 対応するfinallyブロックを返す
      * @return 対応するfinallyブロック．finallyブロックが宣言されていないときはnull
@@ -120,30 +139,29 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
      */
     public void setSequentFinallyBlock(final UnresolvedFinallyBlockInfo finallyBlock) {
         MetricsToolSecurityManager.getInstance().checkAccess();
-        
-        if(null == finallyBlock) {
+
+        if (null == finallyBlock) {
             throw new IllegalArgumentException("finallyBlock is null");
         }
         this.sequentFinallyBlock = finallyBlock;
     }
-    
+
     /**
      * 対応するfinallyブロックが存在するかどうか返す
      * @return 対応するfinallyブロックが存在するならtrue
      */
-    public boolean hasFinally() {
+    public boolean hasFinallyBlock() {
         return null != this.sequentFinallyBlock;
     }
-    
+
     /**
      * 対応するcatchブロックを保存する変数
      */
-    private Set<UnresolvedCatchBlockInfo> sequentCatchBlocks;
-    
+    private final Set<UnresolvedCatchBlockInfo> sequentCatchBlocks;
+
     /**
      * 対応するfinallyブロックを保存する変数
      */
     private UnresolvedFinallyBlockInfo sequentFinallyBlock;
 
-    
 }

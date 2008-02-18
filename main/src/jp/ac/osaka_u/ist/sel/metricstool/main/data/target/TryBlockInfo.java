@@ -1,6 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.HashSet;
+import java.util.Set;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
+
 /**
  * try ブロックを表すクラス
  * 
@@ -20,7 +26,53 @@ public final class TryBlockInfo extends BlockInfo {
      * @param toColumn 終了列
      */
     public TryBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final FinallyBlockInfo sequentFinallyBlock, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
+
         super(ownerClass, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+
+        this.sequentFinallyBlock = sequentFinallyBlock;
+        this.sequentCatchBlocks = new HashSet<CatchBlockInfo>();
     }
+
+    public FinallyBlockInfo getSequentFinallyBlock() {
+        return this.sequentFinallyBlock;
+    }
+
+    /**
+     * 対応するcatchブロックを追加する
+     * @param catchBlock 対応するcatchブロック
+     */
+    public void addSequentCatchBlock(final CatchBlockInfo catchBlock) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == catchBlock) {
+            throw new IllegalArgumentException("catchBlock is null");
+        }
+
+        this.sequentCatchBlocks.add(catchBlock);
+    }
+
+    /**
+     * 対応するcatchブロックのSetを返す
+     * @return 対応するcatchブロックのSet
+     */
+    public Set<CatchBlockInfo> getSequentCatchBlocks() {
+        return this.sequentCatchBlocks;
+    }
+
+    /**
+     * 対応するfinallyブロックが存在するかどうか返す
+     * @return 対応するfinallyブロックが存在するならtrue
+     */
+    public boolean hasFinallyBlock() {
+        return null != this.sequentFinallyBlock;
+    }
+
+    /**
+     * 対応するcatchブロックを保存する変数
+     */
+    private final Set<CatchBlockInfo> sequentCatchBlocks;
+
+    private final FinallyBlockInfo sequentFinallyBlock;
 }
