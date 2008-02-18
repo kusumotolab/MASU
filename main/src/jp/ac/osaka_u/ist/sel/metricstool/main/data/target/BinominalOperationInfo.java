@@ -147,13 +147,19 @@ public class BinominalOperationInfo extends EntityUsageInfo {
                         || secondOperandType.equals(SHORT)
                         || secondOperandType.equals(PrimitiveTypeInfo.SHORT)) {
                     return PrimitiveTypeInfo.SHORT;
-
+                 
                 } else if (firstOperandType.equals(BYTE)
                         || firstOperandType.equals(PrimitiveTypeInfo.BYTE)
                         || secondOperandType.equals(BYTE)
                         || secondOperandType.equals(PrimitiveTypeInfo.BYTE)) {
                     return PrimitiveTypeInfo.BYTE;
 
+                } else if (firstOperandType.equals(CHARACTER)
+                        || firstOperandType.equals(PrimitiveTypeInfo.CHAR)
+                        || secondOperandType.equals(CHARACTER)
+                        || secondOperandType.equals(PrimitiveTypeInfo.CHAR)) {
+                    return PrimitiveTypeInfo.CHAR;
+                    
                 } else if (firstOperandType.equals(BOOLEAN)
                         || firstOperandType.equals(PrimitiveTypeInfo.BOOLEAN)
                         || secondOperandType.equals(BOOLEAN)
