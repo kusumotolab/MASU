@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
+
 /**
  * if ブロックを表すクラス
  * 
@@ -25,4 +28,28 @@ public final class IfBlockInfo extends ConditionalBlockInfo {
             final int fromColumn, final int toLine, final int toColumn) {
         super(ownerClass, ownerMethod, conditionalClause, fromLine, fromColumn, toLine, toColumn);
     }
+
+    public void setSequentElseBlock(final ElseBlockInfo sequentElseBlock) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == sequentElseBlock) {
+            throw new NullPointerException();
+        }
+
+        this.sequentElseBlock = sequentElseBlock;
+    }
+
+    public ElseBlockInfo getSequentElseBlock() {
+        return this.sequentElseBlock;
+    }
+
+    /**
+     * 対応するelseブロックが存在するかどうか表す
+     * @return 対応するelseブロックが存在するならtrue
+     */
+    public boolean hasElseBlock() {
+        return null != this.sequentElseBlock;
+    }
+
+    private ElseBlockInfo sequentElseBlock;
 }

@@ -5,6 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ElseBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
@@ -26,7 +27,7 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
      */
     public UnresolvedIfBlockInfo() {
         MetricsToolSecurityManager.getInstance().checkAccess();
-        
+
         this.sequentElseBlock = null;
     }
 
@@ -71,6 +72,14 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
         this.resolvedInfo = new IfBlockInfo(usingClass, usingMethod, conditionalClause, fromLine,
                 fromColumn, toLine, toColumn);
 
+        // もしelseブロックがある場合は解決する
+        if (this.hasElseBlock()) {
+            final UnresolvedElseBlockInfo unresolvedElseBlockInfo = this.getSequentElseBlock();
+            final ElseBlockInfo sequentBlockInfo = unresolvedElseBlockInfo.resolveUnit(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.setSequentElseBlock(sequentBlockInfo);
+        }
+
         //　内部ブロック情報を解決し，解決済みifブロックオブジェクトに追加
         for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
             final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
@@ -87,7 +96,7 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
 
         return this.resolvedInfo;
     }
-    
+
     /**
      * 対応するelseブロックを返す
      * @return 対応するelseブロック．対応するelseブロックが存在しない場合はnull
@@ -102,11 +111,11 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
      */
     public void setSequentElseBlock(UnresolvedElseBlockInfo elseBlock) {
         MetricsToolSecurityManager.getInstance().checkAccess();
-        
-        if(null == elseBlock) {
+
+        if (null == elseBlock) {
             throw new IllegalArgumentException("elseBlock is null");
         }
-        
+
         this.sequentElseBlock = elseBlock;
     }
 
@@ -117,10 +126,10 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
     public boolean hasElseBlock() {
         return null != this.sequentElseBlock;
     }
-    
+
     /**
      * 対応するelseブロックを保存する変数
      */
     private UnresolvedElseBlockInfo sequentElseBlock;
-    
+
 }
