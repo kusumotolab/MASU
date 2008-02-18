@@ -72,6 +72,9 @@ public class DefaultBuildDataManager implements BuildDataManager {
         if (!this.methodStack.isEmpty() && MODE.METHOD == this.mode) {
             this.methodStack.peek().addLocalVariable(localParameter);
             addNextScopedVariable(localParameter);
+        } else if (!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode) {
+            this.blockStack.peek().addLocalVariable(localParameter);
+            addNextScopedVariable(localParameter);
         }
     }
 
