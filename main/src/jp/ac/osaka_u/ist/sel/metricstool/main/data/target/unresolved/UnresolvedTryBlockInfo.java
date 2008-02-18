@@ -66,18 +66,16 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
+        this.resolvedInfo = new TryBlockInfo(usingClass, usingMethod, fromLine, fromColumn, toLine,
+                toColumn);
+
         // 対応するfinally節を解決
-        final FinallyBlockInfo finallyBlock;
         if (this.hasFinallyBlock()) {
             final UnresolvedFinallyBlockInfo unresolvedFinallyBlock = this.getSequentFinallyBlock();
-            finallyBlock = unresolvedFinallyBlock.resolveUnit(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
-        } else {
-            finallyBlock = null;
+            final FinallyBlockInfo finallyBlock = unresolvedFinallyBlock.resolveUnit(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.setSequentFinallyBlock(finallyBlock);
         }
-
-        this.resolvedInfo = new TryBlockInfo(usingClass, usingMethod, finallyBlock, fromLine,
-                fromColumn, toLine, toColumn);
 
         // 対応するcatch節を解決し，解決済みtryブロックオブジェクトに追加
         for (final UnresolvedCatchBlockInfo unresolvedCatchBlock : this.getSequentCatchBlocks()) {
@@ -160,7 +158,7 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
     private final Set<UnresolvedCatchBlockInfo> sequentCatchBlocks;
 
     /**
-     * 対応するfinallyブロックを保存する変数
+     * 対応する finally ブロックを保存する変数
      */
     private UnresolvedFinallyBlockInfo sequentFinallyBlock;
 

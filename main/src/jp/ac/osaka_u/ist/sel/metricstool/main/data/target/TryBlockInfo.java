@@ -26,13 +26,22 @@ public final class TryBlockInfo extends BlockInfo {
      * @param toColumn èIóπóÒ
      */
     public TryBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
-            final FinallyBlockInfo sequentFinallyBlock, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(ownerClass, ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
-        this.sequentFinallyBlock = sequentFinallyBlock;
+        this.sequentFinallyBlock = null;
         this.sequentCatchBlocks = new HashSet<CatchBlockInfo>();
+    }
+
+    public void setSequentFinallyBlock(final FinallyBlockInfo sequentFinallyBlock) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == sequentFinallyBlock) {
+            throw new NullPointerException();
+        }
+
+        this.sequentFinallyBlock = sequentFinallyBlock;
     }
 
     public FinallyBlockInfo getSequentFinallyBlock() {
@@ -74,5 +83,5 @@ public final class TryBlockInfo extends BlockInfo {
      */
     private final Set<CatchBlockInfo> sequentCatchBlocks;
 
-    private final FinallyBlockInfo sequentFinallyBlock;
+    private FinallyBlockInfo sequentFinallyBlock;
 }
