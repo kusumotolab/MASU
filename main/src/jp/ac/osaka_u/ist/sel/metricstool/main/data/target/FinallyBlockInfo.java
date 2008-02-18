@@ -19,7 +19,7 @@ public final class FinallyBlockInfo extends BlockInfo {
      * @param toColumn 終了列
      * @param ownerTryBlock この finally 節が属する try ブロック
      */
-    public FinallyBlockInfo(final TargetClassInfo ownerClass, final TargetMethodInfo ownerMethod,
+    public FinallyBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn,
             final TryBlockInfo ownerTryBlock) {
 

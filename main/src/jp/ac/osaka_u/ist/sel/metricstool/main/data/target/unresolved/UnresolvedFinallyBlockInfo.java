@@ -9,7 +9,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -73,8 +72,8 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new FinallyBlockInfo(usingClass, (TargetMethodInfo) usingMethod,
-                fromLine, fromColumn, toLine, toColumn, ownerTryBlock);
+        this.resolvedInfo = new FinallyBlockInfo(usingClass, usingMethod, fromLine, fromColumn,
+                toLine, toColumn, ownerTryBlock);
 
         //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
