@@ -24,8 +24,8 @@ public final class UnresolvedWhileBlockInfo extends UnresolvedConditionalBlockIn
     /**
      * while ƒuƒƒbƒNî•ñ‚ğ‰Šú‰»
      */
-    public UnresolvedWhileBlockInfo() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
+    public UnresolvedWhileBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+        super(ownerSpace);
     }
 
     /**

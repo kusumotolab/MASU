@@ -27,9 +27,9 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
     /**
      * try ƒuƒƒbƒNî•ñ‚ð‰Šú‰»
      */
-    public UnresolvedTryBlockInfo() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
-
+    public UnresolvedTryBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+        super(ownerSpace);
+        
         this.sequentCatchBlocks = new HashSet<UnresolvedCatchBlockInfo>();
         this.sequentFinallyBlock = null;
     }

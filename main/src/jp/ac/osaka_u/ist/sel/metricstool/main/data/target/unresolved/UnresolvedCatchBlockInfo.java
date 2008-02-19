@@ -25,13 +25,13 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
      * 
      * @param ownerTryBlock ‘Î‰ž‚·‚étry•¶
      */
-    public UnresolvedCatchBlockInfo(final UnresolvedTryBlockInfo ownerTryBlock) {
+    public UnresolvedCatchBlockInfo(final UnresolvedTryBlockInfo ownerTryBlock, final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+        super(ownerSpace);
 
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == ownerTryBlock) {
-            throw new NullPointerException();
+        if(null == ownerTryBlock) {
+            throw new IllegalArgumentException("ownerTryBlock is null");
         }
-
+        
         this.ownerTryBlock = ownerTryBlock;
     }
 

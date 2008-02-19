@@ -2,22 +2,23 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.CatchBlockStateManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCatchBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTryBlockInfo;
 
-public class CatchBlockBuilder extends InnerBlockBuilder<UnresolvedCatchBlockInfo> {
+public class CatchBlockBuilder extends InnerBlockBuilder<CatchBlockInfo, UnresolvedCatchBlockInfo> {
 
     public CatchBlockBuilder(final BuildDataManager targetDataManager) {
         super(targetDataManager, new CatchBlockStateManager());
     }
 
     @Override
-    protected UnresolvedCatchBlockInfo createUnresolvedBlockInfo() {
-        final UnresolvedBlockInfo<?> preBlock = this.buildManager.getPreBlock();
-        if(preBlock instanceof UnresolvedTryBlockInfo) {
-            final UnresolvedTryBlockInfo ownerTry = (UnresolvedTryBlockInfo) preBlock;
-            final UnresolvedCatchBlockInfo catchBlock = new UnresolvedCatchBlockInfo(ownerTry);
+    protected UnresolvedCatchBlockInfo createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+        if(ownerSpace instanceof UnresolvedTryBlockInfo) {
+            final UnresolvedTryBlockInfo ownerTry = (UnresolvedTryBlockInfo) ownerSpace;
+            
+            final UnresolvedCatchBlockInfo catchBlock = new UnresolvedCatchBlockInfo(ownerTry, ownerTry.getOwnerSpace());
             
             ownerTry.addSequentCatchBlock(catchBlock);
             

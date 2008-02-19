@@ -23,8 +23,8 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
     /**
      * for ƒuƒƒbƒNî•ñ‚ğ‰Šú‰»
      */
-    public UnresolvedForBlockInfo() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
+    public UnresolvedForBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+        super(ownerSpace);
     }
 
     /**

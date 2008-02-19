@@ -9,9 +9,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.InnerBlockStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.InnerBlockStateManager.INNER_BLOCK_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
 
-public abstract class InnerBlockBuilder<T extends UnresolvedBlockInfo> extends CompoundDataBuilder<T> {
+public abstract class InnerBlockBuilder<TResolved extends BlockInfo, T extends UnresolvedBlockInfo<TResolved>> extends CompoundDataBuilder<T> {
 
 	protected InnerBlockBuilder(final BuildDataManager targetDataManager, final InnerBlockStateManager innerBlockStateManager){
 	    
@@ -29,7 +32,7 @@ public abstract class InnerBlockBuilder<T extends UnresolvedBlockInfo> extends C
         StateChangeEventType type = event.getType();
         
         if (type.equals(INNER_BLOCK_STATE_CHANGE.ENTER_BLOCK_DEF)) {
-            startBlockDefinition(event.getTrigger());
+            buildBlockDefinition(event.getTrigger());
         } else if (type.equals(INNER_BLOCK_STATE_CHANGE.EXIT_BLOCK_DEF)) {
             endBlockDefinition();
         } else if (type.equals(INNER_BLOCK_STATE_CHANGE.ENTER_CLAUSE)) {
@@ -52,13 +55,19 @@ public abstract class InnerBlockBuilder<T extends UnresolvedBlockInfo> extends C
         }
     }
     
-    protected void startBlockDefinition(AstVisitEvent triggerEvent){
-        T newBlock = createUnresolvedBlockInfo();
+    protected void buildBlockDefinition(AstVisitEvent triggerEvent){
+        final UnresolvedLocalSpaceInfo<?> currentSpace = this.getCurrentSpace();
+        
+        assert currentSpace != null : "IllegalState: owner of inner block was not local space";
+        
+        final T newBlock = createUnresolvedBlockInfo(currentSpace);
         
         newBlock.setFromLine(triggerEvent.getStartLine());
         newBlock.setFromColumn(triggerEvent.getStartColumn());
         newBlock.setToLine(triggerEvent.getEndLine());
         newBlock.setToColumn(triggerEvent.getEndColumn());
+        
+        newBlock.getOwnerSpace().addInnerBlock(newBlock);
         
         startBlockDefinition(newBlock);
     }
@@ -68,7 +77,17 @@ public abstract class InnerBlockBuilder<T extends UnresolvedBlockInfo> extends C
         buildManager.startInnerBlockDefinition(newBlock);
     }
     
-    protected abstract T createUnresolvedBlockInfo();
+    protected UnresolvedLocalSpaceInfo<?> getCurrentSpace() {
+        UnresolvedUnitInfo<?> currentUnit = this.buildManager.getCurrentUnit();
+        if(currentUnit instanceof UnresolvedLocalSpaceInfo) {
+            return (UnresolvedLocalSpaceInfo<?>) currentUnit;
+        } else {
+            return null;
+        }
+        
+    }
+    
+    protected abstract T createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace);
         
     protected Stack<T> buildingBlockStack = new Stack<T>();
     

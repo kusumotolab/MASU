@@ -25,11 +25,10 @@ public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> 
      * 
      * @param ownerSwitchBlock
      */
-    public UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == ownerSwitchBlock) {
-            throw new NullPointerException();
+    public UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock, final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+        super(ownerSpace);
+        if(null == ownerSwitchBlock) {
+            throw new IllegalArgumentException("ownerSwitchBlock is null");
         }
 
         this.ownerSwitchBlock = ownerSwitchBlock;

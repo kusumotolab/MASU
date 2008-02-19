@@ -17,17 +17,28 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 
-public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?>> extends CompoundDataBuilder<T>{
-    
-    protected CallableUnitBuilder(BuildDataManager buildDataManager, CallableUnitStateManager stateManager, ModifiersInterpriter interpriter) {
-       this(buildDataManager, stateManager, interpriter, new ModifiersBuilder(),new TypeBuilder(buildDataManager),
-               new NameBuilder(),new MethodParameterBuilder(buildDataManager,interpriter));
+
+public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?>> extends
+        CompoundDataBuilder<T> {
+
+    protected CallableUnitBuilder(BuildDataManager buildDataManager,
+            CallableUnitStateManager stateManager, ModifiersInterpriter interpriter) {
+        this(buildDataManager, stateManager, interpriter, new ModifiersBuilder(), new TypeBuilder(
+                buildDataManager), new NameBuilder(), new MethodParameterBuilder(buildDataManager,
+                interpriter));
     }
-    
-    protected CallableUnitBuilder(BuildDataManager targetDataManager, CallableUnitStateManager stateManager, ModifiersInterpriter interpriter,
-            ModifiersBuilder modifiersBuilder,TypeBuilder typeBuilder,
-            NameBuilder nameBuilder,MethodParameterBuilder parameterbuilder){
-        
+
+    protected CallableUnitBuilder(BuildDataManager targetDataManager,
+            CallableUnitStateManager stateManager, ModifiersInterpriter interpriter,
+            ModifiersBuilder modifiersBuilder, TypeBuilder typeBuilder, NameBuilder nameBuilder,
+            MethodParameterBuilder parameterbuilder) {
+
+        if (null == targetDataManager || null == stateManager || null == interpriter
+                || null == modifiersBuilder || null == typeBuilder || null == nameBuilder
+                || null == parameterbuilder) {
+            throw new IllegalArgumentException();
+        }
+
         this.buildManager = targetDataManager;
         this.stateManager = stateManager;
         this.modifiersInterpriter = interpriter;
@@ -35,17 +46,17 @@ public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?
         this.typeBuilder = typeBuilder;
         this.nameBuilder = nameBuilder;
         this.methodParameterBuilder = parameterbuilder;
-        
+
         addInnerBuilder(modifiersBuilder);
         addInnerBuilder(typeBuilder);
         addInnerBuilder(nameBuilder);
         addInnerBuilder(parameterbuilder);
-        
+
         modifiersBuilder.deactivate();
         typeBuilder.deactivate();
         nameBuilder.deactivate();
         parameterbuilder.deactivate();
-        
+
         addStateManager(this.stateManager);
         addStateManager(this.parameterStateManager);
         addStateManager(this.typeStateManager);
@@ -53,49 +64,50 @@ public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?
         addStateManager(new ModifiersDefinitionStateManager());
         addStateManager(new NameStateManager());
     }
-    
-    
+
     @Override
     public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
         StateChangeEventType type = event.getType();
-        
-        if (type.equals(CALLABLE_UNIT_STATE_CHANGE.ENTER_DEF)){
+
+        if (type.equals(CALLABLE_UNIT_STATE_CHANGE.ENTER_DEF)) {
             startUnitDefinition(event.getTrigger());
-        } else if (type.equals(CALLABLE_UNIT_STATE_CHANGE.EXIT_DEF)){
+        } else if (type.equals(CALLABLE_UNIT_STATE_CHANGE.EXIT_DEF)) {
             endUnitDefinition();
-        } else if (type.equals(CALLABLE_UNIT_STATE_CHANGE.ENTER_BLOCK)){
-            if (null != buildManager){
+        } else if (type.equals(CALLABLE_UNIT_STATE_CHANGE.ENTER_BLOCK)) {
+            if (null != buildManager) {
                 buildManager.enterMethodBlock();
             }
-        } else if (isActive() && stateManager.isInPreDeclaration()){
-            if (!parameterStateManager.isInDefinition()){
-                if (type.equals(ModifiersDefinitionStateManager.MODIFIERS_STATE.ENTER_MODIFIERS_DEF)){
-                    if (null != modifierBuilder){
+        } else if (isActive() && stateManager.isInPreDeclaration()) {
+            if (!parameterStateManager.isInDefinition()) {
+                if (type
+                        .equals(ModifiersDefinitionStateManager.MODIFIERS_STATE.ENTER_MODIFIERS_DEF)) {
+                    if (null != modifierBuilder) {
                         modifierBuilder.activate();
                     }
-                } else if (type.equals(ModifiersDefinitionStateManager.MODIFIERS_STATE.EXIT_MODIFIERS_DEF)){
-                    if (null != modifierBuilder){
+                } else if (type
+                        .equals(ModifiersDefinitionStateManager.MODIFIERS_STATE.EXIT_MODIFIERS_DEF)) {
+                    if (null != modifierBuilder) {
                         modifierBuilder.deactivate();
                         registModifiers();
                         modifierBuilder.clearBuiltData();
                     }
-                } else if (type.equals(NameStateManager.NAME_STATE.ENTER_NAME)){
-                    if (null != nameBuilder){
+                } else if (type.equals(NameStateManager.NAME_STATE.ENTER_NAME)) {
+                    if (null != nameBuilder) {
                         nameBuilder.activate();
                     }
-                } else if (type.equals(NameStateManager.NAME_STATE.EXIT_NAME)){
-                    if (null != nameBuilder){
+                } else if (type.equals(NameStateManager.NAME_STATE.EXIT_NAME)) {
+                    if (null != nameBuilder) {
                         nameBuilder.deactivate();
                         registName();
                         nameBuilder.clearBuiltData();
                     }
-                } else if (!typeParameterStateManager.isInTypeParameterDefinition()){
-                    if (type.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)){
-                        if (null != typeBuilder){
+                } else if (!typeParameterStateManager.isInTypeParameterDefinition()) {
+                    if (type.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)) {
+                        if (null != typeBuilder) {
                             typeBuilder.activate();
                         }
-                    } else if (type.equals(TypeDescriptionStateManager.TYPE_STATE.EXIT_TYPE)){
-                        if (null != typeBuilder && !typeStateManager.isEntered()){
+                    } else if (type.equals(TypeDescriptionStateManager.TYPE_STATE.EXIT_TYPE)) {
+                        if (null != typeBuilder && !typeStateManager.isEntered()) {
                             typeBuilder.deactivate();
                             registType();
                             typeBuilder.clearBuiltData();
@@ -103,75 +115,77 @@ public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?
                     }
                 }
             }
-            
-            if (type.equals(VariableDefinitionStateManager.VARIABLE_STATE.ENTER_VARIABLE_DEF)){
-                if (null != methodParameterBuilder){
+
+            if (type.equals(VariableDefinitionStateManager.VARIABLE_STATE.ENTER_VARIABLE_DEF)) {
+                if (null != methodParameterBuilder) {
                     methodParameterBuilder.activate();
                 }
-            } else if (type.equals(VariableDefinitionStateManager.VARIABLE_STATE.EXIT_VARIABLE_DEF)){
-                if (null != methodParameterBuilder){
+            } else if (type.equals(VariableDefinitionStateManager.VARIABLE_STATE.EXIT_VARIABLE_DEF)) {
+                if (null != methodParameterBuilder) {
                     methodParameterBuilder.deactivate();
                 }
             }
         }
     }
-    
-    private void endUnitDefinition(){
+
+    protected void endUnitDefinition() {
         T builtMethod = buildingUnitStack.pop();
         registBuiltData(builtMethod);
-        
-        if (null != buildManager){
-            buildManager.endMethodDefinition();
-        }
+
+        buildManager.endCallableUnitDefinition();
     }
-    
-    private void registModifiers(){
-        if (!buildingUnitStack.isEmpty()){
+
+    private void registModifiers() {
+        if (!buildingUnitStack.isEmpty()) {
             T buildingMethod = buildingUnitStack.peek();
             ModifierInfo[] modifiers = modifierBuilder.popLastBuiltData();
-            for(ModifierInfo modifier : modifiers){
+            for (ModifierInfo modifier : modifiers) {
                 buildingMethod.addModifier(modifier);
             }
-            
-            if (null != this.modifiersInterpriter){
-                modifiersInterpriter.interprit(modifiers,buildingMethod,buildingMethod);
-            }
+
+            modifiersInterpriter.interprit(modifiers, buildingMethod, buildingMethod);
         }
     }
-    
+
     protected abstract void registType();
-    
+
     protected abstract void registName();
-    
-    private void startUnitDefinition(AstVisitEvent triggerEvent){
+
+    protected T startUnitDefinition(AstVisitEvent triggerEvent) {
         T callableUnit = createUnresolvedCallableUnitInfo();
-        
+
         this.buildingUnitStack.push(callableUnit);
         callableUnit.setFromLine(triggerEvent.getStartLine());
         callableUnit.setFromColumn(triggerEvent.getStartColumn());
         callableUnit.setToLine(triggerEvent.getEndLine());
         callableUnit.setToColumn(triggerEvent.getEndColumn());
-        
-        if (null != buildManager){
-            buildManager.startMethodDefinition(callableUnit);
-        }
+
+        buildManager.startCallableUnitDefinition(callableUnit);
+
+        return callableUnit;
     }
-    
+
     protected abstract T createUnresolvedCallableUnitInfo();
-    
+
     protected Stack<T> buildingUnitStack = new Stack<T>();
-    
+
     protected final ModifiersInterpriter modifiersInterpriter;
-    
+
     protected final BuildDataManager buildManager;
-    
+
     protected final TypeBuilder typeBuilder;
+
     protected final ModifiersBuilder modifierBuilder;
+
     protected final NameBuilder nameBuilder;
+
     protected final MethodParameterBuilder methodParameterBuilder;
-    
+
     protected final CallableUnitStateManager stateManager;
+
     protected final MethodParameterStateManager parameterStateManager = new MethodParameterStateManager();
+
     protected final TypeDescriptionStateManager typeStateManager = new TypeDescriptionStateManager();
+
     protected final TypeParameterStateManager typeParameterStateManager = new TypeParameterStateManager();
 }

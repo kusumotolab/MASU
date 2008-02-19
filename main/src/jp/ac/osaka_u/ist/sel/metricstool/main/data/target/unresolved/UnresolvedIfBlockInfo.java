@@ -25,8 +25,8 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
     /**
      * if ƒuƒƒbƒNî•ñ‚ð‰Šú‰»
      */
-    public UnresolvedIfBlockInfo() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
+    public UnresolvedIfBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+        super(ownerSpace);
 
         this.sequentElseBlock = null;
     }

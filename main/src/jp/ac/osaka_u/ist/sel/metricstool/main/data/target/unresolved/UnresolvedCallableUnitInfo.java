@@ -15,22 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> extends
         UnresolvedLocalSpaceInfo<T> implements VisualizableSetting, MemberSetting, ModifierSetting {
 
-    UnresolvedCallableUnitInfo() {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-
-        this.modifiers = new HashSet<ModifierInfo>();
-        this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
-        this.parameters = new LinkedList<UnresolvedParameterInfo>();
-
-        this.privateVisible = false;
-        this.inheritanceVisible = false;
-        this.namespaceVisible = false;
-        this.publicVisible = false;
-    }
-
-    UnresolvedCallableUnitInfo(final UnresolvedClassInfo ownerClass) {
+    protected UnresolvedCallableUnitInfo(final UnresolvedClassInfo ownerClass) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -135,22 +120,6 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * メソッドを定義しているクラスをセットする
-     * 
-     * @param ownerClass メソッドを定義しているクラス
-     */
-    public final void setOwnerClass(final UnresolvedClassInfo ownerClass) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == ownerClass) {
-            throw new NullPointerException();
-        }
-
-        this.ownerClass = ownerClass;
-    }
-
-    /**
      * 子クラスから参照可能かどうかを設定する
      * 
      * @param inheritanceVisible 子クラスから参照可能な場合は true，そうでない場合は false
@@ -225,7 +194,7 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     /**
      * このメソッドを定義しているクラスを保存するための変数
      */
-    private UnresolvedClassInfo ownerClass;
+    private final UnresolvedClassInfo ownerClass;
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数

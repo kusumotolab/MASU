@@ -39,6 +39,14 @@ public class DefinitionToken extends AstTokenAdapter {
             return true;
         }
     };
+    
+    public static final DefinitionToken STATIC_INIT = new DefinitionToken("STATIC_INIT") {
+        
+        @Override
+        public boolean isStaticInitializerDefinition() {
+            return true;
+        }
+    };
 
     /**
      * フィールド定義部を表す定数インスタンス.

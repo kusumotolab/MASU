@@ -34,36 +34,13 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
 
     /**
      * 未解決メソッド定義情報オブジェクトを初期化
+     * @param ownerClass このメソッドを宣言しているクラス
      */
-    public UnresolvedMethodInfo() {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
+    public UnresolvedMethodInfo(final UnresolvedClassInfo ownerClass) {
+        super(ownerClass);
 
         this.methodName = null;
         this.returnType = null;
-        this.instance = true;
-        this.resolvedInfo = null;
-    }
-
-    /**
-     * 未解決メソッド定義情報オブジェクトを初期化
-     * 
-     * @param methodName メソッド名
-     * @param returnType 返り値の型
-     * @param ownerClass このメソッドを定義しているクラス
-     */
-    public UnresolvedMethodInfo(final String methodName, final UnresolvedTypeInfo returnType,
-            final UnresolvedClassInfo ownerClass) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == methodName) || (null == returnType) || (null == ownerClass)) {
-            throw new NullPointerException();
-        }
-
-        this.methodName = methodName;
-        this.returnType = returnType;
         this.instance = true;
         this.resolvedInfo = null;
     }

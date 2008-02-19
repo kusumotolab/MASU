@@ -22,8 +22,8 @@ public final class UnresolvedSimpleBlockInfo extends UnresolvedBlockInfo<SimpleB
     /**
      * 単純ブロック情報を初期化
      */
-    public UnresolvedSimpleBlockInfo() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
+    public UnresolvedSimpleBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+        super(ownerSpace);
     }
 
     /**

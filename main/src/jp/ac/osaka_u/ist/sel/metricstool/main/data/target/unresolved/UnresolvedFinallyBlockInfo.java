@@ -25,11 +25,12 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
      * 
      * @param ownerTryBlock
      */
-    public UnresolvedFinallyBlockInfo(final UnresolvedTryBlockInfo ownerTryBlock) {
+    public UnresolvedFinallyBlockInfo(final UnresolvedTryBlockInfo ownerTryBlock,
+            final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+        super(ownerSpace);
 
-        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == ownerTryBlock) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException("ownerTryBlock is null");
         }
 
         this.ownerTryBlock = ownerTryBlock;

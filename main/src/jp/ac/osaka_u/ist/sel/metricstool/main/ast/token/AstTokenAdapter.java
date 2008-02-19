@@ -112,6 +112,10 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
 
+    public boolean isStaticInitializerDefinition() {
+        return false;
+    }
+    
     public boolean isMethodParameterDefinition() {
         return false;
     }

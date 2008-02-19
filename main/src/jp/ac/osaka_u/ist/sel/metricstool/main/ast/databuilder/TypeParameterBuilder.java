@@ -5,6 +5,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.TypeParameterStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSuperTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
@@ -33,8 +35,8 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
      * @param nameBuilder　名前情報ビルダー
      * @param typeBuilder　型情報ビルダー
      */
-    public TypeParameterBuilder(final BuildDataManager buildDataManager, final NameBuilder nameBuilder,
-            final TypeBuilder typeBuilder) {
+    public TypeParameterBuilder(final BuildDataManager buildDataManager,
+            final NameBuilder nameBuilder, final TypeBuilder typeBuilder) {
         if (null == buildDataManager) {
             throw new NullPointerException("buildDataManager is null.");
         }
@@ -120,23 +122,28 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
         assert (this.nameBuilder.getBuiltDataCount() == 1);
 
         final String[] name = this.nameBuilder.getFirstBuiltData();
-        
+
         //型パラメータの名前が複数個に分かれててもおかしい
         assert (name.length == 1);
 
         final UnresolvedUnitInfo ownerUnit = this.buildDataManager.getCurrentUnit();
+
+        assert (ownerUnit instanceof UnresolvedCallableUnitInfo)
+                || (ownerUnit instanceof UnresolvedClassInfo) : "Illegal state: not parametrized unit";
+        
         //型の上限情報下限情報を取得
         final UnresolvedTypeInfo upperBounds = this.getUpperBounds();
         final UnresolvedTypeInfo lowerBounds = this.getLowerBounds();
         final int index = buildDataManager.getCurrentTypeParameterCount();
-        
+
         UnresolvedTypeParameterInfo parameter = null;
         if (null == lowerBounds) {
             //下限がなければ普通に作る
             parameter = new UnresolvedTypeParameterInfo(ownerUnit, name[0], index, upperBounds);
         } else {
             //下限がある場合はこっちを作る
-            parameter = new UnresolvedSuperTypeParameterInfo(ownerUnit, name[0], index, upperBounds, lowerBounds);
+            parameter = new UnresolvedSuperTypeParameterInfo(ownerUnit, name[0], index,
+                    upperBounds, lowerBounds);
         }
 
         //最後にデータ管理者に登録する

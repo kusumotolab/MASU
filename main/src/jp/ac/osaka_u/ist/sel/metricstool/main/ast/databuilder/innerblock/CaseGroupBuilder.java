@@ -9,12 +9,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.CaseGr
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.CaseGroupStateManager.CASE_GROUP_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.InnerBlockStateManager.INNER_BLOCK_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedDefaultEntryInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSwitchBlockInfo;
 
-public class CaseGroupBuilder extends InnerBlockBuilder<UnresolvedCaseEntryInfo> {
+public class CaseGroupBuilder extends InnerBlockBuilder<CaseEntryInfo, UnresolvedCaseEntryInfo> {
 
     public CaseGroupBuilder(final BuildDataManager targetDataManager){
         super(targetDataManager, new CaseGroupStateManager());
@@ -22,10 +23,10 @@ public class CaseGroupBuilder extends InnerBlockBuilder<UnresolvedCaseEntryInfo>
     
     @Override
     public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
-        StateChangeEventType type = event.getType();
+        final StateChangeEventType type = event.getType();
         
         if (type.equals(CASE_GROUP_STATE_CHANGE.ENTER_ENTRY_DEF)) {
-            this.startBlockDefinition(event.getTrigger());
+            this.buildBlockDefinition(event.getTrigger());
         } else if (type.equals(CASE_GROUP_STATE_CHANGE.EXIT_ENTRY_DEF)) {
             this.endBlockDefinition();
         } else if (type.equals(INNER_BLOCK_STATE_CHANGE.ENTER_BLOCK_SCOPE)) {
@@ -40,17 +41,15 @@ public class CaseGroupBuilder extends InnerBlockBuilder<UnresolvedCaseEntryInfo>
     }
     
     @Override
-    protected UnresolvedCaseEntryInfo createUnresolvedBlockInfo() {
-        final UnresolvedBlockInfo<?> preBlock = this.buildManager.getPreBlock();
-        
-        if(preBlock instanceof UnresolvedSwitchBlockInfo) {
-            final UnresolvedSwitchBlockInfo ownerSwitch = (UnresolvedSwitchBlockInfo) preBlock;
+    protected UnresolvedCaseEntryInfo createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+        if(ownerSpace instanceof UnresolvedSwitchBlockInfo) {
+            final UnresolvedSwitchBlockInfo ownerSwitch = (UnresolvedSwitchBlockInfo) ownerSpace;
             
             final DeclaredBlockState currentState = this.blockStateManager.getState();
             if(currentState.equals(CASE_ENTRY_STATE.CASE_DEF)) {
-                return new UnresolvedCaseEntryInfo(ownerSwitch);
+                return new UnresolvedCaseEntryInfo(ownerSwitch, ownerSwitch.getOwnerSpace());
             } else if(currentState.equals(CASE_ENTRY_STATE.DEFAULT_DEF)) {
-                return new UnresolvedDefaultEntryInfo(ownerSwitch);
+                return new UnresolvedDefaultEntryInfo(ownerSwitch, ownerSwitch.getOwnerSpace());
             }
         }
         

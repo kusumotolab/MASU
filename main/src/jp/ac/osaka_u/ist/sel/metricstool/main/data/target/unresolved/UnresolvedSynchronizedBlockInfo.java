@@ -23,8 +23,8 @@ public final class UnresolvedSynchronizedBlockInfo extends
     /**
      * synchronized ƒuƒƒbƒNî•ñ‚ğ‰Šú‰»
      */
-    public UnresolvedSynchronizedBlockInfo() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
+    public UnresolvedSynchronizedBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+        super(ownerSpace);
     }
 
     /**

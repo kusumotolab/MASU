@@ -139,7 +139,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     public final Set<UnresolvedBlockInfo<?>> getInnerBlocks() {
         return Collections.unmodifiableSet(this.innerBlocks);
     }
-
+    
     /**
      * メソッドまたはコンストラクタ呼び出しを保存する変数
      */

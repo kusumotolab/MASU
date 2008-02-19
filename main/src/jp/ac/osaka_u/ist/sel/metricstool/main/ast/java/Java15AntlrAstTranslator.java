@@ -357,6 +357,9 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             break;
             
         case Java15TokenTypes.STATIC_INIT:
+            //result = DefinitionToken.STATIC_INIT;
+            //break;
+            
         case Java15TokenTypes.INSTANCE_INIT:
         case Java15TokenTypes.ANNOTATION:
         case Java15TokenTypes.LITERAL_throws:

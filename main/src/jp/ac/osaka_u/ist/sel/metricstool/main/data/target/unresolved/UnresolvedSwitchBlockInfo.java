@@ -26,8 +26,8 @@ public final class UnresolvedSwitchBlockInfo extends
      * switch ƒuƒƒbƒNî•ñ‚ğ‰Šú‰»
      * 
      */
-    public UnresolvedSwitchBlockInfo() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
+    public UnresolvedSwitchBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+        super(ownerSpace);
     }
 
     /**

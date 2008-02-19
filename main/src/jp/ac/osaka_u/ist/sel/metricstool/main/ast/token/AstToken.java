@@ -132,6 +132,12 @@ public interface AstToken {
     public boolean isMethodDefinition();
 
     /**
+     * トークンが static initializer の定義部を表すかどうかを返す．
+     * @return static initializer の定義部であればtrue
+     */
+    public boolean isStaticInitializerDefinition();
+    
+    /**
      * トークンがメソッド呼び出しを表すかどうかを返す.
      * @return メソッド呼び出しを表すトークンならtrue
      */

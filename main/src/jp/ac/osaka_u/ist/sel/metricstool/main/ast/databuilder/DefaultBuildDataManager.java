@@ -18,11 +18,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalClauseInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
@@ -61,16 +59,16 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     public void addVariableUsage(UnresolvedVariableUsageInfo usage) {
-        if (!this.methodStack.isEmpty()&& MODE.METHOD == this.mode){
-            this.methodStack.peek().addVariableUsage(usage);
+        if (!this.callableUnitStack.isEmpty()&& MODE.METHOD == this.mode){
+            this.callableUnitStack.peek().addVariableUsage(usage);
         }else if(!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode){
     		this.blockStack.peek().addVariableUsage(usage);
     	}
     }
 
     public void addLocalParameter(final UnresolvedLocalVariableInfo localParameter) {
-        if (!this.methodStack.isEmpty() && MODE.METHOD == this.mode) {
-            this.methodStack.peek().addLocalVariable(localParameter);
+        if (!this.callableUnitStack.isEmpty() && MODE.METHOD == this.mode) {
+            this.callableUnitStack.peek().addLocalVariable(localParameter);
             addNextScopedVariable(localParameter);
         } else if (!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode) {
             this.blockStack.peek().addLocalVariable(localParameter);
@@ -79,8 +77,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     public void addLocalVariable(final UnresolvedLocalVariableInfo localVariable) {
-        if (!this.methodStack.isEmpty() && MODE.METHOD == this.mode) {
-            this.methodStack.peek().addLocalVariable(localVariable);
+        if (!this.callableUnitStack.isEmpty() && MODE.METHOD == this.mode) {
+            this.callableUnitStack.peek().addLocalVariable(localVariable);
             addScopedVariable(localVariable);
         } else if (!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode) {
             this.blockStack.peek().addLocalVariable(localVariable);
@@ -89,16 +87,16 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     public void addMethodCall(UnresolvedCallInfo memberCall) {
-        if (!this.methodStack.isEmpty() && MODE.METHOD == this.mode){
-            this.methodStack.peek().addCall(memberCall);
+        if (!this.callableUnitStack.isEmpty() && MODE.METHOD == this.mode){
+            this.callableUnitStack.peek().addCall(memberCall);
         } else if(!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode){
         	this.blockStack.peek().addCall(memberCall);
         }
     }
 
     public void addMethodParameter(final UnresolvedParameterInfo parameter) {
-        if (!this.methodStack.isEmpty() && MODE.METHOD == this.mode) {
-            final UnresolvedCallableUnitInfo method = this.methodStack.peek();
+        if (!this.callableUnitStack.isEmpty() && MODE.METHOD == this.mode) {
+            final UnresolvedCallableUnitInfo method = this.callableUnitStack.peek();
             method.addParameter(parameter);
             addNextScopedVariable(parameter);
         }
@@ -128,8 +126,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
                 classStack.peek().addTypeParameter(typeParameter);
             }
         } else if (!this.modeStack.isEmpty() && MODE.METHOD == this.mode) {
-            if (!this.methodStack.isEmpty()) {
-                methodStack.peek().addTypeParameter(typeParameter);
+            if (!this.callableUnitStack.isEmpty()) {
+                callableUnitStack.peek().addTypeParameter(typeParameter);
             }
         }
     }
@@ -181,7 +179,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
                 UnresolvedClassInfoManager.getInstance().addClass(classInfo);
             }
 
-            if (!this.methodStack.isEmpty()) {
+            if (!this.callableUnitStack.isEmpty()) {
                 //TODO methodStack.peek().addInnerClass(classInfo);
             }
 
@@ -189,27 +187,17 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
     }
 
-    public UnresolvedCallableUnitInfo endMethodDefinition() {
+    public UnresolvedCallableUnitInfo endCallableUnitDefinition() {
         this.restoreMode();
 
-        if (this.methodStack.isEmpty()) {
+        if (this.callableUnitStack.isEmpty()) {
             return null;
         } else {
-            final UnresolvedCallableUnitInfo methodInfo = this.methodStack.pop();
+            final UnresolvedCallableUnitInfo callableUnit = this.callableUnitStack.pop();
 
             nextScopedVariables.clear();
 
-            UnresolvedClassInfo currentClass = getCurrentClass();
-            if (null != currentClass) {
-                if (methodInfo instanceof UnresolvedMethodInfo) {
-                    currentClass.addDefinedMethod((UnresolvedMethodInfo) methodInfo);
-                } else {
-                    assert methodInfo instanceof UnresolvedConstructorInfo : "Illegal state:";
-                    currentClass.addDefinedConstructor((UnresolvedConstructorInfo) methodInfo);
-                }
-            }
-
-            return methodInfo;
+            return callableUnit;
         }
     }
 
@@ -222,8 +210,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
             final UnresolvedBlockInfo blockInfo = this.blockStack.pop();
             UnresolvedLocalSpaceInfo parentInfo = null;
             if (this.blockStack.isEmpty()) {
-                if (!this.methodStack.isEmpty()) {
-                    parentInfo = this.methodStack.peek();
+                if (!this.callableUnitStack.isEmpty()) {
+                    parentInfo = this.callableUnitStack.peek();
                 }
             } else {
                 parentInfo = this.blockStack.peek();
@@ -345,29 +333,32 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     public UnresolvedUnitInfo getCurrentUnit() {
         UnresolvedUnitInfo currentUnit = null;
-        if(MODE.METHOD == this.mode || MODE.CONDITIONAL_CLAUSE == this.mode || MODE.INNER_BLOCK == this.mode) {
-            currentUnit = this.getCurrentMethod();
-        } else if (MODE.CLASS == this.mode) {
+        if(MODE.CLASS == this.mode) {
             currentUnit = this.getCurrentClass();
+        } else if (MODE.METHOD == this.mode) {
+            currentUnit = this.getCurrentCallableUnit();
+        } else if (MODE.INNER_BLOCK == this.mode) {
+            currentUnit = this.getCurrentBlock();
+        } else if (MODE.CONDITIONAL_CLAUSE == this.mode) {
+            currentUnit = this.getCurrentConditionalCluase();
         }
         return currentUnit;
     }
     
     public UnresolvedClassInfo getCurrentClass() {
-        if (this.classStack.isEmpty()) {
-            return null;
-        } else {
-            return this.classStack.peek();
-        }
+        return this.classStack.isEmpty() ? null : this.classStack.peek();
     }
 
-    public UnresolvedBlockInfo getPreBlock() {
-        // TODO 構文定義ファイルを書き換えたらここもかわるかも
-        if(this.blockStack.isEmpty()) {
-            return null;
-        } else {
-            return this.blockStack.peek();
-        }
+    public UnresolvedCallableUnitInfo getCurrentCallableUnit() {
+        return this.callableUnitStack.isEmpty() ? null : this.callableUnitStack.peek();
+    }
+    
+    public UnresolvedBlockInfo getCurrentBlock() {
+        return this.blockStack.isEmpty() ? null : this.blockStack.peek();
+    }
+    
+    public UnresolvedConditionalClauseInfo getCurrentConditionalCluase() {
+        return this.clauseStack.isEmpty() ? null : this.clauseStack.peek();
     }
     
     public int getAnonymousClassCount(UnresolvedClassInfo classInfo) {
@@ -385,13 +376,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
     }
 
-    public UnresolvedCallableUnitInfo getCurrentMethod() {
-        if (this.methodStack.isEmpty()) {
-            return null;
-        } else {
-            return this.methodStack.peek();
-        }
-    }
+    
 
     /**
      * 現在の名前空間名を返す．
@@ -450,7 +435,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     public UnresolvedTypeParameterInfo getTypeParameter(String name) {
-        for (int i = modeStack.size() - 1, cli = classStack.size() - 1, mei = methodStack.size() - 1; i >= 0; i--) {
+        for (int i = modeStack.size() - 1, cli = classStack.size() - 1, mei = callableUnitStack.size() - 1; i >= 0; i--) {
             MODE mode = modeStack.get(i);
 
             if (MODE.CLASS == mode) {
@@ -466,7 +451,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
             } else if (MODE.METHOD == mode) {
                 assert (mei >= 0);
                 if (mei >= 0) {
-                    UnresolvedCallableUnitInfo<?> methodInfo = methodStack.get(mei--);
+                    UnresolvedCallableUnitInfo<?> methodInfo = callableUnitStack.get(mei--);
                     for (UnresolvedTypeParameterInfo param : methodInfo.getTypeParameters()) {
                         if (param.getName().equals(name)) {
                             return param;
@@ -486,8 +471,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
                 count = classStack.peek().getTypeParameters().size();
             }
         } else if (!this.modeStack.isEmpty() && MODE.METHOD == this.mode) {
-            if (!this.methodStack.isEmpty()) {
-                count = methodStack.peek().getTypeParameters().size();
+            if (!this.callableUnitStack.isEmpty()) {
+                count = callableUnitStack.peek().getTypeParameters().size();
             }
         }
         
@@ -496,8 +481,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
     
     public int getCurrentParameterCount() {
         int count = -1;
-        if (!this.methodStack.isEmpty()) {
-            count = methodStack.peek().getParameters().size();
+        if (!this.callableUnitStack.isEmpty()) {
+            count = callableUnitStack.peek().getParameters().size();
         }
         return count;
     }
@@ -579,20 +564,14 @@ public class DefaultBuildDataManager implements BuildDataManager {
         this.toClassMode();
     }
 
-    public void startMethodDefinition(final UnresolvedCallableUnitInfo methodInfo) {
-        if (null == methodInfo) {
+    public void startCallableUnitDefinition(final UnresolvedCallableUnitInfo callableUnit) {
+        if (null == callableUnit) {
             throw new NullPointerException("method info was null.");
         }
 
-        UnresolvedClassInfo currentClass = getCurrentClass();
-        if(null != currentClass) {
-            methodInfo.setOwnerClass(currentClass);
-        }
-
+        this.callableUnitStack.push(callableUnit);
+        
         this.toMethodMode();
-
-        this.methodStack.push(methodInfo);
-
     }
 
     public void startInnerBlockDefinition(final UnresolvedBlockInfo blockInfo) {
@@ -600,9 +579,9 @@ public class DefaultBuildDataManager implements BuildDataManager {
             throw new IllegalArgumentException("block info was null.");
         }
 
-        if (!this.methodStack.isEmpty()) {
+        if (!this.callableUnitStack.isEmpty()) {
             // TODO ブロック文のownerブロックとownerメソッドを登録したほうが便利かも
-            UnresolvedCallableUnitInfo currentMethod = getCurrentMethod();
+            UnresolvedCallableUnitInfo currentMethod = getCurrentCallableUnit();
             //blockInfo.setOwnerMethod(currentMethod);
             if (!this.blockStack.isEmpty()) {
                 UnresolvedBlockInfo currentBlock = this.blockStack.peek();
@@ -750,7 +729,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     private void innerInit() {
         this.classStack.clear();
-        this.methodStack.clear();
+        this.callableUnitStack.clear();
         this.blockStack.clear();
         this.clauseStack.clear();
         this.nameSpaceStack.clear();
@@ -780,7 +759,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     private final Stack<UnresolvedClassInfo> classStack = new Stack<UnresolvedClassInfo>();
 
-    private final Stack<UnresolvedCallableUnitInfo> methodStack = new Stack<UnresolvedCallableUnitInfo>();
+    private final Stack<UnresolvedCallableUnitInfo> callableUnitStack = new Stack<UnresolvedCallableUnitInfo>();
 
     private final Stack<UnresolvedBlockInfo> blockStack = new Stack<UnresolvedBlockInfo>();
 

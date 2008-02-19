@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalClauseInfo;
 
-public abstract class ConditionalBlockBuilder<T extends UnresolvedConditionalBlockInfo> extends InnerBlockBuilder<T> {
+public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlockInfo, T extends UnresolvedConditionalBlockInfo<TResolved>> extends InnerBlockBuilder<TResolved, T> {
 
     protected ConditionalBlockBuilder(final BuildDataManager targetDataManager, final InnerBlockStateManager blockStateManager){
         super(targetDataManager, blockStateManager);
@@ -21,7 +21,7 @@ public abstract class ConditionalBlockBuilder<T extends UnresolvedConditionalBlo
     @Override
     public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
         super.stateChangend(event);
-        StateChangeEventType type = event.getType();
+        final StateChangeEventType type = event.getType();
         
         if (type.equals(INNER_BLOCK_STATE_CHANGE.ENTER_CLAUSE)) {
             startConditionalClause(event.getTrigger());
@@ -30,10 +30,10 @@ public abstract class ConditionalBlockBuilder<T extends UnresolvedConditionalBlo
         }
     }
     
-    private void startConditionalClause(AstVisitEvent triggerEvent) {
+    private void startConditionalClause(final AstVisitEvent triggerEvent) {
         if(!this.buildingBlockStack.isEmpty() && this.buildingBlockStack.peek() instanceof UnresolvedConditionalBlockInfo) {
-            UnresolvedConditionalBlockInfo currentBlock = (UnresolvedConditionalBlockInfo)this.buildingBlockStack.peek();
-            UnresolvedConditionalClauseInfo conditionalClause = currentBlock.getConditionalClause();
+            final T currentBlock = (T)this.buildingBlockStack.peek();
+            final UnresolvedConditionalClauseInfo conditionalClause = currentBlock.getConditionalClause();
             
             this.buildingClauseStack.push(conditionalClause);
             
@@ -47,7 +47,7 @@ public abstract class ConditionalBlockBuilder<T extends UnresolvedConditionalBlo
     }
     
     private void endConditionalClause() {
-        UnresolvedConditionalClauseInfo buildClause = this.buildingClauseStack.pop();
+        final UnresolvedConditionalClauseInfo buildClause = this.buildingClauseStack.pop();
         
         if (null != buildClause){
             this.buildManager.endClassDefinition();

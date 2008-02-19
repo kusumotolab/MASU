@@ -13,7 +13,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 public abstract class UnresolvedConditionalBlockInfo<T extends ConditionalBlockInfo> extends
         UnresolvedBlockInfo<T> {
 
-    public UnresolvedConditionalBlockInfo() {
+    public UnresolvedConditionalBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+        super(ownerSpace);
         this.conditionalClause = new UnresolvedConditionalClauseInfo();
     }
 

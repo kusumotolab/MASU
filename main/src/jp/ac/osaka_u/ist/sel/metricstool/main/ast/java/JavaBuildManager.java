@@ -65,8 +65,8 @@ public class JavaBuildManager extends DefaultBuildDataManager{
     }
     
     @Override
-    public UnresolvedCallableUnitInfo endMethodDefinition() {
-        UnresolvedCallableUnitInfo method = super.endMethodDefinition();
+    public UnresolvedCallableUnitInfo endCallableUnitDefinition() {
+        UnresolvedCallableUnitInfo method = super.endCallableUnitDefinition();
         if (isInInterface()){
             method.setPublicVisible(true);
             method.setInheritanceVisible(true);

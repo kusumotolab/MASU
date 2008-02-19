@@ -25,11 +25,12 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
      * 
      * @param ownerIfBlock
      */
-    public UnresolvedElseBlockInfo(final UnresolvedIfBlockInfo ownerIfBlock) {
+    public UnresolvedElseBlockInfo(final UnresolvedIfBlockInfo ownerIfBlock,
+            final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+        super(ownerSpace);
 
-        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == ownerIfBlock) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException("ownerIfBlock is null");
         }
 
         this.ownerIfBlock = ownerIfBlock;

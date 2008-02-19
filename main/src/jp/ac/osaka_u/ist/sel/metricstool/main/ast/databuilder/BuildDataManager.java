@@ -107,7 +107,7 @@ public interface BuildDataManager {
      */
     public UnresolvedClassInfo endClassDefinition();
 
-    public UnresolvedCallableUnitInfo endMethodDefinition();
+    public UnresolvedCallableUnitInfo endCallableUnitDefinition();
 
     public UnresolvedBlockInfo endInnerBlockDefinition();
     
@@ -135,7 +135,7 @@ public interface BuildDataManager {
 
     public String[] getCurrentNameSpace();
 
-    public UnresolvedCallableUnitInfo getCurrentMethod();
+    public UnresolvedCallableUnitInfo getCurrentCallableUnit();
 
     public UnresolvedVariableInfo<VariableInfo> getCurrentScopeVariable(String name);
     
@@ -155,13 +155,15 @@ public interface BuildDataManager {
 
     public void startClassDefinition(UnresolvedClassInfo classInfo);
 
-    public void startMethodDefinition(UnresolvedCallableUnitInfo methodInfo);
+    public void startCallableUnitDefinition(UnresolvedCallableUnitInfo methodInfo);
     
     public void startInnerBlockDefinition(UnresolvedBlockInfo blockInfo);
     
     public void startConditionalClause(UnresolvedConditionalClauseInfo clauseInfo);
     
-    public UnresolvedBlockInfo getPreBlock();
+    public UnresolvedBlockInfo getCurrentBlock();
+    
+    public UnresolvedConditionalClauseInfo getCurrentConditionalCluase();
     
     public int getCurrentTypeParameterCount();
     
