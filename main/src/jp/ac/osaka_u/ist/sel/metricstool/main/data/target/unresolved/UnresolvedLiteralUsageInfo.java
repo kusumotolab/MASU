@@ -20,7 +20,7 @@ public final class UnresolvedLiteralUsageInfo extends UnresolvedEntityUsageInfo 
         if ((null == literal) || (null == type)) {
             throw new IllegalArgumentException();
         }
-        
+
         this.literal = literal;
         this.type = type;
         this.resolvedInfo = null;

@@ -28,6 +28,11 @@ public class UnresolvedMonominalOperationInfo extends UnresolvedEntityUsageInfo 
      */
     public UnresolvedMonominalOperationInfo(final UnresolvedEntityUsageInfo term,
             final PrimitiveTypeInfo type) {
+
+        if (null == term || null == type) {
+            throw new IllegalArgumentException("term or type is null");
+        }
+
         this.term = term;
         this.type = type;
     }

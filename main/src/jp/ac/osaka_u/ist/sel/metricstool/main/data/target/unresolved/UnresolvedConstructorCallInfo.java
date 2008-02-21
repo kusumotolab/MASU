@@ -30,8 +30,6 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo {
      */
     public UnresolvedConstructorCallInfo(final UnresolvedReferenceTypeInfo unresolvedReferenceType) {
 
-        super();
-
         if (null == unresolvedReferenceType) {
             throw new IllegalArgumentException();
         }

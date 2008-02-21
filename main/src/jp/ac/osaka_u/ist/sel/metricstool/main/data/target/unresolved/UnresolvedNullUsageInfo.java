@@ -23,6 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedNullUsageInfo extends UnresolvedEntityUsageInfo {
 
     public UnresolvedNullUsageInfo() {
+
         this.resolvedInfo = null;
     }
 

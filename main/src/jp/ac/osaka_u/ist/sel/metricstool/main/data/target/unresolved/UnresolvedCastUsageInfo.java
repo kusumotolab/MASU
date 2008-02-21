@@ -26,6 +26,7 @@ public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo {
      * @param castedType ƒLƒƒƒXƒg‚µ‚½Œ^
      */
     public UnresolvedCastUsageInfo(final UnresolvedTypeInfo castedType) {
+        
         MetricsToolSecurityManager.getInstance().checkAccess();
         this.castedType = castedType;
     }

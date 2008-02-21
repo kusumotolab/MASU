@@ -48,64 +48,67 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
         final ExpressionElement[] elements = this.getAvailableElements();
 
         assert (term > 0 && term == elements.length) : "Illegal state: unexpected element count.";
-        
-        if (term > 0 && term == elements.length){
+
+        if (term > 0 && term == elements.length) {
             //各項の型を記録する配列
             final UnresolvedEntityUsageInfo[] termTypes = new UnresolvedEntityUsageInfo[elements.length];
-    
+
             //最左辺値について
-            if (elements[0] instanceof IdentifierElement) {
+            final ExpressionElement primary = elements[0];
+            if (primary instanceof IdentifierElement) {
                 //識別子の場合
                 final IdentifierElement leftElement = (IdentifierElement) elements[0];
                 if (referenceLeft) {
                     //参照なら被参照変数として解決して結果の型を取得する
                     termTypes[0] = leftElement.resolveAsReferencedVariable(this.buildDataManager);
                 }
-    
+
                 if (assignmentLeft) {
                     //代入なら被代入変数として解決して結果の型を取得する
                     termTypes[0] = leftElement.resolveAsAssignmetedVariable(this.buildDataManager);
                 }
-            } else if (elements[0].equals(InstanceSpecificElement.THIS)){
+            } else if (primary.equals(InstanceSpecificElement.THIS)) {
                 termTypes[0] = InstanceSpecificElement.getThisInstanceType(buildDataManager);
-            } else if (elements[0].equals(InstanceSpecificElement.NULL)){
+            } else if (primary.equals(InstanceSpecificElement.NULL)) {
                 termTypes[0] = new UnresolvedNullUsageInfo();
-            } else if (elements[0] instanceof TypeElement) {
-                TypeElement typeElement = (TypeElement) elements[0];
+            } else if (primary instanceof TypeElement) {
+                TypeElement typeElement = (TypeElement) primary;
                 if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {
                     // キャストがあるとおそらくここに到達
                     // TODO UnresolvedReferenceTypeInfoにすべき
                     termTypes[0] = ((UnresolvedClassTypeInfo) typeElement.getType()).getUsage();
-                } else if(typeElement.getType() instanceof UnresolvedArrayTypeInfo) {
-                    UnresolvedArrayTypeInfo arrayType = (UnresolvedArrayTypeInfo) typeElement.getType();
+                } else if (typeElement.getType() instanceof UnresolvedArrayTypeInfo) {
+                    UnresolvedArrayTypeInfo arrayType = (UnresolvedArrayTypeInfo) typeElement
+                            .getType();
                     termTypes[0] = new UnresolvedArrayTypeReferenceInfo(arrayType);
                 } else {
-                
+
                     termTypes[0] = elements[0].getUsage();
                 }
-            }  else {
+            } else {
                 //それ以外の場合は直接型を取得する
-                termTypes[0] = elements[0].getUsage();
+                termTypes[0] = primary.getUsage();
             }
-    
+
             //2項目以降について
             for (int i = 1; i < term; i++) {
                 if (elements[i] instanceof IdentifierElement) {
                     //識別子なら勝手に参照として解決して方を取得する
                     termTypes[i] = ((IdentifierElement) elements[i])
                             .resolveAsReferencedVariable(this.buildDataManager);
-                } else if (elements[i].equals(InstanceSpecificElement.THIS)){
+                } else if (elements[i].equals(InstanceSpecificElement.THIS)) {
                     termTypes[i] = InstanceSpecificElement.getThisInstanceType(buildDataManager);
-                } else if (elements[i].equals(InstanceSpecificElement.NULL)){
+                } else if (elements[i].equals(InstanceSpecificElement.NULL)) {
                     termTypes[i] = new UnresolvedNullUsageInfo();
                 } else if (elements[i] instanceof TypeElement) {
                     TypeElement typeElement = (TypeElement) elements[i];
                     if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {
                         termTypes[i] = ((UnresolvedClassTypeInfo) typeElement.getType()).getUsage();
-                    } else if(typeElement.getType() instanceof UnresolvedArrayTypeInfo) {
+                    } else if (typeElement.getType() instanceof UnresolvedArrayTypeInfo) {
                         // ここに到達するのはinstanceof type[]とき
                         // TODO instanceofの使用を示すEntityUsageを生成したほうがいいかも
-                        UnresolvedArrayTypeInfo arrayType = (UnresolvedArrayTypeInfo) typeElement.getType();
+                        UnresolvedArrayTypeInfo arrayType = (UnresolvedArrayTypeInfo) typeElement
+                                .getType();
                         termTypes[i] = new UnresolvedArrayTypeReferenceInfo(arrayType);
                     } else {
                         termTypes[i] = elements[i].getUsage();
@@ -115,24 +118,25 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     termTypes[i] = elements[i].getUsage();
                 }
             }
-            
+
             final OPERATOR operator = token.getOperator();
-            
-            if (2 == term && null != operator){
+
+            if (2 == term && null != operator) {
                 //オペレーターインスタンスがセットされている2項演算子＝名前解決部に型決定処理を委譲する
-                assert(null != termTypes[0]) : "Illega state: first term type was not decided.";
-                assert(null != termTypes[1]) : "Illega state: second term type was not decided.";
-                
-                UnresolvedBinominalOperationInfo operation = new UnresolvedBinominalOperationInfo(operator,termTypes[0],termTypes[1]);
+                assert (null != termTypes[0]) : "Illega state: first term type was not decided.";
+                assert (null != termTypes[1]) : "Illega state: second term type was not decided.";
+
+                UnresolvedBinominalOperationInfo operation = new UnresolvedBinominalOperationInfo(
+                        operator, termTypes[0], termTypes[1]);
                 pushElement(UsageElement.getInstance(operation));
-                
-            } else{
+
+            } else {
                 //自分で型決定する
                 UnresolvedEntityUsageInfo resultType = null;
-                
+
                 //オペレータによってすでに決定している戻り値の型，確定していなければnull
                 final PrimitiveTypeInfo type = token.getSpecifiedResultType();
-                
+
                 if (null != type) {
                     //オペレータによってすでに結果の型が決定している
                     resultType = new UnresolvedMonominalOperationInfo(termTypes[0], type);
@@ -146,21 +150,21 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                         ownerType = elements[0].getUsage();
                     }
                     resultType = new UnresolvedArrayElementUsageInfo(ownerType);
-                } else if(token.equals(OperatorToken.CAST) && elements[0] instanceof TypeElement) {
+                } else if (token.equals(OperatorToken.CAST) && elements[0] instanceof TypeElement) {
                     UnresolvedTypeInfo castedType = ((TypeElement) elements[0]).getType();
                     resultType = new UnresolvedCastUsageInfo(castedType);
                 } else {
                     //型決定に関連する項を左から順番に漁っていって最初に決定できた奴に勝手に決める
                     for (int i = 0; i < typeSpecifiedTermIndexes.length; i++) {
                         resultType = termTypes[typeSpecifiedTermIndexes[i]];
-                        if (null != resultType){
+                        if (null != resultType) {
                             break;
                         }
                     }
                 }
 
                 assert (null != resultType) : "Illegal state: operation resultType was not decided.";
-                
+
                 this.pushElement(UsageElement.getInstance(resultType));
             }
         }
@@ -172,5 +176,5 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
     }
 
     private final BuildDataManager buildDataManager;
- 
+
 }

@@ -26,7 +26,7 @@ public final class UnresolvedArrayElementUsageInfo extends UnresolvedEntityUsage
      * @param ownerArrayType —v‘f‚ªQÆ‚³‚ê‚½”z—ñ‚ÌŒ^
      */
     public UnresolvedArrayElementUsageInfo(final UnresolvedEntityUsageInfo ownerArrayType) {
-
+        
         if (null == ownerArrayType) {
             throw new NullPointerException("ownerArrayType is null.");
         }

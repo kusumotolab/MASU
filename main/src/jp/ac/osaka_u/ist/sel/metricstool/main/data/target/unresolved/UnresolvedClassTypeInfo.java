@@ -387,6 +387,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
     }
 
     public final UnresolvedClassReferenceInfo getUsage() {
+
         UnresolvedClassReferenceInfo usage = new UnresolvedClassReferenceInfo(
                 this.availableNamespaces, this.referenceName);
         for (UnresolvedReferenceTypeInfo typeArgument : this.typeArguments) {

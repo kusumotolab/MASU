@@ -558,8 +558,10 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
 
     public final static UnresolvedClassReferenceInfo createClassReference(
             UnresolvedClassTypeInfo referenceType) {
+
         return new UnresolvedClassReferenceInfo(referenceType.getAvailableNamespaces(),
                 referenceType.getReferenceName());
+
     }
 
     /**

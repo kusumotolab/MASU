@@ -20,12 +20,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 public class UnresolvedBinominalOperationInfo extends UnresolvedEntityUsageInfo {
 
     /**
-     * 引数なしコンストラクタ
-     */
-    public UnresolvedBinominalOperationInfo() {
-    }
-
-    /**
      * 演算子と2つのオペランドを与えて初期化する
      * 
      * @param operator 演算子

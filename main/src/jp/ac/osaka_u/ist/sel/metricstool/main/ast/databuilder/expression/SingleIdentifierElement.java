@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
@@ -12,80 +13,80 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
-public class SingleIdentifierElement implements IdentifierElement{
-    
-    public SingleIdentifierElement(String name, UnresolvedEntityUsageInfo ownerUsage){
-        this.name = name;
-        this.qualifiedName = new String[]{name};
+
+public class SingleIdentifierElement extends IdentifierElement {
+
+    public SingleIdentifierElement(final String name, UnresolvedEntityUsageInfo ownerUsage,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+
+        super(name, fromLine, fromColumn, toLine, toColumn);
+        
+        this.qualifiedName = new String[] { name };
         this.ownerUsage = ownerUsage;
+
     }
 
     public UnresolvedTypeInfo getType() {
         return null;
     }
-    
+
     public UnresolvedEntityUsageInfo getUsage() {
         return null;
     }
-    
-    public String[] getQualifiedName() {
-        return qualifiedName;
-    }
-    
-    public String getName(){
-        return name;
-    }
-    
-    public UnresolvedEntityUsageInfo getOwnerUsage() {
-        return ownerUsage;
-    }
-    
-    private UnresolvedVariableUsageInfo resolveAsVariableUsage(BuildDataManager buildDataManager, UnresolvedVariableInfo usedVariable, boolean reference) {
+
+    private UnresolvedVariableUsageInfo resolveAsVariableUsage(BuildDataManager buildDataManager,
+            UnresolvedVariableInfo usedVariable, boolean reference) {
         UnresolvedVariableUsageInfo usage;
-        if (null == usedVariable || usedVariable instanceof UnresolvedFieldInfo){
+        if (null == usedVariable || usedVariable instanceof UnresolvedFieldInfo) {
             //変数がみつからないので多分どこかのフィールド or 見つかった変数がフィールドだった
-            usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),ownerUsage,name, reference);
-        } else if( usedVariable instanceof UnresolvedParameterInfo) {
+            usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),
+                    ownerUsage, name, reference, this.fromLine, this.fromColumn, this.toLine,
+                    this.toColumn);
+        } else if (usedVariable instanceof UnresolvedParameterInfo) {
             UnresolvedParameterInfo parameter = (UnresolvedParameterInfo) usedVariable;
-            usage = new UnresolvedParameterUsageInfo(parameter, reference);
+            usage = new UnresolvedParameterUsageInfo(parameter, reference, this.fromLine,
+                    this.fromColumn, this.toLine, this.toColumn);
         } else {
-            assert( usedVariable instanceof UnresolvedLocalVariableInfo) : "Illegal state: unexpected VariableInfo";
+            assert (usedVariable instanceof UnresolvedLocalVariableInfo) : "Illegal state: unexpected VariableInfo";
             UnresolvedLocalVariableInfo localVariable = (UnresolvedLocalVariableInfo) usedVariable;
-            usage = new UnresolvedLocalVariableUsageInfo(localVariable, reference);
+            usage = new UnresolvedLocalVariableUsageInfo(localVariable, reference, this.fromLine,
+                    this.fromColumn, this.toLine, this.toColumn);
         }
-        
+
         buildDataManager.addVariableUsage(usage);
         return usage;
     }
-    
-    public UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(BuildDataManager buildDataManager) {
-        UnresolvedVariableInfo variable = buildDataManager.getCurrentScopeVariable(name);
-        
+
+    @Override
+    public UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(
+            BuildDataManager buildDataManager) {
+        UnresolvedVariableInfo variable = buildDataManager.getCurrentScopeVariable(this.name);
+
         return resolveAsVariableUsage(buildDataManager, variable, false);
     }
-    
+
+    @Override
     public IdentifierElement resolveAsCalledMethod(BuildDataManager buildDataManager) {
         //特に何もしない
         return this;
     }
 
+    @Override
     public UnresolvedVariableUsageInfo resolveAsReferencedVariable(BuildDataManager buildDataManager) {
-        UnresolvedVariableInfo variable = buildDataManager.getCurrentScopeVariable(name);
-        
+        UnresolvedVariableInfo variable = buildDataManager.getCurrentScopeVariable(this.name);
+
         return resolveAsVariableUsage(buildDataManager, variable, true);
     }
-    
-    public UnresolvedEntityUsageInfo resolveReferencedEntityIfPossible(BuildDataManager buildDataManager) {
-        UnresolvedVariableInfo variable = buildDataManager.getCurrentScopeVariable(name);
-        if (null != variable){
+
+    @Override
+    public UnresolvedEntityUsageInfo resolveReferencedEntityIfPossible(
+            BuildDataManager buildDataManager) {
+        UnresolvedVariableInfo variable = buildDataManager.getCurrentScopeVariable(this.name);
+        if (null != variable) {
             return resolveAsVariableUsage(buildDataManager, variable, true);
         } else {
             return null;
         }
     }
-    
-    
-    private final String name;
-    private final String[] qualifiedName;
-    private final UnresolvedEntityUsageInfo ownerUsage;
+
 }

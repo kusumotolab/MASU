@@ -21,9 +21,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedLocalVariableUsageInfo extends UnresolvedVariableUsageInfo {
 
     public UnresolvedLocalVariableUsageInfo(final UnresolvedLocalVariableInfo usedVariable,
-            boolean reference) {
-
-        super(usedVariable.getName(), reference);
+            boolean reference, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
+        super(usedVariable.getName(), reference, fromLine, fromColumn, toLine, toColumn);
 
         this.usedVariable = usedVariable;
     }

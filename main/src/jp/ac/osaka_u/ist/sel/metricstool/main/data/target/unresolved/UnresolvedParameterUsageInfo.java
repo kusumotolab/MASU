@@ -27,9 +27,9 @@ public final class UnresolvedParameterUsageInfo extends UnresolvedVariableUsageI
      * @param reference@QÆ‚Ìê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
      */
     public UnresolvedParameterUsageInfo(final UnresolvedParameterInfo usedVariable,
-            boolean reference) {
-
-        super(usedVariable.getName(), reference);
+            boolean reference, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
+        super(usedVariable.getName(), reference, fromLine, fromColumn, toLine, toColumn);
 
         this.usedVariable = usedVariable;
     }

@@ -560,7 +560,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     public UnresolvedClassReferenceInfo getClassReference() {
         final UnresolvedClassReferenceInfo classReference = new UnresolvedFullQualifiedNameClassReferenceInfo(
                 this);
-        for(UnresolvedTypeParameterInfo typeParameter : this.typeParameters) {
+        
+        for (UnresolvedTypeParameterInfo typeParameter : this.typeParameters) {
             classReference.addTypeArgument(typeParameter);
         }
         return classReference;

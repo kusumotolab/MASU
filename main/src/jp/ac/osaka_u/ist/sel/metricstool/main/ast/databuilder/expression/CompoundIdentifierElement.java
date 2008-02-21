@@ -14,17 +14,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
  * @author kou-tngt, t-miyake
  *
  */
-public class CompoundIdentifierElement implements IdentifierElement {
+public class CompoundIdentifierElement extends IdentifierElement {
 
-    public CompoundIdentifierElement(final IdentifierElement owner, final String name) {
+    public CompoundIdentifierElement(final IdentifierElement owner, final String name,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        super(name, fromLine, fromColumn, toLine, toColumn);
+
         if (null == owner) {
             throw new NullPointerException("owner is null.");
         }
-        if (null == name) {
-            throw new NullPointerException("name is null.");
-        }
 
-        this.name = name;
         this.owner = owner;
 
         final String[] ownerName = owner.getQualifiedName();
@@ -32,14 +31,6 @@ public class CompoundIdentifierElement implements IdentifierElement {
         System.arraycopy(ownerName, 0, thisName, 0, ownerName.length);
         thisName[thisName.length - 1] = name;
         this.qualifiedName = thisName;
-    }
-
-    public String[] getQualifiedName() {
-        return this.qualifiedName;
-    }
-
-    public String getName() {
-        return this.name;
     }
 
     public ExpressionElement getOwner() {
@@ -54,40 +45,43 @@ public class CompoundIdentifierElement implements IdentifierElement {
         return null;
     }
 
-    public UnresolvedEntityUsageInfo getOwnerUsage() {
-        return this.ownerType;
-    }
-
+    @Override
     public UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(
             final BuildDataManager buildDataManager) {
-        this.ownerType = this.resolveOwner(buildDataManager);
+        this.ownerUsage = this.resolveOwner(buildDataManager);
         final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
-                .getAllAvaliableNames(), this.ownerType, this.name, false);
+                .getAllAvaliableNames(), this.ownerUsage, this.name, false, this.fromLine,
+                this.fromColumn, this.toLine, this.toColumn);
         buildDataManager.addVariableUsage(fieldUsage);
         return fieldUsage;
     }
 
+    @Override
     public IdentifierElement resolveAsCalledMethod(final BuildDataManager buildDataManager) {
-        this.ownerType = this.resolveOwner(buildDataManager);
+        this.ownerUsage = this.resolveOwner(buildDataManager);
         return this;
     }
 
+    @Override
     public UnresolvedVariableUsageInfo resolveAsReferencedVariable(
             final BuildDataManager buildDataManager) {
-        this.ownerType = this.resolveOwner(buildDataManager);
+        this.ownerUsage = this.resolveOwner(buildDataManager);
         final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
-                .getAllAvaliableNames(), this.ownerType, this.name, true);
+                .getAllAvaliableNames(), this.ownerUsage, this.name, true, this.fromLine,
+                this.fromColumn, this.toLine, this.toColumn);
         buildDataManager.addVariableUsage(fieldUsage);
         return fieldUsage;
     }
 
+    @Override
     public UnresolvedEntityUsageInfo resolveReferencedEntityIfPossible(
             final BuildDataManager buildDataManager) {
-        this.ownerType = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
+        this.ownerUsage = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
 
-        if (this.ownerType != null) {
+        if (this.ownerUsage != null) {
             final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(
-                    buildDataManager.getAllAvaliableNames(), this.ownerType, this.name, true);
+                    buildDataManager.getAllAvaliableNames(), this.ownerUsage, this.name, true,
+                    this.fromLine, this.fromColumn, this.toLine, this.toColumn);
             buildDataManager.addVariableUsage(fieldUsage);
             return fieldUsage;
         }
@@ -96,18 +90,12 @@ public class CompoundIdentifierElement implements IdentifierElement {
     }
 
     protected UnresolvedEntityUsageInfo resolveOwner(final BuildDataManager buildDataManager) {
-        this.ownerType = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
+        this.ownerUsage = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
 
-        return null != this.ownerType ? this.ownerType : new UnresolvedUnknownUsageInfo(
+        return null != this.ownerUsage ? this.ownerUsage : new UnresolvedUnknownUsageInfo(
                 buildDataManager.getAllAvaliableNames(), this.owner.getQualifiedName());
     }
 
-    private final String name;
-
-    private final String[] qualifiedName;
-
     private final IdentifierElement owner;
-
-    private UnresolvedEntityUsageInfo ownerType;
 
 }

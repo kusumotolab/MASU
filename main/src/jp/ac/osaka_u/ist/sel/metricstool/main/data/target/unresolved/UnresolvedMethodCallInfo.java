@@ -45,8 +45,6 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
     public UnresolvedMethodCallInfo(final UnresolvedEntityUsageInfo ownerUsage,
             final String methodName) {
 
-        super();
-
         if ((null == ownerUsage) || (null == methodName)) {
             throw new NullPointerException();
         }

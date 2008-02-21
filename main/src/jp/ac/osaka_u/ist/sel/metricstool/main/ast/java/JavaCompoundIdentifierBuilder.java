@@ -56,13 +56,19 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
             }
         } else if (left.equals(JavaExpressionElement.SUPER)) {
             if (right instanceof IdentifierElement) {
+                final IdentifierElement rightIdentifier = (IdentifierElement) right;
+
                 UnresolvedClassInfo classInfo = buildDataManager.getCurrentClass();
                 UnresolvedClassTypeInfo superClassType = classInfo.getSuperClasses().iterator()
                         .next();
                 UnresolvedClassReferenceInfo superClassReference = UnresolvedClassReferenceInfo
                         .createClassReference(superClassType);
-                pushElement(new FieldOrMethodElement(superClassReference,
-                        ((IdentifierElement) right).getName()));
+
+                final FieldOrMethodElement fieldOrMethod = new FieldOrMethodElement(
+                        superClassReference, rightIdentifier.getName(), rightIdentifier
+                                .getFromLine(), rightIdentifier.getFromColumn(), rightIdentifier
+                                .getToLine(), rightIdentifier.getToColumn());
+                pushElement(fieldOrMethod);
             }
         } else if (right.equals(JavaExpressionElement.SUPER)) {
             UnresolvedClassInfo classInfo = null;
@@ -121,7 +127,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
 
             UnresolvedClassTypeInfo superClassType = classInfo.getSuperClasses().iterator().next();
             if (superClassType != null) {
-                
+
                 pushElement(UsageElement.getInstance(superClassType.getUsage()));
             }
         } else {

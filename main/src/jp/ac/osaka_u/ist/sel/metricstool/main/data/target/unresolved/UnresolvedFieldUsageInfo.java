@@ -45,9 +45,9 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo 
      */
     public UnresolvedFieldUsageInfo(final Set<AvailableNamespaceInfo> availableNamespaces,
             final UnresolvedEntityUsageInfo ownerClassType, final String fieldName,
-            final boolean reference) {
-
-        super(fieldName, reference);
+            final boolean reference, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
+        super(fieldName, reference, fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == availableNamespaces) || (null == ownerClassType) || (null == fieldName)) {

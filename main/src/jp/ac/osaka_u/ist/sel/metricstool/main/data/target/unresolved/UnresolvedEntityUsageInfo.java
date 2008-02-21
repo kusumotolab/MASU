@@ -16,6 +16,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
  */
 public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
 
+    protected UnresolvedEntityUsageInfo() {
+        this.fromLine = 0;
+        this.fromColumn = 0;
+        this.toLine = 0;
+        this.toColumn = 0;
+    }
+    
+    
     /**
      * –¼‘O‰ğŒˆ‚ğs‚¤
      * 
