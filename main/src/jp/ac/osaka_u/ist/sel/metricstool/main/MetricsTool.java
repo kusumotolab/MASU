@@ -68,6 +68,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CommonASTWithLineNumber;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
@@ -85,6 +86,8 @@ import org.jargp.BoolDef;
 import org.jargp.ParameterDef;
 import org.jargp.StringDef;
 
+import antlr.ASTFactory;
+import antlr.CommonASTWithHiddenTokens;
 import antlr.RecognitionException;
 import antlr.TokenStreamException;
 import antlr.collections.AST;
@@ -201,6 +204,11 @@ public class MetricsTool {
 
                     final Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
                     final Java15Parser parser = new Java15Parser(lexer);
+                    
+                    final ASTFactory factory = new ASTFactory();
+                    factory.setASTNodeClass(CommonASTWithLineNumber.class);
+                    parser.setASTFactory(factory);
+                                        
                     parser.compilationUnit();
                     targetFile.setCorrectSytax(true);
 
