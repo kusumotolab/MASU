@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
 /**
  * 
  * @author kou-tngt, t-miyake
- *
+ * 
  */
 public class CompoundIdentifierElement extends IdentifierElement {
 
@@ -93,7 +93,8 @@ public class CompoundIdentifierElement extends IdentifierElement {
         this.ownerUsage = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
 
         return null != this.ownerUsage ? this.ownerUsage : new UnresolvedUnknownUsageInfo(
-                buildDataManager.getAllAvaliableNames(), this.owner.getQualifiedName());
+                buildDataManager.getAllAvaliableNames(), this.owner.getQualifiedName(),
+                this.fromLine, this.fromColumn, this.toLine, this.toColumn);
     }
 
     private final IdentifierElement owner;
