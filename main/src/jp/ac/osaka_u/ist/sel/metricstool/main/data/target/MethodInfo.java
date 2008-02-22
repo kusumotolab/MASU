@@ -61,7 +61,6 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
      * <li>メソッドの引数の個数</li>
      * <li>メソッドの引数の型（第一引数から順番に）</li>
      */
-    @Override
     public final int compareTo(final MethodInfo method) {
 
         if (null == method) {

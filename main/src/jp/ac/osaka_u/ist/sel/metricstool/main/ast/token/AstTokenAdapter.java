@@ -184,7 +184,6 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
     
-    @Override
     public boolean isCaseGroupDefinition() {
         return false;
     }
@@ -193,62 +192,50 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
     
-    @Override
     public boolean isCase() {
         return false;
     }
 
-    @Override
     public boolean isCatch() {
         return false;
     }
 
-    @Override
     public boolean isDefault() {
         return false;
     }
 
-    @Override
     public boolean isDo() {
         return false;
     }
 
-    @Override
     public boolean isElse() {
         return false;
     }
 
-    @Override
     public boolean isFinally() {
         return false;
     }
 
-    @Override
     public boolean isFor() {
         return false;
     }
 
-    @Override
     public boolean isIf() {
         return false;
     }
 
-    @Override
     public boolean isSwitch() {
         return false;
     }
 
-    @Override
     public boolean isTry() {
         return false;
     }
 
-    @Override
     public boolean isWhile() {
         return false;
     }
     
-    @Override
     public boolean isSynchronized() {
         return false;
     }

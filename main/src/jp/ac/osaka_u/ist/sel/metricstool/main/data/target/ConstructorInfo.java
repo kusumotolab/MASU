@@ -33,7 +33,6 @@ public abstract class ConstructorInfo extends CallableUnitInfo implements
      * <li>コンストラクタの引数の個数</li>
      * <li>コンストラクタの引数の型（第一引数から順番に）</li>
      */
-    @Override
     public final int compareTo(final ConstructorInfo constructor) {
 
         if (null == constructor) {

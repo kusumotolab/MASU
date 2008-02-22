@@ -73,7 +73,6 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
      * 
      * @return 等しい場合はtrue，等しくない場合はfalse
      */
-    @Override
     public boolean equals(TypeInfo typeInfo) {
 
         // 引数が null ならば，等しくない
@@ -119,7 +118,6 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
      * 
      * @return この参照型を表す文字列
      */
-    @Override
     public String getTypeName() {
 
         final StringBuilder sb = new StringBuilder();

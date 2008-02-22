@@ -58,7 +58,6 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * 
      * @param fromLine 開始行
      */
-    @Override
     public final void setFromLine(final int fromLine) {
 
         if (fromLine < 0) {
@@ -73,7 +72,6 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * 
      * @param fromColumn 開始列
      */
-    @Override
     public final void setFromColumn(final int fromColumn) {
 
         if (fromColumn < 0) {
@@ -88,8 +86,7 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * 
      * @param toLine 終了行
      */
-    @Override
-    public final void setToLine(final int toLine) {
+     public final void setToLine(final int toLine) {
 
         if (toLine < 0) {
             throw new IllegalArgumentException();
@@ -103,9 +100,7 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * 
      * @param toColumn 終了列
      */
-    @Override
-    public final void setToColumn(final int toColumn) {
-
+     public final void setToColumn(final int toColumn) {
         if (toColumn < 0) {
             throw new IllegalArgumentException();
         }
@@ -118,8 +113,7 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * 
      * @return 開始行
      */
-    @Override
-    public final int getFromLine() {
+     public final int getFromLine() {
         return this.fromLine;
     }
 
@@ -128,8 +122,7 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * 
      * @return 開始列
      */
-    @Override
-    public final int getFromColumn() {
+     public final int getFromColumn() {
         return this.fromColumn;
     }
 
@@ -138,7 +131,6 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * 
      * @return 終了行
      */
-    @Override
     public final int getToLine() {
         return this.toLine;
     }
@@ -148,7 +140,6 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * 
      * @return 終了列
      */
-    @Override
     public final int getToColumn() {
         return this.toColumn;
     }

@@ -37,7 +37,6 @@ public abstract class EntityUsageInfo implements Position{
      * 
      * @return 開始行
      */
-    @Override
     public final int getFromLine() {
         return this.fromLine;
     }
@@ -47,7 +46,6 @@ public abstract class EntityUsageInfo implements Position{
      * 
      * @return 開始列
      */
-    @Override
     public final int getFromColumn() {
         return this.fromColumn;
     }
@@ -57,7 +55,6 @@ public abstract class EntityUsageInfo implements Position{
      * 
      * @return 終了行
      */
-    @Override
     public final int getToLine() {
         return this.toLine;
     }
@@ -67,7 +64,6 @@ public abstract class EntityUsageInfo implements Position{
      * 
      * @return 終了列
      */
-    @Override
     public final int getToColumn() {
         return this.toColumn;
     }

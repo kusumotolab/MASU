@@ -85,7 +85,6 @@ public abstract class UnresolvedVariableInfo<T extends VariableInfo> extends Unr
      * 
      * @param modifier ’Ç‰Á‚·‚éCüq
      */
-    @Override
     public final void addModifier(final ModifierInfo modifier) {
 
         if (null == modifier) {

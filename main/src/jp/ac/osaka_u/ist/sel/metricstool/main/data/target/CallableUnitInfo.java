@@ -104,7 +104,6 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @return 子クラスから参照可能な場合は true, そうでない場合は false
      */
-    @Override
     public boolean isInheritanceVisible() {
         return this.inheritanceVisible;
     }
@@ -114,7 +113,6 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
      */
-    @Override
     public boolean isNamespaceVisible() {
         return this.namespaceVisible;
     }
@@ -124,7 +122,6 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
      */
-    @Override
     public boolean isPrivateVisible() {
         return this.privateVisible;
     }
@@ -134,7 +131,6 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @return どこからでも参照可能な場合は true, そうでない場合は false
      */
-    @Override
     public boolean isPublicVisible() {
         return this.publicVisible;
     }

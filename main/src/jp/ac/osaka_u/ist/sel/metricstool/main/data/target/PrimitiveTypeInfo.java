@@ -243,7 +243,6 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
      * 
      * @return ‰ğŒˆÏ‚İ‚ÌŒ^i©•ª©gj
      */
-    @Override
     public TypeInfo resolveType(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {

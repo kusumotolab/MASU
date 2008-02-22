@@ -108,17 +108,14 @@ public final class UnresolvedConstructorInfo extends
         return this.resolvedInfo;
     }
 
-    @Override
     public boolean isInstanceMember() {
         return true;
     }
 
-    @Override
     public boolean isStaticMember() {
         return false;
     }
 
-    @Override
     public void setInstanceMember(boolean instance) {
     }
 

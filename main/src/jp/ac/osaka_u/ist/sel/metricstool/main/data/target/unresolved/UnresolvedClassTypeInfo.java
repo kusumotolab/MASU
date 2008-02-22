@@ -54,7 +54,6 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
      * 
      * @return ‰ğŒˆÏ‚İ‚Ìê‡‚Í trueC‰ğŒˆ‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Í false
      */
-    @Override
     public boolean alreadyResolved() {
         return null != this.resolvedInfo;
     }
@@ -62,7 +61,6 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
     /**
      * ‚±‚Ì–¢‰ğŒˆƒNƒ‰ƒXŒ^‚Ì‰ğŒˆÏ‚İ‚ÌŒ^‚ğ•Ô‚·
      */
-    @Override
     public TypeInfo getResolvedType() {
 
         if (!this.alreadyResolved()) {
@@ -72,7 +70,6 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
         return this.resolvedInfo;
     }
 
-    @Override
     public TypeInfo resolveType(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
