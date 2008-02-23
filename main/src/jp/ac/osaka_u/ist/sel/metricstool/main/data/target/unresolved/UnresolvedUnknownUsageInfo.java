@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
@@ -46,7 +47,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
      * @param name 未解決エンティティ使用名
      */
     public UnresolvedUnknownUsageInfo(final Set<AvailableNamespaceInfo> availableNamespaces,
-            final String[] name, final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final String[] name, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
         this.availableNamespaces = availableNamespaces;
         this.name = name;
@@ -55,7 +57,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
         this.setFromColumn(fromColumn);
         this.setToLine(toLine);
         this.setToColumn(toColumn);
-        
+
         this.resolvedIndo = null;
     }
 
@@ -935,7 +937,20 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
             }
         }
 
-        err.println("Remain unresolved \"" + this.toString() + "\"" + " on \""
+        // java言語の場合は，javaかjavaxで始まり，長さが3以上のUnknownEntityUsageInfoはJDK内のクラスとみなす
+        if (Settings.getLanguage().equals(LANGUAGE.JAVA)) {
+
+            if ((name[0].equals("java") || name[0].equals("javax")) && (3 <= name.length)) {
+                final ExternalClassInfo externalClass = new ExternalClassInfo(name);
+                final ClassTypeInfo externalClassType = new ClassTypeInfo(externalClass);
+                this.resolvedIndo = new ClassReferenceInfo(externalClassType, fromLine, fromColumn,
+                        toLine, toColumn);
+                classInfoManager.add(externalClass);
+            }
+        }
+
+        err.println("Remain unresolved \"" + this.toString() + "\"" + " line:" + this.getFromLine()
+                + " column:" + this.getFromColumn() + " on \""
                 + usingClass.getFullQualifiedName(LANGUAGE.JAVA.getNamespaceDelimiter()));
 
         // 見つからなかった処理を行う
@@ -952,6 +967,16 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
      */
     public String[] getName() {
         return this.name;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder(this.name[0]);
+        for (int i = 1; i < this.name.length; i++) {
+            sb.append(".");
+            sb.append(this.name[i]);
+        }
+        return sb.toString();
     }
 
     /**
