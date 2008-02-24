@@ -946,6 +946,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
                 this.resolvedIndo = new ClassReferenceInfo(externalClassType, fromLine, fromColumn,
                         toLine, toColumn);
                 classInfoManager.add(externalClass);
+                return this.resolvedIndo;
             }
         }
 
