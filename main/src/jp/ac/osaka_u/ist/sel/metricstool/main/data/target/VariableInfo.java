@@ -19,14 +19,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public abstract class VariableInfo extends UnitInfo implements Comparable<VariableInfo>, Modifier {
+public abstract class VariableInfo<T extends VariableUsageInfo> extends UnitInfo implements Comparable<VariableInfo<T>>, Modifier {
 
     /**
      * 変数の順序を定義するメソッド．変数名（String）に従う．
      * 
      * @return 変数の順序関係
      */
-    public final int compareTo(final VariableInfo variable) {
+    public final int compareTo(final VariableInfo<T> variable) {
 
         if (null == variable) {
             throw new NullPointerException();
@@ -64,6 +64,15 @@ public abstract class VariableInfo extends UnitInfo implements Comparable<Variab
         return this.type;
     }
 
+    public void addUsage(T usage) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == usage) {
+            throw new IllegalArgumentException();
+        }
+        
+        this.usages.add(usage);
+    }
+    
     /**
      * 変数オブジェクトを初期化する
      * 
@@ -89,6 +98,7 @@ public abstract class VariableInfo extends UnitInfo implements Comparable<Variab
         this.type = type;
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
+        this.usages = new HashSet<T>();
     }
 
     /**
@@ -105,4 +115,6 @@ public abstract class VariableInfo extends UnitInfo implements Comparable<Variab
      * 変数の型を表す変数
      */
     private final TypeInfo type;
+    
+    private final Set<T> usages;
 }

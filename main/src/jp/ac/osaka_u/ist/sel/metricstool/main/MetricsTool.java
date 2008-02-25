@@ -45,6 +45,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
@@ -1277,7 +1278,9 @@ public class MetricsTool {
 
             // 名前解決でき場合は登録
             if (variableUsage instanceof VariableUsageInfo) {
-                ownerMethod.addVariableUsage((VariableUsageInfo<?>) variableUsage);
+                VariableUsageInfo<?> usage = (VariableUsageInfo<?>) variableUsage;
+                ownerMethod.addVariableUsage(usage);
+                usage.getUsedVariable().addUsage(usage);
 
                 // フィールドの場合は，利用関係情報を取る
                 if (variableUsage instanceof FieldUsageInfo) {

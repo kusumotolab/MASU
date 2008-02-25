@@ -61,6 +61,7 @@ public final class UnresolvedParameterUsageInfo extends UnresolvedVariableUsageI
 
         this.resolvedInfo = new ParameterUsageInfo(usedVariable, reference, fromLine, fromColumn,
                 toLine, toColumn);
+
         return this.resolvedInfo;
     }
 

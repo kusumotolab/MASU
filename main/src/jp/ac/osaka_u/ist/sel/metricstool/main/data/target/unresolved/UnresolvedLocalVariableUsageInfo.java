@@ -52,6 +52,7 @@ public class UnresolvedLocalVariableUsageInfo extends UnresolvedVariableUsageInf
 
         this.resolvedInfo = new LocalVariableUsageInfo(usedVariable, reference, fromLine,
                 fromColumn, toLine, toColumn);
+
         return this.resolvedInfo;
     }
 

@@ -22,7 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  */
-public abstract class FieldInfo extends VariableInfo {
+public abstract class FieldInfo extends VariableInfo<FieldUsageInfo> {
 
     /**
      * フィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．

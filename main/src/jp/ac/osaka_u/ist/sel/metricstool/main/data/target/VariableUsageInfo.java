@@ -16,6 +16,7 @@ public abstract class VariableUsageInfo<T extends VariableInfo> extends EntityUs
 
         this.usedVariable = usedVariable;
         this.reference = reference;
+
     }
 
     public final T getUsedVariable() {

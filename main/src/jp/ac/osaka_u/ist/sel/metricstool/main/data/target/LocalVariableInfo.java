@@ -10,7 +10,7 @@ import java.util.Set;
  * @author higo
  * 
  */
-public final class LocalVariableInfo extends VariableInfo {
+public final class LocalVariableInfo extends VariableInfo<LocalVariableUsageInfo> {
 
     /**
      * ローカル変数オブジェクトを初期化する．変数名と変数の型が必要．
