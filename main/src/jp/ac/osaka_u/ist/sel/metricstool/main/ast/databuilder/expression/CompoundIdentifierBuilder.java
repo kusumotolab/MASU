@@ -93,7 +93,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
                     //‘S‘Ì‚ð‚È‚ñ‚©‚æ‚­•ª‚©‚ç‚ñŽ¯•ÊŽq‚Æ‚µ‚Äˆµ‚¤
                     IdentifierElement leftIdentifier = (IdentifierElement) left;
                     pushElement(new CompoundIdentifierElement(leftIdentifier, rightName,
-                            leftIdentifier.getFromLine(), leftIdentifier.getFromColumn(),
+                            rightIdentifier.getFromLine(), rightIdentifier.getFromColumn(),
                             rightIdentifier.getToLine(), rightIdentifier.getToColumn()));
                 } else {
                     assert (false) : "Illegal state: unknown left element type.";
