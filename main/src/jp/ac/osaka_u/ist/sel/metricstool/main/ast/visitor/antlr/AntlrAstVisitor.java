@@ -7,6 +7,7 @@ import java.util.Stack;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstTokenTranslator;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BlockNameToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitListener;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitStrategy;
@@ -113,11 +114,25 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
         this.positionManager = lineColumn;
     }
 
+    private void printAST(AST node, int nest){
+        AST nextNode = node;
+        while(null != nextNode){
+            AST currentNode = nextNode;
+            nextNode = nextNode.getNextSibling();
+            for(int i = 0; i < nest; i++){
+                System.out.print("  ");
+            }
+            System.out.println(currentNode.getText() + " : (" + currentNode.getLine() + ", " + currentNode.getColumn() + ")");
+            printAST(currentNode.getFirstChild(), nest + 1);
+        }
+    }
+    
     /* (non-Javadoc)
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitor#startVisiting(java.lang.Object)
      */
     public void startVisiting(final AST startNode) {
         AST nextNode = startNode;
+        //printAST(startNode, 0);
         AstToken parentToken = null;
         while (null != nextNode) {
             //このノードのトークンからAstTokenに変換する
@@ -129,12 +144,12 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
             int endLine = 0;
             int endColumn = 0;
             if (null != this.positionManager) {
-                startLine = this.positionManager.getStartLine(nextNode);
-                startColumn = this.positionManager.getStartColumn(nextNode);
+                startLine = nextNode.getLine();
+                startColumn = nextNode.getColumn();
                 endLine = this.positionManager.getEndLine(nextNode);
                 endColumn = this.positionManager.getEndColumn(nextNode);
             }
-
+            
             //訪問イベントを作成
             final AstVisitEvent event = new AstVisitEvent(this, token, parentToken, startLine, startColumn,
                     endLine, endColumn);
