@@ -77,12 +77,10 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
         }
 
         if (null != builtName) {
-            final String[] trueName = buildDataManager.resolveAliase(builtName);
-
-            assert (null != trueName && 0 < trueName.length) : "Illegal state: resolved super type name was empty.";
+            assert (null != builtName && 0 < builtName.length) : "Illegal state: resolved super type name was empty.";
 
             final UnresolvedClassTypeInfo superType = new UnresolvedClassTypeInfo(
-                    buildDataManager.getAvailableNameSpaceSet(), trueName);
+                    buildDataManager.getAvailableNameSpaceSet(), builtName);
             anonymous.addSuperClass(superType);
         }
         

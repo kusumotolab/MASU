@@ -195,12 +195,9 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
                 
             } else {
                 //Œ©‚Â‚©‚ç‚È‚©‚Á‚½‚Ì‚ÅQÆŒ^
-                //–¼‘O’uŠ·‚ğ‰ğŒˆ‚µ‚Ä‚¨‚­
-                final String[] trueName = this.buildDataManager.resolveAliase(identifier);
-    
                 //QÆŒ^‚ğì¬
                 final UnresolvedClassTypeInfo referenceType = new UnresolvedClassTypeInfo(
-                        this.buildDataManager.getAvailableNameSpaceSet(), trueName);
+                        this.buildDataManager.getAvailableNameSpaceSet(), identifier);
     
                 //g‚¦‚éŒ^ˆø”‚ª‚ ‚ê‚Î“o˜^‚µ‚Ä‚µ‚Ü‚¤D
                 if (null != this.availableTypeArugments) {

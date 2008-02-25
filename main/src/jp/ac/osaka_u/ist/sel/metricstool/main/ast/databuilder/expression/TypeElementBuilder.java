@@ -171,9 +171,8 @@ public class TypeElementBuilder extends ExpressionBuilder {
         
         //TODO 型パラメータに型引数が付く言語があったらそれを登録する仕組みを作る必要があるかも
         
-        final String[] trueTypeName = this.buildManager.resolveAliase(typeName);
         UnresolvedClassTypeInfo resultType = new UnresolvedClassTypeInfo(this.buildManager.getAvailableNameSpaceSet(),
-                trueTypeName);
+                typeName);
         
         for(int i=1; i < elements.length; i++){
             assert(elements[i] instanceof TypeArgumentElement) : "Illegal state: type argument was unexpected type";
