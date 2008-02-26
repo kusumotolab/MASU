@@ -64,7 +64,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         ExpressionElement[] elements = getAvailableElements();
         
         Set<AvailableNamespaceInfo> namespaces = new HashSet<AvailableNamespaceInfo>();
-        AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(currentClass.getNamespace(), false);
+        AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(currentClass.getFullQualifiedName(), false);
         namespaces.add(namespace);
         UnresolvedClassTypeInfo referenceType = new UnresolvedClassTypeInfo(namespaces, currentClass.getFullQualifiedName());
 

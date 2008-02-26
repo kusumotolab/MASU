@@ -171,7 +171,7 @@ public class TypeElementBuilder extends ExpressionBuilder {
         
         //TODO 型パラメータに型引数が付く言語があったらそれを登録する仕組みを作る必要があるかも
         
-        UnresolvedClassTypeInfo resultType = new UnresolvedClassTypeInfo(this.buildManager.getAvailableNameSpaceSet(),
+        UnresolvedClassTypeInfo resultType = new UnresolvedClassTypeInfo(this.buildManager.getAllAvaliableNames(),
                 typeName);
         
         for(int i=1; i < elements.length; i++){
