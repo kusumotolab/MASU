@@ -10,6 +10,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.JavaAnonymousClassStateMa
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 
@@ -67,7 +69,10 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
         final UnresolvedClassInfo outer = buildDataManager.getCurrentClass();
         final int anonymousCount = buildDataManager.getAnonymousClassCount(outer);
 
-        final UnresolvedClassInfo anonymous = new UnresolvedClassInfo();
+        final FileInfo currentFile = FileInfoManager.getInstance().getCurrentFile();
+        assert null != null : "Illegal state: the file information was not registered to FileInfoManager";
+        
+        final UnresolvedClassInfo anonymous = new UnresolvedClassInfo(currentFile);
         anonymous.setClassName(outer.getClassName() + JAVA_ANONYMOUSCLASS_NAME_MARKER
                 + anonymousCount);
 

@@ -11,6 +11,7 @@ import java.util.Set;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -41,12 +42,19 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         VisualizableSetting, MemberSetting, ModifierSetting {
 
     /**
-     * 引数なしコンストラクタ
+     * このクラスが記述されているファイル情報を与えて初期化
+     * 
+     * @param fileInfo このクラスが記述されいてるファイル情報
      */
-    public UnresolvedClassInfo() {
+    public UnresolvedClassInfo(final FileInfo fileInfo) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
+        if (null == fileInfo) {
+            throw new IllegalArgumentException("fileInfo is null");
+        }
+
+        this.fileInfo = fileInfo;
         this.namespace = null;
         this.className = null;
 
@@ -147,6 +155,15 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         }
 
         return buffer.toString().hashCode();
+    }
+
+    /**
+     * このクラスが記述されているファイル情報を返す
+     * 
+     * @return このクラスが記述されているファイル情報
+     */
+    public FileInfo getFileInfo() {
+        return this.fileInfo;
     }
 
     /**
@@ -544,10 +561,10 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
         this.resolvedInfo = null == this.outerClass ? new TargetClassInfo(modifiers,
                 fullQualifiedName, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible, instance, fromLine, fromColumn, toLine, toColumn)
+                publicVisible, instance, this.fileInfo, fromLine, fromColumn, toLine, toColumn)
                 : new TargetInnerClassInfo(modifiers, fullQualifiedName, usingClass,
                         privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
-                        instance, fromLine, fromColumn, toLine, toColumn);
+                        instance, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
 
         return this.resolvedInfo;
     }
@@ -560,12 +577,17 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     public UnresolvedClassReferenceInfo getClassReference() {
         final UnresolvedClassReferenceInfo classReference = new UnresolvedFullQualifiedNameClassReferenceInfo(
                 this);
-        
+
         for (UnresolvedTypeParameterInfo typeParameter : this.typeParameters) {
             classReference.addTypeArgument(typeParameter);
         }
         return classReference;
     }
+
+    /**
+     * クラスが記述されているファイル情報を保存するための変数
+     */
+    private final FileInfo fileInfo;
 
     /**
      * 名前空間名を保存するための変数

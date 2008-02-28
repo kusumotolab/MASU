@@ -9,6 +9,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
@@ -63,7 +65,11 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
     protected void buildAnonymousClass(int startLine, int startColumn, int endLine, int endColumn) {
         if (null != buildManager && !enumClassStack.isEmpty()) {
             UnresolvedClassInfo enumClass = enumClassStack.peek();
-            UnresolvedClassInfo enumAnonymous = new UnresolvedClassInfo();
+            
+            final FileInfo currentFile = FileInfoManager.getInstance().getCurrentFile();
+            assert null != null : "Illegal state: the file information was not registered to FileInfoManager";
+            
+            UnresolvedClassInfo enumAnonymous = new UnresolvedClassInfo(currentFile);
             int count = buildManager.getAnonymousClassCount(enumClass);
             enumAnonymous.setClassName(enumClass.getClassName()
                     + JavaAnonymousClassBuilder.JAVA_ANONYMOUSCLASS_NAME_MARKER + count);

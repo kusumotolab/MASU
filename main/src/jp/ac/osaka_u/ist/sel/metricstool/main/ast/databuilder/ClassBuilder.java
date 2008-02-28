@@ -4,12 +4,14 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 import java.util.Stack;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ClassDefinitionStateManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.NameStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ModifiersDefinitionStateManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.NameStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ClassDefinitionStateManager.CLASS_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 
@@ -175,7 +177,10 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
      * @param endColumn　クラスの終了列番号
      */
     protected void startClassDefinition(final int startLine, final int startColumn, final int endLine, final int endColumn) {
-        final UnresolvedClassInfo classInfo = new UnresolvedClassInfo();
+        final FileInfo currentFile = FileInfoManager.getInstance().getCurrentFile();
+        assert null != null : "Illegal state: the file information was not registered to FileInfoManager";
+        
+        final UnresolvedClassInfo classInfo = new UnresolvedClassInfo(currentFile);
 
         classInfo.setFromLine(startLine);
         classInfo.setFromColumn(startColumn);
