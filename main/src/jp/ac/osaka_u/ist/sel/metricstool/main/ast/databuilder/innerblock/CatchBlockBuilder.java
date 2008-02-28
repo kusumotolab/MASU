@@ -14,11 +14,11 @@ public class CatchBlockBuilder extends InnerBlockBuilder<CatchBlockInfo, Unresol
     }
 
     @Override
-    protected UnresolvedCatchBlockInfo createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        if(ownerSpace instanceof UnresolvedTryBlockInfo) {
-            final UnresolvedTryBlockInfo ownerTry = (UnresolvedTryBlockInfo) ownerSpace;
+    protected UnresolvedCatchBlockInfo createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        if(outerSpace instanceof UnresolvedTryBlockInfo) {
+            final UnresolvedTryBlockInfo ownerTry = (UnresolvedTryBlockInfo) outerSpace;
             
-            final UnresolvedCatchBlockInfo catchBlock = new UnresolvedCatchBlockInfo(ownerTry, ownerTry.getOwnerSpace());
+            final UnresolvedCatchBlockInfo catchBlock = new UnresolvedCatchBlockInfo(ownerTry, ownerTry.getOuterSpace());
             
             ownerTry.addSequentCatchBlock(catchBlock);
             

@@ -26,9 +26,10 @@ public final class TryBlockInfo extends BlockInfo {
      * @param toColumn èIóπóÒ
      */
     public TryBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final LocalSpaceInfo outerSpace, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
-        super(ownerClass, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+        super(ownerClass, ownerMethod, outerSpace, fromLine, fromColumn, toLine, toColumn);
 
         this.sequentFinallyBlock = null;
         this.sequentCatchBlocks = new HashSet<CatchBlockInfo>();

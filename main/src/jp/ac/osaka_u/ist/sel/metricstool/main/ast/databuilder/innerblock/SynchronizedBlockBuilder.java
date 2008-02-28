@@ -16,8 +16,8 @@ public class SynchronizedBlockBuilder extends InnerBlockBuilder<SynchronizedBloc
 
     @Override
     protected UnresolvedSynchronizedBlockInfo createUnresolvedBlockInfo(
-            final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        return new UnresolvedSynchronizedBlockInfo(ownerSpace);
+            final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        return new UnresolvedSynchronizedBlockInfo(outerSpace);
     }
 
 }

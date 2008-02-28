@@ -16,8 +16,8 @@ public class SimpleBlockBuilder extends InnerBlockBuilder<SimpleBlockInfo, Unres
 
     @Override
     protected UnresolvedSimpleBlockInfo createUnresolvedBlockInfo(
-            final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        return new UnresolvedSimpleBlockInfo(ownerSpace);
+            final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        return new UnresolvedSimpleBlockInfo(outerSpace);
     }
 
 }

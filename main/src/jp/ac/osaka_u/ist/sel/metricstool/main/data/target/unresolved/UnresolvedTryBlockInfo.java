@@ -10,6 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -27,8 +28,8 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
     /**
      * try ƒuƒƒbƒNî•ñ‚ð‰Šú‰»
      */
-    public UnresolvedTryBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        super(ownerSpace);
+    public UnresolvedTryBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        super(outerSpace);
         
         this.sequentCatchBlocks = new HashSet<UnresolvedCatchBlockInfo>();
         this.sequentFinallyBlock = null;
@@ -66,7 +67,9 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new TryBlockInfo(usingClass, usingMethod, fromLine, fromColumn, toLine,
+        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolvedUnit();
+        
+        this.resolvedInfo = new TryBlockInfo(usingClass, usingMethod, outerSpace, fromLine, fromColumn, toLine,
                 toColumn);
 
         // ‘Î‰ž‚·‚éfinallyß‚ð‰ðŒˆ

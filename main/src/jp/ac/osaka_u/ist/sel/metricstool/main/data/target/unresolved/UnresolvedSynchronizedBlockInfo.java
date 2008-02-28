@@ -5,6 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SynchronizedBlockInfo;
@@ -23,8 +24,8 @@ public final class UnresolvedSynchronizedBlockInfo extends
     /**
      * synchronized ブロック情報を初期化
      */
-    public UnresolvedSynchronizedBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        super(ownerSpace);
+    public UnresolvedSynchronizedBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        super(outerSpace);
     }
 
     /**
@@ -59,8 +60,10 @@ public final class UnresolvedSynchronizedBlockInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new SynchronizedBlockInfo(usingClass, usingMethod, fromLine,
-                fromColumn, toLine, toColumn);
+        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolvedUnit();
+
+        this.resolvedInfo = new SynchronizedBlockInfo(usingClass, usingMethod, outerSpace,
+                fromLine, fromColumn, toLine, toColumn);
 
         //　内部ブロック情報を解決し，解決済みsynchronizedブロックオブジェクトに追加
         for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {

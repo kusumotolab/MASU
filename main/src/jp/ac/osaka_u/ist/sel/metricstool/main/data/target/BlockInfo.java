@@ -22,16 +22,18 @@ public abstract class BlockInfo extends LocalSpaceInfo implements Comparable<Blo
      * @param toColumn 終了列
      */
     BlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
+            final LocalSpaceInfo outerSpace,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(ownerClass, fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == ownerClass) || (null == ownerMethod)) {
+        if ((null == ownerClass) || (null == ownerMethod) || (null == outerSpace)) {
             throw new NullPointerException();
         }
 
         this.ownerMethod = ownerMethod;
+        this.outerSpace = outerSpace;
     }
 
     public final int compareTo(BlockInfo o) {
@@ -90,7 +92,21 @@ public abstract class BlockInfo extends LocalSpaceInfo implements Comparable<Blo
     }
 
     /**
+     * このブロックを直接所有するローカル空間を返す
+     * 
+     * @return このブロックを直接所有するローカル空間
+     */
+    public final LocalSpaceInfo getOuterSpace() {
+        return this.outerSpace;
+    }
+    
+    /**
      * このブロックを所有するメソッドを保存するための変数
      */
     private final CallableUnitInfo ownerMethod;
+    
+    /**
+     * このブロックを直接所有するローカル空間を保存するための変数
+     */
+    private final LocalSpaceInfo outerSpace;
 }

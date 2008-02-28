@@ -7,6 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -23,8 +24,8 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
     /**
      * for ブロック情報を初期化
      */
-    public UnresolvedForBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        super(ownerSpace);
+    public UnresolvedForBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        super(outerSpace);
     }
 
     /**
@@ -65,8 +66,10 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new ForBlockInfo(usingClass, usingMethod, conditionalClause, fromLine,
-                fromColumn, toLine, toColumn);
+        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolvedUnit();
+
+        this.resolvedInfo = new ForBlockInfo(usingClass, usingMethod, conditionalClause,
+                outerSpace, fromLine, fromColumn, toLine, toColumn);
 
         //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {

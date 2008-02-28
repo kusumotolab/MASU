@@ -16,8 +16,8 @@ public class SwitchBlockBuilder extends ConditionalBlockBuilder<SwitchBlockInfo,
 
     @Override
     protected UnresolvedSwitchBlockInfo createUnresolvedBlockInfo(
-            final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        return new UnresolvedSwitchBlockInfo(ownerSpace);
+            final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        return new UnresolvedSwitchBlockInfo(outerSpace);
     }
 
 }

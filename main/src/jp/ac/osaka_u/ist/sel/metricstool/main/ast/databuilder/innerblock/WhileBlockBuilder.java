@@ -16,8 +16,8 @@ public class WhileBlockBuilder extends InnerBlockBuilder<WhileBlockInfo, Unresol
 
     @Override
     protected UnresolvedWhileBlockInfo createUnresolvedBlockInfo(
-            final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        return new UnresolvedWhileBlockInfo(ownerSpace);
+            final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        return new UnresolvedWhileBlockInfo(outerSpace);
     }
 
 }

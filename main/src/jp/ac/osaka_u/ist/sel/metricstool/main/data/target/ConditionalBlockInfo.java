@@ -24,10 +24,10 @@ public abstract class ConditionalBlockInfo extends BlockInfo {
      * @param toColumn èIóπóÒ
      */
     ConditionalBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
-            final ConditionalClauseInfo conditionalClause, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final ConditionalClauseInfo conditionalClause, final LocalSpaceInfo outerSpace,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerClass, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+        super(ownerClass, ownerMethod, outerSpace, fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == conditionalClause) {

@@ -16,8 +16,8 @@ public class TryBlockBuilder extends InnerBlockBuilder<TryBlockInfo, UnresolvedT
 
     @Override
     protected UnresolvedTryBlockInfo createUnresolvedBlockInfo(
-            final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        return new UnresolvedTryBlockInfo(ownerSpace);
+            final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        return new UnresolvedTryBlockInfo(outerSpace);
     }
 
 }

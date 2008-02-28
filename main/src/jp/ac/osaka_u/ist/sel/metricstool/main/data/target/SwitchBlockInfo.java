@@ -24,9 +24,10 @@ public final class SwitchBlockInfo extends ConditionalBlockInfo {
      * @param toColumn èIóπóÒ
      */
     public SwitchBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
-            final ConditionalClauseInfo conditionalClause, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
-        super(ownerClass, ownerMethod, conditionalClause, fromLine, fromColumn, toLine, toColumn);
+            final ConditionalClauseInfo conditionalClause, final LocalSpaceInfo outerSpace,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        super(ownerClass, ownerMethod, conditionalClause, outerSpace, fromLine, fromColumn, toLine,
+                toColumn);
     }
 
     /**

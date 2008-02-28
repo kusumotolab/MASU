@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ElseBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -25,8 +26,8 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
     /**
      * if ブロック情報を初期化
      */
-    public UnresolvedIfBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        super(ownerSpace);
+    public UnresolvedIfBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        super(outerSpace);
 
         this.sequentElseBlock = null;
     }
@@ -69,8 +70,10 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new IfBlockInfo(usingClass, usingMethod, conditionalClause, fromLine,
-                fromColumn, toLine, toColumn);
+        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolvedUnit();
+
+        this.resolvedInfo = new IfBlockInfo(usingClass, usingMethod, conditionalClause, outerSpace,
+                fromLine, fromColumn, toLine, toColumn);
 
         // もしelseブロックがある場合は解決する
         if (this.hasElseBlock()) {

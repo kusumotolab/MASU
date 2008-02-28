@@ -20,8 +20,8 @@ public final class SynchronizedBlockInfo extends BlockInfo {
      * @param toColumn èIóπóÒ
      */
     public SynchronizedBlockInfo(final TargetClassInfo ownerClass,
-            final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
-        super(ownerClass, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+            final CallableUnitInfo ownerMethod, final LocalSpaceInfo outerSpace,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        super(ownerClass, ownerMethod, outerSpace, fromLine, fromColumn, toLine, toColumn);
     }
 }

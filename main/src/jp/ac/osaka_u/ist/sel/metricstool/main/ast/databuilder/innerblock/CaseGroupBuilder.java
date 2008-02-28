@@ -41,15 +41,15 @@ public class CaseGroupBuilder extends InnerBlockBuilder<CaseEntryInfo, Unresolve
     }
     
     @Override
-    protected UnresolvedCaseEntryInfo createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        if(ownerSpace instanceof UnresolvedSwitchBlockInfo) {
-            final UnresolvedSwitchBlockInfo ownerSwitch = (UnresolvedSwitchBlockInfo) ownerSpace;
+    protected UnresolvedCaseEntryInfo createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        if(outerSpace instanceof UnresolvedSwitchBlockInfo) {
+            final UnresolvedSwitchBlockInfo ownerSwitch = (UnresolvedSwitchBlockInfo) outerSpace;
             
             final DeclaredBlockState currentState = this.blockStateManager.getState();
             if(currentState.equals(CASE_ENTRY_STATE.CASE_DEF)) {
-                return new UnresolvedCaseEntryInfo(ownerSwitch, ownerSwitch.getOwnerSpace());
+                return new UnresolvedCaseEntryInfo(ownerSwitch, ownerSwitch.getOuterSpace());
             } else if(currentState.equals(CASE_ENTRY_STATE.DEFAULT_DEF)) {
-                return new UnresolvedDefaultEntryInfo(ownerSwitch, ownerSwitch.getOwnerSpace());
+                return new UnresolvedDefaultEntryInfo(ownerSwitch, ownerSwitch.getOuterSpace());
             }
         }
         

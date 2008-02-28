@@ -24,7 +24,7 @@ public class CaseEntryInfo extends BlockInfo {
             final SwitchBlockInfo ownerSwitchBlock, final boolean breakStatement,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerClass, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+        super(ownerClass, ownerMethod, ownerSwitchBlock, fromLine, fromColumn, toLine, toColumn);
 
         if (null == ownerSwitchBlock) {
             throw new NullPointerException();

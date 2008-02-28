@@ -17,11 +17,11 @@ public class FinallyBlockBuilder extends InnerBlockBuilder<FinallyBlockInfo, Unr
 
     @Override
     protected UnresolvedFinallyBlockInfo createUnresolvedBlockInfo(
-            final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        if (ownerSpace instanceof UnresolvedTryBlockInfo) {
-            final UnresolvedTryBlockInfo ownerTry = (UnresolvedTryBlockInfo) ownerSpace;
+            final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        if (outerSpace instanceof UnresolvedTryBlockInfo) {
+            final UnresolvedTryBlockInfo ownerTry = (UnresolvedTryBlockInfo) outerSpace;
             final UnresolvedFinallyBlockInfo finallyBlock = new UnresolvedFinallyBlockInfo(
-                    ownerTry, ownerTry.getOwnerSpace());
+                    ownerTry, ownerTry.getOuterSpace());
 
             ownerTry.setSequentFinallyBlock(finallyBlock);
 

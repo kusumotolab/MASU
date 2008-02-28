@@ -20,10 +20,10 @@ public final class FinallyBlockInfo extends BlockInfo {
      * @param ownerTryBlock Ç±ÇÃ finally êﬂÇ™ëÆÇ∑ÇÈ try ÉuÉçÉbÉN
      */
     public FinallyBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
-            final TryBlockInfo ownerTryBlock) {
+            final LocalSpaceInfo outerSpace, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn, final TryBlockInfo ownerTryBlock) {
 
-        super(ownerClass, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+        super(ownerClass, ownerMethod, outerSpace, fromLine, fromColumn, toLine, toColumn);
 
         if (null == ownerTryBlock) {
             throw new NullPointerException();

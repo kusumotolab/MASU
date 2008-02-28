@@ -14,10 +14,10 @@ public class ElseBlockBuilder extends InnerBlockBuilder<ElseBlockInfo, Unresolve
     }
 
     @Override
-    protected UnresolvedElseBlockInfo createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        if(ownerSpace instanceof UnresolvedIfBlockInfo) {
-            final UnresolvedIfBlockInfo ownerIf = (UnresolvedIfBlockInfo) ownerSpace;
-            final UnresolvedElseBlockInfo elseBlock = new UnresolvedElseBlockInfo(ownerIf, ownerIf.getOwnerSpace());
+    protected UnresolvedElseBlockInfo createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        if(outerSpace instanceof UnresolvedIfBlockInfo) {
+            final UnresolvedIfBlockInfo ownerIf = (UnresolvedIfBlockInfo) outerSpace;
+            final UnresolvedElseBlockInfo elseBlock = new UnresolvedElseBlockInfo(ownerIf, ownerIf.getOuterSpace());
             
             ownerIf.setSequentElseBlock(elseBlock);
             

@@ -67,7 +67,7 @@ public abstract class InnerBlockBuilder<TResolved extends BlockInfo, T extends U
         newBlock.setToLine(triggerEvent.getEndLine());
         newBlock.setToColumn(triggerEvent.getEndColumn());
         
-        newBlock.getOwnerSpace().addInnerBlock(newBlock);
+        newBlock.getOuterSpace().addInnerBlock(newBlock);
         
         startBlockDefinition(newBlock);
     }
@@ -87,7 +87,7 @@ public abstract class InnerBlockBuilder<TResolved extends BlockInfo, T extends U
         
     }
     
-    protected abstract T createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace);
+    protected abstract T createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace);
         
     protected Stack<T> buildingBlockStack = new Stack<T>();
     

@@ -15,8 +15,8 @@ public class IfBlockBuilder extends ConditionalBlockBuilder<IfBlockInfo, Unresol
     }
 
     @Override
-    protected UnresolvedIfBlockInfo createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        return new UnresolvedIfBlockInfo(ownerSpace);
+    protected UnresolvedIfBlockInfo createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        return new UnresolvedIfBlockInfo(outerSpace);
     }
 
 }

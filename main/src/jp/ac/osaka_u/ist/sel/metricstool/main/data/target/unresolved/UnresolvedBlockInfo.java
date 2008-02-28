@@ -16,22 +16,22 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends Unresolve
      * ブロック構造を表すオブジェクトを初期化する
      * 
      */
-    public UnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
+    public UnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super();
         
-        if(null == ownerSpace) {
-            throw new IllegalArgumentException("ownerSpace is null");
+        if(null == outerSpace) {
+            throw new IllegalArgumentException("outerSpace is null");
         }
         
-        this.ownerSpace = ownerSpace;
+        this.outerSpace = outerSpace;
     }
     
     /**
      * このブロックが属する空間を返す
      * @return このブロックが属する空間
      */
-    public UnresolvedLocalSpaceInfo<?> getOwnerSpace() {
-        return this.ownerSpace;
+    public UnresolvedLocalSpaceInfo<?> getOuterSpace() {
+        return this.outerSpace;
     }
 
     /**
@@ -60,7 +60,7 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends Unresolve
     /**
      * このブロックが属する空間を保存するための変数
      */
-    private final UnresolvedLocalSpaceInfo<?> ownerSpace;
+    private final UnresolvedLocalSpaceInfo<?> outerSpace;
     
     /**
      * 解決済みブロック情報を保存するための変数

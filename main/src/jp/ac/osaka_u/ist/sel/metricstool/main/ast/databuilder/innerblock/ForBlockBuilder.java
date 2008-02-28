@@ -15,8 +15,8 @@ public class ForBlockBuilder extends ConditionalBlockBuilder<ForBlockInfo, Unres
     }
 
     @Override
-    protected UnresolvedForBlockInfo createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        return new UnresolvedForBlockInfo(ownerSpace);
+    protected UnresolvedForBlockInfo createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        return new UnresolvedForBlockInfo(outerSpace);
     }
 
 }

@@ -7,6 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ElseBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -26,8 +27,8 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
      * @param ownerIfBlock
      */
     public UnresolvedElseBlockInfo(final UnresolvedIfBlockInfo ownerIfBlock,
-            final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        super(ownerSpace);
+            final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        super(outerSpace);
 
         if (null == ownerIfBlock) {
             throw new IllegalArgumentException("ownerIfBlock is null");
@@ -73,8 +74,10 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new ElseBlockInfo(usingClass, usingMethod, fromLine, fromColumn,
-                toLine, toColumn, ownerIfBlock);
+        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolvedUnit();
+
+        this.resolvedInfo = new ElseBlockInfo(usingClass, usingMethod, outerSpace, fromLine,
+                fromColumn, toLine, toColumn, ownerIfBlock);
 
         //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {

@@ -15,8 +15,8 @@ public class DoBlockBuilder extends ConditionalBlockBuilder<DoBlockInfo, Unresol
     }
 
     @Override
-    protected UnresolvedDoBlockInfo createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> ownerSpace) {
-        return new UnresolvedDoBlockInfo(ownerSpace);
+    protected UnresolvedDoBlockInfo createUnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
+        return new UnresolvedDoBlockInfo(outerSpace);
     }
 
 }
