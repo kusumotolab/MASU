@@ -3,6 +3,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
@@ -107,9 +110,9 @@ public interface BuildDataManager {
      */
     public UnresolvedClassInfo endClassDefinition();
 
-    public UnresolvedCallableUnitInfo endCallableUnitDefinition();
+    public UnresolvedCallableUnitInfo<? extends CallableUnitInfo> endCallableUnitDefinition();
 
-    public UnresolvedBlockInfo endInnerBlockDefinition();
+    public UnresolvedBlockInfo<? extends BlockInfo> endInnerBlockDefinition();
     
     public UnresolvedConditionalClauseInfo endConditionalClause();
     
@@ -129,15 +132,15 @@ public interface BuildDataManager {
 
     public int getAnonymousClassCount(UnresolvedClassInfo classInfo);
 
-    public UnresolvedUnitInfo getCurrentUnit();
+    public UnresolvedUnitInfo<? extends UnitInfo> getCurrentUnit();
     
     public UnresolvedClassInfo getCurrentClass();
 
     public String[] getCurrentNameSpace();
 
-    public UnresolvedCallableUnitInfo getCurrentCallableUnit();
+    public UnresolvedCallableUnitInfo<? extends CallableUnitInfo> getCurrentCallableUnit();
 
-    public UnresolvedVariableInfo<VariableInfo> getCurrentScopeVariable(String name);
+    public UnresolvedVariableInfo<VariableInfo, ? extends UnresolvedUnitInfo<? extends UnitInfo>> getCurrentScopeVariable(String name);
     
     public UnresolvedTypeParameterInfo getTypeParameter(String name);
 
@@ -155,13 +158,13 @@ public interface BuildDataManager {
 
     public void startClassDefinition(UnresolvedClassInfo classInfo);
 
-    public void startCallableUnitDefinition(UnresolvedCallableUnitInfo methodInfo);
+    public void startCallableUnitDefinition(UnresolvedCallableUnitInfo<? extends CallableUnitInfo> methodInfo);
     
-    public void startInnerBlockDefinition(UnresolvedBlockInfo blockInfo);
+    public void startInnerBlockDefinition(UnresolvedBlockInfo<? extends BlockInfo> blockInfo);
     
     public void startConditionalClause(UnresolvedConditionalClauseInfo clauseInfo);
     
-    public UnresolvedBlockInfo getCurrentBlock();
+    public UnresolvedBlockInfo<? extends BlockInfo> getCurrentBlock();
     
     public UnresolvedConditionalClauseInfo getCurrentConditionalCluase();
     

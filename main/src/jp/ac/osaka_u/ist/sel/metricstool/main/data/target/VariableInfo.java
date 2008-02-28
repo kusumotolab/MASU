@@ -19,14 +19,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public abstract class VariableInfo<T extends VariableUsageInfo> extends UnitInfo implements Comparable<VariableInfo<T>>, Modifier {
+public abstract class VariableInfo<TUsage extends VariableUsageInfo, TUnit extends UnitInfo>
+        extends UnitInfo implements Comparable<VariableInfo<TUsage, TUnit>>, Modifier {
 
     /**
      * 変数の順序を定義するメソッド．変数名（String）に従う．
      * 
      * @return 変数の順序関係
      */
-    public final int compareTo(final VariableInfo<T> variable) {
+    public final int compareTo(final VariableInfo<TUsage, TUnit> variable) {
 
         if (null == variable) {
             throw new NullPointerException();
@@ -64,33 +65,44 @@ public abstract class VariableInfo<T extends VariableUsageInfo> extends UnitInfo
         return this.type;
     }
 
-    public void addUsage(T usage) {
+    public void addUsage(TUsage usage) {
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == usage) {
             throw new IllegalArgumentException();
         }
-        
+
         this.usages.add(usage);
     }
-    
+
+    /**
+     * 変数を宣言しているユニットを返す
+     * 
+     * @return 変数を宣言しているユニット
+     */
+    public final TUnit getDefinitionUnit() {
+        return this.definitionUnit;
+    }
+
     /**
      * 変数オブジェクトを初期化する
      * 
      * @param modifiers 修飾子の Set
      * @param name 変数名
      * @param type 変数の型
+     * @param definitionUnit 宣言しているユニット
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
     VariableInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final TUnit definitionUnit, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == modifiers) || (null == name) || (null == type)) {
+        if ((null == modifiers) || (null == name) || (null == type) || (null == definitionUnit)) {
             throw new NullPointerException();
         }
 
@@ -98,7 +110,8 @@ public abstract class VariableInfo<T extends VariableUsageInfo> extends UnitInfo
         this.type = type;
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
-        this.usages = new HashSet<T>();
+        this.definitionUnit = definitionUnit;
+        this.usages = new HashSet<TUsage>();
     }
 
     /**
@@ -115,6 +128,11 @@ public abstract class VariableInfo<T extends VariableUsageInfo> extends UnitInfo
      * 変数の型を表す変数
      */
     private final TypeInfo type;
-    
-    private final Set<T> usages;
+
+    /**
+     * この変数を宣言しているユニットを保存するための変数
+     */
+    private final TUnit definitionUnit;
+
+    private final Set<TUsage> usages;
 }

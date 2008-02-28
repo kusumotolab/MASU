@@ -11,7 +11,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.VariableDefinitio
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
 
 
@@ -24,10 +26,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
  * 
  * @author kou-tngt
  *
- * @param <T> 構築する変数の型
+ * @param <TVar> 構築する変数の型
+ * @param <TUnit> 構築する変数情報を保存するユニット
  */
-public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends
-        CompoundDataBuilder<T> {
+public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo, TUnit extends UnresolvedUnitInfo<? extends UnitInfo>>
+        extends CompoundDataBuilder<TVar> {
 
     /**
      * 引数で与えられた構築データ管理者，変数宣言に関する状態管理者と，デフォルトの修飾子情報ビルダー，型情報ビルダー，名前情報ビルダーを用いて初期化する．
@@ -36,7 +39,7 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends
      */
     public VariableBuilder(final BuildDataManager buildDataManager,
             final VariableDefinitionStateManager stateManager) {
-        this(stateManager, new ModifiersBuilder(), new TypeBuilder(buildDataManager),
+        this(buildDataManager, stateManager, new ModifiersBuilder(), new TypeBuilder(buildDataManager),
                 new NameBuilder());
     }
 
@@ -47,23 +50,30 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends
      * @param typeBuilder　型情報ビルダー
      * @param nameBuilder　名前情報ビルダー
      */
-    public VariableBuilder(final VariableDefinitionStateManager variableStateManager,
-            final ModifiersBuilder modifiersBuilder, final TypeBuilder typeBuilder, final NameBuilder nameBuilder) {
+    public VariableBuilder(final BuildDataManager buildDataManager, final VariableDefinitionStateManager variableStateManager,
+            final ModifiersBuilder modifiersBuilder, final TypeBuilder typeBuilder,
+            final NameBuilder nameBuilder) {
 
+        if(null == buildDataManager) {
+            throw new IllegalArgumentException("buildDataManager is null");
+        }
+        
         if (null == variableStateManager) {
-            throw new NullPointerException("stateManager is null.");
+            throw new IllegalArgumentException("stateManager is null.");
         }
 
         if (null == typeBuilder) {
-            throw new NullPointerException("typeBuilder is null.");
+            throw new IllegalArgumentException("typeBuilder is null.");
         }
 
         if (null == nameBuilder) {
-            throw new NullPointerException("nameBuilder is null.");
+            throw new IllegalArgumentException("nameBuilder is null.");
         }
 
         //nullチェック終了
 
+        this.buildDataManager = buildDataManager;
+        
         //状態通知を受け取りたいものを登録
         this.variableStateManager = variableStateManager;
         this.addStateManager(variableStateManager);
@@ -93,8 +103,13 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends
             //変数宣言部から出たので，変数情報を登録する
             //スコープの関係上，宣言が終わらないと登録してはいけない
             final AstVisitEvent trigger = event.getTrigger();
-            this.endVariableBuild(trigger.getStartLine(), trigger.getStartColumn(),
-                    trigger.getEndLine(), trigger.getEndColumn());
+            
+            final TUnit currentUnit = this.validateDefinitionSpace(this.buildDataManager.getCurrentUnit());
+            if(null != currentUnit) {
+                this.endVariableBuild(currentUnit, trigger.getStartLine(), trigger.getStartColumn(), trigger
+                        .getEndLine(), trigger.getEndColumn());
+            }
+            
         } else if (this.variableStateManager.isInDefinition()) {
             if (eventType
                     .equals(ModifiersDefinitionStateManager.MODIFIERS_STATE.ENTER_MODIFIERS_DEF)) {
@@ -135,7 +150,7 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends
             }
         }
     }
-
+    
     /**
      * 変数データを構築する抽象メソッド．
      * 構築した変数データを構築データ管理者に渡したい場合もこのメソッドで行う．
@@ -143,10 +158,11 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends
      * @param name　変数の名前
      * @param type　変数の型
      * @param modifiers　変数の修飾子
+     * @param definitionUnit 変数を宣言しているユニット
      * @return　構築した変数情報
      */
-    protected abstract T buildVariable(String[] name, UnresolvedTypeInfo type,
-            ModifierInfo[] modifiers);
+    protected abstract TVar buildVariable(final String[] name, final UnresolvedTypeInfo type,
+            final ModifierInfo[] modifiers, final TUnit definitionUnit);
 
     /**
      * 変数定義が終了したときに呼び出され， {@link #buildVariable(String[], UnresolvedTypeInfo, ModifierInfo[])}
@@ -154,19 +170,31 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends
      * 
      * このメソッドをオーバーライドすることで変数定義の終了時の動作を変更することができる．
      * 
+     * @param 変数を宣言しているユニット
      * @param startLine 変数定義部の開始行
      * @param startColumn　変数定義部の開始列
      * @param endLine　変数定義部の終了行
      * @param endColumn　変数定義部の終了列
      */
-    protected void endVariableBuild(final int startLine, final int startColumn, final int endLine, final int endColumn) {
-        final T variable = this.buildVariable(this.getName(), this.getType(), this.getModifiers());
+    protected void endVariableBuild(final TUnit definitionUnit, final int startLine, final int startColumn,
+            final int endLine, final int endColumn) {
+        final TVar variable = this.buildVariable(this.getName(), this.getType(), this
+                .getModifiers(), definitionUnit);
         variable.setFromLine(startLine);
         variable.setFromColumn(startColumn);
         variable.setToLine(endLine);
         variable.setToColumn(endColumn);
         this.registBuiltData(variable);
     }
+    
+    /**
+     * 引数で与えられてユニットが変数を定義するユニットとして有効であるかどうか判断する
+     * 
+     * @param definitionUnit 変数を定義するユニット
+     * @return 変数を定義する空間として有効であればそのユニット，有効でなければnull
+     */
+    protected abstract TUnit validateDefinitionSpace(final UnresolvedUnitInfo<? extends UnitInfo> definitionUnit);
+
 
     /**
      * 最も最後に構築した変数名を返す．
@@ -196,6 +224,8 @@ public abstract class VariableBuilder<T extends UnresolvedVariableInfo> extends
         return this.builtTypeStack.pop();
     }
 
+    protected final BuildDataManager buildDataManager;
+    
     /**
      * 変数定義部に関する状態を管理するステートマネージャ
      */

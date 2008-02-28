@@ -10,7 +10,7 @@ import java.util.Set;
  * @author higo
  * 
  */
-public final class LocalVariableInfo extends VariableInfo<LocalVariableUsageInfo> {
+public final class LocalVariableInfo extends VariableInfo<LocalVariableUsageInfo, LocalSpaceInfo> {
 
     /**
      * ローカル変数オブジェクトを初期化する．変数名と変数の型が必要．
@@ -24,8 +24,8 @@ public final class LocalVariableInfo extends VariableInfo<LocalVariableUsageInfo
      * @param toColumn 終了列
      */
     public LocalVariableInfo(final Set<ModifierInfo> modifiers, final String name,
-            final TypeInfo type, final int fromLine, final int fromColumn, final int toLine,
+            final TypeInfo type, final LocalSpaceInfo definitionSpace, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
-        super(modifiers, name, type, fromLine, fromColumn, toLine, toColumn);
+        super(modifiers, name, type, definitionSpace, fromLine, fromColumn, toLine, toColumn);
     }
 }

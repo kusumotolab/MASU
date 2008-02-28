@@ -25,7 +25,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFieldInfo> implements
+public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFieldInfo, UnresolvedClassInfo> implements
         VisualizableSetting, MemberSetting {
 
     /**
@@ -33,18 +33,18 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
      * 
      * @param name フィールド名
      * @param type フィールドの型
-     * @param ownerClass フィールドを定義しているクラス
+     * @param definitionClass フィールドを定義しているクラス
      */
     public UnresolvedFieldInfo(final String name, final UnresolvedTypeInfo type,
-            final UnresolvedClassInfo ownerClass) {
+            final UnresolvedClassInfo definitionClass) {
 
-        super(name, type);
+        super(name, type, definitionClass);
 
-        if (null == ownerClass) {
+        if (null == definitionClass) {
             throw new NullPointerException();
         }
 
-        this.ownerClass = ownerClass;
+        this.ownerClass = definitionClass;
 
         this.privateVisible = false;
         this.inheritanceVisible = false;

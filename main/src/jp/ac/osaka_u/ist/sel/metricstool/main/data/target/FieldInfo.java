@@ -22,30 +22,30 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  */
-public abstract class FieldInfo extends VariableInfo<FieldUsageInfo> {
+public abstract class FieldInfo extends VariableInfo<FieldUsageInfo, ClassInfo> {
 
     /**
      * フィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．
      * 
      * @param name フィールド名
      * @param type フィールドの型
-     * @param ownerClass フィールドを定義しているクラス
+     * @param definitionClass フィールドを定義しているクラス
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
     public FieldInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type,
-            final ClassInfo ownerClass, final int fromLine, final int fromColumn, final int toLine,
+            final ClassInfo definitionClass, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
 
-        super(modifiers, name, type, fromLine, fromColumn, toLine, toColumn);
+        super(modifiers, name, type, definitionClass, fromLine, fromColumn, toLine, toColumn);
 
-        if (null == ownerClass) {
+        if (null == definitionClass) {
             throw new NullPointerException();
         }
 
-        this.ownerClass = ownerClass;
+        this.ownerClass = definitionClass;
         this.referencers = new TreeSet<CallableUnitInfo>();
         this.assignmenters = new TreeSet<CallableUnitInfo>();
     }

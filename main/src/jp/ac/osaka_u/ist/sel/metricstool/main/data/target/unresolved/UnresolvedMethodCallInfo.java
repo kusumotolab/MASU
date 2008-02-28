@@ -165,7 +165,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                         final ExternalMethodInfo methodInfo = new ExternalMethodInfo(
                                 this.getName(), externalSuperClass);
                         final List<ParameterInfo> dummyParameters = NameResolver
-                                .createParameters(actualParameters);
+                                .createParameters(actualParameters, methodInfo);
                         methodInfo.addParameters(dummyParameters);
                         methodInfoManager.add(methodInfo);
 
@@ -195,7 +195,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
                         ownerClass);
                 final List<ParameterInfo> parameters = NameResolver
-                        .createParameters(actualParameters);
+                        .createParameters(actualParameters, methodInfo);
                 methodInfo.addParameters(parameters);
                 methodInfoManager.add(methodInfo);
 
@@ -216,7 +216,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
                         ownerClass);
                 final List<ParameterInfo> parameters = NameResolver
-                        .createParameters(actualParameters);
+                        .createParameters(actualParameters, methodInfo);
                 methodInfo.addParameters(parameters);
                 methodInfoManager.add(methodInfo);
 
@@ -239,7 +239,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo {
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
                         wrapperClass);
                 final List<ParameterInfo> parameters = NameResolver
-                        .createParameters(actualParameters);
+                        .createParameters(actualParameters, methodInfo);
                 methodInfo.addParameters(parameters);
                 methodInfoManager.add(methodInfo);
 

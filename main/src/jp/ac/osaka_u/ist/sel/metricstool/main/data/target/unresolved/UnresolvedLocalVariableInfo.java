@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
@@ -28,16 +29,20 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class UnresolvedLocalVariableInfo extends UnresolvedVariableInfo<LocalVariableInfo> {
+public final class UnresolvedLocalVariableInfo
+        extends
+        UnresolvedVariableInfo<LocalVariableInfo, UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo>> {
 
     /**
      * ローカル変数ブジェクトを初期化する．
      * 
      * @param name 変数名
      * @param type 未解決型名
+     * @param definitionSpace 宣言しているローカル空間
      */
-    public UnresolvedLocalVariableInfo(final String name, final UnresolvedTypeInfo type) {
-        super(name, type);
+    public UnresolvedLocalVariableInfo(final String name, final UnresolvedTypeInfo type,
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> definitionSpace) {
+        super(name, type, definitionSpace);
     }
 
     /**
@@ -108,9 +113,11 @@ public final class UnresolvedLocalVariableInfo extends UnresolvedVariableInfo<Lo
         final int localToLine = this.getToLine();
         final int localToColumn = this.getToColumn();
 
+        final LocalSpaceInfo definitionSpace = this.getDefinitionUnit().getResolvedUnit();
+
         // ローカル変数オブジェクトを生成し，MethodInfoに追加
         this.resolvedInfo = new LocalVariableInfo(localModifiers, variableName, variableType,
-                localFromLine, localFromColumn, localToLine, localToColumn);
+                definitionSpace, localFromLine, localFromColumn, localToLine, localToColumn);
         return this.resolvedInfo;
     }
 

@@ -21,10 +21,10 @@ public final class ExternalFieldInfo extends FieldInfo {
      * 名前と定義しているクラス情報を与えて初期化． 型は不明．
      * 
      * @param name フィールド名
-     * @param ownerClass フィールドを定義しているクラス
+     * @param definitionClass フィールドを定義しているクラス
      */
-    public ExternalFieldInfo(final String name, final ClassInfo ownerClass) {
-        super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(), ownerClass, 0, 0,
+    public ExternalFieldInfo(final String name, final ClassInfo definitionClass) {
+        super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(), definitionClass, 0, 0,
                 0, 0);
     }
 

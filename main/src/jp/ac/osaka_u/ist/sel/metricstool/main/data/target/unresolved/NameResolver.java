@@ -19,6 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
@@ -88,18 +89,20 @@ public final class NameResolver {
      * 引数で与えられたエンティティの List から，引数の型の List を作成し，返す
      * 
      * @param エンティティのList
+     * @param 引数を宣言しているメソッド
      * @return 引数の型の List
      */
-    public static List<ParameterInfo> createParameters(final List<EntityUsageInfo> entities) {
+    public static List<ParameterInfo> createParameters(final List<EntityUsageInfo> entities,
+            final ExternalMethodInfo ownerMethod) {
 
-        if (null == entities) {
+        if (null == entities || null == ownerMethod) {
             throw new NullPointerException();
         }
 
         final List<ParameterInfo> parameters = new LinkedList<ParameterInfo>();
         for (final EntityUsageInfo entity : entities) {
             final TypeInfo type = entity.getType();
-            final ExternalParameterInfo parameter = new ExternalParameterInfo(type);
+            final ExternalParameterInfo parameter = new ExternalParameterInfo(type, ownerMethod);
             parameters.add(parameter);
         }
 

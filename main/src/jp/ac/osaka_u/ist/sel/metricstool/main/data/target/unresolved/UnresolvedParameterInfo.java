@@ -24,7 +24,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class UnresolvedParameterInfo extends UnresolvedVariableInfo<TargetParameterInfo> {
+public final class UnresolvedParameterInfo extends
+        UnresolvedVariableInfo<TargetParameterInfo, UnresolvedCallableUnitInfo<? extends CallableUnitInfo>> {
 
     /**
      * 引数オブジェクトを初期化する．名前と型が必要．
@@ -32,8 +33,9 @@ public final class UnresolvedParameterInfo extends UnresolvedVariableInfo<Target
      * @param name 引数名
      * @param type 引数の型
      */
-    public UnresolvedParameterInfo(final String name, final UnresolvedTypeInfo type, final int index) {
-        super(name, type);
+    public UnresolvedParameterInfo(final String name, final UnresolvedTypeInfo type,
+            final int index, final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> definitionMethod) {
+        super(name, type, definitionMethod);
         this.index = index;
     }
 
@@ -105,10 +107,12 @@ public final class UnresolvedParameterInfo extends UnresolvedVariableInfo<Target
         final int parameterToLine = this.getToLine();
         final int parameterToColumn = this.getToColumn();
 
+        final CallableUnitInfo definitionMethod = this.getDefinitionUnit().getResolvedUnit();
+
         // パラメータオブジェクトを生成する
         this.resolvedInfo = new TargetParameterInfo(parameterModifiers, parameterName,
-                parameterType, index, parameterFromLine, parameterFromColumn, parameterToLine,
-                parameterToColumn);
+                parameterType, index, definitionMethod, parameterFromLine, parameterFromColumn,
+                parameterToLine, parameterToColumn);
         return this.resolvedInfo;
     }
 

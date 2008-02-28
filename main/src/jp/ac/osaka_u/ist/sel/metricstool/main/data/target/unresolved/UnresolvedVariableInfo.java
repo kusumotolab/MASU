@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -22,8 +23,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public abstract class UnresolvedVariableInfo<T extends VariableInfo> extends UnresolvedUnitInfo<T>
-        implements ModifierSetting {
+public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit extends UnresolvedUnitInfo<? extends UnitInfo>>
+        extends UnresolvedUnitInfo<TVar> implements ModifierSetting {
 
     /**
      * 変数名を返す
@@ -79,6 +80,10 @@ public abstract class UnresolvedVariableInfo<T extends VariableInfo> extends Unr
     public final Set<ModifierInfo> getModifiers() {
         return Collections.unmodifiableSet(this.modifiers);
     }
+    
+    public final TUnit getDefinitionUnit() {
+        return this.definitionUnit;
+    }
 
     /**
      * 修飾子を追加する
@@ -100,7 +105,7 @@ public abstract class UnresolvedVariableInfo<T extends VariableInfo> extends Unr
      * @return 名前解決された情報
      */
     @Override
-    public final T getResolvedUnit() {
+    public final TVar getResolvedUnit() {
         return this.resolvedInfo;
     }
 
@@ -119,29 +124,39 @@ public abstract class UnresolvedVariableInfo<T extends VariableInfo> extends Unr
      * 
      * @param name 変数名
      * @param type 変数の型
+     * @param definitionUnit 宣言している空間
      */
-    UnresolvedVariableInfo(final String name, final UnresolvedTypeInfo type) {
+    UnresolvedVariableInfo(final String name, final UnresolvedTypeInfo type, final TUnit definitionUnit) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == name) || (null == type)) {
+        if ((null == name) || (null == type) || (null == definitionUnit)) {
             throw new NullPointerException();
         }
 
         this.name = name;
         this.type = type;
         this.modifiers = new HashSet<ModifierInfo>();
+        this.definitionUnit = definitionUnit;
     }
 
     /**
      * 変数オブジェクトを初期化する．
+     * 
+     * @param 宣言している空間
      */
-    UnresolvedVariableInfo() {
+    UnresolvedVariableInfo(final TUnit definitionUnit) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
+        
+        if(null == definitionUnit) {
+            throw new IllegalArgumentException();
+        }
+        
         this.name = null;
         this.type = null;
         this.modifiers = new HashSet<ModifierInfo>();
-
+        this.definitionUnit = definitionUnit;
+        
         this.resolvedInfo = null;
     }
 
@@ -159,9 +174,11 @@ public abstract class UnresolvedVariableInfo<T extends VariableInfo> extends Unr
      * このフィールドの修飾子を保存するための変数
      */
     private Set<ModifierInfo> modifiers;
+    
+    private final TUnit definitionUnit;
 
     /**
      * 名前解決された情報を格納するための変数
      */
-    protected T resolvedInfo;
+    protected TVar resolvedInfo;
 }

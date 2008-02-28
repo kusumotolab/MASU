@@ -11,6 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.FieldOr
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.IdentifierElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.InstanceSpecificElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageElement;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
@@ -18,6 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFullQualifiedNameClassReferenceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
@@ -77,7 +79,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                 IdentifierElement identifier = (IdentifierElement) left;
                 UnresolvedEntityUsageInfo ownerUsage = identifier
                         .resolveReferencedEntityIfPossible(buildDataManager);
-                UnresolvedVariableInfo<VariableInfo> variable = null;
+                UnresolvedVariableInfo<VariableInfo, ? extends UnresolvedUnitInfo<? extends UnitInfo>> variable = null;
                 if (null != ownerUsage && ownerUsage instanceof UnresolvedVariableUsageInfo) {
                     UnresolvedVariableUsageInfo variableUsage = (UnresolvedVariableUsageInfo) ownerUsage;
                     variable = buildDataManager.getCurrentScopeVariable(variableUsage
