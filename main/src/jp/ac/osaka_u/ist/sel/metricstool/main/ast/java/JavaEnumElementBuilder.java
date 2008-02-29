@@ -67,7 +67,7 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
             UnresolvedClassInfo enumClass = enumClassStack.peek();
             
             final FileInfo currentFile = FileInfoManager.getInstance().getCurrentFile();
-            assert null != null : "Illegal state: the file information was not registered to FileInfoManager";
+            assert null != currentFile : "Illegal state: the file information was not registered to FileInfoManager";
             
             UnresolvedClassInfo enumAnonymous = new UnresolvedClassInfo(currentFile);
             int count = buildManager.getAnonymousClassCount(enumClass);

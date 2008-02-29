@@ -178,7 +178,7 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
      */
     protected void startClassDefinition(final int startLine, final int startColumn, final int endLine, final int endColumn) {
         final FileInfo currentFile = FileInfoManager.getInstance().getCurrentFile();
-        assert null != null : "Illegal state: the file information was not registered to FileInfoManager";
+        assert null != currentFile : "Illegal state: the file information was not registered to FileInfoManager";
         
         final UnresolvedClassInfo classInfo = new UnresolvedClassInfo(currentFile);
 

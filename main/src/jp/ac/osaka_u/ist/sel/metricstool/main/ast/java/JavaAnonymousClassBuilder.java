@@ -70,7 +70,7 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
         final int anonymousCount = buildDataManager.getAnonymousClassCount(outer);
 
         final FileInfo currentFile = FileInfoManager.getInstance().getCurrentFile();
-        assert null != null : "Illegal state: the file information was not registered to FileInfoManager";
+        assert null != currentFile : "Illegal state: the file information was not registered to FileInfoManager";
         
         final UnresolvedClassInfo anonymous = new UnresolvedClassInfo(currentFile);
         anonymous.setClassName(outer.getClassName() + JAVA_ANONYMOUSCLASS_NAME_MARKER
