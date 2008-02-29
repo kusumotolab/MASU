@@ -208,18 +208,9 @@ public class DefaultBuildDataManager implements BuildDataManager {
             return null;
         } else {
             final UnresolvedBlockInfo blockInfo = this.blockStack.pop();
-            UnresolvedLocalSpaceInfo parentInfo = null;
-            if (this.blockStack.isEmpty()) {
-                if (!this.callableUnitStack.isEmpty()) {
-                    parentInfo = this.callableUnitStack.peek();
-                }
-            } else {
-                parentInfo = this.blockStack.peek();
-            }
-
-            if (null != parentInfo) {
-                parentInfo.addChildSpaceInfo(blockInfo);
-            }
+            final UnresolvedLocalSpaceInfo outerSpace = blockInfo.getOuterSpace();
+            
+            outerSpace.addChildSpaceInfo(blockInfo);
 
             return blockInfo;
         }
@@ -577,19 +568,6 @@ public class DefaultBuildDataManager implements BuildDataManager {
     public void startInnerBlockDefinition(final UnresolvedBlockInfo blockInfo) {
         if (null == blockInfo) {
             throw new IllegalArgumentException("block info was null.");
-        }
-
-        if (!this.callableUnitStack.isEmpty()) {
-            // TODO ブロック文のownerブロックとownerメソッドを登録したほうが便利かも
-            UnresolvedCallableUnitInfo currentMethod = getCurrentCallableUnit();
-            //blockInfo.setOwnerMethod(currentMethod);
-            if (!this.blockStack.isEmpty()) {
-                UnresolvedBlockInfo currentBlock = this.blockStack.peek();
-                currentBlock.addInnerBlock(blockInfo);
-                //blockInfo.setOwnerBlock(currentBlock);
-            } else {
-                currentMethod.addInnerBlock(blockInfo);
-            }
         }
 
         this.toBlockMode();
