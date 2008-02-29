@@ -3,16 +3,19 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.LocalParameterStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalClauseInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
 
 
 public class LocalParameterBuilder extends
-        VariableBuilder<UnresolvedLocalVariableInfo, UnresolvedBlockInfo<? extends BlockInfo>> {
+        VariableBuilder<UnresolvedLocalVariableInfo, UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo>> {
 
     public LocalParameterBuilder(BuildDataManager buildDataManager, ModifiersInterpriter interpriter) {
         this(buildDataManager, new ModifiersBuilder(), new TypeBuilder(buildDataManager),
@@ -30,14 +33,14 @@ public class LocalParameterBuilder extends
 
     @Override
     protected UnresolvedLocalVariableInfo buildVariable(String[] name, UnresolvedTypeInfo type,
-            ModifierInfo[] modifiers, UnresolvedBlockInfo<? extends BlockInfo> deifnitionBlock) {
+            ModifierInfo[] modifiers, UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> deifnitionSpace) {
         String varName = "";
         if (name.length > 0) {
             varName = name[0];
         }
 
         UnresolvedLocalVariableInfo local = new UnresolvedLocalVariableInfo(varName, type,
-                deifnitionBlock);
+                deifnitionSpace);
         for (ModifierInfo modifier : modifiers) {
             local.addModifier(modifier);
         }
@@ -54,10 +57,15 @@ public class LocalParameterBuilder extends
     }
 
     @Override
-    protected UnresolvedBlockInfo<? extends BlockInfo> validateDefinitionSpace(
+    protected UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> validateDefinitionSpace(
             UnresolvedUnitInfo<? extends UnitInfo> definitionUnit) {
-        return definitionUnit instanceof UnresolvedBlockInfo ? (UnresolvedBlockInfo<? extends BlockInfo>) definitionUnit
-                : null;
+        if(definitionUnit instanceof UnresolvedBlockInfo) {
+            return (UnresolvedBlockInfo<? extends BlockInfo>) definitionUnit;
+        } else if(definitionUnit instanceof UnresolvedConditionalClauseInfo) {
+            return (UnresolvedConditionalClauseInfo) definitionUnit;
+        } else {
+            return null;
+        }
     }
 
     private final ModifiersInterpriter interpriter;
