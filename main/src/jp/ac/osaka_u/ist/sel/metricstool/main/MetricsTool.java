@@ -795,7 +795,7 @@ public class MetricsTool {
 
                 // 解決されたインナークラス情報を登録
                 classInfo.addInnerClass(innerClass);
-                classInfoManager.add(classInfo);
+                classInfoManager.add(innerClass);
             }
         }
     }
@@ -825,7 +825,7 @@ public class MetricsTool {
 
             // 解決されたインナークラス情報を登録
             classInfo.addInnerClass(innerClass);
-            classInfoManager.add(classInfo);
+            classInfoManager.add(innerClass);
         }
 
         // このクラスの ClassInfo を返す

@@ -61,10 +61,12 @@ public final class ClassInfoManager {
         this.targetClassInfos.add(classInfo);
         this.packageInfo.add(classInfo);
 
+        /* この処理はいらないような．．．
         // 内部クラスに対して再帰的に処理
         for (final TargetInnerClassInfo innerClassInfo : classInfo.getInnerClasses()) {
             this.add(innerClassInfo);
         }
+        */
 
         return true;
     }
