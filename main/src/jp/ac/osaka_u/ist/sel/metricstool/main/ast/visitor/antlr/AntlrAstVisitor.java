@@ -7,13 +7,12 @@ import java.util.Stack;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstTokenTranslator;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BlockNameToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitListener;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitStrategy;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitor;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CommonASTWithLineNumber;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.PositionManager;
-
 import antlr.collections.AST;
 
 
@@ -115,14 +114,15 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
     }
 
     private void printAST(AST node, int nest){
-        AST nextNode = node;
+        CommonASTWithLineNumber nextNode = (CommonASTWithLineNumber) node;
         while(null != nextNode){
-            AST currentNode = nextNode;
-            nextNode = nextNode.getNextSibling();
+            CommonASTWithLineNumber currentNode = nextNode;
+            nextNode = (CommonASTWithLineNumber) nextNode.getNextSibling();
+            AstToken token = this.translator.translate(currentNode);
             for(int i = 0; i < nest; i++){
                 System.out.print("  ");
             }
-            System.out.println(currentNode.getText() + " : (" + currentNode.getLine() + ", " + currentNode.getColumn() + ")");
+            System.out.println(token.toString() + " (" + currentNode.getText() + ")" + " : " + "[" + currentNode.getFromLine() + ", " + currentNode.getFromColumn() + "]" + "[" + currentNode.getToLine() + ", " + currentNode.getToColumn() + "]");
             printAST(currentNode.getFirstChild(), nest + 1);
         }
     }
@@ -143,11 +143,12 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
             int startColumn = 0;
             int endLine = 0;
             int endColumn = 0;
-            if (null != this.positionManager) {
-                startLine = nextNode.getLine();
-                startColumn = nextNode.getColumn();
-                endLine = this.positionManager.getEndLine(nextNode);
-                endColumn = this.positionManager.getEndColumn(nextNode);
+            if (nextNode instanceof CommonASTWithLineNumber) {
+                CommonASTWithLineNumber node = (CommonASTWithLineNumber) nextNode;
+                startLine = node.getFromLine();
+                startColumn = node.getFromColumn();
+                endLine = node.getToLine();
+                endColumn = node.getToColumn();
             }
             
             //ñKñ‚ÉCÉxÉìÉgÇçÏê¨

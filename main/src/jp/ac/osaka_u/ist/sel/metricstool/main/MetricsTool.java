@@ -72,6 +72,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CommonASTWithLineNumber;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.MasuAstFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.DefaultPluginLauncher;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginLauncher;
@@ -204,12 +205,13 @@ public class MetricsTool {
                     }
 
                     final Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
+                    lexer.setTabSize(4);
                     final Java15Parser parser = new Java15Parser(lexer);
                     
-                    final ASTFactory factory = new ASTFactory();
+                    final ASTFactory factory = new MasuAstFactory();
                     factory.setASTNodeClass(CommonASTWithLineNumber.class);
                     parser.setASTFactory(factory);
-                                        
+    
                     parser.compilationUnit();
                     targetFile.setCorrectSytax(true);
 
