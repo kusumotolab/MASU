@@ -67,7 +67,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * @return 解決済み配列型
      * @throws NotResolvedException 未解決の場合にスローされる
      */
-    public TypeInfo getResolvedType() {
+    public TypeInfo getResolved() {
         return this.resolvedInfo;
     }
 
@@ -81,7 +81,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * @param methodInfoManager 用いるメソッドマネージャ
      * @return 解決済み配列型
      */
-    public TypeInfo resolveType(final TargetClassInfo usingClass,
+    public TypeInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -93,13 +93,13 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedType();
+            return this.getResolved();
         }
 
         final UnresolvedTypeInfo unresolvedElementType = this.getElementType();
         final int dimension = this.getDimension();
 
-        final TypeInfo elementType = unresolvedElementType.resolveType(usingClass, usingMethod,
+        final TypeInfo elementType = unresolvedElementType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert elementType != null : "resolveEntityUsage returned null!";
 

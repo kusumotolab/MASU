@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public abstract class VariableInfo<TUsage extends VariableUsageInfo, TUnit extends UnitInfo>
+public abstract class VariableInfo<TUsage extends VariableUsageInfo<?>, TUnit extends UnitInfo>
         extends UnitInfo implements Comparable<VariableInfo<TUsage, TUnit>>, Modifier {
 
     /**

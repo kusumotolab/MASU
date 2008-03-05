@@ -105,7 +105,7 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit ex
      * @return –¼‘O‰ðŒˆ‚³‚ê‚½î•ñ
      */
     @Override
-    public final TVar getResolvedUnit() {
+    public final TVar getResolved() {
         return this.resolvedInfo;
     }
 

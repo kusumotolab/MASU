@@ -7,27 +7,17 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author higo
  * 
  */
-public final class ArrayLengthUsageInfo extends EntityUsageInfo {
+public final class ArrayLengthUsageInfo extends FieldUsageInfo {
 
     /**
      * 親となるエンティティ使用を与えてオブジェクトを初期化
      * 
      * @param ownerEntityUsage 親エンティティ
      */
-    public ArrayLengthUsageInfo(final EntityUsageInfo ownerEntityUsage, final int fromLine,
+    public ArrayLengthUsageInfo(final ArrayTypeInfo ownerType, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
-        super(fromLine, fromColumn, toLine, toColumn);
-
-        if (null == ownerEntityUsage) {
-            throw new NullPointerException();
-        }
-
-        if (!(ownerEntityUsage.getType() instanceof ArrayTypeInfo)) {
-            throw new IllegalArgumentException();
-        }
-
-        this.ownerEntityUsage = ownerEntityUsage;
+        super(ownerType, null, true, fromLine, fromColumn, toLine, toColumn);
     }
 
     /**
@@ -39,15 +29,4 @@ public final class ArrayLengthUsageInfo extends EntityUsageInfo {
     public TypeInfo getType() {
         return PrimitiveTypeInfo.INT;
     }
-
-    /**
-     * 親エンティティを返す
-     * 
-     * @return 親エンティティ
-     */
-    public EntityUsageInfo getOwnerEntity() {
-        return this.ownerEntityUsage;
-    }
-
-    private final EntityUsageInfo ownerEntityUsage;
 }

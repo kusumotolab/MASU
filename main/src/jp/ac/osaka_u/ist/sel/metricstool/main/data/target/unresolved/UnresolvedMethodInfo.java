@@ -12,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
@@ -62,7 +63,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
      * @throws まだ解決されていない場合にスローされる
      */
     @Override
-    public TargetMethodInfo getResolvedUnit() {
+    public TargetMethodInfo getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
@@ -82,7 +83,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
      * @return 解決済みメソッド情報
      */
     @Override
-    public TargetMethodInfo resolveUnit(final TargetClassInfo usingClass,
+    public TargetMethodInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -94,7 +95,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedUnit();
+            return this.getResolved();
         }
 
         // 修飾子，名前，返り値，行数，コンストラクタかどうか，可視性，インスタンスメンバーかどうかを取得
@@ -120,14 +121,14 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
             final TypeParameterInfo typeParameter = (TypeParameterInfo) unresolvedTypeParameter
-                    .resolveType(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
+                    .resolve(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
                             methodInfoManager);
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
 
         // 返り値をセットする
         final UnresolvedTypeInfo unresolvedMethodReturnType = this.getReturnType();
-        TypeInfo methodReturnType = unresolvedMethodReturnType.resolveType(usingClass, null,
+        TypeInfo methodReturnType = unresolvedMethodReturnType.resolve(usingClass, null,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert methodReturnType != null : "resolveTypeInfo returned null!";
         if (methodReturnType instanceof UnknownTypeInfo) {
@@ -138,7 +139,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
                 methodReturnType = new ClassTypeInfo(classInfo);
                 for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedMethodReturnType)
                         .getTypeArguments()) {
-                    final TypeInfo typeArgument = unresolvedTypeArgument.resolveType(usingClass,
+                    final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                             usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
                     ((ClassTypeInfo) methodReturnType).addTypeArgument(typeArgument);
                 }
@@ -151,7 +152,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
                         .getDimension();
-                final TypeInfo elementType = unresolvedElementType.resolveType(usingClass,
+                final TypeInfo elementType = unresolvedElementType.resolve(usingClass,
                         usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
                 methodReturnType = ArrayTypeInfo.getType(elementType, dimension);
 
@@ -165,23 +166,23 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         // 引数を追加する
         for (final UnresolvedParameterInfo unresolvedParameterInfo : this.getParameters()) {
 
-            final TargetParameterInfo parameterInfo = unresolvedParameterInfo.resolveUnit(
+            final TargetParameterInfo parameterInfo = unresolvedParameterInfo.resolve(
                     usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
                     methodInfoManager);
             this.resolvedInfo.addParameter(parameterInfo);
         }
 
         //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
-        for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
-            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass,
-                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addInnerBlock(innerBlock);
-        }
+        for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
+            final StatementInfo statement = unresolvedStatement.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addStatement(statement);
+        }          
 
         // メソッド内で定義されている各未解決ローカル変数に対して
         for (final UnresolvedLocalVariableInfo unresolvedLocalVariable : this.getLocalVariables()) {
 
-            final LocalVariableInfo localVariable = unresolvedLocalVariable.resolveUnit(usingClass,
+            final LocalVariableInfo localVariable = unresolvedLocalVariable.resolve(usingClass,
                     this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(localVariable);
         }

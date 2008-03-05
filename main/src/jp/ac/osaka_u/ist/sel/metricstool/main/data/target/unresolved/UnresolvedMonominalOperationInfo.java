@@ -3,22 +3,23 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MonominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
 /**
  * ˆê€‰‰Z‚Ì“à—e‚ğ•\‚·ƒNƒ‰ƒX
  * 
- * @author t-miyake
+ * @author t-miyake, higo
  *
  */
-public class UnresolvedMonominalOperationInfo extends UnresolvedEntityUsageInfo {
+public final class UnresolvedMonominalOperationInfo extends
+        UnresolvedEntityUsageInfo<MonominalOperationInfo> {
 
     /**
      * €‚Æˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^‚ğ—^‚¦‚Ä‰Šú‰»
@@ -26,7 +27,7 @@ public class UnresolvedMonominalOperationInfo extends UnresolvedEntityUsageInfo 
      * @param term €
      * @param type ˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^
      */
-    public UnresolvedMonominalOperationInfo(final UnresolvedEntityUsageInfo term,
+    public UnresolvedMonominalOperationInfo(final UnresolvedVariableUsageInfo<?> term,
             final PrimitiveTypeInfo type) {
 
         if (null == term || null == type) {
@@ -38,22 +39,22 @@ public class UnresolvedMonominalOperationInfo extends UnresolvedEntityUsageInfo 
     }
 
     @Override
-    boolean alreadyResolved() {
-        return null != this.resolvedInfo;
+    public boolean alreadyResolved() {
+        return null != this.resolved;
     }
 
     @Override
-    EntityUsageInfo getResolvedEntityUsage() {
+    public MonominalOperationInfo getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
         }
 
-        return this.resolvedInfo;
+        return this.resolved;
     }
 
     @Override
-    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+    public MonominalOperationInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -66,7 +67,7 @@ public class UnresolvedMonominalOperationInfo extends UnresolvedEntityUsageInfo 
 
         // Šù‚É‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚ÍCƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
         if (this.alreadyResolved()) {
-            return this.getResolvedEntityUsage();
+            return this.getResolved();
         }
 
         // g—pˆÊ’u‚ğæ“¾
@@ -75,14 +76,14 @@ public class UnresolvedMonominalOperationInfo extends UnresolvedEntityUsageInfo 
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final UnresolvedEntityUsageInfo unresolvedTerm = this.getTerm();
-        final EntityUsageInfo term = unresolvedTerm.resolveEntityUsage(usingClass, usingMethod,
+        final UnresolvedVariableUsageInfo<?> unresolvedTerm = this.getTerm();
+        final VariableUsageInfo<?> term = unresolvedTerm.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         final PrimitiveTypeInfo type = this.getResultType();
 
-        this.resolvedInfo = new MonominalOperationInfo(term, type, fromLine, fromColumn, toLine,
+        this.resolved = new MonominalOperationInfo(term, type, fromLine, fromColumn, toLine,
                 toColumn);
-        return this.resolvedInfo;
+        return this.resolved;
     }
 
     /**
@@ -90,7 +91,7 @@ public class UnresolvedMonominalOperationInfo extends UnresolvedEntityUsageInfo 
      * 
      * @return ˆê€‰‰Z‚Ì€
      */
-    public UnresolvedEntityUsageInfo getTerm() {
+    public UnresolvedVariableUsageInfo<?> getTerm() {
         return this.term;
     }
 
@@ -106,12 +107,12 @@ public class UnresolvedMonominalOperationInfo extends UnresolvedEntityUsageInfo 
     /**
      * ˆê€‰‰Z‚Ì€
      */
-    private final UnresolvedEntityUsageInfo term;
+    private final UnresolvedVariableUsageInfo<?> term;
 
     /**
      * ˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^
      */
     private final PrimitiveTypeInfo type;
 
-    private EntityUsageInfo resolvedInfo;
+    private MonominalOperationInfo resolved;
 }

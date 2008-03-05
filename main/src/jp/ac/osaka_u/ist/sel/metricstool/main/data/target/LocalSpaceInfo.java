@@ -28,7 +28,7 @@ public abstract class LocalSpaceInfo extends UnitInfo {
         this.fieldUsages = new HashSet<FieldUsageInfo>();
         this.localVariableUsages = new HashSet<LocalVariableUsageInfo>();
         this.parameterUsages = new HashSet<ParameterUsageInfo>();
-        this.innerBlocks = new TreeSet<BlockInfo>();
+        this.statements = new TreeSet<StatementInfo>();
         this.calls = new HashSet<CallInfo>();
     }
 
@@ -86,18 +86,18 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     }
 
     /**
-     * このメソッドの直内ブロックを追加する．プラグインから呼ぶとランタイムエラー．
+     * このローカルコープの直内の式を追加する．プラグインから呼ぶとランタイムエラー．
      * 
      * @param innerBlock 追加する直内ブロック
      */
-    public void addInnerBlock(final BlockInfo innerBlock) {
+    public void addStatement(final StatementInfo statement) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == innerBlock) {
+        if (null == statement) {
             throw new NullPointerException();
         }
 
-        this.innerBlocks.add(innerBlock);
+        this.statements.add(statement);
     }
 
     /**
@@ -154,12 +154,12 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     }
 
     /**
-     * このメソッドの直内ブロックの SortedSet を返す．
+     * このローカルスペースの直内の文情報の SortedSet を返す．
      * 
-     * @return このメソッドの直内ブロックの SortedSet を返す．
+     * @return このローカルスペースの直内の文情報の SortedSet
      */
-    public SortedSet<BlockInfo> getInnerBlocks() {
-        return Collections.unmodifiableSortedSet(this.innerBlocks);
+    public SortedSet<StatementInfo> getStatements() {
+        return Collections.unmodifiableSortedSet(this.statements);
     }
 
     /**
@@ -197,9 +197,9 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     private final Set<ParameterUsageInfo> parameterUsages;
 
     /**
-     * このメソッド直内のブロック一覧を保存するための変数
+     * このローカルスコープの直内の文情報一覧を保存するための変数
      */
-    private final SortedSet<BlockInfo> innerBlocks;
+    private final SortedSet<StatementInfo> statements;
 
     /**
      * 所属しているクラスを保存するための変数

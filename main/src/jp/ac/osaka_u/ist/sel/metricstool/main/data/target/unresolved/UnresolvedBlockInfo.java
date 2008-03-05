@@ -10,7 +10,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
  * @author higo
  * 
  */
-public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends UnresolvedLocalSpaceInfo<T> {
+public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends UnresolvedLocalSpaceInfo<T>
+        implements UnresolvedStatementInfo<T> {
 
     /**
      * ブロック構造を表すオブジェクトを初期化する
@@ -18,14 +19,14 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends Unresolve
      */
     public UnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super();
-        
-        if(null == outerSpace) {
+
+        if (null == outerSpace) {
             throw new IllegalArgumentException("outerSpace is null");
         }
-        
+
         this.outerSpace = outerSpace;
     }
-    
+
     /**
      * このブロックが属する空間を返す
      * @return このブロックが属する空間
@@ -48,7 +49,7 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends Unresolve
      * このブロックの解決済みオブジェクトを返す
      */
     @Override
-    public final T getResolvedUnit() {
+    public final T getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
@@ -61,7 +62,7 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends Unresolve
      * このブロックが属する空間を保存するための変数
      */
     private final UnresolvedLocalSpaceInfo<?> outerSpace;
-    
+
     /**
      * 解決済みブロック情報を保存するための変数
      */

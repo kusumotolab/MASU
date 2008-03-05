@@ -48,7 +48,7 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
      * @return 解決済みの型パラメータ
      */
     @Override
-    public TypeParameterInfo resolveType(final TargetClassInfo usingClass,
+    public TypeParameterInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -61,19 +61,19 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
         final int index = this.getIndex();
         final String name = this.getName();
         final UnresolvedTypeInfo unresolvedSuperType = this.getSuperType();
-        final TypeInfo superType = unresolvedSuperType.resolveType(usingClass, usingMethod,
+        final TypeInfo superType = unresolvedSuperType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
         //　型パラメータの所有ユニットを解決
         final UnresolvedUnitInfo<?> unresolvedOwnerUnit = this.getOwnerUnit();
-        final UnitInfo ownerUnit = unresolvedOwnerUnit.resolveUnit(usingClass, usingMethod,
+        final UnitInfo ownerUnit = unresolvedOwnerUnit.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
         // extends 節 がある場合
         if (this.hasExtendsType()) {
 
             final UnresolvedTypeInfo unresolvedExtendsType = this.getExtendsType();
-            final TypeInfo extendsType = unresolvedExtendsType.resolveType(usingClass, usingMethod,
+            final TypeInfo extendsType = unresolvedExtendsType.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
 
             this.resolvedInfo = new SuperTypeParameterInfo(ownerUnit, name, index, extendsType,

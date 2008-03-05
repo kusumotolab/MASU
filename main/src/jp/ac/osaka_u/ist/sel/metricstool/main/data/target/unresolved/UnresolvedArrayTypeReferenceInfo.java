@@ -42,7 +42,7 @@ public final class UnresolvedArrayTypeReferenceInfo extends UnresolvedEntityUsag
     }
 
     @Override
-    public EntityUsageInfo getResolvedEntityUsage() {
+    public EntityUsageInfo getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
@@ -52,7 +52,7 @@ public final class UnresolvedArrayTypeReferenceInfo extends UnresolvedEntityUsag
     }
 
     @Override
-    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+    public EntityUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -64,7 +64,7 @@ public final class UnresolvedArrayTypeReferenceInfo extends UnresolvedEntityUsag
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedEntityUsage();
+            return this.getResolved();
         }
 
         //　位置情報を取得
@@ -75,7 +75,7 @@ public final class UnresolvedArrayTypeReferenceInfo extends UnresolvedEntityUsag
 
         // 参照されている配列型を解決
         final UnresolvedArrayTypeInfo unresolvedArrayType = this.getType();
-        final ArrayTypeInfo arrayType = (ArrayTypeInfo) unresolvedArrayType.resolveType(usingClass,
+        final ArrayTypeInfo arrayType = (ArrayTypeInfo) unresolvedArrayType.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         this.resolvedInfo = new ArrayTypeReferenceInfo(arrayType, fromLine, fromColumn, toLine,

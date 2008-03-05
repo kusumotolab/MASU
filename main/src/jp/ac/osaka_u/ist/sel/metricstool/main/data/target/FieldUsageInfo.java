@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author higo
  * 
  */
-public final class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
+public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
 
     /**
      * 使用されているフィールドを与えてオブジェクトを初期化
@@ -25,9 +25,9 @@ public final class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     }
 
     @Override
-    public final TypeInfo getType() {
+    public TypeInfo getType() {
 
-        final VariableInfo usedVariable = this.getUsedVariable();
+        final VariableInfo<?, ?> usedVariable = this.getUsedVariable();
         final TypeInfo definitionType = usedVariable.getType();
 
         // 定義の返り値が型パラメータでなければそのまま返せる
@@ -42,7 +42,7 @@ public final class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         return typeArgument;
     }
 
-    public TypeInfo getOwnerType() {
+    public final TypeInfo getOwnerType() {
         return this.ownerType;
     }
 

@@ -45,7 +45,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
@@ -57,6 +56,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVClassMetricsWriter;
@@ -89,11 +89,7 @@ import org.jargp.ParameterDef;
 import org.jargp.StringDef;
 
 import antlr.ASTFactory;
-import antlr.CommonASTWithHiddenTokens;
-import antlr.CommonHiddenStreamToken;
-import antlr.LexerSharedInputState;
 import antlr.RecognitionException;
-import antlr.TokenBuffer;
 import antlr.TokenStreamException;
 import antlr.collections.AST;
 
@@ -210,7 +206,7 @@ public class MetricsTool {
                     final Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
                     lexer.setTabSize(4);
                     final Java15Parser parser = new Java15Parser(lexer);
-                    
+
                     final ASTFactory factory = new MasuAstFactory();
                     factory.setASTNodeClass(CommonASTWithLineNumber.class);
 
@@ -785,7 +781,7 @@ public class MetricsTool {
                 .getClassInfos()) {
 
             //　クラス情報を解決
-            final TargetClassInfo classInfo = unresolvedClassInfo.resolveUnit(null, null,
+            final TargetClassInfo classInfo = unresolvedClassInfo.resolve(null, null,
                     classInfoManager, null, null);
 
             // 解決されたクラス情報を登録
@@ -818,8 +814,8 @@ public class MetricsTool {
             final UnresolvedClassInfo unresolvedClassInfo, final TargetClassInfo outerClass,
             final ClassInfoManager classInfoManager) {
 
-        final TargetInnerClassInfo classInfo = (TargetInnerClassInfo) unresolvedClassInfo
-                .resolveUnit(outerClass, null, classInfoManager, null, null);
+        final TargetInnerClassInfo classInfo = (TargetInnerClassInfo) unresolvedClassInfo.resolve(
+                outerClass, null, classInfoManager, null, null);
 
         // このクラスのインナークラスに対して再帰的に処理
         for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
@@ -867,14 +863,14 @@ public class MetricsTool {
             final ClassInfoManager classInfoManager) {
 
         // 解決済みクラス情報を取得
-        final TargetClassInfo classInfo = unresolvedClassInfo.getResolvedUnit();
+        final TargetClassInfo classInfo = unresolvedClassInfo.getResolved();
         assert null != classInfo : "classInfo shouldn't be null!";
 
         // 未解決クラス情報から未解決型パラメータを取得し，型解決を行った後，解決済みクラス情報に付与する
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : unresolvedClassInfo
                 .getTypeParameters()) {
 
-            final TypeInfo typeParameter = unresolvedTypeParameter.resolveType(classInfo, null,
+            final TypeInfo typeParameter = unresolvedTypeParameter.resolve(classInfo, null,
                     classInfoManager, null, null);
             classInfo.addTypeParameter((TypeParameterInfo) typeParameter);
         }
@@ -913,14 +909,14 @@ public class MetricsTool {
 
                 // ClassInfo を取得
                 final UnresolvedClassInfo unresolvedClassInfo = classIterator.next();
-                final TargetClassInfo classInfo = unresolvedClassInfo.getResolvedUnit();
+                final TargetClassInfo classInfo = unresolvedClassInfo.getResolved();
                 assert null != classInfo : "classInfo shouldn't be null!";
 
                 // 各親クラス名に対して
                 for (final UnresolvedClassTypeInfo unresolvedSuperClassType : unresolvedClassInfo
                         .getSuperClasses()) {
 
-                    TypeInfo superClassType = unresolvedSuperClassType.resolveType(classInfo, null,
+                    TypeInfo superClassType = unresolvedSuperClassType.resolve(classInfo, null,
                             classInfoManager, null, null);
 
                     // null でない場合は名前解決に成功したとみなす
@@ -969,14 +965,14 @@ public class MetricsTool {
             final List<UnresolvedClassInfo> unresolvableClasses) {
 
         // ClassInfo を取得
-        final TargetClassInfo classInfo = unresolvedClassInfo.getResolvedUnit();
+        final TargetClassInfo classInfo = unresolvedClassInfo.getResolved();
         assert null != classInfo : "classInfo shouldn't be null!";
 
         // 各親クラス名に対して
         for (final UnresolvedClassTypeInfo unresolvedSuperClassType : unresolvedClassInfo
                 .getSuperClasses()) {
 
-            TypeInfo superClassType = unresolvedSuperClassType.resolveType(classInfo, null,
+            TypeInfo superClassType = unresolvedSuperClassType.resolve(classInfo, null,
                     classInfoManager, null, null);
 
             // null だった場合は解決不可能リストに一時的に格納
@@ -1036,14 +1032,13 @@ public class MetricsTool {
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager) {
 
         // ClassInfo を取得
-        final TargetClassInfo ownerClass = unresolvedClassInfo.getResolvedUnit();
+        final TargetClassInfo ownerClass = unresolvedClassInfo.getResolved();
         assert null != ownerClass : "ownerClass shouldn't be null!";
 
         // 各未解決フィールドに対して
         for (final UnresolvedFieldInfo unresolvedFieldInfo : unresolvedClassInfo.getDefinedFields()) {
 
-            unresolvedFieldInfo.resolveUnit(ownerClass, null, classInfoManager, fieldInfoManager,
-                    null);
+            unresolvedFieldInfo.resolve(ownerClass, null, classInfoManager, fieldInfoManager, null);
         }
 
         // 各インナークラスに対して
@@ -1082,14 +1077,14 @@ public class MetricsTool {
             final ClassInfoManager classInfoManager, final MethodInfoManager methodInfoManager) {
 
         // ClassInfo を取得
-        final TargetClassInfo ownerClass = unresolvedClassInfo.getResolvedUnit();
+        final TargetClassInfo ownerClass = unresolvedClassInfo.getResolved();
 
         // 各未解決メソッドに対して
         for (final UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo
                 .getDefinedMethods()) {
 
             // メソッド情報を解決
-            final TargetMethodInfo methodInfo = unresolvedMethodInfo.resolveUnit(ownerClass, null,
+            final TargetMethodInfo methodInfo = unresolvedMethodInfo.resolve(ownerClass, null,
                     classInfoManager, null, methodInfoManager);
 
             // メソッド情報を登録
@@ -1102,7 +1097,7 @@ public class MetricsTool {
                 .getDefinedConstructors()) {
 
             //　コンストラクタ情報を解決
-            final TargetConstructorInfo constructorInfo = unresolvedConstructorInfo.resolveUnit(
+            final TargetConstructorInfo constructorInfo = unresolvedConstructorInfo.resolve(
                     ownerClass, null, classInfoManager, null, methodInfoManager);
             methodInfoManager.add(constructorInfo);
 
@@ -1259,7 +1254,7 @@ public class MetricsTool {
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 未解決メソッド情報から，解決済みメソッド情報を取得
-        final LocalSpaceInfo localSpace = unresolvedLocalSpace.getResolvedUnit();
+        final LocalSpaceInfo localSpace = unresolvedLocalSpace.getResolved();
         assert null != localSpace : "UnresolvedLocalSpaceInfo#getResolvedInfo is null!";
 
         // 所有クラスを取得
@@ -1275,18 +1270,18 @@ public class MetricsTool {
         }
 
         // 各未解決フィールド使用の名前解決処理
-        for (final UnresolvedVariableUsageInfo unresolvedVariableUsage : unresolvedLocalSpace
+        for (final UnresolvedVariableUsageInfo<?> unresolvedVariableUsage : unresolvedLocalSpace
                 .getVariableUsages()) {
 
             // 未解決変数使用を解決
-            final EntityUsageInfo variableUsage = unresolvedVariableUsage.resolveEntityUsage(
-                    ownerClass, ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            final EntityUsageInfo variableUsage = unresolvedVariableUsage.resolve(ownerClass,
+                    ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-            // 名前解決でき場合は登録
+            // 名前解決できた場合は登録
             if (variableUsage instanceof VariableUsageInfo) {
                 VariableUsageInfo<?> usage = (VariableUsageInfo<?>) variableUsage;
                 ownerMethod.addVariableUsage(usage);
-                usage.getUsedVariable().addUsage(usage);
+                //usage.getUsedVariable().addUsage(usage);
 
                 // フィールドの場合は，利用関係情報を取る
                 if (variableUsage instanceof FieldUsageInfo) {
@@ -1302,10 +1297,10 @@ public class MetricsTool {
         }
 
         // 各未解決メソッド呼び出しの解決処理
-        for (final UnresolvedCallInfo unresolvedCall : unresolvedLocalSpace.getCalls()) {
+        for (final UnresolvedCallInfo<?> unresolvedCall : unresolvedLocalSpace.getCalls()) {
 
-            final EntityUsageInfo memberCall = unresolvedCall.resolveEntityUsage(ownerClass,
-                    ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            final EntityUsageInfo memberCall = unresolvedCall.resolve(ownerClass, ownerMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
 
             // メソッドおよびコンストラクタ呼び出しが解決できた場合
             if (memberCall instanceof MethodCallInfo) {
@@ -1317,11 +1312,15 @@ public class MetricsTool {
         }
 
         //　各インナーブロックについて
-        for (final UnresolvedBlockInfo<?> unresolvedBlockInfo : unresolvedLocalSpace.getInnerBlocks()) {
-            
+        for (final UnresolvedStatementInfo<?> unresolvedStatement : unresolvedLocalSpace
+                .getStatements()) {
+
             // 未解決メソッド情報内の利用関係を解決
-            this.addReferenceAssignmentCallRelation(unresolvedBlockInfo, unresolvedClassInfo,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
+            if (unresolvedStatement instanceof UnresolvedBlockInfo) {
+                this.addReferenceAssignmentCallRelation(
+                        (UnresolvedBlockInfo<?>) unresolvedStatement, unresolvedClassInfo,
+                        classInfoManager, fieldInfoManager, methodInfoManager);
+            }
         }
     }
 }

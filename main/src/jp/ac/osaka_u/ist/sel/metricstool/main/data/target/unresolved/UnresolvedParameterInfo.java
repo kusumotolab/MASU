@@ -57,7 +57,7 @@ public final class UnresolvedParameterInfo
      * @return 解決済み引数情報
      */
     @Override
-    public TargetParameterInfo resolveUnit(final TargetClassInfo usingClass,
+    public TargetParameterInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -69,7 +69,7 @@ public final class UnresolvedParameterInfo
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedUnit();
+            return this.getResolved();
         }
 
         // 修飾子，パラメータ名，型，位置情報を取得
@@ -77,7 +77,7 @@ public final class UnresolvedParameterInfo
         final String parameterName = this.getName();
         final int index = this.getIndex();
         final UnresolvedTypeInfo unresolvedParameterType = this.getType();
-        TypeInfo parameterType = unresolvedParameterType.resolveType(usingClass, usingMethod,
+        TypeInfo parameterType = unresolvedParameterType.resolve(usingClass, usingMethod,
                 classInfoManager, null, null);
         assert parameterType != null : "resolveTypeInfo returned null!";
         if (parameterType instanceof UnknownTypeInfo) {
@@ -88,7 +88,7 @@ public final class UnresolvedParameterInfo
                 parameterType = new ClassTypeInfo(externalClass);
                 for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedParameterType)
                         .getTypeArguments()) {
-                    final TypeInfo typeArgument = unresolvedTypeArgument.resolveType(usingClass,
+                    final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                             usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
                     ((ClassTypeInfo) parameterType).addTypeArgument(typeArgument);
                 }
@@ -101,7 +101,7 @@ public final class UnresolvedParameterInfo
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedParameterType)
                         .getDimension();
-                final TypeInfo elementType = unresolvedElementType.resolveType(usingClass,
+                final TypeInfo elementType = unresolvedElementType.resolve(usingClass,
                         usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
                 parameterType = ArrayTypeInfo.getType(elementType, dimension);
             } else {
@@ -114,7 +114,7 @@ public final class UnresolvedParameterInfo
         final int parameterToLine = this.getToLine();
         final int parameterToColumn = this.getToColumn();
 
-        final CallableUnitInfo definitionMethod = this.getDefinitionUnit().getResolvedUnit();
+        final CallableUnitInfo definitionMethod = this.getDefinitionUnit().getResolved();
 
         // パラメータオブジェクトを生成する
         this.resolvedInfo = new TargetParameterInfo(parameterModifiers, parameterName,

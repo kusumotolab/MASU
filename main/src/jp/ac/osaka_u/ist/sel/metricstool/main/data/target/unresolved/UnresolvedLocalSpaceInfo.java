@@ -23,10 +23,10 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        this.calls = new HashSet<UnresolvedCallInfo>();
-        this.variableUsages = new HashSet<UnresolvedVariableUsageInfo>();
+        this.calls = new HashSet<UnresolvedCallInfo<?>>();
+        this.variableUsages = new HashSet<UnresolvedVariableUsageInfo<?>>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
-        this.innerBlocks = new HashSet<UnresolvedBlockInfo<?>>();
+        this.statements = new HashSet<UnresolvedStatementInfo<?>>();
     }
 
     /**
@@ -34,7 +34,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
      * 
      * @param call メソッドまたはコンストラクタ呼び出し
      */
-    public final void addCall(final UnresolvedCallInfo call) {
+    public final void addCall(final UnresolvedCallInfo<?> call) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -48,17 +48,17 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     /**
      * 変数使用を追加する
      * 
-     * @param fieldUsage フィールド使用
+     * @param variableUsage 変数使用
      */
-    public final void addVariableUsage(final UnresolvedVariableUsageInfo fieldUsage) {
+    public final void addVariableUsage(final UnresolvedVariableUsageInfo<?> variableUsage) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == fieldUsage) {
+        if (null == variableUsage) {
             throw new NullPointerException();
         }
 
-        this.variableUsages.add(fieldUsage);
+        this.variableUsages.add(variableUsage);
     }
 
     /**
@@ -78,19 +78,19 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     }
 
     /**
-     * インナーブロックを追加する
+     * 未解決文を追加する
      * 
-     * @param innerBlock ローカル変数
+     * @param statement 未解決文
      */
-    public void addInnerBlock(final UnresolvedBlockInfo<?> innerBlock) {
+    public void addStatement(final UnresolvedStatementInfo<?> statement) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == innerBlock) {
+        if (null == statement) {
             throw new NullPointerException();
         }
 
-        this.innerBlocks.add(innerBlock);
+        this.statements.add(statement);
     }
 
     public void addChildSpaceInfo(final UnresolvedLocalSpaceInfo<?> childLocalInfo) {
@@ -109,7 +109,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
      * 
      * @return このブロック内で行われている未解決メソッド呼び出しおよびコンストラクタ呼び出しの Set
      */
-    public final Set<UnresolvedCallInfo> getCalls() {
+    public final Set<UnresolvedCallInfo<?>> getCalls() {
         return Collections.unmodifiableSet(this.calls);
     }
 
@@ -118,7 +118,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
      * 
      * @return このブロック内で行われている未解決変数使用の Set
      */
-    public final Set<UnresolvedVariableUsageInfo> getVariableUsages() {
+    public final Set<UnresolvedVariableUsageInfo<?>> getVariableUsages() {
         return Collections.unmodifiableSet(this.variableUsages);
     }
 
@@ -136,19 +136,19 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
      * 
      * @return このブロック内の未解決内部ブロックの Set
      */
-    public final Set<UnresolvedBlockInfo<?>> getInnerBlocks() {
-        return Collections.unmodifiableSet(this.innerBlocks);
+    public final Set<UnresolvedStatementInfo<?>> getStatements() {
+        return Collections.unmodifiableSet(this.statements);
     }
-    
+
     /**
      * メソッドまたはコンストラクタ呼び出しを保存する変数
      */
-    private final Set<UnresolvedCallInfo> calls;
+    private final Set<UnresolvedCallInfo<?>> calls;
 
     /**
      * フィールド使用を保存する変数
      */
-    private final Set<UnresolvedVariableUsageInfo> variableUsages;
+    private final Set<UnresolvedVariableUsageInfo<?>> variableUsages;
 
     /**
      * このメソッド内で定義されているローカル変数を保存する変数
@@ -156,8 +156,8 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     private final Set<UnresolvedLocalVariableInfo> localVariables;
 
     /**
-     * このブロックの内側で定義されたブロックを保存する変数
+     * このブロックの内側で定義された未解決文を保存する変数
      */
-    private final Set<UnresolvedBlockInfo<?>> innerBlocks;
+    private final Set<UnresolvedStatementInfo<?>> statements;
 
 }

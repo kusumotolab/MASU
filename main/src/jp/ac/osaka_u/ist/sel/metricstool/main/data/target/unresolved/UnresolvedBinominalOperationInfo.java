@@ -17,7 +17,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
  * @author higo
  * 
  */
-public class UnresolvedBinominalOperationInfo extends UnresolvedEntityUsageInfo {
+public class UnresolvedBinominalOperationInfo extends
+        UnresolvedEntityUsageInfo<BinominalOperationInfo> {
 
     /**
      * 演算子と2つのオペランドを与えて初期化する
@@ -27,8 +28,8 @@ public class UnresolvedBinominalOperationInfo extends UnresolvedEntityUsageInfo 
      * @param secondOperand 第二（未解決）オペランド
      */
     public UnresolvedBinominalOperationInfo(final OPERATOR operator,
-            final UnresolvedEntityUsageInfo firstOperand,
-            final UnresolvedEntityUsageInfo secondOperand) {
+            final UnresolvedEntityUsageInfo<?> firstOperand,
+            final UnresolvedEntityUsageInfo<?> secondOperand) {
 
         if ((null == operator) || (null == firstOperand) || (null == secondOperand)) {
             throw new NullPointerException();
@@ -37,7 +38,7 @@ public class UnresolvedBinominalOperationInfo extends UnresolvedEntityUsageInfo 
         this.operator = operator;
         this.firstOperand = firstOperand;
         this.secondOperand = secondOperand;
-        this.resolvedInfo = null;
+        this.resolved = null;
     }
 
     /**
@@ -47,7 +48,7 @@ public class UnresolvedBinominalOperationInfo extends UnresolvedEntityUsageInfo 
      */
     @Override
     public boolean alreadyResolved() {
-        return null != this.resolvedInfo;
+        return null != this.resolved;
     }
 
     /**
@@ -56,13 +57,13 @@ public class UnresolvedBinominalOperationInfo extends UnresolvedEntityUsageInfo 
      * @return 解決済みニ項演算
      */
     @Override
-    public EntityUsageInfo getResolvedEntityUsage() {
+    public BinominalOperationInfo getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
         }
 
-        return this.resolvedInfo;
+        return this.resolved;
     }
 
     /**
@@ -76,22 +77,22 @@ public class UnresolvedBinominalOperationInfo extends UnresolvedEntityUsageInfo 
      * @return 解決済み二項演算（つまり，演算結果の型）
      */
     @Override
-    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+    public BinominalOperationInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedEntityUsage();
+            return this.getResolved();
         }
 
         final OPERATOR operator = this.getOperator();
-        final UnresolvedEntityUsageInfo unresolvedFirstOperand = this.getFirstOperand();
-        final UnresolvedEntityUsageInfo unresolvedSecondOperand = this.getSecondOperand();
-        final EntityUsageInfo firstOperand = unresolvedFirstOperand.resolveEntityUsage(usingClass,
+        final UnresolvedEntityUsageInfo<?> unresolvedFirstOperand = this.getFirstOperand();
+        final UnresolvedEntityUsageInfo<?> unresolvedSecondOperand = this.getSecondOperand();
+        final EntityUsageInfo firstOperand = unresolvedFirstOperand.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-        final EntityUsageInfo secondOperand = unresolvedSecondOperand.resolveEntityUsage(
-                usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final EntityUsageInfo secondOperand = unresolvedSecondOperand.resolve(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         //　位置情報を取得
         final int fromLine = this.getFromLine();
@@ -99,9 +100,9 @@ public class UnresolvedBinominalOperationInfo extends UnresolvedEntityUsageInfo 
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new BinominalOperationInfo(operator, firstOperand, secondOperand,
-                fromLine, fromColumn, toLine, toColumn);
-        return this.resolvedInfo;
+        this.resolved = new BinominalOperationInfo(operator, firstOperand, secondOperand, fromLine,
+                fromColumn, toLine, toColumn);
+        return this.resolved;
     }
 
     /**
@@ -118,7 +119,7 @@ public class UnresolvedBinominalOperationInfo extends UnresolvedEntityUsageInfo 
      * 
      * @return 第一（未解決）オペランド
      */
-    public UnresolvedEntityUsageInfo getFirstOperand() {
+    public UnresolvedEntityUsageInfo<?> getFirstOperand() {
         return this.firstOperand;
     }
 
@@ -127,7 +128,7 @@ public class UnresolvedBinominalOperationInfo extends UnresolvedEntityUsageInfo 
      * 
      * @return 第二（未解決）オペランド
      */
-    public UnresolvedEntityUsageInfo getSecondOperand() {
+    public UnresolvedEntityUsageInfo<?> getSecondOperand() {
         return this.secondOperand;
     }
 
@@ -150,7 +151,7 @@ public class UnresolvedBinominalOperationInfo extends UnresolvedEntityUsageInfo 
      * 
      * @param firstOperand 第一（未解決）オペランド
      */
-    public void setFirstOperand(final UnresolvedEntityUsageInfo firstOperand) {
+    public void setFirstOperand(final UnresolvedEntityUsageInfo<?> firstOperand) {
 
         if (null == firstOperand) {
             throw new NullPointerException();
@@ -164,7 +165,7 @@ public class UnresolvedBinominalOperationInfo extends UnresolvedEntityUsageInfo 
      * 
      * @param secondOperand 第二（未解決）オペランド
      */
-    public void setSecondOperand(final UnresolvedEntityUsageInfo secondOperand) {
+    public void setSecondOperand(final UnresolvedEntityUsageInfo<?> secondOperand) {
 
         if (null == secondOperand) {
             throw new NullPointerException();
@@ -175,9 +176,9 @@ public class UnresolvedBinominalOperationInfo extends UnresolvedEntityUsageInfo 
 
     private OPERATOR operator;
 
-    private UnresolvedEntityUsageInfo firstOperand;
+    private UnresolvedEntityUsageInfo<?> firstOperand;
 
-    private UnresolvedEntityUsageInfo secondOperand;
+    private UnresolvedEntityUsageInfo<?> secondOperand;
 
-    private EntityUsageInfo resolvedInfo;
+    private BinominalOperationInfo resolved;
 }

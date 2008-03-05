@@ -18,7 +18,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake, higo
  *
  */
-public class UnresolvedLocalVariableUsageInfo extends UnresolvedVariableUsageInfo {
+public class UnresolvedLocalVariableUsageInfo extends
+        UnresolvedVariableUsageInfo<LocalVariableUsageInfo> {
 
     public UnresolvedLocalVariableUsageInfo(final UnresolvedLocalVariableInfo usedVariable,
             boolean reference, final int fromLine, final int fromColumn, final int toLine,
@@ -29,7 +30,7 @@ public class UnresolvedLocalVariableUsageInfo extends UnresolvedVariableUsageInf
     }
 
     @Override
-    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+    public LocalVariableUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -38,10 +39,10 @@ public class UnresolvedLocalVariableUsageInfo extends UnresolvedVariableUsageInf
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedEntityUsage();
+            return this.getResolved();
         }
 
-        final LocalVariableInfo usedVariable = this.getUsedVariable().resolveUnit(usingClass,
+        final LocalVariableInfo usedVariable = this.getUsedVariable().resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final boolean reference = this.isReference();
 
@@ -50,10 +51,10 @@ public class UnresolvedLocalVariableUsageInfo extends UnresolvedVariableUsageInf
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new LocalVariableUsageInfo(usedVariable, reference, fromLine,
+        this.resolved = new LocalVariableUsageInfo(usedVariable, reference, fromLine,
                 fromColumn, toLine, toColumn);
 
-        return this.resolvedInfo;
+        return this.resolved;
     }
 
     public UnresolvedLocalVariableInfo getUsedVariable() {

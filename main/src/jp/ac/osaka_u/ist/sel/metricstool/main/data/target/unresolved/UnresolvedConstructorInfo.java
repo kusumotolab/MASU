@@ -3,13 +3,13 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
@@ -31,7 +31,7 @@ public final class UnresolvedConstructorInfo extends
     }
 
     @Override
-    public TargetConstructorInfo getResolvedUnit() {
+    public TargetConstructorInfo getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
@@ -41,7 +41,7 @@ public final class UnresolvedConstructorInfo extends
     }
 
     @Override
-    public TargetConstructorInfo resolveUnit(final TargetClassInfo usingClass,
+    public TargetConstructorInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -53,7 +53,7 @@ public final class UnresolvedConstructorInfo extends
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedUnit();
+            return this.getResolved();
         }
 
         // 修飾子，名前，返り値，行数，可視性を取得
@@ -77,30 +77,29 @@ public final class UnresolvedConstructorInfo extends
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
             final TypeParameterInfo typeParameter = (TypeParameterInfo) unresolvedTypeParameter
-                    .resolveType(usingClass, this.resolvedInfo, classInfoManager, null, null);
+                    .resolve(usingClass, this.resolvedInfo, classInfoManager, null, null);
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
 
         // 引数を解決し，解決済みコンストラクタ情報に追加する
         for (final UnresolvedParameterInfo unresolvedParameterInfo : this.getParameters()) {
 
-            final TargetParameterInfo parameterInfo = unresolvedParameterInfo.resolveUnit(
-                    usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
-                    methodInfoManager);
+            final TargetParameterInfo parameterInfo = unresolvedParameterInfo.resolve(usingClass,
+                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addParameter(parameterInfo);
         }
 
         //　内部ブロック情報を解決し，解決済みコンストラクタオブジェクトに追加
-        for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
-            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass,
-                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addInnerBlock(innerBlock);
+        for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
+            final StatementInfo statement = unresolvedStatement.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addStatement(statement);
         }
 
         // メソッド内で定義されている各未解決ローカル変数に対して
         for (final UnresolvedLocalVariableInfo unresolvedLocalVariable : this.getLocalVariables()) {
 
-            final LocalVariableInfo localVariable = unresolvedLocalVariable.resolveUnit(usingClass,
+            final LocalVariableInfo localVariable = unresolvedLocalVariable.resolve(usingClass,
                     this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(localVariable);
         }

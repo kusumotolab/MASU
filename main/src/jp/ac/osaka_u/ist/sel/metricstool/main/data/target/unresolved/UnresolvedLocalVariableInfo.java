@@ -61,7 +61,7 @@ public final class UnresolvedLocalVariableInfo
      * @return 解決済みローカル変数情報
      */
     @Override
-    public LocalVariableInfo resolveUnit(final TargetClassInfo usingClass,
+    public LocalVariableInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -73,14 +73,14 @@ public final class UnresolvedLocalVariableInfo
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedUnit();
+            return this.getResolved();
         }
 
         // 修飾子，変数名，型を取得
         final Set<ModifierInfo> localModifiers = this.getModifiers();
         final String variableName = this.getName();
         final UnresolvedTypeInfo unresolvedVariableType = this.getType();
-        TypeInfo variableType = unresolvedVariableType.resolveType(usingClass, usingMethod,
+        TypeInfo variableType = unresolvedVariableType.resolve(usingClass, usingMethod,
                 classInfoManager, null, null);
         assert variableType != null : "resolveTypeInfo returned null!";
         if (variableType instanceof UnknownTypeInfo) {
@@ -91,7 +91,7 @@ public final class UnresolvedLocalVariableInfo
                 variableType = new ClassTypeInfo(externalClass);
                 for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedVariableType)
                         .getTypeArguments()) {
-                    final TypeInfo typeArgument = unresolvedTypeArgument.resolveType(usingClass,
+                    final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                             usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
                     ((ClassTypeInfo) variableType).addTypeArgument(typeArgument);
                 }
@@ -104,7 +104,7 @@ public final class UnresolvedLocalVariableInfo
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedVariableType)
                         .getDimension();
-                final TypeInfo elementType = unresolvedElementType.resolveType(usingClass,
+                final TypeInfo elementType = unresolvedElementType.resolve(usingClass,
                         usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
                 variableType = ArrayTypeInfo.getType(elementType, dimension);
 
@@ -118,7 +118,7 @@ public final class UnresolvedLocalVariableInfo
         final int localToLine = this.getToLine();
         final int localToColumn = this.getToColumn();
 
-        final LocalSpaceInfo definitionSpace = this.getDefinitionUnit().getResolvedUnit();
+        final LocalSpaceInfo definitionSpace = this.getDefinitionUnit().getResolved();
 
         // ローカル変数オブジェクトを生成し，MethodInfoに追加
         this.resolvedInfo = new LocalVariableInfo(localModifiers, variableName, variableType,

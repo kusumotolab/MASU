@@ -1,12 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
 
 /**
@@ -14,7 +9,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
  * 
  * @author higo
  */
-public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
+public abstract class UnresolvedEntityUsageInfo<T extends EntityUsageInfo> implements
+        Resolvable<T>, PositionSetting {
 
     protected UnresolvedEntityUsageInfo() {
         this.fromLine = 0;
@@ -22,36 +18,6 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
         this.toLine = 0;
         this.toColumn = 0;
     }
-    
-    
-    /**
-     * 名前解決を行う
-     * 
-     * @param usingClass 名前解決を行うエンティティがあるクラス
-     * @param usingMethod 名前解決を行うエンティティがあるメソッド
-     * @param classInfoManager 用いるクラスマネージャ
-     * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManager 用いるメソッドマネージャ
-     * 
-     * @return 解決済みのエンティティ
-     */
-    public abstract EntityUsageInfo resolveEntityUsage(TargetClassInfo usingClass,
-            CallableUnitInfo usingMethod, ClassInfoManager classInfoManager,
-            FieldInfoManager fieldInfoManager, MethodInfoManager methodInfoManager);
-
-    /**
-     * 名前解決された情報を返す
-     * 
-     * @return 名前解決された情報
-     */
-    abstract EntityUsageInfo getResolvedEntityUsage();
-
-    /**
-     * 既に名前解決されたかどうかを返す
-     * 
-     * @return 名前解決されている場合は true，そうでない場合は false
-     */
-    abstract boolean alreadyResolved();
 
     /**
      * 開始行をセットする
@@ -86,7 +52,7 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * 
      * @param toLine 終了行
      */
-     public final void setToLine(final int toLine) {
+    public final void setToLine(final int toLine) {
 
         if (toLine < 0) {
             throw new IllegalArgumentException();
@@ -100,7 +66,7 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * 
      * @param toColumn 終了列
      */
-     public final void setToColumn(final int toColumn) {
+    public final void setToColumn(final int toColumn) {
         if (toColumn < 0) {
             throw new IllegalArgumentException();
         }
@@ -113,7 +79,7 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * 
      * @return 開始行
      */
-     public final int getFromLine() {
+    public final int getFromLine() {
         return this.fromLine;
     }
 
@@ -122,7 +88,7 @@ public abstract class UnresolvedEntityUsageInfo implements PositionSetting {
      * 
      * @return 開始列
      */
-     public final int getFromColumn() {
+    public final int getFromColumn() {
         return this.fromColumn;
     }
 

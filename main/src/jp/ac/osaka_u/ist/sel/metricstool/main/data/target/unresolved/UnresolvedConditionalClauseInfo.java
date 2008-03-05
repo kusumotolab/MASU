@@ -32,7 +32,7 @@ public final class UnresolvedConditionalClauseInfo extends
     }
 
     @Override
-    public ConditionalClauseInfo getResolvedUnit() {
+    public ConditionalClauseInfo getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
@@ -42,7 +42,7 @@ public final class UnresolvedConditionalClauseInfo extends
     }
 
     @Override
-    public ConditionalClauseInfo resolveUnit(final TargetClassInfo usingClass,
+    public ConditionalClauseInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -55,7 +55,7 @@ public final class UnresolvedConditionalClauseInfo extends
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedUnit();
+            return this.getResolved();
         }
 
         // この for エントリの位置情報を取得
@@ -69,7 +69,7 @@ public final class UnresolvedConditionalClauseInfo extends
 
         // ローカル変数情報を解決し，解決済み条件節オブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolveUnit(usingClass,
+            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }

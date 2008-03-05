@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
@@ -18,7 +17,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake, higo
  *
  */
-public final class UnresolvedParameterUsageInfo extends UnresolvedVariableUsageInfo {
+public final class UnresolvedParameterUsageInfo extends
+        UnresolvedVariableUsageInfo<ParameterUsageInfo> {
 
     /**
      * 使用されている引数，参照かどうかを与えて初期化
@@ -38,7 +38,7 @@ public final class UnresolvedParameterUsageInfo extends UnresolvedVariableUsageI
      * この未解決引数使用を解決する
      */
     @Override
-    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+    public ParameterUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -47,11 +47,11 @@ public final class UnresolvedParameterUsageInfo extends UnresolvedVariableUsageI
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedEntityUsage();
+            return this.getResolved();
         }
 
-        final ParameterInfo usedVariable = this.getUsedVariable().resolveUnit(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final ParameterInfo usedVariable = this.getUsedVariable().resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
         final boolean reference = this.isReference();
 
         final int fromLine = this.getFromLine();
@@ -59,10 +59,10 @@ public final class UnresolvedParameterUsageInfo extends UnresolvedVariableUsageI
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new ParameterUsageInfo(usedVariable, reference, fromLine, fromColumn,
+        this.resolved = new ParameterUsageInfo(usedVariable, reference, fromLine, fromColumn,
                 toLine, toColumn);
 
-        return this.resolvedInfo;
+        return this.resolved;
     }
 
     /**

@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorInfo;
@@ -13,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 
 
 /**
@@ -67,7 +67,7 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
      * ExternalConstructorInfo‚Å‚Í—˜—p‚Å‚«‚È‚¢
      */
     @Override
-    public SortedSet<BlockInfo> getInnerBlocks() {
+    public SortedSet<StatementInfo> getStatements() {
         throw new CannotUseException();
     }
 

@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
 
 /**
@@ -10,7 +10,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
  * @author t-miyake, higo
  *
  */
-public abstract class UnresolvedVariableUsageInfo extends UnresolvedEntityUsageInfo {
+public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<?>> extends
+        UnresolvedEntityUsageInfo<T> {
 
     public UnresolvedVariableUsageInfo(final String usedVariableName, final boolean reference,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
@@ -21,7 +22,7 @@ public abstract class UnresolvedVariableUsageInfo extends UnresolvedEntityUsageI
 
         this.usedVariableName = usedVariableName;
         this.reference = reference;
-        
+
         this.setFromLine(fromLine);
         this.setFromColumn(fromColumn);
         this.setToLine(toLine);
@@ -53,20 +54,20 @@ public abstract class UnresolvedVariableUsageInfo extends UnresolvedEntityUsageI
      */
     @Override
     public final boolean alreadyResolved() {
-        return null != this.resolvedInfo;
+        return null != this.resolved;
     }
 
     /**
      * 解決済み変数使用を返す
      */
     @Override
-    public final EntityUsageInfo getResolvedEntityUsage() {
+    public final T getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
         }
 
-        return this.resolvedInfo;
+        return this.resolved;
     }
 
     /**
@@ -87,6 +88,6 @@ public abstract class UnresolvedVariableUsageInfo extends UnresolvedEntityUsageI
     /**
      * 解決済み変数使用を保存するための変数
      */
-    protected EntityUsageInfo resolvedInfo;
+    protected T resolved;
 
 }

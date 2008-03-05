@@ -37,7 +37,7 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
     }
 
     @Override
-    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+    public EntityUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -49,7 +49,7 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedEntityUsage();
+            return this.getResolved();
         }
 
         //　位置情報を取得
@@ -69,7 +69,7 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
 
         final ClassTypeInfo referenceType = new ClassTypeInfo(referencedClass);
         for (final UnresolvedTypeInfo unresolvedTypeArgument : this.getTypeArguments()) {
-            final TypeInfo typeArgument = unresolvedTypeArgument.resolveType(usingClass,
+            final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             referenceType.addTypeArgument(typeArgument);
         }

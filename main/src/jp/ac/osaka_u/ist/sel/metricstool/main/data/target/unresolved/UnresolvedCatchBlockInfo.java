@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
@@ -9,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -26,13 +26,14 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
      * 
      * @param ownerTryBlock 対応するtry文
      */
-    public UnresolvedCatchBlockInfo(final UnresolvedTryBlockInfo ownerTryBlock, final UnresolvedLocalSpaceInfo<?> outerSpace) {
+    public UnresolvedCatchBlockInfo(final UnresolvedTryBlockInfo ownerTryBlock,
+            final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
 
-        if(null == ownerTryBlock) {
+        if (null == ownerTryBlock) {
             throw new IllegalArgumentException("ownerTryBlock is null");
         }
-        
+
         this.ownerTryBlock = ownerTryBlock;
     }
 
@@ -46,7 +47,7 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
      * @param methodInfoManger 用いるメソッドマネージャ
      */
     @Override
-    public CatchBlockInfo resolveUnit(final TargetClassInfo usingClass,
+    public CatchBlockInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -59,13 +60,13 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedUnit();
+            return this.getResolved();
         }
 
         // この catch 節が属する try 文を取得
         final UnresolvedTryBlockInfo unresolvedOwnerTryBlock = this.getOwnerTryBlock();
-        final TryBlockInfo ownerTryBlock = unresolvedOwnerTryBlock.resolveUnit(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final TryBlockInfo ownerTryBlock = unresolvedOwnerTryBlock.resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
 
         // この catchブロックの位置情報を取得
         final int fromLine = this.getFromLine();
@@ -73,23 +74,23 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolvedUnit();
-        
+        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolved();
+
         //　解決済み catchブロックオブジェクトを作成
-        this.resolvedInfo = new CatchBlockInfo(usingClass, usingMethod, outerSpace, fromLine, fromColumn,
-                toLine, toColumn, ownerTryBlock);
+        this.resolvedInfo = new CatchBlockInfo(usingClass, usingMethod, outerSpace, fromLine,
+                fromColumn, toLine, toColumn, ownerTryBlock);
 
         //　内部ブロック情報を解決し，解決済みcatchブロックオブジェクトに追加
-        for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
-            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
+        for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
+            final StatementInfo statement = unresolvedStatement.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addInnerBlock(innerBlock);
+            this.resolvedInfo.addStatement(statement);
         }
 
         // ローカル変数情報を解決し，解決済みcatchブロックオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolveUnit(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
 

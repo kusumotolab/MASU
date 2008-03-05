@@ -9,6 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SimpleBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -37,7 +38,7 @@ public final class UnresolvedSimpleBlockInfo extends UnresolvedBlockInfo<SimpleB
      * @param methodInfoManger 用いるメソッドマネージャ
      */
     @Override
-    public SimpleBlockInfo resolveUnit(final TargetClassInfo usingClass,
+    public SimpleBlockInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -50,7 +51,7 @@ public final class UnresolvedSimpleBlockInfo extends UnresolvedBlockInfo<SimpleB
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedUnit();
+            return this.getResolved();
         }
 
         // この単純ブロックの位置情報を取得
@@ -59,21 +60,21 @@ public final class UnresolvedSimpleBlockInfo extends UnresolvedBlockInfo<SimpleB
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolvedUnit();
+        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolved();
 
         this.resolvedInfo = new SimpleBlockInfo(usingClass, usingMethod, outerSpace, fromLine,
                 fromColumn, toLine, toColumn);
 
         //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
-        for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
-            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
+        for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
+            final StatementInfo statement = unresolvedStatement.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addInnerBlock(innerBlock);
-        }
+            this.resolvedInfo.addStatement(statement);
+        }        
 
         // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolveUnit(usingClass,
+            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }

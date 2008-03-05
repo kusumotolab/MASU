@@ -43,7 +43,7 @@ public final class UnresolvedNullUsageInfo extends UnresolvedEntityUsageInfo {
      * @return 名前解決された使用情報
      */
     @Override
-    public EntityUsageInfo getResolvedEntityUsage() {
+    public EntityUsageInfo getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
@@ -58,7 +58,7 @@ public final class UnresolvedNullUsageInfo extends UnresolvedEntityUsageInfo {
      * @return 解決済みの使用情報
      */
     @Override
-    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+    public EntityUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -70,7 +70,7 @@ public final class UnresolvedNullUsageInfo extends UnresolvedEntityUsageInfo {
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedEntityUsage();
+            return this.getResolved();
         }
 
         // 使用位置を取得

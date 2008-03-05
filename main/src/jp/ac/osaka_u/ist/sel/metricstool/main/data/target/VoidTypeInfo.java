@@ -54,7 +54,7 @@ public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo {
      * 
      * @return 自分自身を返す
      */
-    public TypeInfo getResolvedType() {
+    public TypeInfo getResolved() {
         return this;
     }
 
@@ -68,7 +68,7 @@ public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo {
      * @param methodInfoManager 用いるメソッドマネージャ
      * @return 解決済みvoid情報
      */
-    public TypeInfo resolveType(final TargetClassInfo usingClass,
+    public TypeInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
         return this;

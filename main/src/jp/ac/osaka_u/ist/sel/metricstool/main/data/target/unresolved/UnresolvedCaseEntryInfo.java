@@ -1,13 +1,13 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SwitchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -25,9 +25,10 @@ public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> 
      * 
      * @param ownerSwitchBlock
      */
-    public UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock, final UnresolvedLocalSpaceInfo<?> outerSpace) {
+    public UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock,
+            final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
-        if(null == ownerSwitchBlock) {
+        if (null == ownerSwitchBlock) {
             throw new IllegalArgumentException("ownerSwitchBlock is null");
         }
 
@@ -45,7 +46,7 @@ public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> 
      * @param methodInfoManger 用いるメソッドマネージャ
      */
     @Override
-    public CaseEntryInfo resolveUnit(final TargetClassInfo usingClass,
+    public CaseEntryInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -58,12 +59,12 @@ public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> 
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedUnit();
+            return this.getResolved();
         }
 
         // この case エントリが属する switch 文を取得
         final UnresolvedSwitchBlockInfo unresolvedOwnerSwitchBlock = this.getOwnerSwitchBlock();
-        final SwitchBlockInfo ownerSwitchBlock = unresolvedOwnerSwitchBlock.resolveUnit(usingClass,
+        final SwitchBlockInfo ownerSwitchBlock = unresolvedOwnerSwitchBlock.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         // break 文の有無を取得
@@ -79,17 +80,17 @@ public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> 
         this.resolvedInfo = new CaseEntryInfo(usingClass, usingMethod, ownerSwitchBlock,
                 breakStatement, fromLine, fromColumn, toLine, toColumn);
 
-        //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
-        for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
-            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
+        //　直内の未解決文情報を解決し，解決済みcaseエントリオブジェクトに追加
+        for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
+            final StatementInfo statement = unresolvedStatement.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addInnerBlock(innerBlock);
+            this.resolvedInfo.addStatement(statement);
         }
 
         // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolveUnit(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
 

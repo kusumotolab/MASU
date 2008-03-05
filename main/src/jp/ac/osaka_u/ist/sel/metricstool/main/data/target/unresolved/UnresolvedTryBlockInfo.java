@@ -4,7 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import java.util.HashSet;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
@@ -13,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -30,7 +30,7 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
      */
     public UnresolvedTryBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
-        
+
         this.sequentCatchBlocks = new HashSet<UnresolvedCatchBlockInfo>();
         this.sequentFinallyBlock = null;
     }
@@ -45,7 +45,7 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
      * @param methodInfoManger 用いるメソッドマネージャ
      */
     @Override
-    public TryBlockInfo resolveUnit(final TargetClassInfo usingClass,
+    public TryBlockInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -58,7 +58,7 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedUnit();
+            return this.getResolved();
         }
 
         // この for エントリの位置情報を取得
@@ -67,37 +67,37 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolvedUnit();
-        
-        this.resolvedInfo = new TryBlockInfo(usingClass, usingMethod, outerSpace, fromLine, fromColumn, toLine,
-                toColumn);
+        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolved();
+
+        this.resolvedInfo = new TryBlockInfo(usingClass, usingMethod, outerSpace, fromLine,
+                fromColumn, toLine, toColumn);
 
         // 対応するfinally節を解決
         if (this.hasFinallyBlock()) {
             final UnresolvedFinallyBlockInfo unresolvedFinallyBlock = this.getSequentFinallyBlock();
-            final FinallyBlockInfo finallyBlock = unresolvedFinallyBlock.resolveUnit(usingClass,
+            final FinallyBlockInfo finallyBlock = unresolvedFinallyBlock.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.setSequentFinallyBlock(finallyBlock);
         }
 
         // 対応するcatch節を解決し，解決済みtryブロックオブジェクトに追加
         for (final UnresolvedCatchBlockInfo unresolvedCatchBlock : this.getSequentCatchBlocks()) {
-            final CatchBlockInfo catchBlock = unresolvedCatchBlock.resolveUnit(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            final CatchBlockInfo catchBlock = unresolvedCatchBlock.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addSequentCatchBlock(catchBlock);
         }
 
         //　内部ブロック情報を解決し，解決済みtryブロックオブジェクトに追加
-        for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
-            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
+        for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
+            final StatementInfo statement = unresolvedStatement.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addInnerBlock(innerBlock);
+            this.resolvedInfo.addStatement(statement);
         }
 
         // ローカル変数情報を解決し，解決済みtryブロックオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolveUnit(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
 

@@ -11,6 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -42,7 +43,7 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
      * @param methodInfoManger 用いるメソッドマネージャ
      */
     @Override
-    public IfBlockInfo resolveUnit(final TargetClassInfo usingClass,
+    public IfBlockInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -55,13 +56,13 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedUnit();
+            return this.getResolved();
         }
 
         // この if文 の条件節を解決する
         final UnresolvedConditionalClauseInfo unresolvedConditionalClause = this
                 .getConditionalClause();
-        final ConditionalClauseInfo conditionalClause = unresolvedConditionalClause.resolveUnit(
+        final ConditionalClauseInfo conditionalClause = unresolvedConditionalClause.resolve(
                 usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         // この if文の位置情報を取得
@@ -70,7 +71,7 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolvedUnit();
+        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolved();
 
         this.resolvedInfo = new IfBlockInfo(usingClass, usingMethod, conditionalClause, outerSpace,
                 fromLine, fromColumn, toLine, toColumn);
@@ -78,21 +79,21 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
         // もしelseブロックがある場合は解決する
         if (this.hasElseBlock()) {
             final UnresolvedElseBlockInfo unresolvedElseBlockInfo = this.getSequentElseBlock();
-            final ElseBlockInfo sequentBlockInfo = unresolvedElseBlockInfo.resolveUnit(usingClass,
+            final ElseBlockInfo sequentBlockInfo = unresolvedElseBlockInfo.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.setSequentElseBlock(sequentBlockInfo);
         }
 
         //　内部ブロック情報を解決し，解決済みifブロックオブジェクトに追加
-        for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
-            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
+        for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
+            final StatementInfo statement = unresolvedStatement.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addInnerBlock(innerBlock);
-        }
+            this.resolvedInfo.addStatement(statement);
+        }        
 
         // ローカル変数情報を解決し，解決済みifブロックオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolveUnit(usingClass,
+            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }

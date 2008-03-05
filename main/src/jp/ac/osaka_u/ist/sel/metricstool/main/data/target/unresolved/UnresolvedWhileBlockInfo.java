@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
@@ -9,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.WhileBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -39,7 +39,7 @@ public final class UnresolvedWhileBlockInfo extends UnresolvedConditionalBlockIn
      * @param methodInfoManger 用いるメソッドマネージャ
      */
     @Override
-    public WhileBlockInfo resolveUnit(final TargetClassInfo usingClass,
+    public WhileBlockInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -52,13 +52,13 @@ public final class UnresolvedWhileBlockInfo extends UnresolvedConditionalBlockIn
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedUnit();
+            return this.getResolved();
         }
 
         // この while文 の条件節を解決する
         final UnresolvedConditionalClauseInfo unresolvedConditionalClause = this
                 .getConditionalClause();
-        final ConditionalClauseInfo conditionalClause = unresolvedConditionalClause.resolveUnit(
+        final ConditionalClauseInfo conditionalClause = unresolvedConditionalClause.resolve(
                 usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         // この while文の位置情報を取得
@@ -67,22 +67,22 @@ public final class UnresolvedWhileBlockInfo extends UnresolvedConditionalBlockIn
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolvedUnit();
+        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolved();
 
         this.resolvedInfo = new WhileBlockInfo(usingClass, usingMethod, conditionalClause,
                 outerSpace, fromLine, fromColumn, toLine, toColumn);
 
-        //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
-        for (final UnresolvedBlockInfo<?> unresolvedInnerBlock : this.getInnerBlocks()) {
-            final BlockInfo innerBlock = unresolvedInnerBlock.resolveUnit(usingClass, usingMethod,
+        //　内部の未解決ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
+        for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
+            final StatementInfo statement = unresolvedStatement.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addInnerBlock(innerBlock);
+            this.resolvedInfo.addStatement(statement);
         }
 
         // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolveUnit(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
 

@@ -18,21 +18,22 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author kou-tngt, higo
  * @see UnresolvedEntityUsageInfo
  */
-public final class UnresolvedArrayElementUsageInfo extends UnresolvedEntityUsageInfo {
+public final class UnresolvedArrayElementUsageInfo extends
+        UnresolvedEntityUsageInfo<ArrayElementUsageInfo> {
 
     /**
      * 要素が参照された配列の型を与える.
      * 
      * @param ownerArrayType 要素が参照された配列の型
      */
-    public UnresolvedArrayElementUsageInfo(final UnresolvedEntityUsageInfo ownerArrayType) {
-        
+    public UnresolvedArrayElementUsageInfo(final UnresolvedEntityUsageInfo<?> ownerArrayType) {
+
         if (null == ownerArrayType) {
             throw new NullPointerException("ownerArrayType is null.");
         }
 
         this.ownerArrayType = ownerArrayType;
-        this.resolvedInfo = null;
+        this.resolved = null;
     }
 
     /**
@@ -46,7 +47,7 @@ public final class UnresolvedArrayElementUsageInfo extends UnresolvedEntityUsage
      * @return 解決済み参照
      */
     @Override
-    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+    public ArrayElementUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -59,7 +60,7 @@ public final class UnresolvedArrayElementUsageInfo extends UnresolvedEntityUsage
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedEntityUsage();
+            return this.getResolved();
         }
 
         //　位置情報を取得
@@ -69,9 +70,9 @@ public final class UnresolvedArrayElementUsageInfo extends UnresolvedEntityUsage
         final int toColumn = this.getToColumn();
 
         // 要素使用がくっついている未定義型を取得
-        final UnresolvedEntityUsageInfo unresolvedOwnerUsage = this.getOwnerArrayType();
-        EntityUsageInfo ownerUsage = unresolvedOwnerUsage.resolveEntityUsage(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final UnresolvedEntityUsageInfo<?> unresolvedOwnerUsage = this.getOwnerArrayType();
+        EntityUsageInfo ownerUsage = unresolvedOwnerUsage.resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
         assert ownerUsage != null : "resolveEntityUsage returned null!";
 
         // 未解決型の名前解決ができなかった場合
@@ -101,14 +102,14 @@ public final class UnresolvedArrayElementUsageInfo extends UnresolvedEntityUsage
 
             // 親が特定できない場合も配列の要素使用を作成して返す
             // もしかすると，UnknownEntityUsageInfoを返す方が適切かもしれない
-            this.resolvedInfo = new ArrayElementUsageInfo(ownerUsage, fromLine, fromColumn, toLine,
+            this.resolved = new ArrayElementUsageInfo(ownerUsage, fromLine, fromColumn, toLine,
                     toColumn);
-            return this.resolvedInfo;
+            return this.resolved;
         }
 
-        this.resolvedInfo = new ArrayElementUsageInfo(ownerUsage, fromLine, fromColumn, toLine,
+        this.resolved = new ArrayElementUsageInfo(ownerUsage, fromLine, fromColumn, toLine,
                 toColumn);
-        return this.resolvedInfo;
+        return this.resolved;
     }
 
     /**
@@ -118,7 +119,7 @@ public final class UnresolvedArrayElementUsageInfo extends UnresolvedEntityUsage
      */
     @Override
     public boolean alreadyResolved() {
-        return null != this.resolvedInfo;
+        return null != this.resolved;
     }
 
     /**
@@ -128,13 +129,13 @@ public final class UnresolvedArrayElementUsageInfo extends UnresolvedEntityUsage
      * @throws NotResolvedException 未解決状態でこのメソッドが呼ばれた場合にスローされる
      */
     @Override
-    public EntityUsageInfo getResolvedEntityUsage() {
+    public ArrayElementUsageInfo getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
         }
 
-        return this.resolvedInfo;
+        return this.resolved;
     }
 
     /**
@@ -142,17 +143,17 @@ public final class UnresolvedArrayElementUsageInfo extends UnresolvedEntityUsage
      * 
      * @return 要素が参照された配列の型
      */
-    public UnresolvedEntityUsageInfo getOwnerArrayType() {
+    public UnresolvedEntityUsageInfo<?> getOwnerArrayType() {
         return this.ownerArrayType;
     }
 
     /**
      * 要素が参照された配列の型
      */
-    private final UnresolvedEntityUsageInfo ownerArrayType;
+    private final UnresolvedEntityUsageInfo<?> ownerArrayType;
 
     /**
      * 解決済み配列要素使用を保存するための変数
      */
-    private EntityUsageInfo resolvedInfo;
+    private ArrayElementUsageInfo resolved;
 }

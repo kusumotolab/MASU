@@ -21,7 +21,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake, higo
  *
  */
-public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo {
+public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<ConstructorCallInfo> {
 
     /**
      * コンストラクタ呼び出しが実行される参照型と名前を与えてオブジェクトを初期化
@@ -38,7 +38,7 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo {
     }
 
     @Override
-    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+    public ConstructorCallInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -51,7 +51,7 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo {
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedEntityUsage();
+            return this.getResolved();
         }
 
         //　位置情報を取得
@@ -65,17 +65,17 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo {
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         //　コンストラクタの型を解決
-        final TypeInfo referenceType = this.getReferenceType().resolveType(usingClass, usingMethod,
+        final TypeInfo referenceType = this.getReferenceType().resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         if (!(referenceType instanceof ReferenceTypeInfo)) {
             assert false : "Error handling must be inserted!";
         }
 
-        this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType, fromLine,
+        this.resolved = new ConstructorCallInfo((ReferenceTypeInfo) referenceType, fromLine,
                 fromColumn, toLine, toColumn);
         // TODO 型パラメータの情報を追加
-        ((ConstructorCallInfo) this.resolvedInfo).addParameters(actualParameters);
-        return this.resolvedInfo;
+        this.resolved.addParameters(actualParameters);
+        return this.resolved;
     }
 
     public UnresolvedReferenceTypeInfo getReferenceType() {

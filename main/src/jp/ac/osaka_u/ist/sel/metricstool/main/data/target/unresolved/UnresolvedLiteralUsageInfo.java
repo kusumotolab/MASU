@@ -32,7 +32,7 @@ public final class UnresolvedLiteralUsageInfo extends UnresolvedEntityUsageInfo 
     }
 
     @Override
-    public final EntityUsageInfo getResolvedEntityUsage() {
+    public final EntityUsageInfo getResolved() {
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
         }
@@ -41,7 +41,7 @@ public final class UnresolvedLiteralUsageInfo extends UnresolvedEntityUsageInfo 
     }
 
     @Override
-    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+    public EntityUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -54,7 +54,7 @@ public final class UnresolvedLiteralUsageInfo extends UnresolvedEntityUsageInfo 
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedEntityUsage();
+            return this.getResolved();
         }
 
         // 使用位置を取得

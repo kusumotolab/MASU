@@ -64,7 +64,7 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
      * @return 名前解決された情報
      * @throws NotResolvedException
      */
-    public final TypeInfo getResolvedType() {
+    public final TypeInfo getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
@@ -84,7 +84,7 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
      * 
      * @return 解決済みのエンティティ
      */
-    public TypeInfo resolveType(final TargetClassInfo usingClass,
+    public TypeInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -96,7 +96,7 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
 
         //　型パラメータの所有ユニットを解決
         final UnresolvedUnitInfo<?> unresolvedOwnerUnit = this.getOwnerUnit();
-        final UnitInfo ownerUnit = unresolvedOwnerUnit.resolveUnit(usingClass, usingMethod,
+        final UnitInfo ownerUnit = unresolvedOwnerUnit.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
         final String name = this.getName();
@@ -105,7 +105,7 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
         if (this.hasExtendsType()) {
 
             final UnresolvedTypeInfo unresolvedExtendsType = this.getExtendsType();
-            final TypeInfo extendsType = unresolvedExtendsType.resolveType(usingClass, usingMethod,
+            final TypeInfo extendsType = unresolvedExtendsType.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
 
             this.resolvedInfo = new TypeParameterInfo(ownerUnit, name, index, extendsType);

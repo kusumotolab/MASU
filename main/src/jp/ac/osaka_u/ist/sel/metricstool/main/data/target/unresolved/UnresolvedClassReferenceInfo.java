@@ -98,7 +98,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
      * @throws NotResolvedException 解決されていない場合にスローされる
      */
     @Override
-    public EntityUsageInfo getResolvedEntityUsage() {
+    public EntityUsageInfo getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
@@ -108,7 +108,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
     }
 
     @Override
-    public EntityUsageInfo resolveEntityUsage(final TargetClassInfo usingClass,
+    public EntityUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -120,7 +120,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedEntityUsage();
+            return this.getResolved();
         }
 
         //　位置情報を取得
@@ -134,7 +134,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
         if (this.hasOwnerReference()) {
 
             final UnresolvedClassReferenceInfo unresolvedClassReference = this.getOwnerUsage();
-            EntityUsageInfo classReference = unresolvedClassReference.resolveEntityUsage(
+            EntityUsageInfo classReference = unresolvedClassReference.resolve(
                     usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             assert null != classReference : "null is returned!";
 

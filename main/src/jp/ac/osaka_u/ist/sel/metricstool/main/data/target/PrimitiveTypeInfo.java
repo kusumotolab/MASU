@@ -228,7 +228,7 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
      * 
      * @return 自分自身を返す
      */
-    public TypeInfo getResolvedType() {
+    public TypeInfo getResolved() {
         return this;
     }
 
@@ -243,7 +243,7 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
      * 
      * @return 解決済みの型（自分自身）
      */
-    public TypeInfo resolveType(final TargetClassInfo usingClass,
+    public TypeInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
         return this;

@@ -25,7 +25,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFieldInfo, UnresolvedClassInfo> implements
+public final class UnresolvedFieldInfo extends
+        UnresolvedVariableInfo<TargetFieldInfo, UnresolvedClassInfo> implements
         VisualizableSetting, MemberSetting {
 
     /**
@@ -36,8 +37,8 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
      * @param definitionClass フィールドを定義しているクラス
      */
     public UnresolvedFieldInfo(final String name, final UnresolvedTypeInfo type,
-            final UnresolvedClassInfo definitionClass, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+            final UnresolvedClassInfo definitionClass, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
         super(name, type, definitionClass, fromLine, fromColumn, toLine, toColumn);
 
@@ -56,7 +57,7 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
     }
 
     @Override
-    public TargetFieldInfo resolveUnit(final TargetClassInfo usingClass,
+    public TargetFieldInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -67,14 +68,14 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
         }
 
         if (this.alreadyResolved()) {
-            return this.getResolvedUnit();
+            return this.getResolved();
         }
 
         // 修飾子，名前，型，可視性，インスタンスメンバーかどうかを取得
         final Set<ModifierInfo> modifiers = this.getModifiers();
         final String fieldName = this.getName();
         final UnresolvedTypeInfo unresolvedFieldType = this.getType();
-        TypeInfo fieldType = unresolvedFieldType.resolveType(usingClass, null, classInfoManager,
+        TypeInfo fieldType = unresolvedFieldType.resolve(usingClass, null, classInfoManager,
                 fieldInfoManager, null);
         assert fieldType != null : "resolveTypeInfo returned null!";
         if (fieldType instanceof UnknownTypeInfo) {
@@ -85,7 +86,7 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
                 fieldType = new ClassTypeInfo(classInfo);
                 for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedFieldType)
                         .getTypeArguments()) {
-                    final TypeInfo typeArgument = unresolvedTypeArgument.resolveType(usingClass,
+                    final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                             usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
                     ((ClassTypeInfo) fieldType).addTypeArgument(typeArgument);
                 }
@@ -97,8 +98,8 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
                         .getDimension();
-                final TypeInfo elementType = unresolvedElementType.resolveType(usingClass,
-                        usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                final TypeInfo elementType = unresolvedElementType.resolve(usingClass, usingMethod,
+                        classInfoManager, fieldInfoManager, methodInfoManager);
                 fieldType = ArrayTypeInfo.getType(elementType, dimension);
 
             } else {

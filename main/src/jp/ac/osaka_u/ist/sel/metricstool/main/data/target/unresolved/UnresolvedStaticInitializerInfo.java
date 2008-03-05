@@ -31,13 +31,13 @@ public class UnresolvedStaticInitializerInfo extends UnresolvedLocalSpaceInfo {
     }
 
     @Override
-    public UnitInfo getResolvedUnit() {
+    public UnitInfo getResolved() {
         // TODO 自動生成されたメソッド・スタブ
         return null;
     }
 
     @Override
-    public UnitInfo resolveUnit(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
+    public UnitInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager) {
         // TODO 自動生成されたメソッド・スタブ

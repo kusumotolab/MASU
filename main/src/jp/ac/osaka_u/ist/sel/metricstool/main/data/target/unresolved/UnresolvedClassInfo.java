@@ -501,7 +501,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * @throws NotResolvedException 解決されていない場合にスローされる
      */
     @Override
-    public TargetClassInfo getResolvedUnit() {
+    public TargetClassInfo getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
@@ -530,7 +530,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * @param methodInfoManger 用いるメソッドマネージャ
      */
     @Override
-    public TargetClassInfo resolveUnit(final TargetClassInfo usingClass,
+    public TargetClassInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -542,7 +542,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
-            return this.getResolvedUnit();
+            return this.getResolved();
         }
 
         // 修飾子，完全限定名，行数，可視性，インスタンスメンバーかどうかを取得

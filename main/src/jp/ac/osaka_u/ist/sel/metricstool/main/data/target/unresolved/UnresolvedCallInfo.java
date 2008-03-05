@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
@@ -29,16 +30,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake, higo
  *
  */
-public abstract class UnresolvedCallInfo extends UnresolvedEntityUsageInfo {
+public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedEntityUsageInfo<T> {
 
     public UnresolvedCallInfo() {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
-        this.parameterTypes = new LinkedList<UnresolvedEntityUsageInfo>();
+        this.parameterTypes = new LinkedList<UnresolvedEntityUsageInfo<?>>();
 
-        this.resolvedInfo = null;
+        this.resolved = null;
 
     }
 
@@ -49,7 +50,7 @@ public abstract class UnresolvedCallInfo extends UnresolvedEntityUsageInfo {
      */
     @Override
     public final boolean alreadyResolved() {
-        return null != this.resolvedInfo;
+        return null != this.resolved;
     }
 
     /**
@@ -59,13 +60,13 @@ public abstract class UnresolvedCallInfo extends UnresolvedEntityUsageInfo {
      * @throw 解決されていない場合にスローされる
      */
     @Override
-    public final EntityUsageInfo getResolvedEntityUsage() {
+    public final T getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
         }
 
-        return this.resolvedInfo;
+        return this.resolved;
     }
 
     /**
@@ -88,7 +89,7 @@ public abstract class UnresolvedCallInfo extends UnresolvedEntityUsageInfo {
      * 
      * @param typeInfo
      */
-    public final void addParameter(final UnresolvedEntityUsageInfo typeInfo) {
+    public final void addParameter(final UnresolvedEntityUsageInfo<?> typeInfo) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -104,7 +105,7 @@ public abstract class UnresolvedCallInfo extends UnresolvedEntityUsageInfo {
      * 
      * @return 引数の List
      */
-    public final List<UnresolvedEntityUsageInfo> getParameters() {
+    public final List<UnresolvedEntityUsageInfo<?>> getParameters() {
         return Collections.unmodifiableList(this.parameterTypes);
     }
 
@@ -129,10 +130,10 @@ public abstract class UnresolvedCallInfo extends UnresolvedEntityUsageInfo {
         //　解決済み実引数を格納するための変数
         final List<EntityUsageInfo> parameters = new LinkedList<EntityUsageInfo>();
 
-        for (final UnresolvedEntityUsageInfo unresolvedParameter : this.getParameters()) {
+        for (final UnresolvedEntityUsageInfo<?> unresolvedParameter : this.getParameters()) {
 
-            EntityUsageInfo parameter = unresolvedParameter.resolveEntityUsage(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            EntityUsageInfo parameter = unresolvedParameter.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
 
             assert parameter != null : "resolveEntityUsage returned null!";
 
@@ -147,9 +148,8 @@ public abstract class UnresolvedCallInfo extends UnresolvedEntityUsageInfo {
                     final ClassTypeInfo referenceType = new ClassTypeInfo(externalClassInfo);
                     for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedParameter)
                             .getTypeArguments()) {
-                        final TypeInfo typeArgument = unresolvedTypeArgument.resolveType(
-                                usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                                methodInfoManager);
+                        final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
+                                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
                         referenceType.addTypeArgument(typeArgument);
                     }
 
@@ -180,12 +180,12 @@ public abstract class UnresolvedCallInfo extends UnresolvedEntityUsageInfo {
     /**
      * 引数を保存するための変数
      */
-    protected List<UnresolvedEntityUsageInfo> parameterTypes;
+    protected List<UnresolvedEntityUsageInfo<?>> parameterTypes;
 
     /**
      * 解決済みメソッド呼び出し情報を保存するための変数
      */
-    protected EntityUsageInfo resolvedInfo;
+    protected T resolved;
 
     /**
      * エラーメッセージ出力用のプリンタ

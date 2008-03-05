@@ -9,7 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  */
-public abstract class BlockInfo extends LocalSpaceInfo implements Comparable<BlockInfo> {
+public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo {
 
     /**
      * 位置情報を与えて初期化
@@ -22,8 +22,8 @@ public abstract class BlockInfo extends LocalSpaceInfo implements Comparable<Blo
      * @param toColumn 終了列
      */
     BlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
-            final LocalSpaceInfo outerSpace,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final LocalSpaceInfo outerSpace, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
         super(ownerClass, fromLine, fromColumn, toLine, toColumn);
 
@@ -36,7 +36,8 @@ public abstract class BlockInfo extends LocalSpaceInfo implements Comparable<Blo
         this.outerSpace = outerSpace;
     }
 
-    public final int compareTo(BlockInfo o) {
+    @Override
+    public final int compareTo(StatementInfo o) {
 
         if (null == o) {
             throw new NullPointerException();
@@ -99,12 +100,12 @@ public abstract class BlockInfo extends LocalSpaceInfo implements Comparable<Blo
     public final LocalSpaceInfo getOuterSpace() {
         return this.outerSpace;
     }
-    
+
     /**
      * このブロックを所有するメソッドを保存するための変数
      */
     private final CallableUnitInfo ownerMethod;
-    
+
     /**
      * このブロックを直接所有するローカル空間を保存するための変数
      */
