@@ -30,13 +30,6 @@ public class FieldOrMethodElement extends IdentifierElement {
         return null;
     }
 
-    /**
-     * ‚±‚ÌƒNƒ‰ƒX‚ªŠi”[‚·‚é
-     */
-    public UnresolvedEntityUsageInfo getUsage() {
-        return null;
-    }
-
     @Override
     public String[] getQualifiedName() {
         throw new UnsupportedOperationException();

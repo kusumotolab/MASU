@@ -35,14 +35,16 @@ public class MethodBuilder extends CallableUnitBuilder<UnresolvedMethodInfo>{
     }
     
     @Override
-    protected UnresolvedMethodInfo startUnitDefinition(AstVisitEvent triggerEvent) {
-        UnresolvedMethodInfo method = super.startUnitDefinition(triggerEvent);
+    protected UnresolvedMethodInfo startUnitDefinition(final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
+        UnresolvedMethodInfo method = super.startUnitDefinition(fromLine, fromColumn, toLine, toColumn);
         method.getOwnerClass().addDefinedMethod(method);
         return method;
     }
 
     @Override
-    protected UnresolvedMethodInfo createUnresolvedCallableUnitInfo() {
+    protected UnresolvedMethodInfo createUnresolvedCallableUnitInfo(final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
         return new UnresolvedMethodInfo(this.buildManager.getCurrentClass());
     }
         

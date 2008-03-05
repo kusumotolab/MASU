@@ -54,10 +54,11 @@ public class CommonASTWithLineNumber extends CommonAST {
         if(null == ast) {
             return;
         }
-        
+
         CommonASTWithLineNumber newAst = (CommonASTWithLineNumber) ast;
         this.updatePosition(newAst.getFromLine(), newAst.getFromColumn(), newAst.getToLine(),
                 newAst.getToColumn());
+        this.updatePosition(ast.getNextSibling());
     }
 
     public void updatePosition(final int fromLine, final int fromColumn, final int toLine,

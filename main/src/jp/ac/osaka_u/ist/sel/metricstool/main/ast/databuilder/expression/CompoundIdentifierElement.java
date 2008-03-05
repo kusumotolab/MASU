@@ -41,10 +41,6 @@ public class CompoundIdentifierElement extends IdentifierElement {
         return null;
     }
 
-    public UnresolvedEntityUsageInfo getUsage() {
-        return null;
-    }
-
     @Override
     public UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(
             final BuildDataManager buildDataManager) {

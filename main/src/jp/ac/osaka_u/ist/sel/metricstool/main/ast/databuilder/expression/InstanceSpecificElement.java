@@ -8,17 +8,23 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedN
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
-public class InstanceSpecificElement implements ExpressionElement {
+public class InstanceSpecificElement extends ExpressionElement {
 
-    public static final InstanceSpecificElement THIS = new InstanceSpecificElement(null, null);
+    public static final InstanceSpecificElement THIS = new InstanceSpecificElement();
 
     public static final InstanceSpecificElement NULL = new InstanceSpecificElement(null , new UnresolvedNullUsageInfo());
 
     private InstanceSpecificElement(UnresolvedTypeInfo type, UnresolvedEntityUsageInfo usage) {
+        // TODO 0‚Å‚È‚¢‚Ì‚ð‚¢‚ê‚é‚×‚«?
+        super(usage);
         this.type = type;
-        this.usage = usage;
     }
 
+    private InstanceSpecificElement() {
+        super();
+        this.type = null;
+    }
+    
     public static UnresolvedClassReferenceInfo getThisInstanceType(BuildDataManager buildManager) {
         return buildManager.getCurrentClass().getClassReference();
     }
@@ -27,11 +33,6 @@ public class InstanceSpecificElement implements ExpressionElement {
         return type;
     }
 
-    public UnresolvedEntityUsageInfo getUsage() {
-        return usage;
-    }
-
     private final UnresolvedTypeInfo type;
 
-    private final UnresolvedEntityUsageInfo usage;
 }

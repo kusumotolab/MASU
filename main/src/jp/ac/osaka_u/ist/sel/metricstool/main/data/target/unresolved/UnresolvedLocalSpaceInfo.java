@@ -19,8 +19,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
         UnresolvedUnitInfo<T> {
 
+    /**
+     * ˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
+     */
     public UnresolvedLocalSpaceInfo() {
-
+        
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         this.calls = new HashSet<UnresolvedCallInfo<?>>();

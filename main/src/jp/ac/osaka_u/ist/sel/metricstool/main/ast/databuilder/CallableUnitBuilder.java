@@ -70,7 +70,9 @@ public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?
         StateChangeEventType type = event.getType();
 
         if (type.equals(CALLABLE_UNIT_STATE_CHANGE.ENTER_DEF)) {
-            startUnitDefinition(event.getTrigger());
+            final AstVisitEvent trigger = event.getTrigger();
+            startUnitDefinition(trigger.getStartLine(), trigger.getStartColumn(), trigger
+                    .getEndLine(), trigger.getEndColumn());
         } else if (type.equals(CALLABLE_UNIT_STATE_CHANGE.EXIT_DEF)) {
             endUnitDefinition();
         } else if (type.equals(CALLABLE_UNIT_STATE_CHANGE.ENTER_BLOCK)) {
@@ -151,21 +153,19 @@ public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?
 
     protected abstract void registName();
 
-    protected T startUnitDefinition(AstVisitEvent triggerEvent) {
-        T callableUnit = createUnresolvedCallableUnitInfo();
+    protected T startUnitDefinition(final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
+        T callableUnit = createUnresolvedCallableUnitInfo(fromLine, fromColumn, toLine, toColumn);
 
         this.buildingUnitStack.push(callableUnit);
-        callableUnit.setFromLine(triggerEvent.getStartLine());
-        callableUnit.setFromColumn(triggerEvent.getStartColumn());
-        callableUnit.setToLine(triggerEvent.getEndLine());
-        callableUnit.setToColumn(triggerEvent.getEndColumn());
 
         buildManager.startCallableUnitDefinition(callableUnit);
 
         return callableUnit;
     }
 
-    protected abstract T createUnresolvedCallableUnitInfo();
+    protected abstract T createUnresolvedCallableUnitInfo(final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn);
 
     protected Stack<T> buildingUnitStack = new Stack<T>();
 

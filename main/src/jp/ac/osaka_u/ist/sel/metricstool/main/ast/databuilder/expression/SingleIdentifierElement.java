@@ -30,10 +30,6 @@ public class SingleIdentifierElement extends IdentifierElement {
         return null;
     }
 
-    public UnresolvedEntityUsageInfo getUsage() {
-        return null;
-    }
-
     private UnresolvedVariableUsageInfo resolveAsVariableUsage(BuildDataManager buildDataManager,
             UnresolvedVariableInfo usedVariable, boolean reference) {
         UnresolvedVariableUsageInfo usage;

@@ -6,7 +6,6 @@ import java.util.WeakHashMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLiteralUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
@@ -15,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  * @author kou-tngt
  *
  */
-public class TypeElement implements ExpressionElement {
+public class TypeElement extends ExpressionElement {
 
     public static synchronized TypeElement getInstance(final UnresolvedTypeInfo typeInfo) {
         TypeElement instance = instanceMap.get(typeInfo);
@@ -41,18 +40,17 @@ public class TypeElement implements ExpressionElement {
         return this.type;
     }
     
-    public UnresolvedEntityUsageInfo getUsage() {
-        if(this.type instanceof PrimitiveTypeInfo){
-            return new UnresolvedLiteralUsageInfo("", (PrimitiveTypeInfo) this.type);
-        }
-        return null;
-    }
-
     private TypeElement(final UnresolvedTypeInfo type) {
+        super();
+        
         if (null == type) {
             throw new NullPointerException("type is null.");
         }
         this.type = type;
+        
+        if(this.type instanceof PrimitiveTypeInfo){
+            this.usage = new UnresolvedLiteralUsageInfo("", (PrimitiveTypeInfo) this.type);
+        }
     }
 
     private final UnresolvedTypeInfo type;

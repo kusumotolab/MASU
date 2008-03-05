@@ -21,11 +21,11 @@ public class MethodCallBuilder extends ExpressionBuilder{
     protected void afterExited(AstVisitEvent event){
         AstToken token = event.getToken();
         if (token.isMethodCall()){
-            buildMethodCall();
+            buildMethodCall(event);
         }
     }
     
-    protected void buildMethodCall(){
+    protected void buildMethodCall(final AstVisitEvent event){
         ExpressionElement[] elements = getAvailableElements();
         
         if (elements.length > 0){
@@ -34,7 +34,14 @@ public class MethodCallBuilder extends ExpressionBuilder{
                 
                 callee = callee.resolveAsCalledMethod(this.buildDataManager);
                 
-                UnresolvedMethodCallInfo methodCall = new UnresolvedMethodCallInfo(callee.getOwnerUsage(),callee.getName());
+                final UnresolvedMethodCallInfo methodCall = new UnresolvedMethodCallInfo(callee.getOwnerUsage(),callee.getName());
+                // 開始位置はメソッド名の出現位置
+                methodCall.setFromLine(callee.getFromLine());
+                methodCall.setFromColumn(callee.getFromColumn());
+                // 終了位置はメソッド呼び出し式の終了位置
+                methodCall.setToLine(event.getEndLine());
+                methodCall.setToColumn(event.getEndColumn());
+                
                 for(int i=1; i < elements.length; i++){
                     ExpressionElement argment = elements[i];
                     if (argment instanceof IdentifierElement){

@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
  * @author t-miyake
  *
  */
-public class UsageElement implements ExpressionElement {
+public class UsageElement extends ExpressionElement {
 
     public static synchronized UsageElement getInstance(final UnresolvedEntityUsageInfo usageInfo) {
         UsageElement instance = instanceMap.get(usageInfo);
@@ -28,16 +28,9 @@ public class UsageElement implements ExpressionElement {
     }
 
     private UsageElement(final UnresolvedEntityUsageInfo usage) {
-        if (null == usage) {
-            throw new NullPointerException("usage is null.");
-        }
-        this.usage = usage;
+        super(usage);
     }
     
-    public UnresolvedEntityUsageInfo getUsage() {
-        return this.usage;
-    }
-
     public boolean isMemberCall() {
         return this.usage instanceof UnresolvedCallInfo;
     }
@@ -46,7 +39,5 @@ public class UsageElement implements ExpressionElement {
         return this.usage instanceof UnresolvedVariableUsageInfo;
     }
     
-    private final UnresolvedEntityUsageInfo usage;
-
     private static final Map<UnresolvedEntityUsageInfo, UsageElement> instanceMap = new WeakHashMap<UnresolvedEntityUsageInfo, UsageElement>();
 }

@@ -134,6 +134,8 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit ex
             final TUnit definitionUnit, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
 
+        super();
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == name) || (null == type) || (null == definitionUnit)) {
             throw new NullPointerException();

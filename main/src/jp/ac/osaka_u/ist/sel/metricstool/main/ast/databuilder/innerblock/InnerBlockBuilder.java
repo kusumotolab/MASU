@@ -67,7 +67,7 @@ public abstract class InnerBlockBuilder<TResolved extends BlockInfo, T extends U
         newBlock.setToLine(triggerEvent.getEndLine());
         newBlock.setToColumn(triggerEvent.getEndColumn());
         
-        newBlock.getOuterSpace().addInnerBlock(newBlock);
+        newBlock.getOuterSpace().addStatement(newBlock);
         
         startBlockDefinition(newBlock);
     }

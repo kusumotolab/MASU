@@ -6,10 +6,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedE
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
 
-public abstract class IdentifierElement implements ExpressionElement {
+public abstract class IdentifierElement extends ExpressionElement {
 
     public IdentifierElement(final String name, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
+        super(fromLine, fromColumn, toLine, toColumn);
         
         if(null == name) {
             throw new IllegalArgumentException("name is null.");
@@ -19,10 +20,6 @@ public abstract class IdentifierElement implements ExpressionElement {
         
         this.ownerUsage = null;
         
-        this.fromLine = fromLine;
-        this.fromColumn = fromColumn;
-        this.toLine = toLine;
-        this.toColumn = toColumn;
     }
 
     public String getName() {
@@ -48,33 +45,11 @@ public abstract class IdentifierElement implements ExpressionElement {
     public abstract UnresolvedEntityUsageInfo resolveReferencedEntityIfPossible(
             BuildDataManager buildDataManager);
 
-    public final int getFromLine() {
-        return this.fromLine;
-    }
-    
-    public final int getFromColumn() {
-        return this.fromColumn;
-    }
-    
-    public final int getToLine() {
-        return this.toLine;
-    }
-    
-    public final int getToColumn() {
-        return this.toColumn;
-    }
-    
     protected final String name;
     
     protected String[] qualifiedName;
     
     protected UnresolvedEntityUsageInfo ownerUsage;
 
-    protected final int fromLine;
 
-    protected final int fromColumn;
-
-    protected final int toLine;
-
-    protected final int toColumn;
 }

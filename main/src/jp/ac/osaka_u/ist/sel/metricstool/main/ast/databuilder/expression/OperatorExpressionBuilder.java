@@ -17,6 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedE
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMonominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedNullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
 
 public class OperatorExpressionBuilder extends ExpressionBuilder {
@@ -139,7 +140,14 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
 
                 if (null != type) {
                     //オペレータによってすでに結果の型が決定している
-                    resultType = new UnresolvedMonominalOperationInfo(termTypes[0], type);
+
+                    assert termTypes.length == 1
+                            && termTypes[0] instanceof UnresolvedVariableUsageInfo : "Illegal state : expression was not monominal operation";
+
+                    if (termTypes[0] instanceof UnresolvedVariableUsageInfo) {
+                        resultType = new UnresolvedMonominalOperationInfo(
+                                (UnresolvedVariableUsageInfo<?>) termTypes[0], type);
+                    }
                 } else if (token.equals(OperatorToken.ARRAY)) {
                     //配列記述子の場合は特別処理
                     UnresolvedEntityUsageInfo ownerType;

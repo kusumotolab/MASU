@@ -90,11 +90,8 @@ public class MasuAstFactory extends ASTFactory {
                     currentAST.child.setNextSibling(child);
                 }
                 
-                if(child instanceof CommonASTWithLineNumber && currentAST.root instanceof CommonASTWithLineNumber) {
-                    CommonASTWithLineNumber childAst = (CommonASTWithLineNumber) child;
-                    CommonASTWithLineNumber rootAst = (CommonASTWithLineNumber) currentAST.root;
-                    
-                    rootAst.updatePosition(childAst);
+                if(currentAST.root.getNextSibling() != child) {
+                    ((CommonASTWithLineNumber) currentAST.root).updatePosition(child);
                 }
             }
             // Make new child the current child

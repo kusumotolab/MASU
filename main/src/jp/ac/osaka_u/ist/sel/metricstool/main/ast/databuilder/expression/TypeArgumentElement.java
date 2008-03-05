@@ -1,6 +1,5 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 /**
@@ -9,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  * @author kou-tngt
  *
  */
-public class TypeArgumentElement implements ExpressionElement{
+public class TypeArgumentElement extends ExpressionElement{
 
     /**
      * 引数typeを型引数として表すインスタンスを作成する．
@@ -27,10 +26,6 @@ public class TypeArgumentElement implements ExpressionElement{
      */
     public UnresolvedTypeInfo getType() {
         return type;
-    }
-    
-    public UnresolvedEntityUsageInfo getUsage() {
-        return null;
     }
     
     /**
