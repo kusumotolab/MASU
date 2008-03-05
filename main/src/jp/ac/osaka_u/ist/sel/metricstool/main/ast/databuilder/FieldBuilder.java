@@ -25,14 +25,15 @@ public class FieldBuilder extends VariableBuilder<UnresolvedFieldInfo, Unresolve
 
     @Override
     protected UnresolvedFieldInfo buildVariable(String[] name, UnresolvedTypeInfo type,
-            ModifierInfo[] modifiers, UnresolvedClassInfo definitionClass) {
+            ModifierInfo[] modifiers, UnresolvedClassInfo definitionClass, final int startLine,
+            final int startColumn, final int endLine, final int endColumn) {
         String varName = "";
         if (name.length > 0) {
             varName = name[0];
         }
 
         if (null != definitionClass) {
-            UnresolvedFieldInfo field = new UnresolvedFieldInfo(varName, type, definitionClass);
+            UnresolvedFieldInfo field = new UnresolvedFieldInfo(varName, type, definitionClass, startLine, startColumn, endLine, endColumn);
             for (ModifierInfo modifier : modifiers) {
                 field.addModifier(modifier);
             }
@@ -51,7 +52,8 @@ public class FieldBuilder extends VariableBuilder<UnresolvedFieldInfo, Unresolve
     @Override
     protected UnresolvedClassInfo validateDefinitionSpace(
             final UnresolvedUnitInfo<? extends UnitInfo> definitionUnit) {
-        return (definitionUnit instanceof UnresolvedClassInfo) ? (UnresolvedClassInfo) definitionUnit : null;
+        return (definitionUnit instanceof UnresolvedClassInfo) ? (UnresolvedClassInfo) definitionUnit
+                : null;
     }
 
     private final ModifiersInterpriter interpriter;

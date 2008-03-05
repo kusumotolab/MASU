@@ -14,7 +14,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
 
 
-public class LocalParameterBuilder extends
+public class LocalParameterBuilder
+        extends
         VariableBuilder<UnresolvedLocalVariableInfo, UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo>> {
 
     public LocalParameterBuilder(BuildDataManager buildDataManager, ModifiersInterpriter interpriter) {
@@ -33,14 +34,16 @@ public class LocalParameterBuilder extends
 
     @Override
     protected UnresolvedLocalVariableInfo buildVariable(String[] name, UnresolvedTypeInfo type,
-            ModifierInfo[] modifiers, UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> deifnitionSpace) {
+            ModifierInfo[] modifiers,
+            UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> deifnitionSpace,
+            final int startLine, final int startColumn, final int endLine, final int endColumn) {
         String varName = "";
         if (name.length > 0) {
             varName = name[0];
         }
 
         UnresolvedLocalVariableInfo local = new UnresolvedLocalVariableInfo(varName, type,
-                deifnitionSpace);
+                deifnitionSpace, startLine, startColumn, endLine, endColumn);
         for (ModifierInfo modifier : modifiers) {
             local.addModifier(modifier);
         }
@@ -59,9 +62,9 @@ public class LocalParameterBuilder extends
     @Override
     protected UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> validateDefinitionSpace(
             UnresolvedUnitInfo<? extends UnitInfo> definitionUnit) {
-        if(definitionUnit instanceof UnresolvedBlockInfo) {
+        if (definitionUnit instanceof UnresolvedBlockInfo) {
             return (UnresolvedBlockInfo<? extends BlockInfo>) definitionUnit;
-        } else if(definitionUnit instanceof UnresolvedConditionalClauseInfo) {
+        } else if (definitionUnit instanceof UnresolvedConditionalClauseInfo) {
             return (UnresolvedConditionalClauseInfo) definitionUnit;
         } else {
             return null;

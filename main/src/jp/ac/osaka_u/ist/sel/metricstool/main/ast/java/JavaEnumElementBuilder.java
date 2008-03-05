@@ -65,17 +65,17 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
     protected void buildAnonymousClass(int startLine, int startColumn, int endLine, int endColumn) {
         if (null != buildManager && !enumClassStack.isEmpty()) {
             UnresolvedClassInfo enumClass = enumClassStack.peek();
-            
+
             final FileInfo currentFile = FileInfoManager.getInstance().getCurrentFile();
             assert null != currentFile : "Illegal state: the file information was not registered to FileInfoManager";
-            
+
             UnresolvedClassInfo enumAnonymous = new UnresolvedClassInfo(currentFile);
             int count = buildManager.getAnonymousClassCount(enumClass);
             enumAnonymous.setClassName(enumClass.getClassName()
                     + JavaAnonymousClassBuilder.JAVA_ANONYMOUSCLASS_NAME_MARKER + count);
 
-            UnresolvedClassTypeInfo superClassReference = new UnresolvedClassTypeInfo(
-                    buildManager.getAllAvaliableNames(), enumClass.getFullQualifiedName());
+            UnresolvedClassTypeInfo superClassReference = new UnresolvedClassTypeInfo(buildManager
+                    .getAllAvaliableNames(), enumClass.getFullQualifiedName());
 
             enumAnonymous.addSuperClass(superClassReference);
 
@@ -95,13 +95,9 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
             String elementName = name[0];
             UnresolvedClassInfo enumClass = enumClassStack.peek();
             UnresolvedFieldInfo element = new UnresolvedFieldInfo(elementName,
-                    UnresolvedClassTypeInfo.getInstance(enumClass), enumClass);
+                    UnresolvedClassTypeInfo.getInstance(enumClass), enumClass, startLine,
+                    startColumn, endLine, endColumn);
             modifierInterpriter.interprit(defaultModifiers, element, element);
-
-            element.setFromLine(startLine);
-            element.setFromColumn(startColumn);
-            element.setToLine(endLine);
-            element.setToColumn(endColumn);
 
             buildManager.addField(element);
             enumClass.addDefinedField(element);

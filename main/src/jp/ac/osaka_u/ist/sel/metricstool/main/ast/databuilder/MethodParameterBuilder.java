@@ -11,7 +11,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
 
 
-public class MethodParameterBuilder extends
+public class MethodParameterBuilder
+        extends
         VariableBuilder<UnresolvedParameterInfo, UnresolvedCallableUnitInfo<? extends CallableUnitInfo>> {
 
     public MethodParameterBuilder(BuildDataManager buildDataManager,
@@ -23,14 +24,17 @@ public class MethodParameterBuilder extends
     public MethodParameterBuilder(BuildDataManager buildDataManager,
             ModifiersBuilder modifiersBuilder, TypeBuilder typeBuilder, NameBuilder nameBuilder,
             ModifiersInterpriter interpriter) {
-        super(buildDataManager, new MethodParameterStateManager(), modifiersBuilder, typeBuilder, nameBuilder);
+        super(buildDataManager, new MethodParameterStateManager(), modifiersBuilder, typeBuilder,
+                nameBuilder);
 
         this.interpriter = interpriter;
     }
 
     @Override
     protected UnresolvedParameterInfo buildVariable(String[] name, UnresolvedTypeInfo type,
-            ModifierInfo[] modifiers, final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> definitionMehtod) {
+            ModifierInfo[] modifiers,
+            final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> definitionMehtod,
+            final int startLine, final int startColumn, final int endLine, final int endColumn) {
         String varName = "";
         if (name.length > 0) {
             varName = name[0];
@@ -38,7 +42,7 @@ public class MethodParameterBuilder extends
 
         final int index = buildDataManager.getCurrentParameterCount();
         UnresolvedParameterInfo parameter = new UnresolvedParameterInfo(varName, type, index,
-                definitionMehtod);
+                definitionMehtod, startLine, startColumn, endLine, endColumn);
 
         for (ModifierInfo modifier : modifiers) {
             parameter.addModifier(modifier);
@@ -58,7 +62,7 @@ public class MethodParameterBuilder extends
     @Override
     protected UnresolvedCallableUnitInfo<? extends CallableUnitInfo> validateDefinitionSpace(
             UnresolvedUnitInfo<? extends UnitInfo> definitionUnit) {
-        if(definitionUnit instanceof UnresolvedCallableUnitInfo) {
+        if (definitionUnit instanceof UnresolvedCallableUnitInfo) {
             return (UnresolvedCallableUnitInfo) definitionUnit;
         } else {
             return null;

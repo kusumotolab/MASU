@@ -39,10 +39,15 @@ public final class UnresolvedLocalVariableInfo
      * @param name 変数名
      * @param type 未解決型名
      * @param definitionSpace 宣言しているローカル空間
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
     public UnresolvedLocalVariableInfo(final String name, final UnresolvedTypeInfo type,
-            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> definitionSpace) {
-        super(name, type, definitionSpace);
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> definitionSpace,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        super(name, type, definitionSpace, fromLine, fromColumn, toLine, toColumn);
     }
 
     /**

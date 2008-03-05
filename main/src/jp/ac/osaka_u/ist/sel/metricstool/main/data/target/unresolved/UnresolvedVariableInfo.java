@@ -80,7 +80,7 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit ex
     public final Set<ModifierInfo> getModifiers() {
         return Collections.unmodifiableSet(this.modifiers);
     }
-    
+
     public final TUnit getDefinitionUnit() {
         return this.definitionUnit;
     }
@@ -125,8 +125,14 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit ex
      * @param name 変数名
      * @param type 変数の型
      * @param definitionUnit 宣言している空間
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
-    UnresolvedVariableInfo(final String name, final UnresolvedTypeInfo type, final TUnit definitionUnit) {
+    UnresolvedVariableInfo(final String name, final UnresolvedTypeInfo type,
+            final TUnit definitionUnit, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == name) || (null == type) || (null == definitionUnit)) {
@@ -137,27 +143,11 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit ex
         this.type = type;
         this.modifiers = new HashSet<ModifierInfo>();
         this.definitionUnit = definitionUnit;
-    }
 
-    /**
-     * 変数オブジェクトを初期化する．
-     * 
-     * @param 宣言している空間
-     */
-    UnresolvedVariableInfo(final TUnit definitionUnit) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        
-        if(null == definitionUnit) {
-            throw new IllegalArgumentException();
-        }
-        
-        this.name = null;
-        this.type = null;
-        this.modifiers = new HashSet<ModifierInfo>();
-        this.definitionUnit = definitionUnit;
-        
-        this.resolvedInfo = null;
+        this.setFromLine(fromLine);
+        this.setFromColumn(fromColumn);
+        this.setToLine(toLine);
+        this.setToColumn(toColumn);
     }
 
     /**
@@ -174,7 +164,7 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit ex
      * このフィールドの修飾子を保存するための変数
      */
     private Set<ModifierInfo> modifiers;
-    
+
     private final TUnit definitionUnit;
 
     /**

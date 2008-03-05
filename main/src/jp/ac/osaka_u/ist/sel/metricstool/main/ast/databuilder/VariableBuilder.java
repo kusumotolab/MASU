@@ -159,10 +159,15 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo, TUnit
      * @param type　変数の型
      * @param modifiers　変数の修飾子
      * @param definitionUnit 変数を宣言しているユニット
+     * @param startLine 変数定義部の開始行
+     * @param startColumn　変数定義部の開始列
+     * @param endLine　変数定義部の終了行
+     * @param endColumn　変数定義部の終了列
      * @return　構築した変数情報
      */
     protected abstract TVar buildVariable(final String[] name, final UnresolvedTypeInfo type,
-            final ModifierInfo[] modifiers, final TUnit definitionUnit);
+            final ModifierInfo[] modifiers, final TUnit definitionUnit, final int startLine, final int startColumn,
+            final int endLine, final int endColumn);
 
     /**
      * 変数定義が終了したときに呼び出され， {@link #buildVariable(String[], UnresolvedTypeInfo, ModifierInfo[])}
@@ -179,11 +184,8 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo, TUnit
     protected void endVariableBuild(final TUnit definitionUnit, final int startLine, final int startColumn,
             final int endLine, final int endColumn) {
         final TVar variable = this.buildVariable(this.getName(), this.getType(), this
-                .getModifiers(), definitionUnit);
-        variable.setFromLine(startLine);
-        variable.setFromColumn(startColumn);
-        variable.setToLine(endLine);
-        variable.setToColumn(endColumn);
+                .getModifiers(), definitionUnit, startLine, startColumn, endLine, endColumn);
+
         this.registBuiltData(variable);
     }
     

@@ -24,7 +24,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class UnresolvedParameterInfo extends
+public final class UnresolvedParameterInfo
+        extends
         UnresolvedVariableInfo<TargetParameterInfo, UnresolvedCallableUnitInfo<? extends CallableUnitInfo>> {
 
     /**
@@ -32,10 +33,16 @@ public final class UnresolvedParameterInfo extends
      * 
      * @param name 引数名
      * @param type 引数の型
+     * @param definitionMethod 引数を宣言しているメソッド
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
     public UnresolvedParameterInfo(final String name, final UnresolvedTypeInfo type,
-            final int index, final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> definitionMethod) {
-        super(name, type, definitionMethod);
+            final int index, final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> definitionMethod, final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        super(name, type, definitionMethod, fromLine, fromColumn, toLine, toColumn);
+
         this.index = index;
     }
 

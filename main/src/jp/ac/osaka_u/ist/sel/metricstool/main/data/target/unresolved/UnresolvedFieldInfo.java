@@ -36,9 +36,10 @@ public final class UnresolvedFieldInfo extends UnresolvedVariableInfo<TargetFiel
      * @param definitionClass フィールドを定義しているクラス
      */
     public UnresolvedFieldInfo(final String name, final UnresolvedTypeInfo type,
-            final UnresolvedClassInfo definitionClass) {
+            final UnresolvedClassInfo definitionClass, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
-        super(name, type, definitionClass);
+        super(name, type, definitionClass, fromLine, fromColumn, toLine, toColumn);
 
         if (null == definitionClass) {
             throw new NullPointerException();
