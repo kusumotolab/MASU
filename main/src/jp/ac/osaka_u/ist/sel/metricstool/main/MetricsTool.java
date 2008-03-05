@@ -90,7 +90,10 @@ import org.jargp.StringDef;
 
 import antlr.ASTFactory;
 import antlr.CommonASTWithHiddenTokens;
+import antlr.CommonHiddenStreamToken;
+import antlr.LexerSharedInputState;
 import antlr.RecognitionException;
+import antlr.TokenBuffer;
 import antlr.TokenStreamException;
 import antlr.collections.AST;
 
@@ -210,8 +213,9 @@ public class MetricsTool {
                     
                     final ASTFactory factory = new MasuAstFactory();
                     factory.setASTNodeClass(CommonASTWithLineNumber.class);
+
                     parser.setASTFactory(factory);
-    
+
                     parser.compilationUnit();
                     targetFile.setCorrectSytax(true);
 

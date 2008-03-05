@@ -12,68 +12,65 @@ import antlr.collections.AST;
  */
 public class MasuAstFactory extends ASTFactory {
 
+    
+    
+    public MasuAstFactory() {
+        super();
+
+        this.setASTNodeClass(CommonASTWithLineNumber.class);
+    }
+
+    @Override
+    public void setASTNodeClass(final Class c) {
+        if(!CommonASTWithLineNumber.class.getName().equals(c.getName())) {
+            throw new IllegalArgumentException();
+        }
+        
+        super.setASTNodeClass(c);
+    }
+
+    @Override
+    public void setASTNodeClass(final String t) {
+        if(!CommonASTWithLineNumber.class.getName().equals(t)) {
+            throw new IllegalArgumentException();
+        }
+        
+        super.setASTNodeClass(t);
+    }
+
     @Override
     public AST make(final AST[] nodes) {
 
-        if (nodes == null || nodes.length == 0) {
-            return null;
-        }
-
+        if (nodes == null || nodes.length == 0) return null;
+        
         AST root = nodes[0];
         AST tail = null;
-
-        int fromLine = 0;
-        int fromColumn = 0;
-        int toLine = 0;
-        int toColumn = 0;
-        
-        if (null != root) {
-            root.setFirstChild(null);
+        if (root != null) {
+            root.setFirstChild(null);   // don't leave any old pointers set
         }
-
-        // 子ノードを関連付けて木構造を構築
+        // link in children;
         for (int i = 1; i < nodes.length; i++) {
-
-            // nullのノードは無視
-            if (nodes[i] == null) {
-                continue;
-            }
-
-            if (null == root) {
+            if (nodes[i] == null) continue; // ignore null nodes
+            if (root == null) {
+                // Set the root and set it up for a flat list
                 root = tail = nodes[i];
-            } else if (null == tail) {
+            }
+            else if (tail == null) {
                 root.setFirstChild(nodes[i]);
                 tail = root.getFirstChild();
-            } else {
+            }
+            else {
                 tail.setNextSibling(nodes[i]);
                 tail = tail.getNextSibling();
             }
             
-            if(0 == fromLine && tail instanceof CommonASTWithLineNumber) {
-                final CommonASTWithLineNumber tailAst = (CommonASTWithLineNumber) tail;
-                fromLine = tailAst.getFromLine();
-                fromColumn = tailAst.getFromColumn();
-            }
+            ((CommonASTWithLineNumber) root).updatePosition(tail);
             
             // Chase tail to last sibling
             while (tail.getNextSibling() != null) {
                 tail = tail.getNextSibling();
             }
         }
-        
-        if(tail instanceof CommonASTWithLineNumber) {
-            final CommonASTWithLineNumber tailAst = (CommonASTWithLineNumber) tail;
-            toLine = tailAst.getToLine();
-            toColumn = tailAst.getToColumn();
-        }
-        
-        if(root instanceof CommonASTWithLineNumber) {
-            final CommonASTWithLineNumber rootAst = (CommonASTWithLineNumber) root;
-            rootAst.initializeFromPosition(fromLine, fromColumn);
-            rootAst.initializeToPosition(toLine, toColumn);
-        }
-        
-        
         return root;
     }
 
@@ -97,7 +94,7 @@ public class MasuAstFactory extends ASTFactory {
                     CommonASTWithLineNumber childAst = (CommonASTWithLineNumber) child;
                     CommonASTWithLineNumber rootAst = (CommonASTWithLineNumber) currentAST.root;
                     
-                    rootAst.initializeToPosition(childAst.getToLine(), childAst.getToColumn());
+                    rootAst.updatePosition(childAst);
                 }
             }
             // Make new child the current child

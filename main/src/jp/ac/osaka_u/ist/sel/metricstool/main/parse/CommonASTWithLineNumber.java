@@ -1,10 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.parse;
 
 
-import com.sun.xml.internal.bind.marshaller.NioEscapeHandler;
-
 import antlr.CommonAST;
+import antlr.CommonHiddenStreamToken;
 import antlr.Token;
+import antlr.collections.AST;
 
 
 public class CommonASTWithLineNumber extends CommonAST {
@@ -39,21 +39,75 @@ public class CommonASTWithLineNumber extends CommonAST {
     public void initialize(final Token tok) {
         super.initialize(tok);
 
-        this.initializeFromPosition(tok.getLine(), tok.getColumn());
-        this.initializeToPosition(tok.getLine(), tok.getColumn() + tok.getText().length());
+        this.updatePosition(tok.getLine(), tok.getColumn(), tok.getLine(), tok.getColumn()
+                + tok.getText().length());
     }
 
-    public void initializeFromPosition(final int fromLine, final int fromColumn) {
-        this.fromLine = fromLine;
-        this.fromColumn = fromColumn;
+    @Override
+    public void initialize(AST t) {
+        super.initialize(t);
+
+        this.updatePosition(t);
     }
-    
-    public void initializeToPosition(final int toLine, final int toColumn) {
-        this.toLine = toLine;
-        this.toColumn = toColumn;
+
+    public void updatePosition(final AST ast) {
+        if(null == ast) {
+            return;
+        }
+        
+        CommonASTWithLineNumber newAst = (CommonASTWithLineNumber) ast;
+        this.updatePosition(newAst.getFromLine(), newAst.getFromColumn(), newAst.getToLine(),
+                newAst.getToColumn());
     }
-    
-    
+
+    public void updatePosition(final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
+        this.updateFromPosition(fromLine, fromColumn);
+        this.updateToPosition(toLine, toColumn);
+    }
+
+    private void updateFromPosition(final int fromLine, final int fromColumn) {
+        if(0 == fromLine) {
+            return;
+            
+        }
+        
+        if (0 == this.fromLine || !this.isAhead(fromLine, fromColumn)) {
+            this.fromLine = fromLine;
+            this.fromColumn = fromColumn;
+        }
+    }
+
+    private void updateToPosition(final int toLine, final int toColumn) {
+        if(0 == toLine) {
+            return;
+        }
+        
+        if (0 == this.toLine || !this.isBehind(toLine, toColumn)) {
+            this.toLine = toLine;
+            this.toColumn = toColumn;
+        }
+    }
+
+    private boolean isAhead(final int fromLine, final int fromColumn) {
+        if (fromLine > this.getFromLine()) {
+                return true;
+        } else if (fromLine == this.getFromLine() && fromColumn > this.getFromColumn()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isBehind(final int toLine, final int toColumn) {
+        if (toLine < this.getToLine()) {
+            return true;
+        } else if (toLine == this.getToLine() && toColumn < this.getToColumn()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     private int fromLine = 0;
 
