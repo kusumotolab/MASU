@@ -5,7 +5,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -18,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake, higo
  *
  */
-public final class UnresolvedArrayTypeReferenceInfo extends UnresolvedEntityUsageInfo {
+public final class UnresolvedArrayTypeReferenceInfo extends UnresolvedEntityUsageInfo<ArrayTypeReferenceInfo> {
 
     /**
      * éQè∆Ç≥ÇÍÇƒÇ¢ÇÈñ¢âåàîzóÒå^Çó^Ç¶Çƒèâä˙âª
@@ -37,22 +36,7 @@ public final class UnresolvedArrayTypeReferenceInfo extends UnresolvedEntityUsag
     }
 
     @Override
-    public boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    @Override
-    public EntityUsageInfo getResolved() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolvedInfo;
-    }
-
-    @Override
-    public EntityUsageInfo resolve(final TargetClassInfo usingClass,
+    public ArrayTypeReferenceInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -97,5 +81,4 @@ public final class UnresolvedArrayTypeReferenceInfo extends UnresolvedEntityUsag
      */
     private final UnresolvedArrayTypeInfo referencedType;
 
-    private ArrayTypeReferenceInfo resolvedInfo;
 }

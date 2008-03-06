@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableUsageInfo;
@@ -51,10 +50,10 @@ public class UnresolvedLocalVariableUsageInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolved = new LocalVariableUsageInfo(usedVariable, reference, fromLine,
+        this.resolvedInfo = new LocalVariableUsageInfo(usedVariable, reference, fromLine,
                 fromColumn, toLine, toColumn);
 
-        return this.resolved;
+        return this.resolvedInfo;
     }
 
     public UnresolvedLocalVariableInfo getUsedVariable() {

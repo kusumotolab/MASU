@@ -37,6 +37,20 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
     }
 
     @Override
+    public final boolean equals(Object o) {
+
+        if (null == o) {
+            return false;
+        }
+
+        if (!(o instanceof BlockInfo)) {
+            return false;
+        }
+
+        return 0 == this.compareTo((BlockInfo) o);
+    }
+    
+    @Override
     public final int compareTo(StatementInfo o) {
 
         if (null == o) {
@@ -62,20 +76,6 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
         }
 
         return 0;
-    }
-
-    @Override
-    public final boolean equals(Object o) {
-
-        if (null == o) {
-            return false;
-        }
-
-        if (!(o instanceof BlockInfo)) {
-            return false;
-        }
-
-        return 0 == this.compareTo((BlockInfo) o);
     }
 
     @Override

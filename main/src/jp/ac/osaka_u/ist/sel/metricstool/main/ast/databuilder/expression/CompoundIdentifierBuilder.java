@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 
 
@@ -70,7 +71,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
                 SingleIdentifierElement rightIdentifier = (SingleIdentifierElement) right;
                 String rightName = rightIdentifier.getName();
 
-                UnresolvedEntityUsageInfo leftElementType = null;
+                UnresolvedEntityUsageInfo<? extends EntityUsageInfo> leftElementType = null;
 
                 if (left instanceof FieldOrMethodElement) {
                     IdentifierElement leftIdentifier = (IdentifierElement) left;

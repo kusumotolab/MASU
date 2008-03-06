@@ -17,8 +17,36 @@ public abstract class UnresolvedEntityUsageInfo<T extends EntityUsageInfo> imple
         this.fromColumn = 0;
         this.toLine = 0;
         this.toColumn = 0;
+        
+        this.resolvedInfo = null;
     }
 
+    /**
+     * 既に解決済みかどうかを返す．
+     * 
+     * @return 解決済みである場合は true，そうでない場合は false
+     */
+    @Override
+    public boolean alreadyResolved() {
+        return null != this.resolvedInfo;
+    }
+
+    /**
+     * 解決済みクラス参照を返す
+     * 
+     * @return 解決済みクラス参照
+     * @throws NotResolvedException 解決されていない場合にスローされる
+     */
+    @Override
+    public T getResolved() {
+
+        if (!this.alreadyResolved()) {
+            throw new NotResolvedException();
+        }
+
+        return this.resolvedInfo;
+    }
+    
     /**
      * 開始行をセットする
      * 
@@ -110,6 +138,11 @@ public abstract class UnresolvedEntityUsageInfo<T extends EntityUsageInfo> imple
         return this.toColumn;
     }
 
+    /**
+     * 解決済み情報を保存するための変数
+     */
+    protected T resolvedInfo;
+    
     /**
      * 開始行を保存するための変数
      */

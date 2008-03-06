@@ -24,33 +24,18 @@ public final class UnresolvedMonominalOperationInfo extends
     /**
      * €‚Æˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^‚ğ—^‚¦‚Ä‰Šú‰»
      * 
-     * @param term €
+     * @param operand €
      * @param type ˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^
      */
-    public UnresolvedMonominalOperationInfo(final UnresolvedEntityUsageInfo<?> term,
+    public UnresolvedMonominalOperationInfo(final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> operand,
             final PrimitiveTypeInfo type) {
 
-        if (null == term || null == type) {
+        if (null == operand || null == type) {
             throw new IllegalArgumentException("term or type is null");
         }
 
-        this.term = term;
+        this.operand = operand;
         this.type = type;
-    }
-
-    @Override
-    public boolean alreadyResolved() {
-        return null != this.resolved;
-    }
-
-    @Override
-    public MonominalOperationInfo getResolved() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolved;
     }
 
     @Override
@@ -76,14 +61,14 @@ public final class UnresolvedMonominalOperationInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final UnresolvedEntityUsageInfo<?> unresolvedTerm = this.getTerm();
+        final UnresolvedEntityUsageInfo<?> unresolvedTerm = this.getOperand();
         final EntityUsageInfo term = unresolvedTerm.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         final PrimitiveTypeInfo type = this.getResultType();
 
-        this.resolved = new MonominalOperationInfo(term, type, fromLine, fromColumn, toLine,
+        this.resolvedInfo = new MonominalOperationInfo(term, type, fromLine, fromColumn, toLine,
                 toColumn);
-        return this.resolved;
+        return this.resolvedInfo;
     }
 
     /**
@@ -91,8 +76,8 @@ public final class UnresolvedMonominalOperationInfo extends
      * 
      * @return ˆê€‰‰Z‚Ì€
      */
-    public UnresolvedEntityUsageInfo<?> getTerm() {
-        return this.term;
+    public UnresolvedEntityUsageInfo<? extends EntityUsageInfo> getOperand() {
+        return this.operand;
     }
 
     /**
@@ -107,12 +92,11 @@ public final class UnresolvedMonominalOperationInfo extends
     /**
      * ˆê€‰‰Z‚Ì€
      */
-    private final UnresolvedEntityUsageInfo<?> term;
+    private final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> operand;
 
     /**
      * ˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^
      */
     private final PrimitiveTypeInfo type;
 
-    private MonominalOperationInfo resolved;
 }

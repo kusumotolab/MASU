@@ -71,11 +71,11 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
             assert false : "Error handling must be inserted!";
         }
 
-        this.resolved = new ConstructorCallInfo((ReferenceTypeInfo) referenceType, fromLine,
+        this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType, fromLine,
                 fromColumn, toLine, toColumn);
         // TODO Œ^ƒpƒ‰ƒ[ƒ^‚Ìî•ñ‚ð’Ç‰Á
-        this.resolved.addParameters(actualParameters);
-        return this.resolved;
+        this.resolvedInfo.addParameters(actualParameters);
+        return this.resolvedInfo;
     }
 
     public UnresolvedReferenceTypeInfo getReferenceType() {

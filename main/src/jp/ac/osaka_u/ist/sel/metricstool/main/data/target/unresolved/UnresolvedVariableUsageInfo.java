@@ -48,29 +48,6 @@ public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<?>
     }
 
     /**
-     * この未解決変数使用が既に解決されているかどうかを返す
-     * 
-     * @return 既に解決されている場合は true, そうでない場合は false
-     */
-    @Override
-    public final boolean alreadyResolved() {
-        return null != this.resolved;
-    }
-
-    /**
-     * 解決済み変数使用を返す
-     */
-    @Override
-    public final T getResolved() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolved;
-    }
-
-    /**
      * 使用されている変数の名前を返す
      * @return 使用されている変数の名前
      */
@@ -85,9 +62,5 @@ public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<?>
 
     protected boolean reference;
 
-    /**
-     * 解決済み変数使用を保存するための変数
-     */
-    protected T resolved;
 
 }

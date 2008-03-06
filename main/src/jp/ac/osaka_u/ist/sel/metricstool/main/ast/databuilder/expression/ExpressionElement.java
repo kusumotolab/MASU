@@ -1,12 +1,13 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 
 
 public abstract class ExpressionElement {
 
-    protected ExpressionElement(final UnresolvedEntityUsageInfo usage) {
+    protected ExpressionElement(final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> usage) {
         if(null == usage) {
             throw new IllegalArgumentException("usage is null");
         }
@@ -32,7 +33,7 @@ public abstract class ExpressionElement {
         this(0, 0, 0, 0);
     }
 
-    public final UnresolvedEntityUsageInfo getUsage() {
+    public final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> getUsage() {
         return this.usage;
     }
 
@@ -52,7 +53,7 @@ public abstract class ExpressionElement {
         return this.toColumn;
     }
 
-    protected UnresolvedEntityUsageInfo usage;
+    protected UnresolvedEntityUsageInfo<? extends EntityUsageInfo> usage;
 
     protected final int fromLine;
 

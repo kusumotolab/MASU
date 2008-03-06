@@ -33,7 +33,7 @@ public final class UnresolvedArrayElementUsageInfo extends
         }
 
         this.ownerArrayType = ownerArrayType;
-        this.resolved = null;
+        this.resolvedInfo = null;
     }
 
     /**
@@ -102,40 +102,14 @@ public final class UnresolvedArrayElementUsageInfo extends
 
             // 親が特定できない場合も配列の要素使用を作成して返す
             // もしかすると，UnknownEntityUsageInfoを返す方が適切かもしれない
-            this.resolved = new ArrayElementUsageInfo(ownerUsage, fromLine, fromColumn, toLine,
+            this.resolvedInfo = new ArrayElementUsageInfo(ownerUsage, fromLine, fromColumn, toLine,
                     toColumn);
-            return this.resolved;
+            return this.resolvedInfo;
         }
 
-        this.resolved = new ArrayElementUsageInfo(ownerUsage, fromLine, fromColumn, toLine,
+        this.resolvedInfo = new ArrayElementUsageInfo(ownerUsage, fromLine, fromColumn, toLine,
                 toColumn);
-        return this.resolved;
-    }
-
-    /**
-     * この未解決配列要素の参照が解決済みかどうか返す
-     * 
-     * @return 解決済みの場合は true, そうでない場合は false
-     */
-    @Override
-    public boolean alreadyResolved() {
-        return null != this.resolved;
-    }
-
-    /**
-     * この未解決配列要素の参照の解決済み要素を返す
-     * 
-     * @return 解決済み要素
-     * @throws NotResolvedException 未解決状態でこのメソッドが呼ばれた場合にスローされる
-     */
-    @Override
-    public ArrayElementUsageInfo getResolved() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolved;
+        return this.resolvedInfo;
     }
 
     /**
@@ -152,8 +126,4 @@ public final class UnresolvedArrayElementUsageInfo extends
      */
     private final UnresolvedEntityUsageInfo<?> ownerArrayType;
 
-    /**
-     * 解決済み配列要素使用を保存するための変数
-     */
-    private ArrayElementUsageInfo resolved;
 }

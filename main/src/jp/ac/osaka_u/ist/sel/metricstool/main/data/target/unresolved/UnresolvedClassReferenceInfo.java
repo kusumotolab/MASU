@@ -29,7 +29,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
+public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<EntityUsageInfo> {
 
     /**
      * 利用可能な名前空間名，参照名を与えて初期化
@@ -79,32 +79,6 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
         this.referenceName = referenceName;
         this.ownerUsage = ownerUsage;
         this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
-    }
-
-    /**
-     * 既に解決済みかどうかを返す．
-     * 
-     * @return 解決済みである場合は true，そうでない場合は false
-     */
-    @Override
-    public boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    /**
-     * 解決済みクラス参照を返す
-     * 
-     * @return 解決済みクラス参照
-     * @throws NotResolvedException 解決されていない場合にスローされる
-     */
-    @Override
-    public EntityUsageInfo getResolved() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolvedInfo;
     }
 
     @Override
@@ -589,8 +563,5 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo {
      */
     private final List<UnresolvedReferenceTypeInfo> typeArguments;
 
-    /**
-     * 解決済みクラス参照を保存するための変数
-     */
-    protected EntityUsageInfo resolvedInfo;
+
 }

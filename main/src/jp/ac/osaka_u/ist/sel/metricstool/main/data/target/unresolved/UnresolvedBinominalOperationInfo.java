@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
  * 
  */
 public class UnresolvedBinominalOperationInfo extends
-        UnresolvedEntityUsageInfo<BinominalOperationInfo> {
+        UnresolvedEntityUsageInfo<BinominalOperationInfo> implements UnresolvedExpressionInfo<BinominalOperationInfo> {
 
     /**
      * 演算子と2つのオペランドを与えて初期化する
@@ -38,33 +38,10 @@ public class UnresolvedBinominalOperationInfo extends
         this.operator = operator;
         this.firstOperand = firstOperand;
         this.secondOperand = secondOperand;
-        this.resolved = null;
+        this.resolvedInfo = null;
     }
 
-    /**
-     * この未解決ニ項演算が解決済みであるかどうかを表す
-     * 
-     * @return 解決済みである場合は true, そうでない場合は false
-     */
-    @Override
-    public boolean alreadyResolved() {
-        return null != this.resolved;
-    }
 
-    /**
-     * この未解決ニ項演算の解決済みエンティティを返す
-     * 
-     * @return 解決済みニ項演算
-     */
-    @Override
-    public BinominalOperationInfo getResolved() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolved;
-    }
 
     /**
      * 未解決二項演算を解決し，その型を返す．
@@ -100,9 +77,9 @@ public class UnresolvedBinominalOperationInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolved = new BinominalOperationInfo(operator, firstOperand, secondOperand, fromLine,
+        this.resolvedInfo = new BinominalOperationInfo(operator, firstOperand, secondOperand, fromLine,
                 fromColumn, toLine, toColumn);
-        return this.resolved;
+        return this.resolvedInfo;
     }
 
     /**
@@ -180,5 +157,4 @@ public class UnresolvedBinominalOperationInfo extends
 
     private UnresolvedEntityUsageInfo<?> secondOperand;
 
-    private BinominalOperationInfo resolved;
 }

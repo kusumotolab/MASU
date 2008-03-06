@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullUsageInfo;
@@ -20,45 +19,20 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  *
  */
-public final class UnresolvedNullUsageInfo extends UnresolvedEntityUsageInfo {
+public final class UnresolvedNullUsageInfo extends UnresolvedEntityUsageInfo<NullUsageInfo> {
 
     public UnresolvedNullUsageInfo() {
 
         this.resolvedInfo = null;
     }
 
-    /**
-     * 名前解決されているかどうかを返す．
-     * 
-     * @return 名前解決されている場合は true，そうでない場合は false
-     */
-    @Override
-    public boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    /**
-     * 名前解決された使用情報を返す
-     * 
-     * @return 名前解決された使用情報
-     */
-    @Override
-    public EntityUsageInfo getResolved() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolvedInfo;
-    }
-
-    /**
+        /**
      * 使用情報の名前解決する
      * 
      * @return 解決済みの使用情報
      */
     @Override
-    public EntityUsageInfo resolve(final TargetClassInfo usingClass,
+    public NullUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -83,5 +57,4 @@ public final class UnresolvedNullUsageInfo extends UnresolvedEntityUsageInfo {
         return this.resolvedInfo;
     }
 
-    private NullUsageInfo resolvedInfo;
 }

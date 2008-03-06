@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
@@ -34,7 +35,7 @@ public abstract class IdentifierElement extends ExpressionElement {
         return this.ownerUsage;
     }
 
-    public abstract UnresolvedVariableUsageInfo resolveAsReferencedVariable(
+    public abstract UnresolvedVariableUsageInfo<VariableUsageInfo> resolveAsReferencedVariable(
             BuildDataManager buildDataManager);
 
     public abstract UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(

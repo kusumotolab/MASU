@@ -38,7 +38,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
  * @author higo
  * 
  */
-public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo {
+public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<EntityUsageInfo> {
 
     /**
      * 未解決エンティティ使用オブジェクトを作成する．
@@ -58,33 +58,6 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
         this.setToLine(toLine);
         this.setToColumn(toColumn);
 
-        this.resolvedIndo = null;
-    }
-
-    /**
-     * 未解決エンティティ使用が解決されているかどうかを返す
-     * 
-     * @return 解決されている場合は true，そうでない場合は false
-     */
-    @Override
-    public boolean alreadyResolved() {
-        return null != this.resolvedIndo;
-    }
-
-    /**
-     * 解決済みエンティティ使用を返す
-     * 
-     * @return 解決済みエンティティ使用
-     * @throws 解決されていない場合にスローされる
-     */
-    @Override
-    public EntityUsageInfo getResolved() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolvedIndo;
     }
 
     @Override
@@ -141,9 +114,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
                         // 親が UnknownTypeInfo だったら，どうしようもない
                         if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
-                            this.resolvedIndo = new UnknownEntityUsageInfo(fromLine, fromColumn,
+                            this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn,
                                     toLine, toColumn);
-                            return this.resolvedIndo;
+                            return this.resolvedInfo;
 
                             // 親がクラス型の場合
                         } else if (entityUsage.getType() instanceof ClassTypeInfo) {
@@ -227,8 +200,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
                         }
                     }
 
-                    this.resolvedIndo = entityUsage;
-                    return this.resolvedIndo;
+                    this.resolvedInfo = entityUsage;
+                    return this.resolvedInfo;
                 }
             }
         }
@@ -260,9 +233,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
                         // 親が UnknownTypeInfo だったら，どうしようもない
                         if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
-                            this.resolvedIndo = new UnknownEntityUsageInfo(fromLine, fromColumn,
+                            this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn,
                                     toLine, toColumn);
-                            return this.resolvedIndo;
+                            return this.resolvedInfo;
 
                             // 親がクラス型の場合
                         } else if (entityUsage.getType() instanceof ClassTypeInfo) {
@@ -369,8 +342,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
                         }
                     }
 
-                    this.resolvedIndo = entityUsage;
-                    return this.resolvedIndo;
+                    this.resolvedInfo = entityUsage;
+                    return this.resolvedInfo;
                 }
             }
         }
@@ -394,9 +367,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
                         // 親が UnknownTypeInfo だったら，どうしようもない
                         if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
-                            this.resolvedIndo = new UnknownEntityUsageInfo(fromLine, fromColumn,
+                            this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn,
                                     toLine, toColumn);
-                            return this.resolvedIndo;
+                            return this.resolvedInfo;
 
                             // 親がクラス型の場合
                         } else if (entityUsage.getType() instanceof ClassTypeInfo) {
@@ -503,8 +476,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
                         }
                     }
 
-                    this.resolvedIndo = entityUsage;
-                    return this.resolvedIndo;
+                    this.resolvedInfo = entityUsage;
+                    return this.resolvedInfo;
                 }
             }
         }
@@ -535,9 +508,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
                             // 親が UnknownTypeInfo だったら，どうしようもない
                             if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
-                                this.resolvedIndo = new UnknownEntityUsageInfo(fromLine,
+                                this.resolvedInfo = new UnknownEntityUsageInfo(fromLine,
                                         fromColumn, toLine, toColumn);
-                                return this.resolvedIndo;
+                                return this.resolvedInfo;
 
                                 // 親がクラス型の場合
                             } else if (entityUsage.getType() instanceof ClassTypeInfo) {
@@ -645,8 +618,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
                             }
                         }
 
-                        this.resolvedIndo = entityUsage;
-                        return this.resolvedIndo;
+                        this.resolvedInfo = entityUsage;
+                        return this.resolvedInfo;
                     }
                 }
             }
@@ -675,9 +648,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
                                     // 親が UnknownTypeInfo だったら，どうしようもない
                                     if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
-                                        this.resolvedIndo = new UnknownEntityUsageInfo(fromLine,
+                                        this.resolvedInfo = new UnknownEntityUsageInfo(fromLine,
                                                 fromColumn, toLine, toColumn);
-                                        return this.resolvedIndo;
+                                        return this.resolvedInfo;
 
                                         // 親がクラス型の場合
                                     } else if (entityUsage.getType() instanceof ClassTypeInfo) {
@@ -790,8 +763,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
                                     }
                                 }
 
-                                this.resolvedIndo = entityUsage;
-                                return this.resolvedIndo;
+                                this.resolvedInfo = entityUsage;
+                                return this.resolvedInfo;
                             }
                         }
 
@@ -817,9 +790,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
                                 // 親が UnknownTypeInfo だったら，どうしようもない
                                 if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
-                                    this.resolvedIndo = new UnknownEntityUsageInfo(fromLine,
+                                    this.resolvedInfo = new UnknownEntityUsageInfo(fromLine,
                                             fromColumn, toLine, toColumn);
-                                    return this.resolvedIndo;
+                                    return this.resolvedInfo;
 
                                     // 親がクラス型の場合
                                 } else if (entityUsage.getType() instanceof ClassTypeInfo) {
@@ -929,8 +902,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
                                 }
                             }
 
-                            this.resolvedIndo = entityUsage;
-                            return this.resolvedIndo;
+                            this.resolvedInfo = entityUsage;
+                            return this.resolvedInfo;
                         }
                     }
                 }
@@ -943,10 +916,10 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
             if ((name[0].equals("java") || name[0].equals("javax")) && (3 <= name.length)) {
                 final ExternalClassInfo externalClass = new ExternalClassInfo(name);
                 final ClassTypeInfo externalClassType = new ClassTypeInfo(externalClass);
-                this.resolvedIndo = new ClassReferenceInfo(externalClassType, fromLine, fromColumn,
+                this.resolvedInfo = new ClassReferenceInfo(externalClassType, fromLine, fromColumn,
                         toLine, toColumn);
                 classInfoManager.add(externalClass);
-                return this.resolvedIndo;
+                return this.resolvedInfo;
             }
         }
 
@@ -957,8 +930,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
         // 見つからなかった処理を行う
         usingMethod.addUnresolvedUsage(this);
 
-        this.resolvedIndo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
-        return this.resolvedIndo;
+        this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
+        return this.resolvedInfo;
     }
 
     /**
@@ -998,11 +971,6 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo 
      * この未解決エンティティ使用名を保存するための変数
      */
     private final String[] name;
-
-    /**
-     * 解決済みエンティティ使用を保存するための変数
-     */
-    private EntityUsageInfo resolvedIndo;
 
     /**
      * エラーメッセージ出力用のプリンタ

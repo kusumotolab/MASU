@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  *
  */
-public abstract class EntityUsageInfo implements Position{
+public abstract class EntityUsageInfo implements ExpressionInfo {
 
     /**
      * オブジェクトを初期化 
@@ -66,6 +66,34 @@ public abstract class EntityUsageInfo implements Position{
      */
     public final int getToColumn() {
         return this.toColumn;
+    }
+
+    @Override
+    public final int compareTo(StatementInfo o) {
+
+        if (null == o) {
+            throw new NullPointerException();
+        }
+
+        if (this.getFromLine() < o.getFromLine()) {
+            return 1;
+        } else if (this.getFromLine() > o.getFromLine()) {
+            return -1;
+        } else if (this.getFromColumn() < o.getFromColumn()) {
+            return 1;
+        } else if (this.getFromColumn() > o.getFromColumn()) {
+            return -1;
+        } else if (this.getToLine() < o.getToLine()) {
+            return 1;
+        } else if (this.getToLine() > o.getToLine()) {
+            return -1;
+        } else if (this.getToColumn() < o.getToColumn()) {
+            return 1;
+        } else if (this.getToColumn() > o.getToColumn()) {
+            return -1;
+        }
+
+        return 0;
     }
 
     /**

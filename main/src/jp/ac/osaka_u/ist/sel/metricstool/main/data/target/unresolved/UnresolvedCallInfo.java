@@ -39,35 +39,8 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
         this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
         this.parameterTypes = new LinkedList<UnresolvedEntityUsageInfo<?>>();
 
-        this.resolved = null;
-
     }
 
-    /**
-     * この未解決メソッド呼び出しがすでに解決されているかどうかを返す
-     * 
-     * @return 既に解決されている場合は true，そうでない場合は false
-     */
-    @Override
-    public final boolean alreadyResolved() {
-        return null != this.resolved;
-    }
-
-    /**
-     * 解決済みメソッド呼び出し情報を返す
-     * 
-     * @return 解決済みメソッド呼び出し情報
-     * @throw 解決されていない場合にスローされる
-     */
-    @Override
-    public final T getResolved() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolved;
-    }
 
     /**
      * 型パラメータ使用を追加する
@@ -181,11 +154,6 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
      * 引数を保存するための変数
      */
     protected List<UnresolvedEntityUsageInfo<?>> parameterTypes;
-
-    /**
-     * 解決済みメソッド呼び出し情報を保存するための変数
-     */
-    protected T resolved;
 
     /**
      * エラーメッセージ出力用のプリンタ

@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LiteralUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -12,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
-public final class UnresolvedLiteralUsageInfo extends UnresolvedEntityUsageInfo {
+public final class UnresolvedLiteralUsageInfo extends UnresolvedEntityUsageInfo<LiteralUsageInfo> {
 
     public UnresolvedLiteralUsageInfo(final String literal, final PrimitiveTypeInfo type) {
 
@@ -27,21 +26,7 @@ public final class UnresolvedLiteralUsageInfo extends UnresolvedEntityUsageInfo 
     }
 
     @Override
-    public final boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    @Override
-    public final EntityUsageInfo getResolved() {
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolvedInfo;
-    }
-
-    @Override
-    public EntityUsageInfo resolve(final TargetClassInfo usingClass,
+    public LiteralUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -93,5 +78,4 @@ public final class UnresolvedLiteralUsageInfo extends UnresolvedEntityUsageInfo 
 
     private final PrimitiveTypeInfo type;
 
-    private EntityUsageInfo resolvedInfo;
 }

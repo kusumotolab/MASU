@@ -14,11 +14,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.VariableDefinitio
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.CallableUnitStateManager.CALLABLE_UNIT_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 
 
-public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?>> extends
+public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<? extends CallableUnitInfo>> extends
         CompoundDataBuilder<T> {
 
     protected CallableUnitBuilder(BuildDataManager buildDataManager,
