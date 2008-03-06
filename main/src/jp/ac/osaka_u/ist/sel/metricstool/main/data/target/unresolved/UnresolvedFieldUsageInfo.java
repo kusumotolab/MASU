@@ -4,6 +4,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import java.util.List;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayLengthUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
@@ -23,6 +25,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
@@ -210,11 +213,12 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
 
             // Java 言語で フィールド名が length だった場合は int 型を返す
             // TODO　ちゃんとかきなおさないといけない
-            // if (Settings.getLanguage().equals(LANGUAGE.JAVA) && fieldName.equals("length")) {
-            //this.resolved = new ArrayLengthUsageInfo(ownerUsage, fromLine, fromColumn, toLine,
-            //            toColumn);
-            //    return this.resolved;
-            //}
+            if (Settings.getLanguage().equals(LANGUAGE.JAVA) && fieldName.equals("length")) {
+
+                this.resolved = new ArrayLengthUsageInfo((ArrayTypeInfo) ownerType, fromLine,
+                        fromColumn, toLine, toColumn);
+                return this.resolved;
+            }
         }
 
         assert false : "Here shouldn't be reached!";

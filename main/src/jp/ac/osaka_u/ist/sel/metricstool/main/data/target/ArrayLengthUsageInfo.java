@@ -17,7 +17,8 @@ public final class ArrayLengthUsageInfo extends FieldUsageInfo {
     public ArrayLengthUsageInfo(final ArrayTypeInfo ownerType, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerType, null, true, fromLine, fromColumn, toLine, toColumn);
+        super(ownerType, new ArrayLengthInfo(ownerType), true, fromLine, fromColumn, toLine,
+                toColumn);
     }
 
     /**
