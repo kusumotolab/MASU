@@ -27,7 +27,7 @@ public abstract class UnresolvedEntityUsageInfo<T extends EntityUsageInfo> imple
      * @return ‰ğŒˆÏ‚İ‚Å‚ ‚éê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
      */
     @Override
-    public boolean alreadyResolved() {
+    public final boolean alreadyResolved() {
         return null != this.resolvedInfo;
     }
 
@@ -38,7 +38,7 @@ public abstract class UnresolvedEntityUsageInfo<T extends EntityUsageInfo> imple
      * @throws NotResolvedException ‰ğŒˆ‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÉƒXƒ[‚³‚ê‚é
      */
     @Override
-    public T getResolved() {
+    public final T getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
