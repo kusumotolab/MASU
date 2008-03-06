@@ -91,8 +91,8 @@ public final class UnresolvedConstructorInfo extends
 
         //　内部ブロック情報を解決し，解決済みコンストラクタオブジェクトに追加
         for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
-            final StatementInfo statement = unresolvedStatement.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
+            final StatementInfo statement = unresolvedStatement.resolve(usingClass,
+                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addStatement(statement);
         }
 

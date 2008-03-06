@@ -4,7 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
@@ -152,8 +151,8 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
                         .getDimension();
-                final TypeInfo elementType = unresolvedElementType.resolve(usingClass,
-                        usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                final TypeInfo elementType = unresolvedElementType.resolve(usingClass, usingMethod,
+                        classInfoManager, fieldInfoManager, methodInfoManager);
                 methodReturnType = ArrayTypeInfo.getType(elementType, dimension);
 
             } else {
@@ -166,18 +165,17 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         // 引数を追加する
         for (final UnresolvedParameterInfo unresolvedParameterInfo : this.getParameters()) {
 
-            final TargetParameterInfo parameterInfo = unresolvedParameterInfo.resolve(
-                    usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
-                    methodInfoManager);
+            final TargetParameterInfo parameterInfo = unresolvedParameterInfo.resolve(usingClass,
+                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addParameter(parameterInfo);
         }
 
         //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
-            final StatementInfo statement = unresolvedStatement.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
+            final StatementInfo statement = unresolvedStatement.resolve(usingClass,
+                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addStatement(statement);
-        }          
+        }
 
         // メソッド内で定義されている各未解決ローカル変数に対して
         for (final UnresolvedLocalVariableInfo unresolvedLocalVariable : this.getLocalVariables()) {
