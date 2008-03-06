@@ -3,12 +3,12 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MonominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -27,7 +27,7 @@ public final class UnresolvedMonominalOperationInfo extends
      * @param term €
      * @param type ˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^
      */
-    public UnresolvedMonominalOperationInfo(final UnresolvedVariableUsageInfo<?> term,
+    public UnresolvedMonominalOperationInfo(final UnresolvedEntityUsageInfo<?> term,
             final PrimitiveTypeInfo type) {
 
         if (null == term || null == type) {
@@ -76,8 +76,8 @@ public final class UnresolvedMonominalOperationInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final UnresolvedVariableUsageInfo<?> unresolvedTerm = this.getTerm();
-        final VariableUsageInfo<?> term = unresolvedTerm.resolve(usingClass, usingMethod,
+        final UnresolvedEntityUsageInfo<?> unresolvedTerm = this.getTerm();
+        final EntityUsageInfo term = unresolvedTerm.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         final PrimitiveTypeInfo type = this.getResultType();
 
@@ -91,7 +91,7 @@ public final class UnresolvedMonominalOperationInfo extends
      * 
      * @return ˆê€‰‰Z‚Ì€
      */
-    public UnresolvedVariableUsageInfo<?> getTerm() {
+    public UnresolvedEntityUsageInfo<?> getTerm() {
         return this.term;
     }
 
@@ -107,7 +107,7 @@ public final class UnresolvedMonominalOperationInfo extends
     /**
      * ˆê€‰‰Z‚Ì€
      */
-    private final UnresolvedVariableUsageInfo<?> term;
+    private final UnresolvedEntityUsageInfo<?> term;
 
     /**
      * ˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^
