@@ -120,6 +120,11 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                     //OuterClass.super.method()というメソッド呼び出しのようだ
                     classInfo = getSpecifiedOuterClass((IdentifierElement) left);
                 }
+                
+                if(null == classInfo) {
+                    // 該当クラスが見当たらないのでとりあえず現在のクラスのスーパークラスと判断する
+                    classInfo = buildDataManager.getCurrentClass();
+                }
             } else if (left.getUsage() instanceof UnresolvedFullQualifiedNameClassReferenceInfo) {
                 classInfo = ((UnresolvedFullQualifiedNameClassReferenceInfo) left.getUsage())
                         .getReferencedClass();

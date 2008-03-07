@@ -35,15 +35,15 @@ public abstract class IdentifierElement extends ExpressionElement {
         return this.ownerUsage;
     }
 
-    public abstract UnresolvedVariableUsageInfo<VariableUsageInfo> resolveAsReferencedVariable(
+    public abstract UnresolvedVariableUsageInfo<? extends VariableUsageInfo> resolveAsReferencedVariable(
             BuildDataManager buildDataManager);
 
-    public abstract UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(
+    public abstract UnresolvedVariableUsageInfo<? extends VariableUsageInfo> resolveAsAssignmetedVariable(
             BuildDataManager buildDataManager);
 
     public abstract IdentifierElement resolveAsCalledMethod(BuildDataManager buildDataManager);
 
-    public abstract UnresolvedEntityUsageInfo resolveReferencedEntityIfPossible(
+    public abstract UnresolvedEntityUsageInfo<? extends VariableUsageInfo> resolveReferencedEntityIfPossible(
             BuildDataManager buildDataManager);
 
     protected final String name;

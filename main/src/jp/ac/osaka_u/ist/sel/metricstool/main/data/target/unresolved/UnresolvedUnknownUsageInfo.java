@@ -106,9 +106,14 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                         usingClassType.addTypeArgument(typeParameter);
                     }
 
+                    // 暗黙的なクラス参照なので位置情報はすべて0
+                    final ClassReferenceInfo classReference = new ClassReferenceInfo(
+                            usingClassType, 0, 0, 0, 0);
+
                     // availableField.getType() から次のword(name[i])を名前解決
-                    EntityUsageInfo entityUsage = new FieldUsageInfo(usingClassType,
-                            availableFieldOfThisClass, true, fromLine, fromColumn, toLine, toColumn);
+                    EntityUsageInfo entityUsage = new FieldUsageInfo(classReference,
+                            usingClassType, availableFieldOfThisClass, true, fromLine, fromColumn,
+                            toLine, toColumn);
                     for (int i = 1; i < name.length; i++) {
 
                         // 親が UnknownTypeInfo だったら，どうしようもない
@@ -142,9 +147,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             // usingMethod.addReferencee(availableField);
                                             // availableField.addReferencer(usingMethod);
 
-                                            entityUsage = new FieldUsageInfo(entityUsage.getType(),
-                                                    availableField, true, fromLine, fromColumn,
-                                                    toLine, toColumn);
+                                            entityUsage = new FieldUsageInfo(classReference,
+                                                    entityUsage.getType(), availableField, true,
+                                                    fromLine, fromColumn, toLine, toColumn);
                                             found = true;
                                             break;
                                         }
@@ -170,9 +175,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             // fieldInfo.addReferencer(usingMethod);
                                             fieldInfoManager.add(fieldInfo);
 
-                                            entityUsage = new FieldUsageInfo(entityUsage.getType(),
-                                                    fieldInfo, true, fromLine, fromColumn, toLine,
-                                                    toColumn);
+                                            entityUsage = new FieldUsageInfo(classReference,
+                                                    entityUsage.getType(), fieldInfo, true,
+                                                    fromLine, fromColumn, toLine, toColumn);
 
                                         } else {
                                             assert false : "Can't resolve entity usage1 : "
@@ -191,8 +196,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                 // fieldInfo.addReferencer(usingMethod);
                                 fieldInfoManager.add(fieldInfo);
 
-                                entityUsage = new FieldUsageInfo(entityUsage.getType(), fieldInfo,
-                                        true, fromLine, fromColumn, toLine, toColumn);
+                                entityUsage = new FieldUsageInfo(classReference, entityUsage
+                                        .getType(), fieldInfo, true, fromLine, fromColumn, toLine,
+                                        toColumn);
                             }
 
                         } else {
@@ -225,9 +231,14 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                         usingClassType.addTypeArgument(typeParameter);
                     }
 
+                    // 暗黙的なクラス参照なので位置情報はすべて0
+                    final ClassReferenceInfo classReference = new ClassReferenceInfo(
+                            usingClassType, 0, 0, 0, 0);
+
                     // availableField.getType() から次のword(name[i])を名前解決
-                    EntityUsageInfo entityUsage = new FieldUsageInfo(usingClassType,
-                            availableFieldOfThisClass, true, fromLine, fromColumn, toLine, toColumn);
+                    EntityUsageInfo entityUsage = new FieldUsageInfo(classReference,
+                            usingClassType, availableFieldOfThisClass, true, fromLine, fromColumn,
+                            toLine, toColumn);
                     for (int i = 1; i < name.length; i++) {
 
                         // 親が UnknownTypeInfo だったら，どうしようもない
@@ -241,8 +252,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                         } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
                             final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage.getType())
-                                    .getReferencedClass();
-
+                            .getReferencedClass();
+                            
                             // 親が対象クラス(TargetClassInfo)の場合
                             if (ownerClass instanceof TargetClassInfo) {
 
@@ -261,9 +272,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             // usingMethod.addReferencee(availableField);
                                             // availableField.addReferencer(usingMethod);
 
-                                            entityUsage = new FieldUsageInfo(entityUsage.getType(),
-                                                    availableField, true, fromLine, fromColumn,
-                                                    toLine, toColumn);
+                                            entityUsage = new FieldUsageInfo(classReference,
+                                                    entityUsage.getType(), availableField, true, fromLine,
+                                                    fromColumn, toLine, toColumn);
                                             found = true;
                                             break;
                                         }
@@ -312,7 +323,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             // fieldInfo.addReferencer(usingMethod);
                                             fieldInfoManager.add(fieldInfo);
 
-                                            entityUsage = new FieldUsageInfo(entityUsage.getType(),
+                                            entityUsage = new FieldUsageInfo(
+                                                    classReference, entityUsage.getType(),
                                                     fieldInfo, true, fromLine, fromColumn, toLine,
                                                     toColumn);
 
@@ -326,6 +338,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                 // 親が外部クラス(ExternalClassInfo)の場合
                             } else if (ownerClass instanceof ExternalClassInfo) {
 
+
                                 final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(name[i],
                                         ownerClass);
 
@@ -333,8 +346,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                 // fieldInfo.addReferencer(usingMethod);
                                 fieldInfoManager.add(fieldInfo);
 
-                                entityUsage = new FieldUsageInfo(entityUsage.getType(), fieldInfo,
-                                        true, fromLine, fromColumn, toLine, toColumn);
+                                entityUsage = new FieldUsageInfo(classReference,
+                                        entityUsage.getType(), fieldInfo, true, fromLine,
+                                        fromColumn, toLine, toColumn);
                             }
 
                         } else {
@@ -360,8 +374,10 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                 final ClassInfo searchingClass = classInfoManager.getClassInfo(searchingName);
                 if (null != searchingClass) {
 
-                    EntityUsageInfo entityUsage = new ClassReferenceInfo(new ClassTypeInfo(
+                    final ClassReferenceInfo searchedClassReference = new ClassReferenceInfo(new ClassTypeInfo(
                             searchingClass), fromLine, fromColumn, toLine, toColumn);
+                    EntityUsageInfo entityUsage = searchedClassReference;
+                    
                     for (int i = length; i < name.length; i++) {
 
                         // 親が UnknownTypeInfo だったら，どうしようもない
@@ -395,9 +411,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             // usingMethod.addReferencee(availableField);
                                             // availableField.addReferencer(usingMethod);
 
-                                            entityUsage = new FieldUsageInfo(entityUsage.getType(),
-                                                    availableField, true, fromLine, fromColumn,
-                                                    toLine, toColumn);
+                                            entityUsage = new FieldUsageInfo(searchedClassReference,
+                                                    entityUsage.getType(), availableField, true,
+                                                    fromLine, fromColumn, toLine, toColumn);
                                             found = true;
                                             break;
                                         }
@@ -446,9 +462,10 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             // fieldInfo.addReferencer(usingMethod);
                                             fieldInfoManager.add(fieldInfo);
 
-                                            entityUsage = new FieldUsageInfo(entityUsage.getType(),
-                                                    fieldInfo, true, fromLine, fromColumn, toLine,
-                                                    toColumn);
+                                            entityUsage = new FieldUsageInfo(
+                                                    searchedClassReference, entityUsage
+                                                            .getType(), fieldInfo, true, fromLine,
+                                                    fromColumn, toLine, toColumn);
 
                                         } else {
                                             assert false : "Can't resolve entity usage3 : "
@@ -467,8 +484,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                 // fieldInfo.addReferencer(usingMethod);
                                 fieldInfoManager.add(fieldInfo);
 
-                                entityUsage = new FieldUsageInfo(entityUsage.getType(), fieldInfo,
-                                        true, fromLine, fromColumn, toLine, toColumn);
+                                entityUsage = new FieldUsageInfo(searchedClassReference,
+                                        entityUsage.getType(), fieldInfo, true, fromLine,
+                                        fromColumn, toLine, toColumn);
                             }
 
                         } else {
@@ -501,8 +519,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                     final String innerClassName = innerClassInfo.getClassName();
                     if (innerClassName.equals(name[0])) {
 
-                        EntityUsageInfo entityUsage = new ClassReferenceInfo(new ClassTypeInfo(
+                        final ClassReferenceInfo innerClassReference = new ClassReferenceInfo(new ClassTypeInfo(
                                 innerClassInfo), fromLine, fromColumn, toLine, toColumn);
+                        EntityUsageInfo entityUsage = innerClassReference;
                         for (int i = 1; i < name.length; i++) {
 
                             // 親が UnknownTypeInfo だったら，どうしようもない
@@ -536,7 +555,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                 // usingMethod.addReferencee(availableField);
                                                 // availableField.addReferencer(usingMethod);
 
-                                                entityUsage = new FieldUsageInfo(entityUsage
+                                                entityUsage = new FieldUsageInfo(innerClassReference, entityUsage
                                                         .getType(), availableField, true, fromLine,
                                                         fromColumn, toLine, toColumn);
                                                 found = true;
@@ -588,7 +607,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                 // fieldInfo.addReferencer(usingMethod);
                                                 fieldInfoManager.add(fieldInfo);
 
-                                                entityUsage = new FieldUsageInfo(entityUsage
+                                                entityUsage = new FieldUsageInfo(innerClassReference, entityUsage
                                                         .getType(), fieldInfo, true, fromLine,
                                                         fromColumn, toLine, toColumn);
 
@@ -609,7 +628,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                     // fieldInfo.addReferencer(usingMethod);
                                     fieldInfoManager.add(fieldInfo);
 
-                                    entityUsage = new FieldUsageInfo(entityUsage.getType(),
+                                    entityUsage = new FieldUsageInfo(innerClassReference, entityUsage.getType(),
                                             fieldInfo, true, fromLine, fromColumn, toLine, toColumn);
                                 }
 
@@ -640,9 +659,11 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                             // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
                             if (className.equals(name[0])) {
 
-                                EntityUsageInfo entityUsage = new ClassReferenceInfo(
+                                final ClassReferenceInfo classReference = new ClassReferenceInfo(
                                         new ClassTypeInfo(classInfo), fromLine, fromColumn, toLine,
                                         toColumn);
+                                EntityUsageInfo entityUsage = classReference;
+                                
                                 for (int i = 1; i < name.length; i++) {
 
                                     // 親が UnknownTypeInfo だったら，どうしようもない
@@ -677,7 +698,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                         // usingMethod.addReferencee(availableField);
                                                         // availableField.addReferencer(usingMethod);
 
-                                                        entityUsage = new FieldUsageInfo(
+                                                        entityUsage = new FieldUsageInfo(classReference, 
                                                                 entityUsage.getType(),
                                                                 availableField, true, fromLine,
                                                                 fromColumn, toLine, toColumn);
@@ -731,7 +752,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                         // fieldInfo.addReferencer(usingMethod);
                                                         fieldInfoManager.add(fieldInfo);
 
-                                                        entityUsage = new FieldUsageInfo(
+                                                        entityUsage = new FieldUsageInfo(classReference, 
                                                                 entityUsage.getType(), fieldInfo,
                                                                 true, fromLine, fromColumn, toLine,
                                                                 toColumn);
@@ -753,7 +774,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             // fieldInfo.addReferencer(usingMethod);
                                             fieldInfoManager.add(fieldInfo);
 
-                                            entityUsage = new FieldUsageInfo(entityUsage.getType(),
+                                            entityUsage = new FieldUsageInfo(classReference, entityUsage.getType(),
                                                     fieldInfo, true, fromLine, fromColumn, toLine,
                                                     toColumn);
                                         }
@@ -783,8 +804,10 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                 classInfoManager.add((ExternalClassInfo) specifiedClassInfo);
                             }
 
-                            EntityUsageInfo entityUsage = new ClassReferenceInfo(new ClassTypeInfo(
+                            final ClassReferenceInfo classReference = new ClassReferenceInfo(new ClassTypeInfo(
                                     specifiedClassInfo), fromLine, fromColumn, toLine, toColumn);
+                            EntityUsageInfo entityUsage = classReference;
+                            
                             for (int i = 1; i < name.length; i++) {
 
                                 // 親が UnknownTypeInfo だったら，どうしようもない
@@ -819,7 +842,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                     // usingMethod.addReferencee(availableField);
                                                     // availableField.addReferencer(usingMethod);
 
-                                                    entityUsage = new FieldUsageInfo(entityUsage
+                                                    entityUsage = new FieldUsageInfo(classReference, entityUsage
                                                             .getType(), availableField, true,
                                                             fromLine, fromColumn, toLine, toColumn);
                                                     found = true;
@@ -871,7 +894,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                     // fieldInfo.addReferencer(usingMethod);
                                                     fieldInfoManager.add(fieldInfo);
 
-                                                    entityUsage = new FieldUsageInfo(entityUsage
+                                                    entityUsage = new FieldUsageInfo(classReference, entityUsage
                                                             .getType(), fieldInfo, true, fromLine,
                                                             fromColumn, toLine, toColumn);
 
@@ -892,7 +915,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                         // fieldInfo.addReferencer(usingMethod);
                                         fieldInfoManager.add(fieldInfo);
 
-                                        entityUsage = new FieldUsageInfo(entityUsage.getType(),
+                                        entityUsage = new FieldUsageInfo(classReference, entityUsage.getType(),
                                                 fieldInfo, true, fromLine, fromColumn, toLine,
                                                 toColumn);
                                     }

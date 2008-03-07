@@ -21,11 +21,6 @@ public class FieldOrMethodElement extends IdentifierElement {
         this.ownerUsage = ownerUsage;
     }
 
-    @Override
-    public UnresolvedEntityUsageInfo getOwnerUsage() {
-        return ownerUsage;
-    }
-
     public UnresolvedTypeInfo getType() {
         return null;
     }
@@ -62,7 +57,5 @@ public class FieldOrMethodElement extends IdentifierElement {
             BuildDataManager buildDataManager) {
         throw new UnsupportedOperationException();
     }
-
-    private final UnresolvedEntityUsageInfo ownerUsage;
 
 }
