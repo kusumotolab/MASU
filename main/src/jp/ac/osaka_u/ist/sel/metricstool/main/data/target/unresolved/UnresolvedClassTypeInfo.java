@@ -119,6 +119,14 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
                             .getImportName());
                     // null の場合は外部クラスの参照とみなす
                     if (null == referencedClass) {
+                        
+                        // import の外部クラス名とこの参照されているクラス名が一致しない場合は次の import文から探す 
+                        final String[] namespace = availableNamespace.getNamespace();
+                        final String importedClassName = namespace[namespace.length - 1];
+                        if(!this.referenceName[0].equals(importedClassName)){
+                            continue;
+                        }
+                        
                         referencedClass = new ExternalClassInfo(availableNamespace.getImportName());
                         classInfoManager.add((ExternalClassInfo) referencedClass);
                     }
