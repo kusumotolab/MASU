@@ -10,14 +10,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
  * @author higo
  */
 public abstract class UnresolvedEntityUsageInfo<T extends EntityUsageInfo> implements
-        Resolvable<T>, PositionSetting {
+        Resolvable<T>, PositionSetting, UnresolvedExpressionInfo<T> {
 
     protected UnresolvedEntityUsageInfo() {
         this.fromLine = 0;
         this.fromColumn = 0;
         this.toLine = 0;
         this.toColumn = 0;
-        
+
         this.resolvedInfo = null;
     }
 
@@ -46,7 +46,7 @@ public abstract class UnresolvedEntityUsageInfo<T extends EntityUsageInfo> imple
 
         return this.resolvedInfo;
     }
-    
+
     /**
      * 開始行をセットする
      * 
@@ -142,7 +142,7 @@ public abstract class UnresolvedEntityUsageInfo<T extends EntityUsageInfo> imple
      * 解決済み情報を保存するための変数
      */
     protected T resolvedInfo;
-    
+
     /**
      * 開始行を保存するための変数
      */

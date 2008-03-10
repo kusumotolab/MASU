@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
  * 
  */
 public class UnresolvedBinominalOperationInfo extends
-        UnresolvedEntityUsageInfo<BinominalOperationInfo> implements UnresolvedExpressionInfo<BinominalOperationInfo> {
+        UnresolvedEntityUsageInfo<BinominalOperationInfo> {
 
     /**
      * ‰‰Zq‚Æ2‚Â‚ÌƒIƒyƒ‰ƒ“ƒh‚ğ—^‚¦‚Ä‰Šú‰»‚·‚é
@@ -40,8 +40,6 @@ public class UnresolvedBinominalOperationInfo extends
         this.secondOperand = secondOperand;
         this.resolvedInfo = null;
     }
-
-
 
     /**
      * –¢‰ğŒˆ“ñ€‰‰Z‚ğ‰ğŒˆ‚µC‚»‚ÌŒ^‚ğ•Ô‚·D
@@ -77,8 +75,8 @@ public class UnresolvedBinominalOperationInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new BinominalOperationInfo(operator, firstOperand, secondOperand, fromLine,
-                fromColumn, toLine, toColumn);
+        this.resolvedInfo = new BinominalOperationInfo(operator, firstOperand, secondOperand,
+                fromLine, fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 
