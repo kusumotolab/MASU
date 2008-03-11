@@ -22,8 +22,9 @@ public class SingleIdentifierBuilder extends ExpressionBuilder {
         if (token.isIdentifier()) {
             //            AvailableNamespaceInfoSet nameSpaceset = buildDataManager.getAllAvaliableNames();
             //            UnresolvedReferenceTypeInfo unresolvedReference = new UnresolvedReferenceTypeInfo(nameSpaceset,new String[]{token.toString()});
-            UnresolvedClassReferenceInfo currentClassReference = InstanceSpecificElement
-                    .getThisInstanceType(buildDataManager);
+            UnresolvedClassReferenceInfo currentClassReference = buildDataManager.getCurrentClass()
+                    .getClassReference();
+
             pushElement(new SingleIdentifierElement(token.toString(), currentClassReference, event
                     .getStartLine(), event.getStartColumn(), event.getEndLine(), event
                     .getEndColumn()));

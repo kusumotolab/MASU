@@ -43,7 +43,7 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
 
         this.instance = instance;
     }
-
+    
     /**
      * 子クラスから参照可能かどうかを返す
      * 

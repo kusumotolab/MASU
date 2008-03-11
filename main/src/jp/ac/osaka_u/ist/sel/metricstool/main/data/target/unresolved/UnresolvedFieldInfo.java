@@ -7,6 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
@@ -35,10 +36,16 @@ public final class UnresolvedFieldInfo extends
      * @param name フィールド名
      * @param type フィールドの型
      * @param definitionClass フィールドを定義しているクラス
+     * @param initializer フィールドの初期化式
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
     public UnresolvedFieldInfo(final String name, final UnresolvedTypeInfo type,
-            final UnresolvedClassInfo definitionClass, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+            final UnresolvedClassInfo definitionClass,
+            final UnresolvedExpressionInfo<? extends ExpressionInfo> initializer,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(name, type, definitionClass, fromLine, fromColumn, toLine, toColumn);
 
@@ -47,6 +54,7 @@ public final class UnresolvedFieldInfo extends
         }
 
         this.ownerClass = definitionClass;
+        this.initializer = initializer;
 
         this.privateVisible = false;
         this.inheritanceVisible = false;
@@ -248,6 +256,15 @@ public final class UnresolvedFieldInfo extends
     }
 
     /**
+     * 変数の初期化式を返す
+     * 
+     * @return 変数の初期化式．初期化されていない場合はnull
+     */
+    public final UnresolvedExpressionInfo<? extends ExpressionInfo> getInitilizer() {
+        return this.initializer;
+    }
+
+    /**
      * このフィールドを定義しているクラスを保存するための変数
      */
     private UnresolvedClassInfo ownerClass;
@@ -276,4 +293,10 @@ public final class UnresolvedFieldInfo extends
      * インスタンスメンバーかどうかを保存するための変数
      */
     private boolean instance;
+
+    /**
+     * 変数の初期化式を表す変数
+     */
+    private final UnresolvedExpressionInfo<? extends ExpressionInfo> initializer;
+
 }

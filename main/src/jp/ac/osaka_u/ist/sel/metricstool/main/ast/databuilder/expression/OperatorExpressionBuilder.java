@@ -5,6 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsageInfo;
@@ -17,7 +18,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedE
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMonominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedNullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
 
 public class OperatorExpressionBuilder extends ExpressionBuilder {
@@ -52,7 +52,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
 
         if (term > 0 && term == elements.length) {
             //各項の型を記録する配列
-            final UnresolvedEntityUsageInfo[] termTypes = new UnresolvedEntityUsageInfo[elements.length];
+            final UnresolvedEntityUsageInfo<? extends EntityUsageInfo>[] termTypes = new UnresolvedEntityUsageInfo<?>[elements.length];
 
             //最左辺値について
             final ExpressionElement primary = elements[0];
@@ -68,10 +68,6 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     //代入なら被代入変数として解決して結果の型を取得する
                     termTypes[0] = leftElement.resolveAsAssignmetedVariable(this.buildDataManager);
                 }
-            } else if (primary.equals(InstanceSpecificElement.THIS)) {
-                termTypes[0] = InstanceSpecificElement.getThisInstanceType(buildDataManager);
-            } else if (primary.equals(InstanceSpecificElement.NULL)) {
-                termTypes[0] = new UnresolvedNullUsageInfo();
             } else if (primary instanceof TypeElement) {
                 TypeElement typeElement = (TypeElement) primary;
                 if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {
@@ -97,10 +93,6 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     //識別子なら勝手に参照として解決して方を取得する
                     termTypes[i] = ((IdentifierElement) elements[i])
                             .resolveAsReferencedVariable(this.buildDataManager);
-                } else if (elements[i].equals(InstanceSpecificElement.THIS)) {
-                    termTypes[i] = InstanceSpecificElement.getThisInstanceType(buildDataManager);
-                } else if (elements[i].equals(InstanceSpecificElement.NULL)) {
-                    termTypes[i] = new UnresolvedNullUsageInfo();
                 } else if (elements[i] instanceof TypeElement) {
                     TypeElement typeElement = (TypeElement) elements[i];
                     if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {

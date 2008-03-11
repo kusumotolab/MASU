@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
@@ -131,8 +132,8 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit ex
      * @param toColumn 終了列
      */
     UnresolvedVariableInfo(final String name, final UnresolvedTypeInfo type,
-            final TUnit definitionUnit, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+            final TUnit definitionUnit,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super();
 
@@ -145,7 +146,7 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit ex
         this.type = type;
         this.modifiers = new HashSet<ModifierInfo>();
         this.definitionUnit = definitionUnit;
-
+        
         this.setFromLine(fromLine);
         this.setFromColumn(fromColumn);
         this.setToLine(toLine);
@@ -163,14 +164,18 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit ex
     private UnresolvedTypeInfo type;
 
     /**
-     * このフィールドの修飾子を保存するための変数
+     * 変数の修飾子を表す変数
      */
     private Set<ModifierInfo> modifiers;
 
+    /**
+     * 変数を宣言しているユニットを表す変数
+     */
     private final TUnit definitionUnit;
 
     /**
      * 名前解決された情報を格納するための変数
      */
     protected TVar resolvedInfo;
+
 }

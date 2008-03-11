@@ -12,12 +12,20 @@ public class ExpressionElementManager {
     }
 
     public ExpressionElement popExpressionElement() {
-        return this.expressionAnalyzeStack.pop();
+        this.lastPoppedExpressinElement = this.expressionAnalyzeStack.pop();
+        return this.lastPoppedExpressinElement;
+    }
+    
+    public final ExpressionElement getLastPoppedExpressionElement() {
+        return this.lastPoppedExpressinElement;
     }
     
     public void reset(){
         expressionAnalyzeStack.clear();
+        this.lastPoppedExpressinElement = null;
     }
+    
+    private ExpressionElement lastPoppedExpressinElement = null;
     
     private final Stack<ExpressionElement> expressionAnalyzeStack = new Stack<ExpressionElement>();
 }

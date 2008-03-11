@@ -10,6 +10,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
@@ -59,11 +65,11 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     public void addVariableUsage(UnresolvedVariableUsageInfo usage) {
-        if (!this.callableUnitStack.isEmpty()&& MODE.METHOD == this.mode){
+        if (!this.callableUnitStack.isEmpty() && MODE.METHOD == this.mode) {
             this.callableUnitStack.peek().addVariableUsage(usage);
-        }else if(!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode){
-    		this.blockStack.peek().addVariableUsage(usage);
-    	}
+        } else if (!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode) {
+            this.blockStack.peek().addVariableUsage(usage);
+        }
     }
 
     public void addLocalParameter(final UnresolvedLocalVariableInfo localParameter) {
@@ -86,17 +92,17 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
     }
 
-    public void addMethodCall(UnresolvedCallInfo memberCall) {
-        if (!this.callableUnitStack.isEmpty() && MODE.METHOD == this.mode){
+    public void addMethodCall(UnresolvedCallInfo<? extends CallInfo> memberCall) {
+        if (!this.callableUnitStack.isEmpty() && MODE.METHOD == this.mode) {
             this.callableUnitStack.peek().addCall(memberCall);
-        } else if(!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode){
-        	this.blockStack.peek().addCall(memberCall);
+        } else if (!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode) {
+            this.blockStack.peek().addCall(memberCall);
         }
     }
 
     public void addMethodParameter(final UnresolvedParameterInfo parameter) {
         if (!this.callableUnitStack.isEmpty() && MODE.METHOD == this.mode) {
-            final UnresolvedCallableUnitInfo method = this.callableUnitStack.peek();
+            final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> method = this.callableUnitStack.peek();
             method.addParameter(parameter);
             addNextScopedVariable(parameter);
         }
@@ -187,13 +193,13 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
     }
 
-    public UnresolvedCallableUnitInfo endCallableUnitDefinition() {
+    public UnresolvedCallableUnitInfo<? extends CallableUnitInfo> endCallableUnitDefinition() {
         this.restoreMode();
 
         if (this.callableUnitStack.isEmpty()) {
             return null;
         } else {
-            final UnresolvedCallableUnitInfo callableUnit = this.callableUnitStack.pop();
+            final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> callableUnit = this.callableUnitStack.pop();
 
             nextScopedVariables.clear();
 
@@ -201,15 +207,15 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
     }
 
-    public UnresolvedBlockInfo endInnerBlockDefinition() {
+    public UnresolvedBlockInfo<? extends BlockInfo> endInnerBlockDefinition() {
         this.restoreMode();
 
         if (this.blockStack.isEmpty()) {
             return null;
         } else {
-            final UnresolvedBlockInfo blockInfo = this.blockStack.pop();
-            final UnresolvedLocalSpaceInfo outerSpace = blockInfo.getOuterSpace();
-            
+            final UnresolvedBlockInfo<? extends BlockInfo> blockInfo = this.blockStack.pop();
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerSpace = blockInfo.getOuterSpace();
+
             outerSpace.addChildSpaceInfo(blockInfo);
 
             return blockInfo;
@@ -223,17 +229,18 @@ public class DefaultBuildDataManager implements BuildDataManager {
             return null;
         } else {
             final UnresolvedConditionalClauseInfo clauseInfo = this.clauseStack.pop();
-            
+
             if (!this.blockStack.isEmpty()
                     && this.blockStack.peek() instanceof UnresolvedConditionalBlockInfo) {
-                UnresolvedConditionalBlockInfo conditionalBlock = (UnresolvedConditionalBlockInfo) this.blockStack.peek();
+                UnresolvedConditionalBlockInfo<? extends ConditionalBlockInfo> conditionalBlock = (UnresolvedConditionalBlockInfo<?>) this.blockStack
+                        .peek();
                 conditionalBlock.addChildSpaceInfo(clauseInfo);
             }
-            
+
             return clauseInfo;
         }
     }
-    
+
     public void enterClassBlock() {
         int size = classStack.size();
         if (size > 1) {
@@ -280,7 +287,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
             final BlockScope scope = this.scopeStack.get(i);
-            final Set<AvailableNamespaceInfo> scopeLocalNameSpaceSet = scope.getAvailableNameSpaces();
+            final Set<AvailableNamespaceInfo> scopeLocalNameSpaceSet = scope
+                    .getAvailableNameSpaces();
             for (final AvailableNamespaceInfo info : scopeLocalNameSpaceSet) {
                 result.add(info);
             }
@@ -322,9 +330,9 @@ public class DefaultBuildDataManager implements BuildDataManager {
         return EMPTY_NAME;
     }
 
-    public UnresolvedUnitInfo getCurrentUnit() {
-        UnresolvedUnitInfo currentUnit = null;
-        if(MODE.CLASS == this.mode) {
+    public UnresolvedUnitInfo<? extends UnitInfo> getCurrentUnit() {
+        UnresolvedUnitInfo<? extends UnitInfo> currentUnit = null;
+        if (MODE.CLASS == this.mode) {
             currentUnit = this.getCurrentClass();
         } else if (MODE.METHOD == this.mode) {
             currentUnit = this.getCurrentCallableUnit();
@@ -336,22 +344,37 @@ public class DefaultBuildDataManager implements BuildDataManager {
         return currentUnit;
     }
     
+    @Override
+    public UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> getCurrentLocalSpace() {
+        UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = null;
+        
+        if (MODE.METHOD == this.mode) {
+            currentLocal = this.getCurrentCallableUnit();
+        } else if (MODE.INNER_BLOCK == this.mode) {
+            currentLocal = this.getCurrentBlock();
+        } else if (MODE.CONDITIONAL_CLAUSE == this.mode) {
+            currentLocal = this.getCurrentConditionalCluase();
+        }
+        
+        return currentLocal;
+    }
+
     public UnresolvedClassInfo getCurrentClass() {
         return this.classStack.isEmpty() ? null : this.classStack.peek();
     }
 
-    public UnresolvedCallableUnitInfo getCurrentCallableUnit() {
+    public UnresolvedCallableUnitInfo<? extends CallableUnitInfo> getCurrentCallableUnit() {
         return this.callableUnitStack.isEmpty() ? null : this.callableUnitStack.peek();
     }
-    
-    public UnresolvedBlockInfo getCurrentBlock() {
+
+    public UnresolvedBlockInfo<? extends BlockInfo> getCurrentBlock() {
         return this.blockStack.isEmpty() ? null : this.blockStack.peek();
     }
-    
+
     public UnresolvedConditionalClauseInfo getCurrentConditionalCluase() {
         return this.clauseStack.isEmpty() ? null : this.clauseStack.peek();
     }
-    
+
     public int getAnonymousClassCount(UnresolvedClassInfo classInfo) {
         if (null == classInfo) {
             throw new NullPointerException("classInfo is null.");
@@ -366,8 +389,6 @@ public class DefaultBuildDataManager implements BuildDataManager {
             return 1;
         }
     }
-
-    
 
     /**
      * 現在の名前空間名を返す．
@@ -426,7 +447,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     public UnresolvedTypeParameterInfo getTypeParameter(String name) {
-        for (int i = modeStack.size() - 1, cli = classStack.size() - 1, mei = callableUnitStack.size() - 1; i >= 0; i--) {
+        for (int i = modeStack.size() - 1, cli = classStack.size() - 1, mei = callableUnitStack
+                .size() - 1; i >= 0; i--) {
             MODE mode = modeStack.get(i);
 
             if (MODE.CLASS == mode) {
@@ -466,10 +488,10 @@ public class DefaultBuildDataManager implements BuildDataManager {
                 count = callableUnitStack.peek().getTypeParameters().size();
             }
         }
-        
+
         return count;
     }
-    
+
     public int getCurrentParameterCount() {
         int count = -1;
         if (!this.callableUnitStack.isEmpty()) {
@@ -477,7 +499,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
         return count;
     }
-    
+
     public boolean hasAlias(final String name) {
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {
@@ -555,17 +577,17 @@ public class DefaultBuildDataManager implements BuildDataManager {
         this.toClassMode();
     }
 
-    public void startCallableUnitDefinition(final UnresolvedCallableUnitInfo callableUnit) {
+    public void startCallableUnitDefinition(final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> callableUnit) {
         if (null == callableUnit) {
             throw new NullPointerException("method info was null.");
         }
 
         this.callableUnitStack.push(callableUnit);
-        
+
         this.toMethodMode();
     }
 
-    public void startInnerBlockDefinition(final UnresolvedBlockInfo blockInfo) {
+    public void startInnerBlockDefinition(final UnresolvedBlockInfo<? extends BlockInfo> blockInfo) {
         if (null == blockInfo) {
             throw new IllegalArgumentException("block info was null.");
         }
@@ -584,11 +606,12 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
         if (!this.blockStack.isEmpty()
                 && this.blockStack.peek() instanceof UnresolvedConditionalBlockInfo) {
-            UnresolvedConditionalBlockInfo conditionalBlock = (UnresolvedConditionalBlockInfo) this.blockStack.peek();
+            UnresolvedConditionalBlockInfo conditionalBlock = (UnresolvedConditionalBlockInfo) this.blockStack
+                    .peek();
         }
-        
+
         this.toClauseMode();
-        
+
         this.clauseStack.push(clauseInfo);
     }
 
@@ -737,9 +760,9 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     private final Stack<UnresolvedClassInfo> classStack = new Stack<UnresolvedClassInfo>();
 
-    private final Stack<UnresolvedCallableUnitInfo> callableUnitStack = new Stack<UnresolvedCallableUnitInfo>();
+    private final Stack<UnresolvedCallableUnitInfo<? extends CallableUnitInfo>> callableUnitStack = new Stack<UnresolvedCallableUnitInfo<? extends CallableUnitInfo>>();
 
-    private final Stack<UnresolvedBlockInfo> blockStack = new Stack<UnresolvedBlockInfo>();
+    private final Stack<UnresolvedBlockInfo<? extends BlockInfo>> blockStack = new Stack<UnresolvedBlockInfo<? extends BlockInfo>>();
 
     private final Stack<UnresolvedConditionalClauseInfo> clauseStack = new Stack<UnresolvedConditionalClauseInfo>();
 

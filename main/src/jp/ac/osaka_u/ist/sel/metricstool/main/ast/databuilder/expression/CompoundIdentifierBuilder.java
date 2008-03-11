@@ -77,10 +77,6 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
                     IdentifierElement leftIdentifier = (IdentifierElement) left;
                     leftElementType = leftIdentifier
                             .resolveAsReferencedVariable(this.buildDataManager);
-                } else if (left.equals(InstanceSpecificElement.THIS)) {
-                    //左側がthisなら右側はこのクラスのフィールド名かメソッド名
-                    leftElementType = InstanceSpecificElement
-                            .getThisInstanceType(this.buildDataManager);
                 } else {
                     leftElementType = left.getUsage();
                 }

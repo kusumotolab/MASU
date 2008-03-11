@@ -46,16 +46,21 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
             UnresolvedClassReferenceInfo classReference = UnresolvedClassReferenceInfo
                     .createClassReference(JAVA_LANG_CLASS);
             pushElement(UsageElement.getInstance(classReference));
-        } else if (right.equals(InstanceSpecificElement.THIS)) {
-            UnresolvedClassInfo classInfo = getSpecifiedOuterClass((IdentifierElement) left);
-
-            if (classInfo != null) {
-                pushElement(UsageElement.getInstance(classInfo.getClassReference()));
-            } else {
-                assert (false) : "Illegal state: specified this class "
-                        + ((IdentifierElement) left).getName()
-                        + " was not found from outer classes.";
+        } else if (right instanceof InstanceSpecificElement) {
+            
+            // 右側の要素がthisで左側に識別子がある場合，外部クラスのインスタンスの参照
+            if(((InstanceSpecificElement) right).isThisInstance()) {
+                UnresolvedClassInfo classInfo = getSpecifiedOuterClass((IdentifierElement) left);
+    
+                if (classInfo != null) {
+                    pushElement(UsageElement.getInstance(classInfo.getClassReference()));
+                } else {
+                    assert (false) : "Illegal state: specified this class "
+                            + ((IdentifierElement) left).getName()
+                            + " was not found from outer classes.";
+                }
             }
+            
         } else if (left.equals(JavaExpressionElement.SUPER)) {
             if (right instanceof IdentifierElement) {
                 final IdentifierElement rightIdentifier = (IdentifierElement) right;

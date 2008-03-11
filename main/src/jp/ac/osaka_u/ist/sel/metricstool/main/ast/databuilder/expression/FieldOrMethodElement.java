@@ -33,10 +33,13 @@ public class FieldOrMethodElement extends IdentifierElement {
     @Override
     public UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(
             BuildDataManager buildDataManager) {
-        UnresolvedFieldUsageInfo usage = new UnresolvedFieldUsageInfo(buildDataManager
+        UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
                 .getAllAvaliableNames(), this.ownerUsage, this.name, false, this.fromLine, this.fromColumn, this.toLine, this.toColumn);
-        buildDataManager.addVariableUsage(usage);
-        return usage;
+        buildDataManager.addVariableUsage(fieldUsage);
+        
+        this.usage = fieldUsage;
+        
+        return fieldUsage;
     }
 
     @Override
@@ -46,10 +49,13 @@ public class FieldOrMethodElement extends IdentifierElement {
 
     @Override
     public UnresolvedVariableUsageInfo resolveAsReferencedVariable(BuildDataManager buildDataManager) {
-        UnresolvedFieldUsageInfo usage = new UnresolvedFieldUsageInfo(buildDataManager
+        UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
                 .getAllAvaliableNames(), this.ownerUsage, this.name, true, this.fromLine, this.fromColumn, this.toLine, this.toColumn);
-        buildDataManager.addVariableUsage(usage);
-        return usage;
+        buildDataManager.addVariableUsage(fieldUsage);
+        
+        this.usage = fieldUsage;
+        
+        return fieldUsage;
     }
 
     @Override

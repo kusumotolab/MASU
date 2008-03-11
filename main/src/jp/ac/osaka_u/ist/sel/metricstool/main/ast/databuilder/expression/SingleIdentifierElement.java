@@ -20,7 +20,7 @@ public class SingleIdentifierElement extends IdentifierElement {
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(name, fromLine, fromColumn, toLine, toColumn);
-        
+
         this.qualifiedName = new String[] { name };
         this.ownerUsage = ownerUsage;
 
@@ -32,25 +32,28 @@ public class SingleIdentifierElement extends IdentifierElement {
 
     private UnresolvedVariableUsageInfo resolveAsVariableUsage(BuildDataManager buildDataManager,
             UnresolvedVariableInfo usedVariable, boolean reference) {
-        UnresolvedVariableUsageInfo usage;
+        final UnresolvedVariableUsageInfo<?> localVariableUsage;
         if (null == usedVariable || usedVariable instanceof UnresolvedFieldInfo) {
             //変数がみつからないので多分どこかのフィールド or 見つかった変数がフィールドだった
-            usage = new UnresolvedFieldUsageInfo(buildDataManager.getAllAvaliableNames(),
-                    ownerUsage, name, reference, this.fromLine, this.fromColumn, this.toLine,
-                    this.toColumn);
+            localVariableUsage = new UnresolvedFieldUsageInfo(buildDataManager
+                    .getAllAvaliableNames(), ownerUsage, name, reference, this.fromLine,
+                    this.fromColumn, this.toLine, this.toColumn);
         } else if (usedVariable instanceof UnresolvedParameterInfo) {
             UnresolvedParameterInfo parameter = (UnresolvedParameterInfo) usedVariable;
-            usage = new UnresolvedParameterUsageInfo(parameter, reference, this.fromLine,
-                    this.fromColumn, this.toLine, this.toColumn);
+            localVariableUsage = new UnresolvedParameterUsageInfo(parameter, reference,
+                    this.fromLine, this.fromColumn, this.toLine, this.toColumn);
         } else {
             assert (usedVariable instanceof UnresolvedLocalVariableInfo) : "Illegal state: unexpected VariableInfo";
             UnresolvedLocalVariableInfo localVariable = (UnresolvedLocalVariableInfo) usedVariable;
-            usage = new UnresolvedLocalVariableUsageInfo(localVariable, reference, this.fromLine,
-                    this.fromColumn, this.toLine, this.toColumn);
+            localVariableUsage = new UnresolvedLocalVariableUsageInfo(localVariable, reference,
+                    this.fromLine, this.fromColumn, this.toLine, this.toColumn);
         }
 
-        buildDataManager.addVariableUsage(usage);
-        return usage;
+        buildDataManager.addVariableUsage(localVariableUsage);
+
+        this.usage = localVariableUsage;
+
+        return localVariableUsage;
     }
 
     @Override

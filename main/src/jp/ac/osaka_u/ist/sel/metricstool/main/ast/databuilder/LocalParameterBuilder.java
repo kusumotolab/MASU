@@ -1,49 +1,52 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.LocalParameterStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalClauseInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableDecralationStatementInfo;
 
 
 public class LocalParameterBuilder
         extends
-        VariableBuilder<UnresolvedLocalVariableInfo, UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo>> {
-
-    public LocalParameterBuilder(BuildDataManager buildDataManager, ModifiersInterpriter interpriter) {
-        this(buildDataManager, new ModifiersBuilder(), new TypeBuilder(buildDataManager),
-                new NameBuilder(), interpriter);
-    }
+        InitializableVariableBuilder<UnresolvedLocalVariableInfo, UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo>> {
 
     public LocalParameterBuilder(BuildDataManager buildDataManager,
-            ModifiersBuilder modifiersBuilder, TypeBuilder typeBuilder, NameBuilder nameBuilder,
-            ModifiersInterpriter interpriter) {
-        super(buildDataManager, new LocalParameterStateManager(), modifiersBuilder, typeBuilder,
-                nameBuilder);
+            final ExpressionElementManager expressionManager, ModifiersBuilder modifiersBuilder,
+            TypeBuilder typeBuilder, NameBuilder nameBuilder, ModifiersInterpriter interpriter) {
+        super(buildDataManager, expressionManager, new LocalParameterStateManager(),
+                modifiersBuilder, typeBuilder, nameBuilder);
 
         this.interpriter = interpriter;
     }
 
     @Override
-    protected UnresolvedLocalVariableInfo buildVariable(String[] name, UnresolvedTypeInfo type,
-            ModifierInfo[] modifiers,
-            UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> deifnitionSpace,
+    protected UnresolvedLocalVariableInfo buildVariable(final String[] name,
+            final UnresolvedTypeInfo type, final ModifierInfo[] modifiers,
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> deifnitionSpace,
             final int startLine, final int startColumn, final int endLine, final int endColumn) {
         String varName = "";
         if (name.length > 0) {
             varName = name[0];
         }
 
+        final UnresolvedExpressionInfo<? extends ExpressionInfo> initializationExpression = this.builtInitializerStack
+                .pop();
+
         UnresolvedLocalVariableInfo local = new UnresolvedLocalVariableInfo(varName, type,
-                deifnitionSpace, startLine, startColumn, endLine, endColumn);
+                deifnitionSpace, initializationExpression, startLine, startColumn, endLine,
+                endColumn);
         for (ModifierInfo modifier : modifiers) {
             local.addModifier(modifier);
         }
@@ -55,6 +58,15 @@ public class LocalParameterBuilder
         if (null != buildDataManager) {
             buildDataManager.addLocalParameter(local);
         }
+        
+        final UnresolvedVariableDecralationStatementInfo declarationStatement = new UnresolvedVariableDecralationStatementInfo(
+                local, initializationExpression);
+        
+        final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = this.buildDataManager.getCurrentLocalSpace();
+        if(null != currentLocal) {
+            currentLocal.addStatement(declarationStatement);
+        }
+
 
         return local;
     }

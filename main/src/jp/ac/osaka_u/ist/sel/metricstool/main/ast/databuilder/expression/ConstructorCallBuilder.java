@@ -47,8 +47,6 @@ public class ConstructorCallBuilder extends ExpressionBuilder{
             ExpressionElement element = elements[i];
             if (element instanceof IdentifierElement){
                 constructorCall.addParameter(((IdentifierElement)element).resolveAsReferencedVariable(buildManager));
-            } else if (element.equals(InstanceSpecificElement.THIS)){
-                constructorCall.addParameter(InstanceSpecificElement.getThisInstanceType(buildManager));
             } else if (element instanceof TypeArgumentElement) {
                 TypeArgumentElement typeArgument = (TypeArgumentElement) element;
                 

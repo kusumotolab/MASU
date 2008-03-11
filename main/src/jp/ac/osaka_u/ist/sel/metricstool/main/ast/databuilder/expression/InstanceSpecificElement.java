@@ -2,37 +2,55 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedNullUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
 public class InstanceSpecificElement extends ExpressionElement {
 
-    public static final InstanceSpecificElement THIS = new InstanceSpecificElement();
+    private enum SPECIFIC_ELEMENT_TYPE {
+        NULL, THIS
+    }
 
-    public static final InstanceSpecificElement NULL = new InstanceSpecificElement(null , new UnresolvedNullUsageInfo());
-
-    private InstanceSpecificElement(UnresolvedTypeInfo type, UnresolvedEntityUsageInfo usage) {
+    private InstanceSpecificElement(final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> usage, final SPECIFIC_ELEMENT_TYPE elementType) {
         // TODO 0‚Å‚È‚¢‚Ì‚ð‚¢‚ê‚é‚×‚«?
         super(usage);
-        this.type = type;
+        
+        this.elementType = elementType;
     }
 
-    private InstanceSpecificElement() {
-        super();
-        this.type = null;
+    public static InstanceSpecificElement getThisInstanceType(BuildDataManager buildManager,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        
+        final UnresolvedClassReferenceInfo thisInstance = buildManager.getCurrentClass()
+                .getClassReference();
+        thisInstance.setFromLine(fromLine);
+        thisInstance.setFromColumn(fromColumn);
+        thisInstance.setToLine(toLine);
+        thisInstance.setToColumn(toColumn);
+        
+        return new InstanceSpecificElement(thisInstance, SPECIFIC_ELEMENT_TYPE.THIS);
     }
     
-    public static UnresolvedClassReferenceInfo getThisInstanceType(BuildDataManager buildManager) {
-        return buildManager.getCurrentClass().getClassReference();
+    public static InstanceSpecificElement getNullElement(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        final UnresolvedNullUsageInfo nullUsage = new UnresolvedNullUsageInfo();
+        nullUsage.setFromLine(fromLine);
+        nullUsage.setFromColumn(fromColumn);
+        nullUsage.setToLine(toLine);
+        nullUsage.setToColumn(toColumn);
+        
+        return new InstanceSpecificElement(nullUsage, SPECIFIC_ELEMENT_TYPE.NULL);
+    }
+    
+    public final boolean isNullElement() {
+        return this.elementType.equals(SPECIFIC_ELEMENT_TYPE.NULL);
+    }
+    
+    public final boolean isThisInstance() {
+        return this.elementType.equals(SPECIFIC_ELEMENT_TYPE.THIS);
     }
 
-    public UnresolvedTypeInfo getType() {
-        return type;
-    }
-
-    private final UnresolvedTypeInfo type;
-
+    private final SPECIFIC_ELEMENT_TYPE elementType;
 }

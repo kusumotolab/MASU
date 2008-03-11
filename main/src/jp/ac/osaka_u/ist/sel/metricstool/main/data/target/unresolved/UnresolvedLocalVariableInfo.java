@@ -7,6 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
@@ -39,6 +40,7 @@ public final class UnresolvedLocalVariableInfo
      * @param name 変数名
      * @param type 未解決型名
      * @param definitionSpace 宣言しているローカル空間
+     * @param initializer ローカル変数の初期化式
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
@@ -46,8 +48,11 @@ public final class UnresolvedLocalVariableInfo
      */
     public UnresolvedLocalVariableInfo(final String name, final UnresolvedTypeInfo type,
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> definitionSpace,
+            final UnresolvedExpressionInfo<? extends ExpressionInfo> initializer,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         super(name, type, definitionSpace, fromLine, fromColumn, toLine, toColumn);
+
+        this.initializer = initializer;
     }
 
     /**
@@ -104,8 +109,8 @@ public final class UnresolvedLocalVariableInfo
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedVariableType)
                         .getDimension();
-                final TypeInfo elementType = unresolvedElementType.resolve(usingClass,
-                        usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                final TypeInfo elementType = unresolvedElementType.resolve(usingClass, usingMethod,
+                        classInfoManager, fieldInfoManager, methodInfoManager);
                 variableType = ArrayTypeInfo.getType(elementType, dimension);
 
             } else {
@@ -126,4 +131,16 @@ public final class UnresolvedLocalVariableInfo
         return this.resolvedInfo;
     }
 
+    /**
+     * 変数の初期化式を返す
+     * @return 変数の初期化式．初期化されていない場合はnull
+     */
+    public final UnresolvedExpressionInfo<? extends ExpressionInfo> getInitilizer() {
+        return this.initializer;
+    }
+
+    /**
+     * 変数の初期化式を表す変数
+     */
+    private final UnresolvedExpressionInfo<? extends ExpressionInfo> initializer;
 }

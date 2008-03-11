@@ -22,7 +22,6 @@ public class TypeArgumentElement extends ExpressionElement{
     /**
      * 型引数を返す．
      * @return このインスタンスが表す型引数
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElement#getType()
      */
     public UnresolvedTypeInfo getType() {
         return type;

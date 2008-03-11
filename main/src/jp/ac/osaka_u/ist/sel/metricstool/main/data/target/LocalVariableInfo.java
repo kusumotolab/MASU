@@ -24,8 +24,9 @@ public final class LocalVariableInfo extends VariableInfo<LocalVariableUsageInfo
      * @param toColumn I—¹—ñ
      */
     public LocalVariableInfo(final Set<ModifierInfo> modifiers, final String name,
-            final TypeInfo type, final LocalSpaceInfo definitionSpace, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+            final TypeInfo type, final LocalSpaceInfo definitionSpace, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
         super(modifiers, name, type, definitionSpace, fromLine, fromColumn, toLine, toColumn);
     }
+
 }
