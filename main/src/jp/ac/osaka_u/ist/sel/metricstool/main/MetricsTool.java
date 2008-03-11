@@ -1057,12 +1057,14 @@ public class MetricsTool {
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
         final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+        final FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
         final MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
 
         // 各 Unresolvedクラスに対して
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
-            registMethodInfos(unresolvedClassInfo, classInfoManager, methodInfoManager);
+            registMethodInfos(unresolvedClassInfo, classInfoManager, fieldInfoManager,
+                    methodInfoManager);
         }
     }
 
@@ -1074,7 +1076,8 @@ public class MetricsTool {
      * @param methodInfoManager 用いるメソッドマネージャ
      */
     private void registMethodInfos(final UnresolvedClassInfo unresolvedClassInfo,
-            final ClassInfoManager classInfoManager, final MethodInfoManager methodInfoManager) {
+            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
+            final MethodInfoManager methodInfoManager) {
 
         // ClassInfo を取得
         final TargetClassInfo ownerClass = unresolvedClassInfo.getResolved();
@@ -1085,7 +1088,7 @@ public class MetricsTool {
 
             // メソッド情報を解決
             final TargetMethodInfo methodInfo = unresolvedMethodInfo.resolve(ownerClass, null,
-                    classInfoManager, null, methodInfoManager);
+                    classInfoManager, fieldInfoManager, methodInfoManager);
 
             // メソッド情報を登録
             ownerClass.addDefinedMethod(methodInfo);
@@ -1098,7 +1101,7 @@ public class MetricsTool {
 
             //　コンストラクタ情報を解決
             final TargetConstructorInfo constructorInfo = unresolvedConstructorInfo.resolve(
-                    ownerClass, null, classInfoManager, null, methodInfoManager);
+                    ownerClass, null, classInfoManager, fieldInfoManager, methodInfoManager);
             methodInfoManager.add(constructorInfo);
 
             // コンストラクタ情報を登録            
@@ -1110,7 +1113,8 @@ public class MetricsTool {
         // 各 Unresolvedクラスに対して
         for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
                 .getInnerClasses()) {
-            registMethodInfos(unresolvedInnerClassInfo, classInfoManager, methodInfoManager);
+            registMethodInfos(unresolvedInnerClassInfo, classInfoManager, fieldInfoManager,
+                    methodInfoManager);
         }
     }
 

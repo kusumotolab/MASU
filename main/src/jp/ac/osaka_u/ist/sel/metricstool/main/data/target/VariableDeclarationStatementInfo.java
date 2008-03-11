@@ -4,31 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 public class VariableDeclarationStatementInfo implements StatementInfo {
 
     /**
-     * 宣言されている変数，位置情報を与えて初期化
-     * 宣言されている変数が初期化されていない場合，このコンストラクタを使用する
-     * 
-     * @param declaredVariable 宣言されているローカル変数
-     * @param fromLine 開始行
-     * @param fromColumn 開始列
-     * @param toLine 終了行
-     * @param toColumn 終了列
-     */
-    public VariableDeclarationStatementInfo(final LocalVariableInfo declaredVariable,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
-        if (null == declaredVariable) {
-            throw new IllegalArgumentException("declaredVariable is null");
-        }
-
-        this.declaredLocalVarialbe = declaredVariable;
-        this.initializationExpression = null;
-
-        this.fromLine = fromLine;
-        this.fromColumn = fromColumn;
-        this.toLine = toLine;
-        this.toColumn = toColumn;
-    }
-
-    /**
      * 宣言されている変数，初期化式，位置情報を与えて初期化
      * 宣言されている変数が初期化されている場合，このコンストラクタを使用する
      * 

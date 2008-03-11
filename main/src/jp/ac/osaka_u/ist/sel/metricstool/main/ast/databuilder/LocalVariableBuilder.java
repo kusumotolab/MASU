@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedL
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableDecralationStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableDeclarationStatementInfo;
 
 
 public class LocalVariableBuilder
@@ -56,7 +56,7 @@ public class LocalVariableBuilder
             buildDataManager.addLocalVariable(var);
         }
 
-        final UnresolvedVariableDecralationStatementInfo declarationStatement = new UnresolvedVariableDecralationStatementInfo(
+        final UnresolvedVariableDeclarationStatementInfo declarationStatement = new UnresolvedVariableDeclarationStatementInfo(
                 var, initializationExpression);
         
         final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = this.buildDataManager.getCurrentLocalSpace();

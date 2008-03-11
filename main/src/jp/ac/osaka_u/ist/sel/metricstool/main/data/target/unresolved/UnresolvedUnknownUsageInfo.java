@@ -79,13 +79,13 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
 
         // エンティティ参照名を取得
         final String[] name = this.getName();
-
+       
         // 位置情報を取得
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-
+       
         // 利用可能なインスタンスフィールド名からエンティティ名を検索
         {
             // このクラスで利用可能なインスタンスフィールド一覧を取得
