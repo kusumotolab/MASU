@@ -18,8 +18,7 @@ public class ExpressionDescriptionBuilder extends ExpressionBuilder {
      */
     public ExpressionDescriptionBuilder(final ExpressionElementManager expressionManager,
             final BuildDataManager buildDataManager) {
-        super(expressionManager);
-        this.buildDataManager = buildDataManager;
+        super(expressionManager, buildDataManager);
     }
 
     @Override
@@ -44,5 +43,4 @@ public class ExpressionDescriptionBuilder extends ExpressionBuilder {
         return token.isExpression();
     }
 
-    private final BuildDataManager buildDataManager;
 }

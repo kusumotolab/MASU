@@ -16,7 +16,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMonominalOperationInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedNullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -24,8 +23,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
 
     public OperatorExpressionBuilder(final ExpressionElementManager expressionManager,
             final BuildDataManager buildManager) {
-        super(expressionManager);
-        this.buildDataManager = buildManager;
+        super(expressionManager, buildManager);
     }
 
     @Override
@@ -125,7 +123,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
 
             } else {
                 //自分で型決定する
-                UnresolvedEntityUsageInfo resultType = null;
+                UnresolvedEntityUsageInfo<? extends EntityUsageInfo> resultType = null;
 
                 //オペレータによってすでに決定している戻り値の型，確定していなければnull
                 final PrimitiveTypeInfo type = token.getSpecifiedResultType();
@@ -136,7 +134,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     resultType = new UnresolvedMonominalOperationInfo(termTypes[0], type);
                 } else if (token.equals(OperatorToken.ARRAY)) {
                     //配列記述子の場合は特別処理
-                    UnresolvedEntityUsageInfo ownerType;
+                    final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> ownerType;
                     if (elements[0] instanceof IdentifierElement) {
                         ownerType = ((IdentifierElement) elements[0])
                                 .resolveAsReferencedVariable(this.buildDataManager);
@@ -168,7 +166,5 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
     protected boolean isTriggerToken(final AstToken token) {
         return token.isOperator();
     }
-
-    private final BuildDataManager buildDataManager;
 
 }

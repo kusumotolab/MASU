@@ -17,6 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.MethodParameterBui
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameSpaceBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.SingleStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionDescriptionBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.InstanceElementBuilder;
@@ -102,19 +103,24 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders
                 .add(new JavaTypeElementBuilder(this.expressionManager, this.buildDataManager));
         this.builders.add(new MethodCallBuilder(this.expressionManager, this.buildDataManager));
-        this.builders.add(new InstanceElementBuilder(this.buildDataManager, this.expressionManager));
+        this.builders
+                .add(new InstanceElementBuilder(this.buildDataManager, this.expressionManager));
         this.builders.add(new OperatorExpressionBuilder(this.expressionManager,
                 this.buildDataManager));
         this.builders.add(new JavaConstructorCallBuilder(this.expressionManager,
                 this.buildDataManager));
-        this.builders.add(new JavaArrayInstantiationBuilder(this.expressionManager));
+        this.builders.add(new JavaArrayInstantiationBuilder(this.expressionManager,
+                this.buildDataManager));
 
         this.builders.add(new JavaExpressionElementBuilder(this.expressionManager,
                 this.buildDataManager));
 
+        this.builders
+                .add(new SingleStatementBuilder(this.expressionManager, this.buildDataManager));
+
         this.addInnerBlockBuilder();
 
-        for (final DataBuilder builder : this.builders) {
+        for (final DataBuilder<?> builder : this.builders) {
             visitor.addVisitListener(builder);
         }
 
@@ -156,7 +162,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
      * ビジターの状態と構築中のデータをリセットする．
      */
     private void reset() {
-        for (final DataBuilder builder : this.builders) {
+        for (final DataBuilder<?> builder : this.builders) {
             builder.reset();
         }
         this.expressionManager.reset();
@@ -181,5 +187,5 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
     /**
      * ビジターにセットしたビルダー群のセット
      */
-    private final Set<DataBuilder> builders = new LinkedHashSet<DataBuilder>();
+    private final Set<DataBuilder<?>> builders = new LinkedHashSet<DataBuilder<?>>();
 }

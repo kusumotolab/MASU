@@ -20,6 +20,10 @@ public class ExpressionElementManager {
         return this.lastPoppedExpressinElement;
     }
     
+    public final ExpressionElement getPeekExpressionElement() {
+        return this.expressionAnalyzeStack.peek();
+    }
+    
     public void reset(){
         expressionAnalyzeStack.clear();
         this.lastPoppedExpressinElement = null;

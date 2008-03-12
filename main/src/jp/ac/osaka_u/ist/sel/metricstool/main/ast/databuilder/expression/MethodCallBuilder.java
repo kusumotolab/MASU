@@ -12,9 +12,8 @@ public class MethodCallBuilder extends ExpressionBuilder{
     /**
      * @param expressionManager
      */
-    public MethodCallBuilder(ExpressionElementManager expressionManager, BuildDataManager buildDataManager) {
-        super(expressionManager);
-        this.buildDataManager = buildDataManager;
+    public MethodCallBuilder(final ExpressionElementManager expressionManager, final BuildDataManager buildDataManager) {
+        super(expressionManager, buildDataManager);
     }
 
     @Override
@@ -69,7 +68,4 @@ public class MethodCallBuilder extends ExpressionBuilder{
     protected boolean isTriggerToken(AstToken token) {
         return token.isMethodCall();
     }
-    
-    private final BuildDataManager buildDataManager;
-
 }

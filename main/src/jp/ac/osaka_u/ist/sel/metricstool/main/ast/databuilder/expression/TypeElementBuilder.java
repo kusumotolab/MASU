@@ -23,14 +23,8 @@ public class TypeElementBuilder extends ExpressionBuilder {
      * @param expressionManager
      */
     public TypeElementBuilder(final ExpressionElementManager expressionManager,
-            final BuildDataManager buildManager) {
-        super(expressionManager);
-
-        if (null == buildManager) {
-            throw new NullPointerException("buildManager is null.");
-        }
-
-        this.buildManager = buildManager;
+            final BuildDataManager buildDataManager) {
+        super(expressionManager, buildDataManager);
     }
 
     @Override
@@ -162,7 +156,7 @@ public class TypeElementBuilder extends ExpressionBuilder {
         
         UnresolvedTypeParameterInfo typeParameter = null;
         if (typeName.length == 1){
-            typeParameter = this.buildManager.getTypeParameter(typeName[0]);
+            typeParameter = this.buildDataManager.getTypeParameter(typeName[0]);
         }
         
         if (null != typeParameter){
@@ -171,7 +165,7 @@ public class TypeElementBuilder extends ExpressionBuilder {
         
         //TODO 型パラメータに型引数が付く言語があったらそれを登録する仕組みを作る必要があるかも
         
-        UnresolvedClassTypeInfo resultType = new UnresolvedClassTypeInfo(this.buildManager.getAllAvaliableNames(),
+        UnresolvedClassTypeInfo resultType = new UnresolvedClassTypeInfo(this.buildDataManager.getAllAvaliableNames(),
                 typeName);
         
         for(int i=1; i < elements.length; i++){
@@ -200,7 +194,5 @@ public class TypeElementBuilder extends ExpressionBuilder {
                 || token.isConstant() || token.isArrayDeclarator() || token.isTypeArgument()
                 || token.isTypeWildcard();
     }
-
-    private final BuildDataManager buildManager;
     
 }

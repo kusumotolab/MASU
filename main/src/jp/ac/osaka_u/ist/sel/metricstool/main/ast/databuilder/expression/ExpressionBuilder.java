@@ -5,16 +5,28 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ExpressionStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ExpressionStateManager.EXPR_STATE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 
 
 public abstract class ExpressionBuilder extends StateDrivenDataBuilder<ExpressionElement> {
 
-    public ExpressionBuilder(ExpressionElementManager expressionManager) {
+    public ExpressionBuilder(final ExpressionElementManager expressionManager,
+            final BuildDataManager buildDataManager) {
+
+        if (null == buildDataManager || null == expressionManager) {
+            throw new IllegalArgumentException();
+        }
+
+        this.buildDataManager = buildDataManager;
         this.expressionManager = expressionManager;
 
         this.addStateManager(this.expressionStateManger);
@@ -24,7 +36,7 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
     public final void entered(AstVisitEvent e) {
         super.entered(e);
 
-        AstToken token = e.getToken();
+        final AstToken token = e.getToken();
 
         if (isActive() && isInExpression() && isTriggerToken(token)
                 || isExpressionDelimiterToken(token)) {
@@ -33,14 +45,14 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
     }
 
     @Override
-    public void exited(AstVisitEvent e) {
-        AstToken token = e.getToken();
+    public void exited(final AstVisitEvent e) {
+        final AstToken token = e.getToken();
 
-        boolean isRelated = isActive() && isInExpression() && isTriggerToken(token);
+        final boolean isRelated = isActive() && isInExpression() && isTriggerToken(token);
         if (isRelated || isExpressionDelimiterToken(token)) {
             assert (!this.expressionStackCountStack.isEmpty()) : "Illegal state: illegal stack size.";
 
-            int availableElementCount = this.expressionManager.getExpressionStackSize()
+            final int availableElementCount = this.expressionManager.getExpressionStackSize()
                     - this.expressionStackCountStack.pop();
 
             assert (0 <= availableElementCount) : "Illegal state: illegal stack size.";
@@ -57,10 +69,11 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
         if (isRelated) {
             afterExited(e);
         }
+
     }
 
     @Override
-    public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
+    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
 
     }
 
@@ -86,9 +99,11 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
 
     private final ExpressionElementManager expressionManager;
 
+    protected final BuildDataManager buildDataManager;
+
     private final ExpressionStateManager expressionStateManger = new ExpressionStateManager();
 
-    private Stack<Integer> expressionStackCountStack = new Stack<Integer>();
+    private final Stack<Integer> expressionStackCountStack = new Stack<Integer>();
 
     private final List<ExpressionElement> elementBuffer = new LinkedList<ExpressionElement>();
 }

@@ -20,8 +20,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
      */
     public CompoundIdentifierBuilder(ExpressionElementManager expressionManager,
             BuildDataManager buildManager) {
-        super(expressionManager);
-        this.buildDataManager = buildManager;
+        super(expressionManager, buildManager);
     }
 
     @Override
@@ -111,5 +110,4 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
         return token.isNameSeparator();
     }
 
-    private final BuildDataManager buildDataManager;
 }

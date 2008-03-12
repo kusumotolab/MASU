@@ -22,17 +22,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 
 public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
-    public JavaConstructorCallBuilder(ExpressionElementManager expressionManager,
-            BuildDataManager buildDataManager) {
+    public JavaConstructorCallBuilder(final ExpressionElementManager expressionManager,
+            final BuildDataManager buildDataManager) {
         super(expressionManager, buildDataManager);
         this.buildDataManager = buildDataManager;
     }
 
     @Override
-    protected void afterExited(AstVisitEvent event) {
+    protected void afterExited(final AstVisitEvent event) {
         super.afterExited(event);
 
-        AstToken token = event.getToken();
+        final AstToken token = event.getToken();
         if (token.equals(JavaAstToken.CONSTRUCTOR_CALL)) {
             buildInnerConstructorCall(buildDataManager.getCurrentClass());
         } else if (token.equals(JavaAstToken.SUPER_CONSTRUCTOR_CALL)) {
@@ -60,38 +60,38 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         }
     }
 
-    protected void buildInnerConstructorCall(UnresolvedClassInfo currentClass) {
-        ExpressionElement[] elements = getAvailableElements();
+    protected void buildInnerConstructorCall(final UnresolvedClassInfo currentClass) {
+        final ExpressionElement[] elements = getAvailableElements();
         
-        Set<AvailableNamespaceInfo> namespaces = new HashSet<AvailableNamespaceInfo>();
-        AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(currentClass.getFullQualifiedName(), false);
+        final Set<AvailableNamespaceInfo> namespaces = new HashSet<AvailableNamespaceInfo>();
+        final AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(currentClass.getFullQualifiedName(), false);
         namespaces.add(namespace);
-        UnresolvedClassTypeInfo referenceType = new UnresolvedClassTypeInfo(namespaces, currentClass.getFullQualifiedName());
+        final UnresolvedClassTypeInfo referenceType = new UnresolvedClassTypeInfo(namespaces, currentClass.getFullQualifiedName());
 
-        UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(referenceType);
+        final UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(referenceType);
         resolveParameters(constructorCall, elements, 0);
         pushElement(UsageElement.getInstance(constructorCall));
         buildDataManager.addMethodCall(constructorCall);
     }
 
-    protected void buildSuperConstructorCall(UnresolvedClassTypeInfo superClass) {
-        ExpressionElement[] elements = getAvailableElements();
+    protected void buildSuperConstructorCall(final UnresolvedClassTypeInfo superClass) {
+        final ExpressionElement[] elements = getAvailableElements();
 
         int argStartIndex = 0;
 
         //String[] superClassReferenceName = superClass.getFullReferenceName();
-        String[] superClassReferenceName = superClass.getReferenceName();
-        String className = superClassReferenceName[superClassReferenceName.length - 1];
+        final String[] superClassReferenceName = superClass.getReferenceName();
+        final String className = superClassReferenceName[superClassReferenceName.length - 1];
 
         if (elements.length > 0 && elements[0] instanceof TypeElement) {
             //苦し紛れの特別処理
             //elementsの1個目がUnresolvedReferenceTypeInfoでありかつsuperClassのアウタークラスであるなら
             //それはOuterClass.this.super()という呼び出し形式であるとみなす
 
-            UnresolvedTypeInfo type = ((TypeElement) elements[0]).getType();
+            final UnresolvedTypeInfo type = ((TypeElement) elements[0]).getType();
             if (type instanceof UnresolvedClassTypeInfo) {
                 // TODO UnresolvedReferenceTypeにすべきかも 要テスト
-                String[] firstElementReference = ((UnresolvedClassTypeInfo) type).getReferenceName();
+                final String[] firstElementReference = ((UnresolvedClassTypeInfo) type).getReferenceName();
                         //.getFullReferenceName();
                 if (firstElementReference.length < superClassReferenceName.length) {
                     boolean match = true;
@@ -110,14 +110,14 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
         assert (null != className) : "Illegal state: unexpected ownerClass type.";
 
-        UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(superClass);
+        final UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(superClass);
         resolveParameters(constructorCall, elements, argStartIndex);
         pushElement(UsageElement.getInstance(constructorCall));
         buildDataManager.addMethodCall(constructorCall);
 
     }
 
-    protected boolean isJavaArrayInstantiation(ExpressionElement[] elements) {
+    protected boolean isJavaArrayInstantiation(final ExpressionElement[] elements) {
         for (ExpressionElement element : elements) {
             if (element.equals(JavaArrayInstantiationElement.getInstance())) {
                 return true;
@@ -126,8 +126,8 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         return false;
     }
 
-    protected UnresolvedArrayTypeInfo resolveArrayElement(UnresolvedTypeInfo type,
-            ExpressionElement[] elements) {
+    protected UnresolvedArrayTypeInfo resolveArrayElement(final UnresolvedTypeInfo type,
+            final ExpressionElement[] elements) {
         int i = 1;
         int dimension = 0;
         while (i < elements.length
@@ -144,7 +144,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
     }
 
     @Override
-    protected boolean isTriggerToken(AstToken token) {
+    protected boolean isTriggerToken(final AstToken token) {
         return super.isTriggerToken(token) || token.equals(JavaAstToken.CONSTRUCTOR_CALL)
                 || token.equals(JavaAstToken.SUPER_CONSTRUCTOR_CALL);
     }

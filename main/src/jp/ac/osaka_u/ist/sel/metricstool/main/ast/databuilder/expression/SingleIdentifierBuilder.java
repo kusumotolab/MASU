@@ -9,11 +9,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 
 public class SingleIdentifierBuilder extends ExpressionBuilder {
 
-    public SingleIdentifierBuilder(ExpressionElementManager expressionManager,
-            BuildDataManager buildDataManager) {
-        super(expressionManager);
-
-        this.buildDataManager = buildDataManager;
+    public SingleIdentifierBuilder(final ExpressionElementManager expressionManager,
+            final BuildDataManager buildDataManager) {
+        super(expressionManager, buildDataManager);
     }
 
     @Override
@@ -35,7 +33,4 @@ public class SingleIdentifierBuilder extends ExpressionBuilder {
     protected boolean isTriggerToken(AstToken token) {
         return token.isIdentifier();
     }
-
-    private final BuildDataManager buildDataManager;
-
 }
