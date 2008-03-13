@@ -55,9 +55,11 @@ public abstract class InitializableVariableBuilder<TVar extends UnresolvedVariab
 
             assert (lastExpression.getUsage() instanceof UnresolvedExpressionInfo) : "Illegal state: variable initilizer was not a expression";
 
-            this.builtInitializerStack
-                    .push((UnresolvedExpressionInfo<? extends ExpressionInfo>) lastExpression
-                            .getUsage());
+            if(null != lastExpression) {
+                this.builtInitializerStack
+                        .push((UnresolvedExpressionInfo<? extends ExpressionInfo>) lastExpression
+                                .getUsage());
+            }
         }
     }
 
