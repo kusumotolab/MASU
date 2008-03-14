@@ -59,6 +59,8 @@ public abstract class InitializableVariableBuilder<TVar extends UnresolvedVariab
                 this.builtInitializerStack
                         .push((UnresolvedExpressionInfo<? extends ExpressionInfo>) lastExpression
                                 .getUsage());
+            } else {
+                this.builtInitializerStack.push(null);
             }
         }
     }
