@@ -12,8 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationSta
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
-public final class UnresolvedVariableDeclarationStatementInfo implements
-        UnresolvedStatementInfo<VariableDeclarationStatementInfo> {
+public final class UnresolvedVariableDeclarationStatementInfo extends UnresolvedSingleStatementInfo<VariableDeclarationStatementInfo> {
 
     public UnresolvedVariableDeclarationStatementInfo(
             final UnresolvedLocalVariableInfo declaredVariable,
@@ -27,16 +26,6 @@ public final class UnresolvedVariableDeclarationStatementInfo implements
 
         this.declaredLocalVariable = declaredVariable;
         this.initializationExpression = initializationExpression;
-    }
-
-    @Override
-    public boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    @Override
-    public VariableDeclarationStatementInfo getResolved() {
-        return this.resolvedInfo;
     }
 
     @Override
@@ -77,46 +66,6 @@ public final class UnresolvedVariableDeclarationStatementInfo implements
         return this.resolvedInfo;
     }
 
-    @Override
-    public void setFromColumn(int column) {
-        this.fromColumn = column;
-    }
-
-    @Override
-    public void setFromLine(int line) {
-        this.fromLine = line;
-    }
-
-    @Override
-    public void setToColumn(int column) {
-        this.toColumn = column;
-    }
-
-    @Override
-    public void setToLine(int line) {
-        this.toLine = line;
-    }
-
-    @Override
-    public final int getFromColumn() {
-        return this.fromColumn;
-    }
-
-    @Override
-    public final int getFromLine() {
-        return this.fromLine;
-    }
-
-    @Override
-    public final int getToColumn() {
-        return this.toColumn;
-    }
-
-    @Override
-    public final int getToLine() {
-        return this.toLine;
-    }
-
     public final UnresolvedLocalVariableInfo getDeclaredLocalVariable() {
         return this.declaredLocalVariable;
     }
@@ -148,30 +97,5 @@ public final class UnresolvedVariableDeclarationStatementInfo implements
      * 宣言されている変数の初期化式を表すフィールド
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> initializationExpression;
-
-    /**
-     * 開始行を表す変数
-     */
-    private int fromLine;
-
-    /**
-     * 開始列を表す変数
-     */
-    private int fromColumn;
-
-    /**
-     * 終了行を表す変数
-     */
-    private int toLine;
-
-    /**
-     * 終了列を表す変数
-     */
-    private int toColumn;
-
-    /**
-     * 解決済み情報を保存する変数
-     */
-    private VariableDeclarationStatementInfo resolvedInfo;
 
 }
