@@ -210,7 +210,7 @@ tokens {
 	INSTANCE_INIT; STATIC_INIT; TYPE; NAME; CLASS_DEF; INTERFACE_DEF;
 	PACKAGE_DEF; ARRAY_DECLARATOR; ARRAY_INSTANTIATION; EXTENDS_CLAUSE; IMPLEMENTS_CLAUSE;
 	PARAMETERS; METHOD_PARAMETER_DEF; LOCAL_PARAMETER_DEF;LABELED_STAT; TYPECAST; INDEX_OP;
-	POST_INC; POST_DEC; METHOD_CALL; EXPR; ARRAY_INIT;
+	POST_INC; POST_DEC; METHOD_CALL; EXPR; EXPR_STATE; ARRAY_INIT;
 	IMPORT; UNARY_MINUS; UNARY_PLUS; CASE_GROUP; ELIST; FOR;FOR_INIT; FOR_CONDITION;
 	FOR_ITERATOR; EMPTY_STAT; FINAL="final"; ABSTRACT="abstract";
 	STRICTFP="strictfp"; SUPER_CTOR_CALL; CTOR_CALL; VARIABLE_PARAMETER_DEF;
@@ -1159,7 +1159,8 @@ statement
 	// An expression statement. This could be a method call,
 	// assignment statement, or any other expression evaluated for
 	// side-effects.
-	|	expression SEMI!
+	|	ex:expression SEMI!
+		{#statement = #(#[EXPR_STATE,"EXPR_STATE"], ex);}
 
 	//TODO: what abour interfaces, enums and annotations
 	// class definition
