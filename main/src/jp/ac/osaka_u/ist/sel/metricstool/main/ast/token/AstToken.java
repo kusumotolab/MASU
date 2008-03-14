@@ -88,7 +88,13 @@ public interface AstToken {
      * @return 式を表すトークンならtrue
      */
     public boolean isExpression();
-
+    
+    /**
+     * トークンが式文を表すかどうかを返す．
+     * @return 式文を表すトークンならtrue
+     */
+    public boolean isExpressionStatement();
+    
     /**
      * トークンが文のリストを表すかどうか返す
      * @return 文のリストを表すトークンならtrue
@@ -335,4 +341,15 @@ public interface AstToken {
      */
     public boolean isBreak();
 
+    /**
+     * トークンがreturn文を表すかどうか返す
+     * @return return文を表すトークンならtrue
+     */
+    public boolean isReturn();
+    
+    /**
+     * トークンがthrow文を表すかどうか返す
+     * @return throw文を表すトークンならtrue
+     */
+    public boolean isThrow();
 }

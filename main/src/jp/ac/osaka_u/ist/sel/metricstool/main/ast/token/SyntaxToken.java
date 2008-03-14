@@ -74,9 +74,29 @@ public class SyntaxToken extends AstTokenAdapter {
         }
     };
 
+    /**
+     * break文を表す定数インスタンス
+     */
     public static final SyntaxToken BREAK = new SyntaxToken("BREAK") {
         @Override
         public boolean isBreak() {
+            return true;
+        }
+    };
+    
+    /**
+     * return文を表す定数インスタンス
+     */
+    public static final SyntaxToken RETURN = new SyntaxToken("RETURN") {
+        @Override
+        public boolean isReturn() {
+            return true;
+        }
+    };
+    
+    public static final SyntaxToken THROW = new SyntaxToken("THROW") {
+        @Override
+        public boolean isThrow() {
             return true;
         }
     };

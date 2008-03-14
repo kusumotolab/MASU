@@ -76,6 +76,10 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
     
+    public boolean isExpressionStatement() {
+        return false;
+    }
+    
     public boolean isSList() {
         return false;
     }
@@ -241,6 +245,15 @@ public class AstTokenAdapter implements AstToken {
     }
 
     public boolean isBreak() {
+        return false;
+    }
+    
+    public boolean isReturn() {
+        return false;
+    }
+    
+    @Override
+    public boolean isThrow() {
         return false;
     }
     

@@ -217,6 +217,9 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.EXPR:
             result = DescriptionToken.EXPRESSION;
             break;
+        case Java15TokenTypes.EXPR_STATE:
+            result = DescriptionToken.EXPRESSION_STATEMENT;
+            break;
         case Java15TokenTypes.SLIST:
             result = DescriptionToken.SLIST;
             break;
@@ -367,6 +370,12 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             break;
         case Java15TokenTypes.LITERAL_break:
             result = SyntaxToken.BREAK;
+            break;
+        case Java15TokenTypes.LITERAL_throw:
+            result = SyntaxToken.THROW;
+            break;
+        case Java15TokenTypes.LITERAL_return:
+            result = SyntaxToken.RETURN;
             break;
 //        case Java15TokenTypes.PARAMETERS:
 //        case Java15TokenTypes.ELIST:

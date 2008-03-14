@@ -5,9 +5,11 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BlockScopeBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ThrowStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ClassBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ConstructorBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ExpressionStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.FieldBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.InheritanceBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalParameterBuilder;
@@ -17,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.MethodParameterBui
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameSpaceBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.SingleStatementBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ReturnStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionDescriptionBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.InstanceElementBuilder;
@@ -115,8 +117,11 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new JavaExpressionElementBuilder(this.expressionManager,
                 this.buildDataManager));
 
+        this.builders.add(new ExpressionStatementBuilder(this.expressionManager,
+                this.buildDataManager));
         this.builders
-                .add(new SingleStatementBuilder(this.expressionManager, this.buildDataManager));
+                .add(new ReturnStatementBuilder(this.expressionManager, this.buildDataManager));
+        this.builders.add(new ThrowStatementBuilder(this.expressionManager, this.buildDataManager));
 
         this.addInnerBlockBuilder();
 

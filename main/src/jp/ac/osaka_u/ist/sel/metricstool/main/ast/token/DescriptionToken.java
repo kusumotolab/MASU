@@ -18,6 +18,16 @@ public class DescriptionToken extends AstTokenAdapter {
             return true;
         }
     };
+    
+    /**
+     * 式文記述部を表す定数インスタンス.
+     */
+    public static final DescriptionToken EXPRESSION_STATEMENT = new DescriptionToken("EXPRESSION_STATEMENT") {
+        @Override
+        public boolean isExpressionStatement() {
+            return true;
+        }
+    };
 
     /**
      * 親クラス記述部を表す定数インスタンス.
