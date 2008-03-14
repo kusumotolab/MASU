@@ -53,7 +53,8 @@ public abstract class InitializableVariableBuilder<TVar extends UnresolvedVariab
 
             ExpressionElement lastExpression = expressionManager.getLastPoppedExpressionElement();
 
-            assert (lastExpression.getUsage() instanceof UnresolvedExpressionInfo) : "Illegal state: variable initilizer was not a expression";
+            // 配列の初期化子を無視しているのでこのassert文は現在は使用してはいけない
+            //assert (lastExpression.getUsage() instanceof UnresolvedExpressionInfo) : "Illegal state: variable initilizer was not a expression";
 
             if(null != lastExpression) {
                 this.builtInitializerStack
