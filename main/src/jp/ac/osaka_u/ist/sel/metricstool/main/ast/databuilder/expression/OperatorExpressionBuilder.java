@@ -143,8 +143,10 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     }
                     resultType = new UnresolvedArrayElementUsageInfo(ownerType);
                 } else if (token.equals(OperatorToken.CAST) && elements[0] instanceof TypeElement) {
-                    UnresolvedTypeInfo castedType = ((TypeElement) elements[0]).getType();
-                    resultType = new UnresolvedCastUsageInfo(castedType);
+                    final UnresolvedTypeInfo castType = ((TypeElement) elements[0]).getType();
+                    final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> castedUsage = elements[1]
+                            .getUsage();
+                    resultType = new UnresolvedCastUsageInfo(castType, castedUsage);
                 } else {
                     //Œ^Œˆ’è‚ÉŠÖ˜A‚·‚é€‚ğ¶‚©‚ç‡”Ô‚É‹™‚Á‚Ä‚¢‚Á‚ÄÅ‰‚ÉŒˆ’è‚Å‚«‚½“z‚ÉŸè‚ÉŒˆ‚ß‚é
                     for (int i = 0; i < typeSpecifiedTermIndexes.length; i++) {

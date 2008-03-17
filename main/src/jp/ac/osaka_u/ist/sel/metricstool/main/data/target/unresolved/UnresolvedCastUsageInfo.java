@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CastUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -22,12 +23,18 @@ public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo<Cas
     /**
      * キャストした方を与えて初期化
      * 
-     * @param castedType キャストした型
+     * @param castType キャストした型
      */
-    public UnresolvedCastUsageInfo(final UnresolvedTypeInfo castedType) {
-        
+    public UnresolvedCastUsageInfo(final UnresolvedTypeInfo castType,
+            final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> castedUsage) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
-        this.castedType = castedType;
+        if (null == castType || null == castedUsage) {
+            throw new IllegalArgumentException();
+        }
+
+        this.castType = castType;
+        this.castedUsage = castedUsage;
     }
 
     /**
@@ -35,7 +42,15 @@ public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo<Cas
      * @return キャストした型
      */
     public UnresolvedTypeInfo getCastType() {
-        return this.castedType;
+        return this.castType;
+    }
+
+    /**
+     * キャストが行われたエンティティ使用を返す
+     * @return キャストが行われたエンティティ使用
+     */
+    public UnresolvedEntityUsageInfo<? extends EntityUsageInfo> getCastedUsage() {
+        return this.castedUsage;
     }
 
     @Override
@@ -65,15 +80,24 @@ public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo<Cas
         final UnresolvedTypeInfo unresolvedCastType = this.getCastType();
         final TypeInfo castType = unresolvedCastType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-
+        
+        // キャストされたエンティティ使用を解決
+        final EntityUsageInfo castedUsage = this.getCastedUsage().resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+        
         // キャスト使用を解決
-        this.resolvedInfo = new CastUsageInfo(castType, fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo = new CastUsageInfo(castType, castedUsage, fromLine, fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 
     /**
      * キャストした型を保存する変数
      */
-    private final UnresolvedTypeInfo castedType;
+    private final UnresolvedTypeInfo castType;
+
+    /**
+     * キャストが行われたエンティティ使用を保存すための変数
+     */
+    private final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> castedUsage;
 
 }
