@@ -1,6 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+
 /**
  * フィールドの使用を表すクラス
  * 
@@ -16,9 +21,9 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
      * @param usedField 使用されているフィールド
      * @param reference 参照である場合は true, 代入である場合は false
      */
-    public FieldUsageInfo(final EntityUsageInfo ownerUsage, final TypeInfo ownerType, final FieldInfo usedField,
-            final boolean reference, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+    public FieldUsageInfo(final EntityUsageInfo ownerUsage, final TypeInfo ownerType,
+            final FieldInfo usedField, final boolean reference, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(usedField, reference, fromLine, fromColumn, toLine, toColumn);
 
@@ -55,12 +60,20 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     public final EntityUsageInfo getOwnerUsage() {
         return this.ownerUsage;
     }
-    
+
+    @Override
+    public SortedSet<VariableUsageInfo<?>> getVariableUsages() {
+        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>(
+                super.getVariableUsages());
+        variableUsages.addAll(getOwnerUsage().getVariableUsages());
+        return Collections.unmodifiableSortedSet(variableUsages);
+    }
+
     private final TypeInfo ownerType;
-    
+
     /**
      * フィールド参照が実行される親エンティティを保存する変数
      */
     private final EntityUsageInfo ownerUsage;
-    
+
 }

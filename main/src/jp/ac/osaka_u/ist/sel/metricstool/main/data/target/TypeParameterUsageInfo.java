@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import java.util.Set;
+
 
 public final class TypeParameterUsageInfo extends EntityUsageInfo {
 
@@ -24,5 +26,15 @@ public final class TypeParameterUsageInfo extends EntityUsageInfo {
         return this.entityUsage;
     }
 
+    /**
+     * 型パラメータの使用に変数使用が含まれることはないので空のセットを返す
+     * 
+     * @return 空のセット
+     */
+    @Override
+    public final Set<VariableUsageInfo<?>> getVariableUsages() {
+        return VariableUsageInfo.EmptySet;
+    }
+    
     private final EntityUsageInfo entityUsage;
 }

@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import java.util.Set;
+
 
 /**
  * クラスの参照を表すクラス．
@@ -47,6 +49,16 @@ public final class ClassReferenceInfo extends EntityUsageInfo {
         return this.referenceType.getReferencedClass();
     }
 
+    /**
+     * クラス参照において変数が使用されることはないので空のセットを返す
+     * 
+     * @return 空のセット
+     */
+    @Override
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
+        return VariableUsageInfo.EmptySet;
+    }
+    
     /**
      * このクラス参照の参照型を保存する変数
      */

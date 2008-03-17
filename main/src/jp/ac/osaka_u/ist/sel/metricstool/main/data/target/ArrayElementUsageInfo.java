@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import java.util.Set;
+
 
 /**
  * 配列要素の使用を表すクラス
@@ -60,6 +62,11 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
      */
     public EntityUsageInfo getOwnerEntityUsage() {
         return this.ownerEntityUsage;
+    }
+    
+    @Override
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
+        return this.getOwnerEntityUsage().getVariableUsages();
     }
 
     private final EntityUsageInfo ownerEntityUsage;

@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import java.util.Set;
+
 
 /**
  * return•¶‚Ìî•ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
@@ -35,6 +37,11 @@ public class ReturnStatementInfo extends SingleStatementInfo {
      */
     public final ExpressionInfo getReturnedExpression() {
         return this.returnedExpression;
+    }
+    
+    @Override
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
+        return this.returnedExpression.getVariableUsages();
     }
 
     /**

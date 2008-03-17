@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import java.util.Set;
+
 
 public final class UnknownEntityUsageInfo extends EntityUsageInfo {
 
@@ -11,5 +13,10 @@ public final class UnknownEntityUsageInfo extends EntityUsageInfo {
     public UnknownEntityUsageInfo(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
         super(fromLine, fromColumn, toLine, toColumn);
+    }
+    
+    @Override
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
+        return VariableUsageInfo.EmptySet;
     }
 }

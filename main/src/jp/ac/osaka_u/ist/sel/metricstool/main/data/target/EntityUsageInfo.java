@@ -115,4 +115,5 @@ public abstract class EntityUsageInfo implements ExpressionInfo {
      * ŠJn—ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
      */
     private final int toColumn;
+    
 }

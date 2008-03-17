@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Set;
+
+
 /**
  * •Ï”éŒ¾•¶‚Ìî•ñ‚ğ•Û—L‚·‚éƒNƒ‰ƒX
  * 
@@ -24,7 +27,7 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo {
             final ExpressionInfo initializationExpression, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
         super(fromLine, fromColumn, toLine, toColumn);
-        
+
         if (null == declaredVariable) {
             throw new IllegalArgumentException("declaredVariable is null");
         }
@@ -54,6 +57,12 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo {
      */
     public boolean isInitialized() {
         return null != this.initializationExpression;
+    }
+
+    @Override
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
+        return this.isInitialized() ? this.getInitializationExpression().getVariableUsages()
+                : VariableUsageInfo.EmptySet;
     }
 
     /**

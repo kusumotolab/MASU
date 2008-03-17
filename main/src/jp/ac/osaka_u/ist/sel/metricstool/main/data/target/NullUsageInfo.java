@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import java.util.Set;
+
 
 /**
  * null使用を表すクラス．
@@ -24,6 +26,16 @@ public final class NullUsageInfo extends EntityUsageInfo {
         return NULLTYPE;
     }
 
+    /**
+     * nullの使用に変数使用が含まれることはないので空のセットを返す
+     * 
+     * @return 空のセット
+     */
+    @Override
+    public final Set<VariableUsageInfo<?>> getVariableUsages() {
+        return VariableUsageInfo.EmptySet;
+    }
+    
     /**
      * null使用の型を保存するための定数
      */

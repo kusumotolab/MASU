@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import java.util.Set;
+
 
 /**
  * throw文の情報を保有するクラス
@@ -37,6 +39,10 @@ public class ThrowStatementInfo extends SingleStatementInfo {
         return this.thrownEpression;
     }
     
+    @Override
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
+        return this.thrownEpression.getVariableUsages();
+    }
     /**
      * throw文によって投げられる例外を表す式
      */

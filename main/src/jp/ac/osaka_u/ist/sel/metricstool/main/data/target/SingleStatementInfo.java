@@ -3,12 +3,12 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 /**
- * 単文の情報を保有するクラス．
+ * 単文の情報を保有する抽象クラス．
  * 
  * @author t-miyake
  *
  */
-public class SingleStatementInfo implements StatementInfo {
+public abstract class SingleStatementInfo implements StatementInfo {
 
     /**
      * 位置情報を与えて初期化

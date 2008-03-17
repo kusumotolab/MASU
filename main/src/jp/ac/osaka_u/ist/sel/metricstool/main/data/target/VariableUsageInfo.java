@@ -1,6 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+
 /**
  * 変数使用を表す抽象クラス
  * 
@@ -36,7 +41,17 @@ public abstract class VariableUsageInfo<T extends VariableInfo<?, ?>> extends En
         return !this.reference;
     }
 
+    @Override
+    public SortedSet<VariableUsageInfo<?>> getVariableUsages() {
+        final SortedSet<VariableUsageInfo<?>> variableUsage = new TreeSet<VariableUsageInfo<?>>();
+        variableUsage.add(this);
+        return Collections.unmodifiableSortedSet(variableUsage);
+    }
+    
     private final T usedVariable;
 
     private final boolean reference;
+
+    public static final SortedSet<VariableUsageInfo<?>> EmptySet = Collections
+            .unmodifiableSortedSet(new TreeSet<VariableUsageInfo<?>>());
 }

@@ -1,5 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 
 /**
  * This class represents assignment-statement
@@ -54,7 +58,7 @@ public class AssignmentExpressionInfo implements ExpressionInfo {
         return this.leftVariable;
     }
 
-    public ExpressionInfo getRightVariable() {
+    public ExpressionInfo getRightExpression() {
         return this.rightExpression;
     }
 
@@ -94,6 +98,13 @@ public class AssignmentExpressionInfo implements ExpressionInfo {
         return this.toColumn;
     }
 
+    @Override
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
+        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
+        variableUsages.addAll(this.getLeftVariable().getVariableUsages());
+        variableUsages.addAll(this.getRightExpression().getVariableUsages());
+        return variableUsages;
+    }
     /**
      * ŠJns‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
      */

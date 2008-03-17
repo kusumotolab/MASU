@@ -4,6 +4,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -62,6 +65,15 @@ public abstract class CallInfo extends EntityUsageInfo {
      */
     public List<EntityUsageInfo> getParameters() {
         return Collections.unmodifiableList(this.parameters);
+    }
+    
+    @Override
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
+        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
+        for(EntityUsageInfo parameter : this.getParameters()) {
+            variableUsages.addAll(parameter.getVariableUsages());
+        }
+        return Collections.unmodifiableSortedSet(variableUsages);
     }
 
     private final List<EntityUsageInfo> parameters;

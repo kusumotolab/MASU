@@ -1,6 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -99,6 +104,15 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
      */
     public final LocalSpaceInfo getOuterSpace() {
         return this.outerSpace;
+    }
+    
+    @Override
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
+        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
+        variableUsages.addAll(this.getLocalVariableUsages());
+        variableUsages.addAll(this.getFieldUsages());
+        variableUsages.addAll(this.getParameterUsages());
+        return Collections.unmodifiableSortedSet(variableUsages);
     }
 
     /**

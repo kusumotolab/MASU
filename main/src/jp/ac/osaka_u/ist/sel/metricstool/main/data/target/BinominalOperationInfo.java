@@ -1,6 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.TypeConverter;
@@ -219,6 +224,17 @@ public class BinominalOperationInfo extends EntityUsageInfo {
         return this.secondOperand;
     }
 
+    /* (non-Javadoc)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo#getVariableUsages()
+     */
+    @Override
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
+        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
+        variableUsages.addAll(this.getFirstOperand().getVariableUsages());               
+        variableUsages.addAll(this.getSecondOperand().getVariableUsages());
+        return Collections.unmodifiableSortedSet(variableUsages);
+    }
+    
     private final EntityUsageInfo firstOperand;
 
     private final EntityUsageInfo secondOperand;
