@@ -69,7 +69,7 @@ public abstract class EntityUsageInfo implements ExpressionInfo {
     }
 
     @Override
-    public final int compareTo(StatementInfo o) {
+    public final int compareTo(ExpressionInfo o) {
 
         if (null == o) {
             throw new NullPointerException();

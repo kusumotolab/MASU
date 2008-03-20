@@ -114,7 +114,7 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
         variableUsages.addAll(this.getParameterUsages());
         return Collections.unmodifiableSortedSet(variableUsages);
     }
-
+    
     /**
      * このブロックを所有するメソッドを保存するための変数
      */

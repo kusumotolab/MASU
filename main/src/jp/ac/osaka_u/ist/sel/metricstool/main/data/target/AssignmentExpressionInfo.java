@@ -11,7 +11,7 @@ import java.util.TreeSet;
  * @author higo
  *
  */
-public class AssignmentExpressionInfo implements ExpressionInfo {
+public class AssignmentExpressionInfo implements StatementInfo {
 
     public AssignmentExpressionInfo(final VariableUsageInfo<?> leftVariable,
             final ExpressionInfo rightExpression, final int fromLine, final int fromColumn,

@@ -56,6 +56,13 @@ public abstract class UnitInfo implements Position {
     public final int getLOC() {
         return this.getToLine() - this.getFromLine() + 1;
     }
+    
+    /**
+     * このユニットのシグネチャを返す
+     * 
+     * @return このユニットのシグネチャ
+     */
+    //public abstract String getSignature();
 
     /**
      * 終了列を返す

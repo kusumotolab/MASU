@@ -10,9 +10,9 @@ import java.util.Set;
 public interface StatementInfo extends Position, Comparable<StatementInfo> {
 
     /**
-     * 式内での変数の使用を返す
+     * 文内での変数の使用を返す
      * 
-     * @return 式内での変数の使用
+     * @return 文内での変数の使用
      */
     public Set<VariableUsageInfo<?>> getVariableUsages();
 }

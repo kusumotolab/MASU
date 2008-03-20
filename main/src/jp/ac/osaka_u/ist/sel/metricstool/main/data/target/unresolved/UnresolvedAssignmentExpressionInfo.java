@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 public final class UnresolvedAssignmentExpressionInfo implements
-        UnresolvedExpressionInfo<AssignmentExpressionInfo> {
+        UnresolvedStatementInfo<AssignmentExpressionInfo> {
 
     public UnresolvedAssignmentExpressionInfo() {
         this.leftVariable = null;
