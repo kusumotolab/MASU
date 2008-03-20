@@ -11,7 +11,7 @@ import java.util.TreeSet;
  * @author higo
  *
  */
-public class AssignmentExpressionInfo implements StatementInfo {
+public class AssignmentExpressionInfo implements ExpressionInfo {
 
     public AssignmentExpressionInfo(final VariableUsageInfo<?> leftVariable,
             final ExpressionInfo rightExpression, final int fromLine, final int fromColumn,
@@ -27,7 +27,7 @@ public class AssignmentExpressionInfo implements StatementInfo {
     }
 
     @Override
-    public int compareTo(StatementInfo o) {
+    public int compareTo(ExpressionInfo o) {
 
         if (null == o) {
             throw new NullPointerException();
