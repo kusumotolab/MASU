@@ -68,15 +68,6 @@ public class UnresolvedReturnStatementInfo extends
     }
 
     /**
-     * return文の戻り値を表す式の未解決情報を返す
-     * 
-     * @return return文の戻り値を表す式の未解決情報
-     */
-    public UnresolvedExpressionInfo<? extends ExpressionInfo> getReturnedExpression() {
-        return this.returnedExpression;
-    }
-
-    /**
      * return文の戻り値を表す式の未解決情報を保存する変数
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> returnedExpression;

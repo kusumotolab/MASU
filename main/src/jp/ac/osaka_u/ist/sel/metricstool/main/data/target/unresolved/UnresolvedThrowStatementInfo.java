@@ -58,15 +58,6 @@ public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<
     }
     
     /**
-     * throw文によって投げられる例外を表す式の未解決情報を返す
-     * 
-     * @return throw文によって投げられる例外を表す式の未解決情報
-     */
-    public UnresolvedExpressionInfo<? extends ExpressionInfo> getTrownExpression() {
-        return this.thrownExpression;
-    }
-
-    /**
      * throw文によって投げられる例外の未解決情報を保存する変数
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> thrownExpression;
