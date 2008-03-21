@@ -117,6 +117,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
                 this.resolvedInfo = new MethodCallInfo(ownerType, unknownMethod, fromLine, fromColumn,
                         toLine, toColumn);
+                this.resolvedInfo.addParameters(actualParameters);
                 return this.resolvedInfo;
             }
         }
@@ -127,6 +128,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
             this.resolvedInfo = new MethodCallInfo(ownerType, unknownMethod, fromLine, fromColumn,
                     toLine, toColumn);
+            this.resolvedInfo.addParameters(actualParameters);
             return this.resolvedInfo;
 
             // e‚ªƒNƒ‰ƒXŒ^‚¾‚Á‚½ê‡
