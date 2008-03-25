@@ -5,7 +5,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -27,7 +33,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         this.calls = new HashSet<UnresolvedCallInfo<?>>();
-        this.variableUsages = new HashSet<UnresolvedVariableUsageInfo<?>>();
+        this.variableUsages = new HashSet<UnresolvedVariableUsageInfo<VariableUsageInfo<?>>>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
         this.statements = new HashSet<UnresolvedStatementInfo<?>>();
     }
@@ -53,7 +59,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
      * 
      * @param variableUsage 変数使用
      */
-    public final void addVariableUsage(final UnresolvedVariableUsageInfo<?> variableUsage) {
+    public final void addVariableUsage(final UnresolvedVariableUsageInfo<VariableUsageInfo<?>> variableUsage) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -121,7 +127,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
      * 
      * @return このブロック内で行われている未解決変数使用の Set
      */
-    public final Set<UnresolvedVariableUsageInfo<?>> getVariableUsages() {
+    public final Set<UnresolvedVariableUsageInfo<VariableUsageInfo<?>>> getVariableUsages() {
         return Collections.unmodifiableSet(this.variableUsages);
     }
 
@@ -142,6 +148,22 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     public final Set<UnresolvedStatementInfo<?>> getStatements() {
         return Collections.unmodifiableSet(this.statements);
     }
+    
+    protected final void resolveVariableUsages(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+        
+        if(!alreadyResolved()) {
+            throw new NotResolvedException();
+        }
+        
+        for (final UnresolvedVariableUsageInfo<VariableUsageInfo<?>> unresolvedVariableUsage : this.getVariableUsages()) {
+
+            final VariableUsageInfo<?> variableUsage = unresolvedVariableUsage.resolve(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addVariableUsage(variableUsage);
+        }
+    }
 
     /**
      * メソッドまたはコンストラクタ呼び出しを保存する変数
@@ -151,7 +173,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     /**
      * フィールド使用を保存する変数
      */
-    private final Set<UnresolvedVariableUsageInfo<?>> variableUsages;
+    private final Set<UnresolvedVariableUsageInfo<VariableUsageInfo<?>>> variableUsages;
 
     /**
      * このメソッド内で定義されているローカル変数を保存する変数

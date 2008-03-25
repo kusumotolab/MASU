@@ -85,6 +85,9 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
             this.resolvedInfo.addLocalVariable(variable);
         }
 
+        this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);
+        
         return this.resolvedInfo;
     }
 

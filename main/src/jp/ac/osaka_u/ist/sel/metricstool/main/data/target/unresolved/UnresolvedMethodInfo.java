@@ -46,32 +46,6 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
     }
 
     /**
-     * この未解決メソッド情報が解決されているかどうかを返す
-     * 
-     * @return 解決済みの場合は true，そうでない場合は false
-     */
-    @Override
-    public boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    /**
-     * 解決済みメソッド情報を返す
-     * 
-     * @return 解決済みメソッド情報
-     * @throws まだ解決されていない場合にスローされる
-     */
-    @Override
-    public TargetMethodInfo getResolved() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolvedInfo;
-    }
-
-    /**
      * 未解決メソッド情報を解決し，解決済み参照を返す．
      * 
      * @param usingClass 未解決メソッド情報の定義があるクラス
@@ -184,6 +158,8 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
                     this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(localVariable);
         }
+        
+        this.resolveVariableUsages(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
 
         return this.resolvedInfo;
     }
@@ -280,8 +256,4 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
      */
     private boolean instance;
 
-    /**
-     * 名前解決された情報を格納するための変数
-     */
-    private TargetMethodInfo resolvedInfo;
 }

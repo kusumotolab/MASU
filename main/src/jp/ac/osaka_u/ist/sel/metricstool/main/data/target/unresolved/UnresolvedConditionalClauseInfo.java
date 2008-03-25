@@ -27,21 +27,6 @@ public final class UnresolvedConditionalClauseInfo extends
     }
 
     @Override
-    public boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    @Override
-    public ConditionalClauseInfo getResolved() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolvedInfo;
-    }
-
-    @Override
     public ConditionalClauseInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
@@ -74,8 +59,9 @@ public final class UnresolvedConditionalClauseInfo extends
             this.resolvedInfo.addLocalVariable(variable);
         }
 
+        this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);
+        
         return this.resolvedInfo;
     }
-
-    private ConditionalClauseInfo resolvedInfo;
 }

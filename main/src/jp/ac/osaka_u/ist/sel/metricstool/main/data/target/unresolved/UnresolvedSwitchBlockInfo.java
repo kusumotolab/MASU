@@ -87,6 +87,9 @@ public final class UnresolvedSwitchBlockInfo extends
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
+        
+        this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);
 
         return this.resolvedInfo;
     }

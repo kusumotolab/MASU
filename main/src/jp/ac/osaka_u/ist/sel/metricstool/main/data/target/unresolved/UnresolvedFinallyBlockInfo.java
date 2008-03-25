@@ -93,6 +93,9 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
             this.resolvedInfo.addLocalVariable(variable);
         }
 
+        this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);
+        
         return this.resolvedInfo;
     }
 

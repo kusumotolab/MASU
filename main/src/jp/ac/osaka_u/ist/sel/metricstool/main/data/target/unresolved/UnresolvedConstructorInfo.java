@@ -26,21 +26,6 @@ public final class UnresolvedConstructorInfo extends
     }
 
     @Override
-    public boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    @Override
-    public TargetConstructorInfo getResolved() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolvedInfo;
-    }
-
-    @Override
     public TargetConstructorInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
@@ -104,6 +89,9 @@ public final class UnresolvedConstructorInfo extends
             this.resolvedInfo.addLocalVariable(localVariable);
         }
 
+        this.resolveVariableUsages(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
+                methodInfoManager);
+
         return this.resolvedInfo;
     }
 
@@ -118,8 +106,4 @@ public final class UnresolvedConstructorInfo extends
     public void setInstanceMember(boolean instance) {
     }
 
-    /**
-     * ñºëOâåàÇ≥ÇÍÇΩèÓïÒÇäiî[Ç∑ÇÈÇΩÇﬂÇÃïœêî
-     */
-    private TargetConstructorInfo resolvedInfo;
 }

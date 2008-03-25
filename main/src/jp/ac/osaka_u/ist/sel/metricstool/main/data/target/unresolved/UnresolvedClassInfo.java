@@ -495,32 +495,6 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * 名前解決された情報を返す
-     * 
-     * @return 名前解決された情報
-     * @throws NotResolvedException 解決されていない場合にスローされる
-     */
-    @Override
-    public TargetClassInfo getResolved() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolvedInfo;
-    }
-
-    /**
-     * 既に名前解決されたかどうかを返す
-     * 
-     * @return 名前解決されている場合は true，そうでない場合は false
-     */
-    @Override
-    public final boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    /**
      * この未解決クラス情報を解決する
      * 
      * @param usingClass 所属クラス，このメソッド呼び出しの際は null さセットされていると思われる．
@@ -664,8 +638,4 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      */
     private boolean instance;
 
-    /**
-     * 名前解決された情報を格納するための変数
-     */
-    private TargetClassInfo resolvedInfo;
 }

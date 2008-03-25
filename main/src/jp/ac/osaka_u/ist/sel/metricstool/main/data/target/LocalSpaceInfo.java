@@ -145,6 +145,14 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     public Set<LocalVariableUsageInfo> getLocalVariableUsages() {
         return Collections.unmodifiableSet(this.localVariableUsages);
     }
+    
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
+        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
+        variableUsages.addAll(this.getLocalVariableUsages());
+        variableUsages.addAll(this.getFieldUsages());
+        variableUsages.addAll(this.getParameterUsages());
+        return Collections.unmodifiableSortedSet(variableUsages);
+    }
 
     /**
      * このメソッドのフィールド利用のSetを返す

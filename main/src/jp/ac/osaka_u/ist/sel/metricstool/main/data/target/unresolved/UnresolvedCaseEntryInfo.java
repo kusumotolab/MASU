@@ -93,6 +93,9 @@ public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> 
                     classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
+        
+        this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);
 
         return this.resolvedInfo;
     }

@@ -106,15 +106,6 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
         return this.outerSpace;
     }
     
-    @Override
-    public Set<VariableUsageInfo<?>> getVariableUsages() {
-        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
-        variableUsages.addAll(this.getLocalVariableUsages());
-        variableUsages.addAll(this.getFieldUsages());
-        variableUsages.addAll(this.getParameterUsages());
-        return Collections.unmodifiableSortedSet(variableUsages);
-    }
-    
     /**
      * このブロックを所有するメソッドを保存するための変数
      */

@@ -25,18 +25,6 @@ public class UnresolvedStaticInitializerInfo extends UnresolvedLocalSpaceInfo {
     }
 
     @Override
-    public boolean alreadyResolved() {
-        // TODO 自動生成されたメソッド・スタブ
-        return false;
-    }
-
-    @Override
-    public UnitInfo getResolved() {
-        // TODO 自動生成されたメソッド・スタブ
-        return null;
-    }
-
-    @Override
     public UnitInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager) {

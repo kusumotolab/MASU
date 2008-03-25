@@ -78,6 +78,9 @@ public final class UnresolvedSimpleBlockInfo extends UnresolvedBlockInfo<SimpleB
             this.resolvedInfo.addLocalVariable(variable);
         }
 
+        this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);
+        
         return this.resolvedInfo;
     }
 

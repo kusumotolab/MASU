@@ -101,26 +101,6 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit ex
     }
 
     /**
-     * 名前解決された情報を返す
-     * 
-     * @return 名前解決された情報
-     */
-    @Override
-    public final TVar getResolved() {
-        return this.resolvedInfo;
-    }
-
-    /**
-     * 既に名前解決されたかどうかを返す
-     * 
-     * @return 名前解決されている場合は true，そうでない場合は false
-     */
-    @Override
-    public final boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    /**
      * 変数オブジェクトを初期化する．
      * 
      * @param name 変数名
@@ -172,10 +152,5 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit ex
      * 変数を宣言しているユニットを表す変数
      */
     private final TUnit definitionUnit;
-
-    /**
-     * 名前解決された情報を格納するための変数
-     */
-    protected TVar resolvedInfo;
 
 }

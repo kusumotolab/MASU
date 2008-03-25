@@ -36,35 +36,8 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends Unresolve
     }
 
     /**
-     * このブロックが既に解決されているかどうかをかえす
-     * 
-     * @return 既に解決されている場合は true, そうでない場合は false
-     */
-    @Override
-    public final boolean alreadyResolved() {
-        return null != this.resolvedInfo;
-    }
-
-    /**
-     * このブロックの解決済みオブジェクトを返す
-     */
-    @Override
-    public final T getResolved() {
-
-        if (!this.alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        return this.resolvedInfo;
-    }
-
-    /**
      * このブロックが属する空間を保存するための変数
      */
     private final UnresolvedLocalSpaceInfo<?> outerSpace;
 
-    /**
-     * 解決済みブロック情報を保存するための変数
-     */
-    protected T resolvedInfo;
 }

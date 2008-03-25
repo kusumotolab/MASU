@@ -79,6 +79,9 @@ public final class UnresolvedSynchronizedBlockInfo extends
             this.resolvedInfo.addLocalVariable(variable);
         }
 
+        this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);
+        
         return this.resolvedInfo;
     }
 
