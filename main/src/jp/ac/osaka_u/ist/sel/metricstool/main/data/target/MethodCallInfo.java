@@ -1,6 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+
 /**
  * メソッド呼び出しを表すクラス
  * 
@@ -14,16 +20,18 @@ public final class MethodCallInfo extends CallInfo {
      * 
      * @param callee 呼び出されるメソッド
      */
-    public MethodCallInfo(final TypeInfo ownerType, final MethodInfo callee, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    public MethodCallInfo(final TypeInfo ownerType, final EntityUsageInfo ownerUsage,
+            final MethodInfo callee, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
-        if ((null == ownerType) || (null == callee)) {
+        if ((null == ownerType) || (null == callee) || (null == ownerUsage)) {
             throw new NullPointerException();
         }
 
         this.ownerType = ownerType;
+        this.ownerUsage = ownerUsage;
         this.callee = callee;
     }
 
@@ -65,7 +73,17 @@ public final class MethodCallInfo extends CallInfo {
         return this.callee;
     }
 
+    @Override
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
+        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>(
+                super.getVariableUsages());
+        variableUsages.addAll(this.ownerUsage.getVariableUsages());
+        return Collections.unmodifiableSortedSet(variableUsages);
+    }
+
     private final TypeInfo ownerType;
 
     private final MethodInfo callee;
+
+    private final EntityUsageInfo ownerUsage;
 }
