@@ -17,6 +17,8 @@ public final class ArrayTypeInfo implements ReferenceTypeInfo {
 
     /**
      * 型名を返す
+     * 
+     * @param 型名
      */
     public String getTypeName() {
         final TypeInfo elementType = this.getElementType();
@@ -32,6 +34,8 @@ public final class ArrayTypeInfo implements ReferenceTypeInfo {
 
     /**
      * 等しいかどうかのチェックを行う
+     * 
+     * @param 等しい場合はtrue, そうでない場合はfalse
      */
     public boolean equals(final TypeInfo typeInfo) {
 

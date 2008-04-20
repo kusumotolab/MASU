@@ -35,6 +35,11 @@ public final class TryBlockInfo extends BlockInfo {
         this.sequentCatchBlocks = new HashSet<CatchBlockInfo>();
     }
 
+    /**
+     * ‘Î‰ž‚·‚é finally •¶‚ðƒZƒbƒg‚·‚é
+     * 
+     * @param sequentFinallyBlock ‘Î‰ž‚·‚é finally •¶
+     */
     public void setSequentFinallyBlock(final FinallyBlockInfo sequentFinallyBlock) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -45,6 +50,11 @@ public final class TryBlockInfo extends BlockInfo {
         this.sequentFinallyBlock = sequentFinallyBlock;
     }
 
+    /**
+     * ‘Î‰ž‚·‚é finally •¶‚ð•Ô‚·
+     * 
+     * @return ‘Î‰ž‚·‚é finally •¶
+     */
     public FinallyBlockInfo getSequentFinallyBlock() {
         return this.sequentFinallyBlock;
     }

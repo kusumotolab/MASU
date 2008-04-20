@@ -1,8 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-
-
 /**
  * switch ブロックを表すクラス
  * 
@@ -34,19 +32,18 @@ public final class SwitchBlockInfo extends ConditionalBlockInfo {
      * 
      * @param innerBlock 追加する case エントリ
      */
-//    @Override
-//    public void addInnerBlock(final BlockInfo innerBlock) {
-//
-//        MetricsToolSecurityManager.getInstance().checkAccess();
-//        if (null == innerBlock) {
-//            throw new NullPointerException();
-//        }
-//
-//        if (!(innerBlock instanceof CaseEntryInfo)) {
-//            throw new IllegalArgumentException(
-//                    "Inner block of switch statement must be case or default entry!");
-//        }
-
-//        super.addInnerBlock(innerBlock);
-//    }
+    //    @Override
+    //    public void addInnerBlock(final BlockInfo innerBlock) {
+    //
+    //        MetricsToolSecurityManager.getInstance().checkAccess();
+    //        if (null == innerBlock) {
+    //            throw new NullPointerException();
+    //        }
+    //
+    //        if (!(innerBlock instanceof CaseEntryInfo)) {
+    //            throw new IllegalArgumentException(
+    //                    "Inner block of switch statement must be case or default entry!");
+    //        }
+    //        super.addInnerBlock(innerBlock);
+    //    }
 }

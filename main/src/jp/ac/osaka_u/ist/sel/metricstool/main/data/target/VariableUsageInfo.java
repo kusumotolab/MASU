@@ -24,10 +24,20 @@ public abstract class VariableUsageInfo<T extends VariableInfo<?, ?>> extends En
 
     }
 
+    /**
+     * 使用されている変数を返す
+     * 
+     * @return 使用されている変数
+     */
     public final T getUsedVariable() {
         return this.usedVariable;
     }
 
+    /**
+     * 参照か代入かを返す
+     * 
+     * @return 参照である場合は true，代入である場合は false
+     */
     public final boolean isReference() {
         return this.reference;
     }

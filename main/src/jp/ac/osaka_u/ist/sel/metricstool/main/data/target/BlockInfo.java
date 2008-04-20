@@ -41,6 +41,9 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
         this.outerSpace = outerSpace;
     }
 
+    /**
+     * このブロックオブジェクトを他のブロックオブジェクトと比較する
+     */
     @Override
     public final boolean equals(Object o) {
 
@@ -55,6 +58,9 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
         return 0 == this.compareTo((BlockInfo) o);
     }
     
+    /**
+     * このブロックオブジェクトを他のブロックオブジェクトと比較する
+     */
     @Override
     public final int compareTo(StatementInfo o) {
 
@@ -83,6 +89,11 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
         return 0;
     }
 
+    /**
+     * このブロックオブジェクトのハッシュ値を返す
+     * 
+     * @return このブロックオブジェクトのハッシュ値
+     */
     @Override
     public final int hashCode() {
         return this.getFromLine() + this.getFromColumn() + this.getToLine() + this.getToColumn();

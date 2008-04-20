@@ -65,6 +65,11 @@ public abstract class VariableInfo<TUsage extends VariableUsageInfo<?>, TUnit ex
         return this.type;
     }
 
+    /**
+     * この変数の使用を追加する
+     * 
+     * @param usage この変数の使用
+     */
     public void addUsage(TUsage usage) {
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == usage) {

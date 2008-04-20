@@ -63,10 +63,10 @@ public final class TargetFile implements Comparable<TargetFile> {
             throw new NullPointerException();
         }
 
-        if (!(o instanceof TargetFile)){
+        if (!(o instanceof TargetFile)) {
             return false;
         }
-        
+
         String thisName = this.getName();
         String correspondName = ((TargetFile) o).getName();
         return thisName.equals(correspondName);

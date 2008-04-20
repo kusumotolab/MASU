@@ -30,6 +30,11 @@ public final class IfBlockInfo extends ConditionalBlockInfo {
                 toColumn);
     }
 
+    /**
+     * else •¶‚ð’Ç‰Á‚·‚é
+     * 
+     * @param sequentElseBlock ’Ç‰Á‚·‚é else •¶
+     */
     public void setSequentElseBlock(final ElseBlockInfo sequentElseBlock) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();

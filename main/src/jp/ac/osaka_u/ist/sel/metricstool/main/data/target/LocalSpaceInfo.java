@@ -18,6 +18,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 public abstract class LocalSpaceInfo extends UnitInfo {
 
+    /**
+     * 必要な情報を与えてオブジェクトを居幾何
+     * 
+     * @param ownerClass このローカル領域を定義しているクラス
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn終了列
+     */
     LocalSpaceInfo(final ClassInfo ownerClass, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 

@@ -10,10 +10,29 @@ import java.util.Set;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
-
+/**
+ * コンストラクタを表すクラス
+ * 
+ * @author higo
+ *
+ */
 public abstract class ConstructorInfo extends CallableUnitInfo implements
         Comparable<ConstructorInfo> {
 
+    /**
+     * 必要な情報を与えて初期化
+     * 
+     * @param modifiers このコンストラクタの修飾子
+     * @param ownerClass このコンストラクタを定義しているクラス
+     * @param privateVisible privateかどういか
+     * @param namespaceVisible 同じ名前空間から可視かどうか
+     * @param inheritanceVisible 子クラスから可視かどうか
+     * @param publicVisible public かどうか
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
+     */
     public ConstructorInfo(final Set<ModifierInfo> modifiers, final ClassInfo ownerClass,
             final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final int fromLine,
