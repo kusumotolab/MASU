@@ -27,5 +27,21 @@ public final class ConditionalClauseInfo extends LocalSpaceInfo {
         super(ownerClass, fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
+
     }
+
+    public final ConditionalBlockInfo getOwnerBlock() {
+        return this.ownerBlock;
+    }
+    
+    public final void setOwnerBlock(final ConditionalBlockInfo ownerBlock) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if(null == ownerBlock) {
+            throw new IllegalArgumentException("ownerBlock is null");
+        }
+        
+        this.ownerBlock = ownerBlock;
+    }
+
+    private ConditionalBlockInfo ownerBlock;
 }

@@ -28,11 +28,7 @@ public class UnresolvedReturnStatementInfo extends
     public UnresolvedReturnStatementInfo(
             UnresolvedExpressionInfo<? extends ExpressionInfo> returnedExpression) {
         super();
-        
-        if(null == returnedExpression) {
-            throw new IllegalArgumentException("returnedExpression is null");
-        }
-        
+
         this.returnedExpression = returnedExpression;
     }
 
@@ -58,8 +54,9 @@ public class UnresolvedReturnStatementInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final ExpressionInfo returnedExpression = this.returnedExpression.resolve(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final ExpressionInfo returnedExpression = null == this.returnedExpression ? null
+                : this.returnedExpression.resolve(usingClass, usingMethod, classInfoManager,
+                        fieldInfoManager, methodInfoManager);
 
         this.resolvedInfo = new ReturnStatementInfo(returnedExpression, fromLine, fromColumn,
                 toLine, toColumn);

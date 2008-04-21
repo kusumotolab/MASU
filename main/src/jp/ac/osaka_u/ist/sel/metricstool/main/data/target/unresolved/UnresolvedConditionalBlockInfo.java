@@ -15,7 +15,7 @@ public abstract class UnresolvedConditionalBlockInfo<T extends ConditionalBlockI
 
     public UnresolvedConditionalBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
-        this.conditionalClause = new UnresolvedConditionalClauseInfo();
+        this.conditionalClause = new UnresolvedConditionalClauseInfo(this);
     }
 
     /**

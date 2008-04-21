@@ -22,6 +22,7 @@ public class ThrowStatementBuilder extends SingleStatementBuilder<UnresolvedThro
         final UnresolvedExpressionInfo<? extends ExpressionInfo> thrownStatement = this
                 .getLastBuiltExpression();
 
+        assert null != thrownStatement : "Illegal state: the thrown statement was not found.";
         final UnresolvedThrowStatementInfo throwStatement = new UnresolvedThrowStatementInfo(
                 thrownStatement);
         throwStatement.setFromLine(fromLine);

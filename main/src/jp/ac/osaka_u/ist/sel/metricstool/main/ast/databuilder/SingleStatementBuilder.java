@@ -31,7 +31,7 @@ public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<?
         if (this.isTriggerToken(e.getToken())) {
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = this.buildDataManager
                     .getCurrentLocalSpace();
-            
+
             if (null != currentLocal) {
                 final T singleStatement = this.buildStatement(e.getStartLine(), e.getStartColumn(),
                         e.getEndLine(), e.getEndColumn());
@@ -44,9 +44,10 @@ public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<?
     }
 
     protected UnresolvedExpressionInfo<? extends ExpressionInfo> getLastBuiltExpression() {
-        return this.expressionManager.getPeekExpressionElement().getUsage();
+        return null == this.expressionManager.getPeekExpressionElement() ? null
+                : this.expressionManager.getPeekExpressionElement().getUsage();
     }
-    
+
     protected abstract T buildStatement(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn);
 

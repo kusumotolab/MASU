@@ -19,11 +19,11 @@ public class ExpressionStatementBuilder extends
     @Override
     protected UnresolvedExpressionStatementInfo buildStatement(final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
-        final UnresolvedExpressionInfo<? extends ExpressionInfo> returnedStatement = this
+        final UnresolvedExpressionInfo<? extends ExpressionInfo> expression = this
         .getLastBuiltExpression();
 
         final UnresolvedExpressionStatementInfo expressionStatement = new UnresolvedExpressionStatementInfo(
-                returnedStatement);
+                expression);
         expressionStatement.setFromLine(fromLine);
         expressionStatement.setFromColumn(fromColumn);
         expressionStatement.setToLine(toLine);

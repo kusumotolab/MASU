@@ -23,10 +23,6 @@ public class ReturnStatementInfo extends SingleStatementInfo {
             int fromColumn, int toLine, int toColumn) {
         super(fromLine, fromColumn, toLine, toColumn);
 
-        if (null == returnedExpression) {
-            throw new IllegalArgumentException("returnedExpression is null");
-        }
-
         this.returnedExpression = returnedExpression;
     }
 

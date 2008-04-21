@@ -21,7 +21,7 @@ public class ExpressionElementManager {
     }
     
     public final ExpressionElement getPeekExpressionElement() {
-        return this.expressionAnalyzeStack.peek();
+        return this.expressionAnalyzeStack.empty() ? null : this.expressionAnalyzeStack.peek();
     }
     
     public void reset(){

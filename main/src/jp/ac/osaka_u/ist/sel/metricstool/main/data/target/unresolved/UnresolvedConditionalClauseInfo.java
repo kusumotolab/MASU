@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
@@ -20,9 +21,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedConditionalClauseInfo extends
         UnresolvedLocalSpaceInfo<ConditionalClauseInfo> {
 
-    UnresolvedConditionalClauseInfo() {
+    UnresolvedConditionalClauseInfo(
+            final UnresolvedConditionalBlockInfo<? extends ConditionalBlockInfo> ownerBlock) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == ownerBlock) {
+            throw new IllegalArgumentException("ownerBlock is null");
+        }
+
+        this.ownerBlock = ownerBlock;
         this.resolvedInfo = null;
     }
 
@@ -51,17 +58,25 @@ public final class UnresolvedConditionalClauseInfo extends
 
         this.resolvedInfo = new ConditionalClauseInfo(usingClass, fromLine, fromColumn, toLine,
                 toColumn);
+        
+        // 条件節に対応したブロック文の情報を解決
+        final ConditionalBlockInfo ownerBlock = this.ownerBlock.resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+        this.resolvedInfo.setOwnerBlock(ownerBlock);
+
 
         // ローカル変数情報を解決し，解決済み条件節オブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
 
         this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
-        
+
         return this.resolvedInfo;
     }
+
+    private final UnresolvedConditionalBlockInfo<? extends ConditionalBlockInfo> ownerBlock;
 }
