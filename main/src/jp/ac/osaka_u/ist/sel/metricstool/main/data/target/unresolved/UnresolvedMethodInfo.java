@@ -35,9 +35,14 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
     /**
      * 未解決メソッド定義情報オブジェクトを初期化
      * @param ownerClass このメソッドを宣言しているクラス
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
-    public UnresolvedMethodInfo(final UnresolvedClassInfo ownerClass) {
-        super(ownerClass);
+    public UnresolvedMethodInfo(final UnresolvedClassInfo ownerClass, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
+        super(ownerClass, fromLine, fromColumn, toLine, toColumn);
 
         this.methodName = null;
         this.returnType = null;
@@ -158,8 +163,9 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
                     this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(localVariable);
         }
-        
-        this.resolveVariableUsages(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
+
+        this.resolveVariableUsages(usingClass, this.resolvedInfo, classInfoManager,
+                fieldInfoManager, methodInfoManager);
 
         return this.resolvedInfo;
     }

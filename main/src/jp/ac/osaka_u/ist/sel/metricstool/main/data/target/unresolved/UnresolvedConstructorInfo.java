@@ -20,9 +20,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedConstructorInfo extends
         UnresolvedCallableUnitInfo<TargetConstructorInfo> {
 
-    public UnresolvedConstructorInfo(final UnresolvedClassInfo ownerClass) {
+    public UnresolvedConstructorInfo(final UnresolvedClassInfo ownerClass, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerClass);
+        super(ownerClass, fromLine, fromColumn, toLine, toColumn);
     }
 
     @Override
@@ -89,8 +90,8 @@ public final class UnresolvedConstructorInfo extends
             this.resolvedInfo.addLocalVariable(localVariable);
         }
 
-        this.resolveVariableUsages(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
-                methodInfoManager);
+        this.resolveVariableUsages(usingClass, this.resolvedInfo, classInfoManager,
+                fieldInfoManager, methodInfoManager);
 
         return this.resolvedInfo;
     }

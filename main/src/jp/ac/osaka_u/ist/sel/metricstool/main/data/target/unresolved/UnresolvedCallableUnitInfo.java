@@ -15,7 +15,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> extends
         UnresolvedLocalSpaceInfo<T> implements VisualizableSetting, MemberSetting, ModifierSetting {
 
-    protected UnresolvedCallableUnitInfo(final UnresolvedClassInfo ownerClass) {
+    protected UnresolvedCallableUnitInfo(final UnresolvedClassInfo ownerClass, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -33,6 +34,11 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
         this.inheritanceVisible = false;
         this.namespaceVisible = false;
         this.publicVisible = false;
+        
+        this.setFromLine(fromLine);
+        this.setFromColumn(fromColumn);
+        this.setToLine(toLine);
+        this.setToColumn(toColumn);
     }
 
     /**

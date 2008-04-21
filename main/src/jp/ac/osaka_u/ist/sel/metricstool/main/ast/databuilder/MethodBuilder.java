@@ -45,7 +45,7 @@ public class MethodBuilder extends CallableUnitBuilder<UnresolvedMethodInfo>{
     @Override
     protected UnresolvedMethodInfo createUnresolvedCallableUnitInfo(final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
-        return new UnresolvedMethodInfo(this.buildManager.getCurrentClass());
+        return new UnresolvedMethodInfo(this.buildManager.getCurrentClass(), fromLine, fromColumn, toLine, toColumn);
     }
         
 }

@@ -39,7 +39,7 @@ public class ConstructorBuilder extends CallableUnitBuilder<UnresolvedConstructo
     @Override
     protected UnresolvedConstructorInfo createUnresolvedCallableUnitInfo(final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
-        return new UnresolvedConstructorInfo(buildManager.getCurrentClass());
+        return new UnresolvedConstructorInfo(buildManager.getCurrentClass(), fromLine, fromColumn, toLine, toColumn);
     }
 
 }
