@@ -10,6 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -29,7 +30,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
      * 位置情報を与えて初期化
      */
     public UnresolvedLocalSpaceInfo() {
-        
+
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         this.calls = new HashSet<UnresolvedCallInfo<?>>();
@@ -59,7 +60,8 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
      * 
      * @param variableUsage 変数使用
      */
-    public final void addVariableUsage(final UnresolvedVariableUsageInfo<VariableUsageInfo<?>> variableUsage) {
+    public final void addVariableUsage(
+            final UnresolvedVariableUsageInfo<VariableUsageInfo<?>> variableUsage) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -148,20 +150,34 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     public final Set<UnresolvedStatementInfo<?>> getStatements() {
         return Collections.unmodifiableSet(this.statements);
     }
-    
+
     protected final void resolveVariableUsages(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
-        
-        if(!alreadyResolved()) {
+
+        if (!alreadyResolved()) {
             throw new NotResolvedException();
         }
-        
-        for (final UnresolvedVariableUsageInfo<VariableUsageInfo<?>> unresolvedVariableUsage : this.getVariableUsages()) {
+
+        for (final UnresolvedVariableUsageInfo<VariableUsageInfo<?>> unresolvedVariableUsage : this
+                .getVariableUsages()) {
 
             final VariableUsageInfo<?> variableUsage = unresolvedVariableUsage.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addVariableUsage(variableUsage);
+        }
+    }
+
+    protected final void resolveInnerBlock(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+        // 内部ブロック情報を解決し，解決済みオブジェクトに追加
+        for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
+            if (unresolvedStatement instanceof UnresolvedBlockInfo) {
+                final StatementInfo statement = unresolvedStatement.resolve(usingClass,
+                        usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                this.resolvedInfo.addStatement(statement);
+            }
         }
     }
 

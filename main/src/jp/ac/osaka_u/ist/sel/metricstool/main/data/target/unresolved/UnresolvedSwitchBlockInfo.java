@@ -74,12 +74,9 @@ public final class UnresolvedSwitchBlockInfo extends
         this.resolvedInfo = new SwitchBlockInfo(usingClass, usingMethod, conditionalClause,
                 outerSpace, fromLine, fromColumn, toLine, toColumn);
 
-        //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
-        for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
-            final StatementInfo statement = unresolvedStatement.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addStatement(statement);
-        }          
+        // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
+        this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);          
 
         // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {

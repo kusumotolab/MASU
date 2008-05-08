@@ -75,12 +75,9 @@ public final class UnresolvedConstructorInfo extends
             this.resolvedInfo.addParameter(parameterInfo);
         }
 
-        //　内部ブロック情報を解決し，解決済みコンストラクタオブジェクトに追加
-        for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
-            final StatementInfo statement = unresolvedStatement.resolve(usingClass,
-                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addStatement(statement);
-        }
+        // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
+        this.resolveInnerBlock(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
+                methodInfoManager);  
 
         // メソッド内で定義されている各未解決ローカル変数に対して
         for (final UnresolvedLocalVariableInfo unresolvedLocalVariable : this.getLocalVariables()) {

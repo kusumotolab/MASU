@@ -80,6 +80,10 @@ public final class MethodCallInfo extends CallInfo {
         variableUsages.addAll(this.ownerUsage.getVariableUsages());
         return Collections.unmodifiableSortedSet(variableUsages);
     }
+    
+    public final EntityUsageInfo getOwnerUsage() {
+        return this.ownerUsage;
+    }
 
     private final TypeInfo ownerType;
 

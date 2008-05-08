@@ -36,6 +36,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
@@ -204,7 +205,7 @@ public class MetricsTool {
                     }
 
                     final Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
-                    lexer.setTabSize(4);
+                    lexer.setTabSize(1);
                     final Java15Parser parser = new Java15Parser(lexer);
 
                     final ASTFactory factory = new MasuAstFactory();
@@ -1117,7 +1118,7 @@ public class MetricsTool {
                     methodInfoManager);
         }
     }
-
+    
     /**
      * メソッドオーバーライド情報を各MethodInfoに追加する．addInheritanceInfomationToClassInfos の後 かつ registMethodInfos
      * の後に呼び出さなければならない
@@ -1273,6 +1274,14 @@ public class MetricsTool {
             assert false : "Here shouldn't be reached!";
         }
 
+        // 各未解決文情報の名前解決処理
+        for (final UnresolvedStatementInfo<? extends StatementInfo> unresolvedStatement : unresolvedLocalSpace.getStatements()) {
+            if(!(unresolvedStatement instanceof UnresolvedBlockInfo)) {
+                final StatementInfo statement = unresolvedStatement.resolve(ownerClass, ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                localSpace.addStatement(statement);
+            }
+        }
+        
         // 各未解決フィールド使用の名前解決処理
         for (final UnresolvedVariableUsageInfo<?> unresolvedVariableUsage : unresolvedLocalSpace
                 .getVariableUsages()) {

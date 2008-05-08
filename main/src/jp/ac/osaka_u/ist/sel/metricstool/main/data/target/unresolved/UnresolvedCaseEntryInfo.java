@@ -80,12 +80,9 @@ public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> 
         this.resolvedInfo = new CaseEntryInfo(usingClass, usingMethod, ownerSwitchBlock,
                 breakStatement, fromLine, fromColumn, toLine, toColumn);
 
-        //　直内の未解決文情報を解決し，解決済みcaseエントリオブジェクトに追加
-        for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
-            final StatementInfo statement = unresolvedStatement.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addStatement(statement);
-        }
+        //　未解決ブロック文情報を解決し，解決済みオブジェクトに追加
+        this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);
 
         // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
@@ -93,7 +90,7 @@ public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> 
                     classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
-        
+
         this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 

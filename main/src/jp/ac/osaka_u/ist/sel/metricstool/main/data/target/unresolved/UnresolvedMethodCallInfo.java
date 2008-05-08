@@ -3,8 +3,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import java.util.List;
 
+import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
@@ -69,7 +72,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
-
+        
         // Žg—pˆÊ’u‚ðŽæ“¾
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
