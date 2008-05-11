@@ -4,6 +4,12 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
 
 
+/**
+ * メトリクスを書き出すjクラスが実装しなければならないインターフェース
+ * 
+ * @author higo
+ *
+ */
 public interface MetricsWriter {
 
     /**
