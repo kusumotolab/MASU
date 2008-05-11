@@ -22,6 +22,11 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
         super(usedLocalVariable, reference, fromLine, fromColumn, toLine, toColumn);
     }
 
+    /**
+     * このローカル変数使用の型を返す
+     * 
+     * @return このローカル変数利用の型
+     */
     @Override
     public TypeInfo getType() {
         final LocalVariableInfo usedVariable = this.getUsedVariable();

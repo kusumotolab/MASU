@@ -30,10 +30,20 @@ public final class ConditionalClauseInfo extends LocalSpaceInfo {
 
     }
 
+    /**
+     * この条件節をもつブロックを返す
+     * 
+     * @return この場建設をもつブロック
+     */
     public final ConditionalBlockInfo getOwnerBlock() {
         return this.ownerBlock;
     }
     
+    /**
+     * この条件節をもつブロックをセットする
+     * 
+     * @param ownerBlock この条件節をもつブロック 
+     */
     public final void setOwnerBlock(final ConditionalBlockInfo ownerBlock) {
         MetricsToolSecurityManager.getInstance().checkAccess();
         if(null == ownerBlock) {

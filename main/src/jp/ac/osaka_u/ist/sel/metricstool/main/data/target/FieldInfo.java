@@ -36,8 +36,8 @@ public abstract class FieldInfo extends VariableInfo<FieldUsageInfo, ClassInfo> 
      * @param toColumn èIóπóÒ
      */
     public FieldInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type,
-            final ClassInfo definitionClass, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+            final ClassInfo definitionClass, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
         super(modifiers, name, type, definitionClass, fromLine, fromColumn, toLine, toColumn);
 

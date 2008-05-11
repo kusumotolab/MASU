@@ -31,6 +31,11 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         this.ownerType = ownerType;
     }
 
+    /**
+     * このフィールド使用の型を返す
+     * 
+     * @return このフィールド使用の型
+     */
     @Override
     public TypeInfo getType() {
 
@@ -49,6 +54,11 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         return typeArgument;
     }
 
+    /**
+     * このフィールド使用の親，つまりこのフィールド使用がくっついている要素を返す
+     * 
+     * @return このフィールド使用の親
+     */
     public final TypeInfo getOwnerType() {
         return this.ownerType;
     }
@@ -61,6 +71,11 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         return this.ownerUsage;
     }
 
+    /**
+     * この式（フィールド使用）における変数利用の一覧を返す
+     * 
+     * @return 変数利用のSet
+     */
     @Override
     public SortedSet<VariableUsageInfo<?>> getVariableUsages() {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>(

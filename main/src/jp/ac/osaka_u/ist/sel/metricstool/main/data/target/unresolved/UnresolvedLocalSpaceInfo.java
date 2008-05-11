@@ -151,6 +151,15 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
         return Collections.unmodifiableSet(this.statements);
     }
 
+    /**
+     * この領域で利用されている変数使用を解決する
+     * 
+     * @param usingClass この領域が存在しているクラス
+     * @param usingMethod この領域が存在しているメソッド
+     * @param classInfoManager クラスマネージャ
+     * @param fieldInfoManager フィールドマネージャ
+     * @param methodInfoManager メソッドマネージャ
+     */
     protected final void resolveVariableUsages(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
@@ -168,9 +177,24 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
         }
     }
 
+    /**
+     * このローカル領域のインナー領域を名前解決する
+     * 
+     * @param usingClass この領域が存在しているクラス
+     * @param usingMethod この領域が存在しているメソッド
+     * @param classInfoManager クラスマネージャ
+     * @param fieldInfoManager フィールドマネージャ
+     * @param methodInfoManager メソッドマネージャ
+     */
     protected final void resolveInnerBlock(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
+                || (null == fieldInfoManager) || (null == methodInfoManager)) {
+            throw new IllegalArgumentException();
+        }
+
         // 内部ブロック情報を解決し，解決済みオブジェクトに追加
         for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
             if (unresolvedStatement instanceof UnresolvedBlockInfo) {

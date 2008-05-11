@@ -1,18 +1,29 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 
 /**
- * This class represents assignment-statement
+ * 代入文を表すクラス
  * 
  * @author higo
  *
  */
 public class AssignmentExpressionInfo implements ExpressionInfo {
 
+    /**
+     * 必要な情報を与えて，オブジェクトを初期化
+     * 
+     * @param leftVariable 左辺の変数
+     * @param rightExpression 右辺の式
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
+     */
     public AssignmentExpressionInfo(final VariableUsageInfo<?> leftVariable,
             final ExpressionInfo rightExpression, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
@@ -26,6 +37,9 @@ public class AssignmentExpressionInfo implements ExpressionInfo {
         this.toColumn = toColumn;
     }
 
+    /**
+     * 位置情報に基づいて比較する
+     */
     @Override
     public int compareTo(ExpressionInfo o) {
 
@@ -54,10 +68,20 @@ public class AssignmentExpressionInfo implements ExpressionInfo {
         return 0;
     }
 
+    /**
+     * 左辺の変数を返す
+     * 
+     * @return 左辺の変数
+     */
     public VariableUsageInfo<?> getLeftVariable() {
         return this.leftVariable;
     }
 
+    /**
+     * 右辺の式を返す
+     * 
+     * @return 右辺の式
+     */
     public ExpressionInfo getRightExpression() {
         return this.rightExpression;
     }
@@ -98,6 +122,11 @@ public class AssignmentExpressionInfo implements ExpressionInfo {
         return this.toColumn;
     }
 
+    /**
+     * この式（代入文）における変数利用の一覧を返す
+     * 
+     * @return 変数利用のSet
+     */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
@@ -105,6 +134,7 @@ public class AssignmentExpressionInfo implements ExpressionInfo {
         variableUsages.addAll(this.getRightExpression().getVariableUsages());
         return variableUsages;
     }
+
     /**
      * 開始行を保存するための変数
      */

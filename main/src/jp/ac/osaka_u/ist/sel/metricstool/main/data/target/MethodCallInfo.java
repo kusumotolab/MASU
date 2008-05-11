@@ -73,6 +73,11 @@ public final class MethodCallInfo extends CallInfo {
         return this.callee;
     }
 
+    /**
+     * この式（メソッド呼び出し）における変数利用の一覧を返すクラス
+     * 
+     * @return 変数利用のSet
+     */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>(
@@ -80,7 +85,12 @@ public final class MethodCallInfo extends CallInfo {
         variableUsages.addAll(this.ownerUsage.getVariableUsages());
         return Collections.unmodifiableSortedSet(variableUsages);
     }
-    
+
+    /**
+     * このメソッド呼び出しの親，つまりこのメソッド呼び出しがくっついている要素を返す
+     * 
+     * @return このメソッド呼び出しの親
+     */
     public final EntityUsageInfo getOwnerUsage() {
         return this.ownerUsage;
     }

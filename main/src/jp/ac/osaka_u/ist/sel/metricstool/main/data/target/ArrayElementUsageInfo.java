@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+
 import java.util.Set;
 
 
@@ -63,7 +64,12 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
     public EntityUsageInfo getOwnerEntityUsage() {
         return this.ownerEntityUsage;
     }
-    
+
+    /**
+     * この式（配列要素の使用）における変数利用の一覧を返す
+     * 
+     * @return 変数利用のSet
+     */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         return this.getOwnerEntityUsage().getVariableUsages();

@@ -45,6 +45,11 @@ public final class IfBlockInfo extends ConditionalBlockInfo {
         this.sequentElseBlock = sequentElseBlock;
     }
 
+    /**
+     * ‚±‚ÌIf•¶‚É‘Î‰ž‚·‚éElse•¶‚ð•Ô‚·
+     * 
+     * @return ‚±‚ÌIf•¶‚É‘Î‰ž‚·‚éElse•¶
+     */
     public ElseBlockInfo getSequentElseBlock() {
         return this.sequentElseBlock;
     }

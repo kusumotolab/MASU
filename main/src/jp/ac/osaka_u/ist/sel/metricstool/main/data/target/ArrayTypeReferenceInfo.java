@@ -6,6 +6,12 @@ import java.util.Set;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
+/**
+ * 配列型参照を表すクラス
+ * 
+ * @author higo
+ *
+ */
 public final class ArrayTypeReferenceInfo extends EntityUsageInfo {
 
     /**
@@ -24,6 +30,9 @@ public final class ArrayTypeReferenceInfo extends EntityUsageInfo {
         this.arrayType = arrayType;
     }
 
+    /**
+     * 型を返す
+     */
     @Override
     public TypeInfo getType() {
         return this.arrayType;
@@ -38,6 +47,6 @@ public final class ArrayTypeReferenceInfo extends EntityUsageInfo {
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         return VariableUsageInfo.EmptySet;
     }
-    
+
     private final ArrayTypeInfo arrayType;
 }

@@ -22,12 +22,9 @@ public class BinominalOperationInfo extends EntityUsageInfo {
     /**
      * ニ項演算の各オペランド，オペレータを与えてオブジェクトを初期化
      * 
-     * @param operator
-     *            オペレータ
-     * @param firstOperand
-     *            第一オペランド
-     * @param secondOperand
-     *            第二オペランド
+     * @param operator オペレータ
+     * @param firstOperand 第一オペランド
+     * @param secondOperand 第二オペランド
      */
     public BinominalOperationInfo(final OPERATOR operator, final EntityUsageInfo firstOperand,
             final EntityUsageInfo secondOperand, final int fromLine, final int fromColumn,
@@ -45,6 +42,11 @@ public class BinominalOperationInfo extends EntityUsageInfo {
 
     }
 
+    /**
+     * この二項演算の型を返す
+     * 
+     * @return この二項演算の型
+     */
     @Override
     public TypeInfo getType() {
 
@@ -152,7 +154,7 @@ public class BinominalOperationInfo extends EntityUsageInfo {
                         || secondOperandType.equals(SHORT)
                         || secondOperandType.equals(PrimitiveTypeInfo.SHORT)) {
                     return PrimitiveTypeInfo.SHORT;
-                 
+
                 } else if (firstOperandType.equals(BYTE)
                         || firstOperandType.equals(PrimitiveTypeInfo.BYTE)
                         || secondOperandType.equals(BYTE)
@@ -164,7 +166,7 @@ public class BinominalOperationInfo extends EntityUsageInfo {
                         || secondOperandType.equals(CHARACTER)
                         || secondOperandType.equals(PrimitiveTypeInfo.CHAR)) {
                     return PrimitiveTypeInfo.CHAR;
-                    
+
                 } else if (firstOperandType.equals(BOOLEAN)
                         || firstOperandType.equals(PrimitiveTypeInfo.BOOLEAN)
                         || secondOperandType.equals(BOOLEAN)
@@ -230,11 +232,11 @@ public class BinominalOperationInfo extends EntityUsageInfo {
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
-        variableUsages.addAll(this.getFirstOperand().getVariableUsages());               
+        variableUsages.addAll(this.getFirstOperand().getVariableUsages());
         variableUsages.addAll(this.getSecondOperand().getVariableUsages());
         return Collections.unmodifiableSortedSet(variableUsages);
     }
-    
+
     private final EntityUsageInfo firstOperand;
 
     private final EntityUsageInfo secondOperand;
