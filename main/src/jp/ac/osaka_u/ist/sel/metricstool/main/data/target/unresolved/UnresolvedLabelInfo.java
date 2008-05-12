@@ -16,7 +16,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  *
  */
-public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> {
+public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> implements
+        UnresolvedStatementInfo<LabelInfo> {
 
     public UnresolvedLabelInfo(final String name) {
 
