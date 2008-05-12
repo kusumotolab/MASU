@@ -9,7 +9,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
@@ -17,15 +16,33 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
+/**
+ * 未解決コンストラクタを表すクラス
+ * 
+ * @author higo
+ *
+ */
 public final class UnresolvedConstructorInfo extends
         UnresolvedCallableUnitInfo<TargetConstructorInfo> {
 
+    /**
+     * 必要な情報を与えて，オブジェクトを初期化
+     * 
+     * @param ownerClass 所有クラス
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
+     */
     public UnresolvedConstructorInfo(final UnresolvedClassInfo ownerClass, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
         super(ownerClass, fromLine, fromColumn, toLine, toColumn);
     }
 
+    /**
+     * 名前解決を行う
+     */
     @Override
     public TargetConstructorInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
@@ -77,7 +94,7 @@ public final class UnresolvedConstructorInfo extends
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
-                methodInfoManager);  
+                methodInfoManager);
 
         // メソッド内で定義されている各未解決ローカル変数に対して
         for (final UnresolvedLocalVariableInfo unresolvedLocalVariable : this.getLocalVariables()) {
@@ -93,14 +110,30 @@ public final class UnresolvedConstructorInfo extends
         return this.resolvedInfo;
     }
 
+    /**
+     * インスタンスメンバーかどうかを返す
+     * 
+     * @return インスタンスメンバーなので true を返す
+     */
+    @Override
     public boolean isInstanceMember() {
         return true;
     }
 
+    /**
+     * スタティックメンバーかどうかを返す
+     * 
+     * @return スタティックメンバーではないので false を返す
+     */
+    @Override
     public boolean isStaticMember() {
         return false;
     }
 
+    /**
+     * なにもしない
+     */
+    @Override
     public void setInstanceMember(boolean instance) {
     }
 
