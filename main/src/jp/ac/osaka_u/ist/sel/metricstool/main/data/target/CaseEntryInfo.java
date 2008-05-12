@@ -17,8 +17,35 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     /**
      * 対応する switch ブロック情報を与えて case エントリを初期化
      * 
-     * @param ownerClass 所有クラス
-     * @param ownerMethod 所有メソッド
+     * @param ownerSwitchBlock この case エントリが属する switch ブロック
+     * @param label この case エントリのラベル
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
+     */
+    public CaseEntryInfo(final SwitchBlockInfo ownerSwitchBlock, final EntityUsageInfo label,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+
+        super(fromLine, fromColumn, toLine, toColumn);
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == ownerSwitchBlock) {
+            throw new IllegalArgumentException();
+        }
+        if ((null == label) || !(label instanceof LiteralUsageInfo)
+                || !(label instanceof ClassReferenceInfo)) {
+            throw new IllegalArgumentException();
+        }
+
+        this.ownerSwitchBlock = ownerSwitchBlock;
+        this.label = label;
+    }
+
+    /**
+     * 対応する switch ブロック情報を与えて case エントリを初期化
+     * 
      * @param ownerSwitchBlock この case エントリが属する switch ブロック
      * @param breakStatement この case エントリが break 文を持つかどうか
      * @param fromLine 開始行
@@ -26,19 +53,19 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public CaseEntryInfo(final SwitchBlockInfo ownerSwitchBlock, final String name,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+    protected CaseEntryInfo(final SwitchBlockInfo ownerSwitchBlock, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == ownerSwitchBlock) || (null == name)) {
+        if (null == ownerSwitchBlock) {
             throw new IllegalArgumentException();
         }
 
         this.ownerSwitchBlock = ownerSwitchBlock;
-        this.name = name;
+        this.label = null;
     }
 
     /**
@@ -90,12 +117,12 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * この case エントリの名前を返す
+     * この case エントリののラベルを返す
      * 
-     * @return この case エントリの名前
+     * @return この case エントリのラベル
      */
-    public final String getName() {
-        return this.name;
+    public final EntityUsageInfo getLabel() {
+        return this.label;
     }
 
     /**
@@ -104,7 +131,7 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     private final SwitchBlockInfo ownerSwitchBlock;
 
     /**
-     * この case エントリの名前を保存する変数
+     * この case エントリのラベルを保存する変数
      */
-    private String name;
+    private EntityUsageInfo label;
 }

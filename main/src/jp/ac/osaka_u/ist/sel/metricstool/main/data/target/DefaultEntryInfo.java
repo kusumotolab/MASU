@@ -15,6 +15,6 @@ public final class DefaultEntryInfo extends CaseEntryInfo {
      */
     public DefaultEntryInfo(final SwitchBlockInfo ownerSwitchBlock, int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
-        super(ownerSwitchBlock, "default", fromLine, fromColumn, toLine, toColumn);
+        super(ownerSwitchBlock, fromLine, fromColumn, toLine, toColumn);
     }
 }

@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SwitchBlockInfo;
@@ -22,21 +23,42 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
     /**
      * 対応する switch ブロック情報を与えて case エントリを初期化
      * 
-     * @param ownerSwitchBlock 対応する swich ブロック
+     * @param ownerSwitchBlock 対応する switch ブロック
      * @param name ラベルの名前
      * 
      */
     public UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock,
-            final String name) {
+            final UnresolvedEntityUsageInfo<?> label) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == ownerSwitchBlock) || (null == name)) {
+        if (null == ownerSwitchBlock) {
             throw new IllegalArgumentException("ownerSwitchBlock is null");
+        }
+        if ((null == label) || !(label instanceof UnresolvedLiteralUsageInfo)
+                || !(label instanceof UnresolvedClassReferenceInfo)) {
+            throw new IllegalArgumentException("label is incorrect");
         }
 
         this.ownerSwitchBlock = ownerSwitchBlock;
-        this.name = name;
+        this.label = label;
+    }
+
+    /**
+     * 対応する switch ブロック情報を与えて case エントリを初期化．
+     * なお，このコンストラクタは default エントリ用のものである．
+     * 
+     * @param ownerSwitchBlock 対応する switch ブロック
+     */
+    protected UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == ownerSwitchBlock) {
+            throw new IllegalArgumentException("ownerSwitchBlock is null");
+        }
+        this.ownerSwitchBlock = ownerSwitchBlock;
+        this.label = null;
     }
 
     /**
@@ -70,8 +92,10 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
         final SwitchBlockInfo ownerSwitchBlock = unresolvedOwnerSwitchBlock.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // この case エントリの名前を取得
-        final String name = this.getName();
+        // この case エントリのラベルを取得
+        final UnresolvedEntityUsageInfo<?> unresolvedLabel = this.getLabel();
+        final EntityUsageInfo label = unresolvedLabel.resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
 
         // この case エントリの位置情報を取得
         final int fromLine = this.getFromLine();
@@ -80,8 +104,8 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
         final int toColumn = this.getToColumn();
 
         //　解決済み case エントリオブジェクトを作成
-        this.resolvedInfo = new CaseEntryInfo(ownerSwitchBlock, name, fromLine, fromColumn, toLine,
-                toColumn);
+        this.resolvedInfo = new CaseEntryInfo(ownerSwitchBlock, label, fromLine, fromColumn,
+                toLine, toColumn);
         return this.resolvedInfo;
     }
 
@@ -95,12 +119,12 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
     }
 
     /**
-     * この case エントリの名前を返す
+     * この case エントリのラベルを返す
      * 
-     * @return この case エントリの名前
+     * @return この case エントリのラベル
      */
-    public final String getName() {
-        return this.name;
+    public final UnresolvedEntityUsageInfo<?> getLabel() {
+        return this.label;
     }
 
     /**
@@ -109,7 +133,7 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
     private final UnresolvedSwitchBlockInfo ownerSwitchBlock;
 
     /**
-     * この case エントリの名前を保存する変数
+     * この case エントリのラベルを保存する変数
      */
-    private String name;
+    private final UnresolvedEntityUsageInfo<?> label;
 }

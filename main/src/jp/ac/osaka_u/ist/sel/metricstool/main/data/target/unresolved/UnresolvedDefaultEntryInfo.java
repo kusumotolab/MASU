@@ -24,7 +24,7 @@ public final class UnresolvedDefaultEntryInfo extends UnresolvedCaseEntryInfo {
      * @param correspondingSwitchBlock
      */
     public UnresolvedDefaultEntryInfo(final UnresolvedSwitchBlockInfo correspondingSwitchBlock) {
-        super(correspondingSwitchBlock, "default");
+        super(correspondingSwitchBlock);
     }
 
     /**
