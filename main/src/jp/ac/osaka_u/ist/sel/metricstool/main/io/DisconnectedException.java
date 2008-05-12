@@ -9,6 +9,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
  */
 public class DisconnectedException extends ConnectionException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -1236997179711018009L;
+
     public DisconnectedException() {
         super();
     }

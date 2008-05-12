@@ -13,6 +13,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class ClosableLinkedBlockingQueue<E> extends LinkedBlockingQueue<E> {
     /**
+     * 
+     */
+    private static final long serialVersionUID = -4159234755316262135L;
+
+    /**
      * キューに入れることができる要素数を返す.
      * {@link #close()}が呼ばれた後は常に0を返す.
      * @return キューに入れることができる要素数.

@@ -8,6 +8,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external;
  */
 public final class CannotUseException extends RuntimeException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 5029193932968214475L;
+
     public CannotUseException() {
         super();
         // TODO Auto-generated constructor stub

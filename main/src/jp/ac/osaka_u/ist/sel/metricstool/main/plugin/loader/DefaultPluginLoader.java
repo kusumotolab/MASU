@@ -259,7 +259,7 @@ public class DefaultPluginLoader implements PluginLoader {
             //このプラグイン専用のURLクラスローダを作成
             final URLClassLoader loader = new URLClassLoader(libraryClassPathArray);
             //それを使ってプラグインクラスをロードしてインスタンス化
-            final Class pluginClass = loader.loadClass(pluginClassName);
+            final Class<?> pluginClass = loader.loadClass(pluginClassName);
             final AbstractPlugin plugin = (AbstractPlugin) pluginClass.newInstance();
 
             assert (null != plugin) : "Illeagal state: Plugin class's instance is null.";

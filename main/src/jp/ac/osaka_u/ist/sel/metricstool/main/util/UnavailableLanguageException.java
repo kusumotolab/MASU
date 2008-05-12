@@ -10,6 +10,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.util;
  */
 public class UnavailableLanguageException extends RuntimeException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 834525430720739558L;
+
     public UnavailableLanguageException() {
         super();
     }

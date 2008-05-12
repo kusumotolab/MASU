@@ -8,6 +8,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
  */
 public class MetricAlreadyRegisteredException extends Exception {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -763049740565557645L;
+
     public MetricAlreadyRegisteredException() {
         super();
     }

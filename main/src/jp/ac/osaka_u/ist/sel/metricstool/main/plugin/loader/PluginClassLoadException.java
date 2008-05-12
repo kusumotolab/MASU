@@ -10,6 +10,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader;
  */
 public class PluginClassLoadException extends PluginLoadException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -996290505390023096L;
+
     public PluginClassLoadException() {
         super();
     }

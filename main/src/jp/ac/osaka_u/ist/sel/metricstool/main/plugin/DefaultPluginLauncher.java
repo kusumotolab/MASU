@@ -41,7 +41,7 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
         }
 
         if (this.futureMap.containsKey(plugin)) {
-            final Future future = this.futureMap.get(plugin);
+            final Future<?> future = this.futureMap.get(plugin);
             this.futureMap.remove(plugin);
             ProgressConnector.getConnector(plugin).disconnect();
             return future.cancel(true);
@@ -131,7 +131,7 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
         }
 
         final PluginExecutor executor = new PluginExecutor(plugin);
-        final Future future = this.threadPool.submit(executor);
+        final Future<?> future = this.threadPool.submit(executor);
         this.futureMap.put(executor.getPlugin(), future);
     }
 
@@ -228,7 +228,7 @@ public final class DefaultPluginLauncher implements PluginLauncher, ExecutionEnd
     /**
      * 各 {@link RunnablePlugin} のFutureを保存するマップ
      */
-    private final Map<AbstractPlugin, Future> futureMap = new ConcurrentHashMap<AbstractPlugin, Future>();
+    private final Map<AbstractPlugin, Future<?>> futureMap = new ConcurrentHashMap<AbstractPlugin, Future<?>>();
 
     /**
      * ランチャーを停止されたかどうかを表す変数

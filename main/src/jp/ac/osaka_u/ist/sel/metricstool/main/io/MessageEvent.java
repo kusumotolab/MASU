@@ -15,6 +15,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 public class MessageEvent extends EventObject {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -4711363868655969016L;
+
+    /**
      * コンストラクタ
      * @param source メッセージ送信者
      * @param messageType メッセージの種類

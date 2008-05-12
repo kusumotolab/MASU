@@ -9,6 +9,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.io;
  */
 public class ConnectionException extends Exception {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -7638061401934671699L;
+
     public ConnectionException() {
         super();
     }

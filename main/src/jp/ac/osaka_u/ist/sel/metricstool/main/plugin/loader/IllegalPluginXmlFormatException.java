@@ -9,6 +9,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader;
  */
 public class IllegalPluginXmlFormatException extends PluginLoadException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 4168828183801661313L;
+
     public IllegalPluginXmlFormatException() {
         super();
     }

@@ -9,6 +9,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
  */
 public class NotResolvedException extends RuntimeException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 5769149366891479545L;
+
     public NotResolvedException() {
         super();
     }

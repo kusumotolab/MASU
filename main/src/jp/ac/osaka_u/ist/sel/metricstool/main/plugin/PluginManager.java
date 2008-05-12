@@ -52,13 +52,13 @@ public class PluginManager {
         METRIC_TYPE type = plugin.getMetricType();
         switch(type){
             case FILE_METRIC :
-                filePlugins.add(plugin);
+                this.filePlugins.add(plugin);
                 break;
             case CLASS_METRIC :
-                classPlugins.add(plugin);
+                this.classPlugins.add(plugin);
                 break;
             case METHOD_METRIC :
-                methodPlugins.add(plugin);
+                this.methodPlugins.add(plugin);
                 break;
         }
     }
@@ -171,13 +171,13 @@ public class PluginManager {
             
             switch(plugin.getMetricType()){
                 case FILE_METRIC :
-                    filePlugins.remove(plugin);
+                    this.filePlugins.remove(plugin);
                     break;
                 case CLASS_METRIC :
-                    classPlugins.remove(plugin);
+                    this.classPlugins.remove(plugin);
                     break;
                 case METHOD_METRIC :
-                    methodPlugins.remove(plugin);
+                    this.methodPlugins.remove(plugin);
                     break;
             }
         }

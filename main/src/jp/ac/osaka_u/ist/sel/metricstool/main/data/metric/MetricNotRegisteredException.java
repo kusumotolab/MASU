@@ -9,6 +9,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
  */
 public class MetricNotRegisteredException extends Exception {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -5771740792340202250L;
+
     public MetricNotRegisteredException() {
         super();
     }

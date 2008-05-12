@@ -255,7 +255,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      */
     @Override
     public final int hashCode() {
-        final Class myClass = this.getClass();
+        final Class<?> myClass = this.getClass();
         final String myClassName = myClass.getCanonicalName();
         return myClassName != null ? myClassName.hashCode() : myClass.hashCode();
     }

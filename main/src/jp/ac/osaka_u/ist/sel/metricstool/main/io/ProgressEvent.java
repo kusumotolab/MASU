@@ -13,6 +13,10 @@ import java.util.EventObject;
 public class ProgressEvent extends EventObject {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -8735402526941031611L;
+    /**
      * コンストラクタ
      * 
      * @param source 進捗状況を送ったプラグイン

@@ -8,6 +8,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin;
  */
 public class PluginResponseException extends Exception {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 9203607800507437330L;
+
     public PluginResponseException() {
         super();
     }

@@ -9,6 +9,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader;
  */
 public class IllegalPluginDirectoryStructureException extends PluginLoadException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 8896937178866661003L;
+
     public IllegalPluginDirectoryStructureException() {
         super();
     }

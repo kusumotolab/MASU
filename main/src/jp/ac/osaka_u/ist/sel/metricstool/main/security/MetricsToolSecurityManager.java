@@ -205,26 +205,27 @@ public final class MetricsToolSecurityManager extends SecurityManager {
         if (null == perm) {
             throw new NullPointerException("Permission is null.");
         }
-        
+
         if (this.isPrivilegeThread()) {
             return;
         } else if (this.globalPermissions.implies(perm)) {
             return;
         } else {
             final Thread current = Thread.currentThread();
-            
+
             //このメソッド内から呼び出されて，自分が所属しているスレッドグループの親グループがnullかどうかを調べに来たスレッドだけ許可する
-            if (perm.getName().equals("modifyThreadGroup") && groupParentCheckingThread.contains(current)){
+            if (perm.getName().equals("modifyThreadGroup")
+                    && this.groupParentCheckingThread.contains(current)) {
                 return;
-            } 
-            
+            }
+
             //自分が所属しているスレッドグループの親グループがnullかどうかを調べにいく
             //nullならシステムスレッドである．
-            groupParentCheckingThread.add(current);
+            this.groupParentCheckingThread.add(current);
             boolean isSystemThread = null == current.getThreadGroup().getParent();
-            groupParentCheckingThread.remove(current);
-            
-            if (isSystemThread){
+            this.groupParentCheckingThread.remove(current);
+
+            if (isSystemThread) {
                 //システムスレッドの場合は全てを許可してしまう．
                 return;
             } else if (this.threadPermissions.containsKey(current)) {
@@ -233,7 +234,7 @@ public final class MetricsToolSecurityManager extends SecurityManager {
                     return;
                 }
             }
-            
+
             super.checkPermission(perm);
         }
     }
@@ -292,14 +293,14 @@ public final class MetricsToolSecurityManager extends SecurityManager {
     public final boolean isPrivilegeThread(final Thread thread) {
         return this.privilegeThreads.contains(thread);
     }
-    
+
     /**
      * プラグインのアクセス権限を解除する
      * @param plugin
      */
-    public final void removePluginPermission(final AbstractPlugin plugin){
+    public final void removePluginPermission(final AbstractPlugin plugin) {
         Thread current = Thread.currentThread();
-        
+
         //許可されていたパーミッションを取ってくる.
         Permissions permissions;
         if (this.threadPermissions.containsKey(current)) {
@@ -308,36 +309,38 @@ public final class MetricsToolSecurityManager extends SecurityManager {
             permissions = new Permissions();
             this.threadPermissions.put(current, permissions);
         }
-        
+
         //新規パーミッションセットを作る
         Permissions newPermissions = new Permissions();
-        
+
         //許可されていたパーミッションがプラグインのパーミッションセットに含まれて居なければ新規パーミッションセットに入れる
-        for(Enumeration<Permission> enumerator = permissions.elements(); enumerator.hasMoreElements();){
+        for (Enumeration<Permission> enumerator = permissions.elements(); enumerator
+                .hasMoreElements();) {
             Permission permission = enumerator.nextElement();
             boolean include = false;
-            for(Enumeration<Permission> pluginPermissions = plugin.getPermissions().elements(); pluginPermissions.hasMoreElements();){
+            for (Enumeration<Permission> pluginPermissions = plugin.getPermissions().elements(); pluginPermissions
+                    .hasMoreElements();) {
                 Permission pluginPermission = pluginPermissions.nextElement();
-                if (pluginPermission == permission){//インスタンスの比較をする
+                if (pluginPermission == permission) {//インスタンスの比較をする
                     include = true;
                     break;
                 }
             }
-            if (!include){
+            if (!include) {
                 newPermissions.add(permission);
             }
         }
         //新規パーミッションセットをこのスレッドのパーミッションとしてセットする
         this.threadPermissions.put(current, newPermissions);
     }
-    
+
     /**
      * プラグインのアクセス権限を設定する
      * @param plugin　プラグインインスタンス
      */
-    public final void requestPluginPermission(final AbstractPlugin plugin){
+    public final void requestPluginPermission(final AbstractPlugin plugin) {
         Thread current = Thread.currentThread();
-        
+
         Permissions permissions;
         if (this.threadPermissions.containsKey(current)) {
             permissions = this.threadPermissions.get(current);
@@ -345,10 +348,11 @@ public final class MetricsToolSecurityManager extends SecurityManager {
             permissions = new Permissions();
             this.threadPermissions.put(current, permissions);
         }
-        
+
         Permissions pluginPermissions = plugin.getPermissions();
-        
-        for(Enumeration<Permission> enumeration = pluginPermissions.elements(); enumeration.hasMoreElements();){
+
+        for (Enumeration<Permission> enumeration = pluginPermissions.elements(); enumeration
+                .hasMoreElements();) {
             permissions.add(enumeration.nextElement());
         }
     }
@@ -377,7 +381,7 @@ public final class MetricsToolSecurityManager extends SecurityManager {
      */
     private final Set<ThreadGroup> pluginThreadGroups = Collections
             .synchronizedSet(new WeakHashSet<ThreadGroup>());
-    
+
     /**
      * {@link #checkPermission(Permission)}メソッドにおいて利用される {@link ThreadGroup#getParent()} メソッドの呼び出しを
      * 実行したスレッドを一時的に保存しておくためのセット．
