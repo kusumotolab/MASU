@@ -1,8 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 
 
@@ -116,7 +114,7 @@ public abstract class UnresolvedUnitInfo<T extends UnitInfo> implements Resolvab
     public final int getLOC() {
         return this.getToLine() - this.getFromLine() + 1;
     }
-    
+
     @Override
     public final boolean alreadyResolved() {
         return null != this.resolvedInfo;
@@ -151,7 +149,7 @@ public abstract class UnresolvedUnitInfo<T extends UnitInfo> implements Resolvab
      * ŠJn—ñ‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
      */
     private int toColumn;
-    
+
     /**
      * –¼‘O‰ğŒˆ‚³‚ê‚½î•ñ‚ğŠi”[‚·‚é‚½‚ß‚Ì•Ï”
      */

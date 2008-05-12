@@ -12,7 +12,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -89,7 +88,7 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);  
+                methodInfoManager);
 
         // ローカル変数情報を解決し，解決済みtryブロックオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
@@ -97,7 +96,7 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
                     classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
-        
+
         this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 
