@@ -42,7 +42,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
         this.publicVisible = publicVisible;
 
         this.typeParameters = new LinkedList<TypeParameterInfo>();
-        this.unresolvedUsage = new HashSet<UnresolvedEntityUsageInfo>();
+        this.unresolvedUsage = new HashSet<UnresolvedEntityUsageInfo<?>>();
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
@@ -77,7 +77,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @param entityUsage 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出し
      */
-    public void addUnresolvedUsage(final UnresolvedEntityUsageInfo entityUsage) {
+    public void addUnresolvedUsage(final UnresolvedEntityUsageInfo<?> entityUsage) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == entityUsage) {
@@ -92,7 +92,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @return このメソッド内で，名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しの Set
      */
-    public Set<UnresolvedEntityUsageInfo> getUnresolvedUsages() {
+    public Set<UnresolvedEntityUsageInfo<?>> getUnresolvedUsages() {
         return Collections.unmodifiableSet(this.unresolvedUsage);
     }
 
@@ -174,5 +174,5 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     /**
      * 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しなどを保存するための変数
      */
-    private final Set<UnresolvedEntityUsageInfo> unresolvedUsage;
+    private final Set<UnresolvedEntityUsageInfo<?>> unresolvedUsage;
 }
