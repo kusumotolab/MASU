@@ -5,9 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.DefaultEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SwitchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -26,7 +24,7 @@ public final class UnresolvedDefaultEntryInfo extends UnresolvedCaseEntryInfo {
      * @param correspondingSwitchBlock
      */
     public UnresolvedDefaultEntryInfo(final UnresolvedSwitchBlockInfo correspondingSwitchBlock) {
-        super(correspondingSwitchBlock);
+        super(correspondingSwitchBlock, "default");
     }
 
     /**
@@ -60,33 +58,15 @@ public final class UnresolvedDefaultEntryInfo extends UnresolvedCaseEntryInfo {
         final SwitchBlockInfo ownerSwitchBlock = unresolvedOwnerSwitchBlock.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // break 文の有無を取得
-        final boolean breakStatement = this.hasBreakStatement();
-
-        // この case エントリの位置情報を取得
+        // この default エントリの位置情報を取得
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
         // default　エントリオブジェクトを作成
-        this.resolvedInfo = new DefaultEntryInfo(usingClass, usingMethod, fromLine, fromColumn,
-                toLine, toColumn, ownerSwitchBlock, breakStatement);
-
-        //　内部ブロック情報を解決し，解決済みcaseエントリオブジェクトに追加
-        for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
-            final StatementInfo statement = unresolvedStatement.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addStatement(statement);
-        }
-
-        // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
-        for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addLocalVariable(variable);
-        }
-
+        this.resolvedInfo = new DefaultEntryInfo(ownerSwitchBlock, fromLine, fromColumn, toLine,
+                toColumn);
         return (DefaultEntryInfo) this.resolvedInfo;
     }
 }

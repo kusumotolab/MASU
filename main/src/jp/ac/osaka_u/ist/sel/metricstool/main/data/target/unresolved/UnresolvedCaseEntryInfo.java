@@ -5,9 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SwitchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -18,21 +16,27 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  */
-public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> {
+public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> implements
+        UnresolvedStatementInfo<CaseEntryInfo> {
 
     /**
      * 対応する switch ブロック情報を与えて case エントリを初期化
      * 
-     * @param ownerSwitchBlock
+     * @param ownerSwitchBlock 対応する swich ブロック
+     * @param name ラベルの名前
+     * 
      */
-    public UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock) {
-        super(ownerSwitchBlock);
-        if (null == ownerSwitchBlock) {
+    public UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock,
+            final String name) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == ownerSwitchBlock) || (null == name)) {
             throw new IllegalArgumentException("ownerSwitchBlock is null");
         }
 
         this.ownerSwitchBlock = ownerSwitchBlock;
-        this.breakStatement = false;
+        this.name = name;
     }
 
     /**
@@ -66,8 +70,8 @@ public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> 
         final SwitchBlockInfo ownerSwitchBlock = unresolvedOwnerSwitchBlock.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // break 文の有無を取得
-        final boolean breakStatement = this.hasBreakStatement();
+        // この case エントリの名前を取得
+        final String name = this.getName();
 
         // この case エントリの位置情報を取得
         final int fromLine = this.getFromLine();
@@ -76,23 +80,8 @@ public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> 
         final int toColumn = this.getToColumn();
 
         //　解決済み case エントリオブジェクトを作成
-        this.resolvedInfo = new CaseEntryInfo(usingClass, usingMethod, ownerSwitchBlock,
-                breakStatement, fromLine, fromColumn, toLine, toColumn);
-
-        //　未解決ブロック文情報を解決し，解決済みオブジェクトに追加
-        this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);
-
-        // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
-        for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addLocalVariable(variable);
-        }
-
-        this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);
-
+        this.resolvedInfo = new CaseEntryInfo(ownerSwitchBlock, name, fromLine, fromColumn, toLine,
+                toColumn);
         return this.resolvedInfo;
     }
 
@@ -106,21 +95,12 @@ public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> 
     }
 
     /**
-     * この case エントリが break 文を持つかどうかを設定する
+     * この case エントリの名前を返す
      * 
-     * @param breakStatement break 文を持つ場合は true, 持たない場合は false
+     * @return この case エントリの名前
      */
-    public final void setHasBreak(final boolean breakStatement) {
-        this.breakStatement = breakStatement;
-    }
-
-    /**
-     * この case エントリが break 文を持つかどうかを返す
-     * 
-     * @return break 文を持つ場合はtrue，持たない場合は false
-     */
-    public final boolean hasBreakStatement() {
-        return this.breakStatement;
+    public final String getName() {
+        return this.name;
     }
 
     /**
@@ -129,7 +109,7 @@ public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> 
     private final UnresolvedSwitchBlockInfo ownerSwitchBlock;
 
     /**
-     * この case エントリが break 文を持つかどうかを保存する変数
+     * この case エントリの名前を保存する変数
      */
-    private boolean breakStatement;
+    private String name;
 }

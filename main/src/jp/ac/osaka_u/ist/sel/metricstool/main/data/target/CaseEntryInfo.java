@@ -1,12 +1,18 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.HashSet;
+import java.util.Set;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
+
 /**
  * switch 文の case エントリを表すクラス
  * 
  * @author higo
  */
-public class CaseEntryInfo extends BlockInfo {
+public class CaseEntryInfo extends UnitInfo implements StatementInfo {
 
     /**
      * 対応する switch ブロック情報を与えて case エントリを初期化
@@ -20,18 +26,58 @@ public class CaseEntryInfo extends BlockInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public CaseEntryInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
-            final SwitchBlockInfo ownerSwitchBlock, final boolean breakStatement,
+    public CaseEntryInfo(final SwitchBlockInfo ownerSwitchBlock, final String name,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerClass, ownerMethod, ownerSwitchBlock, fromLine, fromColumn, toLine, toColumn);
+        super(fromLine, fromColumn, toLine, toColumn);
 
-        if (null == ownerSwitchBlock) {
-            throw new NullPointerException();
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == ownerSwitchBlock) || (null == name)) {
+            throw new IllegalArgumentException();
         }
 
         this.ownerSwitchBlock = ownerSwitchBlock;
-        this.breakStatement = breakStatement;
+        this.name = name;
+    }
+
+    /**
+     * この文（case エントリ）で用いられている変数利用の一覧を返す．
+     * どの変数も用いられていないので，空のsetが返される
+     * 
+     * @return 変数利用のSet
+     */
+    @Override
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
+        return new HashSet<VariableUsageInfo<?>>();
+    }
+
+    @Override
+    public int compareTo(StatementInfo o) {
+
+        if (null == o) {
+            throw new IllegalArgumentException();
+        }
+
+        if (this.getFromLine() < o.getFromLine()) {
+            return 1;
+        } else if (this.getFromLine() > o.getFromLine()) {
+            return -1;
+        } else if (this.getFromColumn() < o.getFromColumn()) {
+            return 1;
+        } else if (this.getFromColumn() > o.getFromColumn()) {
+            return -1;
+        } else if (this.getToLine() < o.getToLine()) {
+            return 1;
+        } else if (this.getToLine() > o.getToLine()) {
+            return -1;
+        } else if (this.getToColumn() < o.getToColumn()) {
+            return 1;
+        } else if (this.getToColumn() > o.getToColumn()) {
+            return -1;
+        }
+
+        return 0;
     }
 
     /**
@@ -44,12 +90,12 @@ public class CaseEntryInfo extends BlockInfo {
     }
 
     /**
-     * この case エントリが break 文を持つかどうかを返す
+     * この case エントリの名前を返す
      * 
-     * @return break 文を持つ場合はtrue，持たない場合は false
+     * @return この case エントリの名前
      */
-    public final boolean hasBreakStatement() {
-        return this.breakStatement;
+    public final String getName() {
+        return this.name;
     }
 
     /**
@@ -58,7 +104,7 @@ public class CaseEntryInfo extends BlockInfo {
     private final SwitchBlockInfo ownerSwitchBlock;
 
     /**
-     * この case エントリが break 文を持つかどうかを保存する変数
+     * この case エントリの名前を保存する変数
      */
-    private boolean breakStatement;
+    private String name;
 }
