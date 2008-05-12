@@ -18,14 +18,28 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NamespaceInfo;
  */
 public final class ArrayTypeClassInfo extends ClassInfo {
 
+    /**
+     * 配列の型を与えて，オブジェクトを初期化
+     * 
+     * @param arrayType 配列の型
+     */
     public ArrayTypeClassInfo(final ArrayTypeInfo arrayType) {
 
         super(new HashSet<ModifierInfo>(), NamespaceInfo.UNKNOWN, NONAME, 0, 0, 0, 0);
-        
+
         if (null == arrayType) {
             throw new IllegalArgumentException();
         }
         this.arrayType = arrayType;
+    }
+
+    /**
+     * 配列の型を返す
+     * 
+     * @return 配列の型
+     */
+    public ArrayTypeInfo getArrayType() {
+        return this.arrayType;
     }
 
     private final ArrayTypeInfo arrayType;
