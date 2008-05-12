@@ -25,9 +25,8 @@ public class UnresolvedCaseEntryInfo extends UnresolvedBlockInfo<CaseEntryInfo> 
      * 
      * @param ownerSwitchBlock
      */
-    public UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock,
-            final UnresolvedLocalSpaceInfo<?> outerSpace) {
-        super(outerSpace);
+    public UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock) {
+        super(ownerSwitchBlock);
         if (null == ownerSwitchBlock) {
             throw new IllegalArgumentException("ownerSwitchBlock is null");
         }

@@ -47,9 +47,9 @@ public class CaseGroupBuilder extends InnerBlockBuilder<CaseEntryInfo, Unresolve
             
             final DeclaredBlockState currentState = this.blockStateManager.getState();
             if(currentState.equals(CASE_ENTRY_STATE.CASE_DEF)) {
-                return new UnresolvedCaseEntryInfo(ownerSwitch, ownerSwitch.getOuterSpace());
+                return new UnresolvedCaseEntryInfo(ownerSwitch);
             } else if(currentState.equals(CASE_ENTRY_STATE.DEFAULT_DEF)) {
-                return new UnresolvedDefaultEntryInfo(ownerSwitch, ownerSwitch.getOuterSpace());
+                return new UnresolvedDefaultEntryInfo(ownerSwitch);
             }
         }
         
