@@ -22,12 +22,12 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public LabelInfo(final String name, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+    public LabelInfo(final String name, final StatementInfo labeledStatement, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
         super(fromLine, fromColumn, toLine, toColumn);
 
         this.name = name;
-
+        this.labeledStatement = labeledStatement;
     }
 
     @Override
@@ -78,5 +78,16 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
         return this.name;
     }
 
+    /**
+     * このラベルが付いた文を返す
+     * 
+     * @return このラベルが付いた文
+     */
+    public StatementInfo getLabeledStatement() {
+        return this.labeledStatement;
+    }
+
     private final String name;
+
+    private final StatementInfo labeledStatement;
 }

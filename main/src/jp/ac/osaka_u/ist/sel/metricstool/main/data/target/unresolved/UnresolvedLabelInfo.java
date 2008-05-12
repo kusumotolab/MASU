@@ -6,6 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LabelInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -28,6 +29,7 @@ public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> imp
         }
 
         this.name = name;
+        this.labeledStatement = null;
         this.resolvedInfo = null;
     }
 
@@ -60,7 +62,13 @@ public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> imp
         // このラベルの名前を取得
         final String name = this.getName();
 
-        this.resolvedInfo = new LabelInfo(name, fromLine, fromColumn, toLine, toColumn);
+        // このラベルが付いた文を取得
+        final UnresolvedStatementInfo<?> unresolvedLabeledStatement = this.getLabeledStatement();
+        final StatementInfo labeledStatement = unresolvedLabeledStatement.resolve(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+
+        this.resolvedInfo = new LabelInfo(name, labeledStatement, fromLine, fromColumn, toLine,
+                toColumn);
         return this.resolvedInfo;
     }
 
@@ -73,5 +81,25 @@ public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> imp
         return this.name;
     }
 
+    /**
+     * このラベルが付いた文をセットする
+     * 
+     * @param labeledStatement このラベルが付いた文
+     */
+    public void setLabeledStatement(final UnresolvedStatementInfo<?> labeledStatement) {
+        this.labeledStatement = labeledStatement;
+    }
+
+    /**
+     * このラベルが付いた文を返す
+     * 
+     * @return このラベルが付いた文
+     */
+    public UnresolvedStatementInfo<?> getLabeledStatement() {
+        return this.labeledStatement;
+    }
+
     private String name;
+
+    private UnresolvedStatementInfo<?> labeledStatement;
 }
