@@ -26,24 +26,4 @@ public final class SwitchBlockInfo extends ConditionalBlockInfo {
         super(ownerClass, ownerMethod, conditionalClause, outerSpace, fromLine, fromColumn, toLine,
                 toColumn);
     }
-
-    /**
-     * このswitch ブロックに case エントリを追加する
-     * 
-     * @param innerBlock 追加する case エントリ
-     */
-    //    @Override
-    //    public void addInnerBlock(final BlockInfo innerBlock) {
-    //
-    //        MetricsToolSecurityManager.getInstance().checkAccess();
-    //        if (null == innerBlock) {
-    //            throw new NullPointerException();
-    //        }
-    //
-    //        if (!(innerBlock instanceof CaseEntryInfo)) {
-    //            throw new IllegalArgumentException(
-    //                    "Inner block of switch statement must be case or default entry!");
-    //        }
-    //        super.addInnerBlock(innerBlock);
-    //    }
 }
