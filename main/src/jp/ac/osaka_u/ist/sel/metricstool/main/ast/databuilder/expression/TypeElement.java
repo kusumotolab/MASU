@@ -24,7 +24,7 @@ public class TypeElement extends ExpressionElement {
         }
         return instance;
     }
-    
+
     public TypeElement getArrayDimensionInclementedInstance() {
         UnresolvedTypeInfo newType = null;
         if (this.type instanceof UnresolvedArrayTypeInfo) {
@@ -39,18 +39,27 @@ public class TypeElement extends ExpressionElement {
     public UnresolvedTypeInfo getType() {
         return this.type;
     }
-    
+
     private TypeElement(final UnresolvedTypeInfo type) {
         super();
-        
+
         if (null == type) {
             throw new NullPointerException("type is null.");
         }
         this.type = type;
-        
-        if(this.type instanceof PrimitiveTypeInfo){
+
+        if (this.type instanceof PrimitiveTypeInfo) {
             this.usage = new UnresolvedLiteralUsageInfo("", (PrimitiveTypeInfo) this.type);
         }
+    }
+    
+    public TypeElement(final String literal, final PrimitiveTypeInfo type) {
+        if(null == literal || null == type) {
+            throw new IllegalArgumentException();
+        }
+        
+        this.type = type;
+        this.usage = new UnresolvedLiteralUsageInfo(literal, type);
     }
 
     private final UnresolvedTypeInfo type;

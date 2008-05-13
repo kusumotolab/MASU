@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 
 
 /**
@@ -19,7 +19,7 @@ public class ConstantToken extends AstTokenAdapter {
      * @param type　定数の型
      * @throws typeがnullの場合
      */
-    public ConstantToken(final String text, final UnresolvedTypeInfo type) {
+    public ConstantToken(final String text, final PrimitiveTypeInfo type) {
         super(text);
         
         if (null == type){
@@ -32,7 +32,7 @@ public class ConstantToken extends AstTokenAdapter {
      * このトークンが表す定数の型を返す.
      * @return このトークンが表す定数の型
      */
-    public UnresolvedTypeInfo getType() {
+    public PrimitiveTypeInfo getType() {
         return this.type;
     }
     
@@ -48,6 +48,6 @@ public class ConstantToken extends AstTokenAdapter {
     /**
      * このトークンが表す定数の型
      */
-    private final UnresolvedTypeInfo type;
+    private final PrimitiveTypeInfo type;
 
 }

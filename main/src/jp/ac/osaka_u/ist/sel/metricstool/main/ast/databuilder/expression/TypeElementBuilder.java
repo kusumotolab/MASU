@@ -185,7 +185,7 @@ public class TypeElementBuilder extends ExpressionBuilder {
     }
 
     protected void buildConstantElement(final ConstantToken token) {
-        this.pushElement(TypeElement.getInstance(token.getType()));
+        this.pushElement(new TypeElement(token.toString(), token.getType()));
     }
 
     @Override

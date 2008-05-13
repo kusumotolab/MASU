@@ -5,7 +5,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BlockScopeBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ThrowStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ClassBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ConstructorBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder;
@@ -20,13 +19,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameSpaceBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ReturnStatementBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ThrowStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionDescriptionBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.InstanceElementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.MethodCallBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.OperatorExpressionBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.SingleIdentifierBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.CaseGroupBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.CatchBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.DoBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.ElseBlockBuilder;
@@ -133,7 +132,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
     }
 
     private void addInnerBlockBuilder() {
-        this.builders.add(new CaseGroupBuilder(this.buildDataManager));
+        //this.builders.add(new CaseGroupBuilder(this.buildDataManager));
         this.builders.add(new CatchBlockBuilder(this.buildDataManager));
         this.builders.add(new DoBlockBuilder(this.buildDataManager));
         this.builders.add(new ElseBlockBuilder(this.buildDataManager));
@@ -141,7 +140,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new ForBlockBuilder(this.buildDataManager));
         this.builders.add(new IfBlockBuilder(this.buildDataManager));
         //this.builders.add(new SimpleBlockBuilder(this.buildDataManager));
-        this.builders.add(new SwitchBlockBuilder(this.buildDataManager));
+        this.builders.add(new SwitchBlockBuilder(this.buildDataManager, this.expressionManager));
         this.builders.add(new SynchronizedBlockBuilder(this.buildDataManager));
         this.builders.add(new TryBlockBuilder(this.buildDataManager));
         this.builders.add(new WhileBlockBuilder(this.buildDataManager));

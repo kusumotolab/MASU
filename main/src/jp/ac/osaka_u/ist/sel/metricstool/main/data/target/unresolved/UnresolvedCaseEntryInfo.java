@@ -35,8 +35,8 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
         if (null == ownerSwitchBlock) {
             throw new IllegalArgumentException("ownerSwitchBlock is null");
         }
-        if ((null == label) || !(label instanceof UnresolvedLiteralUsageInfo)
-                || !(label instanceof UnresolvedClassReferenceInfo)) {
+        if ((null == label) || !((label instanceof UnresolvedLiteralUsageInfo)
+                || (label instanceof UnresolvedClassReferenceInfo))) {
             throw new IllegalArgumentException("label is incorrect");
         }
 
