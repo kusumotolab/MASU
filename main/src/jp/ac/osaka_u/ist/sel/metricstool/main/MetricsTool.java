@@ -216,11 +216,12 @@ public class MetricsTool {
                     parser.compilationUnit();
                     targetFile.setCorrectSytax(true);
 
+                    
                     if (visitorManager != null) {
-                        visitorManager.setPositionManager(parser.getPositionManger());
                         visitorManager.visitStart(parser.getAST());
                     }
-
+                    
+             
                     fileInfo.setLOC(lexer.getLine());
 
                 } catch (FileNotFoundException e) {
