@@ -71,6 +71,8 @@ public class Settings {
             return LANGUAGE.JAVA15;
         } else if (language.equalsIgnoreCase("java14")) {
             return LANGUAGE.JAVA14;
+        } else if (language.equalsIgnoreCase("java13")) {
+            return LANGUAGE.JAVA13;
             // }else if (language.equalsIgnoreCase("cpp")) {
             // return LANGUAGE.C_PLUS_PLUS;
             // }else if (language.equalsIgnoreCase("csharp")) {

@@ -70,6 +70,36 @@ public enum LANGUAGE {
         }
     },
 
+    /**
+     * Java言語 バージョン1.3用
+     */
+    JAVA13 {
+        @Override
+        public boolean isObjectOrientedLanguage() {
+            return true;
+        }
+
+        @Override
+        public String getExtension() {
+            return ".java";
+        }
+
+        @Override
+        public String getName() {
+            return "Java";
+        }
+
+        @Override
+        public String getIdentifierName() {
+            return "java13";
+        }
+
+        @Override
+        public String getNamespaceDelimiter() {
+            return ".";
+        }
+    },
+
     //    C_PLUS_PLUS {
     //        @Override
     //        public boolean isObjectOrientedLanguage() {

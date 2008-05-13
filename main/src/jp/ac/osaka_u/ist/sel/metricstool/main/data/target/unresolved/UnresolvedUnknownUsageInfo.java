@@ -944,7 +944,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
 
         // java言語の場合は，javaかjavaxで始まり，長さが3以上のUnknownEntityUsageInfoはJDK内のクラスとみなす
         if (Settings.getLanguage().equals(LANGUAGE.JAVA15)
-                || (Settings.getLanguage().equals(LANGUAGE.JAVA14))) {
+                || Settings.getLanguage().equals(LANGUAGE.JAVA14)
+                || Settings.getLanguage().equals(LANGUAGE.JAVA13)) {
 
             if ((name[0].equals("java") || name[0].equals("javax")) && (3 <= name.length)) {
                 final ExternalClassInfo externalClass = new ExternalClassInfo(name);

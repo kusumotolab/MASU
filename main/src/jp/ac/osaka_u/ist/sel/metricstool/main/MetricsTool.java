@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java13AntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java14AntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java15AntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.JavaAstVisitorManager;
@@ -185,6 +186,10 @@ public class MetricsTool {
         case JAVA14:
             visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
                     new Java14AntlrAstTranslator()));
+            break;
+        case JAVA13:
+            visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
+                    new Java13AntlrAstTranslator()));
             break;
         default:
             assert false : "here shouldn't be reached!";

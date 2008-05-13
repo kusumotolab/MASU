@@ -213,7 +213,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
             // XXX JavaŒ¾Œê‚Å‚ ‚ê‚ÎC java.lang.Object ‚É‘Î‚·‚éŒÄ‚Ño‚µ
             if (Settings.getLanguage().equals(LANGUAGE.JAVA15)
-                    || (Settings.getLanguage().equals(LANGUAGE.JAVA14))) {
+                    || Settings.getLanguage().equals(LANGUAGE.JAVA14)
+                    || Settings.getLanguage().equals(LANGUAGE.JAVA13)) {
                 final ClassInfo ownerClass = classInfoManager.getClassInfo(new String[] { "java",
                         "lang", "Object" });
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),

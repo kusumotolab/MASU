@@ -184,7 +184,8 @@ public final class ClassInfoManager {
 
         // java言語の場合は，暗黙にインポートされるクラスを追加しておく
         if (Settings.getLanguage().equals(LANGUAGE.JAVA15)
-                || Settings.getLanguage().equals(LANGUAGE.JAVA14)) {
+                || Settings.getLanguage().equals(LANGUAGE.JAVA14)
+                || Settings.getLanguage().equals(LANGUAGE.JAVA13)) {
             for (int i = 0; i < ExternalClassInfo.JAVA_PREIMPORTED_CLASSES.length; i++) {
                 this.add(ExternalClassInfo.JAVA_PREIMPORTED_CLASSES[i]);
             }

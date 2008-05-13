@@ -214,8 +214,9 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
 
             // Java 言語で フィールド名が length だった場合は int 型を返す
             // TODO　ちゃんとかきなおさないといけない
-            if ((Settings.getLanguage().equals(LANGUAGE.JAVA15) || Settings.getLanguage().equals(
-                    LANGUAGE.JAVA14))
+            if ((Settings.getLanguage().equals(LANGUAGE.JAVA15)
+                    || Settings.getLanguage().equals(LANGUAGE.JAVA14) || Settings.getLanguage()
+                    .equals(LANGUAGE.JAVA13))
                     && fieldName.equals("length")) {
 
                 this.resolvedInfo = new ArrayLengthUsageInfo(ownerUsage, (ArrayTypeInfo) ownerType,

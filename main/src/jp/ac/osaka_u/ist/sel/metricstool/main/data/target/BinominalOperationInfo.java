@@ -73,6 +73,7 @@ public class BinominalOperationInfo extends EntityUsageInfo {
         switch (Settings.getLanguage()) {
         case JAVA15:
         case JAVA14:
+        case JAVA13:
 
             final TypeInfo STRING = new ClassTypeInfo(TypeConverter.getTypeConverter(
                     Settings.getLanguage()).getWrapperClass(PrimitiveTypeInfo.STRING));
