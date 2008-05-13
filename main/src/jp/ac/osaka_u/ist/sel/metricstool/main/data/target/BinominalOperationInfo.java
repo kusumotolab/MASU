@@ -71,7 +71,8 @@ public class BinominalOperationInfo extends EntityUsageInfo {
         final TypeInfo secondOperandType = this.getSecondOperand().getType();
 
         switch (Settings.getLanguage()) {
-        case JAVA:
+        case JAVA15:
+        case JAVA14:
 
             final TypeInfo STRING = new ClassTypeInfo(TypeConverter.getTypeConverter(
                     Settings.getLanguage()).getWrapperClass(PrimitiveTypeInfo.STRING));
@@ -79,7 +80,13 @@ public class BinominalOperationInfo extends EntityUsageInfo {
             switch (this.getOperator()) {
             case ARITHMETIC:
 
-                if (firstOperandType.equals(DOUBLE)
+                if (firstOperandType.equals(STRING)
+                        || firstOperandType.equals(PrimitiveTypeInfo.STRING)
+                        || secondOperandType.equals(STRING)
+                        || secondOperandType.equals(PrimitiveTypeInfo.STRING)) {
+                    return PrimitiveTypeInfo.STRING;
+
+                } else if (firstOperandType.equals(DOUBLE)
                         || firstOperandType.equals(PrimitiveTypeInfo.DOUBLE)
                         || secondOperandType.equals(DOUBLE)
                         || secondOperandType.equals(PrimitiveTypeInfo.DOUBLE)) {

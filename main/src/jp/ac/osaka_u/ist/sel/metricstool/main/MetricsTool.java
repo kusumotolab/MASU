@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java14AntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java15AntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.JavaAstVisitorManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitorManager;
@@ -71,6 +72,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CommonASTWithLineNumber;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14Lexer;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.MasuAstFactory;
@@ -173,9 +176,18 @@ public class MetricsTool {
         // 対象ファイルを解析
 
         AstVisitorManager<AST> visitorManager = null;
-        if (language.equals(LANGUAGE.JAVA)) {
+
+        switch (language) {
+        case JAVA15:
             visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
                     new Java15AntlrAstTranslator()));
+            break;
+        case JAVA14:
+            visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
+                    new Java14AntlrAstTranslator()));
+            break;
+        default:
+            assert false : "here shouldn't be reached!";
         }
 
         // 対象ファイルのASTから未解決クラス，フィールド，メソッド情報を取得
@@ -204,25 +216,50 @@ public class MetricsTool {
                         out.println(fileInformationBuffer.toString());
                     }
 
-                    final Java15Lexer lexer = new Java15Lexer(new FileInputStream(name));
-                    lexer.setTabSize(1);
-                    final Java15Parser parser = new Java15Parser(lexer);
+                    switch (language) {
+                    case JAVA15:
+                        final Java15Lexer java15lexer = new Java15Lexer(new FileInputStream(name));
+                        java15lexer.setTabSize(1);
+                        final Java15Parser java15parser = new Java15Parser(java15lexer);
 
-                    final ASTFactory factory = new MasuAstFactory();
-                    factory.setASTNodeClass(CommonASTWithLineNumber.class);
+                        final ASTFactory java15factory = new MasuAstFactory();
+                        java15factory.setASTNodeClass(CommonASTWithLineNumber.class);
 
-                    parser.setASTFactory(factory);
+                        java15parser.setASTFactory(java15factory);
 
-                    parser.compilationUnit();
-                    targetFile.setCorrectSytax(true);
+                        java15parser.compilationUnit();
+                        targetFile.setCorrectSytax(true);
 
-                    
-                    if (visitorManager != null) {
-                        visitorManager.visitStart(parser.getAST());
+                        if (visitorManager != null) {
+                            visitorManager.visitStart(java15parser.getAST());
+                        }
+
+                        fileInfo.setLOC(java15lexer.getLine());
+                        break;
+
+                    case JAVA14:
+                        final Java14Lexer java14lexer = new Java14Lexer(new FileInputStream(name));
+                        java14lexer.setTabSize(1);
+                        final Java14Parser java14parser = new Java14Parser(java14lexer);
+
+                        final ASTFactory java14factory = new MasuAstFactory();
+                        java14factory.setASTNodeClass(CommonASTWithLineNumber.class);
+
+                        java14parser.setASTFactory(java14factory);
+
+                        java14parser.compilationUnit();
+                        targetFile.setCorrectSytax(true);
+
+                        if (visitorManager != null) {
+                            visitorManager.visitStart(java14parser.getAST());
+                        }
+
+                        fileInfo.setLOC(java14lexer.getLine());
+                        break;
+
+                    default:
+                        assert false : "here shouldn't be reached!";
                     }
-                    
-             
-                    fileInfo.setLOC(lexer.getLine());
 
                 } catch (FileNotFoundException e) {
                     err.println(e.getMessage());
@@ -1119,7 +1156,7 @@ public class MetricsTool {
                     methodInfoManager);
         }
     }
-    
+
     /**
      * メソッドオーバーライド情報を各MethodInfoに追加する．addInheritanceInfomationToClassInfos の後 かつ registMethodInfos
      * の後に呼び出さなければならない
@@ -1276,13 +1313,15 @@ public class MetricsTool {
         }
 
         // 各未解決文情報の名前解決処理
-        for (final UnresolvedStatementInfo<? extends StatementInfo> unresolvedStatement : unresolvedLocalSpace.getStatements()) {
-            if(!(unresolvedStatement instanceof UnresolvedBlockInfo)) {
-                final StatementInfo statement = unresolvedStatement.resolve(ownerClass, ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        for (final UnresolvedStatementInfo<? extends StatementInfo> unresolvedStatement : unresolvedLocalSpace
+                .getStatements()) {
+            if (!(unresolvedStatement instanceof UnresolvedBlockInfo)) {
+                final StatementInfo statement = unresolvedStatement.resolve(ownerClass,
+                        ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
                 localSpace.addStatement(statement);
             }
         }
-        
+
         // 各未解決フィールド使用の名前解決処理
         for (final UnresolvedVariableUsageInfo<?> unresolvedVariableUsage : unresolvedLocalSpace
                 .getVariableUsages()) {

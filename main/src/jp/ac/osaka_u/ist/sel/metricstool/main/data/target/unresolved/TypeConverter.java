@@ -26,7 +26,8 @@ public abstract class TypeConverter {
         }
 
         switch (language) {
-        case JAVA:
+        case JAVA15:
+        case JAVA14:
             return JavaTypeConverter.SINGLETON;
         default:
             throw new IllegalArgumentException();

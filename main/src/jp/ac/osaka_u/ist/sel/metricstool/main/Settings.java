@@ -67,8 +67,10 @@ public class Settings {
      */
     public static LANGUAGE getLanguage() throws UnavailableLanguageException {
 
-        if (language.equalsIgnoreCase("java")) {
-            return LANGUAGE.JAVA;
+        if (language.equalsIgnoreCase("java") || language.equalsIgnoreCase("java15")) {
+            return LANGUAGE.JAVA15;
+        } else if (language.equalsIgnoreCase("java14")) {
+            return LANGUAGE.JAVA14;
             // }else if (language.equalsIgnoreCase("cpp")) {
             // return LANGUAGE.C_PLUS_PLUS;
             // }else if (language.equalsIgnoreCase("csharp")) {

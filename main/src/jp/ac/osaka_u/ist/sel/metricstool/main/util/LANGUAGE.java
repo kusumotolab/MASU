@@ -11,14 +11,14 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.util;
  */
 public enum LANGUAGE {
     /**
-     * Java言語
+     * Java言語 バージョン1.5以降用
      */
-    JAVA {
+    JAVA15 {
         @Override
         public boolean isObjectOrientedLanguage() {
             return true;
         }
-        
+
         @Override
         public String getExtension() {
             return ".java";
@@ -28,31 +28,61 @@ public enum LANGUAGE {
         public String getName() {
             return "Java";
         }
-        
+
         @Override
         public String getIdentifierName() {
-            return "java";
+            return "java15";
         }
-        
+
         @Override
-        public String getNamespaceDelimiter(){
+        public String getNamespaceDelimiter() {
             return ".";
         }
     },
 
-//    C_PLUS_PLUS {
-//        @Override
-//        public boolean isObjectOrientedLanguage() {
-//            return true;
-//        }
-//    },
-    
-//    C_SHARP {
-//        @Override
-//        public boolean isObjectOrientedLanguage() {
-//            return true;
-//        }
-//    },
+    /**
+     * Java言語 バージョン1.4用
+     */
+    JAVA14 {
+        @Override
+        public boolean isObjectOrientedLanguage() {
+            return true;
+        }
+
+        @Override
+        public String getExtension() {
+            return ".java";
+        }
+
+        @Override
+        public String getName() {
+            return "Java";
+        }
+
+        @Override
+        public String getIdentifierName() {
+            return "java14";
+        }
+
+        @Override
+        public String getNamespaceDelimiter() {
+            return ".";
+        }
+    },
+
+    //    C_PLUS_PLUS {
+    //        @Override
+    //        public boolean isObjectOrientedLanguage() {
+    //            return true;
+    //        }
+    //    },
+
+    //    C_SHARP {
+    //        @Override
+    //        public boolean isObjectOrientedLanguage() {
+    //            return true;
+    //        }
+    //    },
 
     ;
 
@@ -106,7 +136,7 @@ public enum LANGUAGE {
      * 
      */
     public abstract String getName();
-    
+
     /**
      * この言語の識別子名を返す．
      * 識別子名は -l オプションに用いられる.
@@ -114,7 +144,7 @@ public enum LANGUAGE {
      * @return この言語の説明文
      */
     public abstract String getIdentifierName();
-    
+
     /**
      * この言語の名前空間を区切る文字（列）をを返す．
      * 

@@ -69,7 +69,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
-        
+
         // 使用位置を取得
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
@@ -115,8 +115,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             } else {
                 assert false : "Here should not be reached";
                 final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
-                this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, unknownMethod, fromLine, fromColumn,
-                        toLine, toColumn);
+                this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, unknownMethod,
+                        fromLine, fromColumn, toLine, toColumn);
                 this.resolvedInfo.addParameters(actualParameters);
                 return this.resolvedInfo;
             }
@@ -126,8 +126,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
         if (ownerType instanceof UnknownTypeInfo) {
 
             final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
-            this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, unknownMethod, fromLine, fromColumn,
-                    toLine, toColumn);
+            this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, unknownMethod, fromLine,
+                    fromColumn, toLine, toColumn);
             this.resolvedInfo.addParameters(actualParameters);
             return this.resolvedInfo;
 
@@ -149,8 +149,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                         // 呼び出し可能なメソッドが見つかった場合
                         if (availableMethod.canCalledWith(name, actualParameters)) {
-                            this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, availableMethod,
-                                    fromLine, fromColumn, toLine, toColumn);
+                            this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage,
+                                    availableMethod, fromLine, fromColumn, toLine, toColumn);
                             this.resolvedInfo.addParameters(actualParameters);
                             return this.resolvedInfo;
                         }
@@ -172,8 +172,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                         methodInfoManager.add(methodInfo);
 
                         // 外部クラスに新規で外部メソッド変数（ExternalMethodInfo）を追加したので型は不明
-                        this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, methodInfo, fromLine,
-                                fromColumn, toLine, toColumn);
+                        this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, methodInfo,
+                                fromLine, fromColumn, toLine, toColumn);
                         this.resolvedInfo.addParameters(actualParameters);
                         return this.resolvedInfo;
                     }
@@ -186,8 +186,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                     err.println("Can't resolve method Call : " + this.getName());
 
                     final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
-                    this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, unknownMethod, fromLine,
-                            fromColumn, toLine, toColumn);
+                    this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, unknownMethod,
+                            fromLine, fromColumn, toLine, toColumn);
                     return this.resolvedInfo;
                 }
 
@@ -202,8 +202,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 methodInfoManager.add(methodInfo);
 
                 // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
-                this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, methodInfo, fromLine, fromColumn,
-                        toLine, toColumn);
+                this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, methodInfo, fromLine,
+                        fromColumn, toLine, toColumn);
                 this.resolvedInfo.addParameters(actualParameters);
                 return this.resolvedInfo;
             }
@@ -212,7 +212,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
         } else if (ownerType instanceof ArrayTypeInfo) {
 
             // XXX Java言語であれば， java.lang.Object に対する呼び出し
-            if (Settings.getLanguage().equals(LANGUAGE.JAVA)) {
+            if (Settings.getLanguage().equals(LANGUAGE.JAVA15)
+                    || (Settings.getLanguage().equals(LANGUAGE.JAVA14))) {
                 final ClassInfo ownerClass = classInfoManager.getClassInfo(new String[] { "java",
                         "lang", "Object" });
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
@@ -223,8 +224,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 methodInfoManager.add(methodInfo);
 
                 // 外部クラスに新規で外部メソッドを追加したので型は不明
-                this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, methodInfo, fromLine, fromColumn,
-                        toLine, toColumn);
+                this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, methodInfo, fromLine,
+                        fromColumn, toLine, toColumn);
                 this.resolvedInfo.addParameters(actualParameters);
                 return this.resolvedInfo;
             }
@@ -232,10 +233,36 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             // 親がプリミティブ型だった場合
         } else if (ownerType instanceof PrimitiveTypeInfo) {
 
+            // 文字列にメソッドがくっついているかを判定
+            switch (Settings.getLanguage()) {
+            case JAVA15:
+            case JAVA14:
+
+                // java の場合は java.lang.String かどうかを判定
+                if (ownerType.equals(PrimitiveTypeInfo.STRING)) {
+
+                    final ExternalClassInfo wrapperClass = TypeConverter.getTypeConverter(
+                            Settings.getLanguage()).getWrapperClass((PrimitiveTypeInfo) ownerType);
+                    final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
+                            wrapperClass);
+                    final List<ParameterInfo> parameters = NameResolver.createParameters(
+                            actualParameters, methodInfo);
+                    methodInfo.addParameters(parameters);
+                    methodInfoManager.add(methodInfo);
+
+                    // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
+                    this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, methodInfo,
+                            fromLine, fromColumn, toLine, toColumn);
+                    this.resolvedInfo.addParameters(actualParameters);
+                    return this.resolvedInfo;
+                }
+                break;
+            }
+
             switch (Settings.getLanguage()) {
             // Java の場合はオートボクシングでのメソッド呼び出しが可能
             // TODO 将来的にはこの switch文はとる．なぜなら TypeConverter.getTypeConverter(LANGUAGE)があるから．
-            case JAVA:
+            case JAVA15:
                 final ExternalClassInfo wrapperClass = TypeConverter.getTypeConverter(
                         Settings.getLanguage()).getWrapperClass((PrimitiveTypeInfo) ownerType);
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
@@ -246,24 +273,24 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 methodInfoManager.add(methodInfo);
 
                 // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
-                this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, methodInfo, fromLine, fromColumn,
-                        toLine, toColumn);
+                this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, methodInfo, fromLine,
+                        fromColumn, toLine, toColumn);
                 this.resolvedInfo.addParameters(actualParameters);
                 return this.resolvedInfo;
 
             default:
                 assert false : "Here shouldn't be reached!";
                 final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
-                this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, unknownMethod, fromLine, fromColumn,
-                        toLine, toColumn);
+                this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, unknownMethod,
+                        fromLine, fromColumn, toLine, toColumn);
                 return this.resolvedInfo;
             }
         }
 
         assert false : "Here shouldn't be reached!";
         final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
-        this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, unknownMethod, fromLine, fromColumn, toLine,
-                toColumn);
+        this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, unknownMethod, fromLine,
+                fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 
