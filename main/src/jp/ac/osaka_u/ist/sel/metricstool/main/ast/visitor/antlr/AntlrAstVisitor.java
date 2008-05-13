@@ -122,7 +122,7 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
      */
     public void startVisiting(final AST startNode) {
         AST nextNode = startNode;
-        printAST(startNode, 0);
+        // printAST(startNode, 0);
         AstToken parentToken = null;
         while (null != nextNode) {
             //このノードのトークンからAstTokenに変換する
