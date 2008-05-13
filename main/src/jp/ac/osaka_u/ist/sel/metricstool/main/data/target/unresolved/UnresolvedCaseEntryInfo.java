@@ -32,12 +32,8 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == ownerSwitchBlock) {
-            throw new IllegalArgumentException("ownerSwitchBlock is null");
-        }
-        if ((null == label) || !((label instanceof UnresolvedLiteralUsageInfo)
-                || (label instanceof UnresolvedClassReferenceInfo))) {
-            throw new IllegalArgumentException("label is incorrect");
+        if ((null == ownerSwitchBlock) || (null == label)) {
+            throw new IllegalArgumentException();
         }
 
         this.ownerSwitchBlock = ownerSwitchBlock;
