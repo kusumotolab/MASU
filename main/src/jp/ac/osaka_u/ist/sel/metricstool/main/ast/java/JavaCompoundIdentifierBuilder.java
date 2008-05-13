@@ -11,6 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.FieldOr
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.IdentifierElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.InstanceSpecificElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageElement;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
@@ -47,11 +48,11 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                     .createClassReference(JAVA_LANG_CLASS);
             pushElement(UsageElement.getInstance(classReference));
         } else if (right instanceof InstanceSpecificElement) {
-            
+
             // 右側の要素がthisで左側に識別子がある場合，外部クラスのインスタンスの参照
-            if(((InstanceSpecificElement) right).isThisInstance()) {
+            if (((InstanceSpecificElement) right).isThisInstance()) {
                 UnresolvedClassInfo classInfo = getSpecifiedOuterClass((IdentifierElement) left);
-    
+
                 if (classInfo != null) {
                     pushElement(UsageElement.getInstance(classInfo.getClassReference()));
                 } else {
@@ -60,7 +61,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                             + " was not found from outer classes.";
                 }
             }
-            
+
         } else if (left.equals(JavaExpressionElement.SUPER)) {
             if (right instanceof IdentifierElement) {
                 final IdentifierElement rightIdentifier = (IdentifierElement) right;
@@ -82,11 +83,11 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
             if (left instanceof IdentifierElement) {
                 //まず変数名.super()というコンストラクタ呼び出しかどうかを確認する
                 IdentifierElement identifier = (IdentifierElement) left;
-                UnresolvedEntityUsageInfo ownerUsage = identifier
+                UnresolvedEntityUsageInfo<? extends EntityUsageInfo> ownerUsage = identifier
                         .resolveReferencedEntityIfPossible(buildDataManager);
-                UnresolvedVariableInfo<VariableInfo, ? extends UnresolvedUnitInfo<? extends UnitInfo>> variable = null;
+                UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> variable = null;
                 if (null != ownerUsage && ownerUsage instanceof UnresolvedVariableUsageInfo) {
-                    UnresolvedVariableUsageInfo variableUsage = (UnresolvedVariableUsageInfo) ownerUsage;
+                    UnresolvedVariableUsageInfo<?> variableUsage = (UnresolvedVariableUsageInfo<?>) ownerUsage;
                     variable = buildDataManager.getCurrentScopeVariable(variableUsage
                             .getUsedVariableName());
                 }
@@ -125,8 +126,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                     //OuterClass.super.method()というメソッド呼び出しのようだ
                     classInfo = getSpecifiedOuterClass((IdentifierElement) left);
                 }
-                
-                if(null == classInfo) {
+
+                if (null == classInfo) {
                     // 該当クラスが見当たらないのでとりあえず現在のクラスのスーパークラスと判断する
                     classInfo = buildDataManager.getCurrentClass();
                 }

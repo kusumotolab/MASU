@@ -39,7 +39,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     @Override
     public TypeInfo getType() {
 
-        final VariableInfo<?, ?> usedVariable = this.getUsedVariable();
+        final FieldInfo usedVariable = this.getUsedVariable();
         final TypeInfo definitionType = usedVariable.getType();
 
         // 定義の返り値が型パラメータでなければそのまま返せる

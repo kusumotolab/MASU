@@ -10,7 +10,7 @@ import java.util.Set;
  * @author higo
  * 
  */
-public abstract class ParameterInfo extends VariableInfo<ParameterUsageInfo, CallableUnitInfo> {
+public abstract class ParameterInfo extends VariableInfo<CallableUnitInfo> {
 
     /**
      * 引数オブジェクトを初期化する．名前と型が必要．

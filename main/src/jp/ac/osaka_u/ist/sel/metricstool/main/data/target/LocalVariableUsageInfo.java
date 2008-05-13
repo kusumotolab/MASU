@@ -33,4 +33,8 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
         final TypeInfo usedVariableType = usedVariable.getType();
         return usedVariableType;
     }
+    
+    
+    
+    
 }

@@ -23,7 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit extends UnresolvedUnitInfo<? extends UnitInfo>>
+public abstract class UnresolvedVariableInfo<TVar extends VariableInfo<? extends UnitInfo>, TUnit extends UnresolvedUnitInfo<? extends UnitInfo>>
         extends UnresolvedUnitInfo<TVar> implements ModifierSetting {
 
     /**
@@ -111,8 +111,8 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit ex
      * @param toColumn I—¹—ñ
      */
     UnresolvedVariableInfo(final String name, final UnresolvedTypeInfo type,
-            final TUnit definitionUnit,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final TUnit definitionUnit, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
         super();
 
@@ -125,7 +125,7 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo, TUnit ex
         this.type = type;
         this.modifiers = new HashSet<ModifierInfo>();
         this.definitionUnit = definitionUnit;
-        
+
         this.setFromLine(fromLine);
         this.setFromColumn(fromColumn);
         this.setToLine(toLine);

@@ -2,6 +2,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
@@ -14,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
  */
 public class FieldOrMethodElement extends IdentifierElement {
 
-    public FieldOrMethodElement(UnresolvedEntityUsageInfo ownerUsage, String name,
+    public FieldOrMethodElement(UnresolvedEntityUsageInfo<? extends EntityUsageInfo> ownerUsage, String name,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         super(name, fromLine, fromColumn, toLine, toColumn);
         
@@ -31,7 +35,7 @@ public class FieldOrMethodElement extends IdentifierElement {
     }
 
     @Override
-    public UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(
+    public UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsAssignmetedVariable(
             BuildDataManager buildDataManager) {
         UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
                 .getAllAvaliableNames(), this.ownerUsage, this.name, false, this.fromLine, this.fromColumn, this.toLine, this.toColumn);
@@ -48,7 +52,7 @@ public class FieldOrMethodElement extends IdentifierElement {
     }
 
     @Override
-    public UnresolvedVariableUsageInfo resolveAsReferencedVariable(BuildDataManager buildDataManager) {
+    public UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsReferencedVariable(BuildDataManager buildDataManager) {
         UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
                 .getAllAvaliableNames(), this.ownerUsage, this.name, true, this.fromLine, this.fromColumn, this.toLine, this.toColumn);
         buildDataManager.addVariableUsage(fieldUsage);
@@ -59,7 +63,7 @@ public class FieldOrMethodElement extends IdentifierElement {
     }
 
     @Override
-    public UnresolvedEntityUsageInfo resolveReferencedEntityIfPossible(
+    public UnresolvedEntityUsageInfo<EntityUsageInfo> resolveReferencedEntityIfPossible(
             BuildDataManager buildDataManager) {
         throw new UnsupportedOperationException();
     }

@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.LocalParameterStateManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
@@ -75,7 +74,7 @@ public class LocalParameterBuilder
     protected UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> validateDefinitionSpace(
             UnresolvedUnitInfo<? extends UnitInfo> definitionUnit) {
         if (definitionUnit instanceof UnresolvedBlockInfo) {
-            return (UnresolvedBlockInfo<? extends BlockInfo>) definitionUnit;
+            return (UnresolvedBlockInfo<?>) definitionUnit;
         } else if (definitionUnit instanceof UnresolvedConditionalClauseInfo) {
             return (UnresolvedConditionalClauseInfo) definitionUnit;
         } else {

@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.PositionManager;
 
 
 /**
@@ -38,13 +37,6 @@ public interface AstVisitor<T> {
      * イベントリスナは削除されない.
      */
     public void reset();
-
-    /**
-     * ASTノードのソースコード上での位置情報を管理する {@link PositionManager} をセットする.
-     * 
-     * @param position　ASTノードのソースコード上での位置情報を管理する {@link PositionManager}
-     */
-    public void setPositionManager(PositionManager position);
 
     /**
      * ビジターの訪問を開始する

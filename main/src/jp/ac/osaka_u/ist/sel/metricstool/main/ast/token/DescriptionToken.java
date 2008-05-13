@@ -32,7 +32,12 @@ public class DescriptionToken extends AstTokenAdapter {
     /**
      * ラベル付き文記述部を表す定数インスタンス.
      */
-    public static final DescriptionToken LABELED_STATEMENT = new DescriptionToken("LABELED_STATEMENT");
+    public static final DescriptionToken LABELED_STATEMENT = new DescriptionToken("LABELED_STATEMENT") {
+        @Override
+        public boolean isLabeledStatement() {
+            return true;
+        }
+    };
     
     /**
      * 親クラス記述部を表す定数インスタンス.

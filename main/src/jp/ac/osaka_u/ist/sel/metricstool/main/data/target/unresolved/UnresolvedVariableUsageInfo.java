@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
 
@@ -10,8 +12,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
  * @author t-miyake, higo
  *
  */
-public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<?>> extends
-        UnresolvedEntityUsageInfo<T> {
+public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>
+        extends UnresolvedEntityUsageInfo<T> {
 
     public UnresolvedVariableUsageInfo(final String usedVariableName, final boolean reference,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
@@ -61,6 +63,5 @@ public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<?>
     protected final String usedVariableName;
 
     protected boolean reference;
-
 
 }

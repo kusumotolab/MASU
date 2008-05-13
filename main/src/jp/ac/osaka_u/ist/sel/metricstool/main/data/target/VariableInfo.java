@@ -19,15 +19,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public abstract class VariableInfo<TUsage extends VariableUsageInfo<?>, TUnit extends UnitInfo>
-        extends UnitInfo implements Modifier, Comparable<VariableInfo<TUsage, TUnit>> {
+public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo implements Modifier,
+        Comparable<VariableInfo<TUnit>> {
 
     /**
      * 変数の順序を定義するメソッド．変数名（String）に従う．
      * 
      * @return 変数の順序関係
      */
-    public final int compareTo(final VariableInfo<TUsage, TUnit> variable) {
+    public final int compareTo(final VariableInfo<TUnit> variable) {
 
         if (null == variable) {
             throw new NullPointerException();
@@ -63,20 +63,6 @@ public abstract class VariableInfo<TUsage extends VariableUsageInfo<?>, TUnit ex
      */
     public final TypeInfo getType() {
         return this.type;
-    }
-
-    /**
-     * この変数の使用を追加する
-     * 
-     * @param usage この変数の使用
-     */
-    public void addUsage(TUsage usage) {
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == usage) {
-            throw new IllegalArgumentException();
-        }
-
-        this.usages.add(usage);
     }
 
     /**
@@ -116,7 +102,6 @@ public abstract class VariableInfo<TUsage extends VariableUsageInfo<?>, TUnit ex
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
         this.definitionUnit = definitionUnit;
-        this.usages = new HashSet<TUsage>();
     }
 
     /**
@@ -139,5 +124,4 @@ public abstract class VariableInfo<TUsage extends VariableUsageInfo<?>, TUnit ex
      */
     private final TUnit definitionUnit;
 
-    private final Set<TUsage> usages;
 }

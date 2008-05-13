@@ -16,6 +16,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
@@ -64,7 +66,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
     }
 
-    public void addVariableUsage(UnresolvedVariableUsageInfo usage) {
+    public void addVariableUsage(
+            UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> usage) {
         if (!this.callableUnitStack.isEmpty() && MODE.METHOD == this.mode) {
             this.callableUnitStack.peek().addVariableUsage(usage);
         } else if (!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode) {
@@ -102,7 +105,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     public void addMethodParameter(final UnresolvedParameterInfo parameter) {
         if (!this.callableUnitStack.isEmpty() && MODE.METHOD == this.mode) {
-            final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> method = this.callableUnitStack.peek();
+            final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> method = this.callableUnitStack
+                    .peek();
             method.addParameter(parameter);
             addNextScopedVariable(parameter);
         }
@@ -112,7 +116,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
      * 現在のブロックスコープに変数を追加する.
      * @param var 追加する変数
      */
-    private void addScopedVariable(UnresolvedVariableInfo var) {
+    private void addScopedVariable(
+            UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> var) {
         if (!scopeStack.isEmpty()) {
             scopeStack.peek().addVariable(var);
         }
@@ -122,7 +127,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
      * 現在から次のブロック終了までスコープが有効な変数を追加する.
      * @param var　追加する変数
      */
-    private void addNextScopedVariable(UnresolvedVariableInfo var) {
+    private void addNextScopedVariable(
+            UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> var) {
         nextScopedVariables.add(var);
     }
 
@@ -199,7 +205,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
         if (this.callableUnitStack.isEmpty()) {
             return null;
         } else {
-            final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> callableUnit = this.callableUnitStack.pop();
+            final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> callableUnit = this.callableUnitStack
+                    .pop();
 
             nextScopedVariables.clear();
 
@@ -214,7 +221,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
             return null;
         } else {
             final UnresolvedBlockInfo<? extends BlockInfo> blockInfo = this.blockStack.pop();
-            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerSpace = blockInfo.getOuterSpace();
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerSpace = blockInfo
+                    .getOuterSpace();
 
             outerSpace.addChildSpaceInfo(blockInfo);
 
@@ -343,11 +351,11 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
         return currentUnit;
     }
-    
+
     @Override
     public UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> getCurrentLocalSpace() {
         UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = null;
-        
+
         if (MODE.METHOD == this.mode) {
             currentLocal = this.getCurrentCallableUnit();
         } else if (MODE.INNER_BLOCK == this.mode) {
@@ -355,7 +363,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         } else if (MODE.CONDITIONAL_CLAUSE == this.mode) {
             currentLocal = this.getCurrentConditionalCluase();
         }
-        
+
         return currentLocal;
     }
 
@@ -428,9 +436,9 @@ public class DefaultBuildDataManager implements BuildDataManager {
         return nameSpaceList.toArray(new String[nameSpaceList.size()]);
     }
 
-    public UnresolvedVariableInfo getCurrentScopeVariable(String name) {
+    public UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> getCurrentScopeVariable(String name) {
 
-        for (UnresolvedVariableInfo var : nextScopedVariables) {
+        for (UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> var : nextScopedVariables) {
             if (name.equals(var.getName())) {
                 return var;
             }
@@ -515,7 +523,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         BlockScope newScope = new BlockScope();
         this.scopeStack.push(newScope);
 
-        for (UnresolvedVariableInfo var : nextScopedVariables) {
+        for (UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> var : nextScopedVariables) {
             newScope.addVariable(var);
         }
     }
@@ -577,7 +585,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
         this.toClassMode();
     }
 
-    public void startCallableUnitDefinition(final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> callableUnit) {
+    public void startCallableUnitDefinition(
+            final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> callableUnit) {
         if (null == callableUnit) {
             throw new NullPointerException("method info was null.");
         }
@@ -603,12 +612,6 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
 
         assert this.clauseStack.isEmpty() : "Illegal state: clause was nested.";
-
-        if (!this.blockStack.isEmpty()
-                && this.blockStack.peek() instanceof UnresolvedConditionalBlockInfo) {
-            UnresolvedConditionalBlockInfo conditionalBlock = (UnresolvedConditionalBlockInfo) this.blockStack
-                    .peek();
-        }
 
         this.toClauseMode();
 
@@ -642,14 +645,15 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     protected static class BlockScope {
-        private final Map<String, UnresolvedVariableInfo> variables = new LinkedHashMap<String, UnresolvedVariableInfo>();
+        private final Map<String, UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>>> variables = new LinkedHashMap<String, UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>>>();
 
         //        private final Map<String, String[]> nameAliases = new LinkedHashMap<String, String[]>();
         private final Map<String, AvailableNamespaceInfo> nameAliases = new LinkedHashMap<String, AvailableNamespaceInfo>();
 
         private final Set<AvailableNamespaceInfo> availableNameSpaces = new HashSet<AvailableNamespaceInfo>();
 
-        public void addVariable(final UnresolvedVariableInfo variable) {
+        public void addVariable(
+                final UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> variable) {
             this.variables.put(variable.getName(), variable);
         }
 
@@ -685,7 +689,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
             return resultSet;
         }
 
-        public UnresolvedVariableInfo getVariable(String name) {
+        public UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> getVariable(String name) {
             return this.variables.get(name);
         }
 
@@ -766,7 +770,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     private final Stack<UnresolvedConditionalClauseInfo> clauseStack = new Stack<UnresolvedConditionalClauseInfo>();
 
-    private final Set<UnresolvedVariableInfo> nextScopedVariables = new HashSet<UnresolvedVariableInfo>();
+    private final Set<UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>>> nextScopedVariables = new HashSet<UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>>>();
 
     private final Map<UnresolvedClassInfo, Integer> anonymousClassCountMap = new HashMap<UnresolvedClassInfo, Integer>();
 

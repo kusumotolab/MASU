@@ -63,7 +63,7 @@ public class MethodParameterBuilder
     protected UnresolvedCallableUnitInfo<? extends CallableUnitInfo> validateDefinitionSpace(
             UnresolvedUnitInfo<? extends UnitInfo> definitionUnit) {
         if (definitionUnit instanceof UnresolvedCallableUnitInfo) {
-            return (UnresolvedCallableUnitInfo) definitionUnit;
+            return (UnresolvedCallableUnitInfo<?>) definitionUnit;
         } else {
             return null;
         }

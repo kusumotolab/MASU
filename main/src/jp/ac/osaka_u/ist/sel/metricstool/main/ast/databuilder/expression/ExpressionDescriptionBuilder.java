@@ -4,6 +4,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
 
@@ -29,7 +32,7 @@ public class ExpressionDescriptionBuilder extends ExpressionBuilder {
 
         if (elements.length == 1) {
             if (elements[0] instanceof IdentifierElement) {
-                final UnresolvedVariableUsageInfo variableUsage = ((IdentifierElement) elements[0])
+                final UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsage = ((IdentifierElement) elements[0])
                         .resolveAsReferencedVariable(this.buildDataManager);
                 this.pushElement(UsageElement.getInstance(variableUsage));
             } else {

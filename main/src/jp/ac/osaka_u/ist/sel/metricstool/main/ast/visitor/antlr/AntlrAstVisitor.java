@@ -12,7 +12,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitListener;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitStrategy;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CommonASTWithLineNumber;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.PositionManager;
 import antlr.collections.AST;
 
 
@@ -104,15 +103,6 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
         this.nodeStack.clear();
     }
 
-    /**
-     * ASTノードのソースコード上での位置情報を管理する {@link PositionManager} をセットする.
-     * 
-     * @param position　ASTノードのソースコード上での位置情報を管理する {@link PositionManager}
-     */
-    public void setPositionManager(final PositionManager lineColumn) {
-        this.positionManager = lineColumn;
-    }
-
     private void printAST(AST node, int nest){
         CommonASTWithLineNumber nextNode = (CommonASTWithLineNumber) node;
         while(null != nextNode){
@@ -132,7 +122,7 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
      */
     public void startVisiting(final AST startNode) {
         AST nextNode = startNode;
-        //printAST(startNode, 0);
+        printAST(startNode, 0);
         AstToken parentToken = null;
         while (null != nextNode) {
             //このノードのトークンからAstTokenに変換する
@@ -236,11 +226,6 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
      * 訪問したASTノードをAstTokenに変換する
      */
     private final AstTokenTranslator<AST> translator;
-
-    /**
-     * 訪問したASTノードの位置情報を管理する
-     */
-    private PositionManager positionManager;
 
     /**
      * イベントを管理するスタック

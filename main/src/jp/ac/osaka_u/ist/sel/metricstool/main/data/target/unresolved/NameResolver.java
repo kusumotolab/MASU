@@ -21,10 +21,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 
 
 /**
@@ -708,12 +704,4 @@ public final class NameResolver {
         return Collections.unmodifiableSortedSet(availableDirectInnerClasses);
     }
 
-    /**
-     * エラーメッセージ出力用のプリンタ
-     */
-    private static final MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
-        public String getMessageSourceName() {
-            return "NameResolver";
-        }
-    }, MESSAGE_TYPE.ERROR);
 }

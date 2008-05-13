@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 import java.util.Stack;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ModifiersDefinitionStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.NameStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
@@ -12,10 +11,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.VariableDefinitio
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.VariableDefinitionStateManager.VARIABLE_STATE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
@@ -33,7 +31,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
  * @param <TVar> \’z‚·‚é•Ï”‚ÌŒ^
  * @param <TUnit> \’z‚·‚é•Ï”î•ñ‚ğ•Û‘¶‚·‚éƒ†ƒjƒbƒg
  */
-public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo, TUnit extends UnresolvedUnitInfo<? extends UnitInfo>>
+public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>>, TUnit extends UnresolvedUnitInfo<? extends UnitInfo>>
         extends CompoundDataBuilder<TVar> {
 
     /**

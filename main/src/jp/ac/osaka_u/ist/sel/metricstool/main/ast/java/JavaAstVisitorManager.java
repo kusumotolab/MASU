@@ -38,7 +38,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.TryBloc
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.WhileBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitorManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.PositionManager;
 
 
 /**
@@ -153,13 +152,6 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.reset();
 
         this.visitor.startVisiting(node);
-    }
-
-    /* (non-Javadoc)
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.AstVisitorManager#setLineColumnManager(jp.ac.osaka_u.ist.sel.metricstool.main.ast.LineColumnPositionManager)
-     */
-    public void setPositionManager(final PositionManager lineColumn) {
-        this.visitor.setPositionManager(lineColumn);
     }
 
     /**

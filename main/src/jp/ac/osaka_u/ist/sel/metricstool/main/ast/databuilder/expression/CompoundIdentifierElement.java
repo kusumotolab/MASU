@@ -2,6 +2,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
@@ -42,7 +46,7 @@ public class CompoundIdentifierElement extends IdentifierElement {
     }
 
     @Override
-    public UnresolvedVariableUsageInfo resolveAsAssignmetedVariable(
+    public UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsAssignmetedVariable(
             final BuildDataManager buildDataManager) {
         this.ownerUsage = this.resolveOwner(buildDataManager);
         final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
@@ -62,7 +66,7 @@ public class CompoundIdentifierElement extends IdentifierElement {
     }
 
     @Override
-    public UnresolvedVariableUsageInfo resolveAsReferencedVariable(
+    public UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsReferencedVariable(
             final BuildDataManager buildDataManager) {
         this.ownerUsage = this.resolveOwner(buildDataManager);
         final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
@@ -76,7 +80,7 @@ public class CompoundIdentifierElement extends IdentifierElement {
     }
 
     @Override
-    public UnresolvedEntityUsageInfo resolveReferencedEntityIfPossible(
+    public UnresolvedEntityUsageInfo<? extends EntityUsageInfo> resolveReferencedEntityIfPossible(
             final BuildDataManager buildDataManager) {
         this.ownerUsage = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
 
@@ -94,7 +98,7 @@ public class CompoundIdentifierElement extends IdentifierElement {
         return null;
     }
 
-    protected UnresolvedEntityUsageInfo resolveOwner(final BuildDataManager buildDataManager) {
+    protected UnresolvedEntityUsageInfo<? extends EntityUsageInfo> resolveOwner(final BuildDataManager buildDataManager) {
         this.ownerUsage = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
 
         return null != this.ownerUsage ? this.ownerUsage : new UnresolvedUnknownUsageInfo(

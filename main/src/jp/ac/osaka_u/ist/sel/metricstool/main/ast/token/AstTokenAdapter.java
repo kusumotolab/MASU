@@ -80,6 +80,10 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
     
+    public boolean isLabeledStatement() {
+        return false;
+    }
+    
     public boolean isSList() {
         return false;
     }

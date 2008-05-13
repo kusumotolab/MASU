@@ -96,6 +96,12 @@ public interface AstToken {
     public boolean isExpressionStatement();
     
     /**
+     * トークンがラベル付き文を表すどうかを返す.
+     * @return ラベル付き文を表すトークンならtrue
+     */
+    public boolean isLabeledStatement();
+    
+    /**
      * トークンが文のリストを表すかどうか返す
      * @return 文のリストを表すトークンならtrue
      */
