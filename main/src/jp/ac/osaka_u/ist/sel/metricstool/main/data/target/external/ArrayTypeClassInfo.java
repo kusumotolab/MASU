@@ -44,5 +44,9 @@ public final class ArrayTypeClassInfo extends ClassInfo {
 
     private final ArrayTypeInfo arrayType;
 
+    /**
+     * 配列型を表すためのクラスなので名前はない．
+     * 名前がないことを表す定数．
+     */
     public static final String NONAME = new String("noname");
 }

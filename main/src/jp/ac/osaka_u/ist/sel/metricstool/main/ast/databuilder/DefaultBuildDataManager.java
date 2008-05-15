@@ -436,7 +436,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
         return nameSpaceList.toArray(new String[nameSpaceList.size()]);
     }
 
-    public UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> getCurrentScopeVariable(String name) {
+    public UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> getCurrentScopeVariable(
+            String name) {
 
         for (UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> var : nextScopedVariables) {
             if (name.equals(var.getName())) {
@@ -689,7 +690,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
             return resultSet;
         }
 
-        public UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> getVariable(String name) {
+        public UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> getVariable(
+                String name) {
             return this.variables.get(name);
         }
 

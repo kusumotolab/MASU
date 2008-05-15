@@ -36,6 +36,12 @@ public final class ExternalMethodInfo extends MethodInfo {
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
 
+    /**
+     * 外部クラスに定義されているメソッドオブジェクトを初期化する．
+     * 定義しているクラスが不明な場合に用いるコンストラクタ
+     * 
+     * @param methodName メソッド名
+     */
     public ExternalMethodInfo(final String methodName) {
 
         super(new HashSet<ModifierInfo>(), methodName, ExternalClassInfo.UNKNOWN, false, true,

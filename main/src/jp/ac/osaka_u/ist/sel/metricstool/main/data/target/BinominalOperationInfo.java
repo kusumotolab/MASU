@@ -25,6 +25,10 @@ public class BinominalOperationInfo extends EntityUsageInfo {
      * @param operator オペレータ
      * @param firstOperand 第一オペランド
      * @param secondOperand 第二オペランド
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
     public BinominalOperationInfo(final OPERATOR operator, final EntityUsageInfo firstOperand,
             final EntityUsageInfo secondOperand, final int fromLine, final int fromColumn,

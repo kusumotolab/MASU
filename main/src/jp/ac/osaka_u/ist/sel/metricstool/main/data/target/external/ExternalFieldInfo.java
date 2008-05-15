@@ -24,10 +24,15 @@ public final class ExternalFieldInfo extends FieldInfo {
      * @param definitionClass フィールドを定義しているクラス
      */
     public ExternalFieldInfo(final String name, final ClassInfo definitionClass) {
-        super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(), definitionClass, 0, 0,
-                0, 0);
+        super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(), definitionClass, 0,
+                0, 0, 0);
     }
 
+    /**
+     * 名前を与えて初期化．定義しているクラスが不明な場合に用いる．
+     * 
+     * @param name フィールド名
+     */
     public ExternalFieldInfo(final String name) {
         super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(),
                 ExternalClassInfo.UNKNOWN, 0, 0, 0, 0);

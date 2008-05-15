@@ -35,7 +35,7 @@ public final class ArrayTypeInfo implements ReferenceTypeInfo {
     /**
      * 等しいかどうかのチェックを行う
      * 
-     * @param 等しい場合はtrue, そうでない場合はfalse
+     * @return 等しい場合はtrue, そうでない場合はfalse
      */
     public boolean equals(final TypeInfo typeInfo) {
 

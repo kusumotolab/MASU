@@ -16,6 +16,10 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
      * 要素の親，つまり配列型のエンティティ使用を与えて，オブジェクトを初期化
      * 
      * @param ownerEntityUsage 配列型のエンティティ使用
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
     public ArrayElementUsageInfo(final EntityUsageInfo ownerEntityUsage, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {

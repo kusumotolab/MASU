@@ -26,13 +26,13 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
     /**
      * 名前空間名とクラス名からオブジェクトを生成する
      * 
-     * @param modifiers　修飾子のSet
+     * @param modifiers 修飾子のSet
      * @param namespace 名前空間名
      * @param className クラス名
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
-     * @param toColumn　終了行
+     * @param toColumn 終了列
      */
     public ClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
             final String className, final int fromLine, final int fromColumn, final int toLine,
@@ -58,11 +58,12 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
     /**
      * 完全限定名からクラス情報オブジェクトを生成する
      * 
+     * @param modifiers 修飾子のSet
      * @param fullQualifiedName 完全限定名
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
-     * @param toColumn　終了行
+     * @param toColumn 終了列
      */
     public ClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {

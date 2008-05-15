@@ -191,5 +191,8 @@ public final class ExternalClassInfo extends ClassInfo {
             new ExternalClassInfo(new String[] { "java", "lang", "Override" }),
             new ExternalClassInfo(new String[] { "java", "lang", "SuppressWarnings" }) };
 
+    /**
+     * 不明な外部クラスを表すための定数
+     */
     public static final ExternalClassInfo UNKNOWN = new ExternalClassInfo("UNKNOWN");
 }
