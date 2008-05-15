@@ -111,7 +111,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                             usingClassType, 0, 0, 0, 0);
 
                     // availableField.getType() ‚©‚çŽŸ‚Ìword(name[i])‚ð–¼‘O‰ðŒˆ
-                    EntityUsageInfo entityUsage = new FieldUsageInfo(classReference,
+                    EntityUsageInfo entityUsage = FieldUsageInfo.getInstance(classReference,
                             usingClassType, availableFieldOfThisClass, true, fromLine, fromColumn,
                             toLine, toColumn);
                     for (int i = 1; i < name.length; i++) {
@@ -147,7 +147,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             // usingMethod.addReferencee(availableField);
                                             // availableField.addReferencer(usingMethod);
 
-                                            entityUsage = new FieldUsageInfo(classReference,
+                                            entityUsage = FieldUsageInfo.getInstance(classReference,
                                                     entityUsage.getType(), availableField, true,
                                                     fromLine, fromColumn, toLine, toColumn);
                                             found = true;
@@ -175,7 +175,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             // fieldInfo.addReferencer(usingMethod);
                                             fieldInfoManager.add(fieldInfo);
 
-                                            entityUsage = new FieldUsageInfo(classReference,
+                                            entityUsage = FieldUsageInfo.getInstance(classReference,
                                                     entityUsage.getType(), fieldInfo, true,
                                                     fromLine, fromColumn, toLine, toColumn);
 
@@ -196,7 +196,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                 // fieldInfo.addReferencer(usingMethod);
                                 fieldInfoManager.add(fieldInfo);
 
-                                entityUsage = new FieldUsageInfo(classReference, entityUsage
+                                entityUsage = FieldUsageInfo.getInstance(classReference, entityUsage
                                         .getType(), fieldInfo, true, fromLine, fromColumn, toLine,
                                         toColumn);
                             }
@@ -236,7 +236,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                             usingClassType, 0, 0, 0, 0);
 
                     // availableField.getType() ‚©‚çŽŸ‚Ìword(name[i])‚ð–¼‘O‰ðŒˆ
-                    EntityUsageInfo entityUsage = new FieldUsageInfo(classReference,
+                    EntityUsageInfo entityUsage = FieldUsageInfo.getInstance(classReference,
                             usingClassType, availableFieldOfThisClass, true, fromLine, fromColumn,
                             toLine, toColumn);
                     for (int i = 1; i < name.length; i++) {
@@ -272,9 +272,10 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             // usingMethod.addReferencee(availableField);
                                             // availableField.addReferencer(usingMethod);
 
-                                            entityUsage = new FieldUsageInfo(classReference,
-                                                    entityUsage.getType(), availableField, true,
-                                                    fromLine, fromColumn, toLine, toColumn);
+                                            entityUsage = FieldUsageInfo.getInstance(classReference,
+                                                    entityUsage.getType(), availableField, true, fromLine,
+                                                    fromColumn, toLine, toColumn);
+
                                             found = true;
                                             break;
                                         }
@@ -323,9 +324,10 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             // fieldInfo.addReferencer(usingMethod);
                                             fieldInfoManager.add(fieldInfo);
 
-                                            entityUsage = new FieldUsageInfo(classReference,
-                                                    entityUsage.getType(), fieldInfo, true,
-                                                    fromLine, fromColumn, toLine, toColumn);
+                                            entityUsage = FieldUsageInfo.getInstance(
+                                                    classReference, entityUsage.getType(),
+                                                    fieldInfo, true, fromLine, fromColumn, toLine,
+                                                    toColumn);
 
                                         } else {
                                             assert false : "Can't resolve entity usage2 : "
@@ -344,9 +346,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                 // fieldInfo.addReferencer(usingMethod);
                                 fieldInfoManager.add(fieldInfo);
 
-                                entityUsage = new FieldUsageInfo(classReference, entityUsage
-                                        .getType(), fieldInfo, true, fromLine, fromColumn, toLine,
-                                        toColumn);
+                                entityUsage = FieldUsageInfo.getInstance(classReference,
+                                        entityUsage.getType(), fieldInfo, true, fromLine,
+                                        fromColumn, toLine, toColumn);
                             }
 
                         } else {
@@ -410,10 +412,10 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             // usingMethod.addReferencee(availableField);
                                             // availableField.addReferencer(usingMethod);
 
-                                            entityUsage = new FieldUsageInfo(
-                                                    searchedClassReference, entityUsage.getType(),
-                                                    availableField, true, fromLine, fromColumn,
-                                                    toLine, toColumn);
+                                            entityUsage = FieldUsageInfo.getInstance(searchedClassReference,
+                                                    entityUsage.getType(), availableField, true,
+                                                    fromLine, fromColumn, toLine, toColumn);
+
                                             found = true;
                                             break;
                                         }
@@ -462,10 +464,10 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             // fieldInfo.addReferencer(usingMethod);
                                             fieldInfoManager.add(fieldInfo);
 
-                                            entityUsage = new FieldUsageInfo(
-                                                    searchedClassReference, entityUsage.getType(),
-                                                    fieldInfo, true, fromLine, fromColumn, toLine,
-                                                    toColumn);
+                                            entityUsage = FieldUsageInfo.getInstance(
+                                                    searchedClassReference, entityUsage
+                                                            .getType(), fieldInfo, true, fromLine,
+                                                    fromColumn, toLine, toColumn);
 
                                         } else {
                                             assert false : "Can't resolve entity usage3 : "
@@ -484,7 +486,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                 // fieldInfo.addReferencer(usingMethod);
                                 fieldInfoManager.add(fieldInfo);
 
-                                entityUsage = new FieldUsageInfo(searchedClassReference,
+                                entityUsage = FieldUsageInfo.getInstance(searchedClassReference,
                                         entityUsage.getType(), fieldInfo, true, fromLine,
                                         fromColumn, toLine, toColumn);
                             }
@@ -556,10 +558,10 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                 // usingMethod.addReferencee(availableField);
                                                 // availableField.addReferencer(usingMethod);
 
-                                                entityUsage = new FieldUsageInfo(
-                                                        innerClassReference, entityUsage.getType(),
-                                                        availableField, true, fromLine, fromColumn,
-                                                        toLine, toColumn);
+                                                entityUsage = FieldUsageInfo.getInstance(innerClassReference, entityUsage
+                                                        .getType(), availableField, true, fromLine,
+                                                        fromColumn, toLine, toColumn);
+
                                                 found = true;
                                                 break;
                                             }
@@ -609,10 +611,10 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                 // fieldInfo.addReferencer(usingMethod);
                                                 fieldInfoManager.add(fieldInfo);
 
-                                                entityUsage = new FieldUsageInfo(
-                                                        innerClassReference, entityUsage.getType(),
-                                                        fieldInfo, true, fromLine, fromColumn,
-                                                        toLine, toColumn);
+                                                entityUsage = FieldUsageInfo.getInstance(innerClassReference, entityUsage
+                                                        .getType(), fieldInfo, true, fromLine,
+                                                        fromColumn, toLine, toColumn);
+
 
                                             } else {
                                                 assert false : "Can't resolve entity usage3.5 : "
@@ -631,9 +633,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                     // fieldInfo.addReferencer(usingMethod);
                                     fieldInfoManager.add(fieldInfo);
 
-                                    entityUsage = new FieldUsageInfo(innerClassReference,
-                                            entityUsage.getType(), fieldInfo, true, fromLine,
-                                            fromColumn, toLine, toColumn);
+                                    entityUsage = FieldUsageInfo.getInstance(innerClassReference, entityUsage.getType(),
+                                            fieldInfo, true, fromLine, fromColumn, toLine, toColumn);
+
                                 }
 
                             } else {
@@ -701,12 +703,12 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                     if (name[i].equals(availableField.getName())) {
                                                         // usingMethod.addReferencee(availableField);
                                                         // availableField.addReferencer(usingMethod);
+                                                        
+                                                        entityUsage = FieldUsageInfo.getInstance(classReference, 
+                                                                entityUsage.getType(),
+                                                                availableField, true, fromLine,
+                                                                fromColumn, toLine, toColumn);
 
-                                                        entityUsage = new FieldUsageInfo(
-                                                                classReference, entityUsage
-                                                                        .getType(), availableField,
-                                                                true, fromLine, fromColumn, toLine,
-                                                                toColumn);
                                                         found = true;
                                                         break;
                                                     }
@@ -757,9 +759,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                         // fieldInfo.addReferencer(usingMethod);
                                                         fieldInfoManager.add(fieldInfo);
 
-                                                        entityUsage = new FieldUsageInfo(
-                                                                classReference, entityUsage
-                                                                        .getType(), fieldInfo,
+                                                        entityUsage = FieldUsageInfo.getInstance(classReference, 
+                                                                entityUsage.getType(), fieldInfo,
                                                                 true, fromLine, fromColumn, toLine,
                                                                 toColumn);
 
@@ -780,9 +781,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             // fieldInfo.addReferencer(usingMethod);
                                             fieldInfoManager.add(fieldInfo);
 
-                                            entityUsage = new FieldUsageInfo(classReference,
-                                                    entityUsage.getType(), fieldInfo, true,
-                                                    fromLine, fromColumn, toLine, toColumn);
+                                            entityUsage = FieldUsageInfo.getInstance(classReference, entityUsage.getType(),
+                                                    fieldInfo, true, fromLine, fromColumn, toLine,
+                                                    toColumn);
                                         }
 
                                     } else {
@@ -849,10 +850,10 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                     // usingMethod.addReferencee(availableField);
                                                     // availableField.addReferencer(usingMethod);
 
-                                                    entityUsage = new FieldUsageInfo(
-                                                            classReference, entityUsage.getType(),
-                                                            availableField, true, fromLine,
-                                                            fromColumn, toLine, toColumn);
+                                                    entityUsage = FieldUsageInfo.getInstance(classReference, entityUsage
+                                                            .getType(), availableField, true,
+                                                            fromLine, fromColumn, toLine, toColumn);
+
                                                     found = true;
                                                     break;
                                                 }
@@ -902,10 +903,10 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                     // fieldInfo.addReferencer(usingMethod);
                                                     fieldInfoManager.add(fieldInfo);
 
-                                                    entityUsage = new FieldUsageInfo(
-                                                            classReference, entityUsage.getType(),
-                                                            fieldInfo, true, fromLine, fromColumn,
-                                                            toLine, toColumn);
+                                                    entityUsage = FieldUsageInfo.getInstance(classReference, entityUsage
+                                                            .getType(), fieldInfo, true, fromLine,
+                                                            fromColumn, toLine, toColumn);
+
 
                                                 } else {
                                                     assert false : "Can't resolve entity usage5 : "
@@ -924,9 +925,10 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                         // fieldInfo.addReferencer(usingMethod);
                                         fieldInfoManager.add(fieldInfo);
 
-                                        entityUsage = new FieldUsageInfo(classReference,
-                                                entityUsage.getType(), fieldInfo, true, fromLine,
-                                                fromColumn, toLine, toColumn);
+                                        entityUsage = FieldUsageInfo.getInstance(classReference, entityUsage.getType(),
+                                                fieldInfo, true, fromLine, fromColumn, toLine,
+                                                toColumn);
+
                                     }
 
                                 } else {

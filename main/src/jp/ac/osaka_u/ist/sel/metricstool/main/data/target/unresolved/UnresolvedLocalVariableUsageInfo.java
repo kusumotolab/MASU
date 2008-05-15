@@ -50,7 +50,7 @@ public class UnresolvedLocalVariableUsageInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new LocalVariableUsageInfo(usedVariable, reference, fromLine,
+        this.resolvedInfo = LocalVariableUsageInfo.getInstance(usedVariable, reference, fromLine,
                 fromColumn, toLine, toColumn);
 
         return this.resolvedInfo;
