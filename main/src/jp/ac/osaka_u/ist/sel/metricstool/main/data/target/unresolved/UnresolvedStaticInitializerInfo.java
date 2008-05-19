@@ -70,6 +70,11 @@ public class UnresolvedStaticInitializerInfo extends
         return this.resolvedInfo;
     }
 
+    /**
+     * このスタティックイニシャライザーを定義しているクラスを返す
+     * 
+     * @return このスタティックイニシャライザーを定義しているクラス
+     */
     public final UnresolvedClassInfo getOwnerClass() {
         return this.ownerClass;
     }

@@ -13,6 +13,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
+/**
+ * 未解決型パラメータ（表記が「A super B」）を表すクラス
+ * 
+ * @author higo
+ *
+ */
 public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParameterInfo {
 
     /**
@@ -20,6 +26,7 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
      * 
      * @param ownerUnit この型パラメータの所有ユニット(クラス or　メソッド)
      * @param name 型パラメータ名
+     * @param index 何番目の型パラメータであるかを表す
      * @param extendsType 未解決基底クラス型
      * @param superType 未解決派生クラス型
      */

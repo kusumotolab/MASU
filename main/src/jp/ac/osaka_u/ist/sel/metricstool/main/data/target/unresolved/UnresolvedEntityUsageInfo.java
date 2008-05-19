@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
  * 未解決のクラス参照，メソッド呼び出し，フィールド使用などを現すクラスの共通の基底クラス
  * 
  * @author higo
+ * @param <T> 解決済みの型
  */
 public abstract class UnresolvedEntityUsageInfo<T extends EntityUsageInfo> implements
         Resolvable<T>, PositionSetting, UnresolvedExpressionInfo<T> {

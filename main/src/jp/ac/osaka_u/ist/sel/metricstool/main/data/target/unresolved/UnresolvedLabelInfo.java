@@ -20,6 +20,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> implements
         UnresolvedStatementInfo<LabelInfo> {
 
+    /**
+     * ラベル名を与えて，オブジェクトを初期化
+     * 
+     * @param name ラベル名
+     */
     public UnresolvedLabelInfo(final String name) {
 
         // 不正な呼び出しでないかをチェック

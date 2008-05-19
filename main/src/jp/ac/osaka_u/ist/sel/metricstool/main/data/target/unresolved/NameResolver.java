@@ -84,8 +84,8 @@ public final class NameResolver {
     /**
      * 引数で与えられたエンティティの List から，引数の型の List を作成し，返す
      * 
-     * @param エンティティのList
-     * @param 引数を宣言しているメソッド
+     * @param entities エンティティのList
+     * @param ownerMethod 引数を宣言しているメソッド
      * @return 引数の型の List
      */
     public static List<ParameterInfo> createParameters(final List<EntityUsageInfo> entities,

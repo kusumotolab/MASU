@@ -21,16 +21,19 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 public final class UnresolvedNullUsageInfo extends UnresolvedEntityUsageInfo<NullUsageInfo> {
 
+    /**
+     * オブジェクトを初期化
+     */
     public UnresolvedNullUsageInfo() {
 
         this.resolvedInfo = null;
     }
 
-        /**
-     * 使用情報の名前解決する
-     * 
-     * @return 解決済みの使用情報
-     */
+    /**
+    * 使用情報の名前解決する
+    * 
+    * @return 解決済みの使用情報
+    */
     @Override
     public NullUsageInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,

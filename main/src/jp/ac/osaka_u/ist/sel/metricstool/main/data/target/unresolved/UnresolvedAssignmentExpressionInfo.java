@@ -12,9 +12,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
+/**
+ * 未解決代入文を表すクラス
+ * 
+ * @author higo
+ */
 public final class UnresolvedAssignmentExpressionInfo implements
         UnresolvedExpressionInfo<AssignmentExpressionInfo> {
 
+    /**
+     * オブジェクトを初期化
+     * 
+     */
     public UnresolvedAssignmentExpressionInfo() {
         this.leftVariable = null;
         this.rightExpression = null;
@@ -74,18 +83,38 @@ public final class UnresolvedAssignmentExpressionInfo implements
         return this.resolved;
     }
 
+    /**
+     * 左辺の変数をセットする
+     * 
+     * @param leftVariable 左辺の変数
+     */
     public void setLeftVariable(final UnresolvedVariableUsageInfo<?> leftVariable) {
         this.leftVariable = leftVariable;
     }
 
+    /**
+     * 右辺の式をセットする
+     * 
+     * @param rightExpression 右辺の式
+     */
     public void setRightVariable(final UnresolvedExpressionInfo<?> rightExpression) {
         this.rightExpression = rightExpression;
     }
 
+    /**
+     * 左辺の変数を返す
+     * 
+     * @return 左辺の変数
+     */
     public UnresolvedVariableUsageInfo<?> getLeftVariable() {
         return this.leftVariable;
     }
 
+    /**
+     * 右辺の式を返す
+     * 
+     * @return 右辺の式
+     */
     public UnresolvedExpressionInfo<?> getRightExpression() {
         return this.rightExpression;
     }

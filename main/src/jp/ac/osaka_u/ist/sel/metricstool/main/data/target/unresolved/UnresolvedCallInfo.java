@@ -28,10 +28,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 未解決メンバ(メソッド，コンストラクタ)呼び出しを保存するためのクラス
  * 
  * @author t-miyake, higo
- *
+ * @param <T> 解決済みの型
  */
 public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedEntityUsageInfo<T> {
 
+    /**
+     * オブジェクトを初期化
+     */
     public UnresolvedCallInfo() {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -40,7 +43,6 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
         this.parameterTypes = new LinkedList<UnresolvedEntityUsageInfo<?>>();
 
     }
-
 
     /**
      * 型パラメータ使用を追加する

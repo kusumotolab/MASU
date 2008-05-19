@@ -26,7 +26,8 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
      * 
      * @param ownerUnit この型パラメータを定義しているユニット(クラス or メソッド)
      * @param name 型パラメータ名
-     * @param extends 未解決基底クラス型
+     * @param index 何番目の型パラメータであるかを表す
+     * @param extendsType 未解決基底クラス型
      */
     public UnresolvedTypeParameterInfo(final UnresolvedUnitInfo<?> ownerUnit, final String name,
             final int index, final UnresolvedTypeInfo extendsType) {
@@ -41,7 +42,6 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
                 && (!(ownerUnit instanceof UnresolvedCallableUnitInfo))) {
             throw new IllegalArgumentException();
         }
-        
 
         this.ownerUnit = ownerUnit;
         this.name = name;
@@ -84,9 +84,9 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
      * 
      * @return 解決済みのエンティティ
      */
-    public TypeInfo resolve(final TargetClassInfo usingClass,
-            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
-            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+    public TypeInfo resolve(final TargetClassInfo usingClass, final CallableUnitInfo usingMethod,
+            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
+            final MethodInfoManager methodInfoManager) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();

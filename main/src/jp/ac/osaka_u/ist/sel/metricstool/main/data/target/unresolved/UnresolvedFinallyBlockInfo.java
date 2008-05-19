@@ -21,9 +21,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<FinallyBlockInfo> {
 
     /**
-     * 対応する try ブロック情報を与えて finally ブロックを初期化
+     * 対応する try ブロック情報と外側のブロック情報を与えて finally ブロックを初期化
      * 
-     * @param ownerTryBlock
+     * @param ownerTryBlock 対応する try ブロック
+     * @param outerSpace 外側のブロック
      */
     public UnresolvedFinallyBlockInfo(final UnresolvedTryBlockInfo ownerTryBlock,
             final UnresolvedLocalSpaceInfo<?> outerSpace) {

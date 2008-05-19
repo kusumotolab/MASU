@@ -21,7 +21,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo<ForBlockInfo> {
 
     /**
-     * for ブロック情報を初期化
+     * 外側のブロック情報を与えて，for ブロック情報を初期化
+     * 
+     * @param outerSpace 外側のブロック
      */
     public UnresolvedForBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
@@ -83,7 +85,7 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
 
         this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
-        
+
         return this.resolvedInfo;
     }
 

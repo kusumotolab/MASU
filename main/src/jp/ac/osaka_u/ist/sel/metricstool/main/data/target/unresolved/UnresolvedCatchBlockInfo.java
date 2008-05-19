@@ -21,9 +21,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlockInfo> {
 
     /**
-     * 対応するtry文情報を与えて catch ブロックを初期化
+     * 対応するtry文と外側のブロックを与えて catch ブロックを初期化
      * 
      * @param ownerTryBlock 対応するtry文
+     * @param outerSpace 外側のブロック
      */
     public UnresolvedCatchBlockInfo(final UnresolvedTryBlockInfo ownerTryBlock,
             final UnresolvedLocalSpaceInfo<?> outerSpace) {

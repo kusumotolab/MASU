@@ -33,6 +33,7 @@ public final class UnresolvedParameterInfo
      * 
      * @param name 引数名
      * @param type 引数の型
+     * @param index 何番目の引数でるかを表す
      * @param definitionMethod 引数を宣言しているメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -40,7 +41,9 @@ public final class UnresolvedParameterInfo
      * @param toColumn 終了列
      */
     public UnresolvedParameterInfo(final String name, final UnresolvedTypeInfo type,
-            final int index, final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> definitionMethod, final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final int index,
+            final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> definitionMethod,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         super(name, type, definitionMethod, fromLine, fromColumn, toLine, toColumn);
 
         this.index = index;
@@ -101,8 +104,8 @@ public final class UnresolvedParameterInfo
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedParameterType)
                         .getDimension();
-                final TypeInfo elementType = unresolvedElementType.resolve(usingClass,
-                        usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                final TypeInfo elementType = unresolvedElementType.resolve(usingClass, usingMethod,
+                        classInfoManager, fieldInfoManager, methodInfoManager);
                 parameterType = ArrayTypeInfo.getType(elementType, dimension);
             } else {
                 assert false : "Can't resolve dummy parameter type : "

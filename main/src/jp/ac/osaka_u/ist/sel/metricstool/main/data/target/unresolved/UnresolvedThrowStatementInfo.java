@@ -17,6 +17,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<ThrowStatementInfo> {
 
+    /**
+     * スローされている例外を与えて，オブジェクトを初期化
+     * 
+     * @param thrownExpression スローされている例外
+     */
     public UnresolvedThrowStatementInfo(final UnresolvedExpressionInfo<? extends ExpressionInfo> thrownExpression) {
         super();
         

@@ -78,6 +78,11 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
         return this.resolvedInfo;
     }
 
+    /**
+     * この未解決コンストラクタ呼び出しの型を返す
+     * 
+     * @return この未解決コンストラクタ呼び出しの型
+     */
     public UnresolvedReferenceTypeInfo getReferenceType() {
         return this.unresolvedReferenceType;
     }

@@ -25,7 +25,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockInfo> {
 
     /**
-     * try ブロック情報を初期化
+     * 外側のブロック情報を与えて，try ブロック情報を初期化
+     * 
+     * @param outerSpace 外側のブロック
      */
     public UnresolvedTryBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);

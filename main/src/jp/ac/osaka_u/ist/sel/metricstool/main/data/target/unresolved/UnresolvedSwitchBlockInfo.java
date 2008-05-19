@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * switch ブロックを表すクラス
+ * 未解決 switch ブロックを表すクラス
  * 
  * @author higo
  * 
@@ -23,8 +23,9 @@ public final class UnresolvedSwitchBlockInfo extends
         UnresolvedConditionalBlockInfo<SwitchBlockInfo> {
 
     /**
-     * switch ブロック情報を初期化
+     * 外側のブロック情報を与えて，switch ブロック情報を初期化
      * 
+     * @param outerSpace 外側のブロック
      */
     public UnresolvedSwitchBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
@@ -75,15 +76,15 @@ public final class UnresolvedSwitchBlockInfo extends
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);          
+                methodInfoManager);
 
         // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
-        
+
         this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 
@@ -95,19 +96,19 @@ public final class UnresolvedSwitchBlockInfo extends
      * 
      * @param innerBlock 追加する case エントリ
      */
-//    @Override
-//    public void addInnerBlock(final UnresolvedBlockInfo<?> innerBlock) {
-//
-//        MetricsToolSecurityManager.getInstance().checkAccess();
-//        if (null == innerBlock) {
-//            throw new NullPointerException();
-//        }
-//
-//        if (!(innerBlock instanceof UnresolvedCaseEntryInfo)) {
-//            throw new IllegalArgumentException(
-//                    "Inner block of switch statement must be case or default entry!");
-//        }
-//
-//        super.addInnerBlock(innerBlock);
-//    }
+    //    @Override
+    //    public void addInnerBlock(final UnresolvedBlockInfo<?> innerBlock) {
+    //
+    //        MetricsToolSecurityManager.getInstance().checkAccess();
+    //        if (null == innerBlock) {
+    //            throw new NullPointerException();
+    //        }
+    //
+    //        if (!(innerBlock instanceof UnresolvedCaseEntryInfo)) {
+    //            throw new IllegalArgumentException(
+    //                    "Inner block of switch statement must be case or default entry!");
+    //        }
+    //
+    //        super.addInnerBlock(innerBlock);
+    //    }
 }

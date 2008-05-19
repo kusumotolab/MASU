@@ -108,8 +108,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
         if (this.hasOwnerReference()) {
 
             final UnresolvedClassReferenceInfo unresolvedClassReference = this.getOwnerUsage();
-            EntityUsageInfo classReference = unresolvedClassReference.resolve(
-                    usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            EntityUsageInfo classReference = unresolvedClassReference.resolve(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             assert null != classReference : "null is returned!";
 
             NEXT_NAME: for (int i = 0; i < referenceName.length; i++) {
@@ -530,6 +530,12 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
         return this.availableNamespaces;
     }
 
+    /**
+     * 未解決参照型を与えると，その未解決クラス参照を返す
+     * 
+     * @param referenceType 未解決参照型
+     * @return 未解決クラス参照
+     */
     public final static UnresolvedClassReferenceInfo createClassReference(
             UnresolvedClassTypeInfo referenceType) {
 
@@ -562,6 +568,5 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
      * 未解決型パラメータ使用を保存するための変数
      */
     private final List<UnresolvedReferenceTypeInfo> typeArguments;
-
 
 }

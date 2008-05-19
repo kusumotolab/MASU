@@ -10,11 +10,21 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
  * 未解決変数使用を保存するためのクラス
  * 
  * @author t-miyake, higo
- *
+ * @param <T> 解決済みの型
  */
 public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>
         extends UnresolvedEntityUsageInfo<T> {
 
+    /**
+     * 必要な情報を与えて，オブジェクトを初期化
+     * 
+     * @param usedVariableName 変数名
+     * @param reference 参照の場合はtrue, 代入の場合はfalse
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
+     */
     public UnresolvedVariableUsageInfo(final String usedVariableName, final boolean reference,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 

@@ -21,10 +21,10 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
         UnresolvedStatementInfo<CaseEntryInfo> {
 
     /**
-     * 対応する switch ブロック情報を与えて case エントリを初期化
+     * 対応する switch ブロック情報とラベル情報を与えて case エントリを初期化
      * 
      * @param ownerSwitchBlock 対応する switch ブロック
-     * @param name ラベルの名前
+     * @param label ラベル
      * 
      */
     public UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock,

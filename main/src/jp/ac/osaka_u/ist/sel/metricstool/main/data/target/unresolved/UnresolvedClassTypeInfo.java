@@ -382,10 +382,21 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
         return 1 == this.referenceName.length;
     }
 
+    /**
+     * 未解決クラスを与えると，その未解決参照型を返す
+     * 
+     * @param referencedClass 未解決クラス
+     * @return 与えられた未解決クラスの未解決参照型
+     */
     public final static UnresolvedClassTypeInfo getInstance(UnresolvedClassInfo referencedClass) {
         return new UnresolvedClassTypeInfo(referencedClass.getFullQualifiedName());
     }
 
+    /**
+     * この未解決参照型が表す未解決クラス参照を返す
+     * 
+     * @return この未解決参照型が表す未解決クラス参照
+     */
     public final UnresolvedClassReferenceInfo getUsage() {
 
         UnresolvedClassReferenceInfo usage = new UnresolvedClassReferenceInfo(

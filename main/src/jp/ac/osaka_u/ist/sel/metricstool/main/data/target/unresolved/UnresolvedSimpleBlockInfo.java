@@ -20,7 +20,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedSimpleBlockInfo extends UnresolvedBlockInfo<SimpleBlockInfo> {
 
     /**
-     * 単純ブロック情報を初期化
+     * 外側のブロック情報を与えて，単純ブロック情報を初期化
+     * 
+     * @param outerSpace 外側のブロック
      */
     public UnresolvedSimpleBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
@@ -65,18 +67,18 @@ public final class UnresolvedSimpleBlockInfo extends UnresolvedBlockInfo<SimpleB
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);      
+                methodInfoManager);
 
         // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
 
         this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
-        
+
         return this.resolvedInfo;
     }
 

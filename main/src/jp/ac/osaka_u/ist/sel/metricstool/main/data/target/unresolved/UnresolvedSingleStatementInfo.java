@@ -1,14 +1,24 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
-public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInfo> implements UnresolvedStatementInfo<T>{
+
+/**
+ * ブロック文以外の未解決文を表すクラス
+ * 
+ * @author higo
+ *
+ * @param <T> 解決済みの型
+ */
+public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInfo> implements
+        UnresolvedStatementInfo<T> {
 
     protected UnresolvedSingleStatementInfo() {
         MetricsToolSecurityManager.getInstance().checkAccess();
     }
-    
+
     @Override
     public final boolean alreadyResolved() {
         return null != this.resolvedInfo;
@@ -24,7 +34,7 @@ public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInf
         if (column < 0) {
             throw new IllegalArgumentException();
         }
-        
+
         this.fromColumn = column;
     }
 
@@ -33,7 +43,7 @@ public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInf
         if (line < 0) {
             throw new IllegalArgumentException();
         }
-        
+
         this.fromLine = line;
     }
 
@@ -42,7 +52,7 @@ public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInf
         if (column < 0) {
             throw new IllegalArgumentException();
         }
-        
+
         this.toColumn = column;
     }
 
@@ -51,7 +61,7 @@ public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInf
         if (line < 0) {
             throw new IllegalArgumentException();
         }
-        
+
         this.toLine = line;
     }
 

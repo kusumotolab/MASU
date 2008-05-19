@@ -23,8 +23,12 @@ public final class UnresolvedParameterUsageInfo extends
     /**
      * 使用されている引数，参照かどうかを与えて初期化
      * 
-     * @param usedVariable　使用されている引数
-     * @param reference　参照の場合は true，そうでない場合は false
+     * @param usedVariable 使用されている変数
+     * @param reference 参照の場合はtrue, 代入の場合はfalse
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
     public UnresolvedParameterUsageInfo(final UnresolvedParameterInfo usedVariable,
             boolean reference, final int fromLine, final int fromColumn, final int toLine,
@@ -59,8 +63,8 @@ public final class UnresolvedParameterUsageInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = ParameterUsageInfo.getInstance(usedVariable, reference, fromLine, fromColumn,
-                toLine, toColumn);
+        this.resolvedInfo = ParameterUsageInfo.getInstance(usedVariable, reference, fromLine,
+                fromColumn, toLine, toColumn);
 
         return this.resolvedInfo;
     }

@@ -21,9 +21,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo<CastUsageInfo> {
 
     /**
-     * キャストした方を与えて初期化
+     * キャストされたエンティティとキャストの型を与えて初期化
      * 
-     * @param castType キャストした型
+     * @param castType キャストの型
+     * @param castedUsage キャストされたエンティティ
+     * 
      */
     public UnresolvedCastUsageInfo(final UnresolvedTypeInfo castType,
             final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> castedUsage) {
@@ -80,13 +82,14 @@ public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo<Cas
         final UnresolvedTypeInfo unresolvedCastType = this.getCastType();
         final TypeInfo castType = unresolvedCastType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-        
+
         // キャストされたエンティティ使用を解決
         final EntityUsageInfo castedUsage = this.getCastedUsage().resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-        
+
         // キャスト使用を解決
-        this.resolvedInfo = new CastUsageInfo(castType, castedUsage, fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo = new CastUsageInfo(castType, castedUsage, fromLine, fromColumn, toLine,
+                toColumn);
         return this.resolvedInfo;
     }
 

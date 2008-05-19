@@ -106,15 +106,21 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
         this.statements.add(statement);
     }
 
-    public void addChildSpaceInfo(final UnresolvedLocalSpaceInfo<?> childLocalInfo) {
+    /**
+     * TODO 名前を変える
+     * インナーブロックを追加する
+     * 
+     * @param innerLocalInfo 追加するインナーブロック
+     */
+    public void addChildSpaceInfo(final UnresolvedLocalSpaceInfo<?> innerLocalInfo) {
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == childLocalInfo) {
+        if (null == innerLocalInfo) {
             throw new NullPointerException();
         }
 
-        this.variableUsages.addAll(childLocalInfo.variableUsages);
-        this.localVariables.addAll(childLocalInfo.localVariables);
-        this.calls.addAll(childLocalInfo.calls);
+        this.variableUsages.addAll(innerLocalInfo.variableUsages);
+        this.localVariables.addAll(innerLocalInfo.localVariables);
+        this.calls.addAll(innerLocalInfo.calls);
     }
 
     /**

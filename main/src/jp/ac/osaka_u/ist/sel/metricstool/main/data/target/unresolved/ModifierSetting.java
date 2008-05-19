@@ -13,5 +13,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
  */
 public interface ModifierSetting extends Modifier {
 
+    /**
+     * ˆø”‚Å—^‚¦‚ç‚ê‚½Cüq‚ğ’Ç‰Á‚·‚é
+     * 
+     * @param modifier ’Ç‰Á‚·‚éCüq
+     */
     void addModifier(final ModifierInfo modifier);
 }

@@ -21,7 +21,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * </ul>
  * 
  * @author higo
- * 
+ * @param <TVar> 解決済みの型
+ * @param <TUnit> この変数を宣言しているユニット
  */
 public abstract class UnresolvedVariableInfo<TVar extends VariableInfo<? extends UnitInfo>, TUnit extends UnresolvedUnitInfo<? extends UnitInfo>>
         extends UnresolvedUnitInfo<TVar> implements ModifierSetting {
@@ -81,6 +82,11 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo<? extends
         return Collections.unmodifiableSet(this.modifiers);
     }
 
+    /**
+     * この変数を宣言しているユニットを返す
+     * 
+     * @return この変数を宣言しているユニット
+     */
     public final TUnit getDefinitionUnit() {
         return this.definitionUnit;
     }

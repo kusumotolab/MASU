@@ -21,7 +21,9 @@ public final class UnresolvedSynchronizedBlockInfo extends
         UnresolvedBlockInfo<SynchronizedBlockInfo> {
 
     /**
-     * synchronized ブロック情報を初期化
+     * 外側のブロック情報を与えて，synchronized ブロック情報を初期化
+     * 
+     * @param outerSpace 外側のブロック
      */
     public UnresolvedSynchronizedBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);

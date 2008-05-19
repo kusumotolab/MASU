@@ -12,8 +12,21 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationSta
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
-public final class UnresolvedVariableDeclarationStatementInfo extends UnresolvedSingleStatementInfo<VariableDeclarationStatementInfo> {
+/**
+ * 未解決変数宣言文を表すクラス
+ * 
+ * @author higo
+ *
+ */
+public final class UnresolvedVariableDeclarationStatementInfo extends
+        UnresolvedSingleStatementInfo<VariableDeclarationStatementInfo> {
 
+    /**
+     * 宣言されている変数，（もしあれば）初期化の式を与えて，オブジェクトを初期化
+     * 
+     * @param declaredVariable 宣言されている変数
+     * @param initializationExpression （もしあれば）初期化の式
+     */
     public UnresolvedVariableDeclarationStatementInfo(
             final UnresolvedLocalVariableInfo declaredVariable,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> initializationExpression) {
@@ -66,6 +79,11 @@ public final class UnresolvedVariableDeclarationStatementInfo extends Unresolved
         return this.resolvedInfo;
     }
 
+    /**
+     * 定義されている変数を返す
+     * 
+     * @return 定義されている変数
+     */
     public final UnresolvedLocalVariableInfo getDeclaredLocalVariable() {
         return this.declaredLocalVariable;
     }

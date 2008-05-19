@@ -22,7 +22,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedWhileBlockInfo extends UnresolvedConditionalBlockInfo<WhileBlockInfo> {
 
     /**
-     * while ブロック情報を初期化
+     * 外側のブロック情報を与えて， 未解決while ブロック情報を初期化
+     * 
+     * @param outerSpace 外側のブロック
      */
     public UnresolvedWhileBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
@@ -73,7 +75,7 @@ public final class UnresolvedWhileBlockInfo extends UnresolvedConditionalBlockIn
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);  
+                methodInfoManager);
 
         // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
@@ -81,7 +83,7 @@ public final class UnresolvedWhileBlockInfo extends UnresolvedConditionalBlockIn
                     classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
-        
+
         this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 

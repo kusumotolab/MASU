@@ -12,6 +12,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
+/**
+ * 未解決の呼び出される単位のブロック（メソッドやコンストラクタ）を表すクラス
+ * 
+ * @author higo
+ * @param <T> 解決済みの型
+ */
 public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> extends
         UnresolvedLocalSpaceInfo<T> implements VisualizableSetting, MemberSetting, ModifierSetting {
 
@@ -34,7 +40,7 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
         this.inheritanceVisible = false;
         this.namespaceVisible = false;
         this.publicVisible = false;
-        
+
         this.setFromLine(fromLine);
         this.setFromColumn(fromColumn);
         this.setToLine(toLine);

@@ -11,8 +11,20 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
+/**
+ * 未解決リテラル使用を表すクラス
+ * 
+ * @author higo
+ *
+ */
 public final class UnresolvedLiteralUsageInfo extends UnresolvedEntityUsageInfo<LiteralUsageInfo> {
 
+    /**
+     * リテラルの文字列表現とリテラルの型を与えてオブジェクトを初期化
+     * 
+     * @param literal リテラルの文字列表現
+     * @param type リテラルの型
+     */
     public UnresolvedLiteralUsageInfo(final String literal, final PrimitiveTypeInfo type) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
