@@ -11,12 +11,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 /**
  * データビルダーのアダプト実装．
  * 
- * ビルだのアクティブ，非アクティブの切り替え処理や，過去に構築したデータの管理，取得などを行うメソッド群を実装する．
+ * ビルダのアクティブ，非アクティブの切り替え処理や，過去に構築したデータの管理，取得などを行うメソッド群を実装する．
  * 
- * @author kou-tngt
- *
+ * @author kou-tngt, t-miyake
+ * 
+ * @param <T> ビルドされるデータの型
  */
-public class DataBuilderAdapter<T> implements DataBuilder<T> {
+public abstract class DataBuilderAdapter<T> implements DataBuilder<T> {
 
     /**
      * ビルダをアクティブにする．
@@ -44,14 +45,19 @@ public class DataBuilderAdapter<T> implements DataBuilder<T> {
         this.active = false;
     }
 
-    public void entered(final AstVisitEvent e) {
-        // adapted method.
-    }
+    /* (non-Javadoc)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitListener#entered(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
+     */
+    public abstract void entered(final AstVisitEvent e);
 
-    public void exited(final AstVisitEvent e) {
-        // adapted method.
-    }
+    /* (non-Javadoc)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitListener#exited(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
+     */
+    public abstract void exited(final AstVisitEvent e);
 
+    /* (non-Javadoc)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder#getBuiltDatas()
+     */
     public final List<T> getBuiltDatas() {
         return Collections.unmodifiableList(this.builtDataStack);
     }

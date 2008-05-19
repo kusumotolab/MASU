@@ -8,6 +8,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 
+/**
+ * 識別子の情報を構築するクラス．
+ * ピリオドで区切られた識別子をString型の配列として構築する．
+ * 
+ * @author kou-tang, t-miyake
+ *
+ */
 public class IdentifierBuilder extends DataBuilderAdapter<String[]> {
 
     @Override
@@ -78,6 +85,11 @@ public class IdentifierBuilder extends DataBuilderAdapter<String[]> {
         this.separatorCount = 0;
     }
 
+    /**
+     * 解析した識別子の情報をString型の配列として構築する．
+     * 
+     * @return 識別子
+     */
     private String[] buildIdentifier() {
         if (!this.buildingIdentifiers.isEmpty()) {
             String[] result = new String[this.buildingIdentifiers.size()];
@@ -88,7 +100,13 @@ public class IdentifierBuilder extends DataBuilderAdapter<String[]> {
         return null;
     }
 
+    /**
+     * ビルド中の識別子に含まれる区切り（ピリオド）の数．
+     */
     private int separatorCount;
 
+    /**
+     * ビルド中の識別子を保存するためのフィールド．
+     */
     private final List<String> buildingIdentifiers = new ArrayList<String>();
 }

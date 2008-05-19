@@ -8,9 +8,21 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedE
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionStatementInfo;
 
 
+/**
+ * 式文情報を構築するクラス．
+ * 
+ * @author t-miyake
+ *
+ */
 public class ExpressionStatementBuilder extends
         SingleStatementBuilder<UnresolvedExpressionStatementInfo> {
 
+    /**
+     * 構築済み式情報マネージャー，構築済みデータマネージャーを与えて初期化
+     * 
+     * @param expressionManager 構築済み式情報マネージャー
+     * @param buildDataManager 構築済みデータマネージャー
+     */
     public ExpressionStatementBuilder(ExpressionElementManager expressionManager,
             BuildDataManager buildDataManager) {
         super(expressionManager, buildDataManager);
@@ -20,7 +32,7 @@ public class ExpressionStatementBuilder extends
     protected UnresolvedExpressionStatementInfo buildStatement(final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
         final UnresolvedExpressionInfo<? extends ExpressionInfo> expression = this
-        .getLastBuiltExpression();
+                .getLastBuiltExpression();
 
         final UnresolvedExpressionStatementInfo expressionStatement = new UnresolvedExpressionStatementInfo(
                 expression);
@@ -28,7 +40,7 @@ public class ExpressionStatementBuilder extends
         expressionStatement.setFromColumn(fromColumn);
         expressionStatement.setToLine(toLine);
         expressionStatement.setToColumn(toColumn);
-        
+
         return expressionStatement;
     }
 

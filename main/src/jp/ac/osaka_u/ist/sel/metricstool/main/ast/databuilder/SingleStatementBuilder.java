@@ -12,9 +12,23 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedL
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedStatementInfo;
 
 
+/**
+ * 文の情報を構築するクラス
+ * 複文以外（式文，return文，throw文，break文など）の情報を構築する．
+ * 
+ * @author t-miyake
+ *
+ * @param <T> 構築される文の型，UnresolvedStatementInfoのサブクラスでなければならない．
+ */
 public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<? extends StatementInfo>>
         extends DataBuilderAdapter<T> {
 
+    /**
+     * 式情報マネージャー，構築済みデータマネージャーを与えて初期化
+     * 
+     * @param expressionManager 式情報マネージャー
+     * @param buildDataManager 構築済みデータマネージャー
+     */
     public SingleStatementBuilder(final ExpressionElementManager expressionManager,
             final BuildDataManager buildDataManager) {
 
@@ -24,6 +38,11 @@ public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<?
 
         this.buildDataManager = buildDataManager;
         this.expressionManager = expressionManager;
+    }
+
+    @Override
+    public void entered(AstVisitEvent e) {
+        // 何もしない   
     }
 
     @Override
@@ -43,17 +62,43 @@ public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<?
         }
     }
 
+    /**
+     * 過去に構築された式情報のうち最新の式情報を返す．
+     * 
+     * @return 過去構築された式情報のうち最新の式情報
+     */
     protected UnresolvedExpressionInfo<? extends ExpressionInfo> getLastBuiltExpression() {
         return null == this.expressionManager.getPeekExpressionElement() ? null
                 : this.expressionManager.getPeekExpressionElement().getUsage();
     }
 
+    /**
+     * 文の情報を構築する．
+     * 
+     * @param fromLine 文の開始行
+     * @param fromColumn 文の開始列
+     * @param toLine 文の終了行
+     * @param toColumn 文の終了列
+     * @return
+     */
     protected abstract T buildStatement(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn);
 
+    /**
+     * 引数で与えられたトークンが構築される文を表すノードのトークンであるかどうか返す
+     * 
+     * @param token トークン
+     * @return 引数で与えられたトークンが構築される文を表すノードのトークンであればtrue
+     */
     protected abstract boolean isTriggerToken(final AstToken token);
 
+    /**
+     * 構築済み式情報マネージャーを表すフィールド
+     */
     protected final ExpressionElementManager expressionManager;
 
+    /**
+     * 構築済みデータマネージャーを表すフィールド
+     */
     protected final BuildDataManager buildDataManager;
 }

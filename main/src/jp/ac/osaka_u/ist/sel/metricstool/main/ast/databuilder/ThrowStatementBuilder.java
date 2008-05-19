@@ -8,8 +8,20 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedE
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedThrowStatementInfo;
 
 
+/**
+ * Throw文の情報を構築するクラス
+ * 
+ * @author t-miyake
+ *
+ */
 public class ThrowStatementBuilder extends SingleStatementBuilder<UnresolvedThrowStatementInfo> {
 
+    /**
+     * 構築済み式情報マネージャー，構築済みデータマネージャーを与えて初期化
+     * 
+     * @param expressionManager 構築済み式情報マネージャー
+     * @param buildDataManager 構築済みデータマネージャー
+     */
     public ThrowStatementBuilder(ExpressionElementManager expressionManager,
             BuildDataManager buildDataManager) {
         super(expressionManager, buildDataManager);
