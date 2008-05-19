@@ -14,6 +14,7 @@ public final class SwitchBlockInfo extends ConditionalBlockInfo {
      *
      * @param ownerClass 所有クラス
      * @param ownerMethod 所有メソッド
+     * @param outerSpace 外側のブロック
      * @param conditionalClause 条件節
      * @param fromLine 開始行
      * @param fromColumn 開始列

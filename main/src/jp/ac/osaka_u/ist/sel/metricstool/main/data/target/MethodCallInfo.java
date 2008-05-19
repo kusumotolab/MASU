@@ -18,7 +18,13 @@ public final class MethodCallInfo extends CallInfo {
     /**
      * 呼び出されるメソッドを与えてオブジェクトを初期化
      * 
-     * @param callee 呼び出されるメソッド
+     * @param ownerType メソッド呼び出しの親の型
+     * @param ownerUsage メソッド呼び出しの親エンティティ
+     * @param callee 呼び出されているメソッド
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
     public MethodCallInfo(final TypeInfo ownerType, final EntityUsageInfo ownerUsage,
             final MethodInfo callee, final int fromLine, final int fromColumn, final int toLine,

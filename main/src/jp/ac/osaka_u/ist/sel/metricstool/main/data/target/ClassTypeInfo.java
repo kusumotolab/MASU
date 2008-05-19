@@ -155,7 +155,7 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
     /**
      * この参照型のインデックスで指定された型引数を返す
      * 
-     * @param index　型引数のインデックス
+     * @param index 型引数のインデックス
      * @return　この参照型のインデックスで指定された型引数
      */
     public TypeInfo getTypeArgument(final int index) {

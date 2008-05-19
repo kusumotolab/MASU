@@ -3,7 +3,12 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
-
+/**
+ * 型パラメータ（表記法式が <A super B>）を表すクラス
+ * 
+ * @author higo
+ *
+ */
 public final class SuperTypeParameterInfo extends TypeParameterInfo {
 
     /**
@@ -11,6 +16,7 @@ public final class SuperTypeParameterInfo extends TypeParameterInfo {
      * 
      * @param ownerUnit この型パラメータの所有ユニット(クラス or メソッド)
      * @param name 型パラメータ名
+     * @param index 何番目の型パラメータかを表す
      * @param extendsType 基底クラス型
      * @param superType 派生クラス型
      */

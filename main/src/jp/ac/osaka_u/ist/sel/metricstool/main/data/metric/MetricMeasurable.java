@@ -8,5 +8,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.metric;
  */
 public interface MetricMeasurable {
 
+    /**
+     * 計測単位名を返すメソッド
+     * 
+     * @return 計測単位名
+     */
     String getMeasuredUnitName();
 }

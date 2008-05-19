@@ -18,7 +18,7 @@ public interface MethodMetricsRegister {
      * 
      * @param methodInfo メトリクスの計測対象メソッド
      * @param value メトリクス値
-     * @throws 登録しようとしているメトリクスが既に登録されている場合にスローされる
+     * @throws MetricAlreadyRegisteredException 登録しようとしているメトリクスが既に登録されている場合にスローされる
      */
     void registMetric(MethodInfo methodInfo, Number value) throws MetricAlreadyRegisteredException;
 }

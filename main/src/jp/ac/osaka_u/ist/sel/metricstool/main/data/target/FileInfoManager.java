@@ -41,14 +41,13 @@ public final class FileInfoManager {
 
     /**
      * 現在解析中のファイル情報を返す
-     * @return 現在解析中のファイル情報．
-     * @return 解析が始まっていない場合はnull
-     * @return 解析が終了している場合は最後に解析したファイル
+     * 
+     * @return 現在解析中のファイル情報．解析が始まっていない場合はnull，解析が終了している場合は最後に解析したファイル
      */
     public FileInfo getCurrentFile() {
         return this.fileInfos.size() > 0 ? this.fileInfos.last() : null;
     }
-    
+
     /**
      * ファイル情報の SortedSet を返す．
      * 

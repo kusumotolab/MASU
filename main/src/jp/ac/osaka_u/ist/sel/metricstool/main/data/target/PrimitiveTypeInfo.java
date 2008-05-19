@@ -21,6 +21,9 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
      */
     public enum TYPE {
 
+        /**
+         * ÉuÅ[Éãå^Çï\Ç∑
+         */
         BOOLEAN {
 
             @Override
@@ -29,6 +32,9 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             }
         },
 
+        /**
+         * BYTEå^Çï\Ç∑
+         */
         BYTE {
             @Override
             public String getName() {
@@ -36,6 +42,9 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             }
         },
 
+        /**
+         * CHARå^Çï\Ç∑
+         */
         CHAR {
             @Override
             public String getName() {
@@ -43,6 +52,9 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             }
         },
 
+        /**
+         * SHORTÇï\Ç∑
+         */
         SHORT {
             @Override
             public String getName() {
@@ -50,6 +62,9 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             }
         },
 
+        /**
+         * INTÇï\Ç∑
+         */
         INT {
             @Override
             public String getName() {
@@ -57,6 +72,9 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             }
         },
 
+        /**
+         * LONGå^Çï\Ç∑
+         */
         LONG {
             @Override
             public String getName() {
@@ -64,13 +82,19 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             }
         },
 
+        /**
+         * FLOATå^Çï\Ç∑
+         */
         FLOAT {
             @Override
             public String getName() {
                 return "float";
             }
         },
-
+        
+        /**
+         * DOUBLEå^Çï\Ç∑
+         */
         DOUBLE {
             @Override
             public String getName() {
@@ -78,6 +102,9 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             }
         },
 
+        /**
+         * STRINGå^Çï\Ç∑
+         */
         STRING {
             @Override
             public String getName() {
@@ -85,6 +112,11 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             }
         };
 
+        /**
+         * å^ñºÇï‘Ç∑
+         * 
+         * @return å^ñº
+         */
         public abstract String getName();
     }
 

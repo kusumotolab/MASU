@@ -72,9 +72,9 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     }
 
     /**
-     * このメソッドが参照している変数を追加する．プラグインから呼ぶとランタイムエラー．
+     * このローカル領域に変数利用を追加する．プラグインから呼ぶとランタイムエラー．
      * 
-     * @param fieldUsage 追加するフィールド利用
+     * @param variableUsage 追加する変数利用
      */
     public final void addVariableUsage(final VariableUsageInfo<?> variableUsage) {
 
@@ -95,9 +95,9 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     }
 
     /**
-     * このローカルコープの直内の式を追加する．プラグインから呼ぶとランタイムエラー．
+     * このローカル領域に文を追加する．プラグインから呼ぶとランタイムエラー．
      * 
-     * @param innerBlock 追加する直内ブロック
+     * @param statement 追加する文
      */
     public void addStatement(final StatementInfo statement) {
 
@@ -111,6 +111,8 @@ public abstract class LocalSpaceInfo extends UnitInfo {
 
     /**
      * メソッドおよびコンストラクタ呼び出し一覧を返す
+     * 
+     * @return メソッドおよびコンストラクタ呼び出し
      */
     public Set<CallInfo> getCalls() {
         return Collections.unmodifiableSet(this.calls);
@@ -118,9 +120,9 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     }
 
     /**
-     * このメソッドが呼び出しているメソッドの一覧を返す
+     * このローカル領域が呼び出しているメソッドの一覧を返す
      * 
-     * @return このメソッドが呼び出しているメソッドの SortedSet
+     * @return このローカル領域が呼び出しているメソッドの SortedSet
      */
     public SortedSet<MethodInfo> getCallees() {
         final SortedSet<MethodInfo> callees = new TreeSet<MethodInfo>();
@@ -133,28 +135,37 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     }
 
     /**
-     * このメソッドで定義されているローカル変数の SortedSet を返す．
+     * このローカル領域で定義されているローカル変数の SortedSet を返す．
      * 
-     * @return このメソッドで定義されているローカル変数の SortedSet
+     * @return このローカル領域で定義されているローカル変数の SortedSet
      */
     public SortedSet<LocalVariableInfo> getLocalVariables() {
         return Collections.unmodifiableSortedSet(this.localVariables);
     }
 
     /**
-     * このメソッドのフィールド利用のSetを返す
+     * このローカル領域のフィールド利用のSetを返す
+     * 
+     * @return このローカル領域のフィールド利用のSet
      */
     public Set<FieldUsageInfo> getFieldUsages() {
         return Collections.unmodifiableSet(this.fieldUsages);
     }
 
     /**
-     * このメソッドのローカル変数利用のSetを返す
+     * このローカル領域のローカル変数利用のSetを返す
+     * 
+     * @return このローカル領域のローカル変数利用のSetを返す
      */
     public Set<LocalVariableUsageInfo> getLocalVariableUsages() {
         return Collections.unmodifiableSet(this.localVariableUsages);
     }
-    
+
+    /**
+     * このローカル領域の変数利用のSetを返す
+     * 
+     * @return このローカル領域の変数利用のSet
+     */
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
         variableUsages.addAll(this.getLocalVariableUsages());
@@ -164,7 +175,9 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     }
 
     /**
-     * このメソッドのフィールド利用のSetを返す
+     * このローカル領域のフィールド利用のSetを返す
+     * 
+     * @return このローカル領域のフィールド利用のSet
      */
     public Set<ParameterUsageInfo> getParameterUsages() {
         return Collections.unmodifiableSet(this.parameterUsages);

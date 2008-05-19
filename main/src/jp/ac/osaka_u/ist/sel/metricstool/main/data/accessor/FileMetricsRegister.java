@@ -18,7 +18,7 @@ public interface FileMetricsRegister {
      * 
      * @param fileInfo メトリクスの計測対象ファイル
      * @param value メトリクス値
-     * @throws 登録しようとしているメトリクスが既に登録されている場合にスローされる
+     * @throws MetricAlreadyRegisteredException 登録しようとしているメトリクスが既に登録されている場合にスローされる
      */
     void registMetric(FileInfo fileInfo, Number value) throws MetricAlreadyRegisteredException;
 }

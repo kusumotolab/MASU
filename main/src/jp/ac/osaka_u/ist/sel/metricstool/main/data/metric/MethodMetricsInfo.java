@@ -15,7 +15,7 @@ public final class MethodMetricsInfo extends MetricsInfo<MethodInfo> {
     /**
      * 計測対象オブジェクトを与えて初期化
      * 
-     * @param 計測対象メソッド
+     * @param method 計測対象メソッド
      */
     public MethodMetricsInfo(final MethodInfo method) {
         super(method);

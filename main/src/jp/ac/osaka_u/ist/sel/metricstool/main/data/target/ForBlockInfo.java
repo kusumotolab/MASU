@@ -14,6 +14,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
      * 
      * @param ownerClass 所属クラス
      * @param ownerMethod 所属メソッド
+     * @param outerSpace 外側のブロック
      * @param conditionalClause 条件節
      * @param fromLine 開始行
      * @param fromColumn 開始列

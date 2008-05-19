@@ -27,6 +27,7 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> {
     /**
      * フィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．
      * 
+     * @param modifiers 修飾子のセット
      * @param name フィールド名
      * @param type フィールドの型
      * @param definitionClass フィールドを定義しているクラス
@@ -83,20 +84,20 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> {
     /**
      * フィールドオブジェクトの順序を定義するメソッド．そのフィールドを定義しているクラスの順序に従う．同じクラス内に定義されている場合は，
      * 
+     * @param fieldInfo 比較対象オブジェクト
      * @return フィールドの順序関係
      */
-    public final int compareTo(final TargetFieldInfo fieldInfo) {
-
-        if (null == fieldInfo) {
-            throw new NullPointerException();
-        }
-
-        final ClassInfo classInfo = this.getOwnerClass();
-        final ClassInfo correspondClassInfo = this.getOwnerClass();
-        final int classOrder = classInfo.compareTo(correspondClassInfo);
-        return 0 != classOrder ? classOrder : super.compareTo(fieldInfo);
-    }
-
+    //    @Override
+    //    public final int compareTo(final TargetFieldInfo fieldInfo) {
+    //
+    //        if (null == fieldInfo) {
+    //            throw new NullPointerException();
+    //        }
+    //        final ClassInfo classInfo = this.getOwnerClass();
+    //        final ClassInfo correspondClassInfo = this.getOwnerClass();
+    //        final int classOrder = classInfo.compareTo(correspondClassInfo);
+    //        return 0 != classOrder ? classOrder : super.compareTo(fieldInfo);
+    //    }
     /**
      * このフィールドを定義しているクラスを返す
      * 

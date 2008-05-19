@@ -18,6 +18,7 @@ public final class TargetParameterInfo extends ParameterInfo {
      * @param modifiers 修飾子の Set
      * @param name 引数名
      * @param type 引数の型
+     * @param index 何番目の引数かを表す
      * @param definitionMethod 宣言しているメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列

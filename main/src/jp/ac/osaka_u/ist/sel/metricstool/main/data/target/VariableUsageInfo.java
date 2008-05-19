@@ -10,9 +10,10 @@ import java.util.TreeSet;
  * 変数使用を表す抽象クラス
  * 
  * @author higo
- *
+ * @param <T> 使用されている変数
  */
-public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInfo>> extends EntityUsageInfo {
+public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInfo>> extends
+        EntityUsageInfo {
 
     VariableUsageInfo(final T usedVariable, final boolean reference, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -57,11 +58,14 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
         variableUsage.add(this);
         return Collections.unmodifiableSortedSet(variableUsage);
     }
-    
+
     private final T usedVariable;
 
     private final boolean reference;
 
+    /**
+     * 空の変数利用のSetを表す
+     */
     public static final SortedSet<VariableUsageInfo<?>> EmptySet = Collections
             .unmodifiableSortedSet(new TreeSet<VariableUsageInfo<?>>());
 }

@@ -59,11 +59,10 @@ public class Settings {
     }
 
     /**
-     * 
-     * @return 解析対象ファイルの記述言語
-     * 
      * 解析対象ファイルの記述言語を返す
      * 
+     * @return 解析対象ファイルの記述言語
+     * @throws UnavailableLanguageException 利用不可能な言語が指定されている場合にスローされる
      */
     public static LANGUAGE getLanguage() throws UnavailableLanguageException {
 

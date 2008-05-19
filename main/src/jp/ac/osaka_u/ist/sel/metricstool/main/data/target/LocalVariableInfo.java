@@ -18,6 +18,7 @@ public final class LocalVariableInfo extends VariableInfo<LocalSpaceInfo> {
      * @param modifiers 修飾子の Set
      * @param name ローカル変数名
      * @param type ローカル変数の型
+     * @param definitionSpace この変数を定義しているブロック
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行

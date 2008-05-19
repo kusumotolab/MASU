@@ -37,6 +37,11 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo {
 
     }
 
+    /**
+     * ‚±‚ÌéŒ¾•¶‚ÅéŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ğ•Ô‚·
+     * 
+     * @return ‚±‚ÌéŒ¾•¶‚ÅéŒ¾‚³‚ê‚Ä‚¢‚é•Ï”
+     */
     public final LocalVariableInfo getDeclaredLocalVariable() {
         return this.declaredLocalVarialbe;
     }

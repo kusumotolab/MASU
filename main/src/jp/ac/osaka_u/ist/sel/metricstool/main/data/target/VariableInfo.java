@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * <li>位置情報</li>
  * 
  * @author higo
- * 
+ * @param <TUnit> この変数を宣言しているユニット 
  */
 public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo implements Modifier,
         Comparable<VariableInfo<TUnit>> {
@@ -27,7 +27,8 @@ public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo impl
      * 
      * @return 変数の順序関係
      */
-    public final int compareTo(final VariableInfo<TUnit> variable) {
+    @Override
+    public int compareTo(final VariableInfo<TUnit> variable) {
 
         if (null == variable) {
             throw new NullPointerException();

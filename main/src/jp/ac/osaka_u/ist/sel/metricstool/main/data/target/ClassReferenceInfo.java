@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+
 import java.util.Set;
 
 
@@ -16,7 +17,11 @@ public final class ClassReferenceInfo extends EntityUsageInfo {
     /**
      * 参照型を与えてオブジェクトを初期化
      * 
-     * @param referenceType　このクラス参照の参照型
+     * @param referenceType このクラス参照の参照型
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
     public ClassReferenceInfo(final ClassTypeInfo referenceType, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -58,7 +63,7 @@ public final class ClassReferenceInfo extends EntityUsageInfo {
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         return VariableUsageInfo.EmptySet;
     }
-    
+
     /**
      * このクラス参照の参照型を保存する変数
      */

@@ -13,13 +13,19 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.MetricTypeAndNamePluginComparator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 
-
+/**
+ * メトリクスを表す抽象クラス
+ * 
+ * @author higo
+ *
+ * @param <T> メトリクスの計測単位
+ */
 public abstract class MetricsInfo<T extends MetricMeasurable> implements MessageSource {
 
     /**
      * 計測対象オブジェクトを与えて初期化
      * 
-     * @param 計測対象オブジェクト
+     * @param measuredObject 計測対象オブジェクト
      */
     public MetricsInfo(final T measuredObject) {
 

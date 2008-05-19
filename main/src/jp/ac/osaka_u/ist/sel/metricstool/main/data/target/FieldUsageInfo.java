@@ -97,7 +97,10 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     private final EntityUsageInfo ownerUsage;
 
     /**
-     * 使用されているフィールド，使用の種類，使用されている位置情報を与えてインスタンスを取得
+     * 必要な情報を与えて，インスタンスを取得
+     * 
+     * @param ownerUsage 親エンティティ
+     * @param ownerType 親エンティティの型
      * @param usedField 使用されているフィールド
      * @param reference 参照である場合はtrue，代入である場合はfalse
      * @param fromLine 開始行

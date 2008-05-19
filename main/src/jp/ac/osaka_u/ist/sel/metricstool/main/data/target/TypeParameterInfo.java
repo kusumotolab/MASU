@@ -17,7 +17,8 @@ public class TypeParameterInfo implements TypeInfo {
      * 
      * @param ownerUnit 型パラメータを宣言しているユニット(クラス or メソッド)
      * @param name 型パラメータ名
-     * @param 継承している型
+     * @param index 何番目の型パラメータかを表す
+     * @param extendsType 継承している型
      */
     public TypeParameterInfo(final UnitInfo ownerUnit, final String name, final int index,
             final TypeInfo extendsType) {
@@ -59,7 +60,7 @@ public class TypeParameterInfo implements TypeInfo {
     /**
      * 型パラメータを宣言しているユニット(クラス or メソッド)を返す
      * 
-     * @param 型パラメータを宣言しているユニット(クラス or メソッド)
+     * @return  型パラメータを宣言しているユニット(クラス or メソッド)
      */
     public final UnitInfo getOwnerUnit() {
         return this.ownerUnit;

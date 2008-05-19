@@ -29,6 +29,11 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
      * 
      * @param modifiers 修飾子のSet
      * @param methodName メソッド名
+     * @param ownerClass 定義しているクラス
+     * @param privateVisible private可視か
+     * @param namespaceVisible 名前空間可視か
+     * @param inheritanceVisible 子クラスから可視か
+     * @param publicVisible public可視か
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
@@ -122,7 +127,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
      * このメソッドが，引数で与えられた情報を使って呼び出すことができるかどうかを判定する．
      * 
      * @param methodName メソッド名
-     * @param actualParameterTypes 引数の型のリスト
+     * @param actualParameters 実引数のリスト
      * @return 呼び出せる場合は true，そうでない場合は false
      */
     public final boolean canCalledWith(final String methodName,

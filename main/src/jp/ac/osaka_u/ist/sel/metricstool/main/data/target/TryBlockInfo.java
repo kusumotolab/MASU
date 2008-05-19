@@ -20,6 +20,7 @@ public final class TryBlockInfo extends BlockInfo {
      * 
      * @param ownerClass 所有クラス
      * @param ownerMethod 所有メソッド
+     * @param outerSpace 外側のブロック
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
