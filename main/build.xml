@@ -8,6 +8,8 @@
 	<property name="grammer.dir" value="${SRC.DIR}/jp/ac/osaka_u/ist/sel/metricstool/main/parse" />
 	
 	<property name="java15grammer" value="${grammer.dir}/java15.g" />
+	<property name="java14grammer" value="${grammer.dir}/java14.g" />
+	<property name="java13grammer" value="${grammer.dir}/java13.g" />
 	<!-- property name="cppgrammer" value="${grammer}/cpp.g" / -->
 	<!-- property name="csharpgrammer" value="${grammer}/sharp.g" / -->
 	
@@ -20,10 +22,17 @@
 		<antlr target="${java15grammer}">
 			<classpath path="${antlr.jar}" />
 		</antlr>
+		<antlr target="${java14grammer}">
+			<classpath path="${antlr.jar}" />
+		</antlr>
+		<antlr target="${java13grammer}">
+			<classpath path="${antlr.jar}" />
+		</antlr>
 	</target>
 		
 	<target name="compile" depends="antlr">
 		<mkdir dir="${CLS.DIR}" />
+<!--		<javac classpath="${jargp.jar};${antlr.jar}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="on" source="1.6" target="1.6" fork="yes" / -->
 		<javac classpath="${jargp.jar};${antlr.jar}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" />
 	</target>
 
