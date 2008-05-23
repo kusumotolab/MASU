@@ -32,8 +32,7 @@
 		
 	<target name="compile" depends="antlr">
 		<mkdir dir="${CLS.DIR}" />
-<!--		<javac classpath="${jargp.jar};${antlr.jar}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="on" source="1.6" target="1.6" fork="yes" / -->
-		<javac classpath="${jargp.jar};${antlr.jar}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" />
+		<javac classpath="${jargp.jar};${antlr.jar}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
 	</target>
 
 
