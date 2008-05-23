@@ -48,7 +48,9 @@
 	</target>
 	
 	<target name="package" depends="build">
-		<javadoc packagenames="jp.ac.osaka_u.ist.sel.metricstool.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" />
+		<javadoc packagenames="jp.ac.osaka_u.ist.sel.metricstool.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" encoding="Windows-31J">
+			<classpath path="${jargp.jar};${antlr.jar}" />
+		</javadoc>
 		
 		<zip destfile="${zip.name}" basedir="${PACKAGE.DIR}" />
 	</target>
