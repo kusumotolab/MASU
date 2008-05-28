@@ -1338,7 +1338,7 @@ public class MetricsTool {
             // 名前解決できた場合は登録
             if (variableUsage instanceof VariableUsageInfo) {
                 VariableUsageInfo<?> usage = (VariableUsageInfo<?>) variableUsage;
-                ownerMethod.addVariableUsage(usage);
+                localSpace.addVariableUsage(usage);
                 //usage.getUsedVariable().addUsage(usage);
 
                 // フィールドの場合は，利用関係情報を取る
@@ -1362,10 +1362,10 @@ public class MetricsTool {
 
             // メソッドおよびコンストラクタ呼び出しが解決できた場合
             if (memberCall instanceof MethodCallInfo) {
-                ownerMethod.addCall((MethodCallInfo) memberCall);
+                localSpace.addCall((MethodCallInfo) memberCall);
                 ((MethodCallInfo) memberCall).getCallee().addCaller(ownerMethod);
             } else if (memberCall instanceof ConstructorCallInfo) {
-                ownerMethod.addCall((ConstructorCallInfo) memberCall);
+                localSpace.addCall((ConstructorCallInfo) memberCall);
             }
         }
 

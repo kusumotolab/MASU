@@ -58,6 +58,10 @@ public class LocalVariableBuilder
 
         final UnresolvedVariableDeclarationStatementInfo declarationStatement = new UnresolvedVariableDeclarationStatementInfo(
                 var, initializationExpression);
+        declarationStatement.setFromLine(startLine);
+        declarationStatement.setFromColumn(startColumn);
+        declarationStatement.setToLine(endLine);
+        declarationStatement.setToColumn(endColumn);
         
         final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = this.buildDataManager.getCurrentLocalSpace();
         if(null != currentLocal) {
