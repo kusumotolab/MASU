@@ -37,7 +37,35 @@ public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> imp
         this.labeledStatement = null;
         this.resolvedInfo = null;
     }
+    
+    @Override
+    public final int compareTo(UnresolvedStatementInfo<LabelInfo> o) {
 
+        if (null == o) {
+            throw new NullPointerException();
+        }
+
+        if (this.getFromLine() < o.getFromLine()) {
+            return -1;
+        } else if (this.getFromLine() > o.getFromLine()) {
+            return 1;
+        } else if (this.getFromColumn() < o.getFromColumn()) {
+            return -1;
+        } else if (this.getFromColumn() > o.getFromColumn()) {
+            return 1;
+        } else if (this.getToLine() < o.getToLine()) {
+            return -1;
+        } else if (this.getToLine() > o.getToLine()) {
+            return 1;
+        } else if (this.getToColumn() < o.getToColumn()) {
+            return -1;
+        } else if (this.getToColumn() > o.getToColumn()) {
+            return 1;
+        }
+
+        return 0;
+    }
+    
     /**
      * 名前解決を行うメソッド
      */

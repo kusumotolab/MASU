@@ -83,21 +83,21 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
         }
 
         if (this.getFromLine() < o.getFromLine()) {
-            return 1;
+            return -1;
         } else if (this.getFromLine() > o.getFromLine()) {
-            return -1;
+            return 1;
         } else if (this.getFromColumn() < o.getFromColumn()) {
-            return 1;
+            return -1;
         } else if (this.getFromColumn() > o.getFromColumn()) {
-            return -1;
+            return 1;
         } else if (this.getToLine() < o.getToLine()) {
-            return 1;
+            return -1;
         } else if (this.getToLine() > o.getToLine()) {
-            return -1;
-        } else if (this.getToColumn() < o.getToColumn()) {
             return 1;
-        } else if (this.getToColumn() > o.getToColumn()) {
+        } else if (this.getToColumn() < o.getToColumn()) {
             return -1;
+        } else if (this.getToColumn() > o.getToColumn()) {
+            return 1;
         }
 
         return 0;

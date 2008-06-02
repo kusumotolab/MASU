@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
  *
  * @param <T> ‰ğŒˆÏ‚İ‚ÌŒ^
  */
-public interface UnresolvedStatementInfo<T extends StatementInfo> extends Resolvable<T>,
-        PositionSetting {
+public interface UnresolvedStatementInfo<T extends StatementInfo> extends Comparable<UnresolvedStatementInfo<T>>,
+        Resolvable<T>, PositionSetting {
 
 }

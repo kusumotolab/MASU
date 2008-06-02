@@ -56,6 +56,34 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
         this.ownerSwitchBlock = ownerSwitchBlock;
         this.label = null;
     }
+    
+    @Override
+    public final int compareTo(UnresolvedStatementInfo<CaseEntryInfo> o) {
+
+        if (null == o) {
+            throw new NullPointerException();
+        }
+
+        if (this.getFromLine() < o.getFromLine()) {
+            return -1;
+        } else if (this.getFromLine() > o.getFromLine()) {
+            return 1;
+        } else if (this.getFromColumn() < o.getFromColumn()) {
+            return -1;
+        } else if (this.getFromColumn() > o.getFromColumn()) {
+            return 1;
+        } else if (this.getToLine() < o.getToLine()) {
+            return -1;
+        } else if (this.getToLine() > o.getToLine()) {
+            return 1;
+        } else if (this.getToColumn() < o.getToColumn()) {
+            return -1;
+        } else if (this.getToColumn() > o.getToColumn()) {
+            return 1;
+        }
+
+        return 0;
+    }
 
     /**
      * ‚±‚Ì–¢‰ðŒˆ case ƒGƒ“ƒgƒŠ‚ð‰ðŒˆ‚·‚é
