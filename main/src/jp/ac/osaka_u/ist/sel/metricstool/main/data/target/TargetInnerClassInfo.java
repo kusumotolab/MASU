@@ -23,6 +23,7 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
      * @param instance インスタンスメンバーかどうか
+     * @param isInterface インタフェースかどうか
      * @param fileInfo このクラスを宣言しているファイル情報
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -32,12 +33,13 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
             final String className, final TargetClassInfo outerClass, final boolean privateVisible,
             final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final boolean instance, final FileInfo fileInfo,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final boolean publicVisible, final boolean instance, final boolean isInterface,
+            final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
         super(modifiers, namespace, className, privateVisible, namespaceVisible,
-                inheritanceVisible, publicVisible, instance, fileInfo, fromLine, fromColumn,
-                toLine, toColumn);
+                inheritanceVisible, publicVisible, instance, isInterface, fileInfo, fromLine,
+                fromColumn, toLine, toColumn);
 
         if (null == outerClass) {
             throw new NullPointerException();
@@ -58,6 +60,7 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
      * @param instance インスタンスメンバーかどうか
+     * @param isInterface インタフェースかどうか
      * @param fileInfo このクラスを宣言しているファイル情報
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -68,11 +71,12 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
             final String[] fullQualifiedName, final TargetClassInfo outerClass,
             final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
-            final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+            final boolean isInterface, final FileInfo fileInfo, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(modifiers, fullQualifiedName, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible, instance, fileInfo, fromLine, fromColumn, toLine, toColumn);
+                publicVisible, instance, isInterface, fileInfo, fromLine, fromColumn, toLine,
+                toColumn);
 
         if (null == outerClass) {
             throw new NullPointerException();

@@ -95,6 +95,7 @@ public class JavaBuildManager extends DefaultBuildDataManager{
     
     public void toInterface(){
         if (!classOrInterfaceStack.isEmpty()){
+            this.getCurrentClass().setIsInterface(true);
             classOrInterfaceStack.pop();
             classOrInterfaceStack.push(CLASS_OR_INTERFACE.INTERFACE);
         }

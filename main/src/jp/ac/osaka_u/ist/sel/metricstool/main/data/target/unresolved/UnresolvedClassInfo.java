@@ -70,6 +70,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         this.inheritanceVisible = false;
         this.namespaceVisible = false;
         this.publicVisible = false;
+        this.isInterface = false;
 
         this.instance = true;
 
@@ -495,6 +496,14 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
+     * インターフェースかどうかをセットする．
+     * @param isInterface インターフェースの場合は true，クラスの場合は false
+     */
+    public void setIsInterface(final boolean isInterface) {
+        this.isInterface = isInterface;
+    }
+
+    /**
      * この未解決クラス情報を解決する
      * 
      * @param usingClass 所属クラス，このメソッド呼び出しの際は null さセットされていると思われる．
@@ -535,10 +544,10 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
         this.resolvedInfo = null == this.outerClass ? new TargetClassInfo(modifiers,
                 fullQualifiedName, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible, instance, this.fileInfo, fromLine, fromColumn, toLine, toColumn)
-                : new TargetInnerClassInfo(modifiers, fullQualifiedName, usingClass,
-                        privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
-                        instance, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+                publicVisible, instance, this.isInterface, this.fileInfo, fromLine, fromColumn,
+                toLine, toColumn) : new TargetInnerClassInfo(modifiers, fullQualifiedName,
+                usingClass, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
+                instance, this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
 
         return this.resolvedInfo;
     }
@@ -637,5 +646,10 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * インスタンスメンバーかどうかを保存するための変数
      */
     private boolean instance;
+
+    /**
+     * インターフェースであるかどうかを保存するための変数
+     */
+    private boolean isInterface;
 
 }

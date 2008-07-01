@@ -43,6 +43,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
      * @param instance インスタンスメンバーかどうか
+     * @param isInterface インターフェースかどうか
      * @param fileInfo このクラスを宣言しているファイル情報
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -52,8 +53,8 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
             final String className, final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
-            final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+            final boolean isInterface, final FileInfo fileInfo, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(modifiers, namespace, className, fromLine, fromColumn, toLine, toColumn);
 
@@ -71,6 +72,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         this.namespaceVisible = namespaceVisible;
         this.inheritanceVisible = inheritanceVisible;
         this.publicVisible = publicVisible;
+        this.isInterface = isInterface;
 
         this.instance = instance;
 
@@ -88,6 +90,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * @param inheritanceVisible 子クラスから参照可能
      * @param publicVisible どこからでも参照可能
      * @param instance インスタンスメンバーかどうか
+     * @param isInterface インタフェースであるかどうか
      * @param fileInfo このクラスを宣言しているファイル情報
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -97,8 +100,8 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
             final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
-            final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+            final boolean isInterface, final FileInfo fileInfo, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(modifiers, fullQualifiedName, fromLine, fromColumn, toLine, toColumn);
 
@@ -116,6 +119,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         this.namespaceVisible = namespaceVisible;
         this.inheritanceVisible = inheritanceVisible;
         this.publicVisible = publicVisible;
+        this.isInterface = isInterface;
 
         this.instance = instance;
 
@@ -307,6 +311,24 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
     }
 
     /**
+     * インターフェースかどうか返す．
+     * 
+     * @return インターフェースの場合 true，クラスの場合 false
+     */
+    public final boolean isInterface() {
+        return this.isInterface;
+    }
+
+    /**
+     * クラスかどうか返す．
+     * 
+     *  @return クラスの場合 true，インターフェースの場合 false
+     */
+    public final boolean isClass() {
+        return !this.isInterface;
+    }
+
+    /**
      * このクラスを宣言しているファイル情報を返す
      * 
      * @return このクラスを宣言しているファイル情報
@@ -364,6 +386,11 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * インスタンスメンバーかどうかを保存するための変数
      */
     private final boolean instance;
+
+    /**
+     * インターフェースであるかどうかを保存するための変数
+     */
+    private final boolean isInterface;
 
     /**
      * このクラスを宣言しているファイル情報を保存するための変数
