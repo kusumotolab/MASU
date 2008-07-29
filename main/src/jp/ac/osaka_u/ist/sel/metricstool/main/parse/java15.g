@@ -1217,7 +1217,7 @@ statement
 	|	"throw"^ expression SEMI!
 
 	// synchronize a statement
-	|	"synchronized"^ conditionalClause compoundStatement
+	|	"synchronized"^ LPAREN! expression RPAREN! compoundStatement
 
 	// asserts (uncomment if you want 1.4 compatibility)
 	|	"assert"^ expression ( COLON! expression )? SEMI!

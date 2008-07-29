@@ -8,7 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedL
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedWhileBlockInfo;
 
 
-public class WhileBlockBuilder extends InnerBlockBuilder<WhileBlockInfo, UnresolvedWhileBlockInfo> {
+public class WhileBlockBuilder extends ConditionalBlockBuilder<WhileBlockInfo, UnresolvedWhileBlockInfo> {
 
     public WhileBlockBuilder(final BuildDataManager targetDataManager) {
         super(targetDataManager, new WhileBlockStateManager());
