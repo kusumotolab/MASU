@@ -1,9 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +39,6 @@ public abstract class ConstructorInfo extends CallableUnitInfo implements
         super(modifiers, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
                 publicVisible, fromLine, fromColumn, toLine, toColumn);
 
-        this.parameters = new LinkedList<ParameterInfo>();
     }
 
     /**
@@ -123,15 +120,6 @@ public abstract class ConstructorInfo extends CallableUnitInfo implements
         }
 
         this.parameters.addAll(parameters);
-    }
-
-    /**
-     * このコンストラクタの引数の List を返す．
-     * 
-     * @return このメソッドの引数の List
-     */
-    public List<ParameterInfo> getParameters() {
-        return Collections.unmodifiableList(this.parameters);
     }
 
     /**
@@ -274,10 +262,4 @@ public abstract class ConstructorInfo extends CallableUnitInfo implements
     public int getParameterNumber() {
         return this.parameters.size();
     }
-
-    /**
-     * 引数のリストの保存するための変数
-     */
-    protected final List<ParameterInfo> parameters;
-
 }

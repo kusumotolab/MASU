@@ -1,7 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
@@ -11,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  * @author higo
  * 
  */
-public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
+public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
 
     /**
      * プリミティブ型の各要素を表すための列挙型
@@ -110,6 +112,7 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
             public String getName() {
                 return "string";
             }
+
         };
 
         /**
@@ -208,7 +211,24 @@ public final class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
     /**
      * string 型を表すための定数
      */
-    public static final PrimitiveTypeInfo STRING = new PrimitiveTypeInfo(TYPE.STRING);
+    public static final PrimitiveTypeInfo STRING = new PrimitiveTypeInfo(TYPE.STRING) {
+        @Override
+        public boolean equals(TypeInfo typeInfo) {
+            
+            if(!super.equals(typeInfo)) {
+                LANGUAGE language = Settings.getLanguage();
+                if(language == LANGUAGE.JAVA13 || language == LANGUAGE.JAVA14 || language == LANGUAGE.JAVA15) {
+                    if(typeInfo.getTypeName().equals("java.lang.String")) {
+                        return true;
+                    }
+                }
+                
+                return true;
+            }
+            
+            return true;
+        }
+    };
 
     /**
      * {@link PrimitiveTypeInfo}のファクトリメソッド．

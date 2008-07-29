@@ -53,16 +53,29 @@ public abstract class DeclaredBlockStateManager extends
             //状態をスタックへ記録
             super.entered(event);
 
-            if (this.isDefinitionEvent(event)) {
-                //定義ノードなら状態遷移してイベントを発行
-                this.state = STATE.DECLARE;
-                this.fireStateChangeEvent(this.getDefinitionEnterEventType(), event);
-            } else if (this.isBlockToken(token) && STATE.DECLARE == this.state) {
-                //定義部にいる状態でブロックを表すノードが来れば状態遷移してイベントを発行
-                this.state = STATE.BLOCK;
-                this.fireStateChangeEvent(this.getBlockEnterEventType(), event);
-            }
+            fireStateChangeEnterEvent(event);
         }
+    }
+    
+    /**
+     * 状態変化トリガであるASTノードの中に入ったときの処理を行う．
+     * イベントトリガとブロックの解析状態に応じた状態遷移イベントを発行する
+     * @param event ASTビジットイベント
+     * @return 何らかのイベントが発行された場合true，何もイベントが発行されなかった場合false;
+     */
+    protected boolean fireStateChangeEnterEvent(final AstVisitEvent event) {
+        if (this.isDefinitionEvent(event)) {
+            //定義ノードなら状態遷移してイベントを発行
+            this.state = STATE.DECLARE;
+            this.fireStateChangeEvent(this.getDefinitionEnterEventType(), event);
+        } else if (this.isBlockToken(event.getToken()) && STATE.DECLARE == this.state) {
+            //定義部にいる状態でブロックを表すノードが来れば状態遷移してイベントを発行
+            this.state = STATE.BLOCK;
+            this.fireStateChangeEvent(this.getBlockEnterEventType(), event);
+        } else {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -87,14 +100,27 @@ public abstract class DeclaredBlockStateManager extends
             //スタックの一番上の状態に戻す
             super.exited(event);
 
-            if (this.isDefinitionEvent(event)) {
-                //定義ノードならイベントを発行
-                this.fireStateChangeEvent(this.getDefinitionExitEventType(), event);
-            } else if (this.isBlockToken(token) && STATE.DECLARE == this.state) {
-                //定義部にいる状態でブロックを表すノードが来ればイベントを発行
-                this.fireStateChangeEvent(this.getBlockExitEventType(), event);
-            }
+            fireStateChangeExitEvent(event);
         }
+    }
+    
+    /**
+     * 状態変化トリガであるASTノードの中から出たの処理を行う．
+     * イベントトリガとブロックの解析状態に応じた状態遷移イベントを発行する
+     * @param event ASTビジットイベント
+     * @return 何らかのイベントが発行された場合true，何もイベントが発行されなかった場合false;
+     */
+    protected boolean fireStateChangeExitEvent(final AstVisitEvent event) {
+        if (this.isDefinitionEvent(event)) {
+            //定義ノードならイベントを発行
+            this.fireStateChangeEvent(this.getDefinitionExitEventType(), event);
+        } else if (this.isBlockToken(event.getToken()) && STATE.DECLARE == this.state) {
+            //定義部にいる状態でブロックを表すノードが来ればイベントを発行
+            this.fireStateChangeEvent(this.getBlockExitEventType(), event);
+        } else {
+            return false;
+        }
+        return true;
     }
 
     /**

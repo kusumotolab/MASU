@@ -27,6 +27,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
@@ -55,6 +57,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
@@ -1312,6 +1316,8 @@ public class MetricsTool {
             ownerMethod = (CallableUnitInfo) localSpace;
         } else if (localSpace instanceof BlockInfo) {
             ownerMethod = ((BlockInfo) localSpace).getOwnerMethod();
+        } else if (localSpace instanceof ConditionalClauseInfo) {
+            ownerMethod = ((ConditionalClauseInfo) localSpace).getOwnerBlock().getOwnerMethod();
         } else {
             ownerMethod = null;
             assert false : "Here shouldn't be reached!";
@@ -1375,6 +1381,13 @@ public class MetricsTool {
 
             // 未解決メソッド情報内の利用関係を解決
             if (unresolvedStatement instanceof UnresolvedBlockInfo) {
+                if (unresolvedStatement instanceof UnresolvedConditionalBlockInfo) {
+                    UnresolvedConditionalClauseInfo unresolvedClause = ((UnresolvedConditionalBlockInfo<?>) unresolvedStatement)
+                            .getConditionalClause();
+                    this.addReferenceAssignmentCallRelation(unresolvedClause, unresolvedClassInfo,
+                            classInfoManager, fieldInfoManager, methodInfoManager);
+                }
+
                 this.addReferenceAssignmentCallRelation(
                         (UnresolvedBlockInfo<?>) unresolvedStatement, unresolvedClassInfo,
                         classInfoManager, fieldInfoManager, methodInfoManager);

@@ -50,7 +50,7 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
         final UnresolvedConditionalClauseInfo buildClause = this.buildingClauseStack.pop();
         
         if (null != buildClause){
-            this.buildManager.endClassDefinition();
+            this.buildManager.endConditionalClause();
         }
     }
     

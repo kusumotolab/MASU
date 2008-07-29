@@ -217,7 +217,7 @@ tokens {
 	STATIC_IMPORT; ENUM_DEF; ENUM_CONSTANT_DEF; FOR_EACH_CLAUSE; ANNOTATION_DEF; ANNOTATIONS;
 	ANNOTATION; ANNOTATION_MEMBER_VALUE_PAIR; ANNOTATION_FIELD_DEF; ANNOTATION_ARRAY_INIT;
 	TYPE_ARGUMENTS; TYPE_ARGUMENT; TYPE_PARAMETERS; TYPE_PARAMETER; WILDCARD_TYPE;
-	TYPE_UPPER_BOUNDS; TYPE_LOWER_BOUNDS;
+	TYPE_UPPER_BOUNDS; TYPE_LOWER_BOUNDS; COND_CLAUSE;
 }
 
 {
@@ -1175,7 +1175,7 @@ statement
 	|	IDENT c:COLON^ {#c.setType(LABELED_STAT);} statement
 
 	// If-else statement
-	|	"if"^ LPAREN! expression RPAREN! statement
+	|	"if"^ conditionalClause statement
 		(
 			// CONFLICT: the old "dangling-else" problem...
 			// ANTLR generates proper code matching
@@ -1191,10 +1191,10 @@ statement
 	|	forStatement
 
 	// While statement
-	|	"while"^ LPAREN! expression RPAREN! statement
+	|	"while"^ conditionalClause statement
 
 	// do-while statement
-	|	"do"^ statement "while"! LPAREN! expression RPAREN! SEMI!
+	|	"do"^ statement "while"! conditionalClause SEMI!
 
 	// get out of a loop (or switch)
 	|	"break"^ (IDENT)? SEMI!
@@ -1206,7 +1206,7 @@ statement
 	|	"return"^ (expression)? SEMI!
 
 	// switch/case statement
-	|	"switch"^ LPAREN! expression RPAREN! LCURLY!
+	|	"switch"^ conditionalClause LCURLY!
 			( casesGroup )*
 		RCURLY!
 
@@ -1217,7 +1217,7 @@ statement
 	|	"throw"^ expression SEMI!
 
 	// synchronize a statement
-	|	"synchronized"^ LPAREN! expression RPAREN! compoundStatement
+	|	"synchronized"^ conditionalClause compoundStatement
 
 	// asserts (uncomment if you want 1.4 compatibility)
 	|	"assert"^ expression ( COLON! expression )? SEMI!
@@ -1225,7 +1225,12 @@ statement
 	// empty statement
 	|	s:SEMI {#s.setType(EMPTY_STAT);}
 	;
-
+	
+conditionalClause
+	:	LPAREN! ex:expression RPAREN!
+		{#conditionalClause = #(#[COND_CLAUSE,"COND_CLAUSE"], ex);}
+	;
+	
 elseStatement
 	:	"else"^ statement
 	;	

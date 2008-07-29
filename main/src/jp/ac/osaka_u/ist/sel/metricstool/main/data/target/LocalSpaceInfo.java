@@ -166,8 +166,8 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * 
      * @return ‚±‚Ìƒ[ƒJƒ‹—Ìˆæ‚Ì•Ï”—˜—p‚ÌSet
      */
-    public Set<VariableUsageInfo<?>> getVariableUsages() {
-        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
+    public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
+        final SortedSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages = new TreeSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
         variableUsages.addAll(this.getLocalVariableUsages());
         variableUsages.addAll(this.getFieldUsages());
         variableUsages.addAll(this.getParameterUsages());

@@ -41,6 +41,8 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
         this.inheritanceVisible = inheritanceVisible;
         this.publicVisible = publicVisible;
 
+        this.parameters = new LinkedList<ParameterInfo>();
+
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.unresolvedUsage = new HashSet<UnresolvedEntityUsageInfo<?>>();
 
@@ -61,6 +63,15 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
         }
 
         this.typeParameters.add(typeParameter);
+    }
+
+    /**
+     * このメソッドの引数の List を返す．
+     * 
+     * @return このメソッドの引数の List
+     */
+    public List<ParameterInfo> getParameters() {
+        return Collections.unmodifiableList(this.parameters);
     }
 
     /**
@@ -170,6 +181,11 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 型パラメータを保存する変数
      */
     private final List<TypeParameterInfo> typeParameters;
+
+    /**
+     * 引数のリストの保存するための変数
+     */
+    protected final List<ParameterInfo> parameters;
 
     /**
      * 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しなどを保存するための変数

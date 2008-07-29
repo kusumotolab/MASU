@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.parse;
 
 
 import antlr.CommonAST;
-import antlr.CommonHiddenStreamToken;
 import antlr.Token;
 import antlr.collections.AST;
 

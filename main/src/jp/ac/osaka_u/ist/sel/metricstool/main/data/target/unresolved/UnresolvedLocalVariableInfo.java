@@ -86,7 +86,7 @@ public final class UnresolvedLocalVariableInfo
         final String variableName = this.getName();
         final UnresolvedTypeInfo unresolvedVariableType = this.getType();
         TypeInfo variableType = unresolvedVariableType.resolve(usingClass, usingMethod,
-                classInfoManager, null, null);
+                classInfoManager, fieldInfoManager, methodInfoManager);
         assert variableType != null : "resolveTypeInfo returned null!";
         if (variableType instanceof UnknownTypeInfo) {
             if (unresolvedVariableType instanceof UnresolvedClassReferenceInfo) {

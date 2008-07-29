@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
-
 /**
  * {@link AstToken}のアダプタクラス.
  * AstTokenで宣言されている全てのメソッドについて，falseを返すだけのデフォルト実装を持つ.
@@ -18,11 +17,11 @@ public class AstTokenAdapter implements AstToken {
      * @throws IllegalArgumentException textが空文字列の場合
      */
     public AstTokenAdapter(final String text) {
-        if (null == text){
+        if (null == text) {
             throw new NullPointerException("text is null");
         }
-        
-        if (text.length() == 0){
+
+        if (text.length() == 0) {
             throw new IllegalArgumentException("text must not be empty string.");
         }
         this.text = text;
@@ -43,17 +42,21 @@ public class AstTokenAdapter implements AstToken {
     public boolean isBlock() {
         return false;
     }
-    
+
     public boolean isBlockDefinition() {
         return false;
     }
-    
-	public boolean isBlockName() {
-		return false;
-	}
-	
-	public boolean isBuiltinType(){
+
+    public boolean isBlockName() {
+        return false;
+    }
+
+    public boolean isBuiltinType() {
         return isPrimitiveType() || isVoidType();
+    }
+
+    public boolean isConditionalClause() {
+        return false;
     }
 
     public boolean isClassBlock() {
@@ -63,8 +66,8 @@ public class AstTokenAdapter implements AstToken {
     public boolean isClassDefinition() {
         return false;
     }
-    
-    public boolean isConstant(){
+
+    public boolean isConstant() {
         return false;
     }
 
@@ -75,15 +78,15 @@ public class AstTokenAdapter implements AstToken {
     public boolean isExpression() {
         return false;
     }
-    
+
     public boolean isExpressionStatement() {
         return false;
     }
-    
+
     public boolean isLabeledStatement() {
         return false;
     }
-    
+
     public boolean isSList() {
         return false;
     }
@@ -123,7 +126,7 @@ public class AstTokenAdapter implements AstToken {
     public boolean isStaticInitializerDefinition() {
         return false;
     }
-    
+
     public boolean isMethodParameterDefinition() {
         return false;
     }
@@ -159,47 +162,47 @@ public class AstTokenAdapter implements AstToken {
     public boolean isPrimitiveType() {
         return false;
     }
-    
-    public boolean isTypeArgument(){
+
+    public boolean isTypeArgument() {
         return false;
     }
-    
-    public boolean isTypeArguments(){
+
+    public boolean isTypeArguments() {
         return false;
     }
 
     public boolean isTypeDescription() {
         return false;
     }
-    
-    public boolean isTypeLowerBoundsDescription(){
+
+    public boolean isTypeLowerBoundsDescription() {
         return false;
     }
 
     public boolean isTypeParameterDefinition() {
         return false;
     }
-    
-    public boolean isTypeUpperBoundsDescription(){
+
+    public boolean isTypeUpperBoundsDescription() {
         return false;
     }
-    
-    public boolean isTypeWildcard(){
+
+    public boolean isTypeWildcard() {
         return false;
     }
 
     public boolean isVoidType() {
         return false;
     }
-    
+
     public boolean isCaseGroupDefinition() {
         return false;
     }
-    
+
     public boolean isEntryDefinition() {
         return false;
     }
-    
+
     public boolean isCase() {
         return false;
     }
@@ -243,7 +246,7 @@ public class AstTokenAdapter implements AstToken {
     public boolean isWhile() {
         return false;
     }
-    
+
     public boolean isSynchronized() {
         return false;
     }
@@ -251,22 +254,21 @@ public class AstTokenAdapter implements AstToken {
     public boolean isBreak() {
         return false;
     }
-    
+
     public boolean isReturn() {
         return false;
     }
-    
+
     @Override
     public boolean isThrow() {
         return false;
     }
-    
+
     @Override
     public String toString() {
         return this.text;
     }
 
-    
     /**
      * このトークンの文字列
      */

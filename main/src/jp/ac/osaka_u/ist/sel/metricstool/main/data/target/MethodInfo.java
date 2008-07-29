@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -55,8 +54,6 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
 
         this.methodName = methodName;
         this.returnType = null;
-
-        this.parameters = new LinkedList<ParameterInfo>();
 
         this.callers = new TreeSet<CallableUnitInfo>();
         this.overridees = new TreeSet<MethodInfo>();
@@ -230,10 +227,12 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
 
                 // PrimitiveTypeInfo#equals を使って等価性の判定．
                 // 等しくない場合は該当しない
+                // プリミティブタイプStringでdummmyTypeの型名もStringなら等価
+                // TODO クラス名がStringであるがjava.lang.Stringではない場合，判定ミスがおこる．
                 if (actualParameterType.equals(dummyParameter.getType())) {
                     continue NEXT_PARAMETER;
                 }
-
+                
                 return false;
 
                 // 実引数が配列型の場合
@@ -403,15 +402,6 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
     }
 
     /**
-     * このメソッドの引数の List を返す．
-     * 
-     * @return このメソッドの引数の List
-     */
-    public List<ParameterInfo> getParameters() {
-        return Collections.unmodifiableList(this.parameters);
-    }
-
-    /**
      * このメソッドを呼び出しているメソッドまたはコンストラクタを追加する．プラグインから呼ぶとランタイムエラー．
      * 
      * @param caller 追加する呼び出すメソッド
@@ -493,11 +483,6 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
      * 返り値の型を保存するための変数
      */
     private TypeInfo returnType;
-
-    /**
-     * 引数のリストの保存するための変数
-     */
-    protected final List<ParameterInfo> parameters;
 
     /**
      * このメソッドを呼び出しているメソッド一覧を保存するための変数

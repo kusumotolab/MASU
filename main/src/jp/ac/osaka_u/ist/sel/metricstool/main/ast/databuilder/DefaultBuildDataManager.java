@@ -96,10 +96,9 @@ public class DefaultBuildDataManager implements BuildDataManager {
     }
 
     public void addMethodCall(UnresolvedCallInfo<? extends CallInfo> memberCall) {
-        if (!this.callableUnitStack.isEmpty() && MODE.METHOD == this.mode) {
-            this.callableUnitStack.peek().addCall(memberCall);
-        } else if (!this.blockStack.isEmpty() && MODE.INNER_BLOCK == this.mode) {
-            this.blockStack.peek().addCall(memberCall);
+        final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocalSpace = this.getCurrentLocalSpace();
+        if(null != currentLocalSpace) {
+            currentLocalSpace.addCall(memberCall);
         }
     }
 

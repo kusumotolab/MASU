@@ -66,6 +66,12 @@ public interface AstToken {
     public boolean isClassBlock();
     
     /**
+     * トークンが条件文の条件節を表すかどうか返す．
+     * @return 条件節定義部を表すトークンならtrue
+     */
+    public boolean isConditionalClause();
+    
+    /**
      * トークンが定数を表すかどうかを返す．
      * @return 定数を表すトークンならtrue
      */

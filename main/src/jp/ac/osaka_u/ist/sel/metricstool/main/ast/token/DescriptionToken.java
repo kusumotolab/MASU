@@ -10,6 +10,16 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 public class DescriptionToken extends AstTokenAdapter {
 
     /**
+     * 条件文の条件節を表す定数インスタンス
+     */
+    public static final DescriptionToken CONDITIONAL_CLAUSE = new DescriptionToken("CONDITIONAL_CLAUSE") {
+        @Override
+        public boolean isConditionalClause() {
+            return true;
+        }
+    };
+    
+    /**
      * 式記述部を表す定数インスタンス.
      */
     public static final DescriptionToken EXPRESSION = new DescriptionToken("EXPRESSION") {
