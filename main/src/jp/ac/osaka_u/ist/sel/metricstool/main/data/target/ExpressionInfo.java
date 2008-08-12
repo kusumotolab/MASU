@@ -17,5 +17,5 @@ public interface ExpressionInfo extends Position, Comparable<ExpressionInfo> {
      * 
      * @return ®“à‚Å‚Ì•Ï”‚Ìg—p
      */
-    public Set<VariableUsageInfo<?>> getVariableUsages();
+    public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages();
 }

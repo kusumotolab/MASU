@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Set;
+import java.util.TreeSet;
 
 
 /**
@@ -65,9 +66,11 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo {
     }
 
     @Override
-    public Set<VariableUsageInfo<?>> getVariableUsages() {
-        return this.isInitialized() ? this.getInitializationExpression().getVariableUsages()
-                : VariableUsageInfo.EmptySet;
+    public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
+        Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> usages = this
+                .isInitialized() ? this.getInitializationExpression().getVariableUsages()
+                : new TreeSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
+        return usages;
     }
 
     /**
