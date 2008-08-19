@@ -18,12 +18,12 @@ import antlr.CommonAST;
  *
  * This grammar is in the PUBLIC DOMAIN
  */
-class GeneratedCSharpRecognizer extends Parser;
+class CSharpRecognizer extends Parser;
 
 options {
 	ASTLabelType=CommonAST;
 	k = 2;                           	// two token lookahead
-	exportVocab=GeneratedCSharp;       	// Call its vocabulary "GeneratedCSharp"
+	exportVocab=CSharp;       	// Call its vocabulary "GeneratedCSharp"
 	codeGenMakeSwitchThreshold = 2;  	// Some optimizations
 	codeGenBitsetTestThreshold = 3;
 	defaultErrorHandler = true;     	// Don't generate parser error handlers
@@ -39,7 +39,8 @@ tokens {
 	IMPORT; UNARY_MINUS; UNARY_PLUS; CASE_GROUP; ELIST; FOR_INIT; FOR_CONDITION;
 	FOR_ITERATOR; EMPTY_STAT; FINAL="final"; ABSTRACT="abstract";
 	STRICTFP="strictfp"; SUPER_CTOR_CALL; CTOR_CALL; PROPERTY_DEF; ENUM_DEF; STRUCT_DEF;
-	SCTOR_DEF;
+	SCTOR_DEF; EXPR_STATE; FIELD_DEF; NAME; ENUM_CONSTANT_DEF; LOCAL_PARAMETER_DEF;
+	ARRAY_INSTANTIATION; COND_CLAUSE; LOCAL_VARIABLE_DEF;
 }
 
 
@@ -223,9 +224,9 @@ endregion
 
 
 enumDefinition![CommonAST modifiers]
-	:	"enum"^ IDENT (COLON type)?
+	:	"enum"^ n:name (COLON type)?
 		LCURLY
-		  ( IDENT (COMMA)? )* 
+		  ( name (COMMA)? )* 
 		RCURLY SEMI
 	;
 
@@ -241,7 +242,8 @@ structDefinition![CommonAST modifiers]
 
 // Definition of a cSharp class
 classDefinition![CommonAST modifiers]
-	:	"class" IDENT
+	:	"class" 
+		n:name
 		// it _might_ have a superclass...
 		sc:superClassClause
 		// it might implement some interfaces...
@@ -249,7 +251,7 @@ classDefinition![CommonAST modifiers]
 		// now parse the body of the class
 		cb:classBlock
 		{#classDefinition = #(#[CLASS_DEF,"CLASS_DEF"],
-							   modifiers,IDENT,sc,ic,cb);}
+							   modifiers,n,sc,ic,cb);}
 	;
 
 
@@ -260,13 +262,14 @@ superClassClause!
 
 // Definition of a cSharp Interface
 interfaceDefinition![CommonAST modifiers]
-	:	"interface" IDENT
+	:	"interface"
+		n:name
 		// it might extend some other interfaces
 		ie:interfaceExtends
 		// now parse the body of the interface (looks like a class...)
 		cb:classBlock
 		{#interfaceDefinition = #(#[INTERFACE_DEF,"INTERFACE_DEF"],
-									modifiers,IDENT,ie,cb);}
+									modifiers,n,ie,cb);}
 	;
 
 // This is the body of a class.  You can have fields and extra semicolons,
@@ -338,7 +341,7 @@ field!
 			(
 				modifiers
 			
-				IDENT   // the name of the method
+				n:name   // the name of the method
 
 				// parse the formal parameter declarations.
 				LPAREN param:parameterDeclarationList RPAREN
@@ -350,12 +353,12 @@ field!
 				(tc:throwsClause)?
 
 				( s2: compoundStatement | SEMI )
-				{#field = (#(#[METHOD_DEF,"METHOD_DEF"], mods, #(#[TYPE,"TYPE"],rt),IDENT,LPAREN, param, RPAREN, tc, s2));}
+				{#field = (#(#[METHOD_DEF,"METHOD_DEF"], mods, #(#[TYPE,"TYPE"],rt),n,LPAREN, param, RPAREN, tc, s2));}
 				
     				
-			|	v:variableDefinitions[#mods,#t] SEMI
+			|	f:fieldDefinitions[#mods,#t] SEMI
 //				{#field = #(#[VARIABLE_DEF,"VARIABLE_DEF"], v);}
-				{#field = #v;}
+				{#field = #f;}
 				
 				
 			)
@@ -408,9 +411,19 @@ propinnerBody
    ;
 enumBody
    :	en: LCURLY
-	   	( IDENT (COMMA)? )* 
+	   	( enumConstant (COMMA)? )* 
 	   RCURLY SEMI
    ;
+   
+enumConstant!
+	:	i:name
+		{#enumConstant = #([ENUM_CONSTANT_DEF, "ENUM_CONSTANT_DEF"], i);}
+	;
+   
+name
+    :   IDENT
+    	{#name = #(#[NAME,"NAME"],#name);}
+    ;   
 
 explicitConstructorInvocation
     :   (	options {
@@ -428,6 +441,20 @@ explicitConstructorInvocation
 			{#lp3.setType(SUPER_CTOR_CALL);}
 		)
     ;
+    
+fieldDefinitions[CommonAST mods, CommonAST t]
+	:	fieldDeclarator[(CommonAST) getASTFactory().dupTree(mods),
+						   (CommonAST) getASTFactory().dupTree(t)]
+		(	COMMA
+			fieldDeclarator[(CommonAST) getASTFactory().dupTree(mods),
+							   (CommonAST) getASTFactory().dupTree(t)]
+		)*
+	;
+	
+fieldDeclarator![CommonAST mods, CommonAST t]
+	:	id:name d:declaratorBrackets[t] v:varInitializer
+		{#fieldDeclarator = #(#[FIELD_DEF,"FIELD_DEF"], mods, #(#[TYPE,"TYPE"],d), id, v);}
+	;
 
 variableDefinitions[CommonAST mods, CommonAST t]
 	:	variableDeclarator[(CommonAST) getASTFactory().dupTree(mods),
@@ -437,14 +464,14 @@ variableDefinitions[CommonAST mods, CommonAST t]
 							   (CommonAST) getASTFactory().dupTree(t)]
 		)*
 	;
-
+	
 /** Declaration of a variable.  This can be a class/instance variable,
  *   or a local variable in a method
  * It can also include possible initialization.
  */
 variableDeclarator![CommonAST mods, CommonAST t]
-	:	id:IDENT d:declaratorBrackets[t] v:varInitializer
-		{#variableDeclarator = #(#[VARIABLE_DEF,"VARIABLE_DEF"], mods, #(#[TYPE,"TYPE"],d), id, v);}
+	:	id:name d:declaratorBrackets[t] v:varInitializer
+		{#variableDeclarator = #(#[VARIABLE_DEF,"LOCAL_VARIABLE_DEF"], mods, #(#[TYPE,"TYPE"],d), id, v);}
 	;
 
 declaratorBrackets[CommonAST typ]
@@ -491,7 +518,7 @@ initializer
 //   for the method.
 //   This also watches for a list of exception classes in a "throws" clause.
 ctorHead
-	:	IDENT  // the name of the method
+	:	name  // the name of the method
 
 		// parse the formal parameter declarations.
 		LPAREN parameterDeclarationList RPAREN
@@ -505,18 +532,18 @@ ctorHead
 // This is the header of a method.  It includes the name and parameters
 //   for the method.
 structHead
-	:	IDENT  // the name of the method
+	:	n:name  // the name of the method
 
 		// parse the formal parameter declarations.
 		LPAREN parameterDeclarationList RPAREN
 	;
 
 propertyHead
-	:	(LBRACK RBRACK)? IDENT // name of the method
+	:	(LBRACK RBRACK)? n:name // name of the method
 	;
 
 enumHead
-	: "enum"^ IDENT (COLON type)? 
+	: "enum"^ n:name (COLON type)? 
 	;
 
 // This is a list of exception classes that the method is declared to throw
@@ -534,7 +561,7 @@ parameterDeclarationList
 
 // A formal parameter.
 parameterDeclaration!
-	:	pm:parameterModifier t:typeSpec[false] id:IDENT
+	:	pm:parameterModifier t:typeSpec[false] id:name
 		pd:declaratorBrackets[#t]
 		{#parameterDeclaration = #(#[PARAMETER_DEF,"PARAMETER_DEF"],
 									pm, #([TYPE,"TYPE"],pd), id);}
@@ -587,7 +614,8 @@ traditionalStatement
 	// An expression statement.  This could be a method call,
 	// assignment statement, or any other expression evaluated for
 	// side-effects.
-	|	(expression)=> expression SEMI
+	|	(expression)=> ex:expression SEMI
+		{#traditionalStatement = #(#[EXPR_STATE,"EXPR_STATE"], ex);}
 
 	// class definition
 	|	m:modifiers! classDefinition[#m]
@@ -596,7 +624,7 @@ traditionalStatement
 	|	IDENT c:COLON^ {#c.setType(LABELED_STAT);} statement
 
 	// If-else statement
-	|	"if"^ LPAREN expression RPAREN statement
+	|	"if"^ conditionalClause statement
 		(
 			// CONFLICT: the old "dangling-else" problem...
 			//           ANTLR generates proper code matching
@@ -625,10 +653,10 @@ traditionalStatement
 			statement
 
 	// While statement
-	|	"while"^ LPAREN expression RPAREN statement
+	|	"while"^ conditionalClause statement
 
 	// do-while statement
-	|	"do"^ statement "while"! LPAREN expression RPAREN SEMI
+	|	"do"^ statement "while"! conditionalClause SEMI
 
 	// get out of a loop (or switch)
 	|	"break"^ (IDENT)? SEMI
@@ -640,7 +668,7 @@ traditionalStatement
 	|	"return"^ (expression)? SEMI
 
 	// switch/case statement
-	|	"switch"^ LPAREN expression RPAREN LCURLY
+	|	"switch"^ conditionalClause LCURLY
 			( casesGroup )*
 		RCURLY
 
@@ -660,6 +688,11 @@ traditionalStatement
 	|	"goto"^ IDENT SEMI
 	
 	 
+	;
+	
+conditionalClause
+	:	LPAREN! ex:expression RPAREN!
+		{#conditionalClause = #(#[COND_CLAUSE,"COND_CLAUSE"], ex);}
 	;
 
 elseStatement
@@ -720,7 +753,8 @@ tryBlock
 
 // an exception handler
 handler
-	:	"catch"^ LPAREN parameterDeclaration RPAREN compoundStatement
+	:	"catch"^ LPAREN pd:parameterDeclaration RPAREN compoundStatement
+		{#pd.setType(LOCAL_PARAMETER_DEF);}
 	;
 
 finallyHandler
@@ -1046,7 +1080,7 @@ newArrayDeclarator
 				warnWhenFollowAmbig = false;
 			}
 		:
-			lb:LBRACK^ {#lb.setType(ARRAY_DECLARATOR);}
+			lb:LBRACK^ {#lb.setType(ARRAY_INSTANTIATION);}
 				(expression)? ((COMMA) (expression)?)*
 			RBRACK!
 		)+
@@ -1065,10 +1099,10 @@ constant
 //----------------------------------------------------------------------------
 // The csharp Scanner
 //----------------------------------------------------------------------------
-class GeneratedCSharpLexer extends Lexer;
+class CSharpLexer extends Lexer;
 
 options {
-	exportVocab=GeneratedCSharp; // call the vocabulary "cSharp"
+	exportVocab=CSharp; // call the vocabulary "cSharp"
 	testLiterals=false;        // don't automatically test for literals
 	k=4;                       // four characters of lookahead
 	charVocabulary='\u0003'..'\uFFFF';
