@@ -61,7 +61,7 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
         final int toColumn = this.getToColumn();
 
         // コンストラクタのシグネチャを取得
-        final List<EntityUsageInfo> actualParameters = super.resolveParameters(usingClass,
+        final List<EntityUsageInfo> actualParameters = super.resolveArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final List<ReferenceTypeInfo> typeArguments = super.resolveTypeArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -75,7 +75,7 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
 
         this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType, fromLine,
                 fromColumn, toLine, toColumn);
-        this.resolvedInfo.addParameters(actualParameters);
+        this.resolvedInfo.addArguments(actualParameters);
         this.resolvedInfo.addTypeArguments(typeArguments);
         return this.resolvedInfo;
     }

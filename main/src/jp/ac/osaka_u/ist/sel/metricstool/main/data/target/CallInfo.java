@@ -25,38 +25,38 @@ public abstract class CallInfo extends EntityUsageInfo {
     CallInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
-        this.parameters = new LinkedList<EntityUsageInfo>();
+        this.arguments = new LinkedList<EntityUsageInfo>();
         this.typeArguments = new LinkedList<ReferenceTypeInfo>();
     }
 
     /**
      * このメソッド呼び出しの実引数を追加．プラグインからは呼び出せない．
      * 
-     * @param parameter 追加する実引数
+     * @param argument 追加する実引数
      */
-    public final void addParameter(final EntityUsageInfo parameter) {
+    public final void addArgument(final EntityUsageInfo argument) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == parameter) {
+        if (null == argument) {
             throw new NullPointerException();
         }
 
-        this.parameters.add(parameter);
+        this.arguments.add(argument);
     }
 
     /**
      * この呼び出しの実引数を追加．プラグインからは呼び出せない．
      * 
-     * @param parameters 追加する実引数
+     * @param arguments 追加する実引数
      */
-    public final void addParameters(final List<EntityUsageInfo> parameters) {
+    public final void addArguments(final List<EntityUsageInfo> arguments) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == parameters) {
+        if (null == arguments) {
             throw new NullPointerException();
         }
 
-        this.parameters.addAll(parameters);
+        this.arguments.addAll(arguments);
     }
 
     /**
@@ -94,20 +94,20 @@ public abstract class CallInfo extends EntityUsageInfo {
      * 
      * @return
      */
-    public List<EntityUsageInfo> getParameters() {
-        return Collections.unmodifiableList(this.parameters);
+    public List<EntityUsageInfo> getArguments() {
+        return Collections.unmodifiableList(this.arguments);
     }
 
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
-        for (EntityUsageInfo parameter : this.getParameters()) {
+        for (EntityUsageInfo parameter : this.getArguments()) {
             variableUsages.addAll(parameter.getVariableUsages());
         }
         return Collections.unmodifiableSortedSet(variableUsages);
     }
 
-    private final List<EntityUsageInfo> parameters;
+    private final List<EntityUsageInfo> arguments;
 
     private final List<ReferenceTypeInfo> typeArguments;
 }

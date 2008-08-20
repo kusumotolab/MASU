@@ -51,7 +51,7 @@ public class ConstructorCallBuilder extends ExpressionBuilder {
         for (int i = startIndex; i < elements.length; i++) {
             final ExpressionElement element = elements[i];
             if (element instanceof IdentifierElement) {
-                constructorCall.addParameter(((IdentifierElement) element)
+                constructorCall.addArgument(((IdentifierElement) element)
                         .resolveAsReferencedVariable(this.buildDataManager));
             } else if (element instanceof TypeArgumentElement) {
                 TypeArgumentElement typeArgument = (TypeArgumentElement) element;
@@ -61,7 +61,7 @@ public class ConstructorCallBuilder extends ExpressionBuilder {
                 constructorCall.addTypeArgument((UnresolvedReferenceTypeInfo) typeArgument
                         .getType());
             } else {
-                constructorCall.addParameter(element.getUsage());
+                constructorCall.addArgument(element.getUsage());
             }
         }
     }

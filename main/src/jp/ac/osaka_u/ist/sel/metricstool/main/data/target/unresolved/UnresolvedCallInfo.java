@@ -41,7 +41,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
-        this.parameterTypes = new LinkedList<UnresolvedEntityUsageInfo<?>>();
+        this.arguments = new LinkedList<UnresolvedEntityUsageInfo<?>>();
 
     }
 
@@ -65,7 +65,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
      * 
      * @param typeInfo
      */
-    public final void addParameter(final UnresolvedEntityUsageInfo<?> typeInfo) {
+    public final void addArgument(final UnresolvedEntityUsageInfo<?> typeInfo) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -73,7 +73,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
             throw new NullPointerException();
         }
 
-        this.parameterTypes.add(typeInfo);
+        this.arguments.add(typeInfo);
     }
 
     /**
@@ -81,8 +81,8 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
      * 
      * @return 引数の List
      */
-    public final List<UnresolvedEntityUsageInfo<?>> getParameters() {
-        return Collections.unmodifiableList(this.parameterTypes);
+    public final List<UnresolvedEntityUsageInfo<?>> getArguments() {
+        return Collections.unmodifiableList(this.arguments);
     }
 
     /**
@@ -99,14 +99,14 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
      * @param unresolvedParameters
      * @return
      */
-    protected final List<EntityUsageInfo> resolveParameters(final TargetClassInfo usingClass,
+    protected final List<EntityUsageInfo> resolveArguments(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         //　解決済み実引数を格納するための変数
         final List<EntityUsageInfo> parameters = new LinkedList<EntityUsageInfo>();
 
-        for (final UnresolvedEntityUsageInfo<?> unresolvedParameter : this.getParameters()) {
+        for (final UnresolvedEntityUsageInfo<?> unresolvedParameter : this.getArguments()) {
 
             EntityUsageInfo parameter = unresolvedParameter.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
@@ -176,7 +176,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
     /**
      * 引数を保存するための変数
      */
-    protected List<UnresolvedEntityUsageInfo<?>> parameterTypes;
+    protected List<UnresolvedEntityUsageInfo<?>> arguments;
 
     /**
      * エラーメッセージ出力用のプリンタ
