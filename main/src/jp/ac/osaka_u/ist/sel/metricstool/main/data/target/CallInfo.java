@@ -26,6 +26,7 @@ public abstract class CallInfo extends EntityUsageInfo {
 
         super(fromLine, fromColumn, toLine, toColumn);
         this.parameters = new LinkedList<EntityUsageInfo>();
+        this.typeArguments = new LinkedList<ReferenceTypeInfo>();
     }
 
     /**
@@ -59,6 +60,36 @@ public abstract class CallInfo extends EntityUsageInfo {
     }
 
     /**
+     * このメソッド呼び出しの型引数を追加．プラグインからは呼び出せない
+     * 
+     * @param typeArgument 追加する型引数
+     */
+    public final void addTypeArgument(final ReferenceTypeInfo typeArgument) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == typeArgument) {
+            throw new NullPointerException();
+        }
+
+        this.typeArguments.add(typeArgument);
+    }
+
+    /**
+     * この呼び出しの型引数を追加．プラグインからは呼び出せない．
+     * 
+     * @param typeArguments 追加する型引数
+     */
+    public final void addTypeArguments(final List<ReferenceTypeInfo> typeArguments) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == typeArguments) {
+            throw new NullPointerException();
+        }
+
+        this.typeArguments.addAll(typeArguments);
+    }
+
+    /**
      * この呼び出しの実引数のListを返す．
      * 
      * @return
@@ -66,15 +97,17 @@ public abstract class CallInfo extends EntityUsageInfo {
     public List<EntityUsageInfo> getParameters() {
         return Collections.unmodifiableList(this.parameters);
     }
-    
+
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
-        for(EntityUsageInfo parameter : this.getParameters()) {
+        for (EntityUsageInfo parameter : this.getParameters()) {
             variableUsages.addAll(parameter.getVariableUsages());
         }
         return Collections.unmodifiableSortedSet(variableUsages);
     }
 
     private final List<EntityUsageInfo> parameters;
+
+    private final List<ReferenceTypeInfo> typeArguments;
 }

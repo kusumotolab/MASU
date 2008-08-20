@@ -16,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
@@ -80,6 +81,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
         final String name = this.getName();
         final List<EntityUsageInfo> actualParameters = super.resolveParameters(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final List<ReferenceTypeInfo> typeArguments = super.resolveTypeArguments(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         // 親の型を解決
         final UnresolvedEntityUsageInfo<?> unresolvedOwnerUsage = this.getOwnerClassType();
@@ -118,6 +121,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, unknownMethod,
                         fromLine, fromColumn, toLine, toColumn);
                 this.resolvedInfo.addParameters(actualParameters);
+                this.resolvedInfo.addTypeArguments(typeArguments);                
                 return this.resolvedInfo;
             }
         }
@@ -129,6 +133,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, unknownMethod, fromLine,
                     fromColumn, toLine, toColumn);
             this.resolvedInfo.addParameters(actualParameters);
+            this.resolvedInfo.addTypeArguments(typeArguments);
             return this.resolvedInfo;
 
             // 親がクラス型だった場合
@@ -152,6 +157,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                             this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage,
                                     availableMethod, fromLine, fromColumn, toLine, toColumn);
                             this.resolvedInfo.addParameters(actualParameters);
+                            this.resolvedInfo.addTypeArguments(typeArguments);
                             return this.resolvedInfo;
                         }
                     }
@@ -175,6 +181,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                         this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, methodInfo,
                                 fromLine, fromColumn, toLine, toColumn);
                         this.resolvedInfo.addParameters(actualParameters);
+                        this.resolvedInfo.addTypeArguments(typeArguments);
                         return this.resolvedInfo;
                     }
 
@@ -205,6 +212,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, methodInfo, fromLine,
                         fromColumn, toLine, toColumn);
                 this.resolvedInfo.addParameters(actualParameters);
+                this.resolvedInfo.addTypeArguments(typeArguments);
                 return this.resolvedInfo;
             }
 
@@ -228,6 +236,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, methodInfo, fromLine,
                         fromColumn, toLine, toColumn);
                 this.resolvedInfo.addParameters(actualParameters);
+                this.resolvedInfo.addTypeArguments(typeArguments);
                 return this.resolvedInfo;
             }
 
@@ -255,6 +264,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                     this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, methodInfo,
                             fromLine, fromColumn, toLine, toColumn);
                     this.resolvedInfo.addParameters(actualParameters);
+                    this.resolvedInfo.addTypeArguments(typeArguments);
                     return this.resolvedInfo;
                 }
                 break;
@@ -277,6 +287,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, methodInfo, fromLine,
                         fromColumn, toLine, toColumn);
                 this.resolvedInfo.addParameters(actualParameters);
+                this.resolvedInfo.addTypeArguments(typeArguments);
                 return this.resolvedInfo;
 
             default:

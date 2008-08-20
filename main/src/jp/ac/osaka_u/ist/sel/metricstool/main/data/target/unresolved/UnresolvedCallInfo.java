@@ -13,6 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
@@ -145,6 +146,26 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
         }
 
         return parameters;
+    }
+
+    protected final List<ReferenceTypeInfo> resolveTypeArguments(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        //Å@âåàçœÇ›å^à¯êîÇäiî[Ç∑ÇÈÇΩÇﬂÇÃïœêî
+        final List<ReferenceTypeInfo> typeArguments = new LinkedList<ReferenceTypeInfo>();
+
+        for (final UnresolvedReferenceTypeInfo unresolvedTypeArgument : this.getTypeArguments()) {
+
+            TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+
+            assert typeArgument != null : "resolveEntityUsage returned null!";
+
+            typeArguments.add((ReferenceTypeInfo) typeArgument);
+        }
+
+        return typeArguments;
     }
 
     /**

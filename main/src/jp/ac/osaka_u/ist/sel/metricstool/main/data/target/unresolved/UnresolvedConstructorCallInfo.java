@@ -63,6 +63,8 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
         // コンストラクタのシグネチャを取得
         final List<EntityUsageInfo> actualParameters = super.resolveParameters(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final List<ReferenceTypeInfo> typeArguments = super.resolveTypeArguments(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         //　コンストラクタの型を解決
         final TypeInfo referenceType = this.getReferenceType().resolve(usingClass, usingMethod,
@@ -73,8 +75,8 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
 
         this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType, fromLine,
                 fromColumn, toLine, toColumn);
-        // TODO 型パラメータの情報を追加
         this.resolvedInfo.addParameters(actualParameters);
+        this.resolvedInfo.addTypeArguments(typeArguments);
         return this.resolvedInfo;
     }
 
