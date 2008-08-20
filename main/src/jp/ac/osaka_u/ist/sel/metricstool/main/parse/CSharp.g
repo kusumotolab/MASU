@@ -66,10 +66,14 @@ compilationUnit
 // Package statement: "package" followed by an identifier.
 packageDefinition
 	options {defaultErrorHandler = true;} // let ANTLR handle errors
-	:	p:"namespace"^ {#p.setType(PACKAGE_DEF);} identifier LCURLY (typeDefinition)* RCURLY
+	:	packageHead LCURLY! (typeDefinition)* RCURLY!
 	
 	;
-
+	
+packageHead
+	: 
+		p:"namespace"^ {#p.setType(PACKAGE_DEF);} identifier
+	;
 
 // Using statement: using followed by a package or class name
 usingDefinition
@@ -225,9 +229,9 @@ endregion
 
 enumDefinition![CommonAST modifiers]
 	:	"enum"^ n:name (COLON type)?
-		LCURLY
+		LCURLY!
 		  ( name (COMMA)? )* 
-		RCURLY SEMI
+		RCURLY! SEMI
 	;
 
 structDefinition![CommonAST modifiers]
@@ -275,17 +279,17 @@ interfaceDefinition![CommonAST modifiers]
 // This is the body of a class.  You can have fields and extra semicolons,
 // That's about it (until you see what a field is...)
 classBlock
-	:	LCURLY
-			(((region)*  field) | SEMI )*
-		RCURLY
+	:	LCURLY!
+			(((region)*  field) | SEMI! )*
+		RCURLY!
 		{#classBlock = #([OBJBLOCK, "OBJBLOCK"], #classBlock);}
 	;
 
 // This is the body of a struct.  You can have fields and extra semicolons,
 structBlock
-	:	LCURLY
+	:	LCURLY!
 			(((region)*  field) | SEMI )*
-		RCURLY
+		RCURLY!
 		{#structBlock = #([OBJBLOCK, "OBJBLOCK"], #structBlock);}
 	;
 
@@ -344,7 +348,7 @@ field!
 				n:name   // the name of the method
 
 				// parse the formal parameter declarations.
-				LPAREN param:parameterDeclarationList RPAREN
+				LPAREN! param:parameterDeclarationList RPAREN!
 
 				rt:declaratorBrackets[#t] 
 
@@ -353,7 +357,7 @@ field!
 				(tc:throwsClause)?
 
 				( s2: compoundStatement | SEMI )
-				{#field = (#(#[METHOD_DEF,"METHOD_DEF"], mods, #(#[TYPE,"TYPE"],rt),n,LPAREN, param, RPAREN, tc, s2));}
+				{#field = (#(#[METHOD_DEF,"METHOD_DEF"], mods, #(#[TYPE,"TYPE"],rt),n, param, tc, s2));}
 				
     				
 			|	f:fieldDefinitions[#mods,#t] SEMI
@@ -377,42 +381,42 @@ field!
 	;
 	
 constructorBody
-    :   lc:LCURLY^ {#lc.setType(SLIST);}
+    :   lc:LCURLY^ {#lc.setType(BLOCK);}
 		// Predicate might be slow but only checked once per constructor def
 		// not for general methods.
 		(	(explicitConstructorInvocation) => explicitConstructorInvocation
 		|
 		)
         (statement)*
-        RCURLY
+        RCURLY!
     ;
 
 structBody
-    :   lc:LCURLY^ {#lc.setType(SLIST);}
+    :   lc:LCURLY^ {#lc.setType(BLOCK);}
 		// Predicate might be slow but only checked once per constructor def
 		// not for general methods.
 		(	(explicitConstructorInvocation) => explicitConstructorInvocation
 		|
 		)
         (statement)*
-        RCURLY
+        RCURLY!
     ;
     
 propertyBody
-    :   pc: LCURLY^ {#pc.setType(SLIST);}
+    :   pc: LCURLY^ {#pc.setType(BLOCK);}
     		(   
     		   (propinnerBody)*
    		)
-	    RCURLY
+	    RCURLY!
 	;
 propinnerBody
    : pib :
-   	IDENT (LCURLY (statement)* RCURLY)?  (SEMI)?
+   	IDENT (LCURLY (statement)* RCURLY!)?  (SEMI)?
    ;
 enumBody
-   :	en: LCURLY
+   :	en: LCURLY!
 	   	( enumConstant (COMMA)? )* 
-	   RCURLY SEMI
+	   RCURLY! SEMI!
    ;
    
 enumConstant!
@@ -430,14 +434,14 @@ explicitConstructorInvocation
 				
 				generateAmbigWarnings=false;
 			}
-		:	"this"! lp1:LPAREN^ argList RPAREN SEMI
+		:	"this"! lp1:LPAREN^ argList RPAREN! SEMI!
 			{#lp1.setType(CTOR_CALL);}
 
-	    |   "base"! lp2:LPAREN^ argList RPAREN SEMI
+	    |   "base"! lp2:LPAREN^ argList RPAREN! SEMI!
 			{#lp2.setType(SUPER_CTOR_CALL);}
 
 			// (new Outer()).super()  (create enclosing instance)
-		|	primaryExpression DOT! "base"! lp3:LPAREN^ argList RPAREN SEMI
+		|	primaryExpression DOT! "base"! lp3:LPAREN^ argList RPAREN! SEMI!
 			{#lp3.setType(SUPER_CTOR_CALL);}
 		)
     ;
@@ -471,7 +475,7 @@ variableDefinitions[CommonAST mods, CommonAST t]
  */
 variableDeclarator![CommonAST mods, CommonAST t]
 	:	id:name d:declaratorBrackets[t] v:varInitializer
-		{#variableDeclarator = #(#[VARIABLE_DEF,"LOCAL_VARIABLE_DEF"], mods, #(#[TYPE,"TYPE"],d), id, v);}
+		{#variableDeclarator = #(#[LOCAL_VARIABLE_DEF,"LOCAL_VARIABLE_DEF"], mods, #(#[TYPE,"TYPE"],d), id, v);}
 	;
 
 declaratorBrackets[CommonAST typ]
@@ -521,7 +525,7 @@ ctorHead
 	:	name  // the name of the method
 
 		// parse the formal parameter declarations.
-		LPAREN parameterDeclarationList RPAREN
+		LPAREN! parameterDeclarationList RPAREN!
 		
 		(COLON^ "base" LPAREN! parameterDeclarationList RPAREN!)?
 
@@ -535,7 +539,7 @@ structHead
 	:	n:name  // the name of the method
 
 		// parse the formal parameter declarations.
-		LPAREN parameterDeclarationList RPAREN
+		LPAREN! parameterDeclarationList RPAREN!
 	;
 
 propertyHead
@@ -584,10 +588,10 @@ parameterModifier
 compoundStatement
 	: 
 		
-		lc:LCURLY^  {#lc.setType(SLIST);} 		
+		lc:LCURLY^  {#lc.setType(BLOCK);} 		
 			// include the (possibly-empty) list of statements
 			((region)*  statement)* 			
-		RCURLY
+		RCURLY!
 		
 		
 	;
@@ -609,12 +613,12 @@ traditionalStatement
 	// statements.  Must backtrack to be sure.  Could use a semantic
 	// predicate to test symbol table to see what the type was coming
 	// up, but that's pretty hard without a symbol table ;)
-	|	(declaration)=> declaration SEMI
+	|	(declaration)=> declaration SEMI!
 
 	// An expression statement.  This could be a method call,
 	// assignment statement, or any other expression evaluated for
 	// side-effects.
-	|	(expression)=> ex:expression SEMI
+	|	(expression)=> ex:expression SEMI!
 		{#traditionalStatement = #(#[EXPR_STATE,"EXPR_STATE"], ex);}
 
 	// class definition
@@ -638,54 +642,54 @@ traditionalStatement
 
 	// For statement
 	|	"for"^
-			LPAREN
-				forInit SEMI   // initializer
-				forCond	SEMI   // condition test
+			LPAREN!
+				forInit SEMI!   // initializer
+				forCond	SEMI!   // condition test
 				forIter         // updater
-			RPAREN
+			RPAREN!
 			statement                     // statement to loop over
 			
 	// Foreach statement
 	|	"foreach"^
-			LPAREN
+			LPAREN!
 				type IDENT "in" identifier
-			RPAREN
+			RPAREN!
 			statement
 
 	// While statement
 	|	"while"^ conditionalClause statement
 
 	// do-while statement
-	|	"do"^ statement "while"! conditionalClause SEMI
+	|	"do"^ statement "while"! conditionalClause SEMI!
 
 	// get out of a loop (or switch)
-	|	"break"^ (IDENT)? SEMI
+	|	"break"^ (IDENT)? SEMI!
 
 	// do next iteration of a loop
-	|	"continue"^ (IDENT)? SEMI
+	|	"continue"^ (IDENT)? SEMI!
 
 	// Return an expression
-	|	"return"^ (expression)? SEMI
+	|	"return"^ (expression)? SEMI!
 
 	// switch/case statement
-	|	"switch"^ conditionalClause LCURLY
+	|	"switch"^ conditionalClause lc:LCURLY^ {#lc.setType(BLOCK);}
 			( casesGroup )*
-		RCURLY
+		RCURLY!
 
 	// exception try-catch block
 	|	tryBlock
 
 	// throw an exception
-	|	"throw"^ expression SEMI
+	|	"throw"^ expression SEMI!
 
 	// synchronize a statement
-	|	"synchronized"^ LPAREN expression RPAREN compoundStatement
+	|	"synchronized"^ LPAREN! expression RPAREN! compoundStatement
 
 	// empty statement
-	|	s:SEMI {#s.setType(EMPTY_STAT);}
+	|	s:SEMI! {#s.setType(EMPTY_STAT);}
 	
 	// goto statement
-	|	"goto"^ IDENT SEMI
+	|	"goto"^ IDENT SEMI!
 	
 	 
 	;
@@ -753,7 +757,7 @@ tryBlock
 
 // an exception handler
 handler
-	:	"catch"^ LPAREN pd:parameterDeclaration RPAREN compoundStatement
+	:	"catch"^ LPAREN! pd:parameterDeclaration RPAREN! compoundStatement
 		{#pd.setType(LOCAL_PARAMETER_DEF);}
 	;
 
@@ -928,14 +932,14 @@ unaryExpressionNotPlusMinus
 			}
 		:	// If typecast is built in type, must be numeric operand
 			// Also, no reason to backtrack if type keyword like int, float...
-			lpb:LPAREN^ {#lpb.setType(TYPECAST);} builtInTypeSpec[true] RPAREN
+			lpb:LPAREN^ {#lpb.setType(TYPECAST);} builtInTypeSpec[true] RPAREN!
 			unaryExpression
 
 			// Have to backtrack to see if operator follows.  If no operator
 			// follows, it's a typecast.  No semantic checking needed to parse.
 			// if it _looks_ like a cast, it _is_ a cast; else it's a "(expr)"
 		|	(LPAREN classTypeSpec[true] RPAREN unaryExpressionNotPlusMinus)=>
-			lp:LPAREN^ {#lp.setType(TYPECAST);} classTypeSpec[true] RPAREN
+			lp:LPAREN^ {#lp.setType(TYPECAST);} classTypeSpec[true] RPAREN!
 			unaryExpressionNotPlusMinus
 
 		|	postfixExpression
@@ -973,7 +977,7 @@ postfixExpression
 		
 		|	lp:LPAREN^ {#lp.setType(METHOD_CALL);}
 				argList
-			RPAREN
+			RPAREN!
 		
 		
 		)*
@@ -995,7 +999,7 @@ primaryExpression
 	|	"this"
 	|	"null"
 	|	newExpression
-	|	LPAREN assignmentExpression RPAREN
+	|	LPAREN! assignmentExpression RPAREN!
 	|	"base"
 		// look for int.class and int[].class
 	|	builtInType
@@ -1054,7 +1058,7 @@ primaryExpression
  */
 newExpression
 	:	"new"^ type
-		(	LPAREN argList RPAREN (classBlock)?
+		(	LPAREN! argList RPAREN! (classBlock)?
 
 			
 

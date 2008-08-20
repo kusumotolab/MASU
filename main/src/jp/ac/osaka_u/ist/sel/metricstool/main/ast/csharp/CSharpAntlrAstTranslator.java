@@ -112,7 +112,7 @@ public class CSharpAntlrAstTranslator implements AstTokenTranslator<AST> {
             result = DefinitionToken.CONSTRUCTOR_DEFINITION;
             break;
         case CSharpTokenTypes.LOCAL_VARIABLE_DEF:
-            result = DefinitionToken.LOCALVARIABLE_DEFINITION;
+            result = DefinitionToken.LOCAL_VARIABLE_DEFINITION;
             break;
         case CSharpTokenTypes.LOCAL_PARAMETER_DEF:
             result = DefinitionToken.LOCAL_PARAMETER_DEFINITION;

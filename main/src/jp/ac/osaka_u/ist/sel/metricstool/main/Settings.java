@@ -76,6 +76,8 @@ public class Settings {
             // return LANGUAGE.C_PLUS_PLUS;
             // }else if (language.equalsIgnoreCase("csharp")) {
             // return LANGUAGE.C_SHARP
+        } else if (language.equalsIgnoreCase("csharp")) {
+            return LANGUAGE.CSHARP;
         }
 
         throw new UnavailableLanguageException("\"" + language

@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.csharp.CSharpAntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java13AntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java14AntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java15AntlrAstTranslator;
@@ -76,6 +77,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CSharpLexer;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CSharpRecognizer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CommonASTWithLineNumber;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14Lexer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14Parser;
@@ -195,6 +198,10 @@ public class MetricsTool {
             visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
                     new Java13AntlrAstTranslator()));
             break;
+        case CSHARP:
+            visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
+                    new CSharpAntlrAstTranslator()));
+            break;
         default:
             assert false : "here shouldn't be reached!";
         }
@@ -265,7 +272,25 @@ public class MetricsTool {
 
                         fileInfo.setLOC(java14lexer.getLine());
                         break;
+                    case CSHARP:
+                        final CSharpLexer csharpLexer = new CSharpLexer(new FileInputStream(name));
+                        csharpLexer.setTabSize(1);
+                        final CSharpRecognizer csharpParser = new CSharpRecognizer(csharpLexer);
 
+                        final ASTFactory cshaprFactory = new MasuAstFactory();
+                        cshaprFactory.setASTNodeClass(CommonASTWithLineNumber.class);
+
+                        csharpParser.setASTFactory(cshaprFactory);
+
+                        csharpParser.compilationUnit();
+                        targetFile.setCorrectSytax(true);
+
+                        if (visitorManager != null) {
+                            visitorManager.visitStart(csharpParser.getAST());
+                        }
+
+                        fileInfo.setLOC(csharpLexer.getLine());
+                        break;
                     default:
                         assert false : "here shouldn't be reached!";
                     }

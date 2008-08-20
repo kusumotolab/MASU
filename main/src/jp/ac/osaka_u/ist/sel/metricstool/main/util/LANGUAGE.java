@@ -99,6 +99,36 @@ public enum LANGUAGE {
             return ".";
         }
     },
+    
+    /**
+     * Java言語 バージョン1.3用
+     */
+    CSHARP {
+        @Override
+        public boolean isObjectOrientedLanguage() {
+            return true;
+        }
+
+        @Override
+        public String getExtension() {
+            return ".cs";
+        }
+
+        @Override
+        public String getName() {
+            return "CSharp";
+        }
+
+        @Override
+        public String getIdentifierName() {
+            return "CSharp";
+        }
+
+        @Override
+        public String getNamespaceDelimiter() {
+            return ".";
+        }
+    },
 
     //    C_PLUS_PLUS {
     //        @Override
