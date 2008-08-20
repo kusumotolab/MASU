@@ -1206,7 +1206,7 @@ statement
 	|	"return"^ (expression)? SEMI!
 
 	// switch/case statement
-	|	"switch"^ conditionalClause LCURLY!
+	|	"switch"^ conditionalClause lc:LCURLY^ {#lc.setType(BLOCK);}
 			( casesGroup )*
 		RCURLY!
 

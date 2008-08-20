@@ -72,8 +72,8 @@ public class DefinitionToken extends AstTokenAdapter {
     /**
      * ローカル変数定義部を表す定数インスタンス.
      */
-    public static final DefinitionToken LOCALVARIABLE_DEFINITION = new DefinitionToken(
-            "LOCALVARIABLE_DEFINITION") {
+    public static final DefinitionToken LOCAL_VARIABLE_DEFINITION = new DefinitionToken(
+            "LOCAL_VARIABLE_DEFINITION") {
         @Override
         public boolean isLocalVariableDefinition() {
             return true;

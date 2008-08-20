@@ -12,7 +12,7 @@ public class SwitchBlockStateManager extends InnerBlockStateManager {
         ENTER_ENTRY_DEF, EXIT_ENTRY_DEF, ENTER_CASE_ENTRY, EXIT_CASE_ENTYR, ENTER_DEFAULT_ENTRY, EXIT_DEFAULT_ENTRY
     }
 
-    @Override
+/*    @Override
     public void entered(final AstVisitEvent event) {
         final AstToken token = event.getToken();
 
@@ -44,8 +44,46 @@ public class SwitchBlockStateManager extends InnerBlockStateManager {
                 }
             }
         }
+    }*/
+
+    @Override
+    protected boolean fireStateChangeEnterEvent(final AstVisitEvent event) {
+        // 既にイベントが発行済みの場合，何もせず終了
+        if (super.fireStateChangeEnterEvent(event)) {
+            return true;
+        }
+
+        final AstToken token = event.getToken();
+        if (this.isEntryDefinitionToken(token)){
+            final SWITCH_BLOCK_STATE_CHANGE stateChangeType = getEntryEnterEvent(token);
+            if (null != stateChangeType) {
+                this.fireStateChangeEvent(stateChangeType, event);
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
+    @Override
+    protected boolean fireStateChangeExitEvent(AstVisitEvent event) {
+        // 既にイベントが発行済みの場合，何もせず終了
+        if (super.fireStateChangeExitEvent(event)) {
+            return true;
+        }
+        
+        final AstToken token = event.getToken();
+        if (this.isEntryDefinitionToken(token)) {
+            final SWITCH_BLOCK_STATE_CHANGE stateChangeType = getEntryExitEvent(token);
+            if (null != stateChangeType) {
+                this.fireStateChangeEvent(stateChangeType, event);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     @Override
     protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
         return super.isStateChangeTriggerEvent(event) || isEntryDefinitionToken(event.getToken());

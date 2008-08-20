@@ -109,7 +109,7 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             result = DefinitionToken.CONSTRUCTOR_DEFINITION;
             break;
         case Java15TokenTypes.LOCAL_VARIABLE_DEF:
-            result = DefinitionToken.LOCALVARIABLE_DEFINITION;
+            result = DefinitionToken.LOCAL_VARIABLE_DEFINITION;
             break;
         case Java15TokenTypes.LOCAL_PARAMETER_DEF:
             result = DefinitionToken.LOCAL_PARAMETER_DEFINITION;
