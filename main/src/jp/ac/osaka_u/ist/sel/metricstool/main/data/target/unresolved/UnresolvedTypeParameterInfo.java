@@ -5,6 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
@@ -18,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo {
+public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo<TypeParameterInfo> {
     // TODO 多言語対応時にUnresolvedTypeInfoに変更すべき
 
     /**
@@ -30,7 +31,8 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
      * @param extendsType 未解決基底クラス型
      */
     public UnresolvedTypeParameterInfo(final UnresolvedUnitInfo<?> ownerUnit, final String name,
-            final int index, final UnresolvedTypeInfo extendsType) {
+            final int index,
+            final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> extendsType) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == ownerUnit) || (null == name)) {
@@ -64,7 +66,7 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
      * @return 名前解決された情報
      * @throws NotResolvedException
      */
-    public final TypeInfo getResolved() {
+    public final TypeParameterInfo getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
@@ -84,9 +86,9 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
      * 
      * @return 解決済みのエンティティ
      */
-    public TypeInfo resolve(final TargetClassInfo usingClass, final CallableUnitInfo usingMethod,
-            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
-            final MethodInfoManager methodInfoManager) {
+    public TypeParameterInfo resolve(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -104,7 +106,8 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
 
         if (this.hasExtendsType()) {
 
-            final UnresolvedTypeInfo unresolvedExtendsType = this.getExtendsType();
+            final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> unresolvedExtendsType = this
+                    .getExtendsType();
             final TypeInfo extendsType = unresolvedExtendsType.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
 
@@ -150,7 +153,7 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
      * 
      * @return 基底クラスの未解決型情報
      */
-    public final UnresolvedTypeInfo getExtendsType() {
+    public final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> getExtendsType() {
         return this.extendsType;
     }
 
@@ -176,7 +179,7 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo 
     /**
      * 基底クラスを保存するための変数
      */
-    private final UnresolvedTypeInfo extendsType;
+    private final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> extendsType;
 
     /**
      * 型パラメータのインデックスを保存するための変数

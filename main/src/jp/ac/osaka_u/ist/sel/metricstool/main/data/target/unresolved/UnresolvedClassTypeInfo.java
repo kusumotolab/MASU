@@ -14,6 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
@@ -27,7 +28,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
+public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<ClassTypeInfo> {
 
     /**
      * 利用可能な名前空間名，参照名を与えて初期化
@@ -46,7 +47,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
 
         this.availableNamespaces = availableNamespaces;
         this.referenceName = referenceName;
-        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
+        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>>();
     }
 
     /**
@@ -61,7 +62,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
     /**
      * この未解決クラス型の解決済みの型を返す
      */
-    public TypeInfo getResolved() {
+    public ClassTypeInfo getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
@@ -70,9 +71,9 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
         return this.resolvedInfo;
     }
 
-    public TypeInfo resolve(final TargetClassInfo usingClass, final CallableUnitInfo usingMethod,
-            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
-            final MethodInfoManager methodInfoManager) {
+    public ClassTypeInfo resolve(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -101,12 +102,12 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
                         //　参照されているクラスが見つかった
                         if (this.referenceName[0].equals(availableClass.getClassName())) {
                             this.resolvedInfo = new ClassTypeInfo(availableClass);
-                            for (final UnresolvedTypeInfo unresolvedTypeArgument : this
+                            for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
                                     .getTypeArguments()) {
                                 final TypeInfo typeArgument = unresolvedTypeArgument.resolve(
                                         usingClass, usingMethod, classInfoManager,
                                         fieldInfoManager, methodInfoManager);
-                                ((ClassTypeInfo) this.resolvedInfo).addTypeArgument(typeArgument);
+                                this.resolvedInfo.addTypeArgument(typeArgument);
                             }
                             return this.resolvedInfo;
                         }
@@ -128,12 +129,12 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
                     final String importedClassName = importedClass.getClassName();
                     if (this.referenceName[0].equals(importedClassName)) {
                         this.resolvedInfo = new ClassTypeInfo(importedClass);
-                        for (final UnresolvedTypeInfo unresolvedTypeArgument : this
+                        for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
                                 .getTypeArguments()) {
                             final TypeInfo typeArgument = unresolvedTypeArgument.resolve(
                                     usingClass, usingMethod, classInfoManager, fieldInfoManager,
                                     methodInfoManager);
-                            ((ClassTypeInfo) this.resolvedInfo).addTypeArgument(typeArgument);
+                            this.resolvedInfo.addTypeArgument(typeArgument);
                         }
                         return this.resolvedInfo;
                     }
@@ -146,10 +147,11 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
                 // 参照されているクラスが見つかった
                 if (this.referenceName[0].equals(availableClass.getClassName())) {
                     this.resolvedInfo = new ClassTypeInfo(availableClass);
-                    for (final UnresolvedTypeInfo unresolvedTypeArgument : this.getTypeArguments()) {
+                    for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                            .getTypeArguments()) {
                         final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-                        ((ClassTypeInfo) this.resolvedInfo).addTypeArgument(typeArgument);
+                        this.resolvedInfo.addTypeArgument(typeArgument);
                     }
                     return this.resolvedInfo;
                 }
@@ -199,13 +201,12 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
                                     final ExternalClassInfo unknownReferencedClass = new ExternalClassInfo(
                                             this.referenceName[this.referenceName.length - 1]);
                                     this.resolvedInfo = new ClassTypeInfo(unknownReferencedClass);
-                                    for (final UnresolvedTypeInfo unresolvedTypeArgument : this
+                                    for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
                                             .getTypeArguments()) {
                                         final TypeInfo typeArgument = unresolvedTypeArgument
                                                 .resolve(usingClass, usingMethod, classInfoManager,
                                                         fieldInfoManager, methodInfoManager);
-                                        ((ClassTypeInfo) this.resolvedInfo)
-                                                .addTypeArgument(typeArgument);
+                                        this.resolvedInfo.addTypeArgument(typeArgument);
                                     }
                                     return this.resolvedInfo;
                                 }
@@ -213,12 +214,12 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
 
                             //　ここに到達するのは，クラスが見つかった場合
                             this.resolvedInfo = new ClassTypeInfo(currentClass);
-                            for (final UnresolvedTypeInfo unresolvedTypeArgument : this
+                            for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
                                     .getTypeArguments()) {
                                 final TypeInfo typeArgument = unresolvedTypeArgument.resolve(
                                         usingClass, usingMethod, classInfoManager,
                                         fieldInfoManager, methodInfoManager);
-                                ((ClassTypeInfo) this.resolvedInfo).addTypeArgument(typeArgument);
+                                this.resolvedInfo.addTypeArgument(typeArgument);
                             }
                             return this.resolvedInfo;
                         }
@@ -257,12 +258,12 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
                             final ExternalClassInfo unknownReferencedClass = new ExternalClassInfo(
                                     this.referenceName[this.referenceName.length - 1]);
                             this.resolvedInfo = new ClassTypeInfo(unknownReferencedClass);
-                            for (final UnresolvedTypeInfo unresolvedTypeArgument : this
+                            for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
                                     .getTypeArguments()) {
                                 final TypeInfo typeArgument = unresolvedTypeArgument.resolve(
                                         usingClass, usingMethod, classInfoManager,
                                         fieldInfoManager, methodInfoManager);
-                                ((ClassTypeInfo) this.resolvedInfo).addTypeArgument(typeArgument);
+                                this.resolvedInfo.addTypeArgument(typeArgument);
                             }
                             return this.resolvedInfo;
                         }
@@ -270,10 +271,11 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
 
                     //　ここに到達するのは，クラスが見つかった場合
                     this.resolvedInfo = new ClassTypeInfo(currentClass);
-                    for (final UnresolvedTypeInfo unresolvedTypeArgument : this.getTypeArguments()) {
+                    for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                            .getTypeArguments()) {
                         final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-                        ((ClassTypeInfo) this.resolvedInfo).addTypeArgument(typeArgument);
+                        this.resolvedInfo.addTypeArgument(typeArgument);
                     }
                     return this.resolvedInfo;
                 }
@@ -283,10 +285,11 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
             final ExternalClassInfo unknownReferencedClass = new ExternalClassInfo(
                     this.referenceName[this.referenceName.length - 1]);
             this.resolvedInfo = new ClassTypeInfo(unknownReferencedClass);
-            for (final UnresolvedTypeInfo unresolvedTypeArgument : this.getTypeArguments()) {
+            for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                    .getTypeArguments()) {
                 final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                         usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-                ((ClassTypeInfo) this.resolvedInfo).addTypeArgument(typeArgument);
+                this.resolvedInfo.addTypeArgument(typeArgument);
             }
             return this.resolvedInfo;
         }
@@ -305,7 +308,8 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
      * 
      * @param typeParameterUsage 追加する型パラメータ使用
      */
-    public final void addTypeArgument(final UnresolvedReferenceTypeInfo typeParameterUsage) {
+    public final void addTypeArgument(
+            final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> typeParameterUsage) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -321,7 +325,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
      * 
      * @return このクラス参照で使用されている型パラメータの List
      */
-    public final List<UnresolvedReferenceTypeInfo> getTypeArguments() {
+    public final List<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>> getTypeArguments() {
         return Collections.unmodifiableList(this.typeArguments);
     }
 
@@ -401,7 +405,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
 
         UnresolvedClassReferenceInfo usage = new UnresolvedClassReferenceInfo(
                 this.availableNamespaces, this.referenceName);
-        for (UnresolvedReferenceTypeInfo typeArgument : this.typeArguments) {
+        for (UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> typeArgument : this.typeArguments) {
             usage.addTypeArgument(typeArgument);
         }
         return usage;
@@ -420,8 +424,8 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo {
     /**
      * 型引数を保存するための変数
      */
-    private final List<UnresolvedReferenceTypeInfo> typeArguments;
+    private final List<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>> typeArguments;
 
-    private TypeInfo resolvedInfo;
+    private ClassTypeInfo resolvedInfo;
 
 }

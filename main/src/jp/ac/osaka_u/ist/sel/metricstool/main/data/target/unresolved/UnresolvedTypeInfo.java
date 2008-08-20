@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
  * @author higo
  * 
  */
-public interface UnresolvedTypeInfo {
+public interface UnresolvedTypeInfo<T extends TypeInfo> {
 
     /**
      * 名前解決を行う
@@ -28,7 +28,7 @@ public interface UnresolvedTypeInfo {
      * 
      * @return 解決済みのエンティティ
      */
-    TypeInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
+    T resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager);
 
@@ -37,7 +37,7 @@ public interface UnresolvedTypeInfo {
      * 
      * @return 名前解決された情報
      */
-    TypeInfo getResolved();
+    T getResolved();
 
     /**
      * 既に名前解決されたかどうかを返す

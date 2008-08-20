@@ -25,7 +25,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * @see UnresolvedTypeInfo
  */
-public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo {
+public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<ArrayTypeInfo> {
 
     // /**
     // * 等しいかどうかのチェックを行う
@@ -67,7 +67,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * @return 解決済み配列型
      * @throws NotResolvedException 未解決の場合にスローされる
      */
-    public TypeInfo getResolved() {
+    public ArrayTypeInfo getResolved() {
         return this.resolvedInfo;
     }
 
@@ -81,7 +81,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * @param methodInfoManager 用いるメソッドマネージャ
      * @return 解決済み配列型
      */
-    public TypeInfo resolve(final TargetClassInfo usingClass,
+    public ArrayTypeInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -96,7 +96,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
             return this.getResolved();
         }
 
-        final UnresolvedTypeInfo unresolvedElementType = this.getElementType();
+        final UnresolvedTypeInfo<?> unresolvedElementType = this.getElementType();
         final int dimension = this.getDimension();
 
         final TypeInfo elementType = unresolvedElementType.resolve(usingClass, usingMethod,
@@ -105,13 +105,14 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
 
         // 要素の型が不明のときは UnnownTypeInfo を返す
         if (elementType instanceof UnknownTypeInfo) {
-            this.resolvedInfo = UnknownTypeInfo.getInstance();
+            this.resolvedInfo = ArrayTypeInfo.getType(UnknownTypeInfo.getInstance(), dimension);
+            return this.resolvedInfo;
+
+            // 要素の型が解決できた場合はその配列型を作成し返す
+        } else {
+            this.resolvedInfo = ArrayTypeInfo.getType(elementType, dimension);
             return this.resolvedInfo;
         }
-
-        // 要素の型が解決できた場合はその配列型を作成し返す
-        this.resolvedInfo = ArrayTypeInfo.getType(elementType, dimension);
-        return this.resolvedInfo;
     }
 
     /**
@@ -119,7 +120,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * 
      * @return 配列の要素の未解決型
      */
-    public UnresolvedTypeInfo getElementType() {
+    public UnresolvedTypeInfo<?> getElementType() {
         return this.type;
     }
 
@@ -148,7 +149,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * @param dimension 次元を表す変数
      * @return 生成した UnresolvedArrayTypeInfo オブジェクト
      */
-    public static UnresolvedArrayTypeInfo getType(final UnresolvedTypeInfo type, final int dimension) {
+    public static UnresolvedArrayTypeInfo getType(final UnresolvedTypeInfo<?> type, final int dimension) {
 
         if (null == type) {
             throw new NullPointerException();
@@ -173,7 +174,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * @param type 配列の要素の未解決型
      * @param dimension 配列の次元
      */
-    private UnresolvedArrayTypeInfo(final UnresolvedTypeInfo type, final int dimension) {
+    private UnresolvedArrayTypeInfo(final UnresolvedTypeInfo<?> type, final int dimension) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == type) {
@@ -191,7 +192,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
     /**
      * 配列の要素の型を保存する変数
      */
-    private final UnresolvedTypeInfo type;
+    private final UnresolvedTypeInfo<?> type;
 
     /**
      * 配列の次元を保存する変数
@@ -201,7 +202,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
     /**
      * 解決済み配列使用を保存するための変数
      */
-    private TypeInfo resolvedInfo;
+    private ArrayTypeInfo resolvedInfo;
 
     /**
      * UnresolvedArrayTypeInfo オブジェクトを一元管理するための Map．オブジェクトはファクトリメソッドで生成される．
@@ -218,7 +219,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
         /**
          * 第一キー
          */
-        private final UnresolvedTypeInfo type;
+        private final UnresolvedTypeInfo<?> type;
 
         /**
          * 第二キー
@@ -231,7 +232,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
          * @param type 第一キー
          * @param dimension 第二キー
          */
-        Key(final UnresolvedTypeInfo type, final int dimension) {
+        Key(final UnresolvedTypeInfo<?> type, final int dimension) {
 
             if (null == type) {
                 throw new NullPointerException();
@@ -257,7 +258,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
          * 
          * @return 第一キー
          */
-        public UnresolvedTypeInfo getFirstKey() {
+        public UnresolvedTypeInfo<?> getFirstKey() {
             return this.type;
         }
 
@@ -280,8 +281,8 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
                 throw new NullPointerException();
             }
 
-            final UnresolvedTypeInfo firstKey = this.getFirstKey();
-            final UnresolvedTypeInfo correspondFirstKey = ((Key) o).getFirstKey();
+            final UnresolvedTypeInfo<?> firstKey = this.getFirstKey();
+            final UnresolvedTypeInfo<?> correspondFirstKey = ((Key) o).getFirstKey();
             if (!firstKey.equals(correspondFirstKey)) {
                 return false;
             }

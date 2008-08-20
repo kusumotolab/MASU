@@ -5,6 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SuperTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
@@ -31,8 +32,9 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
      * @param superType ñ¢âåàîhê∂ÉNÉâÉXå^
      */
     public UnresolvedSuperTypeParameterInfo(final UnresolvedUnitInfo<?> ownerUnit,
-            final String name, final int index, final UnresolvedTypeInfo extendsType,
-            final UnresolvedTypeInfo superType) {
+            final String name, final int index,
+            final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> extendsType,
+            final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> superType) {
 
         super(ownerUnit, name, index, extendsType);
 
@@ -67,7 +69,8 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
 
         final int index = this.getIndex();
         final String name = this.getName();
-        final UnresolvedTypeInfo unresolvedSuperType = this.getSuperType();
+        final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> unresolvedSuperType = this
+                .getSuperType();
         final TypeInfo superType = unresolvedSuperType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
@@ -79,7 +82,8 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
         // extends êﬂ Ç™Ç†ÇÈèÍçá
         if (this.hasExtendsType()) {
 
-            final UnresolvedTypeInfo unresolvedExtendsType = this.getExtendsType();
+            final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> unresolvedExtendsType = this
+                    .getExtendsType();
             final TypeInfo extendsType = unresolvedExtendsType.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
 
@@ -99,12 +103,12 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
      * 
      * @return ñ¢âåàîhê∂ÉNÉâÉXå^
      */
-    public UnresolvedTypeInfo getSuperType() {
+    public UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> getSuperType() {
         return this.superType;
     }
 
     /**
      * ñ¢âåàîhê∂ÉNÉâÉXå^Çï€ë∂Ç∑ÇÈ
      */
-    private final UnresolvedTypeInfo superType;
+    private final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> superType;
 }

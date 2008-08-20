@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  * @author higo
  * 
  */
-public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo {
+public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo<VoidTypeInfo> {
 
     /**
      * このクラスの単一オブジェクトを返す
@@ -54,7 +54,7 @@ public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo {
      * 
      * @return 自分自身を返す
      */
-    public TypeInfo getResolved() {
+    public VoidTypeInfo getResolved() {
         return this;
     }
 
@@ -68,7 +68,7 @@ public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo {
      * @param methodInfoManager 用いるメソッドマネージャ
      * @return 解決済みvoid情報
      */
-    public TypeInfo resolve(final TargetClassInfo usingClass,
+    public VoidTypeInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
         return this;

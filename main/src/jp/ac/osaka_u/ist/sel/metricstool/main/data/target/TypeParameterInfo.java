@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public class TypeParameterInfo implements TypeInfo {
+public class TypeParameterInfo implements ReferenceTypeInfo {
 
     /**
      * 型パラメータ名を与えてオブジェクトを初期化する

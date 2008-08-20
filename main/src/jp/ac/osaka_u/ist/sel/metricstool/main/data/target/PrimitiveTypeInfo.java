@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
  * @author higo
  * 
  */
-public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
+public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<PrimitiveTypeInfo> {
 
     /**
      * プリミティブ型の各要素を表すための列挙型
@@ -280,7 +280,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
      * 
      * @return 自分自身を返す
      */
-    public TypeInfo getResolved() {
+    public PrimitiveTypeInfo getResolved() {
         return this;
     }
 
@@ -295,7 +295,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo {
      * 
      * @return 解決済みの型（自分自身）
      */
-    public TypeInfo resolve(final TargetClassInfo usingClass,
+    public PrimitiveTypeInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
         return this;
