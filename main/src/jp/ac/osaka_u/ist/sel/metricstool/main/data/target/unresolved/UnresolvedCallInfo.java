@@ -40,7 +40,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
+        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>>();
         this.arguments = new LinkedList<UnresolvedEntityUsageInfo<?>>();
 
     }
@@ -50,7 +50,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
      * 
      * @param typeParameterUsage 追加する型パラメータ使用
      */
-    public final void addTypeArgument(final UnresolvedReferenceTypeInfo typeParameterUsage) {
+    public final void addTypeArgument(final UnresolvedReferenceTypeInfo<?> typeParameterUsage) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == typeParameterUsage) {
@@ -90,7 +90,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
      * 
      * @return 型パラメータ使用の List
      */
-    public final List<UnresolvedReferenceTypeInfo> getTypeArguments() {
+    public final List<UnresolvedReferenceTypeInfo<?>> getTypeArguments() {
         return Collections.unmodifiableList(this.typeArguments);
     }
 
@@ -122,7 +122,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
                             .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedParameter);
                     classInfoManager.add(externalClassInfo);
                     final ClassTypeInfo referenceType = new ClassTypeInfo(externalClassInfo);
-                    for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedParameter)
+                    for (final UnresolvedReferenceTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedParameter)
                             .getTypeArguments()) {
                         final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -155,7 +155,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
         //　解決済み型引数を格納するための変数
         final List<ReferenceTypeInfo> typeArguments = new LinkedList<ReferenceTypeInfo>();
 
-        for (final UnresolvedReferenceTypeInfo unresolvedTypeArgument : this.getTypeArguments()) {
+        for (final UnresolvedReferenceTypeInfo<?> unresolvedTypeArgument : this.getTypeArguments()) {
 
             TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
@@ -171,7 +171,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
     /**
      * 型パラメータ使用を保存するための変数
      */
-    protected List<UnresolvedReferenceTypeInfo> typeArguments;
+    protected List<UnresolvedReferenceTypeInfo<?>> typeArguments;
 
     /**
      * 引数を保存するための変数

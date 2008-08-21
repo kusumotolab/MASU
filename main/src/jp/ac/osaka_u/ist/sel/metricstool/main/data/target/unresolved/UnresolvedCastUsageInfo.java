@@ -27,7 +27,7 @@ public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo<Cas
      * @param castedUsage キャストされたエンティティ
      * 
      */
-    public UnresolvedCastUsageInfo(final UnresolvedTypeInfo castType,
+    public UnresolvedCastUsageInfo(final UnresolvedTypeInfo<?> castType,
             final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> castedUsage) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -43,7 +43,7 @@ public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo<Cas
      * キャストした型を返す
      * @return キャストした型
      */
-    public UnresolvedTypeInfo getCastType() {
+    public UnresolvedTypeInfo<?> getCastType() {
         return this.castType;
     }
 
@@ -79,7 +79,7 @@ public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo<Cas
         final int toColumn = this.getToColumn();
 
         // キャスト型使用を解決
-        final UnresolvedTypeInfo unresolvedCastType = this.getCastType();
+        final UnresolvedTypeInfo<?> unresolvedCastType = this.getCastType();
         final TypeInfo castType = unresolvedCastType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
@@ -96,7 +96,7 @@ public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo<Cas
     /**
      * キャストした型を保存する変数
      */
-    private final UnresolvedTypeInfo castType;
+    private final UnresolvedTypeInfo<?> castType;
 
     /**
      * キャストが行われたエンティティ使用を保存すための変数

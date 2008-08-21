@@ -55,7 +55,7 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo<? extends
      * 
      * @return •Ï”‚ÌŒ^
      */
-    public final UnresolvedTypeInfo getType() {
+    public final UnresolvedTypeInfo<?> getType() {
         return this.type;
     }
 
@@ -64,7 +64,7 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo<? extends
      * 
      * @param type •Ï”‚ÌŒ^
      */
-    public final void setType(final UnresolvedTypeInfo type) {
+    public final void setType(final UnresolvedTypeInfo<?> type) {
 
         if (null == type) {
             throw new NullPointerException();
@@ -116,7 +116,7 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo<? extends
      * @param toLine I—¹s
      * @param toColumn I—¹—ñ
      */
-    UnresolvedVariableInfo(final String name, final UnresolvedTypeInfo type,
+    UnresolvedVariableInfo(final String name, final UnresolvedTypeInfo<?> type,
             final TUnit definitionUnit, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
 
@@ -146,7 +146,7 @@ public abstract class UnresolvedVariableInfo<TVar extends VariableInfo<? extends
     /**
      * •Ï”‚ÌŒ^‚ğ•\‚·•Ï”
      */
-    private UnresolvedTypeInfo type;
+    private UnresolvedTypeInfo<?> type;
 
     /**
      * •Ï”‚ÌCüq‚ğ•\‚·•Ï”

@@ -40,7 +40,7 @@ public final class UnresolvedParameterInfo
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public UnresolvedParameterInfo(final String name, final UnresolvedTypeInfo type,
+    public UnresolvedParameterInfo(final String name, final UnresolvedTypeInfo<?> type,
             final int index,
             final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> definitionMethod,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
@@ -79,7 +79,7 @@ public final class UnresolvedParameterInfo
         final Set<ModifierInfo> parameterModifiers = this.getModifiers();
         final String parameterName = this.getName();
         final int index = this.getIndex();
-        final UnresolvedTypeInfo unresolvedParameterType = this.getType();
+        final UnresolvedTypeInfo<?> unresolvedParameterType = this.getType();
         TypeInfo parameterType = unresolvedParameterType.resolve(usingClass, usingMethod,
                 classInfoManager, null, null);
         assert parameterType != null : "resolveTypeInfo returned null!";
@@ -89,7 +89,7 @@ public final class UnresolvedParameterInfo
                 final ExternalClassInfo externalClass = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedParameterType);
                 parameterType = new ClassTypeInfo(externalClass);
-                for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedParameterType)
+                for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedParameterType)
                         .getTypeArguments()) {
                     final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                             usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -100,7 +100,7 @@ public final class UnresolvedParameterInfo
             } else if (unresolvedParameterType instanceof UnresolvedArrayTypeInfo) {
 
                 // TODO 型パラメータの情報を格納する
-                final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedParameterType)
+                final UnresolvedTypeInfo<?> unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedParameterType)
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedParameterType)
                         .getDimension();

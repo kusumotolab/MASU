@@ -96,7 +96,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedOwnerUsage);
                 classInfoManager.add(externalClassInfo);
                 final ClassTypeInfo referenceType = new ClassTypeInfo(externalClassInfo);
-                for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedOwnerUsage)
+                for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedOwnerUsage)
                         .getTypeArguments()) {
                     final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                             usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -121,7 +121,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 this.resolvedInfo = new MethodCallInfo(ownerType, ownerUsage, unknownMethod,
                         fromLine, fromColumn, toLine, toColumn);
                 this.resolvedInfo.addArguments(actualParameters);
-                this.resolvedInfo.addTypeArguments(typeArguments);                
+                this.resolvedInfo.addTypeArguments(typeArguments);
                 return this.resolvedInfo;
             }
         }

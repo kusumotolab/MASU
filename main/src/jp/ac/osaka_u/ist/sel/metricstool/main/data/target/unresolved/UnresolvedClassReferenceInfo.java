@@ -50,7 +50,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
         this.referenceName = referenceName;
         this.fullReferenceName = referenceName;
         this.ownerUsage = null;
-        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
+        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo<?>>();
     }
 
     /**
@@ -78,7 +78,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
         this.fullReferenceName = fullReferenceName;
         this.referenceName = referenceName;
         this.ownerUsage = ownerUsage;
-        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo>();
+        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo<?>>();
     }
 
     @Override
@@ -444,7 +444,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
      * 
      * @param typeArgument 追加する型パラメータ使用
      */
-    public final void addTypeArgument(final UnresolvedReferenceTypeInfo typeArgument) {
+    public final void addTypeArgument(final UnresolvedReferenceTypeInfo<?> typeArgument) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -460,7 +460,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
      * 
      * @return このクラス参照で使用されている型パラメータの List
      */
-    public final List<UnresolvedReferenceTypeInfo> getTypeArguments() {
+    public final List<UnresolvedReferenceTypeInfo<?>> getTypeArguments() {
         return Collections.unmodifiableList(this.typeArguments);
     }
 
@@ -567,6 +567,6 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
     /**
      * 未解決型パラメータ使用を保存するための変数
      */
-    private final List<UnresolvedReferenceTypeInfo> typeArguments;
+    private final List<UnresolvedReferenceTypeInfo<?>> typeArguments;
 
 }

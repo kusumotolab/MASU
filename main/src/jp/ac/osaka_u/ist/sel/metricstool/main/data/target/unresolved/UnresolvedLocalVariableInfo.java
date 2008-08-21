@@ -46,7 +46,7 @@ public final class UnresolvedLocalVariableInfo
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public UnresolvedLocalVariableInfo(final String name, final UnresolvedTypeInfo type,
+    public UnresolvedLocalVariableInfo(final String name, final UnresolvedTypeInfo<?> type,
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> definitionSpace,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> initializer,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
@@ -84,7 +84,7 @@ public final class UnresolvedLocalVariableInfo
         // 修飾子，変数名，型を取得
         final Set<ModifierInfo> localModifiers = this.getModifiers();
         final String variableName = this.getName();
-        final UnresolvedTypeInfo unresolvedVariableType = this.getType();
+        final UnresolvedTypeInfo<?> unresolvedVariableType = this.getType();
         TypeInfo variableType = unresolvedVariableType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert variableType != null : "resolveTypeInfo returned null!";
@@ -94,7 +94,7 @@ public final class UnresolvedLocalVariableInfo
                 final ExternalClassInfo externalClass = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedVariableType);
                 variableType = new ClassTypeInfo(externalClass);
-                for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedVariableType)
+                for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedVariableType)
                         .getTypeArguments()) {
                     final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                             usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -105,7 +105,7 @@ public final class UnresolvedLocalVariableInfo
             } else if (unresolvedVariableType instanceof UnresolvedArrayTypeInfo) {
 
                 // TODO 型パラメータの情報を格納する
-                final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedVariableType)
+                final UnresolvedTypeInfo<?> unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedVariableType)
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedVariableType)
                         .getDimension();

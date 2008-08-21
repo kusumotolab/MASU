@@ -97,14 +97,13 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         // 型パラメータを解決し，解決済みメソッド情報に追加する
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
-            final TypeParameterInfo typeParameter = (TypeParameterInfo) unresolvedTypeParameter
-                    .resolve(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
-                            methodInfoManager);
+            final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(usingClass,
+                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
 
         // 返り値をセットする
-        final UnresolvedTypeInfo unresolvedMethodReturnType = this.getReturnType();
+        final UnresolvedTypeInfo<?> unresolvedMethodReturnType = this.getReturnType();
         TypeInfo methodReturnType = unresolvedMethodReturnType.resolve(usingClass, null,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert methodReturnType != null : "resolveTypeInfo returned null!";
@@ -114,7 +113,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
                 final ExternalClassInfo classInfo = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedMethodReturnType);
                 methodReturnType = new ClassTypeInfo(classInfo);
-                for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedMethodReturnType)
+                for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedMethodReturnType)
                         .getTypeArguments()) {
                     final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                             usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -125,7 +124,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
             } else if (unresolvedMethodReturnType instanceof UnresolvedArrayTypeInfo) {
 
                 // TODO 型パラメータの情報を格納する
-                final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
+                final UnresolvedTypeInfo<?> unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
                         .getDimension();
@@ -150,7 +149,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
-                methodInfoManager);  
+                methodInfoManager);
 
         // メソッド内で定義されている各未解決ローカル変数に対して
         for (final UnresolvedLocalVariableInfo unresolvedLocalVariable : this.getLocalVariables()) {
@@ -196,7 +195,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
      * 
      * @return メソッドの返り値の型
      */
-    public UnresolvedTypeInfo getReturnType() {
+    public UnresolvedTypeInfo<?> getReturnType() {
         return this.returnType;
     }
 
@@ -205,7 +204,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
      * 
      * @param returnType メソッドの返り値
      */
-    public void setReturnType(final UnresolvedTypeInfo returnType) {
+    public void setReturnType(final UnresolvedTypeInfo<?> returnType) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -251,7 +250,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
     /**
      * メソッドの返り値を保存するための変数
      */
-    private UnresolvedTypeInfo returnType;
+    private UnresolvedTypeInfo<?> returnType;
 
     /**
      * インスタンスメンバーかどうかを保存するための変数

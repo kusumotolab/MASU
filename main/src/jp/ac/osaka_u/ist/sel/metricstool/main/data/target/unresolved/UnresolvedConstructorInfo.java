@@ -79,8 +79,8 @@ public final class UnresolvedConstructorInfo extends
         // 型パラメータを解決し，解決済みコンストラクタ情報に追加する
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
-            final TypeParameterInfo typeParameter = (TypeParameterInfo) unresolvedTypeParameter
-                    .resolve(usingClass, this.resolvedInfo, classInfoManager, null, null);
+            final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(usingClass,
+                    this.resolvedInfo, classInfoManager, null, null);
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
 

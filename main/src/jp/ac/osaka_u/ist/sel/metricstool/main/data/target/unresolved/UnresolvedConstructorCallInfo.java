@@ -28,7 +28,7 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
      * 
      * @param unresolvedReferenceType コンストラクタ呼び出しが実行される型
      */
-    public UnresolvedConstructorCallInfo(final UnresolvedReferenceTypeInfo unresolvedReferenceType) {
+    public UnresolvedConstructorCallInfo(final UnresolvedReferenceTypeInfo<?> unresolvedReferenceType) {
 
         if (null == unresolvedReferenceType) {
             throw new IllegalArgumentException();
@@ -85,10 +85,10 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
      * 
      * @return この未解決コンストラクタ呼び出しの型
      */
-    public UnresolvedReferenceTypeInfo getReferenceType() {
+    public UnresolvedReferenceTypeInfo<?> getReferenceType() {
         return this.unresolvedReferenceType;
     }
 
-    private final UnresolvedReferenceTypeInfo unresolvedReferenceType;
+    private final UnresolvedReferenceTypeInfo<?> unresolvedReferenceType;
 
 }

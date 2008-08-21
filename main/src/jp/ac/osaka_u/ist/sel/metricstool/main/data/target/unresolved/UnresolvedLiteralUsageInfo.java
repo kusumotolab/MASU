@@ -82,7 +82,7 @@ public final class UnresolvedLiteralUsageInfo extends UnresolvedEntityUsageInfo<
      * 
      * @return　このリテラル使用の文字列を返す
      */
-    public final UnresolvedTypeInfo getType() {
+    public final UnresolvedTypeInfo<?> getType() {
         return this.type;
     }
 

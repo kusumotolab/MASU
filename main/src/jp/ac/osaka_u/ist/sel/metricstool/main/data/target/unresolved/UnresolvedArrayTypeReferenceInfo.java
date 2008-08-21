@@ -17,7 +17,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake, higo
  *
  */
-public final class UnresolvedArrayTypeReferenceInfo extends UnresolvedEntityUsageInfo<ArrayTypeReferenceInfo> {
+public final class UnresolvedArrayTypeReferenceInfo extends
+        UnresolvedEntityUsageInfo<ArrayTypeReferenceInfo> {
 
     /**
      * QÆ‚³‚ê‚Ä‚¢‚é–¢‰ğŒˆ”z—ñŒ^‚ğ—^‚¦‚Ä‰Šú‰»
@@ -59,8 +60,8 @@ public final class UnresolvedArrayTypeReferenceInfo extends UnresolvedEntityUsag
 
         // QÆ‚³‚ê‚Ä‚¢‚é”z—ñŒ^‚ğ‰ğŒˆ
         final UnresolvedArrayTypeInfo unresolvedArrayType = this.getType();
-        final ArrayTypeInfo arrayType = (ArrayTypeInfo) unresolvedArrayType.resolve(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final ArrayTypeInfo arrayType = unresolvedArrayType.resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
 
         this.resolvedInfo = new ArrayTypeReferenceInfo(arrayType, fromLine, fromColumn, toLine,
                 toColumn);

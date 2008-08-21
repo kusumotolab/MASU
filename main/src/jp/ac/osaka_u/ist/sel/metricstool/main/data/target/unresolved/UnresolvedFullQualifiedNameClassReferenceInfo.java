@@ -68,9 +68,9 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
         }
 
         final ClassTypeInfo referenceType = new ClassTypeInfo(referencedClass);
-        for (final UnresolvedTypeInfo unresolvedTypeArgument : this.getTypeArguments()) {
-            final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : this.getTypeArguments()) {
+            final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
             referenceType.addTypeArgument(typeArgument);
         }
         this.resolvedInfo = new ClassReferenceInfo(referenceType, fromLine, fromColumn, toLine,

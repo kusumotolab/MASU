@@ -42,7 +42,7 @@ public final class UnresolvedFieldInfo extends
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public UnresolvedFieldInfo(final String name, final UnresolvedTypeInfo type,
+    public UnresolvedFieldInfo(final String name, final UnresolvedTypeInfo<?> type,
             final UnresolvedClassInfo definitionClass,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> initializer,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
@@ -82,7 +82,7 @@ public final class UnresolvedFieldInfo extends
         // 修飾子，名前，型，可視性，インスタンスメンバーかどうかを取得
         final Set<ModifierInfo> modifiers = this.getModifiers();
         final String fieldName = this.getName();
-        final UnresolvedTypeInfo unresolvedFieldType = this.getType();
+        final UnresolvedTypeInfo<?> unresolvedFieldType = this.getType();
         TypeInfo fieldType = unresolvedFieldType.resolve(usingClass, null, classInfoManager,
                 fieldInfoManager, null);
         assert fieldType != null : "resolveTypeInfo returned null!";
@@ -92,7 +92,7 @@ public final class UnresolvedFieldInfo extends
                 final ExternalClassInfo classInfo = NameResolver
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedFieldType);
                 fieldType = new ClassTypeInfo(classInfo);
-                for (final UnresolvedTypeInfo unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedFieldType)
+                for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedFieldType)
                         .getTypeArguments()) {
                     final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                             usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -102,7 +102,7 @@ public final class UnresolvedFieldInfo extends
 
             } else if (unresolvedFieldType instanceof UnresolvedArrayTypeInfo) {
 
-                final UnresolvedTypeInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
+                final UnresolvedTypeInfo<?> unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
                         .getDimension();
