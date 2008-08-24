@@ -9,6 +9,7 @@ header {
 package jp.ac.osaka_u.ist.sel.metricstool.main.parse;
 
 import antlr.CommonAST;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.csharp.CSharpASTNode;
 }
 
 /** cSharp Recognizer
@@ -43,7 +44,20 @@ tokens {
 	ARRAY_INSTANTIATION; COND_CLAUSE; LOCAL_VARIABLE_DEF;
 }
 
-
+{
+	private CSharpASTNode astNode;
+	
+	public CSharpParser(final CSharpLexer lexer) {
+		this(lexer,2);
+		this.astNode = new CSharpASTNode(this.getASTFactory());
+	}
+	
+	@Override
+	public void setASTFactory(ASTFactory f) {
+        super.setASTFactory(f);
+        this.astNode.setAstFactory(f);
+    }
+}
 // Compilation Unit: In cSharp, this is a single file.  This is the start
 //   rule for this parser
 compilationUnit
@@ -331,9 +345,11 @@ field!
 		|	(enumHead enumBody) => enh:enumHead enb:enumBody
 			{#field = (#(#[ENUM_DEF, "ENUM_DEF"], mods, enh, enb));}
 			
-		|	(type propertyHead propertyBody ) => pt:type p:propertyHead pb:propertyBody //PropertyHeader
-			{#field =(#(#[PROPERTY_DEF, "PROPERTY_DEF"], mods, p, pb));}
+		//|	(type propertyHead propertyBody ) => pt:type p:propertyHead pb:propertyBody2[#mods, #pt] //PropertyHeader
+		//	{#field =(#(#[PROPERTY_DEF, "PROPERTY_DEF"], mods, p, pb));}
 
+		|	(type propertyHead propertyBody ) => pt:type (LBRACK RBRACK)? pn:name pb:propertyBody2[#mods, #(#[TYPE,"TYPE"],pt), #pn] //PropertyHeader
+			{#field =(#(#[PROPERTY_DEF, "PROPERTY_DEF"], mods, pb));}
 		|	cd:classDefinition[#mods]       // inner class
 			{#field = #cd;}
 
@@ -409,10 +425,40 @@ propertyBody
    		)
 	    RCURLY!
 	;
+	
+propertyBody2[CommonAST modifiers, CommonAST type, CommonAST propertyName]
+   :   pc: LCURLY!
+    		(   
+    		   (propinnerBody2[#modifiers, #type, #propertyName])*
+   		)
+	    RCURLY!
+	;
+
 propinnerBody
    : pib :
    	IDENT (LCURLY (statement)* RCURLY!)?  (SEMI)?
    ;
+   
+setOrget
+	: IDENT
+	;
+
+propinnerBody2[CommonAST modifiers, CommonAST type, CommonAST propertyName]
+   :   	i:IDENT!
+		{
+			if(#i.getText().equals("set")){
+				#propinnerBody2 = (CommonAST)this.astNode.createPropertySetterHeadNode(#modifiers, #type, #propertyName);
+			} else if(#i.getText().equals("get")) {
+				#propinnerBody2 = (CommonAST)this.astNode.createPropertyGetterHeadNode(#modifiers, #type, #propertyName);
+			}
+		}
+		propinnerBlock
+   ;
+   
+propinnerBlock
+	:	(lc:LCURLY^ {#lc.setType(BLOCK);} (statement)* RCURLY!)?  (SEMI)?
+	;
+   
 enumBody
    :	en: LCURLY!
 	   	( enumConstant (COMMA)? )* 
