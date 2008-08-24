@@ -11,7 +11,7 @@
 	<property name="java14grammer" value="${grammer.dir}/java14.g" />
 	<property name="java13grammer" value="${grammer.dir}/java13.g" />
 	<!-- property name="cppgrammer" value="${grammer}/cpp.g" / -->
-	<!-- property name="csharpgrammer" value="${grammer}/sharp.g" / -->
+	<property name="csharpgrammer" value="${grammer.dir}/CSharp.g" />
 	
 	<property name="antlr.jar" value="lib/antlr.jar" />
 	<property name="jargp.jar" value="lib/jargp.jar" />
@@ -26,6 +26,9 @@
 			<classpath path="${antlr.jar}" />
 		</antlr>
 		<antlr target="${java13grammer}">
+			<classpath path="${antlr.jar}" />
+		</antlr>
+		<antlr target="${csharpgrammer}">
 			<classpath path="${antlr.jar}" />
 		</antlr>
 	</target>
