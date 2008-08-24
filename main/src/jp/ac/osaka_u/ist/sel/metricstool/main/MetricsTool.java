@@ -28,7 +28,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
@@ -78,7 +77,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CSharpLexer;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CSharpRecognizer;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CSharpParser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CommonASTWithLineNumber;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14Lexer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14Parser;
@@ -275,7 +274,7 @@ public class MetricsTool {
                     case CSHARP:
                         final CSharpLexer csharpLexer = new CSharpLexer(new FileInputStream(name));
                         csharpLexer.setTabSize(1);
-                        final CSharpRecognizer csharpParser = new CSharpRecognizer(csharpLexer);
+                        final CSharpParser csharpParser = new CSharpParser(csharpLexer);
 
                         final ASTFactory cshaprFactory = new MasuAstFactory();
                         cshaprFactory.setASTNodeClass(CommonASTWithLineNumber.class);

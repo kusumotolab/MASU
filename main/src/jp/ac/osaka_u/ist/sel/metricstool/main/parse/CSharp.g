@@ -18,7 +18,7 @@ import antlr.CommonAST;
  *
  * This grammar is in the PUBLIC DOMAIN
  */
-class CSharpRecognizer extends Parser;
+class CSharpParser extends Parser;
 
 options {
 	ASTLabelType=CommonAST;
