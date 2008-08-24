@@ -13,6 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BuiltinTypeToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
@@ -26,7 +27,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  * @author kou-tngt, t-miyake
  *
  */
-public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
+public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extends TypeInfo>> {
 
     /**
      * 引数のBuildDataManagerを用いて初期化を行う．
@@ -113,7 +114,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
             } else if (type
                     .equals(TypeArgumentStateManager.TYPE_ARGUMENT_STATE.ENTER_TYPE_ARGUMENTS)) {
                 //型引数群の定義部に入ったので，新たな型引数群の情報を入れるリストをスタックにつむ
-                this.typeArgumentsLists.push(new ArrayList<UnresolvedTypeInfo>());
+                this.typeArgumentsLists.push(new ArrayList<UnresolvedTypeInfo<? extends TypeInfo>>());
             } else if (type
                     .equals(TypeArgumentStateManager.TYPE_ARGUMENT_STATE.EXIT_TYPE_ARGUMENTS)) {
                 //型引数群の定義部が終わったので，スタックの一番上のリストを，今現在利用できる型パラメータ群として取り出す．
@@ -136,7 +137,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
                 this.inWildCardCount++;
             } else if (type.equals(TypeArgumentStateManager.TYPE_ARGUMENT_STATE.EXIT_TYPE_WILDCARD)) {
                 //ワイルドカード記述部から出るので，型上限情報を取得して型情報を登録
-                final UnresolvedTypeInfo upperBounds = this.getCurrentUpperBounds();
+                final UnresolvedTypeInfo<? extends TypeInfo> upperBounds = this.getCurrentUpperBounds();
                 this.currentUpperBounds = null;
                 if (null != upperBounds) {
                     this.registBuiltData(upperBounds);
@@ -156,7 +157,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
      * 型上限情報を取得する
      * @return　型上限の情報
      */
-    protected UnresolvedTypeInfo getCurrentUpperBounds() {
+    protected UnresolvedTypeInfo<? extends TypeInfo> getCurrentUpperBounds() {
         return this.currentUpperBounds;
     }
 
@@ -165,7 +166,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
      * 型定義ノードから出た時，型情報以外を表すトークンに移ってしまった時，型パラメータ群の構築が終了したときに呼び出される．
      */
     protected void buildType() {
-        UnresolvedTypeInfo resultType = null;
+        UnresolvedTypeInfo<? extends TypeInfo> resultType = null;
 
         if (null != this.primitiveType) {
             //組み込み型のデータが作られていたのでそれを使う
@@ -201,12 +202,12 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
     
                 //使える型引数があれば登録してしまう．
                 if (null != this.availableTypeArugments) {
-                    for (final UnresolvedTypeInfo type : this.availableTypeArugments) {
+                    for (final UnresolvedTypeInfo<? extends TypeInfo> type : this.availableTypeArugments) {
                     	
                     	// C#などは参照型以外も型引数に指定可能なので対処するひつようがあるかも
                     	if (type instanceof UnresolvedReferenceTypeInfo) {
                         referenceType
-                                .addTypeArgument((UnresolvedReferenceTypeInfo) type);
+                                .addTypeArgument((UnresolvedReferenceTypeInfo<?>) type);
                     	}
                     }
     
@@ -275,17 +276,17 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
     /**
      * 型参照でワイルドカードが使われた時の上限情報を記憶しておく
      */
-    private UnresolvedTypeInfo currentUpperBounds;
+    private UnresolvedTypeInfo<? extends TypeInfo> currentUpperBounds;
 
     /**
      * 型引数群を記録しておくスタック
      */
-    private final Stack<List<UnresolvedTypeInfo>> typeArgumentsLists = new Stack<List<UnresolvedTypeInfo>>();
+    private final Stack<List<UnresolvedTypeInfo<? extends TypeInfo>>> typeArgumentsLists = new Stack<List<UnresolvedTypeInfo<? extends TypeInfo>>>();
 
     /**
      * 構築が終わって利用できる型引数群
      */
-    private List<UnresolvedTypeInfo> availableTypeArugments;
+    private List<UnresolvedTypeInfo<? extends TypeInfo>> availableTypeArugments;
 
     /**
      * ワイルドカード情報の構築に入った深さをカウント
@@ -295,12 +296,12 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo> {
     /**
      * 構築した基本型を記録する
      */
-    private UnresolvedTypeInfo primitiveType;
+    private UnresolvedTypeInfo<? extends TypeInfo> primitiveType;
 
     /**
      * 構築したvoid型を記録する
      */
-    private UnresolvedTypeInfo voidType;
+    private UnresolvedTypeInfo<? extends TypeInfo> voidType;
 
     /**
      * 識別子情報を構築するビルダー

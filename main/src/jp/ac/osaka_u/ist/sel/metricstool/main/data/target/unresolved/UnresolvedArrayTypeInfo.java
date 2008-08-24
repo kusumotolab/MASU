@@ -120,7 +120,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * 
      * @return 配列の要素の未解決型
      */
-    public UnresolvedTypeInfo<?> getElementType() {
+    public UnresolvedTypeInfo<? extends TypeInfo> getElementType() {
         return this.type;
     }
 
@@ -149,7 +149,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * @param dimension 次元を表す変数
      * @return 生成した UnresolvedArrayTypeInfo オブジェクト
      */
-    public static UnresolvedArrayTypeInfo getType(final UnresolvedTypeInfo<?> type, final int dimension) {
+    public static UnresolvedArrayTypeInfo getType(final UnresolvedTypeInfo<? extends TypeInfo> type, final int dimension) {
 
         if (null == type) {
             throw new NullPointerException();

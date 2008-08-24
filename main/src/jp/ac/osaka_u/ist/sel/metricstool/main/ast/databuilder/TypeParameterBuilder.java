@@ -5,9 +5,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.TypeParameterStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSuperTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
@@ -127,26 +129,36 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
         //型パラメータの名前が複数個に分かれててもおかしい
         assert (name.length == 1);
 
-        final UnresolvedUnitInfo<? extends UnitInfo> ownerUnit = this.buildDataManager.getCurrentUnit();
+        final UnresolvedUnitInfo<? extends UnitInfo> ownerUnit = this.buildDataManager
+                .getCurrentUnit();
 
         assert (ownerUnit instanceof UnresolvedCallableUnitInfo)
                 || (ownerUnit instanceof UnresolvedClassInfo) : "Illegal state: not parametrized unit";
-        
+
         //型の上限情報下限情報を取得
-        final UnresolvedTypeInfo upperBounds = this.getUpperBounds();
-        final UnresolvedTypeInfo lowerBounds = this.getLowerBounds();
+        final UnresolvedTypeInfo<? extends TypeInfo> upperBounds = this.getUpperBounds();
+        final UnresolvedTypeInfo<? extends TypeInfo> lowerBounds = this.getLowerBounds();
         final int index = buildDataManager.getCurrentTypeParameterCount();
 
         UnresolvedTypeParameterInfo parameter = null;
-        if (null == lowerBounds) {
-            //下限がなければ普通に作る
-            parameter = new UnresolvedTypeParameterInfo(ownerUnit, name[0], index, upperBounds);
-        } else {
-            //下限がある場合はこっちを作る
-            parameter = new UnresolvedSuperTypeParameterInfo(ownerUnit, name[0], index,
-                    upperBounds, lowerBounds);
-        }
 
+        if (upperBounds instanceof UnresolvedReferenceTypeInfo
+                && lowerBounds instanceof UnresolvedReferenceTypeInfo) {
+            if (null == lowerBounds) {
+                //下限がなければ普通に作る
+                parameter = new UnresolvedTypeParameterInfo(ownerUnit, name[0], index,
+                        (UnresolvedReferenceTypeInfo<?>) upperBounds);
+            } else {
+                //下限がある場合はこっちを作る
+                parameter = new UnresolvedSuperTypeParameterInfo(ownerUnit, name[0], index,
+                        (UnresolvedReferenceTypeInfo<?>) upperBounds,
+                        (UnresolvedReferenceTypeInfo<?>) lowerBounds);
+            }
+        } else {
+            // 少なくともJavaではここに到達してはいけない(型パラメータは参照型しか定義できない)
+            // TODO C#の場合は型パラメータがプリミティブ型の場合もあるので対処が必要
+            assert false : "Illegal state: type parameter is not reference type";
+        }
         //最後にデータ管理者に登録する
         this.buildDataManager.addTypeParameger(parameter);
     }
@@ -155,7 +167,7 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
      * 型の上限情報を返す．
      * @return　型の上限情報
      */
-    protected UnresolvedTypeInfo getUpperBounds() {
+    protected UnresolvedTypeInfo<? extends TypeInfo> getUpperBounds() {
         return this.upperBoundsType;
     }
 
@@ -163,7 +175,7 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
      * 型の下限情報を返す．
      * @return　型の下限情報
      */
-    protected UnresolvedTypeInfo getLowerBounds() {
+    protected UnresolvedTypeInfo<? extends TypeInfo> getLowerBounds() {
         return this.lowerBoundsType;
     }
 
@@ -171,7 +183,7 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
      * 最後に構築された型の情報を返す．
      * @return　最後に構築された型
      */
-    protected UnresolvedTypeInfo builtTypeBounds() {
+    protected UnresolvedTypeInfo<? extends TypeInfo> builtTypeBounds() {
         return this.typeBuilder.getLastBuildData();
     }
 
@@ -209,12 +221,12 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
     /**
      * 型パラメータの上限
      */
-    private UnresolvedTypeInfo upperBoundsType;
+    private UnresolvedTypeInfo<? extends TypeInfo> upperBoundsType;
 
     /**
      * 型パラメータの下限
      */
-    private UnresolvedTypeInfo lowerBoundsType;
+    private UnresolvedTypeInfo<? extends TypeInfo> lowerBoundsType;
 
     /**
      * 型パラメータ定義部にいるかどうかを表す

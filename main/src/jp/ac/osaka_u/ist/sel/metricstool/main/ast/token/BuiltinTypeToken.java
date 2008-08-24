@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VoidTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
@@ -68,7 +69,7 @@ public class BuiltinTypeToken extends AstTokenAdapter {
     public static final BuiltinTypeToken VOID = new BuiltinTypeToken(VoidTypeInfo.getInstance(),
             VoidTypeInfo.VOID_STRING);
 
-    public UnresolvedTypeInfo getType() {
+    public UnresolvedTypeInfo<? extends TypeInfo> getType() {
         return this.type;
     }
 
@@ -93,7 +94,7 @@ public class BuiltinTypeToken extends AstTokenAdapter {
      * 
      * @param text　この組み込み型を表す文字列
      */
-    protected BuiltinTypeToken(final UnresolvedTypeInfo type, final String name) {
+    protected BuiltinTypeToken(final UnresolvedTypeInfo<? extends TypeInfo> type, final String name) {
         super(name);
 
         this.type = type;
@@ -102,5 +103,5 @@ public class BuiltinTypeToken extends AstTokenAdapter {
     /**
      * このトークンが表す基本型
      */
-    private final UnresolvedTypeInfo type;
+    private final UnresolvedTypeInfo<? extends TypeInfo> type;
 }
