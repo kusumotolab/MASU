@@ -4,12 +4,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock;
 import java.util.Stack;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.DeclaredBlockStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.DeclaredBlockStateManager.STATE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.InnerBlockStateManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.InnerBlockStateManager.INNER_BLOCK_STATE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.InnerBlockStateManager.INNER_BLOCK_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
@@ -39,7 +36,7 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
 
     private void startConditionalClause(final AstVisitEvent triggerEvent) {
         if (!this.buildingBlockStack.isEmpty()
-                && this.buildingBlockStack.peek() instanceof UnresolvedConditionalBlockInfo) {
+                && this.buildingBlockStack.peek() == this.buildManager.getCurrentBlock()) {
             final T currentBlock = (T) this.buildingBlockStack.peek();
             final UnresolvedConditionalClauseInfo conditionalClause = currentBlock
                     .getConditionalClause();
@@ -56,10 +53,14 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
     }
 
     private void endConditionalClause() {
-        final UnresolvedConditionalClauseInfo buildClause = this.buildingClauseStack.pop();
+        if (!this.buildingBlockStack.isEmpty()
+                && this.buildingBlockStack.peek() == this.buildManager.getCurrentBlock()) {
 
-        if (null != buildClause) {
-            this.buildManager.endConditionalClause();
+            final UnresolvedConditionalClauseInfo buildClause = this.buildingClauseStack.pop();
+
+            if (null != buildClause) {
+                this.buildManager.endConditionalClause();
+            }
         }
     }
 
