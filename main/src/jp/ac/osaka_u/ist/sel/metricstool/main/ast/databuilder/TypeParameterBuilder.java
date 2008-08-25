@@ -142,8 +142,8 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
 
         UnresolvedTypeParameterInfo parameter = null;
 
-        if (upperBounds instanceof UnresolvedReferenceTypeInfo
-                && lowerBounds instanceof UnresolvedReferenceTypeInfo) {
+        if (null == upperBounds || upperBounds instanceof UnresolvedReferenceTypeInfo
+                && null == lowerBounds || lowerBounds instanceof UnresolvedReferenceTypeInfo) {
             if (null == lowerBounds) {
                 //‰ºŒÀ‚ª‚È‚¯‚ê‚Î•’Ê‚Éì‚é
                 parameter = new UnresolvedTypeParameterInfo(ownerUnit, name[0], index,
