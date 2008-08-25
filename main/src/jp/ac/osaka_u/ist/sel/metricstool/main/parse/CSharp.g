@@ -9,7 +9,7 @@ header {
 package jp.ac.osaka_u.ist.sel.metricstool.main.parse;
 
 import antlr.CommonAST;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.csharp.CSharpASTNode;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.csharp.CSharpASTNodeFactory;
 }
 
 /** cSharp Recognizer
@@ -45,11 +45,11 @@ tokens {
 }
 
 {
-	private CSharpASTNode astNode;
+	private CSharpASTNodeFactory astNode;
 	
 	public CSharpParser(final CSharpLexer lexer) {
 		this(lexer,2);
-		this.astNode = new CSharpASTNode(this.getASTFactory());
+		this.astNode = new CSharpASTNodeFactory(this.getASTFactory());
 	}
 	
 	@Override
