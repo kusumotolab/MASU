@@ -216,6 +216,24 @@ public interface AstToken {
     public boolean isPrimitiveType();
 
     /**
+     * トークンがプロパティの定義部を表すかどうか返す．
+     * @return プロパティを表すトークンならtrue
+     */
+    public boolean isPropertyDefinition();
+    
+    /**
+     * トークンがプロパティのget部の表すかどうか返す．
+     * @return プロパティのget部を表すトークンならtrue
+     */
+    public boolean isPropertyGetBody();
+    
+    /**
+     * トークンがプロパティのset部を表すかどうか返す．
+     * @return プロパティがset部を表すトークンならtrue
+     */
+    public boolean isPropertySetBody();
+       
+    /**
      * トークンが型引数記述部を表すかどうかを返す．
      * @return 型引数記述部を表すならtrue
      */

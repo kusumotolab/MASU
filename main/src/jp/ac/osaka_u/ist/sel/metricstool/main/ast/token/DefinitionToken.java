@@ -40,6 +40,19 @@ public class DefinitionToken extends AstTokenAdapter {
         }
     };
     
+    /**
+     * プロパティ定義部を表す定数インスタンス
+     */
+    public static final DefinitionToken PROPERTY_DEFINITION = new DefinitionToken("PROPERTY_DEFINITION") {
+        @Override
+        public boolean isPropertyDefinition() {
+            return true;
+        };
+    };
+    
+    /**
+     * スタティックイニシャライザを表す定数インスタンス
+     */
     public static final DefinitionToken STATIC_INIT = new DefinitionToken("STATIC_INIT") {
         
         @Override

@@ -162,12 +162,24 @@ public class AstTokenAdapter implements AstToken {
     public boolean isPrimitiveType() {
         return false;
     }
+    
+    public boolean isPropertyDefinition() {
+         return false;
+    }
 
-    public boolean isTypeArgument() {
+    public boolean isPropertyGetBody() {
+        return false;
+    }
+    
+    public boolean isPropertySetBody() {
+        return false;
+    }
+    
+    public boolean isTypeArguments() {
         return false;
     }
 
-    public boolean isTypeArguments() {
+    public boolean isTypeArgument() {
         return false;
     }
 

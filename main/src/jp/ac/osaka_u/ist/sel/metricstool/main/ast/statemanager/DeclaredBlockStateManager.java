@@ -45,7 +45,6 @@ public abstract class DeclaredBlockStateManager extends
      */
     @Override
     public void entered(final AstVisitEvent event) {
-        final AstToken token = event.getToken();
 
         if (this.isStateChangeTriggerEvent(event)) {
             //状態変化トリガなら
@@ -92,7 +91,6 @@ public abstract class DeclaredBlockStateManager extends
      */
     @Override
     public void exited(final AstVisitEvent event) {
-        final AstToken token = event.getToken();
 
         if (this.isStateChangeTriggerEvent(event)) {
             //状態変化トリガなら
@@ -155,7 +153,7 @@ public abstract class DeclaredBlockStateManager extends
      * 引数のイベントが対応する定義部を表すかどうかを返す抽象メソッド．
      * このメソッドをオーバーライドすることで，任意の定義部に対応するサブクラスを作成することができる．
      * 
-     * @param event　定義部を表すかどうかを調べたいASTイベント
+     * @param event 定義部を表すかどうかを調べたいASTイベント
      * @return 定義部を表すトークンであればtrue
      */
     protected abstract boolean isDefinitionEvent(AstVisitEvent event);
@@ -165,7 +163,7 @@ public abstract class DeclaredBlockStateManager extends
      * デフォルトではtoken.isBlock()を用いて判定する．
      * このメソッドをオーバーライドすることで，任意のブロック対応するサブクラスを作成することができる．
      * 
-     * @param token　ブロックを表すかどうかを調べたいASTトークン
+     * @param token ブロックを表すかどうかを調べたいASTトークン
      * @return ブロックを表すトークンであればtrue
      */
     protected boolean isBlockToken(final AstToken token) {

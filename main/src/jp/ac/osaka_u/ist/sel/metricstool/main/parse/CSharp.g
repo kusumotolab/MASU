@@ -42,6 +42,7 @@ tokens {
 	STRICTFP="strictfp"; SUPER_CTOR_CALL; CTOR_CALL; PROPERTY_DEF; ENUM_DEF; STRUCT_DEF;
 	SCTOR_DEF; EXPR_STATE; FIELD_DEF; NAME; ENUM_CONSTANT_DEF; LOCAL_PARAMETER_DEF;
 	ARRAY_INSTANTIATION; COND_CLAUSE; LOCAL_VARIABLE_DEF;
+	PROPERTY_SET_BODY; PROPERTY_GET_BODY;
 }
 
 {
@@ -254,7 +255,7 @@ structDefinition![CommonAST modifiers]
 		sc:superClassClause
 		// now parse the body of the class
 		sb:structBlock
-		{#structDefinition = #(#[STRUCT_DEF,"STRUCT_DEF"],
+		{#structDefinition = #(#[CLASS_DEF,"STRUCT_DEF"],
 					   modifiers,IDENT,sc,sb);}
 	;
 
@@ -345,11 +346,11 @@ field!
 		|	(enumHead enumBody) => enh:enumHead enb:enumBody
 			{#field = (#(#[ENUM_DEF, "ENUM_DEF"], mods, enh, enb));}
 			
-		//|	(type propertyHead propertyBody ) => pt:type p:propertyHead pb:propertyBody2[#mods, #pt] //PropertyHeader
-		//	{#field =(#(#[PROPERTY_DEF, "PROPERTY_DEF"], mods, p, pb));}
+		|	(type propertyHead propertyBody ) => pt:type p:propertyHead pb:propertyBody //PropertyHeader
+			{#field =(#(#[PROPERTY_DEF, "PROPERTY_DEF"], mods, #(#[TYPE,"TYPE"],pt), p, pb));}
 
-		|	(type propertyHead propertyBody ) => pt:type (LBRACK RBRACK)? pn:name pb:propertyBody2[#mods, #(#[TYPE,"TYPE"],pt), #pn] //PropertyHeader
-			{#field =(#(#[PROPERTY_DEF, "PROPERTY_DEF"], mods, pb));}
+		//|	(type propertyHead propertyBody ) => pt:type (LBRACK RBRACK)? pn:name pb:propertyBody2[#mods, #(#[TYPE,"TYPE"],pt), #pn] //PropertyHeader
+		//	{#field =(#(#[PROPERTY_DEF, "PROPERTY_DEF"], mods, pb));}
 		|	cd:classDefinition[#mods]       // inner class
 			{#field = #cd;}
 
@@ -419,7 +420,7 @@ structBody
     ;
     
 propertyBody
-    :   pc: LCURLY^ {#pc.setType(BLOCK);}
+    :   pc: LCURLY!
     		(   
     		   (propinnerBody)*
    		)
@@ -435,8 +436,15 @@ propertyBody2[CommonAST modifiers, CommonAST type, CommonAST propertyName]
 	;
 
 propinnerBody
-   : pib :
-   	IDENT (LCURLY (statement)* RCURLY!)?  (SEMI)?
+   : pib :IDENT^
+   {
+       if(#pib.getText().equals("set")){
+       		#pib.setType(PROPERTY_SET_BODY);
+       } else if(#pib.getText().equals("get")) {
+       		#pib.setType(PROPERTY_GET_BODY);
+       }
+   }
+   (LCURLY! (statement)* RCURLY!)?  (SEMI)?
    ;
    
 setOrget

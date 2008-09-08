@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.csharp.MethodBuilderFromPropertyAST;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BlockScopeBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ClassBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ConstructorBuilder;
@@ -80,6 +81,9 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
                 new NameBuilder(), new MethodParameterBuilder(this.buildDataManager,
                         new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
                         new NameBuilder(), modifiersInterpriter)));
+        this.builders.add(new MethodBuilderFromPropertyAST(this.buildDataManager, modifiersInterpriter,
+                new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
+                new NameBuilder()));
         //this.builders.add(new Initializerbuilder());
         //this.builders.add(new StaticInitializerBuilder());
 

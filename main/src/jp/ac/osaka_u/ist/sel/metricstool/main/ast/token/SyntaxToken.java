@@ -94,12 +94,48 @@ public class SyntaxToken extends AstTokenAdapter {
         }
     };
     
+    /**
+     * throw文を表す定数インスタンス
+     */
     public static final SyntaxToken THROW = new SyntaxToken("THROW") {
         @Override
         public boolean isThrow() {
             return true;
         }
     };
+    
+    /**
+     * プロパティのget部を表す定数インスタンス
+     */
+    public static final SyntaxToken PROPERTY_GET_BODY = new SyntaxToken("PROPERTY_GET_BODY") {
+        @Override
+        public boolean isPropertyGetBody() {
+            return true; 
+        };
+        
+        @Override
+        public boolean isBlock() {
+            return true;
+        }
+       
+    };
+    
+    /**
+     * プロパティのset部を表す定数インスタンス
+     */
+    public static final SyntaxToken PROPERTY_SET_BODY = new SyntaxToken("PROPERTY_SET_BODY") {
+        @Override
+        public boolean isPropertySetBody() {
+            return true; 
+        };
+        
+        @Override
+        public boolean isBlock() {
+            return true;
+        }
+    };
+    
+    
     
     /**
      * 指定された文字列で表されるトークンを作成するコンストラクタ

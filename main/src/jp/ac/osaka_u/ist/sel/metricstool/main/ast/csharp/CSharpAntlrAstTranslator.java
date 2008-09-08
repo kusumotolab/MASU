@@ -421,6 +421,15 @@ public class CSharpAntlrAstTranslator implements AstTokenTranslator<AST> {
         case CSharpTokenTypes.COND_CLAUSE:
             result = DescriptionToken.CONDITIONAL_CLAUSE;
             break;
+        case CSharpTokenTypes.PROPERTY_DEF:
+            result = DefinitionToken.PROPERTY_DEFINITION;
+            break;
+        case CSharpTokenTypes.PROPERTY_GET_BODY:
+            result = SyntaxToken.PROPERTY_GET_BODY;
+            break;
+        case CSharpTokenTypes.PROPERTY_SET_BODY:
+            result = SyntaxToken.PROPERTY_SET_BODY;
+            break;
         default:
             //変換できなかったノードは取りあえずその子供に進む
             result = VisitControlToken.ENTER;
