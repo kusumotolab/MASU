@@ -84,7 +84,7 @@ public final class UnresolvedFieldInfo extends
         final String fieldName = this.getName();
         final UnresolvedTypeInfo<?> unresolvedFieldType = this.getType();
         TypeInfo fieldType = unresolvedFieldType.resolve(usingClass, null, classInfoManager,
-                fieldInfoManager, null);
+                fieldInfoManager, methodInfoManager);
         assert fieldType != null : "resolveTypeInfo returned null!";
         if (fieldType instanceof UnknownTypeInfo) {
             if (unresolvedFieldType instanceof UnresolvedClassReferenceInfo) {

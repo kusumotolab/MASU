@@ -1027,7 +1027,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
      */
     private static final MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
         public String getMessageSourceName() {
-            return "UnresolvedUnknownEntityUsage";
+            return "UnresolvedUnknownUsage";
         }
     }, MESSAGE_TYPE.ERROR);
 }

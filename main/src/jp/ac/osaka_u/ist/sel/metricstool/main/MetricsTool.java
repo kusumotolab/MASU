@@ -1085,11 +1085,13 @@ public class MetricsTool {
                 .getInstance();
         final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
         final FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
+        final MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
 
         // 各 Unresolvedクラスに対して
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
-            registFieldInfos(unresolvedClassInfo, classInfoManager, fieldInfoManager);
+            registFieldInfos(unresolvedClassInfo, classInfoManager, fieldInfoManager,
+                    methodInfoManager);
         }
     }
 
@@ -1101,7 +1103,8 @@ public class MetricsTool {
      * @param fieldInfoManager 用いるフィールドマネージャ
      */
     private void registFieldInfos(final UnresolvedClassInfo unresolvedClassInfo,
-            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager) {
+            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
+            final MethodInfoManager methodInfoManager) {
 
         // ClassInfo を取得
         final TargetClassInfo ownerClass = unresolvedClassInfo.getResolved();
@@ -1110,13 +1113,15 @@ public class MetricsTool {
         // 各未解決フィールドに対して
         for (final UnresolvedFieldInfo unresolvedFieldInfo : unresolvedClassInfo.getDefinedFields()) {
 
-            unresolvedFieldInfo.resolve(ownerClass, null, classInfoManager, fieldInfoManager, null);
+            unresolvedFieldInfo.resolve(ownerClass, null, classInfoManager, fieldInfoManager,
+                    methodInfoManager);
         }
 
         // 各インナークラスに対して
         for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
                 .getInnerClasses()) {
-            registFieldInfos(unresolvedInnerClassInfo, classInfoManager, fieldInfoManager);
+            registFieldInfos(unresolvedInnerClassInfo, classInfoManager, fieldInfoManager,
+                    methodInfoManager);
         }
     }
 
