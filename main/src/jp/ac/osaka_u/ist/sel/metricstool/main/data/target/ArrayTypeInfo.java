@@ -18,7 +18,7 @@ public final class ArrayTypeInfo implements ReferenceTypeInfo {
     /**
      * Œ^–¼‚ğ•Ô‚·
      * 
-     * @param Œ^–¼
+     * @return Œ^–¼
      */
     public String getTypeName() {
         final TypeInfo elementType = this.getElementType();
@@ -35,6 +35,7 @@ public final class ArrayTypeInfo implements ReferenceTypeInfo {
     /**
      * “™‚µ‚¢‚©‚Ç‚¤‚©‚Ìƒ`ƒFƒbƒN‚ğs‚¤
      * 
+     * @param typeInfo ”äŠr‘ÎÛŒ^
      * @return “™‚µ‚¢ê‡‚Ítrue, ‚»‚¤‚Å‚È‚¢ê‡‚Ífalse
      */
     public boolean equals(final TypeInfo typeInfo) {

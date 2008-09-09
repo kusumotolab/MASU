@@ -75,6 +75,9 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
         return new HashSet<VariableUsageInfo<?>>();
     }
 
+    /**
+     * ”äŠr‚·‚é
+     */
     @Override
     public int compareTo(StatementInfo o) {
 

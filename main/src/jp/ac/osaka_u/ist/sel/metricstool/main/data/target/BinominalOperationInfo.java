@@ -238,8 +238,10 @@ public class BinominalOperationInfo extends EntityUsageInfo {
         return this.secondOperand;
     }
 
-    /* (non-Javadoc)
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo#getVariableUsages()
+    /**
+     * ‚±‚Ì“ñ€‰‰Z‚É‚¨‚¯‚é•Ï”g—pŒQ‚ğ•Ô‚·
+     * 
+     * return ‚±‚Ì“ñ€‰‰Z‚É‚¨‚¯‚é•Ï”g—pŒQ
      */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {

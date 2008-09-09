@@ -92,12 +92,17 @@ public abstract class CallInfo extends EntityUsageInfo {
     /**
      * この呼び出しの実引数のListを返す．
      * 
-     * @return
+     * @return　この呼び出しの実引数のList
      */
     public List<EntityUsageInfo> getArguments() {
         return Collections.unmodifiableList(this.arguments);
     }
 
+    /**
+     * この呼び出しにおける変数使用群を返す
+     * 
+     * @return この呼び出しにおける変数使用群
+     */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
