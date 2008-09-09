@@ -37,7 +37,6 @@ public final class TargetMethodInfo extends MethodInfo implements Member {
      * @param modifiers 修飾子
      * @param name メソッド名
      * @param ownerClass 所有しているクラス
-     * @param constructor コンストラクタかどうか．コンストラクタの場合は true,そうでない場合は false．
      * @param privateVisible クラス内からのみ参照可能
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能

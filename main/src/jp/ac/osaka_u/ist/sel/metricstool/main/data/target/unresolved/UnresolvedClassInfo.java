@@ -14,6 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetAnonymousClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -73,6 +74,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         this.isInterface = false;
 
         this.instance = true;
+
+        this.anonymous = false;
 
         this.resolvedInfo = null;
     }
@@ -504,13 +507,31 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
+     * 無名クラスかどうかをセットする
+     * 
+     * @param anonymous　無名クラスの場合は true，そうでない場合は false
+     */
+    public void setAnonymous(final boolean anonymous) {
+        this.anonymous = anonymous;
+    }
+
+    /**
+     * 無名クラスかどうかを返す
+     * 
+     * @return 無名クラスである場合はtrue, そうでない場合はfalse
+     */
+    public boolean isAnonymous() {
+        return this.anonymous;
+    }
+
+    /**
      * この未解決クラス情報を解決する
      * 
      * @param usingClass 所属クラス，このメソッド呼び出しの際は null さセットされていると思われる．
      * @param usingMethod 所属メソッド，このメソッド呼び出しの際は null さセットされていると思われる．
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManger 用いるメソッドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
      */
     @Override
     public TargetClassInfo resolve(final TargetClassInfo usingClass,
@@ -542,13 +563,23 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         final int toColumn = this.getToColumn();
 
         // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
-        this.resolvedInfo = null == this.outerClass ? new TargetClassInfo(modifiers,
-                fullQualifiedName, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible, instance, this.isInterface, this.fileInfo, fromLine, fromColumn,
-                toLine, toColumn) : new TargetInnerClassInfo(modifiers, fullQualifiedName,
-                usingClass, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
-                instance, this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+        // 無名クラスの場合
+        if (this.isAnonymous()) {
+            this.resolvedInfo = new TargetAnonymousClassInfo(fullQualifiedName, usingClass,
+                    this.fileInfo, fromLine, fromColumn, toLine, toColumn);
 
+            // 一番外側のクラスの場合
+        } else if (null == this.outerClass) {
+            this.resolvedInfo = new TargetClassInfo(modifiers, fullQualifiedName, privateVisible,
+                    namespaceVisible, inheritanceVisible, publicVisible, instance,
+                    this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+
+            // インナークラスの場合
+        } else {
+            this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName, usingClass,
+                    privateVisible, namespaceVisible, inheritanceVisible, publicVisible, instance,
+                    this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+        }
         return this.resolvedInfo;
     }
 
@@ -651,5 +682,10 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * インターフェースであるかどうかを保存するための変数
      */
     private boolean isInterface;
+
+    /**
+     * 無名クラスかどうかを表す変数
+     */
+    private boolean anonymous;
 
 }

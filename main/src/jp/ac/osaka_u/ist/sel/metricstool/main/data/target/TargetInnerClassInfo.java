@@ -9,7 +9,7 @@ import java.util.Set;
  * 
  * @author higo
  */
-public final class TargetInnerClassInfo extends TargetClassInfo {
+public class TargetInnerClassInfo extends TargetClassInfo {
 
     /**
      * インナークラスオブジェクトを初期化する
@@ -17,7 +17,7 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * @param modifiers 修飾子名の Set
      * @param namespace 名前空間
      * @param className クラス名
-     * @param outerClass 外側のクラス
+     * @param outerUnit 外側のユニット，TargetClassInfo　もしくは TargetMethodInfo でなければならない
      * @param privateVisible クラス内からのみ参照可能
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
@@ -31,7 +31,7 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * @param toColumn 終了列
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
-            final String className, final TargetClassInfo outerClass, final boolean privateVisible,
+            final String className, final UnitInfo outerUnit, final boolean privateVisible,
             final boolean namespaceVisible, final boolean inheritanceVisible,
             final boolean publicVisible, final boolean instance, final boolean isInterface,
             final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
@@ -41,11 +41,15 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
                 inheritanceVisible, publicVisible, instance, isInterface, fileInfo, fromLine,
                 fromColumn, toLine, toColumn);
 
-        if (null == outerClass) {
+        if (null == outerUnit) {
             throw new NullPointerException();
         }
 
-        this.outerClass = outerClass;
+        if (!(outerUnit instanceof TargetClassInfo) && !(outerUnit instanceof TargetMethodInfo)) {
+            throw new IllegalArgumentException();
+        }
+
+        this.outerUnit = outerUnit;
     }
 
     /**
@@ -53,8 +57,7 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * 
      * @param modifiers 修飾子名の Set
      * @param fullQualifiedName 完全限定名
-     * @param outerClass 外側のクラス
-     * @param loc 行数
+     * @param outerUnit 外側のユニット，TargetClassInfo　もしくは TargetMethodInfo でなければならない
      * @param privateVisible クラス内からのみ参照可能
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
@@ -68,7 +71,7 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
      * @param toColumn 終了列
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers,
-            final String[] fullQualifiedName, final TargetClassInfo outerClass,
+            final String[] fullQualifiedName, final UnitInfo outerUnit,
             final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
             final boolean isInterface, final FileInfo fileInfo, final int fromLine,
@@ -78,24 +81,54 @@ public final class TargetInnerClassInfo extends TargetClassInfo {
                 publicVisible, instance, isInterface, fileInfo, fromLine, fromColumn, toLine,
                 toColumn);
 
-        if (null == outerClass) {
+        if (null == outerUnit) {
             throw new NullPointerException();
         }
 
-        this.outerClass = outerClass;
+        if (!(outerUnit instanceof TargetClassInfo) && !(outerUnit instanceof TargetMethodInfo)) {
+            throw new IllegalArgumentException();
+        }
+
+        this.outerUnit = outerUnit;
     }
 
     /**
-     * 外側のクラスを返す
+     * 外側のユニットを返す
      * 
-     * @return 外側のクラス
+     * @return 外側のユニット
      */
-    public TargetClassInfo getOuterClass() {
-        return this.outerClass;
+    public final UnitInfo getOuterUnit() {
+        return this.outerUnit;
     }
 
     /**
-     * 外側のクラスのオブジェクトを保存する変数
+     * 外側のクラスを返す.
+     * つまり，getOuterUnit の返り値がTargetClassInfoである場合は，そのオブジェクトを返し，
+     * 返り値が，TargetMethodInfoである場合は，そのオブジェクトの ownerClass を返す．
+     * 
+     * @return　外側のクラス
      */
-    private final TargetClassInfo outerClass;
+    public final TargetClassInfo getOuterClass() {
+
+        final UnitInfo unitInfo = this.getOuterUnit();
+
+        // 外側のユニットがクラスであればそのまま返す
+        if (unitInfo instanceof TargetClassInfo) {
+            return (TargetClassInfo) unitInfo;
+
+            // 外側のユニットがメソッドであれば，その所有クラスを返す
+        } else if (unitInfo instanceof TargetMethodInfo) {
+
+            final ClassInfo ownerClass = ((TargetMethodInfo) unitInfo).getOwnerClass();
+            return (TargetClassInfo) ownerClass;
+        }
+
+        assert false : "here shouldn't be reached!";
+        return null;
+    }
+
+    /**
+     * 外側のユニットのオブジェクトを保存する変数
+     */
+    private final UnitInfo outerUnit;
 }

@@ -84,7 +84,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @param modifiers 修飾子の Set
      * @param fullQualifiedName 完全限定名
-     * @param loc 行数
      * @param privateVisible クラス内からのみ参照可能
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
