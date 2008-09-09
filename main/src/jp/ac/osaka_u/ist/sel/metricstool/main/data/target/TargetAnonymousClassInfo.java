@@ -17,7 +17,7 @@ public final class TargetAnonymousClassInfo extends TargetInnerClassInfo {
      * 
      * @param namespace 名前空間
      * @param className クラス名
-     * @param outerClass 外側のクラス
+     * @param outerUnit 外側のユニット
      * @param fileInfo このクラスを宣言しているファイル情報
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -25,10 +25,10 @@ public final class TargetAnonymousClassInfo extends TargetInnerClassInfo {
      * @param toColumn 終了列
      */
     public TargetAnonymousClassInfo(final NamespaceInfo namespace, final String className,
-            final TargetClassInfo outerClass, final FileInfo fileInfo, final int fromLine,
+            final UnitInfo outerUnit, final FileInfo fileInfo, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
-        super(new HashSet<ModifierInfo>(), namespace, className, outerClass, false, false, false,
+        super(new HashSet<ModifierInfo>(), namespace, className, outerUnit, false, false, false,
                 false, true, false, fileInfo, fromLine, fromColumn, toLine, toColumn);
     }
 
@@ -36,18 +36,18 @@ public final class TargetAnonymousClassInfo extends TargetInnerClassInfo {
      * 無名インナークラスオブジェクトを初期化する
      * 
      * @param fullQualifiedName 完全限定名
-     * @param outerClass 外側のクラス
+     * @param outerUnit 外側のユニット
      * @param fileInfo このクラスを宣言しているファイル情報
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public TargetAnonymousClassInfo(final String[] fullQualifiedName, final TargetClassInfo outerClass,
+    public TargetAnonymousClassInfo(final String[] fullQualifiedName, final UnitInfo outerUnit,
             final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
 
-        super(new HashSet<ModifierInfo>(), fullQualifiedName, outerClass, false, false, false,
+        super(new HashSet<ModifierInfo>(), fullQualifiedName, outerUnit, false, false, false,
                 false, true, false, fileInfo, fromLine, fromColumn, toLine, toColumn);
     }
 }

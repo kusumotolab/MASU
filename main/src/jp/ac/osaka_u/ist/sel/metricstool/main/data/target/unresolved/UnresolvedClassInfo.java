@@ -17,6 +17,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetAnonymousClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -355,12 +357,12 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * 外部クラスを返す
+     * 外側のユニットを返す
      * 
-     * @return 外部クラス. 外部クラスがない場合はnull
+     * @return 外側のユニット. 外側のユニットがない場合はnull
      */
-    public UnresolvedClassInfo getOuterClass() {
-        return this.outerClass;
+    public UnresolvedUnitInfo<?> getOuterUnit() {
+        return this.outerUnit;
     }
 
     /**
@@ -409,12 +411,12 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * 外部クラスをセットする
+     * 外側のユニットをセットする
      * 
-     * @param outerClass 外部クラス
+     * @param outerUnit 外側のユニット
      */
-    public void setOuterClass(final UnresolvedClassInfo outerClass) {
-        this.outerClass = outerClass;
+    public void setOuterClass(final UnresolvedUnitInfo<?> outerUnit) {
+        this.outerUnit = outerUnit;
     }
 
     /**
@@ -565,20 +567,29 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
         // 無名クラスの場合
         if (this.isAnonymous()) {
-            this.resolvedInfo = new TargetAnonymousClassInfo(fullQualifiedName, usingClass,
+            final UnitInfo resolvedOuterUnit = this.outerUnit.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+            assert !(resolvedOuterUnit instanceof TargetClassInfo)
+                    && !(resolvedOuterUnit instanceof TargetMethodInfo) : "Unexpected State!";
+            this.resolvedInfo = new TargetAnonymousClassInfo(fullQualifiedName, resolvedOuterUnit,
                     this.fileInfo, fromLine, fromColumn, toLine, toColumn);
 
             // 一番外側のクラスの場合
-        } else if (null == this.outerClass) {
+        } else if (null == this.outerUnit) {
             this.resolvedInfo = new TargetClassInfo(modifiers, fullQualifiedName, privateVisible,
                     namespaceVisible, inheritanceVisible, publicVisible, instance,
                     this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
 
             // インナークラスの場合
         } else {
-            this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName, usingClass,
-                    privateVisible, namespaceVisible, inheritanceVisible, publicVisible, instance,
-                    this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+            final UnitInfo resolvedOuterUnit = this.outerUnit.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+            assert !(resolvedOuterUnit instanceof TargetClassInfo)
+                    && !(resolvedOuterUnit instanceof TargetMethodInfo) : "Unexpected State!";
+            this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
+                    resolvedOuterUnit, privateVisible, namespaceVisible, inheritanceVisible,
+                    publicVisible, instance, this.isInterface, this.fileInfo, fromLine, fromColumn,
+                    toLine, toColumn);
         }
         return this.resolvedInfo;
     }
@@ -634,9 +645,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     private final Set<UnresolvedClassInfo> innerClasses;
 
     /**
-     * 外側のクラスを保持する変数
+     * 外側のユニットを保持する変数
      */
-    private UnresolvedClassInfo outerClass;
+    private UnresolvedUnitInfo<?> outerUnit;
 
     /**
      * 定義しているメソッドを保存するためのセット
