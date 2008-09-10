@@ -150,11 +150,14 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
 
     private UnresolvedClassInfo getSpecifiedOuterClass(IdentifierElement identifier) {
         String name = identifier.getName();
-        UnresolvedClassInfo classInfo = buildDataManager.getCurrentClass();
-        while (null != classInfo && !name.equals(classInfo.getClassName())) {
-            classInfo = classInfo.getOuterClass();
+        final UnresolvedClassInfo currentClass = buildDataManager.getCurrentClass();
+        UnresolvedClassInfo outerClass = null;
+        while (null != currentClass && !name.equals(currentClass.getClassName())) {
+            if(currentClass.getOuterUnit() instanceof UnresolvedClassInfo) {
+                outerClass = (UnresolvedClassInfo) currentClass.getOuterUnit();
+            }
         }
-        return classInfo;
+        return outerClass;
     }
 
     private final static UnresolvedClassTypeInfo JAVA_LANG_CLASS = new UnresolvedClassTypeInfo(
