@@ -140,7 +140,6 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
 
             UnresolvedClassTypeInfo superClassType = classInfo.getSuperClasses().iterator().next();
             if (superClassType != null) {
-
                 pushElement(UsageElement.getInstance(superClassType.getUsage()));
             }
         } else {

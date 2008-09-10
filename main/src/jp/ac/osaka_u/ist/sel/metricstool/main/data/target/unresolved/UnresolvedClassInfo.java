@@ -48,8 +48,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * このクラスが記述されているファイル情報を与えて初期化
      * 
      * @param fileInfo このクラスが記述されいてるファイル情報
+     * @param outerUnit このクラスの外側のユニット
      */
-    public UnresolvedClassInfo(final FileInfo fileInfo) {
+    public UnresolvedClassInfo(final FileInfo fileInfo, final UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
@@ -57,6 +58,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             throw new IllegalArgumentException("fileInfo is null");
         }
 
+        this.outerUnit = outerUnit;
+        
         this.fileInfo = fileInfo;
         this.namespace = null;
         this.className = null;
