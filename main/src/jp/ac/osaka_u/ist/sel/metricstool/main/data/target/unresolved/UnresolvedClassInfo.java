@@ -17,7 +17,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetAnonymousClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -50,7 +49,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * @param fileInfo このクラスが記述されいてるファイル情報
      * @param outerUnit このクラスの外側のユニット
      */
-    public UnresolvedClassInfo(final FileInfo fileInfo, final UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
+    public UnresolvedClassInfo(final FileInfo fileInfo,
+            final UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
@@ -59,7 +59,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         }
 
         this.outerUnit = outerUnit;
-        
+
         this.fileInfo = fileInfo;
         this.namespace = null;
         this.className = null;
@@ -572,8 +572,6 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         if (this.isAnonymous()) {
             final UnitInfo resolvedOuterUnit = this.outerUnit.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
-            assert !(resolvedOuterUnit instanceof TargetClassInfo)
-                    && !(resolvedOuterUnit instanceof TargetMethodInfo) : "Unexpected State!";
             this.resolvedInfo = new TargetAnonymousClassInfo(fullQualifiedName, resolvedOuterUnit,
                     this.fileInfo, fromLine, fromColumn, toLine, toColumn);
 
@@ -587,8 +585,6 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         } else {
             final UnitInfo resolvedOuterUnit = this.outerUnit.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
-            assert !(resolvedOuterUnit instanceof TargetClassInfo)
-                    && !(resolvedOuterUnit instanceof TargetMethodInfo) : "Unexpected State!";
             this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
                     resolvedOuterUnit, privateVisible, namespaceVisible, inheritanceVisible,
                     publicVisible, instance, this.isInterface, this.fileInfo, fromLine, fromColumn,
