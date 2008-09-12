@@ -137,16 +137,16 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
     private void addInnerBlockBuilder() {
         //this.builders.add(new CaseGroupBuilder(this.buildDataManager));
         this.builders.add(new CatchBlockBuilder(this.buildDataManager));
-        this.builders.add(new DoBlockBuilder(this.buildDataManager));
+        this.builders.add(new DoBlockBuilder(this.buildDataManager, this.expressionManager));
         this.builders.add(new ElseBlockBuilder(this.buildDataManager));
         this.builders.add(new FinallyBlockBuilder(this.buildDataManager));
-        this.builders.add(new ForBlockBuilder(this.buildDataManager));
-        this.builders.add(new IfBlockBuilder(this.buildDataManager));
+        this.builders.add(new ForBlockBuilder(this.buildDataManager, this.expressionManager));
+        this.builders.add(new IfBlockBuilder(this.buildDataManager, this.expressionManager));
         //this.builders.add(new SimpleBlockBuilder(this.buildDataManager));
         this.builders.add(new SwitchBlockBuilder(this.buildDataManager, this.expressionManager));
         this.builders.add(new SynchronizedBlockBuilder(this.buildDataManager));
         this.builders.add(new TryBlockBuilder(this.buildDataManager));
-        this.builders.add(new WhileBlockBuilder(this.buildDataManager));
+        this.builders.add(new WhileBlockBuilder(this.buildDataManager, this.expressionManager));
     }
 
     /* (non-Javadoc)

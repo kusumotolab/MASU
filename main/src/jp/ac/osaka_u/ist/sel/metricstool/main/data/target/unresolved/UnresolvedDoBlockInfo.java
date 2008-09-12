@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.DoBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
@@ -55,12 +54,6 @@ public final class UnresolvedDoBlockInfo extends UnresolvedConditionalBlockInfo<
             return this.getResolved();
         }
 
-        // この do　ブロックの条件節を解決する
-        final UnresolvedConditionalClauseInfo unresolvedConditionalClause = this
-                .getConditionalClause();
-        final ConditionalClauseInfo conditionalClause = unresolvedConditionalClause.resolve(
-                usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-
         // この do ブロックの位置情報を取得
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
@@ -70,8 +63,8 @@ public final class UnresolvedDoBlockInfo extends UnresolvedConditionalBlockInfo<
         final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolved();
 
         // do ブロックオブジェクトを作成
-        this.resolvedInfo = new DoBlockInfo(usingClass, usingMethod, conditionalClause, outerSpace,
-                fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo = new DoBlockInfo(usingClass, usingMethod, outerSpace, fromLine,
+                fromColumn, toLine, toColumn);
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,

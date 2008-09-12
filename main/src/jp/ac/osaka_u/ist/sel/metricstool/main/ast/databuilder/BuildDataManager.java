@@ -15,7 +15,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedB
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
@@ -117,8 +116,6 @@ public interface BuildDataManager {
 
     public UnresolvedBlockInfo<? extends BlockInfo> endInnerBlockDefinition();
 
-    public UnresolvedConditionalClauseInfo endConditionalClause();
-
     public void endScopedBlock();
 
     public void enterClassBlock();
@@ -169,11 +166,7 @@ public interface BuildDataManager {
 
     public void startInnerBlockDefinition(UnresolvedBlockInfo<? extends BlockInfo> blockInfo);
 
-    public void startConditionalClause(UnresolvedConditionalClauseInfo clauseInfo);
-
     public UnresolvedBlockInfo<? extends BlockInfo> getCurrentBlock();
-
-    public UnresolvedConditionalClauseInfo getCurrentConditionalCluase();
 
     public int getCurrentTypeParameterCount();
 

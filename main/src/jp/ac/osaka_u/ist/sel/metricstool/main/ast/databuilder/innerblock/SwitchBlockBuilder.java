@@ -19,13 +19,8 @@ public class SwitchBlockBuilder extends
         ConditionalBlockBuilder<SwitchBlockInfo, UnresolvedSwitchBlockInfo> {
 
     public SwitchBlockBuilder(final BuildDataManager targetDataManager, final ExpressionElementManager expressionManager) {
-        super(targetDataManager, new SwitchBlockStateManager());
+        super(targetDataManager, new SwitchBlockStateManager(), expressionManager);
         
-        if(null == expressionManager) {
-            throw new IllegalArgumentException("expressionManager is null");
-        }
-        
-        this.expressionManager = expressionManager;
     }
 
     @Override
@@ -56,5 +51,4 @@ public class SwitchBlockBuilder extends
         return new UnresolvedSwitchBlockInfo(outerSpace);
     }
 
-    private final ExpressionElementManager expressionManager;
 }

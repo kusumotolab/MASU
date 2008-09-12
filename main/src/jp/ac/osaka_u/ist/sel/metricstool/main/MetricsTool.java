@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -28,9 +29,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
@@ -58,7 +60,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
@@ -1345,11 +1346,31 @@ public class MetricsTool {
             ownerMethod = (CallableUnitInfo) localSpace;
         } else if (localSpace instanceof BlockInfo) {
             ownerMethod = ((BlockInfo) localSpace).getOwnerMethod();
-        } else if (localSpace instanceof ConditionalClauseInfo) {
-            ownerMethod = ((ConditionalClauseInfo) localSpace).getOwnerBlock().getOwnerMethod();
         } else {
             ownerMethod = null;
             assert false : "Here shouldn't be reached!";
+        }
+
+        // 条件文の場合，未解決条件式の名前解決処理
+        if (localSpace instanceof ConditionalBlockInfo) {
+            final UnresolvedConditionalBlockInfo<?> unresolvedConditionalBlock = (UnresolvedConditionalBlockInfo<?>) unresolvedLocalSpace;
+            final ExpressionInfo conditionalExpression = unresolvedConditionalBlock
+                    .getConditionalExpression().resolve(ownerClass, ownerMethod, classInfoManager,
+                            fieldInfoManager, methodInfoManager);
+
+            try {
+                Class cls = Class
+                        .forName("jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo");
+                Field filed = cls.getDeclaredField("conditionalExpression");
+                filed.setAccessible(true);
+                filed.set(localSpace, conditionalExpression);
+            } catch (ClassNotFoundException e) {
+                assert false : "Illegal state: ConditionalBlockInfo is not found";
+            } catch (NoSuchFieldException e) {
+                assert false : "Illegal state: conditonalExpression is not found";
+            } catch (IllegalAccessException e) {
+
+            }
         }
 
         // 各未解決文情報の名前解決処理
@@ -1410,12 +1431,6 @@ public class MetricsTool {
 
             // 未解決メソッド情報内の利用関係を解決
             if (unresolvedStatement instanceof UnresolvedBlockInfo) {
-                if (unresolvedStatement instanceof UnresolvedConditionalBlockInfo) {
-                    UnresolvedConditionalClauseInfo unresolvedClause = ((UnresolvedConditionalBlockInfo<?>) unresolvedStatement)
-                            .getConditionalClause();
-                    this.addReferenceAssignmentCallRelation(unresolvedClause, unresolvedClassInfo,
-                            classInfoManager, fieldInfoManager, methodInfoManager);
-                }
 
                 this.addReferenceAssignmentCallRelation(
                         (UnresolvedBlockInfo<?>) unresolvedStatement, unresolvedClassInfo,

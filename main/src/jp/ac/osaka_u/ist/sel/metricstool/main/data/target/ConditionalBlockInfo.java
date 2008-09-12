@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
 /**
@@ -17,34 +16,28 @@ public abstract class ConditionalBlockInfo extends BlockInfo {
      * 
      * @param ownerClass このブロックを所有するクラス
      * @param ownerMethod このブロックを所有するメソッド
-     * @param conditionalClause このブロックの条件節
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
     ConditionalBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
-            final ConditionalClauseInfo conditionalClause, final LocalSpaceInfo outerSpace,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final LocalSpaceInfo outerSpace, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
         super(ownerClass, ownerMethod, outerSpace, fromLine, fromColumn, toLine, toColumn);
 
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == conditionalClause) {
-            throw new NullPointerException();
-        }
 
-        this.conditionalClause = conditionalClause;
     }
 
     /**
-     * この条件付ブロックの条件節を返す
+     * この条件付ブロックの条件式を返す
      * 
-     * @return　この条件付ブロックの条件節
+     * @return　この条件付ブロックの条件式
      */
-    public final ConditionalClauseInfo getConditionalClause() {
-        return this.conditionalClause;
+    public final ExpressionInfo getConditionalExpression() {
+        return this.conditionalExpression;
     }
 
-    private final ConditionalClauseInfo conditionalClause;
+    private ExpressionInfo conditionalExpression;
 }
