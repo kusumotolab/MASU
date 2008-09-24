@@ -103,7 +103,7 @@ public class CompoundIdentifierElement extends IdentifierElement {
 
         return null != this.ownerUsage ? this.ownerUsage : new UnresolvedUnknownUsageInfo(
                 buildDataManager.getAllAvaliableNames(), this.owner.getQualifiedName(),
-                this.fromLine, this.fromColumn, this.toLine, this.toColumn);
+                this.owner.fromLine, this.owner.fromColumn, this.owner.toLine, this.owner.toColumn);
     }
 
     private final IdentifierElement owner;
