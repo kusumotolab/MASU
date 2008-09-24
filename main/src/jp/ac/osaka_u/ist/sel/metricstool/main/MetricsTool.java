@@ -1354,22 +1354,25 @@ public class MetricsTool {
         // èåèï∂ÇÃèÍçáÅCñ¢âåàèåèéÆÇÃñºëOâåàèàóù
         if (localSpace instanceof ConditionalBlockInfo) {
             final UnresolvedConditionalBlockInfo<?> unresolvedConditionalBlock = (UnresolvedConditionalBlockInfo<?>) unresolvedLocalSpace;
-            final ExpressionInfo conditionalExpression = unresolvedConditionalBlock
-                    .getConditionalExpression().resolve(ownerClass, ownerMethod, classInfoManager,
-                            fieldInfoManager, methodInfoManager);
 
-            try {
-                Class cls = Class
-                        .forName("jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo");
-                Field filed = cls.getDeclaredField("conditionalExpression");
-                filed.setAccessible(true);
-                filed.set(localSpace, conditionalExpression);
-            } catch (ClassNotFoundException e) {
-                assert false : "Illegal state: ConditionalBlockInfo is not found";
-            } catch (NoSuchFieldException e) {
-                assert false : "Illegal state: conditonalExpression is not found";
-            } catch (IllegalAccessException e) {
+            if (null != unresolvedConditionalBlock.getConditionalExpression()) {
+                final ExpressionInfo conditionalExpression = unresolvedConditionalBlock
+                        .getConditionalExpression().resolve(ownerClass, ownerMethod,
+                                classInfoManager, fieldInfoManager, methodInfoManager);
 
+                try {
+                    Class cls = Class
+                            .forName("jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo");
+                    Field filed = cls.getDeclaredField("conditionalExpression");
+                    filed.setAccessible(true);
+                    filed.set(localSpace, conditionalExpression);
+                } catch (ClassNotFoundException e) {
+                    assert false : "Illegal state: ConditionalBlockInfo is not found";
+                } catch (NoSuchFieldException e) {
+                    assert false : "Illegal state: conditonalExpression is not found";
+                } catch (IllegalAccessException e) {
+
+                }
             }
         }
 

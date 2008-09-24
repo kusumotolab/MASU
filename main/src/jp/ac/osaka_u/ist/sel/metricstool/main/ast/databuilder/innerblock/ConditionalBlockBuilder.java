@@ -12,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedForBlockInfo;
 
 
 public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlockInfo, T extends UnresolvedConditionalBlockInfo<TResolved>>
@@ -60,13 +61,15 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
     }*/
 
     private void registerConditionalExpression() {
+        final T currentBuildingBlock = this.buildingBlockStack.peek();
+        
         if (!this.buildingBlockStack.isEmpty()
-                && this.buildingBlockStack.peek() == this.buildManager.getCurrentBlock()) {
+                && currentBuildingBlock == this.buildManager.getCurrentBlock()) {
 
             final UnresolvedExpressionInfo<? extends ExpressionInfo> conditionalExpression = this.expressionManager
                     .getLastPoppedExpressionElement().getUsage();
             
-            assert null != conditionalExpression : "Illegal state; conditional expression is not found.";
+            assert null != conditionalExpression || currentBuildingBlock instanceof UnresolvedForBlockInfo : "Illegal state; conditional expression is not found.";
 
             this.buildingBlockStack.peek().setConditionalExpression(conditionalExpression);
 

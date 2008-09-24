@@ -39,9 +39,7 @@ public abstract class UnresolvedConditionalBlockInfo<T extends ConditionalBlockI
      */
     public final void setConditionalExpression(
             final UnresolvedExpressionInfo<? extends ExpressionInfo> conditionalExpression) {
-        if(null == conditionalExpression) {
-            throw new IllegalArgumentException("conditionalExpression is null");
-        }
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         
         this.conditionalExpression = conditionalExpression;
