@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.csharp.CSharpAntlrAstTranslator;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java13AntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java14AntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java15AntlrAstTranslator;
@@ -305,6 +306,8 @@ public class MetricsTool {
                     targetFile.setCorrectSytax(false);
                     err.println(e.getMessage());
                     // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
+                } catch (ASTParseException e) {
+                    err.println(e.getMessage());
                 }
             }
         }

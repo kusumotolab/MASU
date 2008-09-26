@@ -3,6 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor;
 
 import java.util.EventListener;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
+
 
 /**
  * 抽象構文木のビジターから {@link AstVisitEvent} の通知を受け取るインタフェース.
@@ -31,5 +33,5 @@ public interface AstVisitListener extends EventListener {
      * ビジターがある頂点の中から出た時にイベントを受け取る
      * @param e
      */
-    public void exited(AstVisitEvent e);
+    public void exited(AstVisitEvent e) throws ASTParseException;
 }

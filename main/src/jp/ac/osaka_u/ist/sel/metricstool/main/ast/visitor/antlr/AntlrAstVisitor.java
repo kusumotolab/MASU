@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Stack;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstTokenTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
@@ -120,7 +121,7 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
     /* (non-Javadoc)
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitor#startVisiting(java.lang.Object)
      */
-    public void startVisiting(final AST startNode) {
+    public void startVisiting(final AST startNode) throws ASTParseException {
         AST nextNode = startNode;
         // printAST(startNode, 0);
         AstToken parentToken = null;
@@ -201,7 +202,7 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
      * 現在のノードの内部から出るイベントを発行する
      * @param event　発行するイベント
      */
-    private void fireExitEvent(final AstVisitEvent event) {
+    private void fireExitEvent(final AstVisitEvent event) throws ASTParseException {
         for (final AstVisitListener listener : this.listeners) {
             listener.exited(event);
         }

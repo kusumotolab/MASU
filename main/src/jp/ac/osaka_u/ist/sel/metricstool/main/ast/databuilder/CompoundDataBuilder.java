@@ -57,7 +57,7 @@ public abstract class CompoundDataBuilder<T> extends StateDrivenDataBuilder<T> {
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder#exited(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
     @Override
-    public void exited(final AstVisitEvent e) {
+    public void exited(final AstVisitEvent e) throws ASTParseException {
         if (this.isActive()) {
             for (final DataBuilder builder : this.builders) {
                 builder.exited(e);

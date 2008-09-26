@@ -53,7 +53,7 @@ public abstract class DataBuilderAdapter<T> implements DataBuilder<T> {
     /* (non-Javadoc)
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitListener#exited(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
-    public abstract void exited(final AstVisitEvent e);
+    public abstract void exited(final AstVisitEvent e) throws ASTParseException;
 
     /* (non-Javadoc)
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder#getBuiltDatas()

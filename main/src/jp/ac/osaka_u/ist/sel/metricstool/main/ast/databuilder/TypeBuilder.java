@@ -80,7 +80,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.CompoundDataBuilder#exited(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
     @Override
-    public void exited(final AstVisitEvent event) {
+    public void exited(final AstVisitEvent event) throws ASTParseException {
         super.exited(event);
 
         if (this.isActive() && this.typeStateManager.isEntered()) {

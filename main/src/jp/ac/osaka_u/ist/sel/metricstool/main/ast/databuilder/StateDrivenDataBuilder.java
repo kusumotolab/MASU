@@ -38,7 +38,7 @@ public abstract class StateDrivenDataBuilder<T> extends DataBuilderAdapter<T> im
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilderAdapter#exited(jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent)
      */
     @Override
-    public void exited(final AstVisitEvent e) {
+    public void exited(final AstVisitEvent e) throws ASTParseException {
         if (isActive()) {
             for (final AstVisitListener listener : this.stateManagers) {
                 listener.exited(e);

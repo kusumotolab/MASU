@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
+
 
 
 
@@ -42,5 +44,5 @@ public interface AstVisitor<T> {
      * ビジターの訪問を開始する
      * @param startNode　最初に訪問するASTノード
      */
-    public void startVisiting(T startNode);
+    public void startVisiting(T startNode) throws ASTParseException;
 }

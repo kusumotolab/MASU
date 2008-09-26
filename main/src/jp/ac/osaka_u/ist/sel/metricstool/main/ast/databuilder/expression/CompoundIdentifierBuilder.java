@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
@@ -24,7 +25,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
     }
 
     @Override
-    protected void afterExited(AstVisitEvent event) {
+    protected void afterExited(AstVisitEvent event) throws ASTParseException {
 
         AstToken token = event.getToken();
         if (token.isNameSeparator()) {
@@ -32,7 +33,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
         }
     }
 
-    protected void buildCompoundIdentifierElementAvoidTypeArguments() {
+    protected void buildCompoundIdentifierElementAvoidTypeArguments() throws ASTParseException {
         ExpressionElement[] elements = getAvailableElements();
 
         if (2 == elements.length) {
@@ -58,7 +59,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
         }
     }
 
-    protected void buildCompoundIdentifierElement(ExpressionElement[] elements) {
+    protected void buildCompoundIdentifierElement(ExpressionElement[] elements) throws ASTParseException {
 
         if (elements.length == 2) {
             ExpressionElement left = elements[0];

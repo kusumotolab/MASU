@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ExpressionStateManager;
@@ -41,7 +42,7 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
     }
 
     @Override
-    public void exited(final AstVisitEvent e) {
+    public void exited(final AstVisitEvent e) throws ASTParseException {
         final AstToken token = e.getToken();
 
         final boolean isRelated = isActive() && isInExpression() && isTriggerToken(token);
@@ -73,7 +74,7 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
 
     }
 
-    protected abstract void afterExited(AstVisitEvent event);
+    protected abstract void afterExited(AstVisitEvent event) throws ASTParseException;
 
     protected boolean isInExpression() {
         return this.expressionStateManger.inExpression();

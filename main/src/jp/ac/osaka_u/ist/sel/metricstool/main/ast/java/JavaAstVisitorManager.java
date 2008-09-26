@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.csharp.MethodBuilderFromPropertyAST;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BlockScopeBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ClassBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ConstructorBuilder;
@@ -152,7 +153,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
     /* (non-Javadoc)
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.AstVisitorManager#visitStart(antlr.collections.AST)
      */
-    public void visitStart(final T node) {
+    public void visitStart(final T node) throws ASTParseException {
         this.reset();
 
         this.visitor.startVisiting(node);
