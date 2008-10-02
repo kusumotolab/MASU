@@ -2,9 +2,13 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
@@ -55,11 +59,30 @@ public final class MethodCallInfo extends CallInfo {
             return definitionType;
         }
 
-        //　型パラメータの場合は型引数を返す
-        final int typeParameterIndex = ((TypeParameterInfo) definitionType).getIndex();
+        //　型パラメータの場合
         final ClassTypeInfo callOwnerType = (ClassTypeInfo) this.getOwnerType();
-        final TypeInfo typeArgument = callOwnerType.getTypeArgument(typeParameterIndex);
-        return typeArgument;
+        final List<TypeInfo> typeArguments = callOwnerType.getTypeArguments();
+
+        // 型引数がある場合は，その型を返す
+        if (0 < typeArguments.size()) {
+            final int typeParameterIndex = ((TypeParameterInfo) definitionType).getIndex();
+            final TypeInfo typeArgument = typeArguments.get(typeParameterIndex);
+            return typeArgument;
+
+            // 型引数がない場合は，特殊な型を返す
+        } else {
+
+            // Java　の場合 (型パラメータは1.5から導入された)
+            if (Settings.getLanguage().equals(LANGUAGE.JAVA15)) {
+                final ClassInfo referencedClass = ClassInfoManager.getInstance().getClassInfo(
+                        new String[] { "java", "lang", "Object" });
+                final TypeInfo classType = new ClassTypeInfo(referencedClass);
+                return classType;
+            }
+        }
+
+        assert false : "Here shouldn't be reached!";
+        return null;
     }
 
     /**
