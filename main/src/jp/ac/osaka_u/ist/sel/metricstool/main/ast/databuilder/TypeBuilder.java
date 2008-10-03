@@ -267,6 +267,16 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
             }*/
         }
     }
+    
+    @Override
+    public void clearBuiltData() {
+        super.clearBuiltData();
+        
+        this.typeArgumentsLists.clear();
+        this.availableTypeArugments = null;
+    }
+    
+    
 
     /**
      * 配列記述子の数をカウントする

@@ -33,7 +33,7 @@ public abstract class DataBuilderAdapter<T> implements DataBuilder<T> {
      * 
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder#clearBuiltData()
      */
-    public final void clearBuiltData() {
+    public void clearBuiltData() {
         this.builtDataStack.clear();
     }
 
