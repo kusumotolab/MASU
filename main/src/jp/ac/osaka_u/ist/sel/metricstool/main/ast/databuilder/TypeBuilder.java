@@ -120,7 +120,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
                 //型引数群の定義部が終わったので，スタックの一番上のリストを，今現在利用できる型パラメータ群として取り出す．
                 if (!this.typeArgumentsLists.isEmpty()) {
                     this.availableTypeArugments = this.typeArgumentsLists.pop();
-                    this.buildType();
+                    //this.buildType();
                 } else {
                     assert (false) : "Illegal state: requested type arguments were not available.";
                 }
