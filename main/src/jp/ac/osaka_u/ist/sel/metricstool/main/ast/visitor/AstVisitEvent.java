@@ -18,16 +18,18 @@ public class AstVisitEvent extends EventObject {
      * このイベントが表すノードに関する情報を引数に取るコンストラクタ.
      * @param source　このイベントの発行元となるビジター
      * @param token 到達したノードの種類を表すトークン
+     * @param text 到達したノードが表す文字列
      * @param enterLine 到達したノードが表す要素のソースコード上での開始行
      * @param enterColumn 到達したノードが表す要素のソースコード上の出開始列
      * @param exitLine 到達したノードが表す要素のソースコード上での終了行
      * @param exitColumn 到達したノードが表す要素のソースコード上での終了行
      */
-    public AstVisitEvent(final AstVisitor source, final AstToken token, final AstToken parentToken,
+    public AstVisitEvent(final AstVisitor source, final AstToken token, final String text, final AstToken parentToken,
             final int enterLine, final int enterColumn, final int exitLine, final int exitColumn) {
         super(source);
         this.source = source;
         this.token = token;
+        this.text = text;
         this.parentToken = parentToken;
         this.startLine = enterLine;
         this.endLine = exitLine;
@@ -50,6 +52,15 @@ public class AstVisitEvent extends EventObject {
      */
     public AstToken getToken() {
         return this.token;
+    }
+    
+    /**
+     * このイベントが関連するASTノードの文字列を返す．
+     * 
+     * @return このイベントが関連するASTノードの文字列
+     */
+    public final String getText() {
+        return this.text;
     }
     
     /**
@@ -105,6 +116,11 @@ public class AstVisitEvent extends EventObject {
      * このイベントが関連するASTノードの種類を表すトークン
      */
     private final AstToken token;
+    
+    /**
+     * このイベントが関連するASTノードの文字列
+     */
+    private final String text;
 
     /**
      * このイベントが関連するASTノードの親ノードの種類を表すトークン

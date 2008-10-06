@@ -38,4 +38,5 @@ public enum OPERATOR_TYPE {
      * 代入演算子を表す定数． = だけでなく，+= や -= など左辺に代入される変数を置く全ての演算子を表す．
      */
     ASSIGNMENT;
+    
 }

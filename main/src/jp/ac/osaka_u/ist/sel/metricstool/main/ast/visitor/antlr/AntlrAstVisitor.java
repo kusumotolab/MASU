@@ -143,7 +143,7 @@ public class AntlrAstVisitor implements AstVisitor<AST> {
             }
             
             //–K–âƒCƒxƒ“ƒg‚ğì¬
-            final AstVisitEvent event = new AstVisitEvent(this, token, parentToken, startLine, startColumn,
+            final AstVisitEvent event = new AstVisitEvent(this, token, nextNode.getText(), parentToken, startLine, startColumn,
                     endLine, endColumn);
 
             this.fireVisitEvent(event);

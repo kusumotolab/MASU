@@ -6,6 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsageInfo;
@@ -30,11 +31,11 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
     protected void afterExited(final AstVisitEvent event) {
         final AstToken token = event.getToken();
         if (isTriggerToken(token)) {
-            this.buildOperatorElement((OperatorToken) token);
+            this.buildOperatorElement(((OperatorToken) token), event.getText());
         }
     }
 
-    protected void buildOperatorElement(final OperatorToken token) {
+    protected void buildOperatorElement(final OperatorToken token, final String tokenText) {
         //演算子が必要とする項の数
         final int term = token.getTermCount();
         //左辺値への代入があるかどうか
@@ -110,14 +111,19 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 }
             }
 
-            final OPERATOR_TYPE operator = token.getOperator();
+            final OPERATOR_TYPE operatorType = token.getOperator();
+            
 
-            if (2 == term && null != operator) {
+            if (2 == term && null != operatorType) {
                 //オペレーターインスタンスがセットされている2項演算子＝名前解決部に型決定処理を委譲する
                 assert (null != termTypes[0]) : "Illega state: first term type was not decided.";
                 assert (null != termTypes[1]) : "Illega state: second term type was not decided.";
 
-                UnresolvedBinominalOperationInfo operation = new UnresolvedBinominalOperationInfo(
+                final OPERATOR operator = OPERATOR.getOperator(tokenText);
+                
+                assert null != operator : "Illegal state: operator is null";
+                
+                final UnresolvedBinominalOperationInfo operation = new UnresolvedBinominalOperationInfo(
                         operator, termTypes[0], termTypes[1]);
                 pushElement(UsageElement.getInstance(operation));
 
