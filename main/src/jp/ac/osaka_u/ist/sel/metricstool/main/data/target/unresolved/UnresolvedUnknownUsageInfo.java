@@ -626,8 +626,13 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                         toLine, toColumn);
 
                                             } else {
-                                                assert false : "Can't resolve entity usage3.5 : "
-                                                        + this.toString();
+                                                // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ˆ—‚ðs‚¤
+                                                // assert false : "Can't resolve entity usage3.5 : " + this.toString();
+                                                usingMethod.addUnresolvedUsage(this);
+                                                this.resolvedInfo = new UnknownEntityUsageInfo(
+                                                        fromLine, fromColumn, toLine, toColumn);
+                                                return this.resolvedInfo;
+
                                             }
                                         }
                                     }
