@@ -31,11 +31,11 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
     protected void afterExited(final AstVisitEvent event) {
         final AstToken token = event.getToken();
         if (isTriggerToken(token)) {
-            this.buildOperatorElement(((OperatorToken) token), event.getText());
+            this.buildOperatorElement(((OperatorToken) token), event);
         }
     }
 
-    protected void buildOperatorElement(final OperatorToken token, final String tokenText) {
+    protected void buildOperatorElement(final OperatorToken token, final AstVisitEvent event) {
         //演算子が必要とする項の数
         final int term = token.getTermCount();
         //左辺値への代入があるかどうか
@@ -112,19 +112,23 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
             }
 
             final OPERATOR_TYPE operatorType = token.getOperator();
-            
 
             if (2 == term && null != operatorType) {
                 //オペレーターインスタンスがセットされている2項演算子＝名前解決部に型決定処理を委譲する
                 assert (null != termTypes[0]) : "Illega state: first term type was not decided.";
                 assert (null != termTypes[1]) : "Illega state: second term type was not decided.";
 
-                final OPERATOR operator = OPERATOR.getOperator(tokenText);
-                
+                final OPERATOR operator = OPERATOR.getOperator(event.getText());
+
                 assert null != operator : "Illegal state: operator is null";
-                
+
                 final UnresolvedBinominalOperationInfo operation = new UnresolvedBinominalOperationInfo(
                         operator, termTypes[0], termTypes[1]);
+                operation.setFromLine(termTypes[0].getFromLine());
+                operation.setFromColumn(termTypes[0].getFromColumn());
+                operation.setToLine(termTypes[1].getToLine());
+                operation.setToColumn(termTypes[1].getToColumn());
+
                 pushElement(UsageElement.getInstance(operation));
 
             } else {
@@ -138,6 +142,20 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     //オペレータによってすでに結果の型が決定している
 
                     resultType = new UnresolvedMonominalOperationInfo(termTypes[0], type);
+
+                    if ((termTypes[0].getFromLine() < event.getStartLine())
+                            || (termTypes[0].getFromLine() == event.getStartLine() && termTypes[0]
+                                    .getFromColumn() < event.getStartColumn())) {
+                        resultType.setFromLine(termTypes[0].getFromLine());
+                        resultType.setFromColumn(termTypes[0].getFromColumn());
+                        resultType.setToLine(event.getEndLine());
+                        resultType.setToColumn(event.getEndColumn());
+                    } else {
+                        resultType.setFromLine(event.getStartLine());
+                        resultType.setFromColumn(event.getStartColumn());
+                        resultType.setToLine(termTypes[0].getToLine());
+                        resultType.setToColumn(termTypes[0].getToColumn());
+                    }
                 } else if (token.equals(OperatorToken.ARRAY)) {
                     //配列記述子の場合は特別処理
                     final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> ownerType;
@@ -148,7 +166,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                         ownerType = elements[0].getUsage();
                     }
                     resultType = new UnresolvedArrayElementUsageInfo(ownerType);
-                } else if (token.equals(OperatorToken.CAST) && elements[0] instanceof TypeElement) {
+                } else if (!token.equals(OperatorToken.CAST) && elements[0] instanceof TypeElement) {
                     final UnresolvedTypeInfo castType = ((TypeElement) elements[0]).getType();
                     final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> castedUsage = elements[1]
                             .getUsage();
