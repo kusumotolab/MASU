@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author higo
  * 
  */
-public enum OPERATOR {
+public enum OPERATOR_TYPE {
 
     /**
      * 算術演算子を表す定数． 具体的には，+, -, *, /, %．

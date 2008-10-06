@@ -6,7 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
@@ -110,7 +110,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 }
             }
 
-            final OPERATOR operator = token.getOperator();
+            final OPERATOR_TYPE operator = token.getOperator();
 
             if (2 == term && null != operator) {
                 //オペレーターインスタンスがセットされている2項演算子＝名前解決部に型決定処理を委譲する

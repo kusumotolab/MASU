@@ -30,7 +30,7 @@ public class BinominalOperationInfo extends EntityUsageInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public BinominalOperationInfo(final OPERATOR operator, final EntityUsageInfo firstOperand,
+    public BinominalOperationInfo(final OPERATOR_TYPE operator, final EntityUsageInfo firstOperand,
             final EntityUsageInfo secondOperand, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 
@@ -216,7 +216,7 @@ public class BinominalOperationInfo extends EntityUsageInfo {
      * 
      * @return 演算子
      */
-    public OPERATOR getOperator() {
+    public OPERATOR_TYPE getOperator() {
         return this.operator;
     }
 
@@ -255,5 +255,5 @@ public class BinominalOperationInfo extends EntityUsageInfo {
 
     private final EntityUsageInfo secondOperand;
 
-    private final OPERATOR operator;
+    private final OPERATOR_TYPE operator;
 }

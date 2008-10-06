@@ -7,7 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
 
@@ -27,7 +27,7 @@ public class UnresolvedBinominalOperationInfo extends
      * @param firstOperand 第一（未解決）オペランド
      * @param secondOperand 第二（未解決）オペランド
      */
-    public UnresolvedBinominalOperationInfo(final OPERATOR operator,
+    public UnresolvedBinominalOperationInfo(final OPERATOR_TYPE operator,
             final UnresolvedEntityUsageInfo<?> firstOperand,
             final UnresolvedEntityUsageInfo<?> secondOperand) {
 
@@ -61,7 +61,7 @@ public class UnresolvedBinominalOperationInfo extends
             return this.getResolved();
         }
 
-        final OPERATOR operator = this.getOperator();
+        final OPERATOR_TYPE operator = this.getOperator();
         final UnresolvedEntityUsageInfo<?> unresolvedFirstOperand = this.getFirstOperand();
         final UnresolvedEntityUsageInfo<?> unresolvedSecondOperand = this.getSecondOperand();
         final EntityUsageInfo firstOperand = unresolvedFirstOperand.resolve(usingClass,
@@ -85,7 +85,7 @@ public class UnresolvedBinominalOperationInfo extends
      * 
      * @return 演算子
      */
-    public OPERATOR getOperator() {
+    public OPERATOR_TYPE getOperator() {
         return this.operator;
     }
 
@@ -112,7 +112,7 @@ public class UnresolvedBinominalOperationInfo extends
      * 
      * @param operator 演算子
      */
-    public void setOperator(final OPERATOR operator) {
+    public void setOperator(final OPERATOR_TYPE operator) {
 
         if (null == operator) {
             throw new NullPointerException();
@@ -149,7 +149,7 @@ public class UnresolvedBinominalOperationInfo extends
         this.secondOperand = secondOperand;
     }
 
-    private OPERATOR operator;
+    private OPERATOR_TYPE operator;
 
     private UnresolvedEntityUsageInfo<?> firstOperand;
 
