@@ -166,7 +166,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                         ownerType = elements[0].getUsage();
                     }
                     resultType = new UnresolvedArrayElementUsageInfo(ownerType);
-                } else if (!token.equals(OperatorToken.CAST) && elements[0] instanceof TypeElement) {
+                } else if (token.equals(OperatorToken.CAST) && elements[0] instanceof TypeElement) {
                     final UnresolvedTypeInfo castType = ((TypeElement) elements[0]).getType();
                     final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> castedUsage = elements[1]
                             .getUsage();
