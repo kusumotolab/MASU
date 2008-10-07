@@ -80,7 +80,7 @@ public final class UnresolvedConstructorInfo extends
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
             final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(usingClass,
-                    this.resolvedInfo, classInfoManager, null, null);
+                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
 
