@@ -228,6 +228,23 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
                     // import aaa.bbb.CCCの場合 (クラス名まで記述されている)
                 } else {
 
+                    // 参照名を完全限定名とするクラスがあるかをチェック
+                    {
+                        final ClassInfo referencedClass = classInfoManager
+                                .getClassInfo(this.referenceName);
+                        if (null != referencedClass) {
+                            this.resolvedInfo = new ClassTypeInfo(referencedClass);
+                            for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                                    .getTypeArguments()) {
+                                final TypeInfo typeArgument = unresolvedTypeArgument.resolve(
+                                        usingClass, usingMethod, classInfoManager,
+                                        fieldInfoManager, methodInfoManager);
+                                this.resolvedInfo.addTypeArgument(typeArgument);
+                            }
+                            return this.resolvedInfo;
+                        }
+                    }
+
                     ClassInfo importClass = classInfoManager.getClassInfo(availableNamespace
                             .getImportName());
 
@@ -242,31 +259,36 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
                         continue AVAILABLENAMESPACE;
                     }
 
-                    // 対象クラスの場合は，順に内部クラスをたどって行く
+                    //　対象クラスの場合は，参照名と一致しているかをチェック
+                    // 参照名がインポート名よりも短い場合は該当しない
+                    final String[] importFullQualifiedName = importClass.getFullQualifiedName();
+                    if (this.referenceName.length < importFullQualifiedName.length) {
+                        continue AVAILABLENAMESPACE;
+                    }
+
+                    // 参照名がインポート名と同じ長さ，もしくはより長い場合は詳しく調べる
+                    int index = 0;
+                    for (; index < importFullQualifiedName.length; index++) {
+                        if (!importFullQualifiedName[index].equals(this.referenceName[index])) {
+                            continue AVAILABLENAMESPACE;
+                        }
+                    }
+
+                    // 参照名の方が長いので，インポートクラスの内部クラスをたどって一致するものがあるかを調べる
                     TargetClassInfo currentClass = (TargetClassInfo) importClass;
-                    INDEX: for (int index = 1; index < this.referenceName.length; index++) {
-                        final SortedSet<TargetInnerClassInfo> innerClasses = currentClass
-                                .getInnerClasses();
-                        for (final TargetInnerClassInfo innerClass : innerClasses) {
+                    INDEX: for (; index < this.referenceName.length; index++) {
+
+                        for (final TargetInnerClassInfo innerClass : currentClass.getInnerClasses()) {
 
                             if (this.referenceName[index].equals(innerClass.getClassName())) {
                                 currentClass = innerClass;
                                 continue INDEX;
                             }
 
-                            // ここに到達するのは，クラスが見つからなかった場合           
-                            final ExternalClassInfo unknownReferencedClass = new ExternalClassInfo(
-                                    this.referenceName[this.referenceName.length - 1]);
-                            this.resolvedInfo = new ClassTypeInfo(unknownReferencedClass);
-                            for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
-                                    .getTypeArguments()) {
-                                final TypeInfo typeArgument = unresolvedTypeArgument.resolve(
-                                        usingClass, usingMethod, classInfoManager,
-                                        fieldInfoManager, methodInfoManager);
-                                this.resolvedInfo.addTypeArgument(typeArgument);
-                            }
-                            return this.resolvedInfo;
+                            // ここにくるのは，クラスが見つからなかった場合
+                            continue AVAILABLENAMESPACE;
                         }
+
                     }
 
                     //　ここに到達するのは，クラスが見つかった場合

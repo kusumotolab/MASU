@@ -553,7 +553,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
-
+        
         // 修飾子，完全限定名，行数，可視性，インスタンスメンバーかどうかを取得
         final Set<ModifierInfo> modifiers = this.getModifiers();
         final String[] fullQualifiedName = this.getFullQualifiedName();
