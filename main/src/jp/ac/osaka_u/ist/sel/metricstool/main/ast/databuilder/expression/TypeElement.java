@@ -53,13 +53,13 @@ public class TypeElement extends ExpressionElement {
         }
     }
     
-    public TypeElement(final String literal, final PrimitiveTypeInfo type) {
-        if(null == literal || null == type) {
+    public TypeElement(final UnresolvedLiteralUsageInfo literal) {
+        if(null == literal) {
             throw new IllegalArgumentException();
         }
         
-        this.type = type;
-        this.usage = new UnresolvedLiteralUsageInfo(literal, type);
+        this.type = literal.getType();
+        this.usage = literal;
     }
 
     private final UnresolvedTypeInfo type;

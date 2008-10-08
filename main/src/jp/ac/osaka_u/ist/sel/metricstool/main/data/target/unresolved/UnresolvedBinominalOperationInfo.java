@@ -8,7 +8,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
 

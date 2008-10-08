@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
  * @param <T> ‰ğŒˆÏ‚İ‚ÌŒ^
  */
 public abstract class UnresolvedEntityUsageInfo<T extends EntityUsageInfo> implements
-        Resolvable<T>, PositionSetting, UnresolvedExpressionInfo<T> {
+        UnresolvedExpressionInfo<T> {
 
     protected UnresolvedEntityUsageInfo() {
         this.fromLine = 0;

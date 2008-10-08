@@ -184,6 +184,12 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 assert (null != resultType) : "Illegal state: operation resultType was not decided.";
 
                 this.pushElement(UsageElement.getInstance(resultType));
+                
+                boolean bool;
+                int i;
+                bool = ((i = 0) == 0);
+                    
+                
             }
         }
     }

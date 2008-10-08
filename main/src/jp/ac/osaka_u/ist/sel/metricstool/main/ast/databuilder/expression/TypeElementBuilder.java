@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ConstantToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLiteralUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
@@ -34,15 +35,16 @@ public class TypeElementBuilder extends ExpressionBuilder {
             this.buildType();
         } else if (token.isArrayDeclarator()) {
             this.buildArrayType();
-        } else if (token.isTypeArgument()){
+        } else if (token.isTypeArgument()) {
             buildTypeArgument();
-        } else if (token.isTypeWildcard()){
+        } else if (token.isTypeWildcard()) {
             buildTypeWildCard();
         } else if (token instanceof BuiltinTypeToken) {
             this.buildBuiltinType((BuiltinTypeToken) token);
         } else if (token instanceof ConstantToken) {
-            this.buildConstantElement((ConstantToken) token);
-        } 
+            this.buildConstantElement((ConstantToken) token, event.getStartLine(), event
+                    .getStartColumn(), event.getEndLine(), event.getEndColumn());
+        }
     }
 
     protected void buildArrayType() {
@@ -70,40 +72,40 @@ public class TypeElementBuilder extends ExpressionBuilder {
         final ExpressionElement[] elements = this.getAvailableElements();
 
         assert (elements.length > 0) : "Illegal state: type description was not found.";
-        
+
         if (elements.length > 0) {
             if (elements[0] instanceof IdentifierElement) {
-                this.pushElement(TypeElement
-                        .getInstance(this.buildReferenceType(elements)));
+                this.pushElement(TypeElement.getInstance(this.buildReferenceType(elements)));
             } else if (elements[0] instanceof TypeElement) {
-                assert(elements.length == 1) : "Illegal state: unexpected type arguments.";
+                assert (elements.length == 1) : "Illegal state: unexpected type arguments.";
                 this.pushElement(elements[0]);
             }
         }
     }
-    
+
     /**
      * Œ^ˆø”‚ğ•\‚·®—v‘f‚ğ\’z‚·‚éD
      */
-    protected void buildTypeArgument(){
+    protected void buildTypeArgument() {
         //—˜—p‚Å‚«‚é‘S—v‘f‚ğæ“¾
         final ExpressionElement[] elements = this.getAvailableElements();
-        
-        assert(elements.length > 0) : "Illegal state: type arguments were not created.";
-        
-        assert(elements.length == 1) : "Illegal state: too many type arguments.";
-        
-        if (elements.length > 0){
-            ExpressionElement element = elements[elements.length-1];
-            
+
+        assert (elements.length > 0) : "Illegal state: type arguments were not created.";
+
+        assert (elements.length == 1) : "Illegal state: too many type arguments.";
+
+        if (elements.length > 0) {
+            ExpressionElement element = elements[elements.length - 1];
+
             assert (element instanceof TypeElement) : "Illegal state: unspecified type argument.";
-            
-            if (element instanceof TypeElement){
+
+            if (element instanceof TypeElement) {
                 //ˆê”ÔÅŒã‚ªŒ^—v‘f‚¾‚Á‚½‚çŒ^ˆø”—v‘f‚ğì¬
-                TypeArgumentElement argument = new TypeArgumentElement(((TypeElement)element).getType());
+                TypeArgumentElement argument = new TypeArgumentElement(((TypeElement) element)
+                        .getType());
                 //‚»‚êˆÈŠO‚Ì—v‘f‚ğ‘S•”‚à‚Æ‚É–ß‚·D
-                int size = elements.length -1;
-                for(int i=0; i < size; i++){
+                int size = elements.length - 1;
+                for (int i = 0; i < size; i++) {
                     pushElement(elements[i]);
                 }
                 //ÅŒã‚ÉŒ^ˆø”—v‘f‚ğ“o˜^‚·‚é
@@ -111,72 +113,72 @@ public class TypeElementBuilder extends ExpressionBuilder {
             }
         }
     }
-    
-    protected void buildTypeWildCard(){
+
+    protected void buildTypeWildCard() {
         UnresolvedTypeInfo upperBounds = getTypeUpperBounds();
-        
-        assert(null != upperBounds);
-        
+
+        assert (null != upperBounds);
+
         pushElement(TypeElement.getInstance(upperBounds));
     }
-    
-    protected UnresolvedTypeInfo getTypeUpperBounds(){
+
+    protected UnresolvedTypeInfo getTypeUpperBounds() {
         final ExpressionElement[] elements = this.getAvailableElements();
-        
+
         UnresolvedTypeInfo resultType = null;
-        
-        if (elements.length > 0){
-            
-            assert(elements.length == 1) : "Illegal state: too many type upper bounds.";
-            
-            ExpressionElement element = elements[elements.length-1];
-            
-            assert(element instanceof TypeElement) : "Illegal state: upper bounds type was not type element.";
-            
-            if (element instanceof TypeElement){
-                resultType = ((TypeElement)element).getType();
+
+        if (elements.length > 0) {
+
+            assert (elements.length == 1) : "Illegal state: too many type upper bounds.";
+
+            ExpressionElement element = elements[elements.length - 1];
+
+            assert (element instanceof TypeElement) : "Illegal state: upper bounds type was not type element.";
+
+            if (element instanceof TypeElement) {
+                resultType = ((TypeElement) element).getType();
             }
         }
-        
+
         //ˆê‰Œ³‚É–ß‚µ‚Ä‚İ‚é
-        int size = elements.length -1;
-        for(int i=0; i < size; i++){
+        int size = elements.length - 1;
+        for (int i = 0; i < size; i++) {
             pushElement(elements[i]);
         }
-        
+
         return resultType;
     }
-    
+
     protected UnresolvedTypeInfo buildReferenceType(final ExpressionElement[] elements) {
-        assert(elements.length > 0);
-        assert(elements[0] instanceof IdentifierElement);
-        
-        IdentifierElement element = (IdentifierElement)elements[0];
+        assert (elements.length > 0);
+        assert (elements[0] instanceof IdentifierElement);
+
+        IdentifierElement element = (IdentifierElement) elements[0];
         final String[] typeName = element.getQualifiedName();
-        
+
         UnresolvedTypeParameterInfo typeParameter = null;
-        if (typeName.length == 1){
+        if (typeName.length == 1) {
             typeParameter = this.buildDataManager.getTypeParameter(typeName[0]);
         }
-        
-        if (null != typeParameter){
+
+        if (null != typeParameter) {
             return typeParameter;
         }
-        
+
         //TODO Œ^ƒpƒ‰ƒ[ƒ^‚ÉŒ^ˆø”‚ª•t‚­Œ¾Œê‚ª‚ ‚Á‚½‚ç‚»‚ê‚ğ“o˜^‚·‚éd‘g‚İ‚ğì‚é•K—v‚ª‚ ‚é‚©‚à
-        
-        UnresolvedClassTypeInfo resultType = new UnresolvedClassTypeInfo(this.buildDataManager.getAllAvaliableNames(),
-                typeName);
-        
-        for(int i=1; i < elements.length; i++){
-            assert(elements[i] instanceof TypeArgumentElement) : "Illegal state: type argument was unexpected type";
+
+        UnresolvedClassTypeInfo resultType = new UnresolvedClassTypeInfo(this.buildDataManager
+                .getAllAvaliableNames(), typeName);
+
+        for (int i = 1; i < elements.length; i++) {
+            assert (elements[i] instanceof TypeArgumentElement) : "Illegal state: type argument was unexpected type";
             TypeArgumentElement typeArugument = (TypeArgumentElement) elements[i];
-            
+
             // TODO C#‚È‚Ç‚ÍQÆŒ^ˆÈ‚Å‚àŒ^ˆø”‚ğw’è‚Å‚«‚é‚Ì‚ÅA‚»‚Ì‘Îˆ‚ª•K—v‚©‚à           
             assert typeArugument.getType() instanceof UnresolvedReferenceTypeInfo : "Illegal state: type argument was not reference type.";
             resultType.addTypeArgument((UnresolvedReferenceTypeInfo) typeArugument.getType());
         }
-        
+
         return resultType;
     }
 
@@ -184,15 +186,22 @@ public class TypeElementBuilder extends ExpressionBuilder {
         this.pushElement(TypeElement.getInstance(token.getType()));
     }
 
-    protected void buildConstantElement(final ConstantToken token) {
-        this.pushElement(new TypeElement(token.toString(), token.getType()));
+    protected void buildConstantElement(final ConstantToken token, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
+        final UnresolvedLiteralUsageInfo literal = new UnresolvedLiteralUsageInfo(token.toString(),
+                token.getType());
+        literal.setFromLine(fromLine);
+        literal.setFromColumn(fromColumn);
+        literal.setToLine(toLine);
+        literal.setToColumn(toColumn);
+
+        this.pushElement(new TypeElement(literal));
     }
 
     @Override
     protected boolean isTriggerToken(final AstToken token) {
-        return token.isBuiltinType() || token.isTypeDescription()
-                || token.isConstant() || token.isArrayDeclarator() || token.isTypeArgument()
-                || token.isTypeWildcard();
+        return token.isBuiltinType() || token.isTypeDescription() || token.isConstant()
+                || token.isArrayDeclarator() || token.isTypeArgument() || token.isTypeWildcard();
     }
-    
+
 }
