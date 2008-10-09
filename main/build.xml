@@ -6,18 +6,18 @@
 	<property file="build.properties" />
 
 	<property name="grammer.dir" value="${SRC.DIR}/jp/ac/osaka_u/ist/sel/metricstool/main/parse" />
-	
+
 	<property name="java15grammer" value="${grammer.dir}/java15.g" />
 	<property name="java14grammer" value="${grammer.dir}/java14.g" />
 	<property name="java13grammer" value="${grammer.dir}/java13.g" />
 	<!-- property name="cppgrammer" value="${grammer}/cpp.g" / -->
 	<property name="csharpgrammer" value="${grammer.dir}/CSharp.g" />
-	
+
 	<property name="antlr.jar" value="lib/antlr.jar" />
 	<property name="jargp.jar" value="lib/jargp.jar" />
 	<property name="manifest.mf" value="resource/manifest.mf" />
 	<property name="zip.name" value="${TOOL.NAME}${DSTAMP}${TSTAMP}.zip" />
-	
+
 	<target name="antlr">
 		<antlr target="${java15grammer}">
 			<classpath path="${antlr.jar}" />
@@ -32,7 +32,7 @@
 			<classpath path="${antlr.jar}" />
 		</antlr>
 	</target>
-		
+
 	<target name="compile" depends="antlr">
 		<mkdir dir="${CLS.DIR}" />
 		<javac classpath="${jargp.jar};${antlr.jar}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
@@ -49,38 +49,49 @@
 		<copy file="${jargp.jar}" todir="${PACKAGE.BIN.DIR}" />
 		<copy file="${antlr.jar}" todir="${PACKAGE.BIN.DIR}" />
 	</target>
-	
-	<target name="package" depends="build">
+
+	<target name="binpackage" depends="build">
 		<javadoc packagenames="jp.ac.osaka_u.ist.sel.metricstool.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" encoding="Windows-31J">
 			<classpath path="${jargp.jar};${antlr.jar}" />
 		</javadoc>
-		
+
 		<zip destfile="${zip.name}" basedir="${PACKAGE.DIR}" />
 	</target>
 
-	
+	<target name="srcpackage" depends="build">
+		<javadoc packagenames="jp.ac.osaka_u.ist.sel.metricstool.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" encoding="Windows-31J">
+			<classpath path="${jargp.jar};${antlr.jar}" />
+		</javadoc>
+
+		<copy todir="${PACKAGE.SRC.DIR}">
+			<fileset dir="${SRC.DIR}" />
+		</copy>
+
+		<zip destfile="${zip.name}" basedir="${PACKAGE.DIR}" />
+	</target>
+
 	<target name="clean">
 		<delete dir="${CLS.DIR}" />
 		<delete dir="${PACKAGE.DIR}" />
 		<delete verbose="true">
 			<fileset dir="${grammer.dir}" includes="*Lexer.java" />
-		</delete>	
+		</delete>
 		<delete verbose="true">
 			<fileset dir="${grammer.dir}" includes="*Parser.java" />
-		</delete>	
-			<delete verbose="true">
-		<fileset dir="${grammer.dir}" includes="*TokenTypes.java" />
-			</delete>	
+		</delete>
+		<delete verbose="true">
+			<fileset dir="${grammer.dir}" includes="*TokenTypes.java" />
+		</delete>
 		<delete verbose="true">
 			<fileset dir="${grammer.dir}" includes="*.smap" />
-		</delete>	
+		</delete>
 		<delete verbose="true">
 			<fileset dir="${grammer.dir}" includes="*.txt" />
-		</delete>	
+		</delete>
 		<delete verbose="true">
 			<fileset dir="." includes="${TOOL.NAME}*.zip" />
 		</delete>
 	</target>
-		
-	<target name="all" depends="clean, package" />
+
+	<target name="all" depends="clean, binpackage" />
 </project>
