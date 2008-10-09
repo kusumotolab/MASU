@@ -6,6 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
@@ -16,6 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedB
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCastUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMonominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
@@ -165,7 +167,9 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     } else {
                         ownerType = elements[0].getUsage();
                     }
-                    resultType = new UnresolvedArrayElementUsageInfo(ownerType);
+                    assert null != elements[1] : "Illegal state: expression that show index of array is not found.";
+                    resultType = new UnresolvedArrayElementUsageInfo(ownerType, elements[1]
+                            .getUsage());
                 } else if (token.equals(OperatorToken.CAST) && elements[0] instanceof TypeElement) {
                     final UnresolvedTypeInfo castType = ((TypeElement) elements[0]).getType();
                     final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> castedUsage = elements[1]
@@ -184,12 +188,11 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 assert (null != resultType) : "Illegal state: operation resultType was not decided.";
 
                 this.pushElement(UsageElement.getInstance(resultType));
-                
+
                 boolean bool;
                 int i;
                 bool = ((i = 0) == 0);
-                    
-                
+
             }
         }
     }

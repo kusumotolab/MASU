@@ -39,6 +39,10 @@ public class JavaModifiersInterpriter implements ModifiersInterpriter{
                 this.pureVirtual = true;
             }
         }
+        
+        if(!this.publicAccess && !this.inheritanceAccess && this.nameSpaceAccess) {
+            this.inheritanceAccess = true;
+        }
     }
     
     private boolean isInheritanceAccessible() {

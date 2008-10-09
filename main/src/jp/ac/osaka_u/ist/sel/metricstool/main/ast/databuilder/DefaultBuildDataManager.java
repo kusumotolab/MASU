@@ -233,7 +233,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
             UnresolvedClassInfo current = classStack.peek();
             UnresolvedClassInfo outer = classStack.get(size - 2);
             outer.addInnerClass(current);
-            current.setOuterClass(outer);
+            current.setOuterUnit(outer);
         }
     }
 

@@ -94,7 +94,7 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
         return token.isBlock();
     }
 
-    private final ExpressionElementManager expressionManager;
+    protected final ExpressionElementManager expressionManager;
 
     protected final BuildDataManager buildDataManager;
 

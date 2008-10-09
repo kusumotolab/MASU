@@ -418,7 +418,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 
      * @param outerUnit 外側のユニット
      */
-    public void setOuterClass(final UnresolvedUnitInfo<?> outerUnit) {
+    public void setOuterUnit(final UnresolvedUnitInfo<?> outerUnit) {
         this.outerUnit = outerUnit;
     }
 
