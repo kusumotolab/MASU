@@ -170,6 +170,10 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     assert null != elements[1] : "Illegal state: expression that show index of array is not found.";
                     resultType = new UnresolvedArrayElementUsageInfo(ownerType, elements[1]
                             .getUsage());
+                    resultType.setFromLine(ownerType.getFromLine());
+                    resultType.setFromColumn(ownerType.getFromColumn());
+                    resultType.setToLine(event.getEndLine());
+                    resultType.setToColumn(event.getEndColumn());
                 } else if (token.equals(OperatorToken.CAST) && elements[0] instanceof TypeElement) {
                     final UnresolvedTypeInfo castType = ((TypeElement) elements[0]).getType();
                     final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> castedUsage = elements[1]
