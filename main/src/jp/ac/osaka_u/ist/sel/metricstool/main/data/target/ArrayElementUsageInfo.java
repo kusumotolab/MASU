@@ -13,16 +13,18 @@ import java.util.Set;
 public class ArrayElementUsageInfo extends EntityUsageInfo {
 
     /**
-     * 要素の親，つまり配列型のエンティティ使用を与えて，オブジェクトを初期化
+     * 要素の親，つまり配列型のエンティティ使用とインデックスを与えて，オブジェクトを初期化
      * 
      * @param ownerEntityUsage 配列型のエンティティ使用
+     * @param indexExpression インデックス
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public ArrayElementUsageInfo(final EntityUsageInfo ownerEntityUsage, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    public ArrayElementUsageInfo(final EntityUsageInfo ownerEntityUsage,
+            final ExpressionInfo indexExpression, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
@@ -31,6 +33,7 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
         }
 
         this.ownerEntityUsage = ownerEntityUsage;
+        this.indexExpression = indexExpression;
     }
 
     /**
@@ -70,6 +73,15 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
     }
 
     /**
+     * この要素のインデックスを返す
+     * 
+     * @return　この要素のインデックス
+     */
+    public ExpressionInfo getIndexExpression() {
+        return this.indexExpression;
+    }
+
+    /**
      * この式（配列要素の使用）における変数利用の一覧を返す
      * 
      * @return 変数利用のSet
@@ -80,4 +92,6 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
     }
 
     private final EntityUsageInfo ownerEntityUsage;
+
+    private final ExpressionInfo indexExpression;
 }

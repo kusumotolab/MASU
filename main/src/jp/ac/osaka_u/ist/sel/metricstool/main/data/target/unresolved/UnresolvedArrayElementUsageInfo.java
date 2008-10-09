@@ -5,6 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -25,14 +26,17 @@ public final class UnresolvedArrayElementUsageInfo extends
      * 要素が参照された配列の型を与える.
      * 
      * @param ownerArrayType 要素が参照された配列の型
+     * @param indexExpression 参照された要素のインデックス
      */
-    public UnresolvedArrayElementUsageInfo(final UnresolvedEntityUsageInfo<?> ownerArrayType) {
+    public UnresolvedArrayElementUsageInfo(final UnresolvedEntityUsageInfo<?> ownerArrayType,
+            final UnresolvedExpressionInfo<?> indexExpression) {
 
         if (null == ownerArrayType) {
             throw new NullPointerException("ownerArrayType is null.");
         }
 
         this.ownerArrayType = ownerArrayType;
+        this.indexExpression = indexExpression;
         this.resolvedInfo = null;
     }
 
@@ -69,11 +73,17 @@ public final class UnresolvedArrayElementUsageInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
+        // 要素使用のインデックスを名前解決
+        final UnresolvedExpressionInfo<?> unresolvedIndexExpression = this.getIndexExpression();
+        final ExpressionInfo indexExpression = unresolvedIndexExpression.resolve(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        assert indexExpression != null : "method \"resolve\" returned null!";
+
         // 要素使用がくっついている未定義型を取得
         final UnresolvedEntityUsageInfo<?> unresolvedOwnerUsage = this.getOwnerArrayType();
         EntityUsageInfo ownerUsage = unresolvedOwnerUsage.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-        assert ownerUsage != null : "resolveEntityUsage returned null!";
+        assert ownerUsage != null : "method \"resolve\" returned null!";
 
         // 未解決型の名前解決ができなかった場合
         if (ownerUsage.getType() instanceof UnknownTypeInfo) {
@@ -102,13 +112,13 @@ public final class UnresolvedArrayElementUsageInfo extends
 
             // 親が特定できない場合も配列の要素使用を作成して返す
             // もしかすると，UnknownEntityUsageInfoを返す方が適切かもしれない
-            this.resolvedInfo = new ArrayElementUsageInfo(ownerUsage, fromLine, fromColumn, toLine,
-                    toColumn);
+            this.resolvedInfo = new ArrayElementUsageInfo(ownerUsage, indexExpression, fromLine,
+                    fromColumn, toLine, toColumn);
             return this.resolvedInfo;
         }
 
-        this.resolvedInfo = new ArrayElementUsageInfo(ownerUsage, fromLine, fromColumn, toLine,
-                toColumn);
+        this.resolvedInfo = new ArrayElementUsageInfo(ownerUsage, indexExpression, fromLine,
+                fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 
@@ -122,8 +132,22 @@ public final class UnresolvedArrayElementUsageInfo extends
     }
 
     /**
+     * 参照された要素のインデックスを返す
+     * 
+     * @return　参照された要素のインデックス
+     */
+    public UnresolvedExpressionInfo<?> getIndexExpression() {
+        return this.indexExpression;
+    }
+
+    /**
      * 要素が参照された配列の型
      */
     private final UnresolvedEntityUsageInfo<?> ownerArrayType;
+
+    /**
+     * 配列要素使用のインデックスを格納する変数
+     */
+    private final UnresolvedExpressionInfo<?> indexExpression;
 
 }
