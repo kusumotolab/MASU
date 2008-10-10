@@ -221,8 +221,8 @@ public final class NameResolver {
             for (final ClassInfo superClass : ClassTypeInfo.convert(currentClass.getSuperClasses())) {
                 if (superClass instanceof TargetClassInfo) {
                     final List<TargetFieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
-                            .getAvailableFieldsDefinedInSuperClasses((TargetClassInfo) superClass,
-                                    checkedClasses);
+                            .getAvailableFieldsDefinedInSuperClasses(currentClass,
+                                    (TargetClassInfo) superClass, checkedClasses);
                     availableFields.addAll(availableFieldsDefinedInSuperClasses);
                 }
             }
@@ -246,8 +246,8 @@ public final class NameResolver {
         for (final ClassInfo superClass : ClassTypeInfo.convert(outestClass.getSuperClasses())) {
             if (superClass instanceof TargetClassInfo) {
                 final List<TargetFieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
-                        .getAvailableFieldsDefinedInSuperClasses((TargetClassInfo) superClass,
-                                checkedClasses);
+                        .getAvailableFieldsDefinedInSuperClasses(outestClass,
+                                (TargetClassInfo) superClass, checkedClasses);
                 availableFields.addAll(availableFieldsDefinedInSuperClasses);
             }
         }
@@ -296,8 +296,8 @@ public final class NameResolver {
         for (final ClassInfo superClass : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
             if (superClass instanceof TargetClassInfo) {
                 final List<TargetFieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
-                        .getAvailableFieldsDefinedInSuperClasses((TargetClassInfo) superClass,
-                                checkedClasses);
+                        .getAvailableFieldsDefinedInSuperClasses(classInfo,
+                                (TargetClassInfo) superClass, checkedClasses);
                 availableFields.addAll(availableFieldsDefinedInSuperClasses);
             }
         }
@@ -313,44 +313,68 @@ public final class NameResolver {
      * @return 子クラスで利用可能なフィールドの List
      */
     private static List<TargetFieldInfo> getAvailableFieldsDefinedInSuperClasses(
-            final TargetClassInfo classInfo, final Set<TargetClassInfo> checkedClasses) {
+            final TargetClassInfo subClass, final TargetClassInfo superClass,
+            final Set<TargetClassInfo> checkedClasses) {
 
-        if ((null == classInfo) || (null == checkedClasses)) {
+        if ((null == subClass) || (null == superClass) || (null == checkedClasses)) {
             throw new NullPointerException();
         }
 
         // 既にチェックしたクラスである場合は何もせずに終了する
-        if (checkedClasses.contains(classInfo)) {
+        if (checkedClasses.contains(superClass)) {
             return new LinkedList<TargetFieldInfo>();
         }
 
         final List<TargetFieldInfo> availableFields = new LinkedList<TargetFieldInfo>();
 
         // 自クラスで定義されており，クラス階層可視性を持つフィールドを追加
-        for (final TargetFieldInfo definedField : classInfo.getDefinedFields()) {
-            if (definedField.isInheritanceVisible()) {
-                availableFields.add(definedField);
+        for (final TargetFieldInfo definedField : superClass.getDefinedFields()) {
+
+            // 子クラスと親クラスの名前空間が同じ場合は，名前空間可視もしくは継承可視があればよい
+            if (subClass.getNamespace().equals(superClass.getNamespace())) {
+
+                if (definedField.isInheritanceVisible() || definedField.isNamespaceVisible()) {
+                    availableFields.add(definedField);
+                }
+
+                //子クラスと親クラスの名前空間が違う場合は，継承可視があればよい
+            } else {
+                if (definedField.isInheritanceVisible()) {
+                    availableFields.add(definedField);
+                }
             }
         }
-        checkedClasses.add(classInfo);
+        checkedClasses.add(superClass);
 
         // 内部クラスで定義されたフィールドを追加
-        for (final TargetInnerClassInfo innerClass : classInfo.getInnerClasses()) {
+        for (final TargetInnerClassInfo innerClass : superClass.getInnerClasses()) {
             final List<TargetFieldInfo> availableFieldsDefinedInInnerClasses = NameResolver
                     .getAvailableFieldsDefinedInInnerClasses(innerClass, checkedClasses);
             for (final TargetFieldInfo field : availableFieldsDefinedInInnerClasses) {
-                if (field.isInheritanceVisible()) {
-                    availableFields.add(field);
+
+                // 子クラスと親クラスの名前空間が同じ場合は，名前空間可視もしくは継承可視があればよい
+                if (subClass.getNamespace().equals(superClass.getNamespace())) {
+
+                    if (field.isInheritanceVisible() || field.isNamespaceVisible()) {
+                        availableFields.add(field);
+                    }
+
+                } else {
+
+                    //子クラスと親クラスの名前空間が違う場合は，継承可視があればよい
+                    if (field.isInheritanceVisible()) {
+                        availableFields.add(field);
+                    }
                 }
             }
         }
 
         // 親クラスで定義されたフィールドを追加
-        for (final ClassInfo superClass : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
-            if (superClass instanceof TargetClassInfo) {
+        for (final ClassInfo superSuperClass : ClassTypeInfo.convert(superClass.getSuperClasses())) {
+            if (superSuperClass instanceof TargetClassInfo) {
                 final List<TargetFieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
-                        .getAvailableFieldsDefinedInSuperClasses((TargetClassInfo) superClass,
-                                checkedClasses);
+                        .getAvailableFieldsDefinedInSuperClasses(subClass,
+                                (TargetClassInfo) superSuperClass, checkedClasses);
                 availableFields.addAll(availableFieldsDefinedInSuperClasses);
             }
         }
@@ -398,8 +422,8 @@ public final class NameResolver {
             for (final ClassInfo superClass : ClassTypeInfo.convert(currentClass.getSuperClasses())) {
                 if (superClass instanceof TargetClassInfo) {
                     final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
-                            .getAvailableMethodsDefinedInSuperClasses((TargetClassInfo) superClass,
-                                    checkedClasses);
+                            .getAvailableMethodsDefinedInSuperClasses(outestClass,
+                                    (TargetClassInfo) superClass, checkedClasses);
                     availableMethods.addAll(availableMethodsDefinedInSuperClasses);
                 }
             }
@@ -423,8 +447,8 @@ public final class NameResolver {
         for (final ClassInfo superClass : ClassTypeInfo.convert(outestClass.getSuperClasses())) {
             if (superClass instanceof TargetClassInfo) {
                 final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
-                        .getAvailableMethodsDefinedInSuperClasses((TargetClassInfo) superClass,
-                                checkedClasses);
+                        .getAvailableMethodsDefinedInSuperClasses(outestClass,
+                                (TargetClassInfo) superClass, checkedClasses);
                 availableMethods.addAll(availableMethodsDefinedInSuperClasses);
             }
         }
@@ -473,8 +497,8 @@ public final class NameResolver {
         for (final ClassInfo superClass : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
             if (superClass instanceof TargetClassInfo) {
                 final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
-                        .getAvailableMethodsDefinedInSuperClasses((TargetClassInfo) superClass,
-                                checkedClasses);
+                        .getAvailableMethodsDefinedInSuperClasses(classInfo,
+                                (TargetClassInfo) superClass, checkedClasses);
                 availableMethods.addAll(availableMethodsDefinedInSuperClasses);
             }
         }
@@ -490,44 +514,69 @@ public final class NameResolver {
      * @return 子クラスで利用可能なメソッドの List
      */
     private static List<TargetMethodInfo> getAvailableMethodsDefinedInSuperClasses(
-            final TargetClassInfo classInfo, final Set<TargetClassInfo> checkedClasses) {
+            final TargetClassInfo subClass, final TargetClassInfo superClass,
+            final Set<TargetClassInfo> checkedClasses) {
 
-        if ((null == classInfo) || (null == checkedClasses)) {
+        if ((null == subClass) || (null == superClass) || (null == checkedClasses)) {
             throw new NullPointerException();
         }
 
         // 既にチェックしたクラスである場合は何もせずに終了する
-        if (checkedClasses.contains(classInfo)) {
+        if (checkedClasses.contains(superClass)) {
             return new LinkedList<TargetMethodInfo>();
         }
 
         final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
 
         // 自クラスで定義されており，クラス階層可視性を持つメソッドを追加
-        for (final TargetMethodInfo definedMethod : classInfo.getDefinedMethods()) {
-            if (definedMethod.isInheritanceVisible()) {
-                availableMethods.add(definedMethod);
+        for (final TargetMethodInfo definedMethod : superClass.getDefinedMethods()) {
+
+            // 子クラスと親クラスの名前空間が同じ場合は，名前空間可視もしくは継承可視があればよい
+            if (subClass.getNamespace().equals(superClass.getNamespace())) {
+
+                if (definedMethod.isInheritanceVisible() || definedMethod.isNamespaceVisible()) {
+                    availableMethods.add(definedMethod);
+                }
+
+                // 子クラスと親クラスの名前空間が異なる場合は，継承可視があればよい
+            } else {
+
+                if (definedMethod.isInheritanceVisible()) {
+                    availableMethods.add(definedMethod);
+                }
             }
         }
-        checkedClasses.add(classInfo);
+        checkedClasses.add(superClass);
 
         // 内部クラスで定義されたメソッドを追加
-        for (final TargetInnerClassInfo innerClass : classInfo.getInnerClasses()) {
+        for (final TargetInnerClassInfo innerClass : superClass.getInnerClasses()) {
             final List<TargetMethodInfo> availableMethodsDefinedInInnerClasses = NameResolver
                     .getAvailableMethodsDefinedInInnerClasses(innerClass, checkedClasses);
             for (final TargetMethodInfo method : availableMethodsDefinedInInnerClasses) {
-                if (method.isInheritanceVisible()) {
-                    availableMethods.add(method);
+
+                // 子クラスと親クラスの名前空間が同じ場合は，名前空間可視もしくは継承可視があればよい
+                if (subClass.getNamespace().equals(superClass.getNamespace())) {
+
+                    if (method.isInheritanceVisible() || method.isNamespaceVisible()) {
+                        availableMethods.add(method);
+                    }
+
+                    // 子クラスと親クラスの名前空間が異なる場合は，継承可視があればよい
+                } else {
+
+                    if (method.isInheritanceVisible()) {
+                        availableMethods.add(method);
+                    }
                 }
             }
         }
 
         // 親クラスで定義されたメソッドを追加
-        for (final ClassInfo superClass : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
-            if (superClass instanceof TargetClassInfo) {
+        for (final ClassInfo superSuperClass : ClassTypeInfo.convert(superClass.getSuperClasses())) {
+            if (superSuperClass instanceof TargetClassInfo) {
                 final List<TargetMethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
-                        .getAvailableMethodsDefinedInSuperClasses((TargetClassInfo) superClass,
-                                checkedClasses);
+                        .getAvailableMethodsDefinedInSuperClasses(subClass,
+                                (TargetClassInfo) superSuperClass, checkedClasses);
                 availableMethods.addAll(availableMethodsDefinedInSuperClasses);
             }
         }
