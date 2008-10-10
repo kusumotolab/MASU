@@ -177,6 +177,123 @@ public final class NameResolver {
     }
 
     /**
+     * 引数で与えられたクラスで利用可能なクラスの　List　を返す
+     * 
+     * @param classInfo クラス
+     * @return　引数で与えられたクラスで利用可能なクラスの　List
+     */
+    public static List<ClassInfo> getAvailableClasses(final TargetClassInfo classInfo) {
+
+        if (null == classInfo) {
+            throw new NullPointerException();
+        }
+
+        // 利用可能な変数を代入するためのリスト
+        final List<ClassInfo> availableClasses = new LinkedList<ClassInfo>();
+
+        // 最も外側のクラスを取得
+        final TargetClassInfo outestClass;
+        if (classInfo instanceof TargetInnerClassInfo) {
+
+            outestClass = NameResolver.getOuterstClass((TargetInnerClassInfo) classInfo);
+
+            // 外部および外部クラスの親クラスを追加
+            for (TargetClassInfo outerClass = classInfo; !outerClass.equals(outestClass); outerClass = ((TargetInnerClassInfo) outerClass)
+                    .getOuterClass()) {
+
+                availableClasses.add(outerClass);
+                NameResolver.getAvailableSuperClasses(classInfo, outerClass, availableClasses);
+            }
+
+        } else {
+            outestClass = classInfo;
+        }
+
+        //　最も外側およびもっとも外側のクラスの親クラスを追加
+        availableClasses.add(outestClass);
+        for(final ClassInfo superClass : ClassTypeInfo.convert(outestClass.getSuperClasses())){
+            if(superClass instanceof TargetClassInfo){
+                NameResolver.getAvailableSuperClasses(outestClass, (TargetClassInfo)superClass, availableClasses);
+            }else if(superClass instanceof TargetClassInfo){
+                availableClasses.add(superClass);
+            }
+        }
+        NameResolver.getAvailableSuperClasses(classInfo, outestClass, availableClasses);
+
+        // 内部クラスを追加
+        for (final TargetInnerClassInfo innerClass : classInfo.getInnerClasses()) {
+            NameResolver.getAvailableInnerClasses(innerClass, availableClasses);
+        }
+
+        return Collections.unmodifiableList(availableClasses);
+    }
+
+    public static void getAvailableSuperClasses(final TargetClassInfo subClass,
+            final TargetClassInfo superClass, final List<ClassInfo> availableClasses) {
+
+        if ((null == subClass) || (null == superClass) || (null == availableClasses)) {
+            throw new NullPointerException();
+        }
+
+        // 既にチェックしたクラスである場合は何もせずに終了する
+        if (availableClasses.contains(superClass)) {
+            return;
+        }
+
+        // 自クラスを追加
+        // 子クラスと親クラスの名前空間が同じ場合は，名前空間可視もしくは継承可視があればよい
+        if (subClass.getNamespace().equals(superClass.getNamespace())) {
+
+            if (superClass.isInheritanceVisible() || superClass.isNamespaceVisible()) {
+                availableClasses.add(superClass);
+                for(final TargetClassInfo innerClass : superClass.getInnerClasses()){
+                    NameResolver.getAvailableInnerClasses(innerClass,availableClasses);
+                }
+            }
+
+            //子クラスと親クラスの名前空間が違う場合は，継承可視があればよい
+        } else {
+
+            if (superClass.isInheritanceVisible()) {
+                availableClasses.add(superClass);
+                for(final TargetClassInfo innerClass : superClass.getInnerClasses()){
+                    NameResolver.getAvailableInnerClasses(innerClass,availableClasses);
+                }
+            }
+        }
+
+        // 親クラスを追加
+        for (final ClassInfo superSuperClass : ClassTypeInfo.convert(superClass.getSuperClasses())) {
+            if (superSuperClass instanceof TargetClassInfo) {
+                NameResolver.getAvailableSuperClasses(subClass, (TargetClassInfo) superSuperClass,
+                        availableClasses);
+            }
+        }
+    }
+
+    public static void getAvailableInnerClasses(final TargetClassInfo classInfo,
+            final List<ClassInfo> availableClasses) {
+
+        if ((null == classInfo) || (null == availableClasses)) {
+            throw new NullPointerException();
+        }
+
+        // 既にチェックしたクラスである場合は何もせずに終了する
+        if (availableClasses.contains(classInfo)) {
+            return;
+        }
+
+        availableClasses.add(classInfo);
+
+        // 内部クラスを追加
+        for (final TargetInnerClassInfo innerClass : classInfo.getInnerClasses()){
+            NameResolver.getAvailableInnerClasses(innerClass, availableClasses);
+        }
+
+        return;
+    }
+
+    /**
      * 「現在のクラス」で利用可能なフィールド一覧を返す．
      * ここで，「利用可能なフィールド」とは，「現在のクラス」で定義されているフィールド，「現在のクラス」のインナークラスで定義されているフィールド，
      * 及びその親クラスで定義されているフィールドのうち子クラスからアクセスが可能なフィールドである． 利用可能なフィールドは List に格納されている．

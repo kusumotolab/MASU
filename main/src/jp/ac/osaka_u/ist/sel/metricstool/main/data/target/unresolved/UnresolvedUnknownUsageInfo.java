@@ -83,7 +83,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
 
         // エンティティ参照名を取得
         final String[] name = this.getName();
-
+        
         // 位置情報を取得
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
@@ -958,6 +958,150 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                             this.resolvedInfo = entityUsage;
                             return this.resolvedInfo;
                         }
+                    }
+                }
+            }
+            
+            //　親クラスから検索
+            {
+                // 利用可能な各親クラスに対して
+                for (final ClassInfo classInfo : NameResolver.getAvailableClasses(usingClass)) {
+                    final String className = classInfo.getClassName();
+
+                    // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
+                    if (className.equals(name[0])) {
+
+                        final ClassReferenceInfo classReference = new ClassReferenceInfo(
+                                new ClassTypeInfo(classInfo), fromLine, fromColumn, toLine,
+                                toColumn);
+                        EntityUsageInfo entityUsage = classReference;
+
+                        for (int i = 1; i < name.length; i++) {
+
+                            // 親が UnknownTypeInfo だったら，どうしようもない
+                            if (entityUsage.getType() instanceof UnknownTypeInfo) {
+
+                                this.resolvedInfo = new UnknownEntityUsageInfo(fromLine,
+                                        fromColumn, toLine, toColumn);
+                                return this.resolvedInfo;
+
+                                // 親がクラス型の場合
+                            } else if (entityUsage.getType() instanceof ClassTypeInfo) {
+
+                                final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage
+                                        .getType()).getReferencedClass();
+
+                                // 親が対象クラス(TargetClassInfo)の場合
+                                if (ownerClass instanceof TargetClassInfo) {
+
+                                    // まずは利用可能なフィールド一覧を取得
+                                    boolean found = false;
+                                    {
+                                        // 利用可能なフィールド一覧を取得
+                                        final List<TargetFieldInfo> availableFields = NameResolver
+                                                .getAvailableFields(
+                                                        (TargetClassInfo) ownerClass,
+                                                        usingClass);
+
+                                        for (TargetFieldInfo availableField : availableFields) {
+
+                                            // 一致するフィールド名が見つかった場合
+                                            if (name[i].equals(availableField.getName())) {
+                                                // usingMethod.addReferencee(availableField);
+                                                // availableField.addReferencer(usingMethod);
+
+                                                entityUsage = FieldUsageInfo.getInstance(
+                                                        classReference, entityUsage
+                                                                .getType(), availableField,
+                                                        true, fromLine, fromColumn, toLine,
+                                                        toColumn);
+
+                                                found = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    // スタティックフィールドで見つからなかった場合は，インナークラスから探す
+                                    {
+                                        if (!found) {
+                                            // インナークラス一覧を取得
+                                            final SortedSet<TargetInnerClassInfo> innerClasses = NameResolver
+                                                    .getAvailableDirectInnerClasses((TargetClassInfo) ownerClass);
+                                            for (final TargetInnerClassInfo innerClass : innerClasses) {
+
+                                                // 一致するクラス名が見つかった場合
+                                                if (name[i].equals(innerClass
+                                                        .getClassName())) {
+                                                    // TODO 利用関係を構築するコードが必要？
+
+                                                    final ClassTypeInfo referenceType = new ClassTypeInfo(
+                                                            innerClass);
+                                                    entityUsage = new ClassReferenceInfo(
+                                                            referenceType, fromLine,
+                                                            fromColumn, toLine, toColumn);
+                                                    found = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    // 利用可能なフィールドが見つからなかった場合は，外部クラスである親クラスがあるはず．
+                                    // そのクラスのフィールドを使用しているとみなす
+                                    {
+                                        if (!found) {
+
+                                            final ClassInfo referencedClass = ((ClassTypeInfo) entityUsage
+                                                    .getType()).getReferencedClass();
+                                            final ExternalClassInfo externalSuperClass = NameResolver
+                                                    .getExternalSuperClass((TargetClassInfo) referencedClass);
+                                            if (!(referencedClass instanceof TargetInnerClassInfo)
+                                                    && (null != externalSuperClass)) {
+
+                                                final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
+                                                        name[i], externalSuperClass);
+
+                                                // usingMethod.addReferencee(fieldInfo);
+                                                // fieldInfo.addReferencer(usingMethod);
+                                                fieldInfoManager.add(fieldInfo);
+
+                                                entityUsage = FieldUsageInfo.getInstance(
+                                                        classReference, entityUsage
+                                                                .getType(), fieldInfo,
+                                                        true, fromLine, fromColumn, toLine,
+                                                        toColumn);
+
+                                            } else {
+                                                assert false : "Can't resolve entity usage4 : "
+                                                        + this.toString();
+                                            }
+                                        }
+                                    }
+
+                                    // 親が外部クラス(ExternalClassInfo)の場合
+                                } else if (ownerClass instanceof ExternalClassInfo) {
+
+                                    final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
+                                            name[i], ownerClass);
+
+                                    // usingMethod.addReferencee(fieldInfo);
+                                    // fieldInfo.addReferencer(usingMethod);
+                                    fieldInfoManager.add(fieldInfo);
+
+                                    entityUsage = FieldUsageInfo.getInstance(
+                                            classReference, entityUsage.getType(),
+                                            fieldInfo, true, fromLine, fromColumn, toLine,
+                                            toColumn);
+                                }
+
+                            } else {
+                                assert false : "Here shouldn't be reached!";
+                            }
+                        }
+
+                        this.resolvedInfo = entityUsage;
+                        return this.resolvedInfo;
                     }
                 }
             }
