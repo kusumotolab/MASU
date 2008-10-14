@@ -23,7 +23,7 @@ public class OperatorToken extends AstTokenAdapter {
      * インクリメント演算子とデクリメント演算子を表す定数インスタンス
      */
     public static final OperatorToken INCL_AND_DECL = new OperatorToken(null, "INCLEMENT", 1, true,
-            true, null, new int[] { 0 });
+            true, PrimitiveTypeInfo.INT, new int[] { 0 });
 
     /**
      * 代入演算子を表す定数インスタンス

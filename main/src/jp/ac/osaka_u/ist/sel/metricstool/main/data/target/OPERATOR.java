@@ -182,11 +182,16 @@ public enum OPERATOR {
      */
     BSR_ASSIGN(ASSIGNMENT, ">>>="),
     
+    /**
+     * 算術一項演算子"++"
+     */
+    INC(ARITHMETIC, "++"),
+    
+    /**
+     * 算術一項演算子"--"
+     */
+    DEC(ARITHMETIC, "--"),
     ;
-
-    //    INC             :   "++"    ;
-
-    //    DEC             :   "--"    ;
 
     /**
      * 演算子のタイプとトークンを与えて初期化

@@ -114,14 +114,12 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
             }
 
             final OPERATOR_TYPE operatorType = token.getOperator();
+            final OPERATOR operator = OPERATOR.getOperator(event.getText());
 
             if (2 == term && null != operatorType) {
                 //オペレーターインスタンスがセットされている2項演算子＝名前解決部に型決定処理を委譲する
                 assert (null != termTypes[0]) : "Illega state: first term type was not decided.";
                 assert (null != termTypes[1]) : "Illega state: second term type was not decided.";
-
-                final OPERATOR operator = OPERATOR.getOperator(event.getText());
-
                 assert null != operator : "Illegal state: operator is null";
 
                 final UnresolvedBinominalOperationInfo operation = new UnresolvedBinominalOperationInfo(
@@ -142,8 +140,8 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
 
                 if (null != type) {
                     //オペレータによってすでに結果の型が決定している
-
-                    resultType = new UnresolvedMonominalOperationInfo(termTypes[0], type);
+                    assert null != operator : "Illegal state: operator is null";
+                    resultType = new UnresolvedMonominalOperationInfo(termTypes[0], operator, type);
 
                     if ((termTypes[0].getFromLine() < event.getStartLine())
                             || (termTypes[0].getFromLine() == event.getStartLine() && termTypes[0]

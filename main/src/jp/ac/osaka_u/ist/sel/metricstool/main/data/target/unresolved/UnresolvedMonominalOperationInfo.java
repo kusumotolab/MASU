@@ -7,6 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MonominalOperationInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -25,16 +26,19 @@ public final class UnresolvedMonominalOperationInfo extends
      * €‚Æˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^‚ğ—^‚¦‚Ä‰Šú‰»
      * 
      * @param operand €
+     * @param operator ˆê€‰‰Z‚Ì‰‰Zq
      * @param type ˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^
      */
-    public UnresolvedMonominalOperationInfo(final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> operand,
-            final PrimitiveTypeInfo type) {
+    public UnresolvedMonominalOperationInfo(
+            final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> operand,
+            final OPERATOR operator, final PrimitiveTypeInfo type) {
 
-        if (null == operand || null == type) {
+        if (null == operand || null == operator || null == type) {
             throw new IllegalArgumentException("term or type is null");
         }
 
         this.operand = operand;
+        this.operator = operator;
         this.type = type;
     }
 
@@ -65,9 +69,10 @@ public final class UnresolvedMonominalOperationInfo extends
         final EntityUsageInfo term = unresolvedTerm.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         final PrimitiveTypeInfo type = this.getResultType();
+        final boolean isPreposed = fromColumn < term.getFromColumn() ? true : false;
 
-        this.resolvedInfo = new MonominalOperationInfo(term, type, fromLine, fromColumn, toLine,
-                toColumn);
+        this.resolvedInfo = new MonominalOperationInfo(term, this.operator, isPreposed, type,
+                fromLine, fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 
@@ -93,6 +98,11 @@ public final class UnresolvedMonominalOperationInfo extends
      * ˆê€‰‰Z‚Ì€
      */
     private final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> operand;
+
+    /**
+     * ˆê€‰‰Z‚Ì‰‰Zq
+     */
+    private final OPERATOR operator;
 
     /**
      * ˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^
