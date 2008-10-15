@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.noc;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractClassMetricPlugin;
 
@@ -38,7 +39,7 @@ public class NocPlugin extends AbstractClassMetricPlugin {
      * @param TargetClass Œv‘ª‘ÎÛƒNƒ‰ƒX
      */
     @Override
-    protected float measureClassMetric(TargetClassInfo targetClass) {
+    protected Number measureClassMetric(TargetClassInfo targetClass) {
         return targetClass.getSubClasses().size();
     }
 
