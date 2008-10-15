@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricMeasurable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -22,7 +24,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  */
-public abstract class FieldInfo extends VariableInfo<ClassInfo> {
+public abstract class FieldInfo extends VariableInfo<ClassInfo> implements MetricMeasurable {
 
     /**
      * フィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．
@@ -51,6 +53,20 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> {
         this.assignmenters = new TreeSet<CallableUnitInfo>();
     }
 
+    /**
+     * メトリクス計測対象としての名前を返す
+     * 
+     * @return メトリクス計測対象としての名前
+     */
+    public final String getMeasuredUnitName() {
+
+        final StringBuilder sb = new StringBuilder(this.getName());
+        sb.append("#");
+        sb.append(this.getOwnerClass().getFullQualifiedName(
+                Settings.getLanguage().getNamespaceDelimiter()));
+        return sb.toString();
+    }
+    
     /**
      * このフィールドを参照しているメソッドまたはコンストラクタを追加する
      * 

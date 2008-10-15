@@ -166,6 +166,14 @@ public class Settings {
     }
 
     /**
+     * 
+     * @return フィールドタイプのメトリクスを出力するファイル
+     */
+    public static String getFieldMetricsFile() {
+        return fieldMetricsFile;
+    }
+
+    /**
      * 文字列の引数の初期化に使われる定数
      */
     public static final String INIT = "INIT";
@@ -219,4 +227,9 @@ public class Settings {
      * メソッドタイプのメトリクスを出力するファイルのパスを記録するための変数
      */
     private static String methodMetricsFile = INIT;
+
+    /**
+     * フィールドタイプのメトリクスを出力するファイルのパスを記録するための変数
+     */
+    private static String fieldMetricsFile = INIT;
 }

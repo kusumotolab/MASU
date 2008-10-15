@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.util;
 
 
 /**
- * @author kou-tngt
+ * @author kou-tngt,higo
  * 
  * メトリクスの種類を表すEnum．
  */
@@ -20,5 +20,10 @@ public enum METRIC_TYPE {
     /**
      * メソッド単位のメトリクス
      */
-    METHOD_METRIC
+    METHOD_METRIC,
+    
+    /**
+     * フィールド単位のメトリクス
+     */
+    FIELD_METRIC
 }

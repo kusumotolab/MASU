@@ -22,6 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.JavaAstVisitorManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitorManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.antlr.AntlrAstVisitor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FieldMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredException;
@@ -502,6 +503,21 @@ public class MetricsTool {
             }
 
         }
+
+        if (!Settings.getFieldMetricsFile().equals(Settings.INIT)) {
+
+            try {
+                FieldMetricsInfoManager manager = FieldMetricsInfoManager.getInstance();
+                manager.checkMetrics();
+
+                String fileName = Settings.getMethodMetricsFile();
+                CSVMethodMetricsWriter writer = new CSVMethodMetricsWriter(fileName);
+                writer.write();
+
+            } catch (MetricNotRegisteredException e) {
+                System.exit(0);
+            }
+        }
     }
 
     /**
@@ -564,6 +580,13 @@ public class MetricsTool {
             printUsage();
             System.exit(0);
         }
+
+        // -A は使えない
+        if (!Settings.getFieldMetricsFile().equals(Settings.INIT)) {
+            err.println("-A can't be specified in the display mode!");
+            printUsage();
+            System.exit(0);
+        }
     }
 
     /**
@@ -600,6 +623,7 @@ public class MetricsTool {
         boolean measureFileMetrics = false;
         boolean measureClassMetrics = false;
         boolean measureMethodMetrics = false;
+        boolean measureFieldMetrics = false;
 
         for (PluginInfo pluginInfo : PluginManager.getInstance().getPluginInfos()) {
             switch (pluginInfo.getMetricType()) {
@@ -611,6 +635,8 @@ public class MetricsTool {
                 break;
             case METHOD_METRIC:
                 measureMethodMetrics = true;
+            case FIELD_METRIC:
+                measureFieldMetrics = true;
                 break;
             }
         }
@@ -629,6 +655,12 @@ public class MetricsTool {
         // メソッドメトリクスを計測する場合は -M オプションが指定されていなければならない
         if (measureMethodMetrics && (Settings.getMethodMetricsFile().equals(Settings.INIT))) {
             err.println("-M must be used for specifying a file for method metrics!");
+            System.exit(0);
+        }
+
+        // フィールドメトリクスを計測する場合は -A オプションが指定されていなければならない
+        if (measureFieldMetrics && (Settings.getFieldMetricsFile().equals(Settings.INIT))) {
+            err.println("-A must be used for specifying a file for field metrics!");
             System.exit(0);
         }
     }
@@ -715,9 +747,10 @@ public class MetricsTool {
         err.println("\t-l: Programming language of the target files.");
         err.println("\t-m: Metrics that you want to get. Metrics names are separated with \',\'.");
         err.println("\t-v: Output progress verbosely.");
-        err.println("\t-C: File path that the class type metrics are output");
+        err.println("\t-C: File path that the class type metrics are output.");
         err.println("\t-F: File path that the file type metrics are output.");
-        err.println("\t-M: File path that the method type metrics are output");
+        err.println("\t-M: File path that the method type metrics are output.");
+        err.println("\t-A: File path that the field type metrics are output.");
 
         err.println();
         err.println("Usage:");
@@ -730,9 +763,9 @@ public class MetricsTool {
         err.println();
         err.println("\t<Analysis Mode>");
         err
-                .println("\tMetricsTool -d directory -l language -m metrics1,metrics2 -C file1 -F file2 -M file3");
+                .println("\tMetricsTool -d directory -l language -m metrics1,metrics2 -C file1 -F file2 -M file3 -A file4");
         err
-                .println("\tMetricsTool -i listFile -l language -m metrics1,metrics2 -C file1 -F file2 -M file3");
+                .println("\tMetricsTool -i listFile -l language -m metrics1,metrics2 -C file1 -F file2 -M file3 -A file4");
     }
 
     /**
@@ -819,7 +852,8 @@ public class MetricsTool {
             new StringDef('m', "metrics", "Measured metrics"),
             new StringDef('F', "fileMetricsFile", "File storing file metrics"),
             new StringDef('C', "classMetricsFile", "File storing class metrics"),
-            new StringDef('M', "methodMetricsFile", "File storing method metrics") };
+            new StringDef('M', "methodMetricsFile", "File storing method metrics"),
+            new StringDef('A', "fieldMetricsFile", "File storing field metrics") };
 
     /**
      * 出力メッセージ出力用のプリンタ
