@@ -467,7 +467,8 @@ public class MetricsTool {
                 writer.write();
 
             } catch (MetricNotRegisteredException e) {
-                System.exit(0);
+                err.println(e.getMessage());
+                err.println("File metrics can't be output!");
             }
         }
 
@@ -483,7 +484,8 @@ public class MetricsTool {
                 writer.write();
 
             } catch (MetricNotRegisteredException e) {
-                System.exit(0);
+                err.println(e.getMessage());
+                err.println("Class metrics can't be output!");
             }
         }
 
@@ -499,7 +501,8 @@ public class MetricsTool {
                 writer.write();
 
             } catch (MetricNotRegisteredException e) {
-                System.exit(0);
+                err.println(e.getMessage());
+                err.println("Method metrics can't be output!");
             }
 
         }
@@ -515,7 +518,8 @@ public class MetricsTool {
                 writer.write();
 
             } catch (MetricNotRegisteredException e) {
-                System.exit(0);
+                err.println(e.getMessage());
+                err.println("Field metrics can't be output!");
             }
         }
     }
@@ -858,7 +862,7 @@ public class MetricsTool {
     /**
      * 出力メッセージ出力用のプリンタ
      */
-    private static final MessagePrinter out = new DefaultMessagePrinter(new MessageSource() {
+    private static MessagePrinter out = new DefaultMessagePrinter(new MessageSource() {
         public String getMessageSourceName() {
             return "main";
         }
@@ -867,7 +871,7 @@ public class MetricsTool {
     /**
      * エラーメッセージ出力用のプリンタ
      */
-    private static final MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
+    private static MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
         public String getMessageSourceName() {
             return "main";
         }
