@@ -1,9 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.dit;
 
 
-import java.util.SortedSet;
+import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractClassMetricPlugin;
 
@@ -30,11 +31,11 @@ public class DITPlugin extends AbstractClassMetricPlugin {
         ClassInfo classInfo = targetClass;
         for (int depth = 1;; depth++) {
 
-            SortedSet<ClassInfo> superClasses = classInfo.getSuperClasses();
+            final List<ClassTypeInfo> superClasses = classInfo.getSuperClasses();
             if (0 == superClasses.size()) {
                 return depth;
             }
-            classInfo = superClasses.first();
+            classInfo = superClasses.get(0).getReferencedClass();
         }
     }
 
