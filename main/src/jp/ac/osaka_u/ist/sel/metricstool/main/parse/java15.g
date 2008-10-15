@@ -253,14 +253,20 @@ tokens {
 	
 	private void pushStartLineColumn(){
 		if (null != lexer){
-    		lineStack.push(lexer.getTokenStartLine());
-    		columnStack.push(lexer.getTokenStartColumn());
+    		lineStack.push(this.lexer.getTokenStartLine());
+    		columnStack.push(this.lexer.getTokenStartColumn());
 		}	
 	}
 	
 	private void registLineColumnInfo(AST node){
-		if (null != lexer && null != positionManager && !lineStack.isEmpty() && !columnStack.isEmpty()){
-    		positionManager.setPosition(node, lineStack.pop(), columnStack.pop(), lexer.getTokenStartLine(), lexer.getTokenStartColumn());
+		if (null != lexer && !lineStack.isEmpty() && !columnStack.isEmpty()){
+		    final int fromLine = this.lineStack.pop();
+		    final int fromColumn = this.columnStack.pop();
+		    final int toLine = this.lexer.getLine();
+		    final int toColumn = this.lexer.getColumn();
+    		if(node instanceof CommonASTWithLineNumber) {
+    		    ((CommonASTWithLineNumber) node).setPosition(fromLine, fromColumn, toLine, toColumn);
+    		}
 		}
 	}
 }
