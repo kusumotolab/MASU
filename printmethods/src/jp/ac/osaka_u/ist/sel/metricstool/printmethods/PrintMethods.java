@@ -11,6 +11,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageListener;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 
 
 /**
@@ -26,13 +32,45 @@ public class PrintMethods extends MetricsTool {
         // âêÕópê›íË
         try {
 
-            Class c = Settings.class;
-            Field language = c.getDeclaredField("language");
+            final Class<?> settings = Settings.class;
+            final Field language = settings.getDeclaredField("language");
             language.setAccessible(true);
             language.set(null, "java");
-            Field directory = c.getDeclaredField("targetDirectory");
+            final Field directory = settings.getDeclaredField("targetDirectory");
             directory.setAccessible(true);
             directory.set(null, args[0]);
+            final Field verbose = settings.getDeclaredField("verbose");
+            verbose.setAccessible(true);
+            verbose.set(null, Boolean.TRUE);
+
+            // èÓïÒï\é¶ópê›íË
+            final Class<?> metricstool = MetricsTool.class;
+            final Field out = metricstool.getDeclaredField("out");
+            out.setAccessible(true);
+            out.set(null, new DefaultMessagePrinter(new MessageSource() {
+                public String getMessageSourceName() {
+                    return "printmethods";
+                }
+            }, MESSAGE_TYPE.OUT));
+            final Field err = metricstool.getDeclaredField("err");
+            err.setAccessible(true);
+            err.set(null, new DefaultMessagePrinter(new MessageSource() {
+                public String getMessageSourceName() {
+                    return "main";
+                }
+            }, MESSAGE_TYPE.ERROR));
+            MessagePool.getInstance(MESSAGE_TYPE.OUT).addMessageListener(new MessageListener() {
+                public void messageReceived(MessageEvent event) {
+                    System.out.print(event.getSource().getMessageSourceName() + " > "
+                            + event.getMessage());
+                }
+            });
+            MessagePool.getInstance(MESSAGE_TYPE.ERROR).addMessageListener(new MessageListener() {
+                public void messageReceived(MessageEvent event) {
+                    System.err.print(event.getSource().getMessageSourceName() + " > "
+                            + event.getMessage());
+                }
+            });
 
         } catch (NoSuchFieldException e) {
             System.out.println(e.getMessage());
