@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="Windows-31J"?>
 
-<project name="nom" default="deploy">
+<project name="wmc" default="deploy">
 	<property name="masu.dir" location="../main" />
 	<property file="${masu.dir}/build.properties" />
 
