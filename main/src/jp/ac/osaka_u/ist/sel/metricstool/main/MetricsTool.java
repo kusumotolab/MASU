@@ -156,15 +156,14 @@ public class MetricsTool {
             // ヘルプモードの場合
             metricsTool.doHelpMode();
         } else {
-            LANGUAGE language = metricsTool.getLanguage();
-            metricsTool.loadPlugins(language, Settings.getMetricStrings());
+            metricsTool.loadPlugins(Settings.getMetricStrings());
 
             if (Settings.isDisplayMode()) {
                 // 情報表示モードの場合
-                metricsTool.doDisplayMode(language);
+                metricsTool.doDisplayMode();
             } else {
                 // 解析モード
-                metricsTool.doAnalysisMode(language);
+                metricsTool.doAnalysisMode();
             }
         }
     }
@@ -179,14 +178,13 @@ public class MetricsTool {
     /**
      * {@link #readTargetFiles()} で読み込んだ対象ファイル群を解析する.
      * 
-     * @param language 解析対象の言語
      */
-    public void analyzeTargetFiles(final LANGUAGE language) {
+    public void analyzeTargetFiles() {
         // 対象ファイルを解析
 
         AstVisitorManager<AST> visitorManager = null;
 
-        switch (language) {
+        switch (Settings.getLanguage()) {
         case JAVA15:
             visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
                     new Java15AntlrAstTranslator()));
@@ -233,7 +231,7 @@ public class MetricsTool {
                         out.println(fileInformationBuffer.toString());
                     }
 
-                    switch (language) {
+                    switch (Settings.getLanguage()) {
                     case JAVA15:
                         final Java15Lexer java15lexer = new Java15Lexer(new FileInputStream(name));
                         java15lexer.setTabSize(1);
@@ -379,10 +377,9 @@ public class MetricsTool {
     /**
      * プラグインをロードする. 指定された言語，指定されたメトリクスに関連するプラグインのみを {@link PluginManager}に登録する.
      * 
-     * @param language 指定する言語.
      * @param metrics 指定するメトリクスの配列，指定しない場合はnullまたは空の配列
      */
-    public void loadPlugins(final LANGUAGE language, final String[] metrics) {
+    public void loadPlugins(final String[] metrics) {
         // 指定言語に対応するプラグインで指定されたメトリクスを計測するプラグインをロードして登録
 
         // metrics[]が０個じゃないかつ，2つ以上指定されている or １つだけどデフォルトの文字列じゃない
@@ -393,7 +390,7 @@ public class MetricsTool {
         try {
             for (final AbstractPlugin plugin : (new DefaultPluginLoader()).loadPlugins()) {// プラグインを全ロード
                 final PluginInfo info = plugin.getPluginInfo();
-                if (null == language || info.isMeasurable(language)) {
+                if (info.isMeasurable(Settings.getLanguage())) {
                     // 対象言語が指定されていない or 対象言語を計測可能
                     if (metricsSpecified) {
                         // メトリクスが指定されているのでこのプラグインと一致するかチェック
@@ -512,7 +509,7 @@ public class MetricsTool {
      * ヘルプモードの引数の整合性を確認するためのメソッド． 不正な引数が指定されていた場合，main メソッドには戻らず，この関数内でプログラムを終了する．
      * 
      */
-    private void checkHelpModeParameterValidation() {
+    private final void checkHelpModeParameterValidation() {
         // -h は他のオプションと同時指定できない
         if ((!Settings.getTargetDirectory().equals(Settings.INIT))
                 || (!Settings.getListFile().equals(Settings.INIT))
@@ -532,7 +529,7 @@ public class MetricsTool {
      * 情報表示モードの引数の整合性を確認するためのメソッド． 不正な引数が指定されていた場合，main メソッドには戻らず，この関数内でプログラムを終了する．
      * 
      */
-    private void checkDisplayModeParameterValidation() {
+    private final void checkDisplayModeParameterValidation() {
         // -d は使えない
         if (!Settings.getTargetDirectory().equals(Settings.INIT)) {
             err.println("-d can\'t be specified in the display mode!");
@@ -576,7 +573,7 @@ public class MetricsTool {
      * @param 指定された言語
      * 
      */
-    private void checkAnalysisModeParameterValidation(LANGUAGE language) {
+    private final void checkAnalysisModeParameterValidation() {
         // -d と -i のどちらも指定されているのは不正
         if (Settings.getTargetDirectory().equals(Settings.INIT)
                 && Settings.getListFile().equals(Settings.INIT)) {
@@ -594,7 +591,7 @@ public class MetricsTool {
         }
 
         // 言語が指定されなかったのは不正
-        if (null == language) {
+        if (Settings.getLanguageString().equals(Settings.INIT)) {
             err.println("-l must be specified in the analysis mode.");
             printUsage();
             System.exit(0);
@@ -641,11 +638,11 @@ public class MetricsTool {
      * 
      * @param language 対象言語
      */
-    private void doAnalysisMode(LANGUAGE language) {
-        checkAnalysisModeParameterValidation(language);
+    protected void doAnalysisMode() {
+        checkAnalysisModeParameterValidation();
 
         readTargetFiles();
-        analyzeTargetFiles(language);
+        analyzeTargetFiles();
         launchPlugins();
         writeMetrics();
     }
@@ -655,11 +652,11 @@ public class MetricsTool {
      * 
      * @param language 対象言語
      */
-    private void doDisplayMode(LANGUAGE language) {
+    protected void doDisplayMode() {
         checkDisplayModeParameterValidation();
 
         // -l で言語が指定されていない場合は，解析可能言語一覧を表示
-        if (null == language) {
+        if (Settings.getLanguageString().equals(Settings.INIT)) {
             err.println("Available languages;");
             LANGUAGE[] languages = LANGUAGE.values();
             for (int i = 0; i < languages.length; i++) {
@@ -669,10 +666,10 @@ public class MetricsTool {
 
             // -l で言語が指定されている場合は，そのプログラミング言語で使用可能なメトリクス一覧を表示
         } else {
-            err.println("Available metrics for " + language.getName());
+            err.println("Available metrics for " + Settings.getLanguage().getName());
             for (AbstractPlugin plugin : PluginManager.getInstance().getPlugins()) {
                 PluginInfo pluginInfo = plugin.getPluginInfo();
-                if (pluginInfo.isMeasurable(language)) {
+                if (pluginInfo.isMeasurable(Settings.getLanguage())) {
                     err.println("\t" + pluginInfo.getMetricName());
                 }
             }
@@ -683,7 +680,7 @@ public class MetricsTool {
     /**
      * ヘルプモードを実行する.
      */
-    private void doHelpMode() {
+    protected void doHelpMode() {
         checkHelpModeParameterValidation();
 
         printUsage();
@@ -709,7 +706,7 @@ public class MetricsTool {
      * ツールの使い方（コマンドラインオプション）を表示する．
      * 
      */
-    private void printUsage() {
+    protected void printUsage() {
 
         err.println();
         err.println("Available options:");
@@ -742,7 +739,7 @@ public class MetricsTool {
      * 
      * リストファイルから対象ファイルを登録する． 読み込みエラーが発生した場合は，このメソッド内でプログラムを終了する．
      */
-    private void registerFilesFromListFile() {
+    protected void registerFilesFromListFile() {
 
         try {
 
@@ -769,7 +766,7 @@ public class MetricsTool {
      * するのが気持ち悪かったため作成．
      * 
      */
-    private void registerFilesFromDirectory() {
+    protected void registerFilesFromDirectory() {
 
         File targetDirectory = new File(Settings.getTargetDirectory());
         registerFilesFromDirectory(targetDirectory);
@@ -781,7 +778,7 @@ public class MetricsTool {
      * 
      * 対象がディレクトリの場合は，その子に対して再帰的に処理をする． 対象がファイルの場合は，対象言語のソースファイルであれば，登録処理を行う．
      */
-    private void registerFilesFromDirectory(File file) {
+    private void registerFilesFromDirectory(final File file) {
 
         // ディレクトリならば，再帰的に処理
         if (file.isDirectory()) {
