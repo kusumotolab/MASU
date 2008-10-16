@@ -7,7 +7,7 @@ import java.util.Set;
  * @author higo
  *
  */
-public interface StatementInfo extends Position, Comparable<StatementInfo> {
+public interface StatementInfo extends ExcutableElement {
 
     /**
      * •¶“à‚Å‚Ì•Ï”‚Ìg—p‚ğ•Ô‚·

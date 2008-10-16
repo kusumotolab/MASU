@@ -11,7 +11,7 @@ import java.util.TreeSet;
  * @author t-miyake
  *
  */
-public class VariableDeclarationStatementInfo extends SingleStatementInfo {
+public class VariableDeclarationStatementInfo extends SingleStatementInfo implements ExpressionInfo {
 
     /**
      * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”C‰Šú‰»®CˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»

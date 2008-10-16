@@ -79,7 +79,7 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
      * ”äŠr‚·‚é
      */
     @Override
-    public int compareTo(StatementInfo o) {
+    public int compareTo(ExcutableElement o) {
 
         if (null == o) {
             throw new IllegalArgumentException();

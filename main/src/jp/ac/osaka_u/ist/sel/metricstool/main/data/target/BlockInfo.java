@@ -57,7 +57,7 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
      * このブロックオブジェクトを他のブロックオブジェクトと比較する
      */
     @Override
-    public final int compareTo(StatementInfo o) {
+    public final int compareTo(ExcutableElement o) {
 
         if (null == o) {
             throw new NullPointerException();

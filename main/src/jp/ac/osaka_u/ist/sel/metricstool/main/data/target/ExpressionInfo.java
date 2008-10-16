@@ -10,7 +10,7 @@ import java.util.Set;
  * @author higo
  *
  */
-public interface ExpressionInfo extends Position, Comparable<ExpressionInfo> {
+public interface ExpressionInfo extends ExcutableElement {
 
     /**
      * ®“à‚Å‚Ì•Ï”‚Ìg—p‚ğ•Ô‚·
