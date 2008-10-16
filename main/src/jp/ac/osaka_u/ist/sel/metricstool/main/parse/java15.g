@@ -251,19 +251,23 @@ tokens {
 		this.positionManager = manager;
 	}
 	
-	private void pushStartLineColumn(){
+	private void pushStartLineColumn() throws TokenStreamException {
 		if (null != lexer){
-    		lineStack.push(this.lexer.getTokenStartLine());
-    		columnStack.push(this.lexer.getTokenStartColumn());
+		    Token token = LT(1);
+    		lineStack.push(token.getLine());
+    		columnStack.push(token.getColumn());
 		}	
 	}
 	
-	private void registLineColumnInfo(AST node){
+	private void registLineColumnInfo(AST node) throws TokenStreamException{
 		if (null != lexer && !lineStack.isEmpty() && !columnStack.isEmpty()){
+		    final Token lastToken = LT(0);
 		    final int fromLine = this.lineStack.pop();
 		    final int fromColumn = this.columnStack.pop();
-		    final int toLine = this.lexer.getLine();
-		    final int toColumn = this.lexer.getColumn();
+		    final int toLine = lastToken.getLine();
+            final int toColumn = lastToken.getColumn() + lastToken.getText().length();
+		    //final int toLine = this.lexer.getLine();
+		    //final int toColumn = this.lexer.getColumn();
     		if(node instanceof CommonASTWithLineNumber) {
     		    ((CommonASTWithLineNumber) node).setPosition(fromLine, fromColumn, toLine, toColumn);
     		}
@@ -1154,7 +1158,11 @@ compoundStatement
 
 statement
 	// A list of statements in curly braces -- start a new scope!
-	:	compoundStatement
+	:	
+	{pushStartLineColumn();}
+	
+	(
+		compoundStatement
 
 	// declarations are ambiguous with "ID DOT" relative to expression
 	// statements. Must backtrack to be sure. Could use a semantic
@@ -1171,12 +1179,9 @@ statement
 	//TODO: what abour interfaces, enums and annotations
 	// class definition
 	|
-		{pushStartLineColumn();}
 		
 		m:modifiers! classDefinition[#m]
 		
-		{registLineColumnInfo(#statement);}
-
 	// Attach a label to the front of a statement
 	|	IDENT c:COLON^ {#c.setType(LABELED_STAT);} statement
 
@@ -1230,6 +1235,8 @@ statement
 
 	// empty statement
 	|	s:SEMI {#s.setType(EMPTY_STAT);}
+	)
+	{registLineColumnInfo(#statement);}
 	;
 	
 conditionalClause
