@@ -48,18 +48,21 @@ public class PluginManager {
         final PluginInfo info = plugin.getPluginInfo();
         this.pluginInfos.add(info);
         this.info2pluginMap.put(info, plugin);
-        
+
         METRIC_TYPE type = plugin.getMetricType();
-        switch(type){
-            case FILE_METRIC :
-                this.filePlugins.add(plugin);
-                break;
-            case CLASS_METRIC :
-                this.classPlugins.add(plugin);
-                break;
-            case METHOD_METRIC :
-                this.methodPlugins.add(plugin);
-                break;
+        switch (type) {
+        case FILE_METRIC:
+            this.filePlugins.add(plugin);
+            break;
+        case CLASS_METRIC:
+            this.classPlugins.add(plugin);
+            break;
+        case METHOD_METRIC:
+            this.methodPlugins.add(plugin);
+            break;
+        case FIELD_METRIC:
+            this.fieldPlugins.add(plugin);
+            break;
         }
     }
 
@@ -112,38 +115,49 @@ public class PluginManager {
         MetricsToolSecurityManager.getInstance().checkAccess();
         return Collections.unmodifiableSet(this.plugins);
     }
-    
+
     /**
      * ファイル単位のメトリクスを計測するプラグインの編集不可なSetを返す
      * 特別権限を持つスレッド以外からは呼び出せない
      * @return ファイル単位のメトリクスを計測するプラグインのSet
      * @throws AccessControlException 特別権限を持っていないスレッドからの呼び出しの場合
      */
-    public Set<AbstractPlugin> getFileMetricPlugins(){
+    public Set<AbstractPlugin> getFileMetricPlugins() {
         MetricsToolSecurityManager.getInstance().checkAccess();
         return Collections.unmodifiableSet(this.filePlugins);
     }
-    
+
     /**
      * クラス単位のメトリクスを計測するプラグインの編集不可なSetを返す
      * 特別権限を持つスレッド以外からは呼び出せない
      * @return クラス単位のメトリクスを計測するプラグインのSet
      * @throws AccessControlException 特別権限を持っていないスレッドからの呼び出しの場合
      */
-    public Set<AbstractPlugin> getClassMetricPlugins(){
+    public Set<AbstractPlugin> getClassMetricPlugins() {
         MetricsToolSecurityManager.getInstance().checkAccess();
         return Collections.unmodifiableSet(this.classPlugins);
     }
-    
+
     /**
      * メソッド単位のメトリクスを計測するプラグインの編集不可なSetを返す
      * 特別権限を持つスレッド以外からは呼び出せない
      * @return メソッド単位のメトリクスを計測するプラグインのSet
      * @throws AccessControlException 特別権限を持っていないスレッドからの呼び出しの場合
      */
-    public Set<AbstractPlugin> getMethodMetricPlugins(){
+    public Set<AbstractPlugin> getMethodMetricPlugins() {
         MetricsToolSecurityManager.getInstance().checkAccess();
         return Collections.unmodifiableSet(this.methodPlugins);
+    }
+
+    /**
+     * フィールド単位のメトリクスを計測するプラグインの編集不可なSetを返す
+     * 特別権限を持つスレッド以外からは呼び出せない
+     * @return フィールド単位のメトリクスを計測するプラグインのSet
+     * @throws AccessControlException 特別権限を持っていないスレッドからの呼び出しの場合
+     */
+    public Set<AbstractPlugin> getFieldMetricPlugins() {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        return Collections.unmodifiableSet(this.fieldPlugins);
     }
 
     /**
@@ -168,17 +182,19 @@ public class PluginManager {
             final PluginInfo info = plugin.getPluginInfo();
             this.pluginInfos.remove(info);
             this.info2pluginMap.remove(info);
-            
-            switch(plugin.getMetricType()){
-                case FILE_METRIC :
-                    this.filePlugins.remove(plugin);
-                    break;
-                case CLASS_METRIC :
-                    this.classPlugins.remove(plugin);
-                    break;
-                case METHOD_METRIC :
-                    this.methodPlugins.remove(plugin);
-                    break;
+
+            switch (plugin.getMetricType()) {
+            case FILE_METRIC:
+                this.filePlugins.remove(plugin);
+                break;
+            case CLASS_METRIC:
+                this.classPlugins.remove(plugin);
+                break;
+            case METHOD_METRIC:
+                this.methodPlugins.remove(plugin);
+                break;
+            case FIELD_METRIC:
+                this.fieldPlugins.remove(plugin);
             }
         }
     }
@@ -210,6 +226,7 @@ public class PluginManager {
         this.filePlugins.clear();
         this.classPlugins.clear();
         this.methodPlugins.clear();
+        this.fieldPlugins.clear();
     }
 
     /**
@@ -222,21 +239,26 @@ public class PluginManager {
      * 全てのプラグインのSet
      */
     private final Set<AbstractPlugin> plugins = new ConcurrentHashSet<AbstractPlugin>();
-    
+
     /**
      * ファイル単位のメトリクスを計測するプラグインのセット
      */
     private final Set<AbstractPlugin> filePlugins = new ConcurrentHashSet<AbstractPlugin>();
-    
+
     /**
      * クラス単位のメトリクスを計測するプラグインのセット
      */
     private final Set<AbstractPlugin> classPlugins = new ConcurrentHashSet<AbstractPlugin>();
-    
+
     /**
      * メソッド単位のメトリクスを計測するプラグインのセット
      */
     private final Set<AbstractPlugin> methodPlugins = new ConcurrentHashSet<AbstractPlugin>();
+
+    /**
+     * フィールド単位のメトリクスを計測するプラグインのセット
+     */
+    private final Set<AbstractPlugin> fieldPlugins = new ConcurrentHashSet<AbstractPlugin>();
 
     /**
      * 全てのプラグイン情報のSet

@@ -473,7 +473,7 @@ public class MetricsTool {
         }
 
         // クラスメトリクスを計測する場合
-        if (!Settings.getClassMetricsFile().equals(Settings.INIT)) {
+        if (0 < PluginManager.getInstance().getClassMetricPlugins().size()) {
 
             try {
                 ClassMetricsInfoManager manager = ClassMetricsInfoManager.getInstance();
@@ -490,7 +490,7 @@ public class MetricsTool {
         }
 
         // メソッドメトリクスを計測する場合
-        if (!Settings.getMethodMetricsFile().equals(Settings.INIT)) {
+        if (0 < PluginManager.getInstance().getMethodMetricPlugins().size()) {
 
             try {
                 MethodMetricsInfoManager manager = MethodMetricsInfoManager.getInstance();
@@ -507,7 +507,7 @@ public class MetricsTool {
 
         }
 
-        if (!Settings.getFieldMetricsFile().equals(Settings.INIT)) {
+        if (0 < PluginManager.getInstance().getFieldMetricPlugins().size()) {
 
             try {
                 FieldMetricsInfoManager manager = FieldMetricsInfoManager.getInstance();
@@ -624,49 +624,59 @@ public class MetricsTool {
             System.exit(0);
         }
 
-        boolean measureFileMetrics = false;
-        boolean measureClassMetrics = false;
-        boolean measureMethodMetrics = false;
-        boolean measureFieldMetrics = false;
+        {
+            // ファイルメトリクスを計測する場合は -F オプションが指定されていなければならない
+            if ((0 < PluginManager.getInstance().getFileMetricPlugins().size())
+                    && (Settings.getFileMetricsFile().equals(Settings.INIT))) {
+                err.println("-F must be used for specifying a file for file metrics!");
+                System.exit(0);
+            }
 
-        for (PluginInfo pluginInfo : PluginManager.getInstance().getPluginInfos()) {
-            switch (pluginInfo.getMetricType()) {
-            case FILE_METRIC:
-                measureFileMetrics = true;
-                break;
-            case CLASS_METRIC:
-                measureClassMetrics = true;
-                break;
-            case METHOD_METRIC:
-                measureMethodMetrics = true;
-                break;
-            case FIELD_METRIC:
-                measureFieldMetrics = true;
-                break;
+            // クラスメトリクスを計測する場合は -C オプションが指定されていなければならない
+            if ((0 < PluginManager.getInstance().getClassMetricPlugins().size())
+                    && (Settings.getClassMetricsFile().equals(Settings.INIT))) {
+                err.println("-C must be used for specifying a file for class metrics!");
+                System.exit(0);
+            }
+            // メソッドメトリクスを計測する場合は -M オプションが指定されていなければならない
+            if ((0 < PluginManager.getInstance().getMethodMetricPlugins().size())
+                    && (Settings.getMethodMetricsFile().equals(Settings.INIT))) {
+                err.println("-M must be used for specifying a file for method metrics!");
+                System.exit(0);
+            }
+
+            // フィールドメトリクスを計測する場合は -A オプションが指定されていなければならない
+            if ((0 < PluginManager.getInstance().getFieldMetricPlugins().size())
+                    && (Settings.getFieldMetricsFile().equals(Settings.INIT))) {
+                err.println("-A must be used for specifying a file for field metrics!");
+                System.exit(0);
             }
         }
 
-        // ファイルメトリクスを計測する場合は -F オプションが指定されていなければならない
-        if (measureFileMetrics && (Settings.getFileMetricsFile().equals(Settings.INIT))) {
-            err.println("-F must be used for specifying a file for file metrics!");
-            System.exit(0);
-        }
+        {
+            // ファイルメトリクスを計測しないのに -F　オプションが指定されている場合は無視する旨を通知
+            if ((0 == PluginManager.getInstance().getFileMetricPlugins().size())
+                    && !(Settings.getFileMetricsFile().equals(Settings.INIT))) {
+                err.println("No file metric is specified! -F is ignored.");
+            }
 
-        // クラスメトリクスを計測する場合は -C オプションが指定されていなければならない
-        if (measureClassMetrics && (Settings.getClassMetricsFile().equals(Settings.INIT))) {
-            err.println("-C must be used for specifying a file for class metrics!");
-            System.exit(0);
-        }
-        // メソッドメトリクスを計測する場合は -M オプションが指定されていなければならない
-        if (measureMethodMetrics && (Settings.getMethodMetricsFile().equals(Settings.INIT))) {
-            err.println("-M must be used for specifying a file for method metrics!");
-            System.exit(0);
-        }
+            // クラスメトリクスを計測しないのに -C　オプションが指定されている場合は無視する旨を通知
+            if ((0 == PluginManager.getInstance().getClassMetricPlugins().size())
+                    && !(Settings.getClassMetricsFile().equals(Settings.INIT))) {
+                err.println("No class metric is specified! -C is ignored.");
+            }
 
-        // フィールドメトリクスを計測する場合は -A オプションが指定されていなければならない
-        if (measureFieldMetrics && (Settings.getFieldMetricsFile().equals(Settings.INIT))) {
-            err.println("-A must be used for specifying a file for field metrics!");
-            System.exit(0);
+            // メソッドメトリクスを計測しないのに -M　オプションが指定されている場合は無視する旨を通知
+            if ((0 == PluginManager.getInstance().getMethodMetricPlugins().size())
+                    && !(Settings.getMethodMetricsFile().equals(Settings.INIT))) {
+                err.println("No method metric is specified! -M is ignored.");
+            }
+
+            // フィールドメトリクスを計測しないのに -A　オプションが指定されている場合は無視する旨を通知
+            if ((0 == PluginManager.getInstance().getFieldMetricPlugins().size())
+                    && !(Settings.getFieldMetricsFile().equals(Settings.INIT))) {
+                err.println("No field metric is specified! -A is ignored.");
+            }
         }
     }
 
