@@ -1,8 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
@@ -26,6 +30,9 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
      */
     public UnresolvedForBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
+
+        this.initializerExpressions = new TreeSet<UnresolvedExpressionInfo<? extends ExpressionInfo>>();
+        this.updateExpressions = new TreeSet<UnresolvedExpressionInfo<? extends ExpressionInfo>>();
     }
 
     /**
@@ -69,6 +76,18 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 
+        // 未解決初期化式情報を解決し，解決済みオブジェクトに追加
+        for (final UnresolvedExpressionInfo<? extends ExpressionInfo> initializerExpression : this.initializerExpressions) {
+            this.resolvedInfo.addInitializerExpressions(initializerExpression.resolve(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager));
+        }
+
+        // 未解決更新式情報を追加し，解決済みオブジェクトに追加
+        for (final UnresolvedExpressionInfo<? extends ExpressionInfo> updateExpression : this.updateExpressions) {
+            this.resolvedInfo.addUpdateExpressions(updateExpression.resolve(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager));
+        }
+
         // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
             final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass, usingMethod,
@@ -81,5 +100,31 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
 
         return this.resolvedInfo;
     }
+
+    public final void addInitializerExpression(
+            final UnresolvedExpressionInfo<? extends ExpressionInfo> initializerExpression) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+
+        if (null == initializerExpression) {
+            throw new IllegalArgumentException("initailizerExpression is null.");
+        }
+
+        this.initializerExpressions.add(initializerExpression);
+    }
+
+    public final void addUpdateExpression(
+            final UnresolvedExpressionInfo<? extends ExpressionInfo> updateExpression) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+
+        if (null == updateExpression) {
+            throw new IllegalArgumentException("updateExpression is null.");
+        }
+
+        this.updateExpressions.add(updateExpression);
+    }
+
+    private final SortedSet<UnresolvedExpressionInfo<? extends ExpressionInfo>> initializerExpressions;
+
+    private final SortedSet<UnresolvedExpressionInfo<? extends ExpressionInfo>> updateExpressions;
 
 }
