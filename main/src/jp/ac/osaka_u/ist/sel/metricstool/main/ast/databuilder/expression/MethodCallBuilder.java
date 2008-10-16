@@ -35,8 +35,8 @@ public class MethodCallBuilder extends ExpressionBuilder{
                 
                 final UnresolvedMethodCallInfo methodCall = new UnresolvedMethodCallInfo(callee.getOwnerUsage(),callee.getName());
                 // 開始位置はメソッド名の出現位置
-                methodCall.setFromLine(callee.getFromLine());
-                methodCall.setFromColumn(callee.getFromColumn());
+                methodCall.setFromLine(event.getStartLine());
+                methodCall.setFromColumn(event.getStartColumn());
                 // 終了位置はメソッド呼び出し式の終了位置
                 methodCall.setToLine(event.getEndLine());
                 methodCall.setToColumn(event.getEndColumn());
