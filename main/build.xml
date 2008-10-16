@@ -16,8 +16,9 @@
 	<property name="antlr.jar" value="lib/antlr.jar" />
 	<property name="jargp.jar" value="lib/jargp.jar" />
 	<property name="manifest.mf" value="resource/manifest.mf" />
-	<property name="zip.name" value="${TOOL.NAME}${DSTAMP}${TSTAMP}.zip" />
-
+	<property name="zip.bin.name" value="${TOOL.NAME}bin${DSTAMP}${TSTAMP}.zip" />
+	<property name="zip.src.name" value="${TOOL.NAME}src${DSTAMP}${TSTAMP}.zip" />
+	
 	<target name="antlr">
 		<antlr target="${java15grammer}">
 			<classpath path="${antlr.jar}" />
@@ -55,7 +56,7 @@
 			<classpath path="${jargp.jar};${antlr.jar}" />
 		</javadoc>
 
-		<zip destfile="${zip.name}" basedir="${PACKAGE.DIR}" />
+		<zip destfile="${zip.bin.name}" basedir="${PACKAGE.DIR}" />
 	</target>
 
 	<target name="srcpackage" depends="build">
@@ -67,7 +68,7 @@
 			<fileset dir="${SRC.DIR}" />
 		</copy>
 
-		<zip destfile="${zip.name}" basedir="${PACKAGE.DIR}" />
+		<zip destfile="${zip.src.name}" basedir="${PACKAGE.DIR}" />
 	</target>
 
 	<target name="clean">
