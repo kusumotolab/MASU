@@ -20,12 +20,14 @@ public class ConstructorCallBuilder extends ExpressionBuilder {
         final AstToken token = event.getToken();
 
         if (token.isInstantiation()) {
-            buildNewConstructorCall();
+            buildNewConstructorCall(event.getStartLine(), event.getStartColumn(), event
+                    .getEndLine(), event.getEndColumn());
         }
 
     }
 
-    protected void buildNewConstructorCall() {
+    protected void buildNewConstructorCall(final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
         final ExpressionElement[] elements = getAvailableElements();
 
         assert (elements.length > 0) : "Illegal state: constructor element not found.";
@@ -40,6 +42,11 @@ public class ConstructorCallBuilder extends ExpressionBuilder {
 
             final UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(
                     referenceType);
+            constructorCall.setFromLine(fromLine);
+            constructorCall.setFromColumn(fromColumn);
+            constructorCall.setToLine(toLine);
+            constructorCall.setToColumn(toColumn);
+
             resolveParameters(constructorCall, elements, 1);
             pushElement(UsageElement.getInstance(constructorCall));
             this.buildDataManager.addMethodCall(constructorCall);

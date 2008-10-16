@@ -982,11 +982,15 @@ constructorBody
 
 /** Catch obvious constructor calls, but not the expr.super(...) calls */
 explicitConstructorInvocation
-	:	(typeArguments)?
+	:	
+		{pushStartLineColumn();}
+		(typeArguments)?
 		(	"this"! lp1:LPAREN^ argList RPAREN! SEMI!
 			{#lp1.setType(CTOR_CALL);}
+			{registLineColumnInfo(#lp1);}
 		|	"super"! lp2:LPAREN^ argList RPAREN! SEMI!
 			{#lp2.setType(SUPER_CTOR_CALL);}
+			{registLineColumnInfo(#lp2);}
 		)
 		
 		{#explicitConstructorInvocation = #(#[EXPR,"EXPR"],#explicitConstructorInvocation);}
@@ -1713,7 +1717,9 @@ identPrimary
  *
  */
 newExpression
-	:		"new"^ (typeArguments)? type
+	:	
+		{pushStartLineColumn();}
+		"new"^ (typeArguments)? type
 		(	LPAREN! argList RPAREN! (classBlock)?
 
 			//java 1.1
@@ -1726,6 +1732,7 @@ newExpression
 
 		|	newArrayDeclarator (arrayInitializer)?
 		)
+		{registLineColumnInfo(#newExpression);;}
 	;
 
 argList
