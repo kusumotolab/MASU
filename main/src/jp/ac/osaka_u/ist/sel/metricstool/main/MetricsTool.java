@@ -639,6 +639,7 @@ public class MetricsTool {
                 break;
             case METHOD_METRIC:
                 measureMethodMetrics = true;
+                break;
             case FIELD_METRIC:
                 measureFieldMetrics = true;
                 break;
