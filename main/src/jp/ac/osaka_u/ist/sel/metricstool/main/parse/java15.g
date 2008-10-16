@@ -1550,23 +1550,32 @@ postfixExpression
 		:	*/
 			//type arguments are only appropriate for a parameterized method/ctor invocations
 			//semantic check may be needed here to ensure that this is the case
-			DOT^ (typeArguments)?
+			DOT^
+				{pushStartLineColumn();}
+				(typeArguments)?
 				(	IDENT
 					(	lp:LPAREN^ {#lp.setType(METHOD_CALL);}
 						argList
 						RPAREN!
 					)?
-				|	"super"
+				|	
+					{pushStartLineColumn();}
+					"super"
 					(	// (new Outer()).super() (create enclosing instance)
 						lp3:LPAREN^ argList RPAREN!
 						{#lp3.setType(SUPER_CTOR_CALL);}
-					|	DOT^ (typeArguments)? IDENT
-						(	lps:LPAREN^ {#lps.setType(METHOD_CALL);}
-							argList
-							RPAREN!
-						)?
+					|	DOT^
+							{pushStartLineColumn();}
+							(typeArguments)? IDENT
+							(	lps:LPAREN^ {#lps.setType(METHOD_CALL);}
+								argList
+								RPAREN!
+							)?
+							{registLineColumnInfo(#lps);}
 					)
+					{registLineColumnInfo(#lp3);}
 				)
+				{registLineColumnInfo(#lp);}
 		|	DOT^ "this"
 		|	DOT^ newExpression
 		|	lb:LBRACK^ {#lb.setType(INDEX_OP);} expression RBRACK!
@@ -1601,7 +1610,9 @@ primaryExpression
  *  this or super.
  */
 identPrimary
-	:	(ta1:typeArguments!)?
+	:	
+		{pushStartLineColumn();}
+		(ta1:typeArguments!)?
 		IDENT
 		// Syntax for method invocation with type arguments is
 		// <String>foo("blah")
@@ -1619,8 +1630,8 @@ identPrimary
 			// The problem is that this loop here conflicts with
 			// DOT typeArguments "super" in postfixExpression (k=2)
 			// A proper solution would require a lot of refactoring...
-		:	(DOT (typeArguments)? IDENT) =>
-				DOT^ (ta2:typeArguments!)? IDENT
+		:	(DOT {registLineColumnInfo(null); pushStartLineColumn();} (typeArguments)? IDENT) =>
+				DOT^ {registLineColumnInfo(null); pushStartLineColumn();} (ta2:typeArguments!)? IDENT
 		|	{false}?	// FIXME: this is very ugly but it seems to work...
 						// this will also produce an ANTLR warning!
 				// Unfortunately a syntactic predicate can only select one of
@@ -1648,6 +1659,8 @@ identPrimary
 				lbc:LBRACK^ {#lbc.setType(ARRAY_DECLARATOR);} RBRACK!
 			)+
 		)?
+		
+		{registLineColumnInfo(#lp);}
 	;
 
 /** object instantiation.
