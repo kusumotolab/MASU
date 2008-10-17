@@ -81,7 +81,7 @@ public final class UnresolvedParameterInfo
         final int index = this.getIndex();
         final UnresolvedTypeInfo<?> unresolvedParameterType = this.getType();
         TypeInfo parameterType = unresolvedParameterType.resolve(usingClass, usingMethod,
-                classInfoManager, null, null);
+                classInfoManager, fieldInfoManager, methodInfoManager);
         assert parameterType != null : "resolveTypeInfo returned null!";
         if (parameterType instanceof UnknownTypeInfo) {
             if (unresolvedParameterType instanceof UnresolvedClassReferenceInfo) {
