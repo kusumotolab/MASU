@@ -123,7 +123,7 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
         final StringBuilder sb = new StringBuilder();
         sb.append(this.referencedClass.getFullQualifiedName("."));
 
-        if (0 <= this.typeArguments.size()) {
+        if (0 < this.typeArguments.size()) {
             sb.append("<");
             for (final TypeInfo typeParameter : this.typeArguments) {
                 sb.append(typeParameter.getTypeName());
