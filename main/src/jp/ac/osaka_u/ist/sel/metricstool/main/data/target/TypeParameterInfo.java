@@ -81,7 +81,14 @@ public class TypeParameterInfo implements ReferenceTypeInfo {
      * @return Œ^–¼
      */
     public final String getTypeName() {
-        return this.name;
+
+        StringBuilder sb = new StringBuilder(this.name);
+        if (this.hasExtendsType()) {
+            sb.append(" extends ");
+            sb.append(this.getExtendsType().getTypeName());
+        }
+
+        return sb.toString();
     }
 
     /**

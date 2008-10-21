@@ -127,7 +127,9 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
             sb.append("<");
             for (final TypeInfo typeParameter : this.typeArguments) {
                 sb.append(typeParameter.getTypeName());
+                sb.append(",");
             }
+            sb.deleteCharAt(sb.length() - 1);
             sb.append(">");
         }
 
