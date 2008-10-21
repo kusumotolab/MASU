@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 
-import java.util.HashSet;
+import java.util.LinkedList;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.TypeBuilder;
@@ -49,8 +49,8 @@ public class JavaTypeBuilder extends TypeBuilder {
      * java.lang.ObjectÇï\Ç∑å^éQè∆
      */
     public final static UnresolvedClassTypeInfo JAVA_LANG_OBJECT = new UnresolvedClassTypeInfo(
-            new HashSet<AvailableNamespaceInfo>(), new String[] { "java", "lang", "Object" });
-    
+            new LinkedList<AvailableNamespaceInfo>(), new String[] { "java", "lang", "Object" });
+
     public final static UnresolvedClassTypeInfo JAVA_LANG_STRIG = new UnresolvedClassTypeInfo(
-            new HashSet<AvailableNamespaceInfo>(),new String[]{"java","lang","String"});
+            new LinkedList<AvailableNamespaceInfo>(), new String[] { "java", "lang", "String" });
 }

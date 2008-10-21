@@ -82,9 +82,9 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
                 new NameBuilder(), new MethodParameterBuilder(this.buildDataManager,
                         new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
                         new NameBuilder(), modifiersInterpriter)));
-        this.builders.add(new MethodBuilderFromPropertyAST(this.buildDataManager, modifiersInterpriter,
-                new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
-                new NameBuilder()));
+        this.builders.add(new MethodBuilderFromPropertyAST(this.buildDataManager,
+                modifiersInterpriter, new ModifiersBuilder(), new JavaTypeBuilder(
+                        this.buildDataManager), new NameBuilder()));
         //this.builders.add(new Initializerbuilder());
         //this.builders.add(new StaticInitializerBuilder());
 

@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import java.util.List;
-import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayLengthUsageInfo;
@@ -47,7 +46,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public UnresolvedFieldUsageInfo(final Set<AvailableNamespaceInfo> availableNamespaces,
+    public UnresolvedFieldUsageInfo(final List<AvailableNamespaceInfo> availableNamespaces,
             final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> ownerUsage,
             final String fieldName, final boolean reference, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -249,7 +248,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
      * 
      * @return 使用可能な名前空間を返す
      */
-    public Set<AvailableNamespaceInfo> getAvailableNamespaces() {
+    public List<AvailableNamespaceInfo> getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
@@ -274,7 +273,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
     /**
      * 使用可能な名前空間を保存するための変数
      */
-    private final Set<AvailableNamespaceInfo> availableNamespaces;
+    private final List<AvailableNamespaceInfo> availableNamespaces;
 
     /**
      * フィールド名を保存するための変数

@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 
-import java.util.HashSet;
+import java.util.LinkedList;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
@@ -38,7 +38,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
     }
 
     @Override
-    protected void buildCompoundIdentifierElement(ExpressionElement[] elements) throws ASTParseException {
+    protected void buildCompoundIdentifierElement(ExpressionElement[] elements)
+            throws ASTParseException {
 
         assert (2 == elements.length) : "Illega state: two element must be usable.";
 
@@ -139,7 +140,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                 classInfo = buildDataManager.getCurrentClass();
             }
 
-            final UnresolvedClassTypeInfo superClassType = classInfo.getSuperClasses().iterator().next();
+            final UnresolvedClassTypeInfo superClassType = classInfo.getSuperClasses().iterator()
+                    .next();
             if (superClassType != null) {
                 pushElement(UsageElement.getInstance(superClassType.getUsage()));
             }
@@ -148,25 +150,26 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
         }
     }
 
-    private UnresolvedClassInfo getSpecifiedOuterClass(IdentifierElement identifier) throws ASTParseException {
+    private UnresolvedClassInfo getSpecifiedOuterClass(IdentifierElement identifier)
+            throws ASTParseException {
         String name = identifier.getName();
         UnresolvedClassInfo currentClass = buildDataManager.getCurrentClass();
         while (null != currentClass && !name.equals(currentClass.getClassName())) {
             final UnresolvedUnitInfo<? extends UnitInfo> outerUnit = currentClass.getOuterUnit();
-            if(outerUnit instanceof UnresolvedClassInfo) {
+            if (outerUnit instanceof UnresolvedClassInfo) {
                 currentClass = (UnresolvedClassInfo) outerUnit;
-            } else if(null == outerUnit) {
+            } else if (null == outerUnit) {
                 currentClass = null;
             } else {
                 // TODO 今のところメソッド内で宣言されたクラスのコンストラクタ内で"識別子.super()"という構文はサポートしていない
                 throw new ASTParseException("unsupported super constructor call");
-            } 
+            }
         }
         return currentClass;
     }
 
     private final static UnresolvedClassTypeInfo JAVA_LANG_CLASS = new UnresolvedClassTypeInfo(
-            new HashSet<AvailableNamespaceInfo>(), new String[] { "java", "lang", "Class" });
+            new LinkedList<AvailableNamespaceInfo>(), new String[] { "java", "lang", "Class" });
 
     private final BuildDataManager buildDataManager;
 

@@ -37,7 +37,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
      * @param availableNamespaces 名前空間名
      * @param referenceName 参照名
      */
-    public UnresolvedClassReferenceInfo(final Set<AvailableNamespaceInfo> availableNamespaces,
+    public UnresolvedClassReferenceInfo(final List<AvailableNamespaceInfo> availableNamespaces,
             final String[] referenceName) {
 
         // 不正な呼び出しでないかをチェック
@@ -60,7 +60,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
      * @param referenceName 参照名
      * @param ownerUsage 親参照
      */
-    public UnresolvedClassReferenceInfo(final Set<AvailableNamespaceInfo> availableNamespaces,
+    public UnresolvedClassReferenceInfo(final List<AvailableNamespaceInfo> availableNamespaces,
             final String[] referenceName, final UnresolvedClassReferenceInfo ownerUsage) {
 
         // 不正な呼び出しでないかをチェック
@@ -330,6 +330,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
 
                                             // 見つからなかったので null を返す．
                                             // 現在の想定では，この部分に到着しうるのは継承関係の名前解決が完全に終わっていない段階のみのはず．
+                                            assert false : "Here shouldn't be reached!";
                                             return null;
 
                                             // 親が外部クラス(ExternalClassInfo)の場合
@@ -526,7 +527,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
      * 
      * @return この参照型の完全限定名として可能性のある名前空間名の一覧
      */
-    public final Set<AvailableNamespaceInfo> getAvailableNamespaces() {
+    public final List<AvailableNamespaceInfo> getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
@@ -547,7 +548,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
     /**
      * 利用可能な名前空間名を保存するための変数，名前解決処理の際に用いる
      */
-    private final Set<AvailableNamespaceInfo> availableNamespaces;
+    private final List<AvailableNamespaceInfo> availableNamespaces;
 
     /**
      * 参照名を保存する変数

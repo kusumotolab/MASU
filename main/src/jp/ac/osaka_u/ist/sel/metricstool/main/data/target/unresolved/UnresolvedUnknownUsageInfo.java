@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import java.util.List;
-import java.util.Set;
 import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
@@ -50,7 +49,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public UnresolvedUnknownUsageInfo(final Set<AvailableNamespaceInfo> availableNamespaces,
+    public UnresolvedUnknownUsageInfo(final List<AvailableNamespaceInfo> availableNamespaces,
             final String[] name, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
 
@@ -83,7 +82,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
 
         // エンティティ参照名を取得
         final String[] name = this.getName();
-        
+
         // 位置情報を取得
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
@@ -961,7 +960,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                     }
                 }
             }
-            
+
             //　親クラスから検索
             {
                 // 利用可能な各親クラスに対して
@@ -988,8 +987,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                 // 親がクラス型の場合
                             } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
-                                final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage
-                                        .getType()).getReferencedClass();
+                                final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage.getType())
+                                        .getReferencedClass();
 
                                 // 親が対象クラス(TargetClassInfo)の場合
                                 if (ownerClass instanceof TargetClassInfo) {
@@ -999,8 +998,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                     {
                                         // 利用可能なフィールド一覧を取得
                                         final List<TargetFieldInfo> availableFields = NameResolver
-                                                .getAvailableFields(
-                                                        (TargetClassInfo) ownerClass,
+                                                .getAvailableFields((TargetClassInfo) ownerClass,
                                                         usingClass);
 
                                         for (TargetFieldInfo availableField : availableFields) {
@@ -1011,10 +1009,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                 // availableField.addReferencer(usingMethod);
 
                                                 entityUsage = FieldUsageInfo.getInstance(
-                                                        classReference, entityUsage
-                                                                .getType(), availableField,
-                                                        true, fromLine, fromColumn, toLine,
-                                                        toColumn);
+                                                        classReference, entityUsage.getType(),
+                                                        availableField, true, fromLine, fromColumn,
+                                                        toLine, toColumn);
 
                                                 found = true;
                                                 break;
@@ -1031,15 +1028,14 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                             for (final TargetInnerClassInfo innerClass : innerClasses) {
 
                                                 // 一致するクラス名が見つかった場合
-                                                if (name[i].equals(innerClass
-                                                        .getClassName())) {
+                                                if (name[i].equals(innerClass.getClassName())) {
                                                     // TODO 利用関係を構築するコードが必要？
 
                                                     final ClassTypeInfo referenceType = new ClassTypeInfo(
                                                             innerClass);
                                                     entityUsage = new ClassReferenceInfo(
-                                                            referenceType, fromLine,
-                                                            fromColumn, toLine, toColumn);
+                                                            referenceType, fromLine, fromColumn,
+                                                            toLine, toColumn);
                                                     found = true;
                                                     break;
                                                 }
@@ -1067,10 +1063,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                                 fieldInfoManager.add(fieldInfo);
 
                                                 entityUsage = FieldUsageInfo.getInstance(
-                                                        classReference, entityUsage
-                                                                .getType(), fieldInfo,
-                                                        true, fromLine, fromColumn, toLine,
-                                                        toColumn);
+                                                        classReference, entityUsage.getType(),
+                                                        fieldInfo, true, fromLine, fromColumn,
+                                                        toLine, toColumn);
 
                                             } else {
                                                 assert false : "Can't resolve entity usage4 : "
@@ -1089,10 +1084,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                     // fieldInfo.addReferencer(usingMethod);
                                     fieldInfoManager.add(fieldInfo);
 
-                                    entityUsage = FieldUsageInfo.getInstance(
-                                            classReference, entityUsage.getType(),
-                                            fieldInfo, true, fromLine, fromColumn, toLine,
-                                            toColumn);
+                                    entityUsage = FieldUsageInfo.getInstance(classReference,
+                                            entityUsage.getType(), fieldInfo, true, fromLine,
+                                            fromColumn, toLine, toColumn);
                                 }
 
                             } else {
@@ -1157,14 +1151,14 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
      * 
      * @return この未解決エンティティ使用が利用することのできる名前空間
      */
-    public Set<AvailableNamespaceInfo> getAvailableNamespaces() {
+    public List<AvailableNamespaceInfo> getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
     /**
      * この未解決エンティティ使用が利用することのできる名前空間を保存するための変数
      */
-    private final Set<AvailableNamespaceInfo> availableNamespaces;
+    private final List<AvailableNamespaceInfo> availableNamespaces;
 
     /**
      * この未解決エンティティ使用名を保存するための変数

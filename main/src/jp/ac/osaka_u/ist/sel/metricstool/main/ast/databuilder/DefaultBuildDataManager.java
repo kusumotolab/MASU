@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -241,13 +242,13 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     }
 
-    public Set<AvailableNamespaceInfo> getAllAvaliableNames() {
+    public List<AvailableNamespaceInfo> getAllAvaliableNames() {
         //      nullじゃなければ変化してないのでキャッシュ使いまわし
         if (null != allAvaliableNameSetCache) {
             return allAvaliableNameSetCache;
         }
 
-        Set<AvailableNamespaceInfo> resultSet = getAvailableAliasSet();
+        List<AvailableNamespaceInfo> resultSet = getAvailableAliasSet();
         for (AvailableNamespaceInfo info : getAvailableNameSpaceSet()) {
             resultSet.add(info);
         }
@@ -257,13 +258,13 @@ public class DefaultBuildDataManager implements BuildDataManager {
         return resultSet;
     }
 
-    public Set<AvailableNamespaceInfo> getAvailableNameSpaceSet() {
+    public List<AvailableNamespaceInfo> getAvailableNameSpaceSet() {
         //nullじゃなければ変化してないのでキャッシュ使いまわし
         if (null != availableNameSpaceSetCache) {
             return availableNameSpaceSetCache;
         }
 
-        final Set<AvailableNamespaceInfo> result = new HashSet<AvailableNamespaceInfo>();
+        final List<AvailableNamespaceInfo> result = new LinkedList<AvailableNamespaceInfo>();
         //まず先に今の名前空間を登録
         if (null == currentNameSpaceCache) {
             currentNameSpaceCache = new AvailableNamespaceInfo(getCurrentNameSpace(), true);
@@ -273,7 +274,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
             final BlockScope scope = this.scopeStack.get(i);
-            final Set<AvailableNamespaceInfo> scopeLocalNameSpaceSet = scope
+            final List<AvailableNamespaceInfo> scopeLocalNameSpaceSet = scope
                     .getAvailableNameSpaces();
             for (final AvailableNamespaceInfo info : scopeLocalNameSpaceSet) {
                 result.add(info);
@@ -284,17 +285,17 @@ public class DefaultBuildDataManager implements BuildDataManager {
         return result;
     }
 
-    public Set<AvailableNamespaceInfo> getAvailableAliasSet() {
+    public List<AvailableNamespaceInfo> getAvailableAliasSet() {
         //nullじゃなければ変化してないのでキャッシュ使いまわし
         if (null != aliaseNameSetCache) {
             return aliaseNameSetCache;
         }
 
-        final Set<AvailableNamespaceInfo> result = new HashSet<AvailableNamespaceInfo>();
+        final List<AvailableNamespaceInfo> result = new LinkedList<AvailableNamespaceInfo>();
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
             final BlockScope scope = this.scopeStack.get(i);
-            final Set<AvailableNamespaceInfo> scopeLocalNameSpaceSet = scope.getAvailableAliases();
+            final List<AvailableNamespaceInfo> scopeLocalNameSpaceSet = scope.getAvailableAliases();
             for (final AvailableNamespaceInfo info : scopeLocalNameSpaceSet) {
                 result.add(info);
             }
@@ -604,7 +605,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         //        private final Map<String, String[]> nameAliases = new LinkedHashMap<String, String[]>();
         private final Map<String, AvailableNamespaceInfo> nameAliases = new LinkedHashMap<String, AvailableNamespaceInfo>();
 
-        private final Set<AvailableNamespaceInfo> availableNameSpaces = new HashSet<AvailableNamespaceInfo>();
+        private final List<AvailableNamespaceInfo> availableNameSpaces = new LinkedList<AvailableNamespaceInfo>();
 
         public void addVariable(
                 final UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> variable) {
@@ -631,12 +632,12 @@ public class DefaultBuildDataManager implements BuildDataManager {
             this.availableNameSpaces.add(info);
         }
 
-        public Set<AvailableNamespaceInfo> getAvailableNameSpaces() {
+        public List<AvailableNamespaceInfo> getAvailableNameSpaces() {
             return this.availableNameSpaces;
         }
 
-        public Set<AvailableNamespaceInfo> getAvailableAliases() {
-            Set<AvailableNamespaceInfo> resultSet = new HashSet<AvailableNamespaceInfo>();
+        public List<AvailableNamespaceInfo> getAvailableAliases() {
+            List<AvailableNamespaceInfo> resultSet = new LinkedList<AvailableNamespaceInfo>();
             for (AvailableNamespaceInfo info : this.nameAliases.values()) {
                 resultSet.add(info);
             }
@@ -704,11 +705,11 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     private static final String[] EMPTY_NAME = new String[0];
 
-    private Set<AvailableNamespaceInfo> aliaseNameSetCache = null;
+    private List<AvailableNamespaceInfo> aliaseNameSetCache = null;
 
-    private Set<AvailableNamespaceInfo> availableNameSpaceSetCache = null;
+    private List<AvailableNamespaceInfo> availableNameSpaceSetCache = null;
 
-    private Set<AvailableNamespaceInfo> allAvaliableNameSetCache = null;
+    private List<AvailableNamespaceInfo> allAvaliableNameSetCache = null;
 
     private AvailableNamespaceInfo currentNameSpaceCache = null;
 

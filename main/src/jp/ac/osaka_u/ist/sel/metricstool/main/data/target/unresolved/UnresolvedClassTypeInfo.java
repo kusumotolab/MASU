@@ -2,10 +2,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
@@ -36,7 +34,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
      * @param availableNamespaces 名前空間名
      * @param referenceName 参照名
      */
-    public UnresolvedClassTypeInfo(final Set<AvailableNamespaceInfo> availableNamespaces,
+    public UnresolvedClassTypeInfo(final List<AvailableNamespaceInfo> availableNamespaces,
             final String[] referenceName) {
 
         // 不正な呼び出しでないかをチェック
@@ -322,7 +320,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
      * @param referenceName 型の完全修飾名
      */
     public UnresolvedClassTypeInfo(final String[] referenceName) {
-        this(new HashSet<AvailableNamespaceInfo>(), referenceName);
+        this(new LinkedList<AvailableNamespaceInfo>(), referenceName);
     }
 
     /**
@@ -395,7 +393,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
      * 
      * @return この参照型の完全限定名として可能性のある名前空間名の一覧
      */
-    public final Set<AvailableNamespaceInfo> getAvailableNamespaces() {
+    public final List<AvailableNamespaceInfo> getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
@@ -436,7 +434,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
     /**
      * 利用可能な名前空間名を保存するための変数，名前解決処理の際に用いる
      */
-    private final Set<AvailableNamespaceInfo> availableNamespaces;
+    private final List<AvailableNamespaceInfo> availableNamespaces;
 
     /**
      * 参照名を保存する変数

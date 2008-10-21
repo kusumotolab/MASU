@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import java.util.HashSet;
+import java.util.LinkedList;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
@@ -32,7 +32,7 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
      * @param referencedClass éQè∆Ç≥ÇÍÇƒÇ¢ÇÈÉNÉâÉX
      */
     public UnresolvedFullQualifiedNameClassReferenceInfo(final UnresolvedClassInfo referencedClass) {
-        super(new HashSet<AvailableNamespaceInfo>(), referencedClass.getFullQualifiedName());
+        super(new LinkedList<AvailableNamespaceInfo>(), referencedClass.getFullQualifiedName());
         this.referencedClass = referencedClass;
     }
 

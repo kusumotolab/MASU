@@ -1,8 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ConstructorCallBuilder;
@@ -77,7 +77,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         final ExpressionElement[] elements = getAvailableElements();
 
-        final Set<AvailableNamespaceInfo> namespaces = new HashSet<AvailableNamespaceInfo>();
+        final List<AvailableNamespaceInfo> namespaces = new LinkedList<AvailableNamespaceInfo>();
         final AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(currentClass
                 .getFullQualifiedName(), false);
         namespaces.add(namespace);

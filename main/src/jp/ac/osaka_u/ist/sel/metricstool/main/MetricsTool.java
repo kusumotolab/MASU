@@ -127,6 +127,8 @@ public class MetricsTool {
      */
     public static void main(String[] args) {
 
+        final long start = System.nanoTime();
+        
         MetricsTool metricsTool = new MetricsTool();
 
         ArgumentProcessor.processArgs(args, parameterDefs, new Settings());
@@ -167,6 +169,9 @@ public class MetricsTool {
                 metricsTool.doAnalysisMode();
             }
         }
+        
+        final long end = System.nanoTime();
+        System.out.println("elapsed time: " + (end - start) / 1000000000 + " seconds.");
     }
 
     /**
