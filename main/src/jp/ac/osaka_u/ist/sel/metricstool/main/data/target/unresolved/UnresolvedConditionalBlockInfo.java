@@ -1,8 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -29,7 +29,7 @@ public abstract class UnresolvedConditionalBlockInfo<T extends ConditionalBlockI
      * –¢‰ðŒˆðŒŽ®‚ð•Ô‚·
      * @return –¢‰ðŒˆðŒŽ®
      */
-    public final UnresolvedExpressionInfo<? extends ExpressionInfo> getConditionalExpression() {
+    public final UnresolvedConditionInfo<? extends ConditionInfo> getConditionalExpression() {
         return this.conditionalExpression;
     }
 
@@ -38,7 +38,7 @@ public abstract class UnresolvedConditionalBlockInfo<T extends ConditionalBlockI
      * @param conditionalExpression –¢‰ðŒˆðŒŽ®
      */
     public final void setConditionalExpression(
-            final UnresolvedExpressionInfo<? extends ExpressionInfo> conditionalExpression) {
+            final UnresolvedConditionInfo<? extends ConditionInfo> conditionalExpression) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         
@@ -48,5 +48,5 @@ public abstract class UnresolvedConditionalBlockInfo<T extends ConditionalBlockI
     /**
      * –¢‰ðŒˆðŒŽ®‚ð•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
      */
-    private UnresolvedExpressionInfo<? extends ExpressionInfo> conditionalExpression;
+    private UnresolvedConditionInfo<? extends ConditionInfo> conditionalExpression;
 }

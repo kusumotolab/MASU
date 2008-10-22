@@ -13,6 +13,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
  */
 public class TypeParameterStateManager extends StackedAstVisitStateManager<TypeParameterStateManager.STATE> {
 
+    public TypeParameterStateManager() {
+        this.setState(STATE.OUT);
+    }
     /**
      * 送信する状態変化イベントの種類を表すenum
      * @author kou-tngt
@@ -37,13 +40,13 @@ public class TypeParameterStateManager extends StackedAstVisitStateManager<TypeP
         AstToken token = event.getToken();
         
         if (token.isTypeParameterDefinition()){
-            this.state = STATE.IN_PARAMETER_DEF;
+            this.setState(STATE.IN_PARAMETER_DEF);
             fireStateChangeEvent(TYPE_PARAMETER.ENTER_TYPE_PARAMETER_DEF, event);
         } else if (token.isTypeLowerBoundsDescription()){
-            this.state = STATE.IN_LOWER_BOUNDS;
+            this.setState(STATE.IN_LOWER_BOUNDS);
             fireStateChangeEvent(TYPE_PARAMETER.ENTER_TYPE_LOWER_BOUNDS, event);
         } else if (token.isTypeUpperBoundsDescription()){
-            this.state = STATE.IN_UPPER_BOUNDS;
+            this.setState(STATE.IN_UPPER_BOUNDS);
             fireStateChangeEvent(TYPE_PARAMETER.ENTER_TYPE_UPPER_BOUNDS, event);            
         }
     }
@@ -74,7 +77,7 @@ public class TypeParameterStateManager extends StackedAstVisitStateManager<TypeP
      * @return　ビジターの現在位置が型パラメータ定義部の中であればtrue
      */
     public boolean isInTypeParameterDefinition(){
-        return STATE.OUT != this.state;
+        return STATE.OUT != this.getState();
     }
     
     /**
@@ -90,28 +93,6 @@ public class TypeParameterStateManager extends StackedAstVisitStateManager<TypeP
     }
     
     /**
-     * 現在の状態を返す．
-     * @return 現在の状態．
-     * 
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#getState()
-     */
-    @Override
-    protected STATE getState() {
-        return this.state;
-    }
-
-    /**
-     * 引数 state　を用いて状態を復元する．
-     * @param state 復元する状態
-     * 
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#setState(java.lang.Object)
-     */
-    @Override
-    protected void setState(final STATE state) {
-        this.state = state;
-    }
-    
-    /**
      * 状態を表すenum
      * 
      * @author kou-tngt
@@ -120,9 +101,5 @@ public class TypeParameterStateManager extends StackedAstVisitStateManager<TypeP
     protected enum STATE{
         OUT,IN_PARAMETER_DEF,IN_UPPER_BOUNDS,IN_LOWER_BOUNDS
     }
-    
-    /**
-     * 現在の状態
-     */
-    private STATE state = STATE.OUT;
+
 }

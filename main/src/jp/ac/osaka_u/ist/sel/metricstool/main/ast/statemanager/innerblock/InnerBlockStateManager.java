@@ -34,9 +34,9 @@ public abstract class InnerBlockStateManager extends DeclaredBlockStateManager {
             return true;
         }
 
-        if (this.isConditionalClause(event.getToken()) && STATE.DECLARE == this.state){
+        if (this.isConditionalClause(event.getToken()) && STATE.DECLARE == this.getState()){
             //定義部にいる状態で条件節を表すノードがくれば状態遷移してイベントを発行
-            this.state = INNER_BLOCK_STATE.CONDITIONAL_CLAUSE;
+            this.setState(INNER_BLOCK_STATE.CONDITIONAL_CLAUSE);
             this.fireStateChangeEvent(INNER_BLOCK_STATE_CHANGE.ENTER_CLAUSE, event);
             return true;
         } else {
@@ -51,7 +51,7 @@ public abstract class InnerBlockStateManager extends DeclaredBlockStateManager {
             return true;
         }
         
-        if (this.isConditionalClause(event.getToken()) && STATE.DECLARE == this.state) {
+        if (this.isConditionalClause(event.getToken()) && STATE.DECLARE == this.getState()) {
             //定義部にいる状態でブロックを表すノードが来ればイベントを発行
             this.fireStateChangeEvent(INNER_BLOCK_STATE_CHANGE.EXIT_CLAUSE, event);
             return true;
@@ -84,8 +84,8 @@ public abstract class InnerBlockStateManager extends DeclaredBlockStateManager {
     protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
         return super.isStateChangeTriggerEvent(event) || this.isConditionalClause(event.getToken());
     }
-
-    private boolean isConditionalClause(AstToken token) {
+    
+    protected boolean isConditionalClause(AstToken token) {
         return token.isConditionalClause();
     }
 }

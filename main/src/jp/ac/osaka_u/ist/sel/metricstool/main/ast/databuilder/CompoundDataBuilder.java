@@ -24,7 +24,7 @@ public abstract class CompoundDataBuilder<T> extends StateDrivenDataBuilder<T> {
      * 
      * @param builder　登録するビルダ
      */
-    public final void addInnerBuilder(final DataBuilder builder) {
+    public final void addInnerBuilder(final DataBuilder<?> builder) {
         if (null != builder) {
             builder.deactivate();
             this.builders.add(builder);
@@ -43,7 +43,7 @@ public abstract class CompoundDataBuilder<T> extends StateDrivenDataBuilder<T> {
         super.entered(e);
 
         if (this.isActive()) {
-            for (final DataBuilder builder : this.builders) {
+            for (final DataBuilder<?> builder : this.builders) {
                 builder.entered(e);
             }
         }
@@ -59,7 +59,7 @@ public abstract class CompoundDataBuilder<T> extends StateDrivenDataBuilder<T> {
     @Override
     public void exited(final AstVisitEvent e) throws ASTParseException {
         if (this.isActive()) {
-            for (final DataBuilder builder : this.builders) {
+            for (final DataBuilder<?> builder : this.builders) {
                 builder.exited(e);
             }
         }
@@ -72,7 +72,7 @@ public abstract class CompoundDataBuilder<T> extends StateDrivenDataBuilder<T> {
      * 
      * @param builder　削除するビルダ
      */
-    public final void removeInnerBuilder(final DataBuilder builder) {
+    public final void removeInnerBuilder(final DataBuilder<?> builder) {
         this.builders.remove(builder);
     }
 
@@ -84,7 +84,7 @@ public abstract class CompoundDataBuilder<T> extends StateDrivenDataBuilder<T> {
     @Override
     public void reset() {
         super.reset();
-        for (final DataBuilder builder : this.builders) {
+        for (final DataBuilder<?> builder : this.builders) {
             builder.reset();
         }
     }
@@ -92,5 +92,5 @@ public abstract class CompoundDataBuilder<T> extends StateDrivenDataBuilder<T> {
     /**
      * 利用する内部ビルだのセット
      */
-    private final Set<DataBuilder> builders = new LinkedHashSet<DataBuilder>();
+    private final Set<DataBuilder<?>> builders = new LinkedHashSet<DataBuilder<?>>();
 }

@@ -242,6 +242,14 @@ public class AstTokenAdapter implements AstToken {
     public boolean isFor() {
         return false;
     }
+    
+    public boolean isForInit() {
+        return false;
+    }
+    
+    public boolean isForIterator() {
+        return false;
+    }
 
     public boolean isIf() {
         return false;

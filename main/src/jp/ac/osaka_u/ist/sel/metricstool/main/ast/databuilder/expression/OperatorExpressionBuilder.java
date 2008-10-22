@@ -10,6 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TernaryOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeReferenceInfo;
@@ -19,6 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMonominalOperationInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTernaryOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -131,6 +133,19 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
 
                 pushElement(UsageElement.getInstance(operation));
 
+            } else if (3 == term && token.equals(OperatorToken.TERNARY)) {
+                assert null != termTypes[0] : "Illegal stete : first term type was not decided.";
+                assert null != termTypes[1] : "Illegal stete : first term type was not decided.";
+                assert null != termTypes[2] : "Illegal stete : first term type was not decided.";
+
+                final UnresolvedTernaryOperationInfo operation = new UnresolvedTernaryOperationInfo(
+                        termTypes[0], termTypes[1], termTypes[2]);
+                operation.setFromLine(termTypes[0].getFromLine());
+                operation.setFromColumn(termTypes[0].getFromColumn());
+                operation.setToLine(termTypes[2].getToLine());
+                operation.setToColumn(termTypes[2].getToColumn());
+                
+                pushElement(UsageElement.getInstance(operation));
             } else {
                 //Ž©•ª‚ÅŒ^Œˆ’è‚·‚é
                 UnresolvedEntityUsageInfo<? extends EntityUsageInfo> resultType = null;

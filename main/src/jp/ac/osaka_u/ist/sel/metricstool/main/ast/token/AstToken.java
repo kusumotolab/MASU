@@ -312,6 +312,18 @@ public interface AstToken {
     public boolean isFor();
     
     /**
+     * トークンがfor文の初期節を表すかどうか返す
+     * @return for文の初期節ならtrue
+     */
+    public boolean isForInit();
+    
+    /**
+     * トークンがfor文の繰り返し節を表すかどうか返す
+     * @return for文の繰り返し節ならtrue
+     */
+    public boolean isForIterator();
+    
+    /**
      * トークンがtryを表すかどうかを返す
      * @return tryを表すトークンならtrue
      */

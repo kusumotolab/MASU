@@ -123,7 +123,8 @@ public final class UnresolvedLocalVariableInfo
         final int localToLine = this.getToLine();
         final int localToColumn = this.getToColumn();
 
-        final LocalSpaceInfo definitionSpace = this.getDefinitionUnit().getResolved();
+        final LocalSpaceInfo definitionSpace = this.getDefinitionUnit().resolve(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         // ローカル変数オブジェクトを生成し，MethodInfoに追加
         this.resolvedInfo = new LocalVariableInfo(localModifiers, variableName, variableType,

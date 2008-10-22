@@ -1,11 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
@@ -31,8 +32,8 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
     public UnresolvedForBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
 
-        this.initializerExpressions = new TreeSet<UnresolvedExpressionInfo<? extends ExpressionInfo>>();
-        this.updateExpressions = new TreeSet<UnresolvedExpressionInfo<? extends ExpressionInfo>>();
+        this.initializerExpressions = new HashSet<UnresolvedConditionInfo<? extends ConditionInfo>>();
+        this.iteratorExpressions = new HashSet<UnresolvedExpressionInfo<? extends ExpressionInfo>>();
     }
 
     /**
@@ -67,7 +68,8 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolved();
+        final LocalSpaceInfo outerSpace = this.getOuterSpace().resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
 
         this.resolvedInfo = new ForBlockInfo(usingClass, usingMethod, outerSpace, fromLine,
                 fromColumn, toLine, toColumn);
@@ -77,14 +79,14 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
                 methodInfoManager);
 
         // 未解決初期化式情報を解決し，解決済みオブジェクトに追加
-        for (final UnresolvedExpressionInfo<? extends ExpressionInfo> initializerExpression : this.initializerExpressions) {
+        for (final UnresolvedConditionInfo<? extends ConditionInfo> initializerExpression : this.initializerExpressions) {
             this.resolvedInfo.addInitializerExpressions(initializerExpression.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager));
         }
 
         // 未解決更新式情報を追加し，解決済みオブジェクトに追加
-        for (final UnresolvedExpressionInfo<? extends ExpressionInfo> updateExpression : this.updateExpressions) {
-            this.resolvedInfo.addUpdateExpressions(updateExpression.resolve(usingClass,
+        for (final UnresolvedExpressionInfo<? extends ExpressionInfo> updateExpression : this.iteratorExpressions) {
+            this.resolvedInfo.addIteratorExpressions(updateExpression.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager));
         }
 
@@ -107,7 +109,7 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
      * @param initializerExpression 追加する初期化式
      */
     public final void addInitializerExpression(
-            final UnresolvedExpressionInfo<? extends ExpressionInfo> initializerExpression) {
+            final UnresolvedConditionInfo<? extends ConditionInfo> initializerExpression) {
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         if (null == initializerExpression) {
@@ -120,21 +122,22 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
     /**
      * 更新式を追加するメソッド
      * 
-     * @param updateExpression 追加する更新式
+     * @param iteratorExpression 追加する更新式
      */
-    public final void addUpdateExpression(
-            final UnresolvedExpressionInfo<? extends ExpressionInfo> updateExpression) {
+    public final void addIteratorExpression(
+            final UnresolvedExpressionInfo<? extends ExpressionInfo> iteratorExpression) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        if (null == updateExpression) {
+        if (null == iteratorExpression) {
             throw new IllegalArgumentException("updateExpression is null.");
         }
 
-        this.updateExpressions.add(updateExpression);
+        this.iteratorExpressions.add(iteratorExpression);
     }
 
-    private final SortedSet<UnresolvedExpressionInfo<? extends ExpressionInfo>> initializerExpressions;
+    private final Set<UnresolvedConditionInfo<? extends ConditionInfo>> initializerExpressions;
 
-    private final SortedSet<UnresolvedExpressionInfo<? extends ExpressionInfo>> updateExpressions;
+    private final Set<UnresolvedExpressionInfo<? extends ExpressionInfo>> iteratorExpressions;
 
 }

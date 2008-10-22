@@ -22,15 +22,15 @@ public class CaseGroupStateManager extends InnerBlockStateManager {
         if (this.isStateChangeTriggerEvent(event)) {
             super.entered(event);
 
-            if (this.isEntryDefinitionToken(token) && STATE.DECLARE == this.state) {
+            if (this.isEntryDefinitionToken(token) && STATE.DECLARE == this.getState()) {
                 if(token.isCase()) {
-                    this.state = CASE_ENTRY_STATE.CASE_DEF;
+                    this.setState(CASE_ENTRY_STATE.CASE_DEF);
                 } else if(token.isDefault()) {
-                    this.state = CASE_ENTRY_STATE.DEFAULT_DEF;
+                    this.setState(CASE_ENTRY_STATE.DEFAULT_DEF);
                 }
                 
                 this.fireStateChangeEvent(CASE_GROUP_STATE_CHANGE.ENTER_ENTRY_DEF, event);
-            } else if(this.isBreakStatement(token) && STATE.BLOCK == this.state) {
+            } else if(this.isBreakStatement(token) && STATE.BLOCK == this.getState()) {
                 this.fireStateChangeEvent(CASE_GROUP_STATE_CHANGE.ENTER_BREAK_STATEMENT, event);
             }
         }
@@ -43,9 +43,9 @@ public class CaseGroupStateManager extends InnerBlockStateManager {
         if (this.isStateChangeTriggerEvent(event)) {
             super.exited(event);
 
-            if (this.isEntryDefinitionToken(token) && STATE.DECLARE == this.state) {
+            if (this.isEntryDefinitionToken(token) && STATE.DECLARE == this.getState()) {
                 this.fireStateChangeEvent(CASE_GROUP_STATE_CHANGE.EXIT_ENTRY_DEF, event);
-            } else if(STATE.BLOCK == this.state && this.isBreakStatement(token)) {
+            } else if(STATE.BLOCK == this.getState() && this.isBreakStatement(token)) {
                 this.fireStateChangeEvent(CASE_GROUP_STATE_CHANGE.EXIT_BREAK_STATEMENT, event);
             }
         }

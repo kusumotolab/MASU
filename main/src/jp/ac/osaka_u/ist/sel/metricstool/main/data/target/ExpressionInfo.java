@@ -10,7 +10,7 @@ import java.util.Set;
  * @author higo
  *
  */
-public interface ExpressionInfo extends ExcutableElement {
+public interface ExpressionInfo extends ConditionInfo {
 
     /**
      * 式内での変数の使用を返す
@@ -18,4 +18,6 @@ public interface ExpressionInfo extends ExcutableElement {
      * @return 式内での変数の使用
      */
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages();
+    
+    public TypeInfo getType();
 }

@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
@@ -9,6 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ThrowStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
+
 /**
  * 未解決throw文情報を表すクラス
  * 
@@ -16,21 +18,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  *
  */
 public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<ThrowStatementInfo> {
-
-    /**
-     * スローされている例外を与えて，オブジェクトを初期化
-     * 
-     * @param thrownExpression スローされている例外
-     */
-    public UnresolvedThrowStatementInfo(final UnresolvedExpressionInfo<? extends ExpressionInfo> thrownExpression) {
-        super();
-        
-        if(null == thrownExpression) {
-            throw new IllegalArgumentException("thrownExpression is null");
-        }
-        
-        this.thrownExpression = thrownExpression;
-    }
 
     @Override
     public ThrowStatementInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
@@ -57,14 +44,29 @@ public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<
         final ExpressionInfo thrownExpression = this.thrownExpression.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        this.resolvedInfo = new ThrowStatementInfo(thrownExpression, fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo = new ThrowStatementInfo(thrownExpression, fromLine, fromColumn, toLine,
+                toColumn);
 
         return this.resolvedInfo;
     }
-    
+
+    /**
+     * throw文によって投げられる例外の未解決情報を保存する
+     * @param thrownExpression throw文によって投げられる例外の未解決情報
+     */
+    public final void setThrownExpresasion(
+            final UnresolvedExpressionInfo<? extends ExpressionInfo> thrownExpression) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+
+        if (null == thrownExpression) {
+            throw new IllegalArgumentException("thronExpression is null");
+        }
+
+        this.thrownExpression = thrownExpression;    }
+
     /**
      * throw文によって投げられる例外の未解決情報を保存する変数
      */
-    private final UnresolvedExpressionInfo<? extends ExpressionInfo> thrownExpression;
+    private UnresolvedExpressionInfo<? extends ExpressionInfo> thrownExpression;
 
 }

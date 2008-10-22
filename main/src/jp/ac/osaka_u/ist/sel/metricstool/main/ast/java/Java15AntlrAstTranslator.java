@@ -417,6 +417,12 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.FOR_EACH_CLAUSE:
             result = DescriptionToken.CONDITIONAL_CLAUSE;
             break;
+        case Java15TokenTypes.FOR_INIT:
+            result = DescriptionToken.FOR_INIT;
+            break;
+        case Java15TokenTypes.FOR_ITERATOR:
+            result = DescriptionToken.FOR_ITERATOR;
+            break;
         default:
             //変換できなかったノードは取りあえずその子供に進む
             result = VisitControlToken.ENTER;

@@ -20,18 +20,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedReturnStatementInfo extends
         UnresolvedSingleStatementInfo<ReturnStatementInfo> {
 
-    /**
-     * return文の戻り値を表す式の未解決情報を与えて初期化
-     * 
-     * @param returnedExpression
-     */
-    public UnresolvedReturnStatementInfo(
-            UnresolvedExpressionInfo<? extends ExpressionInfo> returnedExpression) {
-        super();
-
-        this.returnedExpression = returnedExpression;
-    }
-
     @Override
     public ReturnStatementInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
@@ -64,9 +52,16 @@ public class UnresolvedReturnStatementInfo extends
         return this.resolvedInfo;
     }
 
+    public void setReturnedExpression(
+            final UnresolvedExpressionInfo<? extends ExpressionInfo> returnedExpression) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+
+        this.returnedExpression = returnedExpression;
+    }
+
     /**
      * return文の戻り値を表す式の未解決情報を保存する変数
      */
-    private final UnresolvedExpressionInfo<? extends ExpressionInfo> returnedExpression;
+    private UnresolvedExpressionInfo<? extends ExpressionInfo> returnedExpression;
 
 }

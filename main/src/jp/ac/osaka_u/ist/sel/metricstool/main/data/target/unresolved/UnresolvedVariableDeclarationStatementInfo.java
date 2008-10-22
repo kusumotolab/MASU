@@ -19,7 +19,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  *
  */
 public final class UnresolvedVariableDeclarationStatementInfo extends
-        UnresolvedSingleStatementInfo<VariableDeclarationStatementInfo> {
+        UnresolvedSingleStatementInfo<VariableDeclarationStatementInfo> implements
+        UnresolvedConditionInfo<VariableDeclarationStatementInfo> {
 
     /**
      * 宣言されている変数，（もしあれば）初期化の式を与えて，オブジェクトを初期化
@@ -77,6 +78,19 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
         }
 
         return this.resolvedInfo;
+    }
+
+    @Override
+    public int compareTo(UnresolvedStatementInfo<VariableDeclarationStatementInfo> o) {
+        int result = super.compareTo(o);
+
+        if (0 == result && o instanceof UnresolvedVariableDeclarationStatementInfo) {
+            UnresolvedLocalVariableInfo argVariable = ((UnresolvedVariableDeclarationStatementInfo) o)
+                    .getDeclaredLocalVariable();
+            return this.getDeclaredLocalVariable().getName().compareTo(argVariable.getName());
+        } else {
+            return result;
+        }
     }
 
     /**

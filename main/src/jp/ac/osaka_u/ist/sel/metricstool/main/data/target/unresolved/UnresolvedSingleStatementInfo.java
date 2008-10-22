@@ -30,7 +30,7 @@ public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInf
     }
 
     @Override
-    public final int compareTo(UnresolvedStatementInfo<T> o) {
+    public int compareTo(UnresolvedStatementInfo<T> o) {
 
         if (null == o) {
             throw new NullPointerException();

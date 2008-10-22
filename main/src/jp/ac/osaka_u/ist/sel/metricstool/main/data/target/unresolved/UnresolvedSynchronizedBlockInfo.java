@@ -43,7 +43,7 @@ public final class UnresolvedSynchronizedBlockInfo extends
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
-        // 不正な呼び出しでないかをチェック
+        // 不正な呼び出しでないかをチェックf
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
                 || (null == methodInfoManager)) {
@@ -61,14 +61,15 @@ public final class UnresolvedSynchronizedBlockInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolved();
+        final LocalSpaceInfo outerSpace = this.getOuterSpace().resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
 
         this.resolvedInfo = new SynchronizedBlockInfo(usingClass, usingMethod, outerSpace,
                 fromLine, fromColumn, toLine, toColumn);
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);  
+                methodInfoManager);
 
         // ローカル変数情報を解決し，解決済みsynchronizedブロックオブジェクトに追加
         for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
@@ -79,7 +80,7 @@ public final class UnresolvedSynchronizedBlockInfo extends
 
         this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
-        
+
         return this.resolvedInfo;
     }
 

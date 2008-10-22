@@ -42,39 +42,33 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
         }
     }
 
-    /*private void startConditionalClause(final AstVisitEvent triggerEvent) {
-        if (!this.buildingBlockStack.isEmpty()
-                && this.buildingBlockStack.peek() == this.buildManager.getCurrentBlock()) {
-            final T currentBlock = (T) this.buildingBlockStack.peek();
-            final UnresolvedConditionalClauseInfo conditionalClause = currentBlock
-                    .getConditionalExpression();
-
-            this.buildingClauseStack.push(conditionalClause);
-
-            conditionalClause.setFromLine(triggerEvent.getStartLine());
-            conditionalClause.setFromColumn(triggerEvent.getStartColumn());
-            conditionalClause.setToLine(triggerEvent.getEndLine());
-            conditionalClause.setToColumn(triggerEvent.getEndColumn());
-
-            this.buildManager.startConditionalClause(conditionalClause);
-        }
-    }*/
-
     private void registerConditionalExpression() {
-        final T currentBuildingBlock = this.buildingBlockStack.peek();
-        
+        final T buildingBlock = this.getBuildingBlock();
+
         if (!this.buildingBlockStack.isEmpty()
-                && currentBuildingBlock == this.buildManager.getCurrentBlock()) {
+                && buildingBlock == this.buildManager.getCurrentBlock()) {
 
             final UnresolvedExpressionInfo<? extends ExpressionInfo> conditionalExpression = this.expressionManager
                     .getLastPoppedExpressionElement().getUsage();
-            
-            assert null != conditionalExpression || currentBuildingBlock instanceof UnresolvedForBlockInfo : "Illegal state; conditional expression is not found.";
+
+            assert null != conditionalExpression || buildingBlock instanceof UnresolvedForBlockInfo : "Illegal state; conditional expression is not found.";
 
             this.buildingBlockStack.peek().setConditionalExpression(conditionalExpression);
+
+            //assert buildingBlock.getStatements().size() <= 1 : "Illegal state: the number of conditional statements is more than one.";
+
+            /*if (buildingBlock.getStatements().size() >= 1) {
+                final UnresolvedStatementInfo<? extends StatementInfo> statement = buildingBlock
+                        .getStatements().iterator().next();
+                assert statement instanceof UnresolvedVariableDeclarationStatementInfo : "Illegal state: the conditioanl statement is not a variable declaration.";
+                if (statement instanceof UnresolvedVariableDeclarationStatementInfo) {
+                    buildingBlock.setConditionalExpression((UnresolvedVariableDeclarationStatementInfo) statement);
+                }
+            }*/
 
         }
     }
 
     protected final ExpressionElementManager expressionManager;
+
 }

@@ -15,6 +15,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
  */
 public class TypeArgumentStateManager extends
         StackedAstVisitStateManager<TypeArgumentStateManager.STATE> {
+    
+    public TypeArgumentStateManager() {
+        this.setState(STATE.OUT);
+    }
 
     /**
      * 通知するイベントのタイプを表すenum
@@ -38,13 +42,13 @@ public class TypeArgumentStateManager extends
         final AstToken token = event.getToken();
 
         if (token.isTypeArgument()) {
-            this.state = STATE.IN_ARGUMENT;
+            this.setState(STATE.IN_ARGUMENT);
             this.fireStateChangeEvent(TYPE_ARGUMENT_STATE.ENTER_TYPE_ARGUMENT, event);
         } else if (token.isTypeArguments()) {
-            this.state = STATE.IN_ARGUMENTS;
+            this.setState(STATE.IN_ARGUMENTS);
             this.fireStateChangeEvent(TYPE_ARGUMENT_STATE.ENTER_TYPE_ARGUMENTS, event);
         } else if (token.isTypeWildcard()) {
-            this.state = STATE.IN_WILDCARD;
+            this.setState(STATE.IN_WILDCARD);
             this.fireStateChangeEvent(TYPE_ARGUMENT_STATE.ENTER_TYPE_WILDCARD, event);
         }
     }
@@ -82,22 +86,6 @@ public class TypeArgumentStateManager extends
         return token.isTypeArgument() || token.isTypeArguments() || token.isTypeWildcard();
     }
 
-    /* (non-Javadoc)
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#getState()
-     */
-    @Override
-    protected STATE getState() {
-        return this.state;
-    }
-
-    /* (non-Javadoc)
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#setState(java.lang.Object)
-     */
-    @Override
-    protected void setState(final STATE state) {
-        this.state = state;
-    }
-
     /**
      * 状態を表すenum
      * @author kou-tngt
@@ -107,8 +95,4 @@ public class TypeArgumentStateManager extends
         OUT, IN_ARGUMENTS, IN_ARGUMENT, IN_WILDCARD
     }
 
-    /**
-     * 現在の状態を表す
-     */
-    private STATE state = STATE.OUT;
 }

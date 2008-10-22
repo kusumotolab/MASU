@@ -217,21 +217,21 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     /**
      * メソッドまたはコンストラクタ呼び出しを保存する変数
      */
-    private final Set<UnresolvedCallInfo<?>> calls;
+    protected final Set<UnresolvedCallInfo<?>> calls;
 
     /**
      * フィールド使用を保存する変数
      */
-    private final Set<UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>> variableUsages;
+    protected final Set<UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>> variableUsages;
 
     /**
      * このメソッド内で定義されているローカル変数を保存する変数
      */
-    private final Set<UnresolvedLocalVariableInfo> localVariables;
+    protected final Set<UnresolvedLocalVariableInfo> localVariables;
 
     /**
      * このブロックの内側で定義された未解決文を保存する変数
      */
-    private final Set<UnresolvedStatementInfo<?>> statements;
+    protected final Set<UnresolvedStatementInfo<?>> statements;
 
 }

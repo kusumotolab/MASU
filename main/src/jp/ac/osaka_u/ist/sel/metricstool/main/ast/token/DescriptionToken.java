@@ -20,6 +20,26 @@ public class DescriptionToken extends AstTokenAdapter {
     };
     
     /**
+     * for分の初期化節を表す定数インスタンス
+     */
+    public static final DescriptionToken FOR_INIT = new DescriptionToken("FOR_INIT") {
+        @Override
+        public boolean isForInit() {
+            return true;
+        };
+    };
+    
+    /**
+     * for文の繰り返し節を表すインスタンス
+     */
+    public static final DescriptionToken FOR_ITERATOR = new DescriptionToken("FOR_ITERATOR") {
+        @Override
+        public boolean isForIterator() {
+            return true;
+        };
+    };
+    
+    /**
      * 式記述部を表す定数インスタンス.
      */
     public static final DescriptionToken EXPRESSION = new DescriptionToken("EXPRESSION") {

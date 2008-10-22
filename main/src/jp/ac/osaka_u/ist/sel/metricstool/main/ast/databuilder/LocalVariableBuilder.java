@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 
+import java.util.Stack;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.LocalVariableStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
@@ -26,6 +28,8 @@ public class LocalVariableBuilder
                 modifiersBuilder, typeBuilder, nameBuilder);
 
         this.interpriter = interpriter;
+        this.statemetnStack = new Stack<UnresolvedVariableDeclarationStatementInfo>();
+
     }
 
     @Override
@@ -62,13 +66,22 @@ public class LocalVariableBuilder
         declarationStatement.setFromColumn(startColumn);
         declarationStatement.setToLine(endLine);
         declarationStatement.setToColumn(endColumn);
-        
-        final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = this.buildDataManager.getCurrentLocalSpace();
-        if(null != currentLocal) {
+
+        final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = this.buildDataManager
+                .getCurrentLocalSpace();
+        if (null != currentLocal) {
             currentLocal.addStatement(declarationStatement);
         }
 
+        this.statemetnStack.add(declarationStatement);
+
         return var;
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        this.statemetnStack.clear();
     }
 
     @Override
@@ -77,6 +90,12 @@ public class LocalVariableBuilder
         return definitionUnit instanceof UnresolvedLocalSpaceInfo ? (UnresolvedLocalSpaceInfo<?>) definitionUnit
                 : null;
     }
+
+    public UnresolvedVariableDeclarationStatementInfo getLastStackedDeclationStatement() {
+        return this.statemetnStack.isEmpty() ? null : this.statemetnStack.peek();
+    }
+
+    private final Stack<UnresolvedVariableDeclarationStatementInfo> statemetnStack;
 
     private final ModifiersInterpriter interpriter;
 }

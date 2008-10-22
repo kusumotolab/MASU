@@ -42,7 +42,7 @@ public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<?
 
     @Override
     public void entered(AstVisitEvent e) {
-        // ‰½‚à‚µ‚È‚¢   
+
     }
 
     @Override
@@ -58,6 +58,8 @@ public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<?
                 assert singleStatement != null : "Illegal state: a single statement was not built";
 
                 currentLocal.addStatement(singleStatement);
+                
+                this.registBuiltData(singleStatement);
             }
         }
     }

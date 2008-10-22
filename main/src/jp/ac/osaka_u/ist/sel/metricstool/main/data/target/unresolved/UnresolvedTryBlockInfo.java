@@ -68,7 +68,8 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolved();
+        final LocalSpaceInfo outerSpace = this.getOuterSpace().resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
 
         this.resolvedInfo = new TryBlockInfo(usingClass, usingMethod, outerSpace, fromLine,
                 fromColumn, toLine, toColumn);

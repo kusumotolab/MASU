@@ -120,13 +120,17 @@ public abstract class StackedAstVisitStateManager<T> implements AstVisitStateMan
      * 現在の状態の情報を返す.
      * @return 現在の状態の情報
      */
-    protected abstract T getState();
+    protected T getState() {
+        return this.state;
+    }
 
     /**
      * 引数で与えられた情報を基に状態を復元する.
      * @param state 状態を復元するための情報
      */
-    protected abstract void setState(T state);
+    protected void setState(T state) {
+        this.state = state;
+    }
 
     /**
      * 引数で与えられたトークンが状態変化のトリガになり得るかどうかを返す.
@@ -145,4 +149,6 @@ public abstract class StackedAstVisitStateManager<T> implements AstVisitStateMan
      * 状態を記録しておくスタック
      */
     private final Stack<T> stateStack = new Stack<T>();
+    
+    private T state;
 }

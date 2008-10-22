@@ -16,6 +16,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 public abstract class VariableDefinitionStateManager extends
         StackedAstVisitStateManager<VariableDefinitionStateManager.STATE> {
 
+    public VariableDefinitionStateManager() {
+        this.setState(STATE.OUT);
+    }
+
     /**
      * 状態変化の種類を表すenum
      * 
@@ -41,11 +45,11 @@ public abstract class VariableDefinitionStateManager extends
 
             if (this.isDefinitionToken(token)) {
                 //定義部に入ったので状態遷移をしてイベントを発行する
-                this.state = STATE.DEFINITION;
+                this.setState(STATE.DEFINITION);
                 this.fireStateChangeEvent(VARIABLE_STATE.ENTER_VARIABLE_DEF, event);
-            } else if (token.isAssignmentOperator() && STATE.DEFINITION == this.state) {
+            } else if (token.isAssignmentOperator() && STATE.DEFINITION == this.getState()) {
                 //定義部内に代入演算子があったので，初期化部へと常態遷移をしてイベントを発行する
-                this.state = STATE.INITIALIZER;
+                this.setState(STATE.INITIALIZER);
                 this.fireStateChangeEvent(VARIABLE_STATE.ENTER_VARIABLE_INITIALIZER, event);
             }
         }
@@ -65,7 +69,7 @@ public abstract class VariableDefinitionStateManager extends
             if (this.isDefinitionToken(token)) {
                 //定義部から出たのでイベントを発行する
                 this.fireStateChangeEvent(VARIABLE_STATE.EXIT_VARIABLE_DEF, event);
-            } else if (token.isAssignmentOperator() && STATE.DEFINITION == this.state) {
+            } else if (token.isAssignmentOperator() && STATE.DEFINITION == this.getState()) {
                 //初期化部から出たのでイベントを発行する
                 this.fireStateChangeEvent(VARIABLE_STATE.EXIT_VARIABLE_INITIALIZER, event);
             }
@@ -77,7 +81,7 @@ public abstract class VariableDefinitionStateManager extends
      * @return 変数定義部にいる場合はtrue
      */
     public boolean isInDefinition() {
-        return STATE.DEFINITION == this.state;
+        return STATE.DEFINITION == this.getState();
     }
 
     /**
@@ -85,16 +89,7 @@ public abstract class VariableDefinitionStateManager extends
      * @return　変数初期化部にいる場合はtrue
      */
     public boolean isInInitializer() {
-        return STATE.INITIALIZER == this.state;
-    }
-
-    /**
-     * 現在の状態を返す.
-     * @return 現在の状態
-     */
-    @Override
-    protected STATE getState() {
-        return this.state;
+        return STATE.INITIALIZER == this.getState();
     }
 
     /**
@@ -120,15 +115,6 @@ public abstract class VariableDefinitionStateManager extends
     }
 
     /**
-     * 状態を復元する.
-     * @param state 復元に用いる状態
-     */
-    @Override
-    protected void setState(final STATE state) {
-        this.state = state;
-    }
-
-    /**
      * 状態を表すenum
      * @author kou-tngt
      */
@@ -136,8 +122,4 @@ public abstract class VariableDefinitionStateManager extends
         OUT, DEFINITION, INITIALIZER
     }
 
-    /**
-     * 現在の状態を保持する
-     */
-    private STATE state = STATE.OUT;
 }

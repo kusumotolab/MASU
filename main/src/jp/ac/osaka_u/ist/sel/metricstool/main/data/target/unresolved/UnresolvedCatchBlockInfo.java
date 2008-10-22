@@ -74,7 +74,8 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolved();
+        final LocalSpaceInfo outerSpace = this.getOuterSpace().resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
 
         //　解決済み catchブロックオブジェクトを作成
         this.resolvedInfo = new CatchBlockInfo(usingClass, usingMethod, outerSpace, fromLine,
@@ -90,7 +91,7 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
                     classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addLocalVariable(variable);
         }
-        
+
         this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 

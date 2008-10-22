@@ -80,6 +80,11 @@ public class DefinitionToken extends AstTokenAdapter {
         public boolean isLocalParameterDefinition() {
             return true;
         }
+        
+        @Override
+        public boolean isLocalVariableDefinition() {
+            return true;
+        }
     };
 
     /**

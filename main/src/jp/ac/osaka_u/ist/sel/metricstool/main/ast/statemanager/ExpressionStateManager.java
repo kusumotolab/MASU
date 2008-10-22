@@ -20,6 +20,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 public class ExpressionStateManager extends
         StackedAstVisitStateManager<ExpressionStateManager.STATE> {
 
+    public ExpressionStateManager() {
+        this.setState(STATE.NOT);
+    }
+    
     /**
      * 通知する状態遷移イベントのイベントタイプを表すEnum
      * @author kou-tngt
@@ -42,10 +46,10 @@ public class ExpressionStateManager extends
 
         final AstToken token = event.getToken();
         if (token.isExpression()) {
-            this.state = STATE.IN;
+            this.setState(STATE.IN);
             this.fireStateChangeEvent(EXPR_STATE.ENTER_EXPR, event);
         } else if (this.isExpressionInsulator(token)) {
-            this.state = STATE.NOT;
+            this.setState(STATE.NOT);
             this.fireStateChangeEvent(EXPR_STATE.EXIT_EXPR, event);
         }
     }
@@ -64,7 +68,7 @@ public class ExpressionStateManager extends
         final AstToken token = event.getToken();
         if (token.isExpression()) {
             this.fireStateChangeEvent(EXPR_STATE.EXIT_EXPR, event);
-        } else if (this.isExpressionInsulator(token) && STATE.IN == this.state) {
+        } else if (this.isExpressionInsulator(token) && STATE.IN == this.getState()) {
             this.fireStateChangeEvent(EXPR_STATE.ENTER_EXPR, event);
         }
     }
@@ -74,7 +78,7 @@ public class ExpressionStateManager extends
      * @return　式の中に居る場合はtrue
      */
     public boolean inExpression() {
-        return STATE.IN == this.state;
+        return STATE.IN == this.getState();
     }
 
     /**
@@ -103,24 +107,6 @@ public class ExpressionStateManager extends
     }
 
     /**
-     * 現在の状態の情報を返す.
-     * @return 現在の状態
-     */
-    @Override
-    protected STATE getState() {
-        return this.state;
-    }
-
-    /**
-     * 引数で与えられた情報を基に状態を復元する.
-     * @param state 状態を復元するための情報
-     */
-    @Override
-    protected void setState(final STATE state) {
-        this.state = state;
-    }
-
-    /**
      * 状態を表すEnum
      * @author kou-tngt
      *
@@ -129,8 +115,5 @@ public class ExpressionStateManager extends
         NOT, IN,
     }
 
-    /**
-     * 現在の状態
-     */
-    private STATE state = STATE.NOT;
+
 }

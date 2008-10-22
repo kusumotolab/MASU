@@ -31,6 +31,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 public abstract class DeclaredBlockStateManager extends
         StackedAstVisitStateManager<DeclaredBlockStateManager.DeclaredBlockState> {
 
+    public DeclaredBlockStateManager() {
+        this.setState(STATE.OUT);
+    }
+
     /**
      * ビジターがASTノードの中に入った時のイベント通知を受け取り，
      * そのノードが定義部やその後に続くブロックを表すものならば状態を遷移して状態変化イベントを発行する．
@@ -55,7 +59,7 @@ public abstract class DeclaredBlockStateManager extends
             fireStateChangeEnterEvent(event);
         }
     }
-    
+
     /**
      * 状態変化トリガであるASTノードの中に入ったときの処理を行う．
      * イベントトリガとブロックの解析状態に応じた状態遷移イベントを発行する
@@ -65,11 +69,11 @@ public abstract class DeclaredBlockStateManager extends
     protected boolean fireStateChangeEnterEvent(final AstVisitEvent event) {
         if (this.isDefinitionEvent(event)) {
             //定義ノードなら状態遷移してイベントを発行
-            this.state = STATE.DECLARE;
+            this.setState(STATE.DECLARE);
             this.fireStateChangeEvent(this.getDefinitionEnterEventType(), event);
-        } else if (this.isBlockToken(event.getToken()) && STATE.DECLARE == this.state) {
+        } else if (this.isBlockToken(event.getToken()) && STATE.DECLARE == this.getState()) {
             //定義部にいる状態でブロックを表すノードが来れば状態遷移してイベントを発行
-            this.state = STATE.BLOCK;
+            this.setState(STATE.BLOCK);
             this.fireStateChangeEvent(this.getBlockEnterEventType(), event);
         } else {
             return false;
@@ -101,7 +105,7 @@ public abstract class DeclaredBlockStateManager extends
             fireStateChangeExitEvent(event);
         }
     }
-    
+
     /**
      * 状態変化トリガであるASTノードの中から出たの処理を行う．
      * イベントトリガとブロックの解析状態に応じた状態遷移イベントを発行する
@@ -112,7 +116,7 @@ public abstract class DeclaredBlockStateManager extends
         if (this.isDefinitionEvent(event)) {
             //定義ノードならイベントを発行
             this.fireStateChangeEvent(this.getDefinitionExitEventType(), event);
-        } else if (this.isBlockToken(event.getToken()) && STATE.DECLARE == this.state) {
+        } else if (this.isBlockToken(event.getToken()) && STATE.DECLARE == this.getState()) {
             //定義部にいる状態でブロックを表すノードが来ればイベントを発行
             this.fireStateChangeEvent(this.getBlockExitEventType(), event);
         } else {
@@ -175,7 +179,7 @@ public abstract class DeclaredBlockStateManager extends
      * @return ビジターが現在定義ブロック内にいる場合はtrue
      */
     public boolean isInBlock() {
-        return STATE.BLOCK == this.state;
+        return STATE.BLOCK == this.getState();
     }
 
     /**
@@ -183,7 +187,7 @@ public abstract class DeclaredBlockStateManager extends
      * @return ビジターが現在定義部または定義ブロックにいる場合はtrue
      */
     public boolean isInDefinition() {
-        return STATE.DECLARE == this.state || this.isInBlock();
+        return STATE.DECLARE == this.getState() || this.isInBlock();
     }
 
     /**
@@ -191,15 +195,7 @@ public abstract class DeclaredBlockStateManager extends
      * @return　ビジターが現在定義部にいる場合はtrue
      */
     public boolean isInPreDeclaration() {
-        return STATE.DECLARE == this.state;
-    }
-
-    /* (non-Javadoc)
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#getState()
-     */
-    @Override
-    public DeclaredBlockState getState() {
-        return this.state;
+        return STATE.DECLARE == this.getState();
     }
 
     /**
@@ -214,17 +210,9 @@ public abstract class DeclaredBlockStateManager extends
         return this.isBlockToken(event.getToken()) || this.isDefinitionEvent(event);
     }
 
-    /* (non-Javadoc)
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StackedAstVisitStateManager#setState(java.lang.Object)
-     */
-    @Override
-    protected void setState(final DeclaredBlockState state) {
-        this.state = state;
-    };
-
     public interface DeclaredBlockState {
     }
-    
+
     /**
      * 状態を表すEnum
      * 
@@ -234,10 +222,5 @@ public abstract class DeclaredBlockStateManager extends
     public static enum STATE implements DeclaredBlockState {
         OUT, DECLARE, BLOCK
     }
-
-    /**
-     * 現在の状態
-     */
-    protected DeclaredBlockState state = STATE.OUT;
 
 }

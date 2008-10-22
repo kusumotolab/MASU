@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedThrowStatementInfo;
@@ -31,18 +32,28 @@ public class ThrowStatementBuilder extends SingleStatementBuilder<UnresolvedThro
     protected UnresolvedThrowStatementInfo buildStatement(final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 
-        final UnresolvedExpressionInfo<? extends ExpressionInfo> thrownStatement = this
-                .getLastBuiltExpression();
-
-        assert null != thrownStatement : "Illegal state: the thrown statement was not found.";
-        final UnresolvedThrowStatementInfo throwStatement = new UnresolvedThrowStatementInfo(
-                thrownStatement);
+        final UnresolvedThrowStatementInfo throwStatement = new UnresolvedThrowStatementInfo();
         throwStatement.setFromLine(fromLine);
         throwStatement.setFromColumn(fromColumn);
         throwStatement.setToLine(toLine);
         throwStatement.setToColumn(toColumn);
 
         return throwStatement;
+    }
+
+    @Override
+    public void exited(AstVisitEvent e) {
+        super.exited(e);
+
+        if (this.isTriggerToken(e.getToken())) {
+            if (null != this.getLastBuildData()) {
+                final UnresolvedExpressionInfo<? extends ExpressionInfo> thrownStatement = this
+                        .getLastBuiltExpression();
+
+                assert null != thrownStatement : "Illegal state: the thrown statement was not found.";
+                this.getLastBuildData().setThrownExpresasion(thrownStatement);
+            }
+        }
     }
 
     @Override

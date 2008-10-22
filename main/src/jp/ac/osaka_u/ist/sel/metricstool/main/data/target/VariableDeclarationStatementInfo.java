@@ -11,7 +11,7 @@ import java.util.TreeSet;
  * @author t-miyake
  *
  */
-public class VariableDeclarationStatementInfo extends SingleStatementInfo implements ExpressionInfo {
+public class VariableDeclarationStatementInfo extends SingleStatementInfo implements ConditionInfo {
 
     /**
      * 宣言されている変数，初期化式，位置情報を与えて初期化
@@ -33,18 +33,31 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
             throw new IllegalArgumentException("declaredVariable is null");
         }
 
-        this.declaredLocalVarialbe = declaredVariable;
+        this.declaredLocalVariable = declaredVariable;
         this.initializationExpression = initializationExpression;
 
     }
 
+    @Override
+    public int compareTo(ExcutableElement o) {
+        int result = super.compareTo(o);
+        
+        if(0 == result && o instanceof VariableDeclarationStatementInfo) {
+            LocalVariableInfo argVariable = ((VariableDeclarationStatementInfo) o).getDeclaredLocalVariable();
+            
+            return this.getDeclaredLocalVariable().compareTo(argVariable);
+        } else {
+            return result;
+        }
+        
+    }
     /**
      * この宣言文で宣言されている変数を返す
      * 
      * @return この宣言文で宣言されている変数
      */
     public final LocalVariableInfo getDeclaredLocalVariable() {
-        return this.declaredLocalVarialbe;
+        return this.declaredLocalVariable;
     }
 
     /**
@@ -76,7 +89,7 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
     /**
      * 宣言されている変数を表すフィールド
      */
-    private final LocalVariableInfo declaredLocalVarialbe;
+    private final LocalVariableInfo declaredLocalVariable;
 
     /**
      * 宣言されている変数の初期化式を表すフィールド
