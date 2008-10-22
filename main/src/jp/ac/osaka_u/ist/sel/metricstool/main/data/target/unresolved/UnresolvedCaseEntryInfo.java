@@ -56,7 +56,11 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
         this.ownerSwitchBlock = ownerSwitchBlock;
         this.label = null;
     }
-    
+
+    /**
+     * 比較用メソッド．
+     * 位置に基づいて比較する.
+     */
     @Override
     public final int compareTo(UnresolvedStatementInfo<CaseEntryInfo> o) {
 
@@ -92,7 +96,7 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
      * @param usingMethod 所属メソッド
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManger 用いるメソッドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
      */
     @Override
     public CaseEntryInfo resolve(final TargetClassInfo usingClass,

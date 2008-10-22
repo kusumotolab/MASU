@@ -13,12 +13,30 @@ public interface MessagePrinter {
      * @author kou-tngt
      */
     public static enum MESSAGE_TYPE {
-        OUT, INFO, WARNING, ERROR
+        /**
+         * 標準出力用
+         */
+        OUT,
+
+        /**
+         * 情報出力用
+         */
+        INFO,
+
+        /**
+         * 警告出力用
+         */
+        WARNING,
+
+        /**
+         * エラー出力用
+         */
+        ERROR
     };
 
     /**
      * メッセージをそのまま出力する
-     * @param message 出力するメッセージ
+     * @param o 出力するメッセージ
      */
     public void print(Object o);
 
@@ -29,13 +47,13 @@ public interface MessagePrinter {
 
     /**
      * メッセージを出力して改行する
-     * @param message 出力するメッセージ
+     * @param o 出力するメッセージ
      */
     public void println(Object o);
 
     /**
      * 複数行のメッセージの間に，他のメッセージの割り込みがないように出力する.
-     * @param messages 出力するメッセージの配列
+     * @param o 出力するメッセージの配列
      */
     public void println(Object[] o);
 }

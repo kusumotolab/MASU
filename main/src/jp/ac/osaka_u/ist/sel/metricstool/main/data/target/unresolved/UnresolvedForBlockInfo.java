@@ -42,7 +42,7 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
      * @param usingMethod 所属メソッド
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManger 用いるメソッドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
      */
     @Override
     public ForBlockInfo resolve(final TargetClassInfo usingClass,
@@ -101,6 +101,11 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
         return this.resolvedInfo;
     }
 
+    /**
+     * 初期化式を追加するメソッド
+     * 
+     * @param initializerExpression 追加する初期化式
+     */
     public final void addInitializerExpression(
             final UnresolvedExpressionInfo<? extends ExpressionInfo> initializerExpression) {
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -112,6 +117,11 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
         this.initializerExpressions.add(initializerExpression);
     }
 
+    /**
+     * 更新式を追加するメソッド
+     * 
+     * @param updateExpression 追加する更新式
+     */
     public final void addUpdateExpression(
             final UnresolvedExpressionInfo<? extends ExpressionInfo> updateExpression) {
         MetricsToolSecurityManager.getInstance().checkAccess();

@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 /**
- * 型パラメータ（表記法式が <A super B>）を表すクラス
+ * 型パラメータ（表記法式が <X super Y>）を表すクラス
  * 
  * @author higo
  *

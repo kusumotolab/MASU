@@ -39,7 +39,7 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
      * @param usingMethod 所属メソッド
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManger 用いるメソッドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
      */
     @Override
     public IfBlockInfo resolve(final TargetClassInfo usingClass,

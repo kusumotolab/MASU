@@ -35,7 +35,7 @@ public final class UnresolvedSimpleBlockInfo extends UnresolvedBlockInfo<SimpleB
      * @param usingMethod 所属メソッド
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManger 用いるメソッドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
      */
     @Override
     public SimpleBlockInfo resolve(final TargetClassInfo usingClass,

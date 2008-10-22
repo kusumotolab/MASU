@@ -43,7 +43,7 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
      * @param usingMethod 所属メソッド
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManger 用いるメソッドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
      */
     @Override
     public TryBlockInfo resolve(final TargetClassInfo usingClass,

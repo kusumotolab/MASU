@@ -96,7 +96,8 @@ public final class MethodCallInfo extends CallInfo {
 
     /**
      * このメソッド呼び出しで呼び出されているメソッドを返す
-     * @return
+     * 
+     * @return このメソッド呼び出しで呼び出されているメソッド
      */
     public MethodInfo getCallee() {
         return this.callee;

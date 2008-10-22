@@ -35,7 +35,7 @@ public final class UnresolvedDoBlockInfo extends UnresolvedConditionalBlockInfo<
      * @param usingMethod 所属メソッド
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManger 用いるメソッドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
      */
     @Override
     public DoBlockInfo resolve(final TargetClassInfo usingClass,

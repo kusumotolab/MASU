@@ -13,7 +13,7 @@ public class DefaultProgressReporter implements ProgressReporter {
     /**
      * 唯一のコンストラクタ. 引数に {@link ProgressSource} を受け取り，報告用の接続を確立する
      * 
-     * @param plugin 進捗報告をするプラグイン
+     * @param source 進捗報告をするプラグイン
      * @throws AlreadyConnectedException すでに同じ{@link ProgressSource}が別のレポーターで接続を作っている場合
      */
     public DefaultProgressReporter(final ProgressSource source) throws AlreadyConnectedException {

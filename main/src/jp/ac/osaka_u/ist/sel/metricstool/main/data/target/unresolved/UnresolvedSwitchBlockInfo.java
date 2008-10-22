@@ -37,7 +37,7 @@ public final class UnresolvedSwitchBlockInfo extends
      * @param usingMethod 所属メソッド
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManger 用いるメソッドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
      */
     @Override
     public SwitchBlockInfo resolve(final TargetClassInfo usingClass,

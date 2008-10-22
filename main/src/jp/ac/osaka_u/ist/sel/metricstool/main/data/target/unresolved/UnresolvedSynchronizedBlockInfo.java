@@ -36,7 +36,7 @@ public final class UnresolvedSynchronizedBlockInfo extends
      * @param usingMethod 所属メソッド
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManger 用いるメソッドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
      */
     @Override
     public SynchronizedBlockInfo resolve(final TargetClassInfo usingClass,

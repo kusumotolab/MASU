@@ -34,7 +34,7 @@ public final class UnresolvedDefaultEntryInfo extends UnresolvedCaseEntryInfo {
      * @param usingMethod 所属メソッド
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManger 用いるメソッドマネージャ
+     * @param methodInfoManager 用いるメソッドマネージャ
      */
     @Override
     public final DefaultEntryInfo resolve(final TargetClassInfo usingClass,
