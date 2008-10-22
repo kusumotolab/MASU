@@ -31,6 +31,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
@@ -1410,7 +1411,7 @@ public class MetricsTool {
             final UnresolvedConditionalBlockInfo<?> unresolvedConditionalBlock = (UnresolvedConditionalBlockInfo<?>) unresolvedLocalSpace;
 
             if (null != unresolvedConditionalBlock.getConditionalExpression()) {
-                final ExpressionInfo conditionalExpression = unresolvedConditionalBlock
+                final ConditionInfo conditionalExpression = unresolvedConditionalBlock
                         .getConditionalExpression().resolve(ownerClass, ownerMethod,
                                 classInfoManager, fieldInfoManager, methodInfoManager);
 
