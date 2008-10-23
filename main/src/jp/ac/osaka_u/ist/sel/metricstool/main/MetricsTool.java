@@ -127,8 +127,6 @@ public class MetricsTool {
      */
     public static void main(String[] args) {
 
-        final long start = System.nanoTime();
-        
         MetricsTool metricsTool = new MetricsTool();
 
         ArgumentProcessor.processArgs(args, parameterDefs, new Settings());
@@ -169,10 +167,6 @@ public class MetricsTool {
                 metricsTool.doAnalysisMode();
             }
         }
-        
-        final long end = System.nanoTime();
-        System.out.println("elapsed time: " + (end - start) / 1000000000 + " seconds.");
-        System.out.println(Runtime.getRuntime().totalMemory());
     }
 
     /**
@@ -254,7 +248,7 @@ public class MetricsTool {
                         targetFile.setCorrectSytax(true);
 
                         if (visitorManager != null) {
-                            
+
                             visitorManager.visitStart(java15parser.getAST());
                         }
 
@@ -322,8 +316,6 @@ public class MetricsTool {
             System.out.println(totalFileNumber);
         }
 
-        
-        
         out.println("resolving definitions and usages.");
         if (Settings.isVerbose()) {
             out.println("STEP1 : resolve class definitions.");
@@ -357,8 +349,6 @@ public class MetricsTool {
         // 名前解決が終了したら未解決情報は不要になるので，
         // メモリを解放するために未解決情報のマネージャーが持つ情報を消去
 
-        
-        
         // 文法誤りのあるファイル一覧を表示
         // err.println("The following files includes uncorrect syntax.");
         // err.println("Any metrics of them were not measured");
@@ -367,8 +357,6 @@ public class MetricsTool {
                 err.println("Incorrect syntax file: " + targetFile.getName());
             }
         }
-
-        out.println("finished.");
 
         {
             /*
@@ -436,6 +424,9 @@ public class MetricsTool {
      * ロード済みのプラグインを実行する.
      */
     public void launchPlugins() {
+        
+        out.println("calculating metrics.");
+        
         PluginLauncher launcher = new DefaultPluginLauncher();
         launcher.setMaximumLaunchingNum(1);
         launcher.launchAll(PluginManager.getInstance().getPlugins());
@@ -706,10 +697,28 @@ public class MetricsTool {
     protected void doAnalysisMode() {
         checkAnalysisModeParameterValidation();
 
+        final long start = System.nanoTime();
+
         readTargetFiles();
         analyzeTargetFiles();
         launchPlugins();
         writeMetrics();
+
+        out.println("successfully finished.");
+        
+        final long end = System.nanoTime();
+
+        if (Settings.isVerbose()) {
+            out.println("elapsed time: " + (end - start) / 1000000000 + " seconds");
+            out.println("number of analyzed files: "
+                    + FileInfoManager.getInstance().getFileInfos().size());
+
+            int loc = 0;
+            for (final FileInfo file : FileInfoManager.getInstance().getFileInfos()) {
+                loc += file.getLOC();
+            }
+            out.println("analyzed lines of code: " + loc);
+        }
     }
 
     /**
