@@ -160,7 +160,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
     /**
      * ビジターの状態と構築中のデータをリセットする．
      */
-    private void reset() {
+    public void reset() {
         for (final DataBuilder<?> builder : this.builders) {
             builder.reset();
         }

@@ -47,7 +47,7 @@ public abstract class InnerBlockBuilder<TResolved extends BlockInfo, T extends U
             final T buildingBlock = this.getBuildingBlock();
             if(null != buildingBlock) {
                 // ðŒß“à‚Ì•Ï”éŒ¾•¶“™‚ªðŒß“à‚Ì•¶‚Æ‚µ‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚é‰Â”\«‚ª‚ ‚é‚½‚ß‰Šú‰»ˆ—‚ðs‚¤
-                buildingBlock.initBody();
+                //buildingBlock.initBody();
             }
         } else if (type.equals(INNER_BLOCK_STATE_CHANGE.EXIT_BLOCK_SCOPE)) {
 

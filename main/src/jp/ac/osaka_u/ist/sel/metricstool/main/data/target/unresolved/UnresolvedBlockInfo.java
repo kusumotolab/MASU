@@ -59,6 +59,7 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends Unresolve
     }
     
     public void initBody() {
+        
         this.statements.clear();
     }
 

@@ -170,6 +170,10 @@ public class UnresolvedClassInfoManager {
     private UnresolvedClassInfoManager() {
         this.classInfos = new HashMap<ClassKey, UnresolvedClassInfo>();
     }
+    
+    public final void clearClassInfos() {
+        this.classInfos.clear();
+    }
 
     /**
      * 単一オブジェクトを保存するための変数

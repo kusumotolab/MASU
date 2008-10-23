@@ -20,5 +20,7 @@ public interface AstVisitorManager<T> {
      * @param node　ビジターの訪問を開始するノード
      */
     public void visitStart(T node) throws ASTParseException;
+    
+    public void reset();
 
 }

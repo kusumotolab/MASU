@@ -35,7 +35,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
@@ -173,6 +172,7 @@ public class MetricsTool {
         
         final long end = System.nanoTime();
         System.out.println("elapsed time: " + (end - start) / 1000000000 + " seconds.");
+        System.out.println(Runtime.getRuntime().totalMemory());
     }
 
     /**
@@ -219,6 +219,7 @@ public class MetricsTool {
             int currentFileNumber = 1;
             final StringBuffer fileInformationBuffer = new StringBuffer();
 
+            int loc = 0;
             for (TargetFile targetFile : TargetFileManager.getInstance()) {
                 try {
                     final String name = targetFile.getName();
@@ -253,10 +254,12 @@ public class MetricsTool {
                         targetFile.setCorrectSytax(true);
 
                         if (visitorManager != null) {
+                            
                             visitorManager.visitStart(java15parser.getAST());
                         }
 
                         fileInfo.setLOC(java15lexer.getLine());
+                        loc += fileInfo.getLOC();
                         break;
 
                     case JAVA14:
@@ -315,8 +318,12 @@ public class MetricsTool {
                     err.println(e.getMessage());
                 }
             }
+            System.out.println(loc);
+            System.out.println(totalFileNumber);
         }
 
+        
+        
         out.println("resolving definitions and usages.");
         if (Settings.isVerbose()) {
             out.println("STEP1 : resolve class definitions.");
@@ -347,6 +354,11 @@ public class MetricsTool {
         }
         addReferenceAssignmentCallRelateion();
 
+        // 名前解決が終了したら未解決情報は不要になるので，
+        // メモリを解放するために未解決情報のマネージャーが持つ情報を消去
+
+        
+        
         // 文法誤りのあるファイル一覧を表示
         // err.println("The following files includes uncorrect syntax.");
         // err.println("Any metrics of them were not measured");
