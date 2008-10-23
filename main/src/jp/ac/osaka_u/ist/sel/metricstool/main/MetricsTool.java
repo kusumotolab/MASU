@@ -312,8 +312,6 @@ public class MetricsTool {
                     err.println(e.getMessage());
                 }
             }
-            System.out.println(loc);
-            System.out.println(totalFileNumber);
         }
 
         out.println("resolving definitions and usages.");
