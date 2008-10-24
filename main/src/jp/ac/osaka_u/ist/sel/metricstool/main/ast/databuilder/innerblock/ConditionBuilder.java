@@ -24,8 +24,9 @@ public class ConditionBuilder extends
             final LocalVariableBuilder variableBuilder, final AstToken[] triggerTokens) {
         this.expressionManager = expressionManager;
         this.variableBuilder = variableBuilder;
-        
-        this.addStateManager(new ConditionStateManager(triggerTokens));
+
+        this.stateManager = new ConditionStateManager(triggerTokens);
+        this.addStateManager(this.stateManager);
     }
 
     @Override
@@ -38,21 +39,29 @@ public class ConditionBuilder extends
         } else if (type.equals(CONDITION_STATE_CHANGE.EXIT_CONDITION)) {
 
         } else if (type.equals(CONDITION_STATE_CHANGE.ENTER_DECLARATION)) {
-            
+
         } else if (type.equals(CONDITION_STATE_CHANGE.EXIT_DECLARATION)) {
             if (null != this.variableBuilder
                     && null != this.variableBuilder.getLastStackedDeclationStatement()) {
-                this.getLastBuildData().add(this.variableBuilder.getLastStackedDeclationStatement());
+                this.getLastBuildData()
+                        .add(this.variableBuilder.getLastStackedDeclationStatement());
             }
         } else if (type.equals(CONDITION_STATE_CHANGE.ENTER_EXPRESSION)) {
 
         } else if (type.equals(CONDITION_STATE_CHANGE.EXIT_EXPRESSION)) {
-            if (null != this.expressionManager && null != this.expressionManager.getPeekExpressionElement()) {
+            if (null != this.expressionManager
+                    && null != this.expressionManager.getPeekExpressionElement()) {
                 this.getLastBuildData().add(
                         this.expressionManager.getPeekExpressionElement().getUsage());
             }
         }
     }
+
+    public void addTriggerToken(final AstToken triggerToken) {
+        this.stateManager.addTriggerToken(triggerToken);
+    }
+
+    private final ConditionStateManager stateManager;
 
     private final ExpressionElementManager expressionManager;
 

@@ -90,9 +90,9 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new FieldBuilder(this.buildDataManager, this.expressionManager,
                 new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
                 new NameBuilder(), modifiersInterpriter));
-        final LocalVariableBuilder localVariableBuilder = new LocalVariableBuilder(this.buildDataManager, this.expressionManager,
-                new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
-                new NameBuilder(), modifiersInterpriter);
+        final LocalVariableBuilder localVariableBuilder = new LocalVariableBuilder(
+                this.buildDataManager, this.expressionManager, new ModifiersBuilder(),
+                new JavaTypeBuilder(this.buildDataManager), new NameBuilder(), modifiersInterpriter);
         this.builders.add(localVariableBuilder);
         /*this.builders.add(new LocalParameterBuilder(this.buildDataManager, this.expressionManager,
                 new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
@@ -126,18 +126,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
                 .add(new ReturnStatementBuilder(this.expressionManager, this.buildDataManager));
         this.builders.add(new ThrowStatementBuilder(this.expressionManager, this.buildDataManager));
 
-      //this.builders.add(new CaseGroupBuilder(this.buildDataManager));
-        this.builders.add(new CatchBlockBuilder(this.buildDataManager));
-        this.builders.add(new DoBlockBuilder(this.buildDataManager, this.expressionManager));
-        this.builders.add(new ElseBlockBuilder(this.buildDataManager));
-        this.builders.add(new FinallyBlockBuilder(this.buildDataManager));
-        this.builders.add(new ForBlockBuilder(this.buildDataManager, this.expressionManager, localVariableBuilder));
-        this.builders.add(new IfBlockBuilder(this.buildDataManager, this.expressionManager));
-        //this.builders.add(new SimpleBlockBuilder(this.buildDataManager));
-        this.builders.add(new SwitchBlockBuilder(this.buildDataManager, this.expressionManager));
-        this.builders.add(new SynchronizedBlockBuilder(this.buildDataManager));
-        this.builders.add(new TryBlockBuilder(this.buildDataManager));
-        this.builders.add(new WhileBlockBuilder(this.buildDataManager, this.expressionManager));
+        this.addInnerBlockBuilder(localVariableBuilder);
 
         for (final DataBuilder<?> builder : this.builders) {
             visitor.addVisitListener(builder);
@@ -146,7 +135,24 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.visitor = visitor;
     }
 
-
+    private void addInnerBlockBuilder(final LocalVariableBuilder variableBuilder) {
+        this.builders.add(new CatchBlockBuilder(this.buildDataManager));
+        this.builders.add(new DoBlockBuilder(this.buildDataManager, this.expressionManager,
+                variableBuilder));
+        this.builders.add(new ElseBlockBuilder(this.buildDataManager));
+        this.builders.add(new FinallyBlockBuilder(this.buildDataManager));
+        this.builders.add(new ForBlockBuilder(this.buildDataManager, this.expressionManager,
+                variableBuilder));
+        this.builders.add(new IfBlockBuilder(this.buildDataManager, this.expressionManager,
+                variableBuilder));
+        //this.builders.add(new SimpleBlockBuilder(this.buildDataManager));
+        this.builders.add(new SwitchBlockBuilder(this.buildDataManager, this.expressionManager,
+                variableBuilder));
+        this.builders.add(new SynchronizedBlockBuilder(this.buildDataManager));
+        this.builders.add(new TryBlockBuilder(this.buildDataManager));
+        this.builders.add(new WhileBlockBuilder(this.buildDataManager, this.expressionManager,
+                variableBuilder));
+    }
 
     /* (non-Javadoc)
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.AstVisitorManager#visitStart(antlr.collections.AST)

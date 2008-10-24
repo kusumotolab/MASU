@@ -213,7 +213,6 @@ public class MetricsTool {
             int currentFileNumber = 1;
             final StringBuffer fileInformationBuffer = new StringBuffer();
 
-            int loc = 0;
             for (TargetFile targetFile : TargetFileManager.getInstance()) {
                 try {
                     final String name = targetFile.getName();
@@ -253,7 +252,6 @@ public class MetricsTool {
                         }
 
                         fileInfo.setLOC(java15lexer.getLine());
-                        loc += fileInfo.getLOC();
                         break;
 
                     case JAVA14:
@@ -343,9 +341,6 @@ public class MetricsTool {
             out.println("STEP7 : resolve field and method usages.");
         }
         addReferenceAssignmentCallRelateion();
-
-        // 名前解決が終了したら未解決情報は不要になるので，
-        // メモリを解放するために未解決情報のマネージャーが持つ情報を消去
 
         // 文法誤りのあるファイル一覧を表示
         // err.println("The following files includes uncorrect syntax.");

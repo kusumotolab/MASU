@@ -70,9 +70,9 @@ public class ConditionStateManager extends
             if (this.isTriggerToken(token)) {
                 this.fireStateChangeEvent(CONDITION_STATE_CHANGE.EXIT_CONDITION, event);
             } else if (STATE.IN == this.getState()) {
-                if(token.isExpression()) {
+                if (token.isExpression()) {
                     this.fireStateChangeEvent(CONDITION_STATE_CHANGE.EXIT_EXPRESSION, event);
-                } else if(token.isLocalVariableDefinition()) {
+                } else if (token.isLocalVariableDefinition()) {
                     this.fireStateChangeEvent(CONDITION_STATE_CHANGE.EXIT_DECLARATION, event);
                 }
             }
@@ -88,6 +88,10 @@ public class ConditionStateManager extends
 
     protected boolean isTriggerToken(final AstToken token) {
         return this.triggerTokens.contains(token);
+    }
+
+    public void addTriggerToken(final AstToken triggerToken) {
+        this.triggerTokens.add(triggerToken);
     }
 
     private final Set<AstToken> triggerTokens;

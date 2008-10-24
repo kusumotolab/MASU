@@ -8,7 +8,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.ForBlockStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.ForBlockStateManager.FOR_BLOCK_STATE_CHANGE;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.DescriptionToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
@@ -24,13 +23,11 @@ public class ForBlockBuilder extends ConditionalBlockBuilder<ForBlockInfo, Unres
     public ForBlockBuilder(final BuildDataManager targetDataManager,
             final ExpressionElementManager expressionManager,
             final LocalVariableBuilder variableBuilder) {
-        super(targetDataManager, new ForBlockStateManager(), expressionManager);
+        super(targetDataManager, new ForBlockStateManager(), expressionManager, variableBuilder);
 
-        this.conditionBuilder = new ConditionBuilder(expressionManager, variableBuilder,
-                new AstToken[] { DescriptionToken.FOR_INIT, DescriptionToken.FOR_ITERATOR });
-        this.conditionBuilder.deactivate();
+        this.conditionBuilder.addTriggerToken(DescriptionToken.FOR_INIT);
+        this.conditionBuilder.addTriggerToken(DescriptionToken.FOR_ITERATOR);
 
-        this.addInnerBuilder(this.conditionBuilder);
     }
 
     @Override
@@ -78,7 +75,5 @@ public class ForBlockBuilder extends ConditionalBlockBuilder<ForBlockInfo, Unres
             final UnresolvedLocalSpaceInfo<?> outerSpace) {
         return new UnresolvedForBlockInfo(outerSpace);
     }
-
-    private final ConditionBuilder conditionBuilder;
 
 }
