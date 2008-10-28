@@ -28,7 +28,7 @@ public class UnresolvedTernaryOperationInfo extends UnresolvedEntityUsageInfo<Te
             throw new IllegalArgumentException();
         }
 
-        this.conditionalExpresion = conditionalExpression;
+        this.conditionalExpression = conditionalExpression;
         this.trueExpression = trueExpression;
         this.falseExpression = falseExpression;
 
@@ -55,7 +55,7 @@ public class UnresolvedTernaryOperationInfo extends UnresolvedEntityUsageInfo<Te
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final ExpressionInfo conditionalExpression = this.conditionalExpresion.resolve(usingClass,
+        final ExpressionInfo conditionalExpression = this.conditionalExpression.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final ExpressionInfo trueExpression = this.trueExpression.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
@@ -71,7 +71,7 @@ public class UnresolvedTernaryOperationInfo extends UnresolvedEntityUsageInfo<Te
     /**
      * O€‰‰Z‚ÌğŒ®(‘æˆê€)‚Ì‚İ‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚é•Ï”
      */
-    private final UnresolvedExpressionInfo<? extends ExpressionInfo> conditionalExpresion;
+    private final UnresolvedExpressionInfo<? extends ExpressionInfo> conditionalExpression;
 
     /**
      * O€‰‰Z‚ÌğŒ®‚ªtrue‚Ì‚Æ‚«‚É•Ô‚³‚ê‚é®(‘æ“ñ€)‚Ì–¢‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚é•Ï”
