@@ -467,7 +467,7 @@ protected typeArgumentsOrParametersEnd
 typeArgumentBounds
 	{boolean isUpperBounds = false;}
 	:
-		( "extends"! {isUpperBounds=true;} | "super"! ) classOrInterfaceType[true]
+		( "extends"! {isUpperBounds=true;} | "super"! ) classTypeSpec[true]
 		{
 			if (isUpperBounds)
 			{
