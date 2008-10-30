@@ -72,7 +72,7 @@ public final class MonominalOperationInfo extends EntityUsageInfo {
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
         variableUsages.addAll(this.getOperand().getVariableUsages());
-        return null;
+        return variableUsages;
     }
 
     /**

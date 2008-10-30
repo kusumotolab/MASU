@@ -33,7 +33,7 @@ public class FieldBuilder extends
         }
 
         if (null != definitionClass) {
-            UnresolvedFieldInfo field = new UnresolvedFieldInfo(varName, type, definitionClass,
+            final UnresolvedFieldInfo field = new UnresolvedFieldInfo(varName, type, definitionClass,
                     this.builtInitializerStack.pop(), startLine, startColumn, endLine, endColumn);
             for (ModifierInfo modifier : modifiers) {
                 field.addModifier(modifier);
