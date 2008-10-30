@@ -227,7 +227,7 @@ tokens {
 	 * enough closing '>' characters; which actually may have been
 	 * either GT, SR or BSR tokens.
 	 */
-	private int ltCounter = 0;
+	//private int ltCounter = 0;
 	
 	private boolean useNameTag = true;
 	
@@ -362,6 +362,7 @@ classTypeSpec[boolean addImagNode]
 			if ( addImagNode ) {
 				#classTypeSpec = #(#[TYPE,"TYPE"], #classTypeSpec);
 			}
+			
 		}
 	;
 
@@ -401,13 +402,13 @@ wildcardType
 
 // Type arguments to a class or interface type
 typeArguments
-{int currentLtLevel = 0;}
+//{int currentLtLevel = 0;}
 	:
-		{currentLtLevel = ltCounter;}
-		LT! {ltCounter++;}
+		//{currentLtLevel = ltCounter;}
+		LT! //{ltCounter++;}
 		typeArgument
 		(options{greedy=true;}: // match as many as possible
-			{inputState.guessing !=0 || ltCounter == currentLtLevel + 1}?
+			//{inputState.guessing !=0 || ltCounter == currentLtLevel + 1}?
 			COMMA! typeArgument
 		)*
 
@@ -419,17 +420,47 @@ typeArguments
 
 		// make sure we have gobbled up enough '>' characters
 		// if we are at the "top level" of nested typeArgument productions
-		{(currentLtLevel != 0) || ltCounter == currentLtLevel}?
+		//{(currentLtLevel != 0) || ltCounter == currentLtLevel}?
 
 		{#typeArguments = #(#[TYPE_ARGUMENTS, "TYPE_ARGUMENTS"], #typeArguments);}
 	;
-
+	
 // this gobbles up *some* amount of '>' characters, and counts how many
 // it gobbled.
 protected typeArgumentsOrParametersEnd
-	:	GT! {ltCounter-=1;}
-	|	SR! {ltCounter-=2;}
-	|	BSR! {ltCounter-=3;}
+	{
+		int mark = this.mark();
+		int gtCount = 0; 
+	}
+	:
+	(
+		GT! {gtCount = 1;} //{ltCounter-=1;}
+	|	SR! {gtCount = 2;} //{ltCounter-=2;}
+	|	BSR! {gtCount = 3;}  //{ltCounter-=3;}
+	)
+
+	{
+		
+		Token nextToken;
+		switch (gtCount) {
+			case 1:
+				break;
+			case 2:
+				this.rewind(mark);
+				nextToken = this.LT(1);
+				nextToken.setType(GT);
+				nextToken.setText(">");
+				break;
+			case 3:
+				this.rewind(mark);
+				nextToken = this.LT(1);
+				nextToken.setType(SR);
+				nextToken.setText(">>");
+				break;
+			default :
+				break;
+		}
+	}
 	;
 
 // Restriction on wildcard types based on super class or derrived class
@@ -673,16 +704,16 @@ annotationDefinition![AST modifiers]
 	;
 
 typeParameters
-{int currentLtLevel = 0;}
+//{int currentLtLevel = 0;}
 	:
-		{currentLtLevel = ltCounter;}
-		LT! {ltCounter++;}
+		//{currentLtLevel = ltCounter;}
+		LT! //{ltCounter++;}
 		typeParameter (COMMA! typeParameter)*
 		(typeArgumentsOrParametersEnd)?
 
 		// make sure we have gobbled up enough '>' characters
 		// if we are at the "top level" of nested typeArgument productions
-		{(currentLtLevel != 0) || ltCounter == currentLtLevel}?
+		//{(currentLtLevel != 0) || ltCounter == currentLtLevel}?
 
 		{#typeParameters = #(#[TYPE_PARAMETERS, "TYPE_PARAMETERS"], #typeParameters);}
 	;
@@ -1790,7 +1821,7 @@ options {
 	private boolean assertEnabled = true;
 	/** flag for enabling the "enum" keyword */
 	private boolean enumEnabled = true;
-
+	
 	/** Enable the "assert" keyword */
 	public void enableAssert(boolean shouldEnable) { assertEnabled = shouldEnable; }
 	/** Query the "assert" keyword state */
@@ -1837,7 +1868,7 @@ STAR			:	'*'		;
 STAR_ASSIGN		:	"*="	;
 MOD				:	'%'		;
 MOD_ASSIGN		:	"%="	;
-SR				:	">>"	;
+SR				:   ">>"	;
 SR_ASSIGN		:	">>="	;
 BSR				:	">>>"	;
 BSR_ASSIGN		:	">>>="	;
