@@ -921,10 +921,14 @@ public class MetricsTool {
         // 各未解決クラスに対して
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
+            
+            final FileInfo fileInfo = unresolvedClassInfo.getFileInfo();
 
             //　クラス情報を解決
             final TargetClassInfo classInfo = unresolvedClassInfo.resolve(null, null,
                     classInfoManager, null, null);
+            
+            fileInfo.addDefinedClass(classInfo);
 
             // 解決されたクラス情報を登録
             classInfoManager.add(classInfo);
