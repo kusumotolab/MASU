@@ -67,6 +67,10 @@ public abstract class InitializableVariableBuilder<TVar extends UnresolvedVariab
         }
     }
 
+    public UnresolvedExpressionInfo<? extends ExpressionInfo> getLastBuiltExpression() {
+        return this.builtInitializerStack.isEmpty() ? null : this.builtInitializerStack.peek();
+    }
+
     /**
      * 構築した初期化式を格納しておくスタック
      */

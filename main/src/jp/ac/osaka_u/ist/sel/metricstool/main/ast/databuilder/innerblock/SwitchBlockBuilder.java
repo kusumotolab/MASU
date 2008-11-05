@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalVariableBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalVariableDeclarationStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
@@ -21,7 +21,7 @@ public class SwitchBlockBuilder extends
 
     public SwitchBlockBuilder(final BuildDataManager targetDataManager,
             final ExpressionElementManager expressionManager,
-            final LocalVariableBuilder variableBuilder) {
+            final LocalVariableDeclarationStatementBuilder variableBuilder) {
         super(targetDataManager, new SwitchBlockStateManager(), expressionManager, variableBuilder);
 
     }

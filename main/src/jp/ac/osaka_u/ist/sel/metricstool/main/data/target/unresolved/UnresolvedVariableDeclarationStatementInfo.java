@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
@@ -25,20 +25,20 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
     /**
      * 宣言されている変数，（もしあれば）初期化の式を与えて，オブジェクトを初期化
      * 
-     * @param declaredVariable 宣言されている変数
+     * @param variableDeclaration 宣言されている変数
      * @param initializationExpression （もしあれば）初期化の式
      */
     public UnresolvedVariableDeclarationStatementInfo(
-            final UnresolvedLocalVariableInfo declaredVariable,
+            final UnresolvedLocalVariableUsageInfo variableDeclaration,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> initializationExpression) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        if (null == declaredVariable) {
+        if (null == variableDeclaration) {
             throw new IllegalArgumentException("declaredVariable is null");
         }
 
-        this.declaredLocalVariable = declaredVariable;
+        this.variableDeclaration = variableDeclaration;
         this.initializationExpression = initializationExpression;
     }
 
@@ -64,16 +64,16 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalVariableInfo localVariable = this.declaredLocalVariable.resolve(usingClass,
+        final LocalVariableUsageInfo variableDeclaration = this.variableDeclaration.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         if (null != this.initializationExpression) {
             final ExpressionInfo initializationExpression = this.initializationExpression.resolve(
                     usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-            this.resolvedInfo = new VariableDeclarationStatementInfo(localVariable,
+            this.resolvedInfo = new VariableDeclarationStatementInfo(variableDeclaration,
                     initializationExpression, fromLine, fromColumn, toLine, toColumn);
         } else {
-            this.resolvedInfo = new VariableDeclarationStatementInfo(localVariable, null, fromLine,
+            this.resolvedInfo = new VariableDeclarationStatementInfo(variableDeclaration, null, fromLine,
                     fromColumn, toLine, toColumn);
         }
 
@@ -99,7 +99,7 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
      * @return 定義されている変数
      */
     public final UnresolvedLocalVariableInfo getDeclaredLocalVariable() {
-        return this.declaredLocalVariable;
+        return this.variableDeclaration.getUsedVariable();
     }
 
     /**
@@ -123,7 +123,7 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
     /**
      * 宣言されている変数を表すフィールド
      */
-    private final UnresolvedLocalVariableInfo declaredLocalVariable;
+    private final UnresolvedLocalVariableUsageInfo variableDeclaration;
 
     /**
      * 宣言されている変数の初期化式を表すフィールド

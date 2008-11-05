@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock;
 import java.util.LinkedList;
 import java.util.List;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalVariableBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalVariableDeclarationStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
@@ -21,9 +21,10 @@ public class ConditionBuilder extends
         StateDrivenDataBuilder<List<UnresolvedConditionInfo<? extends ConditionInfo>>> {
 
     public ConditionBuilder(final ExpressionElementManager expressionManager,
-            final LocalVariableBuilder variableBuilder, final AstToken[] triggerTokens) {
+            final LocalVariableDeclarationStatementBuilder variableDeclarationStatementBuilder,
+            final AstToken[] triggerTokens) {
         this.expressionManager = expressionManager;
-        this.variableBuilder = variableBuilder;
+        this.declarationStatementBuilder = variableDeclarationStatementBuilder;
 
         this.stateManager = new ConditionStateManager(triggerTokens);
         this.addStateManager(this.stateManager);
@@ -41,10 +42,9 @@ public class ConditionBuilder extends
         } else if (type.equals(CONDITION_STATE_CHANGE.ENTER_DECLARATION)) {
 
         } else if (type.equals(CONDITION_STATE_CHANGE.EXIT_DECLARATION)) {
-            if (null != this.variableBuilder
-                    && null != this.variableBuilder.getLastStackedDeclationStatement()) {
-                this.getLastBuildData()
-                        .add(this.variableBuilder.getLastStackedDeclationStatement());
+            if (null != this.declarationStatementBuilder
+                    && null != this.declarationStatementBuilder.getLastBuildData()) {
+                this.getLastBuildData().add(this.declarationStatementBuilder.getLastBuildData());
             }
         } else if (type.equals(CONDITION_STATE_CHANGE.ENTER_EXPRESSION)) {
 
@@ -65,6 +65,6 @@ public class ConditionBuilder extends
 
     private final ExpressionElementManager expressionManager;
 
-    private final LocalVariableBuilder variableBuilder;
+    private final LocalVariableDeclarationStatementBuilder declarationStatementBuilder;
 
 }

@@ -46,7 +46,7 @@ public class CommonASTWithLineNumber extends CommonAST {
         super.initialize(tok);
 
         this.updatePosition(tok.getLine(), tok.getColumn(), tok.getLine(), tok.getColumn()
-                + tok.getText().length() - 1);
+                + tok.getText().length());
     }
 
     @Override

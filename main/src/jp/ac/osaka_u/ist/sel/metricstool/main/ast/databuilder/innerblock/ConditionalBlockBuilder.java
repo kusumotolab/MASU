@@ -1,11 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock;
 
 
-import java.util.LinkedList;
 import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalVariableBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalVariableDeclarationStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
@@ -27,7 +26,7 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
     protected ConditionalBlockBuilder(final BuildDataManager targetDataManager,
             final InnerBlockStateManager blockStateManager,
             final ExpressionElementManager expressionManager,
-            final LocalVariableBuilder variableBuilder) {
+            final LocalVariableDeclarationStatementBuilder variableBuilder) {
         super(targetDataManager, blockStateManager);
 
         if (null == expressionManager) {

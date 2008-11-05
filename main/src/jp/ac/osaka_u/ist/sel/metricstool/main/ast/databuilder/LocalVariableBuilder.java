@@ -5,6 +5,11 @@ import java.util.Stack;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.LocalVariableStateManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.NameStateManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.VariableDefinitionStateManager.VARIABLE_STATE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
@@ -12,9 +17,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableDeclarationStatementInfo;
 
 
 public class LocalVariableBuilder
@@ -28,8 +33,35 @@ public class LocalVariableBuilder
                 modifiersBuilder, typeBuilder, nameBuilder);
 
         this.interpriter = interpriter;
-        this.statemetnStack = new Stack<UnresolvedVariableDeclarationStatementInfo>();
+        this.declarationUsageTriggerStack = new Stack<AstVisitEvent>();
+        this.declarationUsageStack = new Stack<UnresolvedLocalVariableUsageInfo>();
+    }
 
+    @Override
+    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
+        super.stateChangend(event);
+
+        final StateChangeEventType eventType = event.getType();
+        if (eventType.equals(VARIABLE_STATE.EXIT_VARIABLE_DEF)) {
+
+            assert !this.declarationUsageTriggerStack.isEmpty() : "Illegal state: ";
+
+            if (!this.declarationUsageTriggerStack.isEmpty() && null != this.getLastBuildData()) {
+                final AstVisitEvent trigger = this.declarationUsageTriggerStack.pop();
+                final UnresolvedLocalVariableUsageInfo declarationUsage = this
+                        .buildDeclarationUsage(this.getLastBuildData(), trigger.getStartLine(),
+                                trigger.getStartColumn(), trigger.getEndLine(), trigger
+                                        .getEndColumn());
+                
+                this.declarationUsageStack.push(declarationUsage);
+                
+            }
+
+        } else if (this.variableStateManager.isInDefinition()) {
+            if (eventType.equals(NameStateManager.NAME_STATE.ENTER_NAME)) {
+                this.declarationUsageTriggerStack.push(event.getTrigger());
+            }
+        }
     }
 
     @Override
@@ -42,8 +74,8 @@ public class LocalVariableBuilder
             varName = name[0];
         }
 
-        final UnresolvedExpressionInfo<? extends ExpressionInfo> initializationExpression = this.builtInitializerStack
-                .pop();
+        final UnresolvedExpressionInfo<? extends ExpressionInfo> initializationExpression = this
+                .getLastBuiltExpression();
 
         final UnresolvedLocalVariableInfo var = new UnresolvedLocalVariableInfo(varName, type,
                 definitionSpace, initializationExpression, startLine, startColumn, endLine,
@@ -56,32 +88,28 @@ public class LocalVariableBuilder
             // TODO            interpriter.interpirt(modifiers, var);
         }
 
-        if (null != buildDataManager) {
-            buildDataManager.addLocalVariable(var);
-        }
-
-        final UnresolvedVariableDeclarationStatementInfo declarationStatement = new UnresolvedVariableDeclarationStatementInfo(
-                var, initializationExpression);
-        declarationStatement.setFromLine(startLine);
-        declarationStatement.setFromColumn(startColumn);
-        declarationStatement.setToLine(endLine);
-        declarationStatement.setToColumn(endColumn);
-
-        final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = this.buildDataManager
-                .getCurrentLocalSpace();
-        if (null != currentLocal) {
-            currentLocal.addStatement(declarationStatement);
-        }
-
-        this.statemetnStack.add(declarationStatement);
+        this.buildDataManager.addLocalVariable(var);
 
         return var;
+    }
+
+    private UnresolvedLocalVariableUsageInfo buildDeclarationUsage(
+            final UnresolvedLocalVariableInfo declaredVariable, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
+
+        final UnresolvedLocalVariableUsageInfo declarationUsage = new UnresolvedLocalVariableUsageInfo(
+                declaredVariable, false, fromLine, fromColumn, toLine, toColumn);
+
+        this.buildDataManager.addVariableUsage(declarationUsage);
+
+        return declarationUsage;
     }
 
     @Override
     public void reset() {
         super.reset();
-        this.statemetnStack.clear();
+        this.declarationUsageStack.clear();
+        this.declarationUsageTriggerStack.clear();
     }
 
     @Override
@@ -91,11 +119,13 @@ public class LocalVariableBuilder
                 : null;
     }
 
-    public UnresolvedVariableDeclarationStatementInfo getLastStackedDeclationStatement() {
-        return this.statemetnStack.isEmpty() ? null : this.statemetnStack.peek();
+    public UnresolvedLocalVariableUsageInfo getLastDeclarationUsage() {
+        return this.declarationUsageStack.isEmpty() ? null : this.declarationUsageStack.peek();
     }
 
-    private final Stack<UnresolvedVariableDeclarationStatementInfo> statemetnStack;
+    private final Stack<AstVisitEvent> declarationUsageTriggerStack;
+
+    private final Stack<UnresolvedLocalVariableUsageInfo> declarationUsageStack;
 
     private final ModifiersInterpriter interpriter;
 }

@@ -236,7 +236,7 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
     /**
      * 変数定義部に関する状態を管理するステートマネージャ
      */
-    private final VariableDefinitionStateManager variableStateManager;
+    protected final VariableDefinitionStateManager variableStateManager;
 
     /**
      * 型パラメータ記述部に関する状態を管理するステートマネージャ

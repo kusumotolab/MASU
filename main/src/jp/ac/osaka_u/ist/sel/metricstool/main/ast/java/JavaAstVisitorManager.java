@@ -14,6 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ExpressionStatemen
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.FieldBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.InheritanceBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalVariableBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalVariableDeclarationStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.MethodBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.MethodParameterBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersBuilder;
@@ -120,13 +121,18 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new JavaExpressionElementBuilder(this.expressionManager,
                 this.buildDataManager));
 
+        final LocalVariableDeclarationStatementBuilder localVariableDeclarationBuilder = new LocalVariableDeclarationStatementBuilder(
+                localVariableBuilder, this.buildDataManager);
+        
+        this.builders.add(localVariableDeclarationBuilder);
+        
         this.builders.add(new ExpressionStatementBuilder(this.expressionManager,
                 this.buildDataManager));
         this.builders
                 .add(new ReturnStatementBuilder(this.expressionManager, this.buildDataManager));
         this.builders.add(new ThrowStatementBuilder(this.expressionManager, this.buildDataManager));
 
-        this.addInnerBlockBuilder(localVariableBuilder);
+        this.addInnerBlockBuilder(localVariableDeclarationBuilder);
 
         for (final DataBuilder<?> builder : this.builders) {
             visitor.addVisitListener(builder);
@@ -135,7 +141,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.visitor = visitor;
     }
 
-    private void addInnerBlockBuilder(final LocalVariableBuilder variableBuilder) {
+    private void addInnerBlockBuilder(final LocalVariableDeclarationStatementBuilder variableBuilder) {
         this.builders.add(new CatchBlockBuilder(this.buildDataManager));
         this.builders.add(new DoBlockBuilder(this.buildDataManager, this.expressionManager,
                 variableBuilder));
