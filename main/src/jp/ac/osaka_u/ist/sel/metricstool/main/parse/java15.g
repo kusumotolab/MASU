@@ -259,15 +259,24 @@ tokens {
 		}	
 	}
 	
-	private void registLineColumnInfo(AST node) throws TokenStreamException{
+	private void registLineColumn(AST node) throws TokenStreamException {
 		if (null != lexer && !lineStack.isEmpty() && !columnStack.isEmpty()){
 		    final Token lastToken = LT(0);
 		    final int fromLine = this.lineStack.pop();
 		    final int fromColumn = this.columnStack.pop();
 		    final int toLine = lastToken.getLine();
             final int toColumn = lastToken.getColumn() + lastToken.getText().length();
-		    //final int toLine = this.lexer.getLine();
-		    //final int toColumn = this.lexer.getColumn();
+
+    		if(node instanceof CommonASTWithLineNumber) {
+    		    ((CommonASTWithLineNumber) node).setPosition(fromLine, fromColumn, toLine, toColumn);
+    		}
+		}
+	}
+	
+	private void registLineColumn(AST node, int toLine, int toColumn) throws TokenStreamException {
+		if (null != lexer && !lineStack.isEmpty() && !columnStack.isEmpty()){
+		    final int fromLine = this.lineStack.pop();
+		    final int fromColumn = this.columnStack.pop();
     		if(node instanceof CommonASTWithLineNumber) {
     		    ((CommonASTWithLineNumber) node).setPosition(fromLine, fromColumn, toLine, toColumn);
     		}
@@ -317,7 +326,7 @@ typeDefinition
 		m:modifiers!
 		typeDefinitionInternal[#m]
 		
-		{registLineColumnInfo(#typeDefinition);}
+		{registLineColumn(#typeDefinition);}
 		
 	|	SEMI!
 	;
@@ -339,7 +348,7 @@ declaration![boolean isParameter]
 		m:modifiers t:typeSpec[false] v:variableDefinitions[#m,#t,isParameter]
 		{#declaration = #v;}
 		
-		{registLineColumnInfo(#declaration);}
+		{registLineColumn(#declaration);}
 	;
 
 // A type specification is a type name with possible brackets afterwards
@@ -741,7 +750,7 @@ classBlock
 		RCURLY!
 		{#classBlock = #([OBJBLOCK, "OBJBLOCK"], #classBlock);}
 		
-		{registLineColumnInfo(#classBlock);}
+		{registLineColumn(#classBlock);}
 	;
 
 // This is the body of an interface. You can have interfaceField and extra semicolons.
@@ -803,7 +812,7 @@ annotationField!
     		)
 		)
 		
-		{registLineColumnInfo(#annotationField);}
+		{registLineColumn(#annotationField);}
 	;
 
 //An enum constant may have optional parameters and may have a
@@ -821,7 +830,7 @@ enumConstant!
 		( b:enumConstantBlock )?
 		{#enumConstant = #([ENUM_CONSTANT_DEF, "ENUM_CONSTANT_DEF"], an, i, a, b);}
 		
-		{registLineColumnInfo(#enumConstant);}
+		{registLineColumn(#enumConstant);}
 	;
 
 //The class-like body of an enum constant
@@ -877,7 +886,7 @@ enumConstantField!
     		{#enumConstantField = #(#[INSTANCE_INIT,"INSTANCE_INIT"], s4);}
 		)
 		
-		{registLineColumnInfo(#enumConstantField);}
+		{registLineColumn(#enumConstantField);}
 	;
 
 
@@ -956,7 +965,7 @@ classField!
     		{#classField = #(#[INSTANCE_INIT,"INSTANCE_INIT"], s4);}
 		)
 		
-		{registLineColumnInfo(#classField);}
+		{registLineColumn(#classField);}
 	;
 
 // Now the various things that can be defined inside a interface
@@ -1001,7 +1010,7 @@ interfaceField!
     		)
     	)
     	
-		{registLineColumnInfo(#interfaceField);}
+		{registLineColumn(#interfaceField);}
 	;
 
 constructorBody
@@ -1018,10 +1027,10 @@ explicitConstructorInvocation
 		(typeArguments)?
 		(	"this"! lp1:LPAREN^ argList RPAREN! SEMI!
 			{#lp1.setType(CTOR_CALL);}
-			{registLineColumnInfo(#lp1);}
+			{registLineColumn(#lp1);}
 		|	"super"! lp2:LPAREN^ argList RPAREN! SEMI!
 			{#lp2.setType(SUPER_CTOR_CALL);}
-			{registLineColumnInfo(#lp2);}
+			{registLineColumn(#lp2);}
 		)
 		
 		{#explicitConstructorInvocation = #(#[EXPR,"EXPR"],#explicitConstructorInvocation);}
@@ -1152,7 +1161,7 @@ parameterDeclaration!
 		{#parameterDeclaration = #(#[METHOD_PARAMETER_DEF,"METHOD_PARAMETER_DEF"],
 									pm, #([TYPE,"TYPE"],pd), id);}
 									
-		{registLineColumnInfo(#parameterDeclaration);}
+		{registLineColumn(#parameterDeclaration);}
 	;
 
 variableLengthParameterDeclaration!
@@ -1164,7 +1173,7 @@ variableLengthParameterDeclaration!
 		{#variableLengthParameterDeclaration = #(#[VARIABLE_PARAMETER_DEF,"VARIABLE_PARAMETER_DEF"],
 												pm, #([TYPE,"TYPE"],pd), id);}
 												
-	{registLineColumnInfo(#variableLengthParameterDeclaration);}
+	{registLineColumn(#variableLengthParameterDeclaration);}
 	;
 
 parameterModifier
@@ -1193,6 +1202,11 @@ compoundStatement
 
 statement
 	// A list of statements in curly braces -- start a new scope!
+	{
+		boolean isIf = false;
+		int ifToLine = 0;
+		int ifToColumn = 0;
+	}
 	:	
 	{pushStartLineColumn();}
 	
@@ -1221,7 +1235,13 @@ statement
 	|	IDENT c:COLON^ {#c.setType(LABELED_STAT);} statement
 
 	// If-else statement
-	|	"if"^ conditionalClause statement
+	|	i:"if"^ conditionalClause statement
+		{
+			final Token lastToken = LT(0);
+			ifToLine = lastToken.getLine();
+			ifToColumn = lastToken.getColumn() + lastToken.getText().length();
+			isIf = true;
+		}
 		(
 			// CONFLICT: the old "dangling-else" problem...
 			// ANTLR generates proper code matching
@@ -1230,7 +1250,11 @@ statement
 				warnWhenFollowAmbig = false;
 			}
 		:
-			elseStatement
+			{pushStartLineColumn();}
+		
+			e:elseStatement
+			
+			{registLineColumn(#e);}
 		)?
 
 	// For statement
@@ -1271,7 +1295,14 @@ statement
 	// empty statement
 	|	s:SEMI {#s.setType(EMPTY_STAT);}
 	)
-	{registLineColumnInfo(#statement);}
+	
+	{
+		if(isIf) {
+			registLineColumn(#statement, ifToLine, ifToColumn);
+		} else {
+			registLineColumn(#statement);
+		}
+	}
 	;
 	
 conditionalClause
@@ -1325,7 +1356,7 @@ localParameterDeclaration!
 		{#localParameterDeclaration = #(#[LOCAL_PARAMETER_DEF,"LOCAL_PARAMETER_DEF"],
 									pm, #([TYPE,"TYPE"],pd), id);}
 									
-		{registLineColumnInfo(#localParameterDeclaration);}
+		{registLineColumn(#localParameterDeclaration);}
 	;
 
 casesGroup
@@ -1606,11 +1637,11 @@ postfixExpression
 								argList
 								RPAREN!
 							)?
-							{registLineColumnInfo(#lps);}
+							{registLineColumn(#lps);}
 					)
-					{registLineColumnInfo(#lp3);}
+					{registLineColumn(#lp3);}
 				)
-				{registLineColumnInfo(#lp);}
+				{registLineColumn(#lp);}
 		|	DOT^ "this"
 		|	DOT^ newExpression
 		|	lb:LBRACK^ {#lb.setType(INDEX_OP);} expression RBRACK!
@@ -1665,8 +1696,8 @@ identPrimary
 			// The problem is that this loop here conflicts with
 			// DOT typeArguments "super" in postfixExpression (k=2)
 			// A proper solution would require a lot of refactoring...
-		:	(DOT {registLineColumnInfo(null); pushStartLineColumn();} (typeArguments)? IDENT) =>
-				DOT^ {registLineColumnInfo(null); pushStartLineColumn();} (ta2:typeArguments!)? IDENT
+		:	(DOT {registLineColumn(null); pushStartLineColumn();} (typeArguments)? IDENT) =>
+				DOT^ {registLineColumn(null); pushStartLineColumn();} (ta2:typeArguments!)? IDENT
 		|	{false}?	// FIXME: this is very ugly but it seems to work...
 						// this will also produce an ANTLR warning!
 				// Unfortunately a syntactic predicate can only select one of
@@ -1695,7 +1726,7 @@ identPrimary
 			)+
 		)?
 		
-		{registLineColumnInfo(#lp);}
+		{registLineColumn(#lp);}
 	;
 
 /** object instantiation.
@@ -1763,7 +1794,7 @@ newExpression
 
 		|	newArrayDeclarator (arrayInitializer)?
 		)
-		{registLineColumnInfo(#newExpression);;}
+		{registLineColumn(#newExpression);;}
 	;
 
 argList
