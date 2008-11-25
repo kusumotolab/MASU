@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.cbo;
 import java.util.HashSet;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -24,7 +24,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractClassMetricPlugin;
  */
 public class CBOPlugin extends AbstractClassMetricPlugin {
 
-    
     /**
      * 引数で与えられたクラスのCBOを計算する
      * 
@@ -34,13 +33,13 @@ public class CBOPlugin extends AbstractClassMetricPlugin {
     @Override
     protected Number measureClassMetric(TargetClassInfo targetClass) {
 
-        Set<ClassInfo> classes = new HashSet<ClassInfo>();
+        Set<ClassTypeInfo> classes = new HashSet<ClassTypeInfo>();
 
         // フィールドで使用されているクラス型を取得
         for (final TargetFieldInfo field : targetClass.getDefinedFields()) {
             final TypeInfo type = field.getType();
-            if (type instanceof ClassInfo) {
-                classes.add((ClassInfo) type);
+            if (type instanceof ClassTypeInfo) {
+                classes.add((ClassTypeInfo) type);
             }
         }
 
@@ -50,34 +49,33 @@ public class CBOPlugin extends AbstractClassMetricPlugin {
             // 返り値についての処理
             {
                 final TypeInfo returnType = method.getReturnType();
-                if (returnType instanceof ClassInfo) {
-                    classes.add((ClassInfo) returnType);
+                if (returnType instanceof ClassTypeInfo) {
+                    classes.add((ClassTypeInfo) returnType);
                 }
             }
 
             // 引数のついての処理
             for (final ParameterInfo parameter : method.getParameters()) {
                 final TypeInfo parameterType = parameter.getType();
-                if(parameterType instanceof ClassInfo){
-                    classes.add((ClassInfo) parameterType);
+                if (parameterType instanceof ClassTypeInfo) {
+                    classes.add((ClassTypeInfo) parameterType);
                 }
             }
-            
+
             // ローカル変数についての処理
-            for (final LocalVariableInfo variable : method.getLocalVariables()){
+            for (final LocalVariableInfo variable : method.getLocalVariables()) {
                 final TypeInfo variableType = variable.getType();
-                if(variableType instanceof ClassInfo){
-                    classes.add((ClassInfo)variableType);
+                if (variableType instanceof ClassTypeInfo) {
+                    classes.add((ClassTypeInfo) variableType);
                 }
             }
         }
-        
+
         //自分自身は取り除く
         classes.remove(targetClass);
 
         return classes.size();
     }
-    
 
     /**
      * このプラグインの簡易説明を１行で返す
