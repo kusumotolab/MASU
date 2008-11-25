@@ -74,34 +74,7 @@ public class MasuAstFactory extends ASTFactory {
         return root;
     }
 
-    @Override
-    public void addASTChild(ASTPair currentAST, AST child) {
-        if (child != null) {
-            if (currentAST.root == null) {
-                // Make new child the current root
-                currentAST.root = child;
-            }
-            else {
-                if (currentAST.child == null) {
-                    // Add new child to current root
-                    currentAST.root.setFirstChild(child);
-                }
-                else {
-                    currentAST.child.setNextSibling(child);
-                }
-                
-                if(currentAST.root.getNextSibling() != child) {
-                    ((CommonASTWithLineNumber) currentAST.root).updatePosition(child);
-                }
-            }
-            // Make new child the current child
-            currentAST.child = child;
-            currentAST.advanceChildToEnd();
-            
-        }
-
-    }
-    
+   
     
     
     

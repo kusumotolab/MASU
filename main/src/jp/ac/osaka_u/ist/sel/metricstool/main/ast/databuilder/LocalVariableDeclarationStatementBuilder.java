@@ -27,7 +27,7 @@ public class LocalVariableDeclarationStatementBuilder extends
         this.variableBuilder = variableBuilder;
 
         this.buildDataManager = buildDataManager;
-        
+
         this.addStateManager(new LocalVariableStateManager());
     }
 
@@ -36,13 +36,16 @@ public class LocalVariableDeclarationStatementBuilder extends
         final StateChangeEventType eventType = event.getType();
         if (eventType.equals(VARIABLE_STATE.EXIT_VARIABLE_DEF)) {
             final AstVisitEvent trigger = event.getTrigger();
-            this.buildVariableDeclarationStatement(this.variableBuilder.getLastDeclarationUsage(),
-                    this.variableBuilder.getLastBuiltExpression(), trigger.getStartLine(), trigger
+            final UnresolvedVariableDeclarationStatementInfo builtDeclarationStatement = this
+                    .buildVariableDeclarationStatement(this.variableBuilder
+                            .getLastDeclarationUsage(), this.variableBuilder
+                            .getLastBuiltExpression(), trigger.getStartLine(), trigger
                             .getStartColumn(), trigger.getEndLine(), trigger.getEndColumn());
+            this.registBuiltData(builtDeclarationStatement);
         }
     }
 
-    private void buildVariableDeclarationStatement(
+    private UnresolvedVariableDeclarationStatementInfo buildVariableDeclarationStatement(
             final UnresolvedLocalVariableUsageInfo declarationUsage,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> initializerExpression,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
@@ -59,6 +62,7 @@ public class LocalVariableDeclarationStatementBuilder extends
             currentLocal.addStatement(declarationStatement);
         }
 
+        return declarationStatement;
     }
 
     private final LocalVariableBuilder variableBuilder;
