@@ -30,8 +30,8 @@ public class BinominalOperationInfo extends EntityUsageInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public BinominalOperationInfo(final OPERATOR operator, final EntityUsageInfo firstOperand,
-            final EntityUsageInfo secondOperand, final int fromLine, final int fromColumn,
+    public BinominalOperationInfo(final OPERATOR operator, final ExpressionInfo firstOperand,
+            final ExpressionInfo secondOperand, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
@@ -225,7 +225,7 @@ public class BinominalOperationInfo extends EntityUsageInfo {
      * 
      * @return 第一オペランド
      */
-    public EntityUsageInfo getFirstOperand() {
+    public ExpressionInfo getFirstOperand() {
         return this.firstOperand;
     }
 
@@ -234,7 +234,7 @@ public class BinominalOperationInfo extends EntityUsageInfo {
      * 
      * @return 第二オペランド
      */
-    public EntityUsageInfo getSecondOperand() {
+    public ExpressionInfo getSecondOperand() {
         return this.secondOperand;
     }
 
@@ -251,9 +251,9 @@ public class BinominalOperationInfo extends EntityUsageInfo {
         return Collections.unmodifiableSortedSet(variableUsages);
     }
 
-    private final EntityUsageInfo firstOperand;
+    private final ExpressionInfo firstOperand;
 
-    private final EntityUsageInfo secondOperand;
+    private final ExpressionInfo secondOperand;
 
     private final OPERATOR operator;
 }
