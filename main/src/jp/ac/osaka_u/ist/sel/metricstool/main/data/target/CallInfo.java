@@ -25,7 +25,7 @@ public abstract class CallInfo extends EntityUsageInfo {
     CallInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
-        this.arguments = new LinkedList<EntityUsageInfo>();
+        this.arguments = new LinkedList<ExpressionInfo>();
         this.typeArguments = new LinkedList<ReferenceTypeInfo>();
     }
 
@@ -49,7 +49,7 @@ public abstract class CallInfo extends EntityUsageInfo {
      * 
      * @param arguments ’Ç‰Á‚·‚éÀˆø”
      */
-    public final void addArguments(final List<EntityUsageInfo> arguments) {
+    public final void addArguments(final List<ExpressionInfo> arguments) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == arguments) {
@@ -94,7 +94,7 @@ public abstract class CallInfo extends EntityUsageInfo {
      * 
      * @return@‚±‚ÌŒÄ‚Ño‚µ‚ÌÀˆø”‚ÌList
      */
-    public List<EntityUsageInfo> getArguments() {
+    public List<ExpressionInfo> getArguments() {
         return Collections.unmodifiableList(this.arguments);
     }
 
@@ -106,13 +106,13 @@ public abstract class CallInfo extends EntityUsageInfo {
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
-        for (EntityUsageInfo parameter : this.getArguments()) {
+        for (final ExpressionInfo parameter : this.getArguments()) {
             variableUsages.addAll(parameter.getVariableUsages());
         }
         return Collections.unmodifiableSortedSet(variableUsages);
     }
 
-    private final List<EntityUsageInfo> arguments;
+    private final List<ExpressionInfo> arguments;
 
     private final List<ReferenceTypeInfo> typeArguments;
 }
