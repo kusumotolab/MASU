@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+
 import java.util.Set;
 
 
@@ -14,36 +15,36 @@ public final class TypeParameterUsageInfo extends EntityUsageInfo {
     /**
      * 必要な情報を与えて，オブジェクトを初期化
      * 
-     * @param entityUsage 利用されているエンティティ
+     * @param expression 利用されている式
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public TypeParameterUsageInfo(final EntityUsageInfo entityUsage, final int fromLine,
+    public TypeParameterUsageInfo(final ExpressionInfo expression, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
-        if (null == entityUsage) {
+        if (null == expression) {
             throw new NullPointerException();
         }
 
-        this.entityUsage = entityUsage;
+        this.expression = expression;
     }
 
     @Override
     public TypeInfo getType() {
-        return this.entityUsage.getType();
+        return this.expression.getType();
     }
 
     /**
-     * エンティティを返す
+     * この型パラメータ使用内の式を返す
      * 
-     * @return エンティティ
+     * @return この型パラメータ使用内の式
      */
-    public EntityUsageInfo getEntityUsage() {
-        return this.entityUsage;
+    public ExpressionInfo getExpression() {
+        return this.expression;
     }
 
     /**
@@ -55,6 +56,6 @@ public final class TypeParameterUsageInfo extends EntityUsageInfo {
     public final Set<VariableUsageInfo<?>> getVariableUsages() {
         return VariableUsageInfo.EmptySet;
     }
-    
-    private final EntityUsageInfo entityUsage;
+
+    private final ExpressionInfo expression;
 }
