@@ -5,20 +5,28 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.AssertStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BinominalOperationInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CastUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ElseBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LiteralUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MonominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SimpleBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SynchronizedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TernaryOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ThrowStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
@@ -80,6 +88,42 @@ public class Conversion {
                 final String expressionString = Conversion.getNormalizedString(expression);
                 sb.append(expressionString);
             }
+        }
+
+        return sb.toString();
+    }
+
+    public static String getNormalizedString(final BlockInfo block) {
+
+        final StringBuilder sb = new StringBuilder();
+
+        if (block instanceof CatchBlockInfo) {
+
+            sb.append("CATCH");
+
+        } else if (block instanceof ConditionalBlockInfo) {
+
+            sb.append("CONDITION");
+
+        } else if (block instanceof ElseBlockInfo) {
+
+            sb.append("ELSE");
+
+        } else if (block instanceof FinallyBlockInfo) {
+
+            sb.append("FINALLY");
+
+        } else if (block instanceof SimpleBlockInfo) {
+
+            sb.append("SIMPLE");
+
+        } else if (block instanceof SynchronizedBlockInfo) {
+
+            sb.append("CYNCHRONIZED");
+
+        } else if (block instanceof TryBlockInfo) {
+
+            sb.append("TRY");
         }
 
         return sb.toString();
