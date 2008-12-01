@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
@@ -99,16 +99,16 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
      * @param unresolvedParameters
      * @return
      */
-    protected final List<EntityUsageInfo> resolveArguments(final TargetClassInfo usingClass,
+    protected final List<ExpressionInfo> resolveArguments(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         //Å@âåàçœÇ›é¿à¯êîÇäiî[Ç∑ÇÈÇΩÇﬂÇÃïœêî
-        final List<EntityUsageInfo> parameters = new LinkedList<EntityUsageInfo>();
+        final List<ExpressionInfo> parameters = new LinkedList<ExpressionInfo>();
 
         for (final UnresolvedEntityUsageInfo<?> unresolvedParameter : this.getArguments()) {
 
-            EntityUsageInfo parameter = unresolvedParameter.resolve(usingClass, usingMethod,
+            ExpressionInfo parameter = unresolvedParameter.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
 
             assert parameter != null : "resolveEntityUsage returned null!";

@@ -11,6 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -79,7 +80,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
         // メソッドのシグネチャを取得
         final String name = this.getName();
-        final List<EntityUsageInfo> actualParameters = super.resolveArguments(usingClass,
+        final List<ExpressionInfo> actualParameters = super.resolveArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final List<ReferenceTypeInfo> typeArguments = super.resolveTypeArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);

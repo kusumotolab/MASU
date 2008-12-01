@@ -6,7 +6,7 @@ import java.util.List;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
@@ -28,7 +28,8 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
      * 
      * @param unresolvedReferenceType コンストラクタ呼び出しが実行される型
      */
-    public UnresolvedConstructorCallInfo(final UnresolvedReferenceTypeInfo<?> unresolvedReferenceType) {
+    public UnresolvedConstructorCallInfo(
+            final UnresolvedReferenceTypeInfo<?> unresolvedReferenceType) {
 
         if (null == unresolvedReferenceType) {
             throw new IllegalArgumentException();
@@ -61,7 +62,7 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
         final int toColumn = this.getToColumn();
 
         // コンストラクタのシグネチャを取得
-        final List<EntityUsageInfo> actualParameters = super.resolveArguments(usingClass,
+        final List<ExpressionInfo> actualParameters = super.resolveArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final List<ReferenceTypeInfo> typeArguments = super.resolveTypeArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);

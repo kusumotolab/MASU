@@ -11,7 +11,7 @@ import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
@@ -82,22 +82,22 @@ public final class NameResolver {
     }
 
     /**
-     * 引数で与えられたエンティティの List から，引数の型の List を作成し，返す
+     * 引数で与えられたExpressionInfoの List から，引数の型の List を作成し，返す
      * 
-     * @param entities エンティティのList
+     * @param expressions エンティティのList
      * @param ownerMethod 引数を宣言しているメソッド
      * @return 引数の型の List
      */
-    public static List<ParameterInfo> createParameters(final List<EntityUsageInfo> entities,
+    public static List<ParameterInfo> createParameters(final List<ExpressionInfo> expressions,
             final ExternalMethodInfo ownerMethod) {
 
-        if (null == entities || null == ownerMethod) {
+        if (null == expressions || null == ownerMethod) {
             throw new NullPointerException();
         }
 
         final List<ParameterInfo> parameters = new LinkedList<ParameterInfo>();
-        for (final EntityUsageInfo entity : entities) {
-            final TypeInfo type = entity.getType();
+        for (final ExpressionInfo expression : expressions) {
+            final TypeInfo type = expression.getType();
             final ExternalParameterInfo parameter = new ExternalParameterInfo(type, ownerMethod);
             parameters.add(parameter);
         }
@@ -211,10 +211,11 @@ public final class NameResolver {
 
         //　最も外側およびもっとも外側のクラスの親クラスを追加
         availableClasses.add(outestClass);
-        for(final ClassInfo superClass : ClassTypeInfo.convert(outestClass.getSuperClasses())){
-            if(superClass instanceof TargetClassInfo){
-                NameResolver.getAvailableSuperClasses(outestClass, (TargetClassInfo)superClass, availableClasses);
-            }else if(superClass instanceof TargetClassInfo){
+        for (final ClassInfo superClass : ClassTypeInfo.convert(outestClass.getSuperClasses())) {
+            if (superClass instanceof TargetClassInfo) {
+                NameResolver.getAvailableSuperClasses(outestClass, (TargetClassInfo) superClass,
+                        availableClasses);
+            } else if (superClass instanceof TargetClassInfo) {
                 availableClasses.add(superClass);
             }
         }
@@ -246,8 +247,8 @@ public final class NameResolver {
 
             if (superClass.isInheritanceVisible() || superClass.isNamespaceVisible()) {
                 availableClasses.add(superClass);
-                for(final TargetClassInfo innerClass : superClass.getInnerClasses()){
-                    NameResolver.getAvailableInnerClasses(innerClass,availableClasses);
+                for (final TargetClassInfo innerClass : superClass.getInnerClasses()) {
+                    NameResolver.getAvailableInnerClasses(innerClass, availableClasses);
                 }
             }
 
@@ -256,8 +257,8 @@ public final class NameResolver {
 
             if (superClass.isInheritanceVisible()) {
                 availableClasses.add(superClass);
-                for(final TargetClassInfo innerClass : superClass.getInnerClasses()){
-                    NameResolver.getAvailableInnerClasses(innerClass,availableClasses);
+                for (final TargetClassInfo innerClass : superClass.getInnerClasses()) {
+                    NameResolver.getAvailableInnerClasses(innerClass, availableClasses);
                 }
             }
         }
@@ -286,7 +287,7 @@ public final class NameResolver {
         availableClasses.add(classInfo);
 
         // 内部クラスを追加
-        for (final TargetInnerClassInfo innerClass : classInfo.getInnerClasses()){
+        for (final TargetInnerClassInfo innerClass : classInfo.getInnerClasses()) {
             NameResolver.getAvailableInnerClasses(innerClass, availableClasses);
         }
 

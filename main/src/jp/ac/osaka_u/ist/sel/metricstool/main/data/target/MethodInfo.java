@@ -128,7 +128,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
      * @return 呼び出せる場合は true，そうでない場合は false
      */
     public final boolean canCalledWith(final String methodName,
-            final List<EntityUsageInfo> actualParameters) {
+            final List<ExpressionInfo> actualParameters) {
 
         if ((null == methodName) || (null == actualParameters)) {
             throw new NullPointerException();
@@ -147,11 +147,11 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
 
         // 引数の型を先頭からチェック等しくない場合は該当しない
         final Iterator<ParameterInfo> dummyParameterIterator = dummyParameters.iterator();
-        final Iterator<EntityUsageInfo> actualParameterIterator = actualParameters.iterator();
+        final Iterator<ExpressionInfo> actualParameterIterator = actualParameters.iterator();
         NEXT_PARAMETER: while (dummyParameterIterator.hasNext()
                 && actualParameterIterator.hasNext()) {
             final ParameterInfo dummyParameter = dummyParameterIterator.next();
-            final EntityUsageInfo actualParameter = actualParameterIterator.next();
+            final ExpressionInfo actualParameter = actualParameterIterator.next();
 
             TypeInfo actualParameterType = actualParameter.getType();
 
@@ -232,7 +232,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
                 if (actualParameterType.equals(dummyParameter.getType())) {
                     continue NEXT_PARAMETER;
                 }
-                
+
                 return false;
 
                 // 実引数が配列型の場合
