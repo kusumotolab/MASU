@@ -22,6 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ThrowStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
 
@@ -141,16 +142,59 @@ public class Conversion {
 
         } else if (expression instanceof MonominalOperationInfo) {
 
+            final OPERATOR operator = ((MonominalOperationInfo) expression).getOperator();
+            sb.append(operator.getToken());
+
+            final ExpressionInfo operand = ((MonominalOperationInfo) expression).getOperand();
+            final String operandString = Conversion.getNormalizedString(operand);
+            sb.append(operandString);
+
         } else if (expression instanceof NullUsageInfo) {
+
+            sb.append("NULL");
 
         } else if (expression instanceof TernaryOperationInfo) {
 
+            final ExpressionInfo conditionExpression = ((TernaryOperationInfo) expression)
+                    .getConditionalExpression();
+            final String conditionExpressionString = Conversion
+                    .getNormalizedString(conditionExpression);
+            sb.append(conditionExpressionString);
+
+            sb.append("?");
+
+            final ExpressionInfo trueExpression = ((TernaryOperationInfo) expression)
+                    .getTrueExpression();
+            String trueExpressionString = Conversion.getNormalizedString(trueExpression);
+            sb.append(trueExpressionString);
+
+            sb.append(":");
+
+            final ExpressionInfo falseExpression = ((TernaryOperationInfo) expression)
+                    .getTrueExpression();
+            String falseExpressionString = Conversion.getNormalizedString(falseExpression);
+            sb.append(falseExpressionString);
+
         } else if (expression instanceof TypeParameterUsageInfo) {
+
+            sb.append(">");
+
+            final ExpressionInfo typeParameterExpression = ((TypeParameterUsageInfo) expression)
+                    .getExpression();
+            final String typeParameterExpressionString = Conversion
+                    .getNormalizedString(typeParameterExpression);
+            sb.append(typeParameterExpressionString);
+
+            sb.append("<");
 
         } else if (expression instanceof UnknownEntityUsageInfo) {
 
+            sb.append("UNKNOWN");
+
         } else if (expression instanceof VariableUsageInfo) {
 
+            final VariableInfo<?> variable = ((VariableUsageInfo<?>) expression).getUsedVariable();
+            sb.append(variable.getModifiers());
         }
 
         return sb.toString();
