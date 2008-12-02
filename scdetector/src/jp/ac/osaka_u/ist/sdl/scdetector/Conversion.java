@@ -11,12 +11,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CastUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ElseBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LiteralUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MonominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
@@ -30,7 +32,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
 
@@ -162,9 +163,19 @@ public class Conversion {
             final String secondOperandString = Conversion.getNormalizedString(secondOperand);
             sb.append(secondOperandString);
 
-        } else if (expression instanceof CallInfo) {
+        } else if (expression instanceof MethodCallInfo) {
 
-            sb.append("CALL(");
+            sb.append("METHOD(");
+            for (final ExpressionInfo argument : ((CallInfo) expression).getArguments()) {
+                final String argumentString = Conversion.getNormalizedString(argument);
+                sb.append(argumentString);
+                sb.append(",");
+            }
+            sb.append("");
+
+        } else if (expression instanceof ConstructorCallInfo) {
+
+            sb.append("CONSTRUCTOR(");
             for (final ExpressionInfo argument : ((CallInfo) expression).getArguments()) {
                 final String argumentString = Conversion.getNormalizedString(argument);
                 sb.append(argumentString);
@@ -221,7 +232,7 @@ public class Conversion {
 
         } else if (expression instanceof TypeParameterUsageInfo) {
 
-            sb.append(">");
+            sb.append("<");
 
             final ExpressionInfo typeParameterExpression = ((TypeParameterUsageInfo) expression)
                     .getExpression();
@@ -229,7 +240,7 @@ public class Conversion {
                     .getNormalizedString(typeParameterExpression);
             sb.append(typeParameterExpressionString);
 
-            sb.append("<");
+            sb.append(">");
 
         } else if (expression instanceof UnknownEntityUsageInfo) {
 
@@ -237,8 +248,7 @@ public class Conversion {
 
         } else if (expression instanceof VariableUsageInfo) {
 
-            final VariableInfo<?> variable = ((VariableUsageInfo<?>) expression).getUsedVariable();
-            sb.append(variable.getModifiers());
+            sb.append("VARIABLE");
         }
 
         return sb.toString();
