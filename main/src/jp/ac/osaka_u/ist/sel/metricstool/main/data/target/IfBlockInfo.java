@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.SortedSet;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -59,6 +61,34 @@ public final class IfBlockInfo extends ConditionalBlockInfo {
      */
     public boolean hasElseBlock() {
         return null != this.sequentElseBlock;
+    }
+
+    /**
+     * このif文のテキスト表現（String型）を返す
+     * 
+     * @return このif文のテキスト表現（String型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        sb.append("if (");
+
+        final ConditionInfo condition = this.getConditionalExpression();
+        sb.append(condition.getText());
+
+        sb.append(") {");
+
+        final SortedSet<StatementInfo> statements = this.getStatements();
+        for (final StatementInfo statement : statements) {
+            sb.append(statement.getText());
+            sb.append(System.getProperty("line.separator"));
+        }
+
+        sb.append("}");
+
+        return sb.toString();
     }
 
     private ElseBlockInfo sequentElseBlock;

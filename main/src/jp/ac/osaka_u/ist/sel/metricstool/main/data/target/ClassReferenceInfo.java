@@ -65,6 +65,18 @@ public final class ClassReferenceInfo extends EntityUsageInfo {
     }
 
     /**
+     * このクラス参照のテキスト表現（String型）を返す
+     * 
+     * @return このクラス参照のテキスト表現（String型）
+     */
+    @Override
+    public String getText() {
+
+        final ClassInfo classInfo = this.getReferencedClass();
+        return classInfo.getFullQualifiedName(".");
+    }
+
+    /**
      * このクラス参照の参照型を保存する変数
      */
     private final ClassTypeInfo referenceType;

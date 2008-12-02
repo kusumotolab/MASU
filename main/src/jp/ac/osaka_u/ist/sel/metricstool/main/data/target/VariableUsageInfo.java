@@ -59,6 +59,17 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
         return Collections.unmodifiableSortedSet(variableUsage);
     }
 
+    /**
+     * この変数使用のテキスト表現（型）を返す
+     * 
+     * @return この変数使用のテキスト表現（型）
+     */
+    @Override
+    public final String getText() {
+        final T variable = this.getUsedVariable();
+        return variable.getName();
+    }
+
     private final T usedVariable;
 
     private final boolean reference;

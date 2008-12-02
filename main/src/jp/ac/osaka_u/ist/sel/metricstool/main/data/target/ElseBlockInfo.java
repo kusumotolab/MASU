@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.SortedSet;
+
+
 /**
  * else ブロックを表すクラス
  * 
@@ -31,6 +34,30 @@ public final class ElseBlockInfo extends BlockInfo {
         }
 
         this.ownerIfBlock = ownerIfBlock;
+    }
+
+    /**
+     * このelse文のテキスト表現（String型）を返す
+     * 
+     * @return このelse文のテキスト表現（String型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        sb.append("else {");
+        sb.append(System.getProperty("line.separator"));
+
+        final SortedSet<StatementInfo> statements = this.getStatements();
+        for (final StatementInfo statement : statements) {
+            sb.append(statement.getText());
+            sb.append(System.getProperty("line.separator"));
+        }
+
+        sb.append("}");
+
+        return sb.toString();
     }
 
     /**

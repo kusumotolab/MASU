@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+
 import java.util.Set;
 
 
@@ -45,7 +46,7 @@ public final class LiteralUsageInfo extends EntityUsageInfo {
     public final String getLiteral() {
         return this.literal;
     }
-    
+
     /**
      * リテラルは変数参照ではないので空のセットを返す
      * 
@@ -54,6 +55,16 @@ public final class LiteralUsageInfo extends EntityUsageInfo {
     @Override
     public final Set<VariableUsageInfo<?>> getVariableUsages() {
         return VariableUsageInfo.EmptySet;
+    }
+
+    /**
+     * このリテラル使用のテキスト表現（String型）を返す
+     * 
+     * @return このリテラル使用のテキスト表現（String型）
+     */
+    @Override
+    public String getText() {
+        return this.getLiteral();
     }
 
     /**

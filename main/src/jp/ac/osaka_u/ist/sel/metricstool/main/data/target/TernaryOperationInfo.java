@@ -12,7 +12,6 @@ import java.util.Set;
  */
 public class TernaryOperationInfo extends EntityUsageInfo {
 
-    
     /**
      * 三項演算の条件式(第一項)，条件式がtrueの時に返される式，条件式がfalseの時に返される式(第三項)，開始位置，終了位置を与えて初期化
      * @param condtionalExpression 条件式(第一項)
@@ -27,11 +26,11 @@ public class TernaryOperationInfo extends EntityUsageInfo {
             ExpressionInfo trueExpression, ExpressionInfo falseExpression, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
         super(fromLine, fromColumn, toLine, toColumn);
-        
-        if(null == condtionalExpression || null == trueExpression || null == falseExpression) {
+
+        if (null == condtionalExpression || null == trueExpression || null == falseExpression) {
             throw new IllegalArgumentException();
         }
-        
+
         this.conditionalExpression = condtionalExpression;
         this.trueExpression = trueExpression;
         this.falseExpression = falseExpression;
@@ -39,7 +38,7 @@ public class TernaryOperationInfo extends EntityUsageInfo {
 
     @Override
     public TypeInfo getType() {
-       return this.trueExpression.getType();
+        return this.trueExpression.getType();
     }
 
     /**
@@ -70,6 +69,33 @@ public class TernaryOperationInfo extends EntityUsageInfo {
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    /**
+     * この三項演算のテキスト表現（型）を返す
+     * 
+     * @return この三項演算のテキスト表現（型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        final ExpressionInfo condition = this.getConditionalExpression();
+        sb.append(condition.getText());
+
+        sb.append(" ? ");
+
+        final ExpressionInfo trueExpression = this.getTrueExpression();
+        sb.append(trueExpression.getText());
+
+        sb.append(" : ");
+
+        final ExpressionInfo falseExpression = this.getFalseExpression();
+        sb.append(falseExpression.getText());
+
+        return sb.toString();
+
     }
 
     /**

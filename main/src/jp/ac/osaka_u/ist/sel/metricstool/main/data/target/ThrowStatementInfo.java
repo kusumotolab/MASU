@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+
 import java.util.Set;
 
 
@@ -23,8 +24,8 @@ public class ThrowStatementInfo extends SingleStatementInfo {
     public ThrowStatementInfo(ExpressionInfo thrownEpression, int fromLine, int fromColumn,
             int toLine, int toColumn) {
         super(fromLine, fromColumn, toLine, toColumn);
-        
-        if(null == thrownEpression) {
+
+        if (null == thrownEpression) {
             throw new IllegalArgumentException("thrownExpression is null");
         }
         this.thrownEpression = thrownEpression;
@@ -38,11 +39,32 @@ public class ThrowStatementInfo extends SingleStatementInfo {
     public final ExpressionInfo getThrownExpression() {
         return this.thrownEpression;
     }
-    
+
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         return this.thrownEpression.getVariableUsages();
     }
+
+    /**
+     * このthrow文のテキスト表現（型）を返す
+     * 
+     * @return このthrow文のテキスト表現（型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        sb.append("throw ");
+
+        final ExpressionInfo expression = this.getThrownExpression();
+        sb.append(expression.getText());
+
+        sb.append(";");
+
+        return sb.toString();
+    }
+
     /**
      * throw文によって投げられる例外を表す式
      */

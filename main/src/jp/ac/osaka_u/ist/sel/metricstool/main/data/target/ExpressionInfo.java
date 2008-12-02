@@ -8,5 +8,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  */
 public interface ExpressionInfo extends ConditionInfo {
 
-    public TypeInfo getType();
+    TypeInfo getType();
+    
+    String getText();
 }

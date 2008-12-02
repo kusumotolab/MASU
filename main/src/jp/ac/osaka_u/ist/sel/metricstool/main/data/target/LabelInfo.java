@@ -71,6 +71,26 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
+     * このラベル付き文のテキスト表現（型）を返す
+     * 
+     * @return このラベル付き文のテキスト表現（型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        sb.append(this.getName());
+
+        sb.append(" : ");
+
+        final StatementInfo labeledStatement = this.getLabeledStatement();
+        sb.append(labeledStatement.getText());
+
+        return sb.toString();
+    }
+
+    /**
      * このラベルの名前を返す
      * 
      * @return このラベルの名前

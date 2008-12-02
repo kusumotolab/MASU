@@ -9,7 +9,7 @@ import java.util.TreeSet;
 /**
  * assert文の
  * 
- * @author t-miyake
+ * @author t-miyake，higo
  *
  */
 public class AssertStatementInfo extends SingleStatementInfo {
@@ -30,17 +30,36 @@ public class AssertStatementInfo extends SingleStatementInfo {
     public final ExpressionInfo getAssertedExpression() {
         return this.assertedExpression;
     }
-    
+
     public final ExpressionInfo getMessageExpression() {
         return this.messageExpression;
     }
-    
+
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         SortedSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> result = new TreeSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
         result.addAll(this.assertedExpression.getVariableUsages());
         result.addAll(this.messageExpression.getVariableUsages());
         return null;
+    }
+
+    /**
+     * このアサート文のテキスト表現（String型）を返す
+     * 
+     * @return このアサート文のテキスト表現（String型）
+     */
+    @Override
+    public String getText() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("assert ");
+
+        final ExpressionInfo expression = this.getAssertedExpression();
+        sb.append(expression.getText());
+
+        sb.append(";");
+
+        return sb.toString();
     }
 
     private final ExpressionInfo assertedExpression;

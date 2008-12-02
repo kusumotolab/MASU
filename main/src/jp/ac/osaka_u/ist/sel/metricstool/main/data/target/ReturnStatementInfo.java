@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+
 import java.util.Set;
 
 
@@ -34,10 +35,30 @@ public class ReturnStatementInfo extends SingleStatementInfo {
     public final ExpressionInfo getReturnedExpression() {
         return this.returnedExpression;
     }
-    
+
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         return this.returnedExpression.getVariableUsages();
+    }
+
+    /**
+     * このreturn文のテキスト表現（型）を返す
+     * 
+     * @return このreturn文のテキスト表現（型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        sb.append("return ");
+
+        final ExpressionInfo statement = this.getReturnedExpression();
+        sb.append(statement.getText());
+
+        sb.append(";");
+
+        return sb.toString();
     }
 
     /**

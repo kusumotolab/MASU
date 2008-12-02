@@ -34,4 +34,16 @@ public final class UnknownEntityUsageInfo extends EntityUsageInfo {
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         return VariableUsageInfo.EmptySet;
     }
+
+    /**
+     * この未解決エンティティ使用のテキスト表現（型）を返す
+     * 
+     * @return この未解決エンティティ使用のテキスト表現（型）
+     */
+    @Override
+    public String getText() {
+        return UNKNOWNSTRING;
+    }
+
+    private static final String UNKNOWNSTRING = new String("UNKNOWN");
 }

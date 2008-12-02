@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.SortedSet;
+
+
 /**
  * finally ブロック情報を表すクラス
  * 
@@ -31,6 +34,30 @@ public final class FinallyBlockInfo extends BlockInfo {
         }
 
         this.ownerTryBlock = ownerTryBlock;
+    }
+
+    /**
+     * このfinally節のテキスト表現（String型）を返す
+     * 
+     * @return このfinally節のテキスト表現（String型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        sb.append("finally {");
+        sb.append(System.getProperty("line.separator"));
+
+        final SortedSet<StatementInfo> statements = this.getStatements();
+        for (final StatementInfo statement : statements) {
+            sb.append(statement.getText());
+            sb.append(System.getProperty("line.separator"));
+        }
+
+        sb.append("}");
+
+        return sb.toString();
     }
 
     /**

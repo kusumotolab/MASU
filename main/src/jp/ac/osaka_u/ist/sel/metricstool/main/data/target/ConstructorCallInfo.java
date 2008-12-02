@@ -39,6 +39,33 @@ public final class ConstructorCallInfo extends CallInfo {
         return this.referenceType;
     }
 
+    /**
+     * このコンストラクタ呼び出しのテキスト表現（型）を返す
+     * 
+     * @return このコンストラクタ呼び出しのテキスト表現（型）を返す
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        sb.append("new ");
+
+        final TypeInfo type = this.getType();
+        sb.append(type.getTypeName());
+
+        sb.append("(");
+
+        for (final ExpressionInfo argument : this.getArguments()) {
+            sb.append(argument.getText());
+            sb.append(",");
+        }
+
+        sb.append(")");
+
+        return sb.toString();
+    }
+
     private final ReferenceTypeInfo referenceType;
 
 }

@@ -54,5 +54,16 @@ public final class ArrayTypeReferenceInfo extends EntityUsageInfo {
         return VariableUsageInfo.EmptySet;
     }
 
+    /**
+     * この配列型参照のテキスト表現（String型）を返す
+     * 
+     * @return この配列型のテキスト表現（String型）
+     */
+    @Override
+    public String getText() {
+        final TypeInfo type = this.getType();
+        return type.getTypeName();
+    }
+
     private final ArrayTypeInfo arrayType;
 }

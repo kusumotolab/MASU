@@ -251,6 +251,32 @@ public class BinominalOperationInfo extends EntityUsageInfo {
         return Collections.unmodifiableSortedSet(variableUsages);
     }
 
+    /**
+     * この二項演算のテキスト表現（String型）を返す
+     * 
+     * @return この二項演算のテキスト表現（String型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        final ExpressionInfo firstExpression = this.getFirstOperand();
+        sb.append(firstExpression.getText());
+
+        sb.append(" ");
+
+        final OPERATOR operator = this.getOperator();
+        sb.append(operator.getToken());
+
+        sb.append(" ");
+
+        final ExpressionInfo secondExpression = this.getSecondOperand();
+        sb.append(secondExpression.getText());
+
+        return sb.toString();
+    }
+
     private final ExpressionInfo firstOperand;
 
     private final ExpressionInfo secondOperand;

@@ -86,11 +86,41 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
         final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> usages = new TreeSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
 
         usages.add(this.variableDeclaration);
-        if(this.isInitialized()) {
+        if (this.isInitialized()) {
             usages.addAll(this.getInitializationExpression().getVariableUsages());
         }
 
         return Collections.unmodifiableSet(usages);
+    }
+
+    /**
+     * この変数宣言文のテキスト表現（String型）を返す
+     * 
+     * @return この変数宣言文のテキスト表現（String型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        final LocalVariableInfo variable = this.getDeclaredLocalVariable();
+        final TypeInfo type = variable.getType();
+        sb.append(type.getTypeName());
+
+        sb.append(" ");
+
+        sb.append(variable.getName());
+
+        if (this.isInitialized()) {
+
+            sb.append(" = ");
+            final ExpressionInfo expression = this.getInitializationExpression();
+            sb.append(expression.getText());
+        }
+
+        sb.append(";");
+
+        return sb.toString();
     }
 
     /**

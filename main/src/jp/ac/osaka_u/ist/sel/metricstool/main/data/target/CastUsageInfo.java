@@ -24,7 +24,7 @@ public final class CastUsageInfo extends EntityUsageInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public CastUsageInfo(final TypeInfo castType, final EntityUsageInfo castedUsage,
+    public CastUsageInfo(final TypeInfo castType, final ExpressionInfo castedUsage,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
@@ -54,7 +54,7 @@ public final class CastUsageInfo extends EntityUsageInfo {
      * 
      * @return キャストされる要素
      */
-    public EntityUsageInfo getCastedUsage() {
+    public ExpressionInfo getCastedUsage() {
         return this.castedUsage;
     }
 
@@ -68,7 +68,27 @@ public final class CastUsageInfo extends EntityUsageInfo {
         return this.getCastedUsage().getVariableUsages();
     }
 
+    /**
+     * このキャスト使用のテキスト表現（String型）を返す
+     * 
+     * @return このキャスト使用のテキスト表現（String型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        sb.append("(");
+
+        final ExpressionInfo expression = this.getCastedUsage();
+        sb.append(expression.getText());
+
+        sb.append(")");
+
+        return sb.toString();
+    }
+
     private final TypeInfo castType;
 
-    private final EntityUsageInfo castedUsage;
+    private final ExpressionInfo castedUsage;
 }

@@ -15,26 +15,26 @@ import java.util.Set;
 public class ArrayElementUsageInfo extends EntityUsageInfo {
 
     /**
-     * 要素の親，つまり配列型のエンティティ使用とインデックスを与えて，オブジェクトを初期化
+     * 要素の親，つまり配列型の式とインデックスを与えて，オブジェクトを初期化
      * 
-     * @param ownerEntityUsage 配列型のエンティティ使用
+     * @param ownerExpression 配列型の式
      * @param indexExpression インデックス
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public ArrayElementUsageInfo(final EntityUsageInfo ownerEntityUsage,
+    public ArrayElementUsageInfo(final ExpressionInfo ownerExpression,
             final ExpressionInfo indexExpression, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
-        if (null == ownerEntityUsage) {
+        if (null == ownerExpression) {
             throw new NullPointerException();
         }
 
-        this.ownerEntityUsage = ownerEntityUsage;
+        this.ownerExpression = ownerExpression;
         this.indexExpression = indexExpression;
     }
 
@@ -46,7 +46,7 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
     @Override
     public TypeInfo getType() {
 
-        final TypeInfo ownerType = this.getOwnerEntityUsage().getType();
+        final TypeInfo ownerType = this.getOwnerExpression().getType();
 
         // 親が配列型である，と解決できている場合
         if (ownerType instanceof ArrayTypeInfo) {
@@ -66,12 +66,12 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
     }
 
     /**
-     * この要素の親，つまり配列型のエンティティ使用を返す
+     * この要素の親，つまり配列型の式を返す
      * 
      * @return この要素の親を返す
      */
-    public EntityUsageInfo getOwnerEntityUsage() {
-        return this.ownerEntityUsage;
+    public ExpressionInfo getOwnerExpression() {
+        return this.ownerExpression;
     }
 
     /**
@@ -92,12 +92,35 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         final Set<VariableUsageInfo<?>> variableUsages = new HashSet<VariableUsageInfo<?>>(
                 this.indexExpression.getVariableUsages());
-        variableUsages.addAll(this.getOwnerEntityUsage().getVariableUsages());
+        variableUsages.addAll(this.getOwnerExpression().getVariableUsages());
         return Collections.unmodifiableSet(variableUsages);
         //return this.getOwnerEntityUsage().getVariableUsages();
     }
 
-    private final EntityUsageInfo ownerEntityUsage;
+    /**
+     * この配列要素使用のテキスト表現（String型）を返す
+     * 
+     * @return この配列要素使用のテキスト表現
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        final ExpressionInfo expression = this.getOwnerExpression();
+        sb.append(expression.getText());
+
+        sb.append("[");
+
+        final ExpressionInfo indexExpression = this.getIndexExpression();
+        sb.append(indexExpression.getText());
+
+        sb.append("]");
+
+        return sb.toString();
+    }
+
+    private final ExpressionInfo ownerExpression;
 
     private final ExpressionInfo indexExpression;
 }

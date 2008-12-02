@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.SortedSet;
+
+
 /**
  * synchronized ブロックを表すクラス
  * 
@@ -24,5 +27,33 @@ public final class SynchronizedBlockInfo extends BlockInfo {
             final CallableUnitInfo ownerMethod, final LocalSpaceInfo outerSpace,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         super(ownerClass, ownerMethod, outerSpace, fromLine, fromColumn, toLine, toColumn);
+    }
+
+    /**
+     * このsynchronized文のテキスト表現（String型）を返す
+     * 
+     * @return このsynchronized文のテキスト表現（String型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        sb.append("synchronized (");
+
+        sb.append("UNDER IMPLEMENTATION");
+
+        sb.append(") {");
+        sb.append(System.getProperty("line.separator"));
+
+        final SortedSet<StatementInfo> statements = this.getStatements();
+        for (final StatementInfo statement : statements) {
+            sb.append(statement.getText());
+            sb.append(System.getProperty("line.separator"));
+        }
+
+        sb.append("}");
+
+        return sb.toString();
     }
 }

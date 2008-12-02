@@ -57,5 +57,25 @@ public final class TypeParameterUsageInfo extends EntityUsageInfo {
         return VariableUsageInfo.EmptySet;
     }
 
+    /**
+     * この型パラメータ使用のテキスト表現（型）を返す
+     * 
+     * @return この型パラメータ使用のテキスト表現（型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        sb.append("<");
+
+        final ExpressionInfo expression = this.getExpression();
+        sb.append(expression.getText());
+
+        sb.append(">");
+
+        return sb.toString();
+    }
+
     private final ExpressionInfo expression;
 }

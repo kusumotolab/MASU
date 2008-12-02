@@ -117,6 +117,31 @@ public final class MethodCallInfo extends CallInfo {
     }
 
     /**
+     * このメソッド呼び出しのテキスト表現（型）を返す
+     * 
+     * @return このメソッド呼び出しのテキスト表現（型）を返す
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        final MethodInfo method = this.getCallee();
+        sb.append(method.getMethodName());
+
+        sb.append("(");
+
+        for (final ExpressionInfo argument : this.getArguments()) {
+            sb.append(argument.getText());
+            sb.append(",");
+        }
+
+        sb.append(")");
+
+        return sb.toString();
+    }
+
+    /**
      * このメソッド呼び出しの親，つまりこのメソッド呼び出しがくっついている要素を返す
      * 
      * @return このメソッド呼び出しの親

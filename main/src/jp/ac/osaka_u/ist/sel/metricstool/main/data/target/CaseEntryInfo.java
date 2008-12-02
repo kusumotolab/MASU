@@ -24,7 +24,7 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public CaseEntryInfo(final SwitchBlockInfo ownerSwitchBlock, final EntityUsageInfo label,
+    public CaseEntryInfo(final SwitchBlockInfo ownerSwitchBlock, final ExpressionInfo label,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
@@ -76,6 +76,26 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
+     * このcaseエントリのテキスト表現（String型）を返す
+     * 
+     * @return このcaseエントリのテキスト表現（String型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        sb.append("case ");
+
+        final ExpressionInfo expression = this.getLabel();
+        sb.append(expression.getText());
+
+        sb.append(":");
+
+        return sb.toString();
+    }
+
+    /**
      * 比較する
      */
     @Override
@@ -120,7 +140,7 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
      * 
      * @return この case エントリのラベル
      */
-    public final EntityUsageInfo getLabel() {
+    public final ExpressionInfo getLabel() {
         return this.label;
     }
 
@@ -132,5 +152,5 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     /**
      * この case エントリのラベルを保存する変数
      */
-    private EntityUsageInfo label;
+    private ExpressionInfo label;
 }

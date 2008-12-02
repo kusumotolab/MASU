@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.SortedSet;
+
+
 /**
  * catch ブロック情報を表すクラス
  * 
@@ -40,6 +43,30 @@ public final class CatchBlockInfo extends BlockInfo {
      */
     public TryBlockInfo getOwnerTryBlock() {
         return this.ownerTryBlock;
+    }
+
+    /**
+     * このcatch　文のテキスト表現（String型）を返す
+     * 
+     * @return このcatch　文のテキスト表現（String型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        sb.append("catch (UNDER IMPLEMENTATION) {");
+        sb.append(System.getProperty("line.separator"));
+
+        final SortedSet<StatementInfo> statements = this.getStatements();
+        for (final StatementInfo statement : statements) {
+            sb.append(statement.getText());
+            sb.append(System.getProperty("line.separator"));
+        }
+
+        sb.append("}");
+
+        return sb.toString();
     }
 
     private final TryBlockInfo ownerTryBlock;

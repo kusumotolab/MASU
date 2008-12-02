@@ -48,6 +48,23 @@ public class ExpressionStatementInfo extends SingleStatementInfo {
     }
     
     /**
+     * この式文のテキスト表現（型）を返す
+     * 
+     * @return この式文のテキスト表現（型）
+     */
+    @Override
+    public String getText(){
+        
+        final StringBuilder sb = new StringBuilder();
+        
+        final ExpressionInfo expression = this.getExpression();
+        sb.append(expression.getText());
+        
+        sb.append(";");
+        
+        return sb.toString();
+    }
+    /**
      * 式文を構成する式を保存するための変数
      */
     private final ExpressionInfo expression;

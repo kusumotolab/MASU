@@ -46,7 +46,19 @@ public final class NullUsageInfo extends EntityUsageInfo {
     }
 
     /**
+     * null使用のテキスト表現（型）を返す
+     * 
+     * @return null使用のテキスト表現（型）
+     */
+    @Override
+    public String getText() {
+        return NULLSTRING;
+    }
+
+    /**
      * null使用の型を保存するための定数
      */
     private static final TypeInfo NULLTYPE = UnknownTypeInfo.getInstance();
+
+    private static final String NULLSTRING = new String("null");
 }
