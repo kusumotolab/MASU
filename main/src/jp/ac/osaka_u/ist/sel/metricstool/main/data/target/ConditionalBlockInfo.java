@@ -35,9 +35,9 @@ public abstract class ConditionalBlockInfo extends BlockInfo {
      * 
      * @return　この条件付ブロックの条件式
      */
-    public final ConditionInfo getConditionalExpression() {
-        return this.conditionalExpression;
+    public final ConditionInfo getCondition() {
+        return this.condition;
     }
 
-    private ConditionInfo conditionalExpression;
+    private ConditionInfo condition;
 }

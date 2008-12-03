@@ -57,7 +57,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
 
         sb.append(" ; ");
 
-        final ConditionInfo condition = this.getConditionalExpression();
+        final ConditionInfo condition = this.getCondition();
         sb.append(condition.getText());
 
         sb.append(" ; ");

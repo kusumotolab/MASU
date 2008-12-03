@@ -34,11 +34,7 @@ public class ForBlockBuilder extends ConditionalBlockBuilder<ForBlockInfo, Unres
     public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
         super.stateChangend(event);
         final StateChangeEventType type = event.getType();
-        /*if (type.equals(INNER_BLOCK_STATE_CHANGE.ENTER_CLAUSE)) {
-            //startConditionalClause(event.getTrigger());
-        } else if (type.equals(INNER_BLOCK_STATE_CHANGE.EXIT_CLAUSE)) {
-            registerConditionalExpression();
-        }*/
+
         if (type.equals(FOR_BLOCK_STATE_CHANGE.ENTER_FOR_INIT)) {
             this.conditionBuilder.clearBuiltData();
             this.conditionBuilder.activate();

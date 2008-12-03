@@ -36,7 +36,7 @@ public final class WhileBlockInfo extends ConditionalBlockInfo {
 
         sb.append("while (");
 
-        final ConditionInfo condition = this.getConditionalExpression();
+        final ConditionInfo condition = this.getCondition();
         sb.append(condition.getText());
 
         sb.append(") {");

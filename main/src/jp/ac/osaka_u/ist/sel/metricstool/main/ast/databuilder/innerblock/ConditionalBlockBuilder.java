@@ -48,18 +48,18 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
         final StateChangeEventType type = event.getType();
 
         if (type.equals(INNER_BLOCK_STATE_CHANGE.ENTER_CLAUSE)) {
-            this.startConditionalExpression();
+            this.startCondition();
         } else if (type.equals(INNER_BLOCK_STATE_CHANGE.EXIT_CLAUSE)) {
-            this.endConditionalExpression();
+            this.endCondition();
         }
     }
 
-    protected void startConditionalExpression() {
+    protected void startCondition() {
         this.conditionBuilder.clearBuiltData();
         this.conditionBuilder.activate();
     }
 
-    protected void endConditionalExpression() {
+    protected void endCondition() {
         final T buildingBlock = this.getBuildingBlock();
         final List<UnresolvedConditionInfo<? extends ConditionInfo>> conditionList = null != this.conditionBuilder ? this.conditionBuilder
                 .getLastBuildData()
@@ -69,12 +69,12 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
                 && buildingBlock == this.buildManager.getCurrentBlock() && null != conditionList
                 && 0 < conditionList.size()) {
 
-            final UnresolvedConditionInfo<? extends ConditionInfo> conditionalExpression = conditionList
+            final UnresolvedConditionInfo<? extends ConditionInfo> condition = conditionList
                     .get(0);
 
-            assert null != conditionalExpression || buildingBlock instanceof UnresolvedForBlockInfo : "Illegal state; conditional expression is not found.";
+            assert null != condition || buildingBlock instanceof UnresolvedForBlockInfo : "Illegal state; conditional expression is not found.";
 
-            buildingBlock.setConditionalExpression(conditionalExpression);
+            buildingBlock.setCondition(condition);
 
             //assert buildingBlock.getStatements().size() <= 1 : "Illegal state: the number of conditional statements is more than one.";
 
@@ -83,7 +83,7 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
                         .getStatements().iterator().next();
                 assert statement instanceof UnresolvedVariableDeclarationStatementInfo : "Illegal state: the conditioanl statement is not a variable declaration.";
                 if (statement instanceof UnresolvedVariableDeclarationStatementInfo) {
-                    buildingBlock.setConditionalExpression((UnresolvedVariableDeclarationStatementInfo) statement);
+                    buildingBlock.setCondition((UnresolvedVariableDeclarationStatementInfo) statement);
                 }
             }*/
 

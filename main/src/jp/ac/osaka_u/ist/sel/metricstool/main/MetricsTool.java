@@ -1428,17 +1428,17 @@ public class MetricsTool {
         if (localSpace instanceof ConditionalBlockInfo) {
             final UnresolvedConditionalBlockInfo<?> unresolvedConditionalBlock = (UnresolvedConditionalBlockInfo<?>) unresolvedLocalSpace;
 
-            if (null != unresolvedConditionalBlock.getConditionalExpression()) {
-                final ConditionInfo conditionalExpression = unresolvedConditionalBlock
-                        .getConditionalExpression().resolve(ownerClass, ownerMethod,
+            if (null != unresolvedConditionalBlock.getCondition()) {
+                final ConditionInfo condition = unresolvedConditionalBlock
+                        .getCondition().resolve(ownerClass, ownerMethod,
                                 classInfoManager, fieldInfoManager, methodInfoManager);
 
                 try {
                     Class cls = Class
                             .forName("jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo");
-                    Field filed = cls.getDeclaredField("conditionalExpression");
+                    Field filed = cls.getDeclaredField("condition");
                     filed.setAccessible(true);
-                    filed.set(localSpace, conditionalExpression);
+                    filed.set(localSpace, condition);
                 } catch (ClassNotFoundException e) {
                     assert false : "Illegal state: ConditionalBlockInfo is not found";
                 } catch (NoSuchFieldException e) {

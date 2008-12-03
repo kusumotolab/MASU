@@ -29,24 +29,24 @@ public abstract class UnresolvedConditionalBlockInfo<T extends ConditionalBlockI
      * –¢‰ğŒˆğŒ®‚ğ•Ô‚·
      * @return –¢‰ğŒˆğŒ®
      */
-    public final UnresolvedConditionInfo<? extends ConditionInfo> getConditionalExpression() {
-        return this.conditionalExpression;
+    public final UnresolvedConditionInfo<? extends ConditionInfo> getCondition() {
+        return this.condition;
     }
 
     /**
      * –¢‰ğŒˆğŒ®‚ğİ’è‚·‚é
-     * @param conditionalExpression –¢‰ğŒˆğŒ®
+     * @param condition –¢‰ğŒˆğŒ®
      */
-    public final void setConditionalExpression(
-            final UnresolvedConditionInfo<? extends ConditionInfo> conditionalExpression) {
+    public final void setCondition(
+            final UnresolvedConditionInfo<? extends ConditionInfo> condition) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         
-        this.conditionalExpression = conditionalExpression;
+        this.condition = condition;
     }
 
     /**
      * –¢‰ğŒˆğŒ®‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
      */
-    private UnresolvedConditionInfo<? extends ConditionInfo> conditionalExpression;
+    private UnresolvedConditionInfo<? extends ConditionInfo> condition;
 }
