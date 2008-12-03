@@ -40,7 +40,7 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
     }
 
     @Override
-    public int compareTo(ExcutableElement o) {
+    public int compareTo(ExecutableElement o) {
         int result = super.compareTo(o);
 
         if (0 == result && o instanceof VariableDeclarationStatementInfo) {

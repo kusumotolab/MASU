@@ -3,7 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import java.util.Set;
 
 
-public interface ExcutableElement extends Position, Comparable<ExcutableElement> {
+public interface ExecutableElement extends Position, Comparable<ExecutableElement> {
 
     /**
      * ®“à‚Å‚Ì•Ï”‚Ìg—p‚ğ•Ô‚·

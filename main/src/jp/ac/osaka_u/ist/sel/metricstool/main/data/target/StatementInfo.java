@@ -5,7 +5,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author higo
  *
  */
-public interface StatementInfo extends ExcutableElement {
+public interface StatementInfo extends ExecutableElement {
 
     /**
      * 文のテキスト表現(String型)を返す

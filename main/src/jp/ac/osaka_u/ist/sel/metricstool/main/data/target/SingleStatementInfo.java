@@ -30,7 +30,7 @@ public abstract class SingleStatementInfo implements StatementInfo {
     }
 
     @Override
-    public int compareTo(ExcutableElement o) {
+    public int compareTo(ExecutableElement o) {
 
         if (null == o) {
             throw new NullPointerException();
