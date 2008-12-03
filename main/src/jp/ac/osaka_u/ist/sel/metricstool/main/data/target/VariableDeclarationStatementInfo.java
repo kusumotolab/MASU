@@ -122,6 +122,14 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
 
         return sb.toString();
     }
+    
+    /**
+     * 宣言されている変数の型を返す
+     * @return 宣言されている変数の型
+     */
+    public TypeInfo getType() {
+        return this.variableDeclaration.getType();
+    }
 
     /**
      * 宣言されている変数を表すフィールド
