@@ -80,10 +80,13 @@ public final class CastUsageInfo extends EntityUsageInfo {
 
         sb.append("(");
 
-        final ExpressionInfo expression = this.getCastedUsage();
-        sb.append(expression.getText());
+        final TypeInfo type = this.getType();
+        sb.append(type.getTypeName());
 
         sb.append(")");
+
+        final ExpressionInfo expression = this.getCastedUsage();
+        sb.append(expression.getText());
 
         return sb.toString();
     }
