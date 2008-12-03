@@ -100,7 +100,8 @@ public class SCDetector extends MetricsTool {
             if (1 < statements.size()) {
                 System.out.println("-----BEGIN-----");
                 for (final StatementInfo statement : statements) {
-                    System.out.println(statement.getText());
+                    final String text = statement.getText();
+                    System.out.println(text);
                 }
                 System.out.println("----- END -----");
             }

@@ -187,6 +187,10 @@ public class Conversion {
 
             sb.append("(TYPE)");
 
+            final ExpressionInfo castedExpression = ((CastUsageInfo) expression).getCastedUsage();
+            final String castedExpressionString = Conversion.getNormalizedString(castedExpression);
+            sb.append(castedExpressionString);
+
         } else if (expression instanceof ClassReferenceInfo) {
 
             sb.append("TYPE");
