@@ -1,7 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 
 /**
@@ -67,8 +70,12 @@ public class TernaryOperationInfo extends EntityUsageInfo {
 
     @Override
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
-        // TODO Auto-generated method stub
-        return null;
+
+        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
+        variableUsages.addAll(this.getConditionalExpression().getVariableUsages());
+        variableUsages.addAll(this.getTrueExpression().getVariableUsages());
+        variableUsages.addAll(this.getFalseExpression().getVariableUsages());
+        return Collections.unmodifiableSortedSet(variableUsages);
     }
 
     /**
