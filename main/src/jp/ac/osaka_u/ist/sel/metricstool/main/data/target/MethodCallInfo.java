@@ -23,25 +23,25 @@ public final class MethodCallInfo extends CallInfo {
      * 呼び出されるメソッドを与えてオブジェクトを初期化
      * 
      * @param ownerType メソッド呼び出しの親の型
-     * @param ownerUsage メソッド呼び出しの親エンティティ
+     * @param ownerExpression メソッド呼び出しの親エンティティ
      * @param callee 呼び出されているメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public MethodCallInfo(final TypeInfo ownerType, final EntityUsageInfo ownerUsage,
+    public MethodCallInfo(final TypeInfo ownerType, final ExpressionInfo ownerExpression,
             final MethodInfo callee, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
-        if ((null == ownerType) || (null == callee) || (null == ownerUsage)) {
+        if ((null == ownerType) || (null == callee) || (null == ownerExpression)) {
             throw new NullPointerException();
         }
 
         this.ownerType = ownerType;
-        this.ownerUsage = ownerUsage;
+        this.ownerExpression = ownerExpression;
         this.callee = callee;
     }
 
@@ -112,7 +112,7 @@ public final class MethodCallInfo extends CallInfo {
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>(
                 super.getVariableUsages());
-        variableUsages.addAll(this.ownerUsage.getVariableUsages());
+        variableUsages.addAll(this.ownerExpression.getVariableUsages());
         return Collections.unmodifiableSortedSet(variableUsages);
     }
 
@@ -126,6 +126,11 @@ public final class MethodCallInfo extends CallInfo {
 
         final StringBuilder sb = new StringBuilder();
 
+        final ExpressionInfo ownerExpression = this.getOwnerExpression();
+        sb.append(ownerExpression.getText());
+
+        sb.append(".");
+        
         final MethodInfo method = this.getCallee();
         sb.append(method.getMethodName());
 
@@ -146,13 +151,13 @@ public final class MethodCallInfo extends CallInfo {
      * 
      * @return このメソッド呼び出しの親
      */
-    public final EntityUsageInfo getOwnerUsage() {
-        return this.ownerUsage;
+    public final ExpressionInfo getOwnerExpression() {
+        return this.ownerExpression;
     }
 
     private final TypeInfo ownerType;
 
     private final MethodInfo callee;
 
-    private final EntityUsageInfo ownerUsage;
+    private final ExpressionInfo ownerExpression;
 }
