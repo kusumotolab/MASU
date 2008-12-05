@@ -163,6 +163,24 @@ public final class ClassInfoManager {
 
         return this.packageInfo.getClassInfos(namespace);
     }
+    
+    /**
+     * マネージャーの状態をリセットする
+     */
+    public final void reset(LANGUAGE language) {
+        this.externalClassInfos.clear();
+        this.targetClassInfos.clear();
+        this.packageInfo = new PackageInfo("DEFAULT", 0);
+        
+        // java言語の場合は，暗黙にインポートされるクラスを追加しておく
+        if (language.equals(LANGUAGE.JAVA15)
+                || language.equals(LANGUAGE.JAVA14)
+                || language.equals(LANGUAGE.JAVA13)) {
+            for (int i = 0; i < ExternalClassInfo.JAVA_PREIMPORTED_CLASSES.length; i++) {
+                this.add(ExternalClassInfo.JAVA_PREIMPORTED_CLASSES[i]);
+            }
+        }
+    }
 
     /**
      * エラーメッセージ出力用のプリンタ
@@ -212,7 +230,7 @@ public final class ClassInfoManager {
     /**
      * クラス情報を階層構造で保つための変数
      */
-    private final PackageInfo packageInfo;
+    private PackageInfo packageInfo;
 
     /**
      * クラス一覧を階層的名前空間（パッケージ階層）で持つデータクラス
