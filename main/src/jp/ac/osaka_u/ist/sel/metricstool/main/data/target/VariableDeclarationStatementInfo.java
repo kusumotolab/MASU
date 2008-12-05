@@ -62,6 +62,14 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
     public final LocalVariableInfo getDeclaredLocalVariable() {
         return this.variableDeclaration.getUsedVariable();
     }
+    
+    /**
+     * 宣言時の変数使用を返す
+     * @return 宣言時の変数使用
+     */
+    public final LocalVariableUsageInfo getDeclaration() {
+        return this.variableDeclaration;
+    }
 
     /**
      * 宣言されている変数の初期化式を返す
