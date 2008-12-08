@@ -165,7 +165,7 @@ public final class MethodInfoManager {
         this.targetConstructorInfos = new TreeSet<TargetConstructorInfo>();
         this.externalConstructorInfos = new TreeSet<ExternalConstructorInfo>();
     }
-
+    
     /**
      * 
      * シングルトンパターンを実装するための変数．

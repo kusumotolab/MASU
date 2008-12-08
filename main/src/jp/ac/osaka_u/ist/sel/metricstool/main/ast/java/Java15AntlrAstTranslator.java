@@ -184,6 +184,9 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
                 }
             };
             break;
+        case Java15TokenTypes.ABSTRACT:
+            result = new ModifierToken("abstract");
+            break;
         case Java15TokenTypes.FINAL:
             result = new ModifierToken("final");
             break;

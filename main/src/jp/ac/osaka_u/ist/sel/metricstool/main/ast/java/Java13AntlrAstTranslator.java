@@ -23,6 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java13Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java13TokenTypes;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14Parser;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15TokenTypes;
 import antlr.collections.AST;
 
 
@@ -184,6 +185,9 @@ public class Java13AntlrAstTranslator implements AstTokenTranslator<AST> {
                     return true;
                 }
             };
+            break;
+        case Java13TokenTypes.ABSTRACT:
+            result = new ModifierToken("abstract");
             break;
         case Java13TokenTypes.FINAL:
             result = new ModifierToken("final");
