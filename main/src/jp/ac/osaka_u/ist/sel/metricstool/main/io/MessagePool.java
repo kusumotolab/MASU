@@ -61,7 +61,7 @@ public class MessagePool {
      * リスナーを削除する
      * @param listener 削除するリスナー
      */
-    public void revmoeMessageListener(final MessageListener listener) {
+    public void removeMessageListener(final MessageListener listener) {
         if (null != listener) {
             synchronized (this) {
                 this.listeners.remove(listener);
