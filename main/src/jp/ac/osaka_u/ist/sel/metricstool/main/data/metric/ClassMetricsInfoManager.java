@@ -116,6 +116,13 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
     public String getMessageSourceName() {
         return this.getClass().getName();
     }
+    
+    /**
+     * メトリクス情報をクリア
+     */
+    public void clear() {
+        this.classMetricsInfos.clear();
+    }
 
     /**
      * クラスメトリクスマネージャのオブジェクトを生成する． シングルトンパターンを用いているため，private がついている．

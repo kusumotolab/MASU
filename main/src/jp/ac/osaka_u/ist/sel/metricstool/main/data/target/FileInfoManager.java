@@ -65,7 +65,14 @@ public final class FileInfoManager {
     public int getFileCount() {
         return this.fileInfos.size();
     }
-
+    
+    /**
+     * ファイル情報をクリア
+     */
+    public void clear() {
+        this.fileInfos.clear();
+    }
+    
     /**
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．

@@ -154,6 +154,16 @@ public final class MethodInfoManager {
     public int getExternalConstructorCount() {
         return this.externalConstructorInfos.size();
     }
+    
+    /**
+     * メソッド情報をクリア
+     */
+    public void clear() {
+        this.targetMethodInfos.clear();
+        this.targetConstructorInfos.clear();
+        this.externalMethodInfos.clear();
+        this.externalConstructorInfos.clear();
+    }
 
     /**
      * 

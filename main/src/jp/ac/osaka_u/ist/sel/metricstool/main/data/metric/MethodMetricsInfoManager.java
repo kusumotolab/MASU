@@ -120,6 +120,13 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
     public String getMessageSourceName() {
         return this.getClass().getName();
     }
+    
+    /**
+     * メトリクス情報をクリア
+     */
+    public void clear() {
+        this.methodMetricsInfos.clear();
+    }
 
     /**
      * メソッドメトリクスマネージャのオブジェクトを生成する． シングルトンパターンを用いているため，private がついている．

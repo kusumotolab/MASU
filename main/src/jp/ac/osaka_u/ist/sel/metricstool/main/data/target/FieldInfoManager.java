@@ -91,6 +91,14 @@ public final class FieldInfoManager {
     public int getExternalFieldCount() {
         return this.externalFieldInfos.size();
     }
+    
+    /**
+     * フィールド情報をクリア
+     */
+    public void clear() {
+        this.targetFieldInfos.clear();
+        this.externalFieldInfos.clear();
+    }
 
     /**
      * 

@@ -59,6 +59,13 @@ public final class TargetFileManager implements Iterable<TargetFile> {
     }
     
     /**
+     * 対象ファイルをクリア
+     */
+    public void clear() {
+        this.targetFiles.clear();
+    }
+    
+    /**
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている
      * 以前は HashSet を用いていたが，同じディレクトリのファイルはまとめて返すほうがよいので，TreeSet に変更した．

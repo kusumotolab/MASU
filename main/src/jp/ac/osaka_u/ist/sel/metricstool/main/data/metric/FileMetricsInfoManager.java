@@ -115,6 +115,13 @@ public final class FileMetricsInfoManager implements Iterable<FileMetricsInfo>, 
     public String getMessageSourceName() {
         return this.getClass().getName();
     }
+    
+    /**
+     * メトリクス情報をクリア
+     */
+    public void clear() {
+        this.fileMetricsInfos.clear();
+    }
 
     /**
      * ファイルメトリクスマネージャのオブジェクトを生成する． シングルトンパターンを用いているため，private がついている．
