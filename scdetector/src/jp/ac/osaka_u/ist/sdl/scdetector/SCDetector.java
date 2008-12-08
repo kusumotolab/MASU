@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,6 +14,9 @@ import java.util.TreeSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -102,17 +104,17 @@ public class SCDetector extends MetricsTool {
         }
 
         // 文単位で正規化を行う
-        final Map<Integer, List<StatementInfo>> normalizedStatementHashes = new HashMap<Integer, List<StatementInfo>>();
+        final Map<Integer, List<StatementInfo>> normalizedStatements = new HashMap<Integer, List<StatementInfo>>();
         for (final TargetMethodInfo method : MethodInfoManager.getInstance().getTargetMethodInfos()) {
-            SCDetector.makeNormalizedStatementHashes(method, normalizedStatementHashes);
+            SCDetector.makeNormalizedStatementHashes(method, normalizedStatements);
         }
 
-        // 文単位のハッシュのキャッシュを作成
-        final Map<StatementInfo, Integer> statementHashCache = new HashMap<StatementInfo, Integer>();
-        for (final Integer hash : normalizedStatementHashes.keySet()) {
-            final List<StatementInfo> statements = normalizedStatementHashes.get(hash);
+        // 文単位のハッシュデータを作成
+        final Map<StatementInfo, Integer> statementHash = new HashMap<StatementInfo, Integer>();
+        for (final Integer hash : normalizedStatements.keySet()) {
+            final List<StatementInfo> statements = normalizedStatements.get(hash);
             for (final StatementInfo statement : statements) {
-                statementHashCache.put(statement, hash);
+                statementHash.put(statement, hash);
             }
 
         }
@@ -132,11 +134,11 @@ public class SCDetector extends MetricsTool {
         }*/
 
         int index = 0;
-        for (final Integer hash : normalizedStatementHashes.keySet()) {
+        for (final Integer hash : normalizedStatements.keySet()) {
 
-            System.out.println("===" + index++ + "/" + normalizedStatementHashes.size() + "===");
+            System.out.println("===" + index++ + "/" + normalizedStatements.size() + "===");
 
-            final List<StatementInfo> statements = normalizedStatementHashes.get(hash);
+            final List<StatementInfo> statements = normalizedStatements.get(hash);
 
             System.out.println(statements.size());
 
@@ -149,23 +151,36 @@ public class SCDetector extends MetricsTool {
 
                         final ClonePairInfo clonePair = new ClonePairInfo(statementA, statementB);
 
+                        final Set<VariableInfo<?>> usedVariableHashesA = new HashSet<VariableInfo<?>>();
+                        final Set<VariableInfo<?>> usedVariableHashesB = new HashSet<VariableInfo<?>>();
+
                         SCDetector.performBackwordSlice((SingleStatementInfo) statementA,
                                 (SingleStatementInfo) statementB, clonePair, variableUsageHashes,
-                                statementHashCache);
+                                statementHash, usedVariableHashesA, usedVariableHashesB);
 
                         if (1 < clonePair.size()) {
                             System.out.println("-----BEGIN-----");
                             System.out.println("-----  A  -----");
-                            final SortedSet<StatementInfo> cloneA = clonePair.getCloneA();
-                            final SortedSet<StatementInfo> cloneB = clonePair.getCloneB();
-                            for (final StatementInfo statement : cloneA) {
-                                System.out.println(statement.getFromLine() + ":"
-                                        + statement.getText());
+                            final SortedSet<ExecutableElement> cloneA = clonePair.getCloneA();
+                            final SortedSet<ExecutableElement> cloneB = clonePair.getCloneB();
+                            for (final ExecutableElement statement : cloneA) {
+                                if (statement instanceof StatementInfo) {
+                                    System.out.println(statement.getFromLine() + ":"
+                                            + ((StatementInfo) statement).getText());
+                                } else if (statement instanceof ConditionInfo) {
+                                    System.out.println(statement.getFromLine() + ":"
+                                            + ((ConditionInfo) statement).getText());
+                                }
                             }
                             System.out.println("-----  B  -----");
-                            for (final StatementInfo statement : cloneB) {
-                                System.out.println(statement.getFromLine() + ":"
-                                        + statement.getText());
+                            for (final ExecutableElement statement : cloneB) {
+                                if (statement instanceof StatementInfo) {
+                                    System.out.println(statement.getFromLine() + ":"
+                                            + ((StatementInfo) statement).getText());
+                                } else if (statement instanceof ConditionInfo) {
+                                    System.out.println(statement.getFromLine() + ":"
+                                            + ((ConditionInfo) statement).getText());
+                                }
                             }
                             System.out.println("----- END -----");
                         }
@@ -228,11 +243,90 @@ public class SCDetector extends MetricsTool {
     private static void performBackwordSlice(final SingleStatementInfo statementA,
             final SingleStatementInfo statementB, final ClonePairInfo clonePair,
             final Map<VariableInfo<?>, Set<StatementInfo>> variableUsageHashes,
-            final Map<StatementInfo, Integer> statementHashCache) {
+            final Map<StatementInfo, Integer> statementHash,
+            final Set<VariableInfo<?>> usedVariableHashesA,
+            final Set<VariableInfo<?>> usedVariableHashesB) {
 
         final Set<VariableUsageInfo<?>> variableUsagesA = statementA.getVariableUsages();
         final Set<VariableUsageInfo<?>> variableUsagesB = statementB.getVariableUsages();
 
+        final SortedSet<StatementInfo> relatedStatementsA = new TreeSet<StatementInfo>();
+        final SortedSet<StatementInfo> relatedStatementsB = new TreeSet<StatementInfo>();
+
+        for (final VariableUsageInfo<?> variableUsage : variableUsagesA) {
+            final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
+            if (!usedVariableHashesA.contains(usedVariable) && !(usedVariable instanceof FieldInfo)) {
+                relatedStatementsA.addAll(variableUsageHashes.get(usedVariable));
+                usedVariableHashesA.add(usedVariable);
+            }
+        }
+
+        for (final VariableUsageInfo<?> variableUsage : variableUsagesB) {
+            final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
+            if (!usedVariableHashesB.contains(usedVariable) && !(usedVariable instanceof FieldInfo)) {
+                relatedStatementsB.addAll(variableUsageHashes.get(usedVariable));
+                usedVariableHashesB.add(usedVariable);
+            }
+        }
+
+        final StatementInfo[] relatedStatementArrayA = relatedStatementsA
+                .toArray(new StatementInfo[] {});
+        final StatementInfo[] relatedStatementArrayB = relatedStatementsB
+                .toArray(new StatementInfo[] {});
+
+        for (int a = 0; a < relatedStatementArrayA.length; a++) {
+
+            if (relatedStatementArrayA[a] == statementA) {
+                break;
+            }
+
+            for (int b = 0; b < relatedStatementArrayB.length; b++) {
+
+                if (relatedStatementArrayB[b] == statementB) {
+                    break;
+                }
+
+                if ((relatedStatementArrayA[a] instanceof SingleStatementInfo)
+                        && (relatedStatementArrayB[b] instanceof SingleStatementInfo)) {
+
+                    final int hashA = statementHash.get(relatedStatementArrayA[a]);
+                    final int hashB = statementHash.get(relatedStatementArrayB[b]);
+                    if (hashA == hashB) {
+                        clonePair.add(relatedStatementArrayA[a], relatedStatementArrayB[b]);
+
+                        SCDetector.performBackwordSlice(
+                                (SingleStatementInfo) relatedStatementArrayA[a],
+                                (SingleStatementInfo) relatedStatementArrayB[b], clonePair,
+                                variableUsageHashes, statementHash, usedVariableHashesA,
+                                usedVariableHashesB);
+                    }
+
+                } else if ((relatedStatementArrayA[a] instanceof ConditionalBlockInfo)
+                        && (relatedStatementArrayB[b] instanceof ConditionalBlockInfo)) {
+
+                    final ConditionInfo conditionA = ((ConditionalBlockInfo) relatedStatementArrayA[a])
+                            .getCondition();
+                    final ConditionInfo conditionB = ((ConditionalBlockInfo) relatedStatementArrayB[b])
+                            .getCondition();
+
+                    final int hashA = conditionA.getText().hashCode();
+                    final int hashB = conditionB.getText().hashCode();
+
+                    if (hashA == hashB) {
+
+                        clonePair.add(conditionA, conditionB);
+
+                        SCDetector.performForwardSlice(
+                                (ConditionalBlockInfo) relatedStatementArrayA[a],
+                                (ConditionalBlockInfo) relatedStatementArrayB[b], clonePair,
+                                variableUsageHashes, statementHash, usedVariableHashesA,
+                                usedVariableHashesB);
+                    }
+                }
+            }
+        }
+
+        /*
         // Heuristisc: 両方の文における変数使用の数が同じときのみスライスを取る
         if (variableUsagesA.size() == variableUsagesB.size()) {
 
@@ -255,45 +349,95 @@ public class SCDetector extends MetricsTool {
                 if (!(usedVariableA instanceof FieldInfo) && !(usedVariableB instanceof FieldInfo)) {
                     relatedStatementsA.addAll(variableUsageHashes.get(usedVariableA));
                     relatedStatementsB.addAll(variableUsageHashes.get(usedVariableB));
+                }
+            }
+        }*/
+    }
 
-                    final StatementInfo[] relatedStatementArrayA = relatedStatementsA
-                            .toArray(new StatementInfo[] {});
-                    final StatementInfo[] relatedStatementArrayB = relatedStatementsB
-                            .toArray(new StatementInfo[] {});
+    private static void performForwardSlice(final ConditionalBlockInfo blockA,
+            final ConditionalBlockInfo blockB, final ClonePairInfo clonePair,
+            final Map<VariableInfo<?>, Set<StatementInfo>> variableUsageHashes,
+            final Map<StatementInfo, Integer> statementHash,
+            final Set<VariableInfo<?>> usedVariableHashesA,
+            final Set<VariableInfo<?>> usedVariableHashesB) {
 
-                    for (int a = 0; a < relatedStatementArrayA.length; a++) {
+        final ConditionInfo conditionA = blockA.getCondition();
+        final ConditionInfo conditionB = blockB.getCondition();
 
-                        if (relatedStatementArrayA[a] == statementA) {
-                            break;
-                        }
+        final Set<VariableUsageInfo<?>> variableUsagesA = conditionA.getVariableUsages();
+        final Set<VariableUsageInfo<?>> variableUsagesB = conditionB.getVariableUsages();
 
-                        for (int b = 0; b < relatedStatementArrayB.length; b++) {
+        final Set<VariableInfo<?>> usedVariablesA = new HashSet<VariableInfo<?>>();
+        for (final VariableUsageInfo<?> variableUsage : variableUsagesA) {
+            final VariableInfo<?> variable = variableUsage.getUsedVariable();
+            usedVariablesA.add(variable);
+        }
 
-                            if (relatedStatementArrayB[b] == statementB) {
-                                break;
-                            }
+        final Set<VariableInfo<?>> usedVariablesB = new HashSet<VariableInfo<?>>();
+        for (final VariableUsageInfo<?> variableUsage : variableUsagesB) {
+            final VariableInfo<?> variable = variableUsage.getUsedVariable();
+            usedVariablesB.add(variable);
+        }
 
-                            if ((relatedStatementArrayA[a] instanceof SingleStatementInfo)
-                                    && (relatedStatementArrayB[b] instanceof SingleStatementInfo)) {
+        final SortedSet<StatementInfo> innerStatementA = blockA.getStatements();
+        final SortedSet<StatementInfo> innerStatementB = blockB.getStatements();
 
-                                final int hashA = statementHashCache
-                                        .get((SingleStatementInfo) relatedStatementArrayA[a]);
-                                final int hashB = statementHashCache
-                                        .get((SingleStatementInfo) relatedStatementArrayB[b]);
-                                if (hashA == hashB) {
-                                    clonePair.add(relatedStatementArrayA[a],
-                                            relatedStatementArrayB[b]);
+        final StatementInfo[] innerStatementArrayA = innerStatementA
+                .toArray(new StatementInfo[] {});
+        final StatementInfo[] innerStatementArrayB = innerStatementB
+                .toArray(new StatementInfo[] {});
 
-                                    SCDetector.performBackwordSlice(
-                                            (SingleStatementInfo) relatedStatementArrayA[a],
-                                            (SingleStatementInfo) relatedStatementArrayB[b],
-                                            clonePair, variableUsageHashes, statementHashCache);
-                                }
-                            }
-                        }
+        for (int i = 0; i < innerStatementArrayA.length; i++) {
+            for (int j = 0; j < innerStatementArrayB.length; j++) {
+
+                if ((innerStatementArrayA[i] instanceof SingleStatementInfo)
+                        && (innerStatementArrayB[j] instanceof SingleStatementInfo)) {
+
+                    final int hashA = statementHash.get(innerStatementArrayA[i]);
+                    final int hashB = statementHash.get(innerStatementArrayB[j]);
+
+                    if ((hashA == hashB)
+                            && SCDetector.isUsed(usedVariablesA, innerStatementArrayA[i])
+                            && SCDetector.isUsed(usedVariablesB, innerStatementArrayB[j])) {
+                    }
+
+                } else if ((innerStatementArrayA[i] instanceof ConditionalBlockInfo)
+                        && (innerStatementArrayB[j] instanceof ConditionalBlockInfo)) {
+
+                    final ConditionInfo innerConditionA = ((ConditionalBlockInfo) innerStatementArrayA[i])
+                            .getCondition();
+                    final ConditionInfo innerConditionB = ((ConditionalBlockInfo) innerStatementArrayB[j])
+                            .getCondition();
+
+                    final int hashA = innerConditionA.getText().hashCode();
+                    final int hashB = innerConditionB.getText().hashCode();
+
+                    if ((hashA == hashB) && SCDetector.isUsed(usedVariablesA, innerConditionA)
+                            && SCDetector.isUsed(usedVariablesB, innerConditionB)) {
+                        clonePair.add(innerConditionA, innerConditionB);
+
+                        SCDetector.performForwardSlice(
+                                (ConditionalBlockInfo) innerStatementArrayA[i],
+                                (ConditionalBlockInfo) innerStatementArrayB[j], clonePair,
+                                variableUsageHashes, statementHash, usedVariableHashesA,
+                                usedVariableHashesB);
                     }
                 }
             }
         }
+    }
+
+    private static boolean isUsed(final Set<VariableInfo<?>> variables,
+            final ExecutableElement executableElement) {
+
+        final Set<VariableUsageInfo<?>> variableUsages = executableElement.getVariableUsages();
+        for (final VariableUsageInfo<?> variableUsage : variableUsages) {
+            final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
+            if (variables.contains(usedVariable)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
