@@ -132,19 +132,20 @@ public class MetricsTool {
         ArgumentProcessor.processArgs(args, parameterDefs, new Settings());
 
         // 情報表示用のリスナを作成
-        MessagePool.getInstance(MESSAGE_TYPE.OUT).addMessageListener(new MessageListener() {
+        final MessageListener outListener = new MessageListener() {
             public void messageReceived(MessageEvent event) {
                 System.out.print(event.getSource().getMessageSourceName() + " > "
                         + event.getMessage());
             }
-        });
-
-        MessagePool.getInstance(MESSAGE_TYPE.ERROR).addMessageListener(new MessageListener() {
+        };
+        final MessageListener errListener = new MessageListener() {
             public void messageReceived(MessageEvent event) {
-                System.err.print(event.getSource().getMessageSourceName() + " > "
+                System.out.print(event.getSource().getMessageSourceName() + " > "
                         + event.getMessage());
             }
-        });
+        };
+        MessagePool.getInstance(MESSAGE_TYPE.OUT).addMessageListener(outListener);
+        MessagePool.getInstance(MESSAGE_TYPE.ERROR).addMessageListener(errListener);
 
         // ヘルプモードと情報表示モードが同時にオンになっている場合は不正
         if (Settings.isHelpMode() && Settings.isDisplayMode()) {
@@ -167,6 +168,10 @@ public class MetricsTool {
                 metricsTool.doAnalysisMode();
             }
         }
+
+        // 情報表示用のリスナを削除
+        MessagePool.getInstance(MESSAGE_TYPE.OUT).removeMessageListener(outListener);
+        MessagePool.getInstance(MESSAGE_TYPE.ERROR).removeMessageListener(errListener);
     }
 
     /**
@@ -417,9 +422,9 @@ public class MetricsTool {
      * ロード済みのプラグインを実行する.
      */
     public void launchPlugins() {
-        
+
         out.println("calculating metrics.");
-        
+
         PluginLauncher launcher = new DefaultPluginLauncher();
         launcher.setMaximumLaunchingNum(1);
         launcher.launchAll(PluginManager.getInstance().getPlugins());
@@ -698,7 +703,7 @@ public class MetricsTool {
         writeMetrics();
 
         out.println("successfully finished.");
-        
+
         final long end = System.nanoTime();
 
         if (Settings.isVerbose()) {
@@ -921,13 +926,13 @@ public class MetricsTool {
         // 各未解決クラスに対して
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
-            
+
             final FileInfo fileInfo = unresolvedClassInfo.getFileInfo();
 
             //　クラス情報を解決
             final TargetClassInfo classInfo = unresolvedClassInfo.resolve(null, null,
                     classInfoManager, null, null);
-            
+
             fileInfo.addDefinedClass(classInfo);
 
             // 解決されたクラス情報を登録
@@ -1429,9 +1434,9 @@ public class MetricsTool {
             final UnresolvedConditionalBlockInfo<?> unresolvedConditionalBlock = (UnresolvedConditionalBlockInfo<?>) unresolvedLocalSpace;
 
             if (null != unresolvedConditionalBlock.getCondition()) {
-                final ConditionInfo condition = unresolvedConditionalBlock
-                        .getCondition().resolve(ownerClass, ownerMethod,
-                                classInfoManager, fieldInfoManager, methodInfoManager);
+                final ConditionInfo condition = unresolvedConditionalBlock.getCondition().resolve(
+                        ownerClass, ownerMethod, classInfoManager, fieldInfoManager,
+                        methodInfoManager);
 
                 try {
                     Class cls = Class
