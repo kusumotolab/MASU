@@ -1,9 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+import java.io.Serializable;
 import java.util.Set;
 
 
-public interface ExecutableElement extends Position, Comparable<ExecutableElement> {
+public interface ExecutableElement extends Position, Comparable<ExecutableElement>, Serializable{
 
     /**
      * ®“à‚Å‚Ì•Ï”‚Ìg—p‚ğ•Ô‚·

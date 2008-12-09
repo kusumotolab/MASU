@@ -1,13 +1,16 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.io.Serializable;
+
+
 /**
  * 「型」を表すインターフェース．
  * 
  * @author higo
  * 
  */
-public interface TypeInfo {
+public interface TypeInfo extends Serializable {
 
     /**
      * 型名を返す

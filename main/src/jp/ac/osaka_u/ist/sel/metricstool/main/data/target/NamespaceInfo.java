@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.io.Serializable;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.StringArrayComparator;
 
@@ -10,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.StringArrayComparator;
  * 
  * @author higo
  */
-public final class NamespaceInfo implements Comparable<NamespaceInfo> {
+public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializable {
 
     /**
      * 名前空間オブジェクトを初期化する．名前空間名が与えられなければならない．

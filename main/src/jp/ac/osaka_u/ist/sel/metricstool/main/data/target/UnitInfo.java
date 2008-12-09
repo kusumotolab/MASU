@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.io.Serializable;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -9,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  */
-public abstract class UnitInfo implements Position {
+public abstract class UnitInfo implements Position, Serializable {
 
     /**
      * 必要な情報を与えてオブジェクトを初期化

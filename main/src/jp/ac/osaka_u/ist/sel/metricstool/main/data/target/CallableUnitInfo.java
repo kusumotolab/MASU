@@ -190,5 +190,5 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     /**
      * 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しなどを保存するための変数
      */
-    private final Set<UnresolvedEntityUsageInfo<?>> unresolvedUsage;
+    private final transient Set<UnresolvedEntityUsageInfo<?>> unresolvedUsage;
 }

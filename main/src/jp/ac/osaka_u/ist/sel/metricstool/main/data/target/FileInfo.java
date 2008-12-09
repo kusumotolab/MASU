@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -15,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * ファイルの情報を表すクラス．
  */
-public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable {
+public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, Serializable {
 
     /**
      * 指定されたファイル名のオブジェクトを初期化する．

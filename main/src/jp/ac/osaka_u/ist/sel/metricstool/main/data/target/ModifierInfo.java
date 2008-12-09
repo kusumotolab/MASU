@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ import java.util.Map;
  * @author higo
  * 
  */
-public final class ModifierInfo {
+public final class ModifierInfo implements Serializable {
 
     /**
      * abstract ‚ğ•\‚·’è”
