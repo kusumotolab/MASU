@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sdl.scdetector.gui.MainWindow;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Option;
@@ -35,6 +37,9 @@ public class SCVisualizer {
             final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(cmd
                     .getOptionValue("i")));
             final Set<ClonePairInfo> clonePairs = (Set<ClonePairInfo>) ois.readObject();
+
+            final MainWindow mainWindow = new MainWindow(clonePairs);
+            mainWindow.setVisible(true);
 
         } catch (ParseException e) {
             e.printStackTrace();

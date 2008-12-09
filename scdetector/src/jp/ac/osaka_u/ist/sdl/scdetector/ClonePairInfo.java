@@ -17,6 +17,7 @@ public class ClonePairInfo implements Serializable {
 
         this.cloneA.add(statementA);
         this.cloneB.add(statementB);
+        this.id = number++;
     }
 
     public void add(final ExecutableElement statementA, final ExecutableElement statementB) {
@@ -36,7 +37,15 @@ public class ClonePairInfo implements Serializable {
         return this.cloneB;
     }
 
+    public int getID() {
+        return this.id;
+    }
+
     final private SortedSet<ExecutableElement> cloneA;
 
     final private SortedSet<ExecutableElement> cloneB;
+
+    final private int id;
+
+    private static int number = 0;
 }
