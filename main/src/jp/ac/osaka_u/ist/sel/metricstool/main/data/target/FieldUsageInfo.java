@@ -83,9 +83,13 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
      */
     @Override
     public SortedSet<VariableUsageInfo<?>> getVariableUsages() {
-        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>(
-                super.getVariableUsages());
-        variableUsages.addAll(getOwnerUsage().getVariableUsages());
+
+        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
+        variableUsages.addAll(super.getVariableUsages());
+
+        final ExpressionInfo ownerExpression = this.getOwnerUsage();
+        variableUsages.addAll(ownerExpression.getVariableUsages());
+
         return Collections.unmodifiableSortedSet(variableUsages);
     }
 

@@ -110,9 +110,13 @@ public final class MethodCallInfo extends CallInfo {
      */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
-        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>(
-                super.getVariableUsages());
-        variableUsages.addAll(this.ownerExpression.getVariableUsages());
+
+        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
+        variableUsages.addAll(super.getVariableUsages());
+
+        final ExpressionInfo ownerExpression = this.getOwnerExpression();
+        variableUsages.addAll(ownerExpression.getVariableUsages());
+
         return Collections.unmodifiableSortedSet(variableUsages);
     }
 
@@ -130,7 +134,7 @@ public final class MethodCallInfo extends CallInfo {
         sb.append(ownerExpression.getText());
 
         sb.append(".");
-        
+
         final MethodInfo method = this.getCallee();
         sb.append(method.getMethodName());
 
