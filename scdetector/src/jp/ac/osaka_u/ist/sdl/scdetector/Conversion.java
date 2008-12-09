@@ -29,9 +29,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SynchronizedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TernaryOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ThrowStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
 
@@ -77,10 +79,30 @@ public class Conversion {
         } else if (statement instanceof VariableDeclarationStatementInfo) {
 
             sb.append("TYPE");
-            final LocalVariableInfo variable = ((VariableDeclarationStatementInfo) statement)
-                    .getDeclaredLocalVariable();
 
-            sb.append("VARIABLE");
+            {
+                final LocalVariableInfo variable = ((VariableDeclarationStatementInfo) statement)
+                        .getDeclaredLocalVariable();
+                final TypeInfo variableType = variable.getType();
+
+                switch (Configuration.INSTANCE.getPV()) {
+                case 0: // 正規化レベル0，変数名をそのまま使う
+                    sb.append(variable.getName());
+                    break;
+
+                case 1: // 正規化レベル1，変数は型名に正規化する．変数名が異なっていても，型が同じであれば，クローンとして検出する
+                    sb.append(variableType.getTypeName());
+                    break;
+
+                case 2: // 正規化レベル2，全ての変数を同一字句に正規化する．
+                    sb.append("VARIABLE");
+                    break;
+
+                default:
+                    assert false : "Here shouldn't be reached!";
+                }
+            }
+
             if (((VariableDeclarationStatementInfo) statement).isInitialized()) {
 
                 sb.append("=");
@@ -136,7 +158,12 @@ public class Conversion {
 
         if (expression instanceof ArrayElementUsageInfo) {
 
-            sb.append("VARIABLE[");
+            final ExpressionInfo ownerExpression = ((ArrayElementUsageInfo) expression)
+                    .getOwnerExpression();
+            final String ownerExpressionString = Conversion.getNormalizedString(ownerExpression);
+            sb.append(ownerExpressionString);
+
+            sb.append("[");
             final ExpressionInfo indexExpression = ((ArrayElementUsageInfo) expression)
                     .getIndexExpression();
             final String indexExpressionString = Conversion.getNormalizedString(indexExpression);
@@ -252,7 +279,26 @@ public class Conversion {
 
         } else if (expression instanceof VariableUsageInfo) {
 
-            sb.append("VARIABLE");
+            final VariableInfo<?> usedVariable = ((VariableUsageInfo<?>) expression)
+                    .getUsedVariable();
+            final TypeInfo variableType = usedVariable.getType();
+
+            switch (Configuration.INSTANCE.getPV()) {
+            case 0: // 正規化レベル0，変数名をそのまま使う
+                sb.append(usedVariable.getName());
+                break;
+
+            case 1: // 正規化レベル1，変数は型名に正規化する．変数名が異なっていても，型が同じであれば，クローンとして検出する
+                sb.append(variableType.getTypeName());
+                break;
+
+            case 2: // 正規化レベル2，全ての変数を同一字句に正規化する．
+                sb.append("VARIABLE");
+                break;
+
+            default:
+                assert false : "Here shouldn't be reached!";
+            }
         }
 
         return sb.toString();

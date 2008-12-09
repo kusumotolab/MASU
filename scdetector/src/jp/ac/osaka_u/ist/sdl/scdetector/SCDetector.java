@@ -1,6 +1,11 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.NotSerializableException;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +37,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
+
 
 /**
  * プログラム依存グラフの同形なサブグラフ部分をコードクローンとして検出するプログラム
@@ -43,16 +55,63 @@ public class SCDetector extends MetricsTool {
 
     public static void main(String[] args) {
 
-        // 解析用設定
         try {
 
+            //　コマンドライン引数を処理
+            final Options options = new Options();
+
+            final Option d = new Option("d", "directory", true, "target directory");
+            d.setArgName("directory");
+            d.setArgs(1);
+            d.setRequired(true);
+            options.addOption(d);
+
+            final Option l = new Option("l", "language", true,
+                    "programming language of analyzed source code");
+            l.setArgName("language");
+            l.setArgs(1);
+            l.setRequired(true);
+            options.addOption(l);
+
+            final Option o = new Option("o", "output", true, "output file");
+            o.setArgName("output file");
+            o.setArgs(1);
+            o.setRequired(true);
+            options.addOption(o);
+
+            final Option pv = new Option("pv", true, "parameterize variables");
+            pv.setArgName("parameterization level");
+            pv.setArgs(1);
+            pv.setRequired(false);
+            pv.setType(Integer.class);
+            options.addOption(pv);
+
+            final CommandLineParser parser = new PosixParser();
+            final CommandLine cmd = parser.parse(options, args);
+
+            Configuration.INSTANCE.setD(cmd.getOptionValue("d"));
+            Configuration.INSTANCE.setL(cmd.getOptionValue("l"));
+            Configuration.INSTANCE.setO(cmd.getOptionValue("o"));
+
+            if (cmd.hasOption("pv")) {
+                Configuration.INSTANCE.setPV(Integer.valueOf(cmd.getOptionValue("pv")));
+            }
+
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+
+        try {
+
+            // 解析用設定
             final Class<?> settings = Settings.class;
             final Field language = settings.getDeclaredField("language");
             language.setAccessible(true);
-            language.set(null, "java");
+            language.set(null, Configuration.INSTANCE.getL());
             final Field directory = settings.getDeclaredField("targetDirectory");
             directory.setAccessible(true);
-            directory.set(null, args[0]);
+            directory.set(null, Configuration.INSTANCE.getD());
             final Field verbose = settings.getDeclaredField("verbose");
             verbose.setAccessible(true);
             verbose.set(null, Boolean.TRUE);
@@ -133,6 +192,8 @@ public class SCDetector extends MetricsTool {
             }
         }*/
 
+        final Set<ClonePairInfo> clonePairs = new HashSet<ClonePairInfo>();
+
         int index = 0;
         for (final Integer hash : normalizedStatements.keySet()) {
 
@@ -159,6 +220,8 @@ public class SCDetector extends MetricsTool {
                                 statementHash, usedVariableHashesA, usedVariableHashesB);
 
                         if (1 < clonePair.size()) {
+                            clonePairs.add(clonePair);
+
                             System.out.println("-----BEGIN-----");
                             System.out.println("-----  A  -----");
                             final SortedSet<ExecutableElement> cloneA = clonePair.getCloneA();
@@ -187,6 +250,18 @@ public class SCDetector extends MetricsTool {
                     }
                 }
             }
+        }
+
+        try {
+
+            final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(
+                    Configuration.INSTANCE.getO()));
+            oos.writeObject(clonePairs);
+
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
