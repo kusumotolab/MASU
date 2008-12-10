@@ -19,8 +19,8 @@ public class ExpressionStatementInfo extends SingleStatementInfo {
      * @param toLine èIóπçs
      * @param toColumn èIóπóÒ
      */
-    public ExpressionStatementInfo(final ExpressionInfo expression, final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
-        super(fromLine, fromColumn, toLine, toColumn);
+    public ExpressionStatementInfo(final LocalSpaceInfo ownerSpace, final ExpressionInfo expression, final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        super(ownerSpace, fromLine, fromColumn, toLine, toColumn);
 
         if(null == expression) {
             throw new IllegalArgumentException("expression is null");

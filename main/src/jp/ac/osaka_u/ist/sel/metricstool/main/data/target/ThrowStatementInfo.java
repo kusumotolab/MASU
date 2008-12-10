@@ -15,15 +15,16 @@ public class ThrowStatementInfo extends SingleStatementInfo {
     /**
      * throw文によって投げられる例外を表す式と位置情報を与えて初期化
      * 
+     * @param ownerSpace 文を直接所有する空間
      * @param thrownEpression throw文によって投げられる例外を表す式
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public ThrowStatementInfo(ExpressionInfo thrownEpression, int fromLine, int fromColumn,
+    public ThrowStatementInfo(final LocalSpaceInfo ownerSpace, ExpressionInfo thrownEpression, int fromLine, int fromColumn,
             int toLine, int toColumn) {
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerSpace, fromLine, fromColumn, toLine, toColumn);
 
         if (null == thrownEpression) {
             throw new IllegalArgumentException("thrownExpression is null");

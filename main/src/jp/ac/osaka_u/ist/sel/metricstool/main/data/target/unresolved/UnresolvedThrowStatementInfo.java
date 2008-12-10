@@ -5,6 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ThrowStatementInfo;
@@ -19,6 +20,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<ThrowStatementInfo> {
 
+    public UnresolvedThrowStatementInfo(final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace) {
+        super(ownerSpace);
+    }
+    
     @Override
     public ThrowStatementInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
@@ -41,10 +46,13 @@ public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
+        final LocalSpaceInfo ownerSpace = this.getOwnerSpace().resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+        
         final ExpressionInfo thrownExpression = this.thrownExpression.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        this.resolvedInfo = new ThrowStatementInfo(thrownExpression, fromLine, fromColumn, toLine,
+        this.resolvedInfo = new ThrowStatementInfo(ownerSpace, thrownExpression, fromLine, fromColumn, toLine,
                 toColumn);
 
         return this.resolvedInfo;

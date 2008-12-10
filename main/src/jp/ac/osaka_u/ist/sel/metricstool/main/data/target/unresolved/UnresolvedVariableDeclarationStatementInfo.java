@@ -32,6 +32,8 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
             final UnresolvedLocalVariableUsageInfo variableDeclaration,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> initializationExpression) {
 
+        super(variableDeclaration.getUsedVariable().getDefinitionUnit());
+
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         if (null == variableDeclaration) {
@@ -40,6 +42,7 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
 
         this.variableDeclaration = variableDeclaration;
         this.initializationExpression = initializationExpression;
+
     }
 
     @Override
@@ -64,8 +67,8 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalVariableUsageInfo variableDeclaration = this.variableDeclaration.resolve(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final LocalVariableUsageInfo variableDeclaration = this.variableDeclaration.resolve(
+                usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         if (null != this.initializationExpression) {
             final ExpressionInfo initializationExpression = this.initializationExpression.resolve(
                     usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -73,8 +76,8 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
             this.resolvedInfo = new VariableDeclarationStatementInfo(variableDeclaration,
                     initializationExpression, fromLine, fromColumn, toLine, toColumn);
         } else {
-            this.resolvedInfo = new VariableDeclarationStatementInfo(variableDeclaration, null, fromLine,
-                    fromColumn, toLine, toColumn);
+            this.resolvedInfo = new VariableDeclarationStatementInfo(variableDeclaration, null,
+                    fromLine, fromColumn, toLine, toColumn);
         }
 
         return this.resolvedInfo;

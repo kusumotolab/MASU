@@ -4,8 +4,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 
 
 /**
@@ -29,13 +31,14 @@ public class ExpressionStatementBuilder extends
     }
 
     @Override
-    protected UnresolvedExpressionStatementInfo buildStatement(final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    protected UnresolvedExpressionStatementInfo buildStatement(
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         final UnresolvedExpressionInfo<? extends ExpressionInfo> expression = this
                 .getLastBuiltExpression();
 
         final UnresolvedExpressionStatementInfo expressionStatement = new UnresolvedExpressionStatementInfo(
-                expression);
+                ownerSpace, expression);
         expressionStatement.setFromLine(fromLine);
         expressionStatement.setFromColumn(fromColumn);
         expressionStatement.setToLine(toLine);

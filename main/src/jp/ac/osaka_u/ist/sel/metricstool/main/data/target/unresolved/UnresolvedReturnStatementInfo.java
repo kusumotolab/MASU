@@ -5,6 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -20,6 +21,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedReturnStatementInfo extends
         UnresolvedSingleStatementInfo<ReturnStatementInfo> {
 
+    public UnresolvedReturnStatementInfo(final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace) {
+        super(ownerSpace);
+    }
+    
     @Override
     public ReturnStatementInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
@@ -42,11 +47,14 @@ public class UnresolvedReturnStatementInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
+        final LocalSpaceInfo ownerSpace = this.getOwnerSpace().resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+
         final ExpressionInfo returnedExpression = null == this.returnedExpression ? null
                 : this.returnedExpression.resolve(usingClass, usingMethod, classInfoManager,
                         fieldInfoManager, methodInfoManager);
 
-        this.resolvedInfo = new ReturnStatementInfo(returnedExpression, fromLine, fromColumn,
+        this.resolvedInfo = new ReturnStatementInfo(ownerSpace, returnedExpression, fromLine, fromColumn,
                 toLine, toColumn);
 
         return this.resolvedInfo;

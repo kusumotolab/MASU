@@ -14,15 +14,16 @@ public class ReturnStatementInfo extends SingleStatementInfo {
 
     /**
      * return文の戻り値を表す式と位置情報を与えて初期化
+     * @param ownerSpaceInfo 文を直接所有する空間
      * @param returnedExpression
      * @param fromLine
      * @param fromColumn
      * @param toLine
      * @param toColumn
      */
-    public ReturnStatementInfo(final ExpressionInfo returnedExpression, int fromLine,
+    public ReturnStatementInfo(final LocalSpaceInfo ownerSpaceInfo, final ExpressionInfo returnedExpression, int fromLine,
             int fromColumn, int toLine, int toColumn) {
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerSpaceInfo, fromLine, fromColumn, toLine, toColumn);
 
         this.returnedExpression = returnedExpression;
     }

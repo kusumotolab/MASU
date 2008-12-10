@@ -108,7 +108,8 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
      * 
      * @return このブロックを直接所有するローカル空間
      */
-    public final LocalSpaceInfo getOuterSpace() {
+    @Override
+    public final LocalSpaceInfo getOwnerSpace() {
         return this.outerSpace;
     }
 

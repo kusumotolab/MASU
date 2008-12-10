@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -15,8 +16,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInfo> implements
         UnresolvedStatementInfo<T> {
 
-    protected UnresolvedSingleStatementInfo() {
+    protected UnresolvedSingleStatementInfo(
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace) {
         MetricsToolSecurityManager.getInstance().checkAccess();
+
+        this.ownerSpace = ownerSpace;
+    }
+
+    protected UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> getOwnerSpace() {
+        return this.ownerSpace;
     }
 
     @Override
@@ -56,7 +64,7 @@ public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInf
 
         return 0;
     }
-    
+
     @Override
     public final void setFromColumn(int column) {
         if (column < 0) {
@@ -112,6 +120,8 @@ public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInf
     public final int getToLine() {
         return this.toLine;
     }
+
+    private UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace;
 
     /**
      * 開始行を表す変数

@@ -7,17 +7,17 @@ import java.util.TreeSet;
 
 
 /**
- * assert文の
+ * assert文を表すクラス
  * 
  * @author t-miyake，higo
  *
  */
 public class AssertStatementInfo extends SingleStatementInfo {
 
-    public AssertStatementInfo(final ExpressionInfo assertedExpression,
-            final ExpressionInfo messageExpresssion, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
-        super(fromLine, fromColumn, toLine, toColumn);
+    public AssertStatementInfo(final LocalSpaceInfo ownrSpace,
+            final ExpressionInfo assertedExpression, final ExpressionInfo messageExpresssion,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        super(ownrSpace, fromLine, fromColumn, toLine, toColumn);
 
         if (null == assertedExpression) {
             throw new IllegalArgumentException("assertedExpressoin is null.");

@@ -28,7 +28,7 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
     public VariableDeclarationStatementInfo(final LocalVariableUsageInfo variableDeclaration,
             final ExpressionInfo initializationExpression, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(variableDeclaration.getUsedVariable().getDefinitionUnit(), fromLine, fromColumn, toLine, toColumn);
 
         if (null == variableDeclaration) {
             throw new IllegalArgumentException("declaredVariable is null");

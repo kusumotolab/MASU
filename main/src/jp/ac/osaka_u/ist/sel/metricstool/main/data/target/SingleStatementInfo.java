@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * 単文の情報を保有する抽象クラス．
@@ -13,15 +15,22 @@ public abstract class SingleStatementInfo implements StatementInfo {
     /**
      * 位置情報を与えて初期化
      * 
+     * @param ownerSpace 文を直接所有する空間
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public SingleStatementInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+    public SingleStatementInfo(final LocalSpaceInfo ownerSpace, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
+        if (null == ownerSpace) {
+            throw new IllegalArgumentException("ownerSpace is null.");
+        }
+
+        this.ownerSpace = ownerSpace;
         this.fromLine = fromLine;
         this.fromColumn = fromColumn;
         this.toLine = toLine;
@@ -58,6 +67,11 @@ public abstract class SingleStatementInfo implements StatementInfo {
     }
 
     @Override
+    public final LocalSpaceInfo getOwnerSpace() {
+        return this.ownerSpace;
+    }
+
+    @Override
     public final int getFromColumn() {
         return this.fromColumn;
     }
@@ -76,6 +90,11 @@ public abstract class SingleStatementInfo implements StatementInfo {
     public final int getToLine() {
         return this.toLine;
     }
+
+    /**
+     * 文を直接所有する空間を表す変数
+     */
+    private final LocalSpaceInfo ownerSpace;
 
     /**
      * 開始行を表す変数

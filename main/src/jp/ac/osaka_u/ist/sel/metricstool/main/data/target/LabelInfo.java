@@ -108,7 +108,18 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
         return this.labeledStatement;
     }
 
+    @Override
+    public final LocalSpaceInfo getOwnerSpace() {
+        return this.labeledStatement.getOwnerSpace();
+    }
+
+    /**
+     * ラベルの名前を表す変数
+     */
     private final String name;
 
+    /**
+     * このラベルが付いた文を表す変数を返す
+     */
     private final StatementInfo labeledStatement;
 }

@@ -5,7 +5,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.Express
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedThrowStatementInfo;
 
 
@@ -29,10 +31,12 @@ public class ThrowStatementBuilder extends SingleStatementBuilder<UnresolvedThro
     }
 
     @Override
-    protected UnresolvedThrowStatementInfo buildStatement(final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+    protected UnresolvedThrowStatementInfo buildStatement(
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        final UnresolvedThrowStatementInfo throwStatement = new UnresolvedThrowStatementInfo();
+        final UnresolvedThrowStatementInfo throwStatement = new UnresolvedThrowStatementInfo(
+                ownerSpace);
         throwStatement.setFromLine(fromLine);
         throwStatement.setFromColumn(fromColumn);
         throwStatement.setToLine(toLine);

@@ -1,13 +1,16 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * 式文の未解決情報を表すクラス
@@ -15,26 +18,30 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake
  *
  */
-public class UnresolvedExpressionStatementInfo extends UnresolvedSingleStatementInfo<ExpressionStatementInfo> {
+public class UnresolvedExpressionStatementInfo extends
+        UnresolvedSingleStatementInfo<ExpressionStatementInfo> {
 
     /**
      * 式文を構成する式の未解決情報を与えて初期化
+     * @param ownerSpace　式分を直接所有する空間
      * @param expression 式文を構成する式の未解決情報
      */
     public UnresolvedExpressionStatementInfo(
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> expression) {
-        
-        if(null == expression) {
+        super(ownerSpace);
+
+        if (null == expression) {
             throw new IllegalArgumentException("expression is null");
         }
-        
+
         this.expression = expression;
     }
 
     @Override
-    public ExpressionStatementInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
-            ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
-            MethodInfoManager methodInfoManager) {
+    public ExpressionStatementInfo resolve(TargetClassInfo usingClass,
+            CallableUnitInfo usingMethod, ClassInfoManager classInfoManager,
+            FieldInfoManager fieldInfoManager, MethodInfoManager methodInfoManager) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -47,24 +54,27 @@ public class UnresolvedExpressionStatementInfo extends UnresolvedSingleStatement
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
-        
+
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final ExpressionInfo expression = this.expression.resolve(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final LocalSpaceInfo ownerSpace = this.getOwnerSpace().resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
 
-        this.resolvedInfo = new ExpressionStatementInfo(expression, fromLine, fromColumn,
-                toLine, toColumn);
+        final ExpressionInfo expression = this.expression.resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+
+        this.resolvedInfo = new ExpressionStatementInfo(ownerSpace, expression, fromLine,
+                fromColumn, toLine, toColumn);
 
         return this.resolvedInfo;
     }
-    
+
     /**
      * 式文を構成する式の未解決情報を保存する変数
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> expression;
- 
+
 }

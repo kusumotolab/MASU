@@ -6,6 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -19,6 +20,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 public class UnresolvedAssertStatementInfo extends
         UnresolvedSingleStatementInfo<AssertStatementInfo> {
+
+    public UnresolvedAssertStatementInfo(
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace) {
+        super(ownerSpace);
+    }
 
     @Override
     public AssertStatementInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
@@ -38,7 +44,7 @@ public class UnresolvedAssertStatementInfo extends
 
         this.messsageExpression = messageExpression;
     }
-    
+
     /**
      * ŒŸØ®‚Ì–¢‰ğŒˆî•ñ‚ğİ’è‚·‚é
      * @param assertedExpression ŒŸØ®‚Ì–¢‰ğŒˆî•ñ

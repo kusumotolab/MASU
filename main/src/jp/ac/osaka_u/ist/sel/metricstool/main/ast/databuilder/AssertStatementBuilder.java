@@ -7,7 +7,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.AssertStatementStateManager.ASSERT_STATEMENT_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedAssertStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 
 
 public class AssertStatementBuilder extends StateDrivenDataBuilder<UnresolvedAssertStatementInfo> {
@@ -20,10 +22,12 @@ public class AssertStatementBuilder extends StateDrivenDataBuilder<UnresolvedAss
         this.stateManager = new AssertStatementStateManager();
     }
 
-    protected UnresolvedAssertStatementInfo buildStatement(int fromLine, int fromColumn,
-            int toLine, int toColumn) {
+    protected UnresolvedAssertStatementInfo buildStatement(
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace, int fromLine,
+            int fromColumn, int toLine, int toColumn) {
 
-        final UnresolvedAssertStatementInfo assertStatement = new UnresolvedAssertStatementInfo();
+        final UnresolvedAssertStatementInfo assertStatement = new UnresolvedAssertStatementInfo(
+                ownerSpace);
         assertStatement.setFromLine(fromLine);
         assertStatement.setFromColumn(fromColumn);
         assertStatement.setToLine(toLine);
@@ -38,10 +42,15 @@ public class AssertStatementBuilder extends StateDrivenDataBuilder<UnresolvedAss
         final AstVisitEvent trigger = event.getTrigger();
 
         if (type.equals(this.stateManager.getStatementEnterEventType())) {
-            final UnresolvedAssertStatementInfo assertStatement = this.buildStatement(trigger
-                    .getStartLine(), trigger.getStartColumn(), trigger.getEndLine(), trigger
-                    .getEndColumn());
-            this.registBuiltData(assertStatement);
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = this.buildDaraManager
+                    .getCurrentLocalSpace();
+
+            if (null != currentLocal) {
+                final UnresolvedAssertStatementInfo assertStatement = this.buildStatement(currentLocal, trigger
+                        .getStartLine(), trigger.getStartColumn(), trigger.getEndLine(), trigger
+                        .getEndColumn());
+                this.registBuiltData(assertStatement);
+            }
         } else if (type.equals(this.stateManager.getStatementExitEventType())) {
             this.buildDaraManager.getCurrentLocalSpace().addStatement(this.getLastBuildData());
         } else if (type.equals(ASSERT_STATEMENT_STATE_CHANGE.ENTER_ASSERT_EXPRESSION)) {

@@ -135,6 +135,11 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
         return this.ownerSwitchBlock;
     }
 
+    @Override
+    public final LocalSpaceInfo getOwnerSpace() {
+        return this.getOwnerSwitchBlock();
+    }
+
     /**
      * ‚±‚Ì case ƒGƒ“ƒgƒŠ‚Ì‚Ìƒ‰ƒxƒ‹‚ð•Ô‚·
      * 

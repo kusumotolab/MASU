@@ -52,13 +52,13 @@ public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<?
                     .getCurrentLocalSpace();
 
             if (null != currentLocal) {
-                final T singleStatement = this.buildStatement(e.getStartLine(), e.getStartColumn(),
-                        e.getEndLine(), e.getEndColumn());
+                final T singleStatement = this.buildStatement(currentLocal, e.getStartLine(), e
+                        .getStartColumn(), e.getEndLine(), e.getEndColumn());
 
                 assert singleStatement != null : "Illegal state: a single statement was not built";
 
                 currentLocal.addStatement(singleStatement);
-                
+
                 this.registBuiltData(singleStatement);
             }
         }
@@ -83,8 +83,9 @@ public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<?
      * @param toColumn 文の終了列
      * @return
      */
-    protected abstract T buildStatement(final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn);
+    protected abstract T buildStatement(
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn);
 
     /**
      * 引数で与えられたトークンが構築される文を表すノードのトークンであるかどうか返す
