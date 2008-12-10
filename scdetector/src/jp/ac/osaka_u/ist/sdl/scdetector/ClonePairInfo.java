@@ -8,7 +8,7 @@ import java.util.TreeSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElement;
 
 
-public class ClonePairInfo implements Serializable {
+public class ClonePairInfo implements Serializable, Entity {
 
     public ClonePairInfo(final ExecutableElement statementA, final ExecutableElement statementB) {
 
@@ -48,4 +48,6 @@ public class ClonePairInfo implements Serializable {
     final private int id;
 
     private static int number = 0;
+
+    public static String CLONEPAIR = new String("CLONEPAIR");
 }

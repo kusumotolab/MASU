@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sdl.scdetector.gui;
+package jp.ac.osaka_u.ist.sdl.scdetector.gui.clonepair;
 
 
 import java.util.Set;
