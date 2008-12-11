@@ -32,7 +32,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
 
         super(usedField, reference, fromLine, fromColumn, toLine, toColumn);
 
-        this.ownerUsage = ownerUsage;
+        this.ownerExpression = ownerUsage;
         this.ownerType = ownerType;
     }
 
@@ -72,8 +72,8 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
      * フィールド使用が実行される親エンティティを返す
      * @return フィールド使用が実行される親エンティティ
      */
-    public final EntityUsageInfo getOwnerUsage() {
-        return this.ownerUsage;
+    public final EntityUsageInfo getOwnerExpression() {
+        return this.ownerExpression;
     }
 
     /**
@@ -87,7 +87,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
         variableUsages.addAll(super.getVariableUsages());
 
-        final ExpressionInfo ownerExpression = this.getOwnerUsage();
+        final ExpressionInfo ownerExpression = this.getOwnerExpression();
         variableUsages.addAll(ownerExpression.getVariableUsages());
 
         return Collections.unmodifiableSortedSet(variableUsages);
@@ -98,7 +98,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     /**
      * フィールド参照が実行される親エンティティを保存する変数
      */
-    private final EntityUsageInfo ownerUsage;
+    private final EntityUsageInfo ownerExpression;
 
     /**
      * 必要な情報を与えて，インスタンスを取得

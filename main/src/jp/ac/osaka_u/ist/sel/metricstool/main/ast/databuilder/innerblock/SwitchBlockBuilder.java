@@ -34,6 +34,7 @@ public class SwitchBlockBuilder extends
         if (this.getCurrentSpace() instanceof UnresolvedSwitchBlockInfo) {
             final UnresolvedSwitchBlockInfo currentSwitch = (UnresolvedSwitchBlockInfo) this
                     .getCurrentSpace();
+            final AstVisitEvent trigger = event.getTrigger();
             if (type.equals(SWITCH_BLOCK_STATE_CHANGE.ENTER_CASE_ENTRY)) {
 
             } else if (type.equals(SWITCH_BLOCK_STATE_CHANGE.EXIT_CASE_ENTYR)) {
@@ -41,10 +42,19 @@ public class SwitchBlockBuilder extends
                 final UnresolvedCaseEntryInfo caseEntry = new UnresolvedCaseEntryInfo(
                         currentSwitch, this.expressionManager.getLastPoppedExpressionElement()
                                 .getUsage());
+                caseEntry.setFromLine(trigger.getStartLine());
+                caseEntry.setFromColumn(trigger.getStartColumn());
+                caseEntry.setToLine(trigger.getEndLine());
+                caseEntry.setToColumn(trigger.getEndColumn());
                 currentSwitch.addStatement(caseEntry);
+                
             } else if (type.equals(SWITCH_BLOCK_STATE_CHANGE.ENTER_DEFAULT_ENTRY)) {
                 final UnresolvedDefaultEntryInfo defaultEntry = new UnresolvedDefaultEntryInfo(
                         currentSwitch);
+                defaultEntry.setFromLine(trigger.getStartLine());
+                defaultEntry.setFromColumn(trigger.getStartColumn());
+                defaultEntry.setToLine(trigger.getEndLine());
+                defaultEntry.setToColumn(trigger.getEndColumn());
                 currentSwitch.addStatement(defaultEntry);
             } else if (type.equals(SWITCH_BLOCK_STATE_CHANGE.EXIT_DEFAULT_ENTRY)) {
 
