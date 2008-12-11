@@ -16,7 +16,12 @@ public class MainWindow extends JFrame {
     public MainWindow(final Set<ClonePairInfo> clonePairs) {
 
         final ClonePairListView clonePairListView = new ClonePairListView(clonePairs);
+        SelectedEntities.<ClonePairInfo> getInstance(ClonePairInfo.CLONEPAIR).addObserver(
+                clonePairListView);
+
         final SourceCodeView sourceCodeView = new SourceCodeView();
+        SelectedEntities.<ClonePairInfo> getInstance(ClonePairInfo.CLONEPAIR).addObserver(
+                sourceCodeView);
 
         this.getContentPane().setLayout(new BorderLayout());
         this.getContentPane().add(clonePairListView.scrollPane, BorderLayout.WEST);

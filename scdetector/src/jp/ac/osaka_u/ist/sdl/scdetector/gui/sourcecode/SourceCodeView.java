@@ -9,19 +9,19 @@ import javax.swing.JSplitPane;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.SelectedEntities;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElement;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
 
 public class SourceCodeView extends JSplitPane implements Observer {
 
     public SourceCodeView() {
-
-        this.leftSourceCodePanel = new SourceCodePanel();
-        this.rightSourceCodePanel = new SourceCodePanel();
-
         this.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-        this.setLeftComponent(this.leftSourceCodePanel);
-        this.setRightComponent(this.rightSourceCodePanel);
+
     }
 
     public void update(Observable o, Object arg) {
@@ -33,20 +33,48 @@ public class SourceCodeView extends JSplitPane implements Observer {
 
                 final ClonePairInfo clonePair = SelectedEntities.<ClonePairInfo> getInstance(
                         ClonePairInfo.CLONEPAIR).get().first();
-                
+
                 final SortedSet<ExecutableElement> cloneA = clonePair.getCloneA();
                 final SortedSet<ExecutableElement> cloneB = clonePair.getCloneB();
-                
-    
-                final ExecutableElement firstElement = cloneA.first();
-                
+
+                final SourceCodePanel leftSourceCodePanel = new SourceCodePanel();
+                final SourceCodePanel rightSourceCodePanel = new SourceCodePanel();
+
+                for (final ExecutableElement element : cloneA) {
+
+                    if (element instanceof StatementInfo) {
+                        final FileInfo ownerFile = SourceCodeView
+                                .geOwnerFile((StatementInfo) element);
+                        leftSourceCodePanel.readFile(ownerFile);
+                        this.setLeftComponent(leftSourceCodePanel.scrollPane);
+                        break;
+                    }
+                }
+
+                for (final ExecutableElement element : cloneB) {
+
+                    if (element instanceof StatementInfo) {
+                        final FileInfo ownerFile = SourceCodeView
+                                .geOwnerFile((StatementInfo) element);
+                        rightSourceCodePanel.readFile(ownerFile);
+                        this.setRightComponent(rightSourceCodePanel.scrollPane);
+                        break;
+                    }
+                }
+
+                final int width = this.getWidth();
+                this.setDividerLocation(width / 2);
+
+                leftSourceCodePanel.displayCodeFragment(cloneA);
+                rightSourceCodePanel.displayCodeFragment(cloneB);
             }
         }
     }
-    
-    
 
-    private final SourceCodePanel leftSourceCodePanel;
+    private static FileInfo geOwnerFile(final StatementInfo statement) {
 
-    private final SourceCodePanel rightSourceCodePanel;
+        final LocalSpaceInfo ownerSpace = statement.getOwnerSpace();
+        final ClassInfo ownerClass = ownerSpace.getOwnerClass();
+        return ((TargetClassInfo) ownerClass).getFileInfo();
+    }
 }
