@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sdl.scdetector.gui.sourcecode;
 
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.io.FileInputStream;
@@ -9,8 +10,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.SortedSet;
 
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
@@ -20,17 +23,24 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 
 
-class SourceCodePanel extends JTextArea {
+class SourceCodePanel extends JPanel {
 
     SourceCodePanel() {
 
-        this.setTabSize(4);
+        this.fileNameField = new JTextField();
+        this.fileNameField.setEditable(false);
 
-        this.scrollPane = new JScrollPane();
-        this.scrollPane.setViewportView(this);
+        this.sourceCodeArea = new JTextArea();
+        this.sourceCodeArea.setTabSize(1);
 
-        this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        this.sourceCodeScrollPane = new JScrollPane(this.sourceCodeArea);
+        this.sourceCodeScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        this.sourceCodeScrollPane
+                .setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        this.setLayout(new BorderLayout());
+        this.add(this.fileNameField, BorderLayout.NORTH);
+        this.add(this.sourceCodeScrollPane, BorderLayout.CENTER);
     }
 
     SourceCodePanel(final FileInfo file) {
@@ -42,7 +52,9 @@ class SourceCodePanel extends JTextArea {
 
     void readFile(final FileInfo file) {
 
-        this.replaceSelection("");
+        this.fileNameField.setText(file.getName());
+
+        this.sourceCodeArea.replaceSelection("");
 
         try {
 
@@ -53,7 +65,7 @@ class SourceCodePanel extends JTextArea {
                 sb.append((char) c);
             }
             reader.close();
-            this.append(sb.toString());
+            this.sourceCodeArea.append(sb.toString());
 
         } catch (FileNotFoundException e) {
             System.err.println(e.getMessage());
@@ -79,19 +91,21 @@ class SourceCodePanel extends JTextArea {
 
                 final int fromOffset;
                 if (0 < fromLine) {
-                    fromOffset = super.getLineStartOffset(fromLine - 1) + (fromColumn - 1);
+                    fromOffset = this.sourceCodeArea.getLineStartOffset(fromLine - 1)
+                            + (fromColumn - 1);
                 } else {
                     fromOffset = (fromColumn - 1);
                 }
 
                 final int toOffset;
                 if (0 < toLine) {
-                    toOffset = super.getLineStartOffset(toLine - 1) + (toColumn - 1);
+                    toOffset = this.sourceCodeArea.getLineStartOffset(toLine - 1) + (toColumn - 1);
                 } else {
                     toOffset = (toColumn - 1);
                 }
 
-                this.getHighlighter().addHighlight(fromOffset, toOffset, highlightPainter);
+                this.sourceCodeArea.getHighlighter().addHighlight(fromOffset, toOffset,
+                        highlightPainter);
 
             } catch (BadLocationException e) {
                 e.printStackTrace();
@@ -101,21 +115,24 @@ class SourceCodePanel extends JTextArea {
 
     void display(final SortedSet<ExecutableElement> clone) {
 
-        final Document doc = this.getDocument();
+        final Document doc = this.sourceCodeArea.getDocument();
         final Element root = doc.getDefaultRootElement();
 
         final ExecutableElement firstElement = clone.first();
 
+        // â∫ÇÃ modelToViewÇÃï‘ÇËílÇnullÇ…ÇµÇ»Ç¢ÇΩÇﬂÇ…ã≠êßìIÇ…ê≥ÇÃílÇê›íË
+        this.sourceCodeArea.setBounds(new Rectangle(10, 10));
+
         try {
             Element elem = root.getElement(Math.max(1, firstElement.getFromLine() - 2));
             if (null != elem) {
-                Rectangle rect = this.modelToView(elem.getStartOffset());
-                Rectangle vr = this.scrollPane.getViewport().getViewRect();
+                Rectangle rect = this.sourceCodeArea.modelToView(elem.getStartOffset());
+                Rectangle vr = this.sourceCodeScrollPane.getViewport().getViewRect();
                 if ((null != rect) && (null != vr)) {
                     rect.setSize(10, vr.height);
-                    this.scrollRectToVisible(rect);
+                    this.sourceCodeArea.scrollRectToVisible(rect);
                 }
-                this.setCaretPosition(elem.getStartOffset());
+                this.sourceCodeArea.setCaretPosition(elem.getStartOffset());
             }
 
             // textArea.requestFocus();
@@ -124,5 +141,9 @@ class SourceCodePanel extends JTextArea {
         }
     }
 
-    final JScrollPane scrollPane;
+    final private JTextField fileNameField;
+
+    final private JTextArea sourceCodeArea;
+
+    final private JScrollPane sourceCodeScrollPane;
 }

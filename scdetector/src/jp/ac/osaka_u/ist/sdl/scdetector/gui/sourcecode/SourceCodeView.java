@@ -46,7 +46,7 @@ public class SourceCodeView extends JSplitPane implements Observer {
                         final FileInfo ownerFile = SourceCodeView
                                 .geOwnerFile((StatementInfo) element);
                         leftSourceCodePanel.readFile(ownerFile);
-                        this.setLeftComponent(leftSourceCodePanel.scrollPane);
+                        this.setLeftComponent(leftSourceCodePanel);
                         break;
                     }
                 }
@@ -57,7 +57,7 @@ public class SourceCodeView extends JSplitPane implements Observer {
                         final FileInfo ownerFile = SourceCodeView
                                 .geOwnerFile((StatementInfo) element);
                         rightSourceCodePanel.readFile(ownerFile);
-                        this.setRightComponent(rightSourceCodePanel.scrollPane);
+                        this.setRightComponent(rightSourceCodePanel);
                         break;
                     }
                 }

@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -39,6 +41,8 @@ public class SCVisualizer {
             final Set<ClonePairInfo> clonePairs = (Set<ClonePairInfo>) ois.readObject();
 
             final MainWindow mainWindow = new MainWindow(clonePairs);
+            Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+            mainWindow.setSize(new Dimension(d.width - 5, d.height - 27));
             mainWindow.setVisible(true);
 
         } catch (ParseException e) {
