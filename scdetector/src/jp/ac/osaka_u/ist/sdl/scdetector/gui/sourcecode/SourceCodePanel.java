@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sdl.scdetector.gui.sourcecode;
 
 
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,6 +14,7 @@ import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
+import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
@@ -61,7 +63,43 @@ class SourceCodePanel extends JTextArea {
 
     }
 
-    void displayCodeFragment(final SortedSet<ExecutableElement> clone) {
+    void addHighlight(final SortedSet<ExecutableElement> clone) {
+
+        final DefaultHighlightPainter highlightPainter = new DefaultHighlightPainter(new Color(180,
+                180, 180, 125));
+
+        for (final ExecutableElement element : clone) {
+
+            try {
+
+                final int fromLine = element.getFromLine();
+                final int fromColumn = element.getFromColumn();
+                final int toLine = element.getToLine();
+                final int toColumn = element.getToColumn();
+
+                final int fromOffset;
+                if (0 < fromLine) {
+                    fromOffset = super.getLineStartOffset(fromLine - 1) + (fromColumn - 1);
+                } else {
+                    fromOffset = (fromColumn - 1);
+                }
+
+                final int toOffset;
+                if (0 < toLine) {
+                    toOffset = super.getLineStartOffset(toLine - 1) + (toColumn - 1);
+                } else {
+                    toOffset = (toColumn - 1);
+                }
+
+                this.getHighlighter().addHighlight(fromOffset, toOffset, highlightPainter);
+
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    void display(final SortedSet<ExecutableElement> clone) {
 
         final Document doc = this.getDocument();
         final Element root = doc.getDefaultRootElement();

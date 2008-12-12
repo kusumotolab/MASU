@@ -65,8 +65,11 @@ public class SourceCodeView extends JSplitPane implements Observer {
                 final int width = this.getWidth();
                 this.setDividerLocation(width / 2);
 
-                leftSourceCodePanel.displayCodeFragment(cloneA);
-                rightSourceCodePanel.displayCodeFragment(cloneB);
+                leftSourceCodePanel.addHighlight(cloneA);
+                rightSourceCodePanel.addHighlight(cloneB);
+
+                leftSourceCodePanel.display(cloneA);
+                rightSourceCodePanel.display(cloneB);
             }
         }
     }
