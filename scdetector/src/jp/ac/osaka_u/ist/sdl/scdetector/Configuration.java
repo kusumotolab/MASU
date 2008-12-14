@@ -10,6 +10,8 @@ public final class Configuration {
         this.l = null;
         this.o = null;
         this.pv = 1;
+        this.pm = 2;
+        this.pc = 2;
     }
 
     public String getD() {
@@ -48,6 +50,30 @@ public final class Configuration {
         this.pv = pv;
     }
 
+    public int getPM() {
+        return this.pm;
+    }
+
+    public void setPM(final int pm) {
+
+        if ((pm < 0) || (3 < pm)) {
+            throw new RuntimeException("\"pm\" option must be between 0 and 3.");
+        }
+        this.pm = pm;
+    }
+
+    public int getPC() {
+        return this.pc;
+    }
+
+    public void setPC(final int pc) {
+
+        if ((pc < 0) || (3 < pc)) {
+            throw new RuntimeException("\"pc\" option must be between 0 and 3.");
+        }
+        this.pc = pc;
+    }
+
     private String d;
 
     private String l;
@@ -55,4 +81,8 @@ public final class Configuration {
     private String o;
 
     private int pv;
+
+    private int pm;
+
+    private int pc;
 }

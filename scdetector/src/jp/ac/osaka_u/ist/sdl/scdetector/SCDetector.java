@@ -79,11 +79,25 @@ public class SCDetector extends MetricsTool {
             options.addOption(o);
 
             final Option pv = new Option("pv", true, "parameterize variables");
-            pv.setArgName("parameterization level");
+            pv.setArgName("variable parameterization level");
             pv.setArgs(1);
             pv.setRequired(false);
             pv.setType(Integer.class);
             options.addOption(pv);
+
+            final Option pm = new Option("pm", true, "parameterize method invocation");
+            pm.setArgName("method invocation parameterization level");
+            pm.setArgs(1);
+            pm.setRequired(false);
+            pm.setType(Integer.class);
+            options.addOption(pm);
+
+            final Option pc = new Option("pc", true, "parameterize constructor invocation");
+            pc.setArgName("constructor invocation parameterization level");
+            pc.setArgs(1);
+            pc.setRequired(false);
+            pc.setType(Integer.class);
+            options.addOption(pc);
 
             final CommandLineParser parser = new PosixParser();
             final CommandLine cmd = parser.parse(options, args);
@@ -94,6 +108,10 @@ public class SCDetector extends MetricsTool {
 
             if (cmd.hasOption("pv")) {
                 Configuration.INSTANCE.setPV(Integer.valueOf(cmd.getOptionValue("pv")));
+            }
+
+            if (cmd.hasOption("pm")) {
+                Configuration.INSTANCE.setPM(Integer.valueOf(cmd.getOptionValue("pm")));
             }
 
         } catch (ParseException e) {
@@ -155,10 +173,10 @@ public class SCDetector extends MetricsTool {
         scdetector.registerFilesFromDirectory();
         scdetector.analyzeTargetFiles();
 
-        // 変数を指定することにより，その変数を使用している文を取得するためのハッシュを構築する
-        final Map<VariableInfo<?>, Set<StatementInfo>> variableUsageHashes = new HashMap<VariableInfo<?>, Set<StatementInfo>>();
+        // 変数を指定することにより，その変数に対して代入を行っている文を取得するためのハッシュを構築する
+        final Map<VariableInfo<?>, Set<StatementInfo>> assignedVariableHashes = new HashMap<VariableInfo<?>, Set<StatementInfo>>();
         for (final TargetMethodInfo method : MethodInfoManager.getInstance().getTargetMethodInfos()) {
-            SCDetector.makeVariableUsageHashes(method, variableUsageHashes);
+            SCDetector.makeAssignedVariableHashes(method, assignedVariableHashes);
         }
 
         // 文単位で正規化を行う
@@ -215,8 +233,9 @@ public class SCDetector extends MetricsTool {
                         final Set<VariableInfo<?>> usedVariableHashesB = new HashSet<VariableInfo<?>>();
 
                         SCDetector.performBackwordSlice((SingleStatementInfo) statementA,
-                                (SingleStatementInfo) statementB, clonePair, variableUsageHashes,
-                                statementHash, usedVariableHashesA, usedVariableHashesB);
+                                (SingleStatementInfo) statementB, clonePair,
+                                assignedVariableHashes, statementHash, usedVariableHashesA,
+                                usedVariableHashesB);
 
                         if (1 < clonePair.size()) {
                             clonePairs.add(clonePair);
@@ -264,8 +283,8 @@ public class SCDetector extends MetricsTool {
         }
     }
 
-    private static void makeVariableUsageHashes(final LocalSpaceInfo localSpace,
-            final Map<VariableInfo<?>, Set<StatementInfo>> variableUsageHashes) {
+    private static void makeAssignedVariableHashes(final LocalSpaceInfo localSpace,
+            final Map<VariableInfo<?>, Set<StatementInfo>> assignedVariableHashes) {
 
         for (final StatementInfo statement : localSpace.getStatements()) {
 
@@ -274,17 +293,20 @@ public class SCDetector extends MetricsTool {
                 final Set<VariableUsageInfo<?>> variableUsages = ((SingleStatementInfo) statement)
                         .getVariableUsages();
                 for (final VariableUsageInfo<?> variableUsage : variableUsages) {
-                    final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
-                    Set<StatementInfo> statements = variableUsageHashes.get(usedVariable);
-                    if (null == statements) {
-                        statements = new HashSet<StatementInfo>();
-                        variableUsageHashes.put(usedVariable, statements);
+                    if (variableUsage.isAssignment()) {
+                        final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
+                        Set<StatementInfo> statements = assignedVariableHashes.get(usedVariable);
+                        if (null == statements) {
+                            statements = new HashSet<StatementInfo>();
+                            assignedVariableHashes.put(usedVariable, statements);
+                        }
+                        statements.add(statement);
                     }
-                    statements.add(statement);
                 }
 
             } else if (statement instanceof BlockInfo) {
-                SCDetector.makeVariableUsageHashes((BlockInfo) statement, variableUsageHashes);
+                SCDetector
+                        .makeAssignedVariableHashes((BlockInfo) statement, assignedVariableHashes);
             }
         }
     }
@@ -316,7 +338,7 @@ public class SCDetector extends MetricsTool {
 
     private static void performBackwordSlice(final SingleStatementInfo statementA,
             final SingleStatementInfo statementB, final ClonePairInfo clonePair,
-            final Map<VariableInfo<?>, Set<StatementInfo>> variableUsageHashes,
+            final Map<VariableInfo<?>, Set<StatementInfo>> assignedVariableHashes,
             final Map<StatementInfo, Integer> statementHash,
             final Set<VariableInfo<?>> usedVariableHashesA,
             final Set<VariableInfo<?>> usedVariableHashesB) {
@@ -329,17 +351,27 @@ public class SCDetector extends MetricsTool {
 
         for (final VariableUsageInfo<?> variableUsage : variableUsagesA) {
             final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
-            if (!usedVariableHashesA.contains(usedVariable) && !(usedVariable instanceof FieldInfo)) {
-                relatedStatementsA.addAll(variableUsageHashes.get(usedVariable));
-                usedVariableHashesA.add(usedVariable);
+            if (variableUsage.isReference()) {
+                if (!usedVariableHashesA.contains(usedVariable)
+                        && !(usedVariable instanceof FieldInfo)) {
+                    if (assignedVariableHashes.containsKey(usedVariable)) {
+                        relatedStatementsA.addAll(assignedVariableHashes.get(usedVariable));
+                        usedVariableHashesA.add(usedVariable);
+                    }
+                }
             }
         }
 
         for (final VariableUsageInfo<?> variableUsage : variableUsagesB) {
             final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
-            if (!usedVariableHashesB.contains(usedVariable) && !(usedVariable instanceof FieldInfo)) {
-                relatedStatementsB.addAll(variableUsageHashes.get(usedVariable));
-                usedVariableHashesB.add(usedVariable);
+            if (variableUsage.isReference()) {
+                if (!usedVariableHashesB.contains(usedVariable)
+                        && !(usedVariable instanceof FieldInfo)) {
+                    if (assignedVariableHashes.containsKey(usedVariable)) {
+                        relatedStatementsB.addAll(assignedVariableHashes.get(usedVariable));
+                        usedVariableHashesB.add(usedVariable);
+                    }
+                }
             }
         }
 
@@ -371,7 +403,7 @@ public class SCDetector extends MetricsTool {
                         SCDetector.performBackwordSlice(
                                 (SingleStatementInfo) relatedStatementArrayA[a],
                                 (SingleStatementInfo) relatedStatementArrayB[b], clonePair,
-                                variableUsageHashes, statementHash, usedVariableHashesA,
+                                assignedVariableHashes, statementHash, usedVariableHashesA,
                                 usedVariableHashesB);
                     }
 
@@ -393,7 +425,7 @@ public class SCDetector extends MetricsTool {
                         SCDetector.performForwardSlice(
                                 (ConditionalBlockInfo) relatedStatementArrayA[a],
                                 (ConditionalBlockInfo) relatedStatementArrayB[b], clonePair,
-                                variableUsageHashes, statementHash, usedVariableHashesA,
+                                assignedVariableHashes, statementHash, usedVariableHashesA,
                                 usedVariableHashesB);
                     }
                 }

@@ -19,6 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LiteralUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MonominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
@@ -192,23 +193,82 @@ public class Conversion {
 
         } else if (expression instanceof MethodCallInfo) {
 
-            sb.append("METHOD(");
-            for (final ExpressionInfo argument : ((CallInfo) expression).getArguments()) {
-                final String argumentString = Conversion.getNormalizedString(argument);
-                sb.append(argumentString);
-                sb.append(",");
+            final MethodInfo method = ((MethodCallInfo) expression).getCallee();
+
+            switch (Configuration.INSTANCE.getPM()) {
+
+            case 0: // 正規化レベル0，メソッド名はそのまま，引数情報も用いる
+                sb.append(method.getMethodName());
+                sb.append("(");
+                for (final ExpressionInfo argument : ((CallInfo) expression).getArguments()) {
+                    final String argumentString = Conversion.getNormalizedString(argument);
+                    sb.append(argumentString);
+                    sb.append(",");
+                }
+                sb.deleteCharAt(sb.length() - 1);
+                sb.append(")");
+                break;
+            case 1: // 正規化レベル1，メソッド名を返り値の型名に正規化する，引数情報も用いる
+                sb.append(method.getReturnType().getTypeName());
+                sb.append("(");
+                for (final ExpressionInfo argument : ((CallInfo) expression).getArguments()) {
+                    final String argumentString = Conversion.getNormalizedString(argument);
+                    sb.append(argumentString);
+                    sb.append(",");
+                }
+                sb.deleteCharAt(sb.length() - 1);
+                sb.append(")");
+                break;
+            case 2: // 正規化レベル1，メソッド名を返り値の型名に正規化する，引数情報は用いない
+                sb.append(method.getReturnType().getTypeName());
+                break;
+            case 3: // 正規化レベル1，メソッド名を返り値の型名に正規化する，引数情報は用いない
+                sb.append("MEHTOD");
+                break;
+            default:
+                assert false : "Here shouldn't be reached!";
             }
+
             sb.append("");
 
         } else if (expression instanceof ConstructorCallInfo) {
 
-            sb.append("CONSTRUCTOR(");
-            for (final ExpressionInfo argument : ((CallInfo) expression).getArguments()) {
-                final String argumentString = Conversion.getNormalizedString(argument);
-                sb.append(argumentString);
-                sb.append(",");
+            final ConstructorCallInfo constructorCall = ((ConstructorCallInfo) expression);
+
+            switch (Configuration.INSTANCE.getPM()) {
+
+            case 0: // 正規化レベル0，コンストラクタ名はそのまま，引数情報も用いる
+                sb.append("new ");
+                sb.append(constructorCall.getType().getTypeName());
+                sb.append("(");
+                for (final ExpressionInfo argument : ((CallInfo) expression).getArguments()) {
+                    final String argumentString = Conversion.getNormalizedString(argument);
+                    sb.append(argumentString);
+                    sb.append(",");
+                }
+                sb.deleteCharAt(sb.length() - 1);
+                sb.append(")");
+                break;
+            case 1: // 正規化レベル1，コンストラクタ呼び出しを型に正規化する(new 演算子を取る)，引数情報は用いる
+                sb.append(constructorCall.getType().getTypeName());
+                sb.append("(");
+                for (final ExpressionInfo argument : ((CallInfo) expression).getArguments()) {
+                    final String argumentString = Conversion.getNormalizedString(argument);
+                    sb.append(argumentString);
+                    sb.append(",");
+                }
+                sb.deleteCharAt(sb.length() - 1);
+                sb.append(")");
+                break;
+            case 2: // 正規化レベル1，コンストラクタ呼び出しを型に正規化する（new 演算子を取る），引数情報は用いない
+                sb.append(constructorCall.getType().getTypeName());
+                break;
+            case 3: // 正規化レベル2，メソッド名を返り値の型名に正規化する，引数情報は用いない
+                sb.append("CONSTRUCTOR");
+                break;
+            default:
+                assert false : "Here shouldn't be reached!";
             }
-            sb.append("");
 
         } else if (expression instanceof CastUsageInfo) {
 
