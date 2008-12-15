@@ -28,15 +28,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 public final class ClassInfoManager {
 
     /**
-     * クラス情報を管理しているインスタンスを返す． シングルトンパターンを持ちている．
-     * 
-     * @return クラス情報を管理しているインスタンス
-     */
-    public static ClassInfoManager getInstance() {
-        return SINGLETON;
-    }
-
-    /**
      * 対象クラスを追加する
      * 
      * @param classInfo 追加するクラス情報
@@ -163,24 +154,6 @@ public final class ClassInfoManager {
 
         return this.packageInfo.getClassInfos(namespace);
     }
-    
-    /**
-     * マネージャーの状態をリセットする
-     */
-    public final void reset(LANGUAGE language) {
-        this.externalClassInfos.clear();
-        this.targetClassInfos.clear();
-        this.packageInfo = new PackageInfo("DEFAULT", 0);
-        
-        // java言語の場合は，暗黙にインポートされるクラスを追加しておく
-        if (language.equals(LANGUAGE.JAVA15)
-                || language.equals(LANGUAGE.JAVA14)
-                || language.equals(LANGUAGE.JAVA13)) {
-            for (int i = 0; i < ExternalClassInfo.JAVA_PREIMPORTED_CLASSES.length; i++) {
-                this.add(ExternalClassInfo.JAVA_PREIMPORTED_CLASSES[i]);
-            }
-        }
-    }
 
     /**
      * エラーメッセージ出力用のプリンタ
@@ -193,9 +166,9 @@ public final class ClassInfoManager {
 
     /**
      * 
-     * コンストラクタ． シングルトンパターンで実装しているために private がついている．
+     * コンストラクタ． 
      */
-    private ClassInfoManager() {
+    public ClassInfoManager() {
         this.targetClassInfos = new TreeSet<TargetClassInfo>();
         this.externalClassInfos = new TreeSet<ExternalClassInfo>();
         this.packageInfo = new PackageInfo("DEFAULT", 0);
@@ -209,12 +182,6 @@ public final class ClassInfoManager {
             }
         }
     }
-
-    /**
-     * 
-     * シングルトンパターンを実装するための変数．
-     */
-    private static final ClassInfoManager SINGLETON = new ClassInfoManager();
 
     /**
      * 

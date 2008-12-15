@@ -17,15 +17,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class FileInfoManager {
 
     /**
-     * ファイル情報を管理しているインスタンスを返す． シングルトンパターンを持ちている．
-     * 
-     * @return ファイル情報を管理しているインスタンス
-     */
-    public static FileInfoManager getInstance() {
-        return SINGLETON;
-    }
-
-    /**
      * 
      * @param fileInfo 追加するクラス情報
      */
@@ -65,27 +56,21 @@ public final class FileInfoManager {
     public int getFileCount() {
         return this.fileInfos.size();
     }
-    
+
     /**
      * ファイル情報をクリア
      */
     public void clear() {
         this.fileInfos.clear();
     }
-    
+
     /**
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */
-    private FileInfoManager() {
+    public FileInfoManager() {
         this.fileInfos = new TreeSet<FileInfo>();
     }
-
-    /**
-     * 
-     * シングルトンパターンを実装するための変数．
-     */
-    private static final FileInfoManager SINGLETON = new FileInfoManager();
 
     /**
      * 

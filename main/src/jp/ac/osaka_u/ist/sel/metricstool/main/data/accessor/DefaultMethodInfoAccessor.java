@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor;
 import java.util.Iterator;
 import java.util.SortedSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 
@@ -23,8 +24,9 @@ public class DefaultMethodInfoAccessor implements MethodInfoAccessor {
      */
     @Override
     public Iterator<TargetMethodInfo> iterator() {
-        MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
-        SortedSet<TargetMethodInfo> methodInfos = methodInfoManager.getTargetMethodInfos();
+        final MethodInfoManager methodInfoManager = DataManager.getInstance()
+                .getMethodInfoManager();
+        final SortedSet<TargetMethodInfo> methodInfos = methodInfoManager.getTargetMethodInfos();
         return methodInfos.iterator();
     }
 
@@ -35,7 +37,9 @@ public class DefaultMethodInfoAccessor implements MethodInfoAccessor {
      */
     @Override
     public int getMethodCount() {
-        return MethodInfoManager.getInstance().getTargetMethodCount();
+        final MethodInfoManager methodInfoManager = DataManager.getInstance()
+                .getMethodInfoManager();
+        return methodInfoManager.getTargetMethodCount();
     }
 
 }

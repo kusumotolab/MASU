@@ -40,7 +40,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
@@ -215,16 +214,16 @@ public class MetricsTool {
         // 対象ファイルのASTから未解決クラス，フィールド，メソッド情報を取得
         {
             out.println("parsing all target files.");
-            final int totalFileNumber = TargetFileManager.getInstance().size();
+            final int totalFileNumber = DataManager.getInstance().getTargetFileManager().size();
             int currentFileNumber = 1;
             final StringBuffer fileInformationBuffer = new StringBuffer();
 
-            for (TargetFile targetFile : TargetFileManager.getInstance()) {
+            for (final TargetFile targetFile : DataManager.getInstance().getTargetFileManager()) {
                 try {
                     final String name = targetFile.getName();
 
                     final FileInfo fileInfo = new FileInfo(name);
-                    FileInfoManager.getInstance().add(fileInfo);
+                    DataManager.getInstance().getFileInfoManager().add(fileInfo);
 
                     if (Settings.isVerbose()) {
                         fileInformationBuffer.delete(0, fileInformationBuffer.length());
@@ -351,7 +350,7 @@ public class MetricsTool {
         // 文法誤りのあるファイル一覧を表示
         // err.println("The following files includes uncorrect syntax.");
         // err.println("Any metrics of them were not measured");
-        for (TargetFile targetFile : TargetFileManager.getInstance()) {
+        for (final TargetFile targetFile : DataManager.getInstance().getTargetFileManager()) {
             if (!targetFile.isCorrectSyntax()) {
                 err.println("Incorrect syntax file: " + targetFile.getName());
             }
@@ -714,10 +713,11 @@ public class MetricsTool {
         if (Settings.isVerbose()) {
             out.println("elapsed time: " + (end - start) / 1000000000 + " seconds");
             out.println("number of analyzed files: "
-                    + FileInfoManager.getInstance().getFileInfos().size());
+                    + DataManager.getInstance().getFileInfoManager().getFileInfos().size());
 
             int loc = 0;
-            for (final FileInfo file : FileInfoManager.getInstance().getFileInfos()) {
+            for (final FileInfo file : DataManager.getInstance().getFileInfoManager()
+                    .getFileInfos()) {
                 loc += file.getLOC();
             }
             out.println("analyzed lines of code: " + loc);
@@ -821,11 +821,11 @@ public class MetricsTool {
 
         try {
 
-            TargetFileManager targetFiles = TargetFileManager.getInstance();
+            final TargetFileManager targetFiles = DataManager.getInstance().getTargetFileManager();
             for (BufferedReader reader = new BufferedReader(new FileReader(Settings.getListFile())); reader
                     .ready();) {
-                String line = reader.readLine();
-                TargetFile targetFile = new TargetFile(line);
+                final String line = reader.readLine();
+                final TargetFile targetFile = new TargetFile(line);
                 targetFiles.add(targetFile);
             }
 
@@ -872,7 +872,8 @@ public class MetricsTool {
             final String extension = language.getExtension();
             final String path = file.getAbsolutePath();
             if (path.endsWith(extension)) {
-                final TargetFileManager targetFiles = TargetFileManager.getInstance();
+                final TargetFileManager targetFiles = DataManager.getInstance()
+                        .getTargetFileManager();
                 final TargetFile targetFile = new TargetFile(path);
                 targetFiles.add(targetFile);
             }
@@ -926,7 +927,7 @@ public class MetricsTool {
         // 未解決クラス情報マネージャ， クラス情報マネージャを取得
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
-        final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+        final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
 
         // 各未解決クラスに対して
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
@@ -1000,7 +1001,7 @@ public class MetricsTool {
         // 未解決クラス情報マネージャ， 解決済みクラスマネージャを取得
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
-        final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+        final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
 
         // 各未解決クラスに対して
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
@@ -1046,7 +1047,7 @@ public class MetricsTool {
         // Unresolved クラス情報マネージャ， クラス情報マネージャを取得
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
-        final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
+        final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
 
         // 名前解決不可能クラスを保存するためのリスト
         final List<UnresolvedClassInfo> unresolvableClasses = new LinkedList<UnresolvedClassInfo>();
@@ -1167,9 +1168,10 @@ public class MetricsTool {
         // Unresolved クラス情報マネージャ，クラス情報マネージャ，フィールド情報マネージャを取得
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
-        final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
-        final FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
-        final MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
+        final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
+        final FieldInfoManager fieldInfoManager = DataManager.getInstance().getFieldInfoManager();
+        final MethodInfoManager methodInfoManager = DataManager.getInstance()
+                .getMethodInfoManager();
 
         // 各 Unresolvedクラスに対して
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
@@ -1217,9 +1219,10 @@ public class MetricsTool {
         // Unresolved クラス情報マネージャ， クラス情報マネージャ，メソッド情報マネージャを取得
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
-        final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
-        final FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
-        final MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
+        final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
+        final FieldInfoManager fieldInfoManager = DataManager.getInstance().getFieldInfoManager();
+        final MethodInfoManager methodInfoManager = DataManager.getInstance()
+                .getMethodInfoManager();
 
         // 各 Unresolvedクラスに対して
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
@@ -1286,7 +1289,8 @@ public class MetricsTool {
     private void addOverrideRelation() {
 
         // 全ての対象クラスに対して
-        for (TargetClassInfo classInfo : ClassInfoManager.getInstance().getTargetClassInfos()) {
+        for (final TargetClassInfo classInfo : DataManager.getInstance().getClassInfoManager()
+                .getTargetClassInfos()) {
             addOverrideRelation(classInfo);
         }
     }
@@ -1358,9 +1362,10 @@ public class MetricsTool {
 
         final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
                 .getInstance();
-        final ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
-        final FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
-        final MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
+        final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
+        final FieldInfoManager fieldInfoManager = DataManager.getInstance().getFieldInfoManager();
+        final MethodInfoManager methodInfoManager = DataManager.getInstance()
+                .getMethodInfoManager();
 
         // 各未解決クラス情報 に対して
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
@@ -1444,9 +1449,9 @@ public class MetricsTool {
                         methodInfoManager);
 
                 try {
-                    Class cls = Class
+                    Class<?> cls = Class
                             .forName("jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo");
-                    Field filed = cls.getDeclaredField("condition");
+                    final Field filed = cls.getDeclaredField("condition");
                     filed.setAccessible(true);
                     filed.set(localSpace, condition);
                 } catch (ClassNotFoundException e) {

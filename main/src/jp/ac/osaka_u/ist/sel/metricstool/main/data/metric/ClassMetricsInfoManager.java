@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
@@ -84,7 +84,8 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        for (ClassInfo classInfo : ClassInfoManager.getInstance().getTargetClassInfos()) {
+        for (final ClassInfo classInfo : DataManager.getInstance().getClassInfoManager()
+                .getTargetClassInfos()) {
 
             ClassMetricsInfo classMetricsInfo = this.get(classInfo);
             if (null == classMetricsInfo) {

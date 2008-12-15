@@ -10,8 +10,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ClassDefinitionStateManager.CLASS_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 
@@ -31,7 +31,8 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
      * @param targetDataManager　ビルダーが利用する構築データ管理者
      * @param interpriter　ビルダーが利用する修飾子の意味解析者
      */
-    public ClassBuilder(final BuildDataManager targetDataManager, final ModifiersInterpriter interpriter) {
+    public ClassBuilder(final BuildDataManager targetDataManager,
+            final ModifiersInterpriter interpriter) {
         this(targetDataManager, new ModifiersBuilder(), new NameBuilder(), interpriter);
     }
 
@@ -42,8 +43,9 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
      * @param targetDataManager　ビルダーが利用する構築データ管理者
      * @param interpriter　ビルダーが利用する修飾子の意味解析者
      */
-    public ClassBuilder(final BuildDataManager targetDataManager, final ModifiersBuilder modifiersBuilder,
-            final NameBuilder nameBuilder, final ModifiersInterpriter interpriter) {
+    public ClassBuilder(final BuildDataManager targetDataManager,
+            final ModifiersBuilder modifiersBuilder, final NameBuilder nameBuilder,
+            final ModifiersInterpriter interpriter) {
 
         //データ管理者はnullだと困る．
         if (null == targetDataManager) {
@@ -176,11 +178,14 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
      * @param endLine　クラスの終了行番号
      * @param endColumn　クラスの終了列番号
      */
-    protected void startClassDefinition(final int startLine, final int startColumn, final int endLine, final int endColumn) {
-        final FileInfo currentFile = FileInfoManager.getInstance().getCurrentFile();
+    protected void startClassDefinition(final int startLine, final int startColumn,
+            final int endLine, final int endColumn) {
+        final FileInfo currentFile = DataManager.getInstance().getFileInfoManager()
+                .getCurrentFile();
         assert null != currentFile : "Illegal state: the file information was not registered to FileInfoManager";
-        
-        final UnresolvedClassInfo classInfo = new UnresolvedClassInfo(currentFile, this.buildManager.getCurrentUnit());
+
+        final UnresolvedClassInfo classInfo = new UnresolvedClassInfo(currentFile,
+                this.buildManager.getCurrentUnit());
 
         classInfo.setFromLine(startLine);
         classInfo.setFromColumn(startColumn);

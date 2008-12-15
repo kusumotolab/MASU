@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor;
 import java.util.Iterator;
 import java.util.SortedSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
@@ -23,8 +24,8 @@ public class DefaultClassInfoAccessor implements ClassInfoAccessor {
      */
     @Override
     public Iterator<TargetClassInfo> iterator() {
-        ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
-        SortedSet<TargetClassInfo> classInfos = classInfoManager.getTargetClassInfos();
+        final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
+        final SortedSet<TargetClassInfo> classInfos = classInfoManager.getTargetClassInfos();
         return classInfos.iterator();
     }
 
@@ -35,7 +36,8 @@ public class DefaultClassInfoAccessor implements ClassInfoAccessor {
      */
     @Override
     public int getClassCount() {
-        return ClassInfoManager.getInstance().getTargetClassCount();
+        final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
+        return classInfoManager.getTargetClassCount();
     }
 
 }

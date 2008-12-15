@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
@@ -84,12 +84,14 @@ public final class FileMetricsInfoManager implements Iterable<FileMetricsInfo>, 
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        for (FileInfo fileInfo : FileInfoManager.getInstance().getFileInfos()) {
+        for (final FileInfo fileInfo : DataManager.getInstance().getFileInfoManager()
+                .getFileInfos()) {
 
-            FileMetricsInfo fileMetricsInfo = this.get(fileInfo);
+            final FileMetricsInfo fileMetricsInfo = this.get(fileInfo);
             if (null == fileMetricsInfo) {
-                String message = "File \"" + fileInfo.getName() + "\" metrics are not registered!";
-                MessagePrinter printer = new DefaultMessagePrinter(this,
+                final String message = "File \"" + fileInfo.getName()
+                        + "\" metrics are not registered!";
+                final MessagePrinter printer = new DefaultMessagePrinter(this,
                         MessagePrinter.MESSAGE_TYPE.ERROR);
                 printer.println(message);
                 throw new MetricNotRegisteredException(message);

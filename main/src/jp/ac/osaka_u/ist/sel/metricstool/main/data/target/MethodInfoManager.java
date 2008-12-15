@@ -19,15 +19,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class MethodInfoManager {
 
     /**
-     * メソッド情報を管理しているインスタンスを返す． シングルトンパターンを持ちている．
-     * 
-     * @return メソッド情報を管理しているインスタンス
-     */
-    public static MethodInfoManager getInstance() {
-        return SINGLETON;
-    }
-
-    /**
      * 
      * @param methodInfo 追加するメソッド情報
      */
@@ -154,7 +145,7 @@ public final class MethodInfoManager {
     public int getExternalConstructorCount() {
         return this.externalConstructorInfos.size();
     }
-    
+
     /**
      * メソッド情報をクリア
      */
@@ -167,20 +158,14 @@ public final class MethodInfoManager {
 
     /**
      * 
-     * コンストラクタ． シングルトンパターンで実装しているために private がついている．
+     * コンストラクタ． 
      */
-    private MethodInfoManager() {
+    public MethodInfoManager() {
         this.targetMethodInfos = new TreeSet<TargetMethodInfo>();
         this.externalMethodInfos = new TreeSet<ExternalMethodInfo>();
         this.targetConstructorInfos = new TreeSet<TargetConstructorInfo>();
         this.externalConstructorInfos = new TreeSet<ExternalConstructorInfo>();
     }
-    
-    /**
-     * 
-     * シングルトンパターンを実装するための変数．
-     */
-    private static final MethodInfoManager SINGLETON = new MethodInfoManager();
 
     /**
      * 

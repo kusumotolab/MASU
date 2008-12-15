@@ -9,11 +9,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 
 
@@ -66,10 +66,12 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
         if (null != buildManager && !enumClassStack.isEmpty()) {
             UnresolvedClassInfo enumClass = enumClassStack.peek();
 
-            final FileInfo currentFile = FileInfoManager.getInstance().getCurrentFile();
+            final FileInfo currentFile = DataManager.getInstance().getFileInfoManager()
+                    .getCurrentFile();
             assert null != currentFile : "Illegal state: the file information was not registered to FileInfoManager";
 
-            UnresolvedClassInfo enumAnonymous = new UnresolvedClassInfo(currentFile, this.buildManager.getCurrentUnit());
+            UnresolvedClassInfo enumAnonymous = new UnresolvedClassInfo(currentFile,
+                    this.buildManager.getCurrentUnit());
             int count = buildManager.getAnonymousClassCount(enumClass);
             enumAnonymous.setClassName(enumClass.getClassName()
                     + JavaAnonymousClassBuilder.JAVA_ANONYMOUSCLASS_NAME_MARKER + count);

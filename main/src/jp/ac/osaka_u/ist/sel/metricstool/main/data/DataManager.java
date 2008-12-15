@@ -5,6 +5,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManage
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FieldMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
 
 
 /**
@@ -22,11 +27,11 @@ public class DataManager {
      */
     public static DataManager getInstance() {
 
-        if (null == singleton) {
-            singleton = new DataManager();
+        if (null == SINGLETON) {
+            SINGLETON = new DataManager();
         }
 
-        return singleton;
+        return SINGLETON;
 
     }
 
@@ -34,7 +39,16 @@ public class DataManager {
      * データマネージャーに登録されている情報をクリアする
      */
     public static void clear() {
-        singleton = null;
+        SINGLETON = null;
+    }
+
+    /**
+     * TargetFileManager　を返す
+     * 
+     * @return TargetFileManager
+     */
+    public TargetFileManager getTargetFileManager() {
+        return this.targetFileManager;
     }
 
     /**
@@ -73,14 +87,59 @@ public class DataManager {
         return this.methodMetricsInfoManager;
     }
 
+    /**
+     * ClassInfoManager　を返す
+     * 
+     * @return ClassInfoManager
+     */
+    public ClassInfoManager getClassInfoManager() {
+        return this.classInfoManager;
+    }
+
+    /**
+     * FieldInfoManager　を返す
+     * 
+     * @return FieldInfoManager
+     */
+    public FieldInfoManager getFieldInfoManager() {
+        return this.fieldInfoManager;
+    }
+
+    /**
+     * FileInfoManager　を返す
+     * 
+     * @return FileInfoManager
+     */
+    public FileInfoManager getFileInfoManager() {
+        return this.fileInfoManager;
+    }
+
+    /**
+     * MethodInfoManager　を返す
+     * 
+     * @return MethodInfoManager
+     */
+    public MethodInfoManager getMethodInfoManager() {
+        return this.methodInfoManager;
+    }
+
     private DataManager() {
+        this.targetFileManager = new TargetFileManager();
+
         this.classMetricsInfoManager = new ClassMetricsInfoManager();
         this.fieldMetricsInfoManager = new FieldMetricsInfoManager();
         this.fileMetricsInfoManager = new FileMetricsInfoManager();
         this.methodMetricsInfoManager = new MethodMetricsInfoManager();
+
+        this.classInfoManager = new ClassInfoManager();
+        this.fieldInfoManager = new FieldInfoManager();
+        this.fileInfoManager = new FileInfoManager();
+        this.methodInfoManager = new MethodInfoManager();
     }
 
-    private static DataManager singleton;
+    private static DataManager SINGLETON;
+
+    final private TargetFileManager targetFileManager;
 
     final private ClassMetricsInfoManager classMetricsInfoManager;
 
@@ -90,4 +149,11 @@ public class DataManager {
 
     final private MethodMetricsInfoManager methodMetricsInfoManager;
 
+    final private ClassInfoManager classInfoManager;
+
+    final private FieldInfoManager fieldInfoManager;
+
+    final private FileInfoManager fileInfoManager;
+
+    final private MethodInfoManager methodInfoManager;
 }

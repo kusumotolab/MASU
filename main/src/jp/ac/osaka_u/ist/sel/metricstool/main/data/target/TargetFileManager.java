@@ -22,25 +22,15 @@ public final class TargetFileManager implements Iterable<TargetFile> {
 
     /**
      * 
-     * @return 対象ファイルを格納している Set を返す．
-     * 
-     * シングルトンパターンを用いて実装している．
-     */
-    public static TargetFileManager getInstance() {
-        return SINGLETON;
-    }
-
-    /**
-     * 
      * @param targetFile 追加する対象ファイル (TargetFile)
      */
     public void add(final TargetFile targetFile) {
-        
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == targetFile) {
             throw new NullPointerException();
         }
-        
+
         this.targetFiles.add(targetFile);
     }
 
@@ -54,31 +44,25 @@ public final class TargetFileManager implements Iterable<TargetFile> {
      * 
      * @return 対象ファイルの数
      */
-    public int size(){
+    public int size() {
         return this.targetFiles.size();
     }
-    
+
     /**
      * 対象ファイルをクリア
      */
     public void clear() {
         this.targetFiles.clear();
     }
-    
-    /**
-     * 
-     * コンストラクタ． シングルトンパターンで実装しているために private がついている
-     * 以前は HashSet を用いていたが，同じディレクトリのファイルはまとめて返すほうがよいので，TreeSet に変更した．
-     */
-    private TargetFileManager() {
-        this.targetFiles = new TreeSet<TargetFile>();
-    }
 
     /**
      * 
-     * シングルトンパターンを実装するための変数．
+     * コンストラクタ． 
+     * 以前は HashSet を用いていたが，同じディレクトリのファイルはまとめて返すほうがよいので，TreeSet に変更した．
      */
-    private static final TargetFileManager SINGLETON = new TargetFileManager();
+    public TargetFileManager() {
+        this.targetFiles = new TreeSet<TargetFile>();
+    }
 
     /**
      * 

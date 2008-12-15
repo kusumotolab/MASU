@@ -18,15 +18,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class FieldInfoManager {
 
     /**
-     * フィールド情報を管理しているインスタンスを返す． シングルトンパターンを持ちている．
-     * 
-     * @return フィールド情報を管理しているインスタンス
-     */
-    public static FieldInfoManager getInstance() {
-        return SINGLETON;
-    }
-
-    /**
      * 対象フィールドを追加する
      * 
      * @param fieldInfo 追加する対象フィールド情報
@@ -91,7 +82,7 @@ public final class FieldInfoManager {
     public int getExternalFieldCount() {
         return this.externalFieldInfos.size();
     }
-    
+
     /**
      * フィールド情報をクリア
      */
@@ -104,16 +95,10 @@ public final class FieldInfoManager {
      * 
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */
-    private FieldInfoManager() {
+    public FieldInfoManager() {
         this.targetFieldInfos = new TreeSet<TargetFieldInfo>();
         this.externalFieldInfos = new TreeSet<ExternalFieldInfo>();
     }
-
-    /**
-     * 
-     * シングルトンパターンを実装するための変数．
-     */
-    private static final FieldInfoManager SINGLETON = new FieldInfoManager();
 
     /**
      * 

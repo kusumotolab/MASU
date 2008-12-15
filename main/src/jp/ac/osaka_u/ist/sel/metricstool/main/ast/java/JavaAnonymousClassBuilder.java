@@ -10,8 +10,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.JavaAnonymousClassStateMa
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
@@ -24,7 +24,8 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
         this(buildManager, new IdentifierBuilder());
     }
 
-    public JavaAnonymousClassBuilder(final BuildDataManager buildManager, final IdentifierBuilder identifierBuilder) {
+    public JavaAnonymousClassBuilder(final BuildDataManager buildManager,
+            final IdentifierBuilder identifierBuilder) {
         if (null == buildManager) {
             throw new NullPointerException("buildManager is null.");
         }
@@ -37,7 +38,7 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
         this.identifierBuilder = identifierBuilder;
 
         this.identifierBuilder.deactivate();
-        
+
         addStateManager(stateManager);
 
         addInnerBuilder(identifierBuilder);
@@ -55,13 +56,13 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
         } else if (type.equals(ANONYMOUSCLASS_STATE.ENTER_INSTANTIATION)) {
             builtIdentifierCountStack.push(identifierBuilder.getBuiltDataCount());
             identifierBuilder.activate();
-        } else if (type.equals(ANONYMOUSCLASS_STATE.EXIT_INSTANTIATION)){
+        } else if (type.equals(ANONYMOUSCLASS_STATE.EXIT_INSTANTIATION)) {
             final int builtIdentifierCount = identifierBuilder.getBuiltDataCount()
-                - builtIdentifierCountStack.pop();
-            for(int i=0; i<builtIdentifierCount;i++){
+                    - builtIdentifierCountStack.pop();
+            for (int i = 0; i < builtIdentifierCount; i++) {
                 identifierBuilder.popLastBuiltData();
             }
-            if (!stateManager.isInInstantiation()){
+            if (!stateManager.isInInstantiation()) {
                 identifierBuilder.deactivate();
             }
         }
@@ -71,13 +72,15 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
         final UnresolvedClassInfo outer = buildDataManager.getCurrentClass();
         final int anonymousCount = buildDataManager.getAnonymousClassCount(outer);
 
-        final FileInfo currentFile = FileInfoManager.getInstance().getCurrentFile();
+        final FileInfo currentFile = DataManager.getInstance().getFileInfoManager()
+                .getCurrentFile();
         assert null != currentFile : "Illegal state: the file information was not registered to FileInfoManager";
-        
-        final UnresolvedUnitInfo<? extends UnitInfo> currentUnit = this.buildDataManager.getCurrentUnit();
+
+        final UnresolvedUnitInfo<? extends UnitInfo> currentUnit = this.buildDataManager
+                .getCurrentUnit();
         final UnresolvedClassInfo anonymous = new UnresolvedClassInfo(currentFile, currentUnit);
         anonymous.setAnonymous(true);
-        
+
         anonymous.setClassName(String.valueOf(anonymousCount));
         /*anonymous.setClassName(outer.getClassName() + JAVA_ANONYMOUSCLASS_NAME_MARKER
                 + anonymousCount);*/
@@ -90,11 +93,11 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
         if (null != builtName) {
             assert (null != builtName && 0 < builtName.length) : "Illegal state: resolved super type name was empty.";
 
-            final UnresolvedClassTypeInfo superType = new UnresolvedClassTypeInfo(
-                    buildDataManager.getAllAvaliableNames(), builtName);
+            final UnresolvedClassTypeInfo superType = new UnresolvedClassTypeInfo(buildDataManager
+                    .getAllAvaliableNames(), builtName);
             anonymous.addSuperClass(superType);
         }
-        
+
         anonymous.setInheritanceVisible(false);
         anonymous.setPublicVisible(false);
         anonymous.setNamespaceVisible(false);
@@ -112,10 +115,10 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
     protected void endAnonymousClassDef() {
         buildDataManager.endClassDefinition();
     }
-    
-    protected void startAnonymousClassDef(AstVisitEvent trigger){
+
+    protected void startAnonymousClassDef(AstVisitEvent trigger) {
         final int builtIdentifierCount = identifierBuilder.getBuiltDataCount()
-            - builtIdentifierCountStack.peek();
+                - builtIdentifierCountStack.peek();
 
         UnresolvedClassInfo anonymousClass = buildAnonymousClass(builtIdentifierCount);
         anonymousClass.setFromLine(trigger.getStartLine());

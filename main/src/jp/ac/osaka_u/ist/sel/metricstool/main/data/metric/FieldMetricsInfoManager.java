@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
@@ -84,13 +84,14 @@ public final class FieldMetricsInfoManager implements Iterable<FieldMetricsInfo>
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        for (final FieldInfo fieldInfo : FieldInfoManager.getInstance().getTargetFieldInfos()) {
+        for (final FieldInfo fieldInfo : DataManager.getInstance().getFieldInfoManager()
+                .getTargetFieldInfos()) {
 
-            FieldMetricsInfo fieldMetricsInfo = this.get(fieldInfo);
+            final FieldMetricsInfo fieldMetricsInfo = this.get(fieldInfo);
             if (null == fieldMetricsInfo) {
-                String message = "Field \"" + fieldInfo.getName()
+                final String message = "Field \"" + fieldInfo.getName()
                         + "\" metrics are not registered!";
-                MessagePrinter printer = new DefaultMessagePrinter(this,
+                final MessagePrinter printer = new DefaultMessagePrinter(this,
                         MessagePrinter.MESSAGE_TYPE.ERROR);
                 printer.println(message);
                 throw new MetricNotRegisteredException(message);

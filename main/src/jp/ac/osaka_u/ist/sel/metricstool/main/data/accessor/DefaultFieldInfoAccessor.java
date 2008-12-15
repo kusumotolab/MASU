@@ -4,8 +4,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor;
 import java.util.Iterator;
 import java.util.SortedSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 
 
@@ -24,7 +24,7 @@ public class DefaultFieldInfoAccessor implements FieldInfoAccessor {
      */
     @Override
     public Iterator<TargetFieldInfo> iterator() {
-        final FieldInfoManager fieldInfoManager = FieldInfoManager.getInstance();
+        final FieldInfoManager fieldInfoManager = DataManager.getInstance().getFieldInfoManager();
         final SortedSet<TargetFieldInfo> fieldInfos = fieldInfoManager.getTargetFieldInfos();
         return fieldInfos.iterator();
     }
@@ -35,7 +35,8 @@ public class DefaultFieldInfoAccessor implements FieldInfoAccessor {
      */
     @Override
     public int getFieldCount() {
-        return FileInfoManager.getInstance().getFileCount();
+        final FieldInfoManager fieldInfoManager = DataManager.getInstance().getFieldInfoManager();
+        return fieldInfoManager.getTargetFieldCount();
     }
 
 }

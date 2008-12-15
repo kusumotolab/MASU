@@ -8,6 +8,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
@@ -74,8 +75,8 @@ public final class MethodCallInfo extends CallInfo {
 
             // Java　の場合 (型パラメータは1.5から導入された)
             if (Settings.getLanguage().equals(LANGUAGE.JAVA15)) {
-                final ClassInfo referencedClass = ClassInfoManager.getInstance().getClassInfo(
-                        new String[] { "java", "lang", "Object" });
+                final ClassInfo referencedClass = DataManager.getInstance().getClassInfoManager()
+                        .getClassInfo(new String[] { "java", "lang", "Object" });
                 final TypeInfo classType = new ClassTypeInfo(referencedClass);
                 return classType;
             }

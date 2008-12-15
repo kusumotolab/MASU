@@ -7,9 +7,9 @@ import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
@@ -85,16 +85,17 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        for (MethodInfo methodInfo : MethodInfoManager.getInstance().getTargetMethodInfos()) {
+        for (final MethodInfo methodInfo : DataManager.getInstance().getMethodInfoManager()
+                .getTargetMethodInfos()) {
 
-            MethodMetricsInfo methodMetricsInfo = this.get(methodInfo);
+            final MethodMetricsInfo methodMetricsInfo = this.get(methodInfo);
             if (null == methodMetricsInfo) {
-                String methodName = methodInfo.getMethodName();
-                ClassInfo ownerClassInfo = methodInfo.getOwnerClass();
-                String ownerClassName = ownerClassInfo.getFullQualifiedName(".");
-                String message = "Metrics of " + ownerClassName + "::" + methodName
+                final String methodName = methodInfo.getMethodName();
+                final ClassInfo ownerClassInfo = methodInfo.getOwnerClass();
+                final String ownerClassName = ownerClassInfo.getFullQualifiedName(".");
+                final String message = "Metrics of " + ownerClassName + "::" + methodName
                         + " are not registered!";
-                MessagePrinter printer = new DefaultMessagePrinter(this,
+                final MessagePrinter printer = new DefaultMessagePrinter(this,
                         MessagePrinter.MESSAGE_TYPE.ERROR);
                 printer.println(message);
                 throw new MetricNotRegisteredException(message);
