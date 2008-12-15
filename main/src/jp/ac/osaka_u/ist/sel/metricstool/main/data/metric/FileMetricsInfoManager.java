@@ -26,15 +26,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class FileMetricsInfoManager implements Iterable<FileMetricsInfo>, MessageSource {
 
     /**
-     * このクラスのインスタンスを返す．シングルトンパターンを用いている．
-     * 
-     * @return このクラスのインスタンス
-     */
-    public static FileMetricsInfoManager getInstance() {
-        return SINGLETON;
-    }
-
-    /**
      * メトリクス情報一覧のイテレータを返す．
      * 
      * @return メトリクス情報のイテレータ
@@ -115,27 +106,16 @@ public final class FileMetricsInfoManager implements Iterable<FileMetricsInfo>, 
     public String getMessageSourceName() {
         return this.getClass().getName();
     }
-    
-    /**
-     * メトリクス情報をクリア
-     */
-    public void clear() {
-        this.fileMetricsInfos.clear();
-    }
 
     /**
-     * ファイルメトリクスマネージャのオブジェクトを生成する． シングルトンパターンを用いているため，private がついている．
+     * ファイルメトリクスマネージャのオブジェクトを生成する．
      * 
      */
-    private FileMetricsInfoManager() {
+    public FileMetricsInfoManager() {
+        //MetricsToolSecurityManager.getInstance().checkAccess();
         this.fileMetricsInfos = Collections
                 .synchronizedSortedMap(new TreeMap<FileInfo, FileMetricsInfo>());
     }
-
-    /**
-     * このクラスのオブジェクトを管理している定数．シングルトンパターンを用いている．
-     */
-    private static final FileMetricsInfoManager SINGLETON = new FileMetricsInfoManager();
 
     /**
      * ファイルメトリクスのマップを保存するための変数

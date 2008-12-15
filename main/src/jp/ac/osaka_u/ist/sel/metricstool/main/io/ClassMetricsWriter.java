@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManager;
 
 
@@ -19,6 +20,6 @@ public interface ClassMetricsWriter extends MetricsWriter {
     /**
      * クラスメトリクスを保存している定数
      */
-    ClassMetricsInfoManager CLASS_METRICS_MANAGER = ClassMetricsInfoManager.getInstance();
-
+    ClassMetricsInfoManager CLASS_METRICS_MANAGER = DataManager.getInstance()
+            .getClassMetricsInfoManager();
 }

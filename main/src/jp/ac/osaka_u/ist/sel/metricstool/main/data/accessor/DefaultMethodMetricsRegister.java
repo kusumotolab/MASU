@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricAlreadyRegisteredException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
@@ -36,7 +37,12 @@ public class DefaultMethodMetricsRegister implements MethodMetricsRegister {
 
     /**
      * 第一引数のメソッドのメトリクス値（第二引数）を登録する
+     * 
+     * @param methodInfo メトリクスを登録するメソッド
+     * @param value 登録するメトリクス値
+     * @throws MetricAlreadyRegisteredException すでにメトリクスが登録されている場合にスローされる例外    
      */
+    @Override
     public void registMetric(final MethodInfo methodInfo, final Number value)
             throws MetricAlreadyRegisteredException {
 
@@ -44,7 +50,8 @@ public class DefaultMethodMetricsRegister implements MethodMetricsRegister {
             throw new NullPointerException();
         }
 
-        final MethodMetricsInfoManager manager = MethodMetricsInfoManager.getInstance();
+        final MethodMetricsInfoManager manager = DataManager.getInstance()
+                .getMethodMetricsInfoManager();
         manager.putMetric(methodInfo, this.plugin, value);
     }
 

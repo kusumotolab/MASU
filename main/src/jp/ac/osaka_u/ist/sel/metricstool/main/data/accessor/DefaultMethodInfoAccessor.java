@@ -21,6 +21,7 @@ public class DefaultMethodInfoAccessor implements MethodInfoAccessor {
      * 
      * @return MethodInfo のイテレータ
      */
+    @Override
     public Iterator<TargetMethodInfo> iterator() {
         MethodInfoManager methodInfoManager = MethodInfoManager.getInstance();
         SortedSet<TargetMethodInfo> methodInfos = methodInfoManager.getTargetMethodInfos();
@@ -32,6 +33,7 @@ public class DefaultMethodInfoAccessor implements MethodInfoAccessor {
      * 
      * @return 対象メソッドの数
      */
+    @Override
     public int getMethodCount() {
         return MethodInfoManager.getInstance().getTargetMethodCount();
     }

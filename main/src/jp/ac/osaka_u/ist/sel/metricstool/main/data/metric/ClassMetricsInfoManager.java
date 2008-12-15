@@ -26,15 +26,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>, MessageSource {
 
     /**
-     * このクラスのインスタンスを返す．シングルトンパターンを用いている．
-     * 
-     * @return このクラスのインスタンス
-     */
-    public static ClassMetricsInfoManager getInstance() {
-        return SINGLETON;
-    }
-
-    /**
      * メトリクス情報一覧のイテレータを返す．
      * 
      * @return メトリクス情報のイテレータ
@@ -116,26 +107,15 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
     public String getMessageSourceName() {
         return this.getClass().getName();
     }
-    
-    /**
-     * メトリクス情報をクリア
-     */
-    public void clear() {
-        this.classMetricsInfos.clear();
-    }
 
     /**
-     * クラスメトリクスマネージャのオブジェクトを生成する． シングルトンパターンを用いているため，private がついている．
+     * クラスメトリクスマネージャのオブジェクトを生成する． 
      */
-    private ClassMetricsInfoManager() {
+    public ClassMetricsInfoManager() {
+        //MetricsToolSecurityManager.getInstance().checkAccess();
         this.classMetricsInfos = Collections
                 .synchronizedSortedMap(new TreeMap<ClassInfo, ClassMetricsInfo>());
     }
-
-    /**
-     * このクラスのオブジェクトを管理している定数．シングルトンパターンを用いている．
-     */
-    private static final ClassMetricsInfoManager SINGLETON = new ClassMetricsInfoManager();
 
     /**
      * クラスメトリクスのマップを保存するための変数

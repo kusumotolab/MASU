@@ -26,19 +26,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class FieldMetricsInfoManager implements Iterable<FieldMetricsInfo>, MessageSource {
 
     /**
-     * このクラスのインスタンスを返す．シングルトンパターンを用いている．
-     * 
-     * @return このクラスのインスタンス
-     */
-    public static FieldMetricsInfoManager getInstance() {
-        return SINGLETON;
-    }
-
-    /**
-     * メトリクス情報一覧のイテレータを返す．
-     * 
-     * @return メトリクス情報のイテレータ
-     */
+    * メトリクス情報一覧のイテレータを返す．
+    * 
+    * @return メトリクス情報のイテレータ
+    */
     public Iterator<FieldMetricsInfo> iterator() {
         MetricsToolSecurityManager.getInstance().checkAccess();
         Collection<FieldMetricsInfo> unmodifiableFieldMetricsInfoCollection = Collections
@@ -118,21 +109,17 @@ public final class FieldMetricsInfoManager implements Iterable<FieldMetricsInfo>
     }
 
     /**
-     * フィールドメトリクスマネージャのオブジェクトを生成する． シングルトンパターンを用いているため，private がついている．
+     * フィールドメトリクスマネージャのオブジェクトを生成する． 
      * 
      */
-    private FieldMetricsInfoManager() {
+    public FieldMetricsInfoManager() {
+        //MetricsToolSecurityManager.getInstance().checkAccess();
         this.fieldMetricsInfos = Collections
                 .synchronizedSortedMap(new TreeMap<FieldInfo, FieldMetricsInfo>());
     }
 
     /**
-     * このクラスのオブジェクトを管理している定数．シングルトンパターンを用いている．
-     */
-    private static final FieldMetricsInfoManager SINGLETON = new FieldMetricsInfoManager();
-
-    /**
-     * ファイルメトリクスのマップを保存するための変数
-     */
+    * ファイルメトリクスのマップを保存するための変数
+    */
     private final SortedMap<FieldInfo, FieldMetricsInfo> fieldMetricsInfos;
 }

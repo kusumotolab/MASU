@@ -21,6 +21,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java15AntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.JavaAstVisitorManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitorManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.antlr.AntlrAstVisitor;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FieldMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
@@ -466,11 +467,12 @@ public class MetricsTool {
         if (0 < PluginManager.getInstance().getFileMetricPlugins().size()) {
 
             try {
-                FileMetricsInfoManager manager = FileMetricsInfoManager.getInstance();
+                final FileMetricsInfoManager manager = DataManager.getInstance()
+                        .getFileMetricsInfoManager();
                 manager.checkMetrics();
 
-                String fileName = Settings.getFileMetricsFile();
-                CSVFileMetricsWriter writer = new CSVFileMetricsWriter(fileName);
+                final String fileName = Settings.getFileMetricsFile();
+                final CSVFileMetricsWriter writer = new CSVFileMetricsWriter(fileName);
                 writer.write();
 
             } catch (MetricNotRegisteredException e) {
@@ -483,11 +485,12 @@ public class MetricsTool {
         if (0 < PluginManager.getInstance().getClassMetricPlugins().size()) {
 
             try {
-                ClassMetricsInfoManager manager = ClassMetricsInfoManager.getInstance();
+                final ClassMetricsInfoManager manager = DataManager.getInstance()
+                        .getClassMetricsInfoManager();
                 manager.checkMetrics();
 
-                String fileName = Settings.getClassMetricsFile();
-                CSVClassMetricsWriter writer = new CSVClassMetricsWriter(fileName);
+                final String fileName = Settings.getClassMetricsFile();
+                final CSVClassMetricsWriter writer = new CSVClassMetricsWriter(fileName);
                 writer.write();
 
             } catch (MetricNotRegisteredException e) {
@@ -500,11 +503,12 @@ public class MetricsTool {
         if (0 < PluginManager.getInstance().getMethodMetricPlugins().size()) {
 
             try {
-                MethodMetricsInfoManager manager = MethodMetricsInfoManager.getInstance();
+                final MethodMetricsInfoManager manager = DataManager.getInstance()
+                        .getMethodMetricsInfoManager();
                 manager.checkMetrics();
 
-                String fileName = Settings.getMethodMetricsFile();
-                CSVMethodMetricsWriter writer = new CSVMethodMetricsWriter(fileName);
+                final String fileName = Settings.getMethodMetricsFile();
+                final CSVMethodMetricsWriter writer = new CSVMethodMetricsWriter(fileName);
                 writer.write();
 
             } catch (MetricNotRegisteredException e) {
@@ -517,11 +521,12 @@ public class MetricsTool {
         if (0 < PluginManager.getInstance().getFieldMetricPlugins().size()) {
 
             try {
-                FieldMetricsInfoManager manager = FieldMetricsInfoManager.getInstance();
+                final FieldMetricsInfoManager manager = DataManager.getInstance()
+                        .getFieldMetricsInfoManager();
                 manager.checkMetrics();
 
-                String fileName = Settings.getMethodMetricsFile();
-                CSVMethodMetricsWriter writer = new CSVMethodMetricsWriter(fileName);
+                final String fileName = Settings.getMethodMetricsFile();
+                final CSVMethodMetricsWriter writer = new CSVMethodMetricsWriter(fileName);
                 writer.write();
 
             } catch (MetricNotRegisteredException e) {

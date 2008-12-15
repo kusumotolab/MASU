@@ -21,6 +21,7 @@ public class DefaultClassInfoAccessor implements ClassInfoAccessor {
      * 
      * @return ClassInfo のイテレータ
      */
+    @Override
     public Iterator<TargetClassInfo> iterator() {
         ClassInfoManager classInfoManager = ClassInfoManager.getInstance();
         SortedSet<TargetClassInfo> classInfos = classInfoManager.getTargetClassInfos();
@@ -32,6 +33,7 @@ public class DefaultClassInfoAccessor implements ClassInfoAccessor {
      * 
      * @return 対象クラスの数
      */
+    @Override
     public int getClassCount() {
         return ClassInfoManager.getInstance().getTargetClassCount();
     }

@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
 
 
@@ -20,6 +21,7 @@ public interface FileMetricsWriter extends MetricsWriter {
     /**
      * ファイルメトリクスを保存している定数
      */
-    FileMetricsInfoManager FILE_METRICS_MANAGER = FileMetricsInfoManager.getInstance();
+    FileMetricsInfoManager FILE_METRICS_MANAGER = DataManager.getInstance()
+            .getFileMetricsInfoManager();
 
 }

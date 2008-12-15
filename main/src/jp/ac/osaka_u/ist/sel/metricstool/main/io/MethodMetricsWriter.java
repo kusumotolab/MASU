@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManager;
 
 
@@ -20,6 +21,7 @@ public interface MethodMetricsWriter extends MetricsWriter {
     /**
      * メソッドメトリクスを保存している定数
      */
-    MethodMetricsInfoManager METHOD_METRICS_MANAGER = MethodMetricsInfoManager.getInstance();
+    MethodMetricsInfoManager METHOD_METRICS_MANAGER = DataManager.getInstance()
+            .getMethodMetricsInfoManager();
 
 }

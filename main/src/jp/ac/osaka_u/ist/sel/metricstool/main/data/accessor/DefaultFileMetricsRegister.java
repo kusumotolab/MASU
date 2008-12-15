@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricAlreadyRegisteredException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
@@ -36,7 +37,12 @@ public class DefaultFileMetricsRegister implements FileMetricsRegister {
 
     /**
      * 第一引数のファイルのメトリクス値（第二引数）を登録する
+     * 
+     * @param fileInfo メトリクスを登録するファイル
+     * @param value 登録するメトリクス値
+     * @throws MetricAlreadyRegisteredException すでにメトリクスが登録されている場合にスローされる例外
      */
+    @Override
     public void registMetric(final FileInfo fileInfo, final Number value)
             throws MetricAlreadyRegisteredException {
 
@@ -44,7 +50,8 @@ public class DefaultFileMetricsRegister implements FileMetricsRegister {
             throw new NullPointerException();
         }
 
-        final FileMetricsInfoManager manager = FileMetricsInfoManager.getInstance();
+        final FileMetricsInfoManager manager = DataManager.getInstance()
+                .getFileMetricsInfoManager();
         manager.putMetric(fileInfo, this.plugin, value);
     }
 
