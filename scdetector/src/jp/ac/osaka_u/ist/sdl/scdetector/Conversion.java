@@ -10,6 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CastUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ElseBlockInfo;
@@ -26,6 +27,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SimpleBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SynchronizedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TernaryOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ThrowStatementInfo;
@@ -79,29 +81,27 @@ public class Conversion {
 
         } else if (statement instanceof VariableDeclarationStatementInfo) {
 
-            sb.append("TYPE");
+            final LocalVariableInfo variable = ((VariableDeclarationStatementInfo) statement)
+                    .getDeclaredLocalVariable();
+            final TypeInfo variableType = variable.getType();
 
-            {
-                final LocalVariableInfo variable = ((VariableDeclarationStatementInfo) statement)
-                        .getDeclaredLocalVariable();
-                final TypeInfo variableType = variable.getType();
+            switch (Configuration.INSTANCE.getPV()) {
+            case 0: // 正規化レベル0，変数名をそのまま使う
+                sb.append(variable.getType().getTypeName());
+                sb.append(" ");
+                sb.append(variable.getName());
+                break;
 
-                switch (Configuration.INSTANCE.getPV()) {
-                case 0: // 正規化レベル0，変数名をそのまま使う
-                    sb.append(variable.getName());
-                    break;
+            case 1: // 正規化レベル1，変数は型名に正規化する．変数名が異なっていても，型が同じであれば，クローンとして検出する
+                sb.append(variableType.getTypeName());
+                break;
 
-                case 1: // 正規化レベル1，変数は型名に正規化する．変数名が異なっていても，型が同じであれば，クローンとして検出する
-                    sb.append(variableType.getTypeName());
-                    break;
+            case 2: // 正規化レベル2，全ての変数を同一字句に正規化する．
+                sb.append("VARIABLE");
+                break;
 
-                case 2: // 正規化レベル2，全ての変数を同一字句に正規化する．
-                    sb.append("VARIABLE");
-                    break;
-
-                default:
-                    assert false : "Here shouldn't be reached!";
-                }
+            default:
+                assert false : "Here shouldn't be reached!";
             }
 
             if (((VariableDeclarationStatementInfo) statement).isInitialized()) {
@@ -148,6 +148,25 @@ public class Conversion {
         } else if (block instanceof TryBlockInfo) {
 
             sb.append("TRY");
+        }
+
+        return sb.toString();
+    }
+
+    public static String getNormalizedString(final ConditionInfo condition) {
+
+        final StringBuilder sb = new StringBuilder();
+
+        if (condition instanceof VariableDeclarationStatementInfo) {
+
+            sb.append((StatementInfo) condition);
+
+        } else if (condition instanceof ExpressionInfo) {
+
+            final ExpressionInfo expression = (ExpressionInfo) condition;
+            final String expressionString = Conversion.getNormalizedString(expression);
+            sb.append(expressionString);
+
         }
 
         return sb.toString();

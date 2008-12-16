@@ -38,6 +38,14 @@ public final class Configuration {
         this.o = o;
     }
 
+    public int getS() {
+        return this.s;
+    }
+
+    public void setS(final int s) {
+        this.s = s;
+    }
+
     public int getPV() {
         return this.pv;
     }
@@ -79,6 +87,8 @@ public final class Configuration {
     private String l;
 
     private String o;
+
+    private int s;
 
     private int pv;
 

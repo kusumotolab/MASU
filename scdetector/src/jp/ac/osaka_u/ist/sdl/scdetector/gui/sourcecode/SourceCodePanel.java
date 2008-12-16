@@ -19,6 +19,7 @@ import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 
@@ -32,11 +33,13 @@ class SourceCodePanel extends JPanel {
 
         this.sourceCodeArea = new JTextArea();
         this.sourceCodeArea.setTabSize(1);
+        this.sourceCodeArea.setEditable(false);
 
         this.sourceCodeScrollPane = new JScrollPane(this.sourceCodeArea);
         this.sourceCodeScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.sourceCodeScrollPane
                 .setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        this.sourceCodeScrollPane.setRowHeaderView(new LineNumberView(this.sourceCodeArea));
 
         this.setLayout(new BorderLayout());
         this.add(this.fileNameField, BorderLayout.NORTH);
@@ -81,6 +84,10 @@ class SourceCodePanel extends JPanel {
                 180, 180, 125));
 
         for (final ExecutableElement element : clone) {
+
+            if (element instanceof BlockInfo) {
+                System.out.println("Block");
+            }
 
             try {
 
