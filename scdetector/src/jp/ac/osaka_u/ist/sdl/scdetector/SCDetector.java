@@ -178,6 +178,7 @@ public class SCDetector extends MetricsTool {
         scdetector.analyzeTargetFiles();
 
         // 変数を指定することにより，その変数に対して代入を行っている文を取得するためのハッシュを構築する
+        // ただし，条件節については，変数を参照している場合もハッシュを構築する
         final Map<VariableInfo<?>, Set<ExecutableElement>> assignedVariableHashes = new HashMap<VariableInfo<?>, Set<ExecutableElement>>();
         for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
                 .getTargetMethodInfos()) {
@@ -222,7 +223,7 @@ public class SCDetector extends MetricsTool {
                             assignedVariableHashes, elementHash, usedVariableHashesA,
                             usedVariableHashesB);
 
-                    if (1 < clonePair.size()) {
+                    if (Configuration.INSTANCE.getS() <= clonePair.size()) {
                         clonePairs.add(clonePair);
                     }
                 }
@@ -269,9 +270,10 @@ public class SCDetector extends MetricsTool {
                 if (statement instanceof ConditionalBlockInfo) {
                     final ConditionInfo condition = ((ConditionalBlockInfo) statement)
                             .getCondition();
-                    final Set<VariableUsageInfo<?>> variableUsages = condition.getVariableUsages();
-                    for (final VariableUsageInfo<?> variableUsage : variableUsages) {
-                        if (variableUsage.isAssignment()) {
+                    if (null != condition) {
+                        final Set<VariableUsageInfo<?>> variableUsages = condition
+                                .getVariableUsages();
+                        for (final VariableUsageInfo<?> variableUsage : variableUsages) {
                             final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
                             Set<ExecutableElement> statements = assignedVariableHashes
                                     .get(usedVariable);

@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElement;
@@ -46,7 +47,7 @@ public class ProgramSlice {
         final SortedSet<ExecutableElement> relatedElementsA = new TreeSet<ExecutableElement>();
         final SortedSet<ExecutableElement> relatedElementsB = new TreeSet<ExecutableElement>();
 
-        //　スライス基点(statementA)の変数利用が参照であれば，その変数に対して代入を行っている文をスライス追加用のSetに格納する
+        //　スライス基点(elementA)の変数利用が参照であれば，その変数に対して代入を行っている文をスライス追加用のSetに格納する
         for (final VariableUsageInfo<?> variableUsage : variableUsagesA) {
             if (variableUsage.isReference()) {
                 final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
@@ -59,7 +60,7 @@ public class ProgramSlice {
             }
         }
 
-        //　スライス基点(statementB)の変数利用が参照であれば，その変数に対して代入を行っている文をスライス追加用のSetに格納する
+        //　スライス基点(elementB)の変数利用が参照であれば，その変数に対して代入を行っている文をスライス追加用のSetに格納する
         for (final VariableUsageInfo<?> variableUsage : variableUsagesB) {
             final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
             if (variableUsage.isReference()) {
@@ -94,6 +95,7 @@ public class ProgramSlice {
 
                     final int hashA = elementHash.get(relatedElementArrayA[a]);
                     final int hashB = elementHash.get(relatedElementArrayB[b]);
+
                     if (hashA == hashB) {
                         clonePair.add(relatedElementArrayA[a], relatedElementArrayB[b]);
 
@@ -102,57 +104,29 @@ public class ProgramSlice {
                                 elementHash, usedVariableHashesA, usedVariableHashesB);
                     }
 
-                } else if ((relatedElementArrayA[a] instanceof ConditionalBlockInfo)
-                        && (relatedElementArrayB[b] instanceof ConditionalBlockInfo)) {
+                } else if ((relatedElementArrayA[a] instanceof ConditionInfo)
+                        && (relatedElementArrayB[b] instanceof ConditionInfo)) {
 
-                    final ConditionInfo conditionA = ((ConditionalBlockInfo) relatedElementArrayA[a])
-                            .getCondition();
-                    final ConditionInfo conditionB = ((ConditionalBlockInfo) relatedElementArrayB[b])
-                            .getCondition();
+                    final ConditionInfo conditionA = (ConditionInfo) relatedElementArrayA[a];
+                    final ConditionInfo conditionB = (ConditionInfo) relatedElementArrayB[b];
 
                     final int hashA = conditionA.getText().hashCode();
                     final int hashB = conditionB.getText().hashCode();
 
                     if (hashA == hashB) {
-
                         clonePair.add(conditionA, conditionB);
 
-                        ProgramSlice.performForwardSlice(
+                        /*
+                        ProgramSlice.performForwardSlice(conditionA, conditionB
                                 (ConditionalBlockInfo) relatedElementArrayA[a],
                                 (ConditionalBlockInfo) relatedElementArrayB[b], clonePair,
                                 assignedVariableHashes, elementHash, usedVariableHashesA,
                                 usedVariableHashesB);
+                                */
                     }
                 }
             }
         }
-
-        /*
-        // Heuristisc: 両方の文における変数使用の数が同じときのみスライスを取る
-        if (variableUsagesA.size() == variableUsagesB.size()) {
-
-            final Iterator<VariableUsageInfo<?>> iteratorA = variableUsagesA.iterator();
-            final Iterator<VariableUsageInfo<?>> iteratorB = variableUsagesB.iterator();
-
-            while (iteratorA.hasNext() && iteratorB.hasNext()) {
-
-                final SortedSet<StatementInfo> relatedStatementsA = new TreeSet<StatementInfo>();
-                final SortedSet<StatementInfo> relatedStatementsB = new TreeSet<StatementInfo>();
-
-                final VariableUsageInfo<?> variableUsageA = iteratorA.next();
-                final VariableUsageInfo<?> variableUsageB = iteratorB.next();
-
-                final VariableInfo<?> usedVariableA = variableUsageA.getUsedVariable();
-                final VariableInfo<?> usedVariableB = variableUsageB.getUsedVariable();
-
-                // 一時的にローカル変数と引数のみをスライスに利用するようにしている
-                // 最終的には，すべての種類の変数を用いて，同じメソッド内の文をとってくるように変更
-                if (!(usedVariableA instanceof FieldInfo) && !(usedVariableB instanceof FieldInfo)) {
-                    relatedStatementsA.addAll(variableUsageHashes.get(usedVariableA));
-                    relatedStatementsB.addAll(variableUsageHashes.get(usedVariableB));
-                }
-            }
-        }*/
     }
 
     static void performForwardSlice(final ConditionalBlockInfo blockA,
@@ -180,49 +154,26 @@ public class ProgramSlice {
             usedVariablesB.add(variable);
         }
 
-        final SortedSet<StatementInfo> innerStatementA = blockA.getStatements();
-        final SortedSet<StatementInfo> innerStatementB = blockB.getStatements();
+        final SortedSet<ExecutableElement> innerElementA = ProgramSlice
+                .getAllInnerExecutableElement(blockA);
+        final SortedSet<ExecutableElement> innerElementB = ProgramSlice
+                .getAllInnerExecutableElement(blockB);
 
-        final StatementInfo[] innerStatementArrayA = innerStatementA
-                .toArray(new StatementInfo[] {});
-        final StatementInfo[] innerStatementArrayB = innerStatementB
-                .toArray(new StatementInfo[] {});
+        final ExecutableElement[] innerElementArrayA = innerElementA
+                .toArray(new ExecutableElement[] {});
+        final ExecutableElement[] innerElementArrayB = innerElementB
+                .toArray(new ExecutableElement[] {});
 
-        for (int i = 0; i < innerStatementArrayA.length; i++) {
-            for (int j = 0; j < innerStatementArrayB.length; j++) {
+        for (int i = 0; i < innerElementArrayA.length; i++) {
+            for (int j = 0; j < innerElementArrayB.length; j++) {
 
-                if ((innerStatementArrayA[i] instanceof SingleStatementInfo)
-                        && (innerStatementArrayB[j] instanceof SingleStatementInfo)) {
+                final int hashA = statementHash.get(innerElementArrayA[i]);
+                final int hashB = statementHash.get(innerElementArrayB[j]);
 
-                    final int hashA = statementHash.get(innerStatementArrayA[i]);
-                    final int hashB = statementHash.get(innerStatementArrayB[j]);
+                if ((hashA == hashB) && ProgramSlice.isUsed(usedVariablesA, innerElementArrayA[i])
+                        && ProgramSlice.isUsed(usedVariablesB, innerElementArrayB[j])) {
 
-                    if ((hashA == hashB)
-                            && ProgramSlice.isUsed(usedVariablesA, innerStatementArrayA[i])
-                            && ProgramSlice.isUsed(usedVariablesB, innerStatementArrayB[j])) {
-                    }
-
-                } else if ((innerStatementArrayA[i] instanceof ConditionalBlockInfo)
-                        && (innerStatementArrayB[j] instanceof ConditionalBlockInfo)) {
-
-                    final ConditionInfo innerConditionA = ((ConditionalBlockInfo) innerStatementArrayA[i])
-                            .getCondition();
-                    final ConditionInfo innerConditionB = ((ConditionalBlockInfo) innerStatementArrayB[j])
-                            .getCondition();
-
-                    final int hashA = innerConditionA.getText().hashCode();
-                    final int hashB = innerConditionB.getText().hashCode();
-
-                    if ((hashA == hashB) && ProgramSlice.isUsed(usedVariablesA, innerConditionA)
-                            && ProgramSlice.isUsed(usedVariablesB, innerConditionB)) {
-                        clonePair.add(innerConditionA, innerConditionB);
-
-                        ProgramSlice.performForwardSlice(
-                                (ConditionalBlockInfo) innerStatementArrayA[i],
-                                (ConditionalBlockInfo) innerStatementArrayB[j], clonePair,
-                                variableUsageHashes, statementHash, usedVariableHashesA,
-                                usedVariableHashesB);
-                    }
+                    clonePair.add(innerElementArrayA[i], innerElementArrayB[j]);
                 }
             }
         }
@@ -240,5 +191,19 @@ public class ProgramSlice {
         }
 
         return false;
+    }
+
+    private static SortedSet<ExecutableElement> getAllInnerExecutableElement(final BlockInfo block) {
+
+        final SortedSet<ExecutableElement> elements = new TreeSet<ExecutableElement>();
+        for (final StatementInfo statement : block.getStatements()) {
+            if (statement instanceof SingleStatementInfo) {
+                elements.add(statement);
+            } else if (statement instanceof BlockInfo) {
+                elements.addAll(ProgramSlice.getAllInnerExecutableElement((BlockInfo) statement));
+            }
+        }
+
+        return elements;
     }
 }
