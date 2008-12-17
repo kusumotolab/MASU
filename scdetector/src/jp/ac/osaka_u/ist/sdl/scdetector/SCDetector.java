@@ -202,6 +202,12 @@ public class SCDetector extends MetricsTool {
 
         }
 
+        // ConditionInfo から その所有者である ConditionalBlockInfo を取得するためのデータを作成(Forward Slice　用)
+        for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
+                .getTargetMethodInfos()) {
+            ProgramSlice.makeConditionMap(method);
+        }
+
         // ハッシュ値が同じ2つの文を基点にしてコードクローンを検出
         final Set<ClonePairInfo> clonePairs = new HashSet<ClonePairInfo>();
         for (final Integer hash : normalizedElements.keySet()) {
@@ -269,20 +275,17 @@ public class SCDetector extends MetricsTool {
 
                 if (statement instanceof ConditionalBlockInfo) {
                     final ConditionInfo condition = ((ConditionalBlockInfo) statement)
-                            .getCondition();
-                    if (null != condition) {
-                        final Set<VariableUsageInfo<?>> variableUsages = condition
-                                .getVariableUsages();
-                        for (final VariableUsageInfo<?> variableUsage : variableUsages) {
-                            final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
-                            Set<ExecutableElementInfo> statements = assignedVariableHashes
-                                    .get(usedVariable);
-                            if (null == statements) {
-                                statements = new HashSet<ExecutableElementInfo>();
-                                assignedVariableHashes.put(usedVariable, statements);
-                            }
-                            statements.add(condition);
+                            .getConditionalClause().getCondition();
+                    final Set<VariableUsageInfo<?>> variableUsages = condition.getVariableUsages();
+                    for (final VariableUsageInfo<?> variableUsage : variableUsages) {
+                        final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
+                        Set<ExecutableElementInfo> statements = assignedVariableHashes
+                                .get(usedVariable);
+                        if (null == statements) {
+                            statements = new HashSet<ExecutableElementInfo>();
+                            assignedVariableHashes.put(usedVariable, statements);
                         }
+                        statements.add(condition);
                     }
                 }
 
@@ -315,7 +318,7 @@ public class SCDetector extends MetricsTool {
                 // ConditionalBlockInfo　であるならば，その条件文をハッシュ化する
                 if (statement instanceof ConditionalBlockInfo) {
                     final ConditionInfo condition = ((ConditionalBlockInfo) statement)
-                            .getCondition();
+                            .getConditionalClause().getCondition();
                     final String normalizedCondition = Conversion.getNormalizedString(condition);
                     final int hash = normalizedCondition.hashCode();
 

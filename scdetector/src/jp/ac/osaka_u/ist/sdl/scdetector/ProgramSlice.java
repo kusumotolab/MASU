@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -9,8 +10,11 @@ import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
@@ -131,7 +135,6 @@ public class ProgramSlice {
             final Set<VariableInfo<?>> usedVariableHashesA,
             final Set<VariableInfo<?>> usedVariableHashesB) {
 
-        /*
         final Set<VariableUsageInfo<?>> variableUsagesA = conditionA.getVariableUsages();
         final Set<VariableUsageInfo<?>> variableUsagesB = conditionB.getVariableUsages();
 
@@ -147,10 +150,13 @@ public class ProgramSlice {
             usedVariablesB.add(variable);
         }
 
+        final ConditionalBlockInfo ownerBlockA = CONDITION_MAP.get(conditionA);
+        final ConditionalBlockInfo ownerBlockB = CONDITION_MAP.get(conditionB);
+
         final SortedSet<ExecutableElementInfo> innerElementA = ProgramSlice
-                .getAllInnerExecutableElementInfo(blockA);
+                .getAllInnerExecutableElementInfo(ownerBlockA);
         final SortedSet<ExecutableElementInfo> innerElementB = ProgramSlice
-                .getAllInnerExecutableElementInfo(blockB);
+                .getAllInnerExecutableElementInfo(ownerBlockB);
 
         final ExecutableElementInfo[] innerElementArrayA = innerElementA
                 .toArray(new ExecutableElementInfo[] {});
@@ -170,7 +176,6 @@ public class ProgramSlice {
                 }
             }
         }
-        */
     }
 
     private static boolean isUsed(final Set<VariableInfo<?>> variables,
@@ -201,5 +206,27 @@ public class ProgramSlice {
         }
 
         return elements;
+    }
+
+    static Map<ConditionInfo, ConditionalBlockInfo> CONDITION_MAP = new HashMap<ConditionInfo, ConditionalBlockInfo>();
+
+    static void makeConditionMap(final LocalSpaceInfo localSpace) {
+
+        // ConditionalBlockInfoの子クラスであれば，Mapにデータを追加
+        if (localSpace instanceof ConditionalBlockInfo) {
+            final ConditionalBlockInfo conditionalBlockInfo = ((ConditionalBlockInfo) localSpace);
+            final ConditionalClauseInfo conditionalClauseInfo = conditionalBlockInfo
+                    .getConditionalClause();
+            final ConditionInfo condition = conditionalClauseInfo.getCondition();
+            CONDITION_MAP.put(condition, (ConditionalBlockInfo) localSpace);
+        }
+
+        final Set<StatementInfo> innerStatements = localSpace.getStatements();
+        for (final StatementInfo innerStatement : innerStatements) {
+            if (innerStatement instanceof LocalSpaceInfo) {
+                makeConditionMap((LocalSpaceInfo) innerStatement);
+            }
+        }
+
     }
 }
