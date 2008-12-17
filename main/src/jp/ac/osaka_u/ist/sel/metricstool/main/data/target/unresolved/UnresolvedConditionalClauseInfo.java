@@ -68,9 +68,9 @@ public class UnresolvedConditionalClauseInfo extends UnresolvedUnitInfo<Conditio
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-
-        return new ConditionalClauseInfo(ownerConditionalBlock, condition, fromLine, fromColumn,
+        this.resolvedInfo = new ConditionalClauseInfo(ownerConditionalBlock, condition, fromLine, fromColumn,
                 toLine, toColumn);
+        return this.resolvedInfo;
     }
 
     /**

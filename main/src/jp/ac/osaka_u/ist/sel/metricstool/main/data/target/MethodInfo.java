@@ -283,15 +283,15 @@ public abstract class MethodInfo extends CallableUnitInfo implements Comparable<
     @Override
     public final boolean equals(Object o) {
 
-        if (null == o) {
-            return false;
+        if(this == o) {
+            return true;
         }
 
         if (!(o instanceof MethodInfo)) {
             return false;
         }
 
-        return 0 == this.compareTo((MethodInfo) o) ? true : false;
+        return 0 == this.compareTo((MethodInfo) o);
     }
 
     /**

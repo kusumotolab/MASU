@@ -241,12 +241,12 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
     @Override
     public final boolean equals(final Object o) {
 
-        if (null == o) {
-            throw new NullPointerException();
-        }
-
         if (!(o instanceof ClassInfo)) {
             return false;
+        }
+        
+        if(this == o) {
+            return true;
         }
 
         final NamespaceInfo namespace = this.getNamespace();

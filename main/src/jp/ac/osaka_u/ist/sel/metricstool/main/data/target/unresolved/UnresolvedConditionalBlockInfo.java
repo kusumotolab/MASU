@@ -34,14 +34,17 @@ public abstract class UnresolvedConditionalBlockInfo<T extends ConditionalBlockI
 
     /**
      * –¢‰ðŒˆðŒŽ®‚ðÝ’è‚·‚é
-     * @param condition –¢‰ðŒˆðŒŽ®
+     * @param conditionalClause –¢‰ðŒˆðŒŽ®
      */
     public final void setConditionalClause(
-            final UnresolvedConditionalClauseInfo condition) {
+            final UnresolvedConditionalClauseInfo conditionalClause) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if(null == conditionalClause) {
+            throw new IllegalArgumentException("conditionalClause is null");
+        }
         
-        this.conditionalClause = condition;
+        this.conditionalClause = conditionalClause;
     }
 
     /**
