@@ -72,11 +72,10 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
                 : null;
 
         if (!this.buildingBlockStack.isEmpty()
-                && buildingBlock == this.buildManager.getCurrentBlock() && null != conditionList
-                && 0 < conditionList.size()) {
+                && buildingBlock == this.buildManager.getCurrentBlock() && null != conditionList) {
 
             final UnresolvedConditionableInfo<? extends ConditionableInfo> condition = conditionList
-                    .get(0);
+                    .size() == 0 ? null : conditionList.get(0);
 
             assert null != condition || buildingBlock instanceof UnresolvedForBlockInfo : "Illegal state; conditional expression is not found.";
 

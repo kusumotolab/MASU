@@ -1460,8 +1460,10 @@ public class MetricsTool {
                 } catch (NoSuchFieldException e) {
                     assert false : "Illegal state: conditionalClause is not found";
                 } catch (IllegalAccessException e) {
-
+                    assert false;
                 }
+            } else {
+                assert false;
             }
         }
 
