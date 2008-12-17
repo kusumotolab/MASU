@@ -3,7 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
@@ -26,7 +26,7 @@ public class UnresolvedConditionalClauseInfo extends UnresolvedUnitInfo<Conditio
      */
     public UnresolvedConditionalClauseInfo(
             final UnresolvedConditionalBlockInfo<? extends ConditionalBlockInfo> ownerConditionalBlockInfo,
-            final UnresolvedConditionableInfo<? extends ConditionableInfo> condition) {
+            final UnresolvedConditionableInfo<? extends ConditionInfo> condition) {
         super();
 
         if (null == ownerConditionalBlockInfo) {
@@ -55,7 +55,7 @@ public class UnresolvedConditionalClauseInfo extends UnresolvedUnitInfo<Conditio
         final ConditionalBlockInfo ownerConditionalBlock = this.ownerConditionalBlock.resolve(
                 usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        final ConditionableInfo condition;
+        final ConditionInfo condition;
         if (null != this.condition) {
             condition = this.condition.resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                     methodInfoManager);
@@ -81,6 +81,6 @@ public class UnresolvedConditionalClauseInfo extends UnresolvedUnitInfo<Conditio
     /**
      * ðŒß‚É‹Lq‚³‚ê‚Ä‚¢‚éðŒ‚Ì–¢‰ðŒˆî•ñ‚ð•\‚·•Ï”
      */
-    private final UnresolvedConditionableInfo<? extends ConditionableInfo> condition;
+    private final UnresolvedConditionableInfo<? extends ConditionInfo> condition;
 
 }

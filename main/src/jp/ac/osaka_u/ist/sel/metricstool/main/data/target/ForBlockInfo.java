@@ -32,7 +32,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
             final int toLine, final int toColumn) {
         super(ownerClass, ownerMethod, outerSpace, fromLine, fromColumn, toLine, toColumn);
 
-        this.initilizerExpressions = new TreeSet<ConditionableInfo>();
+        this.initilizerExpressions = new TreeSet<ConditionInfo>();
         this.iteratorExpressions = new TreeSet<ExpressionInfo>();
 
     }
@@ -49,8 +49,8 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
 
         sb.append("for (");
 
-        final SortedSet<ConditionableInfo> initializerExpressions = this.getInitializerExpressions();
-        for (final ConditionableInfo initializerExpression : initializerExpressions) {
+        final SortedSet<ConditionInfo> initializerExpressions = this.getInitializerExpressions();
+        for (final ConditionInfo initializerExpression : initializerExpressions) {
             sb.append(initializerExpression.getText());
             sb.append(",");
         }
@@ -86,7 +86,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
      * for文の初期化式を追加
      * @param initializerExpression 初期化式
      */
-    public final void addInitializerExpressions(final ConditionableInfo initializerExpression) {
+    public final void addInitializerExpressions(final ConditionInfo initializerExpression) {
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         if (null == initializerExpression) {
@@ -114,7 +114,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
      * 初期化式のセットを返す
      * @return 初期化式のセット
      */
-    public final SortedSet<ConditionableInfo> getInitializerExpressions() {
+    public final SortedSet<ConditionInfo> getInitializerExpressions() {
         return Collections.unmodifiableSortedSet(this.initilizerExpressions);
     }
 
@@ -129,7 +129,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     /**
      * 初期化式を保存するための変数
      */
-    private final SortedSet<ConditionableInfo> initilizerExpressions;
+    private final SortedSet<ConditionInfo> initilizerExpressions;
 
     /**
      * 更新式を保存するための変数

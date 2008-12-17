@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.ForBlo
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.ForBlockStateManager.FOR_BLOCK_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.DescriptionToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
@@ -40,7 +40,7 @@ public class ForBlockBuilder extends ConditionalBlockBuilder<ForBlockInfo, Unres
             this.conditionBuilder.activate();
         } else if (type.equals(FOR_BLOCK_STATE_CHANGE.EXIT_FOR_INIT)) {
 
-            for (final UnresolvedConditionableInfo<? extends ConditionableInfo> condition : this.conditionBuilder
+            for (final UnresolvedConditionableInfo<? extends ConditionInfo> condition : this.conditionBuilder
                     .getLastBuildData()) {
                 this.getBuildingBlock().addInitializerExpression(condition);
             }
@@ -51,7 +51,7 @@ public class ForBlockBuilder extends ConditionalBlockBuilder<ForBlockInfo, Unres
             this.conditionBuilder.activate();
         } else if (type.equals(FOR_BLOCK_STATE_CHANGE.EXIT_FOR_ITERATOR)) {
 
-            for (final UnresolvedConditionableInfo<? extends ConditionableInfo> condition : this.conditionBuilder
+            for (final UnresolvedConditionableInfo<? extends ConditionInfo> condition : this.conditionBuilder
                     .getLastBuildData()) {
                 assert condition instanceof UnresolvedExpressionInfo : "Illegal state: iterator expression was not ExpressionInfo";
                 if (condition instanceof UnresolvedExpressionInfo) {

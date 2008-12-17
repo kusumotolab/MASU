@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.InnerB
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.DescriptionToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalBlockInfo;
@@ -67,14 +67,14 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
     protected void endCondition(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
         final T buildingBlock = this.getBuildingBlock();
-        final List<UnresolvedConditionableInfo<? extends ConditionableInfo>> conditionList = null != this.conditionBuilder ? this.conditionBuilder
+        final List<UnresolvedConditionableInfo<? extends ConditionInfo>> conditionList = null != this.conditionBuilder ? this.conditionBuilder
                 .getLastBuildData()
                 : null;
 
         if (!this.buildingBlockStack.isEmpty()
                 && buildingBlock == this.buildManager.getCurrentBlock() && null != conditionList) {
 
-            final UnresolvedConditionableInfo<? extends ConditionableInfo> condition = conditionList
+            final UnresolvedConditionableInfo<? extends ConditionInfo> condition = conditionList
                     .size() == 0 ? null : conditionList.get(0);
 
             assert null != condition || buildingBlock instanceof UnresolvedForBlockInfo : "Illegal state; conditional expression is not found.";

@@ -12,7 +12,7 @@ import java.util.TreeSet;
  * @author t-miyake
  *
  */
-public class VariableDeclarationStatementInfo extends SingleStatementInfo implements ConditionableInfo {
+public class VariableDeclarationStatementInfo extends SingleStatementInfo implements ConditionInfo {
 
     /**
      * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”C‰Šú‰»®CˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»

@@ -20,7 +20,7 @@ public class ConditionalClauseInfo extends UnitInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public ConditionalClauseInfo(final ConditionalBlockInfo ownerConditionalBlock, final ConditionableInfo condition, final int fromLine, final int fromColumn, final int toLine,
+    public ConditionalClauseInfo(final ConditionalBlockInfo ownerConditionalBlock, final ConditionInfo condition, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
         super(fromLine, fromColumn, toLine, toColumn);
         
@@ -44,7 +44,7 @@ public class ConditionalClauseInfo extends UnitInfo {
      * 条件節に記述されている条件を返す
      * @return 条件節に記述されている条件
      */
-    public final ConditionableInfo getCondition() {
+    public final ConditionInfo getCondition() {
         return this.condition;
     }
     
@@ -60,5 +60,5 @@ public class ConditionalClauseInfo extends UnitInfo {
     /**
      * 条件節に記述されている条件を表す変数
      */
-    private final ConditionableInfo condition;
+    private final ConditionInfo condition;
 }
