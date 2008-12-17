@@ -50,8 +50,8 @@ public final class DoBlockInfo extends ConditionalBlockInfo {
 
         sb.append("} while (");
 
-        final ConditionInfo condition = this.getCondition();
-        sb.append(condition.getText());
+        final ConditionalClauseInfo conditionalClause = this.getConditionalClause();
+        sb.append(conditionalClause.getText());
 
         sb.append(")");
 

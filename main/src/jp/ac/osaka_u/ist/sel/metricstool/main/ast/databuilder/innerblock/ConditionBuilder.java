@@ -13,12 +13,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.Condit
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.ConditionStateManager.CONDITION_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionableInfo;
 
 
 public class ConditionBuilder extends
-        StateDrivenDataBuilder<List<UnresolvedConditionInfo<? extends ConditionInfo>>> {
+        StateDrivenDataBuilder<List<UnresolvedConditionableInfo<? extends ConditionableInfo>>> {
 
     public ConditionBuilder(final ExpressionElementManager expressionManager,
             final LocalVariableDeclarationStatementBuilder variableDeclarationStatementBuilder,
@@ -35,7 +35,7 @@ public class ConditionBuilder extends
         final StateChangeEventType type = event.getType();
 
         if (type.equals(CONDITION_STATE_CHANGE.ENTER_CONDITION)) {
-            final List<UnresolvedConditionInfo<? extends ConditionInfo>> conditionList = new LinkedList<UnresolvedConditionInfo<? extends ConditionInfo>>();
+            final List<UnresolvedConditionableInfo<? extends ConditionableInfo>> conditionList = new LinkedList<UnresolvedConditionableInfo<? extends ConditionableInfo>>();
             this.registBuiltData(conditionList);
         } else if (type.equals(CONDITION_STATE_CHANGE.EXIT_CONDITION)) {
 

@@ -3,6 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock;
 
 import java.util.List;
 
+import sun.text.normalizer.CharTrie.FriendAgent;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalVariableDeclarationStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
@@ -13,10 +15,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock.InnerB
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.DescriptionToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedForBlockInfo;
 
 
@@ -38,7 +41,7 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
         this.conditionBuilder = new ConditionBuilder(expressionManager, variableBuilder,
                 new AstToken[] { DescriptionToken.CONDITIONAL_CLAUSE });
         this.conditionBuilder.deactivate();
-        
+
         this.addInnerBuilder(this.conditionBuilder);
     }
 
@@ -50,7 +53,9 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
         if (type.equals(INNER_BLOCK_STATE_CHANGE.ENTER_CLAUSE)) {
             this.startCondition();
         } else if (type.equals(INNER_BLOCK_STATE_CHANGE.EXIT_CLAUSE)) {
-            this.endCondition();
+            final AstVisitEvent trigger = event.getTrigger();
+            this.endCondition(trigger.getStartLine(), trigger.getStartColumn(), trigger
+                    .getEndLine(), trigger.getEndColumn());
         }
     }
 
@@ -59,9 +64,10 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
         this.conditionBuilder.activate();
     }
 
-    protected void endCondition() {
+    protected void endCondition(final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
         final T buildingBlock = this.getBuildingBlock();
-        final List<UnresolvedConditionInfo<? extends ConditionInfo>> conditionList = null != this.conditionBuilder ? this.conditionBuilder
+        final List<UnresolvedConditionableInfo<? extends ConditionableInfo>> conditionList = null != this.conditionBuilder ? this.conditionBuilder
                 .getLastBuildData()
                 : null;
 
@@ -69,12 +75,19 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
                 && buildingBlock == this.buildManager.getCurrentBlock() && null != conditionList
                 && 0 < conditionList.size()) {
 
-            final UnresolvedConditionInfo<? extends ConditionInfo> condition = conditionList
+            final UnresolvedConditionableInfo<? extends ConditionableInfo> condition = conditionList
                     .get(0);
 
             assert null != condition || buildingBlock instanceof UnresolvedForBlockInfo : "Illegal state; conditional expression is not found.";
 
-            buildingBlock.setCondition(condition);
+            final UnresolvedConditionalClauseInfo conditionalCluase = new UnresolvedConditionalClauseInfo(
+                    buildingBlock, condition);
+            conditionalCluase.setFromLine(fromLine);
+            conditionalCluase.setFromColumn(fromColumn);
+            conditionalCluase.setToLine(toLine);
+            conditionalCluase.setToColumn(toColumn);
+
+            buildingBlock.setConditionalClause(conditionalCluase);
 
             //assert buildingBlock.getStatements().size() <= 1 : "Illegal state: the number of conditional statements is more than one.";
 

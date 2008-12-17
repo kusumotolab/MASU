@@ -32,8 +32,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
@@ -1443,21 +1443,22 @@ public class MetricsTool {
         if (localSpace instanceof ConditionalBlockInfo) {
             final UnresolvedConditionalBlockInfo<?> unresolvedConditionalBlock = (UnresolvedConditionalBlockInfo<?>) unresolvedLocalSpace;
 
-            if (null != unresolvedConditionalBlock.getCondition()) {
-                final ConditionInfo condition = unresolvedConditionalBlock.getCondition().resolve(
-                        ownerClass, ownerMethod, classInfoManager, fieldInfoManager,
-                        methodInfoManager);
+            if (null != unresolvedConditionalBlock.getConditionalClause()) {
+                final ConditionalClauseInfo conditionalClause = unresolvedConditionalBlock
+                        .getConditionalClause().resolve(ownerClass, ownerMethod, classInfoManager,
+                                fieldInfoManager, methodInfoManager);
 
                 try {
-                    Class<?> cls = Class
+                    final Class<?> cls = Class
                             .forName("jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo");
-                    final Field filed = cls.getDeclaredField("condition");
+                    final Field filed = cls.getDeclaredField("conditionalClause");
+
                     filed.setAccessible(true);
-                    filed.set(localSpace, condition);
+                    filed.set(localSpace, conditionalClause);
                 } catch (ClassNotFoundException e) {
                     assert false : "Illegal state: ConditionalBlockInfo is not found";
                 } catch (NoSuchFieldException e) {
-                    assert false : "Illegal state: conditonalExpression is not found";
+                    assert false : "Illegal state: conditionalClause is not found";
                 } catch (IllegalAccessException e) {
 
                 }

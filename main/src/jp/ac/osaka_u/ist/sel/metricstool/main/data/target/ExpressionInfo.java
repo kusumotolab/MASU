@@ -6,7 +6,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author higo
  *
  */
-public interface ExpressionInfo extends ConditionInfo {
+public interface ExpressionInfo extends ConditionableInfo {
 
     TypeInfo getType();
     

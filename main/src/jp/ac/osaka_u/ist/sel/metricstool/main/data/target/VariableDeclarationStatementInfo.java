@@ -12,7 +12,7 @@ import java.util.TreeSet;
  * @author t-miyake
  *
  */
-public class VariableDeclarationStatementInfo extends SingleStatementInfo implements ConditionInfo {
+public class VariableDeclarationStatementInfo extends SingleStatementInfo implements ConditionableInfo {
 
     /**
      * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”C‰Šú‰»®CˆÊ’uî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
@@ -40,7 +40,7 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
     }
 
     @Override
-    public int compareTo(ExecutableElement o) {
+    public int compareTo(ExecutableElementInfo o) {
         int result = super.compareTo(o);
 
         if (0 == result && o instanceof VariableDeclarationStatementInfo) {

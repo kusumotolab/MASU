@@ -1306,8 +1306,11 @@ statement
 	;
 	
 conditionalClause
-	:	LPAREN! ex:expression RPAREN!
+	:	
+		{pushStartLineColumn();}
+		LPAREN! ex:expression RPAREN!
 		{#conditionalClause = #(#[COND_CLAUSE,"COND_CLAUSE"], ex);}
+		{registLineColumn(#conditionalClause);}
 	;
 	
 

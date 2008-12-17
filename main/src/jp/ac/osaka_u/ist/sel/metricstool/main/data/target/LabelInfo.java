@@ -32,7 +32,7 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
     }
 
     @Override
-    public int compareTo(ExecutableElement o) {
+    public int compareTo(ExecutableElementInfo o) {
 
         if (null == o) {
             throw new IllegalArgumentException();

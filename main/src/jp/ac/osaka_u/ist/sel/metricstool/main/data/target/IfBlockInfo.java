@@ -75,8 +75,8 @@ public final class IfBlockInfo extends ConditionalBlockInfo {
 
         sb.append("if (");
 
-        final ConditionInfo condition = this.getCondition();
-        sb.append(condition.getText());
+        final ConditionalClauseInfo conditionalClause = this.getConditionalClause();
+        sb.append(conditionalClause.getText());
 
         sb.append(") {");
 

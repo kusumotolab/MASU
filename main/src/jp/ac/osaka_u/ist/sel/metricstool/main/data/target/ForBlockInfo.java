@@ -32,7 +32,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
             final int toLine, final int toColumn) {
         super(ownerClass, ownerMethod, outerSpace, fromLine, fromColumn, toLine, toColumn);
 
-        this.initilizerExpressions = new TreeSet<ConditionInfo>();
+        this.initilizerExpressions = new TreeSet<ConditionableInfo>();
         this.iteratorExpressions = new TreeSet<ExpressionInfo>();
 
     }
@@ -49,16 +49,16 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
 
         sb.append("for (");
 
-        final SortedSet<ConditionInfo> initializerExpressions = this.getInitializerExpressions();
-        for (final ConditionInfo initializerExpression : initializerExpressions) {
+        final SortedSet<ConditionableInfo> initializerExpressions = this.getInitializerExpressions();
+        for (final ConditionableInfo initializerExpression : initializerExpressions) {
             sb.append(initializerExpression.getText());
             sb.append(",");
         }
 
         sb.append(" ; ");
 
-        final ConditionInfo condition = this.getCondition();
-        sb.append(condition.getText());
+        final ConditionalClauseInfo conditionalClause = this.getConditionalClause();
+        sb.append(conditionalClause.getText());
 
         sb.append(" ; ");
 
@@ -86,7 +86,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
      * for文の初期化式を追加
      * @param initializerExpression 初期化式
      */
-    public final void addInitializerExpressions(final ConditionInfo initializerExpression) {
+    public final void addInitializerExpressions(final ConditionableInfo initializerExpression) {
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         if (null == initializerExpression) {
@@ -114,7 +114,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
      * 初期化式のセットを返す
      * @return 初期化式のセット
      */
-    public final SortedSet<ConditionInfo> getInitializerExpressions() {
+    public final SortedSet<ConditionableInfo> getInitializerExpressions() {
         return Collections.unmodifiableSortedSet(this.initilizerExpressions);
     }
 
@@ -129,7 +129,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     /**
      * 初期化式を保存するための変数
      */
-    private final SortedSet<ConditionInfo> initilizerExpressions;
+    private final SortedSet<ConditionableInfo> initilizerExpressions;
 
     /**
      * 更新式を保存するための変数

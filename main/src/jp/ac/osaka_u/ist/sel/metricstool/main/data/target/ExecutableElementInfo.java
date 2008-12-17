@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 
-public interface ExecutableElement extends Position, Comparable<ExecutableElement>, Serializable{
+public interface ExecutableElementInfo extends Position, Comparable<ExecutableElementInfo>, Serializable{
 
     /**
      * ®“à‚Å‚Ì•Ï”‚Ìg—p‚ğ•Ô‚·

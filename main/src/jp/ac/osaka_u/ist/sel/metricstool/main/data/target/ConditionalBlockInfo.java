@@ -31,13 +31,13 @@ public abstract class ConditionalBlockInfo extends BlockInfo {
     }
 
     /**
-     * この条件付ブロックの条件式を返す
+     * この条件付ブロックの条件節を返す
      * 
-     * @return　この条件付ブロックの条件式
+     * @return　この条件付ブロックの条件節
      */
-    public final ConditionInfo getCondition() {
-        return this.condition;
+    public final ConditionalClauseInfo getConditionalClause() {
+        return this.conditionalClause;
     }
 
-    private ConditionInfo condition;
+    private ConditionalClauseInfo conditionalClause;
 }

@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -29,24 +28,24 @@ public abstract class UnresolvedConditionalBlockInfo<T extends ConditionalBlockI
      * –¢‰ğŒˆğŒ®‚ğ•Ô‚·
      * @return –¢‰ğŒˆğŒ®
      */
-    public final UnresolvedConditionInfo<? extends ConditionInfo> getCondition() {
-        return this.condition;
+    public final UnresolvedConditionalClauseInfo getConditionalClause() {
+        return this.conditionalClause;
     }
 
     /**
      * –¢‰ğŒˆğŒ®‚ğİ’è‚·‚é
      * @param condition –¢‰ğŒˆğŒ®
      */
-    public final void setCondition(
-            final UnresolvedConditionInfo<? extends ConditionInfo> condition) {
+    public final void setConditionalClause(
+            final UnresolvedConditionalClauseInfo condition) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         
-        this.condition = condition;
+        this.conditionalClause = condition;
     }
 
     /**
      * –¢‰ğŒˆğŒ®‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
      */
-    private UnresolvedConditionInfo<? extends ConditionInfo> condition;
+    private UnresolvedConditionalClauseInfo conditionalClause;
 }
