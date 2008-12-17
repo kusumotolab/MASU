@@ -10,7 +10,7 @@ import javax.swing.JSplitPane;
 import jp.ac.osaka_u.ist.sdl.scdetector.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.SelectedEntities;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElement;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
@@ -34,13 +34,13 @@ public class SourceCodeView extends JSplitPane implements Observer {
                 final ClonePairInfo clonePair = SelectedEntities.<ClonePairInfo> getInstance(
                         ClonePairInfo.CLONEPAIR).get().first();
 
-                final SortedSet<ExecutableElement> cloneA = clonePair.getCloneA();
-                final SortedSet<ExecutableElement> cloneB = clonePair.getCloneB();
+                final SortedSet<ExecutableElementInfo> cloneA = clonePair.getCloneA();
+                final SortedSet<ExecutableElementInfo> cloneB = clonePair.getCloneB();
 
                 final SourceCodePanel leftSourceCodePanel = new SourceCodePanel();
                 final SourceCodePanel rightSourceCodePanel = new SourceCodePanel();
 
-                for (final ExecutableElement element : cloneA) {
+                for (final ExecutableElementInfo element : cloneA) {
 
                     if (element instanceof StatementInfo) {
                         final FileInfo ownerFile = SourceCodeView
@@ -51,7 +51,7 @@ public class SourceCodeView extends JSplitPane implements Observer {
                     }
                 }
 
-                for (final ExecutableElement element : cloneB) {
+                for (final ExecutableElementInfo element : cloneB) {
 
                     if (element instanceof StatementInfo) {
                         final FileInfo ownerFile = SourceCodeView

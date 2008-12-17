@@ -9,8 +9,7 @@ import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElement;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
@@ -32,10 +31,10 @@ public class ProgramSlice {
      * @param usedVariableHashesA
      * @param usedVariableHashesB
      */
-    static void performBackwordSlice(final ExecutableElement elementA,
-            final ExecutableElement elementB, final ClonePairInfo clonePair,
-            final Map<VariableInfo<?>, Set<ExecutableElement>> assignedVariableHashes,
-            final Map<ExecutableElement, Integer> elementHash,
+    static void performBackwordSlice(final ExecutableElementInfo elementA,
+            final ExecutableElementInfo elementB, final ClonePairInfo clonePair,
+            final Map<VariableInfo<?>, Set<ExecutableElementInfo>> assignedVariableHashes,
+            final Map<ExecutableElementInfo, Integer> elementHash,
             final Set<VariableInfo<?>> usedVariableHashesA,
             final Set<VariableInfo<?>> usedVariableHashesB) {
 
@@ -44,8 +43,8 @@ public class ProgramSlice {
         final Set<VariableUsageInfo<?>> variableUsagesB = elementB.getVariableUsages();
 
         // スライス追加用のSetを宣言
-        final SortedSet<ExecutableElement> relatedElementsA = new TreeSet<ExecutableElement>();
-        final SortedSet<ExecutableElement> relatedElementsB = new TreeSet<ExecutableElement>();
+        final SortedSet<ExecutableElementInfo> relatedElementsA = new TreeSet<ExecutableElementInfo>();
+        final SortedSet<ExecutableElementInfo> relatedElementsB = new TreeSet<ExecutableElementInfo>();
 
         //　スライス基点(elementA)の変数利用が参照であれば，その変数に対して代入を行っている文をスライス追加用のSetに格納する
         for (final VariableUsageInfo<?> variableUsage : variableUsagesA) {
@@ -73,10 +72,10 @@ public class ProgramSlice {
             }
         }
 
-        final ExecutableElement[] relatedElementArrayA = relatedElementsA
-                .toArray(new ExecutableElement[] {});
-        final ExecutableElement[] relatedElementArrayB = relatedElementsB
-                .toArray(new ExecutableElement[] {});
+        final ExecutableElementInfo[] relatedElementArrayA = relatedElementsA
+                .toArray(new ExecutableElementInfo[] {});
+        final ExecutableElementInfo[] relatedElementArrayB = relatedElementsB
+                .toArray(new ExecutableElementInfo[] {});
 
         for (int a = 0; a < relatedElementArrayA.length; a++) {
 
@@ -116,29 +115,23 @@ public class ProgramSlice {
                     if (hashA == hashB) {
                         clonePair.add(conditionA, conditionB);
 
-                        /*
-                        ProgramSlice.performForwardSlice(conditionA, conditionB
-                                (ConditionalBlockInfo) relatedElementArrayA[a],
-                                (ConditionalBlockInfo) relatedElementArrayB[b], clonePair,
+                        ProgramSlice.performForwardSlice(conditionA, conditionB, clonePair,
                                 assignedVariableHashes, elementHash, usedVariableHashesA,
                                 usedVariableHashesB);
-                                */
                     }
                 }
             }
         }
     }
 
-    static void performForwardSlice(final ConditionalBlockInfo blockA,
-            final ConditionalBlockInfo blockB, final ClonePairInfo clonePair,
-            final Map<VariableInfo<?>, Set<ExecutableElement>> variableUsageHashes,
-            final Map<ExecutableElement, Integer> statementHash,
+    static void performForwardSlice(final ConditionInfo conditionA, final ConditionInfo conditionB,
+            final ClonePairInfo clonePair,
+            final Map<VariableInfo<?>, Set<ExecutableElementInfo>> variableUsageHashes,
+            final Map<ExecutableElementInfo, Integer> statementHash,
             final Set<VariableInfo<?>> usedVariableHashesA,
             final Set<VariableInfo<?>> usedVariableHashesB) {
 
-        final ConditionInfo conditionA = blockA.getCondition();
-        final ConditionInfo conditionB = blockB.getCondition();
-
+        /*
         final Set<VariableUsageInfo<?>> variableUsagesA = conditionA.getVariableUsages();
         final Set<VariableUsageInfo<?>> variableUsagesB = conditionB.getVariableUsages();
 
@@ -154,15 +147,15 @@ public class ProgramSlice {
             usedVariablesB.add(variable);
         }
 
-        final SortedSet<ExecutableElement> innerElementA = ProgramSlice
-                .getAllInnerExecutableElement(blockA);
-        final SortedSet<ExecutableElement> innerElementB = ProgramSlice
-                .getAllInnerExecutableElement(blockB);
+        final SortedSet<ExecutableElementInfo> innerElementA = ProgramSlice
+                .getAllInnerExecutableElementInfo(blockA);
+        final SortedSet<ExecutableElementInfo> innerElementB = ProgramSlice
+                .getAllInnerExecutableElementInfo(blockB);
 
-        final ExecutableElement[] innerElementArrayA = innerElementA
-                .toArray(new ExecutableElement[] {});
-        final ExecutableElement[] innerElementArrayB = innerElementB
-                .toArray(new ExecutableElement[] {});
+        final ExecutableElementInfo[] innerElementArrayA = innerElementA
+                .toArray(new ExecutableElementInfo[] {});
+        final ExecutableElementInfo[] innerElementArrayB = innerElementB
+                .toArray(new ExecutableElementInfo[] {});
 
         for (int i = 0; i < innerElementArrayA.length; i++) {
             for (int j = 0; j < innerElementArrayB.length; j++) {
@@ -177,12 +170,13 @@ public class ProgramSlice {
                 }
             }
         }
+        */
     }
 
     private static boolean isUsed(final Set<VariableInfo<?>> variables,
-            final ExecutableElement executableElement) {
+            final ExecutableElementInfo ExecutableElementInfo) {
 
-        final Set<VariableUsageInfo<?>> variableUsages = executableElement.getVariableUsages();
+        final Set<VariableUsageInfo<?>> variableUsages = ExecutableElementInfo.getVariableUsages();
         for (final VariableUsageInfo<?> variableUsage : variableUsages) {
             final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
             if (variables.contains(usedVariable)) {
@@ -193,14 +187,16 @@ public class ProgramSlice {
         return false;
     }
 
-    private static SortedSet<ExecutableElement> getAllInnerExecutableElement(final BlockInfo block) {
+    private static SortedSet<ExecutableElementInfo> getAllInnerExecutableElementInfo(
+            final BlockInfo block) {
 
-        final SortedSet<ExecutableElement> elements = new TreeSet<ExecutableElement>();
+        final SortedSet<ExecutableElementInfo> elements = new TreeSet<ExecutableElementInfo>();
         for (final StatementInfo statement : block.getStatements()) {
             if (statement instanceof SingleStatementInfo) {
                 elements.add(statement);
             } else if (statement instanceof BlockInfo) {
-                elements.addAll(ProgramSlice.getAllInnerExecutableElement((BlockInfo) statement));
+                elements.addAll(ProgramSlice
+                        .getAllInnerExecutableElementInfo((BlockInfo) statement));
             }
         }
 

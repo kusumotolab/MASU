@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElement;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
@@ -179,24 +179,24 @@ public class SCDetector extends MetricsTool {
 
         // 変数を指定することにより，その変数に対して代入を行っている文を取得するためのハッシュを構築する
         // ただし，条件節については，変数を参照している場合もハッシュを構築する
-        final Map<VariableInfo<?>, Set<ExecutableElement>> assignedVariableHashes = new HashMap<VariableInfo<?>, Set<ExecutableElement>>();
+        final Map<VariableInfo<?>, Set<ExecutableElementInfo>> assignedVariableHashes = new HashMap<VariableInfo<?>, Set<ExecutableElementInfo>>();
         for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
                 .getTargetMethodInfos()) {
             SCDetector.makeAssignedVariableHashes(method, assignedVariableHashes);
         }
 
         // 文単位で正規化を行う
-        final Map<Integer, List<ExecutableElement>> normalizedElements = new HashMap<Integer, List<ExecutableElement>>();
+        final Map<Integer, List<ExecutableElementInfo>> normalizedElements = new HashMap<Integer, List<ExecutableElementInfo>>();
         for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
                 .getTargetMethodInfos()) {
             SCDetector.makeNormalizedElement(method, normalizedElements);
         }
 
-        // ExecutableElement単位のハッシュデータを作成
-        final Map<ExecutableElement, Integer> elementHash = new HashMap<ExecutableElement, Integer>();
+        // ExecutableElementInfo単位のハッシュデータを作成
+        final Map<ExecutableElementInfo, Integer> elementHash = new HashMap<ExecutableElementInfo, Integer>();
         for (final Integer hash : normalizedElements.keySet()) {
-            final List<ExecutableElement> elements = normalizedElements.get(hash);
-            for (final ExecutableElement element : elements) {
+            final List<ExecutableElementInfo> elements = normalizedElements.get(hash);
+            for (final ExecutableElementInfo element : elements) {
                 elementHash.put(element, hash);
             }
 
@@ -206,13 +206,13 @@ public class SCDetector extends MetricsTool {
         final Set<ClonePairInfo> clonePairs = new HashSet<ClonePairInfo>();
         for (final Integer hash : normalizedElements.keySet()) {
 
-            final List<ExecutableElement> elements = normalizedElements.get(hash);
+            final List<ExecutableElementInfo> elements = normalizedElements.get(hash);
 
             for (int i = 0; i < elements.size(); i++) {
                 for (int j = i + 1; j < elements.size(); j++) {
 
-                    final ExecutableElement elementA = elements.get(i);
-                    final ExecutableElement elementB = elements.get(j);
+                    final ExecutableElementInfo elementA = elements.get(i);
+                    final ExecutableElementInfo elementB = elements.get(j);
 
                     final ClonePairInfo clonePair = new ClonePairInfo(elementA, elementB);
 
@@ -244,7 +244,7 @@ public class SCDetector extends MetricsTool {
     }
 
     private static void makeAssignedVariableHashes(final LocalSpaceInfo localSpace,
-            final Map<VariableInfo<?>, Set<ExecutableElement>> assignedVariableHashes) {
+            final Map<VariableInfo<?>, Set<ExecutableElementInfo>> assignedVariableHashes) {
 
         for (final StatementInfo statement : localSpace.getStatements()) {
 
@@ -255,10 +255,10 @@ public class SCDetector extends MetricsTool {
                 for (final VariableUsageInfo<?> variableUsage : variableUsages) {
                     if (variableUsage.isAssignment()) {
                         final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
-                        Set<ExecutableElement> statements = assignedVariableHashes
+                        Set<ExecutableElementInfo> statements = assignedVariableHashes
                                 .get(usedVariable);
                         if (null == statements) {
-                            statements = new HashSet<ExecutableElement>();
+                            statements = new HashSet<ExecutableElementInfo>();
                             assignedVariableHashes.put(usedVariable, statements);
                         }
                         statements.add(statement);
@@ -275,10 +275,10 @@ public class SCDetector extends MetricsTool {
                                 .getVariableUsages();
                         for (final VariableUsageInfo<?> variableUsage : variableUsages) {
                             final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
-                            Set<ExecutableElement> statements = assignedVariableHashes
+                            Set<ExecutableElementInfo> statements = assignedVariableHashes
                                     .get(usedVariable);
                             if (null == statements) {
-                                statements = new HashSet<ExecutableElement>();
+                                statements = new HashSet<ExecutableElementInfo>();
                                 assignedVariableHashes.put(usedVariable, statements);
                             }
                             statements.add(condition);
@@ -293,7 +293,7 @@ public class SCDetector extends MetricsTool {
     }
 
     private static void makeNormalizedElement(final LocalSpaceInfo localSpace,
-            final Map<Integer, List<ExecutableElement>> normalizedElements) {
+            final Map<Integer, List<ExecutableElementInfo>> normalizedElements) {
 
         for (final StatementInfo statement : localSpace.getStatements()) {
 
@@ -303,9 +303,9 @@ public class SCDetector extends MetricsTool {
                         .getNormalizedString((SingleStatementInfo) statement);
                 final int hash = normalizedStatement.hashCode();
 
-                List<ExecutableElement> statements = normalizedElements.get(hash);
+                List<ExecutableElementInfo> statements = normalizedElements.get(hash);
                 if (null == statements) {
-                    statements = new ArrayList<ExecutableElement>();
+                    statements = new ArrayList<ExecutableElementInfo>();
                     normalizedElements.put(hash, statements);
                 }
                 statements.add(statement);
@@ -319,9 +319,9 @@ public class SCDetector extends MetricsTool {
                     final String normalizedCondition = Conversion.getNormalizedString(condition);
                     final int hash = normalizedCondition.hashCode();
 
-                    List<ExecutableElement> statements = normalizedElements.get(hash);
+                    List<ExecutableElementInfo> statements = normalizedElements.get(hash);
                     if (null == statements) {
-                        statements = new ArrayList<ExecutableElement>();
+                        statements = new ArrayList<ExecutableElementInfo>();
                         normalizedElements.put(hash, statements);
                     }
                     statements.add(condition);

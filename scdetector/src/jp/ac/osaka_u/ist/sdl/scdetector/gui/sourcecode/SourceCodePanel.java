@@ -20,7 +20,7 @@ import javax.swing.text.Element;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElement;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 
 
@@ -78,12 +78,12 @@ class SourceCodePanel extends JPanel {
 
     }
 
-    void addHighlight(final SortedSet<ExecutableElement> clone) {
+    void addHighlight(final SortedSet<ExecutableElementInfo> clone) {
 
         final DefaultHighlightPainter highlightPainter = new DefaultHighlightPainter(new Color(180,
                 180, 180, 125));
 
-        for (final ExecutableElement element : clone) {
+        for (final ExecutableElementInfo element : clone) {
 
             if (element instanceof BlockInfo) {
                 System.out.println("Block");
@@ -120,12 +120,12 @@ class SourceCodePanel extends JPanel {
         }
     }
 
-    void display(final SortedSet<ExecutableElement> clone) {
+    void display(final SortedSet<ExecutableElementInfo> clone) {
 
         final Document doc = this.sourceCodeArea.getDocument();
         final Element root = doc.getDefaultRootElement();
 
-        final ExecutableElement firstElement = clone.first();
+        final ExecutableElementInfo firstElement = clone.first();
 
         // â∫ÇÃ modelToViewÇÃï‘ÇËílÇnullÇ…ÇµÇ»Ç¢ÇΩÇﬂÇ…ã≠êßìIÇ…ê≥ÇÃílÇê›íË
         this.sourceCodeArea.setBounds(new Rectangle(10, 10));
