@@ -6,6 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -55,19 +56,19 @@ public class UnresolvedConditionalClauseInfo extends UnresolvedUnitInfo<Conditio
         final ConditionalBlockInfo ownerConditionalBlock = this.ownerConditionalBlock.resolve(
                 usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+        
         final ConditionInfo condition;
         if (null != this.condition) {
             condition = this.condition.resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                     methodInfoManager);
         } else {
-            // EmptyExpression‚ðì‚Á‚½‚çnull‚Í‚â‚ß‚é‚×‚«
-            condition = null;
+            condition = new EmptyExpressionInfo(toLine, toColumn, toLine, toColumn);
         }
 
-        final int fromLine = this.getFromLine();
-        final int fromColumn = this.getFromColumn();
-        final int toLine = this.getToLine();
-        final int toColumn = this.getToColumn();
         this.resolvedInfo = new ConditionalClauseInfo(ownerConditionalBlock, condition, fromLine, fromColumn,
                 toLine, toColumn);
         return this.resolvedInfo;
