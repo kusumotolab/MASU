@@ -1,9 +1,7 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -11,10 +9,8 @@ import java.util.TreeSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
@@ -30,15 +26,11 @@ public class ProgramSlice {
      * @param elementA
      * @param elementB
      * @param clonePair
-     * @param assignedVariableHashes
-     * @param elementHash
      * @param usedVariableHashesA
      * @param usedVariableHashesB
      */
     static void performBackwordSlice(final ExecutableElementInfo elementA,
             final ExecutableElementInfo elementB, final ClonePairInfo clonePair,
-            final Map<VariableInfo<?>, Set<ExecutableElementInfo>> assignedVariableHashes,
-            final Map<ExecutableElementInfo, Integer> elementHash,
             final Set<VariableInfo<?>> usedVariableHashesA,
             final Set<VariableInfo<?>> usedVariableHashesB) {
 
@@ -56,8 +48,8 @@ public class ProgramSlice {
                 final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
                 if (!usedVariableHashesA.contains(usedVariable)
                         && !(usedVariable instanceof FieldInfo)
-                        && assignedVariableHashes.containsKey(usedVariable)) {
-                    relatedElementsA.addAll(assignedVariableHashes.get(usedVariable));
+                        && AssignedVariableHashMap.INSTANCE.containsKey(usedVariable)) {
+                    relatedElementsA.addAll(AssignedVariableHashMap.INSTANCE.get(usedVariable));
                     usedVariableHashesA.add(usedVariable);
                 }
             }
@@ -69,8 +61,8 @@ public class ProgramSlice {
             if (variableUsage.isReference()) {
                 if (!usedVariableHashesB.contains(usedVariable)
                         && !(usedVariable instanceof FieldInfo)
-                        && assignedVariableHashes.containsKey(usedVariable)) {
-                    relatedElementsB.addAll(assignedVariableHashes.get(usedVariable));
+                        && AssignedVariableHashMap.INSTANCE.containsKey(usedVariable)) {
+                    relatedElementsB.addAll(AssignedVariableHashMap.INSTANCE.get(usedVariable));
                     usedVariableHashesB.add(usedVariable);
                 }
             }
@@ -96,15 +88,17 @@ public class ProgramSlice {
                 if ((relatedElementArrayA[a] instanceof SingleStatementInfo)
                         && (relatedElementArrayB[b] instanceof SingleStatementInfo)) {
 
-                    final int hashA = elementHash.get(relatedElementArrayA[a]);
-                    final int hashB = elementHash.get(relatedElementArrayB[b]);
+                    final int hashA = NormalizedElementHashMap.INSTANCE
+                            .getHash(relatedElementArrayA[a]);
+                    final int hashB = NormalizedElementHashMap.INSTANCE
+                            .getHash(relatedElementArrayB[b]);
 
                     if (hashA == hashB) {
                         clonePair.add(relatedElementArrayA[a], relatedElementArrayB[b]);
 
                         ProgramSlice.performBackwordSlice(relatedElementArrayA[a],
-                                relatedElementArrayB[b], clonePair, assignedVariableHashes,
-                                elementHash, usedVariableHashesA, usedVariableHashesB);
+                                relatedElementArrayB[b], clonePair, usedVariableHashesA,
+                                usedVariableHashesB);
                     }
 
                 } else if ((relatedElementArrayA[a] instanceof ConditionInfo)
@@ -120,8 +114,7 @@ public class ProgramSlice {
                         clonePair.add(conditionA, conditionB);
 
                         ProgramSlice.performForwardSlice(conditionA, conditionB, clonePair,
-                                assignedVariableHashes, elementHash, usedVariableHashesA,
-                                usedVariableHashesB);
+                                usedVariableHashesA, usedVariableHashesB);
                     }
                 }
             }
@@ -129,10 +122,7 @@ public class ProgramSlice {
     }
 
     static void performForwardSlice(final ConditionInfo conditionA, final ConditionInfo conditionB,
-            final ClonePairInfo clonePair,
-            final Map<VariableInfo<?>, Set<ExecutableElementInfo>> variableUsageHashes,
-            final Map<ExecutableElementInfo, Integer> statementHash,
-            final Set<VariableInfo<?>> usedVariableHashesA,
+            final ClonePairInfo clonePair, final Set<VariableInfo<?>> usedVariableHashesA,
             final Set<VariableInfo<?>> usedVariableHashesB) {
 
         final Set<VariableUsageInfo<?>> variableUsagesA = conditionA.getVariableUsages();
@@ -150,8 +140,8 @@ public class ProgramSlice {
             usedVariablesB.add(variable);
         }
 
-        final ConditionalBlockInfo ownerBlockA = CONDITION_MAP.get(conditionA);
-        final ConditionalBlockInfo ownerBlockB = CONDITION_MAP.get(conditionB);
+        final ConditionalBlockInfo ownerBlockA = ConditionHashMap.INSTANCE.get(conditionA);
+        final ConditionalBlockInfo ownerBlockB = ConditionHashMap.INSTANCE.get(conditionB);
 
         final SortedSet<ExecutableElementInfo> innerElementA = ProgramSlice
                 .getAllInnerExecutableElementInfo(ownerBlockA);
@@ -166,8 +156,8 @@ public class ProgramSlice {
         for (int i = 0; i < innerElementArrayA.length; i++) {
             for (int j = 0; j < innerElementArrayB.length; j++) {
 
-                final int hashA = statementHash.get(innerElementArrayA[i]);
-                final int hashB = statementHash.get(innerElementArrayB[j]);
+                final int hashA = NormalizedElementHashMap.INSTANCE.getHash(innerElementArrayA[i]);
+                final int hashB = NormalizedElementHashMap.INSTANCE.getHash(innerElementArrayB[j]);
 
                 if ((hashA == hashB) && ProgramSlice.isUsed(usedVariablesA, innerElementArrayA[i])
                         && ProgramSlice.isUsed(usedVariablesB, innerElementArrayB[j])) {
@@ -206,27 +196,5 @@ public class ProgramSlice {
         }
 
         return elements;
-    }
-
-    static Map<ConditionInfo, ConditionalBlockInfo> CONDITION_MAP = new HashMap<ConditionInfo, ConditionalBlockInfo>();
-
-    static void makeConditionMap(final LocalSpaceInfo localSpace) {
-
-        // ConditionalBlockInfoの子クラスであれば，Mapにデータを追加
-        if (localSpace instanceof ConditionalBlockInfo) {
-            final ConditionalBlockInfo conditionalBlockInfo = ((ConditionalBlockInfo) localSpace);
-            final ConditionalClauseInfo conditionalClauseInfo = conditionalBlockInfo
-                    .getConditionalClause();
-            final ConditionInfo condition = conditionalClauseInfo.getCondition();
-            CONDITION_MAP.put(condition, (ConditionalBlockInfo) localSpace);
-        }
-
-        final Set<StatementInfo> innerStatements = localSpace.getStatements();
-        for (final StatementInfo innerStatement : innerStatements) {
-            if (innerStatement instanceof LocalSpaceInfo) {
-                makeConditionMap((LocalSpaceInfo) innerStatement);
-            }
-        }
-
     }
 }

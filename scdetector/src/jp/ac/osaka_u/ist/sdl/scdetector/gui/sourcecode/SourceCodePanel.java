@@ -19,7 +19,6 @@ import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 
@@ -82,12 +81,7 @@ class SourceCodePanel extends JPanel {
 
         final DefaultHighlightPainter highlightPainter = new DefaultHighlightPainter(new Color(180,
                 180, 180, 125));
-
         for (final ExecutableElementInfo element : clone) {
-
-            if (element instanceof BlockInfo) {
-                System.out.println("Block");
-            }
 
             try {
 

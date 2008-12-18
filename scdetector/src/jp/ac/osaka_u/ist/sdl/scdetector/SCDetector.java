@@ -6,26 +6,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageListener;
@@ -179,40 +169,29 @@ public class SCDetector extends MetricsTool {
 
         // 変数を指定することにより，その変数に対して代入を行っている文を取得するためのハッシュを構築する
         // ただし，条件節については，変数を参照している場合もハッシュを構築する
-        final Map<VariableInfo<?>, Set<ExecutableElementInfo>> assignedVariableHashes = new HashMap<VariableInfo<?>, Set<ExecutableElementInfo>>();
         for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
                 .getTargetMethodInfos()) {
-            SCDetector.makeAssignedVariableHashes(method, assignedVariableHashes);
+            AssignedVariableHashMap.INSTANCE.makeHash(method);
         }
 
-        // 文単位で正規化を行う
-        final Map<Integer, List<ExecutableElementInfo>> normalizedElements = new HashMap<Integer, List<ExecutableElementInfo>>();
+        // ExecutableElement単位で正規化データを構築する
         for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
                 .getTargetMethodInfos()) {
-            SCDetector.makeNormalizedElement(method, normalizedElements);
-        }
-
-        // ExecutableElementInfo単位のハッシュデータを作成
-        final Map<ExecutableElementInfo, Integer> elementHash = new HashMap<ExecutableElementInfo, Integer>();
-        for (final Integer hash : normalizedElements.keySet()) {
-            final List<ExecutableElementInfo> elements = normalizedElements.get(hash);
-            for (final ExecutableElementInfo element : elements) {
-                elementHash.put(element, hash);
-            }
-
+            NormalizedElementHashMap.INSTANCE.makeHash(method);
         }
 
         // ConditionInfo から その所有者である ConditionalBlockInfo を取得するためのデータを作成(Forward Slice　用)
         for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
                 .getTargetMethodInfos()) {
-            ProgramSlice.makeConditionMap(method);
+            ConditionHashMap.INSTANCE.makeHash(method);
         }
 
         // ハッシュ値が同じ2つの文を基点にしてコードクローンを検出
         final Set<ClonePairInfo> clonePairs = new HashSet<ClonePairInfo>();
-        for (final Integer hash : normalizedElements.keySet()) {
+        for (final Integer hash : NormalizedElementHashMap.INSTANCE.keySet()) {
 
-            final List<ExecutableElementInfo> elements = normalizedElements.get(hash);
+            final List<ExecutableElementInfo> elements = NormalizedElementHashMap.INSTANCE
+                    .get(hash);
 
             for (int i = 0; i < elements.size(); i++) {
                 for (int j = i + 1; j < elements.size(); j++) {
@@ -226,8 +205,7 @@ public class SCDetector extends MetricsTool {
                     final Set<VariableInfo<?>> usedVariableHashesB = new HashSet<VariableInfo<?>>();
 
                     ProgramSlice.performBackwordSlice(elementA, elementB, clonePair,
-                            assignedVariableHashes, elementHash, usedVariableHashesA,
-                            usedVariableHashesB);
+                            usedVariableHashesA, usedVariableHashesB);
 
                     if (Configuration.INSTANCE.getS() <= clonePair.size()) {
                         clonePairs.add(clonePair);
@@ -236,11 +214,29 @@ public class SCDetector extends MetricsTool {
             }
         }
 
+        //他のクローンペアに内包されるクローンペアを除去する
+        final Set<ClonePairInfo> refinedClonePairs = new HashSet<ClonePairInfo>();
+        CLONEPAIR: for (final ClonePairInfo clonePair : clonePairs) {
+            COUNTERCLONEPAIR: for (final ClonePairInfo counterClonePair : clonePairs) {
+
+                if (clonePair == counterClonePair) {
+                    continue COUNTERCLONEPAIR;
+                }
+
+                if (clonePair.includedBy(counterClonePair)) {
+                    continue CLONEPAIR;
+                }
+            }
+            refinedClonePairs.add(clonePair);
+        }
+
+        System.out.println(refinedClonePairs.size() + ":" + clonePairs.size());
+
         try {
 
             final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(
                     Configuration.INSTANCE.getO()));
-            oos.writeObject(clonePairs);
+            oos.writeObject(refinedClonePairs);
 
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
@@ -249,89 +245,4 @@ public class SCDetector extends MetricsTool {
         }
     }
 
-    private static void makeAssignedVariableHashes(final LocalSpaceInfo localSpace,
-            final Map<VariableInfo<?>, Set<ExecutableElementInfo>> assignedVariableHashes) {
-
-        for (final StatementInfo statement : localSpace.getStatements()) {
-
-            if (statement instanceof SingleStatementInfo) {
-
-                final Set<VariableUsageInfo<?>> variableUsages = ((SingleStatementInfo) statement)
-                        .getVariableUsages();
-                for (final VariableUsageInfo<?> variableUsage : variableUsages) {
-                    if (variableUsage.isAssignment()) {
-                        final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
-                        Set<ExecutableElementInfo> statements = assignedVariableHashes
-                                .get(usedVariable);
-                        if (null == statements) {
-                            statements = new HashSet<ExecutableElementInfo>();
-                            assignedVariableHashes.put(usedVariable, statements);
-                        }
-                        statements.add(statement);
-                    }
-                }
-
-            } else if (statement instanceof BlockInfo) {
-
-                if (statement instanceof ConditionalBlockInfo) {
-                    final ConditionInfo condition = ((ConditionalBlockInfo) statement)
-                            .getConditionalClause().getCondition();
-                    final Set<VariableUsageInfo<?>> variableUsages = condition.getVariableUsages();
-                    for (final VariableUsageInfo<?> variableUsage : variableUsages) {
-                        final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
-                        Set<ExecutableElementInfo> statements = assignedVariableHashes
-                                .get(usedVariable);
-                        if (null == statements) {
-                            statements = new HashSet<ExecutableElementInfo>();
-                            assignedVariableHashes.put(usedVariable, statements);
-                        }
-                        statements.add(condition);
-                    }
-                }
-
-                SCDetector
-                        .makeAssignedVariableHashes((BlockInfo) statement, assignedVariableHashes);
-            }
-        }
-    }
-
-    private static void makeNormalizedElement(final LocalSpaceInfo localSpace,
-            final Map<Integer, List<ExecutableElementInfo>> normalizedElements) {
-
-        for (final StatementInfo statement : localSpace.getStatements()) {
-
-            if (statement instanceof SingleStatementInfo) {
-
-                final String normalizedStatement = Conversion
-                        .getNormalizedString((SingleStatementInfo) statement);
-                final int hash = normalizedStatement.hashCode();
-
-                List<ExecutableElementInfo> statements = normalizedElements.get(hash);
-                if (null == statements) {
-                    statements = new ArrayList<ExecutableElementInfo>();
-                    normalizedElements.put(hash, statements);
-                }
-                statements.add(statement);
-
-            } else if (statement instanceof BlockInfo) {
-
-                // ConditionalBlockInfo　であるならば，その条件文をハッシュ化する
-                if (statement instanceof ConditionalBlockInfo) {
-                    final ConditionInfo condition = ((ConditionalBlockInfo) statement)
-                            .getConditionalClause().getCondition();
-                    final String normalizedCondition = Conversion.getNormalizedString(condition);
-                    final int hash = normalizedCondition.hashCode();
-
-                    List<ExecutableElementInfo> statements = normalizedElements.get(hash);
-                    if (null == statements) {
-                        statements = new ArrayList<ExecutableElementInfo>();
-                        normalizedElements.put(hash, statements);
-                    }
-                    statements.add(condition);
-                }
-
-                SCDetector.makeNormalizedElement((BlockInfo) statement, normalizedElements);
-            }
-        }
-    }
 }

@@ -38,6 +38,17 @@ public class ClonePairInfo implements Serializable, Entity {
         return this.cloneB;
     }
 
+    public boolean includedBy(final ClonePairInfo counterClonePair) {
+
+        final SortedSet<ExecutableElementInfo> cloneA = this.getCloneA();
+        final SortedSet<ExecutableElementInfo> cloneB = this.getCloneB();
+
+        final SortedSet<ExecutableElementInfo> counterCloneA = counterClonePair.getCloneA();
+        final SortedSet<ExecutableElementInfo> counterCloneB = counterClonePair.getCloneB();
+
+        return counterCloneA.containsAll(cloneA) && counterCloneB.containsAll(cloneB);
+    }
+
     public int getID() {
         return this.id;
     }
