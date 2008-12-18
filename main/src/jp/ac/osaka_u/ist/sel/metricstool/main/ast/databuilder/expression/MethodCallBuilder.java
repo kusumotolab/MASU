@@ -55,7 +55,7 @@ public class MethodCallBuilder extends ExpressionBuilder{
                     }
                 }
                 
-                pushElement(UsageElement.getInstance(methodCall));
+                pushElement(new UsageElement(methodCall));
                 this.buildDataManager.addMethodCall(methodCall);
             }
             

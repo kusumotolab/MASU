@@ -1,8 +1,5 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
@@ -15,20 +12,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
  */
 public class UsageElement extends ExpressionElement {
 
-    public static synchronized UsageElement getInstance(final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> usageInfo) {
-        UsageElement instance = instanceMap.get(usageInfo);
-        if (null == instance) {
-            instance = new UsageElement(usageInfo);
-            instanceMap.put(usageInfo, instance);
-        }
-        return instance;
-    }
-    
     public UnresolvedTypeInfo getType() {
         return null;
     }
 
-    private UsageElement(final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> usage) {
+    public UsageElement(final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> usage) {
         super(usage);
     }
     
@@ -39,6 +27,5 @@ public class UsageElement extends ExpressionElement {
     public boolean isVariableUsage() {
         return this.usage instanceof UnresolvedVariableUsageInfo;
     }
-    
-    private static final Map<UnresolvedEntityUsageInfo<? extends EntityUsageInfo>, UsageElement> instanceMap = new WeakHashMap<UnresolvedEntityUsageInfo<? extends EntityUsageInfo>, UsageElement>();
+
 }

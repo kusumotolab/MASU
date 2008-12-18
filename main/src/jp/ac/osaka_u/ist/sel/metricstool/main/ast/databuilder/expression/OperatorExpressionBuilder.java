@@ -131,7 +131,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 operation.setToLine(termTypes[1].getToLine());
                 operation.setToColumn(termTypes[1].getToColumn());
 
-                pushElement(UsageElement.getInstance(operation));
+                pushElement(new UsageElement(operation));
 
             } else if (3 == term && token.equals(OperatorToken.TERNARY)) {
                 assert null != termTypes[0] : "Illegal stete : first term type was not decided.";
@@ -145,7 +145,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 operation.setToLine(termTypes[2].getToLine());
                 operation.setToColumn(termTypes[2].getToColumn());
                 
-                pushElement(UsageElement.getInstance(operation));
+                pushElement(new UsageElement(operation));
             } else {
                 //Ž©•ª‚ÅŒ^Œˆ’è‚·‚é
                 UnresolvedEntityUsageInfo<? extends EntityUsageInfo> resultType = null;
@@ -208,7 +208,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
 
                 assert (null != resultType) : "Illegal state: operation resultType was not decided.";
 
-                this.pushElement(UsageElement.getInstance(resultType));
+                this.pushElement(new UsageElement(resultType));
 
                 boolean bool;
                 int i;

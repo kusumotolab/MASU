@@ -66,7 +66,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
             constructorCall.setToLine(toLine);
             constructorCall.setToColumn(toColumn);
 
-            pushElement(UsageElement.getInstance(constructorCall));
+            pushElement(new UsageElement(constructorCall));
         } else {
             //ÇªÇÍà»äOÇÕïÅí Ç…èàóùÇ∑ÇÈ
             super.buildNewConstructorCall(fromLine, fromColumn, toLine, toColumn);
@@ -92,7 +92,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         constructorCall.setToColumn(toColumn);
 
         resolveParameters(constructorCall, elements, 0);
-        pushElement(UsageElement.getInstance(constructorCall));
+        pushElement(new UsageElement(constructorCall));
         buildDataManager.addMethodCall(constructorCall);
     }
 
@@ -142,7 +142,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         constructorCall.setToColumn(toColumn);
 
         resolveParameters(constructorCall, elements, argStartIndex);
-        pushElement(UsageElement.getInstance(constructorCall));
+        pushElement(new UsageElement(constructorCall));
         buildDataManager.addMethodCall(constructorCall);
 
     }

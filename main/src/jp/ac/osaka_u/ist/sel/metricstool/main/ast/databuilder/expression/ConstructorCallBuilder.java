@@ -48,7 +48,7 @@ public class ConstructorCallBuilder extends ExpressionBuilder {
             constructorCall.setToColumn(toColumn);
 
             resolveParameters(constructorCall, elements, 1);
-            pushElement(UsageElement.getInstance(constructorCall));
+            pushElement(new UsageElement(constructorCall));
             this.buildDataManager.addMethodCall(constructorCall);
         }
     }

@@ -34,7 +34,7 @@ public class ExpressionDescriptionBuilder extends ExpressionBuilder {
             if (elements[0] instanceof IdentifierElement) {
                 final UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsage = ((IdentifierElement) elements[0])
                         .resolveAsReferencedVariable(this.buildDataManager);
-                this.pushElement(UsageElement.getInstance(variableUsage));
+                this.pushElement(new UsageElement(variableUsage));
             } else {
                 this.pushElement(elements[0]);
             }

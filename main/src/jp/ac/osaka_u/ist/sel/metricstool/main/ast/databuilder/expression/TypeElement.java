@@ -1,9 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
-import java.util.Map;
-import java.util.WeakHashMap;
-
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLiteralUsageInfo;
@@ -16,15 +13,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  */
 public class TypeElement extends ExpressionElement {
 
-    public static synchronized TypeElement getInstance(final UnresolvedTypeInfo typeInfo) {
-        TypeElement instance = instanceMap.get(typeInfo);
-        if (null == instance) {
-            instance = new TypeElement(typeInfo);
-            instanceMap.put(typeInfo, instance);
-        }
-        return instance;
-    }
-
     public TypeElement getArrayDimensionInclementedInstance() {
         UnresolvedTypeInfo newType = null;
         if (this.type instanceof UnresolvedArrayTypeInfo) {
@@ -33,14 +21,14 @@ public class TypeElement extends ExpressionElement {
             newType = UnresolvedArrayTypeInfo.getType(this.type, 1);
         }
 
-        return getInstance(newType);
+        return new TypeElement(newType);
     }
 
     public UnresolvedTypeInfo getType() {
         return this.type;
     }
 
-    private TypeElement(final UnresolvedTypeInfo type) {
+    public TypeElement(final UnresolvedTypeInfo type) {
         super();
 
         if (null == type) {
@@ -64,5 +52,5 @@ public class TypeElement extends ExpressionElement {
 
     private final UnresolvedTypeInfo type;
 
-    private static final Map<UnresolvedTypeInfo, TypeElement> instanceMap = new WeakHashMap<UnresolvedTypeInfo, TypeElement>();
+
 }

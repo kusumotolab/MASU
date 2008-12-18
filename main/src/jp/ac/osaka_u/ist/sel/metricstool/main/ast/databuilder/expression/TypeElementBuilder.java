@@ -56,7 +56,7 @@ public class TypeElementBuilder extends ExpressionBuilder {
         if (elements.length > 0) {
             if (elements[0] instanceof IdentifierElement) {
                 final UnresolvedTypeInfo referenceType = this.buildReferenceType(elements);
-                typeElement = TypeElement.getInstance(UnresolvedArrayTypeInfo.getType(
+                typeElement = new TypeElement(UnresolvedArrayTypeInfo.getType(
                         referenceType, 1));
             } else if (elements[0] instanceof TypeElement) {
                 typeElement = ((TypeElement) elements[0]).getArrayDimensionInclementedInstance();
@@ -75,7 +75,7 @@ public class TypeElementBuilder extends ExpressionBuilder {
 
         if (elements.length > 0) {
             if (elements[0] instanceof IdentifierElement) {
-                this.pushElement(TypeElement.getInstance(this.buildReferenceType(elements)));
+                this.pushElement(new TypeElement(this.buildReferenceType(elements)));
             } else if (elements[0] instanceof TypeElement) {
                 assert (elements.length == 1) : "Illegal state: unexpected type arguments.";
                 this.pushElement(elements[0]);
@@ -119,7 +119,7 @@ public class TypeElementBuilder extends ExpressionBuilder {
 
         assert (null != upperBounds);
 
-        pushElement(TypeElement.getInstance(upperBounds));
+        pushElement(new TypeElement(upperBounds));
     }
 
     protected UnresolvedTypeInfo getTypeUpperBounds() {
@@ -183,7 +183,7 @@ public class TypeElementBuilder extends ExpressionBuilder {
     }
 
     protected void buildBuiltinType(final BuiltinTypeToken token) {
-        this.pushElement(TypeElement.getInstance(token.getType()));
+        this.pushElement(new TypeElement(token.getType()));
     }
 
     protected void buildConstantElement(final ConstantToken token, final int fromLine,
