@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
@@ -224,7 +225,17 @@ public class SCDetector extends MetricsTool {
                 }
 
                 if (clonePair.includedBy(counterClonePair)) {
+                    System.out.println("included clone pair.");
                     continue CLONEPAIR;
+                }
+
+                {
+                    final SortedSet<ExecutableElementInfo> cloneA = clonePair.getCloneA();
+                    final SortedSet<ExecutableElementInfo> cloneB = clonePair.getCloneB();
+                    if ((cloneA.first() == cloneB.first()) && (cloneA.last() == cloneB.last())) {
+                        System.out.println("same code fragments.");
+                        continue CLONEPAIR;
+                    }
                 }
             }
             refinedClonePairs.add(clonePair);

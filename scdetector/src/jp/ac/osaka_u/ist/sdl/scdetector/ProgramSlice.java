@@ -75,12 +75,32 @@ public class ProgramSlice {
 
         for (int a = 0; a < relatedElementArrayA.length; a++) {
 
+            // クローンが存在しないExecutableElementについては調べる必要がない
+            {
+                final int hashA = NormalizedElementHashMap.INSTANCE
+                        .getHash(relatedElementArrayA[a]);
+                if (NormalizedElementHashMap.INSTANCE.get(hashA).size() < 2) {
+                    continue;
+                }
+            }
+
+            // Backwordスライスなので，自分よりも下にあるExecutableElementについては調べる必要がない
             if (relatedElementArrayA[a] == elementA) {
                 break;
             }
 
             for (int b = 0; b < relatedElementArrayB.length; b++) {
 
+                // クローンが存在しないExecutableElementについては調べる必要がない
+                {
+                    final int hashB = NormalizedElementHashMap.INSTANCE
+                            .getHash(relatedElementArrayB[b]);
+                    if (NormalizedElementHashMap.INSTANCE.get(hashB).size() < 2) {
+                        continue;
+                    }
+                }
+
+                // Backwordスライスなので，自分よりも下にあるExecutableElementについては調べる必要がない
                 if (relatedElementArrayB[b] == elementB) {
                     break;
                 }
@@ -92,7 +112,6 @@ public class ProgramSlice {
                             .getHash(relatedElementArrayA[a]);
                     final int hashB = NormalizedElementHashMap.INSTANCE
                             .getHash(relatedElementArrayB[b]);
-
                     if (hashA == hashB) {
                         clonePair.add(relatedElementArrayA[a], relatedElementArrayB[b]);
 
@@ -154,10 +173,20 @@ public class ProgramSlice {
                 .toArray(new ExecutableElementInfo[] {});
 
         for (int i = 0; i < innerElementArrayA.length; i++) {
+
+            //　クローンがないExecutableElementについては調べなくてよい
+            final int hashA = NormalizedElementHashMap.INSTANCE.getHash(innerElementArrayA[i]);
+            if (NormalizedElementHashMap.INSTANCE.get(hashA).size() < 2) {
+                continue;
+            }
+
             for (int j = 0; j < innerElementArrayB.length; j++) {
 
-                final int hashA = NormalizedElementHashMap.INSTANCE.getHash(innerElementArrayA[i]);
+                //　クローンがないExecutableElementについては調べなくてよい
                 final int hashB = NormalizedElementHashMap.INSTANCE.getHash(innerElementArrayB[j]);
+                if (NormalizedElementHashMap.INSTANCE.get(hashB).size() < 2) {
+                    continue;
+                }
 
                 if ((hashA == hashB) && ProgramSlice.isUsed(usedVariablesA, innerElementArrayA[i])
                         && ProgramSlice.isUsed(usedVariablesB, innerElementArrayB[j])) {
