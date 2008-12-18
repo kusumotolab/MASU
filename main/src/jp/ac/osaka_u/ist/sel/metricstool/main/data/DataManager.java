@@ -16,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableUsageInfo
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
 
 
 /**
@@ -120,6 +121,15 @@ public class DataManager {
     }
 
     /**
+     * UnresolvedClassInfoManagerÅ@Çï‘Ç∑
+     * 
+     * @return UnresolvedClassInfoManager
+     */
+    public UnresolvedClassInfoManager getUnresolvedClassInfoManager() {
+        return this.unresolvedClassInfoManager;
+    }
+
+    /**
      * ClassInfoManagerÅ@Çï‘Ç∑
      * 
      * @return ClassInfoManager
@@ -158,6 +168,8 @@ public class DataManager {
     private DataManager() {
         this.targetFileManager = new TargetFileManager();
 
+        this.unresolvedClassInfoManager = new UnresolvedClassInfoManager();
+
         this.classMetricsInfoManager = new ClassMetricsInfoManager();
         this.fieldMetricsInfoManager = new FieldMetricsInfoManager();
         this.fileMetricsInfoManager = new FileMetricsInfoManager();
@@ -180,6 +192,8 @@ public class DataManager {
     final private FileMetricsInfoManager fileMetricsInfoManager;
 
     final private MethodMetricsInfoManager methodMetricsInfoManager;
+
+    final private UnresolvedClassInfoManager unresolvedClassInfoManager;
 
     final private ClassInfoManager classInfoManager;
 

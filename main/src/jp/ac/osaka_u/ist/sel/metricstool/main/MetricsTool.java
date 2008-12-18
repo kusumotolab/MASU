@@ -925,8 +925,8 @@ public class MetricsTool {
     private void registClassInfos() {
 
         // 未解決クラス情報マネージャ， クラス情報マネージャを取得
-        final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
-                .getInstance();
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = DataManager.getInstance()
+                .getUnresolvedClassInfoManager();
         final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
 
         // 各未解決クラスに対して
@@ -999,8 +999,8 @@ public class MetricsTool {
     private void resolveTypeParameterOfClassInfos() {
 
         // 未解決クラス情報マネージャ， 解決済みクラスマネージャを取得
-        final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
-                .getInstance();
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = DataManager.getInstance()
+                .getUnresolvedClassInfoManager();
         final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
 
         // 各未解決クラスに対して
@@ -1045,8 +1045,8 @@ public class MetricsTool {
     private void addInheritanceInformationToClassInfos() {
 
         // Unresolved クラス情報マネージャ， クラス情報マネージャを取得
-        final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
-                .getInstance();
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = DataManager.getInstance()
+                .getUnresolvedClassInfoManager();
         final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
 
         // 名前解決不可能クラスを保存するためのリスト
@@ -1166,8 +1166,8 @@ public class MetricsTool {
     private void registFieldInfos() {
 
         // Unresolved クラス情報マネージャ，クラス情報マネージャ，フィールド情報マネージャを取得
-        final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
-                .getInstance();
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = DataManager.getInstance()
+                .getUnresolvedClassInfoManager();
         final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
         final FieldInfoManager fieldInfoManager = DataManager.getInstance().getFieldInfoManager();
         final MethodInfoManager methodInfoManager = DataManager.getInstance()
@@ -1217,8 +1217,8 @@ public class MetricsTool {
     private void registMethodInfos() {
 
         // Unresolved クラス情報マネージャ， クラス情報マネージャ，メソッド情報マネージャを取得
-        final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
-                .getInstance();
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = DataManager.getInstance()
+                .getUnresolvedClassInfoManager();
         final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
         final FieldInfoManager fieldInfoManager = DataManager.getInstance().getFieldInfoManager();
         final MethodInfoManager methodInfoManager = DataManager.getInstance()
@@ -1360,8 +1360,8 @@ public class MetricsTool {
      */
     private void addReferenceAssignmentCallRelateion() {
 
-        final UnresolvedClassInfoManager unresolvedClassInfoManager = UnresolvedClassInfoManager
-                .getInstance();
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = DataManager.getInstance()
+                .getUnresolvedClassInfoManager();
         final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
         final FieldInfoManager fieldInfoManager = DataManager.getInstance().getFieldInfoManager();
         final MethodInfoManager methodInfoManager = DataManager.getInstance()

@@ -18,16 +18,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedClassInfoManager {
 
     /**
-     * 単一オブジェクトを返す
-     * 
-     * @return 単一オブジェクト
-     */
-    public static UnresolvedClassInfoManager getInstance() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        return SINGLETON;
-    }
-
-    /**
      * クラス情報を追加する
      * 
      * @param classInfo クラス情報
@@ -67,13 +57,13 @@ public class UnresolvedClassInfoManager {
          * @param fullQualifiedName クラスの完全修飾名
          */
         ClassKey(final String[] fullQualifiedName) {
-            
+
             // 不正な呼び出しでないかをチェック
             MetricsToolSecurityManager.getInstance().checkAccess();
-            if (null == fullQualifiedName){
+            if (null == fullQualifiedName) {
                 throw new NullPointerException();
             }
-            
+
             this.fullQualifiedName = fullQualifiedName;
         }
 
@@ -90,11 +80,11 @@ public class UnresolvedClassInfoManager {
          * キーの順序を定義する
          */
         public int compareTo(final ClassKey classKey) {
-            
-            if (null == classKey){
+
+            if (null == classKey) {
                 throw new NullPointerException();
             }
-            
+
             String[] fullQualifiedName = this.getFullQualifiedName();
             String[] correspondFullQualifiedName = classKey.getFullQualifiedName();
 
@@ -123,10 +113,10 @@ public class UnresolvedClassInfoManager {
         @Override
         public boolean equals(Object o) {
 
-            if (null == o){
+            if (null == o) {
                 throw new NullPointerException();
             }
-            
+
             String[] fullQualifiedName = this.getFullQualifiedName();
             String[] correspondFullQualifiedName = ((ClassKey) o).getFullQualifiedName();
 
@@ -167,18 +157,9 @@ public class UnresolvedClassInfoManager {
      * 引数なしコンストラクタ
      * 
      */
-    private UnresolvedClassInfoManager() {
+    public UnresolvedClassInfoManager() {
         this.classInfos = new HashMap<ClassKey, UnresolvedClassInfo>();
     }
-    
-    public final void clearClassInfos() {
-        this.classInfos.clear();
-    }
-
-    /**
-     * 単一オブジェクトを保存するための変数
-     */
-    private final static UnresolvedClassInfoManager SINGLETON = new UnresolvedClassInfoManager();
 
     /**
      * UnresolvedClassInfo を保存するためのセット
