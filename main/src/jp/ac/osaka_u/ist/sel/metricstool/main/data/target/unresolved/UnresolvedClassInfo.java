@@ -493,6 +493,10 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     public boolean isStaticMember() {
         return !this.instance;
     }
+    
+    public final boolean isInterface() {
+        return this.isInterface;
+    }
 
     /**
      * インスタンスメンバーかどうかをセットする
