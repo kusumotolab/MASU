@@ -20,7 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 public final class UnresolvedVariableDeclarationStatementInfo extends
         UnresolvedSingleStatementInfo<VariableDeclarationStatementInfo> implements
-        UnresolvedConditionableInfo<VariableDeclarationStatementInfo> {
+        UnresolvedConditionInfo<VariableDeclarationStatementInfo> {
 
     /**
      * 宣言されている変数，（もしあれば）初期化の式を与えて，オブジェクトを初期化

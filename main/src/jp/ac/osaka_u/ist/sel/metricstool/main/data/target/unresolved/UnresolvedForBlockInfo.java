@@ -32,7 +32,7 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
     public UnresolvedForBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
 
-        this.initializerExpressions = new HashSet<UnresolvedConditionableInfo<? extends ConditionInfo>>();
+        this.initializerExpressions = new HashSet<UnresolvedConditionInfo<? extends ConditionInfo>>();
         this.iteratorExpressions = new HashSet<UnresolvedExpressionInfo<? extends ExpressionInfo>>();
     }
 
@@ -79,7 +79,7 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
                 methodInfoManager);
 
         // 未解決初期化式情報を解決し，解決済みオブジェクトに追加
-        for (final UnresolvedConditionableInfo<? extends ConditionInfo> initializerExpression : this.initializerExpressions) {
+        for (final UnresolvedConditionInfo<? extends ConditionInfo> initializerExpression : this.initializerExpressions) {
             this.resolvedInfo.addInitializerExpressions(initializerExpression.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager));
         }
@@ -109,7 +109,7 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
      * @param initializerExpression 追加する初期化式
      */
     public final void addInitializerExpression(
-            final UnresolvedConditionableInfo<? extends ConditionInfo> initializerExpression) {
+            final UnresolvedConditionInfo<? extends ConditionInfo> initializerExpression) {
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         if (null == initializerExpression) {
@@ -136,7 +136,7 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
         this.iteratorExpressions.add(iteratorExpression);
     }
 
-    private final Set<UnresolvedConditionableInfo<? extends ConditionInfo>> initializerExpressions;
+    private final Set<UnresolvedConditionInfo<? extends ConditionInfo>> initializerExpressions;
 
     private final Set<UnresolvedExpressionInfo<? extends ExpressionInfo>> iteratorExpressions;
 

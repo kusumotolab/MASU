@@ -27,7 +27,7 @@ public class UnresolvedConditionalClauseInfo extends UnresolvedUnitInfo<Conditio
      */
     public UnresolvedConditionalClauseInfo(
             final UnresolvedConditionalBlockInfo<? extends ConditionalBlockInfo> ownerConditionalBlockInfo,
-            final UnresolvedConditionableInfo<? extends ConditionInfo> condition) {
+            final UnresolvedConditionInfo<? extends ConditionInfo> condition) {
         super();
 
         if (null == ownerConditionalBlockInfo) {
@@ -82,6 +82,6 @@ public class UnresolvedConditionalClauseInfo extends UnresolvedUnitInfo<Conditio
     /**
      * ðŒß‚É‹Lq‚³‚ê‚Ä‚¢‚éðŒ‚Ì–¢‰ðŒˆî•ñ‚ð•\‚·•Ï”
      */
-    private final UnresolvedConditionableInfo<? extends ConditionInfo> condition;
+    private final UnresolvedConditionInfo<? extends ConditionInfo> condition;
 
 }
