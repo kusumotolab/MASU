@@ -3,8 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock;
 
 import java.util.List;
 
-import sun.text.normalizer.CharTrie.FriendAgent;
-
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalVariableDeclarationStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
