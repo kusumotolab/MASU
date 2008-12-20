@@ -1048,6 +1048,9 @@ public class MetricsTool {
         final UnresolvedClassInfoManager unresolvedClassInfoManager = DataManager.getInstance()
                 .getUnresolvedClassInfoManager();
         final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
+        final FieldInfoManager fieldInfoManager = DataManager.getInstance().getFieldInfoManager();
+        final MethodInfoManager methodInfoManager = DataManager.getInstance()
+                .getMethodInfoManager();
 
         // 名前解決不可能クラスを保存するためのリスト
         final List<UnresolvedClassInfo> unresolvableClasses = new LinkedList<UnresolvedClassInfo>();
@@ -1055,7 +1058,7 @@ public class MetricsTool {
         // 各 Unresolvedクラスに対して
         for (UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager.getClassInfos()) {
             addInheritanceInformationToClassInfo(unresolvedClassInfo, classInfoManager,
-                    unresolvableClasses);
+                    fieldInfoManager, methodInfoManager, unresolvableClasses);
         }
 
         // 名前解決不可能クラスを解析する
@@ -1119,6 +1122,7 @@ public class MetricsTool {
      */
     private void addInheritanceInformationToClassInfo(
             final UnresolvedClassInfo unresolvedClassInfo, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager,
             final List<UnresolvedClassInfo> unresolvableClasses) {
 
         // ClassInfo を取得
@@ -1130,7 +1134,7 @@ public class MetricsTool {
                 .getSuperClasses()) {
 
             TypeInfo superClassType = unresolvedSuperClassType.resolve(classInfo, null,
-                    classInfoManager, null, null);
+                    classInfoManager, fieldInfoManager, methodInfoManager);
 
             // null だった場合は解決不可能リストに一時的に格納
             if (null == superClassType) {
@@ -1155,7 +1159,7 @@ public class MetricsTool {
         for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
                 .getInnerClasses()) {
             addInheritanceInformationToClassInfo(unresolvedInnerClassInfo, classInfoManager,
-                    unresolvableClasses);
+                    fieldInfoManager, methodInfoManager, unresolvableClasses);
         }
     }
 
