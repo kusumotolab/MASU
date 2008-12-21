@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.io.Serializable;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.StringArrayComparator;
 
 
@@ -21,7 +20,6 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializa
      */
     public NamespaceInfo(final String[] name) {
 
-        MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == name) {
             throw new NullPointerException();
         }
@@ -75,6 +73,29 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializa
     }
 
     /**
+     * 名前空間の比較を行う
+     * 
+     * @param namespace 比較対象のString[] （名前空間を表すStringの配列）
+     * @return 等しい場合はtrue,そうでない場合はfalse
+     */
+    public boolean equals(final String[] namespace) {
+
+        // 名前空間の長さで比較
+        final String[] name = this.getName();
+        if (name.length != namespace.length) {
+            return false;
+        }
+
+        // 各要素を個別に比較
+        for (int i = 0; i < name.length; i++) {
+            if (!name[i].equals(namespace[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * 名前空間名を返す
      * 
      * @return 名前空間名
@@ -109,6 +130,23 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializa
 
         return buffer.toString();
 
+    }
+
+    /**
+     * この名前空間名のハッシュコードを返す
+     * 
+     * @return この名前空間名のハッシュコード
+     */
+    @Override
+    public int hashCode() {
+
+        final String[] namespace = this.getName();
+        int hash = 0;
+        for (int i = 0; i < namespace.length; i++) {
+            hash += namespace[i].hashCode();
+        }
+
+        return hash;
     }
 
     /**

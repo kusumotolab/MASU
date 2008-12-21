@@ -1,12 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.SortedMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
@@ -33,7 +33,7 @@ public final class ClassInfoManager {
      * @param classInfo 追加するクラス情報
      * @return 引数クラスを追加した場合は true,しなかった場合はfalse
      */
-    public boolean add(final TargetClassInfo classInfo) {
+    public boolean add(final ClassInfo classInfo) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfo) {
@@ -49,42 +49,36 @@ public final class ClassInfoManager {
             return false;
         }
 
-        this.targetClassInfos.add(classInfo);
-        this.packageInfo.add(classInfo);
-
-        /* この処理はいらないような．．．
-        // 内部クラスに対して再帰的に処理
-        for (final TargetInnerClassInfo innerClassInfo : classInfo.getInnerClasses()) {
-            this.add(innerClassInfo);
-        }
-        */
-
-        return true;
-    }
-
-    /**
-     * 外部クラスを追加する
-     * 
-     * @param classInfo 追加するクラス情報
-     * @return 引数クラスを追加した場合は true,しなかった場合はfalse
-     */
-    public boolean add(final ExternalClassInfo classInfo) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == classInfo) {
-            throw new NullPointerException();
+        // クラス一覧のセットに登録
+        if (classInfo instanceof TargetClassInfo) {
+            this.targetClassInfos.add((TargetClassInfo) classInfo);
+        } else if (classInfo instanceof ExternalClassInfo) {
+            this.externalClassInfos.add((ExternalClassInfo) classInfo);
+        } else {
+            assert false : "Here shouldn't be reached!";
         }
 
-        // 二重登録チェック
-        if (this.targetClassInfos.contains(classInfo)
-                || (this.externalClassInfos.contains(classInfo))) {
-            // 外部クラスの場合は二重登録エラーは出力しない
-            //err.println(classInfo.getFullQualifiedtName(".") + " is already registered!");
-            return false;
+        // クラス名からクラスオブジェクトを得るためのマップに追加
+        {
+            final String name = classInfo.getClassName();
+            SortedSet<ClassInfo> classInfos = this.classNameMap.get(name);
+            if (null == classInfos) {
+                classInfos = new TreeSet<ClassInfo>();
+                this.classNameMap.put(name, classInfos);
+            }
+            classInfos.add(classInfo);
         }
 
-        this.externalClassInfos.add(classInfo);
-        this.packageInfo.add(classInfo);
+        //　名前空間からクラスオブジェクトを得るためのマップに追加
+        {
+            final NamespaceInfo namespace = classInfo.getNamespace();
+            SortedSet<ClassInfo> classInfos = this.namespaceMap.get(namespace);
+            if (null == classInfos) {
+                classInfos = new TreeSet<ClassInfo>();
+                this.namespaceMap.put(namespace, classInfos);
+            }
+            classInfos.add(classInfo);
+        }
 
         return true;
     }
@@ -137,7 +131,35 @@ public final class ClassInfoManager {
             throw new NullPointerException();
         }
 
-        return this.packageInfo.getClassInfo(fullQualifiedName);
+        final int namespaceLength = fullQualifiedName.length - 1;
+        final String[] namespace = Arrays.<String> copyOf(fullQualifiedName,
+                fullQualifiedName.length - 1);
+        final String className = fullQualifiedName[namespaceLength];
+
+        // 同じクラス名を持つクラス一覧を取得
+        final SortedSet<ClassInfo> classInfos = this.classNameMap.get(className);
+        if (null != classInfos) {
+            // 名前空間が等しいクラスを返す
+            for (final ClassInfo classInfo : classInfos) {
+                if (classInfo.getNamespace().equals(namespace)) {
+                    return classInfo;
+                }
+            }
+
+            // ここに来るのは登録されていないクラスの完全限定名が指定されたとき
+            // 外部クラスとしてオブジェクトを生成し，登録する
+            final ExternalClassInfo classInfo = new ExternalClassInfo(fullQualifiedName);
+            this.add(classInfo);
+            return classInfo;
+
+        } else {
+
+            // ここに来るのは登録されていないクラスの完全限定名が指定されたとき
+            // 外部クラスとしてオブジェクトを生成し，登録する
+            final ExternalClassInfo classInfo = new ExternalClassInfo(fullQualifiedName);
+            this.add(classInfo);
+            return classInfo;
+        }
     }
 
     /**
@@ -149,10 +171,29 @@ public final class ClassInfoManager {
     public Collection<ClassInfo> getClassInfos(final String[] namespace) {
 
         if (null == namespace) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
 
-        return this.packageInfo.getClassInfos(namespace);
+        final SortedSet<ClassInfo> classInfos = this.namespaceMap.get(new NamespaceInfo(namespace));
+        return null != classInfos ? Collections.unmodifiableSortedSet(classInfos) : Collections
+                .unmodifiableSortedSet(new TreeSet<ClassInfo>());
+    }
+
+    /**
+     * 引数で指定したクラス名を持つクラス情報の Collection を返す
+     * 
+     * @param className クラス名
+     * @return 引数で指定したクラス名を持つクラス情報の Collection
+     */
+    public Collection<ClassInfo> getClassInfos(final String className) {
+
+        if (null == className) {
+            throw new IllegalArgumentException();
+        }
+
+        final SortedSet<ClassInfo> classInfos = this.classNameMap.get(className);
+        return null != classInfos ? Collections.unmodifiableSortedSet(classInfos) : Collections
+                .unmodifiableSortedSet(new TreeSet<ClassInfo>());
     }
 
     /**
@@ -169,9 +210,12 @@ public final class ClassInfoManager {
      * コンストラクタ． 
      */
     public ClassInfoManager() {
+
+        this.classNameMap = new HashMap<String, SortedSet<ClassInfo>>();
+        this.namespaceMap = new HashMap<NamespaceInfo, SortedSet<ClassInfo>>();
+
         this.targetClassInfos = new TreeSet<TargetClassInfo>();
         this.externalClassInfos = new TreeSet<ExternalClassInfo>();
-        this.packageInfo = new PackageInfo("DEFAULT", 0);
 
         // java言語の場合は，暗黙にインポートされるクラスを追加しておく
         if (Settings.getLanguage().equals(LANGUAGE.JAVA15)
@@ -184,181 +228,22 @@ public final class ClassInfoManager {
     }
 
     /**
-     * 
-     * 対象クラス情報(TargetClassInfo)を格納する変数．
+     * クラス名から，クラスオブジェクトを得るためのマップ
+     */
+    private final Map<String, SortedSet<ClassInfo>> classNameMap;
+
+    /**
+     * 名前空間名から，クラスオブジェクトを得るためのマップ
+     */
+    private final Map<NamespaceInfo, SortedSet<ClassInfo>> namespaceMap;
+
+    /**
+     * 対象クラス一覧を保存するためのセット
      */
     private final SortedSet<TargetClassInfo> targetClassInfos;
 
     /**
-     * 外部クラス情報（ExternalClassInfo）を格納する変数
+     * 外部クラス一覧を保存するためのセット
      */
     private final SortedSet<ExternalClassInfo> externalClassInfos;
-
-    /**
-     * クラス情報を階層構造で保つための変数
-     */
-    private PackageInfo packageInfo;
-
-    /**
-     * クラス一覧を階層的名前空間（パッケージ階層）で持つデータクラス
-     * 
-     * @author higo
-     */
-    class PackageInfo {
-
-        /**
-         * 名前空間を初期化．名前空間名と深さを与える．デフォルトパッケージは0．
-         * 
-         * @param packageName 名前空間名
-         */
-        PackageInfo(final String packageName, final int depth) {
-
-            if (null == packageName) {
-                throw new NullPointerException();
-            }
-            if (depth < 0) {
-                throw new IllegalArgumentException("Depth must be 0 or more!");
-            }
-
-            this.packageName = packageName;
-            this.depth = depth;
-            this.classInfos = new TreeMap<String, ClassInfo>();
-            this.subPackages = new TreeMap<String, PackageInfo>();
-        }
-
-        /**
-         * 引数で指定されたクラス情報を追加する
-         * 
-         * @param classInfo 追加するクラス情報
-         */
-        void add(final ClassInfo classInfo) {
-
-            if (null == classInfo) {
-                throw new NullPointerException();
-            }
-
-            String[] packageNames = classInfo.getNamespace().getName();
-
-            // 追加するクラス情報の名前空間階層が，この名前空間階層よりも深い場合は，該当するサブ名前空間を呼び出す
-            if (this.getDepth() < packageNames.length) {
-                PackageInfo subPackage = this.subPackages.get(packageNames[this.getDepth()]);
-                if (null == subPackage) {
-                    subPackage = new PackageInfo(packageNames[this.getDepth()], this.getDepth() + 1);
-                    this.subPackages.put(subPackage.getPackageName(), subPackage);
-                }
-                subPackage.add(classInfo);
-
-                // 追加するクラス情報の名前空間階層が，この名前空間階層と同じ場合は，この名前空間にクラス情報を追加する
-            } else if (this.getDepth() == packageNames.length) {
-                this.classInfos.put(classInfo.getClassName(), classInfo);
-
-                final PackageInfo innerPackage = new PackageInfo(classInfo.getClassName(), this
-                        .getDepth() + 1);
-                this.subPackages.put(classInfo.getClassName(), innerPackage);
-
-                // 追加するクラス情報の名前空間階層が，この名前空間階層よりも浅い場合は，エラー
-            } else {
-                throw new IllegalArgumentException("Illegal class Info: " + classInfo.toString());
-            }
-        }
-
-        /**
-         * この名前空間の深さを返す
-         * 
-         * @return この名前空間の深さ
-         */
-        int getDepth() {
-            return this.depth;
-        }
-
-        /**
-         * この名前空間名を返す
-         * 
-         * @return この名前空間名
-         */
-        String getPackageName() {
-            return this.packageName;
-        }
-
-        /**
-         * 引数で与えられた Full Qualified Name を持つクラスを返す
-         * 
-         * @param fullQualifiedName ほしいクラス情報の Full Qualified Name
-         * @return クラス情報
-         */
-        ClassInfo getClassInfo(final String[] fullQualifiedName) {
-
-            if (null == fullQualifiedName) {
-                throw new NullPointerException();
-            }
-
-            int namespaceLength = fullQualifiedName.length - 1;
-
-            // ほしいクラス情報の名前空間階層が，この名前空間階層よりも深い場合は，該当するサブ名前空間を呼び出す
-            if (this.getDepth() < namespaceLength) {
-                final PackageInfo subPackage = this.subPackages.get(fullQualifiedName[this
-                        .getDepth()]);
-                return null == subPackage ? null : subPackage.getClassInfo(fullQualifiedName);
-
-                // ほしいクラス情報の名前空間層が，この名前空間階層と同じ場合は，クラス情報を返す
-            } else if (this.getDepth() == namespaceLength) {
-                final ClassInfo classInfo = this.classInfos.get(fullQualifiedName[namespaceLength]);
-                return classInfo;
-
-                // ほしいクラス情報の名前空間階層が，この名前空間階層よりも浅い場合は，エラー
-            } else {
-                throw new IllegalArgumentException("Illegal full qualified name: "
-                        + fullQualifiedName.toString());
-            }
-        }
-
-        /**
-         * 引数で与えられた名前空間を持つクラスの Collection を返す
-         * 
-         * @param namespace 名前空間
-         * @return 引数で与えられた名前空間を持つクラスの Collection
-         */
-        Collection<ClassInfo> getClassInfos(final String[] namespace) {
-
-            if (null == namespace) {
-                throw new NullPointerException();
-            }
-
-            // ほしいクラス情報の名前空間層が，この名前空間層よりも深い場合は，該当するサブ名前空間名を呼び出す
-            if (this.getDepth() < namespace.length) {
-                final PackageInfo subPackage = this.subPackages.get(namespace[this.getDepth()]);
-                return null == subPackage ? Collections
-                        .unmodifiableCollection(new HashSet<ClassInfo>()) : subPackage
-                        .getClassInfos(namespace);
-
-                // ほしいクラス情報の名前空間層が，この名前空間層と同じ場合は，クラス情報を返す
-            } else if (this.getDepth() == namespace.length) {
-
-                return Collections.unmodifiableCollection(this.classInfos.values());
-                // ほしいクラス情報の名前空間階層が，この名前空間階層よりも浅い場合は，エラー
-            } else {
-                throw new IllegalArgumentException("Illegal namepace: " + namespace.toString());
-            }
-        }
-
-        /**
-         * このパッケージの名前を保存する
-         */
-        private final String packageName;
-
-        /**
-         * このパッケージの深さ． デフォルトパッケージは0である．
-         */
-        private final int depth;
-
-        /**
-         * このパッケージにあるクラス一覧を保存する
-         */
-        private final SortedMap<String, ClassInfo> classInfos;
-
-        /**
-         * このパッケージのサブパッケージ一覧を保存する
-         */
-        private final SortedMap<String, PackageInfo> subPackages;
-    }
 }

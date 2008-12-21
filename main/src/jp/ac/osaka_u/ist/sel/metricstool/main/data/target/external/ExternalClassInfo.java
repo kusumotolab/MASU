@@ -34,7 +34,7 @@ public final class ExternalClassInfo extends ClassInfo {
      * @param fullQualifiedName Š®‘SŒÀ’è–¼
      */
     public ExternalClassInfo(final String[] fullQualifiedName) {
-
+        
         super(new HashSet<ModifierInfo>(), fullQualifiedName, 0, 0, 0, 0);
     }
 
