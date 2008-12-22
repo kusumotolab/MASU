@@ -244,8 +244,8 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
         if (!(o instanceof ClassInfo)) {
             return false;
         }
-        
-        if(this == o) {
+
+        if (this == o) {
             return true;
         }
 

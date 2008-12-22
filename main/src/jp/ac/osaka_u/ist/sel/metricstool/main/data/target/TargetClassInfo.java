@@ -1,7 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -31,6 +33,81 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
+
+    /**
+     * 指定されたクラスに含まれる全てのインナークラスを返す
+     * 
+     * @param classInfo 指定するクラス
+     * @return　指定されたクラスに含まれる全てのインナークラス
+     */
+    static public Collection<TargetInnerClassInfo> getAllInnerClasses(
+            final TargetClassInfo classInfo) {
+
+        if (null == classInfo) {
+            throw new IllegalArgumentException();
+        }
+
+        final SortedSet<TargetInnerClassInfo> innerClassInfos = new TreeSet<TargetInnerClassInfo>();
+        for (final TargetInnerClassInfo innerClassInfo : classInfo.getInnerClasses()) {
+
+            innerClassInfos.add(innerClassInfo);
+            innerClassInfos.addAll(getAllInnerClasses(innerClassInfo));
+        }
+
+        return Collections.unmodifiableSortedSet(innerClassInfos);
+    }
+
+    /**
+     * 指定したクラスにおいてアクセス可能なインナークラス一覧を返す．
+     * アクセス可能なクラスとは，指定されたクラス，もしくはその親クラス内に定義されたクラスある．
+     * 
+     * @param classInfo 指定されたクラス
+     * @return 指定したクラスにおいてアクセス可能なインナークラス一覧を返す．
+     */
+    static public Collection<TargetInnerClassInfo> getAccessibleInnerClasses(
+            final TargetClassInfo classInfo) {
+
+        if (null == classInfo) {
+            throw new IllegalArgumentException();
+        }
+
+        final Set<TargetClassInfo> classCache = new HashSet<TargetClassInfo>();
+
+        return Collections.unmodifiableCollection(getAccessibleInnerClasses(classInfo, classCache));
+    }
+
+    static private Collection<TargetInnerClassInfo> getAccessibleInnerClasses(
+            final TargetClassInfo classInfo, final Set<TargetClassInfo> classCache) {
+
+        if ((null == classInfo) || (null == classCache)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (classCache.contains(classInfo)) {
+            return Collections.unmodifiableCollection(new TreeSet<TargetInnerClassInfo>());
+        }
+
+        classCache.add(classInfo);
+
+        final SortedSet<TargetInnerClassInfo> innerClassInfos = new TreeSet<TargetInnerClassInfo>();
+
+        for (final TargetInnerClassInfo innerClassInfo : classInfo.getInnerClasses()) {
+            innerClassInfos.add(innerClassInfo);
+            innerClassInfos.addAll(getAccessibleInnerClasses(innerClassInfo, classCache));
+        }
+
+        for (final ClassInfo superClassInfo : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
+            if (superClassInfo instanceof TargetClassInfo) {
+                if (superClassInfo instanceof TargetInnerClassInfo) {
+                    innerClassInfos.add((TargetInnerClassInfo) superClassInfo);
+                }
+                innerClassInfos.addAll(getAccessibleInnerClasses((TargetClassInfo) superClassInfo,
+                        classCache));
+            }
+        }
+
+        return Collections.unmodifiableCollection(innerClassInfos);
+    }
 
     /**
      * 名前空間名，クラス名を与えてクラス情報オブジェクトを初期化

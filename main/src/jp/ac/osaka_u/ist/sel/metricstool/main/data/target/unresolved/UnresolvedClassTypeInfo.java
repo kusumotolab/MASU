@@ -1,10 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
@@ -12,6 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
@@ -84,7 +86,19 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
             return this.getResolved();
         }
 
-        /*
+        // import 文で指定されているクラスが登録されていないなら，外部クラスとして登録する
+        for (final AvailableNamespaceInfo availableNamespace : this.getAvailableNamespaces()) {
+
+            if (!availableNamespace.isAllClasses()) {
+                final String[] fullQualifiedName = availableNamespace.getImportName();
+                if (!classInfoManager.hasClassInfo(fullQualifiedName)) {
+                    final ExternalClassInfo externalClassInfo = new ExternalClassInfo(
+                            fullQualifiedName);
+                    classInfoManager.add(externalClassInfo);
+                }
+            }
+        }
+
         final String[] referenceName = this.getReferenceName();
         final Collection<ClassInfo> classInfos = classInfoManager
                 .getClassInfos(referenceName[referenceName.length - 1]);
@@ -93,59 +107,26 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
             final String className = classInfo.getClassName();
             final NamespaceInfo namespace = classInfo.getNamespace();
 
-            // インポートされているクラスから検索
-            for (final AvailableNamespaceInfo availableNamespace : this.getAvailableNamespaces()) {
+            //　複数項参照の場合は，完全限定名かどうかを調べる
+            if (!this.isMoniminalReference()) {
 
-                final String[] importedNamespace = availableNamespace.getNamespace();
-                if (namespace.equals(importedNamespace)) {
-
-                    // import aaa.bbb.*の場合 (クラス名の部分が*)
-                    if (availableNamespace.isAllClasses()) {
-
-                        Collection<ClassInfo> importedClassInfos = classInfoManager
-                                .getClassInfos(importedNamespace);
-                        for (final ClassInfo importedClassInfo : importedClassInfos) {
-
-                            //クラスが見つかった
-                            if (className.equals(importedClassInfo.getClassName())) {
-                                this.resolvedInfo = new ClassTypeInfo(importedClassInfo);
-                                for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
-                                        .getTypeArguments()) {
-                                    final TypeInfo typeArgument = unresolvedTypeArgument.resolve(
-                                            usingClass, usingMethod, classInfoManager,
-                                            fieldInfoManager, methodInfoManager);
-                                    this.resolvedInfo.addTypeArgument(typeArgument);
-                                }
-                                return this.resolvedInfo;
-                            }
-                        }
-
-                        // import aaa.bbb.Ccc の場合 (クラス名まで明示的に記述されている)
-                    } else {
-
-                        final ClassInfo importedClassInfo = classInfoManager
-                                .getClassInfo(availableNamespace.getImportName());
-
-                        //クラスが見つかった
-                        if (className.equals(importedClassInfo.getClassName())) {
-                            this.resolvedInfo = new ClassTypeInfo(importedClassInfo);
-                            for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
-                                    .getTypeArguments()) {
-                                final TypeInfo typeArgument = unresolvedTypeArgument.resolve(
-                                        usingClass, usingMethod, classInfoManager,
-                                        fieldInfoManager, methodInfoManager);
-                                this.resolvedInfo.addTypeArgument(typeArgument);
-                            }
-                            return this.resolvedInfo;
-                        }
+                final String[] referenceNamespace = Arrays.copyOf(referenceName,
+                        referenceName.length - 1);
+                if (classInfo.getNamespace().equals(referenceNamespace)) {
+                    this.resolvedInfo = new ClassTypeInfo(classInfo);
+                    for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                            .getTypeArguments()) {
+                        final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
+                                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                        this.resolvedInfo.addTypeArgument(typeArgument);
                     }
-
+                    return this.resolvedInfo;
                 }
             }
 
             // 単項参照の場合は，デフォルトパッケージからクラスを検索
             if (this.isMoniminalReference()) {
-                
+
                 for (final ClassInfo defaultClassInfo : classInfoManager
                         .getClassInfos(new String[0])) {
 
@@ -164,20 +145,126 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
                 }
             }
 
-            //　複数項参照の場合は，完全限定名かどうかを調べる
+            // 単項演算の場合は，インポートされているクラスから検索
+            if (this.isMoniminalReference()) {
+
+                for (final AvailableNamespaceInfo availableNamespace : this
+                        .getAvailableNamespaces()) {
+
+                    final String[] importedNamespace = availableNamespace.getNamespace();
+                    if (namespace.equals(importedNamespace)) {
+
+                        // import aaa.bbb.*の場合 (クラス名の部分が*)
+                        if (availableNamespace.isAllClasses()) {
+
+                            Collection<ClassInfo> importedClassInfos = classInfoManager
+                                    .getClassInfos(importedNamespace);
+                            for (final ClassInfo importedClassInfo : importedClassInfos) {
+
+                                //クラスが見つかった
+                                if (className.equals(importedClassInfo.getClassName())) {
+                                    this.resolvedInfo = new ClassTypeInfo(importedClassInfo);
+                                    for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                                            .getTypeArguments()) {
+                                        final TypeInfo typeArgument = unresolvedTypeArgument
+                                                .resolve(usingClass, usingMethod, classInfoManager,
+                                                        fieldInfoManager, methodInfoManager);
+                                        this.resolvedInfo.addTypeArgument(typeArgument);
+                                    }
+                                    return this.resolvedInfo;
+                                }
+                            }
+
+                            // import aaa.bbb.Ccc の場合 (クラス名まで明示的に記述されている)
+                        } else {
+
+                            final ClassInfo importedClassInfo = classInfoManager
+                                    .getClassInfo(availableNamespace.getImportName());
+
+                            //クラスが見つかった
+                            if (className.equals(importedClassInfo.getClassName())) {
+                                this.resolvedInfo = new ClassTypeInfo(importedClassInfo);
+                                for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                                        .getTypeArguments()) {
+                                    final TypeInfo typeArgument = unresolvedTypeArgument.resolve(
+                                            usingClass, usingMethod, classInfoManager,
+                                            fieldInfoManager, methodInfoManager);
+                                    this.resolvedInfo.addTypeArgument(typeArgument);
+                                }
+                                return this.resolvedInfo;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 複数項参照の場合は，importされているクラスのインナークラスを調べる
             if (!this.isMoniminalReference()) {
 
-                final String[] referenceNamespace = Arrays.copyOf(referenceName,
-                        referenceName.length - 1);
-                if (classInfo.getNamespace().equals(referenceNamespace)) {
-                    this.resolvedInfo = new ClassTypeInfo(classInfo);
-                    for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
-                            .getTypeArguments()) {
-                        final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
-                                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-                        this.resolvedInfo.addTypeArgument(typeArgument);
+                for (final AvailableNamespaceInfo availableNamespace : this
+                        .getAvailableNamespaces()) {
+
+                    final String[] importedNamespace = availableNamespace.getNamespace();
+                    if (namespace.equals(importedNamespace)) {
+
+                        // import aaa.bbb.*の場合 (クラス名の部分が*)
+                        if (availableNamespace.isAllClasses()) {
+
+                            final Collection<ClassInfo> importedClassInfos = classInfoManager
+                                    .getClassInfos(importedNamespace);
+                            for (final ClassInfo importedClassInfo : importedClassInfos) {
+
+                                if (importedClassInfo instanceof TargetClassInfo) {
+                                    final Collection<TargetInnerClassInfo> importedInnerClassInfos = TargetClassInfo
+                                            .getAccessibleInnerClasses((TargetClassInfo) importedClassInfo);
+
+                                    for (final ClassInfo importedInnerClassInfo : importedInnerClassInfos) {
+
+                                        if (importedInnerClassInfo.equals(classInfo)) {
+                                            this.resolvedInfo = new ClassTypeInfo(classInfo);
+                                            for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                                                    .getTypeArguments()) {
+                                                final TypeInfo typeArgument = unresolvedTypeArgument
+                                                        .resolve(usingClass, usingMethod,
+                                                                classInfoManager, fieldInfoManager,
+                                                                methodInfoManager);
+                                                this.resolvedInfo.addTypeArgument(typeArgument);
+                                            }
+                                            return this.resolvedInfo;
+                                        }
+                                    }
+                                }
+                            }
+
+                            // import aaa.bbb.Ccc の場合
+                        } else {
+
+                            final String[] importedFullQualifiedName = availableNamespace
+                                    .getImportName();
+                            final ClassInfo importedClassInfo = classInfoManager
+                                    .getClassInfo(importedFullQualifiedName);
+                            if (importedClassInfo instanceof TargetClassInfo) {
+                                final Collection<TargetInnerClassInfo> importedInnerClassInfos = TargetClassInfo
+                                        .getAllInnerClasses((TargetClassInfo) importedClassInfo);
+
+                                for (final ClassInfo importedInnerClassInfo : importedInnerClassInfos) {
+
+                                    if (importedInnerClassInfo.equals(classInfo)) {
+                                        this.resolvedInfo = new ClassTypeInfo(classInfo);
+                                        for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                                                .getTypeArguments()) {
+                                            final TypeInfo typeArgument = unresolvedTypeArgument
+                                                    .resolve(usingClass, usingMethod,
+                                                            classInfoManager, fieldInfoManager,
+                                                            methodInfoManager);
+                                            this.resolvedInfo.addTypeArgument(typeArgument);
+                                        }
+                                        return this.resolvedInfo;
+                                    }
+                                }
+                            }
+                        }
                     }
-                    return this.resolvedInfo;
                 }
             }
         }
@@ -207,8 +294,8 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
         }
 
         return this.resolvedInfo;
-         */
-        
+
+        /* ここからふるい実装
         //　単項参照の場合
         if (this.isMoniminalReference()) {
 
@@ -438,6 +525,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
             }
             return this.resolvedInfo;
         }
+        */
     }
 
     /**
