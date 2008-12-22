@@ -54,12 +54,13 @@ public class ReturnStatementBuilder extends SingleStatementBuilder<UnresolvedRet
                 final UnresolvedExpressionInfo<? extends ExpressionInfo> returnedExpression = this
                         .getLastBuiltExpression();
                 final UnresolvedReturnStatementInfo buildingStatement = this.getLastBuildData();
-                
+
                 // TODO ‚¢‚¯‚Ä‚È‚¢.SingleStatementBuilder‚ğStatetDrivenDataBuilder‚ğŒp³‚·‚é‚æ‚¤‚É•ÏX‚·‚×‚«
                 if (null != returnedExpression
-                        && returnedExpression.getToLine() < buildingStatement.getFromLine()
-                        || returnedExpression.getToLine() == buildingStatement.getFromLine()
-                        && returnedExpression.getToColumn() < buildingStatement.getFromColumn()) {
+                        && (returnedExpression.getToLine() < buildingStatement.getFromLine() || returnedExpression
+                                .getToLine() == buildingStatement.getFromLine()
+                                && returnedExpression.getToColumn() < buildingStatement
+                                        .getFromColumn())) {
                     buildingStatement.setReturnedExpression(null);
                 } else {
                     buildingStatement.setReturnedExpression(returnedExpression);
