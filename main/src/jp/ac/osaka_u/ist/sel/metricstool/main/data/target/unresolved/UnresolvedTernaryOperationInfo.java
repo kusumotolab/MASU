@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -20,15 +21,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedTernaryOperationInfo extends UnresolvedEntityUsageInfo<TernaryOperationInfo> {
 
     public UnresolvedTernaryOperationInfo(
-            final UnresolvedExpressionInfo<? extends ExpressionInfo> conditionalExpression,
+            final UnresolvedConditionInfo<? extends ConditionInfo> condition,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> trueExpression,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> falseExpression) {
         super();
-        if (null == conditionalExpression || null == trueExpression || null == falseExpression) {
+        if (null == condition || null == trueExpression || null == falseExpression) {
             throw new IllegalArgumentException();
         }
 
-        this.conditionalExpression = conditionalExpression;
+        this.condition = condition;
         this.trueExpression = trueExpression;
         this.falseExpression = falseExpression;
 
@@ -55,7 +56,7 @@ public class UnresolvedTernaryOperationInfo extends UnresolvedEntityUsageInfo<Te
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final ExpressionInfo conditionalExpression = this.conditionalExpression.resolve(usingClass,
+        final ConditionInfo conditionalExpression = this.condition.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final ExpressionInfo trueExpression = this.trueExpression.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
@@ -71,7 +72,7 @@ public class UnresolvedTernaryOperationInfo extends UnresolvedEntityUsageInfo<Te
     /**
      * O€‰‰Z‚ÌğŒ®(‘æˆê€)‚Ì‚İ‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚é•Ï”
      */
-    private final UnresolvedExpressionInfo<? extends ExpressionInfo> conditionalExpression;
+    private final UnresolvedConditionInfo<? extends ConditionInfo> condition;
 
     /**
      * O€‰‰Z‚ÌğŒ®‚ªtrue‚Ì‚Æ‚«‚É•Ô‚³‚ê‚é®(‘æ“ñ€)‚Ì–¢‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚é•Ï”

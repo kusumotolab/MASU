@@ -17,7 +17,7 @@ public class TernaryOperationInfo extends EntityUsageInfo {
 
     /**
      * 三項演算の条件式(第一項)，条件式がtrueの時に返される式，条件式がfalseの時に返される式(第三項)，開始位置，終了位置を与えて初期化
-     * @param condtionalExpression 条件式(第一項)
+     * @param condtion 条件式(第一項)
      * @param trueExpression 条件式がtrueのときに返される式(第二項)
      * @param falseExpression 条件式がfalseのといに返される式(第三項)
      * @param fromLine 開始行
@@ -25,16 +25,16 @@ public class TernaryOperationInfo extends EntityUsageInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public TernaryOperationInfo(final ExpressionInfo condtionalExpression,
-            ExpressionInfo trueExpression, ExpressionInfo falseExpression, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    public TernaryOperationInfo(final ConditionInfo condtion, ExpressionInfo trueExpression,
+            ExpressionInfo falseExpression, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
         super(fromLine, fromColumn, toLine, toColumn);
 
-        if (null == condtionalExpression || null == trueExpression || null == falseExpression) {
+        if (null == condtion || null == trueExpression || null == falseExpression) {
             throw new IllegalArgumentException();
         }
 
-        this.conditionalExpression = condtionalExpression;
+        this.condition = condtion;
         this.trueExpression = trueExpression;
         this.falseExpression = falseExpression;
     }
@@ -48,8 +48,8 @@ public class TernaryOperationInfo extends EntityUsageInfo {
      * 三項演算の条件式(第一項)を返す
      * @return 三項演算の条件式(第一項)
      */
-    public ExpressionInfo getConditionalExpression() {
-        return conditionalExpression;
+    public ConditionInfo getCondition() {
+        return condition;
     }
 
     /**
@@ -72,7 +72,7 @@ public class TernaryOperationInfo extends EntityUsageInfo {
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
 
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
-        variableUsages.addAll(this.getConditionalExpression().getVariableUsages());
+        variableUsages.addAll(this.getCondition().getVariableUsages());
         variableUsages.addAll(this.getTrueExpression().getVariableUsages());
         variableUsages.addAll(this.getFalseExpression().getVariableUsages());
         return Collections.unmodifiableSortedSet(variableUsages);
@@ -88,7 +88,7 @@ public class TernaryOperationInfo extends EntityUsageInfo {
 
         final StringBuilder sb = new StringBuilder();
 
-        final ExpressionInfo condition = this.getConditionalExpression();
+        final ConditionInfo condition = this.getCondition();
         sb.append(condition.getText());
 
         sb.append(" ? ");
@@ -108,7 +108,7 @@ public class TernaryOperationInfo extends EntityUsageInfo {
     /**
      * 三項演算の条件式(第一項)を保存する変数
      */
-    private final ExpressionInfo conditionalExpression;
+    private final ConditionInfo condition;
 
     /**
      * 三項演算の条件式がtrueのときに返される式(第二項)を保存する変数
