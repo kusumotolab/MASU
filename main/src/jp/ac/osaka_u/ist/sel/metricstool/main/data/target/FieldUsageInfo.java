@@ -33,7 +33,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         super(usedField, reference, fromLine, fromColumn, toLine, toColumn);
 
         this.qualifierExpression = ownerExpression;
-        this.ownerType = ownerType;
+        this.qualifierType = ownerType;
     }
 
     /**
@@ -65,7 +65,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
      * @return このフィールド使用の親
      */
     public final TypeInfo getQualifierType() {
-        return this.ownerType;
+        return this.qualifierType;
     }
 
     /**
@@ -93,7 +93,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         return Collections.unmodifiableSortedSet(variableUsages);
     }
 
-    private final TypeInfo ownerType;
+    private final TypeInfo qualifierType;
 
     /**
      * フィールド参照が実行される親の式を保存する変数
@@ -104,7 +104,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
      * 必要な情報を与えて，インスタンスを取得
      * 
      * @param qualifierExpression 親の式
-     * @param ownerType 親エンティティの型
+     * @param qualifierType 親エンティティの型
      * @param usedField 使用されているフィールド
      * @param reference 参照である場合はtrue，代入である場合はfalse
      * @param fromLine 開始行
@@ -114,9 +114,9 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
      * @return フィールド使用のインスタンス
      */
     public static FieldUsageInfo getInstance(final ExpressionInfo qualifierExpression,
-            final TypeInfo ownerType, final FieldInfo usedField, final boolean reference,
+            final TypeInfo qualifierType, final FieldInfo usedField, final boolean reference,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
-        final FieldUsageInfo instance = new FieldUsageInfo(qualifierExpression, ownerType,
+        final FieldUsageInfo instance = new FieldUsageInfo(qualifierExpression, qualifierType,
                 usedField, reference, fromLine, fromColumn, toLine, toColumn);
         addFieldUsage(instance);
         return instance;

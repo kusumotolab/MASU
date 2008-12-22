@@ -23,7 +23,7 @@ public final class MethodCallInfo extends CallInfo {
     /**
      * 呼び出されるメソッドを与えてオブジェクトを初期化
      * 
-     * @param ownerType メソッド呼び出しの親の型
+     * @param qualifierType メソッド呼び出しの親の型
      * @param qualifierExpression メソッド呼び出しの親エンティティ
      * @param callee 呼び出されているメソッド
      * @param fromLine 開始行
@@ -31,17 +31,17 @@ public final class MethodCallInfo extends CallInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public MethodCallInfo(final TypeInfo ownerType, final ExpressionInfo qualifierExpression,
+    public MethodCallInfo(final TypeInfo qualifierType, final ExpressionInfo qualifierExpression,
             final MethodInfo callee, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
-        if ((null == ownerType) || (null == callee) || (null == qualifierExpression)) {
+        if ((null == qualifierType) || (null == callee) || (null == qualifierExpression)) {
             throw new NullPointerException();
         }
 
-        this.qualifierType = ownerType;
+        this.qualifierType = qualifierType;
         this.qualifierExpression = qualifierExpression;
         this.callee = callee;
     }
