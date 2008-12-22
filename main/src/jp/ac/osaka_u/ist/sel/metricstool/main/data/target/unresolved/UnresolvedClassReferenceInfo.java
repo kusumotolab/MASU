@@ -538,11 +538,17 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
      * @return –¢‰ðŒˆƒNƒ‰ƒXŽQÆ
      */
     public final static UnresolvedClassReferenceInfo createClassReference(
-            UnresolvedClassTypeInfo referenceType) {
+            final UnresolvedClassTypeInfo referenceType, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
-        return new UnresolvedClassReferenceInfo(referenceType.getAvailableNamespaces(),
+        final UnresolvedClassReferenceInfo reference = new UnresolvedClassReferenceInfo(referenceType.getAvailableNamespaces(),
                 referenceType.getReferenceName());
-
+        reference.setFromLine(fromLine);
+        reference.setFromColumn(fromColumn);
+        reference.setToLine(toLine);
+        reference.setToColumn(toColumn);
+        
+        return reference;
     }
 
     /**

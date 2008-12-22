@@ -18,14 +18,16 @@ public class SingleIdentifierBuilder extends ExpressionBuilder {
     protected void afterExited(AstVisitEvent event) {
         AstToken token = event.getToken();
         if (token.isIdentifier()) {
-            //            AvailableNamespaceInfoSet nameSpaceset = buildDataManager.getAllAvaliableNames();
-            //            UnresolvedReferenceTypeInfo unresolvedReference = new UnresolvedReferenceTypeInfo(nameSpaceset,new String[]{token.toString()});
-            UnresolvedClassReferenceInfo currentClassReference = buildDataManager.getCurrentClass()
-                    .getClassReference();
+            final int fromLine = event.getStartLine();
+            final int fromColumn = event.getStartColumn();
+            final int toLine = event.getEndLine();
+            final int toColumn = event.getEndColumn();
 
-            pushElement(new SingleIdentifierElement(token.toString(), currentClassReference, event
-                    .getStartLine(), event.getStartColumn(), event.getEndLine(), event
-                    .getEndColumn()));
+            UnresolvedClassReferenceInfo currentClassReference = buildDataManager.getCurrentClass()
+                    .getClassReference(fromLine, fromColumn, toLine, toColumn);
+
+            pushElement(new SingleIdentifierElement(token.toString(), currentClassReference,
+                    fromLine, fromColumn, toLine, toColumn));
         }
     }
 

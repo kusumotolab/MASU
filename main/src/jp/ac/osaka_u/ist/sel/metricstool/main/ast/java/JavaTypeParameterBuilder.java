@@ -1,9 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.TypeParameterBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+
 
 /**
  * Javaの型パラメータ情報を構築する．
@@ -13,14 +16,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  * @author kou-tngt, t-miyake
  *
  */
-public class JavaTypeParameterBuilder extends TypeParameterBuilder{
+public class JavaTypeParameterBuilder extends TypeParameterBuilder {
 
     /**
      * 親クラスのコンストラクタを呼び出す．
      * @param buildDataManager
      */
     public JavaTypeParameterBuilder(BuildDataManager buildDataManager) {
-        super(buildDataManager,new NameBuilder(),new JavaTypeBuilder(buildDataManager));
+        super(buildDataManager, new NameBuilder(), new JavaTypeBuilder(buildDataManager));
     }
 
     /**
@@ -31,9 +34,9 @@ public class JavaTypeParameterBuilder extends TypeParameterBuilder{
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.TypeParameterBuilder#getUpperBounds()
      */
     @Override
-    protected UnresolvedTypeInfo getUpperBounds(){
-        UnresolvedTypeInfo extendsTypeInfo = super.getUpperBounds();
-        if (null == extendsTypeInfo){
+    protected UnresolvedTypeInfo<? extends TypeInfo> getUpperBounds() {
+        UnresolvedTypeInfo<? extends TypeInfo> extendsTypeInfo = super.getUpperBounds();
+        if (null == extendsTypeInfo) {
             return JavaTypeBuilder.JAVA_LANG_OBJECT;
         } else {
             return extendsTypeInfo;

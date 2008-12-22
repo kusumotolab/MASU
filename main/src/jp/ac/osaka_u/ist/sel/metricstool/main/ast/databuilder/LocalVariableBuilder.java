@@ -13,6 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
@@ -66,7 +67,7 @@ public class LocalVariableBuilder
 
     @Override
     protected UnresolvedLocalVariableInfo buildVariable(final String[] name,
-            final UnresolvedTypeInfo type, final ModifierInfo[] modifiers,
+            final UnresolvedTypeInfo<? extends TypeInfo> type, final ModifierInfo[] modifiers,
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> definitionSpace,
             final int startLine, final int startColumn, final int endLine, final int endColumn) {
         String varName = "";

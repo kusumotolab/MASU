@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.MethodParameterStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
@@ -31,8 +32,8 @@ public class MethodParameterBuilder
     }
 
     @Override
-    protected UnresolvedParameterInfo buildVariable(String[] name, UnresolvedTypeInfo type,
-            ModifierInfo[] modifiers,
+    protected UnresolvedParameterInfo buildVariable(String[] name,
+            UnresolvedTypeInfo<? extends TypeInfo> type, ModifierInfo[] modifiers,
             final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> definitionMehtod,
             final int startLine, final int startColumn, final int endLine, final int endColumn) {
         String varName = "";

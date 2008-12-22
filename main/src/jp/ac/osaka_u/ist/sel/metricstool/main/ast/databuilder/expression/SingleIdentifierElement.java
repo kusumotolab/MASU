@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
@@ -32,7 +33,7 @@ public class SingleIdentifierElement extends IdentifierElement {
 
     }
 
-    public UnresolvedTypeInfo getType() {
+    public UnresolvedTypeInfo<? extends TypeInfo> getType() {
         return null;
     }
 

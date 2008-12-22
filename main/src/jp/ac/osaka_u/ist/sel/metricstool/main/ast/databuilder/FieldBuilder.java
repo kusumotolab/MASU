@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.FieldStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
@@ -24,7 +25,7 @@ public class FieldBuilder extends
     }
 
     @Override
-    protected UnresolvedFieldInfo buildVariable(final String[] name, final UnresolvedTypeInfo type,
+    protected UnresolvedFieldInfo buildVariable(final String[] name, final UnresolvedTypeInfo<? extends TypeInfo> type,
             final ModifierInfo[] modifiers, final UnresolvedClassInfo definitionClass,
             final int startLine, final int startColumn, final int endLine, final int endColumn) {
         String varName = "";

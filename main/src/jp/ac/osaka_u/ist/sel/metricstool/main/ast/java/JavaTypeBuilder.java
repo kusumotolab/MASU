@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.TypeBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
@@ -36,8 +37,8 @@ public class JavaTypeBuilder extends TypeBuilder {
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.TypeBuilder#getCurrentUpperBounds()
      */
     @Override
-    protected UnresolvedTypeInfo getCurrentUpperBounds() {
-        final UnresolvedTypeInfo type = super.getCurrentUpperBounds();
+    protected UnresolvedTypeInfo<? extends TypeInfo> getCurrentUpperBounds() {
+        final UnresolvedTypeInfo<? extends TypeInfo> type = super.getCurrentUpperBounds();
         if (null == type) {
             return JAVA_LANG_OBJECT;
         } else {

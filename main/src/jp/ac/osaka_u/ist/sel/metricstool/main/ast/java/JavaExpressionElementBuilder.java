@@ -26,9 +26,11 @@ public class JavaExpressionElementBuilder extends ExpressionBuilder {
     protected void afterExited(AstVisitEvent event) {
         AstToken token = event.getToken();
         if (token.equals(JavaAstToken.SUPER)) {
-            pushElement(JavaExpressionElement.SUPER);
+            pushElement(new JavaExpressionElement(false, true, event.getStartLine(), event
+                    .getStartColumn(), event.getEndLine(), event.getEndColumn()));
         } else if (token.equals(JavaAstToken.CLASS)) {
-            pushElement(JavaExpressionElement.CLASS);
+            pushElement(new JavaExpressionElement(true, false, event.getStartLine(), event
+                    .getStartColumn(), event.getEndLine(), event.getEndColumn()));
         }
     }
 

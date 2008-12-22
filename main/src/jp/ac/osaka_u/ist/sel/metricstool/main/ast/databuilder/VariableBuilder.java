@@ -12,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.VariableDefinitionStateManager.VARIABLE_STATE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
@@ -170,9 +171,10 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
      * @param endColumn　変数定義部の終了列
      * @return　構築した変数情報
      */
-    protected abstract TVar buildVariable(final String[] name, final UnresolvedTypeInfo type,
-            final ModifierInfo[] modifiers, final TUnit definitionUnit, final int startLine,
-            final int startColumn, final int endLine, final int endColumn);
+    protected abstract TVar buildVariable(final String[] name,
+            final UnresolvedTypeInfo<? extends TypeInfo> type, final ModifierInfo[] modifiers,
+            final TUnit definitionUnit, final int startLine, final int startColumn,
+            final int endLine, final int endColumn);
 
     /**
      * 変数定義が終了したときに呼び出され， {@link #buildVariable(String[], UnresolvedTypeInfo, ModifierInfo[])}
@@ -227,7 +229,7 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
      * 最も最後に構築した変数の型を返す．
      * @return　最も最後に構築した変数の型
      */
-    private UnresolvedTypeInfo getType() {
+    private UnresolvedTypeInfo<? extends TypeInfo> getType() {
         return this.builtTypeStack.pop();
     }
 
@@ -261,7 +263,7 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
     /**
      * 構築した型情報を構築後すぐに格納しておくスタック
      */
-    private final Stack<UnresolvedTypeInfo> builtTypeStack = new Stack<UnresolvedTypeInfo>();
+    private final Stack<UnresolvedTypeInfo<? extends TypeInfo>> builtTypeStack = new Stack<UnresolvedTypeInfo<? extends TypeInfo>>();
 
     /**
      * 構築した修飾子情報を構築後すぐに格納しておくスタック

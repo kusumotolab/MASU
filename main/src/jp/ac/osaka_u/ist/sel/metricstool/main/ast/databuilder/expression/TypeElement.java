@@ -1,9 +1,16 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BuiltinTypeToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLiteralUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -13,23 +20,30 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  */
 public class TypeElement extends ExpressionElement {
 
-    public TypeElement getArrayDimensionInclementedInstance() {
-        UnresolvedTypeInfo newType = null;
+    public TypeElement getArrayDimensionInclementedInstance(final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
+        UnresolvedTypeInfo<? extends TypeInfo> newType = null;
         if (this.type instanceof UnresolvedArrayTypeInfo) {
             newType = ((UnresolvedArrayTypeInfo) this.type).getDimensionInclementedArrayType();
         } else {
             newType = UnresolvedArrayTypeInfo.getType(this.type, 1);
         }
 
-        return new TypeElement(newType);
+        return new TypeElement(newType, fromLine, fromColumn, toLine, toColumn);
     }
 
-    public UnresolvedTypeInfo getType() {
+    public UnresolvedTypeInfo<? extends TypeInfo> getType() {
         return this.type;
     }
 
-    public TypeElement(final UnresolvedTypeInfo type) {
-        super();
+    public TypeElement(final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> type,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        this((UnresolvedTypeInfo<? extends TypeInfo>) type, fromLine, fromColumn, toLine, toColumn);
+    }
+
+    private TypeElement(final UnresolvedTypeInfo<? extends TypeInfo> type, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
+        super(fromLine, fromColumn, toLine, toColumn);
 
         if (null == type) {
             throw new NullPointerException("type is null.");
@@ -40,17 +54,28 @@ public class TypeElement extends ExpressionElement {
             this.usage = new UnresolvedLiteralUsageInfo("", (PrimitiveTypeInfo) this.type);
         }
     }
-    
+
     public TypeElement(final UnresolvedLiteralUsageInfo literal) {
-        if(null == literal) {
+        if (null == literal) {
             throw new IllegalArgumentException();
         }
-        
+
         this.type = literal.getType();
         this.usage = literal;
     }
 
-    private final UnresolvedTypeInfo type;
+    public static final TypeElement getBuiltinTypeElement(final BuiltinTypeToken token) {
+        if (BUILTIN_TYPE_CACHE.containsKey(token)) {
+            return BUILTIN_TYPE_CACHE.get(token);
+        } else {
+            final TypeElement builtinTypeElement = new TypeElement(token.getType(), 0, 0, 0, 0);
+            BUILTIN_TYPE_CACHE.put(token, builtinTypeElement);
+            return builtinTypeElement;
+        }
+    }
 
+    private static final Map<BuiltinTypeToken, TypeElement> BUILTIN_TYPE_CACHE = new HashMap<BuiltinTypeToken, TypeElement>();
+
+    private final UnresolvedTypeInfo<? extends TypeInfo> type;
 
 }

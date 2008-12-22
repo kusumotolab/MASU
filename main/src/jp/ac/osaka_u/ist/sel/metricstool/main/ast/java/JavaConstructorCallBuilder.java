@@ -12,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeEle
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
@@ -111,7 +112,8 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
             //elementsの1個目がUnresolvedReferenceTypeInfoでありかつsuperClassのアウタークラスであるなら
             //それはOuterClass.this.super()という呼び出し形式であるとみなす
 
-            final UnresolvedTypeInfo type = ((TypeElement) elements[0]).getType();
+            final UnresolvedTypeInfo<? extends TypeInfo> type = ((TypeElement) elements[0])
+                    .getType();
             if (type instanceof UnresolvedClassTypeInfo) {
                 // TODO UnresolvedReferenceTypeにすべきかも 要テスト
                 final String[] firstElementReference = ((UnresolvedClassTypeInfo) type)
@@ -156,8 +158,8 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         return false;
     }
 
-    protected UnresolvedArrayTypeInfo resolveArrayElement(final UnresolvedTypeInfo type,
-            final ExpressionElement[] elements) {
+    protected UnresolvedArrayTypeInfo resolveArrayElement(
+            final UnresolvedTypeInfo<? extends TypeInfo> type, final ExpressionElement[] elements) {
         int i = 1;
         int dimension = 0;
         while (i < elements.length

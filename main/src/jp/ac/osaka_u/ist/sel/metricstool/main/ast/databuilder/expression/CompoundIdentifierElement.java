@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
@@ -41,7 +42,7 @@ public class CompoundIdentifierElement extends IdentifierElement {
         return this.owner;
     }
 
-    public UnresolvedTypeInfo getType() {
+    public UnresolvedTypeInfo<? extends TypeInfo> getType() {
         return null;
     }
 
@@ -53,9 +54,9 @@ public class CompoundIdentifierElement extends IdentifierElement {
                 .getAllAvaliableNames(), this.ownerUsage, this.name, false, this.fromLine,
                 this.fromColumn, this.toLine, this.toColumn);
         buildDataManager.addVariableUsage(fieldUsage);
-        
+
         this.usage = fieldUsage;
-        
+
         return fieldUsage;
     }
 
@@ -73,9 +74,9 @@ public class CompoundIdentifierElement extends IdentifierElement {
                 .getAllAvaliableNames(), this.ownerUsage, this.name, true, this.fromLine,
                 this.fromColumn, this.toLine, this.toColumn);
         buildDataManager.addVariableUsage(fieldUsage);
-        
+
         this.usage = fieldUsage;
-        
+
         return fieldUsage;
     }
 
@@ -89,16 +90,17 @@ public class CompoundIdentifierElement extends IdentifierElement {
                     buildDataManager.getAllAvaliableNames(), this.ownerUsage, this.name, true,
                     this.fromLine, this.fromColumn, this.toLine, this.toColumn);
             buildDataManager.addVariableUsage(fieldUsage);
-            
+
             this.usage = fieldUsage;
-            
+
             return fieldUsage;
         }
 
         return null;
     }
 
-    protected UnresolvedEntityUsageInfo<? extends EntityUsageInfo> resolveOwner(final BuildDataManager buildDataManager) {
+    protected UnresolvedEntityUsageInfo<? extends EntityUsageInfo> resolveOwner(
+            final BuildDataManager buildDataManager) {
         this.ownerUsage = this.owner.resolveReferencedEntityIfPossible(buildDataManager);
 
         return null != this.ownerUsage ? this.ownerUsage : new UnresolvedUnknownUsageInfo(

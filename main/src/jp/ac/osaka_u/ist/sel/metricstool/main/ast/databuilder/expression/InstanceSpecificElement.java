@@ -25,11 +25,7 @@ public class InstanceSpecificElement extends ExpressionElement {
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         
         final UnresolvedClassReferenceInfo thisInstance = buildManager.getCurrentClass()
-                .getClassReference();
-        thisInstance.setFromLine(fromLine);
-        thisInstance.setFromColumn(fromColumn);
-        thisInstance.setToLine(toLine);
-        thisInstance.setToColumn(toColumn);
+                .getClassReference(fromLine, fromColumn, toLine, toColumn);
         
         return new InstanceSpecificElement(thisInstance, SPECIFIC_ELEMENT_TYPE.THIS);
     }

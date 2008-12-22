@@ -49,7 +49,7 @@ public class MethodCallBuilder extends ExpressionBuilder{
                     	// TODO C#などの場合は型引数に参照型以外も指定できるので対処が必要かも
                         TypeArgumentElement typeArgument = (TypeArgumentElement) argment;
                     	assert typeArgument.getType() instanceof UnresolvedReferenceTypeInfo : "type argument was not reference type.";
-                        methodCall.addTypeArgument((UnresolvedReferenceTypeInfo) typeArgument.getType());
+                        methodCall.addTypeArgument((UnresolvedReferenceTypeInfo<?>) typeArgument.getType());
                     } else {
                         methodCall.addArgument(argment.getUsage());
                     }

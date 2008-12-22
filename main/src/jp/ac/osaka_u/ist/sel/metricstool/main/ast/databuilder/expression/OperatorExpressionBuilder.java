@@ -6,11 +6,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TernaryOperationInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeReferenceInfo;
@@ -18,7 +17,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedB
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCastUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMonominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTernaryOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
@@ -76,7 +74,9 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {
                     // キャストがあるとおそらくここに到達
                     // TODO UnresolvedReferenceTypeInfoにすべき
-                    termTypes[0] = ((UnresolvedClassTypeInfo) typeElement.getType()).getUsage();
+                    termTypes[0] = ((UnresolvedClassTypeInfo) typeElement.getType()).getUsage(
+                            typeElement.getFromLine(), typeElement.getFromColumn(), typeElement
+                                    .getToLine(), typeElement.getToColumn());
                 } else if (typeElement.getType() instanceof UnresolvedArrayTypeInfo) {
                     UnresolvedArrayTypeInfo arrayType = (UnresolvedArrayTypeInfo) typeElement
                             .getType();
@@ -99,10 +99,11 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 } else if (elements[i] instanceof TypeElement) {
                     TypeElement typeElement = (TypeElement) elements[i];
                     if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {
-                        termTypes[i] = ((UnresolvedClassTypeInfo) typeElement.getType()).getUsage();
+                        termTypes[i] = ((UnresolvedClassTypeInfo) typeElement.getType()).getUsage(
+                                typeElement.getFromLine(), typeElement.getFromColumn(), typeElement
+                                        .getToLine(), typeElement.getToColumn());
                     } else if (typeElement.getType() instanceof UnresolvedArrayTypeInfo) {
                         // ここに到達するのはinstanceof type[]とき
-                        // TODO instanceofの使用を示すEntityUsageを生成したほうがいいかも
                         UnresolvedArrayTypeInfo arrayType = (UnresolvedArrayTypeInfo) typeElement
                                 .getType();
                         termTypes[i] = new UnresolvedArrayTypeReferenceInfo(arrayType);
@@ -144,7 +145,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 operation.setFromColumn(termTypes[0].getFromColumn());
                 operation.setToLine(termTypes[2].getToLine());
                 operation.setToColumn(termTypes[2].getToColumn());
-                
+
                 pushElement(new UsageElement(operation));
             } else {
                 //自分で型決定する
@@ -188,7 +189,8 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     resultType.setToLine(event.getEndLine());
                     resultType.setToColumn(event.getEndColumn());
                 } else if (token.equals(OperatorToken.CAST) && elements[0] instanceof TypeElement) {
-                    final UnresolvedTypeInfo castType = ((TypeElement) elements[0]).getType();
+                    final UnresolvedTypeInfo<? extends TypeInfo> castType = ((TypeElement) elements[0])
+                            .getType();
                     final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> castedUsage = elements[1]
                             .getUsage();
                     resultType = new UnresolvedCastUsageInfo(castType, castedUsage);
@@ -209,11 +211,6 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 assert (null != resultType) : "Illegal state: operation resultType was not decided.";
 
                 this.pushElement(new UsageElement(resultType));
-
-                boolean bool;
-                int i;
-                bool = ((i = 0) == 0);
-
             }
         }
     }

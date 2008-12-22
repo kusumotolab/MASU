@@ -493,7 +493,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     public boolean isStaticMember() {
         return !this.instance;
     }
-    
+
     public final boolean isInterface() {
         return this.isInterface;
     }
@@ -557,7 +557,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
-        
+
         // 修飾子，完全限定名，行数，可視性，インスタンスメンバーかどうかを取得
         final Set<ModifierInfo> modifiers = this.getModifiers();
         final String[] fullQualifiedName = this.getFullQualifiedName();
@@ -602,9 +602,14 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 
      * @return この未解決クラス定義情報の未解決参照型
      */
-    public UnresolvedClassReferenceInfo getClassReference() {
+    public UnresolvedClassReferenceInfo getClassReference(final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
         final UnresolvedClassReferenceInfo classReference = new UnresolvedFullQualifiedNameClassReferenceInfo(
                 this);
+        classReference.setFromLine(fromLine);
+        classReference.setFromColumn(fromColumn);
+        classReference.setToLine(toLine);
+        classReference.setToColumn(toColumn);
 
         for (UnresolvedTypeParameterInfo typeParameter : this.typeParameters) {
             classReference.addTypeArgument(typeParameter);

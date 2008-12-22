@@ -45,9 +45,10 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
 
         ExpressionElement left = elements[0];
         ExpressionElement right = elements[1];
-        if (right.equals(JavaExpressionElement.CLASS)) {
+        if (right instanceof JavaExpressionElement && ((JavaExpressionElement) right).isClass()) {
             UnresolvedClassReferenceInfo classReference = UnresolvedClassReferenceInfo
-                    .createClassReference(JAVA_LANG_CLASS);
+                    .createClassReference(JAVA_LANG_CLASS, right.getFromLine(), right
+                            .getFromColumn(), right.getToLine(), right.getToColumn());
             pushElement(new UsageElement(classReference));
         } else if (right instanceof InstanceSpecificElement) {
 
@@ -56,7 +57,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                 UnresolvedClassInfo classInfo = getSpecifiedOuterClass((IdentifierElement) left);
 
                 if (classInfo != null) {
-                    pushElement(new UsageElement(classInfo.getClassReference()));
+                    pushElement(new UsageElement(classInfo.getClassReference(right.getFromLine(),
+                            right.getFromColumn(), right.getToLine(), right.getToColumn())));
                 } else {
                     assert (false) : "Illegal state: specified this class "
                             + ((IdentifierElement) left).getName()
@@ -64,7 +66,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                 }
             }
 
-        } else if (left.equals(JavaExpressionElement.SUPER)) {
+        } else if (left instanceof JavaExpressionElement
+                && ((JavaExpressionElement) left).isSuper()) {
             if (right instanceof IdentifierElement) {
                 final IdentifierElement rightIdentifier = (IdentifierElement) right;
 
@@ -72,7 +75,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                 UnresolvedClassTypeInfo superClassType = classInfo.getSuperClasses().iterator()
                         .next();
                 UnresolvedClassReferenceInfo superClassReference = UnresolvedClassReferenceInfo
-                        .createClassReference(superClassType);
+                        .createClassReference(superClassType, left.getFromLine(), left
+                                .getFromColumn(), left.getToLine(), left.getToColumn());
 
                 final FieldOrMethodElement fieldOrMethod = new FieldOrMethodElement(
                         superClassReference, rightIdentifier.getName(), rightIdentifier
@@ -80,7 +84,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                                 .getToLine(), rightIdentifier.getToColumn());
                 pushElement(fieldOrMethod);
             }
-        } else if (right.equals(JavaExpressionElement.SUPER)) {
+        } else if (right instanceof JavaExpressionElement
+                && ((JavaExpressionElement) right).isSuper()) {
             UnresolvedClassInfo classInfo = null;
             if (left instanceof IdentifierElement) {
                 //まず変数名.super()というコンストラクタ呼び出しかどうかを確認する
@@ -143,7 +148,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
             final UnresolvedClassTypeInfo superClassType = classInfo.getSuperClasses().iterator()
                     .next();
             if (superClassType != null) {
-                pushElement(new UsageElement(superClassType.getUsage()));
+                pushElement(new UsageElement(superClassType.getUsage(right.getFromLine(), right
+                        .getFromColumn(), right.getToLine(), right.getToColumn())));
             }
         } else {
             super.buildCompoundIdentifierElement(elements);

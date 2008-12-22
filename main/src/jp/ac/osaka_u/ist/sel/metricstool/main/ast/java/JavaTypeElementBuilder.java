@@ -1,9 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElementBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+
 
 /**
  * Java‚Ì®’†‚É“oê‚·‚éŒ^—v‘f‚ğ\’z‚·‚éƒNƒ‰ƒXD
@@ -14,25 +17,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  * @author kou-tngt
  *
  */
-public class JavaTypeElementBuilder extends TypeElementBuilder{
+public class JavaTypeElementBuilder extends TypeElementBuilder {
 
-    public JavaTypeElementBuilder(ExpressionElementManager expressionManager, BuildDataManager buildManager) {
+    public JavaTypeElementBuilder(ExpressionElementManager expressionManager,
+            BuildDataManager buildManager) {
         super(expressionManager, buildManager);
     }
 
-    /**
-     * Œ^—v‘f‚ÉŒ^‚ÌãŒÀ‚ªw’è‚³‚ê‚Ä‚¢‚éê‡‚Í‚»‚ÌŒ^‚ğ•Ô‚·D
-     * ‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍCjava.lang.Object‚ğ•\‚·Œ^‚ğ•Ô‚·D
-     * @return Œ^—v‘f‚ÌŒ^‚ÌãŒÀ
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeElementBuilder#getTypeUpperBounds()
-     */
     @Override
-    protected UnresolvedTypeInfo getTypeUpperBounds(){
-        UnresolvedTypeInfo type = super.getTypeUpperBounds();
-        if (null == type){
-            return JavaTypeBuilder.JAVA_LANG_OBJECT;
-        } else {
-            return type;
-        }
+    protected UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> getDefaultTypeUpperBound() {
+        return JavaTypeBuilder.JAVA_LANG_OBJECT;
     }
 }

@@ -546,10 +546,16 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
      * 
      * @return この未解決参照型が表す未解決クラス参照
      */
-    public final UnresolvedClassReferenceInfo getUsage() {
+    public final UnresolvedClassReferenceInfo getUsage(final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
         UnresolvedClassReferenceInfo usage = new UnresolvedClassReferenceInfo(
                 this.availableNamespaces, this.referenceName);
+        usage.setFromLine(fromLine);
+        usage.setFromColumn(fromColumn);
+        usage.setToLine(toLine);
+        usage.setToColumn(toColumn);
+        
         for (UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> typeArgument : this.typeArguments) {
             usage.addTypeArgument(typeArgument);
         }
