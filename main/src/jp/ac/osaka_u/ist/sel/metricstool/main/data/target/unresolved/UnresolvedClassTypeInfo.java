@@ -84,6 +84,131 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
             return this.getResolved();
         }
 
+        /*
+        final String[] referenceName = this.getReferenceName();
+        final Collection<ClassInfo> classInfos = classInfoManager
+                .getClassInfos(referenceName[referenceName.length - 1]);
+        for (final ClassInfo classInfo : classInfos) {
+
+            final String className = classInfo.getClassName();
+            final NamespaceInfo namespace = classInfo.getNamespace();
+
+            // インポートされているクラスから検索
+            for (final AvailableNamespaceInfo availableNamespace : this.getAvailableNamespaces()) {
+
+                final String[] importedNamespace = availableNamespace.getNamespace();
+                if (namespace.equals(importedNamespace)) {
+
+                    // import aaa.bbb.*の場合 (クラス名の部分が*)
+                    if (availableNamespace.isAllClasses()) {
+
+                        Collection<ClassInfo> importedClassInfos = classInfoManager
+                                .getClassInfos(importedNamespace);
+                        for (final ClassInfo importedClassInfo : importedClassInfos) {
+
+                            //クラスが見つかった
+                            if (className.equals(importedClassInfo.getClassName())) {
+                                this.resolvedInfo = new ClassTypeInfo(importedClassInfo);
+                                for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                                        .getTypeArguments()) {
+                                    final TypeInfo typeArgument = unresolvedTypeArgument.resolve(
+                                            usingClass, usingMethod, classInfoManager,
+                                            fieldInfoManager, methodInfoManager);
+                                    this.resolvedInfo.addTypeArgument(typeArgument);
+                                }
+                                return this.resolvedInfo;
+                            }
+                        }
+
+                        // import aaa.bbb.Ccc の場合 (クラス名まで明示的に記述されている)
+                    } else {
+
+                        final ClassInfo importedClassInfo = classInfoManager
+                                .getClassInfo(availableNamespace.getImportName());
+
+                        //クラスが見つかった
+                        if (className.equals(importedClassInfo.getClassName())) {
+                            this.resolvedInfo = new ClassTypeInfo(importedClassInfo);
+                            for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                                    .getTypeArguments()) {
+                                final TypeInfo typeArgument = unresolvedTypeArgument.resolve(
+                                        usingClass, usingMethod, classInfoManager,
+                                        fieldInfoManager, methodInfoManager);
+                                this.resolvedInfo.addTypeArgument(typeArgument);
+                            }
+                            return this.resolvedInfo;
+                        }
+                    }
+
+                }
+            }
+
+            // 単項参照の場合は，デフォルトパッケージからクラスを検索
+            if (this.isMoniminalReference()) {
+                
+                for (final ClassInfo defaultClassInfo : classInfoManager
+                        .getClassInfos(new String[0])) {
+
+                    // 参照されているクラスが見つかった
+                    if (referenceName[0].equals(defaultClassInfo.getClassName())) {
+                        this.resolvedInfo = new ClassTypeInfo(defaultClassInfo);
+                        for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                                .getTypeArguments()) {
+                            final TypeInfo typeArgument = unresolvedTypeArgument.resolve(
+                                    usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                                    methodInfoManager);
+                            this.resolvedInfo.addTypeArgument(typeArgument);
+                        }
+                        return this.resolvedInfo;
+                    }
+                }
+            }
+
+            //　複数項参照の場合は，完全限定名かどうかを調べる
+            if (!this.isMoniminalReference()) {
+
+                final String[] referenceNamespace = Arrays.copyOf(referenceName,
+                        referenceName.length - 1);
+                if (classInfo.getNamespace().equals(referenceNamespace)) {
+                    this.resolvedInfo = new ClassTypeInfo(classInfo);
+                    for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                            .getTypeArguments()) {
+                        final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
+                                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                        this.resolvedInfo.addTypeArgument(typeArgument);
+                    }
+                    return this.resolvedInfo;
+                }
+            }
+        }
+
+        //ここにくるのは，クラスが見つからなかったとき
+        if (this.isMoniminalReference()) {
+
+            final ExternalClassInfo externalClassInfo = new ExternalClassInfo(referenceName[0]);
+            this.resolvedInfo = new ClassTypeInfo(externalClassInfo);
+            for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                    .getTypeArguments()) {
+                final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
+                        usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                this.resolvedInfo.addTypeArgument(typeArgument);
+            }
+
+        } else {
+
+            final ExternalClassInfo externalClassInfo = new ExternalClassInfo(referenceName);
+            this.resolvedInfo = new ClassTypeInfo(externalClassInfo);
+            for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                    .getTypeArguments()) {
+                final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
+                        usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                this.resolvedInfo.addTypeArgument(typeArgument);
+            }
+        }
+
+        return this.resolvedInfo;
+         */
+        
         //　単項参照の場合
         if (this.isMoniminalReference()) {
 

@@ -128,7 +128,7 @@ public final class ClassInfoManager {
     public ClassInfo getClassInfo(final String[] fullQualifiedName) {
 
         if (null == fullQualifiedName) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
 
         final int namespaceLength = fullQualifiedName.length - 1;
@@ -162,6 +162,32 @@ public final class ClassInfoManager {
         }
     }
 
+    public boolean hasClassInfo(final String[] fullQualifiedName) {
+
+        if (null == fullQualifiedName) {
+            throw new IllegalArgumentException();
+        }
+
+        final int namespaceLength = fullQualifiedName.length - 1;
+        final String[] namespace = Arrays.<String> copyOf(fullQualifiedName,
+                fullQualifiedName.length - 1);
+        final String className = fullQualifiedName[namespaceLength];
+
+        //同じクラス名を持つクラス一覧を取得
+        final SortedSet<ClassInfo> classInfos = this.classNameMap.get(className);
+        if (null != classInfos) {
+
+            // 名前空間が等しいクラスがあれば，trueを返す
+            for (final ClassInfo classInfo : classInfos) {
+                if (classInfo.getNamespace().equals(namespace)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     /**
      * 引数で指定した名前空間を持つクラス情報の Collection を返す
      * 
@@ -174,7 +200,22 @@ public final class ClassInfoManager {
             throw new IllegalArgumentException();
         }
 
-        final SortedSet<ClassInfo> classInfos = this.namespaceMap.get(new NamespaceInfo(namespace));
+        return this.getClassInfos(new NamespaceInfo(namespace));
+    }
+
+    /**
+     * 引数で指定した名前空間を持つクラス情報の Collection を返す
+     * 
+     * @param namespace 名前空間
+     * @return 引数で指定した名前空間を持つクラス情報の Collection
+     */
+    public Collection<ClassInfo> getClassInfos(final NamespaceInfo namespace) {
+
+        if (null == namespace) {
+            throw new IllegalArgumentException();
+        }
+
+        final SortedSet<ClassInfo> classInfos = this.namespaceMap.get(namespace);
         return null != classInfos ? Collections.unmodifiableSortedSet(classInfos) : Collections
                 .unmodifiableSortedSet(new TreeSet<ClassInfo>());
     }
