@@ -17,24 +17,24 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
     /**
      * 要素の親，つまり配列型の式とインデックスを与えて，オブジェクトを初期化
      * 
-     * @param ownerExpression 配列型の式
+     * @param qualifierExpression 配列型の式
      * @param indexExpression インデックス
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public ArrayElementUsageInfo(final ExpressionInfo ownerExpression,
+    public ArrayElementUsageInfo(final ExpressionInfo qualifierExpression,
             final ExpressionInfo indexExpression, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
-        if (null == ownerExpression) {
+        if (null == qualifierExpression) {
             throw new NullPointerException();
         }
 
-        this.ownerExpression = ownerExpression;
+        this.qualifierExpression = qualifierExpression;
         this.indexExpression = indexExpression;
     }
 
@@ -46,7 +46,7 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
     @Override
     public TypeInfo getType() {
 
-        final TypeInfo ownerType = this.getOwnerExpression().getType();
+        final TypeInfo ownerType = this.getQualifierExpression().getType();
 
         // 親が配列型である，と解決できている場合
         if (ownerType instanceof ArrayTypeInfo) {
@@ -70,8 +70,8 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
      * 
      * @return この要素の親を返す
      */
-    public ExpressionInfo getOwnerExpression() {
-        return this.ownerExpression;
+    public ExpressionInfo getQualifierExpression() {
+        return this.qualifierExpression;
     }
 
     /**
@@ -92,7 +92,7 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         final Set<VariableUsageInfo<?>> variableUsages = new HashSet<VariableUsageInfo<?>>(
                 this.indexExpression.getVariableUsages());
-        variableUsages.addAll(this.getOwnerExpression().getVariableUsages());
+        variableUsages.addAll(this.getQualifierExpression().getVariableUsages());
         return Collections.unmodifiableSet(variableUsages);
         //return this.getOwnerEntityUsage().getVariableUsages();
     }
@@ -107,7 +107,7 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
 
         final StringBuilder sb = new StringBuilder();
 
-        final ExpressionInfo expression = this.getOwnerExpression();
+        final ExpressionInfo expression = this.getQualifierExpression();
         sb.append(expression.getText());
 
         sb.append("[");
@@ -120,7 +120,7 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
         return sb.toString();
     }
 
-    private final ExpressionInfo ownerExpression;
+    private final ExpressionInfo qualifierExpression;
 
     private final ExpressionInfo indexExpression;
 }

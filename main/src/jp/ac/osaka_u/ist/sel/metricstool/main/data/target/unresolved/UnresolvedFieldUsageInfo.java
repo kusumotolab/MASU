@@ -38,7 +38,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
      * フィールド使用が実行される変数の型名と変数名，利用可能な名前空間を与えてオブジェクトを初期化
      * 
      * @param availableNamespaces 利用可能な名前空間
-     * @param ownerUsage フィールド使用が実行される親エンティティ
+     * @param qualifierUsage フィールド使用が実行される親エンティティ
      * @param fieldName 変数名
      * @param reference フィールド使用が参照である場合は true，代入である場合は false を指定
      * @param fromLine 開始行
@@ -47,18 +47,18 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
      * @param toColumn 終了列
      */
     public UnresolvedFieldUsageInfo(final List<AvailableNamespaceInfo> availableNamespaces,
-            final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> ownerUsage,
+            final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> qualifierUsage,
             final String fieldName, final boolean reference, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
         super(fieldName, reference, fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == availableNamespaces) || (null == ownerUsage) || (null == fieldName)) {
+        if ((null == availableNamespaces) || (null == qualifierUsage) || (null == fieldName)) {
             throw new NullPointerException();
         }
 
         this.availableNamespaces = availableNamespaces;
-        this.ownerUsage = ownerUsage;
+        this.qualifierUsage = qualifierUsage;
         this.fieldName = fieldName;
         this.reference = reference;
     }
@@ -101,7 +101,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
         final int toColumn = this.getToColumn();
 
         // 親の型を解決
-        final UnresolvedEntityUsageInfo<?> unresolvedOwnerUsage = this.getOwnerUsage();
+        final UnresolvedEntityUsageInfo<?> unresolvedOwnerUsage = this.getQualifierUsage();
         final EntityUsageInfo ownerUsage = unresolvedOwnerUsage.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert ownerUsage != null : "resolveEntityUsage returned null!";
@@ -257,8 +257,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
      * 
      * @return フィールド使用が実行される変数の未解決型名
      */
-    public UnresolvedEntityUsageInfo<? extends EntityUsageInfo> getOwnerUsage() {
-        return this.ownerUsage;
+    public UnresolvedEntityUsageInfo<? extends EntityUsageInfo> getQualifierUsage() {
+        return this.qualifierUsage;
     }
 
     /**
@@ -283,5 +283,5 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
     /**
      * フィールド使用が実行される変数の未解決型名を保存するための変数
      */
-    private final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> ownerUsage;
+    private final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> qualifierUsage;
 }

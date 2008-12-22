@@ -42,17 +42,17 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
     /**
      * メソッド呼び出しが実行される変数の型，メソッド名を与えてオブジェクトを初期化
      * 
-     * @param ownerUsage メソッド呼び出しが実行される変数の型
+     * @param qualifierUsage メソッド呼び出しが実行される変数の型
      * @param methodName メソッド名
      */
-    public UnresolvedMethodCallInfo(final UnresolvedEntityUsageInfo<?> ownerUsage,
+    public UnresolvedMethodCallInfo(final UnresolvedEntityUsageInfo<?> qualifierUsage,
             final String methodName) {
 
-        if ((null == ownerUsage) || (null == methodName)) {
+        if ((null == qualifierUsage) || (null == methodName)) {
             throw new NullPointerException();
         }
 
-        this.ownerUsage = ownerUsage;
+        this.qualifierUsage = qualifierUsage;
         this.methodName = methodName;
     }
 
@@ -87,7 +87,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         // 親の型を解決
-        final UnresolvedEntityUsageInfo<?> unresolvedOwnerUsage = this.getOwnerClassType();
+        final UnresolvedEntityUsageInfo<?> unresolvedOwnerUsage = this.getQualifierType();
         EntityUsageInfo ownerUsage = unresolvedOwnerUsage.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert ownerUsage != null : "resolveEntityUsage returned null!";
@@ -313,8 +313,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
      * 
      * @return メソッド呼び出しが実行される変数の型
      */
-    public UnresolvedEntityUsageInfo<?> getOwnerClassType() {
-        return this.ownerUsage;
+    public UnresolvedEntityUsageInfo<?> getQualifierType() {
+        return this.qualifierUsage;
     }
 
     /**
@@ -334,6 +334,6 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
     /**
      * メソッド呼び出しが実行される変数の参照を保存するための変数
      */
-    private final UnresolvedEntityUsageInfo<?> ownerUsage;
+    private final UnresolvedEntityUsageInfo<?> qualifierUsage;
 
 }

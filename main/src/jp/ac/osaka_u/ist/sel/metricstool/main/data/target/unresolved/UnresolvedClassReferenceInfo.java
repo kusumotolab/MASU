@@ -49,7 +49,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
         this.availableNamespaces = availableNamespaces;
         this.referenceName = referenceName;
         this.fullReferenceName = referenceName;
-        this.ownerUsage = null;
+        this.qualifierUsage = null;
         this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo<?>>();
     }
 
@@ -77,7 +77,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
                 referenceName.length);
         this.fullReferenceName = fullReferenceName;
         this.referenceName = referenceName;
-        this.ownerUsage = ownerUsage;
+        this.qualifierUsage = ownerUsage;
         this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo<?>>();
     }
 
@@ -107,7 +107,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
 
         if (this.hasOwnerReference()) {
 
-            final UnresolvedClassReferenceInfo unresolvedClassReference = this.getOwnerUsage();
+            final UnresolvedClassReferenceInfo unresolvedClassReference = this.getQualifierUsage();
             EntityUsageInfo classReference = unresolvedClassReference.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             assert null != classReference : "null is returned!";
@@ -488,8 +488,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
      * 
      * @return この参照型がくっついている未解決参照型
      */
-    public final UnresolvedClassReferenceInfo getOwnerUsage() {
-        return this.ownerUsage;
+    public final UnresolvedClassReferenceInfo getQualifierUsage() {
+        return this.qualifierUsage;
     }
 
     /**
@@ -498,7 +498,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
      * @return くっついている場合は true，くっついていない場合は false
      */
     public final boolean hasOwnerReference() {
-        return null != this.ownerUsage;
+        return null != this.qualifierUsage;
     }
 
     /**
@@ -569,7 +569,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
     /**
      * この参照がくっついている未解決参照型を保存する変数
      */
-    private final UnresolvedClassReferenceInfo ownerUsage;
+    private final UnresolvedClassReferenceInfo qualifierUsage;
 
     /**
      * 未解決型パラメータ使用を保存するための変数

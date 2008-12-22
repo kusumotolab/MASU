@@ -25,17 +25,17 @@ public final class UnresolvedArrayElementUsageInfo extends
     /**
      * 要素が参照された配列の型を与える.
      * 
-     * @param ownerArrayType 要素が参照された配列の型
+     * @param qualifierArrayType 要素が参照された配列の型
      * @param indexExpression 参照された要素のインデックス
      */
-    public UnresolvedArrayElementUsageInfo(final UnresolvedEntityUsageInfo<?> ownerArrayType,
+    public UnresolvedArrayElementUsageInfo(final UnresolvedEntityUsageInfo<?> qualifierArrayType,
             final UnresolvedExpressionInfo<?> indexExpression) {
 
-        if (null == ownerArrayType) {
+        if (null == qualifierArrayType) {
             throw new NullPointerException("ownerArrayType is null.");
         }
 
-        this.ownerArrayType = ownerArrayType;
+        this.qualifierArrayType = qualifierArrayType;
         this.indexExpression = indexExpression;
         this.resolvedInfo = null;
     }
@@ -80,7 +80,7 @@ public final class UnresolvedArrayElementUsageInfo extends
         assert indexExpression != null : "method \"resolve\" returned null!";
 
         // 要素使用がくっついている未定義型を取得
-        final UnresolvedEntityUsageInfo<?> unresolvedOwnerUsage = this.getOwnerArrayType();
+        final UnresolvedEntityUsageInfo<?> unresolvedOwnerUsage = this.getQualifierArrayType();
         EntityUsageInfo ownerUsage = unresolvedOwnerUsage.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert ownerUsage != null : "method \"resolve\" returned null!";
@@ -127,8 +127,8 @@ public final class UnresolvedArrayElementUsageInfo extends
      * 
      * @return 要素が参照された配列の型
      */
-    public UnresolvedEntityUsageInfo<?> getOwnerArrayType() {
-        return this.ownerArrayType;
+    public UnresolvedEntityUsageInfo<?> getQualifierArrayType() {
+        return this.qualifierArrayType;
     }
 
     /**
@@ -143,7 +143,7 @@ public final class UnresolvedArrayElementUsageInfo extends
     /**
      * 要素が参照された配列の型
      */
-    private final UnresolvedEntityUsageInfo<?> ownerArrayType;
+    private final UnresolvedEntityUsageInfo<?> qualifierArrayType;
 
     /**
      * 配列要素使用のインデックスを格納する変数

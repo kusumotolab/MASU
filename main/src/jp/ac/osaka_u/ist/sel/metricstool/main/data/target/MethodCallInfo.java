@@ -24,25 +24,25 @@ public final class MethodCallInfo extends CallInfo {
      * 呼び出されるメソッドを与えてオブジェクトを初期化
      * 
      * @param ownerType メソッド呼び出しの親の型
-     * @param ownerExpression メソッド呼び出しの親エンティティ
+     * @param qualifierExpression メソッド呼び出しの親エンティティ
      * @param callee 呼び出されているメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public MethodCallInfo(final TypeInfo ownerType, final ExpressionInfo ownerExpression,
+    public MethodCallInfo(final TypeInfo ownerType, final ExpressionInfo qualifierExpression,
             final MethodInfo callee, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
-        if ((null == ownerType) || (null == callee) || (null == ownerExpression)) {
+        if ((null == ownerType) || (null == callee) || (null == qualifierExpression)) {
             throw new NullPointerException();
         }
 
-        this.ownerType = ownerType;
-        this.ownerExpression = ownerExpression;
+        this.qualifierType = ownerType;
+        this.qualifierExpression = qualifierExpression;
         this.callee = callee;
     }
 
@@ -61,7 +61,7 @@ public final class MethodCallInfo extends CallInfo {
         }
 
         //　型パラメータの場合
-        final ClassTypeInfo callOwnerType = (ClassTypeInfo) this.getOwnerType();
+        final ClassTypeInfo callOwnerType = (ClassTypeInfo) this.getQualifierType();
         final List<TypeInfo> typeArguments = callOwnerType.getTypeArguments();
 
         // 型引数がある場合は，その型を返す
@@ -91,8 +91,8 @@ public final class MethodCallInfo extends CallInfo {
      * 
      * @return このメソッド呼び出しがくっついている型
      */
-    public TypeInfo getOwnerType() {
-        return this.ownerType;
+    public TypeInfo getQualifierType() {
+        return this.qualifierType;
     }
 
     /**
@@ -115,7 +115,7 @@ public final class MethodCallInfo extends CallInfo {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
         variableUsages.addAll(super.getVariableUsages());
 
-        final ExpressionInfo ownerExpression = this.getOwnerExpression();
+        final ExpressionInfo ownerExpression = this.getQualifierExpression();
         variableUsages.addAll(ownerExpression.getVariableUsages());
 
         return Collections.unmodifiableSortedSet(variableUsages);
@@ -131,7 +131,7 @@ public final class MethodCallInfo extends CallInfo {
 
         final StringBuilder sb = new StringBuilder();
 
-        final ExpressionInfo ownerExpression = this.getOwnerExpression();
+        final ExpressionInfo ownerExpression = this.getQualifierExpression();
         sb.append(ownerExpression.getText());
 
         sb.append(".");
@@ -156,13 +156,13 @@ public final class MethodCallInfo extends CallInfo {
      * 
      * @return このメソッド呼び出しの親
      */
-    public final ExpressionInfo getOwnerExpression() {
-        return this.ownerExpression;
+    public final ExpressionInfo getQualifierExpression() {
+        return this.qualifierExpression;
     }
 
-    private final TypeInfo ownerType;
+    private final TypeInfo qualifierType;
 
     private final MethodInfo callee;
 
-    private final ExpressionInfo ownerExpression;
+    private final ExpressionInfo qualifierExpression;
 }
