@@ -11,16 +11,11 @@ import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalMethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalParameterInfo;
 
 
 /**
@@ -79,30 +74,6 @@ public final class NameResolver {
         final ExternalClassInfo unknownClassInfo = new ExternalClassInfo(
                 referenceName[referenceName.length - 1]);
         return unknownClassInfo;
-    }
-
-    /**
-     * 引数で与えられたExpressionInfoの List から，引数の型の List を作成し，返す
-     * 
-     * @param expressions エンティティのList
-     * @param ownerMethod 引数を宣言しているメソッド
-     * @return 引数の型の List
-     */
-    public static List<ParameterInfo> createParameters(final List<ExpressionInfo> expressions,
-            final ExternalMethodInfo ownerMethod) {
-
-        if (null == expressions || null == ownerMethod) {
-            throw new NullPointerException();
-        }
-
-        final List<ParameterInfo> parameters = new LinkedList<ParameterInfo>();
-        for (final ExpressionInfo expression : expressions) {
-            final TypeInfo type = expression.getType();
-            final ExternalParameterInfo parameter = new ExternalParameterInfo(type, ownerMethod);
-            parameters.add(parameter);
-        }
-
-        return Collections.unmodifiableList(parameters);
     }
 
     /**

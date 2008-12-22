@@ -1,8 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external;
 
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
@@ -15,6 +19,30 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
  * @author higo
  */
 public final class ExternalParameterInfo extends ParameterInfo {
+
+    /**
+     * 引数で与えられたExpressionInfoの List から，引数の型の List を作成し，返す
+     * 
+     * @param expressions エンティティのList
+     * @param ownerMethod 引数を宣言しているメソッド
+     * @return 引数の型の List
+     */
+    public static List<ParameterInfo> createParameters(final List<ExpressionInfo> expressions,
+            final ExternalMethodInfo ownerMethod) {
+
+        if (null == expressions || null == ownerMethod) {
+            throw new NullPointerException();
+        }
+
+        final List<ParameterInfo> parameters = new LinkedList<ParameterInfo>();
+        for (final ExpressionInfo expression : expressions) {
+            final TypeInfo type = expression.getType();
+            final ExternalParameterInfo parameter = new ExternalParameterInfo(type, ownerMethod);
+            parameters.add(parameter);
+        }
+
+        return Collections.unmodifiableList(parameters);
+    }
 
     /**
      * 引数の型を指定してオブジェクトを初期化．外部定義のメソッド名なので引数名は不明．

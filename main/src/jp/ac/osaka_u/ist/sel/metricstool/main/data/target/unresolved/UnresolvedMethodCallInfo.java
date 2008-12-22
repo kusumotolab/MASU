@@ -26,6 +26,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
@@ -173,7 +174,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                         final ExternalMethodInfo methodInfo = new ExternalMethodInfo(
                                 this.getName(), externalSuperClass);
-                        final List<ParameterInfo> dummyParameters = NameResolver.createParameters(
+                        final List<ParameterInfo> dummyParameters = ExternalParameterInfo.createParameters(
                                 actualParameters, methodInfo);
                         methodInfo.addParameters(dummyParameters);
                         methodInfoManager.add(methodInfo);
@@ -204,7 +205,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
                         ownerClass);
-                final List<ParameterInfo> parameters = NameResolver.createParameters(
+                final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(
                         actualParameters, methodInfo);
                 methodInfo.addParameters(parameters);
                 methodInfoManager.add(methodInfo);
@@ -228,7 +229,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                         "lang", "Object" });
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
                         ownerClass);
-                final List<ParameterInfo> parameters = NameResolver.createParameters(
+                final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(
                         actualParameters, methodInfo);
                 methodInfo.addParameters(parameters);
                 methodInfoManager.add(methodInfo);
@@ -256,7 +257,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                             Settings.getLanguage()).getWrapperClass((PrimitiveTypeInfo) ownerType);
                     final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
                             wrapperClass);
-                    final List<ParameterInfo> parameters = NameResolver.createParameters(
+                    final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(
                             actualParameters, methodInfo);
                     methodInfo.addParameters(parameters);
                     methodInfoManager.add(methodInfo);
@@ -279,7 +280,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                         Settings.getLanguage()).getWrapperClass((PrimitiveTypeInfo) ownerType);
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
                         wrapperClass);
-                final List<ParameterInfo> parameters = NameResolver.createParameters(
+                final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(
                         actualParameters, methodInfo);
                 methodInfo.addParameters(parameters);
                 methodInfoManager.add(methodInfo);
