@@ -22,18 +22,24 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     /**
      * 使用されているフィールドを与えてオブジェクトを初期化
      * 
-     * @param ownerUsage フィールド使用が実行される親の式
+     * @param ownerExecutableElement オーナーエレメント
+     * @param qualifierExpression フィールド使用が実行される親の式
      * @param usedField 使用されているフィールド
      * @param reference 参照である場合は true, 代入である場合は false
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
-    protected FieldUsageInfo(final ExpressionInfo ownerExpression, final TypeInfo ownerType,
+    protected FieldUsageInfo(final ExecutableElementInfo ownerExecutableElement,
+            final ExpressionInfo qualifierExpression, final TypeInfo qualifierType,
             final FieldInfo usedField, final boolean reference, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
-        super(usedField, reference, fromLine, fromColumn, toLine, toColumn);
+        super(ownerExecutableElement, usedField, reference, fromLine, fromColumn, toLine, toColumn);
 
-        this.qualifierExpression = ownerExpression;
-        this.qualifierType = ownerType;
+        this.qualifierExpression = qualifierExpression;
+        this.qualifierType = qualifierType;
     }
 
     /**
@@ -102,7 +108,8 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
 
     /**
      * 必要な情報を与えて，インスタンスを取得
-     * 
+     *
+     * @param ownerExecutableElement オーナーエレメント
      * @param qualifierExpression 親の式
      * @param qualifierType 親エンティティの型
      * @param usedField 使用されているフィールド
@@ -113,11 +120,13 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
      * @param toColumn 終了列
      * @return フィールド使用のインスタンス
      */
-    public static FieldUsageInfo getInstance(final ExpressionInfo qualifierExpression,
-            final TypeInfo qualifierType, final FieldInfo usedField, final boolean reference,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
-        final FieldUsageInfo instance = new FieldUsageInfo(qualifierExpression, qualifierType,
-                usedField, reference, fromLine, fromColumn, toLine, toColumn);
+    public static FieldUsageInfo getInstance(final ExecutableElementInfo ownerExecutableElement,
+            final ExpressionInfo qualifierExpression, final TypeInfo qualifierType,
+            final FieldInfo usedField, final boolean reference, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
+        final FieldUsageInfo instance = new FieldUsageInfo(ownerExecutableElement,
+                qualifierExpression, qualifierType, usedField, reference, fromLine, fromColumn,
+                toLine, toColumn);
         addFieldUsage(instance);
         return instance;
     }

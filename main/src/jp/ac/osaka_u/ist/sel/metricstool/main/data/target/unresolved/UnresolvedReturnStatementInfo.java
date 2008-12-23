@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
@@ -52,8 +51,7 @@ public class UnresolvedReturnStatementInfo extends
         final LocalSpaceInfo ownerSpace = this.getOwnerSpace().resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
-        final ExpressionInfo returnedExpression = null == this.returnedExpression ? new EmptyExpressionInfo(
-                toLine, toColumn, toLine, toColumn)
+        final ExpressionInfo returnedExpression = null == this.returnedExpression ? null
                 : this.returnedExpression.resolve(usingClass, usingMethod, classInfoManager,
                         fieldInfoManager, methodInfoManager);
 

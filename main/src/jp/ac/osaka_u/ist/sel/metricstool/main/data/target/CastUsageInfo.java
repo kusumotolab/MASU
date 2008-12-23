@@ -17,6 +17,7 @@ public final class CastUsageInfo extends EntityUsageInfo {
     /**
      * 必要な情報を与えてオブジェクトを初期化
      * 
+     * @param ownerExecutableElement オーナーエレメント
      * @param castType キャストの型
      * @param castedUsage キャストされる要素
      * @param fromLine 開始行
@@ -24,10 +25,11 @@ public final class CastUsageInfo extends EntityUsageInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public CastUsageInfo(final TypeInfo castType, final ExpressionInfo castedUsage,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+    public CastUsageInfo(final ExecutableElementInfo ownerExecutableElement,
+            final TypeInfo castType, final ExpressionInfo castedUsage, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerExecutableElement, fromLine, fromColumn, toLine, toColumn);
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();

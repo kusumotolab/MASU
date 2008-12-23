@@ -22,6 +22,7 @@ public class BinominalOperationInfo extends EntityUsageInfo {
     /**
      * ニ項演算の各オペランド，オペレータを与えてオブジェクトを初期化
      * 
+     * @param ownerExecutableElement オーナーエレメント
      * @param operator オペレータ
      * @param firstOperand 第一オペランド
      * @param secondOperand 第二オペランド
@@ -30,11 +31,12 @@ public class BinominalOperationInfo extends EntityUsageInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public BinominalOperationInfo(final OPERATOR operator, final ExpressionInfo firstOperand,
+    public BinominalOperationInfo(final ExecutableElementInfo ownerExecutableElement,
+            final OPERATOR operator, final ExpressionInfo firstOperand,
             final ExpressionInfo secondOperand, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerExecutableElement, fromLine, fromColumn, toLine, toColumn);
 
         if ((null == operator) || (null == firstOperand) || (null == secondOperand)) {
             throw new NullPointerException();

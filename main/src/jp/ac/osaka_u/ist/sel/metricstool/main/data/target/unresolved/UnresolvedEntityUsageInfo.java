@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
 /**
@@ -20,6 +21,35 @@ public abstract class UnresolvedEntityUsageInfo<T extends EntityUsageInfo> imple
         this.toColumn = 0;
 
         this.resolvedInfo = null;
+        this.ownerExecutableElement = null;
+    }
+
+    @Override
+    public final int compareTo(UnresolvedExecutableElementInfo<?> o) {
+
+        if (null == o) {
+            throw new IllegalArgumentException();
+        }
+
+        if (this.getFromLine() < o.getFromLine()) {
+            return -1;
+        } else if (this.getFromLine() > o.getFromLine()) {
+            return 1;
+        } else if (this.getFromColumn() < o.getFromColumn()) {
+            return -1;
+        } else if (this.getFromColumn() > o.getFromColumn()) {
+            return 1;
+        } else if (this.getToLine() < o.getToLine()) {
+            return -1;
+        } else if (this.getToLine() > o.getToLine()) {
+            return 1;
+        } else if (this.getToColumn() < o.getToColumn()) {
+            return -1;
+        } else if (this.getToColumn() > o.getToColumn()) {
+            return 1;
+        }
+
+        return 0;
     }
 
     /**
@@ -46,6 +76,36 @@ public abstract class UnresolvedEntityUsageInfo<T extends EntityUsageInfo> imple
         }
 
         return this.resolvedInfo;
+    }
+
+    /**
+     * オーナーエレメントをセットする
+     * 
+     * @param ownerExecutableElement オーナーエレメント
+     */
+    public final void setOwnerExecutableElementInfo(
+            final UnresolvedExecutableElementInfo<T> ownerExecutableElement) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == ownerExecutableElement) {
+            throw new IllegalArgumentException();
+        }
+
+        this.ownerExecutableElement = ownerExecutableElement;
+    }
+
+    /**
+     * オーナーエレメントを返す
+     * 
+     * @return　オーナーエレメント
+     */
+    public final UnresolvedExecutableElementInfo<T> getOwnerExecutableElement() {
+
+        if (null == this.ownerExecutableElement) {
+            throw new NullPointerException();
+        }
+
+        return this.ownerExecutableElement;
     }
 
     /**
@@ -143,6 +203,8 @@ public abstract class UnresolvedEntityUsageInfo<T extends EntityUsageInfo> imple
      * 解決済み情報を保存するための変数
      */
     protected T resolvedInfo;
+
+    private UnresolvedExecutableElementInfo<T> ownerExecutableElement;
 
     /**
      * 開始行を保存するための変数

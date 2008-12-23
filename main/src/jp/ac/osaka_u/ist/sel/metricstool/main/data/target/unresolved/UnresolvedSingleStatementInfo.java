@@ -38,7 +38,7 @@ public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInf
     }
 
     @Override
-    public int compareTo(UnresolvedStatementInfo<T> o) {
+    public int compareTo(UnresolvedExecutableElementInfo<?> o) {
 
         if (null == o) {
             throw new NullPointerException();

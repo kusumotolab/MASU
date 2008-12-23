@@ -13,12 +13,22 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public abstract class EntityUsageInfo implements ExpressionInfo {
 
     /**
-     * オブジェクトを初期化 
+     * 
+     * @param ownerExecutableElement オーナーエレメント
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      */
-    EntityUsageInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+    EntityUsageInfo(final ExecutableElementInfo ownerExecutableElement, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == ownerExecutableElement) {
+            throw new IllegalArgumentException();
+        }
 
+        this.ownerExecutableElement = ownerExecutableElement;
         this.fromLine = fromLine;
         this.fromColumn = fromColumn;
         this.toLine = toLine;
@@ -96,6 +106,30 @@ public abstract class EntityUsageInfo implements ExpressionInfo {
         return 0;
     }
 
+    @Override
+    public ExecutableElementInfo getOwnerExecutableElement() {
+        return this.ownerExecutableElement;
+    }
+
+    @Override
+    public StatementInfo getOwnerStatement() {
+
+        final ExecutableElementInfo ownerExecutableElement = this.getOwnerExecutableElement();
+        if (ownerExecutableElement instanceof StatementInfo) {
+            return (StatementInfo) ownerExecutableElement;
+        }
+
+        if (ownerExecutableElement instanceof ExpressionInfo) {
+            return ((ExpressionInfo) ownerExecutableElement).getOwnerStatement();
+        }
+
+        // ownerExecutableElement が StatementInfo でも ExpressionInfo　でもないときはIllegalStateException
+        throw new IllegalStateException(
+                "ownerExecutableElement must be StatementInfo or ExpressionInfo.");
+    }
+
+    private final ExecutableElementInfo ownerExecutableElement;
+
     /**
      * 開始行を保存するための変数
      */
@@ -115,5 +149,5 @@ public abstract class EntityUsageInfo implements ExpressionInfo {
      * 開始列を保存するための変数
      */
     private final int toColumn;
-    
+
 }

@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -56,15 +57,22 @@ public class UnresolvedTernaryOperationInfo extends UnresolvedEntityUsageInfo<Te
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final ConditionInfo conditionalExpression = this.condition.resolve(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final ConditionInfo conditionalExpression = this.condition.resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
         final ExpressionInfo trueExpression = this.trueExpression.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         final ExpressionInfo falseExpression = this.falseExpression.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        this.resolvedInfo = new TernaryOperationInfo(conditionalExpression, trueExpression,
-                falseExpression, fromLine, fromColumn, toLine, toColumn);
+        // 要素使用のオーナー要素を返す
+        final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
+                .getOwnerExecutableElement();
+        final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
+                .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                        methodInfoManager);
+
+        this.resolvedInfo = new TernaryOperationInfo(ownerExecutableElement, conditionalExpression,
+                trueExpression, falseExpression, fromLine, fromColumn, toLine, toColumn);
 
         return this.resolvedInfo;
     }

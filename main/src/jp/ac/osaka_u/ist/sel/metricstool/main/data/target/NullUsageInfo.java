@@ -15,14 +15,15 @@ public final class NullUsageInfo extends EntityUsageInfo {
     /**
      * 位置情報を与えて，オブジェクトを初期化
      * 
+     * @param ownerExecutableElement オーナーエレメント
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public NullUsageInfo(final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
-        super(fromLine, fromColumn, toLine, toColumn);
+    public NullUsageInfo(final ExecutableElementInfo ownerExecutableElement, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
+        super(ownerExecutableElement, fromLine, fromColumn, toLine, toColumn);
     }
 
     /**

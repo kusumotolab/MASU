@@ -84,8 +84,9 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
     }
 
     @Override
-    public int compareTo(UnresolvedStatementInfo<VariableDeclarationStatementInfo> o) {
-        int result = super.compareTo(o);
+    public int compareTo(UnresolvedExecutableElementInfo<?> o) {
+
+        final int result = super.compareTo(o);
 
         if (0 == result && o instanceof UnresolvedVariableDeclarationStatementInfo) {
             UnresolvedLocalVariableInfo argVariable = ((UnresolvedVariableDeclarationStatementInfo) o)

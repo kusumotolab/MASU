@@ -14,23 +14,44 @@ import java.util.TreeSet;
  */
 public class AssertStatementInfo extends SingleStatementInfo {
 
-    public AssertStatementInfo(final LocalSpaceInfo ownrSpace,
-            final ExpressionInfo assertedExpression, final ExpressionInfo messageExpresssion,
+    /**
+     * アサート文を生成
+     * 
+     * @param ownerSpace 外側のブロック
+     * @param assertedExpression 検証式
+     * @param messageExpression メッセージ
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
+     */
+    public AssertStatementInfo(final LocalSpaceInfo ownerSpace,
+            final ExpressionInfo assertedExpression, final ExpressionInfo messageExpression,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
-        super(ownrSpace, fromLine, fromColumn, toLine, toColumn);
+        super(ownerSpace, fromLine, fromColumn, toLine, toColumn);
 
         if (null == assertedExpression) {
             throw new IllegalArgumentException("assertedExpressoin is null.");
         }
 
         this.assertedExpression = assertedExpression;
-        this.messageExpression = messageExpresssion;
+        this.messageExpression = messageExpression;
     }
 
+    /**
+     * 検証式を返す
+     * 
+     * @return　検証式
+     */
     public final ExpressionInfo getAssertedExpression() {
         return this.assertedExpression;
     }
 
+    /**
+     * メッセージを返す
+     * 
+     * @return　メッセージ
+     */
     public final ExpressionInfo getMessageExpression() {
         return this.messageExpression;
     }

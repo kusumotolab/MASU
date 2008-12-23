@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LiteralUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -63,8 +64,15 @@ public final class UnresolvedLiteralUsageInfo extends UnresolvedEntityUsageInfo<
         final String literal = this.getLiteral();
         final PrimitiveTypeInfo type = (PrimitiveTypeInfo) this.getType();
 
-        this.resolvedInfo = new LiteralUsageInfo(literal, type, fromLine, fromColumn, toLine,
-                toColumn);
+        // 要素使用のオーナー要素を返す
+        final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
+                .getOwnerExecutableElement();
+        final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
+                .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                        methodInfoManager);
+
+        this.resolvedInfo = new LiteralUsageInfo(ownerExecutableElement, literal, type, fromLine,
+                fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 

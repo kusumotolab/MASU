@@ -17,6 +17,8 @@ public class TernaryOperationInfo extends EntityUsageInfo {
 
     /**
      * 三項演算の条件式(第一項)，条件式がtrueの時に返される式，条件式がfalseの時に返される式(第三項)，開始位置，終了位置を与えて初期化
+     * 
+     * @param ownerExecutableElement オーナーエレメント
      * @param condtion 条件式(第一項)
      * @param trueExpression 条件式がtrueのときに返される式(第二項)
      * @param falseExpression 条件式がfalseのといに返される式(第三項)
@@ -25,10 +27,11 @@ public class TernaryOperationInfo extends EntityUsageInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public TernaryOperationInfo(final ConditionInfo condtion, ExpressionInfo trueExpression,
+    public TernaryOperationInfo(final ExecutableElementInfo ownerExecutableElement,
+            final ConditionInfo condtion, ExpressionInfo trueExpression,
             ExpressionInfo falseExpression, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerExecutableElement, fromLine, fromColumn, toLine, toColumn);
 
         if (null == condtion || null == trueExpression || null == falseExpression) {
             throw new IllegalArgumentException();

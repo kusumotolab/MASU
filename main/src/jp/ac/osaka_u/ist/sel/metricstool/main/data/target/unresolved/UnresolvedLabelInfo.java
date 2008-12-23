@@ -37,9 +37,9 @@ public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> imp
         this.labeledStatement = null;
         this.resolvedInfo = null;
     }
-    
+
     @Override
-    public final int compareTo(UnresolvedStatementInfo<LabelInfo> o) {
+    public final int compareTo(UnresolvedExecutableElementInfo<?> o) {
 
         if (null == o) {
             throw new NullPointerException();
@@ -65,7 +65,7 @@ public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> imp
 
         return 0;
     }
-    
+
     /**
      * 名前解決を行うメソッド
      */

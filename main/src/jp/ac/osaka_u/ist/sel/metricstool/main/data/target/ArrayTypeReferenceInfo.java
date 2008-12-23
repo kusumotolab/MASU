@@ -17,16 +17,18 @@ public final class ArrayTypeReferenceInfo extends EntityUsageInfo {
     /**
      * オブジェクトを初期化
      * 
+     * @param ownerExecutableElement オーナーエレメント
      * @param arrayType 参照されている配列の型
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public ArrayTypeReferenceInfo(final ArrayTypeInfo arrayType, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    public ArrayTypeReferenceInfo(final ExecutableElementInfo ownerExecutableElement,
+            final ArrayTypeInfo arrayType, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerExecutableElement, fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == arrayType) {

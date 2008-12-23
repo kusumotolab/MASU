@@ -29,9 +29,9 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends Unresolve
 
         this.outerSpace = outerSpace;
     }
-    
+
     @Override
-    public final int compareTo(UnresolvedStatementInfo<T> o) {
+    public final int compareTo(UnresolvedExecutableElementInfo<?> o) {
 
         if (null == o) {
             throw new NullPointerException();
@@ -57,9 +57,9 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends Unresolve
 
         return 0;
     }
-    
+
     public void initBody() {
-        
+
         this.statements.clear();
     }
 

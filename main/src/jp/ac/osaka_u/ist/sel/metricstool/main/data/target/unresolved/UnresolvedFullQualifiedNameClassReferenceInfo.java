@@ -9,6 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -67,14 +68,21 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
             classInfoManager.add((ExternalClassInfo) referencedClass);
         }
 
+        // 要素使用のオーナー要素を返す
+        final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
+                .getOwnerExecutableElement();
+        final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
+                .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                        methodInfoManager);
+
         final ClassTypeInfo referenceType = new ClassTypeInfo(referencedClass);
         for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : this.getTypeArguments()) {
             final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
             referenceType.addTypeArgument(typeArgument);
         }
-        this.resolvedInfo = new ClassReferenceInfo(referenceType, fromLine, fromColumn, toLine,
-                toColumn);
+        this.resolvedInfo = new ClassReferenceInfo(ownerExecutableElement, referenceType, fromLine,
+                fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 

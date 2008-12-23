@@ -15,10 +15,21 @@ import java.util.TreeSet;
 public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInfo>> extends
         EntityUsageInfo {
 
-    VariableUsageInfo(final T usedVariable, final boolean reference, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    /**
+     * 
+     * @param ownerExecutableElement オーナーエレメント
+     * @param usedVariable 使用されている変数
+     * @param reference 参照かどうか
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
+     */
+    VariableUsageInfo(final ExecutableElementInfo ownerExecutableElement, final T usedVariable,
+            final boolean reference, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerExecutableElement, fromLine, fromColumn, toLine, toColumn);
 
         this.usedVariable = usedVariable;
         this.reference = reference;

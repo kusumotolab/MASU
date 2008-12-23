@@ -62,7 +62,7 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
      * ˆÊ’u‚ÉŠî‚Ã‚¢‚Ä”äŠr‚·‚é.
      */
     @Override
-    public final int compareTo(UnresolvedStatementInfo<CaseEntryInfo> o) {
+    public final int compareTo(UnresolvedExecutableElementInfo<?> o) {
 
         if (null == o) {
             throw new NullPointerException();

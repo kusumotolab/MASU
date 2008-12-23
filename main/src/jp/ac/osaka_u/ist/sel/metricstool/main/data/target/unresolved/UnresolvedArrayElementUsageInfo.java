@@ -5,6 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -79,14 +80,21 @@ public final class UnresolvedArrayElementUsageInfo extends
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         assert indexExpression != null : "method \"resolve\" returned null!";
 
-        // 要素使用がくっついている未定義型を取得
-        final UnresolvedEntityUsageInfo<?> unresolvedOwnerUsage = this.getQualifierArrayType();
-        EntityUsageInfo ownerUsage = unresolvedOwnerUsage.resolve(usingClass, usingMethod,
+        // 要素使用がくっついている("."の前のこと)未定義型を取得
+        final UnresolvedEntityUsageInfo<?> unresolvedQualifierUsage = this.getQualifierArrayType();
+        EntityUsageInfo qualifierUsage = unresolvedQualifierUsage.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-        assert ownerUsage != null : "method \"resolve\" returned null!";
+        assert qualifierUsage != null : "method \"resolve\" returned null!";
+
+        // 要素使用のオーナー要素を返す
+        final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
+                .getOwnerExecutableElement();
+        final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
+                .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                        methodInfoManager);
 
         // 未解決型の名前解決ができなかった場合
-        if (ownerUsage.getType() instanceof UnknownTypeInfo) {
+        if (qualifierUsage.getType() instanceof UnknownTypeInfo) {
 
             //            // 未解決型が配列型である場合は，型を作成する
             //            if (unresolvedOwnerUsage instanceof UnresolvedArrayTypeInfo) {
@@ -112,13 +120,13 @@ public final class UnresolvedArrayElementUsageInfo extends
 
             // 親が特定できない場合も配列の要素使用を作成して返す
             // もしかすると，UnknownEntityUsageInfoを返す方が適切かもしれない
-            this.resolvedInfo = new ArrayElementUsageInfo(ownerUsage, indexExpression, fromLine,
-                    fromColumn, toLine, toColumn);
+            this.resolvedInfo = new ArrayElementUsageInfo(ownerExecutableElement, qualifierUsage,
+                    indexExpression, fromLine, fromColumn, toLine, toColumn);
             return this.resolvedInfo;
         }
 
-        this.resolvedInfo = new ArrayElementUsageInfo(ownerUsage, indexExpression, fromLine,
-                fromColumn, toLine, toColumn);
+        this.resolvedInfo = new ArrayElementUsageInfo(ownerExecutableElement, qualifierUsage,
+                indexExpression, fromLine, fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 

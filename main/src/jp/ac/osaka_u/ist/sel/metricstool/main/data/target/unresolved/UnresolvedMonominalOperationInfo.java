@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MonominalOperationInfo;
@@ -65,14 +66,21 @@ public final class UnresolvedMonominalOperationInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
+        // 要素使用のオーナー要素を返す
+        final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
+                .getOwnerExecutableElement();
+        final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
+                .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                        methodInfoManager);
+
         final UnresolvedEntityUsageInfo<?> unresolvedTerm = this.getOperand();
         final EntityUsageInfo term = unresolvedTerm.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         final PrimitiveTypeInfo type = this.getResultType();
         final boolean isPreposed = fromColumn < term.getFromColumn() ? true : false;
 
-        this.resolvedInfo = new MonominalOperationInfo(term, this.operator, isPreposed, type,
-                fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo = new MonominalOperationInfo(ownerExecutableElement, term, this.operator,
+                isPreposed, type, fromLine, fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 

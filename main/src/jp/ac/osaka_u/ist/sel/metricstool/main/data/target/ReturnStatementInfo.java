@@ -21,11 +21,13 @@ public class ReturnStatementInfo extends SingleStatementInfo {
      * @param toLine
      * @param toColumn
      */
-    public ReturnStatementInfo(final LocalSpaceInfo ownerSpaceInfo, final ExpressionInfo returnedExpression, int fromLine,
-            int fromColumn, int toLine, int toColumn) {
+    public ReturnStatementInfo(final LocalSpaceInfo ownerSpaceInfo,
+            final ExpressionInfo returnedExpression, int fromLine, int fromColumn, int toLine,
+            int toColumn) {
         super(ownerSpaceInfo, fromLine, fromColumn, toLine, toColumn);
 
-        this.returnedExpression = returnedExpression;
+        this.returnedExpression = null != returnedExpression ? returnedExpression
+                : new EmptyExpressionInfo(this, toLine, toColumn - 1, toLine, toColumn - 1);
     }
 
     /**
