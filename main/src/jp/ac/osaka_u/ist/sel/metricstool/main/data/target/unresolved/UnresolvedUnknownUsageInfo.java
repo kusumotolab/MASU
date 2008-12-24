@@ -846,7 +846,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                     .getClassInfo(importName);
                             if (null == specifiedClassInfo) {
                                 specifiedClassInfo = new ExternalClassInfo(importName);
-                                classInfoManager.add((ExternalClassInfo) specifiedClassInfo);
+                                classInfoManager.add(specifiedClassInfo);
                             }
 
                             final ClassReferenceInfo classReference = new ClassReferenceInfo(

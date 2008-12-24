@@ -65,7 +65,7 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
         // 参照されたクラスが登録されていない場合は，ここで登録する
         if (null == referencedClass) {
             referencedClass = new ExternalClassInfo(fullQualifiedReferenceName);
-            classInfoManager.add((ExternalClassInfo) referencedClass);
+            classInfoManager.add(referencedClass);
         }
 
         // 要素使用のオーナー要素を返す

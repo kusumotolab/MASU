@@ -178,9 +178,13 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
                             // import aaa.bbb.Ccc の場合 (クラス名まで明示的に記述されている)
                         } else {
 
-                            final ClassInfo importedClassInfo = classInfoManager
+                            ClassInfo importedClassInfo = classInfoManager
                                     .getClassInfo(availableNamespace.getImportName());
-
+                            if (null == importedClassInfo) {
+                                importedClassInfo = new ExternalClassInfo(referenceName);
+                                classInfoManager.add((ExternalClassInfo) importedClassInfo);
+                            }
+                            
                             //クラスが見つかった
                             if (className.equals(importedClassInfo.getClassName())) {
                                 this.resolvedInfo = new ClassTypeInfo(importedClassInfo);

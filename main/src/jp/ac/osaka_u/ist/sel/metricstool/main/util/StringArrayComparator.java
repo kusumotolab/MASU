@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.util;
 
 import java.util.Comparator;
 
+
 /**
  * String‚Ì”z—ñ‚ð”äŠr‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
  * 
@@ -22,7 +23,7 @@ public class StringArrayComparator implements Comparator<String[]> {
     public int compare(final String[] array1, final String[] array2) {
 
         if ((null == array1) || (null == array2)) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
 
         for (int index = 0;; index++) {

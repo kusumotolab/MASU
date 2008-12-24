@@ -178,7 +178,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
                 ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
                 if (null == classInfo) {
                     classInfo = new ExternalClassInfo(referenceName);
-                    classInfoManager.add((ExternalClassInfo) classInfo);
+                    classInfoManager.add(classInfo);
                 }
 
                 // TODO 型パラメータ情報を追記する処理が必要

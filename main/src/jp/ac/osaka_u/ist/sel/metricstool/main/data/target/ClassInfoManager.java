@@ -37,7 +37,7 @@ public final class ClassInfoManager {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfo) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
 
         // 二重登録チェック
@@ -120,14 +120,15 @@ public final class ClassInfoManager {
     }
 
     /**
-     * 引数で指定した完全限定名を持つクラス情報を返す
+     * 引数で指定した完全限定名を持つクラス情報を返す.
+     * 指定された完全限定名をもつクラスが存在しないときはnullを返す
      * 
      * @param fullQualifiedName 完全限定名
      * @return クラス情報
      */
     public ClassInfo getClassInfo(final String[] fullQualifiedName) {
 
-        if (null == fullQualifiedName) {
+        if ((null == fullQualifiedName) || (0 == fullQualifiedName.length)) {
             throw new IllegalArgumentException();
         }
 
@@ -145,26 +146,19 @@ public final class ClassInfoManager {
                     return classInfo;
                 }
             }
-
-            // ここに来るのは登録されていないクラスの完全限定名が指定されたとき
-            // 外部クラスとしてオブジェクトを生成し，登録する
-            final ExternalClassInfo classInfo = new ExternalClassInfo(fullQualifiedName);
-            this.add(classInfo);
-            return classInfo;
-
-        } else {
-
-            // ここに来るのは登録されていないクラスの完全限定名が指定されたとき
-            // 外部クラスとしてオブジェクトを生成し，登録する
-            final ExternalClassInfo classInfo = new ExternalClassInfo(fullQualifiedName);
-            this.add(classInfo);
-            return classInfo;
         }
+        return null;
     }
 
+    /**
+     * 引数で指定した完全限定名を持つクラスがあるか判定する
+     * 
+     * @param fullQualifiedName 調査したいクラスの完全限定名
+     * @return クラスがある場合はtrue, ない場合はfalse
+     */
     public boolean hasClassInfo(final String[] fullQualifiedName) {
 
-        if (null == fullQualifiedName) {
+        if ((null == fullQualifiedName) || (0 == fullQualifiedName.length)) {
             throw new IllegalArgumentException();
         }
 
