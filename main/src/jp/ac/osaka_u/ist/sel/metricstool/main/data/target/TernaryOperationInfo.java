@@ -38,6 +38,12 @@ public class TernaryOperationInfo extends ExpressionInfo {
         this.condition = condtion;
         this.trueExpression = trueExpression;
         this.falseExpression = falseExpression;
+        
+        if(this.condition instanceof ExpressionInfo) {
+            ((ExpressionInfo) this.condition).setOwnerExecutableElement(this);
+        }
+        this.trueExpression.setOwnerExecutableElement(this);
+        this.falseExpression.setOwnerExecutableElement(this);
     }
 
     @Override

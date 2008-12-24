@@ -40,6 +40,8 @@ public final class MonominalOperationInfo extends ExpressionInfo {
         this.operator = operator;
         this.isPreposed = isPreposed;
         this.type = type;
+        
+        this.operand.setOwnerExecutableElement(this);
     }
 
     @Override

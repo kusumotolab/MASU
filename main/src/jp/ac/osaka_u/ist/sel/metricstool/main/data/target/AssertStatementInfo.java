@@ -36,6 +36,12 @@ public class AssertStatementInfo extends SingleStatementInfo {
 
         this.assertedExpression = assertedExpression;
         this.messageExpression = messageExpression;
+        
+        this.assertedExpression.setOwnerExecutableElement(this);
+        if(null != this.messageExpression) {
+            this.messageExpression.setOwnerExecutableElement(this);
+        }
+        
     }
 
     /**

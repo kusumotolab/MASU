@@ -12,7 +12,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -103,12 +102,12 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // 要素使用のオーナー要素を返す
+        /*// 要素使用のオーナー要素を返す
         final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
                 .getOwnerExecutableElement();
         final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                        methodInfoManager);
+                        methodInfoManager);*/
 
         final String[] referenceName = this.getReferenceName();
 
@@ -126,7 +125,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                     this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine,
                             toColumn);
-                    this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+                    /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                     return this.resolvedInfo;
 
                     // 親が対象クラス(TargetClassInfo)の場合
@@ -150,7 +149,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                 final ClassTypeInfo reference = new ClassTypeInfo(innerClass);
                                 classReference = new ClassReferenceInfo(reference, fromLine,
                                         fromColumn, toLine, toColumn);
-                                classReference.setOwnerExecutableElement(ownerExecutableElement);
+                                /*classReference.setOwnerExecutableElement(ownerExecutableElement);*/
                                 continue NEXT_NAME;
                             }
                         }
@@ -162,7 +161,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                         classReference = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine,
                                 toColumn);
-                        classReference.setOwnerExecutableElement(ownerExecutableElement);
+                        /*classReference.setOwnerExecutableElement(ownerExecutableElement);*/
                         continue NEXT_NAME;
                     }
                 }
@@ -188,7 +187,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                 final ClassTypeInfo reference = new ClassTypeInfo(classInfo);
                 this.resolvedInfo = new ClassReferenceInfo(reference, fromLine, fromColumn, toLine,
                         toColumn);
-                this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+                /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                 return this.resolvedInfo;
             }
 
@@ -201,7 +200,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                     final ClassTypeInfo reference = new ClassTypeInfo(classInfo);
                     this.resolvedInfo = new ClassReferenceInfo(reference, fromLine, fromColumn,
                             toLine, toColumn);
-                    this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+                    /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                     return this.resolvedInfo;
                 }
             }
@@ -225,7 +224,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                         ClassTypeInfo reference = new ClassTypeInfo(innerClassInfo);
                         ExpressionInfo classReference = new ClassReferenceInfo(reference,
                                 fromLine, fromColumn, toLine, toColumn);
-                        classReference.setOwnerExecutableElement(ownerExecutableElement);
+                        /*classReference.setOwnerExecutableElement(ownerExecutableElement);*/
 
                         NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
@@ -234,7 +233,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                                 this.resolvedInfo = new UnknownEntityUsageInfo(fromLine,
                                         fromColumn, toLine, toColumn);
-                                this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+                                /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                                 return this.resolvedInfo;
 
                                 // 親がクラス型の場合
@@ -260,8 +259,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                             reference = new ClassTypeInfo(innerClass);
                                             classReference = new ClassReferenceInfo(reference,
                                                     fromLine, fromColumn, toLine, toColumn);
-                                            classReference
-                                                    .setOwnerExecutableElement(ownerExecutableElement);
+                                            /*classReference
+                                                    .setOwnerExecutableElement(ownerExecutableElement);*/
                                             continue NEXT_NAME;
                                         }
                                     }
@@ -273,8 +272,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                                     classReference = new UnknownEntityUsageInfo(fromLine,
                                             fromColumn, toLine, toColumn);
-                                    classReference
-                                            .setOwnerExecutableElement(ownerExecutableElement);
+                                    /*classReference
+                                            .setOwnerExecutableElement(ownerExecutableElement);*/
                                     continue NEXT_NAME;
                                 }
                             }
@@ -309,7 +308,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                 ClassTypeInfo reference = new ClassTypeInfo(classInfo);
                                 ExpressionInfo classReference = new ClassReferenceInfo(reference,
                                         fromLine, fromColumn, toLine, toColumn);
-                                classReference.setOwnerExecutableElement(ownerExecutableElement);
+                                /*classReference.setOwnerExecutableElement(ownerExecutableElement);*/
 
                                 NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
@@ -318,8 +317,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                                         this.resolvedInfo = new UnknownEntityUsageInfo(fromLine,
                                                 fromColumn, toLine, toColumn);
-                                        this.resolvedInfo
-                                                .setOwnerExecutableElement(ownerExecutableElement);
+                                        /*this.resolvedInfo
+                                                .setOwnerExecutableElement(ownerExecutableElement);*/
                                         return this.resolvedInfo;
 
                                         // 親がクラス型の場合
@@ -347,8 +346,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                                     classReference = new ClassReferenceInfo(
                                                             reference, fromLine, fromColumn,
                                                             toLine, toColumn);
-                                                    classReference
-                                                            .setOwnerExecutableElement(ownerExecutableElement);
+                                                    /*classReference
+                                                            .setOwnerExecutableElement(ownerExecutableElement);*/
                                                     continue NEXT_NAME;
                                                 }
                                             }
@@ -363,8 +362,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                                             classReference = new UnknownEntityUsageInfo(fromLine,
                                                     fromColumn, toLine, toColumn);
-                                            classReference
-                                                    .setOwnerExecutableElement(ownerExecutableElement);
+                                            /*classReference
+                                                    .setOwnerExecutableElement(ownerExecutableElement);*/
                                             continue NEXT_NAME;
                                         }
                                     }
@@ -396,7 +395,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                             ClassTypeInfo reference = new ClassTypeInfo(specifiedClassInfo);
                             ExpressionInfo classReference = new ClassReferenceInfo(reference,
                                     fromLine, fromColumn, toLine, toColumn);
-                            classReference.setOwnerExecutableElement(ownerExecutableElement);
+                            /*classReference.setOwnerExecutableElement(ownerExecutableElement);*/
 
                             NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
@@ -405,8 +404,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                                     this.resolvedInfo = new UnknownEntityUsageInfo(fromLine,
                                             fromColumn, toLine, toColumn);
-                                    this.resolvedInfo
-                                            .setOwnerExecutableElement(ownerExecutableElement);
+                                    /*this.resolvedInfo
+                                            .setOwnerExecutableElement(ownerExecutableElement);*/
                                     return this.resolvedInfo;
 
                                     // 親がクラス型の場合
@@ -432,8 +431,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                                 reference = new ClassTypeInfo(innerClass);
                                                 classReference = new ClassReferenceInfo(reference,
                                                         fromLine, fromColumn, toLine, toColumn);
-                                                classReference
-                                                        .setOwnerExecutableElement(ownerExecutableElement);
+                                                /*classReference
+                                                        .setOwnerExecutableElement(ownerExecutableElement);*/
                                                 continue NEXT_NAME;
                                             }
                                         }
@@ -443,8 +442,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                                         classReference = new UnknownEntityUsageInfo(fromLine,
                                                 fromColumn, toLine, toColumn);
-                                        classReference
-                                                .setOwnerExecutableElement(ownerExecutableElement);
+                                        /*classReference
+                                                .setOwnerExecutableElement(ownerExecutableElement);*/
                                         continue NEXT_NAME;
                                     }
                                 }
@@ -472,7 +471,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
         // 見つからなかった場合は，UknownTypeInfo を返す
         this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
-        this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+        /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
         return this.resolvedInfo;
     }
 

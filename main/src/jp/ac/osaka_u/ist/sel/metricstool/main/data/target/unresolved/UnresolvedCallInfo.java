@@ -10,7 +10,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -136,16 +135,16 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
                     final int toLine = this.getToLine();
                     final int toColumn = this.getToColumn();
 
-                    // 要素使用のオーナー要素を返す
+                    /*// 要素使用のオーナー要素を返す
                     final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
                             .getOwnerExecutableElement();
                     final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
                             .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                                    methodInfoManager);
+                                    methodInfoManager);*/
 
                     parameter = new ClassReferenceInfo(referenceType, fromLine, fromColumn, toLine,
                             toColumn);
-                    parameter.setOwnerExecutableElement(ownerExecutableElement);
+                    /*parameter.setOwnerExecutableElement(ownerExecutableElement);*/
 
                 } else {
                     assert false : "Here shouldn't be reached!";

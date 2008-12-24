@@ -31,8 +31,8 @@ public class ReturnStatementInfo extends SingleStatementInfo {
         } else {
             this.returnedExpression = new EmptyExpressionInfo(toLine, toColumn - 1, toLine,
                     toColumn - 1);
-            ((ExpressionInfo) this.returnedExpression).setOwnerExecutableElement(this);
         }
+        this.returnedExpression.setOwnerExecutableElement(this);
     }
 
     /**

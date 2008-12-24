@@ -36,6 +36,8 @@ public class ArrayElementUsageInfo extends ExpressionInfo {
 
         this.qualifierExpression = qualifierExpression;
         this.indexExpression = indexExpression;
+        
+        this.indexExpression.setOwnerExecutableElement(this);
     }
 
     /**
@@ -96,7 +98,14 @@ public class ArrayElementUsageInfo extends ExpressionInfo {
         return Collections.unmodifiableSet(variableUsages);
         //return this.getOwnerEntityUsage().getVariableUsages();
     }
-
+    
+    @Override
+    public void setOwnerExecutableElement(ExecutableElementInfo ownerExecutableElement) {
+        super.setOwnerExecutableElement(ownerExecutableElement);
+        
+        this.qualifierExpression.setOwnerExecutableElement(ownerExecutableElement);
+    }
+    
     /**
      * この配列要素使用のテキスト表現（String型）を返す
      * 

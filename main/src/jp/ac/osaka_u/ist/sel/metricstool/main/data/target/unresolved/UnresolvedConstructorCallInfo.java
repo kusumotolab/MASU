@@ -6,7 +6,6 @@ import java.util.List;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -75,16 +74,16 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
             assert false : "Error handling must be inserted!";
         }
 
-        // 要素使用のオーナー要素を返す
+        /*// 要素使用のオーナー要素を返す
         final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
                 .getOwnerExecutableElement();
         final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                        methodInfoManager);
+                        methodInfoManager);*/
 
         this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType, fromLine,
                 fromColumn, toLine, toColumn);
-        this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+        /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
         this.resolvedInfo.addArguments(actualParameters);
         this.resolvedInfo.addTypeArguments(typeArguments);
         return this.resolvedInfo;

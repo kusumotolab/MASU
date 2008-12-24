@@ -40,6 +40,12 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         this.qualifierType = qualifierType;
     }
 
+    @Override
+    public void setOwnerExecutableElement(ExecutableElementInfo ownerExecutableElement) {
+        super.setOwnerExecutableElement(ownerExecutableElement);
+        this.qualifierExpression.setOwnerExecutableElement(ownerExecutableElement);
+    }
+
     /**
      * このフィールド使用の親，つまりこのフィールド使用がくっついている式を返す
      * 

@@ -37,6 +37,8 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
 
         this.ownerSwitchBlock = ownerSwitchBlock;
         this.label = label;
+        
+        this.label.setOwnerExecutableElement(this);
     }
 
     /**

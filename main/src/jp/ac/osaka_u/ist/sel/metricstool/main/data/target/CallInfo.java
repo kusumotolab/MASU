@@ -47,6 +47,7 @@ public abstract class CallInfo extends ExpressionInfo {
         }
 
         this.arguments.add(argument);
+        argument.setOwnerExecutableElement(this);
     }
 
     /**
@@ -62,6 +63,10 @@ public abstract class CallInfo extends ExpressionInfo {
         }
 
         this.arguments.addAll(arguments);
+        
+        for(final ExpressionInfo argument : arguments) {
+            argument.setOwnerExecutableElement(this);
+        }
     }
 
     /**

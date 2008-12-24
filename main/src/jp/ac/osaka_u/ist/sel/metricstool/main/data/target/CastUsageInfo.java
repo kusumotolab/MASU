@@ -37,6 +37,8 @@ public final class CastUsageInfo extends ExpressionInfo {
 
         this.castType = castType;
         this.castedUsage = castedUsage;
+        
+        this.castedUsage.setOwnerExecutableElement(this);
     }
 
     /**

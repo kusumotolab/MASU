@@ -43,6 +43,9 @@ public class BinominalOperationInfo extends ExpressionInfo {
         this.operator = operator;
         this.firstOperand = firstOperand;
         this.secondOperand = secondOperand;
+        
+        this.firstOperand.setOwnerExecutableElement(this);
+        this.secondOperand.setOwnerExecutableElement(this);
 
     }
 

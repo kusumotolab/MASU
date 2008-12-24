@@ -30,6 +30,8 @@ public class ThrowStatementInfo extends SingleStatementInfo {
             throw new IllegalArgumentException("thrownExpression is null");
         }
         this.thrownEpression = thrownEpression;
+        
+        this.thrownEpression.setOwnerExecutableElement(this);
     }
 
     /**

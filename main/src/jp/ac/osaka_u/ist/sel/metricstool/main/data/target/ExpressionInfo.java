@@ -133,7 +133,7 @@ public abstract class ExpressionInfo implements ConditionInfo {
      * 
      * @param ownerExecutableElement 直接のオーナーであるExecutableElement
      */
-    public final void setOwnerExecutableElement(final ExecutableElementInfo ownerExecutableElement) {
+    public void setOwnerExecutableElement(final ExecutableElementInfo ownerExecutableElement) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == ownerExecutableElement) {

@@ -86,6 +86,12 @@ public final class MethodCallInfo extends CallInfo {
         return null;
     }
 
+    @Override
+    public void setOwnerExecutableElement(ExecutableElementInfo ownerExecutableElement) {
+        super.setOwnerExecutableElement(ownerExecutableElement);
+        this.qualifierExpression.setOwnerExecutableElement(ownerExecutableElement);
+    }
+
     /**
      * このメソッド呼び出しがくっついている型を返す
      * 

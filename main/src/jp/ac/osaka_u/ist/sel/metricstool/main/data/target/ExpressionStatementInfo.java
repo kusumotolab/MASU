@@ -32,6 +32,8 @@ public class ExpressionStatementInfo extends SingleStatementInfo {
         }
 
         this.expression = expression;
+        
+        this.expression.setOwnerExecutableElement(this);
     }
 
     /**

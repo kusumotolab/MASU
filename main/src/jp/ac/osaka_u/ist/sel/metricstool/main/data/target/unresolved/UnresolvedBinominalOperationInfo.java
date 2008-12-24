@@ -5,7 +5,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BinominalOperationInfo
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
@@ -79,16 +78,16 @@ public class UnresolvedBinominalOperationInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // 要素使用のオーナー要素を返す
+        /*// 要素使用のオーナー要素を返す
         final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
                 .getOwnerExecutableElement();
         final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                        methodInfoManager);
+                        methodInfoManager);*/
 
         this.resolvedInfo = new BinominalOperationInfo(operator, firstOperand, secondOperand,
                 fromLine, fromColumn, toLine, toColumn);
-        this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+        /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
 
         return this.resolvedInfo;
     }

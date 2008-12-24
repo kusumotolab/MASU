@@ -10,8 +10,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -115,12 +115,12 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         assert qualifierUsage != null : "resolveEntityUsage returned null!";
 
-        // 要素使用のオーナー要素を返す
+        /*// 要素使用のオーナー要素を返す
         final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
                 .getOwnerExecutableElement();
         final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                        methodInfoManager);
+                        methodInfoManager);*/
 
         // -----ここから親の型に応じて処理を分岐
         TypeInfo ownerType = qualifierUsage.getType();
@@ -137,7 +137,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                 this.resolvedInfo = FieldUsageInfo.getInstance(qualifierUsage, UnknownTypeInfo
                         .getInstance(), unknownField, reference, fromLine, fromColumn, toLine,
                         toColumn);
-                this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+                /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                 return this.resolvedInfo;
             }
         }
@@ -151,7 +151,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
             this.resolvedInfo = FieldUsageInfo
                     .getInstance(qualifierUsage, UnknownTypeInfo.getInstance(), unknownField,
                             reference, fromLine, fromColumn, toLine, toColumn);
-            this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+            /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
             return this.resolvedInfo;
 
             //親がクラス型の場合
@@ -177,7 +177,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                             this.resolvedInfo = FieldUsageInfo.getInstance(qualifierUsage,
                                     qualifierUsage.getType(), availableField, reference, fromLine,
                                     fromColumn, toLine, toColumn);
-                            this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+                            /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                             return this.resolvedInfo;
                         }
                     }
@@ -201,7 +201,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                             this.resolvedInfo = FieldUsageInfo.getInstance(qualifierUsage,
                                     qualifierUsage.getType(), fieldInfo, reference, fromLine,
                                     fromColumn, toLine, toColumn);
-                            this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+                            /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                             return this.resolvedInfo;
                         }
 
@@ -219,7 +219,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                     this.resolvedInfo = FieldUsageInfo.getInstance(qualifierUsage, UnknownTypeInfo
                             .getInstance(), unknownField, reference, fromLine, fromColumn, toLine,
                             toColumn);
-                    this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+                    /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                     return this.resolvedInfo;
                 }
 
@@ -232,7 +232,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                 // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
                 this.resolvedInfo = FieldUsageInfo.getInstance(qualifierUsage, qualifierUsage
                         .getType(), fieldInfo, reference, fromLine, fromColumn, toLine, toColumn);
-                this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+                /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                 return this.resolvedInfo;
             }
 
@@ -249,7 +249,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
 
                 this.resolvedInfo = new ArrayLengthUsageInfo(qualifierUsage,
                         (ArrayTypeInfo) ownerType, fromLine, fromColumn, toLine, toColumn);
-                this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+                /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                 return this.resolvedInfo;
             }
         }
@@ -259,7 +259,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
 
         this.resolvedInfo = FieldUsageInfo.getInstance(qualifierUsage, UnknownTypeInfo
                 .getInstance(), unknownField, reference, fromLine, fromColumn, toLine, toColumn);
-        this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+        /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
         return this.resolvedInfo;
     }
 
