@@ -2,11 +2,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
 
@@ -34,7 +34,7 @@ public abstract class IdentifierElement extends ExpressionElement {
         return this.qualifiedName;
     }
 
-    public UnresolvedEntityUsageInfo<? extends EntityUsageInfo> getOwnerUsage() {
+    public UnresolvedExpressionInfo<? extends ExpressionInfo> getOwnerUsage() {
         return this.ownerUsage;
     }
 
@@ -46,14 +46,14 @@ public abstract class IdentifierElement extends ExpressionElement {
 
     public abstract IdentifierElement resolveAsCalledMethod(BuildDataManager buildDataManager);
 
-    public abstract UnresolvedEntityUsageInfo<? extends EntityUsageInfo> resolveReferencedEntityIfPossible(
+    public abstract UnresolvedExpressionInfo<? extends ExpressionInfo> resolveReferencedEntityIfPossible(
             BuildDataManager buildDataManager);
 
     protected final String name;
     
     protected String[] qualifiedName;
     
-    protected UnresolvedEntityUsageInfo<? extends EntityUsageInfo> ownerUsage;
+    protected UnresolvedExpressionInfo<? extends ExpressionInfo> ownerUsage;
 
 
 }

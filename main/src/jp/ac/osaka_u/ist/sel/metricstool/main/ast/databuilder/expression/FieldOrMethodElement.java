@@ -2,12 +2,12 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
  */
 public class FieldOrMethodElement extends IdentifierElement {
 
-    public FieldOrMethodElement(UnresolvedEntityUsageInfo<? extends EntityUsageInfo> ownerUsage,
+    public FieldOrMethodElement(UnresolvedExpressionInfo<? extends ExpressionInfo> ownerUsage,
             String name, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
         super(name, fromLine, fromColumn, toLine, toColumn);
@@ -68,7 +68,7 @@ public class FieldOrMethodElement extends IdentifierElement {
     }
 
     @Override
-    public UnresolvedEntityUsageInfo<EntityUsageInfo> resolveReferencedEntityIfPossible(
+    public UnresolvedExpressionInfo<ExpressionInfo> resolveReferencedEntityIfPossible(
             BuildDataManager buildDataManager) {
         throw new UnsupportedOperationException();
     }

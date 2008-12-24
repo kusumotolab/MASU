@@ -12,7 +12,7 @@ import java.util.Set;
  * @author higo
  * 
  */
-public class ArrayElementUsageInfo extends EntityUsageInfo {
+public class ArrayElementUsageInfo extends ExpressionInfo {
 
     /**
      * 要素の親，つまり配列型の式とインデックスを与えて，オブジェクトを初期化

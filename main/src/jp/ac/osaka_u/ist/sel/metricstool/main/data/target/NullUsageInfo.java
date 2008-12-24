@@ -10,7 +10,7 @@ import java.util.Set;
  * @author higo, t-miyake
  * 
  */
-public final class NullUsageInfo extends EntityUsageInfo {
+public final class NullUsageInfo extends ExpressionInfo {
 
     /**
      * 位置情報を与えて，オブジェクトを初期化

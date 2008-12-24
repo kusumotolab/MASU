@@ -3,7 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -21,7 +21,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  *
  */
 public final class UnresolvedMonominalOperationInfo extends
-        UnresolvedEntityUsageInfo<MonominalOperationInfo> {
+        UnresolvedExpressionInfo<MonominalOperationInfo> {
 
     /**
      * €‚Æˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^‚ğ—^‚¦‚Ä‰Šú‰»
@@ -31,7 +31,7 @@ public final class UnresolvedMonominalOperationInfo extends
      * @param type ˆê€‰‰Z‚ÌŒ‹‰Ê‚ÌŒ^
      */
     public UnresolvedMonominalOperationInfo(
-            final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> operand,
+            final UnresolvedExpressionInfo<? extends ExpressionInfo> operand,
             final OPERATOR operator, final PrimitiveTypeInfo type) {
 
         if (null == operand || null == operator || null == type) {
@@ -73,8 +73,8 @@ public final class UnresolvedMonominalOperationInfo extends
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager);
 
-        final UnresolvedEntityUsageInfo<?> unresolvedTerm = this.getOperand();
-        final EntityUsageInfo term = unresolvedTerm.resolve(usingClass, usingMethod,
+        final UnresolvedExpressionInfo<?> unresolvedTerm = this.getOperand();
+        final ExpressionInfo term = unresolvedTerm.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         final PrimitiveTypeInfo type = this.getResultType();
         final boolean isPreposed = fromColumn < term.getFromColumn() ? true : false;
@@ -90,7 +90,7 @@ public final class UnresolvedMonominalOperationInfo extends
      * 
      * @return ˆê€‰‰Z‚Ì€
      */
-    public UnresolvedEntityUsageInfo<? extends EntityUsageInfo> getOperand() {
+    public UnresolvedExpressionInfo<? extends ExpressionInfo> getOperand() {
         return this.operand;
     }
 
@@ -106,7 +106,7 @@ public final class UnresolvedMonominalOperationInfo extends
     /**
      * ˆê€‰‰Z‚Ì€
      */
-    private final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> operand;
+    private final UnresolvedExpressionInfo<? extends ExpressionInfo> operand;
 
     /**
      * ˆê€‰‰Z‚Ì‰‰Zq

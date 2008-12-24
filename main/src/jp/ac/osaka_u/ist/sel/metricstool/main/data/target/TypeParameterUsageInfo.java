@@ -10,7 +10,7 @@ import java.util.Set;
  * @author higo
  *
  */
-public final class TypeParameterUsageInfo extends EntityUsageInfo {
+public final class TypeParameterUsageInfo extends ExpressionInfo {
 
     /**
      * 必要な情報を与えて，オブジェクトを初期化

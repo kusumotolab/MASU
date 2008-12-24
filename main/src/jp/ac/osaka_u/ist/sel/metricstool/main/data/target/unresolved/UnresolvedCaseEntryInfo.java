@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SwitchBlockInfo;
@@ -28,7 +28,7 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
      * 
      */
     public UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock,
-            final UnresolvedEntityUsageInfo<?> label) {
+            final UnresolvedExpressionInfo<?> label) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -121,8 +121,8 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         // この case エントリのラベルを取得
-        final UnresolvedEntityUsageInfo<?> unresolvedLabel = this.getLabel();
-        final EntityUsageInfo label = unresolvedLabel.resolve(usingClass, usingMethod,
+        final UnresolvedExpressionInfo<?> unresolvedLabel = this.getLabel();
+        final ExpressionInfo label = unresolvedLabel.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
         // この case エントリの位置情報を取得
@@ -151,7 +151,7 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
      * 
      * @return この case エントリのラベル
      */
-    public final UnresolvedEntityUsageInfo<?> getLabel() {
+    public final UnresolvedExpressionInfo<?> getLabel() {
         return this.label;
     }
 
@@ -163,5 +163,5 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
     /**
      * この case エントリのラベルを保存する変数
      */
-    private final UnresolvedEntityUsageInfo<?> label;
+    private final UnresolvedExpressionInfo<?> label;
 }

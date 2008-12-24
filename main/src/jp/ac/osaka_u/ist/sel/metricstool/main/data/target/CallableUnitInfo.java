@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -49,7 +49,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.typeParameterUsages = new HashMap<TypeParameterInfo, TypeInfo>();
 
-        this.unresolvedUsage = new HashSet<UnresolvedEntityUsageInfo<?>>();
+        this.unresolvedUsage = new HashSet<UnresolvedExpressionInfo<?>>();
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
@@ -133,7 +133,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @param entityUsage 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出し
      */
-    public void addUnresolvedUsage(final UnresolvedEntityUsageInfo<?> entityUsage) {
+    public void addUnresolvedUsage(final UnresolvedExpressionInfo<?> entityUsage) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == entityUsage) {
@@ -148,7 +148,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @return このメソッド内で，名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しの Set
      */
-    public Set<UnresolvedEntityUsageInfo<?>> getUnresolvedUsages() {
+    public Set<UnresolvedExpressionInfo<?>> getUnresolvedUsages() {
         return Collections.unmodifiableSet(this.unresolvedUsage);
     }
 
@@ -246,5 +246,5 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     /**
      * 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しなどを保存するための変数
      */
-    private final transient Set<UnresolvedEntityUsageInfo<?>> unresolvedUsage;
+    private final transient Set<UnresolvedExpressionInfo<?>> unresolvedUsage;
 }

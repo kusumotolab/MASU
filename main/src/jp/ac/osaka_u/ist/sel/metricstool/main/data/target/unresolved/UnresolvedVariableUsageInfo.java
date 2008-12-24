@@ -13,7 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
  * @param <T> 解決済みの型
  */
 public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>
-        extends UnresolvedEntityUsageInfo<T> {
+        extends UnresolvedExpressionInfo<T> {
 
     /**
      * 必要な情報を与えて，オブジェクトを初期化

@@ -128,7 +128,7 @@ public abstract class ConstructorInfo extends CallableUnitInfo implements
      * @param actualParameters 引数の型のリスト
      * @return 呼び出せる場合は true，そうでない場合は false
      */
-    public final boolean canCalledWith(final List<EntityUsageInfo> actualParameters) {
+    public final boolean canCalledWith(final List<ExpressionInfo> actualParameters) {
 
         if (null == actualParameters) {
             throw new NullPointerException();
@@ -142,11 +142,11 @@ public abstract class ConstructorInfo extends CallableUnitInfo implements
 
         // 引数の型を先頭からチェック等しくない場合は該当しない
         final Iterator<ParameterInfo> dummyParameterIterator = dummyParameters.iterator();
-        final Iterator<EntityUsageInfo> actualParameterIterator = actualParameters.iterator();
+        final Iterator<ExpressionInfo> actualParameterIterator = actualParameters.iterator();
         NEXT_PARAMETER: while (dummyParameterIterator.hasNext()
                 && actualParameterIterator.hasNext()) {
             final ParameterInfo dummyParameter = dummyParameterIterator.next();
-            final EntityUsageInfo actualParameter = actualParameterIterator.next();
+            final ExpressionInfo actualParameter = actualParameterIterator.next();
 
             // 実引数が参照型の場合
             if (actualParameter.getType() instanceof ClassTypeInfo) {

@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  *
  */
-public final class CastUsageInfo extends EntityUsageInfo {
+public final class CastUsageInfo extends ExpressionInfo {
 
     /**
      * 必要な情報を与えてオブジェクトを初期化

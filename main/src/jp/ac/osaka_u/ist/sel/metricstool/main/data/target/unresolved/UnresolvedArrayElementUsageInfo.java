@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
@@ -17,10 +17,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 未解決配列に対する要素の参照を表すためのクラス．以下の情報を持つ．
  * 
  * @author kou-tngt, higo
- * @see UnresolvedEntityUsageInfo
+ * @see UnresolvedExpressionInfo
  */
 public final class UnresolvedArrayElementUsageInfo extends
-        UnresolvedEntityUsageInfo<ArrayElementUsageInfo> {
+        UnresolvedExpressionInfo<ArrayElementUsageInfo> {
 
     /**
      * 要素が参照された配列の型を与える.
@@ -28,7 +28,7 @@ public final class UnresolvedArrayElementUsageInfo extends
      * @param qualifierArrayType 要素が参照された配列の型
      * @param indexExpression 参照された要素のインデックス
      */
-    public UnresolvedArrayElementUsageInfo(final UnresolvedEntityUsageInfo<?> qualifierArrayType,
+    public UnresolvedArrayElementUsageInfo(final UnresolvedExpressionInfo<?> qualifierArrayType,
             final UnresolvedExpressionInfo<?> indexExpression) {
 
         if (null == qualifierArrayType) {
@@ -80,8 +80,8 @@ public final class UnresolvedArrayElementUsageInfo extends
         assert indexExpression != null : "method \"resolve\" returned null!";
 
         // 要素使用がくっついている("."の前のこと)未定義型を取得
-        final UnresolvedEntityUsageInfo<?> unresolvedQualifierUsage = this.getQualifierArrayType();
-        EntityUsageInfo qualifierUsage = unresolvedQualifierUsage.resolve(usingClass, usingMethod,
+        final UnresolvedExpressionInfo<?> unresolvedQualifierUsage = this.getQualifierArrayType();
+        ExpressionInfo qualifierUsage = unresolvedQualifierUsage.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert qualifierUsage != null : "method \"resolve\" returned null!";
 
@@ -106,7 +106,7 @@ public final class UnresolvedArrayElementUsageInfo extends
      * 
      * @return 要素が参照された配列の型
      */
-    public UnresolvedEntityUsageInfo<?> getQualifierArrayType() {
+    public UnresolvedExpressionInfo<?> getQualifierArrayType() {
         return this.qualifierArrayType;
     }
 
@@ -122,7 +122,7 @@ public final class UnresolvedArrayElementUsageInfo extends
     /**
      * 要素が参照された配列の型
      */
-    private final UnresolvedEntityUsageInfo<?> qualifierArrayType;
+    private final UnresolvedExpressionInfo<?> qualifierArrayType;
 
     /**
      * 配列要素使用のインデックスを格納する変数

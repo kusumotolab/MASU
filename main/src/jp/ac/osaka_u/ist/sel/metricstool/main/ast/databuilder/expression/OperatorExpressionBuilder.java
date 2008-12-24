@@ -5,7 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
@@ -16,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedA
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBinominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCastUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMonominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTernaryOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
@@ -53,7 +53,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
 
         if (term > 0 && term == elements.length) {
             //各項の型を記録する配列
-            final UnresolvedEntityUsageInfo<? extends EntityUsageInfo>[] termTypes = new UnresolvedEntityUsageInfo<?>[elements.length];
+            final UnresolvedExpressionInfo<? extends ExpressionInfo>[] termTypes = new UnresolvedExpressionInfo<?>[elements.length];
 
             //最左辺値について
             final ExpressionElement primary = elements[0];
@@ -149,7 +149,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 pushElement(new UsageElement(operation));
             } else {
                 //自分で型決定する
-                UnresolvedEntityUsageInfo<? extends EntityUsageInfo> resultType = null;
+                UnresolvedExpressionInfo<? extends ExpressionInfo> resultType = null;
 
                 //オペレータによってすでに決定している戻り値の型，確定していなければnull
                 final PrimitiveTypeInfo type = token.getSpecifiedResultType();
@@ -174,7 +174,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     }
                 } else if (token.equals(OperatorToken.ARRAY)) {
                     //配列記述子の場合は特別処理
-                    final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> ownerType;
+                    final UnresolvedExpressionInfo<? extends ExpressionInfo> ownerType;
                     if (elements[0] instanceof IdentifierElement) {
                         ownerType = ((IdentifierElement) elements[0])
                                 .resolveAsReferencedVariable(this.buildDataManager);
@@ -191,7 +191,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 } else if (token.equals(OperatorToken.CAST) && elements[0] instanceof TypeElement) {
                     final UnresolvedTypeInfo<? extends TypeInfo> castType = ((TypeElement) elements[0])
                             .getType();
-                    final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> castedUsage = elements[1]
+                    final UnresolvedExpressionInfo<? extends ExpressionInfo> castedUsage = elements[1]
                             .getUsage();
                     resultType = new UnresolvedCastUsageInfo(castType, castedUsage);
                     resultType.setFromLine(event.getStartLine());

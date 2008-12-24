@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake
  *
  */
-public class UnresolvedTernaryOperationInfo extends UnresolvedEntityUsageInfo<TernaryOperationInfo> {
+public class UnresolvedTernaryOperationInfo extends UnresolvedExpressionInfo<TernaryOperationInfo> {
 
     /**
      * オブジェクトを初期化

@@ -2,12 +2,12 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
@@ -23,7 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
 public class SingleIdentifierElement extends IdentifierElement {
 
     public SingleIdentifierElement(final String name,
-            UnresolvedEntityUsageInfo<? extends EntityUsageInfo> ownerUsage, final int fromLine,
+            UnresolvedExpressionInfo<? extends ExpressionInfo> ownerUsage, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
         super(name, fromLine, fromColumn, toLine, toColumn);
@@ -90,7 +90,7 @@ public class SingleIdentifierElement extends IdentifierElement {
     }
 
     @Override
-    public UnresolvedEntityUsageInfo<? extends EntityUsageInfo> resolveReferencedEntityIfPossible(
+    public UnresolvedExpressionInfo<? extends ExpressionInfo> resolveReferencedEntityIfPossible(
             BuildDataManager buildDataManager) {
         UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> variable = buildDataManager
                 .getCurrentScopeVariable(this.name);

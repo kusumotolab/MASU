@@ -20,7 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  *
  */
-public final class UnresolvedNullUsageInfo extends UnresolvedEntityUsageInfo<NullUsageInfo> {
+public final class UnresolvedNullUsageInfo extends UnresolvedExpressionInfo<NullUsageInfo> {
 
     /**
      * オブジェクトを初期化

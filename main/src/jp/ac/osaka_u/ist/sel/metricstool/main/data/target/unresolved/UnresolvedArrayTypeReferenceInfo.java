@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  *
  */
 public final class UnresolvedArrayTypeReferenceInfo extends
-        UnresolvedEntityUsageInfo<ArrayTypeReferenceInfo> {
+        UnresolvedExpressionInfo<ArrayTypeReferenceInfo> {
 
     /**
      * QÆ‚³‚ê‚Ä‚¢‚é–¢‰ğŒˆ”z—ñŒ^‚ğ—^‚¦‚Ä‰Šú‰»

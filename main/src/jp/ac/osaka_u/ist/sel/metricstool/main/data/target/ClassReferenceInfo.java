@@ -12,7 +12,7 @@ import java.util.Set;
  * @author higo
  *
  */
-public final class ClassReferenceInfo extends EntityUsageInfo {
+public final class ClassReferenceInfo extends ExpressionInfo {
 
     /**
      * 参照型を与えてオブジェクトを初期化

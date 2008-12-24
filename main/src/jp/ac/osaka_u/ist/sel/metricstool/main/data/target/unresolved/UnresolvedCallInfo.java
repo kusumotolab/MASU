@@ -32,7 +32,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake, higo
  * @param <T> 解決済みの型
  */
-public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedEntityUsageInfo<T> {
+public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedExpressionInfo<T> {
 
     /**
      * オブジェクトを初期化
@@ -42,7 +42,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>>();
-        this.arguments = new LinkedList<UnresolvedEntityUsageInfo<?>>();
+        this.arguments = new LinkedList<UnresolvedExpressionInfo<?>>();
 
     }
 
@@ -66,7 +66,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
      * 
      * @param typeInfo
      */
-    public final void addArgument(final UnresolvedEntityUsageInfo<?> typeInfo) {
+    public final void addArgument(final UnresolvedExpressionInfo<?> typeInfo) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -82,7 +82,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
      * 
      * @return 引数の List
      */
-    public final List<UnresolvedEntityUsageInfo<?>> getArguments() {
+    public final List<UnresolvedExpressionInfo<?>> getArguments() {
         return Collections.unmodifiableList(this.arguments);
     }
 
@@ -107,7 +107,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
         //　解決済み実引数を格納するための変数
         final List<ExpressionInfo> parameters = new LinkedList<ExpressionInfo>();
 
-        for (final UnresolvedEntityUsageInfo<?> unresolvedParameter : this.getArguments()) {
+        for (final UnresolvedExpressionInfo<?> unresolvedParameter : this.getArguments()) {
 
             ExpressionInfo parameter = unresolvedParameter.resolve(usingClass, usingMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
@@ -185,7 +185,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
     /**
      * 引数を保存するための変数
      */
-    protected List<UnresolvedEntityUsageInfo<?>> arguments;
+    protected List<UnresolvedExpressionInfo<?>> arguments;
 
     /**
      * エラーメッセージ出力用のプリンタ

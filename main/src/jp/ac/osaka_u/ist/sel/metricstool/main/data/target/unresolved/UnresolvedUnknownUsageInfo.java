@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
@@ -38,7 +38,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
  * @author higo
  * 
  */
-public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<EntityUsageInfo> {
+public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<ExpressionInfo> {
 
     /**
      * 未解決エンティティ使用オブジェクトを作成する．
@@ -65,7 +65,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
     }
 
     @Override
-    public EntityUsageInfo resolve(final TargetClassInfo usingClass,
+    public ExpressionInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -123,7 +123,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                     classReference.setOwnerExecutableElement(ownerExecutableElement);
 
                     // availableField.getType() から次のword(name[i])を名前解決
-                    EntityUsageInfo entityUsage = FieldUsageInfo.getInstance(classReference,
+                    ExpressionInfo entityUsage = FieldUsageInfo.getInstance(classReference,
                             usingClassType, availableFieldOfThisClass, true, fromLine, fromColumn,
                             toLine, toColumn);
                     entityUsage.setOwnerExecutableElement(ownerExecutableElement);
@@ -259,7 +259,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                     classReference.setOwnerExecutableElement(ownerExecutableElement);
 
                     // availableField.getType() から次のword(name[i])を名前解決
-                    EntityUsageInfo entityUsage = FieldUsageInfo.getInstance(classReference,
+                    ExpressionInfo entityUsage = FieldUsageInfo.getInstance(classReference,
                             usingClassType, availableFieldOfThisClass, true, fromLine, fromColumn,
                             toLine, toColumn);
                     entityUsage.setOwnerExecutableElement(ownerExecutableElement);
@@ -412,7 +412,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                             new ClassTypeInfo(searchingClass), fromLine, fromColumn, toLine,
                             toColumn);
                     searchedClassReference.setOwnerExecutableElement(ownerExecutableElement);
-                    EntityUsageInfo entityUsage = searchedClassReference;
+                    ExpressionInfo entityUsage = searchedClassReference;
 
                     for (int i = length; i < name.length; i++) {
 
@@ -568,7 +568,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                 new ClassTypeInfo(innerClassInfo), fromLine, fromColumn, toLine,
                                 toColumn);
                         innerClassReference.setOwnerExecutableElement(ownerExecutableElement);
-                        EntityUsageInfo entityUsage = innerClassReference;
+                        ExpressionInfo entityUsage = innerClassReference;
                         for (int i = 1; i < name.length; i++) {
 
                             // 親が UnknownTypeInfo だったら，どうしようもない
@@ -728,7 +728,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                         new ClassTypeInfo(classInfo), fromLine, fromColumn, toLine,
                                         toColumn);
                                 classReference.setOwnerExecutableElement(ownerExecutableElement);
-                                EntityUsageInfo entityUsage = classReference;
+                                ExpressionInfo entityUsage = classReference;
 
                                 for (int i = 1; i < name.length; i++) {
 
@@ -887,7 +887,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                     new ClassTypeInfo(specifiedClassInfo), fromLine, fromColumn,
                                     toLine, toColumn);
                             classReference.setOwnerExecutableElement(ownerExecutableElement);
-                            EntityUsageInfo entityUsage = classReference;
+                            ExpressionInfo entityUsage = classReference;
 
                             for (int i = 1; i < name.length; i++) {
 
@@ -1039,7 +1039,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedEntityUsageInfo<
                                 new ClassTypeInfo(classInfo), fromLine, fromColumn, toLine,
                                 toColumn);
                         classReference.setOwnerExecutableElement(ownerExecutableElement);
-                        EntityUsageInfo entityUsage = classReference;
+                        ExpressionInfo entityUsage = classReference;
 
                         for (int i = 1; i < name.length; i++) {
 

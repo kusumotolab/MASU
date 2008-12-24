@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  *
  */
-public abstract class CallInfo extends EntityUsageInfo {
+public abstract class CallInfo extends ExpressionInfo {
 
     /**
      * 
@@ -39,7 +39,7 @@ public abstract class CallInfo extends EntityUsageInfo {
      * 
      * @param argument í«â¡Ç∑ÇÈé¿à¯êî
      */
-    public final void addArgument(final EntityUsageInfo argument) {
+    public final void addArgument(final ExpressionInfo argument) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == argument) {

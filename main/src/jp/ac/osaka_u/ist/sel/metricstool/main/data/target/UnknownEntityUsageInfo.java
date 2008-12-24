@@ -10,7 +10,7 @@ import java.util.Set;
  * @author higo
  *
  */
-public final class UnknownEntityUsageInfo extends EntityUsageInfo {
+public final class UnknownEntityUsageInfo extends ExpressionInfo {
 
     @Override
     public TypeInfo getType() {

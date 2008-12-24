@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.TypeConvert
  * @author higo
  * 
  */
-public class BinominalOperationInfo extends EntityUsageInfo {
+public class BinominalOperationInfo extends ExpressionInfo {
 
     /**
      * ニ項演算の各オペランド，オペレータを与えてオブジェクトを初期化

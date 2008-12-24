@@ -12,7 +12,7 @@ import java.util.Set;
  * @author higo
  *
  */
-public final class EmptyExpressionInfo extends EntityUsageInfo {
+public final class EmptyExpressionInfo extends ExpressionInfo {
 
     /**
      * @param fromLine äJénçs

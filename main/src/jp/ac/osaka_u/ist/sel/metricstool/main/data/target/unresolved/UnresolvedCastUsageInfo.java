@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CastUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake, higo
  *
  */
-public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo<CastUsageInfo> {
+public final class UnresolvedCastUsageInfo extends UnresolvedExpressionInfo<CastUsageInfo> {
 
     /**
      * キャストされたエンティティとキャストの型を与えて初期化
@@ -29,7 +29,7 @@ public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo<Cas
      * 
      */
     public UnresolvedCastUsageInfo(final UnresolvedTypeInfo<?> castType,
-            final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> castedUsage) {
+            final UnresolvedExpressionInfo<? extends ExpressionInfo> castedUsage) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == castType || null == castedUsage) {
@@ -52,7 +52,7 @@ public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo<Cas
      * キャストが行われたエンティティ使用を返す
      * @return キャストが行われたエンティティ使用
      */
-    public UnresolvedEntityUsageInfo<? extends EntityUsageInfo> getCastedUsage() {
+    public UnresolvedExpressionInfo<? extends ExpressionInfo> getCastedUsage() {
         return this.castedUsage;
     }
 
@@ -85,7 +85,7 @@ public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo<Cas
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
         // キャストされたエンティティ使用を解決
-        final EntityUsageInfo castedUsage = this.getCastedUsage().resolve(usingClass, usingMethod,
+        final ExpressionInfo castedUsage = this.getCastedUsage().resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
         // 要素使用のオーナー要素を返す
@@ -111,6 +111,6 @@ public final class UnresolvedCastUsageInfo extends UnresolvedEntityUsageInfo<Cas
     /**
      * キャストが行われたエンティティ使用を保存すための変数
      */
-    private final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> castedUsage;
+    private final UnresolvedExpressionInfo<? extends ExpressionInfo> castedUsage;
 
 }

@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
@@ -48,7 +48,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
      * @param toColumn 終了列
      */
     public UnresolvedFieldUsageInfo(final List<AvailableNamespaceInfo> availableNamespaces,
-            final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> qualifierUsage,
+            final UnresolvedExpressionInfo<? extends ExpressionInfo> qualifierUsage,
             final String fieldName, final boolean reference, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
         super(fieldName, reference, fromLine, fromColumn, toLine, toColumn);
@@ -102,8 +102,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
         final int toColumn = this.getToColumn();
 
         // フィールド使用がくっついている型("."の前のやつ)を解決
-        final UnresolvedEntityUsageInfo<?> unresolvedQualifierUsage = this.getQualifierUsage();
-        final EntityUsageInfo qualifierUsage = unresolvedQualifierUsage.resolve(usingClass,
+        final UnresolvedExpressionInfo<?> unresolvedQualifierUsage = this.getQualifierUsage();
+        final ExpressionInfo qualifierUsage = unresolvedQualifierUsage.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         assert qualifierUsage != null : "resolveEntityUsage returned null!";
 
@@ -269,7 +269,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
      * 
      * @return フィールド使用が実行される変数の未解決型名
      */
-    public UnresolvedEntityUsageInfo<? extends EntityUsageInfo> getQualifierUsage() {
+    public UnresolvedExpressionInfo<? extends ExpressionInfo> getQualifierUsage() {
         return this.qualifierUsage;
     }
 
@@ -295,5 +295,5 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
     /**
      * フィールド使用が実行される変数の未解決型名を保存するための変数
      */
-    private final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> qualifierUsage;
+    private final UnresolvedExpressionInfo<? extends ExpressionInfo> qualifierUsage;
 }

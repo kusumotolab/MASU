@@ -2,9 +2,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassReferenceInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedNullUsageInfo;
 
 
@@ -14,7 +14,7 @@ public class InstanceSpecificElement extends ExpressionElement {
         NULL, THIS
     }
 
-    private InstanceSpecificElement(final UnresolvedEntityUsageInfo<? extends EntityUsageInfo> usage, final SPECIFIC_ELEMENT_TYPE elementType) {
+    private InstanceSpecificElement(final UnresolvedExpressionInfo<? extends ExpressionInfo> usage, final SPECIFIC_ELEMENT_TYPE elementType) {
         // TODO 0‚Å‚È‚¢‚Ì‚ð‚¢‚ê‚é‚×‚«?
         super(usage);
         

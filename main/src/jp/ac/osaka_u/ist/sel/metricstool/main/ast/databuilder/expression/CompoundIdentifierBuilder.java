@@ -5,8 +5,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 
 
 /**
@@ -71,7 +71,7 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
                 SingleIdentifierElement rightIdentifier = (SingleIdentifierElement) right;
                 String rightName = rightIdentifier.getName();
 
-                UnresolvedEntityUsageInfo<? extends EntityUsageInfo> leftElementType = null;
+                UnresolvedExpressionInfo<? extends ExpressionInfo> leftElementType = null;
 
                 if (left instanceof FieldOrMethodElement) {
                     IdentifierElement leftIdentifier = (IdentifierElement) left;

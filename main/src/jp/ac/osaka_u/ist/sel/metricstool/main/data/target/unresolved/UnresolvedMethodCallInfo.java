@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
@@ -46,7 +46,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
      * @param qualifierUsage メソッド呼び出しが実行される変数の型
      * @param methodName メソッド名
      */
-    public UnresolvedMethodCallInfo(final UnresolvedEntityUsageInfo<?> qualifierUsage,
+    public UnresolvedMethodCallInfo(final UnresolvedExpressionInfo<?> qualifierUsage,
             final String methodName) {
 
         if ((null == qualifierUsage) || (null == methodName)) {
@@ -88,8 +88,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         // メソッド呼び出しがくっついている型("."の前のやつ)を解決
-        final UnresolvedEntityUsageInfo<?> unresolvedQualifierUsage = this.getQualifierType();
-        EntityUsageInfo qualifierUsage = unresolvedQualifierUsage.resolve(usingClass, usingMethod,
+        final UnresolvedExpressionInfo<?> unresolvedQualifierUsage = this.getQualifierType();
+        ExpressionInfo qualifierUsage = unresolvedQualifierUsage.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert qualifierUsage != null : "resolveEntityUsage returned null!";
 
@@ -334,7 +334,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
      * 
      * @return メソッド呼び出しが実行される変数の型
      */
-    public UnresolvedEntityUsageInfo<?> getQualifierType() {
+    public UnresolvedExpressionInfo<?> getQualifierType() {
         return this.qualifierUsage;
     }
 
@@ -355,6 +355,6 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
     /**
      * メソッド呼び出しが実行される変数の参照を保存するための変数
      */
-    private final UnresolvedEntityUsageInfo<?> qualifierUsage;
+    private final UnresolvedExpressionInfo<?> qualifierUsage;
 
 }

@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  *
  */
-public final class UnresolvedLiteralUsageInfo extends UnresolvedEntityUsageInfo<LiteralUsageInfo> {
+public final class UnresolvedLiteralUsageInfo extends UnresolvedExpressionInfo<LiteralUsageInfo> {
 
     /**
      * リテラルの文字列表現とリテラルの型を与えてオブジェクトを初期化

@@ -36,7 +36,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
@@ -1553,7 +1553,7 @@ public class MetricsTool {
                 .getVariableUsages()) {
 
             // 未解決変数使用を解決
-            final EntityUsageInfo variableUsage = unresolvedVariableUsage.resolve(ownerClass,
+            final ExpressionInfo variableUsage = unresolvedVariableUsage.resolve(ownerClass,
                     ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
             // 名前解決できた場合は登録
@@ -1578,7 +1578,7 @@ public class MetricsTool {
         // 各未解決メソッド呼び出しの解決処理
         for (final UnresolvedCallInfo<?> unresolvedCall : unresolvedLocalSpace.getCalls()) {
 
-            final EntityUsageInfo memberCall = unresolvedCall.resolve(ownerClass, ownerMethod,
+            final ExpressionInfo memberCall = unresolvedCall.resolve(ownerClass, ownerMethod,
                     classInfoManager, fieldInfoManager, methodInfoManager);
 
             // メソッドおよびコンストラクタ呼び出しが解決できた場合

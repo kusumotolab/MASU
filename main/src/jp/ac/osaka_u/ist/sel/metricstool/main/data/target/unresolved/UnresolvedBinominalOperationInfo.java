@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BinominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
  * 
  */
 public class UnresolvedBinominalOperationInfo extends
-        UnresolvedEntityUsageInfo<BinominalOperationInfo> {
+        UnresolvedExpressionInfo<BinominalOperationInfo> {
 
     /**
      * 演算子と2つのオペランドを与えて初期化する
@@ -29,8 +29,8 @@ public class UnresolvedBinominalOperationInfo extends
      * @param secondOperand 第二（未解決）オペランド
      */
     public UnresolvedBinominalOperationInfo(final OPERATOR operator,
-            final UnresolvedEntityUsageInfo<?> firstOperand,
-            final UnresolvedEntityUsageInfo<?> secondOperand) {
+            final UnresolvedExpressionInfo<?> firstOperand,
+            final UnresolvedExpressionInfo<?> secondOperand) {
 
         if ((null == operator) || (null == firstOperand) || (null == secondOperand)) {
             throw new NullPointerException();
@@ -63,11 +63,11 @@ public class UnresolvedBinominalOperationInfo extends
         }
 
         final OPERATOR operator = this.getOperator();
-        final UnresolvedEntityUsageInfo<?> unresolvedFirstOperand = this.getFirstOperand();
-        final UnresolvedEntityUsageInfo<?> unresolvedSecondOperand = this.getSecondOperand();
-        final EntityUsageInfo firstOperand = unresolvedFirstOperand.resolve(usingClass,
+        final UnresolvedExpressionInfo<?> unresolvedFirstOperand = this.getFirstOperand();
+        final UnresolvedExpressionInfo<?> unresolvedSecondOperand = this.getSecondOperand();
+        final ExpressionInfo firstOperand = unresolvedFirstOperand.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-        final EntityUsageInfo secondOperand = unresolvedSecondOperand.resolve(usingClass,
+        final ExpressionInfo secondOperand = unresolvedSecondOperand.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         //　位置情報を取得
@@ -104,7 +104,7 @@ public class UnresolvedBinominalOperationInfo extends
      * 
      * @return 第一（未解決）オペランド
      */
-    public UnresolvedEntityUsageInfo<?> getFirstOperand() {
+    public UnresolvedExpressionInfo<?> getFirstOperand() {
         return this.firstOperand;
     }
 
@@ -113,7 +113,7 @@ public class UnresolvedBinominalOperationInfo extends
      * 
      * @return 第二（未解決）オペランド
      */
-    public UnresolvedEntityUsageInfo<?> getSecondOperand() {
+    public UnresolvedExpressionInfo<?> getSecondOperand() {
         return this.secondOperand;
     }
 
@@ -136,7 +136,7 @@ public class UnresolvedBinominalOperationInfo extends
      * 
      * @param firstOperand 第一（未解決）オペランド
      */
-    public void setFirstOperand(final UnresolvedEntityUsageInfo<?> firstOperand) {
+    public void setFirstOperand(final UnresolvedExpressionInfo<?> firstOperand) {
 
         if (null == firstOperand) {
             throw new NullPointerException();
@@ -150,7 +150,7 @@ public class UnresolvedBinominalOperationInfo extends
      * 
      * @param secondOperand 第二（未解決）オペランド
      */
-    public void setSecondOperand(final UnresolvedEntityUsageInfo<?> secondOperand) {
+    public void setSecondOperand(final UnresolvedExpressionInfo<?> secondOperand) {
 
         if (null == secondOperand) {
             throw new NullPointerException();
@@ -161,8 +161,8 @@ public class UnresolvedBinominalOperationInfo extends
 
     private OPERATOR operator;
 
-    private UnresolvedEntityUsageInfo<?> firstOperand;
+    private UnresolvedExpressionInfo<?> firstOperand;
 
-    private UnresolvedEntityUsageInfo<?> secondOperand;
+    private UnresolvedExpressionInfo<?> secondOperand;
 
 }

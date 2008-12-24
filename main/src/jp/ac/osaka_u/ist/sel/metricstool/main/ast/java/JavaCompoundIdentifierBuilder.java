@@ -12,14 +12,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.FieldOr
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.IdentifierElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.InstanceSpecificElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageElement;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFullQualifiedNameClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
@@ -90,7 +90,7 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
             if (left instanceof IdentifierElement) {
                 //まず変数名.super()というコンストラクタ呼び出しかどうかを確認する
                 IdentifierElement identifier = (IdentifierElement) left;
-                UnresolvedEntityUsageInfo<? extends EntityUsageInfo> ownerUsage = identifier
+                UnresolvedExpressionInfo<? extends ExpressionInfo> ownerUsage = identifier
                         .resolveReferencedEntityIfPossible(buildDataManager);
                 UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> variable = null;
                 if (null != ownerUsage && ownerUsage instanceof UnresolvedVariableUsageInfo) {

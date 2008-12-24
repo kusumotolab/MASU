@@ -13,7 +13,7 @@ import java.util.TreeSet;
  * @author t-miyake
  *
  */
-public class TernaryOperationInfo extends EntityUsageInfo {
+public class TernaryOperationInfo extends ExpressionInfo {
 
     /**
      * 三項演算の条件式(第一項)，条件式がtrueの時に返される式，条件式がfalseの時に返される式(第三項)，開始位置，終了位置を与えて初期化

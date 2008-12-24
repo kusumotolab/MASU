@@ -14,7 +14,7 @@ import java.util.TreeSet;
  * @param <T> g—p‚³‚ê‚Ä‚¢‚é•Ï”
  */
 public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInfo>> extends
-        EntityUsageInfo {
+        ExpressionInfo {
 
     /**
      * 

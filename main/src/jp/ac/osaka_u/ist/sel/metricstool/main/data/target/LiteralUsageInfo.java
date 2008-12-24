@@ -9,7 +9,7 @@ import java.util.Set;
  * @author t-miyake
  *
  */
-public final class LiteralUsageInfo extends EntityUsageInfo {
+public final class LiteralUsageInfo extends ExpressionInfo {
 
     /**
      * リテラル、リテラルの型、出現位置を与えて初期化

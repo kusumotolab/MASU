@@ -12,7 +12,7 @@ import java.util.TreeSet;
  * @author t-miyake
  *
  */
-public final class MonominalOperationInfo extends EntityUsageInfo {
+public final class MonominalOperationInfo extends ExpressionInfo {
 
     /**
      * オペランド、一項演算の結果の型、位置情報を与えて初期化

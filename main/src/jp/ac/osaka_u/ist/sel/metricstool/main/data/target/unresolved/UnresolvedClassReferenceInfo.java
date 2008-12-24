@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EntityUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -29,7 +29,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<EntityUsageInfo> {
+public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<ExpressionInfo> {
 
     /**
      * 利用可能な名前空間名，参照名を与えて初期化
@@ -82,7 +82,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
     }
 
     @Override
-    public EntityUsageInfo resolve(final TargetClassInfo usingClass,
+    public ExpressionInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -115,7 +115,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
         if (this.hasOwnerReference()) {
 
             final UnresolvedClassReferenceInfo unresolvedClassReference = this.getQualifierUsage();
-            EntityUsageInfo classReference = unresolvedClassReference.resolve(usingClass,
+            ExpressionInfo classReference = unresolvedClassReference.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             assert null != classReference : "null is returned!";
 
@@ -223,7 +223,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
                         // availableField.getType() から次のword(name[i])を名前解決
                         // TODO 型パラメータ情報を格納する処理が必要
                         ClassTypeInfo reference = new ClassTypeInfo(innerClassInfo);
-                        EntityUsageInfo classReference = new ClassReferenceInfo(reference,
+                        ExpressionInfo classReference = new ClassReferenceInfo(reference,
                                 fromLine, fromColumn, toLine, toColumn);
                         classReference.setOwnerExecutableElement(ownerExecutableElement);
 
@@ -307,7 +307,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
                                 // availableField.getType() から次のword(name[i])を名前解決
                                 // TODO 型パラメータ情報を格納する処理が必要
                                 ClassTypeInfo reference = new ClassTypeInfo(classInfo);
-                                EntityUsageInfo classReference = new ClassReferenceInfo(reference,
+                                ExpressionInfo classReference = new ClassReferenceInfo(reference,
                                         fromLine, fromColumn, toLine, toColumn);
                                 classReference.setOwnerExecutableElement(ownerExecutableElement);
 
@@ -394,7 +394,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
 
                             // TODO 型パラメータ情報を格納する処理が必要
                             ClassTypeInfo reference = new ClassTypeInfo(specifiedClassInfo);
-                            EntityUsageInfo classReference = new ClassReferenceInfo(reference,
+                            ExpressionInfo classReference = new ClassReferenceInfo(reference,
                                     fromLine, fromColumn, toLine, toColumn);
                             classReference.setOwnerExecutableElement(ownerExecutableElement);
 
