@@ -41,6 +41,8 @@ public final class UnresolvedMonominalOperationInfo extends
         this.operand = operand;
         this.operator = operator;
         this.type = type;
+
+        this.operand.setOwnerExecutableElementInfo(this);
     }
 
     @Override

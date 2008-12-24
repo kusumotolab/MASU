@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -83,8 +84,8 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
      * 
      * @param ownerExecutableElement オーナーエレメント
      */
-    public final void setOwnerExecutableElementInfo(
-            final UnresolvedExecutableElementInfo<T> ownerExecutableElement) {
+    public void setOwnerExecutableElementInfo(
+            final UnresolvedExecutableElementInfo<? extends ExecutableElementInfo> ownerExecutableElement) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == ownerExecutableElement) {
@@ -99,7 +100,7 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
      * 
      * @return　オーナーエレメント
      */
-    public final UnresolvedExecutableElementInfo<T> getOwnerExecutableElement() {
+    public final UnresolvedExecutableElementInfo<? extends ExecutableElementInfo> getOwnerExecutableElement() {
 
         if (null == this.ownerExecutableElement) {
             throw new NullPointerException();
@@ -204,7 +205,7 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
      */
     protected T resolvedInfo;
 
-    private UnresolvedExecutableElementInfo<T> ownerExecutableElement;
+    private UnresolvedExecutableElementInfo<? extends ExecutableElementInfo> ownerExecutableElement;
 
     /**
      * 開始行を保存するための変数
@@ -225,4 +226,5 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
      * 開始列を保存するための変数
      */
     private int toColumn;
+
 }

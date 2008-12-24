@@ -64,17 +64,17 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
     /**
      * 引数を追加
      * 
-     * @param typeInfo
+     * @param argument
      */
-    public final void addArgument(final UnresolvedExpressionInfo<?> typeInfo) {
-
+    public void addArgument(final UnresolvedExpressionInfo<? extends ExpressionInfo> argument) {
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == typeInfo) {
+        if (null == argument) {
             throw new NullPointerException();
         }
 
-        this.arguments.add(typeInfo);
+        this.arguments.add(argument);
+        argument.setOwnerExecutableElementInfo(this);
     }
 
     /**

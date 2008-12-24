@@ -36,6 +36,7 @@ public class UnresolvedExpressionStatementInfo extends
         }
 
         this.expression = expression;
+        this.expression.setOwnerExecutableElementInfo(this);
     }
 
     @Override

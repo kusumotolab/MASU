@@ -10,7 +10,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
@@ -55,6 +54,12 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
         this.qualifierUsage = qualifierUsage;
         this.methodName = methodName;
+    }
+
+    @Override
+    public void addArgument(UnresolvedExpressionInfo<? extends ExpressionInfo> argument) {
+        super.addArgument(argument);
+        this.qualifierUsage.setOwnerExecutableElementInfo(this);
     }
 
     @Override

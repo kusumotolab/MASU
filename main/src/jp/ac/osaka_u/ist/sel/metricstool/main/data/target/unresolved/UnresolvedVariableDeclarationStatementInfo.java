@@ -43,6 +43,11 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
         this.variableDeclaration = variableDeclaration;
         this.initializationExpression = initializationExpression;
 
+        this.variableDeclaration.setOwnerExecutableElementInfo(this);
+
+        if (null != this.initializationExpression) {
+            this.initializationExpression.setOwnerExecutableElementInfo(this);
+        }
     }
 
     @Override

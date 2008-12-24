@@ -63,6 +63,14 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
         this.fieldName = fieldName;
         this.reference = reference;
     }
+    
+    @Override
+    public void setOwnerExecutableElementInfo(
+            UnresolvedExecutableElementInfo<? extends ExecutableElementInfo> ownerExecutableElement) {
+        super.setOwnerExecutableElementInfo(ownerExecutableElement);
+        
+        this.qualifierUsage.setOwnerExecutableElementInfo(ownerExecutableElement);
+    }
 
     /**
      * 未解決フィールド使用を解決し，その型を返す．

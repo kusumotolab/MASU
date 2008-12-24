@@ -38,6 +38,8 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
 
         this.ownerSwitchBlock = ownerSwitchBlock;
         this.label = label;
+        
+        this.label.setOwnerExecutableElementInfo(this);
     }
 
     /**

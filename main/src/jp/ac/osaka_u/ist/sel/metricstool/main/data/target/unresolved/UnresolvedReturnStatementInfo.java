@@ -76,6 +76,9 @@ public class UnresolvedReturnStatementInfo extends
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         this.returnedExpression = returnedExpression;
+        if (null != this.returnedExpression) {
+            this.returnedExpression.setOwnerExecutableElementInfo(this);
+        }
     }
 
     /**

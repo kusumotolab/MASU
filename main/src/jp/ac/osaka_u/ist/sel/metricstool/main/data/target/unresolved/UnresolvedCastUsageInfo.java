@@ -38,6 +38,8 @@ public final class UnresolvedCastUsageInfo extends UnresolvedExpressionInfo<Cast
 
         this.castType = castType;
         this.castedUsage = castedUsage;
+
+        this.castedUsage.setOwnerExecutableElementInfo(this);
     }
 
     /**

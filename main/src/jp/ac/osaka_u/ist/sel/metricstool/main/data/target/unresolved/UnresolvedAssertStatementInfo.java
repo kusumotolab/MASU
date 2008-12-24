@@ -84,6 +84,7 @@ public class UnresolvedAssertStatementInfo extends
             throw new IllegalArgumentException();
         }
         this.messageExpression = messageExpression;
+        this.messageExpression.setOwnerExecutableElementInfo(this);
     }
 
     /**
@@ -108,6 +109,7 @@ public class UnresolvedAssertStatementInfo extends
         }
 
         this.assertedExpression = assertedExpression;
+        this.assertedExpression.setOwnerExecutableElementInfo(this);
     }
 
     /**
