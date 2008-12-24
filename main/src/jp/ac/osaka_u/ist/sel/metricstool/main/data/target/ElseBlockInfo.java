@@ -15,7 +15,6 @@ public final class ElseBlockInfo extends BlockInfo {
      * 対応する if ブロックを与えて，else ブロック情報を初期化
      * 
      * @param ownerClass 所有クラス
-     * @param ownerMethod 所有メソッド
      * @param outerSpace 外側のブロック
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -23,11 +22,11 @@ public final class ElseBlockInfo extends BlockInfo {
      * @param toColumn 終了列
      * @param ownerIfBlock 対応するifブロック
      */
-    public ElseBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
-            final LocalSpaceInfo outerSpace, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn, final IfBlockInfo ownerIfBlock) {
+    public ElseBlockInfo(final TargetClassInfo ownerClass, final LocalSpaceInfo outerSpace,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
+            final IfBlockInfo ownerIfBlock) {
 
-        super(ownerClass, ownerMethod, outerSpace, fromLine, fromColumn, toLine, toColumn);
+        super(ownerClass, outerSpace, fromLine, fromColumn, toLine, toColumn);
 
         if (null == ownerIfBlock) {
             throw new NullPointerException();

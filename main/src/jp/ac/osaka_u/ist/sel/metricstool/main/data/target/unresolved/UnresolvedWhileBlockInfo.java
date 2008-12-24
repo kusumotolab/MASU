@@ -61,11 +61,12 @@ public final class UnresolvedWhileBlockInfo extends UnresolvedConditionalBlockIn
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo outerSpace = this.getOuterSpace().resolve(usingClass, usingMethod,
+        final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
+        final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
-        this.resolvedInfo = new WhileBlockInfo(usingClass, usingMethod, outerSpace, fromLine,
-                fromColumn, toLine, toColumn);
+        this.resolvedInfo = new WhileBlockInfo(usingClass, outerSpace, fromLine, fromColumn,
+                toLine, toColumn);
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,

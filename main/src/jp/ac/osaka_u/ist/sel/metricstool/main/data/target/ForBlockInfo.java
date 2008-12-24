@@ -20,17 +20,15 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
      * 位置情報を与えて for ブロックを初期化
      * 
      * @param ownerClass 所属クラス
-     * @param ownerMethod 所属メソッド
      * @param outerSpace 外側のブロック
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public ForBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
-            final LocalSpaceInfo outerSpace, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
-        super(ownerClass, ownerMethod, outerSpace, fromLine, fromColumn, toLine, toColumn);
+    public ForBlockInfo(final TargetClassInfo ownerClass, final LocalSpaceInfo outerSpace,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        super(ownerClass, outerSpace, fromLine, fromColumn, toLine, toColumn);
 
         this.initilizerExpressions = new TreeSet<ConditionInfo>();
         this.iteratorExpressions = new TreeSet<ExpressionInfo>();

@@ -1,8 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-
-
 /**
  * if　や while など，条件節を持ったブロック文を表すクラス
  * 
@@ -15,18 +13,16 @@ public abstract class ConditionalBlockInfo extends BlockInfo {
      * 位置情報を与えて初期化
      * 
      * @param ownerClass このブロックを所有するクラス
-     * @param ownerMethod このブロックを所有するメソッド
+     * @param ownerSpace このブロックを所有するブロック
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    ConditionalBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
-            final LocalSpaceInfo outerSpace, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+    ConditionalBlockInfo(final TargetClassInfo ownerClass, final LocalSpaceInfo outerSpace,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerClass, ownerMethod, outerSpace, fromLine, fromColumn, toLine, toColumn);
-
+        super(ownerClass, outerSpace, fromLine, fromColumn, toLine, toColumn);
 
     }
 

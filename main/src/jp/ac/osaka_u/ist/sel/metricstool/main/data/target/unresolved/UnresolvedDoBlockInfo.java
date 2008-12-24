@@ -60,11 +60,13 @@ public final class UnresolvedDoBlockInfo extends UnresolvedConditionalBlockInfo<
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolved();
+        final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
+        final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
 
         // do ブロックオブジェクトを作成
-        this.resolvedInfo = new DoBlockInfo(usingClass, usingMethod, outerSpace, fromLine,
-                fromColumn, toLine, toColumn);
+        this.resolvedInfo = new DoBlockInfo(usingClass, outerSpace, fromLine, fromColumn, toLine,
+                toColumn);
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,

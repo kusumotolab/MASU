@@ -74,9 +74,11 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo outerSpace = this.getOuterSpace().getResolved();
+        final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
+        final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
 
-        this.resolvedInfo = new FinallyBlockInfo(usingClass, usingMethod, outerSpace, fromLine,
+        this.resolvedInfo = new FinallyBlockInfo(usingClass, outerSpace, fromLine,
                 fromColumn, toLine, toColumn, ownerTryBlock);
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加

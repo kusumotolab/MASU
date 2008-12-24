@@ -15,7 +15,6 @@ public final class FinallyBlockInfo extends BlockInfo {
      * 対応する try ブロック情報を与えて finally ブロックを初期化
      * 
      * @param ownerClass 所有クラス
-     * @param ownerMethod 所有メソッド
      * @param outerSpace 外側のブロック
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -23,11 +22,11 @@ public final class FinallyBlockInfo extends BlockInfo {
      * @param toColumn 終了列
      * @param ownerTryBlock この finally 節が属する try ブロック
      */
-    public FinallyBlockInfo(final TargetClassInfo ownerClass, final CallableUnitInfo ownerMethod,
-            final LocalSpaceInfo outerSpace, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn, final TryBlockInfo ownerTryBlock) {
+    public FinallyBlockInfo(final TargetClassInfo ownerClass, final LocalSpaceInfo outerSpace,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
+            final TryBlockInfo ownerTryBlock) {
 
-        super(ownerClass, ownerMethod, outerSpace, fromLine, fromColumn, toLine, toColumn);
+        super(ownerClass, outerSpace, fromLine, fromColumn, toLine, toColumn);
 
         if (null == ownerTryBlock) {
             throw new NullPointerException();
