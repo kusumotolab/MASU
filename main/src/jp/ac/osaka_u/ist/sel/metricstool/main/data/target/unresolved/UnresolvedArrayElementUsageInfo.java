@@ -10,7 +10,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -93,40 +92,12 @@ public final class UnresolvedArrayElementUsageInfo extends
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager);
 
-        // 未解決型の名前解決ができなかった場合
-        if (qualifierUsage.getType() instanceof UnknownTypeInfo) {
+        // 親が特定できない場合も配列の要素使用を作成して返す
+        // もしかすると，UnknownEntityUsageInfoを返す方が適切かもしれない
+        this.resolvedInfo = new ArrayElementUsageInfo(qualifierUsage, indexExpression, fromLine,
+                fromColumn, toLine, toColumn);
+        this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
 
-            //            // 未解決型が配列型である場合は，型を作成する
-            //            if (unresolvedOwnerUsage instanceof UnresolvedArrayTypeInfo) {
-            //                final UnresolvedEntityUsageInfo unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedOwnerUsage)
-            //                        .getElementType();
-            //                final int dimension = ((UnresolvedArrayTypeInfo) unresolvedOwnerUsage)
-            //                        .getDimension();
-            //                final ExternalClassInfo externalClassInfo = NameResolver
-            //                        .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedElementType);
-            //                classInfoManager.add(externalClassInfo);
-            //
-            //                // TODO 型パラメータの情報を格納する
-            //                final ReferenceTypeInfo reference = new ReferenceTypeInfo(externalClassInfo);
-            //                ownerUsage = ArrayTypeInfo.getType(reference, dimension);
-            //
-            //                // 配列型以外の場合はどうしようもない
-            //            } else {
-            //
-            //                usingMethod.addUnresolvedUsage(this);
-            //                this.resolvedInfo = UnknownEntityUsageInfo.getInstance();
-            //                return this.resolvedInfo;
-            //            }
-
-            // 親が特定できない場合も配列の要素使用を作成して返す
-            // もしかすると，UnknownEntityUsageInfoを返す方が適切かもしれない
-            this.resolvedInfo = new ArrayElementUsageInfo(ownerExecutableElement, qualifierUsage,
-                    indexExpression, fromLine, fromColumn, toLine, toColumn);
-            return this.resolvedInfo;
-        }
-
-        this.resolvedInfo = new ArrayElementUsageInfo(ownerExecutableElement, qualifierUsage,
-                indexExpression, fromLine, fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 

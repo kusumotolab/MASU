@@ -28,8 +28,12 @@ public class ConditionalClauseInfo extends UnitInfo {
         }
 
         this.ownerCondtiBlock = ownerConditionalBlock;
-        this.condition = null != condition ? condition : new EmptyExpressionInfo(
-                ownerConditionalBlock, toLine, toColumn - 1, toLine, toColumn - 1);
+        if (null != condition) {
+            this.condition = condition;
+        } else {
+            this.condition = new EmptyExpressionInfo(toLine, toColumn - 1, toLine, toColumn - 1);
+            ((ExpressionInfo) this.condition).setOwnerExecutableElement(ownerConditionalBlock);
+        }
     }
 
     /**

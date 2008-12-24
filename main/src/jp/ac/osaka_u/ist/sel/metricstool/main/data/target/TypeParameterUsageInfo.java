@@ -15,18 +15,16 @@ public final class TypeParameterUsageInfo extends EntityUsageInfo {
     /**
      * 必要な情報を与えて，オブジェクトを初期化
      * 
-     * @param ownerExecutableElement オーナーエレメント
      * @param expression 利用されている式
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public TypeParameterUsageInfo(final ExecutableElementInfo ownerExecutableElement,
-            final ExpressionInfo expression, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+    public TypeParameterUsageInfo(final ExpressionInfo expression, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerExecutableElement, fromLine, fromColumn, toLine, toColumn);
+        super(fromLine, fromColumn, toLine, toColumn);
 
         if (null == expression) {
             throw new NullPointerException();

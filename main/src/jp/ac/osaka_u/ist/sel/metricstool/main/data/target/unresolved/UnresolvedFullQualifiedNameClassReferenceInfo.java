@@ -81,8 +81,9 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
                     classInfoManager, fieldInfoManager, methodInfoManager);
             referenceType.addTypeArgument(typeArgument);
         }
-        this.resolvedInfo = new ClassReferenceInfo(ownerExecutableElement, referenceType, fromLine,
-                fromColumn, toLine, toColumn);
+        this.resolvedInfo = new ClassReferenceInfo(referenceType, fromLine, fromColumn, toLine,
+                toColumn);
+        this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
         return this.resolvedInfo;
     }
 

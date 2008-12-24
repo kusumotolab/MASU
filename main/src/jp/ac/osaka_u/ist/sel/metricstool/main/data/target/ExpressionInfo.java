@@ -23,6 +23,8 @@ public interface ExpressionInfo extends ConditionInfo {
      */
     ExecutableElementInfo getOwnerExecutableElement();
 
+    void setOwnerExecutableElement(ExecutableElementInfo ownerExecutableElement);
+
     /**
      * このExecutableElementのオーナーであるStatementInfoを返す
      * 

@@ -83,8 +83,10 @@ public class UnresolvedBinominalOperationInfo extends
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager);
 
-        this.resolvedInfo = new BinominalOperationInfo(ownerExecutableElement, operator,
-                firstOperand, secondOperand, fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo = new BinominalOperationInfo(operator, firstOperand, secondOperand,
+                fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
+
         return this.resolvedInfo;
     }
 

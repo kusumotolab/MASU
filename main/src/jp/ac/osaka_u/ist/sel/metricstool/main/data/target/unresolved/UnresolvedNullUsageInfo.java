@@ -64,8 +64,8 @@ public final class UnresolvedNullUsageInfo extends UnresolvedEntityUsageInfo<Nul
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager);
 
-        this.resolvedInfo = new NullUsageInfo(ownerExecutableElement, fromLine, fromColumn, toLine,
-                toColumn);
+        this.resolvedInfo = new NullUsageInfo(fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
         return this.resolvedInfo;
     }
 

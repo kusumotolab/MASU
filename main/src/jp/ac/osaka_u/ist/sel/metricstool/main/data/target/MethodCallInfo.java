@@ -23,7 +23,6 @@ public final class MethodCallInfo extends CallInfo {
     /**
      * 呼び出されるメソッドを与えてオブジェクトを初期化
      *
-     * @param ownerExecutableElement オーナーエレメント
      * @param qualifierType メソッド呼び出しの親の型
      * @param qualifierExpression メソッド呼び出しの親エンティティ
      * @param callee 呼び出されているメソッド
@@ -32,12 +31,11 @@ public final class MethodCallInfo extends CallInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public MethodCallInfo(final ExecutableElementInfo ownerExecutableElement,
-            final TypeInfo qualifierType, final ExpressionInfo qualifierExpression,
+    public MethodCallInfo(final TypeInfo qualifierType, final ExpressionInfo qualifierExpression,
             final MethodInfo callee, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
 
-        super(ownerExecutableElement, fromLine, fromColumn, toLine, toColumn);
+        super(fromLine, fromColumn, toLine, toColumn);
 
         if ((null == qualifierType) || (null == callee) || (null == qualifierExpression)) {
             throw new NullPointerException();

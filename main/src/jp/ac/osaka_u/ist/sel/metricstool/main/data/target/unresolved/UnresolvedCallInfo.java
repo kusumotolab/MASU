@@ -143,8 +143,9 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
                             .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                                     methodInfoManager);
 
-                    parameter = new ClassReferenceInfo(ownerExecutableElement, referenceType,
-                            fromLine, fromColumn, toLine, toColumn);
+                    parameter = new ClassReferenceInfo(referenceType, fromLine, fromColumn, toLine,
+                            toColumn);
+                    parameter.setOwnerExecutableElement(ownerExecutableElement);
 
                 } else {
                     assert false : "Here shouldn't be reached!";

@@ -14,21 +14,16 @@ public abstract class EntityUsageInfo implements ExpressionInfo {
 
     /**
      * 
-     * @param ownerExecutableElement オーナーエレメント
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    EntityUsageInfo(final ExecutableElementInfo ownerExecutableElement, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    EntityUsageInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == ownerExecutableElement) {
-            throw new IllegalArgumentException();
-        }
 
-        this.ownerExecutableElement = ownerExecutableElement;
+        this.ownerExecutableElement = null;
         this.fromLine = fromLine;
         this.fromColumn = fromColumn;
         this.toLine = toLine;
@@ -107,12 +102,17 @@ public abstract class EntityUsageInfo implements ExpressionInfo {
     }
 
     @Override
-    public ExecutableElementInfo getOwnerExecutableElement() {
+    public final ExecutableElementInfo getOwnerExecutableElement() {
+
+        if (null == this.ownerExecutableElement) {
+            throw new IllegalStateException();
+        }
+
         return this.ownerExecutableElement;
     }
 
     @Override
-    public StatementInfo getOwnerStatement() {
+    public final StatementInfo getOwnerStatement() {
 
         final ExecutableElementInfo ownerExecutableElement = this.getOwnerExecutableElement();
         if (ownerExecutableElement instanceof StatementInfo) {
@@ -128,7 +128,23 @@ public abstract class EntityUsageInfo implements ExpressionInfo {
                 "ownerExecutableElement must be StatementInfo or ExpressionInfo.");
     }
 
-    private final ExecutableElementInfo ownerExecutableElement;
+    /**
+     * 直接のオーナーであるExecutableElementをセットする
+     * 
+     * @param ownerExecutableElement 直接のオーナーであるExecutableElement
+     */
+    @Override
+    public final void setOwnerExecutableElement(final ExecutableElementInfo ownerExecutableElement) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == ownerExecutableElement) {
+            throw new IllegalArgumentException();
+        }
+
+        this.ownerExecutableElement = ownerExecutableElement;
+    }
+
+    private ExecutableElementInfo ownerExecutableElement;
 
     /**
      * 開始行を保存するための変数

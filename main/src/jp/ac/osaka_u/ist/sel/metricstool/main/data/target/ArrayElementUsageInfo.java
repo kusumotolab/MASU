@@ -17,7 +17,6 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
     /**
      * 要素の親，つまり配列型の式とインデックスを与えて，オブジェクトを初期化
      * 
-     * @param ownerExecutableElement オーナー要素
      * @param qualifierExpression 配列型の式
      * @param indexExpression インデックス
      * @param fromLine 開始行
@@ -25,11 +24,11 @@ public class ArrayElementUsageInfo extends EntityUsageInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public ArrayElementUsageInfo(final ExecutableElementInfo ownerExecutableElement,
-            final ExpressionInfo qualifierExpression, final ExpressionInfo indexExpression,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+    public ArrayElementUsageInfo(final ExpressionInfo qualifierExpression,
+            final ExpressionInfo indexExpression, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
-        super(ownerExecutableElement, fromLine, fromColumn, toLine, toColumn);
+        super(fromLine, fromColumn, toLine, toColumn);
 
         if (null == qualifierExpression) {
             throw new NullPointerException();

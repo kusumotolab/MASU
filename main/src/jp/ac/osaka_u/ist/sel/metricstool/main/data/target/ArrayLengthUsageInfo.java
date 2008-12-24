@@ -12,7 +12,6 @@ public final class ArrayLengthUsageInfo extends FieldUsageInfo {
     /**
      * 親となるエンティティ使用を与えてオブジェクトを初期化
      *
-     * @param ownerExecutableElement オーナーエレメント
      * @param qualifierExpression 親エンティティ
      * @param qualifierType 親エンティティの型（必要ないかも．．．）
      * @param fromLine 開始行
@@ -20,12 +19,12 @@ public final class ArrayLengthUsageInfo extends FieldUsageInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public ArrayLengthUsageInfo(final ExecutableElementInfo ownerExecutableElement,
-            final ExpressionInfo qualifierExpression, final ArrayTypeInfo qualifierType,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+    public ArrayLengthUsageInfo(final ExpressionInfo qualifierExpression,
+            final ArrayTypeInfo qualifierType, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
-        super(ownerExecutableElement, qualifierExpression, qualifierType, new ArrayLengthInfo(
-                qualifierType), true, fromLine, fromColumn, toLine, toColumn);
+        super(qualifierExpression, qualifierType, new ArrayLengthInfo(qualifierType), true,
+                fromLine, fromColumn, toLine, toColumn);
     }
 
     /**

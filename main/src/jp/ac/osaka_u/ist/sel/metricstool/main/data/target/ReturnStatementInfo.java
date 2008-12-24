@@ -26,8 +26,13 @@ public class ReturnStatementInfo extends SingleStatementInfo {
             int toColumn) {
         super(ownerSpaceInfo, fromLine, fromColumn, toLine, toColumn);
 
-        this.returnedExpression = null != returnedExpression ? returnedExpression
-                : new EmptyExpressionInfo(this, toLine, toColumn - 1, toLine, toColumn - 1);
+        if (null != returnedExpression) {
+            this.returnedExpression = returnedExpression;
+        } else {
+            this.returnedExpression = new EmptyExpressionInfo(toLine, toColumn - 1, toLine,
+                    toColumn - 1);
+            ((ExpressionInfo) this.returnedExpression).setOwnerExecutableElement(this);
+        }
     }
 
     /**

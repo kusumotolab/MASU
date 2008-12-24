@@ -21,7 +21,6 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
     /**
      * 使用されているローカル変数を与えてオブジェクトを初期化
      * 
-     * @param ownerExecutableElement オーナーエレメント
      * @param usedLocalVariable 使用されているローカル変数
      * @param reference 参照である場合は true, 代入である場合は false
      * @param fromLine 開始行
@@ -29,18 +28,16 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    private LocalVariableUsageInfo(final ExecutableElementInfo onwerExecutableElement,
-            final LocalVariableInfo usedLocalVariable, final boolean reference, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    private LocalVariableUsageInfo(final LocalVariableInfo usedLocalVariable,
+            final boolean reference, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
-        super(onwerExecutableElement, usedLocalVariable, reference, fromLine, fromColumn, toLine,
-                toColumn);
+        super(usedLocalVariable, reference, fromLine, fromColumn, toLine, toColumn);
     }
 
     /**
      * 使用されているローカル変数，使用の種類，使用されている位置情報を与えてインスタンスを取得
      * 
-     * @param ownerExecutableElement オーナーエレメント
      * @param usedLocalVariable 使用されているローカル変数
      * @param reference 参照である場合はtrue，代入である場合はfalse
      * @param fromLine 開始行
@@ -49,12 +46,11 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
      * @param toColumn 終了列
      * @return ローカル変数使用のインスタンス
      */
-    public static LocalVariableUsageInfo getInstance(
-            final ExecutableElementInfo ownerExecutableElement,
-            final LocalVariableInfo usedLocalVariable, final boolean reference, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
-        final LocalVariableUsageInfo instance = new LocalVariableUsageInfo(ownerExecutableElement,
-                usedLocalVariable, reference, fromLine, fromColumn, toLine, toColumn);
+    public static LocalVariableUsageInfo getInstance(final LocalVariableInfo usedLocalVariable,
+            final boolean reference, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
+        final LocalVariableUsageInfo instance = new LocalVariableUsageInfo(usedLocalVariable,
+                reference, fromLine, fromColumn, toLine, toColumn);
         addLocalVariableUsage(instance);
         return instance;
     }

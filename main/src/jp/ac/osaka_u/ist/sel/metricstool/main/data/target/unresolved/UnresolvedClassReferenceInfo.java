@@ -124,8 +124,9 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
                 // 親が UnknownTypeInfo だったら，どうしようもない
                 if (classReference.getType() instanceof UnknownTypeInfo) {
 
-                    this.resolvedInfo = new UnknownEntityUsageInfo(ownerExecutableElement,
-                            fromLine, fromColumn, toLine, toColumn);
+                    this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine,
+                            toColumn);
+                    this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
                     return this.resolvedInfo;
 
                     // 親が対象クラス(TargetClassInfo)の場合
@@ -147,8 +148,9 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
 
                                 // TODO 型パラメータ情報を追記する処理が必要
                                 final ClassTypeInfo reference = new ClassTypeInfo(innerClass);
-                                classReference = new ClassReferenceInfo(ownerExecutableElement,
-                                        reference, fromLine, fromColumn, toLine, toColumn);
+                                classReference = new ClassReferenceInfo(reference, fromLine,
+                                        fromColumn, toLine, toColumn);
+                                classReference.setOwnerExecutableElement(ownerExecutableElement);
                                 continue NEXT_NAME;
                             }
                         }
@@ -158,8 +160,9 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
                         // 親が外部クラス(ExternalClassInfo)の場合
                     } else if (ownerClass instanceof ExternalClassInfo) {
 
-                        classReference = new UnknownEntityUsageInfo(ownerExecutableElement,
-                                fromLine, fromColumn, toLine, toColumn);
+                        classReference = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine,
+                                toColumn);
+                        classReference.setOwnerExecutableElement(ownerExecutableElement);
                         continue NEXT_NAME;
                     }
                 }
@@ -183,8 +186,9 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
 
                 // TODO 型パラメータ情報を追記する処理が必要
                 final ClassTypeInfo reference = new ClassTypeInfo(classInfo);
-                this.resolvedInfo = new ClassReferenceInfo(ownerExecutableElement, reference,
-                        fromLine, fromColumn, toLine, toColumn);
+                this.resolvedInfo = new ClassReferenceInfo(reference, fromLine, fromColumn, toLine,
+                        toColumn);
+                this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
                 return this.resolvedInfo;
             }
 
@@ -195,8 +199,9 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
 
                     // TODO　型パラメータ情報を追記する処理が必要
                     final ClassTypeInfo reference = new ClassTypeInfo(classInfo);
-                    this.resolvedInfo = new ClassReferenceInfo(ownerExecutableElement, reference,
-                            fromLine, fromColumn, toLine, toColumn);
+                    this.resolvedInfo = new ClassReferenceInfo(reference, fromLine, fromColumn,
+                            toLine, toColumn);
+                    this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
                     return this.resolvedInfo;
                 }
             }
@@ -218,17 +223,18 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
                         // availableField.getType() から次のword(name[i])を名前解決
                         // TODO 型パラメータ情報を格納する処理が必要
                         ClassTypeInfo reference = new ClassTypeInfo(innerClassInfo);
-                        EntityUsageInfo classReference = new ClassReferenceInfo(
-                                ownerExecutableElement, reference, fromLine, fromColumn, toLine,
-                                toColumn);
+                        EntityUsageInfo classReference = new ClassReferenceInfo(reference,
+                                fromLine, fromColumn, toLine, toColumn);
+                        classReference.setOwnerExecutableElement(ownerExecutableElement);
+
                         NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
                             // 親が UnknownTypeInfo だったら，どうしようもない
                             if (classReference.getType() instanceof UnknownTypeInfo) {
 
-                                this.resolvedInfo = new UnknownEntityUsageInfo(
-                                        ownerExecutableElement, fromLine, fromColumn, toLine,
-                                        toColumn);
+                                this.resolvedInfo = new UnknownEntityUsageInfo(fromLine,
+                                        fromColumn, toLine, toColumn);
+                                this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
                                 return this.resolvedInfo;
 
                                 // 親がクラス型の場合
@@ -252,9 +258,10 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
 
                                             // TODO　型パラメータ情報を格納する処理が必要
                                             reference = new ClassTypeInfo(innerClass);
-                                            classReference = new ClassReferenceInfo(
-                                                    ownerExecutableElement, reference, fromLine,
-                                                    fromColumn, toLine, toColumn);
+                                            classReference = new ClassReferenceInfo(reference,
+                                                    fromLine, fromColumn, toLine, toColumn);
+                                            classReference
+                                                    .setOwnerExecutableElement(ownerExecutableElement);
                                             continue NEXT_NAME;
                                         }
                                     }
@@ -264,9 +271,10 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
                                     // 親が外部クラス(ExternalClassInfo)の場合
                                 } else if (ownerClass instanceof ExternalClassInfo) {
 
-                                    classReference = new UnknownEntityUsageInfo(
-                                            ownerExecutableElement, fromLine, fromColumn, toLine,
-                                            toColumn);
+                                    classReference = new UnknownEntityUsageInfo(fromLine,
+                                            fromColumn, toLine, toColumn);
+                                    classReference
+                                            .setOwnerExecutableElement(ownerExecutableElement);
                                     continue NEXT_NAME;
                                 }
                             }
@@ -299,17 +307,19 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
                                 // availableField.getType() から次のword(name[i])を名前解決
                                 // TODO 型パラメータ情報を格納する処理が必要
                                 ClassTypeInfo reference = new ClassTypeInfo(classInfo);
-                                EntityUsageInfo classReference = new ClassReferenceInfo(
-                                        ownerExecutableElement, reference, fromLine, fromColumn,
-                                        toLine, toColumn);
+                                EntityUsageInfo classReference = new ClassReferenceInfo(reference,
+                                        fromLine, fromColumn, toLine, toColumn);
+                                classReference.setOwnerExecutableElement(ownerExecutableElement);
+
                                 NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
                                     // 親が UnknownTypeInfo だったら，どうしようもない
                                     if (classReference.getType() instanceof UnknownTypeInfo) {
 
-                                        this.resolvedInfo = new UnknownEntityUsageInfo(
-                                                ownerExecutableElement, fromLine, fromColumn,
-                                                toLine, toColumn);
+                                        this.resolvedInfo = new UnknownEntityUsageInfo(fromLine,
+                                                fromColumn, toLine, toColumn);
+                                        this.resolvedInfo
+                                                .setOwnerExecutableElement(ownerExecutableElement);
                                         return this.resolvedInfo;
 
                                         // 親がクラス型の場合
@@ -335,8 +345,10 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
                                                     // TODO 型パラメータ情報を格納する処理が必要
                                                     reference = new ClassTypeInfo(innerClass);
                                                     classReference = new ClassReferenceInfo(
-                                                            ownerExecutableElement, reference,
-                                                            fromLine, fromColumn, toLine, toColumn);
+                                                            reference, fromLine, fromColumn,
+                                                            toLine, toColumn);
+                                                    classReference
+                                                            .setOwnerExecutableElement(ownerExecutableElement);
                                                     continue NEXT_NAME;
                                                 }
                                             }
@@ -349,9 +361,10 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
                                             // 親が外部クラス(ExternalClassInfo)の場合
                                         } else if (ownerClass instanceof ExternalClassInfo) {
 
-                                            classReference = new UnknownEntityUsageInfo(
-                                                    ownerExecutableElement, fromLine, fromColumn,
-                                                    toLine, toColumn);
+                                            classReference = new UnknownEntityUsageInfo(fromLine,
+                                                    fromColumn, toLine, toColumn);
+                                            classReference
+                                                    .setOwnerExecutableElement(ownerExecutableElement);
                                             continue NEXT_NAME;
                                         }
                                     }
@@ -376,22 +389,24 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
                                     .getClassInfo(importName);
                             if (null == specifiedClassInfo) {
                                 specifiedClassInfo = new ExternalClassInfo(importName);
-                                classInfoManager.add((ExternalClassInfo) specifiedClassInfo);
+                                classInfoManager.add(specifiedClassInfo);
                             }
 
                             // TODO 型パラメータ情報を格納する処理が必要
                             ClassTypeInfo reference = new ClassTypeInfo(specifiedClassInfo);
-                            EntityUsageInfo classReference = new ClassReferenceInfo(
-                                    ownerExecutableElement, reference, fromLine, fromColumn,
-                                    toLine, toColumn);
+                            EntityUsageInfo classReference = new ClassReferenceInfo(reference,
+                                    fromLine, fromColumn, toLine, toColumn);
+                            classReference.setOwnerExecutableElement(ownerExecutableElement);
+
                             NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
 
                                 // 親が UnknownTypeInfo だったら，どうしようもない
                                 if (classReference.getType() instanceof UnknownTypeInfo) {
 
-                                    this.resolvedInfo = new UnknownEntityUsageInfo(
-                                            ownerExecutableElement, fromLine, fromColumn, toLine,
-                                            toColumn);
+                                    this.resolvedInfo = new UnknownEntityUsageInfo(fromLine,
+                                            fromColumn, toLine, toColumn);
+                                    this.resolvedInfo
+                                            .setOwnerExecutableElement(ownerExecutableElement);
                                     return this.resolvedInfo;
 
                                     // 親がクラス型の場合
@@ -415,9 +430,10 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
 
                                                 // TODO 型パラメータ情報を格納する処理が必要
                                                 reference = new ClassTypeInfo(innerClass);
-                                                classReference = new ClassReferenceInfo(
-                                                        ownerExecutableElement, reference,
+                                                classReference = new ClassReferenceInfo(reference,
                                                         fromLine, fromColumn, toLine, toColumn);
+                                                classReference
+                                                        .setOwnerExecutableElement(ownerExecutableElement);
                                                 continue NEXT_NAME;
                                             }
                                         }
@@ -425,9 +441,10 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
                                         // 親が外部クラス(ExternalClassInfo)の場合
                                     } else if (ownerClass instanceof ExternalClassInfo) {
 
-                                        classReference = new UnknownEntityUsageInfo(
-                                                ownerExecutableElement, fromLine, fromColumn,
-                                                toLine, toColumn);
+                                        classReference = new UnknownEntityUsageInfo(fromLine,
+                                                fromColumn, toLine, toColumn);
+                                        classReference
+                                                .setOwnerExecutableElement(ownerExecutableElement);
                                         continue NEXT_NAME;
                                     }
                                 }
@@ -454,8 +471,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
          */
 
         // 見つからなかった場合は，UknownTypeInfo を返す
-        this.resolvedInfo = new UnknownEntityUsageInfo(ownerExecutableElement, fromLine,
-                fromColumn, toLine, toColumn);
+        this.resolvedInfo = new UnknownEntityUsageInfo(fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
         return this.resolvedInfo;
     }
 

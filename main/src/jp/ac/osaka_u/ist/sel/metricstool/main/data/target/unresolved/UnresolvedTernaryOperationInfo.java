@@ -78,9 +78,9 @@ public class UnresolvedTernaryOperationInfo extends UnresolvedEntityUsageInfo<Te
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager);
 
-        this.resolvedInfo = new TernaryOperationInfo(ownerExecutableElement, conditionalExpression,
-                trueExpression, falseExpression, fromLine, fromColumn, toLine, toColumn);
-
+        this.resolvedInfo = new TernaryOperationInfo(conditionalExpression, trueExpression,
+                falseExpression, fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);
         return this.resolvedInfo;
     }
 

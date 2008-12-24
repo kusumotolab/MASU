@@ -14,7 +14,6 @@ public final class LiteralUsageInfo extends EntityUsageInfo {
     /**
      * リテラル、リテラルの型、出現位置を与えて初期化
      * 
-     * @param ownerExecutableElement オーナーエレメント
      * @param literal リテラル
      * @param type リテラルの型
      * @param fromLine 開始行
@@ -22,11 +21,10 @@ public final class LiteralUsageInfo extends EntityUsageInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public LiteralUsageInfo(final ExecutableElementInfo ownerExecutableElement,
-            final String literal, final PrimitiveTypeInfo type, final int fromLine,
+    public LiteralUsageInfo(final String literal, final PrimitiveTypeInfo type, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerExecutableElement, fromLine, fromColumn, toLine, toColumn);
+        super(fromLine, fromColumn, toLine, toColumn);
 
         this.literal = literal;
         this.type = type;

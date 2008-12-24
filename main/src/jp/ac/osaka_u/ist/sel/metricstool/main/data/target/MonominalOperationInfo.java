@@ -17,7 +17,6 @@ public final class MonominalOperationInfo extends EntityUsageInfo {
     /**
      * オペランド、一項演算の結果の型、位置情報を与えて初期化
      * 
-     * @param ownerExecutableElement オーナーエレメント
      * @param operand オペランド
      * @param operator オペレーター
      * @param isPreposed 演算子の位置
@@ -27,12 +26,11 @@ public final class MonominalOperationInfo extends EntityUsageInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public MonominalOperationInfo(final ExecutableElementInfo ownerExecutableElement,
-            final ExpressionInfo operand, final OPERATOR operator, final boolean isPreposed,
-            final PrimitiveTypeInfo type, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+    public MonominalOperationInfo(final ExpressionInfo operand, final OPERATOR operator,
+            final boolean isPreposed, final PrimitiveTypeInfo type, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerExecutableElement, fromLine, fromColumn, toLine, toColumn);
+        super(fromLine, fromColumn, toLine, toColumn);
 
         if (null == operand || null == operator || null == type) {
             throw new IllegalArgumentException();

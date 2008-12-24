@@ -21,7 +21,6 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
     /**
      * 使用されている引数を与えてオブジェクトを初期化
      * 
-     * @param ownerExecutableElement オーナーエレメント
      * @param usedParameter 使用されている引数
      * @param reference 参照である場合は true, 代入である場合は false
      * @param fromLine 開始行
@@ -29,18 +28,15 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    private ParameterUsageInfo(final ExecutableElementInfo ownerExecutableElement,
-            final ParameterInfo usedParameter, final boolean reference, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    private ParameterUsageInfo(final ParameterInfo usedParameter, final boolean reference,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerExecutableElement, usedParameter, reference, fromLine, fromColumn, toLine,
-                toColumn);
+        super(usedParameter, reference, fromLine, fromColumn, toLine, toColumn);
     }
 
     /**
      * 使用されているパラメータ，使用の種類，使用されている位置情報を与えてインスタンスを取得
      * 
-     * @param ownerExecutableElement オーナーエレメント
      * @param usedParameter 使用されているパラメータ
      * @param reference 参照である場合はtrue，代入である場合はfalse
      * @param fromLine 開始行
@@ -49,12 +45,11 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
      * @param toColumn 終了列
      * @return パラーメータ使用のインスタンス
      */
-    public static ParameterUsageInfo getInstance(
-            final ExecutableElementInfo ownerExecutableElement, final ParameterInfo usedParameter,
+    public static ParameterUsageInfo getInstance(final ParameterInfo usedParameter,
             final boolean reference, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
-        final ParameterUsageInfo instance = new ParameterUsageInfo(ownerExecutableElement,
-                usedParameter, reference, fromLine, fromColumn, toLine, toColumn);
+        final ParameterUsageInfo instance = new ParameterUsageInfo(usedParameter, reference,
+                fromLine, fromColumn, toLine, toColumn);
         addParameterUsage(instance);
         return instance;
     }

@@ -18,7 +18,6 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
 
     /**
      * 
-     * @param ownerExecutableElement オーナーエレメント
      * @param usedVariable 使用されている変数
      * @param reference 参照かどうか
      * @param fromLine 開始行
@@ -26,11 +25,10 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    VariableUsageInfo(final ExecutableElementInfo ownerExecutableElement, final T usedVariable,
-            final boolean reference, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+    VariableUsageInfo(final T usedVariable, final boolean reference, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerExecutableElement, fromLine, fromColumn, toLine, toColumn);
+        super(fromLine, fromColumn, toLine, toColumn);
 
         this.usedVariable = usedVariable;
         this.reference = reference;
