@@ -184,7 +184,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
                                 importedClassInfo = new ExternalClassInfo(referenceName);
                                 classInfoManager.add((ExternalClassInfo) importedClassInfo);
                             }
-                            
+
                             //クラスが見つかった
                             if (className.equals(importedClassInfo.getClassName())) {
                                 this.resolvedInfo = new ClassTypeInfo(importedClassInfo);
@@ -636,6 +636,10 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
     /**
      * この未解決参照型が表す未解決クラス参照を返す
      * 
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      * @return この未解決参照型が表す未解決クラス参照
      */
     public final UnresolvedClassReferenceInfo getUsage(final int fromLine, final int fromColumn,
@@ -647,7 +651,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
         usage.setFromColumn(fromColumn);
         usage.setToLine(toLine);
         usage.setToColumn(toColumn);
-        
+
         for (UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> typeArgument : this.typeArguments) {
             usage.addTypeArgument(typeArgument);
         }

@@ -23,7 +23,7 @@ public class UnresolvedExpressionStatementInfo extends
 
     /**
      * 式文を構成する式の未解決情報を与えて初期化
-     * @param ownerSpace　式分を直接所有する空間
+     * @param ownerSpace 式分を直接所有する空間
      * @param expression 式文を構成する式の未解決情報
      */
     public UnresolvedExpressionStatementInfo(

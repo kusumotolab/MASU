@@ -554,6 +554,10 @@ public class UnresolvedClassReferenceInfo extends UnresolvedEntityUsageInfo<Enti
      * 未解決参照型を与えると，その未解決クラス参照を返す
      * 
      * @param referenceType 未解決参照型
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
      * @return 未解決クラス参照
      */
     public final static UnresolvedClassReferenceInfo createClassReference(

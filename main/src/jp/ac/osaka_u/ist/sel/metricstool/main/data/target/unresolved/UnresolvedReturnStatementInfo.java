@@ -21,6 +21,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedReturnStatementInfo extends
         UnresolvedSingleStatementInfo<ReturnStatementInfo> {
 
+    /**
+     * 外側のブロックを与えてオブジェクトを生成
+     * 
+     * @param ownerSpace 外側のブロック
+     */
     public UnresolvedReturnStatementInfo(
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace) {
         super(ownerSpace);
@@ -61,6 +66,11 @@ public class UnresolvedReturnStatementInfo extends
         return this.resolvedInfo;
     }
 
+    /**
+     * 返す式をセットする
+     * 
+     * @param returnedExpression 返す式
+     */
     public void setReturnedExpression(
             final UnresolvedExpressionInfo<? extends ExpressionInfo> returnedExpression) {
         MetricsToolSecurityManager.getInstance().checkAccess();

@@ -494,6 +494,11 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         return !this.instance;
     }
 
+    /**
+     * インターフェースかどうかを返す
+     * 
+     * @return インターフェースの場合はtrue, そうでない場合はfalse
+     */
     public final boolean isInterface() {
         return this.isInterface;
     }
@@ -518,7 +523,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     /**
      * 無名クラスかどうかをセットする
      * 
-     * @param anonymous　無名クラスの場合は true，そうでない場合は false
+     * @param anonymous 無名クラスの場合は true，そうでない場合は false
      */
     public void setAnonymous(final boolean anonymous) {
         this.anonymous = anonymous;
@@ -600,6 +605,10 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     /**
      * この未解決クラス定義情報の未解決参照型を返す
      * 
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列 
      * @return この未解決クラス定義情報の未解決参照型
      */
     public UnresolvedClassReferenceInfo getClassReference(final int fromLine, final int fromColumn,

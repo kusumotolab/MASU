@@ -21,6 +21,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 public class UnresolvedTernaryOperationInfo extends UnresolvedEntityUsageInfo<TernaryOperationInfo> {
 
+    /**
+     * オブジェクトを初期化
+     * 
+     * @param condition 条件式
+     * @param trueExpression trueの場合の式
+     * @param falseExpression falseの場合の式
+     */
     public UnresolvedTernaryOperationInfo(
             final UnresolvedConditionInfo<? extends ConditionInfo> condition,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> trueExpression,

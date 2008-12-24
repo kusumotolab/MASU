@@ -22,7 +22,9 @@ public class UnresolvedConditionalClauseInfo extends UnresolvedUnitInfo<Conditio
 
     /**
      * ðŒß‚É‘Î‰ž‚·‚éðŒ•¶‚Ì–¢‰ðŒˆî•ñ‚ð—^‚¦‚Ä‰Šú‰»
+     * 
      * @param ownerConditionalBlockInfo ðŒß‚É‘Î‰ž‚·‚éðŒ•¶‚Ì–¢‰ðŒˆî•ñ
+     * @param condition ðŒ•¶
      */
     public UnresolvedConditionalClauseInfo(
             final UnresolvedConditionalBlockInfo<? extends ConditionalBlockInfo> ownerConditionalBlockInfo,

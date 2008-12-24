@@ -20,10 +20,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<ThrowStatementInfo> {
 
-    public UnresolvedThrowStatementInfo(final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace) {
+    /**
+     * 外側のスコープを与えてオブジェクトを初期化
+     * 
+     * @param ownerSpace 外側のスコープ
+     */
+    public UnresolvedThrowStatementInfo(
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace) {
         super(ownerSpace);
     }
-    
+
     @Override
     public ThrowStatementInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
@@ -48,12 +54,12 @@ public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<
 
         final LocalSpaceInfo ownerSpace = this.getOwnerSpace().resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-        
+
         final ExpressionInfo thrownExpression = this.thrownExpression.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        this.resolvedInfo = new ThrowStatementInfo(ownerSpace, thrownExpression, fromLine, fromColumn, toLine,
-                toColumn);
+        this.resolvedInfo = new ThrowStatementInfo(ownerSpace, thrownExpression, fromLine,
+                fromColumn, toLine, toColumn);
 
         return this.resolvedInfo;
     }
@@ -70,7 +76,8 @@ public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<
             throw new IllegalArgumentException("thronExpression is null");
         }
 
-        this.thrownExpression = thrownExpression;    }
+        this.thrownExpression = thrownExpression;
+    }
 
     /**
      * throw文によって投げられる例外の未解決情報を保存する変数

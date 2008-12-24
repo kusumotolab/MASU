@@ -9,6 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
  * 
  * @author higo
  *
+ * @param <T> 解決された型を表す型パラメータ
  */
 public interface UnresolvedReferenceTypeInfo<T extends ReferenceTypeInfo> extends
         UnresolvedTypeInfo<T> {
