@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.csharp.CSharpAntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
@@ -339,11 +340,16 @@ public class MetricsTool {
         }
         registMethodInfos();
         if (Settings.isVerbose()) {
-            out.println("STEP6 : resolve method overrides.");
+            out.println("STEP6 : resolve type parameter usages.");
+        }
+        addClassTypeParameterInfos();
+        addMethodTypeParameterInfos();
+        if (Settings.isVerbose()) {
+            out.println("STEP7 : resolve method overrides.");
         }
         addOverrideRelation();
         if (Settings.isVerbose()) {
-            out.println("STEP7 : resolve field and method usages.");
+            out.println("STEP8 : resolve field and method usages.");
         }
         addReferenceAssignmentCallRelateion();
 
@@ -1284,6 +1290,67 @@ public class MetricsTool {
             registMethodInfos(unresolvedInnerClassInfo, classInfoManager, fieldInfoManager,
                     methodInfoManager);
         }
+    }
+
+    private void addClassTypeParameterInfos() {
+
+        for (final TargetClassInfo classInfo : DataManager.getInstance().getClassInfoManager()
+                .getTargetClassInfos()) {
+            addClassTypeParameterInfos(classInfo);
+        }
+    }
+
+    private void addClassTypeParameterInfos(final TargetClassInfo classInfo) {
+
+        final List<ClassTypeInfo> superClassTypes = classInfo.getSuperClasses();
+        for (final ClassTypeInfo superClassType : superClassTypes) {
+
+            final ClassInfo superClassInfo = superClassType.getReferencedClass();
+            if (superClassInfo instanceof TargetClassInfo) {
+                addClassTypeParameterInfos((TargetClassInfo) superClassInfo);
+
+                // 親クラス以上における型パラメータの使用を取得
+                final Map<TypeParameterInfo, TypeInfo> typeParameterUsages = ((TargetClassInfo) superClassInfo)
+                        .getTypeParameterUsages();
+                for (final TypeParameterInfo typeParameterInfo : typeParameterUsages.keySet()) {
+                    final TypeInfo usedType = typeParameterUsages.get(typeParameterInfo);
+                    classInfo.addTypeParameterUsage(typeParameterInfo, usedType);
+                }
+
+                // このクラスにおける型パラメータの使用を取得
+                final List<TypeInfo> typeArguments = superClassType.getTypeArguments();
+                for (int index = 0; index < typeArguments.size(); index++) {
+                    final TypeInfo usedType = typeArguments.get(index);
+                    final TypeParameterInfo typeParameterInfo = ((TargetClassInfo) superClassInfo)
+                            .getTypeParameter(index);
+                    classInfo.addTypeParameterUsage(typeParameterInfo, usedType);
+                }
+            }
+        }
+    }
+
+    private void addMethodTypeParameterInfos() {
+
+        for (final TargetMethodInfo methodInfo : DataManager.getInstance().getMethodInfoManager()
+                .getTargetMethodInfos()) {
+            addMethodTypeParameterInfos(methodInfo);
+        }
+    }
+
+    private void addMethodTypeParameterInfos(final TargetMethodInfo methodInfo) {
+
+        //　まず，オーナークラスにおける型パラメータ使用の情報を追加する
+        {
+            final TargetClassInfo ownerClassInfo = (TargetClassInfo) methodInfo.getOwnerClass();
+            final Map<TypeParameterInfo, TypeInfo> typeParameterUsages = ownerClassInfo
+                    .getTypeParameterUsages();
+            for (final TypeParameterInfo typeParameterInfo : typeParameterUsages.keySet()) {
+                final TypeInfo usedType = typeParameterUsages.get(typeParameterInfo);
+                methodInfo.addTypeParameterUsage(typeParameterInfo, usedType);
+            }
+        }
+
+        // TODO メソッド内における型パラメータ使用を追加すべき？
     }
 
     /**

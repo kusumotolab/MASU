@@ -43,29 +43,6 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     }
 
     /**
-     * このフィールド使用の型を返す
-     * 
-     * @return このフィールド使用の型
-     */
-    @Override
-    public TypeInfo getType() {
-
-        final FieldInfo usedVariable = this.getUsedVariable();
-        final TypeInfo definitionType = usedVariable.getType();
-
-        // 定義の返り値が型パラメータでなければそのまま返せる
-        if (!(definitionType instanceof TypeParameterInfo)) {
-            return definitionType;
-        }
-
-        //　準備
-        final int typeParameterIndex = ((TypeParameterInfo) definitionType).getIndex();
-        final ClassTypeInfo callOwnerType = (ClassTypeInfo) this.getQualifierType();
-        final TypeInfo typeArgument = callOwnerType.getTypeArgument(typeParameterIndex);
-        return typeArgument;
-    }
-
-    /**
      * このフィールド使用の親，つまりこのフィールド使用がくっついている式を返す
      * 
      * @return このフィールド使用の親
@@ -93,8 +70,8 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
         variableUsages.addAll(super.getVariableUsages());
 
-        final ExpressionInfo ownerExpression = this.getQualifierExpression();
-        variableUsages.addAll(ownerExpression.getVariableUsages());
+        final ExpressionInfo qualifierExpression = this.getQualifierExpression();
+        variableUsages.addAll(qualifierExpression.getVariableUsages());
 
         return Collections.unmodifiableSortedSet(variableUsages);
     }
@@ -102,7 +79,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     private final TypeInfo qualifierType;
 
     /**
-     * フィールド参照が実行される親の式を保存する変数
+     * フィールド参照が実行される親の式("."の前のやつ)を保存する変数
      */
     private final ExpressionInfo qualifierExpression;
 

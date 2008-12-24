@@ -72,6 +72,21 @@ public abstract class SingleStatementInfo implements StatementInfo {
     }
 
     @Override
+    public final CallableUnitInfo getOwnerMethod() {
+
+        final LocalSpaceInfo ownerSpace = this.getOwnerSpace();
+        if (ownerSpace instanceof CallableUnitInfo) {
+            return (CallableUnitInfo) ownerSpace;
+        }
+
+        if (ownerSpace instanceof BlockInfo) {
+            return ((BlockInfo) ownerSpace).getOwnerMethod();
+        }
+
+        throw new IllegalStateException();
+    }
+
+    @Override
     public final int getFromColumn() {
         return this.fromColumn;
     }

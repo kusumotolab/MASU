@@ -4,8 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -139,7 +137,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
             throw new NullPointerException();
         }
 
-        this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedConstructors = new TreeSet<TargetConstructorInfo>();
@@ -185,7 +182,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
             throw new NullPointerException();
         }
 
-        this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.innerClasses = new TreeSet<TargetInnerClassInfo>();
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedConstructors = new TreeSet<TargetConstructorInfo>();
@@ -254,40 +250,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         }
 
         this.definedConstructors.add(definedConstructor);
-    }
-
-    /**
-     * 引数で指定された型パラメータを追加する
-     * 
-     * @param typeParameter 追加する型パラメータ
-     */
-    public final void addTypeParameter(final TypeParameterInfo typeParameter) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == typeParameter) {
-            throw new NullPointerException();
-        }
-
-        this.typeParameters.add(typeParameter);
-    }
-
-    /**
-     * このクラスの型パラメータの List を返す．
-     * 
-     * @return このクラスの型パラメータの List
-     */
-    public final List<TypeParameterInfo> getTypeParameters() {
-        return Collections.unmodifiableList(this.typeParameters);
-    }
-
-    /**
-     * 指定されたインデックスの型パラメータを返す
-     * 
-     * @param index 型パラメータのインデックス
-     * @return　指定されたインデックスの型パラメータ
-     */
-    public final TypeParameterInfo getIndex(final int index) {
-        return this.typeParameters.get(index);
     }
 
     /**
@@ -412,11 +374,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
     public final FileInfo getFileInfo() {
         return this.fileInfo;
     }
-
-    /**
-     * 型パラメータを保存する変数
-     */
-    private final List<TypeParameterInfo> typeParameters;
 
     /**
      * このクラスの内部クラス一覧を保存するための変数．直接の内部クラスのみを保有する．

@@ -97,6 +97,7 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
      * 
      * @return このブロックを所有するメソッド
      */
+    @Override
     public final CallableUnitInfo getOwnerMethod() {
 
         final LocalSpaceInfo outerSpace = this.getOwnerSpace();

@@ -38,18 +38,6 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
     }
 
     /**
-     * このローカル変数使用の型を返す
-     * 
-     * @return このローカル変数利用の型
-     */
-    @Override
-    public TypeInfo getType() {
-        final LocalVariableInfo usedVariable = this.getUsedVariable();
-        final TypeInfo usedVariableType = usedVariable.getType();
-        return usedVariableType;
-    }
-
-    /**
      * 使用されているローカル変数，使用の種類，使用されている位置情報を与えてインスタンスを取得
      * 
      * @param ownerExecutableElement オーナーエレメント

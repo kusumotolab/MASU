@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -79,6 +80,45 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     public final String getText() {
         final T variable = this.getUsedVariable();
         return variable.getName();
+    }
+
+    /**
+     * このフィールド使用の型を返す
+     * 
+     * @return このフィールド使用の型
+     */
+    @Override
+    public TypeInfo getType() {
+
+        final T usedVariable = this.getUsedVariable();
+        final TypeInfo definitionType = usedVariable.getType();
+
+        // 定義の返り値が型パラメータでなければそのまま返せる
+        if (!(definitionType instanceof TypeParameterInfo)) {
+            return definitionType;
+        }
+
+        // 型パラメータから，実際に使用されている型を取得し返す
+        // メソッドの型パラメータかどうか
+        final StatementInfo ownerStatement = this.getOwnerStatement();
+        final CallableUnitInfo ownerMethod = ownerStatement.getOwnerMethod();
+        for (final TypeParameterInfo typeParameter : ownerMethod.getTypeParameters()) {
+            if (typeParameter.equals(definitionType)) {
+                return ((TypeParameterInfo) definitionType).getExtendsType();
+            }
+        }
+
+        //　クラスの型パラメータかどうか
+        final ClassInfo ownerClass = ownerMethod.getOwnerClass();
+        final Map<TypeParameterInfo, TypeInfo> typeParameterUsages = ownerClass
+                .getTypeParameterUsages();
+        for (final TypeParameterInfo typeParameter : typeParameterUsages.keySet()) {
+            if (typeParameter.equals(definitionType)) {
+                return typeParameterUsages.get(typeParameter);
+            }
+        }
+
+        throw new IllegalStateException();
     }
 
     private final T usedVariable;

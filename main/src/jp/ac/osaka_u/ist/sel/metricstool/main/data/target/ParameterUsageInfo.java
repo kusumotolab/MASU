@@ -37,13 +37,6 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
                 toColumn);
     }
 
-    @Override
-    public TypeInfo getType() {
-        final ParameterInfo parameter = this.getUsedVariable();
-        final TypeInfo usedVariableType = parameter.getType();
-        return usedVariableType;
-    }
-
     /**
      * 使用されているパラメータ，使用の種類，使用されている位置情報を与えてインスタンスを取得
      * 

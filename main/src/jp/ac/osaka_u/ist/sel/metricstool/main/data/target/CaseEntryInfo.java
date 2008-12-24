@@ -140,6 +140,11 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
         return this.getOwnerSwitchBlock();
     }
 
+    @Override
+    public CallableUnitInfo getOwnerMethod() {
+        return this.getOwnerSwitchBlock().getOwnerMethod();
+    }
+
     /**
      * ‚±‚Ì case ƒGƒ“ƒgƒŠ‚Ì‚Ìƒ‰ƒxƒ‹‚ð•Ô‚·
      * 

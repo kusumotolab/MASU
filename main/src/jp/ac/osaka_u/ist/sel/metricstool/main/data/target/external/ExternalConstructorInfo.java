@@ -2,6 +2,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external;
 
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -13,6 +15,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 
 
 /**
@@ -140,6 +144,46 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
      */
     @Override
     public Set<ModifierInfo> getModifiers() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalClassInfo では利用できない
+     */
+    @Override
+    public TypeParameterInfo getTypeParameter(int index) {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalClassInfo では利用できない
+     */
+    @Override
+    public List<TypeParameterInfo> getTypeParameters() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalClassInfo では利用できない
+     */
+    @Override
+    public void addTypeParameter(TypeParameterInfo typeParameter) {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalClassInfo では利用できない
+     */
+    @Override
+    public void addTypeParameterUsage(TypeParameterInfo typeParameterInfo, TypeInfo usedType) {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalClassInfo では利用できない
+     */
+    @Override
+    public Map<TypeParameterInfo, TypeInfo> getTypeParameterUsages() {
         throw new CannotUseException();
     }
 }

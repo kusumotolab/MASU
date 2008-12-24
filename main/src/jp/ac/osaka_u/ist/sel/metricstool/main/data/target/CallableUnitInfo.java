@@ -2,9 +2,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEntityUsageInfo;
@@ -17,7 +19,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  */
 
-public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visualizable, Modifier {
+public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visualizable, Modifier,
+        TypeParameterizable {
 
     /**
      * オブジェクトを初期化する
@@ -44,25 +47,12 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
         this.parameters = new LinkedList<ParameterInfo>();
 
         this.typeParameters = new LinkedList<TypeParameterInfo>();
+        this.typeParameterUsages = new HashMap<TypeParameterInfo, TypeInfo>();
+
         this.unresolvedUsage = new HashSet<UnresolvedEntityUsageInfo<?>>();
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
-    }
-
-    /**
-     * 引数で指定された型パラメータを追加する
-     * 
-     * @param typeParameter 追加する型パラメータ
-     */
-    public void addTypeParameter(final TypeParameterInfo typeParameter) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == typeParameter) {
-            throw new NullPointerException();
-        }
-
-        this.typeParameters.add(typeParameter);
     }
 
     /**
@@ -75,10 +65,65 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
+     * 型パラメータの使用を追加する
+     * 
+     * @param typeParameterInfo 型パラメータ 
+     * @param usedType 型パラメータに代入されている型
+     */
+    @Override
+    public void addTypeParameterUsage(final TypeParameterInfo typeParameterInfo,
+            final TypeInfo usedType) {
+
+        if ((null == typeParameterInfo) || (null == usedType)) {
+            throw new IllegalArgumentException();
+        }
+
+        this.typeParameterUsages.put(typeParameterInfo, usedType);
+    }
+
+    /**
+     * 型パラメータ使用のマップを返す
+     * 
+     * @return 型パラメータ使用のマップ
+     */
+    @Override
+    public Map<TypeParameterInfo, TypeInfo> getTypeParameterUsages() {
+        return Collections.unmodifiableMap(this.typeParameterUsages);
+    }
+
+    /**
+     * 引数で指定された型パラメータを追加する
+     * 
+     * @param typeParameter 追加する型パラメータ
+     */
+    @Override
+    public void addTypeParameter(final TypeParameterInfo typeParameter) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == typeParameter) {
+            throw new NullPointerException();
+        }
+
+        this.typeParameters.add(typeParameter);
+    }
+
+    /**
+     * 指定されたインデックスの型パラメータを返す
+     * 
+     * @param index 型パラメータのインデックス
+     * @return　指定されたインデックスの型パラメータ
+     */
+    @Override
+    public TypeParameterInfo getTypeParameter(final int index) {
+        return this.typeParameters.get(index);
+    }
+
+    /**
      * このクラスの型パラメータの List を返す．
      * 
      * @return このクラスの型パラメータの List
      */
+    @Override
     public List<TypeParameterInfo> getTypeParameters() {
         return Collections.unmodifiableList(this.typeParameters);
     }
@@ -112,6 +157,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @return 修飾子の Set
      */
+    @Override
     public Set<ModifierInfo> getModifiers() {
         return Collections.unmodifiableSet(this.modifiers);
     }
@@ -121,6 +167,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @return 子クラスから参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public boolean isInheritanceVisible() {
         return this.inheritanceVisible;
     }
@@ -130,6 +177,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public boolean isNamespaceVisible() {
         return this.namespaceVisible;
     }
@@ -139,6 +187,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public boolean isPrivateVisible() {
         return this.privateVisible;
     }
@@ -148,6 +197,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @return どこからでも参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public boolean isPublicVisible() {
         return this.publicVisible;
     }
@@ -181,6 +231,12 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 型パラメータを保存する変数
      */
     private final List<TypeParameterInfo> typeParameters;
+
+    /**
+     * このクラスで使用されている型パラメータと実際に型パラメータに代入されている型のペア.
+     * このクラスで定義されている型パラメータではない．
+     */
+    private final Map<TypeParameterInfo, TypeInfo> typeParameterUsages;
 
     /**
      * 引数のリストの保存するための変数

@@ -2,9 +2,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -21,7 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo>,
-        MetricMeasurable, Modifier {
+        MetricMeasurable, Modifier, TypeParameterizable {
 
     /**
      * 名前空間名とクラス名からオブジェクトを生成する
@@ -50,6 +52,9 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
         this.className = className;
         this.superClasses = new LinkedList<ClassTypeInfo>();
         this.subClasses = new TreeSet<ClassInfo>();
+
+        this.typeParameters = new LinkedList<TypeParameterInfo>();
+        this.typeParameterUsages = new HashMap<TypeParameterInfo, TypeInfo>();
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
@@ -85,6 +90,9 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
         this.className = fullQualifiedName[fullQualifiedName.length - 1];
         this.superClasses = new LinkedList<ClassTypeInfo>();
         this.subClasses = new TreeSet<ClassInfo>();
+
+        this.typeParameters = new LinkedList<TypeParameterInfo>();
+        this.typeParameterUsages = new HashMap<TypeParameterInfo, TypeInfo>();
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
@@ -341,6 +349,70 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
     }
 
     /**
+     * 引数で指定された型パラメータを追加する
+     * 
+     * @param typeParameter 追加する型パラメータ
+     */
+    @Override
+    public void addTypeParameter(final TypeParameterInfo typeParameter) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == typeParameter) {
+            throw new NullPointerException();
+        }
+
+        this.typeParameters.add(typeParameter);
+    }
+
+    /**
+     * 指定されたインデックスの型パラメータを返す
+     * 
+     * @param index 型パラメータのインデックス
+     * @return　指定されたインデックスの型パラメータ
+     */
+    @Override
+    public TypeParameterInfo getTypeParameter(final int index) {
+        return this.typeParameters.get(index);
+    }
+
+    /**
+     * このクラスの型パラメータの List を返す．
+     * 
+     * @return このクラスの型パラメータの List
+     */
+    @Override
+    public List<TypeParameterInfo> getTypeParameters() {
+        return Collections.unmodifiableList(this.typeParameters);
+    }
+
+    /**
+     * 型パラメータの使用を追加する
+     * 
+     * @param typeParameterInfo 型パラメータ 
+     * @param usedType 型パラメータに代入されている型
+     */
+    @Override
+    public void addTypeParameterUsage(final TypeParameterInfo typeParameterInfo,
+            final TypeInfo usedType) {
+
+        if ((null == typeParameterInfo) || (null == usedType)) {
+            throw new IllegalArgumentException();
+        }
+
+        this.typeParameterUsages.put(typeParameterInfo, usedType);
+    }
+
+    /**
+     * 型パラメータ使用のマップを返す
+     * 
+     * @return 型パラメータ使用のマップ
+     */
+    @Override
+    public Map<TypeParameterInfo, TypeInfo> getTypeParameterUsages() {
+        return Collections.unmodifiableMap(this.typeParameterUsages);
+    }
+
+    /**
      * クラス名を保存するための変数
      */
     private final String className;
@@ -364,4 +436,18 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
      * このクラスを継承しているクラス一覧を保存するための変数．直接の子クラスのみを保有する．
      */
     private final SortedSet<ClassInfo> subClasses;
+
+    /**
+     * このクラスで使用されている型パラメータと実際に型パラメータに代入されている型のペア.
+     * このクラスで定義されている型パラメータではない．
+     * 
+     * class A<T> extends B<String> な場合，String は含まれるが，Tは含まれない
+     */
+    private final Map<TypeParameterInfo, TypeInfo> typeParameterUsages;
+
+    /**
+     * 型パラメータを保存する変数
+     */
+    private final List<TypeParameterInfo> typeParameters;
+
 }

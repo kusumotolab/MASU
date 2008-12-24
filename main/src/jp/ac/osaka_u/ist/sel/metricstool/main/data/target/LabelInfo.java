@@ -113,6 +113,11 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
         return this.labeledStatement.getOwnerSpace();
     }
 
+    @Override
+    public CallableUnitInfo getOwnerMethod() {
+        return this.labeledStatement.getOwnerMethod();
+    }
+
     /**
      * ƒ‰ƒxƒ‹‚Ì–¼‘O‚ğ•\‚·•Ï”
      */
