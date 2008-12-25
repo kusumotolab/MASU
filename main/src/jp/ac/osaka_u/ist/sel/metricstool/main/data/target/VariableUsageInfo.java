@@ -83,9 +83,9 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     }
 
     /**
-     * このフィールド使用の型を返す
+     * 変数使用の型を返す
      * 
-     * @return このフィールド使用の型
+     * @return 変数使用の型
      */
     @Override
     public TypeInfo getType() {
@@ -107,20 +107,28 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
             }
         }
 
-        //　クラスの型パラメータかどうか
-        final ClassInfo ownerClass = ownerMethod.getOwnerClass();
-        for (final TypeParameterInfo typeParameter : ownerClass.getTypeParameters()) {
-            if (typeParameter.equals(definitionType)) {
-                return ((TypeParameterInfo) definitionType).getExtendsType();
-            }
-        }
+        // クラスの型パラメータかどうか
+        for (ClassInfo ownerClass = ownerMethod.getOwnerClass(); true; ownerClass = ((TargetInnerClassInfo) ownerClass)
+                .getOuterClass()) {
 
-        //　親クラスで定義された型パラメータか
-        final Map<TypeParameterInfo, TypeInfo> typeParameterUsages = ownerClass
-                .getTypeParameterUsages();
-        for (final TypeParameterInfo typeParameter : typeParameterUsages.keySet()) {
-            if (typeParameter.equals(definitionType)) {
-                return typeParameterUsages.get(typeParameter);
+            //　型パラメータがそのままか
+            for (final TypeParameterInfo typeParameter : ownerClass.getTypeParameters()) {
+                if (typeParameter.equals(definitionType)) {
+                    return ((TypeParameterInfo) definitionType).getExtendsType();
+                }
+            }
+
+            //　親クラスで定義された型パラメータか
+            final Map<TypeParameterInfo, TypeInfo> typeParameterUsages = ownerClass
+                    .getTypeParameterUsages();
+            for (final TypeParameterInfo typeParameter : typeParameterUsages.keySet()) {
+                if (typeParameter.equals(definitionType)) {
+                    return typeParameterUsages.get(typeParameter);
+                }
+            }
+
+            if (!(ownerClass instanceof TargetInnerClassInfo)) {
+                break;
             }
         }
 
