@@ -22,15 +22,15 @@ public class ThrowStatementInfo extends SingleStatementInfo {
      * @param toLine èIóπçs
      * @param toColumn èIóπóÒ
      */
-    public ThrowStatementInfo(final LocalSpaceInfo ownerSpace, ExpressionInfo thrownEpression, int fromLine, int fromColumn,
-            int toLine, int toColumn) {
+    public ThrowStatementInfo(final LocalSpaceInfo ownerSpace, ExpressionInfo thrownEpression,
+            int fromLine, int fromColumn, int toLine, int toColumn) {
         super(ownerSpace, fromLine, fromColumn, toLine, toColumn);
 
         if (null == thrownEpression) {
             throw new IllegalArgumentException("thrownExpression is null");
         }
         this.thrownEpression = thrownEpression;
-        
+
         this.thrownEpression.setOwnerExecutableElement(this);
     }
 

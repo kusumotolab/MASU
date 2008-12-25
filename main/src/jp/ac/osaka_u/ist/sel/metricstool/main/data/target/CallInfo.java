@@ -21,14 +21,16 @@ public abstract class CallInfo extends ExpressionInfo {
 
     /**
      * 
+     * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    CallInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+    CallInfo(final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         this.arguments = new LinkedList<ExpressionInfo>();
         this.typeArguments = new LinkedList<ReferenceTypeInfo>();
@@ -63,8 +65,8 @@ public abstract class CallInfo extends ExpressionInfo {
         }
 
         this.arguments.addAll(arguments);
-        
-        for(final ExpressionInfo argument : arguments) {
+
+        for (final ExpressionInfo argument : arguments) {
             argument.setOwnerExecutableElement(this);
         }
     }

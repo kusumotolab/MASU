@@ -19,16 +19,17 @@ public class ArrayElementUsageInfo extends ExpressionInfo {
      * 
      * @param qualifierExpression 配列型の式
      * @param indexExpression インデックス
+     * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
     public ArrayElementUsageInfo(final ExpressionInfo qualifierExpression,
-            final ExpressionInfo indexExpression, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+            final ExpressionInfo indexExpression, final CallableUnitInfo ownerMethod,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         if (null == qualifierExpression) {
             throw new NullPointerException();
@@ -36,7 +37,7 @@ public class ArrayElementUsageInfo extends ExpressionInfo {
 
         this.qualifierExpression = qualifierExpression;
         this.indexExpression = indexExpression;
-        
+
         this.indexExpression.setOwnerExecutableElement(this);
     }
 
@@ -98,14 +99,14 @@ public class ArrayElementUsageInfo extends ExpressionInfo {
         return Collections.unmodifiableSet(variableUsages);
         //return this.getOwnerEntityUsage().getVariableUsages();
     }
-    
+
     @Override
     public void setOwnerExecutableElement(ExecutableElementInfo ownerExecutableElement) {
         super.setOwnerExecutableElement(ownerExecutableElement);
-        
+
         this.qualifierExpression.setOwnerExecutableElement(ownerExecutableElement);
     }
-    
+
     /**
      * この配列要素使用のテキスト表現（String型）を返す
      * 

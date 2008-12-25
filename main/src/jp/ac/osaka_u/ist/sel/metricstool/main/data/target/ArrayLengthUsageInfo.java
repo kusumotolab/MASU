@@ -14,17 +14,18 @@ public final class ArrayLengthUsageInfo extends FieldUsageInfo {
      *
      * @param qualifierExpression 親エンティティ
      * @param qualifierType 親エンティティの型（必要ないかも．．．）
+     * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
     public ArrayLengthUsageInfo(final ExpressionInfo qualifierExpression,
-            final ArrayTypeInfo qualifierType, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+            final ArrayTypeInfo qualifierType, final CallableUnitInfo ownerMethod,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(qualifierExpression, qualifierType, new ArrayLengthInfo(qualifierType), true,
-                fromLine, fromColumn, toLine, toColumn);
+                ownerMethod, fromLine, fromColumn, toLine, toColumn);
     }
 
     /**

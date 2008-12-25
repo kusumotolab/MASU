@@ -19,15 +19,17 @@ public final class CastUsageInfo extends ExpressionInfo {
      * 
      * @param castType キャストの型
      * @param castedUsage キャストされる要素
+     * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
     public CastUsageInfo(final TypeInfo castType, final ExpressionInfo castedUsage,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -37,7 +39,7 @@ public final class CastUsageInfo extends ExpressionInfo {
 
         this.castType = castType;
         this.castedUsage = castedUsage;
-        
+
         this.castedUsage.setOwnerExecutableElement(this);
     }
 

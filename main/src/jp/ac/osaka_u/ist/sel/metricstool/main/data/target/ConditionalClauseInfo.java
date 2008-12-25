@@ -30,11 +30,13 @@ public class ConditionalClauseInfo extends UnitInfo {
         this.ownerCondtionalBlock = ownerConditionalBlock;
         if (null != condition) {
             this.condition = condition;
-            if(this.condition instanceof ExpressionInfo) {
-                ((ExpressionInfo) this.condition).setOwnerExecutableElement(this.ownerCondtionalBlock);
+            if (this.condition instanceof ExpressionInfo) {
+                ((ExpressionInfo) this.condition)
+                        .setOwnerExecutableElement(this.ownerCondtionalBlock);
             }
         } else {
-            this.condition = new EmptyExpressionInfo(toLine, toColumn - 1, toLine, toColumn - 1);
+            this.condition = new EmptyExpressionInfo(null, toLine, toColumn - 1, toLine,
+                    toColumn - 1);
             ((ExpressionInfo) this.condition).setOwnerExecutableElement(ownerConditionalBlock);
         }
     }

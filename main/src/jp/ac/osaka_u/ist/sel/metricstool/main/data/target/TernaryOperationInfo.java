@@ -21,15 +21,16 @@ public class TernaryOperationInfo extends ExpressionInfo {
      * @param condtion 条件式(第一項)
      * @param trueExpression 条件式がtrueのときに返される式(第二項)
      * @param falseExpression 条件式がfalseのといに返される式(第三項)
+     * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
     public TernaryOperationInfo(final ConditionInfo condtion, ExpressionInfo trueExpression,
-            ExpressionInfo falseExpression, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
-        super(fromLine, fromColumn, toLine, toColumn);
+            ExpressionInfo falseExpression, final CallableUnitInfo ownerMethod, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         if (null == condtion || null == trueExpression || null == falseExpression) {
             throw new IllegalArgumentException();
@@ -38,8 +39,8 @@ public class TernaryOperationInfo extends ExpressionInfo {
         this.condition = condtion;
         this.trueExpression = trueExpression;
         this.falseExpression = falseExpression;
-        
-        if(this.condition instanceof ExpressionInfo) {
+
+        if (this.condition instanceof ExpressionInfo) {
             ((ExpressionInfo) this.condition).setOwnerExecutableElement(this);
         }
         this.trueExpression.setOwnerExecutableElement(this);

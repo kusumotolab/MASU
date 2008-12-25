@@ -13,17 +13,20 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public abstract class ExpressionInfo implements ConditionInfo {
 
     /**
-     * 
+     *
+     * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    ExpressionInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+    ExpressionInfo(final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         this.ownerExecutableElement = null;
+        this.ownerMethod = ownerMethod;
         this.fromLine = fromLine;
         this.fromColumn = fromColumn;
         this.toLine = toLine;
@@ -143,7 +146,21 @@ public abstract class ExpressionInfo implements ConditionInfo {
         this.ownerExecutableElement = ownerExecutableElement;
     }
 
+    /**
+     * オーナーメソッドを返す
+     * 
+     * @return オーナーメソッド
+     */
+    public final CallableUnitInfo getOwnerMethod() {
+        return this.ownerMethod;
+    }
+
     private ExecutableElementInfo ownerExecutableElement;
+
+    /**
+     * オーナーメソッドを保存するための変数
+     */
+    private final CallableUnitInfo ownerMethod;
 
     /**
      * 開始行を保存するための変数

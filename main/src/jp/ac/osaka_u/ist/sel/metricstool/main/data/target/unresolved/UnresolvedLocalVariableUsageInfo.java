@@ -67,8 +67,8 @@ public class UnresolvedLocalVariableUsageInfo extends
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager);*/
 
-        this.resolvedInfo = LocalVariableUsageInfo.getInstance(usedVariable, reference, fromLine,
-                fromColumn, toLine, toColumn);
+        this.resolvedInfo = LocalVariableUsageInfo.getInstance(usedVariable, reference,
+                usingMethod, fromLine, fromColumn, toLine, toColumn);
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
         return this.resolvedInfo;
     }

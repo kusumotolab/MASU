@@ -14,6 +14,7 @@ public class ReturnStatementInfo extends SingleStatementInfo {
 
     /**
      * return文の戻り値を表す式と位置情報を与えて初期化
+     * @param ownerMethod オーナーメソッド
      * @param ownerSpaceInfo 文を直接所有する空間
      * @param returnedExpression
      * @param fromLine
@@ -29,7 +30,7 @@ public class ReturnStatementInfo extends SingleStatementInfo {
         if (null != returnedExpression) {
             this.returnedExpression = returnedExpression;
         } else {
-            this.returnedExpression = new EmptyExpressionInfo(toLine, toColumn - 1, toLine,
+            this.returnedExpression = new EmptyExpressionInfo(null, toLine, toColumn - 1, toLine,
                     toColumn - 1);
         }
         this.returnedExpression.setOwnerExecutableElement(this);

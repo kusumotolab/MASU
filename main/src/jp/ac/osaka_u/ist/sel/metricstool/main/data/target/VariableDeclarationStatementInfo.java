@@ -40,10 +40,10 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
         if (null != initializationExpression) {
             this.initializationExpression = initializationExpression;
         } else {
-            this.initializationExpression = new EmptyExpressionInfo(toLine, toColumn - 1, toLine,
-                    toColumn - 1);
+            this.initializationExpression = new EmptyExpressionInfo(null, toLine, toColumn - 1,
+                    toLine, toColumn - 1);
         }
-        
+
         this.initializationExpression.setOwnerExecutableElement(this);
 
     }

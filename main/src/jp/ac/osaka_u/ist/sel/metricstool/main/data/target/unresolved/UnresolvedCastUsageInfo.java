@@ -97,8 +97,8 @@ public final class UnresolvedCastUsageInfo extends UnresolvedExpressionInfo<Cast
                         methodInfoManager);*/
 
         // キャスト使用を解決
-        this.resolvedInfo = new CastUsageInfo(castType, castedUsage, fromLine, fromColumn, toLine,
-                toColumn);
+        this.resolvedInfo = new CastUsageInfo(castType, castedUsage, usingMethod, fromLine,
+                fromColumn, toLine, toColumn);
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
 
         return this.resolvedInfo;

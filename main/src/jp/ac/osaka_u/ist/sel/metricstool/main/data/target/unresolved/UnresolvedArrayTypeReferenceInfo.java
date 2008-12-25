@@ -70,8 +70,8 @@ public final class UnresolvedArrayTypeReferenceInfo extends
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager);*/
 
-        this.resolvedInfo = new ArrayTypeReferenceInfo(arrayType, fromLine, fromColumn, toLine,
-                toColumn);
+        this.resolvedInfo = new ArrayTypeReferenceInfo(arrayType, usingMethod, fromLine,
+                fromColumn, toLine, toColumn);
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
 
         return this.resolvedInfo;

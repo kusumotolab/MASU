@@ -18,15 +18,17 @@ public final class ClassReferenceInfo extends ExpressionInfo {
      * 参照型を与えてオブジェクトを初期化
      * 
      * @param referenceType このクラス参照の参照型
+     * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public ClassReferenceInfo(final ClassTypeInfo referenceType, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    public ClassReferenceInfo(final ClassTypeInfo referenceType,
+            final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         if (null == referenceType) {
             throw new NullPointerException();

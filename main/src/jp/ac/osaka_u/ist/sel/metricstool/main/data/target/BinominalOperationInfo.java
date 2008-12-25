@@ -25,16 +25,17 @@ public class BinominalOperationInfo extends ExpressionInfo {
      * @param operator オペレータ
      * @param firstOperand 第一オペランド
      * @param secondOperand 第二オペランド
+     * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
     public BinominalOperationInfo(final OPERATOR operator, final ExpressionInfo firstOperand,
-            final ExpressionInfo secondOperand, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+            final ExpressionInfo secondOperand, final CallableUnitInfo ownerMethod,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         if ((null == operator) || (null == firstOperand) || (null == secondOperand)) {
             throw new NullPointerException();
@@ -43,7 +44,7 @@ public class BinominalOperationInfo extends ExpressionInfo {
         this.operator = operator;
         this.firstOperand = firstOperand;
         this.secondOperand = secondOperand;
-        
+
         this.firstOperand.setOwnerExecutableElement(this);
         this.secondOperand.setOwnerExecutableElement(this);
 

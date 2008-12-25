@@ -37,7 +37,7 @@ public final class UnresolvedArrayElementUsageInfo extends
         this.qualifierArrayType = qualifierArrayType;
         this.indexExpression = indexExpression;
         this.resolvedInfo = null;
-        
+
         this.indexExpression.setOwnerExecutableElementInfo(this);
     }
 
@@ -95,8 +95,8 @@ public final class UnresolvedArrayElementUsageInfo extends
 
         // 親が特定できない場合も配列の要素使用を作成して返す
         // もしかすると，UnknownEntityUsageInfoを返す方が適切かもしれない
-        this.resolvedInfo = new ArrayElementUsageInfo(qualifierUsage, indexExpression, fromLine,
-                fromColumn, toLine, toColumn);
+        this.resolvedInfo = new ArrayElementUsageInfo(qualifierUsage, indexExpression, usingMethod,
+                fromLine, fromColumn, toLine, toColumn);
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
 
         return this.resolvedInfo;
@@ -119,7 +119,7 @@ public final class UnresolvedArrayElementUsageInfo extends
     public UnresolvedExpressionInfo<?> getIndexExpression() {
         return this.indexExpression;
     }
-    
+
     @Override
     public void setOwnerExecutableElementInfo(
             UnresolvedExecutableElementInfo<? extends ExecutableElementInfo> ownerExecutableElement) {

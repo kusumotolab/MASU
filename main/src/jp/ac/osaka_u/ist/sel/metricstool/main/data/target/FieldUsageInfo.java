@@ -25,6 +25,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
      * @param qualifierExpression フィールド使用が実行される親の式
      * @param usedField 使用されているフィールド
      * @param reference 参照である場合は true, 代入である場合は false
+     * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
@@ -32,9 +33,10 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
      */
     protected FieldUsageInfo(final ExpressionInfo qualifierExpression,
             final TypeInfo qualifierType, final FieldInfo usedField, final boolean reference,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
-        super(usedField, reference, fromLine, fromColumn, toLine, toColumn);
+        super(usedField, reference, ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         this.qualifierExpression = qualifierExpression;
         this.qualifierType = qualifierType;
@@ -94,6 +96,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
      * @param qualifierType 親エンティティの型
      * @param usedField 使用されているフィールド
      * @param reference 参照である場合はtrue，代入である場合はfalse
+     * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
@@ -102,9 +105,10 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
      */
     public static FieldUsageInfo getInstance(final ExpressionInfo qualifierExpression,
             final TypeInfo qualifierType, final FieldInfo usedField, final boolean reference,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
         final FieldUsageInfo instance = new FieldUsageInfo(qualifierExpression, qualifierType,
-                usedField, reference, fromLine, fromColumn, toLine, toColumn);
+                usedField, reference, ownerMethod, fromLine, fromColumn, toLine, toColumn);
         addFieldUsage(instance);
         return instance;
     }

@@ -26,16 +26,17 @@ public final class MethodCallInfo extends CallInfo {
      * @param qualifierType メソッド呼び出しの親の型
      * @param qualifierExpression メソッド呼び出しの親エンティティ
      * @param callee 呼び出されているメソッド
+     * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
     public MethodCallInfo(final TypeInfo qualifierType, final ExpressionInfo qualifierExpression,
-            final MethodInfo callee, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+            final MethodInfo callee, final CallableUnitInfo ownerMethod, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         if ((null == qualifierType) || (null == callee) || (null == qualifierExpression)) {
             throw new NullPointerException();

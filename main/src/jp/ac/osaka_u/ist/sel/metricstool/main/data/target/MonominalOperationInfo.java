@@ -21,16 +21,18 @@ public final class MonominalOperationInfo extends ExpressionInfo {
      * @param operator オペレーター
      * @param isPreposed 演算子の位置
      * @param type 一項演算の結果の型
+     * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
     public MonominalOperationInfo(final ExpressionInfo operand, final OPERATOR operator,
-            final boolean isPreposed, final PrimitiveTypeInfo type, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final boolean isPreposed, final PrimitiveTypeInfo type,
+            final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
-        super(fromLine, fromColumn, toLine, toColumn);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         if (null == operand || null == operator || null == type) {
             throw new IllegalArgumentException();
@@ -40,7 +42,7 @@ public final class MonominalOperationInfo extends ExpressionInfo {
         this.operator = operator;
         this.isPreposed = isPreposed;
         this.type = type;
-        
+
         this.operand.setOwnerExecutableElement(this);
     }
 

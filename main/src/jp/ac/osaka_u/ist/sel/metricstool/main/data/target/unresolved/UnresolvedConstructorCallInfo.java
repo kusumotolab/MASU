@@ -81,8 +81,8 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager);*/
 
-        this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType, fromLine,
-                fromColumn, toLine, toColumn);
+        this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType, usingMethod,
+                fromLine, fromColumn, toLine, toColumn);
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
         this.resolvedInfo.addArguments(actualParameters);
         this.resolvedInfo.addTypeArguments(typeArguments);

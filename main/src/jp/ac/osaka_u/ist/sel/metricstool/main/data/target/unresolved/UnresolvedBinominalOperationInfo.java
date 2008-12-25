@@ -39,7 +39,7 @@ public class UnresolvedBinominalOperationInfo extends
         this.firstOperand = firstOperand;
         this.secondOperand = secondOperand;
         this.resolvedInfo = null;
-        
+
         this.firstOperand.setOwnerExecutableElementInfo(this);
         this.secondOperand.setOwnerExecutableElementInfo(this);
     }
@@ -67,8 +67,8 @@ public class UnresolvedBinominalOperationInfo extends
         final OPERATOR operator = this.getOperator();
         final UnresolvedExpressionInfo<?> unresolvedFirstOperand = this.getFirstOperand();
         final UnresolvedExpressionInfo<?> unresolvedSecondOperand = this.getSecondOperand();
-        final ExpressionInfo firstOperand = unresolvedFirstOperand.resolve(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final ExpressionInfo firstOperand = unresolvedFirstOperand.resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
         final ExpressionInfo secondOperand = unresolvedSecondOperand.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
@@ -86,7 +86,7 @@ public class UnresolvedBinominalOperationInfo extends
                         methodInfoManager);*/
 
         this.resolvedInfo = new BinominalOperationInfo(operator, firstOperand, secondOperand,
-                fromLine, fromColumn, toLine, toColumn);
+                usingMethod, fromLine, fromColumn, toLine, toColumn);
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
 
         return this.resolvedInfo;

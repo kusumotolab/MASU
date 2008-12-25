@@ -83,7 +83,7 @@ public class UnresolvedTernaryOperationInfo extends UnresolvedExpressionInfo<Ter
                         methodInfoManager);*/
 
         this.resolvedInfo = new TernaryOperationInfo(conditionalExpression, trueExpression,
-                falseExpression, fromLine, fromColumn, toLine, toColumn);
+                falseExpression, usingMethod, fromLine, fromColumn, toLine, toColumn);
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
         return this.resolvedInfo;
     }

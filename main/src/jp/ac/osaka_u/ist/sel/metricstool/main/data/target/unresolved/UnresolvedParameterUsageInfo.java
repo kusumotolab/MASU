@@ -70,8 +70,8 @@ public final class UnresolvedParameterUsageInfo extends
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager);*/
 
-        this.resolvedInfo = ParameterUsageInfo.getInstance(usedVariable, reference, fromLine,
-                fromColumn, toLine, toColumn);
+        this.resolvedInfo = ParameterUsageInfo.getInstance(usedVariable, reference, usingMethod,
+                fromLine, fromColumn, toLine, toColumn);
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
         return this.resolvedInfo;
     }
