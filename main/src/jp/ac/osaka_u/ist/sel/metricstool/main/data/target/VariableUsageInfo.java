@@ -100,8 +100,7 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
 
         // 型パラメータから，実際に使用されている型を取得し返す
         // メソッドの型パラメータかどうか
-        final StatementInfo ownerStatement = this.getOwnerStatement();
-        final CallableUnitInfo ownerMethod = ownerStatement.getOwnerMethod();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
         for (final TypeParameterInfo typeParameter : ownerMethod.getTypeParameters()) {
             if (typeParameter.equals(definitionType)) {
                 return ((TypeParameterInfo) definitionType).getExtendsType();
