@@ -613,7 +613,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
 
         public void addAlias(final String alias, final String[] name) {
-            if (name.length == 0 || (name.length == 1 && name[0] == alias)) {
+            if (null == name || name.length == 0) {
                 throw new IllegalArgumentException("Illegal name alias.");
             }
 
