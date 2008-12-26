@@ -47,51 +47,89 @@ public class SCDetector extends MetricsTool {
             //　コマンドライン引数を処理
             final Options options = new Options();
 
-            final Option d = new Option("d", "directory", true, "target directory");
-            d.setArgName("directory");
-            d.setArgs(1);
-            d.setRequired(true);
-            options.addOption(d);
+            {
+                final Option d = new Option("d", "directory", true, "target directory");
+                d.setArgName("directory");
+                d.setArgs(1);
+                d.setRequired(true);
+                options.addOption(d);
+            }
 
-            final Option l = new Option("l", "language", true,
-                    "programming language of analyzed source code");
-            l.setArgName("language");
-            l.setArgs(1);
-            l.setRequired(true);
-            options.addOption(l);
+            {
+                final Option l = new Option("l", "language", true,
+                        "programming language of analyzed source code");
+                l.setArgName("language");
+                l.setArgs(1);
+                l.setRequired(true);
+                options.addOption(l);
+            }
 
-            final Option o = new Option("o", "output", true, "output file");
-            o.setArgName("output file");
-            o.setArgs(1);
-            o.setRequired(true);
-            options.addOption(o);
+            {
+                final Option o = new Option("o", "output", true, "output file");
+                o.setArgName("output file");
+                o.setArgs(1);
+                o.setRequired(true);
+                options.addOption(o);
+            }
 
-            final Option s = new Option("s", "size", true, "lower size of detected clone");
-            s.setArgName("size");
-            s.setArgs(1);
-            s.setRequired(true);
-            options.addOption(s);
+            {
+                final Option s = new Option("s", "size", true, "lower size of detected clone");
+                s.setArgName("size");
+                s.setArgs(1);
+                s.setRequired(true);
+                options.addOption(s);
+            }
 
-            final Option pv = new Option("pv", true, "parameterize variables");
-            pv.setArgName("variable parameterization level");
-            pv.setArgs(1);
-            pv.setRequired(false);
-            pv.setType(Integer.class);
-            options.addOption(pv);
+            {
+                final Option pv = new Option("pv", true, "parameterize variables");
+                pv.setArgName("variable parameterization level");
+                pv.setArgs(1);
+                pv.setRequired(false);
+                pv.setType(Integer.class);
+                options.addOption(pv);
+            }
 
-            final Option pm = new Option("pm", true, "parameterize method invocation");
-            pm.setArgName("method invocation parameterization level");
-            pm.setArgs(1);
-            pm.setRequired(false);
-            pm.setType(Integer.class);
-            options.addOption(pm);
+            {
+                final Option pm = new Option("pm", true, "parameterize method invocation");
+                pm.setArgName("method invocation parameterization level");
+                pm.setArgs(1);
+                pm.setRequired(false);
+                pm.setType(Integer.class);
+                options.addOption(pm);
+            }
 
-            final Option pc = new Option("pc", true, "parameterize constructor invocation");
-            pc.setArgName("constructor invocation parameterization level");
-            pc.setArgs(1);
-            pc.setRequired(false);
-            pc.setType(Integer.class);
-            options.addOption(pc);
+            {
+                final Option pc = new Option("pc", true, "parameterize constructor invocation");
+                pc.setArgName("constructor invocation parameterization level");
+                pc.setArgs(1);
+                pc.setRequired(false);
+                pc.setType(Integer.class);
+                options.addOption(pc);
+            }
+
+            {
+                final Option fi = new Option("fi", false,
+                        "filtering out code clones included in other code clones");
+                fi.setRequired(false);
+                options.addOption(fi);
+            }
+
+            {
+                final Option fj = new Option("fj", false,
+                        "filtering out code clones whose start statement and end statement are the same");
+                fj.setRequired(false);
+                options.addOption(fj);
+            }
+
+            {
+                final Option fk = new Option("fk", true,
+                        "code clones whose elements are overlapped more than the specified threshold");
+                fk.setArgName("threshold");
+                fk.setArgs(1);
+                fk.setRequired(false);
+                fk.setType(Integer.class);
+                options.addOption(fk);
+            }
 
             final CommandLineParser parser = new PosixParser();
             final CommandLine cmd = parser.parse(options, args);
@@ -100,13 +138,19 @@ public class SCDetector extends MetricsTool {
             Configuration.INSTANCE.setL(cmd.getOptionValue("l"));
             Configuration.INSTANCE.setO(cmd.getOptionValue("o"));
             Configuration.INSTANCE.setS(Integer.valueOf(cmd.getOptionValue("s")));
-
             if (cmd.hasOption("pv")) {
                 Configuration.INSTANCE.setPV(Integer.valueOf(cmd.getOptionValue("pv")));
             }
-
             if (cmd.hasOption("pm")) {
                 Configuration.INSTANCE.setPM(Integer.valueOf(cmd.getOptionValue("pm")));
+            }
+            if (cmd.hasOption("pc")) {
+                Configuration.INSTANCE.setPC(Integer.valueOf(cmd.getOptionValue("pc")));
+            }
+            Configuration.INSTANCE.setFI(cmd.hasOption("fi"));
+            Configuration.INSTANCE.setFJ(cmd.hasOption("fj"));
+            if (cmd.hasOption("fk")) {
+                Configuration.INSTANCE.setFK(Integer.valueOf(cmd.getOptionValue("fk")));
             }
 
         } catch (ParseException e) {
@@ -215,7 +259,6 @@ public class SCDetector extends MetricsTool {
             }
         }
 
-        //他のクローンペアに内包されるクローンペアを除去する
         final Set<ClonePairInfo> refinedClonePairs = new HashSet<ClonePairInfo>();
         CLONEPAIR: for (final ClonePairInfo clonePair : clonePairs) {
             COUNTERCLONEPAIR: for (final ClonePairInfo counterClonePair : clonePairs) {
@@ -224,16 +267,32 @@ public class SCDetector extends MetricsTool {
                     continue COUNTERCLONEPAIR;
                 }
 
-                if (clonePair.includedBy(counterClonePair)) {
-                    System.out.println("included clone pair.");
-                    continue CLONEPAIR;
+                //他のクローンペアに内包されるクローンペアを除去する
+                if (Configuration.INSTANCE.getFI()) {
+                    if (clonePair.includedBy(counterClonePair)) {
+                        continue CLONEPAIR;
+                    }
+                }
+
+                if (Configuration.INSTANCE.getFJ()) {
+                    final SortedSet<ExecutableElementInfo> cloneA = clonePair.getCloneA();
+                    final SortedSet<ExecutableElementInfo> cloneB = clonePair.getCloneB();
+                    if ((cloneA.first() == cloneB.first()) && (cloneA.last() == cloneB.last())) {
+                        continue CLONEPAIR;
+                    }
                 }
 
                 {
                     final SortedSet<ExecutableElementInfo> cloneA = clonePair.getCloneA();
                     final SortedSet<ExecutableElementInfo> cloneB = clonePair.getCloneB();
-                    if ((cloneA.first() == cloneB.first()) && (cloneA.last() == cloneB.last())) {
-                        System.out.println("same code fragments.");
+                    int sharedElementCount = 0;
+                    for (final ExecutableElementInfo element : cloneA) {
+                        if (cloneB.contains(element)) {
+                            sharedElementCount++;
+                        }
+                    }
+                    if (Configuration.INSTANCE.getFK() < ((100 * 2 * sharedElementCount) / (cloneA
+                            .size() + cloneB.size()))) {
                         continue CLONEPAIR;
                     }
                 }

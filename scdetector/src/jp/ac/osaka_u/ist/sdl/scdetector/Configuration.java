@@ -12,6 +12,9 @@ public final class Configuration {
         this.pv = 1;
         this.pm = 2;
         this.pc = 2;
+        this.fi = false;
+        this.fj = false;
+        this.fk = 100;
     }
 
     public String getD() {
@@ -82,6 +85,35 @@ public final class Configuration {
         this.pc = pc;
     }
 
+    public boolean getFI() {
+        return this.fi;
+    }
+
+    public boolean setFI(final boolean fi) {
+        return this.fi = fi;
+    }
+
+    public boolean getFJ() {
+        return this.fj;
+    }
+
+    public void setFJ(final boolean fj) {
+        this.fj = fj;
+    }
+
+    public int getFK() {
+        return this.fk;
+    }
+
+    public void setFK(final int fk) {
+
+        if ((fk < 1) || (100 < fk)) {
+            throw new RuntimeException("\"fk\" option must be between 1 and 100.");
+        }
+
+        this.fk = fk;
+    }
+
     private String d;
 
     private String l;
@@ -95,4 +127,10 @@ public final class Configuration {
     private int pm;
 
     private int pc;
+
+    private boolean fi;
+
+    private boolean fj;
+
+    private int fk;
 }

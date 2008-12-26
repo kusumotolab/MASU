@@ -181,7 +181,7 @@ public class Conversion {
         if (expression instanceof ArrayElementUsageInfo) {
 
             final ExpressionInfo ownerExpression = ((ArrayElementUsageInfo) expression)
-                    .getOwnerExpression();
+                    .getQualifierExpression();
             final String ownerExpressionString = Conversion.getNormalizedString(ownerExpression);
             sb.append(ownerExpressionString);
 
@@ -322,10 +322,8 @@ public class Conversion {
 
         } else if (expression instanceof TernaryOperationInfo) {
 
-            final ExpressionInfo conditionExpression = ((TernaryOperationInfo) expression)
-                    .getConditionalExpression();
-            final String conditionExpressionString = Conversion
-                    .getNormalizedString(conditionExpression);
+            final ConditionInfo condition = ((TernaryOperationInfo) expression).getCondition();
+            final String conditionExpressionString = Conversion.getNormalizedString(condition);
             sb.append(conditionExpressionString);
 
             sb.append("?");

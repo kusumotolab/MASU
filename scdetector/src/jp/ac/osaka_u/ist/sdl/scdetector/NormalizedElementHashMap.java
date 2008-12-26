@@ -32,7 +32,7 @@ public class NormalizedElementHashMap extends HashMap<Integer, List<ExecutableEl
                     INSTANCE.put(hash, statements);
                 }
                 statements.add(statement);
-                elementHashMap.put(statement, hash);
+                this.elementHashMap.put(statement, hash);
 
             } else if (statement instanceof BlockInfo) {
 
@@ -49,7 +49,7 @@ public class NormalizedElementHashMap extends HashMap<Integer, List<ExecutableEl
                         INSTANCE.put(hash, statements);
                     }
                     statements.add(condition);
-                    elementHashMap.put(statement, hash);
+                    this.elementHashMap.put(condition, hash);
                 }
 
                 INSTANCE.makeHash((BlockInfo) statement);
