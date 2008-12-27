@@ -13,13 +13,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class ArrayTypeInfo implements ReferenceTypeInfo {
+public class ArrayTypeInfo implements ReferenceTypeInfo {
 
     /**
      * å^ñºÇï‘Ç∑
      * 
      * @return å^ñº
      */
+    @Override
     public String getTypeName() {
         final TypeInfo elementType = this.getElementType();
         final int dimension = this.getDimension();
@@ -38,6 +39,7 @@ public final class ArrayTypeInfo implements ReferenceTypeInfo {
      * @param typeInfo î‰ärëŒè€å^
      * @return ìôÇµÇ¢èÍçáÇÕtrue, ÇªÇ§Ç≈Ç»Ç¢èÍçáÇÕfalse
      */
+    @Override
     public boolean equals(final TypeInfo typeInfo) {
 
         if (null == typeInfo) {
@@ -64,7 +66,7 @@ public final class ArrayTypeInfo implements ReferenceTypeInfo {
      * 
      * @return îzóÒÇÃóvëfÇÃå^
      */
-    public TypeInfo getElementType() {
+    public final TypeInfo getElementType() {
         return this.element;
     }
 
@@ -73,7 +75,7 @@ public final class ArrayTypeInfo implements ReferenceTypeInfo {
      * 
      * @return îzóÒÇÃéüå≥
      */
-    public int getDimension() {
+    public final int getDimension() {
         return this.dimension;
     }
 
@@ -109,7 +111,7 @@ public final class ArrayTypeInfo implements ReferenceTypeInfo {
      * @param element îzóÒÇÃóvëf
      * @param dimension îzóÒÇÃéñåè
      */
-    private ArrayTypeInfo(final TypeInfo element, final int dimension) {
+    ArrayTypeInfo(final TypeInfo element, final int dimension) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == element) {

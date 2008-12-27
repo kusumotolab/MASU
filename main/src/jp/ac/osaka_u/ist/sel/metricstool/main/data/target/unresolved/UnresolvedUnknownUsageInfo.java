@@ -1195,9 +1195,10 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
             }
         }
 
-        err.println("Remain unresolved \"" + this.toString() + "\"" + " line:" + this.getFromLine()
-                + " column:" + this.getFromColumn() + " on \""
-                + usingClass.getFullQualifiedName(LANGUAGE.JAVA15.getNamespaceDelimiter()));
+        err
+                .println("Remain unresolved \"" + this.toString() + "\"" + " line:"
+                        + this.getFromLine() + " column:" + this.getFromColumn() + " on \""
+                        + usingClass.getFileInfo().getName());
 
         // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ˆ—‚ðs‚¤
         usingMethod.addUnresolvedUsage(this);

@@ -25,39 +25,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * @see UnresolvedTypeInfo
  */
-public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<ArrayTypeInfo> {
-
-    // /**
-    // * 等しいかどうかのチェックを行う
-    // */
-    // public boolean equals(final UnresolvedEntityUsage entityUsage) {
-    //
-    // if (null == entityUsage) {
-    // throw new NullPointerException();
-    // }
-    //
-    // if (!(entityUsage instanceof UnresolvedArrayUsage)) {
-    // return false;
-    // }
-    //
-    // final UnresolvedEntityUsage elementTypeInfo = this.getElementType();
-    // final UnresolvedEntityUsage correspondElementTypeInfo = ((UnresolvedArrayUsage) entityUsage)
-    // .getElementType();
-    // if (!elementTypeInfo.equals(correspondElementTypeInfo)) {
-    // return false;
-    // }
-    //
-    // final int dimension = this.getDimension();
-    // final int correspondDimension = ((UnresolvedArrayUsage) entityUsage).getDimension();
-    // return dimension == correspondDimension;
-    // }
+public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<ArrayTypeInfo> {
 
     /**
      * この未解決配列使用が解決済みかどうか返す
      * 
      * @return 解決済みの場合は true, そうでない場合は false
      */
-    public boolean alreadyResolved() {
+    @Override
+    public final boolean alreadyResolved() {
         return null != this.resolvedInfo;
     }
 
@@ -67,7 +43,8 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * @return 解決済み配列型
      * @throws NotResolvedException 未解決の場合にスローされる
      */
-    public ArrayTypeInfo getResolved() {
+    @Override
+    public final ArrayTypeInfo getResolved() {
         return this.resolvedInfo;
     }
 
@@ -81,6 +58,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * @param methodInfoManager 用いるメソッドマネージャ
      * @return 解決済み配列型
      */
+    @Override
     public ArrayTypeInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
@@ -120,7 +98,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * 
      * @return 配列の要素の未解決型
      */
-    public UnresolvedTypeInfo<? extends TypeInfo> getElementType() {
+    public final UnresolvedTypeInfo<? extends TypeInfo> getElementType() {
         return this.type;
     }
 
@@ -129,7 +107,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * 
      * @return 配列の次元
      */
-    public int getDimension() {
+    public final int getDimension() {
         return this.dimension;
     }
 
@@ -138,7 +116,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * 
      * @return このインスタンスが表す配列の次元を1大きくした配列
      */
-    public UnresolvedArrayTypeInfo getDimensionInclementedArrayType() {
+    public final UnresolvedArrayTypeInfo getDimensionInclementedArrayType() {
         return getType(getElementType(), getDimension() + 1);
     }
 
@@ -149,7 +127,8 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * @param dimension 次元を表す変数
      * @return 生成した UnresolvedArrayTypeInfo オブジェクト
      */
-    public static UnresolvedArrayTypeInfo getType(final UnresolvedTypeInfo<? extends TypeInfo> type, final int dimension) {
+    public static UnresolvedArrayTypeInfo getType(
+            final UnresolvedTypeInfo<? extends TypeInfo> type, final int dimension) {
 
         if (null == type) {
             throw new NullPointerException();
@@ -174,7 +153,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
      * @param type 配列の要素の未解決型
      * @param dimension 配列の次元
      */
-    private UnresolvedArrayTypeInfo(final UnresolvedTypeInfo<?> type, final int dimension) {
+    UnresolvedArrayTypeInfo(final UnresolvedTypeInfo<?> type, final int dimension) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == type) {
@@ -202,7 +181,7 @@ public final class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInf
     /**
      * 解決済み配列使用を保存するための変数
      */
-    private ArrayTypeInfo resolvedInfo;
+    ArrayTypeInfo resolvedInfo;
 
     /**
      * UnresolvedArrayTypeInfo オブジェクトを一元管理するための Map．オブジェクトはファクトリメソッドで生成される．
