@@ -89,7 +89,7 @@ public final class UnresolvedFieldInfo extends
         if (fieldType instanceof UnknownTypeInfo) {
             if (unresolvedFieldType instanceof UnresolvedClassReferenceInfo) {
 
-                final ExternalClassInfo classInfo = NameResolver
+                final ExternalClassInfo classInfo = UnresolvedClassReferenceInfo
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedFieldType);
                 fieldType = new ClassTypeInfo(classInfo);
                 for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedFieldType)

@@ -27,56 +27,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClass
 public final class NameResolver {
 
     /**
-     * 引数で与えられた未解決型情報を表す解決済み型情報クラスを生成する． ここで引数として与えられるのは，ソースコードがパースされていない型であるので，生成する解決済み型情報クラスは
-     * ExternalClassInfo となる．
-     * 
-     * @param unresolvedReferenceType 未解決型情報
-     * @return 解決済み型情報
-     */
-    public static ExternalClassInfo createExternalClassInfo(
-            final UnresolvedClassReferenceInfo unresolvedReferenceType) {
-
-        if (null == unresolvedReferenceType) {
-            throw new NullPointerException();
-        }
-
-        // 未解決クラス情報の参照名を取得
-        final String[] referenceName = unresolvedReferenceType.getReferenceName();
-
-        // 利用可能な名前空間を検索し，未解決クラス情報の完全限定名を決定
-        for (AvailableNamespaceInfo availableNamespace : unresolvedReferenceType
-                .getAvailableNamespaces()) {
-
-            // 名前空間名.* となっている場合は，見つけることができない
-            if (availableNamespace.isAllClasses()) {
-                continue;
-            }
-
-            // 名前空間.クラス名 となっている場合
-            final String[] importName = availableNamespace.getImportName();
-
-            // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
-            if (importName[importName.length - 1].equals(referenceName[0])) {
-
-                final String[] namespace = availableNamespace.getNamespace();
-                final String[] fullQualifiedName = new String[namespace.length
-                        + referenceName.length];
-                System.arraycopy(namespace, 0, fullQualifiedName, 0, namespace.length);
-                System.arraycopy(referenceName, 0, fullQualifiedName, namespace.length,
-                        referenceName.length);
-
-                final ExternalClassInfo classInfo = new ExternalClassInfo(fullQualifiedName);
-                return classInfo;
-            }
-        }
-
-        // 見つからない場合は，名前空間が UNKNOWN な 外部クラス情報を作成
-        final ExternalClassInfo unknownClassInfo = new ExternalClassInfo(
-                referenceName[referenceName.length - 1]);
-        return unknownClassInfo;
-    }
-
-    /**
      * 引数で与えられたクラスの親クラスであり，かつ外部クラス(ExternalClassInfo)であるものを返す． クラス階層的に最も下位に位置する外部クラスを返す．
      * 該当するクラスが存在しない場合は， null を返す．
      * 

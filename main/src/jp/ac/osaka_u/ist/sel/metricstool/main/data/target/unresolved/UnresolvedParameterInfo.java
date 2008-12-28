@@ -86,7 +86,7 @@ public final class UnresolvedParameterInfo
         if (parameterType instanceof UnknownTypeInfo) {
             if (unresolvedParameterType instanceof UnresolvedClassReferenceInfo) {
 
-                final ExternalClassInfo externalClass = NameResolver
+                final ExternalClassInfo externalClass = UnresolvedClassReferenceInfo
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedParameterType);
                 parameterType = new ClassTypeInfo(externalClass);
                 for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedParameterType)

@@ -109,7 +109,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
         if (qualifierUsage instanceof UnknownEntityUsageInfo) {
             if (unresolvedQualifierUsage instanceof UnresolvedClassReferenceInfo) {
 
-                final ExternalClassInfo externalClassInfo = NameResolver
+                final ExternalClassInfo externalClassInfo = UnresolvedClassReferenceInfo
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedQualifierUsage);
                 classInfoManager.add(externalClassInfo);
                 final ClassTypeInfo referenceType = new ClassTypeInfo(externalClassInfo);

@@ -91,7 +91,7 @@ public final class UnresolvedLocalVariableInfo
         if (variableType instanceof UnknownTypeInfo) {
             if (unresolvedVariableType instanceof UnresolvedClassReferenceInfo) {
 
-                final ExternalClassInfo externalClass = NameResolver
+                final ExternalClassInfo externalClass = UnresolvedClassReferenceInfo
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedVariableType);
                 variableType = new ClassTypeInfo(externalClass);
                 for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedVariableType)

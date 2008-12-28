@@ -110,7 +110,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         if (methodReturnType instanceof UnknownTypeInfo) {
             if (unresolvedMethodReturnType instanceof UnresolvedClassReferenceInfo) {
 
-                final ExternalClassInfo classInfo = NameResolver
+                final ExternalClassInfo classInfo = UnresolvedClassReferenceInfo
                         .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedMethodReturnType);
                 methodReturnType = new ClassTypeInfo(classInfo);
                 for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedMethodReturnType)

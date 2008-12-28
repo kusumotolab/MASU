@@ -118,7 +118,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
                 // ÉNÉâÉXéQè∆ÇæÇ¡ÇΩèÍçá
                 if (unresolvedParameter instanceof UnresolvedClassReferenceInfo) {
 
-                    final ExternalClassInfo externalClassInfo = NameResolver
+                    final ExternalClassInfo externalClassInfo = UnresolvedClassReferenceInfo
                             .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedParameter);
                     classInfoManager.add(externalClassInfo);
                     final ClassTypeInfo referenceType = new ClassTypeInfo(externalClassInfo);
