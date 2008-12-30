@@ -1,8 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -15,6 +18,23 @@ import java.util.TreeSet;
  */
 public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInfo>> extends
         ExpressionInfo {
+
+    /**
+     * 変数使用のCollectionから使用されている変数のSetを返す
+     * 
+     * @param variableUsages 変数使用のCollection
+     * @return 使用されている変数のSet
+     */
+    public static Set<VariableInfo<?>> getUsedVariables(
+            Collection<VariableUsageInfo<?>> variableUsages) {
+
+        Set<VariableInfo<?>> usedVariables = new HashSet<VariableInfo<?>>();
+        for (final VariableUsageInfo<?> variableUsage : variableUsages) {
+            final VariableInfo<?> variable = variableUsage.getUsedVariable();
+            usedVariables.add(variable);
+        }
+        return usedVariables;
+    }
 
     /**
      * 
