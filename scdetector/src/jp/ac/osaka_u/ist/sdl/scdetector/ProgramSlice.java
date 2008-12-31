@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -10,7 +9,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
@@ -47,7 +45,6 @@ public class ProgramSlice {
             if (variableUsage.isReference()) {
                 final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
                 if (!usedVariableHashesA.contains(usedVariable)
-                        && !(usedVariable instanceof FieldInfo)
                         && AssignedVariableHashMap.INSTANCE.containsKey(usedVariable)) {
                     relatedElementsA.addAll(AssignedVariableHashMap.INSTANCE.get(usedVariable));
                     usedVariableHashesA.add(usedVariable);
@@ -60,7 +57,6 @@ public class ProgramSlice {
             final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
             if (variableUsage.isReference()) {
                 if (!usedVariableHashesB.contains(usedVariable)
-                        && !(usedVariable instanceof FieldInfo)
                         && AssignedVariableHashMap.INSTANCE.containsKey(usedVariable)) {
                     relatedElementsB.addAll(AssignedVariableHashMap.INSTANCE.get(usedVariable));
                     usedVariableHashesB.add(usedVariable);
@@ -140,24 +136,18 @@ public class ProgramSlice {
         }
     }
 
-    static void performForwardSlice(final ConditionInfo conditionA, final ConditionInfo conditionB,
-            final ClonePairInfo clonePair, final Set<VariableInfo<?>> usedVariableHashesA,
+    private static void performForwardSlice(final ConditionInfo conditionA,
+            final ConditionInfo conditionB, final ClonePairInfo clonePair,
+            final Set<VariableInfo<?>> usedVariableHashesA,
             final Set<VariableInfo<?>> usedVariableHashesB) {
 
         final Set<VariableUsageInfo<?>> variableUsagesA = conditionA.getVariableUsages();
         final Set<VariableUsageInfo<?>> variableUsagesB = conditionB.getVariableUsages();
 
-        final Set<VariableInfo<?>> usedVariablesA = new HashSet<VariableInfo<?>>();
-        for (final VariableUsageInfo<?> variableUsage : variableUsagesA) {
-            final VariableInfo<?> variable = variableUsage.getUsedVariable();
-            usedVariablesA.add(variable);
-        }
-
-        final Set<VariableInfo<?>> usedVariablesB = new HashSet<VariableInfo<?>>();
-        for (final VariableUsageInfo<?> variableUsage : variableUsagesB) {
-            final VariableInfo<?> variable = variableUsage.getUsedVariable();
-            usedVariablesB.add(variable);
-        }
+        final Set<VariableInfo<?>> usedVariablesA = VariableUsageInfo
+                .getUsedVariables(variableUsagesA);
+        final Set<VariableInfo<?>> usedVariablesB = VariableUsageInfo
+                .getUsedVariables(variableUsagesB);
 
         final ConditionalBlockInfo ownerBlockA = ConditionHashMap.INSTANCE.get(conditionA);
         final ConditionalBlockInfo ownerBlockB = ConditionHashMap.INSTANCE.get(conditionB);
@@ -172,31 +162,38 @@ public class ProgramSlice {
         final ExecutableElementInfo[] innerElementArrayB = innerElementB
                 .toArray(new ExecutableElementInfo[] {});
 
-        for (int i = 0; i < innerElementArrayA.length; i++) {
+        for (int a = 0; a < innerElementArrayA.length; a++) {
 
-            //　クローンがないExecutableElementについては調べなくてよい
-            final int hashA = NormalizedElementHashMap.INSTANCE.getHash(innerElementArrayA[i]);
+            //　クローンがないExecutableElementについては調べなくてよい            
+            final int hashA = NormalizedElementHashMap.INSTANCE.getHash(innerElementArrayA[a]);
             if (NormalizedElementHashMap.INSTANCE.get(hashA).size() < 2) {
                 continue;
             }
 
-            for (int j = 0; j < innerElementArrayB.length; j++) {
+            for (int b = 0; b < innerElementArrayB.length; b++) {
 
                 //　クローンがないExecutableElementについては調べなくてよい
-                final int hashB = NormalizedElementHashMap.INSTANCE.getHash(innerElementArrayB[j]);
+                final int hashB = NormalizedElementHashMap.INSTANCE.getHash(innerElementArrayB[b]);
                 if (NormalizedElementHashMap.INSTANCE.get(hashB).size() < 2) {
                     continue;
                 }
 
-                if ((hashA == hashB) && ProgramSlice.isUsed(usedVariablesA, innerElementArrayA[i])
-                        && ProgramSlice.isUsed(usedVariablesB, innerElementArrayB[j])) {
+                if ((hashA == hashB) && ProgramSlice.isUsed(usedVariablesA, innerElementArrayA[a])
+                        && ProgramSlice.isUsed(usedVariablesB, innerElementArrayB[b])) {
 
-                    clonePair.add(innerElementArrayA[i], innerElementArrayB[j]);
+                    clonePair.add(innerElementArrayA[a], innerElementArrayB[b]);
                 }
             }
         }
     }
 
+    /**
+     * 第一引数で与えられた変数を，第二引数で指定された式が使っているかを調べる
+     * 
+     * @param variables 
+     * @param ExecutableElementInfo
+     * @return 使っている場合はtrue,　使っていない場合はfalse
+     */
     private static boolean isUsed(final Set<VariableInfo<?>> variables,
             final ExecutableElementInfo ExecutableElementInfo) {
 
@@ -211,6 +208,12 @@ public class ProgramSlice {
         return false;
     }
 
+    /**
+     * 引数で与えられたブロック文の内側にある全てのExecutableElementのSortedSetを返す
+     * 
+     * @param block
+     * @return
+     */
     private static SortedSet<ExecutableElementInfo> getAllInnerExecutableElementInfo(
             final BlockInfo block) {
 
@@ -221,6 +224,11 @@ public class ProgramSlice {
             } else if (statement instanceof BlockInfo) {
                 elements.addAll(ProgramSlice
                         .getAllInnerExecutableElementInfo((BlockInfo) statement));
+
+                if (statement instanceof ConditionalBlockInfo) {
+                    elements.add(((ConditionalBlockInfo) statement).getConditionalClause()
+                            .getCondition());
+                }
             }
         }
 

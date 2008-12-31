@@ -11,6 +11,7 @@ import jp.ac.osaka_u.ist.sdl.scdetector.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.SelectedEntities;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
@@ -40,26 +41,52 @@ public class SourceCodeView extends JSplitPane implements Observer {
                 final SourceCodePanel leftSourceCodePanel = new SourceCodePanel();
                 final SourceCodePanel rightSourceCodePanel = new SourceCodePanel();
 
-                for (final ExecutableElementInfo element : cloneA) {
+                {
+                    boolean set = false;
+                    for (final ExecutableElementInfo element : cloneA) {
 
-                    if (element instanceof StatementInfo) {
-                        final FileInfo ownerFile = SourceCodeView
-                                .geOwnerFile((StatementInfo) element);
-                        leftSourceCodePanel.readFile(ownerFile);
-                        this.setLeftComponent(leftSourceCodePanel);
-                        break;
+                        if (element instanceof StatementInfo) {
+                            final FileInfo ownerFile = SourceCodeView
+                                    .getOwnerFile((StatementInfo) element);
+                            leftSourceCodePanel.readFile(ownerFile);
+                            this.setLeftComponent(leftSourceCodePanel);
+                            set = true;
+                            break;
+                        } else if (element instanceof ExpressionInfo) {
+                            final FileInfo ownerFile = SourceCodeView
+                                    .getOwnerFile(((ExpressionInfo) element).getOwnerStatement());
+                            leftSourceCodePanel.readFile(ownerFile);
+                            this.setLeftComponent(leftSourceCodePanel);
+                            set = true;
+                            break;
+                        }
                     }
+
+                    assert set : "State is illegal!";
                 }
 
-                for (final ExecutableElementInfo element : cloneB) {
+                {
+                    boolean set = false;
+                    for (final ExecutableElementInfo element : cloneB) {
 
-                    if (element instanceof StatementInfo) {
-                        final FileInfo ownerFile = SourceCodeView
-                                .geOwnerFile((StatementInfo) element);
-                        rightSourceCodePanel.readFile(ownerFile);
-                        this.setRightComponent(rightSourceCodePanel);
-                        break;
+                        if (element instanceof StatementInfo) {
+                            final FileInfo ownerFile = SourceCodeView
+                                    .getOwnerFile((StatementInfo) element);
+                            rightSourceCodePanel.readFile(ownerFile);
+                            this.setRightComponent(rightSourceCodePanel);
+                            set = true;
+                            break;
+                        } else if (element instanceof ExpressionInfo) {
+                            final FileInfo ownerFile = SourceCodeView
+                                    .getOwnerFile(((ExpressionInfo) element).getOwnerStatement());
+                            rightSourceCodePanel.readFile(ownerFile);
+                            this.setRightComponent(rightSourceCodePanel);
+                            set = true;
+                            break;
+                        }
                     }
+
+                    assert set : "State is illegal!";
                 }
 
                 final int width = this.getWidth();
@@ -74,7 +101,7 @@ public class SourceCodeView extends JSplitPane implements Observer {
         }
     }
 
-    private static FileInfo geOwnerFile(final StatementInfo statement) {
+    private static FileInfo getOwnerFile(final StatementInfo statement) {
 
         final LocalSpaceInfo ownerSpace = statement.getOwnerSpace();
         final ClassInfo ownerClass = ownerSpace.getOwnerClass();

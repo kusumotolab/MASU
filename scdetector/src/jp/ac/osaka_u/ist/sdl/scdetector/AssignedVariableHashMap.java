@@ -9,6 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
@@ -29,12 +30,14 @@ public class AssignedVariableHashMap extends HashMap<VariableInfo<?>, Set<Execut
                 for (final VariableUsageInfo<?> variableUsage : variableUsages) {
                     if (variableUsage.isAssignment()) {
                         final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
-                        Set<ExecutableElementInfo> statements = INSTANCE.get(usedVariable);
-                        if (null == statements) {
-                            statements = new HashSet<ExecutableElementInfo>();
-                            INSTANCE.put(usedVariable, statements);
+                        if (!(usedVariable instanceof FieldInfo)) {
+                            Set<ExecutableElementInfo> statements = INSTANCE.get(usedVariable);
+                            if (null == statements) {
+                                statements = new HashSet<ExecutableElementInfo>();
+                                INSTANCE.put(usedVariable, statements);
+                            }
+                            statements.add(statement);
                         }
-                        statements.add(statement);
                     }
                 }
 
@@ -46,12 +49,14 @@ public class AssignedVariableHashMap extends HashMap<VariableInfo<?>, Set<Execut
                     final Set<VariableUsageInfo<?>> variableUsages = condition.getVariableUsages();
                     for (final VariableUsageInfo<?> variableUsage : variableUsages) {
                         final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
-                        Set<ExecutableElementInfo> statements = INSTANCE.get(usedVariable);
-                        if (null == statements) {
-                            statements = new HashSet<ExecutableElementInfo>();
-                            INSTANCE.put(usedVariable, statements);
+                        if (!(usedVariable instanceof FieldInfo)) {
+                            Set<ExecutableElementInfo> statements = INSTANCE.get(usedVariable);
+                            if (null == statements) {
+                                statements = new HashSet<ExecutableElementInfo>();
+                                INSTANCE.put(usedVariable, statements);
+                            }
+                            statements.add(condition);
                         }
-                        statements.add(condition);
                     }
                 }
 

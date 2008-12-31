@@ -214,24 +214,28 @@ public class SCDetector extends MetricsTool {
 
         // 変数を指定することにより，その変数に対して代入を行っている文を取得するためのハッシュを構築する
         // ただし，条件節については，変数を参照している場合もハッシュを構築する
+        out.println("constructing variable - statement relations ...");
         for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
                 .getTargetMethodInfos()) {
             AssignedVariableHashMap.INSTANCE.makeHash(method);
         }
 
         // ExecutableElement単位で正規化データを構築する
+        out.println("constructing statement hashtable ...");
         for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
                 .getTargetMethodInfos()) {
             NormalizedElementHashMap.INSTANCE.makeHash(method);
         }
 
         // ConditionInfo から その所有者である ConditionalBlockInfo を取得するためのデータを作成(Forward Slice　用)
+        out.println("constructing conditional block - condition relations ...");
         for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
                 .getTargetMethodInfos()) {
             ConditionHashMap.INSTANCE.makeHash(method);
         }
 
         // ハッシュ値が同じ2つの文を基点にしてコードクローンを検出
+        out.println("detecting clone pairs ...");
         final Set<ClonePairInfo> clonePairs = new HashSet<ClonePairInfo>();
         for (final Integer hash : NormalizedElementHashMap.INSTANCE.keySet()) {
 
@@ -259,44 +263,49 @@ public class SCDetector extends MetricsTool {
             }
         }
 
+        out.println("filtering out uninterested clone pairs ...");
         final Set<ClonePairInfo> refinedClonePairs = new HashSet<ClonePairInfo>();
         CLONEPAIR: for (final ClonePairInfo clonePair : clonePairs) {
-            COUNTERCLONEPAIR: for (final ClonePairInfo counterClonePair : clonePairs) {
 
-                if (clonePair == counterClonePair) {
-                    continue COUNTERCLONEPAIR;
+            // はじめと終りが一致しているコード片はフィルタリングする
+            if (Configuration.INSTANCE.getFJ()) {
+                final SortedSet<ExecutableElementInfo> cloneA = clonePair.getCloneA();
+                final SortedSet<ExecutableElementInfo> cloneB = clonePair.getCloneB();
+                if ((cloneA.first() == cloneB.first()) && (cloneA.last() == cloneB.last())) {
+                    continue CLONEPAIR;
                 }
+            }
 
-                //他のクローンペアに内包されるクローンペアを除去する
-                if (Configuration.INSTANCE.getFI()) {
+            // 閾値以上重複しているコード片はフィルタリングする
+            {
+                final SortedSet<ExecutableElementInfo> cloneA = clonePair.getCloneA();
+                final SortedSet<ExecutableElementInfo> cloneB = clonePair.getCloneB();
+                int sharedElementCount = 0;
+                for (final ExecutableElementInfo element : cloneA) {
+                    if (cloneB.contains(element)) {
+                        sharedElementCount++;
+                    }
+                }
+                if (Configuration.INSTANCE.getFK() < ((100 * 2 * sharedElementCount) / (cloneA
+                        .size() + cloneB.size()))) {
+                    continue CLONEPAIR;
+                }
+            }
+
+            //他のクローンペアに内包されるクローンペアを除去する
+            if (Configuration.INSTANCE.getFI()) {
+                COUNTERCLONEPAIR: for (final ClonePairInfo counterClonePair : clonePairs) {
+
+                    if (clonePair == counterClonePair) {
+                        continue COUNTERCLONEPAIR;
+                    }
+
                     if (clonePair.includedBy(counterClonePair)) {
                         continue CLONEPAIR;
                     }
                 }
-
-                if (Configuration.INSTANCE.getFJ()) {
-                    final SortedSet<ExecutableElementInfo> cloneA = clonePair.getCloneA();
-                    final SortedSet<ExecutableElementInfo> cloneB = clonePair.getCloneB();
-                    if ((cloneA.first() == cloneB.first()) && (cloneA.last() == cloneB.last())) {
-                        continue CLONEPAIR;
-                    }
-                }
-
-                {
-                    final SortedSet<ExecutableElementInfo> cloneA = clonePair.getCloneA();
-                    final SortedSet<ExecutableElementInfo> cloneB = clonePair.getCloneB();
-                    int sharedElementCount = 0;
-                    for (final ExecutableElementInfo element : cloneA) {
-                        if (cloneB.contains(element)) {
-                            sharedElementCount++;
-                        }
-                    }
-                    if (Configuration.INSTANCE.getFK() < ((100 * 2 * sharedElementCount) / (cloneA
-                            .size() + cloneB.size()))) {
-                        continue CLONEPAIR;
-                    }
-                }
             }
+
             refinedClonePairs.add(clonePair);
         }
 
@@ -314,5 +323,4 @@ public class SCDetector extends MetricsTool {
             e.printStackTrace();
         }
     }
-
 }
