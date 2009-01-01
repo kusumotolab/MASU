@@ -81,6 +81,14 @@ public class SCDetector extends MetricsTool {
             }
 
             {
+                final Option r = new Option("r", "reference", false,
+                        "use variable reference as dependencies");
+                r.setArgName("reference");
+                r.setRequired(false);
+                options.addOption(r);
+            }
+
+            {
                 final Option pv = new Option("pv", true, "parameterize variables");
                 pv.setArgName("variable parameterization level");
                 pv.setArgs(1);
@@ -137,6 +145,7 @@ public class SCDetector extends MetricsTool {
             Configuration.INSTANCE.setD(cmd.getOptionValue("d"));
             Configuration.INSTANCE.setL(cmd.getOptionValue("l"));
             Configuration.INSTANCE.setO(cmd.getOptionValue("o"));
+            Configuration.INSTANCE.setR(!cmd.hasOption("r"));
             Configuration.INSTANCE.setS(Integer.valueOf(cmd.getOptionValue("s")));
             if (cmd.hasOption("pv")) {
                 Configuration.INSTANCE.setPV(Integer.valueOf(cmd.getOptionValue("pv")));
@@ -217,7 +226,7 @@ public class SCDetector extends MetricsTool {
         out.println("constructing variable - statement relations ...");
         for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
                 .getTargetMethodInfos()) {
-            AssignedVariableHashMap.INSTANCE.makeHash(method);
+            VariableHashMap.INSTANCE.makeHash(method);
         }
 
         // ExecutableElement単位で正規化データを構築する

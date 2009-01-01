@@ -9,6 +9,7 @@ public final class Configuration {
         this.d = null;
         this.l = null;
         this.o = null;
+        this.r = true;
         this.pv = 1;
         this.pm = 2;
         this.pc = 2;
@@ -39,6 +40,14 @@ public final class Configuration {
 
     public void setO(final String o) {
         this.o = o;
+    }
+
+    public boolean getR() {
+        return this.r;
+    }
+
+    public void setR(final boolean r) {
+        this.r = r;
     }
 
     public int getS() {
@@ -119,6 +128,8 @@ public final class Configuration {
     private String l;
 
     private String o;
+
+    private boolean r;
 
     private int s;
 

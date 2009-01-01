@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
 
-public class AssignedVariableHashMap extends HashMap<VariableInfo<?>, Set<ExecutableElementInfo>> {
+public class VariableHashMap extends HashMap<VariableInfo<?>, Set<ExecutableElementInfo>> {
 
     public void makeHash(final LocalSpaceInfo localSpace) {
 
@@ -28,7 +28,7 @@ public class AssignedVariableHashMap extends HashMap<VariableInfo<?>, Set<Execut
                 final Set<VariableUsageInfo<?>> variableUsages = ((SingleStatementInfo) statement)
                         .getVariableUsages();
                 for (final VariableUsageInfo<?> variableUsage : variableUsages) {
-                    if (variableUsage.isAssignment()) {
+                    if (Configuration.INSTANCE.getR() || variableUsage.isAssignment()) {
                         final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
                         if (!(usedVariable instanceof FieldInfo)) {
                             Set<ExecutableElementInfo> statements = INSTANCE.get(usedVariable);
@@ -65,9 +65,9 @@ public class AssignedVariableHashMap extends HashMap<VariableInfo<?>, Set<Execut
         }
     }
 
-    private AssignedVariableHashMap() {
+    private VariableHashMap() {
         super();
     }
 
-    public static final AssignedVariableHashMap INSTANCE = new AssignedVariableHashMap();
+    public static final VariableHashMap INSTANCE = new VariableHashMap();
 }

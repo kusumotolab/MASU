@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -29,8 +31,14 @@ public class ProgramSlice {
      */
     static void performBackwordSlice(final ExecutableElementInfo elementA,
             final ExecutableElementInfo elementB, final ClonePairInfo clonePair,
-            final Set<VariableInfo<?>> usedVariableHashesA,
-            final Set<VariableInfo<?>> usedVariableHashesB) {
+            final Set<VariableInfo<?>> unmodifiableUsedVariableHashesA,
+            final Set<VariableInfo<?>> unmodifiableUsedVariableHashesB) {
+
+        //調査した変数のハッシュを作成
+        final Set<VariableInfo<?>> usedVariableHashesA = new HashSet<VariableInfo<?>>(
+                unmodifiableUsedVariableHashesA);
+        final Set<VariableInfo<?>> usedVariableHashesB = new HashSet<VariableInfo<?>>(
+                unmodifiableUsedVariableHashesB);
 
         // スライス基点の変数利用を取得
         final Set<VariableUsageInfo<?>> variableUsagesA = elementA.getVariableUsages();
@@ -45,8 +53,8 @@ public class ProgramSlice {
             if (variableUsage.isReference()) {
                 final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
                 if (!usedVariableHashesA.contains(usedVariable)
-                        && AssignedVariableHashMap.INSTANCE.containsKey(usedVariable)) {
-                    relatedElementsA.addAll(AssignedVariableHashMap.INSTANCE.get(usedVariable));
+                        && VariableHashMap.INSTANCE.containsKey(usedVariable)) {
+                    relatedElementsA.addAll(VariableHashMap.INSTANCE.get(usedVariable));
                     usedVariableHashesA.add(usedVariable);
                 }
             }
@@ -57,8 +65,8 @@ public class ProgramSlice {
             final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
             if (variableUsage.isReference()) {
                 if (!usedVariableHashesB.contains(usedVariable)
-                        && AssignedVariableHashMap.INSTANCE.containsKey(usedVariable)) {
-                    relatedElementsB.addAll(AssignedVariableHashMap.INSTANCE.get(usedVariable));
+                        && VariableHashMap.INSTANCE.containsKey(usedVariable)) {
+                    relatedElementsB.addAll(VariableHashMap.INSTANCE.get(usedVariable));
                     usedVariableHashesB.add(usedVariable);
                 }
             }
@@ -112,8 +120,9 @@ public class ProgramSlice {
                         clonePair.add(relatedElementArrayA[a], relatedElementArrayB[b]);
 
                         ProgramSlice.performBackwordSlice(relatedElementArrayA[a],
-                                relatedElementArrayB[b], clonePair, usedVariableHashesA,
-                                usedVariableHashesB);
+                                relatedElementArrayB[b], clonePair, Collections
+                                        .unmodifiableSet(usedVariableHashesA), Collections
+                                        .unmodifiableSet(usedVariableHashesB));
                     }
 
                 } else if ((relatedElementArrayA[a] instanceof ConditionInfo)
@@ -128,8 +137,7 @@ public class ProgramSlice {
                     if (hashA == hashB) {
                         clonePair.add(conditionA, conditionB);
 
-                        ProgramSlice.performForwardSlice(conditionA, conditionB, clonePair,
-                                usedVariableHashesA, usedVariableHashesB);
+                        ProgramSlice.performForwardSlice(conditionA, conditionB, clonePair);
                     }
                 }
             }
@@ -137,9 +145,7 @@ public class ProgramSlice {
     }
 
     private static void performForwardSlice(final ConditionInfo conditionA,
-            final ConditionInfo conditionB, final ClonePairInfo clonePair,
-            final Set<VariableInfo<?>> usedVariableHashesA,
-            final Set<VariableInfo<?>> usedVariableHashesB) {
+            final ConditionInfo conditionB, final ClonePairInfo clonePair) {
 
         final Set<VariableUsageInfo<?>> variableUsagesA = conditionA.getVariableUsages();
         final Set<VariableUsageInfo<?>> variableUsagesB = conditionB.getVariableUsages();
