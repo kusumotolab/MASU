@@ -31,12 +31,12 @@ public class VariableHashMap extends HashMap<VariableInfo<?>, Set<ExecutableElem
                     if (Configuration.INSTANCE.getR() || variableUsage.isAssignment()) {
                         final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
                         if (!(usedVariable instanceof FieldInfo)) {
-                            Set<ExecutableElementInfo> statements = INSTANCE.get(usedVariable);
-                            if (null == statements) {
-                                statements = new HashSet<ExecutableElementInfo>();
-                                INSTANCE.put(usedVariable, statements);
+                            Set<ExecutableElementInfo> elements = INSTANCE.get(usedVariable);
+                            if (null == elements) {
+                                elements = new HashSet<ExecutableElementInfo>();
+                                INSTANCE.put(usedVariable, elements);
                             }
-                            statements.add(statement);
+                            elements.add(statement);
                         }
                     }
                 }
@@ -50,12 +50,12 @@ public class VariableHashMap extends HashMap<VariableInfo<?>, Set<ExecutableElem
                     for (final VariableUsageInfo<?> variableUsage : variableUsages) {
                         final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
                         if (!(usedVariable instanceof FieldInfo)) {
-                            Set<ExecutableElementInfo> statements = INSTANCE.get(usedVariable);
-                            if (null == statements) {
-                                statements = new HashSet<ExecutableElementInfo>();
-                                INSTANCE.put(usedVariable, statements);
+                            Set<ExecutableElementInfo> elements = INSTANCE.get(usedVariable);
+                            if (null == elements) {
+                                elements = new HashSet<ExecutableElementInfo>();
+                                INSTANCE.put(usedVariable, elements);
                             }
-                            statements.add(condition);
+                            elements.add(condition);
                         }
                     }
                 }

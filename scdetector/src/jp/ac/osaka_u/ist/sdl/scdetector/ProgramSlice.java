@@ -48,27 +48,23 @@ public class ProgramSlice {
         final SortedSet<ExecutableElementInfo> relatedElementsA = new TreeSet<ExecutableElementInfo>();
         final SortedSet<ExecutableElementInfo> relatedElementsB = new TreeSet<ExecutableElementInfo>();
 
-        //　スライス基点(elementA)の変数利用が参照であれば，その変数に対して代入を行っている文をスライス追加用のSetに格納する
+        //　スライス基点(elementA)で利用されている変数に対して，その変数に対して代入を行っている文をスライス追加用のSetに格納する
         for (final VariableUsageInfo<?> variableUsage : variableUsagesA) {
-            if (variableUsage.isReference()) {
-                final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
-                if (!usedVariableHashesA.contains(usedVariable)
-                        && VariableHashMap.INSTANCE.containsKey(usedVariable)) {
-                    relatedElementsA.addAll(VariableHashMap.INSTANCE.get(usedVariable));
-                    usedVariableHashesA.add(usedVariable);
-                }
+            final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
+            if (!usedVariableHashesA.contains(usedVariable)
+                    && VariableHashMap.INSTANCE.containsKey(usedVariable)) {
+                relatedElementsA.addAll(VariableHashMap.INSTANCE.get(usedVariable));
+                usedVariableHashesA.add(usedVariable);
             }
         }
 
-        //　スライス基点(elementB)の変数利用が参照であれば，その変数に対して代入を行っている文をスライス追加用のSetに格納する
+        //　スライス基点(elementB)で利用されている変数に対して，その変数に対して代入を行っている文をスライス追加用のSetに格納する
         for (final VariableUsageInfo<?> variableUsage : variableUsagesB) {
             final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
-            if (variableUsage.isReference()) {
-                if (!usedVariableHashesB.contains(usedVariable)
-                        && VariableHashMap.INSTANCE.containsKey(usedVariable)) {
-                    relatedElementsB.addAll(VariableHashMap.INSTANCE.get(usedVariable));
-                    usedVariableHashesB.add(usedVariable);
-                }
+            if (!usedVariableHashesB.contains(usedVariable)
+                    && VariableHashMap.INSTANCE.containsKey(usedVariable)) {
+                relatedElementsB.addAll(VariableHashMap.INSTANCE.get(usedVariable));
+                usedVariableHashesB.add(usedVariable);
             }
         }
 
@@ -137,6 +133,9 @@ public class ProgramSlice {
                     if (hashA == hashB) {
                         clonePair.add(conditionA, conditionB);
 
+                        ProgramSlice.performBackwordSlice(conditionA, conditionB, clonePair,
+                                Collections.unmodifiableSet(usedVariableHashesA), Collections
+                                        .unmodifiableSet(usedVariableHashesB));
                         ProgramSlice.performForwardSlice(conditionA, conditionB, clonePair);
                     }
                 }

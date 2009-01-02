@@ -16,6 +16,7 @@ public final class Configuration {
         this.fi = false;
         this.fj = false;
         this.fk = 100;
+        this.fl = 2;
     }
 
     public String getD() {
@@ -123,6 +124,19 @@ public final class Configuration {
         this.fk = fk;
     }
 
+    public int getFL() {
+        return this.fl;
+    }
+
+    public void setFL(final int fl) {
+
+        if (fl < 0) {
+            throw new RuntimeException("\"fl\" option must be 0 or more.");
+        }
+
+        this.fl = fl;
+    }
+
     private String d;
 
     private String l;
@@ -144,4 +158,6 @@ public final class Configuration {
     private boolean fj;
 
     private int fk;
+
+    private int fl;
 }

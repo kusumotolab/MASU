@@ -139,6 +139,16 @@ public class SCDetector extends MetricsTool {
                 options.addOption(fk);
             }
 
+            {
+                final Option fl = new Option("fl", true,
+                        "code clones whose elements sizes are different more than the specified threshold");
+                fl.setArgName("threshold");
+                fl.setArgs(1);
+                fl.setRequired(false);
+                fl.setType(Integer.class);
+                options.addOption(fl);
+            }
+
             final CommandLineParser parser = new PosixParser();
             final CommandLine cmd = parser.parse(options, args);
 
@@ -160,6 +170,9 @@ public class SCDetector extends MetricsTool {
             Configuration.INSTANCE.setFJ(cmd.hasOption("fj"));
             if (cmd.hasOption("fk")) {
                 Configuration.INSTANCE.setFK(Integer.valueOf(cmd.getOptionValue("fk")));
+            }
+            if (cmd.hasOption("fl")) {
+                Configuration.INSTANCE.setFL(Integer.valueOf(cmd.getOptionValue("fl")));
             }
 
         } catch (ParseException e) {
@@ -251,6 +264,12 @@ public class SCDetector extends MetricsTool {
             final List<ExecutableElementInfo> elements = NormalizedElementHashMap.INSTANCE
                     .get(hash);
 
+            if (50 < elements.size()) {
+                continue;
+            }
+
+            System.out.println(elements.size());
+
             for (int i = 0; i < elements.size(); i++) {
                 for (int j = i + 1; j < elements.size(); j++) {
 
@@ -275,6 +294,16 @@ public class SCDetector extends MetricsTool {
         out.println("filtering out uninterested clone pairs ...");
         final Set<ClonePairInfo> refinedClonePairs = new HashSet<ClonePairInfo>();
         CLONEPAIR: for (final ClonePairInfo clonePair : clonePairs) {
+
+            // コード片のサイズが閾値以上違う場合はフィルタリングする
+            {
+                final SortedSet<ExecutableElementInfo> cloneA = clonePair.getCloneA();
+                final SortedSet<ExecutableElementInfo> cloneB = clonePair.getCloneB();
+                if (((cloneA.size() + Configuration.INSTANCE.getFL()) < cloneB.size())
+                        || ((cloneA.size() - Configuration.INSTANCE.getFL()) > cloneB.size())) {
+                    continue CLONEPAIR;
+                }
+            }
 
             // はじめと終りが一致しているコード片はフィルタリングする
             if (Configuration.INSTANCE.getFJ()) {
