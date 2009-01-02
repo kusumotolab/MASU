@@ -136,7 +136,9 @@ public class ProgramSlice {
                         ProgramSlice.performBackwordSlice(conditionA, conditionB, clonePair,
                                 Collections.unmodifiableSet(usedVariableHashesA), Collections
                                         .unmodifiableSet(usedVariableHashesB));
-                        ProgramSlice.performForwardSlice(conditionA, conditionB, clonePair);
+                        ProgramSlice.performForwardSlice(conditionA, conditionB, clonePair,
+                                Collections.unmodifiableSet(usedVariableHashesA), Collections
+                                        .unmodifiableSet(usedVariableHashesB));
                     }
                 }
             }
@@ -144,7 +146,9 @@ public class ProgramSlice {
     }
 
     private static void performForwardSlice(final ConditionInfo conditionA,
-            final ConditionInfo conditionB, final ClonePairInfo clonePair) {
+            final ConditionInfo conditionB, final ClonePairInfo clonePair,
+            final Set<VariableInfo<?>> unmodifiableUsedVariableHashesA,
+            final Set<VariableInfo<?>> unmodifiableUsedVariableHashesB) {
 
         final Set<VariableUsageInfo<?>> variableUsagesA = conditionA.getVariableUsages();
         final Set<VariableUsageInfo<?>> variableUsagesB = conditionB.getVariableUsages();
@@ -187,6 +191,9 @@ public class ProgramSlice {
                         && ProgramSlice.isUsed(usedVariablesB, innerElementArrayB[b])) {
 
                     clonePair.add(innerElementArrayA[a], innerElementArrayB[b]);
+
+                    ProgramSlice.performBackwordSlice(conditionA, conditionB, clonePair,
+                            unmodifiableUsedVariableHashesA, unmodifiableUsedVariableHashesB);
                 }
             }
         }
