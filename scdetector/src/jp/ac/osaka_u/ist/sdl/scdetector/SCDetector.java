@@ -15,6 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
@@ -48,6 +49,15 @@ public class SCDetector extends MetricsTool {
             final Options options = new Options();
 
             {
+                final Option c = new Option("c", "count", true,
+                        "count for filtering out repeated statements");
+                c.setArgName("count");
+                c.setArgs(1);
+                c.setRequired(false);
+                options.addOption(c);
+            }
+
+            {
                 final Option d = new Option("d", "directory", true, "target directory");
                 d.setArgName("directory");
                 d.setArgs(1);
@@ -73,19 +83,19 @@ public class SCDetector extends MetricsTool {
             }
 
             {
-                final Option s = new Option("s", "size", true, "lower size of detected clone");
-                s.setArgName("size");
-                s.setArgs(1);
-                s.setRequired(true);
-                options.addOption(s);
-            }
-
-            {
                 final Option r = new Option("r", "reference", false,
                         "use variable reference as dependencies");
                 r.setArgName("reference");
                 r.setRequired(false);
                 options.addOption(r);
+            }
+
+            {
+                final Option s = new Option("s", "size", true, "lower size of detected clone");
+                s.setArgName("size");
+                s.setArgs(1);
+                s.setRequired(true);
+                options.addOption(s);
             }
 
             {
@@ -152,6 +162,9 @@ public class SCDetector extends MetricsTool {
             final CommandLineParser parser = new PosixParser();
             final CommandLine cmd = parser.parse(options, args);
 
+            if (cmd.hasOption("c")) {
+                Configuration.INSTANCE.setC(Integer.valueOf(cmd.getOptionValue("c")));
+            }
             Configuration.INSTANCE.setD(cmd.getOptionValue("d"));
             Configuration.INSTANCE.setL(cmd.getOptionValue("l"));
             Configuration.INSTANCE.setO(cmd.getOptionValue("o"));
@@ -264,11 +277,10 @@ public class SCDetector extends MetricsTool {
             final List<ExecutableElementInfo> elements = NormalizedElementHashMap.INSTANCE
                     .get(hash);
 
-            if (50 < elements.size()) {
+            if ((Configuration.INSTANCE.getC() < elements.size())
+                    && !(elements.get(0) instanceof ReturnStatementInfo)) {
                 continue;
             }
-
-            System.out.println(elements.size());
 
             for (int i = 0; i < elements.size(); i++) {
                 for (int j = i + 1; j < elements.size(); j++) {

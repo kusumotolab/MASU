@@ -6,6 +6,7 @@ public final class Configuration {
     public static Configuration INSTANCE = new Configuration();
 
     private Configuration() {
+        this.c = 50;
         this.d = null;
         this.l = null;
         this.o = null;
@@ -17,6 +18,14 @@ public final class Configuration {
         this.fj = false;
         this.fk = 100;
         this.fl = 2;
+    }
+
+    public int getC() {
+        return this.c;
+    }
+
+    public void setC(final int c) {
+        this.c = c;
     }
 
     public String getD() {
@@ -137,27 +146,69 @@ public final class Configuration {
         this.fl = fl;
     }
 
+    /**
+     * ハッシュ値が同じ文が閾値以上の個数ある場合は，スライス拠点としないためのオプション
+     */
+    private int c;
+
+    /**
+     * 解析対象ディレクトリを指定するためのオプション
+     */
     private String d;
 
+    /**
+     * 解析対象プログラミング言語を指定するためのオプション
+     */
     private String l;
 
+    /**
+     * 解析結果を出力するファイルを指定するためのオプション
+     */
     private String o;
 
+    /**
+     * 変数参照もバックワードスライスの依存関係として含めるかを指定するためのオプション
+     */
     private boolean r;
 
+    /**
+     * 出力するコードクローンのサイズの下限を指定するためのオプション．
+     * 大きさは文の数を表す．
+     */
     private int s;
 
+    /**
+     * 変数利用の正規化レベルを指定するためのオプション
+     */
     private int pv;
 
+    /**
+     * メソッド呼び出しの正規化レベルを指定するためのオプション
+     */
     private int pm;
 
+    /**
+     * コンストラクタ呼び出しの正規化レベルを指定するためのオプション
+     */
     private int pc;
 
+    /**
+     * 他のクローンペアに内包されるクローンペアをフィルタリングするためのオプション
+     */
     private boolean fi;
 
+    /**
+     * 始めと終りが一致しているクローンペアをフィルタリングするためのオプション
+     */
     private boolean fj;
 
+    /**
+     * 閾値以上オーバーラップしているクローンペアをフィルタリングするためのオプション
+     */
     private int fk;
 
+    /**
+     * コードサイズが閾値以上異なるクローンペアをフィルタリングするためのオプション
+     */
     private int fl;
 }
