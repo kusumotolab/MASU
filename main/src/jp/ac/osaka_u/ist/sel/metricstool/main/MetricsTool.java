@@ -1471,6 +1471,15 @@ public class MetricsTool {
                     classInfoManager, fieldInfoManager, methodInfoManager);
         }
 
+        // 各未解決コンストラクタ情報に対して
+        for (final UnresolvedConstructorInfo unresolvedConstructorInfo : unresolvedClassInfo
+                .getDefinedConstructors()) {
+
+            // 未解決コンストラクタ情報内の利用関係を解決
+            this.addReferenceAssignmentCallRelation(unresolvedConstructorInfo, unresolvedClassInfo,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+        }
+        
         // 各インナークラスに対して
         for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
                 .getInnerClasses()) {

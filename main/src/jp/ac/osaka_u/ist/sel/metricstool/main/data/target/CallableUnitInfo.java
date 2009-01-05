@@ -22,7 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 
 public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visualizable, Modifier,
-        TypeParameterizable {
+        TypeParameterizable, Comparable<CallableUnitInfo> {
 
     /**
      * オブジェクトを初期化する
@@ -55,6 +55,77 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
+    }
+
+    /**
+     * メソッド間の順序関係を定義するメソッド．以下の順序で順序を決める．
+     * <ol>
+     * <li>メソッドを定義しているクラスの名前空間名</li>
+     * <li>メソッドを定義しているクラスのクラス名</li>
+     * <li>メソッド名</li>
+     * <li>メソッドの引数の個数</li>
+     * <li>メソッドの引数の型（第一引数から順番に）</li>
+     */
+    @Override
+    public final int compareTo(final CallableUnitInfo target) {
+
+        if (null == target) {
+            throw new IllegalArgumentException();
+        }
+
+        // クラスオブジェクトの compareTo を用いる．
+        // クラスの名前空間名，クラス名が比較に用いられている．
+        final ClassInfo ownerClass = this.getOwnerClass();
+        final ClassInfo correspondOwnerClass = target.getOwnerClass();
+        final int classOrder = ownerClass.compareTo(correspondOwnerClass);
+        if (classOrder != 0) {
+            return classOrder;
+        }
+
+        if (this.hashCode() > target.hashCode()) {
+            return 1;
+        } else if (this.hashCode() < target.hashCode()) {
+            return -1;
+        } else {
+            return 0;
+        }
+
+        /*
+        // メソッド名で比較
+        final String name = this.getMethodName();
+        final String correspondName = method.getMethodName();
+        final int methodNameOrder = name.compareTo(correspondName);
+        if (methodNameOrder != 0) {
+            return methodNameOrder;
+        }
+
+        // 引数の個数で比較
+        final int parameterNumber = this.getParameterNumber();
+        final int correspondParameterNumber = method.getParameterNumber();
+        if (parameterNumber < correspondParameterNumber) {
+            return 1;
+        } else if (parameterNumber > correspondParameterNumber) {
+            return -1;
+        } else {
+
+            // 引数の型で比較．第一引数から順番に．
+            final Iterator<ParameterInfo> parameterIterator = this.getParameters().iterator();
+            final Iterator<ParameterInfo> correspondParameterIterator = method.getParameters()
+                    .iterator();
+            while (parameterIterator.hasNext() && correspondParameterIterator.hasNext()) {
+                final ParameterInfo parameter = parameterIterator.next();
+                final ParameterInfo correspondParameter = correspondParameterIterator.next();
+                final String typeName = parameter.getName();
+                final String correspondTypeName = correspondParameter.getName();
+                final int typeOrder = typeName.compareTo(correspondTypeName);
+                if (typeOrder != 0) {
+                    return typeOrder;
+                }
+            }
+
+            return 0;
+        }
+        */
     }
 
     /**
