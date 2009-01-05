@@ -12,8 +12,11 @@ public final class Configuration {
         this.o = null;
         this.r = true;
         this.pv = 1;
-        this.pm = 2;
-        this.pc = 2;
+        this.pi = 2;
+        this.pc = 1;
+        this.po = 1;
+        this.pl = 1;
+        this.pr = false;
         this.fi = false;
         this.fj = false;
         this.fk = 100;
@@ -80,16 +83,16 @@ public final class Configuration {
         this.pv = pv;
     }
 
-    public int getPM() {
-        return this.pm;
+    public int getPI() {
+        return this.pi;
     }
 
-    public void setPM(final int pm) {
+    public void setPI(final int pi) {
 
-        if ((pm < 0) || (3 < pm)) {
-            throw new RuntimeException("\"pm\" option must be between 0 and 3.");
+        if ((pi < 0) || (3 < pi)) {
+            throw new RuntimeException("\"pi\" option must be between 0 and 3.");
         }
-        this.pm = pm;
+        this.pi = pi;
     }
 
     public int getPC() {
@@ -98,10 +101,42 @@ public final class Configuration {
 
     public void setPC(final int pc) {
 
-        if ((pc < 0) || (3 < pc)) {
-            throw new RuntimeException("\"pc\" option must be between 0 and 3.");
+        if ((pc < 0) || (2 < pc)) {
+            throw new RuntimeException("\"pc\" option must be between 0 and 2.");
         }
         this.pc = pc;
+    }
+
+    public int getPO() {
+        return this.po;
+    }
+
+    public void setPO(final int po) {
+
+        if ((po < 0) || (2 < po)) {
+            throw new RuntimeException("\"po\" option must be between 0 and 2.");
+        }
+        this.po = po;
+    }
+
+    public int getPL() {
+        return this.pl;
+    }
+
+    public void setPL(final int pl) {
+
+        if ((pl < 0) || (2 < pl)) {
+            throw new RuntimeException("\"pl\" option must be between 0 and 2.");
+        }
+        this.pl = pl;
+    }
+
+    public boolean getPR() {
+        return this.pr;
+    }
+
+    public void setPR(final boolean pr) {
+        this.pr = pr;
     }
 
     public boolean getFI() {
@@ -179,18 +214,54 @@ public final class Configuration {
 
     /**
      * 変数利用の正規化レベルを指定するためのオプション
+     * 0: 変数名をそのまま使う
+     * 1: 変数名を型名に正規化する．
+     * 2: 全ての変数を同一字句に正規化する．
      */
     private int pv;
 
     /**
-     * メソッド呼び出しの正規化レベルを指定するためのオプション
+     * (メソッドまたはコンストラクタ)呼び出しの正規化レベルを指定するためのオプション
+     * 0: 呼び出し名はそのまま，引数情報も用いる
+     * 1: 呼び出し名を返り値の型名に変換する，引数情報も用いる．
+     * 2: 呼び出し名を返り値の型名に変換する，引数情報は用いない．
+     * 3: 全ての呼び出しを同一字句に正規化する．引数情報は用いない
      */
-    private int pm;
+    private int pi;
 
     /**
-     * コンストラクタ呼び出しの正規化レベルを指定するためのオプション
+     * キャスト使用の正規化レベルを指定するためのオプション
+     * 0: キャスト使用をそのまま用いる．
+     * 1: キャスト使用を型に正規化する．
+     * 2: 全てのキャスト使用を同一字句に正規化する．
      */
     private int pc;
+
+    /**
+     * 
+     * 単項演算，二項演算，三項演算の正規化レベルを指定するためのオプション
+     * 0: 演算をそのまま用いる
+     * 1: 演算をその型に正規化する
+     * 2: 全ての演算を同一の字句に正規化する
+     */
+    private int po;
+
+    /**
+     *
+     * リテラルの正規化レベルを指定するためのオプション
+     * 0: リテラルをそのまま用いる
+     * 1: リテラルをその型の正規化する
+     * 2: 全てのリテラルを同一の字句に正規化する 
+     */
+    private int pl;
+
+    /**
+     * 
+     * クラス参照名を正規化するためのオプション
+     * false: クラス参照は正規化しない
+     * true: 全てのクラス参照を同一字句に正規化する
+     */
+    private boolean pr;
 
     /**
      * 他のクローンペアに内包されるクローンペアをフィルタリングするためのオプション

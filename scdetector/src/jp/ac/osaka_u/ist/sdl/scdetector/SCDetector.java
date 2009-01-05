@@ -108,21 +108,45 @@ public class SCDetector extends MetricsTool {
             }
 
             {
-                final Option pm = new Option("pm", true, "parameterize method invocation");
-                pm.setArgName("method invocation parameterization level");
-                pm.setArgs(1);
-                pm.setRequired(false);
-                pm.setType(Integer.class);
-                options.addOption(pm);
+                final Option pi = new Option("pi", true, "parameterize invocations");
+                pi.setArgName("invocation parameterization level");
+                pi.setArgs(1);
+                pi.setRequired(false);
+                pi.setType(Integer.class);
+                options.addOption(pi);
             }
 
             {
-                final Option pc = new Option("pc", true, "parameterize constructor invocation");
-                pc.setArgName("constructor invocation parameterization level");
+                final Option po = new Option("po", true, "parameterize operations");
+                po.setArgName("operation parameterization level");
+                po.setArgs(1);
+                po.setRequired(false);
+                po.setType(Integer.class);
+                options.addOption(po);
+            }
+
+            {
+                final Option pl = new Option("pl", true, "parameterize literals");
+                pl.setArgName("literal parameterization level");
+                pl.setArgs(1);
+                pl.setRequired(false);
+                pl.setType(Integer.class);
+                options.addOption(pl);
+            }
+
+            {
+                final Option pc = new Option("pc", true, "parameterize casts");
+                pc.setArgName("cast parameterization level");
                 pc.setArgs(1);
                 pc.setRequired(false);
                 pc.setType(Integer.class);
                 options.addOption(pc);
+            }
+
+            {
+                final Option pr = new Option("pr", false, "parameterize class references");
+                pr.setRequired(false);
+                options.addOption(pr);
             }
 
             {
@@ -173,12 +197,19 @@ public class SCDetector extends MetricsTool {
             if (cmd.hasOption("pv")) {
                 Configuration.INSTANCE.setPV(Integer.valueOf(cmd.getOptionValue("pv")));
             }
-            if (cmd.hasOption("pm")) {
-                Configuration.INSTANCE.setPM(Integer.valueOf(cmd.getOptionValue("pm")));
+            if (cmd.hasOption("pi")) {
+                Configuration.INSTANCE.setPI(Integer.valueOf(cmd.getOptionValue("pi")));
+            }
+            if (cmd.hasOption("po")) {
+                Configuration.INSTANCE.setPO(Integer.valueOf(cmd.getOptionValue("po")));
+            }
+            if (cmd.hasOption("pl")) {
+                Configuration.INSTANCE.setPL(Integer.valueOf(cmd.getOptionValue("pl")));
             }
             if (cmd.hasOption("pc")) {
                 Configuration.INSTANCE.setPC(Integer.valueOf(cmd.getOptionValue("pc")));
             }
+            Configuration.INSTANCE.setPR(cmd.hasOption("pr"));
             Configuration.INSTANCE.setFI(cmd.hasOption("fi"));
             Configuration.INSTANCE.setFJ(cmd.hasOption("fj"));
             if (cmd.hasOption("fk")) {
@@ -363,6 +394,7 @@ public class SCDetector extends MetricsTool {
 
         try {
 
+            out.println("outputing clone pairs ...");
             final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(
                     Configuration.INSTANCE.getO()));
             oos.writeObject(refinedClonePairs);
@@ -372,5 +404,7 @@ public class SCDetector extends MetricsTool {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        out.println("successifully finished.");
     }
 }

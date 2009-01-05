@@ -97,7 +97,7 @@ public class Conversion {
                 break;
 
             case 2: // 正規化レベル2，全ての変数を同一字句に正規化する．
-                sb.append("VARIABLE");
+                sb.append("TOKEN");
                 break;
 
             default:
@@ -198,25 +198,38 @@ public class Conversion {
 
         } else if (expression instanceof BinominalOperationInfo) {
 
-            final ExpressionInfo firstOperand = ((BinominalOperationInfo) expression)
-                    .getFirstOperand();
-            final String firstOperandString = Conversion.getNormalizedString(firstOperand);
-            sb.append(firstOperandString);
+            final BinominalOperationInfo operation = (BinominalOperationInfo) expression;
 
-            final OPERATOR operator = ((BinominalOperationInfo) expression).getOperator();
-            final String operatorString = operator.getToken();
-            sb.append(operatorString);
+            switch (Configuration.INSTANCE.getPO()) {
 
-            final ExpressionInfo secondOperand = ((BinominalOperationInfo) expression)
-                    .getSecondOperand();
-            final String secondOperandString = Conversion.getNormalizedString(secondOperand);
-            sb.append(secondOperandString);
+            case 0: // 演算をそのまま用いる
+                final ExpressionInfo firstOperand = operation.getFirstOperand();
+                final String firstOperandString = Conversion.getNormalizedString(firstOperand);
+                sb.append(firstOperandString);
+
+                final OPERATOR operator = operation.getOperator();
+                final String operatorString = operator.getToken();
+                sb.append(operatorString);
+
+                final ExpressionInfo secondOperand = operation.getSecondOperand();
+                final String secondOperandString = Conversion.getNormalizedString(secondOperand);
+                sb.append(secondOperandString);
+                break;
+
+            case 1: // 演算をその型に正規化する
+                sb.append(operation.getType().getTypeName());
+                break;
+
+            case 2: // 全ての演算を同一の字句に正規化する
+                sb.append("TOKEN");
+                break;
+            }
 
         } else if (expression instanceof MethodCallInfo) {
 
             final MethodInfo method = ((MethodCallInfo) expression).getCallee();
 
-            switch (Configuration.INSTANCE.getPM()) {
+            switch (Configuration.INSTANCE.getPI()) {
 
             case 0: // 正規化レベル0，メソッド名はそのまま，引数情報も用いる
                 sb.append(method.getMethodName());
@@ -243,8 +256,8 @@ public class Conversion {
             case 2: // 正規化レベル1，メソッド名を返り値の型名に正規化する，引数情報は用いない
                 sb.append(method.getReturnType().getTypeName());
                 break;
-            case 3: // 正規化レベル1，メソッド名を返り値の型名に正規化する，引数情報は用いない
-                sb.append("MEHTOD");
+            case 3: // 正規化レベル1，全てのメソッドを同一字句に正規化する．引数情報は用いない
+                sb.append("TOKEN");
                 break;
             default:
                 assert false : "Here shouldn't be reached!";
@@ -256,7 +269,7 @@ public class Conversion {
 
             final ConstructorCallInfo constructorCall = ((ConstructorCallInfo) expression);
 
-            switch (Configuration.INSTANCE.getPM()) {
+            switch (Configuration.INSTANCE.getPI()) {
 
             case 0: // 正規化レベル0，コンストラクタ名はそのまま，引数情報も用いる
                 sb.append("new ");
@@ -281,11 +294,11 @@ public class Conversion {
                 sb.deleteCharAt(sb.length() - 1);
                 sb.append(")");
                 break;
-            case 2: // 正規化レベル1，コンストラクタ呼び出しを型に正規化する（new 演算子を取る），引数情報は用いない
+            case 2: // 正規化レベル2，コンストラクタ呼び出しを型に正規化する（new 演算子を取る），引数情報は用いない
                 sb.append(constructorCall.getType().getTypeName());
                 break;
-            case 3: // 正規化レベル2，メソッド名を返り値の型名に正規化する，引数情報は用いない
-                sb.append("CONSTRUCTOR");
+            case 3: // 正規化レベル3，全てのコンストラクタ呼び出しを同一字句に正規化する，引数情報は用いない
+                sb.append("TOKEN");
                 break;
             default:
                 assert false : "Here shouldn't be reached!";
@@ -293,28 +306,80 @@ public class Conversion {
 
         } else if (expression instanceof CastUsageInfo) {
 
-            sb.append("(TYPE)");
+            final CastUsageInfo cast = (CastUsageInfo) expression;
 
-            final ExpressionInfo castedExpression = ((CastUsageInfo) expression).getCastedUsage();
-            final String castedExpressionString = Conversion.getNormalizedString(castedExpression);
-            sb.append(castedExpressionString);
+            switch (Configuration.INSTANCE.getPC()) {
+            case 0:
+                sb.append("(");
+
+                sb.append(cast.getType().getTypeName());
+
+                sb.append(")");
+
+                final ExpressionInfo castedExpression = cast.getCastedUsage();
+                final String castedExpressionString = Conversion
+                        .getNormalizedString(castedExpression);
+                sb.append(castedExpressionString);
+                break;
+
+            case 1:
+                sb.append(cast.getType().getTypeName());
+                break;
+
+            case 2:
+                sb.append("TOKEN");
+                break;
+            }
 
         } else if (expression instanceof ClassReferenceInfo) {
 
-            sb.append("TYPE");
+            if (Configuration.INSTANCE.getPR()) {
+                final ClassReferenceInfo reference = (ClassReferenceInfo) expression;
+                sb.append(reference.getType().getTypeName());
+            } else {
+                sb.append("TOKEN");
+            }
 
         } else if (expression instanceof LiteralUsageInfo) {
 
-            sb.append("LITERAL");
+            final LiteralUsageInfo literal = (LiteralUsageInfo) expression;
+
+            switch (Configuration.INSTANCE.getPL()) {
+
+            case 0: // リテラルをそのまま用いる
+                sb.append(literal.getLiteral());
+                break;
+            case 1: // リテラルをその型の正規化する
+                sb.append(literal.getType().getTypeName());
+                break;
+            case 2: // 全てのリテラルを同一の字句に正規化する 
+                sb.append("TOKEN");
+                break;
+            }
 
         } else if (expression instanceof MonominalOperationInfo) {
 
-            final OPERATOR operator = ((MonominalOperationInfo) expression).getOperator();
-            sb.append(operator.getToken());
+            final MonominalOperationInfo operation = (MonominalOperationInfo) expression;
 
-            final ExpressionInfo operand = ((MonominalOperationInfo) expression).getOperand();
-            final String operandString = Conversion.getNormalizedString(operand);
-            sb.append(operandString);
+            switch (Configuration.INSTANCE.getPO()) {
+
+            case 0: // 演算をそのまま用いる
+                final OPERATOR operator = operation.getOperator();
+                sb.append(operator.getToken());
+
+                final ExpressionInfo operand = ((MonominalOperationInfo) expression).getOperand();
+                final String operandString = Conversion.getNormalizedString(operand);
+                sb.append(operandString);
+                break;
+
+            case 1: // 演算をその型に正規化する
+                sb.append(operation.getType().getTypeName());
+                break;
+
+            case 2: // 全ての演算を同一の字句に正規化する
+                sb.append("TOKEN");
+                break;
+            }
 
         } else if (expression instanceof NullUsageInfo) {
 
@@ -322,23 +387,37 @@ public class Conversion {
 
         } else if (expression instanceof TernaryOperationInfo) {
 
-            final ConditionInfo condition = ((TernaryOperationInfo) expression).getCondition();
-            final String conditionExpressionString = Conversion.getNormalizedString(condition);
-            sb.append(conditionExpressionString);
+            final TernaryOperationInfo operation = (TernaryOperationInfo) expression;
 
-            sb.append("?");
+            switch (Configuration.INSTANCE.getPO()) {
 
-            final ExpressionInfo trueExpression = ((TernaryOperationInfo) expression)
-                    .getTrueExpression();
-            String trueExpressionString = Conversion.getNormalizedString(trueExpression);
-            sb.append(trueExpressionString);
+            case 0: // 演算をそのまま用いる
 
-            sb.append(":");
+                final ConditionInfo condition = operation.getCondition();
+                final String conditionExpressionString = Conversion.getNormalizedString(condition);
+                sb.append(conditionExpressionString);
 
-            final ExpressionInfo falseExpression = ((TernaryOperationInfo) expression)
-                    .getTrueExpression();
-            String falseExpressionString = Conversion.getNormalizedString(falseExpression);
-            sb.append(falseExpressionString);
+                sb.append("?");
+
+                final ExpressionInfo trueExpression = operation.getTrueExpression();
+                String trueExpressionString = Conversion.getNormalizedString(trueExpression);
+                sb.append(trueExpressionString);
+
+                sb.append(":");
+
+                final ExpressionInfo falseExpression = operation.getFalseExpression();
+                String falseExpressionString = Conversion.getNormalizedString(falseExpression);
+                sb.append(falseExpressionString);
+                break;
+
+            case 1: // 演算をその型に正規化する
+                sb.append(operation.getType().getTypeName());
+                break;
+
+            case 2: // 全ての演算を同一の字句に正規化する
+                sb.append("TOKEN");
+                break;
+            }
 
         } else if (expression instanceof TypeParameterUsageInfo) {
 
@@ -372,7 +451,7 @@ public class Conversion {
                 break;
 
             case 2: // 正規化レベル2，全ての変数を同一字句に正規化する．
-                sb.append("VARIABLE");
+                sb.append("TOKEN");
                 break;
 
             default:
