@@ -910,7 +910,7 @@ public class MetricsTool {
     /**
      * 出力メッセージ出力用のプリンタ
      */
-    private static MessagePrinter out = new DefaultMessagePrinter(new MessageSource() {
+    protected static MessagePrinter out = new DefaultMessagePrinter(new MessageSource() {
         public String getMessageSourceName() {
             return "main";
         }
@@ -919,7 +919,7 @@ public class MetricsTool {
     /**
      * エラーメッセージ出力用のプリンタ
      */
-    private static MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
+    protected static MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
         public String getMessageSourceName() {
             return "main";
         }

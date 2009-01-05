@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
  * @author higo
  *
  */
-public final class MethodCallInfo extends CallInfo {
+public final class MethodCallInfo extends CallInfo<MethodInfo> {
 
     /**
      * 呼び出されるメソッドを与えてオブジェクトを初期化
@@ -36,7 +36,7 @@ public final class MethodCallInfo extends CallInfo {
             final MethodInfo callee, final CallableUnitInfo ownerMethod, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
+        super(callee, ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         if ((null == qualifierType) || (null == callee) || (null == qualifierExpression)) {
             throw new NullPointerException();
@@ -44,7 +44,6 @@ public final class MethodCallInfo extends CallInfo {
 
         this.qualifierType = qualifierType;
         this.qualifierExpression = qualifierExpression;
-        this.callee = callee;
     }
 
     /**
@@ -100,15 +99,6 @@ public final class MethodCallInfo extends CallInfo {
      */
     public TypeInfo getQualifierType() {
         return this.qualifierType;
-    }
-
-    /**
-     * このメソッド呼び出しで呼び出されているメソッドを返す
-     * 
-     * @return このメソッド呼び出しで呼び出されているメソッド
-     */
-    public MethodInfo getCallee() {
-        return this.callee;
     }
 
     /**
@@ -168,8 +158,6 @@ public final class MethodCallInfo extends CallInfo {
     }
 
     private final TypeInfo qualifierType;
-
-    private final MethodInfo callee;
 
     private final ExpressionInfo qualifierExpression;
 }

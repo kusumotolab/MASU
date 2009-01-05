@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
@@ -759,6 +760,32 @@ public final class NameResolver {
 
             return Collections.unmodifiableList(availableMethods);
         }
+    }
+
+    /**
+     * 引数で与えられたクラス型で呼び出し可能なコンストラクタのListを返す
+     * 
+     * @param classType
+     * @return
+     */
+    public static final List<TargetConstructorInfo> getAvailableConstructors(
+            final ClassTypeInfo classType) {
+
+        final List<TargetConstructorInfo> constructors = new LinkedList<TargetConstructorInfo>();
+        final ClassInfo classInfo = classType.getReferencedClass();
+
+        if (classInfo instanceof TargetClassInfo) {
+            final TargetClassInfo targetClassInfo = (TargetClassInfo) classInfo;
+            constructors.addAll(targetClassInfo.getDefinedConstructors());
+
+            for (final ClassTypeInfo superClassType : targetClassInfo.getSuperClasses()) {
+                final List<TargetConstructorInfo> superConstructors = NameResolver
+                        .getAvailableConstructors(superClassType);
+                constructors.addAll(superConstructors);
+            }
+        }
+
+        return constructors;
     }
 
     /**

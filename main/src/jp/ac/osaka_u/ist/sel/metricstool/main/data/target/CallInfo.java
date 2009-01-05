@@ -17,23 +17,25 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  *
  */
-public abstract class CallInfo extends ExpressionInfo {
+public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInfo {
 
     /**
-     * 
+     * @param callee 呼ばれているオブジェクト，この呼び出しが，配列のコンストラクタの場合はnullが入っている．
      * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    CallInfo(final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+    CallInfo(final T callee, final CallableUnitInfo ownerMethod, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         this.arguments = new LinkedList<ExpressionInfo>();
         this.typeArguments = new LinkedList<ReferenceTypeInfo>();
+
+        this.callee = callee;
     }
 
     /**
@@ -123,6 +125,17 @@ public abstract class CallInfo extends ExpressionInfo {
         }
         return Collections.unmodifiableSortedSet(variableUsages);
     }
+
+    /**
+     * この呼び出しで呼び出されているものを返す
+     * 
+     * @return この呼び出しで呼び出されているもの
+     */
+    public T getCallee() {
+        return this.callee;
+    }
+
+    private final T callee;
 
     private final List<ExpressionInfo> arguments;
 

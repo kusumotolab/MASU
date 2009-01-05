@@ -4,14 +4,20 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -74,19 +80,44 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
             assert false : "Error handling must be inserted!";
         }
 
-        /*// 要素使用のオーナー要素を返す
-        final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
-                .getOwnerExecutableElement();
-        final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
-                .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                        methodInfoManager);*/
+        if (referenceType instanceof ClassTypeInfo) {
 
-        this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType, usingMethod,
-                fromLine, fromColumn, toLine, toColumn);
-        /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-        this.resolvedInfo.addArguments(actualParameters);
-        this.resolvedInfo.addTypeArguments(typeArguments);
-        return this.resolvedInfo;
+            final List<TargetConstructorInfo> constructors = NameResolver
+                    .getAvailableConstructors((ClassTypeInfo) referenceType);
+
+            for (final ConstructorInfo constructor : constructors) {
+
+                if (constructor.canCalledWith(actualParameters)) {
+                    this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType,
+                            constructor, usingMethod, fromLine, fromColumn, toLine, toColumn);
+                    this.resolvedInfo.addArguments(actualParameters);
+                    this.resolvedInfo.addTypeArguments(typeArguments);
+                    return this.resolvedInfo;
+                }
+            }
+
+            // 対象クラスに定義されたコンストラクタで該当するものがないので，外部クラスに定義されたコンストラクタを呼び出していることにする
+            {
+                ClassInfo classInfo = ((ClassTypeInfo) referenceType).getReferencedClass();
+                if (classInfo instanceof TargetClassInfo) {
+                    final ExternalClassInfo externalSuperClass = NameResolver
+                            .getExternalSuperClass((TargetClassInfo) classInfo);
+                }
+                final ExternalConstructorInfo constructor = new ExternalConstructorInfo(classInfo);
+                this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType,
+                        constructor, usingMethod, fromLine, fromColumn, toLine, toColumn);
+                this.resolvedInfo.addArguments(actualParameters);
+                this.resolvedInfo.addTypeArguments(typeArguments);
+                return this.resolvedInfo;
+            }
+
+        } else {
+            this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType, null,
+                    usingMethod, fromLine, fromColumn, toLine, toColumn);
+            this.resolvedInfo.addArguments(actualParameters);
+            this.resolvedInfo.addTypeArguments(typeArguments);
+            return this.resolvedInfo;
+        }
     }
 
     /**
