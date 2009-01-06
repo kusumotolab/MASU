@@ -27,17 +27,17 @@ public class ConditionalClauseInfo extends UnitInfo {
             throw new IllegalArgumentException();
         }
 
-        this.ownerCondtionalBlock = ownerConditionalBlock;
+        this.ownerConditionalBlock = ownerConditionalBlock;
         if (null != condition) {
             this.condition = condition;
             if (this.condition instanceof ExpressionInfo) {
                 ((ExpressionInfo) this.condition)
-                        .setOwnerExecutableElement(this.ownerCondtionalBlock);
+                        .setOwnerExecutableElement(this.ownerConditionalBlock);
             }
         } else {
             this.condition = new EmptyExpressionInfo(null, toLine, toColumn - 1, toLine,
                     toColumn - 1);
-            ((ExpressionInfo) this.condition).setOwnerExecutableElement(ownerConditionalBlock);
+            ((ExpressionInfo) this.condition).setOwnerExecutableElement(this.ownerConditionalBlock);
         }
     }
 
@@ -46,7 +46,7 @@ public class ConditionalClauseInfo extends UnitInfo {
      * @return 条件節を保持するブロック
      */
     public final ConditionalBlockInfo getOwnerConditionalBlock() {
-        return this.ownerCondtionalBlock;
+        return this.ownerConditionalBlock;
     }
 
     /**
@@ -64,7 +64,7 @@ public class ConditionalClauseInfo extends UnitInfo {
     /**
      * 条件節を保持するブロックを表す変数
      */
-    private final ConditionalBlockInfo ownerCondtionalBlock;
+    private final ConditionalBlockInfo ownerConditionalBlock;
 
     /**
      * 条件節に記述されている条件を表す変数

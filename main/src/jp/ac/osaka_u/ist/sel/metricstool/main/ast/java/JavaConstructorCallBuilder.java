@@ -60,7 +60,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
         if (elements.isJavaArrayInstantiation()) {
             //îzóÒÇÃnewï∂ÇÕÇ±Ç¡ÇøÇ≈èàóùÇ∑ÇÈ
-            //UnresolvedArrayTypeInfo arrayType = resolveArrayElement(typeElement.getType(), elements);
+
             final UnresolvedArrayTypeInfo arrayType = elements.resolveArrayElement();
             final UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(
                     arrayType, fromLine, fromColumn, toLine, toColumn);
@@ -119,23 +119,23 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         }
 
         List<ExpressionElement> getArguments() {
-            return arguments;
+            return this.arguments;
         }
 
         List<ExpressionElement> getAvailableElements() {
-            return availableElements;
+            return this.availableElements;
         }
 
         int getArrayDimention() {
-            return arrayDimention;
+            return this.arrayDimention;
         }
 
         List<TypeArgumentElement> getTypeArguments() {
-            return typeArguments;
+            return this.typeArguments;
         }
 
         TypeElement getTypeElement() {
-            return typeElement;
+            return this.typeElement;
         }
 
         boolean isJavaArrayInstantiation() {

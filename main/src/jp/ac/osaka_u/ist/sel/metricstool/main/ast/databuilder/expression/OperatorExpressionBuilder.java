@@ -151,13 +151,10 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 //自分で型決定する
                 UnresolvedExpressionInfo<? extends ExpressionInfo> resultType = null;
 
-                //オペレータによってすでに決定している戻り値の型，確定していなければnull
-                final PrimitiveTypeInfo type = token.getSpecifiedResultType();
-
-                if (null != type) {
+                if (null != operator && null != operator.getSpecifiedResultType()) {
                     //オペレータによってすでに結果の型が決定している
                     assert null != operator : "Illegal state: operator is null";
-                    resultType = new UnresolvedMonominalOperationInfo(termTypes[0], operator, type);
+                    resultType = new UnresolvedMonominalOperationInfo(termTypes[0], operator);
 
                     if ((termTypes[0].getFromLine() < event.getStartLine())
                             || (termTypes[0].getFromLine() == event.getStartLine() && termTypes[0]
@@ -172,6 +169,13 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                         resultType.setToLine(termTypes[0].getToLine());
                         resultType.setToColumn(termTypes[0].getToColumn());
                     }
+                } else if (1 == term
+                        && (OPERATOR.MINUS.equals(operator) || OPERATOR.PLUS.equals(operator))) {
+                    resultType = new UnresolvedMonominalOperationInfo(termTypes[0], operator);
+                    resultType.setFromLine(event.getStartLine());
+                    resultType.setFromColumn(event.getStartColumn());
+                    resultType.setToLine(termTypes[0].getToLine());
+                    resultType.setToColumn(termTypes[0].getToColumn());
                 } else if (token.equals(OperatorToken.ARRAY)) {
                     //配列記述子の場合は特別処理
                     final UnresolvedExpressionInfo<? extends ExpressionInfo> ownerType;

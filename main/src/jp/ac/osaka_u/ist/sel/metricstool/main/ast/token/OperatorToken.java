@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR_TYPE;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 
 
 /**
@@ -16,86 +15,86 @@ public class OperatorToken extends AstTokenAdapter {
     /**
      * キャストは演算子を表す定数インスタンス
      */
-    public static final OperatorToken CAST = new OperatorToken(null, "CAST", 2, false, false, null,
+    public static final OperatorToken CAST = new OperatorToken(null, "CAST", 2, false, false,
             new int[] { 0 });
 
     /**
      * インクリメント演算子とデクリメント演算子を表す定数インスタンス
      */
     public static final OperatorToken INCL_AND_DECL = new OperatorToken(null, "INCLEMENT", 1, true,
-            true, PrimitiveTypeInfo.INT, new int[] { 0 });
+            true, new int[] { 0 });
 
     /**
      * 代入演算子を表す定数インスタンス
      */
     public static final OperatorToken ASSIGNMENT = new OperatorToken(OPERATOR_TYPE.ASSIGNMENT,
-            "ASSIMENT", 2, true, false, null, new int[] { 0 });
+            "ASSIMENT", 2, true, false, new int[] { 0 });
 
     /**
      * 複合代入演算子を表す定数インスタンス
      */
-    public static final OperatorToken COMPOUND_ASSIGNMENT = new OperatorToken(OPERATOR_TYPE.ASSIGNMENT,
-            "COMPOUND_ASSIGNMENT", 2, true, true, null, new int[] { 0 });
+    public static final OperatorToken COMPOUND_ASSIGNMENT = new OperatorToken(
+            OPERATOR_TYPE.ASSIGNMENT, "COMPOUND_ASSIGNMENT", 2, true, true, new int[] { 0 });
 
     /**
      * 単項算術演算子を表す定数インスタンス
      */
-    public static final OperatorToken ARITHMETHIC_UNARY = new OperatorToken(OPERATOR_TYPE.ARITHMETIC,
-            "ARITHMETIC_UNARY", 1, false, true, null, new int[] { 0 });
+    public static final OperatorToken ARITHMETHIC_UNARY = new OperatorToken(
+            OPERATOR_TYPE.ARITHMETIC, "ARITHMETIC_UNARY", 1, false, true, new int[] { 0 });
 
     /**
      * 二項算術演算子を表す定数インスタンス
      */
-    public static final OperatorToken ARITHMETICH_BINOMIAL = new OperatorToken(OPERATOR_TYPE.ARITHMETIC,
-            "ARITHMETIC_BINOMIAL", 2, false, true, null, new int[] { 0, 1 });
+    public static final OperatorToken ARITHMETICH_BINOMIAL = new OperatorToken(
+            OPERATOR_TYPE.ARITHMETIC, "ARITHMETIC_BINOMIAL", 2, false, true, new int[] { 0, 1 });
 
     /**
      * 単項論理演算子を表す定数インスタンス
      */
     public static final OperatorToken LOGICAL_UNARY = new OperatorToken(OPERATOR_TYPE.LOGICAL,
-            "NOT_UNARY", 1, false, true, PrimitiveTypeInfo.BOOLEAN, new int[] { 0 });
+            "NOT_UNARY", 1, false, true, new int[] { 0 });
 
     /**
      * 二項論理演算子を表す定数インスタンス
      */
     public static final OperatorToken LOGICAL_BINOMIAL = new OperatorToken(OPERATOR_TYPE.LOGICAL,
-            "LOGICAL_BINOMIAL", 2, false, true, PrimitiveTypeInfo.BOOLEAN, new int[] { 0, 1 });
+            "LOGICAL_BINOMIAL", 2, false, true, new int[] { 0, 1 });
 
     /**
      * 単項ビット演算子を表す定数インスタンス
      */
-    public static final OperatorToken BIT_UNARY = new OperatorToken(OPERATOR_TYPE.BITS, "BIT_UNARY", 1,
-            false, true, null, new int[] { 0 });
+    public static final OperatorToken BIT_UNARY = new OperatorToken(OPERATOR_TYPE.BITS,
+            "BIT_UNARY", 1, false, true, new int[] { 0 });
 
     /**
      * 二項ビット演算子を表す定数インスタンス
      */
     public static final OperatorToken BIT_BINOMIAL = new OperatorToken(OPERATOR_TYPE.BITS,
-            "BIT_BINOMIAL", 2, false, true, null, new int[] { 0, 1 });
+            "BIT_BINOMIAL", 2, false, true, new int[] { 0, 1 });
 
     /**
      * 二項シフト演算子を表す定数インスタンス
      */
-    public static final OperatorToken SHIFT = new OperatorToken(OPERATOR_TYPE.SHIFT, "SHIFT", 2, false,
-            true, null, new int[] { 0, 1 });
+    public static final OperatorToken SHIFT = new OperatorToken(OPERATOR_TYPE.SHIFT, "SHIFT", 2,
+            false, true, new int[] { 0, 1 });
 
     /**
      * 二項比較演算子を表す定数インスタンス
      */
     public static final OperatorToken COMPARATIVE = new OperatorToken(OPERATOR_TYPE.COMPARATIVE,
-            "COMPARATIVE", 2, false, true, PrimitiveTypeInfo.BOOLEAN, new int[] {});
+            "COMPARATIVE", 2, false, true, new int[] {});
 
     /**
      * 三項演算子を表す定数インスタンス
      */
     public static final OperatorToken TERNARY = new OperatorToken(null, "TERNARY", 3, false, true,
-            null, new int[] { 1, 2 });
+            new int[] { 1, 2 });
 
     /**
      * 配列記述子を表す定数インスタンス
      */
     public static final OperatorToken ARRAY = new OperatorToken(null, "ARRAY", 2, false, true,
-            null, new int[] {});
+            new int[] {});
 
     /**
      * 演算子の文字列，扱う項の数，左辺値への参照と代入を行うかどうか，演算結果の型を指定するコンストラクタ.
@@ -109,7 +108,7 @@ public class OperatorToken extends AstTokenAdapter {
      */
     public OperatorToken(final OPERATOR_TYPE operator, final String text, final int termCount,
             final boolean leftIsAssignmentee, final boolean leftIsReferencee,
-            final PrimitiveTypeInfo specifiedResultType, final int[] typeSpecifiedTermIndexes) {
+            final int[] typeSpecifiedTermIndexes) {
         super(text);
 
         if (termCount <= 0) {
@@ -120,7 +119,6 @@ public class OperatorToken extends AstTokenAdapter {
         this.leftIsAssignmentee = leftIsAssignmentee;
         this.leftIsReferencee = leftIsReferencee;
         this.termCount = termCount;
-        this.specifiedResultType = specifiedResultType;
         this.typeSpecifiedTermIndexes = typeSpecifiedTermIndexes;
     }
 
@@ -169,15 +167,6 @@ public class OperatorToken extends AstTokenAdapter {
     }
 
     /**
-     * 演算結果の型が決まっている場合はその型を返す.
-     * 決まっていない場合はnullを返す.
-     * @return 演算結果の型が決まっている場合はその型，決まっていない場合はnull
-     */
-    public PrimitiveTypeInfo getSpecifiedResultType() {
-        return this.specifiedResultType;
-    }
-
-    /**
      * 演算結果の型を決定される際に考慮される項のインデックスの配列を返す.
      * 項の型とは関係なく型が決定される場合は空の配列を返す.
      * @return 演算結果の型を決定される際に考慮される項のインデックスの配列
@@ -205,12 +194,6 @@ public class OperatorToken extends AstTokenAdapter {
      * 演算子
      */
     private final OPERATOR_TYPE operator;
-
-    /**
-     * 演算結果の型を表す.
-     * 決まっていない場合はnull.
-     */
-    private final PrimitiveTypeInfo specifiedResultType;
 
     /**
      * 演算結果の型を決定される際に考慮される項のインデックスの配列

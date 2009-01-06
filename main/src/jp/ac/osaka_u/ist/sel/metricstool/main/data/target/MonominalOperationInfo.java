@@ -15,12 +15,11 @@ import java.util.TreeSet;
 public final class MonominalOperationInfo extends ExpressionInfo {
 
     /**
-     * オペランド、一項演算の結果の型、位置情報を与えて初期化
+     * 一項演算のオペランド、位置情報を与えて初期化
      * 
      * @param operand オペランド
      * @param operator オペレーター
      * @param isPreposed 演算子の位置
-     * @param type 一項演算の結果の型
      * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -28,20 +27,20 @@ public final class MonominalOperationInfo extends ExpressionInfo {
      * @param toColumn 終了列
      */
     public MonominalOperationInfo(final ExpressionInfo operand, final OPERATOR operator,
-            final boolean isPreposed, final PrimitiveTypeInfo type,
-            final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+            final boolean isPreposed, final CallableUnitInfo ownerMethod, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
-        if (null == operand || null == operator || null == type) {
+        if (null == operand || null == operator) {
             throw new IllegalArgumentException();
         }
 
         this.operand = operand;
         this.operator = operator;
         this.isPreposed = isPreposed;
-        this.type = type;
+        this.type = null != this.operator.getSpecifiedResultType() ? this.operator
+                .getSpecifiedResultType() : this.operand.getType();
 
         this.operand.setOwnerExecutableElement(this);
     }
@@ -122,7 +121,7 @@ public final class MonominalOperationInfo extends ExpressionInfo {
     /**
      * 一項演算の結果の型を保存するための変数
      */
-    private final PrimitiveTypeInfo type;
+    private final TypeInfo type;
 
     /**
      * 演算子が前置しているかどうかを示す変数

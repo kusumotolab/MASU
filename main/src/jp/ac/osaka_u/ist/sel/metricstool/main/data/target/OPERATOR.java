@@ -15,182 +15,182 @@ public enum OPERATOR {
     /**
      * 算術演算子"+"
      */
-    PLUS(ARITHMETIC, "+"),
+    PLUS(ARITHMETIC, "+", null),
 
     /**
      * 算術演算子"-"
      */
-    MINUS(ARITHMETIC, "-"),
+    MINUS(ARITHMETIC, "-", null),
 
     /**
      * 算術演算子"*"
      */
-    STAR(ARITHMETIC, "*"),
+    STAR(ARITHMETIC, "*", null),
 
     /**
      * 算術演算子"/"
      */
-    DIV(ARITHMETIC, "/"),
+    DIV(ARITHMETIC, "/", null),
 
     /**
      * 算術演算子"%"
      */
-    MOD(ARITHMETIC, "%"),
+    MOD(ARITHMETIC, "%", null),
 
     /**
      * 比較演算子"=="
      */
-    EQUAL(COMPARATIVE, "=="),
+    EQUAL(COMPARATIVE, "==", PrimitiveTypeInfo.BOOLEAN),
 
     /**
      * 比較演算子"!="
      */
-    NOT_EQUAL(COMPARATIVE, "!="),
+    NOT_EQUAL(COMPARATIVE, "!=", PrimitiveTypeInfo.BOOLEAN),
 
     /**
      * 比較演算子"<"
      */
-    LT(COMPARATIVE, "<"),
+    LT(COMPARATIVE, "<", PrimitiveTypeInfo.BOOLEAN),
 
     /**
      * 比較演算子">"
      */
-    GT(COMPARATIVE, ">"),
+    GT(COMPARATIVE, ">", PrimitiveTypeInfo.BOOLEAN),
 
     /**
      * 比較演算子"<="
      */
-    LE(COMPARATIVE, "<="),
+    LE(COMPARATIVE, "<=", PrimitiveTypeInfo.BOOLEAN),
 
     /**
      * 比較演算子">="
      */
-    GE(COMPARATIVE, ">="),
+    GE(COMPARATIVE, ">=", PrimitiveTypeInfo.BOOLEAN),
     
     /**
      * instanceof演算子
      */
-    INSTANCEOF(COMPARATIVE, "instanceof"),
+    INSTANCEOF(COMPARATIVE, "instanceof", PrimitiveTypeInfo.BOOLEAN),
 
     /**
      * 論理演算子"&&"
      */
-    LAND(LOGICAL, "&&"),
+    LAND(LOGICAL, "&&", PrimitiveTypeInfo.BOOLEAN),
 
     /**
      * 論理演算子"||"
      */
-    LOR(LOGICAL, "||"),
+    LOR(LOGICAL, "||", PrimitiveTypeInfo.BOOLEAN),
 
     /**
      * 論理演算子"!"
      */
-    LNOT(LOGICAL, "!"),
+    LNOT(LOGICAL, "!", PrimitiveTypeInfo.BOOLEAN),
 
     /**
      * ビット演算子"&"
      */
-    BAND(BITS, "&"),
+    BAND(BITS, "&", null),
 
     /**
      * ビット演算子"|"
      */
-    BOR(BITS, "|"),
+    BOR(BITS, "|", null),
 
     /**
      * ビット演算子"^"
      */
-    BXOR(BITS, "^"),
+    BXOR(BITS, "^", null),
 
     /**
      * ビット演算子"~"
      */
-    BNOT(BITS, "~"),
+    BNOT(BITS, "~", null),
 
     /**
      * シフト演算子"<<"
      */
-    SL(SHIFT, "<<"),
+    SL(SHIFT, "<<", null),
 
     /**
      * シフト演算子">>"
      */
-    SR(SHIFT, ">>"),
+    SR(SHIFT, ">>", null),
 
     /**
      * シフト演算子">>>"
      */
-    BSR(SHIFT, ">>>"),
+    BSR(SHIFT, ">>>", null),
 
     /**
      * 代入演算子"="
      */
-    ASSIGN(ASSIGNMENT, "="),
+    ASSIGN(ASSIGNMENT, "=", null),
 
     /**
      * 代入演算子"+="
      */
-    PLUS_ASSIGN(ASSIGNMENT, "+="),
+    PLUS_ASSIGN(ASSIGNMENT, "+=", null),
 
     /**
      * 代入演算子"-="
      */
-    MINUS_ASSIGN(ASSIGNMENT, "-="),
+    MINUS_ASSIGN(ASSIGNMENT, "-=", null),
 
     /**
      * 代入演算子"*="
      */
-    STAR_ASSIGN(ASSIGNMENT, "*="),
+    STAR_ASSIGN(ASSIGNMENT, "*=", null),
 
     /**
      * 代入演算子"/="
      */
-    DIV_ASSIGN(ASSIGNMENT, "/="),
+    DIV_ASSIGN(ASSIGNMENT, "/=", null),
 
     /**
      * 代入演算子"%="
      */
-    MOD_ASSIGN(ASSIGNMENT, "%="),
+    MOD_ASSIGN(ASSIGNMENT, "%=", null),
 
     /**
      * 代入演算子"&="
      */
-    BAND_ASSIGN(ASSIGNMENT, "&="),
+    BAND_ASSIGN(ASSIGNMENT, "&=", null),
 
     /**
      * 代入演算子"|="
      */
-    BOR_ASSIGN(ASSIGNMENT, "|="),
+    BOR_ASSIGN(ASSIGNMENT, "|=", null),
 
     /**
      * 代入演算子"^="
      */
-    BXOR_ASSIGN(ASSIGNMENT, "^="),
+    BXOR_ASSIGN(ASSIGNMENT, "^=", null),
 
     /**
      * 代入演算子"<<="
      */
-    SL_ASSIGN(ASSIGNMENT, "<<="),
+    SL_ASSIGN(ASSIGNMENT, "<<=", null),
 
     /**
      * 代入演算子">>="
      */
-    SR_ASSIGN(ASSIGNMENT, ">>="),
+    SR_ASSIGN(ASSIGNMENT, ">>=", null),
 
     /**
      * 代入演算子">>>="
      */
-    BSR_ASSIGN(ASSIGNMENT, ">>>="),
+    BSR_ASSIGN(ASSIGNMENT, ">>>=", null),
     
     /**
      * 算術一項演算子"++"
      */
-    INC(ARITHMETIC, "++"),
+    INC(ARITHMETIC, "++", PrimitiveTypeInfo.INT),
     
     /**
      * 算術一項演算子"--"
      */
-    DEC(ARITHMETIC, "--"),
+    DEC(ARITHMETIC, "--", PrimitiveTypeInfo.INT),
     ;
 
     /**
@@ -199,9 +199,10 @@ public enum OPERATOR {
      * @param operatorType 演算子のタイプ
      * @param token 演算子のトークン
      */
-    private OPERATOR(final OPERATOR_TYPE operatorType, final String token) {
+    private OPERATOR(final OPERATOR_TYPE operatorType, final String token, final PrimitiveTypeInfo specifiedResultType) {
         this.operatorType = operatorType;
         this.token = token;
+        this.specifiedResultType = specifiedResultType;
     }
 
     /**
@@ -230,6 +231,17 @@ public enum OPERATOR {
         }
         return null;
     }
+    
+    /**
+     * 演算結果の型が決まっている場合はその型を返す.
+     * 決まっていない場合はnullを返す.
+     * @return 演算結果の型が決まっている場合はその型，決まっていない場合はnull
+     */
+    public PrimitiveTypeInfo getSpecifiedResultType() {
+        return this.specifiedResultType;
+    }
+    
+    final private PrimitiveTypeInfo specifiedResultType;
 
     /**
      * 演算子のタイプを表す変数
