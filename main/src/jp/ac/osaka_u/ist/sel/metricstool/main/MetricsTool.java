@@ -397,7 +397,7 @@ public class MetricsTool {
         boolean metricsSpecified = null != metrics && metrics.length != 0
                 && (1 < metrics.length || !metrics[0].equals(Settings.INIT));
 
-        final PluginManager pluginManager = PluginManager.getInstance();
+        final PluginManager pluginManager = DataManager.getInstance().getPluginManager();
         try {
             for (final AbstractPlugin plugin : (new DefaultPluginLoader()).loadPlugins()) {// プラグインを全ロード
                 final PluginInfo info = plugin.getPluginInfo();
@@ -433,7 +433,7 @@ public class MetricsTool {
 
         PluginLauncher launcher = new DefaultPluginLauncher();
         launcher.setMaximumLaunchingNum(1);
-        launcher.launchAll(PluginManager.getInstance().getPlugins());
+        launcher.launchAll(DataManager.getInstance().getPluginManager().getPlugins());
 
         do {
             try {
@@ -469,7 +469,7 @@ public class MetricsTool {
     public void writeMetrics() {
 
         // ファイルメトリクスを計測する場合
-        if (0 < PluginManager.getInstance().getFileMetricPlugins().size()) {
+        if (0 < DataManager.getInstance().getPluginManager().getFileMetricPlugins().size()) {
 
             try {
                 final FileMetricsInfoManager manager = DataManager.getInstance()
@@ -487,7 +487,7 @@ public class MetricsTool {
         }
 
         // クラスメトリクスを計測する場合
-        if (0 < PluginManager.getInstance().getClassMetricPlugins().size()) {
+        if (0 < DataManager.getInstance().getPluginManager().getClassMetricPlugins().size()) {
 
             try {
                 final ClassMetricsInfoManager manager = DataManager.getInstance()
@@ -505,7 +505,7 @@ public class MetricsTool {
         }
 
         // メソッドメトリクスを計測する場合
-        if (0 < PluginManager.getInstance().getMethodMetricPlugins().size()) {
+        if (0 < DataManager.getInstance().getPluginManager().getMethodMetricPlugins().size()) {
 
             try {
                 final MethodMetricsInfoManager manager = DataManager.getInstance()
@@ -523,7 +523,7 @@ public class MetricsTool {
 
         }
 
-        if (0 < PluginManager.getInstance().getFieldMetricPlugins().size()) {
+        if (0 < DataManager.getInstance().getPluginManager().getFieldMetricPlugins().size()) {
 
             try {
                 final FieldMetricsInfoManager manager = DataManager.getInstance()
@@ -643,27 +643,27 @@ public class MetricsTool {
 
         {
             // ファイルメトリクスを計測する場合は -F オプションが指定されていなければならない
-            if ((0 < PluginManager.getInstance().getFileMetricPlugins().size())
+            if ((0 < DataManager.getInstance().getPluginManager().getFileMetricPlugins().size())
                     && (Settings.getFileMetricsFile().equals(Settings.INIT))) {
                 err.println("-F must be used for specifying a file for file metrics!");
                 System.exit(0);
             }
 
             // クラスメトリクスを計測する場合は -C オプションが指定されていなければならない
-            if ((0 < PluginManager.getInstance().getClassMetricPlugins().size())
+            if ((0 < DataManager.getInstance().getPluginManager().getClassMetricPlugins().size())
                     && (Settings.getClassMetricsFile().equals(Settings.INIT))) {
                 err.println("-C must be used for specifying a file for class metrics!");
                 System.exit(0);
             }
             // メソッドメトリクスを計測する場合は -M オプションが指定されていなければならない
-            if ((0 < PluginManager.getInstance().getMethodMetricPlugins().size())
+            if ((0 < DataManager.getInstance().getPluginManager().getMethodMetricPlugins().size())
                     && (Settings.getMethodMetricsFile().equals(Settings.INIT))) {
                 err.println("-M must be used for specifying a file for method metrics!");
                 System.exit(0);
             }
 
             // フィールドメトリクスを計測する場合は -A オプションが指定されていなければならない
-            if ((0 < PluginManager.getInstance().getFieldMetricPlugins().size())
+            if ((0 < DataManager.getInstance().getPluginManager().getFieldMetricPlugins().size())
                     && (Settings.getFieldMetricsFile().equals(Settings.INIT))) {
                 err.println("-A must be used for specifying a file for field metrics!");
                 System.exit(0);
@@ -672,25 +672,25 @@ public class MetricsTool {
 
         {
             // ファイルメトリクスを計測しないのに -F　オプションが指定されている場合は無視する旨を通知
-            if ((0 == PluginManager.getInstance().getFileMetricPlugins().size())
+            if ((0 == DataManager.getInstance().getPluginManager().getFileMetricPlugins().size())
                     && !(Settings.getFileMetricsFile().equals(Settings.INIT))) {
                 err.println("No file metric is specified! -F is ignored.");
             }
 
             // クラスメトリクスを計測しないのに -C　オプションが指定されている場合は無視する旨を通知
-            if ((0 == PluginManager.getInstance().getClassMetricPlugins().size())
+            if ((0 == DataManager.getInstance().getPluginManager().getClassMetricPlugins().size())
                     && !(Settings.getClassMetricsFile().equals(Settings.INIT))) {
                 err.println("No class metric is specified! -C is ignored.");
             }
 
             // メソッドメトリクスを計測しないのに -M　オプションが指定されている場合は無視する旨を通知
-            if ((0 == PluginManager.getInstance().getMethodMetricPlugins().size())
+            if ((0 == DataManager.getInstance().getPluginManager().getMethodMetricPlugins().size())
                     && !(Settings.getMethodMetricsFile().equals(Settings.INIT))) {
                 err.println("No method metric is specified! -M is ignored.");
             }
 
             // フィールドメトリクスを計測しないのに -A　オプションが指定されている場合は無視する旨を通知
-            if ((0 == PluginManager.getInstance().getFieldMetricPlugins().size())
+            if ((0 == DataManager.getInstance().getPluginManager().getFieldMetricPlugins().size())
                     && !(Settings.getFieldMetricsFile().equals(Settings.INIT))) {
                 err.println("No field metric is specified! -A is ignored.");
             }
@@ -750,8 +750,9 @@ public class MetricsTool {
             // -l で言語が指定されている場合は，そのプログラミング言語で使用可能なメトリクス一覧を表示
         } else {
             err.println("Available metrics for " + Settings.getLanguage().getName());
-            for (AbstractPlugin plugin : PluginManager.getInstance().getPlugins()) {
-                PluginInfo pluginInfo = plugin.getPluginInfo();
+            for (final AbstractPlugin plugin : DataManager.getInstance().getPluginManager()
+                    .getPlugins()) {
+                final PluginInfo pluginInfo = plugin.getPluginInfo();
                 if (pluginInfo.isMeasurable(Settings.getLanguage())) {
                     err.println("\t" + pluginInfo.getMetricName());
                 }
@@ -1479,7 +1480,7 @@ public class MetricsTool {
             this.addReferenceAssignmentCallRelation(unresolvedConstructorInfo, unresolvedClassInfo,
                     classInfoManager, fieldInfoManager, methodInfoManager);
         }
-        
+
         // 各インナークラスに対して
         for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
                 .getInnerClasses()) {

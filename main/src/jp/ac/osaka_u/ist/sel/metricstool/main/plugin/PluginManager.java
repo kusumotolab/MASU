@@ -23,14 +23,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
 public class PluginManager {
 
     /**
-     * シングルトンインスタンスを取得する
-     * @return シングルトンインスタンス
-     */
-    public static PluginManager getInstance() {
-        return SINGLETON;
-    }
-
-    /**
      * プラグインを登録する
      * このメソッドを呼び出すには特別権限が必要である
      * @param plugin 登録するプラグイン
@@ -216,62 +208,51 @@ public class PluginManager {
     }
 
     /**
-     * 登録されているプラグインを全て削除する
-     * 特別権限スレッドのみから呼び出せる.
-     * @throws AccessControlException 特別権限を持っていない場合
-     */
-    public void removeAllPlugins() {
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        this.plugins.clear();
-        this.filePlugins.clear();
-        this.classPlugins.clear();
-        this.methodPlugins.clear();
-        this.fieldPlugins.clear();
-    }
-
-    /**
      * シングルトン用，空のprivateコンストラクタ
      */
-    private PluginManager() {
+    public PluginManager() {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.plugins = new ConcurrentHashSet<AbstractPlugin>();
+        this.filePlugins = new ConcurrentHashSet<AbstractPlugin>();
+        this.classPlugins = new ConcurrentHashSet<AbstractPlugin>();
+        this.methodPlugins = new ConcurrentHashSet<AbstractPlugin>();
+        this.fieldPlugins = new ConcurrentHashSet<AbstractPlugin>();
+        this.pluginInfos = new ConcurrentHashSet<PluginInfo>();
+        this.info2pluginMap = new ConcurrentHashMap<PluginInfo, AbstractPlugin>();
     };
 
     /**
      * 全てのプラグインのSet
      */
-    private final Set<AbstractPlugin> plugins = new ConcurrentHashSet<AbstractPlugin>();
+    private final Set<AbstractPlugin> plugins;
 
     /**
      * ファイル単位のメトリクスを計測するプラグインのセット
      */
-    private final Set<AbstractPlugin> filePlugins = new ConcurrentHashSet<AbstractPlugin>();
+    private final Set<AbstractPlugin> filePlugins;
 
     /**
      * クラス単位のメトリクスを計測するプラグインのセット
      */
-    private final Set<AbstractPlugin> classPlugins = new ConcurrentHashSet<AbstractPlugin>();
+    private final Set<AbstractPlugin> classPlugins;
 
     /**
      * メソッド単位のメトリクスを計測するプラグインのセット
      */
-    private final Set<AbstractPlugin> methodPlugins = new ConcurrentHashSet<AbstractPlugin>();
+    private final Set<AbstractPlugin> methodPlugins;
 
     /**
      * フィールド単位のメトリクスを計測するプラグインのセット
      */
-    private final Set<AbstractPlugin> fieldPlugins = new ConcurrentHashSet<AbstractPlugin>();
+    private final Set<AbstractPlugin> fieldPlugins;
 
     /**
      * 全てのプラグイン情報のSet
      */
-    private final Set<PluginInfo> pluginInfos = new ConcurrentHashSet<PluginInfo>();
+    private final Set<PluginInfo> pluginInfos;
 
     /**
      * プラグイン情報からプラグインインスタンスへのマッピング
      */
-    private final Map<PluginInfo, AbstractPlugin> info2pluginMap = new ConcurrentHashMap<PluginInfo, AbstractPlugin>();
-
-    /**
-     * シングルトンインスタンス
-     */
-    private static final PluginManager SINGLETON = new PluginManager();
+    private final Map<PluginInfo, AbstractPlugin> info2pluginMap;
 }

@@ -14,7 +14,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
-import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -100,7 +99,8 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
                 printer.println(message);
                 throw new MetricNotRegisteredException(message);
             }
-            methodMetricsInfo.checkMetrics(PluginManager.getInstance().getMethodMetricPlugins());
+            methodMetricsInfo.checkMetrics(DataManager.getInstance().getPluginManager()
+                    .getMethodMetricPlugins());
         }
     }
 

@@ -19,6 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
 
 
 /**
@@ -86,7 +87,8 @@ public class DataManager {
 
             {
                 final Class<?> unresolvedArrayTypeInfo = UnresolvedArrayTypeInfo.class;
-                final Field ARRAY_TYPE_MAP = unresolvedArrayTypeInfo.getDeclaredField("ARRAY_TYPE_MAP");
+                final Field ARRAY_TYPE_MAP = unresolvedArrayTypeInfo
+                        .getDeclaredField("ARRAY_TYPE_MAP");
                 ARRAY_TYPE_MAP.setAccessible(true);
                 final Map<?, ?> arrayTypeMap = (Map<?, ?>) ARRAY_TYPE_MAP.get(null);
                 arrayTypeMap.clear();
@@ -189,6 +191,15 @@ public class DataManager {
         return this.methodInfoManager;
     }
 
+    /**
+     * PluginManagerÅ@Çï‘Ç∑
+     * 
+     * @return PluginManager
+     */
+    public PluginManager getPluginManager() {
+        return this.pluginManager;
+    }
+
     private DataManager() {
         this.targetFileManager = new TargetFileManager();
 
@@ -203,6 +214,8 @@ public class DataManager {
         this.fieldInfoManager = new FieldInfoManager();
         this.fileInfoManager = new FileInfoManager();
         this.methodInfoManager = new MethodInfoManager();
+
+        this.pluginManager = new PluginManager();
     }
 
     private static DataManager SINGLETON;
@@ -226,4 +239,6 @@ public class DataManager {
     final private FileInfoManager fileInfoManager;
 
     final private MethodInfoManager methodInfoManager;
+
+    final private PluginManager pluginManager;
 }

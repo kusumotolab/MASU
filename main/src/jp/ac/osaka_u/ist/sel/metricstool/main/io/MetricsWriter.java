@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.io;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
 
 
@@ -20,7 +21,7 @@ public interface MetricsWriter {
     /**
      * プラグインを管理しているオブジェクトを指す定数
      */
-    PluginManager PLUGIN_MANAGER = PluginManager.getInstance();
+    PluginManager PLUGIN_MANAGER = DataManager.getInstance().getPluginManager();
 
     /**
      * メトリクス値がないことを表す文字
