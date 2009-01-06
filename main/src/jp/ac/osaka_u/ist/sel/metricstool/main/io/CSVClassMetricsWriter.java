@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
@@ -48,8 +49,9 @@ public final class CSVClassMetricsWriter implements ClassMetricsWriter, CSVWrite
 
             // メトリクス名などを書き出し
             writer.write(CLASS_NAME);
-            for (AbstractPlugin plugin : PLUGIN_MANAGER.getPlugins()) {
-                PluginInfo pluginInfo = plugin.getPluginInfo();
+            for (final AbstractPlugin plugin : DataManager.getInstance().getPluginManager()
+                    .getPlugins()) {
+                final PluginInfo pluginInfo = plugin.getPluginInfo();
                 if (METRIC_TYPE.CLASS_METRIC == pluginInfo.getMetricType()) {
                     String metricName = pluginInfo.getMetricName();
                     writer.write(SEPARATOR);
@@ -65,7 +67,8 @@ public final class CSVClassMetricsWriter implements ClassMetricsWriter, CSVWrite
 
                 final String className = classInfo.getFullQualifiedName(".");
                 writer.write(className);
-                for (final AbstractPlugin plugin : PLUGIN_MANAGER.getPlugins()) {
+                for (final AbstractPlugin plugin : DataManager.getInstance().getPluginManager()
+                        .getPlugins()) {
                     final PluginInfo pluginInfo = plugin.getPluginInfo();
                     if (METRIC_TYPE.CLASS_METRIC == pluginInfo.getMetricType()) {
 
