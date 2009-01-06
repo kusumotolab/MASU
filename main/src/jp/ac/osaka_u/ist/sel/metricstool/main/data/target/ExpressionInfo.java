@@ -129,6 +129,7 @@ public abstract class ExpressionInfo implements ConditionInfo {
         // ownerExecutableElement Ç™ StatementInfo Ç≈Ç‡ ExpressionInfoÅ@Ç≈Ç‡Ç»Ç¢Ç∆Ç´ÇÕIllegalStateException
         throw new IllegalStateException(
                 "ownerExecutableElement must be StatementInfo or ExpressionInfo.");
+        //return null;
     }
 
     /**

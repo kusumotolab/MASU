@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,7 +60,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
 
         this.typeArguments.add(typeParameterUsage);
     }
-
+    
     /**
      * ˆø”‚ğ’Ç‰Á
      * 

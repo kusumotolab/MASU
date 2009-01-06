@@ -30,7 +30,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<ConstructorCallInfo> {
 
     /**
-     * コンストラクタ呼び出しが実行される参照型と名前を与えてオブジェクトを初期化
+     * コンストラクタ呼び出しが実行される参照型を与えてオブジェクトを初期化
      * 
      * @param unresolvedReferenceType コンストラクタ呼び出しが実行される型
      */
@@ -42,6 +42,25 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
         }
 
         this.unresolvedReferenceType = unresolvedReferenceType;
+    }
+
+    /**
+     * コンストラクタ呼び出しが実行される参照型を与えて初期化
+     * @param unresolvedReferenceType コンストラクタ呼び出しが実行される型
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
+     */
+    public UnresolvedConstructorCallInfo(
+            final UnresolvedReferenceTypeInfo<?> unresolvedReferenceType, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
+        this(unresolvedReferenceType);
+
+        this.setFromLine(fromLine);
+        this.setFromColumn(fromColumn);
+        this.setToLine(toLine);
+        this.setToColumn(toColumn);
     }
 
     @Override

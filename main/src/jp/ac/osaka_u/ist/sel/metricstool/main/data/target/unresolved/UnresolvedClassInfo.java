@@ -626,6 +626,19 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         return classReference;
     }
 
+    public UnresolvedClassTypeInfo getClassType() {
+        if (null != this.classType) {
+            return this.classType;
+        }
+        final List<AvailableNamespaceInfo> namespaces = new LinkedList<AvailableNamespaceInfo>();
+        final AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(this
+                .getFullQualifiedName(), false);
+        namespaces.add(namespace);
+        this.classType = new UnresolvedClassTypeInfo(namespaces,
+                this.getFullQualifiedName());
+        return this.classType;
+    }
+
     /**
      * クラスが記述されているファイル情報を保存するための変数
      */
@@ -715,5 +728,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 無名クラスかどうかを表す変数
      */
     private boolean anonymous;
+
+    private UnresolvedClassTypeInfo classType = null;
 
 }

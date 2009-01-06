@@ -219,8 +219,8 @@ public abstract class TypeElementBuilder extends ExpressionBuilder {
         literal.setFromColumn(fromColumn);
         literal.setToLine(toLine);
         literal.setToColumn(toColumn);
-
-        this.pushElement(new TypeElement(literal));
+        
+        this.pushElement(new UsageElement(literal));
     }
 
     @Override

@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
+import java.util.LinkedList;
+import java.util.List;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
@@ -29,47 +32,47 @@ public class ConstructorCallBuilder extends ExpressionBuilder {
 
     protected void buildNewConstructorCall(final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
-        final ExpressionElement[] elements = getAvailableElements();
+        TypeElement type = null;
+        final List<ExpressionElement> parameters = new LinkedList<ExpressionElement>();
+        for (final ExpressionElement element : getAvailableElements()) {
+            if (element instanceof TypeElement) {
+                if (null != type) {
+                    assert false;
+                }
+                type = (TypeElement) element;
+            } else {
+                parameters.add(element);
+            }
+        }
 
-        assert (elements.length > 0) : "Illegal state: constructor element not found.";
-        assert (elements[0] instanceof TypeElement) : "Illegal state: constructor owner is not type.";
-
-        if (elements.length > 0 && elements[0] instanceof TypeElement) {
-            // TODO 配列のnew文の対処をすべき
-            final TypeElement type = (TypeElement) elements[0];
+        assert null != type;
+        if (null != type) {
             final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> referenceType = (UnresolvedReferenceTypeInfo<?>) type
                     .getType();
-            //String[] name = type.getFullReferenceName();
-
             final UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(
-                    referenceType);
-            constructorCall.setFromLine(fromLine);
-            constructorCall.setFromColumn(fromColumn);
-            constructorCall.setToLine(toLine);
-            constructorCall.setToColumn(toColumn);
+                    referenceType, fromLine, fromColumn, toLine, toColumn);
 
-            resolveParameters(constructorCall, elements, 1);
+            resolveParameters(constructorCall, parameters);
             pushElement(new UsageElement(constructorCall));
             this.buildDataManager.addMethodCall(constructorCall);
         }
     }
 
     protected void resolveParameters(final UnresolvedConstructorCallInfo constructorCall,
-            final ExpressionElement[] elements, final int startIndex) {
-        for (int i = startIndex; i < elements.length; i++) {
-            final ExpressionElement element = elements[i];
-            if (element instanceof IdentifierElement) {
-                constructorCall.addArgument(((IdentifierElement) element)
+            final List<ExpressionElement> elements) {
+        for (final ExpressionElement argument : elements) {
+            if (argument instanceof IdentifierElement) {
+                constructorCall.addArgument(((IdentifierElement) argument)
                         .resolveAsReferencedVariable(this.buildDataManager));
-            } else if (element instanceof TypeArgumentElement) {
-                TypeArgumentElement typeArgument = (TypeArgumentElement) element;
+            } else if (argument instanceof TypeArgumentElement) {
+                TypeArgumentElement typeArgument = (TypeArgumentElement) argument;
 
                 // TODO C# などの場合はプリミティブ型も型引数に指定可能
                 assert typeArgument.getType() instanceof UnresolvedReferenceTypeInfo : "Illegal state; type argument was not reference type.";
                 constructorCall.addTypeArgument((UnresolvedReferenceTypeInfo<?>) typeArgument
                         .getType());
             } else {
-                constructorCall.addArgument(element.getUsage());
+                constructorCall.addArgument(argument.getUsage());
             }
         }
     }
