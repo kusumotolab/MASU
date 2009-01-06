@@ -27,7 +27,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake, higo
  *
  */
-public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<ConstructorCallInfo> {
+public class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<ConstructorCallInfo> {
 
     /**
      * コンストラクタ呼び出しが実行される参照型を与えてオブジェクトを初期化
@@ -55,6 +55,7 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
     public UnresolvedConstructorCallInfo(
             final UnresolvedReferenceTypeInfo<?> unresolvedReferenceType, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
+
         this(unresolvedReferenceType);
 
         this.setFromLine(fromLine);
@@ -63,6 +64,9 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
         this.setToColumn(toColumn);
     }
 
+    /**
+     * 名前解決を行う
+     */
     @Override
     public ConstructorCallInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
@@ -93,46 +97,35 @@ public final class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Cons
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         //　コンストラクタの型を解決
-        final TypeInfo referenceType = this.getReferenceType().resolve(usingClass, usingMethod,
+        final UnresolvedTypeInfo<?> unresolvedReferenceType = this.getReferenceType();
+        final TypeInfo referenceType = unresolvedReferenceType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-        if (!(referenceType instanceof ReferenceTypeInfo)) {
-            assert false : "Error handling must be inserted!";
-        }
+        assert referenceType instanceof ClassTypeInfo : "Illegal type was found";
 
-        if (referenceType instanceof ClassTypeInfo) {
+        final List<TargetConstructorInfo> constructors = NameResolver
+                .getAvailableConstructors((ClassTypeInfo) referenceType);
 
-            final List<TargetConstructorInfo> constructors = NameResolver
-                    .getAvailableConstructors((ClassTypeInfo) referenceType);
+        for (final ConstructorInfo constructor : constructors) {
 
-            for (final ConstructorInfo constructor : constructors) {
-
-                if (constructor.canCalledWith(actualParameters)) {
-                    this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType,
-                            constructor, usingMethod, fromLine, fromColumn, toLine, toColumn);
-                    this.resolvedInfo.addArguments(actualParameters);
-                    this.resolvedInfo.addTypeArguments(typeArguments);
-                    return this.resolvedInfo;
-                }
-            }
-
-            // 対象クラスに定義されたコンストラクタで該当するものがないので，外部クラスに定義されたコンストラクタを呼び出していることにする
-            {
-                ClassInfo classInfo = ((ClassTypeInfo) referenceType).getReferencedClass();
-                if (classInfo instanceof TargetClassInfo) {
-                    final ExternalClassInfo externalSuperClass = NameResolver
-                            .getExternalSuperClass((TargetClassInfo) classInfo);
-                }
-                final ExternalConstructorInfo constructor = new ExternalConstructorInfo(classInfo);
+            if (constructor.canCalledWith(actualParameters)) {
                 this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType,
                         constructor, usingMethod, fromLine, fromColumn, toLine, toColumn);
                 this.resolvedInfo.addArguments(actualParameters);
                 this.resolvedInfo.addTypeArguments(typeArguments);
                 return this.resolvedInfo;
             }
+        }
 
-        } else {
-            this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType, null,
-                    usingMethod, fromLine, fromColumn, toLine, toColumn);
+        // 対象クラスに定義されたコンストラクタで該当するものがないので，外部クラスに定義されたコンストラクタを呼び出していることにする
+        {
+            ClassInfo classInfo = ((ClassTypeInfo) referenceType).getReferencedClass();
+            if (classInfo instanceof TargetClassInfo) {
+                final ExternalClassInfo externalSuperClass = NameResolver
+                        .getExternalSuperClass((TargetClassInfo) classInfo);
+            }
+            final ExternalConstructorInfo constructor = new ExternalConstructorInfo(classInfo);
+            this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType,
+                    constructor, usingMethod, fromLine, fromColumn, toLine, toColumn);
             this.resolvedInfo.addArguments(actualParameters);
             this.resolvedInfo.addTypeArguments(typeArguments);
             return this.resolvedInfo;

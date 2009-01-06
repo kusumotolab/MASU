@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author higo
  *
  */
-public final class ConstructorCallInfo extends CallInfo<ConstructorInfo> {
+public class ConstructorCallInfo extends CallInfo<ConstructorInfo> {
 
     /**
      * 型を与えてコンストラクタ呼び出しを初期化
@@ -30,7 +30,6 @@ public final class ConstructorCallInfo extends CallInfo<ConstructorInfo> {
         }
 
         this.referenceType = referenceType;
-
     }
 
     /**
