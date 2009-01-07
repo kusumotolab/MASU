@@ -1,7 +1,13 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 
+import java.util.Stack;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.MethodParameterStateManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.VariableDefinitionStateManager.VARIABLE_STATE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
@@ -10,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableLengthTypeInfo;
 
 
 public class MethodParameterBuilder
@@ -29,6 +36,31 @@ public class MethodParameterBuilder
                 nameBuilder);
 
         this.interpriter = interpriter;
+        this.isVariableParameterStack = new Stack<Boolean>();
+    }
+
+    @Override
+    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
+        final StateChangeEventType eventType = event.getType();
+        if (eventType.equals(VARIABLE_STATE.ENTER_VARIABLE_DEF)) {
+            if (event.getTrigger().getToken().isVariableParameterDefinition()) {
+                this.isVariableParameterStack.push(true);
+            } else {
+                this.isVariableParameterStack.push(false);
+            }
+        } else if (eventType.equals(VARIABLE_STATE.EXIT_VARIABLE_DEF)) {
+            this.isVariableParameterStack.pop();
+        }
+
+        super.stateChangend(event);
+    }
+
+    @Override
+    protected void pushBuiltType(UnresolvedTypeInfo<? extends TypeInfo> builtType) {
+        final UnresolvedTypeInfo<? extends TypeInfo> actualType = this
+                .isAnalyzingVariableParameter() ? UnresolvedVariableLengthTypeInfo
+                .getType(builtType) : builtType;
+        super.pushBuiltType(actualType);
     }
 
     @Override
@@ -42,7 +74,7 @@ public class MethodParameterBuilder
         }
 
         final int index = buildDataManager.getCurrentParameterCount();
-        UnresolvedParameterInfo parameter = new UnresolvedParameterInfo(varName, type, index,
+        final UnresolvedParameterInfo parameter = new UnresolvedParameterInfo(varName, type, index,
                 definitionMehtod, startLine, startColumn, endLine, endColumn);
 
         for (ModifierInfo modifier : modifiers) {
@@ -70,5 +102,11 @@ public class MethodParameterBuilder
         }
     }
 
+    private final boolean isAnalyzingVariableParameter() {
+        return this.isVariableParameterStack.peek();
+    }
+
     private final ModifiersInterpriter interpriter;
+
+    private final Stack<Boolean> isVariableParameterStack;
 }

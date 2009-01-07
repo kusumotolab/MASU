@@ -17,7 +17,7 @@ public class DefinitionToken extends AstTokenAdapter {
         public boolean isClassDefinition() {
             return true;
         }
-        
+
         @Override
         public boolean isBlockDefinition() {
             return true;
@@ -33,28 +33,29 @@ public class DefinitionToken extends AstTokenAdapter {
         public boolean isConstructorDefinition() {
             return true;
         }
-        
+
         @Override
         public boolean isBlockDefinition() {
             return true;
         }
     };
-    
+
     /**
      * プロパティ定義部を表す定数インスタンス
      */
-    public static final DefinitionToken PROPERTY_DEFINITION = new DefinitionToken("PROPERTY_DEFINITION") {
+    public static final DefinitionToken PROPERTY_DEFINITION = new DefinitionToken(
+            "PROPERTY_DEFINITION") {
         @Override
         public boolean isPropertyDefinition() {
             return true;
         };
     };
-    
+
     /**
      * スタティックイニシャライザを表す定数インスタンス
      */
     public static final DefinitionToken STATIC_INIT = new DefinitionToken("STATIC_INIT") {
-        
+
         @Override
         public boolean isStaticInitializerDefinition() {
             return true;
@@ -80,7 +81,7 @@ public class DefinitionToken extends AstTokenAdapter {
         public boolean isLocalParameterDefinition() {
             return true;
         }
-        
+
         @Override
         public boolean isLocalVariableDefinition() {
             return true;
@@ -106,7 +107,7 @@ public class DefinitionToken extends AstTokenAdapter {
         public boolean isMethodDefinition() {
             return true;
         }
-        
+
         @Override
         public boolean isBlockDefinition() {
             return true;
@@ -125,6 +126,22 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
+     * メソッドの可変長パラメータ定義部を表す定数インスタンス
+     */
+    public static final DefinitionToken VARIABLE_PARAMETER_DEFINTION = new DefinitionToken(
+            "VARIABLE_PARAMETER_DEFINTION") {
+        @Override
+        public boolean isMethodParameterDefinition() {
+            return true;
+        }
+        
+        @Override
+        public boolean isVariableParameterDefinition() {
+            return true;
+        }
+    };
+
+    /**
      * 名前空間の定義部を表す定数インスタンス.
      */
     public static final DefinitionToken NAMESPACE_DEFINITION = new DefinitionToken(
@@ -134,13 +151,14 @@ public class DefinitionToken extends AstTokenAdapter {
             return true;
         }
     };
-    
+
     /**
      * 型パラメータの定義部を表す定数インスタンス.
      */
-    public static final DefinitionToken TYPE_PARAMETER_DEFINITION = new DefinitionToken("TYPE_PARAMETER_DEFINITION"){
+    public static final DefinitionToken TYPE_PARAMETER_DEFINITION = new DefinitionToken(
+            "TYPE_PARAMETER_DEFINITION") {
         @Override
-        public boolean isTypeParameterDefinition(){
+        public boolean isTypeParameterDefinition() {
             return true;
         }
     };

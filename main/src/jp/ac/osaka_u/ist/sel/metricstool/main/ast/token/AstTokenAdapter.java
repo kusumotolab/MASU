@@ -131,6 +131,10 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
 
+    public boolean isVariableParameterDefinition() {
+        return false;
+    }
+
     public boolean isModifier() {
         return this.isAccessModifier();
     }
@@ -162,19 +166,19 @@ public class AstTokenAdapter implements AstToken {
     public boolean isPrimitiveType() {
         return false;
     }
-    
+
     public boolean isPropertyDefinition() {
-         return false;
+        return false;
     }
 
     public boolean isPropertyGetBody() {
         return false;
     }
-    
+
     public boolean isPropertySetBody() {
         return false;
     }
-    
+
     public boolean isTypeArguments() {
         return false;
     }
@@ -242,11 +246,11 @@ public class AstTokenAdapter implements AstToken {
     public boolean isFor() {
         return false;
     }
-    
+
     public boolean isForInit() {
         return false;
     }
-    
+
     public boolean isForIterator() {
         return false;
     }

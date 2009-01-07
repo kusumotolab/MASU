@@ -102,6 +102,9 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.METHOD_PARAMETER_DEF:
             result = DefinitionToken.METHOD_PARAMETER_DEFINITION;
             break;
+        case Java15TokenTypes.VARIABLE_PARAMETER_DEF:
+            result = DefinitionToken.VARIABLE_PARAMETER_DEFINTION;
+            break;
         case Java15TokenTypes.METHOD_DEF:
             result = DefinitionToken.METHOD_DEFINITION;
             break;

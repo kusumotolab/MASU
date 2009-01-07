@@ -166,6 +166,12 @@ public interface AstToken {
      * @return メソッドパラメータの定義を表すトークンならtrue
      */
     public boolean isMethodParameterDefinition();
+    
+    /**
+     * トークンが可変長パラメータ定義を表すかどうかを返す．
+     * @return 可変長パラメータ定義を表すトークンならtrue
+     */
+    public boolean isVariableParameterDefinition();
 
     /**
      * トークンが修飾子を表すかどうかを返す.

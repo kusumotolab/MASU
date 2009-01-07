@@ -46,7 +46,7 @@ public class UnresolvedVariableLengthTypeInfo extends UnresolvedArrayTypeInfo {
         return variableLengthUsage;
     }
 
-    UnresolvedVariableLengthTypeInfo(final UnresolvedTypeInfo<?> type) {
+    UnresolvedVariableLengthTypeInfo(final UnresolvedTypeInfo<? extends TypeInfo> type) {
         super(type, 1);
     }
 

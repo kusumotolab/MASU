@@ -141,7 +141,7 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
                     //とりあえず一番外側の型定義が終わっていたら型情報構築終了
                     //構築した型情報をすぐに取得してスタックへ
                     this.typeBuilder.deactivate();
-                    this.builtTypeStack.push(this.typeBuilder.popLastBuiltData());
+                    this.pushBuiltType(this.typeBuilder.popLastBuiltData());
                     this.typeBuilder.clearBuiltData();
                 }
             } else if (eventType.equals(NameStateManager.NAME_STATE.ENTER_NAME)) {
@@ -157,6 +157,10 @@ public abstract class VariableBuilder<TVar extends UnresolvedVariableInfo<? exte
         }
     }
 
+    protected void pushBuiltType(final UnresolvedTypeInfo<? extends TypeInfo> builtType) {
+        this.builtTypeStack.push(builtType);
+    }
+    
     /**
      * 変数データを構築する抽象メソッド．
      * 構築した変数データを構築データ管理者に渡したい場合もこのメソッドで行う．
