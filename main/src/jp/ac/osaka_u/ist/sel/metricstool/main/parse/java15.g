@@ -520,8 +520,12 @@ builtInTypeSpec[boolean addImagNode]
 // A type name. which is either a (possibly qualified and parameterized)
 // class name or a primitive (builtin) type
 type
-	:	classOrInterfaceType[true]
+	:	
+	(
+		classOrInterfaceType[true]
 	|	builtInType
+	)
+	{#type = #(#[TYPE,"TYPE"], #type);}
 	;
 
 // The primitive types.
