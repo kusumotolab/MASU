@@ -7,7 +7,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayConstructorCallIn
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
@@ -24,7 +23,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  *
  */
-public class UnresolvedArrayConstructorCallInfo extends UnresolvedConstructorCallInfo {
+public class UnresolvedArrayConstructorCallInfo extends
+        UnresolvedConstructorCallInfo<UnresolvedArrayTypeInfo, ArrayConstructorCallInfo> {
 
     /**
      * 配列コンストラクタ呼び出しが実行される参照型を与えてオブジェクトを初期化
@@ -39,10 +39,27 @@ public class UnresolvedArrayConstructorCallInfo extends UnresolvedConstructorCal
     }
 
     /**
+     * 配列コンストラクタ呼び出しが実行される型と位置情報を与えて初期化
+     * @param unresolvedArrayType コンストラクタ呼び出しが実行される型
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
+     */
+    public UnresolvedArrayConstructorCallInfo(final UnresolvedArrayTypeInfo unresolvedArrayType,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        this(unresolvedArrayType);
+        this.setFromLine(fromLine);
+        this.setFromColumn(fromColumn);
+        this.setToLine(toLine);
+        this.setToColumn(toColumn);
+    }
+
+    /**
      * 名前解決を行う
      */
     @Override
-    public ConstructorCallInfo resolve(final TargetClassInfo usingClass,
+    public ArrayConstructorCallInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -96,7 +113,8 @@ public class UnresolvedArrayConstructorCallInfo extends UnresolvedConstructorCal
      * 
      * @param indexExpression
      */
-    public void setIndexExpression(final UnresolvedExpressionInfo<?> indexExpression) {
+    public void setIndexExpression(
+            final UnresolvedExpressionInfo<? extends ExpressionInfo> indexExpression) {
         this.indexExpression = indexExpression;
     }
 
@@ -105,12 +123,12 @@ public class UnresolvedArrayConstructorCallInfo extends UnresolvedConstructorCal
      * 
      * @return インデックスの式
      */
-    public UnresolvedExpressionInfo<?> getIndexExpression() {
+    public UnresolvedExpressionInfo<? extends ExpressionInfo> getIndexExpression() {
         return this.indexExpression;
     }
 
     /**
      * インデックスの式を保存するための変数
      */
-    private UnresolvedExpressionInfo indexExpression;
+    private UnresolvedExpressionInfo<? extends ExpressionInfo> indexExpression;
 }

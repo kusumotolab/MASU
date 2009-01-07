@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author higo
  *
  */
-public class ConstructorCallInfo extends CallInfo<ConstructorInfo> {
+public abstract class ConstructorCallInfo<T extends ReferenceTypeInfo> extends CallInfo<ConstructorInfo> {
 
     /**
      * 型を与えてコンストラクタ呼び出しを初期化
@@ -19,7 +19,7 @@ public class ConstructorCallInfo extends CallInfo<ConstructorInfo> {
      * @param toLine 終了行
      * @param toColumn 終了列 
      */
-    public ConstructorCallInfo(final ReferenceTypeInfo referenceType, final ConstructorInfo callee,
+    public ConstructorCallInfo(final T referenceType, final ConstructorInfo callee,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 
@@ -36,7 +36,7 @@ public class ConstructorCallInfo extends CallInfo<ConstructorInfo> {
      * コンストラクタ呼び出しの型を返す
      */
     @Override
-    public TypeInfo getType() {
+    public T getType() {
         return this.referenceType;
     }
 
@@ -67,6 +67,6 @@ public class ConstructorCallInfo extends CallInfo<ConstructorInfo> {
         return sb.toString();
     }
 
-    private final ReferenceTypeInfo referenceType;
+    private final T referenceType;
 
 }

@@ -7,7 +7,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * @author higo
  *
  */
-public final class ArrayConstructorCallInfo extends ConstructorCallInfo {
+public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTypeInfo> {
 
     /**
      * 型を与えて配列コンストラクタ呼び出しを初期化

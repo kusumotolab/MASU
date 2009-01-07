@@ -7,7 +7,8 @@ import java.util.List;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassConstructorCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 
@@ -47,9 +48,8 @@ public class ConstructorCallBuilder extends ExpressionBuilder {
 
         assert null != type;
         if (null != type) {
-            final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> referenceType = (UnresolvedReferenceTypeInfo<?>) type
-                    .getType();
-            final UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(
+            final UnresolvedClassTypeInfo referenceType = (UnresolvedClassTypeInfo) type.getType();
+            final UnresolvedClassConstructorCallInfo constructorCall = new UnresolvedClassConstructorCallInfo(
                     referenceType, fromLine, fromColumn, toLine, toColumn);
 
             resolveParameters(constructorCall, parameters);
@@ -58,7 +58,7 @@ public class ConstructorCallBuilder extends ExpressionBuilder {
         }
     }
 
-    protected void resolveParameters(final UnresolvedConstructorCallInfo constructorCall,
+    protected void resolveParameters(final UnresolvedConstructorCallInfo<?,?> constructorCall,
             final List<ExpressionElement> elements) {
         for (final ExpressionElement argument : elements) {
             if (argument instanceof IdentifierElement) {

@@ -15,10 +15,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageEl
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
@@ -62,7 +63,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
             //îzóÒÇÃnewï∂ÇÕÇ±Ç¡ÇøÇ≈èàóùÇ∑ÇÈ
 
             final UnresolvedArrayTypeInfo arrayType = elements.resolveArrayElement();
-            final UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(
+            final UnresolvedArrayConstructorCallInfo constructorCall = new UnresolvedArrayConstructorCallInfo(
                     arrayType, fromLine, fromColumn, toLine, toColumn);
 
             for (final TypeArgumentElement typeArgument : elements.typeArguments) {
@@ -151,10 +152,10 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
     protected void buildInnerConstructorCall(final UnresolvedClassInfo currentClass,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
-        final UnresolvedClassTypeInfo referenceType = currentClass.getClassType();
+        final UnresolvedClassTypeInfo classType = currentClass.getClassType();
 
-        final UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(
-                referenceType, fromLine, fromColumn, toLine, toColumn);
+        final UnresolvedClassConstructorCallInfo constructorCall = new UnresolvedClassConstructorCallInfo(
+                classType, fromLine, fromColumn, toLine, toColumn);
 
         resolveParameters(constructorCall, Arrays.asList(this.getAvailableElements()));
         pushElement(new UsageElement(constructorCall));
@@ -200,7 +201,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
         assert (null != className) : "Illegal state: unexpected ownerClass type.";
 
-        final UnresolvedConstructorCallInfo constructorCall = new UnresolvedConstructorCallInfo(
+        final UnresolvedClassConstructorCallInfo constructorCall = new UnresolvedClassConstructorCallInfo(
                 superClass, fromLine, fromColumn, toLine, toColumn);
 
         List<ExpressionElement> paramters = Arrays.asList(elements);
