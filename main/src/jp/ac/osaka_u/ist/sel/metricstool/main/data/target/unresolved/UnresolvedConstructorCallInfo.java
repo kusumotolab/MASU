@@ -16,7 +16,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -120,8 +119,7 @@ public class UnresolvedConstructorCallInfo extends UnresolvedCallInfo<Constructo
         {
             ClassInfo classInfo = ((ClassTypeInfo) referenceType).getReferencedClass();
             if (classInfo instanceof TargetClassInfo) {
-                final ExternalClassInfo externalSuperClass = NameResolver
-                        .getExternalSuperClass((TargetClassInfo) classInfo);
+                classInfo = NameResolver.getExternalSuperClass((TargetClassInfo) classInfo);
             }
             final ExternalConstructorInfo constructor = new ExternalConstructorInfo(classInfo);
             this.resolvedInfo = new ConstructorCallInfo((ReferenceTypeInfo) referenceType,
