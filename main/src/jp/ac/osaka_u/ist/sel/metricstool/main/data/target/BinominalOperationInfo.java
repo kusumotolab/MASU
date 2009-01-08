@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.TypeConverter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
@@ -58,33 +59,35 @@ public class BinominalOperationInfo extends ExpressionInfo {
     @Override
     public TypeInfo getType() {
 
-        final ExternalClassInfo DOUBLE = TypeConverter.getTypeConverter(Settings.getLanguage())
-                .getWrapperClass(PrimitiveTypeInfo.DOUBLE);
-        final ExternalClassInfo FLOAT = TypeConverter.getTypeConverter(Settings.getLanguage())
-                .getWrapperClass(PrimitiveTypeInfo.FLOAT);
-        final ExternalClassInfo LONG = TypeConverter.getTypeConverter(Settings.getLanguage())
-                .getWrapperClass(PrimitiveTypeInfo.LONG);
-        final ExternalClassInfo INTEGER = TypeConverter.getTypeConverter(Settings.getLanguage())
-                .getWrapperClass(PrimitiveTypeInfo.INT);
-        final ExternalClassInfo SHORT = TypeConverter.getTypeConverter(Settings.getLanguage())
-                .getWrapperClass(PrimitiveTypeInfo.SHORT);
-        final ExternalClassInfo CHARACTER = TypeConverter.getTypeConverter(Settings.getLanguage())
+        final LANGUAGE language = Settings.getInstance().getLanguage();
+
+        final ExternalClassInfo DOUBLE = TypeConverter.getTypeConverter(language).getWrapperClass(
+                PrimitiveTypeInfo.DOUBLE);
+        final ExternalClassInfo FLOAT = TypeConverter.getTypeConverter(language).getWrapperClass(
+                PrimitiveTypeInfo.FLOAT);
+        final ExternalClassInfo LONG = TypeConverter.getTypeConverter(language).getWrapperClass(
+                PrimitiveTypeInfo.LONG);
+        final ExternalClassInfo INTEGER = TypeConverter.getTypeConverter(language).getWrapperClass(
+                PrimitiveTypeInfo.INT);
+        final ExternalClassInfo SHORT = TypeConverter.getTypeConverter(language).getWrapperClass(
+                PrimitiveTypeInfo.SHORT);
+        final ExternalClassInfo CHARACTER = TypeConverter.getTypeConverter(language)
                 .getWrapperClass(PrimitiveTypeInfo.CHAR);
-        final ExternalClassInfo BYTE = TypeConverter.getTypeConverter(Settings.getLanguage())
-                .getWrapperClass(PrimitiveTypeInfo.BYTE);
-        final ExternalClassInfo BOOLEAN = TypeConverter.getTypeConverter(Settings.getLanguage())
-                .getWrapperClass(PrimitiveTypeInfo.BOOLEAN);
+        final ExternalClassInfo BYTE = TypeConverter.getTypeConverter(language).getWrapperClass(
+                PrimitiveTypeInfo.BYTE);
+        final ExternalClassInfo BOOLEAN = TypeConverter.getTypeConverter(language).getWrapperClass(
+                PrimitiveTypeInfo.BOOLEAN);
 
         final TypeInfo firstOperandType = this.getFirstOperand().getType();
         final TypeInfo secondOperandType = this.getSecondOperand().getType();
 
-        switch (Settings.getLanguage()) {
+        switch (language) {
         case JAVA15:
         case JAVA14:
         case JAVA13:
 
-            final TypeInfo STRING = new ClassTypeInfo(TypeConverter.getTypeConverter(
-                    Settings.getLanguage()).getWrapperClass(PrimitiveTypeInfo.STRING));
+            final TypeInfo STRING = new ClassTypeInfo(TypeConverter.getTypeConverter(language)
+                    .getWrapperClass(PrimitiveTypeInfo.STRING));
 
             switch (this.getOperator().getOperatorType()) {
             case ARITHMETIC:

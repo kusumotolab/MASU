@@ -74,7 +74,7 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
         } else {
 
             // Java　の場合 (型パラメータは1.5から導入された)
-            if (Settings.getLanguage().equals(LANGUAGE.JAVA15)) {
+            if (Settings.getInstance().getLanguage().equals(LANGUAGE.JAVA15)) {
                 final ClassInfo referencedClass = DataManager.getInstance().getClassInfoManager()
                         .getClassInfo(new String[] { "java", "lang", "Object" });
                 final TypeInfo classType = new ClassTypeInfo(referencedClass);

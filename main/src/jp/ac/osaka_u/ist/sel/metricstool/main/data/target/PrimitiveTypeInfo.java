@@ -93,7 +93,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
                 return "float";
             }
         },
-        
+
         /**
          * DOUBLEŒ^‚ð•\‚·
          */
@@ -214,18 +214,19 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
     public static final PrimitiveTypeInfo STRING = new PrimitiveTypeInfo(TYPE.STRING) {
         @Override
         public boolean equals(TypeInfo typeInfo) {
-            
-            if(!super.equals(typeInfo)) {
-                LANGUAGE language = Settings.getLanguage();
-                if(language == LANGUAGE.JAVA13 || language == LANGUAGE.JAVA14 || language == LANGUAGE.JAVA15) {
-                    if(typeInfo.getTypeName().equals("java.lang.String")) {
+
+            if (!super.equals(typeInfo)) {
+                final LANGUAGE language = Settings.getInstance().getLanguage();
+                if (language == LANGUAGE.JAVA13 || language == LANGUAGE.JAVA14
+                        || language == LANGUAGE.JAVA15) {
+                    if (typeInfo.getTypeName().equals("java.lang.String")) {
                         return true;
                     }
                 }
-                
+
                 return true;
             }
-            
+
             return true;
         }
     };

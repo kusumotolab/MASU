@@ -245,9 +245,10 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
         } else if (ownerType instanceof ArrayTypeInfo) {
 
             // XXX Java言語であれば， java.lang.Object に対する呼び出し
-            if (Settings.getLanguage().equals(LANGUAGE.JAVA15)
-                    || Settings.getLanguage().equals(LANGUAGE.JAVA14)
-                    || Settings.getLanguage().equals(LANGUAGE.JAVA13)) {
+            final Settings settings = Settings.getInstance();
+            if (settings.getLanguage().equals(LANGUAGE.JAVA15)
+                    || settings.getLanguage().equals(LANGUAGE.JAVA14)
+                    || settings.getLanguage().equals(LANGUAGE.JAVA13)) {
                 final ClassInfo ownerClass = classInfoManager.getClassInfo(new String[] { "java",
                         "lang", "Object" });
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
@@ -270,7 +271,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
         } else if (ownerType instanceof PrimitiveTypeInfo) {
 
             // 文字列にメソッドがくっついているかを判定
-            switch (Settings.getLanguage()) {
+            final Settings settings = Settings.getInstance();
+            switch (settings.getLanguage()) {
             case JAVA15:
             case JAVA14:
 
@@ -278,7 +280,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 if (ownerType.equals(PrimitiveTypeInfo.STRING)) {
 
                     final ExternalClassInfo wrapperClass = TypeConverter.getTypeConverter(
-                            Settings.getLanguage()).getWrapperClass((PrimitiveTypeInfo) ownerType);
+                            settings.getLanguage()).getWrapperClass((PrimitiveTypeInfo) ownerType);
                     final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
                             wrapperClass);
                     final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(
@@ -297,12 +299,12 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 break;
             }
 
-            switch (Settings.getLanguage()) {
+            switch (settings.getLanguage()) {
             // Java の場合はオートボクシングでのメソッド呼び出しが可能
             // TODO 将来的にはこの switch文はとる．なぜなら TypeConverter.getTypeConverter(LANGUAGE)があるから．
             case JAVA15:
                 final ExternalClassInfo wrapperClass = TypeConverter.getTypeConverter(
-                        Settings.getLanguage()).getWrapperClass((PrimitiveTypeInfo) ownerType);
+                        settings.getLanguage()).getWrapperClass((PrimitiveTypeInfo) ownerType);
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
                         wrapperClass);
                 final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(

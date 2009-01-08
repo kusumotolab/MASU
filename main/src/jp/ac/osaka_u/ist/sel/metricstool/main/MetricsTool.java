@@ -98,10 +98,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.PluginLoadException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
-import org.jargp.ArgumentProcessor;
-import org.jargp.BoolDef;
-import org.jargp.ParameterDef;
-import org.jargp.StringDef;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
 
 import antlr.ASTFactory;
 import antlr.RecognitionException;
@@ -128,10 +131,6 @@ public class MetricsTool {
      */
     public static void main(String[] args) {
 
-        MetricsTool metricsTool = new MetricsTool();
-
-        ArgumentProcessor.processArgs(args, parameterDefs, new Settings());
-
         // 情報表示用のリスナを作成
         final MessageListener outListener = new MessageListener() {
             public void messageReceived(MessageEvent event) {
@@ -148,31 +147,262 @@ public class MetricsTool {
         MessagePool.getInstance(MESSAGE_TYPE.OUT).addMessageListener(outListener);
         MessagePool.getInstance(MESSAGE_TYPE.ERROR).addMessageListener(errListener);
 
-        // ヘルプモードと情報表示モードが同時にオンになっている場合は不正
-        if (Settings.isHelpMode() && Settings.isDisplayMode()) {
-            err.println("-h and -x can\'t be set at the same time!");
-            metricsTool.printUsage();
+        final Options options = new Options();
+
+        {
+            final Option h = new Option("h", "help", false, "display usage");
+            h.setRequired(false);
+            options.addOption(h);
+        }
+
+        {
+            final Option v = new Option("v", "verbose", false, "output progress verbosely");
+            v.setRequired(false);
+            options.addOption(v);
+        }
+
+        {
+            final Option d = new Option("d", "directory", true, "specify target directory");
+            d.setArgName("directory");
+            d.setArgs(1);
+            d.setRequired(false);
+            options.addOption(d);
+        }
+
+        {
+            final Option i = new Option("i", "input", true,
+                    "specify the input that contains the list of target files");
+            i.setArgName("input");
+            i.setArgs(1);
+            i.setRequired(false);
+            options.addOption(i);
+        }
+
+        {
+            final Option l = new Option("l", "language", true, "specify programming language");
+            l.setArgName("input");
+            l.setArgs(1);
+            l.setRequired(false);
+            options.addOption(l);
+        }
+
+        {
+            final Option m = new Option("m", "metrics", true,
+                    "specify measured metrics with comma separeted format (e.g., -m rfc,dit,lcom)");
+            m.setArgName("metrics");
+            m.setArgs(1);
+            m.setRequired(false);
+            options.addOption(m);
+        }
+
+        {
+            final Option F = new Option("F", "FileMetricsFile", true,
+                    "specify file that measured FILE metrics were stored into");
+            F.setArgName("file metrics file");
+            F.setArgs(1);
+            F.setRequired(false);
+            options.addOption(F);
+        }
+
+        {
+            final Option C = new Option("C", "ClassMetricsFile", true,
+                    "specify file that measured CLASS metrics were stored into");
+            C.setArgName("class metrics file");
+            C.setArgs(1);
+            C.setRequired(false);
+            options.addOption(C);
+        }
+
+        {
+            final Option M = new Option("M", "MethodMetricsFile", true,
+                    "specify file that measured METHOD metrics were stored into");
+            M.setArgName("method metrics file");
+            M.setArgs(1);
+            M.setRequired(false);
+            options.addOption(M);
+        }
+
+        {
+            final Option A = new Option("A", "AttributeMetricsFile", true,
+                    "specify file that measured ATTRIBUTE metrics were stored into");
+            A.setArgName("attribute metrics file");
+            A.setArgs(1);
+            A.setRequired(false);
+            options.addOption(A);
+        }
+
+        final MetricsTool metricsTool = new MetricsTool();
+
+        try {
+
+            final CommandLineParser parser = new PosixParser();
+            final CommandLine cmd = parser.parse(options, args);
+
+            // "-h"が指定されている場合はヘルプを表示して終了
+            // このとき，他のオプションは全て無視される
+            if (cmd.hasOption("h")) {
+                final HelpFormatter formatter = new HelpFormatter();
+                formatter.printHelp("MetricsTool", options, true);
+
+                // -l で言語が指定されていない場合は，解析可能言語一覧を表示
+                if (!cmd.hasOption("l")) {
+                    err.println("Available languages;");
+                    for (final LANGUAGE language : LANGUAGE.values()) {
+                        err.println("\t" + language.getName() + ": can be specified with term \""
+                                + language.getIdentifierName() + "\"");
+                    }
+
+                    // -l で言語が指定されている場合は，そのプログラミング言語で使用可能なメトリクス一覧を表示
+                } else {
+                    Settings.getInstance().setLanguage(cmd.getOptionValue("l"));
+                    err.println("Available metrics for "
+                            + Settings.getInstance().getLanguage().getName());
+                    for (final AbstractPlugin plugin : DataManager.getInstance().getPluginManager()
+                            .getPlugins()) {
+                        final PluginInfo pluginInfo = plugin.getPluginInfo();
+                        if (pluginInfo.isMeasurable(Settings.getInstance().getLanguage())) {
+                            err.println("\t" + pluginInfo.getMetricName());
+                        }
+                    }
+                }
+
+                System.exit(0);
+            }
+
+            Settings.getInstance().setVerbose(cmd.hasOption("v"));
+            if (cmd.hasOption("d")) {
+                Settings.getInstance().setTargetDirectory(cmd.getOptionValue("d"));
+            }
+            if (cmd.hasOption("i")) {
+                Settings.getInstance().setListFile(cmd.getOptionValue("i"));
+            }
+            Settings.getInstance().setLanguage(cmd.getOptionValue("l"));
+            Settings.getInstance().setMetrics(cmd.getOptionValue("m"));
+            if (cmd.hasOption("F")) {
+                Settings.getInstance().setFileMetricsFile(cmd.getOptionValue("F"));
+            }
+            if (cmd.hasOption("C")) {
+                Settings.getInstance().setClassMetricsFile(cmd.getOptionValue("C"));
+            }
+            if (cmd.hasOption("M")) {
+                Settings.getInstance().setMethodMetricsFile(cmd.getOptionValue("M"));
+            }
+            if (cmd.hasOption("A")) {
+                Settings.getInstance().setFieldMetricsFile(cmd.getOptionValue("A"));
+            }
+
+            metricsTool.loadPlugins(Settings.getInstance().getMetrics());
+
+            // コマンドライン引数が正しいかどうかチェックする
+            {
+                // -d と -i のどちらも指定されているのは不正
+                if (!cmd.hasOption("d") && !cmd.hasOption("l")) {
+                    err.println("-d and/or -i must be specified in the analysis mode!");
+                    System.exit(0);
+                }
+
+                // 言語が指定されなかったのは不正
+                if (!cmd.hasOption("l")) {
+                    err.println("-l must be specified for analysis");
+                    System.exit(0);
+                }
+
+                {
+                    // ファイルメトリクスを計測する場合は -F オプションが指定されていなければならない
+                    if ((0 < DataManager.getInstance().getPluginManager().getFileMetricPlugins()
+                            .size())
+                            && !cmd.hasOption("F")) {
+                        err.println("-F must be specified for file metrics!");
+                        System.exit(0);
+                    }
+
+                    // クラスメトリクスを計測する場合は -C オプションが指定されていなければならない
+                    if ((0 < DataManager.getInstance().getPluginManager().getClassMetricPlugins()
+                            .size())
+                            && !cmd.hasOption("C")) {
+                        err.println("-C must be specified for class metrics!");
+                        System.exit(0);
+                    }
+                    // メソッドメトリクスを計測する場合は -M オプションが指定されていなければならない
+                    if ((0 < DataManager.getInstance().getPluginManager().getMethodMetricPlugins()
+                            .size())
+                            && !cmd.hasOption("M")) {
+                        err.println("-M must be specified for method metrics!");
+                        System.exit(0);
+                    }
+
+                    // フィールドメトリクスを計測する場合は -A オプションが指定されていなければならない
+                    if ((0 < DataManager.getInstance().getPluginManager().getFieldMetricPlugins()
+                            .size())
+                            && !cmd.hasOption("A")) {
+                        err.println("-A must be specified for field metrics!");
+                        System.exit(0);
+                    }
+                }
+
+                {
+                    // ファイルメトリクスを計測しないのに -F　オプションが指定されている場合は無視する旨を通知
+                    if ((0 == DataManager.getInstance().getPluginManager().getFileMetricPlugins()
+                            .size())
+                            && cmd.hasOption("F")) {
+                        err.println("No file metric is specified. -F is ignored.");
+                    }
+
+                    // クラスメトリクスを計測しないのに -C　オプションが指定されている場合は無視する旨を通知
+                    if ((0 == DataManager.getInstance().getPluginManager().getClassMetricPlugins()
+                            .size())
+                            && cmd.hasOption("C")) {
+                        err.println("No class metric is specified. -C is ignored.");
+                    }
+
+                    // メソッドメトリクスを計測しないのに -M　オプションが指定されている場合は無視する旨を通知
+                    if ((0 == DataManager.getInstance().getPluginManager().getMethodMetricPlugins()
+                            .size())
+                            && cmd.hasOption("M")) {
+                        err.println("No method metric is specified. -M is ignored.");
+                    }
+
+                    // フィールドメトリクスを計測しないのに -A　オプションが指定されている場合は無視する旨を通知
+                    if ((0 == DataManager.getInstance().getPluginManager().getFieldMetricPlugins()
+                            .size())
+                            && cmd.hasOption("A")) {
+                        err.println("No field metric is specified. -A is ignored.");
+                    }
+                }
+            }
+
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
             System.exit(0);
         }
 
-        if (Settings.isHelpMode()) {
-            // ヘルプモードの場合
-            metricsTool.doHelpMode();
-        } else {
-            metricsTool.loadPlugins(Settings.getMetricStrings());
+        final long start = System.nanoTime();
 
-            if (Settings.isDisplayMode()) {
-                // 情報表示モードの場合
-                metricsTool.doDisplayMode();
-            } else {
-                // 解析モード
-                metricsTool.doAnalysisMode();
+        metricsTool.readTargetFiles();
+        metricsTool.analyzeTargetFiles();
+        metricsTool.launchPlugins();
+        metricsTool.writeMetrics();
+
+        out.println("successfully finished.");
+
+        final long end = System.nanoTime();
+
+        if (Settings.getInstance().isVerbose()) {
+            out.println("elapsed time: " + (end - start) / 1000000000 + " seconds");
+            out.println("number of analyzed files: "
+                    + DataManager.getInstance().getFileInfoManager().getFileInfos().size());
+
+            int loc = 0;
+            for (final FileInfo file : DataManager.getInstance().getFileInfoManager()
+                    .getFileInfos()) {
+                loc += file.getLOC();
             }
+            out.println("analyzed lines of code: " + loc);
         }
 
-        // 情報表示用のリスナを削除
         MessagePool.getInstance(MESSAGE_TYPE.OUT).removeMessageListener(outListener);
         MessagePool.getInstance(MESSAGE_TYPE.ERROR).removeMessageListener(errListener);
+
     }
 
     /**
@@ -191,7 +421,7 @@ public class MetricsTool {
 
         AstVisitorManager<AST> visitorManager = null;
 
-        switch (Settings.getLanguage()) {
+        switch (Settings.getInstance().getLanguage()) {
         case JAVA15:
             visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
                     new Java15AntlrAstTranslator()));
@@ -226,7 +456,7 @@ public class MetricsTool {
                     final FileInfo fileInfo = new FileInfo(name);
                     DataManager.getInstance().getFileInfoManager().add(fileInfo);
 
-                    if (Settings.isVerbose()) {
+                    if (Settings.getInstance().isVerbose()) {
                         fileInformationBuffer.delete(0, fileInformationBuffer.length());
                         fileInformationBuffer.append("parsing ");
                         fileInformationBuffer.append(name);
@@ -238,7 +468,7 @@ public class MetricsTool {
                         out.println(fileInformationBuffer.toString());
                     }
 
-                    switch (Settings.getLanguage()) {
+                    switch (Settings.getInstance().getLanguage()) {
                     case JAVA15:
                         final Java15Lexer java15lexer = new Java15Lexer(new FileInputStream(name));
                         java15lexer.setTabSize(1);
@@ -319,36 +549,36 @@ public class MetricsTool {
         }
 
         out.println("resolving definitions and usages.");
-        if (Settings.isVerbose()) {
+        if (Settings.getInstance().isVerbose()) {
             out.println("STEP1 : resolve class definitions.");
         }
         registClassInfos();
-        if (Settings.isVerbose()) {
+        if (Settings.getInstance().isVerbose()) {
             out.println("STEP2 : resolve type parameters of classes.");
         }
         resolveTypeParameterOfClassInfos();
-        if (Settings.isVerbose()) {
+        if (Settings.getInstance().isVerbose()) {
             out.println("STEP3 : resolve class inheritances.");
         }
         addInheritanceInformationToClassInfos();
-        if (Settings.isVerbose()) {
+        if (Settings.getInstance().isVerbose()) {
             out.println("STEP4 : resolve field definitions.");
         }
         registFieldInfos();
-        if (Settings.isVerbose()) {
+        if (Settings.getInstance().isVerbose()) {
             out.println("STEP5 : resolve method definitions.");
         }
         registMethodInfos();
-        if (Settings.isVerbose()) {
+        if (Settings.getInstance().isVerbose()) {
             out.println("STEP6 : resolve type parameter usages.");
         }
         addClassTypeParameterInfos();
         addMethodTypeParameterInfos();
-        if (Settings.isVerbose()) {
+        if (Settings.getInstance().isVerbose()) {
             out.println("STEP7 : resolve method overrides.");
         }
         addOverrideRelation();
-        if (Settings.isVerbose()) {
+        if (Settings.getInstance().isVerbose()) {
             out.println("STEP8 : resolve field and method usages.");
         }
         addReferenceAssignmentCallRelateion();
@@ -361,61 +591,40 @@ public class MetricsTool {
                 err.println("Incorrect syntax file: " + targetFile.getName());
             }
         }
-
-        {
-            /*
-             * for (final ClassInfo classInfo :
-             * ClassInfoManager.getInstance().getExternalClassInfos()) {
-             * out.println(classInfo.getFullQualifiedName(Settings.getLanguage()
-             * .getNamespaceDelimiter())); }
-             */
-        }
-    }
-
-    /**
-     * 対象言語を取得する.
-     * 
-     * @return 指定された対象言語.指定されなかった場合はnull
-     */
-    public LANGUAGE getLanguage() {
-        if (Settings.getLanguageString().equals(Settings.INIT)) {
-            return null;
-        }
-
-        return Settings.getLanguage();
     }
 
     /**
      * プラグインをロードする. 指定された言語，指定されたメトリクスに関連するプラグインのみを {@link PluginManager}に登録する.
+     * null が指定された場合は対象言語において計測可能な全てのメトリクスを登録する
      * 
-     * @param metrics 指定するメトリクスの配列，指定しない場合はnullまたは空の配列
+     * @param metrics 指定するメトリクスの配列，指定しない場合はnull
      */
     public void loadPlugins(final String[] metrics) {
-        // 指定言語に対応するプラグインで指定されたメトリクスを計測するプラグインをロードして登録
-
-        // metrics[]が０個じゃないかつ，2つ以上指定されている or １つだけどデフォルトの文字列じゃない
-        boolean metricsSpecified = null != metrics && metrics.length != 0
-                && (1 < metrics.length || !metrics[0].equals(Settings.INIT));
 
         final PluginManager pluginManager = DataManager.getInstance().getPluginManager();
+        final Settings settings = Settings.getInstance();
         try {
             for (final AbstractPlugin plugin : (new DefaultPluginLoader()).loadPlugins()) {// プラグインを全ロード
                 final PluginInfo info = plugin.getPluginInfo();
-                if (info.isMeasurable(Settings.getLanguage())) {
-                    // 対象言語が指定されていない or 対象言語を計測可能
-                    if (metricsSpecified) {
-                        // メトリクスが指定されているのでこのプラグインと一致するかチェック
-                        final String pluginMetricName = info.getMetricName();
-                        for (final String metric : metrics) {
-                            if (metric.equalsIgnoreCase(pluginMetricName)) {
-                                pluginManager.addPlugin(plugin);
-                                break;
-                            }
+
+                // 対象言語で計測可能でなければ登録しない
+                if (!info.isMeasurable(settings.getLanguage())) {
+                    continue;
+                }
+
+                if (null != metrics) {
+                    // メトリクスが指定されているのでこのプラグインと一致するかチェック
+                    final String pluginMetricName = info.getMetricName();
+                    for (final String metric : metrics) {
+                        if (metric.equalsIgnoreCase(pluginMetricName)) {
+                            pluginManager.addPlugin(plugin);
+                            break;
                         }
-                    } else {
-                        // メトリクスが指定されていないのでとりあえず全部登録
-                        pluginManager.addPlugin(plugin);
                     }
+
+                    // メトリクスが指定されていないのでとりあえず全部登録
+                } else {
+                    pluginManager.addPlugin(plugin);
                 }
             }
         } catch (PluginLoadException e) {
@@ -453,13 +662,35 @@ public class MetricsTool {
 
         out.println("building target file list.");
 
+        final Settings settings = Settings.getInstance();
+
         // ディレクトリから読み込み
-        if (!Settings.getTargetDirectory().equals(Settings.INIT)) {
-            registerFilesFromDirectory();
+        if (null != settings.getTargetDirectory()) {
+
+            File targetDirectory = new File(settings.getTargetDirectory());
+            registerFilesFromDirectory(targetDirectory);
 
             // リストファイルから読み込み
-        } else if (!Settings.getListFile().equals(Settings.INIT)) {
-            registerFilesFromListFile();
+        } else if (null != settings.getListFile()) {
+
+            try {
+
+                final TargetFileManager targetFiles = DataManager.getInstance()
+                        .getTargetFileManager();
+                for (BufferedReader reader = new BufferedReader(new FileReader(settings
+                        .getListFile())); reader.ready();) {
+                    final String line = reader.readLine();
+                    final TargetFile targetFile = new TargetFile(line);
+                    targetFiles.add(targetFile);
+                }
+
+            } catch (FileNotFoundException e) {
+                err.println("\"" + settings.getListFile() + "\" is not a valid file!");
+                System.exit(0);
+            } catch (IOException e) {
+                err.println("\"" + settings.getListFile() + "\" can\'t read!");
+                System.exit(0);
+            }
         }
     }
 
@@ -468,15 +699,18 @@ public class MetricsTool {
      */
     public void writeMetrics() {
 
+        final PluginManager pluginManager = DataManager.getInstance().getPluginManager();
+        final Settings settings = Settings.getInstance();
+
         // ファイルメトリクスを計測する場合
-        if (0 < DataManager.getInstance().getPluginManager().getFileMetricPlugins().size()) {
+        if (0 < pluginManager.getFileMetricPlugins().size()) {
 
             try {
                 final FileMetricsInfoManager manager = DataManager.getInstance()
                         .getFileMetricsInfoManager();
                 manager.checkMetrics();
 
-                final String fileName = Settings.getFileMetricsFile();
+                final String fileName = settings.getFileMetricsFile();
                 final CSVFileMetricsWriter writer = new CSVFileMetricsWriter(fileName);
                 writer.write();
 
@@ -487,14 +721,14 @@ public class MetricsTool {
         }
 
         // クラスメトリクスを計測する場合
-        if (0 < DataManager.getInstance().getPluginManager().getClassMetricPlugins().size()) {
+        if (0 < pluginManager.getClassMetricPlugins().size()) {
 
             try {
                 final ClassMetricsInfoManager manager = DataManager.getInstance()
                         .getClassMetricsInfoManager();
                 manager.checkMetrics();
 
-                final String fileName = Settings.getClassMetricsFile();
+                final String fileName = settings.getClassMetricsFile();
                 final CSVClassMetricsWriter writer = new CSVClassMetricsWriter(fileName);
                 writer.write();
 
@@ -505,14 +739,14 @@ public class MetricsTool {
         }
 
         // メソッドメトリクスを計測する場合
-        if (0 < DataManager.getInstance().getPluginManager().getMethodMetricPlugins().size()) {
+        if (0 < pluginManager.getMethodMetricPlugins().size()) {
 
             try {
                 final MethodMetricsInfoManager manager = DataManager.getInstance()
                         .getMethodMetricsInfoManager();
                 manager.checkMetrics();
 
-                final String fileName = Settings.getMethodMetricsFile();
+                final String fileName = settings.getMethodMetricsFile();
                 final CSVMethodMetricsWriter writer = new CSVMethodMetricsWriter(fileName);
                 writer.write();
 
@@ -523,14 +757,15 @@ public class MetricsTool {
 
         }
 
-        if (0 < DataManager.getInstance().getPluginManager().getFieldMetricPlugins().size()) {
+        // フィールドメトリクスを計測する場合
+        if (0 < pluginManager.getFieldMetricPlugins().size()) {
 
             try {
                 final FieldMetricsInfoManager manager = DataManager.getInstance()
                         .getFieldMetricsInfoManager();
                 manager.checkMetrics();
 
-                final String fileName = Settings.getMethodMetricsFile();
+                final String fileName = settings.getMethodMetricsFile();
                 final CSVMethodMetricsWriter writer = new CSVMethodMetricsWriter(fileName);
                 writer.write();
 
@@ -539,235 +774,6 @@ public class MetricsTool {
                 err.println("Field metrics can't be output!");
             }
         }
-    }
-
-    /**
-     * 
-     * ヘルプモードの引数の整合性を確認するためのメソッド． 不正な引数が指定されていた場合，main メソッドには戻らず，この関数内でプログラムを終了する．
-     * 
-     */
-    private final void checkHelpModeParameterValidation() {
-        // -h は他のオプションと同時指定できない
-        if ((!Settings.getTargetDirectory().equals(Settings.INIT))
-                || (!Settings.getListFile().equals(Settings.INIT))
-                || (!Settings.getLanguageString().equals(Settings.INIT))
-                || (!Settings.getMetrics().equals(Settings.INIT))
-                || (!Settings.getFileMetricsFile().equals(Settings.INIT))
-                || (!Settings.getClassMetricsFile().equals(Settings.INIT))
-                || (!Settings.getMethodMetricsFile().equals(Settings.INIT))) {
-            err.println("-h can\'t be specified with any other options!");
-            printUsage();
-            System.exit(0);
-        }
-    }
-
-    /**
-     * 
-     * 情報表示モードの引数の整合性を確認するためのメソッド． 不正な引数が指定されていた場合，main メソッドには戻らず，この関数内でプログラムを終了する．
-     * 
-     */
-    private final void checkDisplayModeParameterValidation() {
-        // -d は使えない
-        if (!Settings.getTargetDirectory().equals(Settings.INIT)) {
-            err.println("-d can\'t be specified in the display mode!");
-            printUsage();
-            System.exit(0);
-        }
-
-        // -i は使えない
-        if (!Settings.getListFile().equals(Settings.INIT)) {
-            err.println("-i can't be specified in the display mode!");
-            printUsage();
-            System.exit(0);
-        }
-
-        // -F は使えない
-        if (!Settings.getFileMetricsFile().equals(Settings.INIT)) {
-            err.println("-F can't be specified in the display mode!");
-            printUsage();
-            System.exit(0);
-        }
-
-        // -C は使えない
-        if (!Settings.getClassMetricsFile().equals(Settings.INIT)) {
-            err.println("-C can't be specified in the display mode!");
-            printUsage();
-            System.exit(0);
-        }
-
-        // -M は使えない
-        if (!Settings.getMethodMetricsFile().equals(Settings.INIT)) {
-            err.println("-M can't be specified in the display mode!");
-            printUsage();
-            System.exit(0);
-        }
-
-        // -A は使えない
-        if (!Settings.getFieldMetricsFile().equals(Settings.INIT)) {
-            err.println("-A can't be specified in the display mode!");
-            printUsage();
-            System.exit(0);
-        }
-    }
-
-    /**
-     * 
-     * 解析モードの引数の整合性を確認するためのメソッド． 不正な引数が指定されていた場合，main メソッドには戻らず，この関数内でプログラムを終了する．
-     * 
-     * @param 指定された言語
-     * 
-     */
-    private final void checkAnalysisModeParameterValidation() {
-        // -d と -i のどちらも指定されているのは不正
-        if (Settings.getTargetDirectory().equals(Settings.INIT)
-                && Settings.getListFile().equals(Settings.INIT)) {
-            err.println("-d or -i must be specified in the analysis mode!");
-            printUsage();
-            System.exit(0);
-        }
-
-        // -d と -i の両方が指定されているのは不正
-        if (!Settings.getTargetDirectory().equals(Settings.INIT)
-                && !Settings.getListFile().equals(Settings.INIT)) {
-            err.println("-d and -i can't be specified at the same time!");
-            printUsage();
-            System.exit(0);
-        }
-
-        // 言語が指定されなかったのは不正
-        if (Settings.getLanguageString().equals(Settings.INIT)) {
-            err.println("-l must be specified in the analysis mode.");
-            printUsage();
-            System.exit(0);
-        }
-
-        {
-            // ファイルメトリクスを計測する場合は -F オプションが指定されていなければならない
-            if ((0 < DataManager.getInstance().getPluginManager().getFileMetricPlugins().size())
-                    && (Settings.getFileMetricsFile().equals(Settings.INIT))) {
-                err.println("-F must be used for specifying a file for file metrics!");
-                System.exit(0);
-            }
-
-            // クラスメトリクスを計測する場合は -C オプションが指定されていなければならない
-            if ((0 < DataManager.getInstance().getPluginManager().getClassMetricPlugins().size())
-                    && (Settings.getClassMetricsFile().equals(Settings.INIT))) {
-                err.println("-C must be used for specifying a file for class metrics!");
-                System.exit(0);
-            }
-            // メソッドメトリクスを計測する場合は -M オプションが指定されていなければならない
-            if ((0 < DataManager.getInstance().getPluginManager().getMethodMetricPlugins().size())
-                    && (Settings.getMethodMetricsFile().equals(Settings.INIT))) {
-                err.println("-M must be used for specifying a file for method metrics!");
-                System.exit(0);
-            }
-
-            // フィールドメトリクスを計測する場合は -A オプションが指定されていなければならない
-            if ((0 < DataManager.getInstance().getPluginManager().getFieldMetricPlugins().size())
-                    && (Settings.getFieldMetricsFile().equals(Settings.INIT))) {
-                err.println("-A must be used for specifying a file for field metrics!");
-                System.exit(0);
-            }
-        }
-
-        {
-            // ファイルメトリクスを計測しないのに -F　オプションが指定されている場合は無視する旨を通知
-            if ((0 == DataManager.getInstance().getPluginManager().getFileMetricPlugins().size())
-                    && !(Settings.getFileMetricsFile().equals(Settings.INIT))) {
-                err.println("No file metric is specified! -F is ignored.");
-            }
-
-            // クラスメトリクスを計測しないのに -C　オプションが指定されている場合は無視する旨を通知
-            if ((0 == DataManager.getInstance().getPluginManager().getClassMetricPlugins().size())
-                    && !(Settings.getClassMetricsFile().equals(Settings.INIT))) {
-                err.println("No class metric is specified! -C is ignored.");
-            }
-
-            // メソッドメトリクスを計測しないのに -M　オプションが指定されている場合は無視する旨を通知
-            if ((0 == DataManager.getInstance().getPluginManager().getMethodMetricPlugins().size())
-                    && !(Settings.getMethodMetricsFile().equals(Settings.INIT))) {
-                err.println("No method metric is specified! -M is ignored.");
-            }
-
-            // フィールドメトリクスを計測しないのに -A　オプションが指定されている場合は無視する旨を通知
-            if ((0 == DataManager.getInstance().getPluginManager().getFieldMetricPlugins().size())
-                    && !(Settings.getFieldMetricsFile().equals(Settings.INIT))) {
-                err.println("No field metric is specified! -A is ignored.");
-            }
-        }
-    }
-
-    /**
-     * 解析モードを実行する.
-     * 
-     * @param language 対象言語
-     */
-    protected void doAnalysisMode() {
-        checkAnalysisModeParameterValidation();
-
-        final long start = System.nanoTime();
-
-        readTargetFiles();
-        analyzeTargetFiles();
-        launchPlugins();
-        writeMetrics();
-
-        out.println("successfully finished.");
-
-        final long end = System.nanoTime();
-
-        if (Settings.isVerbose()) {
-            out.println("elapsed time: " + (end - start) / 1000000000 + " seconds");
-            out.println("number of analyzed files: "
-                    + DataManager.getInstance().getFileInfoManager().getFileInfos().size());
-
-            int loc = 0;
-            for (final FileInfo file : DataManager.getInstance().getFileInfoManager()
-                    .getFileInfos()) {
-                loc += file.getLOC();
-            }
-            out.println("analyzed lines of code: " + loc);
-        }
-    }
-
-    /**
-     * 情報表示モードを実行する
-     * 
-     * @param language 対象言語
-     */
-    protected void doDisplayMode() {
-        checkDisplayModeParameterValidation();
-
-        // -l で言語が指定されていない場合は，解析可能言語一覧を表示
-        if (Settings.getLanguageString().equals(Settings.INIT)) {
-            err.println("Available languages;");
-            LANGUAGE[] languages = LANGUAGE.values();
-            for (int i = 0; i < languages.length; i++) {
-                err.println("\t" + languages[0].getName() + ": can be specified with term \""
-                        + languages[0].getIdentifierName() + "\"");
-            }
-
-            // -l で言語が指定されている場合は，そのプログラミング言語で使用可能なメトリクス一覧を表示
-        } else {
-            err.println("Available metrics for " + Settings.getLanguage().getName());
-            for (final AbstractPlugin plugin : DataManager.getInstance().getPluginManager()
-                    .getPlugins()) {
-                final PluginInfo pluginInfo = plugin.getPluginInfo();
-                if (pluginInfo.isMeasurable(Settings.getLanguage())) {
-                    err.println("\t" + pluginInfo.getMetricName());
-                }
-            }
-            // TODO 利用可能メトリクス一覧を表示
-        }
-    }
-
-    /**
-     * ヘルプモードを実行する.
-     */
-    protected void doHelpMode() {
-        checkHelpModeParameterValidation();
-
-        printUsage();
     }
 
     /**
@@ -783,78 +789,6 @@ public class MetricsTool {
             err
                     .println("Failed to set system security manager. MetricsToolsecurityManager works only to manage privilege threads.");
         }
-    }
-
-    /**
-     * 
-     * ツールの使い方（コマンドラインオプション）を表示する．
-     * 
-     */
-    protected void printUsage() {
-
-        err.println();
-        err.println("Available options:");
-        err.println("\t-d: root directory that you are going to analysis.");
-        err.println("\t-i: List file including file paths that you are going to analysis.");
-        err.println("\t-l: Programming language of the target files.");
-        err.println("\t-m: Metrics that you want to get. Metrics names are separated with \',\'.");
-        err.println("\t-v: Output progress verbosely.");
-        err.println("\t-C: File path that the class type metrics are output.");
-        err.println("\t-F: File path that the file type metrics are output.");
-        err.println("\t-M: File path that the method type metrics are output.");
-        err.println("\t-A: File path that the field type metrics are output.");
-
-        err.println();
-        err.println("Usage:");
-        err.println("\t<Help Mode>");
-        err.println("\tMetricsTool -h");
-        err.println();
-        err.println("\t<Display Mode>");
-        err.println("\tMetricsTool -x -l");
-        err.println("\tMetricsTool -x -l language -m");
-        err.println();
-        err.println("\t<Analysis Mode>");
-        err
-                .println("\tMetricsTool -d directory -l language -m metrics1,metrics2 -C file1 -F file2 -M file3 -A file4");
-        err
-                .println("\tMetricsTool -i listFile -l language -m metrics1,metrics2 -C file1 -F file2 -M file3 -A file4");
-    }
-
-    /**
-     * 
-     * リストファイルから対象ファイルを登録する． 読み込みエラーが発生した場合は，このメソッド内でプログラムを終了する．
-     */
-    protected void registerFilesFromListFile() {
-
-        try {
-
-            final TargetFileManager targetFiles = DataManager.getInstance().getTargetFileManager();
-            for (BufferedReader reader = new BufferedReader(new FileReader(Settings.getListFile())); reader
-                    .ready();) {
-                final String line = reader.readLine();
-                final TargetFile targetFile = new TargetFile(line);
-                targetFiles.add(targetFile);
-            }
-
-        } catch (FileNotFoundException e) {
-            err.println("\"" + Settings.getListFile() + "\" is not a valid file!");
-            System.exit(0);
-        } catch (IOException e) {
-            err.println("\"" + Settings.getListFile() + "\" can\'t read!");
-            System.exit(0);
-        }
-    }
-
-    /**
-     * 
-     * registerFilesFromDirectory(File file)を呼び出すのみ． mainメソッドで new File(Settings.getTargetDirectory)
-     * するのが気持ち悪かったため作成．
-     * 
-     */
-    protected void registerFilesFromDirectory() {
-
-        File targetDirectory = new File(Settings.getTargetDirectory());
-        registerFilesFromDirectory(targetDirectory);
     }
 
     /**
@@ -875,7 +809,7 @@ public class MetricsTool {
             // ファイルならば，拡張子が対象言語と一致すれば登録
         } else if (file.isFile()) {
 
-            final LANGUAGE language = Settings.getLanguage();
+            final LANGUAGE language = Settings.getInstance().getLanguage();
             final String extension = language.getExtension();
             final String path = file.getAbsolutePath();
             if (path.endsWith(extension)) {
@@ -891,22 +825,6 @@ public class MetricsTool {
             System.exit(0);
         }
     }
-
-    /**
-     * 引数の仕様を Jargp に渡すための配列．
-     */
-    private static ParameterDef[] parameterDefs = {
-            new BoolDef('h', "helpMode", "display usage", true),
-            new BoolDef('x', "displayMode", "display available language or metrics", true),
-            new BoolDef('v', "verbose", "output progress verbosely", true),
-            new StringDef('d', "targetDirectory", "Target directory"),
-            new StringDef('i', "listFile", "List file including paths of target files"),
-            new StringDef('l', "language", "Programming language"),
-            new StringDef('m', "metrics", "Measured metrics"),
-            new StringDef('F', "fileMetricsFile", "File storing file metrics"),
-            new StringDef('C', "classMetricsFile", "File storing class metrics"),
-            new StringDef('M', "methodMetricsFile", "File storing method metrics"),
-            new StringDef('A', "fieldMetricsFile", "File storing field metrics") };
 
     /**
      * 出力メッセージ出力用のプリンタ

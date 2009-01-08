@@ -109,7 +109,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
 
         final StringBuilder sb = new StringBuilder();
         sb.append(this.getOwnerClass().getFullQualifiedName(
-                Settings.getLanguage().getNamespaceDelimiter()));
+                Settings.getInstance().getLanguage().getNamespaceDelimiter()));
         sb.append(this.methodName);
 
         return sb.toString().hashCode();
@@ -125,7 +125,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
         final StringBuilder sb = new StringBuilder(this.getMethodName());
         sb.append("#");
         sb.append(this.getOwnerClass().getFullQualifiedName(
-                Settings.getLanguage().getNamespaceDelimiter()));
+                Settings.getInstance().getLanguage().getNamespaceDelimiter()));
         return sb.toString();
     }
 

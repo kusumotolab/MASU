@@ -63,10 +63,10 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
         final StringBuilder sb = new StringBuilder(this.getName());
         sb.append("#");
         sb.append(this.getOwnerClass().getFullQualifiedName(
-                Settings.getLanguage().getNamespaceDelimiter()));
+                Settings.getInstance().getLanguage().getNamespaceDelimiter()));
         return sb.toString();
     }
-    
+
     /**
      * このフィールドを参照しているメソッドまたはコンストラクタを追加する
      * 

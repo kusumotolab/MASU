@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FieldMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
@@ -52,6 +53,14 @@ public class DataManager {
         SINGLETON = null;
 
         try {
+
+            {
+                final Class<?> settings = Settings.class;
+                final Field instance = settings.getDeclaredField("INSTANCE");
+                instance.setAccessible(true);
+                instance.set(null, null);
+            }
+
             {
                 final Class<?> fieldUsageInfo = FieldUsageInfo.class;
                 final Field FIELD_USAGE_MAP = fieldUsageInfo.getDeclaredField("USAGE_MAP");

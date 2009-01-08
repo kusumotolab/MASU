@@ -143,8 +143,10 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
      * 
      * @return メトリクス計測対象としての名前
      */
+    @Override
     public final String getMeasuredUnitName() {
-        return this.getFullQualifiedName(Settings.getLanguage().getNamespaceDelimiter());
+        return this.getFullQualifiedName(Settings.getInstance().getLanguage()
+                .getNamespaceDelimiter());
     }
 
     /**
@@ -152,6 +154,7 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
      * 
      * @return このクラスの修飾子の Set
      */
+    @Override
     public Set<ModifierInfo> getModifiers() {
         return Collections.unmodifiableSet(this.modifiers);
     }

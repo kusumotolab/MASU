@@ -243,8 +243,9 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
 
             // Java 言語で フィールド名が length だった場合は int 型を返す
             // TODO　ちゃんとかきなおさないといけない
-            if ((Settings.getLanguage().equals(LANGUAGE.JAVA15)
-                    || Settings.getLanguage().equals(LANGUAGE.JAVA14) || Settings.getLanguage()
+            final Settings settings = Settings.getInstance();
+            if ((settings.getLanguage().equals(LANGUAGE.JAVA15)
+                    || settings.getLanguage().equals(LANGUAGE.JAVA14) || settings.getLanguage()
                     .equals(LANGUAGE.JAVA13))
                     && fieldName.equals("length")) {
 
