@@ -62,7 +62,8 @@ public final class CSVClassMetricsWriter implements ClassMetricsWriter, CSVWrite
             writer.newLine();
 
             // メトリクス値を書き出し
-            for (final ClassMetricsInfo classMetricsInfo : CLASS_METRICS_MANAGER) {
+            for (final ClassMetricsInfo classMetricsInfo : DataManager.getInstance()
+                    .getClassMetricsInfoManager()) {
                 final ClassInfo classInfo = classMetricsInfo.getMeasuredObject();
 
                 final String className = classInfo.getFullQualifiedName(".");

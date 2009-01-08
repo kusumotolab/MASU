@@ -62,7 +62,8 @@ public final class CSVMethodMetricsWriter implements MethodMetricsWriter, CSVWri
             writer.newLine();
 
             // メトリクス値を書き出し
-            for (final MethodMetricsInfo methodMetricsInfo : METHOD_METRICS_MANAGER) {
+            for (final MethodMetricsInfo methodMetricsInfo : DataManager.getInstance()
+                    .getMethodMetricsInfoManager()) {
                 final MethodInfo methodInfo = methodMetricsInfo.getMeasuredObject();
 
                 final String methodName = methodInfo.getMethodName();
