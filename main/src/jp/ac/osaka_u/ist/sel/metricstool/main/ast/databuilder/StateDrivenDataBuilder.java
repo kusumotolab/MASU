@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitListener;
  * AST上で複数の状態に分けて定義されるデータを構築するクラス
  * 各状態に応じた構築処理を行い，最終的に1つのデータを構築する
  * 
- * @author t-miyake
+ * @author kou-tngt, t-miyake
  *
  * @param <T> 構築されるデータの型
  */

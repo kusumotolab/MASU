@@ -16,11 +16,16 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
         UnresolvedConditionInfo<T> {
 
     protected UnresolvedExpressionInfo() {
-        this.fromLine = 0;
-        this.fromColumn = 0;
-        this.toLine = 0;
-        this.toColumn = 0;
+        this(0, 0, 0, 0);
+    }
 
+    protected UnresolvedExpressionInfo(final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
+        this.fromLine = fromLine;
+        this.fromColumn = fromColumn;
+        this.toLine = toLine;
+        this.toColumn = toColumn;
+        
         this.resolvedInfo = null;
         this.ownerExecutableElement = null;
     }

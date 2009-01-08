@@ -27,6 +27,12 @@ public interface AstToken {
      * @return 配列記述子を表すトークンならtrue
      */
     public boolean isArrayDeclarator();
+    
+    /**
+     * 配列の初期化部を表すかどうかを返す．
+     * @return 配列の初期化部を表すトークンならtrue
+     */
+    public boolean isArrayInitilizer();
 
     /**
      * トークンがブロックを表すかどうかを返す.

@@ -86,18 +86,11 @@ public final class UnresolvedArrayElementUsageInfo extends
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert qualifierUsage != null : "method \"resolve\" returned null!";
 
-        /*// 要素使用のオーナー要素を返す
-        final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
-                .getOwnerExecutableElement();
-        final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
-                .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                        methodInfoManager);*/
 
         // 親が特定できない場合も配列の要素使用を作成して返す
         // もしかすると，UnknownEntityUsageInfoを返す方が適切かもしれない
         this.resolvedInfo = new ArrayElementUsageInfo(qualifierUsage, indexExpression, usingMethod,
                 fromLine, fromColumn, toLine, toColumn);
-        /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
 
         return this.resolvedInfo;
     }

@@ -34,6 +34,10 @@ public class AstTokenAdapter implements AstToken {
     public boolean isArrayDeclarator() {
         return false;
     }
+    
+    public boolean isArrayInitilizer() {
+        return false;
+    }
 
     public boolean isAssignmentOperator() {
         return false;

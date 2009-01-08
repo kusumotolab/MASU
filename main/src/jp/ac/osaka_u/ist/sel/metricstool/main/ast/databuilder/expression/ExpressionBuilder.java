@@ -1,8 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -37,7 +35,7 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
 
         final AstToken token = e.getToken();
 
-        if (isActive() && isInExpression() && isTriggerToken(token)
+        if (this.isRelated(token)
                 || isExpressionDelimiterToken(token)) {
             this.expressionStackCountStack.push(this.expressionManager.getExpressionStackSize());
         }
@@ -47,7 +45,7 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
     public void exited(final AstVisitEvent e) throws ASTParseException {
         final AstToken token = e.getToken();
 
-        final boolean isRelated = isActive() && isInExpression() && isTriggerToken(token);
+        final boolean isRelated = this.isRelated(token);
         if (isRelated || isExpressionDelimiterToken(token)) {
             assert (!this.expressionStackCountStack.isEmpty()) : "Illegal state: illegal stack size.";
 
@@ -69,6 +67,10 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
             afterExited(e);
         }
 
+    }
+    
+    protected boolean isRelated(final AstToken token) {
+        return this.isActive() && isInExpression() && this.isTriggerToken(token);
     }
 
     @Override

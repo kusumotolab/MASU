@@ -30,7 +30,12 @@ public class JavaAstToken extends AstTokenAdapter {
     /**
      * 配列初期化部を表す定数インスタンス
      */
-    public static final JavaAstToken ARRAY_INIT = new JavaAstToken("ARRAY_INIT");
+    public static final JavaAstToken ARRAY_INIT = new JavaAstToken("ARRAY_INIT") {
+        @Override
+        public boolean isArrayInitilizer() {
+            return true;
+        }
+    };
     
     /**
      * new文による配列型指定（[]）を表す定数インスタンス

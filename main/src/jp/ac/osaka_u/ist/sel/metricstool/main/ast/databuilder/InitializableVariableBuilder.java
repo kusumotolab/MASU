@@ -52,10 +52,9 @@ public abstract class InitializableVariableBuilder<TVar extends UnresolvedVariab
 
         } else if (eventType.equals(VARIABLE_STATE.EXIT_VARIABLE_INITIALIZER)) {
 
-            ExpressionElement lastExpression = expressionManager.getLastPoppedExpressionElement();
+            ExpressionElement lastExpression = expressionManager.getPeekExpressionElement();
 
-            // 配列の初期化子を無視しているのでこのassert文は現在は使用してはいけない
-            //assert (lastExpression.getUsage() instanceof UnresolvedExpressionInfo) : "Illegal state: variable initilizer was not a expression";
+            assert (lastExpression.getUsage() instanceof UnresolvedExpressionInfo) : "Illegal state: variable initilizer was not a expression";
 
             if (null != lastExpression) {
                 this.builtInitializerStack

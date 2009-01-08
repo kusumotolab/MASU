@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,12 +15,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.TypeEle
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayConstructorCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayInitilizerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
@@ -75,6 +79,20 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
                 }
             }
 
+            int dimention = 0;
+            for (final JavaArrayInstantiationElement instantiationElement : elements
+                    .getArrayInstantiationElements()) {
+                constructorCall.addIndexExpression(++dimention, instantiationElement
+                        .getIndexExpression());
+            }
+
+            if (null != elements.getArrayInitilizer()) {
+                for (final UnresolvedExpressionInfo<? extends ExpressionInfo> initilizerElement : elements
+                        .getArrayInitilizer().getElements()) {
+                    constructorCall.addArgument(initilizerElement);
+                }
+            }
+
             pushElement(new UsageElement(constructorCall));
         } else {
             //ÇªÇÍà»äOÇÕïÅí Ç…èàóùÇ∑ÇÈ
@@ -92,7 +110,9 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
         private final List<ExpressionElement> arguments;
 
-        private int arrayDimention;
+        private UnresolvedArrayInitilizerInfo arrayInitilizer;
+
+        private final List<JavaArrayInstantiationElement> arrayInstaiationElements;
 
         ConstructorCallElements(final ExpressionElement[] availableElements) {
             if (null == availableElements) {
@@ -101,22 +121,29 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
             this.availableElements = Arrays.asList(availableElements);
             this.typeElement = null;
+            this.arrayInitilizer = null;
             this.typeArguments = new LinkedList<TypeArgumentElement>();
-            this.arguments = new LinkedList<ExpressionElement>();
-            this.arrayDimention = 0;
+            this.arguments = new ArrayList<ExpressionElement>();
+            this.arrayInstaiationElements = new ArrayList<JavaArrayInstantiationElement>();
 
             for (final ExpressionElement element : this.availableElements) {
                 if (element instanceof TypeArgumentElement) {
                     this.typeArguments.add((TypeArgumentElement) element);
                 } else if (element instanceof TypeElement) {
                     this.typeElement = (TypeElement) element;
-                } else if (element.equals(JavaArrayInstantiationElement.getInstance())) {
-                    this.arrayDimention++;
+                } else if (element instanceof JavaArrayInstantiationElement) {
+                    this.arrayInstaiationElements.add((JavaArrayInstantiationElement) element);
+                } else if (element.getUsage() instanceof UnresolvedArrayInitilizerInfo) {
+                    this.arrayInitilizer = (UnresolvedArrayInitilizerInfo) element.getUsage();
                 } else {
                     this.arguments.add(element);
                 }
             }
 
+        }
+
+        UnresolvedArrayInitilizerInfo getArrayInitilizer() {
+            return arrayInitilizer;
         }
 
         List<ExpressionElement> getArguments() {
@@ -128,7 +155,11 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         }
 
         int getArrayDimention() {
-            return this.arrayDimention;
+            return this.arrayInstaiationElements.size();
+        }
+
+        List<JavaArrayInstantiationElement> getArrayInstantiationElements() {
+            return this.arrayInstaiationElements;
         }
 
         List<TypeArgumentElement> getTypeArguments() {
@@ -140,12 +171,12 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         }
 
         boolean isJavaArrayInstantiation() {
-            return this.arrayDimention > 0;
+            return this.getArrayDimention() > 0;
         }
 
         UnresolvedArrayTypeInfo resolveArrayElement() {
-            return this.arrayDimention > 0 ? UnresolvedArrayTypeInfo.getType(this.typeElement
-                    .getType(), this.arrayDimention) : null;
+            return this.getArrayDimention() > 0 ? UnresolvedArrayTypeInfo.getType(this.typeElement
+                    .getType(), this.getArrayDimention()) : null;
         }
 
     }

@@ -1,19 +1,18 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -35,7 +34,7 @@ public class UnresolvedArrayConstructorCallInfo extends
 
         super(unresolvedArrayType);
 
-        this.indexExpression = null;
+        this.indexExpressions = new ArrayList<UnresolvedExpressionInfo<? extends ExpressionInfo>>();
     }
 
     /**
@@ -88,21 +87,21 @@ public class UnresolvedArrayConstructorCallInfo extends
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         //　コンストラクタの型を解決
-        final UnresolvedTypeInfo<?> unresolvedArrayType = this.getReferenceType();
-        final TypeInfo arrayType = unresolvedArrayType.resolve(usingClass, usingMethod,
+        final UnresolvedArrayTypeInfo unresolvedArrayType = this.getReferenceType();
+        final ArrayTypeInfo arrayType = unresolvedArrayType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-        assert arrayType instanceof ArrayTypeInfo : "Illegal Type was found";
 
         // インデックスの式を解決
-        final UnresolvedExpressionInfo<?> unresolvedIndexExpression = this.getIndexExpression();
-        final ExpressionInfo indexExpression = null != unresolvedIndexExpression ? unresolvedIndexExpression
-                .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                        methodInfoManager)
-                : new EmptyExpressionInfo(usingMethod, fromLine, fromColumn + 1, fromLine,
-                        fromColumn + 1);
+        final List<UnresolvedExpressionInfo<? extends ExpressionInfo>> unresolvedIndexExpressions = this
+                .getIndexExpressions();
+        final List<ExpressionInfo> indexExpressions = new ArrayList<ExpressionInfo>();
+        for (final UnresolvedExpressionInfo<? extends ExpressionInfo> unresolvedIndexExpression : unresolvedIndexExpressions) {
+            indexExpressions.add(unresolvedIndexExpression.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager));
+        }
 
-        this.resolvedInfo = new ArrayConstructorCallInfo((ArrayTypeInfo) arrayType,
-                indexExpression, usingMethod, fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo = new ArrayConstructorCallInfo(arrayType, indexExpressions, usingMethod,
+                fromLine, fromColumn, toLine, toColumn);
         this.resolvedInfo.addArguments(actualParameters);
         this.resolvedInfo.addTypeArguments(typeArguments);
         return this.resolvedInfo;
@@ -113,9 +112,14 @@ public class UnresolvedArrayConstructorCallInfo extends
      * 
      * @param indexExpression
      */
-    public void setIndexExpression(
+    public void addIndexExpression(final int dimention,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> indexExpression) {
-        this.indexExpression = indexExpression;
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == indexExpression) {
+            throw new IllegalArgumentException("indexExpression is null");
+        }
+
+        this.indexExpressions.add(dimention - 1, indexExpression);
     }
 
     /**
@@ -123,12 +127,12 @@ public class UnresolvedArrayConstructorCallInfo extends
      * 
      * @return インデックスの式
      */
-    public UnresolvedExpressionInfo<? extends ExpressionInfo> getIndexExpression() {
-        return this.indexExpression;
+    public List<UnresolvedExpressionInfo<? extends ExpressionInfo>> getIndexExpressions() {
+        return this.indexExpressions;
     }
 
     /**
      * インデックスの式を保存するための変数
      */
-    private UnresolvedExpressionInfo<? extends ExpressionInfo> indexExpression;
+    private List<UnresolvedExpressionInfo<? extends ExpressionInfo>> indexExpressions;
 }
