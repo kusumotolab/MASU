@@ -277,7 +277,9 @@ public class MetricsTool {
                 Settings.getInstance().setListFile(cmd.getOptionValue("i"));
             }
             Settings.getInstance().setLanguage(cmd.getOptionValue("l"));
-            Settings.getInstance().setMetrics(cmd.getOptionValue("m"));
+            if (cmd.hasOption("m")) {
+                Settings.getInstance().setMetrics(cmd.getOptionValue("m"));
+            }
             if (cmd.hasOption("F")) {
                 Settings.getInstance().setFileMetricsFile(cmd.getOptionValue("F"));
             }
