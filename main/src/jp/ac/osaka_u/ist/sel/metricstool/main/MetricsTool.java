@@ -257,6 +257,7 @@ public class MetricsTool {
                     Settings.getInstance().setLanguage(cmd.getOptionValue("l"));
                     err.println("Available metrics for "
                             + Settings.getInstance().getLanguage().getName());
+                    metricsTool.loadPlugins(Settings.getInstance().getMetrics());
                     for (final AbstractPlugin plugin : DataManager.getInstance().getPluginManager()
                             .getPlugins()) {
                         final PluginInfo pluginInfo = plugin.getPluginInfo();
