@@ -240,7 +240,7 @@ public class MetricsTool {
 
             // "-h"が指定されている場合はヘルプを表示して終了
             // このとき，他のオプションは全て無視される
-            if (cmd.hasOption("h")) {
+            if (cmd.hasOption("h") || (0 == args.length)) {
                 final HelpFormatter formatter = new HelpFormatter();
                 formatter.printHelp("MetricsTool", options, true);
 
