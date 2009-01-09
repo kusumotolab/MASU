@@ -14,7 +14,7 @@
 	<property name="csharpgrammer" value="${grammer.dir}/CSharp.g" />
 
 	<property name="antlr.jar" value="lib/antlr.jar" />
-	<property name="jargp.jar" value="lib/jargp.jar" />
+	<property name="cli.jar" value="lib/commons-cli-1.1.jar" />
 	<property name="manifest.mf" value="resource/manifest.mf" />
 	<property name="zip.bin.name" value="${TOOL.NAME}bin${DSTAMP}${TSTAMP}.zip" />
 	<property name="zip.src.name" value="${TOOL.NAME}src${DSTAMP}${TSTAMP}.zip" />
@@ -36,7 +36,7 @@
 
 	<target name="compile" depends="antlr">
 		<mkdir dir="${CLS.DIR}" />
-		<javac classpath="${jargp.jar};${antlr.jar}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
+		<javac classpath="${cli.jar};${antlr.jar}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
 	</target>
 
 
@@ -47,13 +47,13 @@
 		<mkdir dir="${PACKAGE.DOC.DIR}" />
 
 		<jar basedir="${CLS.DIR}" jarfile="${PACKAGE.BIN.DIR}/${TOOL.NAME}.jar" manifest="${manifest.mf}" />
-		<copy file="${jargp.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${cli.jar}" todir="${PACKAGE.BIN.DIR}" />
 		<copy file="${antlr.jar}" todir="${PACKAGE.BIN.DIR}" />
 	</target>
 
 	<target name="binpackage" depends="build">
 		<javadoc packagenames="jp.ac.osaka_u.ist.sel.metricstool.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" encoding="Windows-31J">
-			<classpath path="${jargp.jar};${antlr.jar}" />
+			<classpath path="${cli.jar};${antlr.jar}" />
 		</javadoc>
 
 		<zip destfile="${zip.bin.name}" basedir="${PACKAGE.DIR}" />
@@ -61,7 +61,7 @@
 
 	<target name="srcpackage" depends="build">
 		<javadoc packagenames="jp.ac.osaka_u.ist.sel.metricstool.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" encoding="Windows-31J">
-			<classpath path="${jargp.jar};${antlr.jar}" />
+			<classpath path="${cli.jar};${antlr.jar}" />
 		</javadoc>
 
 		<copy todir="${PACKAGE.SRC.DIR}">
