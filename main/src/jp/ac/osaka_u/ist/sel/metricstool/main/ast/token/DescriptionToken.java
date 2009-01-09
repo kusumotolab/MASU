@@ -57,6 +57,11 @@ public class DescriptionToken extends AstTokenAdapter {
         public boolean isExpressionStatement() {
             return true;
         }
+        
+        @Override
+        public boolean isStatement() {
+            return true;
+        }
     };
 
     /**
@@ -65,6 +70,11 @@ public class DescriptionToken extends AstTokenAdapter {
     public static final DescriptionToken LABELED_STATEMENT = new DescriptionToken("LABELED_STATEMENT") {
         @Override
         public boolean isLabeledStatement() {
+            return true;
+        }
+        
+        @Override
+        public boolean isStatement() {
             return true;
         }
     };

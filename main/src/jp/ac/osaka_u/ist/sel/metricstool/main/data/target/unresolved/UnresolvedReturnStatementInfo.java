@@ -28,7 +28,13 @@ public class UnresolvedReturnStatementInfo extends
      */
     public UnresolvedReturnStatementInfo(
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace) {
-        super(ownerSpace);
+        this(ownerSpace, 0, 0 ,0, 0);
+    }
+
+    public UnresolvedReturnStatementInfo(
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        super(ownerSpace, fromLine, fromColumn, toLine, toColumn);
     }
 
     @Override

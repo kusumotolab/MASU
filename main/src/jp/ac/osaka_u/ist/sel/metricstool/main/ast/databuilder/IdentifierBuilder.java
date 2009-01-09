@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
@@ -83,6 +84,10 @@ public class IdentifierBuilder extends DataBuilderAdapter<String[]> {
         super.reset();
         this.buildingIdentifiers.clear();
         this.separatorCount = 0;
+    }
+
+    public List<String> getBuildingIdentifiers() {
+        return Collections.unmodifiableList(buildingIdentifiers);
     }
 
     /**

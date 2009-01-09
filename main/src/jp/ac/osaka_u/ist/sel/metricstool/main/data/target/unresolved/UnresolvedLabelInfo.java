@@ -25,15 +25,10 @@ public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> imp
      * 
      * @param name ラベル名
      */
-    public UnresolvedLabelInfo(final String name) {
+    public UnresolvedLabelInfo() {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == name) {
-            throw new IllegalArgumentException();
-        }
-
-        this.name = name;
         this.labeledStatement = null;
         this.resolvedInfo = null;
     }
@@ -114,6 +109,14 @@ public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> imp
         return this.name;
     }
 
+    /**
+     * このラベルの名前をセットする
+     * @param name このラベルの名前
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+    
     /**
      * このラベルが付いた文をセットする
      * 

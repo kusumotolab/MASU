@@ -1,6 +1,7 @@
-package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
+package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
@@ -29,7 +30,7 @@ public class ExpressionStatementBuilder extends
             BuildDataManager buildDataManager) {
         super(expressionManager, buildDataManager);
     }
-
+    
     @Override
     protected UnresolvedExpressionStatementInfo buildStatement(
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace,

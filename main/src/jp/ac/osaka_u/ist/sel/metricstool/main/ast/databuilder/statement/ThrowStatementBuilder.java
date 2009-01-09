@@ -1,6 +1,8 @@
-package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
+package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
@@ -46,7 +48,7 @@ public class ThrowStatementBuilder extends SingleStatementBuilder<UnresolvedThro
     }
 
     @Override
-    public void exited(AstVisitEvent e) {
+    public void exited(AstVisitEvent e)  throws ASTParseException  {
         super.exited(e);
 
         if (this.isTriggerToken(e.getToken())) {

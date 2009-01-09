@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.innerblock;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.SyntaxToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
 public class CaseGroupStateManager extends InnerBlockStateManager {
@@ -56,7 +57,7 @@ public class CaseGroupStateManager extends InnerBlockStateManager {
     }
     
     protected boolean isBreakStatement(final AstToken token) {
-        return token.isBreak();
+        return token.isJump() && token.equals(SyntaxToken.BREAK);
     }
     
     @Override

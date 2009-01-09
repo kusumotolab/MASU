@@ -48,7 +48,7 @@ public class ArrayInitializerBuilder extends ExpressionBuilder {
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent event) {
+    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
         final StateChangeEventType type = event.getType();
         if (type.equals(ARRAY_INITILIZER_STATE.ENTER_ARRAY_INIT)) {
 
@@ -76,6 +76,13 @@ public class ArrayInitializerBuilder extends ExpressionBuilder {
         return this.buildingInitilizerStack.peek();
     }
 
+    @Override
+    public void clearBuiltData() {
+        super.clearBuiltData();
+        
+        this.buildingInitilizerStack.clear();
+    }
+    
     private final Stack<UnresolvedArrayInitilizerInfo> buildingInitilizerStack;
 
     private final ArrayInitializerStateManager stateManager;

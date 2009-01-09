@@ -10,18 +10,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BlockScopeBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ClassBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ConstructorBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ExpressionStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.FieldBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.InheritanceBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalVariableBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalVariableDeclarationStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.MethodBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.MethodParameterBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameSpaceBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ReturnStatementBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ThrowStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ArrayInitializerBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionDescriptionBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
@@ -29,19 +25,25 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.Instanc
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.MethodCallBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.OperatorExpressionBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.SingleIdentifierBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.CatchBlockBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.DoBlockBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.ElseBlockBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.FinallyBlockBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.ForBlockBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.IfBlockBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.SwitchBlockBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.SynchronizedBlockBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.TryBlockBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.innerblock.WhileBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.BreakStatementBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.ContinueStatementBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.ExpressionStatementBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.LabelBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.LocalVariableDeclarationStatementBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.ReturnStatementBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.ThrowStatementBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.CatchBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.DoBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.ElseBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.FinallyBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.ForBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.IfBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.SwitchBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.SynchronizedBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.TryBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.WhileBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitorManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayInitilizerInfo;
 
 
 /**
@@ -104,6 +106,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         // for expressions
         this.builders.add(new ExpressionDescriptionBuilder(this.expressionManager,
                 this.buildDataManager));
+
         this.builders
                 .add(new SingleIdentifierBuilder(this.expressionManager, this.buildDataManager));
         this.builders.add(new JavaCompoundIdentifierBuilder(this.expressionManager,
@@ -125,19 +128,24 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
 
         final LocalVariableDeclarationStatementBuilder localVariableDeclarationBuilder = new LocalVariableDeclarationStatementBuilder(
                 localVariableBuilder, this.buildDataManager);
-        
+
         this.builders.add(localVariableDeclarationBuilder);
-        
+
         this.builders.add(new ExpressionStatementBuilder(this.expressionManager,
                 this.buildDataManager));
         this.builders
                 .add(new ReturnStatementBuilder(this.expressionManager, this.buildDataManager));
         this.builders.add(new ThrowStatementBuilder(this.expressionManager, this.buildDataManager));
-        
-        this.builders.add(new ArrayInitializerBuilder(this.expressionManager, this.buildDataManager));
+        this.builders.add(new BreakStatementBuilder(this.expressionManager, this.buildDataManager));
+        this.builders.add(new ContinueStatementBuilder(this.expressionManager,
+                this.buildDataManager));
+
+        this.builders
+                .add(new ArrayInitializerBuilder(this.expressionManager, this.buildDataManager));
 
         this.addInnerBlockBuilder(localVariableDeclarationBuilder);
 
+        this.builders.add(new LabelBuilder(this.buildDataManager));
         for (final DataBuilder<?> builder : this.builders) {
             visitor.addVisitListener(builder);
         }

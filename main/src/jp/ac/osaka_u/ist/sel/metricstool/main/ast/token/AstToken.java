@@ -393,7 +393,7 @@ public interface AstToken {
      * トークンがbreak文をあらわすかどうか返す
      * @return break文を表すトークンならtrue
      */
-    public boolean isBreak();
+    public boolean isJump();
 
     /**
      * トークンがreturn文を表すかどうか返す
@@ -406,4 +406,10 @@ public interface AstToken {
      * @return throw文を表すトークンならtrue
      */
     public boolean isThrow();
+    
+    /**
+     * トークンが文を表すかどうか返す
+     * @return 文を表すトークンならtrue
+     */
+    public boolean isStatement();
 }

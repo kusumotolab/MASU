@@ -1,6 +1,8 @@
-package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
+package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
@@ -35,18 +37,12 @@ public class ReturnStatementBuilder extends SingleStatementBuilder<UnresolvedRet
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        final UnresolvedReturnStatementInfo returnStatement = new UnresolvedReturnStatementInfo(
-                ownerSpace);
-        returnStatement.setFromLine(fromLine);
-        returnStatement.setFromColumn(fromColumn);
-        returnStatement.setToLine(toLine);
-        returnStatement.setToColumn(toColumn);
-
-        return returnStatement;
+        return new UnresolvedReturnStatementInfo(
+                ownerSpace, fromLine, fromColumn, toLine, toColumn);
     }
-
+    
     @Override
-    public void exited(AstVisitEvent e) {
+    public void exited(AstVisitEvent e) throws ASTParseException {
         super.exited(e);
 
         if (this.isTriggerToken(e.getToken())) {

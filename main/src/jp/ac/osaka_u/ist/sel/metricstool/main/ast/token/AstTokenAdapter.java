@@ -279,7 +279,7 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
 
-    public boolean isBreak() {
+    public boolean isJump() {
         return false;
     }
 
@@ -289,6 +289,11 @@ public class AstTokenAdapter implements AstToken {
 
     @Override
     public boolean isThrow() {
+        return false;
+    }
+    
+    @Override
+    public boolean isStatement() {
         return false;
     }
 

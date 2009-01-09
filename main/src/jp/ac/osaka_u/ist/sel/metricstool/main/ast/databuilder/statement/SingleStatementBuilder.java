@@ -1,7 +1,11 @@
-package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
+package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.CompoundDataBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
@@ -21,7 +25,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedS
  * @param <T> 構築される文の型，UnresolvedStatementInfoのサブクラスでなければならない．
  */
 public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<? extends StatementInfo>>
-        extends DataBuilderAdapter<T> {
+        extends CompoundDataBuilder<T> {
 
     /**
      * 式情報マネージャー，構築済みデータマネージャーを与えて初期化
@@ -41,12 +45,13 @@ public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<?
     }
 
     @Override
-    public void entered(AstVisitEvent e) {
-
-    }
+    public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
+        
+    }    
 
     @Override
-    public void exited(AstVisitEvent e) {
+    public void exited(AstVisitEvent e) throws ASTParseException {
+        super.exited(e);
         if (this.isTriggerToken(e.getToken())) {
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = this.buildDataManager
                     .getCurrentLocalSpace();

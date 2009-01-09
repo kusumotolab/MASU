@@ -79,11 +79,28 @@ public class SyntaxToken extends AstTokenAdapter {
      */
     public static final SyntaxToken BREAK = new SyntaxToken("BREAK") {
         @Override
-        public boolean isBreak() {
+        public boolean isJump() {
+            return true;
+        }
+        
+        @Override
+        public boolean isStatement() {
             return true;
         }
     };
-    
+
+    public static final SyntaxToken CONTINUE = new SyntaxToken("CONTINUE") {
+        @Override
+        public boolean isJump() {
+            return true;
+        }
+        
+        @Override
+        public boolean isStatement() {
+            return true;
+        }
+    };
+
     /**
      * return文を表す定数インスタンス
      */
@@ -92,8 +109,13 @@ public class SyntaxToken extends AstTokenAdapter {
         public boolean isReturn() {
             return true;
         }
+        
+        @Override
+        public boolean isStatement() {
+            return true;
+        }
     };
-    
+
     /**
      * throw文を表す定数インスタンス
      */
@@ -102,41 +124,44 @@ public class SyntaxToken extends AstTokenAdapter {
         public boolean isThrow() {
             return true;
         }
+        
+        @Override
+        public boolean isStatement() {
+            return true;
+        }
     };
-    
+
     /**
      * プロパティのget部を表す定数インスタンス
      */
     public static final SyntaxToken PROPERTY_GET_BODY = new SyntaxToken("PROPERTY_GET_BODY") {
         @Override
         public boolean isPropertyGetBody() {
-            return true; 
+            return true;
         };
-        
+
         @Override
         public boolean isBlock() {
             return true;
         }
-       
+
     };
-    
+
     /**
      * プロパティのset部を表す定数インスタンス
      */
     public static final SyntaxToken PROPERTY_SET_BODY = new SyntaxToken("PROPERTY_SET_BODY") {
         @Override
         public boolean isPropertySetBody() {
-            return true; 
+            return true;
         };
-        
+
         @Override
         public boolean isBlock() {
             return true;
         }
     };
-    
-    
-    
+
     /**
      * 指定された文字列で表されるトークンを作成するコンストラクタ
      * @param text トークンを表す文字列

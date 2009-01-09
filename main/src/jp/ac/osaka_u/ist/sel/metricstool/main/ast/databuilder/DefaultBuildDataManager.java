@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -16,6 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
@@ -25,9 +27,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLabelInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableInfo;
@@ -93,7 +97,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
     }
 
-    public void addMethodCall(UnresolvedCallInfo<? extends CallInfo> memberCall) {
+    public void addMethodCall(
+            UnresolvedCallInfo<? extends CallInfo<? extends CallableUnitInfo>> memberCall) {
         final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocalSpace = this
                 .getCurrentLocalSpace();
         if (null != currentLocalSpace) {
@@ -164,6 +169,46 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
     }
 
+    public void addStatement(final UnresolvedStatementInfo<? extends StatementInfo> statement) {
+        if (null == statement) {
+            throw new IllegalArgumentException("statement is null");
+        }
+
+        final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = this
+                .getCurrentLocalSpace();
+        assert null != currentLocal;
+        if (null != currentLocal) {
+            currentLocal.addStatement(statement);
+        }
+    }
+    
+    @Override
+    public void addLabel(UnresolvedLabelInfo label) {
+        if(null == label) {
+            throw new IllegalArgumentException("label is null");
+        }
+        
+        this.availableLabelsStack.peek().add(label);
+        this.addStatement(label);
+    }
+
+    public UnresolvedLabelInfo getAvailableLabel(final String labelName) {
+        if (this.availableLabelsStack.isEmpty()) {
+            return null;
+        }
+
+        final List<UnresolvedLabelInfo> availableLabels = new ArrayList<UnresolvedLabelInfo>(
+                this.availableLabelsStack.peek());
+        Collections.reverse(availableLabels);
+        for (final UnresolvedLabelInfo label : availableLabels) {
+            if (label.getName().equals(labelName)) {
+                return label;
+            }
+        }
+
+        return null;
+    }
+
     public void endScopedBlock() {
         if (!this.scopeStack.isEmpty()) {
             this.scopeStack.pop();
@@ -206,8 +251,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
             final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> callableUnit = this.callableUnitStack
                     .pop();
 
-            nextScopedVariables.clear();
-
+            this.nextScopedVariables.clear();
+            this.availableLabelsStack.pop();
             return callableUnit;
         }
     }
@@ -565,6 +610,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
         this.callableUnitStack.push(callableUnit);
 
+        this.availableLabelsStack.push(new ArrayList<UnresolvedLabelInfo>());
+
         this.toMethodMode();
     }
 
@@ -694,6 +741,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         this.blockStack.clear();
         this.nameSpaceStack.clear();
         this.scopeStack.clear();
+        this.availableLabelsStack.clear();
 
         this.scopeStack.add(new BlockScope());
 
@@ -726,6 +774,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
     private final Set<UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>>> nextScopedVariables = new HashSet<UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>>>();
 
     private final Map<UnresolvedClassInfo, Integer> anonymousClassCountMap = new HashMap<UnresolvedClassInfo, Integer>();
+
+    private final Stack<List<UnresolvedLabelInfo>> availableLabelsStack = new Stack<List<UnresolvedLabelInfo>>();
 
     private MODE mode = MODE.INIT;
 

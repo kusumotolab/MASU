@@ -373,6 +373,9 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.LITERAL_break:
             result = SyntaxToken.BREAK;
             break;
+        case Java15TokenTypes.LITERAL_continue:
+            result = SyntaxToken.CONTINUE;
+            break;
         case Java15TokenTypes.LITERAL_throw:
             result = SyntaxToken.THROW;
             break;
