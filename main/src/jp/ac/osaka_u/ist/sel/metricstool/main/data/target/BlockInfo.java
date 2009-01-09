@@ -111,6 +111,14 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
 
         throw new IllegalStateException();
     }
+    
+    /**
+     * このブロックが繰り返し文であるかどうか返す
+     * @return 繰り返し文であるならtrue
+     */
+    protected boolean isLoopStatement() {
+        return false;
+    }
 
     /**
      * このブロックを直接所有するローカル空間を返す

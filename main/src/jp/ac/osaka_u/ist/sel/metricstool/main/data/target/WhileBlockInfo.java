@@ -50,4 +50,9 @@ public final class WhileBlockInfo extends ConditionalBlockInfo {
 
         return sb.toString();
     }
+    
+    @Override
+    protected boolean isLoopStatement() {
+        return true;
+    }
 }

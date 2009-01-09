@@ -123,6 +123,11 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     public final SortedSet<ExpressionInfo> getIteratorExpressions() {
         return Collections.unmodifiableSortedSet(this.iteratorExpressions);
     }
+    
+    @Override
+    protected boolean isLoopStatement() {
+        return true;
+    }
 
     /**
      * ‰Šú‰»®‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”

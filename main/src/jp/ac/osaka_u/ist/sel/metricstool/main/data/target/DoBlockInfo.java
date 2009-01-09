@@ -56,4 +56,9 @@ public final class DoBlockInfo extends ConditionalBlockInfo {
         return sb.toString();
 
     }
+    
+    @Override
+    protected boolean isLoopStatement() {
+        return true;
+    }
 }
