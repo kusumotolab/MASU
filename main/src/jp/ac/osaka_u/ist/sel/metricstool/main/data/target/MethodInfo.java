@@ -35,7 +35,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
      * @param toLine èIóπçs
      * @param toColumn èIóπóÒ
      */
-    public MethodInfo(final Set<ModifierInfo> modifiers, final String methodName,
+    MethodInfo(final Set<ModifierInfo> modifiers, final String methodName,
             final ClassInfo ownerClass, final boolean privateVisible,
             final boolean namespaceVisible, final boolean inheritanceVisible,
             final boolean publicVisible, final int fromLine, final int fromColumn,

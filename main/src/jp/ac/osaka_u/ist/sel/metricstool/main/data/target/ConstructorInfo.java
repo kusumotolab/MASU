@@ -29,7 +29,7 @@ public abstract class ConstructorInfo extends CallableUnitInfo {
      * @param toLine èIóπçs
      * @param toColumn èIóπóÒ
      */
-    public ConstructorInfo(final Set<ModifierInfo> modifiers, final ClassInfo ownerClass,
+    ConstructorInfo(final Set<ModifierInfo> modifiers, final ClassInfo ownerClass,
             final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {

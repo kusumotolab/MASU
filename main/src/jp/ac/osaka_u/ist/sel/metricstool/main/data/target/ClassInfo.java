@@ -36,7 +36,7 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
      * @param toLine I—¹s
      * @param toColumn I—¹—ñ
      */
-    public ClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
+    ClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
             final String className, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
 

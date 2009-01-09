@@ -38,7 +38,7 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
      * @param toLine èIóπçs
      * @param toColumn èIóπóÒ
      */
-    public FieldInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type,
+    FieldInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type,
             final ClassInfo definitionClass, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 

@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external;
+package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
@@ -6,11 +6,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 
 
 /**

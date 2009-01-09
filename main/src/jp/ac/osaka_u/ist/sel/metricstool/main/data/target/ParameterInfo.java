@@ -24,8 +24,9 @@ public abstract class ParameterInfo extends VariableInfo<CallableUnitInfo> {
      * @param toLine èIóπçs
      * @param toColumn èIóπóÒ
      */
-    public ParameterInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type,
-            final CallableUnitInfo definitionMethod, final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+    ParameterInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type,
+            final CallableUnitInfo definitionMethod, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
         super(modifiers, name, type, definitionMethod, fromLine, fromColumn, toLine, toColumn);
     }
 }

@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.external.ExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
