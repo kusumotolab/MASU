@@ -84,13 +84,4 @@ public abstract class ConstructorInfo extends CallableUnitInfo {
 
         return super.canCalledWith(actualParameters);
     }
-
-    /**
-     * このコンストラクタの引数の数を返す
-     * 
-     * @return このメソッドの引数の数
-     */
-    public int getParameterNumber() {
-        return this.parameters.size();
-    }
 }

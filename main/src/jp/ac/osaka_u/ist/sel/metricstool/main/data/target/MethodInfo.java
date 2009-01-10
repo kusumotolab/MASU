@@ -58,6 +58,43 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
+     * メソッド間の順序関係を定義するメソッド．以下の順序で順序を決める．
+     * <ol>
+     * <li>メソッドを定義しているクラスの名前空間名</li>
+     * <li>メソッドを定義しているクラスのクラス名</li>
+     * <li>メソッド名</li>
+     * <li>メソッドの引数の個数</li>
+     * <li>メソッドの引数の型（第一引数から順番に）</li>
+     */
+    @Override
+    public final int compareTo(final CallableUnitInfo target) {
+
+        if (null == target) {
+            throw new IllegalArgumentException();
+        }
+
+        final int order = super.compareTo(target);
+        if(0 != order){
+            return order;
+        }
+        
+        // この処理は危険かも...
+        if (!(target instanceof MethodInfo)) {
+            return -1;
+        }
+
+        // メソッド名で比較
+        final String name = this.getMethodName();
+        final String correspondName = ((MethodInfo) target).getMethodName();
+        final int methodNameOrder = name.compareTo(correspondName);
+        if (methodNameOrder != 0) {
+            return methodNameOrder;
+        }
+
+        return super.compareTo(target);
+    }
+
+    /**
      * このメソッドが，引数で与えられた情報を使って呼び出すことができるかどうかを判定する．
      * 
      * @param methodName メソッド名
@@ -195,15 +232,6 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
         }
 
         this.returnType = returnType;
-    }
-
-    /**
-     * このメソッドの引数の数を返す
-     * 
-     * @return このメソッドの引数の数
-     */
-    public int getParameterNumber() {
-        return this.parameters.size();
     }
 
     /**

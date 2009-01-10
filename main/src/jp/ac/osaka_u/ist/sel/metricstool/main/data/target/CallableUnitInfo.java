@@ -66,7 +66,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * <li>メソッドの引数の型（第一引数から順番に）</li>
      */
     @Override
-    public final int compareTo(final CallableUnitInfo target) {
+    public int compareTo(final CallableUnitInfo target) {
 
         if (null == target) {
             throw new IllegalArgumentException();
@@ -81,26 +81,9 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             return classOrder;
         }
 
-        if (this.hashCode() > target.hashCode()) {
-            return 1;
-        } else if (this.hashCode() < target.hashCode()) {
-            return -1;
-        } else {
-            return 0;
-        }
-
-        /*
-        // メソッド名で比較
-        final String name = this.getMethodName();
-        final String correspondName = method.getMethodName();
-        final int methodNameOrder = name.compareTo(correspondName);
-        if (methodNameOrder != 0) {
-            return methodNameOrder;
-        }
-
         // 引数の個数で比較
         final int parameterNumber = this.getParameterNumber();
-        final int correspondParameterNumber = method.getParameterNumber();
+        final int correspondParameterNumber = target.getParameterNumber();
         if (parameterNumber < correspondParameterNumber) {
             return 1;
         } else if (parameterNumber > correspondParameterNumber) {
@@ -109,7 +92,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
             // 引数の型で比較．第一引数から順番に．
             final Iterator<ParameterInfo> parameterIterator = this.getParameters().iterator();
-            final Iterator<ParameterInfo> correspondParameterIterator = method.getParameters()
+            final Iterator<ParameterInfo> correspondParameterIterator = target.getParameters()
                     .iterator();
             while (parameterIterator.hasNext() && correspondParameterIterator.hasNext()) {
                 final ParameterInfo parameter = parameterIterator.next();
@@ -124,7 +107,6 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
             return 0;
         }
-        */
     }
 
     /**
@@ -279,8 +261,17 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @return このメソッドの引数の List
      */
-    public List<ParameterInfo> getParameters() {
+    public final List<ParameterInfo> getParameters() {
         return Collections.unmodifiableList(this.parameters);
+    }
+
+    /**
+     * このメソッドの引数の数を返す
+     * 
+     * @return このメソッドの引数の数
+     */
+    public final int getParameterNumber() {
+        return this.parameters.size();
     }
 
     /**
