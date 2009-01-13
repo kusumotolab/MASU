@@ -88,7 +88,8 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
         // 引数が参照型の場合，
         // 参照されているクラスが等しくない場合は，参照型は等しくない
         final ClassTypeInfo targetReferenceType = (ClassTypeInfo) typeInfo;
-        if (!this.referencedClass.equals(targetReferenceType)) {
+        final ClassInfo targetReferencedClass = targetReferenceType.getReferencedClass();
+        if (!this.referencedClass.equals(targetReferencedClass)) {
             return false;
         }
 
