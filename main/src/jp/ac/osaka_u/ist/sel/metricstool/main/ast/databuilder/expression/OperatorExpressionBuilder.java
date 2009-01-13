@@ -39,13 +39,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
     protected void buildOperatorElement(final OperatorToken token, final AstVisitEvent event) {
         //演算子が必要とする項の数
         final int term = token.getTermCount();
-        
-        final OPERATOR_TYPE operatorType = token.getOperator();
-        final OPERATOR operator = OPERATOR.getOperator(event.getText());
-        //左辺値への代入があるかどうか
-        final boolean assignmentLeft = operator.isFirstIsAssignmentee();
-        //左辺値への参照があるかどうか
-        final boolean referenceLeft = operator.isFirstIsReferencee();
+
         //型決定に関わる項のインデックスの配列
         final int[] typeSpecifiedTermIndexes = token.getTypeSpecifiedTermIndexes();
 
@@ -54,6 +48,9 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
         assert (term > 0 && term == elements.length) : "Illegal state: unexpected element count.";
 
         if (term > 0 && term == elements.length) {
+            final OPERATOR_TYPE operatorType = token.getOperator();
+            final OPERATOR operator = OPERATOR.getOperator(event.getText());
+
             //各項の型を記録する配列
             final UnresolvedExpressionInfo<? extends ExpressionInfo>[] termTypes = new UnresolvedExpressionInfo<?>[elements.length];
 
@@ -62,6 +59,16 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
             if (primary instanceof IdentifierElement) {
                 //識別子の場合
                 final IdentifierElement leftElement = (IdentifierElement) elements[0];
+
+                //左辺値への代入があるかどうか
+                boolean assignmentLeft = false;
+                //左辺値への参照があるかどうか
+                boolean referenceLeft = true;
+                if (null != operator) {
+                    assignmentLeft = operator.isFirstIsAssignmentee();
+                    referenceLeft = operator.isFirstIsReferencee();
+                }
+
                 //参照なら被参照変数として解決して結果の型を取得する
                 termTypes[0] = leftElement.resolveAsVariable(this.buildDataManager, referenceLeft,
                         assignmentLeft);
