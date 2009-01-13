@@ -1516,21 +1516,6 @@ public class MetricsTool {
             }
         }
 
-        // 各未解決メソッド呼び出しの解決処理
-        for (final UnresolvedCallInfo<?> unresolvedCall : unresolvedLocalSpace.getCalls()) {
-
-            final ExpressionInfo memberCall = unresolvedCall.resolve(ownerClass, ownerMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
-
-            // メソッドおよびコンストラクタ呼び出しが解決できた場合
-            if (memberCall instanceof MethodCallInfo) {
-                localSpace.addCall((MethodCallInfo) memberCall);
-                ((MethodCallInfo) memberCall).getCallee().addCaller(ownerMethod);
-            } else if (memberCall instanceof ConstructorCallInfo) {
-                localSpace.addCall((ConstructorCallInfo) memberCall);
-            }
-        }
-
         //　各インナーブロックについて
         for (final UnresolvedStatementInfo<?> unresolvedStatement : unresolvedLocalSpace
                 .getStatements()) {

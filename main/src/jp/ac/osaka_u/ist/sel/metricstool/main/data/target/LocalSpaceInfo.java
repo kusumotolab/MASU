@@ -38,22 +38,6 @@ public abstract class LocalSpaceInfo extends UnitInfo {
         this.localVariableUsages = new HashSet<LocalVariableUsageInfo>();
         this.parameterUsages = new HashSet<ParameterUsageInfo>();
         this.statements = new TreeSet<StatementInfo>();
-        this.calls = new HashSet<CallInfo<?>>();
-    }
-
-    /**
-     * メソッドおよびコンストラクタ呼び出しを追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param memberCall 追加するメソッドおよびコンストラクタ呼び出し
-     */
-    public final void addCall(final CallInfo<?> memberCall) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == memberCall) {
-            throw new NullPointerException();
-        }
-
-        this.calls.add(memberCall);
     }
 
     /**
@@ -115,8 +99,11 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * @return メソッドおよびコンストラクタ呼び出し
      */
     public final Set<CallInfo<?>> getCalls() {
-        return Collections.unmodifiableSet(this.calls);
-
+        final Set<CallInfo<?>> calls = new HashSet<CallInfo<?>>();
+        for (final StatementInfo statement : this.getStatements()) {
+            calls.addAll(statement.getCalls());
+        }
+        return Collections.unmodifiableSet(calls);
     }
 
     /**
@@ -200,11 +187,6 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     public final ClassInfo getOwnerClass() {
         return this.ownerClass;
     }
-
-    /**
-     * メソッド呼び出し一覧を保存するための変数
-     */
-    protected final Set<CallInfo<?>> calls;
 
     /**
      * このメソッドの内部で定義されているローカル変数

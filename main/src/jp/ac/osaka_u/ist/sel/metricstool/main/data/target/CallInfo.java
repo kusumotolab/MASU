@@ -1,7 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -14,10 +16,27 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 /**
  * メソッド呼び出し，コンストラクタ呼び出しの共通の親クラス
  * 
+ * @param <T> 呼び出されるユニットの型
  * @author higo
  *
  */
 public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInfo {
+
+    /**
+     * 呼び出しのCollectionから呼び出されているユニットのSetを返す
+     * 
+     * @param calls 呼び出しのCollection
+     * @return 呼び出されているユニットのSet
+     */
+    public static Set<CallableUnitInfo> getCallees(Collection<CallInfo<?>> calls) {
+
+        final Set<CallableUnitInfo> callees = new HashSet<CallableUnitInfo>();
+        for (final CallInfo<?> call : calls) {
+            final CallableUnitInfo callee = call.getCallee();
+            callees.add(callee);
+        }
+        return Collections.unmodifiableSet(callees);
+    }
 
     /**
      * @param callee 呼ばれているオブジェクト，この呼び出しが，配列のコンストラクタの場合はnullが入っている．
