@@ -60,6 +60,16 @@ public final class TypeParameterUsageInfo extends ExpressionInfo {
     }
 
     /**
+     * 呼び出しのSetを返す
+     * 
+     * @return 呼び出しのSet
+     */
+    @Override
+    public final Set<CallInfo<?>> getCalls() {
+        return CallInfo.EmptySet;
+    }
+
+    /**
      * この型パラメータ使用のテキスト表現（型）を返す
      * 
      * @return この型パラメータ使用のテキスト表現（型）

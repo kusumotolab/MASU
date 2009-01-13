@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -54,7 +53,17 @@ public final class EmptyExpressionInfo extends ExpressionInfo {
      */
     @Override
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
-        return new HashSet<VariableUsageInfo<?>>();
+        return VariableUsageInfo.EmptySet;
+    }
+
+    /**
+     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * 
+     * @return ŒÄ‚Ño‚µ‚ÌSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        return CallInfo.EmptySet;
     }
 
 }

@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.HashSet;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -37,7 +36,7 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
 
         this.ownerSwitchBlock = ownerSwitchBlock;
         this.label = label;
-        
+
         this.label.setOwnerExecutableElement(this);
     }
 
@@ -74,7 +73,17 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
      */
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
-        return new HashSet<VariableUsageInfo<?>>();
+        return VariableUsageInfo.EmptySet;
+    }
+
+    /**
+     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * 
+     * @return ŒÄ‚Ño‚µ‚ÌSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        return CallInfo.EmptySet;
     }
 
     /**

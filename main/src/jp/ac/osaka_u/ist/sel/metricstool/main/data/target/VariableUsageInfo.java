@@ -85,10 +85,20 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     }
 
     @Override
-    public SortedSet<VariableUsageInfo<?>> getVariableUsages() {
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
         final SortedSet<VariableUsageInfo<?>> variableUsage = new TreeSet<VariableUsageInfo<?>>();
         variableUsage.add(this);
         return Collections.unmodifiableSortedSet(variableUsage);
+    }
+
+    /**
+     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * 
+     * @return ŒÄ‚Ño‚µ‚ÌSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        return CallInfo.EmptySet;
     }
 
     /**

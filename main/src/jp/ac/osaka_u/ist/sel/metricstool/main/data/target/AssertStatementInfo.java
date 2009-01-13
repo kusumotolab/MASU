@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -12,7 +14,7 @@ import java.util.TreeSet;
  * @author t-miyake，higo
  *
  */
-public class AssertStatementInfo extends SingleStatementInfo {
+public final class AssertStatementInfo extends SingleStatementInfo {
 
     /**
      * アサート文を生成
@@ -64,10 +66,25 @@ public class AssertStatementInfo extends SingleStatementInfo {
 
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
-        SortedSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> result = new TreeSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
-        result.addAll(this.assertedExpression.getVariableUsages());
-        result.addAll(this.messageExpression.getVariableUsages());
-        return null;
+        SortedSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> usages = new TreeSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
+        usages.addAll(this.assertedExpression.getVariableUsages());
+        usages.addAll(this.messageExpression.getVariableUsages());
+        return Collections.unmodifiableSet(usages);
+    }
+
+    /**
+     * 呼び出しのSetを返す
+     * 
+     * @return 呼び出しのSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        final Set<CallInfo<?>> calls = new HashSet<CallInfo<?>>();
+        final ExpressionInfo assertedExpression = this.getAssertedExpression();
+        calls.addAll(assertedExpression.getCalls());
+        final ExpressionInfo messageExpression = this.getMessageExpression();
+        calls.addAll(messageExpression.getCalls());
+        return Collections.unmodifiableSet(calls);
     }
 
     /**

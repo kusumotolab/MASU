@@ -15,9 +15,16 @@ public interface ExecutableElementInfo extends Position, Comparable<ExecutableEl
         Serializable {
 
     /**
-     * 式内での変数の使用を返す
+     * 変数の使用を返す
      * 
      * @return 式内での変数の使用
      */
     Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages();
+
+    /**
+     * メソッド呼び出しを返す
+     * 
+     * @return メソッド呼び出し
+     */
+    Set<CallInfo<?>> getCalls();
 }

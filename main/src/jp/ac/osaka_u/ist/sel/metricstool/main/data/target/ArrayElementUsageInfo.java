@@ -12,7 +12,7 @@ import java.util.Set;
  * @author higo
  * 
  */
-public class ArrayElementUsageInfo extends ExpressionInfo {
+public final class ArrayElementUsageInfo extends ExpressionInfo {
 
     /**
      * 要素の親，つまり配列型の式とインデックスを与えて，オブジェクトを初期化
@@ -98,6 +98,21 @@ public class ArrayElementUsageInfo extends ExpressionInfo {
         variableUsages.addAll(this.getQualifierExpression().getVariableUsages());
         return Collections.unmodifiableSet(variableUsages);
         //return this.getOwnerEntityUsage().getVariableUsages();
+    }
+
+    /**
+     * 呼び出しのSetを返す
+     * 
+     * @return 呼び出しのSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        final Set<CallInfo<?>> calls = new HashSet<CallInfo<?>>();
+        final ExpressionInfo quantifierExpression = this.getQualifierExpression();
+        calls.addAll(quantifierExpression.getCalls());
+        final ExpressionInfo indexExpression = this.getIndexExpression();
+        calls.addAll(indexExpression.getCalls());
+        return Collections.unmodifiableSet(calls);
     }
 
     @Override

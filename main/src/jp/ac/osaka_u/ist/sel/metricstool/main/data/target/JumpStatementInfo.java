@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.Collections;
 import java.util.Set;
 
 
@@ -15,21 +14,30 @@ public abstract class JumpStatementInfo extends SingleStatementInfo {
     }
 
     @Override
-    public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
-        return Collections.EMPTY_SET;
+    public final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
+        return VariableUsageInfo.EmptySet;
     }
-    
+
+    /**
+     * åƒÇ—èoÇµÇÃSetÇï‘Ç∑
+     * 
+     * @return åƒÇ—èoÇµÇÃSet
+     */
+    @Override
+    public final Set<CallInfo<?>> getCalls() {
+        return CallInfo.EmptySet;
+    }
+
     @Override
     public String getText() {
         final StringBuilder text = new StringBuilder(this.getReservedKeyword());
-        if(null != this.getDestinationLabel()) {
+        if (null != this.getDestinationLabel()) {
             text.append(" ").append(this.getDestinationLabel().getText());
         }
         return text.toString();
     }
-    
+
     protected abstract String getReservedKeyword();
-    
 
     public abstract StatementInfo getFollowingStatement();
 
@@ -38,6 +46,5 @@ public abstract class JumpStatementInfo extends SingleStatementInfo {
     }
 
     private final LabelInfo destinationLabel;
-
 
 }

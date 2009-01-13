@@ -57,6 +57,16 @@ public final class ArrayTypeReferenceInfo extends ExpressionInfo {
     }
 
     /**
+     * 呼び出しのSetを返す
+     * 
+     * @return 呼び出しのセット
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        return CallInfo.EmptySet;
+    }
+
+    /**
      * この配列型参照のテキスト表現（String型）を返す
      * 
      * @return この配列型のテキスト表現（String型）

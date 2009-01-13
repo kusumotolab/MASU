@@ -32,7 +32,7 @@ public class ExpressionStatementInfo extends SingleStatementInfo {
         }
 
         this.expression = expression;
-        
+
         this.expression.setOwnerExecutableElement(this);
     }
 
@@ -51,6 +51,16 @@ public class ExpressionStatementInfo extends SingleStatementInfo {
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
         return this.getExpression().getVariableUsages();
+    }
+
+    /**
+     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * 
+     * @return ŒÄ‚Ño‚µ‚ÌSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        return this.getExpression().getCalls();
     }
 
     /**

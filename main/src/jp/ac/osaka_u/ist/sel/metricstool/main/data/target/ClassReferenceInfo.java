@@ -67,6 +67,16 @@ public final class ClassReferenceInfo extends ExpressionInfo {
     }
 
     /**
+     * 呼び出しのSetを返す
+     * 
+     * @return 呼び出しのSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        return CallInfo.EmptySet;
+    }
+
+    /**
      * このクラス参照のテキスト表現（String型）を返す
      * 
      * @return このクラス参照のテキスト表現（String型）

@@ -78,7 +78,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
      * @return •Ï”—˜—p‚ÌSet
      */
     @Override
-    public SortedSet<VariableUsageInfo<?>> getVariableUsages() {
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
 
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
         variableUsages.addAll(super.getVariableUsages());
@@ -87,6 +87,16 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         variableUsages.addAll(qualifierExpression.getVariableUsages());
 
         return Collections.unmodifiableSortedSet(variableUsages);
+    }
+
+    /**
+     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * 
+     * @return ŒÄ‚Ño‚µ‚ÌSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        return this.getQualifierExpression().getCalls();
     }
 
     private final TypeInfo qualifierType;

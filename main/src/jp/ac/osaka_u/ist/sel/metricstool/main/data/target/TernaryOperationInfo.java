@@ -2,9 +2,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 
 /**
@@ -78,12 +77,25 @@ public class TernaryOperationInfo extends ExpressionInfo {
 
     @Override
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
-
-        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
+        final Set<VariableUsageInfo<?>> variableUsages = new HashSet<VariableUsageInfo<?>>();
         variableUsages.addAll(this.getCondition().getVariableUsages());
         variableUsages.addAll(this.getTrueExpression().getVariableUsages());
         variableUsages.addAll(this.getFalseExpression().getVariableUsages());
-        return Collections.unmodifiableSortedSet(variableUsages);
+        return Collections.unmodifiableSet(variableUsages);
+    }
+
+    /**
+     * åƒÇ—èoÇµÇÃSetÇï‘Ç∑
+     * 
+     * @return åƒÇ—èoÇµÇÃSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        final Set<CallInfo<?>> calls = new HashSet<CallInfo<?>>();
+        calls.addAll(this.getCondition().getCalls());
+        calls.addAll(this.getTrueExpression().getCalls());
+        calls.addAll(this.getFalseExpression().getCalls());
+        return Collections.unmodifiableSet(calls);
     }
 
     /**

@@ -37,6 +37,16 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
     }
 
     /**
+     * 呼び出しのSetを返す
+     * 
+     * @return 呼び出しのSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        return CallInfo.EmptySet;
+    }
+
+    /**
      * この未解決エンティティ使用のテキスト表現（型）を返す
      * 
      * @return この未解決エンティティ使用のテキスト表現（型）

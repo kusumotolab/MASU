@@ -145,4 +145,10 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
     private final List<ExpressionInfo> arguments;
 
     private final List<ReferenceTypeInfo> typeArguments;
+
+    /**
+     * ‹ó‚ÌŒÄ‚Ño‚µ‚ÌSet‚ğ•\‚·
+     */
+    public static final SortedSet<CallInfo<?>> EmptySet = Collections
+            .unmodifiableSortedSet(new TreeSet<CallInfo<?>>());
 }

@@ -47,7 +47,17 @@ public class ReturnStatementInfo extends SingleStatementInfo {
 
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
-        return this.returnedExpression.getVariableUsages();
+        return this.getReturnedExpression().getVariableUsages();
+    }
+
+    /**
+     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * 
+     * @return ŒÄ‚Ño‚µ‚ÌSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        return this.getReturnedExpression().getCalls();
     }
 
     /**

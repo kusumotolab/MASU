@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -17,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
  * @author higo
  * 
  */
-public class BinominalOperationInfo extends ExpressionInfo {
+public final class BinominalOperationInfo extends ExpressionInfo {
 
     /**
      * ニ項演算の各オペランド，オペレータを与えてオブジェクトを初期化
@@ -255,6 +256,21 @@ public class BinominalOperationInfo extends ExpressionInfo {
         variableUsages.addAll(this.getFirstOperand().getVariableUsages());
         variableUsages.addAll(this.getSecondOperand().getVariableUsages());
         return Collections.unmodifiableSortedSet(variableUsages);
+    }
+
+    /**
+     * 呼び出しのSetを返す
+     * 
+     * @return 呼び出しのSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        final Set<CallInfo<?>> calls = new HashSet<CallInfo<?>>();
+        final ExpressionInfo firstOperand = this.getFirstOperand();
+        calls.addAll(firstOperand.getCalls());
+        final ExpressionInfo secondOperand = this.getSecondOperand();
+        calls.addAll(secondOperand.getCalls());
+        return Collections.unmodifiableSet(calls);
     }
 
     /**

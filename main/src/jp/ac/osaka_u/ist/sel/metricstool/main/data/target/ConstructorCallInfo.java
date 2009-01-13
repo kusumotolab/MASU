@@ -1,18 +1,26 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+
 /**
  * コンストラクタ呼び出しを保存する変数
  * 
  * @author higo
- *
+
+ * @param <T> 型の情報，クラス型か配列型か
  */
-public abstract class ConstructorCallInfo<T extends ReferenceTypeInfo> extends CallInfo<ConstructorInfo> {
+public abstract class ConstructorCallInfo<T extends ReferenceTypeInfo> extends
+        CallInfo<ConstructorInfo> {
 
     /**
      * 型を与えてコンストラクタ呼び出しを初期化
      * 
      * @param referenceType 呼び出しの型
+     * @param callee 呼び出されているコンストラクタ
      * @param ownerMethod オーナーメソッド 
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -38,6 +46,21 @@ public abstract class ConstructorCallInfo<T extends ReferenceTypeInfo> extends C
     @Override
     public T getType() {
         return this.referenceType;
+    }
+
+    /**
+     * 呼び出しのSetを返す
+     * 
+     * @return 呼び出しのSet
+     */
+    @Override
+    public final Set<CallInfo<?>> getCalls() {
+        final Set<CallInfo<?>> calls = new HashSet<CallInfo<?>>();
+        calls.add(this);
+        for (final ExpressionInfo argument : this.getArguments()) {
+            calls.addAll(argument.getCalls());
+        }
+        return Collections.unmodifiableSet(calls);
     }
 
     /**

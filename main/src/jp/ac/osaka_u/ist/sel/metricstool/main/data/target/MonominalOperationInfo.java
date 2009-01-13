@@ -2,8 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 
 /**
@@ -76,9 +74,17 @@ public final class MonominalOperationInfo extends ExpressionInfo {
 
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
-        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
-        variableUsages.addAll(this.getOperand().getVariableUsages());
-        return variableUsages;
+        return this.getOperand().getVariableUsages();
+    }
+
+    /**
+     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * 
+     * @return ŒÄ‚Ño‚µ‚ÌSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        return this.getOperand().getCalls();
     }
 
     /**

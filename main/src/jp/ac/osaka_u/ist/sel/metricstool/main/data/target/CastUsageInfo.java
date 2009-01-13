@@ -73,6 +73,16 @@ public final class CastUsageInfo extends ExpressionInfo {
     }
 
     /**
+     * 呼び出しのSetを返す
+     * 
+     * @return 呼び出しのSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        return this.getCastedUsage().getCalls();
+    }
+
+    /**
      * このキャスト使用のテキスト表現（String型）を返す
      * 
      * @return このキャスト使用のテキスト表現（String型）

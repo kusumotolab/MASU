@@ -112,6 +112,17 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
     }
 
     /**
+     * 呼び出しのSetを返す
+     * 
+     * @return 呼び出しのSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        return this.isInitialized() ? this.getInitializationExpression().getCalls()
+                : CallInfo.EmptySet;
+    }
+
+    /**
      * この変数宣言文のテキスト表現（String型）を返す
      * 
      * @return この変数宣言文のテキスト表現（String型）

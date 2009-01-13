@@ -45,7 +45,17 @@ public class ThrowStatementInfo extends SingleStatementInfo {
 
     @Override
     public Set<VariableUsageInfo<?>> getVariableUsages() {
-        return this.thrownEpression.getVariableUsages();
+        return this.getThrownExpression().getVariableUsages();
+    }
+
+    /**
+     * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·
+     * 
+     * @return ŒÄ‚Ño‚µ‚ÌSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        return this.getThrownExpression().getCalls();
     }
 
     /**

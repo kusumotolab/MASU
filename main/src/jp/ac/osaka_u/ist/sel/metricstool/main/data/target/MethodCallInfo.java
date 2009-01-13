@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -112,10 +113,24 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
         final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
         variableUsages.addAll(super.getVariableUsages());
 
-        final ExpressionInfo ownerExpression = this.getQualifierExpression();
-        variableUsages.addAll(ownerExpression.getVariableUsages());
+        final ExpressionInfo quantifierExpression = this.getQualifierExpression();
+        variableUsages.addAll(quantifierExpression.getVariableUsages());
 
         return Collections.unmodifiableSortedSet(variableUsages);
+    }
+
+    /**
+     * åƒÇ—èoÇµÇÃSetÇï‘Ç∑
+     * 
+     * @return åƒÇ—èoÇµÇÃSet
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        final Set<CallInfo<?>> calls = new HashSet<CallInfo<?>>();
+        calls.add(this);
+        final ExpressionInfo quantifierExpression = this.getQualifierExpression();
+        calls.addAll(quantifierExpression.getCalls());
+        return Collections.unmodifiableSet(calls);
     }
 
     /**

@@ -47,6 +47,16 @@ public final class NullUsageInfo extends ExpressionInfo {
     }
 
     /**
+     * 呼び出しのSetを返す
+     * 
+     * @return 呼び出しのSet
+     */
+    @Override
+    public final Set<CallInfo<?>> getCalls() {
+        return CallInfo.EmptySet;
+    }
+
+    /**
      * null使用のテキスト表現（型）を返す
      * 
      * @return null使用のテキスト表現（型）
