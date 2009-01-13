@@ -158,7 +158,7 @@ public class Settings {
      * 
      */
     public String getFileMetricsFile() {
-        return fileMetricsFile;
+        return this.fileMetricsFile;
     }
 
     public void setFileMetricsFile(final String fileMetricsFile) {
@@ -166,7 +166,7 @@ public class Settings {
         if (null == fileMetricsFile) {
             throw new IllegalArgumentException();
         }
-        this.fieldMetricsFile = fileMetricsFile;
+        this.fileMetricsFile = fileMetricsFile;
     }
 
     /**
@@ -220,7 +220,7 @@ public class Settings {
         if (null == fieldMetricsFile) {
             throw new IllegalArgumentException();
         }
-        this.fieldMetricsFile = fileMetricsFile;
+        this.fieldMetricsFile = fieldMetricsFile;
     }
 
     /**
