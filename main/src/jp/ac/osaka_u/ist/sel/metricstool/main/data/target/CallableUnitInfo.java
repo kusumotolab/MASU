@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -51,6 +53,8 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
         this.typeParameterUsages = new HashMap<TypeParameterInfo, TypeInfo>();
 
         this.unresolvedUsage = new HashSet<UnresolvedExpressionInfo<?>>();
+
+        this.callers = new TreeSet<CallableUnitInfo>();
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
@@ -415,6 +419,30 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
+     * このメソッドを呼び出しているメソッドまたはコンストラクタを追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param caller 追加する呼び出すメソッド
+     */
+    public final void addCaller(final CallableUnitInfo caller) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == caller) {
+            throw new NullPointerException();
+        }
+
+        this.callers.add(caller);
+    }
+
+    /**
+     * このメソッドを呼び出しているメソッドまたはコンストラクタの SortedSet を返す．
+     * 
+     * @return このメソッドを呼び出しているメソッドの SortedSet
+     */
+    public final SortedSet<CallableUnitInfo> getCallers() {
+        return Collections.unmodifiableSortedSet(this.callers);
+    }
+
+    /**
      * クラス内からのみ参照可能かどうか保存するための変数
      */
     private final boolean privateVisible;
@@ -454,6 +482,11 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 引数のリストの保存するための変数
      */
     protected final List<ParameterInfo> parameters;
+
+    /**
+     * このメソッドを呼び出しているメソッド一覧を保存するための変数
+     */
+    private final SortedSet<CallableUnitInfo> callers;
 
     /**
      * 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しなどを保存するための変数

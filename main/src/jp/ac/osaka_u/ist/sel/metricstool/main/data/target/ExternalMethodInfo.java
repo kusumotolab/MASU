@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.SortedSet;
 
 
-
 /**
  * 外部クラスに定義されているメソッド情報を保存するためのクラス
  * 
@@ -41,22 +40,6 @@ public final class ExternalMethodInfo extends MethodInfo {
         super(new HashSet<ModifierInfo>(), methodName, ExternalClassInfo.UNKNOWN, false, true,
                 true, true, 0, 0, 0, 0);
         this.setReturnType(UnknownTypeInfo.getInstance());
-    }
-
-    /**
-     * ExternalMethodInfoでは利用できない
-     */
-    @Override
-    public Set<CallInfo> getCalls() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalMethodInfoでは利用できない
-     */
-    @Override
-    public final SortedSet<MethodInfo> getCallees() {
-        throw new CannotUseException();
     }
 
     /**

@@ -52,7 +52,6 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
         this.methodName = methodName;
         this.returnType = null;
 
-        this.callers = new TreeSet<CallableUnitInfo>();
         this.overridees = new TreeSet<MethodInfo>();
         this.overriders = new TreeSet<MethodInfo>();
     }
@@ -74,10 +73,10 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
         }
 
         final int order = super.compareTo(target);
-        if(0 != order){
+        if (0 != order) {
             return order;
         }
-        
+
         // この処理は危険かも...
         if (!(target instanceof MethodInfo)) {
             return -1;
@@ -235,21 +234,6 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
-     * このメソッドを呼び出しているメソッドまたはコンストラクタを追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param caller 追加する呼び出すメソッド
-     */
-    public void addCaller(final CallableUnitInfo caller) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == caller) {
-            throw new NullPointerException();
-        }
-
-        this.callers.add(caller);
-    }
-
-    /**
      * このメソッドがオーバーライドしているメソッドを追加する．プラグインから呼ぶとランタイムエラー．
      * 
      * @param overridee 追加するオーバーライドされているメソッド
@@ -281,15 +265,6 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
-     * このメソッドを呼び出しているメソッドまたはコンストラクタの SortedSet を返す．
-     * 
-     * @return このメソッドを呼び出しているメソッドの SortedSet
-     */
-    public SortedSet<CallableUnitInfo> getCallers() {
-        return Collections.unmodifiableSortedSet(this.callers);
-    }
-
-    /**
      * このメソッドがオーバーライドしているメソッドの SortedSet を返す．
      * 
      * @return このメソッドがオーバーライドしているメソッドの SortedSet
@@ -316,11 +291,6 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
      * 返り値の型を保存するための変数
      */
     private TypeInfo returnType;
-
-    /**
-     * このメソッドを呼び出しているメソッド一覧を保存するための変数
-     */
-    protected final SortedSet<CallableUnitInfo> callers;
 
     /**
      * このメソッドがオーバーライドしているメソッド一覧を保存するための変数

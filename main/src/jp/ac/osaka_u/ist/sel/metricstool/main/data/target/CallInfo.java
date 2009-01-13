@@ -36,8 +36,9 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
         this.typeArguments = new LinkedList<ReferenceTypeInfo>();
 
         this.callee = callee;
-        
+
         // メソッド呼び出し関係を構築
+        this.callee.addCaller(ownerMethod);
     }
 
     /**
@@ -133,7 +134,7 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
      * 
      * @return この呼び出しで呼び出されているもの
      */
-    public T getCallee() {
+    public final T getCallee() {
         return this.callee;
     }
 

@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.SortedSet;
 
 
-
 /**
  * 外部クラスに定義されているコンストラクタ情報を保存するためのクラス
  * 
@@ -23,22 +22,6 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
      */
     public ExternalConstructorInfo(final ClassInfo ownerClass) {
         super(new HashSet<ModifierInfo>(), ownerClass, false, true, true, true, 0, 0, 0, 0);
-    }
-
-    /**
-     * ExternalConstructorInfoでは利用できない
-     */
-    @Override
-    public Set<CallInfo> getCalls() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalConstructorInfoでは利用できない
-     */
-    @Override
-    public final SortedSet<MethodInfo> getCallees() {
-        throw new CannotUseException();
     }
 
     /**
