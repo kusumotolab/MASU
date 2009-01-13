@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,6 +47,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
@@ -1204,6 +1206,14 @@ public class MetricsTool {
             ownerClass.addDefinedConstructor(constructorInfo);
             methodInfoManager.add(constructorInfo);
 
+        }
+
+        // 未解決コンストラクタが0の場合は，デフォルトコンストラクタを追加
+        if (0 == unresolvedClassInfo.getDefinedConstructors().size()) {
+            final TargetConstructorInfo defaultConstructor = new TargetConstructorInfo(
+                    new HashSet<ModifierInfo>(), ownerClass, false, true, false, false, 0, 0, 0, 0);
+            ownerClass.addDefinedConstructor(defaultConstructor);
+            methodInfoManager.add(defaultConstructor);
         }
 
         // 各 Unresolvedクラスに対して
