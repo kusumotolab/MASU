@@ -40,6 +40,13 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
 
         this.qualifierExpression = qualifierExpression;
         this.qualifierType = qualifierType;
+
+        // フィールドの使用情報を格納
+        if (reference) {
+            usedField.addReferencer(ownerMethod);
+        } else {
+            usedField.addAssignmenter(ownerMethod);
+        }
     }
 
     @Override
