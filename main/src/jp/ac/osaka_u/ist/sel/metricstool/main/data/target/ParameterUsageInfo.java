@@ -22,7 +22,8 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
      * 使用されている引数を与えてオブジェクトを初期化
      * 
      * @param usedParameter 使用されている引数
-     * @param reference 参照である場合は true, 代入である場合は false
+     * @param reference 参照であるかどうか
+     * @param assignment 代入であるかどうか
      * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -30,17 +31,19 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
      * @param toColumn 終了列
      */
     private ParameterUsageInfo(final ParameterInfo usedParameter, final boolean reference,
-            final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+            final boolean assignment, final CallableUnitInfo ownerMethod, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super(usedParameter, reference, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+        super(usedParameter, reference, assignment, ownerMethod, fromLine, fromColumn, toLine,
+                toColumn);
     }
 
     /**
      * 使用されているパラメータ，使用の種類，使用されている位置情報を与えてインスタンスを取得
      * 
      * @param usedParameter 使用されているパラメータ
-     * @param reference 参照である場合はtrue，代入である場合はfalse
+     * @param reference 参照であるかどうか
+     * @param assingment 代入であるかどうか
      * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -49,10 +52,10 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
      * @return パラーメータ使用のインスタンス
      */
     public static ParameterUsageInfo getInstance(final ParameterInfo usedParameter,
-            final boolean reference, final CallableUnitInfo ownerMethod, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final boolean reference, final boolean assingment, final CallableUnitInfo ownerMethod,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         final ParameterUsageInfo instance = new ParameterUsageInfo(usedParameter, reference,
-                ownerMethod, fromLine, fromColumn, toLine, toColumn);
+                assingment, ownerMethod, fromLine, fromColumn, toLine, toColumn);
         addParameterUsage(instance);
         return instance;
     }

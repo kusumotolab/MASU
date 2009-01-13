@@ -40,13 +40,14 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
      * 
      * @param usedVariable 使用されている変数
      * @param reference 参照かどうか
+     * @param assignment 代入かどうか
      * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    VariableUsageInfo(final T usedVariable, final boolean reference,
+    VariableUsageInfo(final T usedVariable, final boolean reference, final boolean assignment,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 
@@ -54,7 +55,7 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
 
         this.usedVariable = usedVariable;
         this.reference = reference;
-
+        this.assignment = assignment;
     }
 
     /**
@@ -81,7 +82,7 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
      * @return 代入である場合は true，参照である場合は false
      */
     public final boolean isAssignment() {
-        return !this.reference;
+        return this.assignment;
     }
 
     @Override
@@ -168,6 +169,8 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     private final T usedVariable;
 
     private final boolean reference;
+
+    private final boolean assignment;
 
     /**
      * 空の変数利用のSetを表す

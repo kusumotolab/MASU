@@ -53,9 +53,9 @@ public class LocalVariableBuilder
                         .buildDeclarationUsage(this.getLastBuildData(), trigger.getStartLine(),
                                 trigger.getStartColumn(), trigger.getEndLine(), trigger
                                         .getEndColumn());
-                
+
                 this.declarationUsageStack.push(declarationUsage);
-                
+
             }
 
         } else if (this.variableStateManager.isInDefinition()) {
@@ -99,7 +99,7 @@ public class LocalVariableBuilder
             final int fromColumn, final int toLine, final int toColumn) {
 
         final UnresolvedLocalVariableUsageInfo declarationUsage = new UnresolvedLocalVariableUsageInfo(
-                declaredVariable, false, fromLine, fromColumn, toLine, toColumn);
+                declaredVariable, false, true, fromLine, fromColumn, toLine, toColumn);
 
         this.buildDataManager.addVariableUsage(declarationUsage);
 

@@ -24,7 +24,7 @@ public final class ArrayLengthUsageInfo extends FieldUsageInfo {
             final ArrayTypeInfo qualifierType, final CallableUnitInfo ownerMethod,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(qualifierExpression, qualifierType, new ArrayLengthInfo(qualifierType), true,
+        super(qualifierExpression, qualifierType, new ArrayLengthInfo(qualifierType), true, false,
                 ownerMethod, fromLine, fromColumn, toLine, toColumn);
     }
 

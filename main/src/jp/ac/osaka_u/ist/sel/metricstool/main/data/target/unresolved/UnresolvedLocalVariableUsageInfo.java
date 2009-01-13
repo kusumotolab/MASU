@@ -24,16 +24,17 @@ public class UnresolvedLocalVariableUsageInfo extends
      * 必要な情報を与えて，オブジェクトを初期化
      * 
      * @param usedVariable 使用されている変数
-     * @param reference 参照か代入か
+     * @param reference 参照かどうか
+     * @param assignment 代入かどうか
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
     public UnresolvedLocalVariableUsageInfo(final UnresolvedLocalVariableInfo usedVariable,
-            boolean reference, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
-        super(usedVariable.getName(), reference, fromLine, fromColumn, toLine, toColumn);
+            boolean reference, final boolean assignment, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
+        super(usedVariable.getName(), reference, assignment, fromLine, fromColumn, toLine, toColumn);
 
         this.usedVariable = usedVariable;
     }
@@ -54,22 +55,16 @@ public class UnresolvedLocalVariableUsageInfo extends
         final LocalVariableInfo usedVariable = this.getUsedVariable().resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final boolean reference = this.isReference();
+        final boolean assignment = this.isAssignment();
 
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        /*// 要素使用のオーナー要素を返す
-        final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
-                .getOwnerExecutableElement();
-        final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
-                .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                        methodInfoManager);*/
-
-        this.resolvedInfo = LocalVariableUsageInfo.getInstance(usedVariable, reference,
+        this.resolvedInfo = LocalVariableUsageInfo.getInstance(usedVariable, reference, assignment,
                 usingMethod, fromLine, fromColumn, toLine, toColumn);
-        /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
+
         return this.resolvedInfo;
     }
 

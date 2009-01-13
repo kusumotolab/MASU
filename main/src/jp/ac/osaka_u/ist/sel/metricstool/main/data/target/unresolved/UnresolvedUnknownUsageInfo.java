@@ -123,8 +123,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                     // availableField.getType() ‚©‚çŽŸ‚Ìword(name[i])‚ð–¼‘O‰ðŒˆ
                     ExpressionInfo entityUsage = FieldUsageInfo.getInstance(classReference,
-                            usingClassType, availableFieldOfThisClass, true, usingMethod, fromLine,
-                            fromColumn, toLine, toColumn);
+                            usingClassType, availableFieldOfThisClass, true, false, usingMethod,
+                            fromLine, fromColumn, toLine, toColumn);
                     /*entityUsage.setOwnerExecutableElement(ownerExecutableElement);*/
 
                     for (int i = 1; i < name.length; i++) {
@@ -163,8 +163,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                             entityUsage = FieldUsageInfo.getInstance(
                                                     classReference, entityUsage.getType(),
-                                                    availableField, true, usingMethod, fromLine,
-                                                    fromColumn, toLine, toColumn);
+                                                    availableField, true, false, usingMethod,
+                                                    fromLine, fromColumn, toLine, toColumn);
                                             /*entityUsage
                                                     .setOwnerExecutableElement(ownerExecutableElement);*/
                                             found = true;
@@ -194,7 +194,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                             entityUsage = FieldUsageInfo.getInstance(
                                                     classReference, entityUsage.getType(),
-                                                    fieldInfo, true, usingMethod, fromLine,
+                                                    fieldInfo, true, false, usingMethod, fromLine,
                                                     fromColumn, toLine, toColumn);
                                             /*entityUsage
                                                     .setOwnerExecutableElement(ownerExecutableElement);*/
@@ -217,7 +217,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 fieldInfoManager.add(fieldInfo);
 
                                 entityUsage = FieldUsageInfo.getInstance(classReference,
-                                        entityUsage.getType(), fieldInfo, true, usingMethod,
+                                        entityUsage.getType(), fieldInfo, true, false, usingMethod,
                                         fromLine, fromColumn, toLine, toColumn);
                                 /*entityUsage.setOwnerExecutableElement(ownerExecutableElement);*/
                             }
@@ -259,8 +259,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                     // availableField.getType() ‚©‚çŽŸ‚Ìword(name[i])‚ð–¼‘O‰ðŒˆ
                     ExpressionInfo entityUsage = FieldUsageInfo.getInstance(classReference,
-                            usingClassType, availableFieldOfThisClass, true, usingMethod, fromLine,
-                            fromColumn, toLine, toColumn);
+                            usingClassType, availableFieldOfThisClass, true, false, usingMethod,
+                            fromLine, fromColumn, toLine, toColumn);
                     /*entityUsage.setOwnerExecutableElement(ownerExecutableElement);*/
 
                     for (int i = 1; i < name.length; i++) {
@@ -299,8 +299,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                             entityUsage = FieldUsageInfo.getInstance(
                                                     classReference, entityUsage.getType(),
-                                                    availableField, true, usingMethod, fromLine,
-                                                    fromColumn, toLine, toColumn);
+                                                    availableField, true, false, usingMethod,
+                                                    fromLine, fromColumn, toLine, toColumn);
                                             /*entityUsage
                                                     .setOwnerExecutableElement(ownerExecutableElement);*/
 
@@ -357,7 +357,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                             entityUsage = FieldUsageInfo.getInstance(
                                                     classReference, entityUsage.getType(),
-                                                    fieldInfo, true, usingMethod, fromLine,
+                                                    fieldInfo, true, false, usingMethod, fromLine,
                                                     fromColumn, toLine, toColumn);
                                             /*entityUsage
                                                     .setOwnerExecutableElement(ownerExecutableElement);*/
@@ -380,7 +380,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 fieldInfoManager.add(fieldInfo);
 
                                 entityUsage = FieldUsageInfo.getInstance(classReference,
-                                        entityUsage.getType(), fieldInfo, true, usingMethod,
+                                        entityUsage.getType(), fieldInfo, true, false, usingMethod,
                                         fromLine, fromColumn, toLine, toColumn);
                                 /*entityUsage.setOwnerExecutableElement(ownerExecutableElement);*/
                             }
@@ -450,8 +450,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                             entityUsage = FieldUsageInfo.getInstance(
                                                     searchedClassReference, entityUsage.getType(),
-                                                    availableField, true, usingMethod, fromLine,
-                                                    fromColumn, toLine, toColumn);
+                                                    availableField, true, false, usingMethod,
+                                                    fromLine, fromColumn, toLine, toColumn);
                                             /*entityUsage
                                                     .setOwnerExecutableElement(ownerExecutableElement);*/
                                             found = true;
@@ -507,7 +507,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                             entityUsage = FieldUsageInfo.getInstance(
                                                     searchedClassReference, entityUsage.getType(),
-                                                    fieldInfo, true, usingMethod, fromLine,
+                                                    fieldInfo, true, false, usingMethod, fromLine,
                                                     fromColumn, toLine, toColumn);
                                             /*entityUsage
                                                     .setOwnerExecutableElement(ownerExecutableElement);*/
@@ -530,7 +530,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 fieldInfoManager.add(fieldInfo);
 
                                 entityUsage = FieldUsageInfo.getInstance(searchedClassReference,
-                                        entityUsage.getType(), fieldInfo, true, usingMethod,
+                                        entityUsage.getType(), fieldInfo, true, false, usingMethod,
                                         fromLine, fromColumn, toLine, toColumn);
                                 /*entityUsage.setOwnerExecutableElement(ownerExecutableElement);*/
                             }
@@ -606,7 +606,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                                 entityUsage = FieldUsageInfo.getInstance(
                                                         innerClassReference, entityUsage.getType(),
-                                                        availableField, true, usingMethod,
+                                                        availableField, true, false, usingMethod,
                                                         fromLine, fromColumn, toLine, toColumn);
                                                 /*entityUsage
                                                         .setOwnerExecutableElement(ownerExecutableElement);*/
@@ -663,8 +663,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                                 entityUsage = FieldUsageInfo.getInstance(
                                                         innerClassReference, entityUsage.getType(),
-                                                        fieldInfo, true, usingMethod, fromLine,
-                                                        fromColumn, toLine, toColumn);
+                                                        fieldInfo, true, false, usingMethod,
+                                                        fromLine, fromColumn, toLine, toColumn);
                                                 /*entityUsage
                                                         .setOwnerExecutableElement(ownerExecutableElement);*/
 
@@ -694,8 +694,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                     fieldInfoManager.add(fieldInfo);
 
                                     entityUsage = FieldUsageInfo.getInstance(innerClassReference,
-                                            entityUsage.getType(), fieldInfo, true, usingMethod,
-                                            fromLine, fromColumn, toLine, toColumn);
+                                            entityUsage.getType(), fieldInfo, true, false,
+                                            usingMethod, fromLine, fromColumn, toLine, toColumn);
                                     /*entityUsage.setOwnerExecutableElement(ownerExecutableElement);*/
                                 }
 
@@ -771,7 +771,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                                         entityUsage = FieldUsageInfo.getInstance(
                                                                 classReference, entityUsage
                                                                         .getType(), availableField,
-                                                                true, usingMethod, fromLine,
+                                                                true, false, usingMethod, fromLine,
                                                                 fromColumn, toLine, toColumn);
                                                         /*entityUsage
                                                                 .setOwnerExecutableElement(ownerExecutableElement);*/
@@ -831,7 +831,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                                         entityUsage = FieldUsageInfo.getInstance(
                                                                 classReference, entityUsage
                                                                         .getType(), fieldInfo,
-                                                                true, usingMethod, fromLine,
+                                                                true, false, usingMethod, fromLine,
                                                                 fromColumn, toLine, toColumn);
                                                         /*entityUsage
                                                                 .setOwnerExecutableElement(ownerExecutableElement);*/
@@ -855,7 +855,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                             entityUsage = FieldUsageInfo.getInstance(
                                                     classReference, entityUsage.getType(),
-                                                    fieldInfo, true, usingMethod, fromLine,
+                                                    fieldInfo, true, false, usingMethod, fromLine,
                                                     fromColumn, toLine, toColumn);
                                             /*entityUsage
                                                     .setOwnerExecutableElement(ownerExecutableElement);*/
@@ -930,8 +930,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                                     entityUsage = FieldUsageInfo.getInstance(
                                                             classReference, entityUsage.getType(),
-                                                            availableField, true, usingMethod,
-                                                            fromLine, fromColumn, toLine, toColumn);
+                                                            availableField, true, false,
+                                                            usingMethod, fromLine, fromColumn,
+                                                            toLine, toColumn);
                                                     /*entityUsage
                                                             .setOwnerExecutableElement(ownerExecutableElement);*/
                                                     found = true;
@@ -988,8 +989,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                                     entityUsage = FieldUsageInfo.getInstance(
                                                             classReference, entityUsage.getType(),
-                                                            fieldInfo, true, usingMethod, fromLine,
-                                                            fromColumn, toLine, toColumn);
+                                                            fieldInfo, true, false, usingMethod,
+                                                            fromLine, fromColumn, toLine, toColumn);
                                                     /*entityUsage
                                                             .setOwnerExecutableElement(ownerExecutableElement);*/
 
@@ -1012,8 +1013,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                         entityUsage = FieldUsageInfo
                                                 .getInstance(classReference, entityUsage.getType(),
-                                                        fieldInfo, true, usingMethod, fromLine,
-                                                        fromColumn, toLine, toColumn);
+                                                        fieldInfo, true, false, usingMethod,
+                                                        fromLine, fromColumn, toLine, toColumn);
                                         /*entityUsage
                                                 .setOwnerExecutableElement(ownerExecutableElement);*/
 
@@ -1082,7 +1083,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                                 entityUsage = FieldUsageInfo.getInstance(
                                                         classReference, entityUsage.getType(),
-                                                        availableField, true, usingMethod,
+                                                        availableField, true, false, usingMethod,
                                                         fromLine, fromColumn, toLine, toColumn);
                                                 /*entityUsage
                                                         .setOwnerExecutableElement(ownerExecutableElement);*/
@@ -1139,8 +1140,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                                                 entityUsage = FieldUsageInfo.getInstance(
                                                         classReference, entityUsage.getType(),
-                                                        fieldInfo, true, usingMethod, fromLine,
-                                                        fromColumn, toLine, toColumn);
+                                                        fieldInfo, true, false, usingMethod,
+                                                        fromLine, fromColumn, toLine, toColumn);
                                                 /*entityUsage
                                                         .setOwnerExecutableElement(ownerExecutableElement);*/
 
@@ -1162,8 +1163,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                     fieldInfoManager.add(fieldInfo);
 
                                     entityUsage = FieldUsageInfo.getInstance(classReference,
-                                            entityUsage.getType(), fieldInfo, true, usingMethod,
-                                            fromLine, fromColumn, toLine, toColumn);
+                                            entityUsage.getType(), fieldInfo, true, false,
+                                            usingMethod, fromLine, fromColumn, toLine, toColumn);
                                     /*entityUsage.setOwnerExecutableElement(ownerExecutableElement);*/
                                 }
 

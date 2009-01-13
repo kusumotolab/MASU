@@ -19,14 +19,16 @@ public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<? 
      * 必要な情報を与えて，オブジェクトを初期化
      * 
      * @param usedVariableName 変数名
-     * @param reference 参照の場合はtrue, 代入の場合はfalse
+     * @param reference 参照であるかどうか
+     * @param assignment 代入であるかどうか
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
     public UnresolvedVariableUsageInfo(final String usedVariableName, final boolean reference,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final boolean assignment, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
         if (null == usedVariableName) {
             throw new IllegalArgumentException("usedVarialbeName is null");
@@ -34,6 +36,7 @@ public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<? 
 
         this.usedVariableName = usedVariableName;
         this.reference = reference;
+        this.assignment = assignment;
 
         this.setFromLine(fromLine);
         this.setFromColumn(fromColumn);
@@ -56,7 +59,7 @@ public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<? 
      * @return 代入である場合は true，参照である場合は false
      */
     public final boolean isAssignment() {
-        return !this.reference;
+        return this.assignment;
     }
 
     /**
@@ -72,6 +75,7 @@ public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<? 
      */
     protected final String usedVariableName;
 
-    protected boolean reference;
+    private boolean reference;
 
+    private boolean assignment;
 }

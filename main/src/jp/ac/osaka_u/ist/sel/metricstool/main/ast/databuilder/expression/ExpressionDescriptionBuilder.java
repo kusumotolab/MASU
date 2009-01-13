@@ -33,7 +33,7 @@ public class ExpressionDescriptionBuilder extends ExpressionBuilder {
         if (elements.length == 1) {
             if (elements[0] instanceof IdentifierElement) {
                 final UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsage = ((IdentifierElement) elements[0])
-                        .resolveAsReferencedVariable(this.buildDataManager);
+                        .resolveAsVariable(this.buildDataManager, true, false);
                 this.pushElement(new UsageElement(variableUsage));
             } else {
                 this.pushElement(elements[0]);

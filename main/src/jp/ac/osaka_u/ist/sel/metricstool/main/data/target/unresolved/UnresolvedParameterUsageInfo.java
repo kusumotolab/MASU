@@ -31,9 +31,9 @@ public final class UnresolvedParameterUsageInfo extends
      * @param toColumn 終了列
      */
     public UnresolvedParameterUsageInfo(final UnresolvedParameterInfo usedVariable,
-            boolean reference, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
-        super(usedVariable.getName(), reference, fromLine, fromColumn, toLine, toColumn);
+            boolean reference, final boolean assignment, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
+        super(usedVariable.getName(), reference, assignment, fromLine, fromColumn, toLine, toColumn);
 
         this.usedVariable = usedVariable;
     }
@@ -57,21 +57,15 @@ public final class UnresolvedParameterUsageInfo extends
         final ParameterInfo usedVariable = this.getUsedVariable().resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         final boolean reference = this.isReference();
+        final boolean assignment = this.isAssignment();
 
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        /*// 要素使用のオーナー要素を返す
-        final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
-                .getOwnerExecutableElement();
-        final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
-                .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                        methodInfoManager);*/
-
-        this.resolvedInfo = ParameterUsageInfo.getInstance(usedVariable, reference, usingMethod,
-                fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo = ParameterUsageInfo.getInstance(usedVariable, reference, assignment,
+                usingMethod, fromLine, fromColumn, toLine, toColumn);
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
         return this.resolvedInfo;
     }

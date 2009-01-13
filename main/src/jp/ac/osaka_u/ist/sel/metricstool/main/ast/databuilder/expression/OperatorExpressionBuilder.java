@@ -39,10 +39,13 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
     protected void buildOperatorElement(final OperatorToken token, final AstVisitEvent event) {
         //演算子が必要とする項の数
         final int term = token.getTermCount();
+        
+        final OPERATOR_TYPE operatorType = token.getOperator();
+        final OPERATOR operator = OPERATOR.getOperator(event.getText());
         //左辺値への代入があるかどうか
-        final boolean assignmentLeft = token.isAssignmentOperator();
+        final boolean assignmentLeft = operator.isFirstIsAssignmentee();
         //左辺値への参照があるかどうか
-        final boolean referenceLeft = token.isLeftTermIsReferencee();
+        final boolean referenceLeft = operator.isFirstIsReferencee();
         //型決定に関わる項のインデックスの配列
         final int[] typeSpecifiedTermIndexes = token.getTypeSpecifiedTermIndexes();
 
@@ -59,15 +62,9 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
             if (primary instanceof IdentifierElement) {
                 //識別子の場合
                 final IdentifierElement leftElement = (IdentifierElement) elements[0];
-                if (referenceLeft) {
-                    //参照なら被参照変数として解決して結果の型を取得する
-                    termTypes[0] = leftElement.resolveAsReferencedVariable(this.buildDataManager);
-                }
-
-                if (assignmentLeft) {
-                    //代入なら被代入変数として解決して結果の型を取得する
-                    termTypes[0] = leftElement.resolveAsAssignmetedVariable(this.buildDataManager);
-                }
+                //参照なら被参照変数として解決して結果の型を取得する
+                termTypes[0] = leftElement.resolveAsVariable(this.buildDataManager, referenceLeft,
+                        assignmentLeft);
             } else if (primary instanceof TypeElement) {
                 TypeElement typeElement = (TypeElement) primary;
                 if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {
@@ -93,8 +90,8 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
             for (int i = 1; i < term; i++) {
                 if (elements[i] instanceof IdentifierElement) {
                     //識別子なら勝手に参照として解決して方を取得する
-                    termTypes[i] = ((IdentifierElement) elements[i])
-                            .resolveAsReferencedVariable(this.buildDataManager);
+                    termTypes[i] = ((IdentifierElement) elements[i]).resolveAsVariable(
+                            this.buildDataManager, true, false);
                 } else if (elements[i] instanceof TypeElement) {
                     TypeElement typeElement = (TypeElement) elements[i];
                     if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {
@@ -114,9 +111,6 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     termTypes[i] = elements[i].getUsage();
                 }
             }
-
-            final OPERATOR_TYPE operatorType = token.getOperator();
-            final OPERATOR operator = OPERATOR.getOperator(event.getText());
 
             if (2 == term && null != operatorType) {
                 //オペレーターインスタンスがセットされている2項演算子＝名前解決部に型決定処理を委譲する
@@ -179,8 +173,8 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     //配列記述子の場合は特別処理
                     final UnresolvedExpressionInfo<? extends ExpressionInfo> ownerType;
                     if (elements[0] instanceof IdentifierElement) {
-                        ownerType = ((IdentifierElement) elements[0])
-                                .resolveAsReferencedVariable(this.buildDataManager);
+                        ownerType = ((IdentifierElement) elements[0]).resolveAsVariable(
+                                this.buildDataManager, true, false);
                     } else {
                         ownerType = elements[0].getUsage();
                     }

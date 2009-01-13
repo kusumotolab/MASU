@@ -15,15 +15,15 @@ public abstract class IdentifierElement extends ExpressionElement {
     public IdentifierElement(final String name, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
         super(fromLine, fromColumn, toLine, toColumn);
-        
-        if(null == name) {
+
+        if (null == name) {
             throw new IllegalArgumentException("name is null.");
         }
-        
+
         this.name = name;
-        
+
         this.ownerUsage = null;
-        
+
     }
 
     public String getName() {
@@ -38,11 +38,8 @@ public abstract class IdentifierElement extends ExpressionElement {
         return this.ownerUsage;
     }
 
-    public abstract UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsReferencedVariable(
-            BuildDataManager buildDataManager);
-
-    public abstract UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsAssignmetedVariable(
-            BuildDataManager buildDataManager);
+    public abstract UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsVariable(
+            BuildDataManager buildDataManager, final boolean reference, final boolean assignment);
 
     public abstract IdentifierElement resolveAsCalledMethod(BuildDataManager buildDataManager);
 
@@ -50,10 +47,9 @@ public abstract class IdentifierElement extends ExpressionElement {
             BuildDataManager buildDataManager);
 
     protected final String name;
-    
-    protected String[] qualifiedName;
-    
-    protected UnresolvedExpressionInfo<? extends ExpressionInfo> ownerUsage;
 
+    protected String[] qualifiedName;
+
+    protected UnresolvedExpressionInfo<? extends ExpressionInfo> ownerUsage;
 
 }

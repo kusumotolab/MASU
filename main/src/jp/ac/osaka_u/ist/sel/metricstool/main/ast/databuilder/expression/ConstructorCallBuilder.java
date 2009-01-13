@@ -63,7 +63,7 @@ public class ConstructorCallBuilder extends ExpressionBuilder {
         for (final ExpressionElement argument : elements) {
             if (argument instanceof IdentifierElement) {
                 constructorCall.addArgument(((IdentifierElement) argument)
-                        .resolveAsReferencedVariable(this.buildDataManager));
+                        .resolveAsVariable(this.buildDataManager, true, false));
             } else if (argument instanceof TypeArgumentElement) {
                 TypeArgumentElement typeArgument = (TypeArgumentElement) argument;
 

@@ -58,7 +58,7 @@ public final class DoBlockInfo extends ConditionalBlockInfo {
     }
     
     @Override
-    protected boolean isLoopStatement() {
+    public boolean isLoopStatement() {
         return true;
     }
 }

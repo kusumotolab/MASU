@@ -37,11 +37,12 @@ public class FieldOrMethodElement extends IdentifierElement {
     }
 
     @Override
-    public UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsAssignmetedVariable(
-            BuildDataManager buildDataManager) {
+    public UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsVariable(
+            final BuildDataManager buildDataManager, final boolean reference,
+            final boolean assignment) {
         UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
-                .getAllAvaliableNames(), this.ownerUsage, this.name, false, this.fromLine,
-                this.fromColumn, this.toLine, this.toColumn);
+                .getAllAvaliableNames(), this.ownerUsage, this.name, reference, assignment,
+                this.fromLine, this.fromColumn, this.toLine, this.toColumn);
         buildDataManager.addVariableUsage(fieldUsage);
 
         this.usage = fieldUsage;
@@ -52,19 +53,6 @@ public class FieldOrMethodElement extends IdentifierElement {
     @Override
     public IdentifierElement resolveAsCalledMethod(BuildDataManager buildDataManager) {
         return this;
-    }
-
-    @Override
-    public UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsReferencedVariable(
-            BuildDataManager buildDataManager) {
-        UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
-                .getAllAvaliableNames(), this.ownerUsage, this.name, true, this.fromLine,
-                this.fromColumn, this.toLine, this.toColumn);
-        buildDataManager.addVariableUsage(fieldUsage);
-
-        this.usage = fieldUsage;
-
-        return fieldUsage;
     }
 
     @Override

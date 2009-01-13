@@ -22,7 +22,8 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
      * 使用されているローカル変数を与えてオブジェクトを初期化
      * 
      * @param usedLocalVariable 使用されているローカル変数
-     * @param reference 参照である場合は true, 代入である場合は false
+     * @param reference 参照であるかどうか
+     * @param assignment 代入であるかどうか
      * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -30,17 +31,19 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
      * @param toColumn 終了列
      */
     private LocalVariableUsageInfo(final LocalVariableInfo usedLocalVariable,
-            final boolean reference, final CallableUnitInfo ownerMethod, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final boolean reference, final boolean assignment, final CallableUnitInfo ownerMethod,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(usedLocalVariable, reference, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+        super(usedLocalVariable, reference, assignment, ownerMethod, fromLine, fromColumn, toLine,
+                toColumn);
     }
 
     /**
      * 使用されているローカル変数，使用の種類，使用されている位置情報を与えてインスタンスを取得
      * 
      * @param usedLocalVariable 使用されているローカル変数
-     * @param reference 参照である場合はtrue，代入である場合はfalse
+     * @param reference 参照であるかどうか
+     * @param assingment 代入であるかどうか
      * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -49,10 +52,10 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
      * @return ローカル変数使用のインスタンス
      */
     public static LocalVariableUsageInfo getInstance(final LocalVariableInfo usedLocalVariable,
-            final boolean reference, final CallableUnitInfo ownerMethod, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final boolean reference, final boolean assignment, final CallableUnitInfo ownerMethod,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         final LocalVariableUsageInfo instance = new LocalVariableUsageInfo(usedLocalVariable,
-                reference, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+                reference, assignment, ownerMethod, fromLine, fromColumn, toLine, toColumn);
         addLocalVariableUsage(instance);
         return instance;
     }

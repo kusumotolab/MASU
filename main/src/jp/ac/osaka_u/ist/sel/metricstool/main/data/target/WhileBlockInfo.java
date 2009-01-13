@@ -52,7 +52,7 @@ public final class WhileBlockInfo extends ConditionalBlockInfo {
     }
     
     @Override
-    protected boolean isLoopStatement() {
+    public boolean isLoopStatement() {
         return true;
     }
 }

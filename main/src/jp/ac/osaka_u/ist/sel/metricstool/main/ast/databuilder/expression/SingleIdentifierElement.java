@@ -37,25 +37,25 @@ public class SingleIdentifierElement extends IdentifierElement {
         return null;
     }
 
-    private UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsVariableUsage(
-            BuildDataManager buildDataManager,
-            UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> usedVariable,
-            boolean reference) {
+    private UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsVariable(
+            final BuildDataManager buildDataManager,
+            final UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> usedVariable,
+            final boolean reference, final boolean assignment) {
         final UnresolvedVariableUsageInfo<?> localVariableUsage;
         if (null == usedVariable || usedVariable instanceof UnresolvedFieldInfo) {
             //変数がみつからないので多分どこかのフィールド or 見つかった変数がフィールドだった
             localVariableUsage = new UnresolvedFieldUsageInfo(buildDataManager
-                    .getAllAvaliableNames(), ownerUsage, name, reference, this.fromLine,
-                    this.fromColumn, this.toLine, this.toColumn);
+                    .getAllAvaliableNames(), ownerUsage, name, reference, assignment,
+                    this.fromLine, this.fromColumn, this.toLine, this.toColumn);
         } else if (usedVariable instanceof UnresolvedParameterInfo) {
             UnresolvedParameterInfo parameter = (UnresolvedParameterInfo) usedVariable;
-            localVariableUsage = new UnresolvedParameterUsageInfo(parameter, reference,
+            localVariableUsage = new UnresolvedParameterUsageInfo(parameter, reference, assignment,
                     this.fromLine, this.fromColumn, this.toLine, this.toColumn);
         } else {
             assert (usedVariable instanceof UnresolvedLocalVariableInfo) : "Illegal state: unexpected VariableInfo";
             UnresolvedLocalVariableInfo localVariable = (UnresolvedLocalVariableInfo) usedVariable;
             localVariableUsage = new UnresolvedLocalVariableUsageInfo(localVariable, reference,
-                    this.fromLine, this.fromColumn, this.toLine, this.toColumn);
+                    assignment, this.fromLine, this.fromColumn, this.toLine, this.toColumn);
         }
 
         buildDataManager.addVariableUsage(localVariableUsage);
@@ -66,12 +66,13 @@ public class SingleIdentifierElement extends IdentifierElement {
     }
 
     @Override
-    public UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsAssignmetedVariable(
-            BuildDataManager buildDataManager) {
+    public UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsVariable(
+            final BuildDataManager buildDataManager, final boolean reference,
+            final boolean assignment) {
         UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> variable = buildDataManager
                 .getCurrentScopeVariable(this.name);
 
-        return resolveAsVariableUsage(buildDataManager, variable, false);
+        return resolveAsVariable(buildDataManager, variable, reference, assignment);
     }
 
     @Override
@@ -81,21 +82,12 @@ public class SingleIdentifierElement extends IdentifierElement {
     }
 
     @Override
-    public UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsReferencedVariable(
-            BuildDataManager buildDataManager) {
-        UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> variable = buildDataManager
-                .getCurrentScopeVariable(this.name);
-
-        return resolveAsVariableUsage(buildDataManager, variable, true);
-    }
-
-    @Override
     public UnresolvedExpressionInfo<? extends ExpressionInfo> resolveReferencedEntityIfPossible(
             BuildDataManager buildDataManager) {
         UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> variable = buildDataManager
                 .getCurrentScopeVariable(this.name);
         if (null != variable) {
-            return resolveAsVariableUsage(buildDataManager, variable, true);
+            return resolveAsVariable(buildDataManager, variable, true, false);
         } else {
             return null;
         }

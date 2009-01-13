@@ -116,7 +116,7 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
      * ‚±‚ÌƒuƒƒbƒN‚ªŒJ‚è•Ô‚µ•¶‚Å‚ ‚é‚©‚Ç‚¤‚©•Ô‚·
      * @return ŒJ‚è•Ô‚µ•¶‚Å‚ ‚é‚È‚çtrue
      */
-    protected boolean isLoopStatement() {
+    public boolean isLoopStatement() {
         return false;
     }
 

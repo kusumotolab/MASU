@@ -47,8 +47,8 @@ public class MethodCallBuilder extends ExpressionBuilder {
                 for (int i = 1; i < elements.length; i++) {
                     final ExpressionElement argument = elements[i];
                     if (argument instanceof IdentifierElement) {
-                        methodCall.addArgument(((IdentifierElement) argument)
-                                .resolveAsReferencedVariable(this.buildDataManager));
+                        methodCall.addArgument(((IdentifierElement) argument).resolveAsVariable(
+                                this.buildDataManager, true, false));
                     } else if (argument instanceof TypeArgumentElement) {
                         // TODO C#などの場合は型引数に参照型以外も指定できるので対処が必要かも
                         TypeArgumentElement typeArgument = (TypeArgumentElement) argument;

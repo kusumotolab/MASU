@@ -59,7 +59,8 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
         }
     }
 
-    protected void buildCompoundIdentifierElement(ExpressionElement[] elements) throws ASTParseException {
+    protected void buildCompoundIdentifierElement(ExpressionElement[] elements)
+            throws ASTParseException {
 
         if (elements.length == 2) {
             ExpressionElement left = elements[0];
@@ -75,8 +76,8 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
 
                 if (left instanceof FieldOrMethodElement) {
                     IdentifierElement leftIdentifier = (IdentifierElement) left;
-                    leftElementType = leftIdentifier
-                            .resolveAsReferencedVariable(this.buildDataManager);
+                    leftElementType = leftIdentifier.resolveAsVariable(this.buildDataManager, true,
+                            false);
                 } else {
                     leftElementType = left.getUsage();
                 }
