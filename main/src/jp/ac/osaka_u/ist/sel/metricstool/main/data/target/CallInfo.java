@@ -38,7 +38,9 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
         this.callee = callee;
 
         // メソッド呼び出し関係を構築
-        this.callee.addCaller(ownerMethod);
+        if (null != callee) {
+            this.callee.addCaller(ownerMethod);
+        }
     }
 
     /**
