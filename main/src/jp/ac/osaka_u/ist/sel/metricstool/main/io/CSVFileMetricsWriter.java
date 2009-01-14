@@ -66,8 +66,8 @@ public final class CSVFileMetricsWriter implements FileMetricsWriter, CSVWriter,
                     .getFileMetricsInfoManager()) {
                 final FileInfo fileInfo = fileMetricsInfo.getMeasuredObject();
 
-                final String fileName = fileInfo.getName();
-                writer.write(fileName);
+                final String measuredName = fileInfo.getMeasuredUnitName();
+                writer.write(measuredName);
                 for (final AbstractPlugin plugin : DataManager.getInstance().getPluginManager()
                         .getPlugins()) {
                     final PluginInfo pluginInfo = plugin.getPluginInfo();
