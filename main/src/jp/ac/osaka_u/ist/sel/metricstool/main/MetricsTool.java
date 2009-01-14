@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main;
 
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -1332,6 +1333,10 @@ public class MetricsTool {
 
             // メソッド名が違う場合はオーバーライドされない
             if (!methodInfo.getMethodName().equals(overrider.getMethodName())) {
+                continue;
+            }
+            
+            if(0 != methodInfo.compareArgumentsTo(overrider)) {
                 continue;
             }
 

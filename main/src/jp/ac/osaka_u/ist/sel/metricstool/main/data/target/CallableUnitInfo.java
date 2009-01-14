@@ -99,8 +99,11 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             return classOrder;
         }
         
-
-        // ˆø”‚ÌŒÂ”‚Å”äŠr
+        return this.compareArgumentsTo(target);
+    }
+    
+    public int compareArgumentsTo(final CallableUnitInfo target) {
+     // ˆø”‚ÌŒÂ”‚Å”äŠr
         final int parameterNumber = this.getParameterNumber();
         final int correspondParameterNumber = target.getParameterNumber();
         if (parameterNumber < correspondParameterNumber) {
