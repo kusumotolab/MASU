@@ -77,6 +77,16 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
+     * 変数定義のSetを返す
+     * 
+     * @return 変数定義のSetを返す
+     */
+    @Override
+    public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        return VariableInfo.EmptySet;
+    }
+
+    /**
      * 呼び出しのSetを返す
      * 
      * @return 呼び出しのSet

@@ -36,11 +36,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
@@ -56,7 +53,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
@@ -68,7 +64,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedL
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVClassMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVFileMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVMethodMetricsWriter;
@@ -1479,33 +1474,6 @@ public class MetricsTool {
                 final StatementInfo statement = unresolvedStatement.resolve(ownerClass,
                         ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
                 localSpace.addStatement(statement);
-            }
-        }
-
-        // 各未解決フィールド使用の名前解決処理
-        for (final UnresolvedVariableUsageInfo<?> unresolvedVariableUsage : unresolvedLocalSpace
-                .getVariableUsages()) {
-
-            // 未解決変数使用を解決
-            final ExpressionInfo variableUsage = unresolvedVariableUsage.resolve(ownerClass,
-                    ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-
-            // 名前解決できた場合は登録
-            if (variableUsage instanceof VariableUsageInfo) {
-                VariableUsageInfo<?> usage = (VariableUsageInfo<?>) variableUsage;
-                localSpace.addVariableUsage(usage);
-                //usage.getUsedVariable().addUsage(usage);
-
-                // フィールドの場合は，利用関係情報を取る
-                if (variableUsage instanceof FieldUsageInfo) {
-                    final boolean reference = ((FieldUsageInfo) variableUsage).isReference();
-                    final FieldInfo usedField = ((FieldUsageInfo) variableUsage).getUsedVariable();
-                    if (reference) {
-                        usedField.addReferencer(ownerMethod);
-                    } else {
-                        usedField.addAssignmenter(ownerMethod);
-                    }
-                }
             }
         }
 

@@ -17,6 +17,16 @@ public abstract class JumpStatementInfo extends SingleStatementInfo {
     public final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
         return VariableUsageInfo.EmptySet;
     }
+    
+    /**
+     * ’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * 
+     * @return ’è‹`‚³‚ê‚½•Ï”‚ÌSet
+     */
+    @Override
+    public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        return VariableInfo.EmptySet;
+    }
 
     /**
      * ŒÄ‚Ño‚µ‚ÌSet‚ğ•Ô‚·

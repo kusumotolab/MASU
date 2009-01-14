@@ -151,17 +151,6 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         this.resolveInnerBlock(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 
-        // メソッド内で定義されている各未解決ローカル変数に対して
-        for (final UnresolvedLocalVariableInfo unresolvedLocalVariable : this.getLocalVariables()) {
-
-            final LocalVariableInfo localVariable = unresolvedLocalVariable.resolve(usingClass,
-                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addLocalVariable(localVariable);
-        }
-
-        this.resolveVariableUsages(usingClass, this.resolvedInfo, classInfoManager,
-                fieldInfoManager, methodInfoManager);
-
         return this.resolvedInfo;
     }
 

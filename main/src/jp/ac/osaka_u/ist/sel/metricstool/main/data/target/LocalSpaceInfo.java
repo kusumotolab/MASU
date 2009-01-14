@@ -33,49 +33,21 @@ public abstract class LocalSpaceInfo extends UnitInfo {
         super(fromLine, fromColumn, toLine, toColumn);
 
         this.ownerClass = ownerClass;
-        this.localVariables = new TreeSet<LocalVariableInfo>();
-        this.fieldUsages = new HashSet<FieldUsageInfo>();
-        this.localVariableUsages = new HashSet<LocalVariableUsageInfo>();
-        this.parameterUsages = new HashSet<ParameterUsageInfo>();
         this.statements = new TreeSet<StatementInfo>();
     }
 
     /**
-     * このメソッドで定義されているローカル変数を追加する． public 宣言してあるが， プラグインからの呼び出しははじく．
+     * このローカルスペース内で定義された変数のSetを返す
      * 
-     * @param localVariable 追加する引数
+     * @return このローカルスペース内で定義された変数のSet
      */
-    public final void addLocalVariable(final LocalVariableInfo localVariable) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == localVariable) {
-            throw new NullPointerException();
+    @Override
+    public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        final Set<VariableInfo<? extends UnitInfo>> definedVariables = new HashSet<VariableInfo<? extends UnitInfo>>();
+        for (final StatementInfo statement : this.getStatements()) {
+            definedVariables.addAll(statement.getDefinedVariables());
         }
-
-        this.localVariables.add(localVariable);
-    }
-
-    /**
-     * このローカル領域に変数利用を追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param variableUsage 追加する変数利用
-     */
-    public final void addVariableUsage(final VariableUsageInfo<?> variableUsage) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == variableUsage) {
-            throw new NullPointerException();
-        }
-
-        if (variableUsage instanceof FieldUsageInfo) {
-            this.fieldUsages.add((FieldUsageInfo) variableUsage);
-        } else if (variableUsage instanceof LocalVariableUsageInfo) {
-            this.localVariableUsages.add((LocalVariableUsageInfo) variableUsage);
-        } else if (variableUsage instanceof ParameterUsageInfo) {
-            this.parameterUsages.add((ParameterUsageInfo) variableUsage);
-        } else {
-            throw new IllegalArgumentException();
-        }
+        return Collections.unmodifiableSet(definedVariables);
     }
 
     /**
@@ -98,7 +70,8 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * 
      * @return メソッドおよびコンストラクタ呼び出し
      */
-    public final Set<CallInfo<?>> getCalls() {
+    @Override
+    public Set<CallInfo<?>> getCalls() {
         final Set<CallInfo<?>> calls = new HashSet<CallInfo<?>>();
         for (final StatementInfo statement : this.getStatements()) {
             calls.addAll(statement.getCalls());
@@ -107,67 +80,17 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     }
 
     /**
-     * このローカル領域が呼び出しているメソッドの一覧を返す
-     * 
-     * @return このローカル領域が呼び出しているメソッドの SortedSet
-     */
-    public final SortedSet<MethodInfo> getCallees() {
-        final SortedSet<MethodInfo> callees = new TreeSet<MethodInfo>();
-        for (final CallInfo<?> call : this.getCalls()) {
-            if (call instanceof MethodCallInfo) {
-                callees.add(((MethodCallInfo) call).getCallee());
-            }
-        }
-        return Collections.unmodifiableSortedSet(callees);
-    }
-
-    /**
-     * このローカル領域で定義されているローカル変数の SortedSet を返す．
-     * 
-     * @return このローカル領域で定義されているローカル変数の SortedSet
-     */
-    public SortedSet<LocalVariableInfo> getLocalVariables() {
-        return Collections.unmodifiableSortedSet(this.localVariables);
-    }
-
-    /**
-     * このローカル領域のフィールド利用のSetを返す
-     * 
-     * @return このローカル領域のフィールド利用のSet
-     */
-    public Set<FieldUsageInfo> getFieldUsages() {
-        return Collections.unmodifiableSet(this.fieldUsages);
-    }
-
-    /**
-     * このローカル領域のローカル変数利用のSetを返す
-     * 
-     * @return このローカル領域のローカル変数利用のSetを返す
-     */
-    public Set<LocalVariableUsageInfo> getLocalVariableUsages() {
-        return Collections.unmodifiableSet(this.localVariableUsages);
-    }
-
-    /**
      * このローカル領域の変数利用のSetを返す
      * 
      * @return このローカル領域の変数利用のSet
      */
+    @Override
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
-        final SortedSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages = new TreeSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
-        variableUsages.addAll(this.getLocalVariableUsages());
-        variableUsages.addAll(this.getFieldUsages());
-        variableUsages.addAll(this.getParameterUsages());
-        return Collections.unmodifiableSortedSet(variableUsages);
-    }
-
-    /**
-     * このローカル領域のフィールド利用のSetを返す
-     * 
-     * @return このローカル領域のフィールド利用のSet
-     */
-    public Set<ParameterUsageInfo> getParameterUsages() {
-        return Collections.unmodifiableSet(this.parameterUsages);
+        final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages = new HashSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
+        for (final StatementInfo statement : this.getStatements()) {
+            variableUsages.addAll(statement.getVariableUsages());
+        }
+        return Collections.unmodifiableSet(variableUsages);
     }
 
     /**
@@ -187,26 +110,6 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     public final ClassInfo getOwnerClass() {
         return this.ownerClass;
     }
-
-    /**
-     * このメソッドの内部で定義されているローカル変数
-     */
-    private final SortedSet<LocalVariableInfo> localVariables;
-
-    /**
-     * 利用しているフィールド一覧を保存するための変数
-     */
-    private final Set<FieldUsageInfo> fieldUsages;
-
-    /**
-     * 利用しているローカル変数の一覧を保存するための変数
-     */
-    private final Set<LocalVariableUsageInfo> localVariableUsages;
-
-    /**
-     * 利用している引数の一覧を保存するための変数
-     */
-    private final Set<ParameterUsageInfo> parameterUsages;
 
     /**
      * このローカルスコープの直内の文情報一覧を保存するための変数

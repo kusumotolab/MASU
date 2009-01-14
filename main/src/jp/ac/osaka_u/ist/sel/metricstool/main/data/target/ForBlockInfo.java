@@ -2,6 +2,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -33,6 +35,42 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
         this.initilizerExpressions = new TreeSet<ConditionInfo>();
         this.iteratorExpressions = new TreeSet<ExpressionInfo>();
 
+    }
+
+    /**
+     * 変数利用の一覧を返す．
+     * 
+     * @return 変数利用のSet
+     */
+    @Override
+    public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
+        final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages = new HashSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
+        variableUsages.addAll(super.getVariableUsages());
+        for (final ConditionInfo initializerExpression : this.getInitializerExpressions()) {
+            variableUsages.addAll(initializerExpression.getVariableUsages());
+        }
+        for (final ExpressionInfo iteratorExpression : this.getIteratorExpressions()) {
+            variableUsages.addAll(iteratorExpression.getVariableUsages());
+        }
+        return Collections.unmodifiableSet(variableUsages);
+    }
+
+    /**
+     * 定義された変数のSetを返す
+     * 
+     * @return 定義された変数のSet
+     */
+    @Override
+    public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        final Set<VariableInfo<? extends UnitInfo>> definedVariables = new HashSet<VariableInfo<? extends UnitInfo>>();
+        definedVariables.addAll(super.getDefinedVariables());
+        for (final ConditionInfo initializerExpression : this.getInitializerExpressions()) {
+            definedVariables.addAll(initializerExpression.getDefinedVariables());
+        }
+        for (final ExpressionInfo iteratorExpression : this.getIteratorExpressions()) {
+            definedVariables.addAll(iteratorExpression.getDefinedVariables());
+        }
+        return Collections.unmodifiableSet(definedVariables);
     }
 
     /**
@@ -123,7 +161,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     public final SortedSet<ExpressionInfo> getIteratorExpressions() {
         return Collections.unmodifiableSortedSet(this.iteratorExpressions);
     }
-    
+
     @Override
     public boolean isLoopStatement() {
         return true;

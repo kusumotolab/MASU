@@ -1,8 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -43,7 +45,7 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
      * 
      * @param usedLocalVariable 使用されているローカル変数
      * @param reference 参照であるかどうか
-     * @param assingment 代入であるかどうか
+     * @param assignment 代入であるかどうか
      * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -93,6 +95,23 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
         } else {
             return Collections.<LocalVariableUsageInfo> emptySet();
         }
+    }
+
+    /**
+     * 与えられた変数利用のCollectionに含まれるローカル変数利用のSetを返す
+     * 
+     * @param variableUsages 変数利用のCollection
+     * @return 与えられた変数利用のCollectionに含まれるローカル変数利用のSet
+     */
+    public final static Set<LocalVariableUsageInfo> getLocalVariableUsages(
+            Collection<VariableUsageInfo<?>> variableUsages) {
+        final Set<LocalVariableUsageInfo> localVariableUsages = new HashSet<LocalVariableUsageInfo>();
+        for (final VariableUsageInfo<?> variableUsage : variableUsages) {
+            if (variableUsage instanceof LocalVariableUsageInfo) {
+                localVariableUsages.add((LocalVariableUsageInfo) variableUsage);
+            }
+        }
+        return Collections.unmodifiableSet(localVariableUsages);
     }
 
     private static final Map<LocalVariableInfo, TreeSet<LocalVariableUsageInfo>> USAGE_MAP = new HashMap<LocalVariableInfo, TreeSet<LocalVariableUsageInfo>>();

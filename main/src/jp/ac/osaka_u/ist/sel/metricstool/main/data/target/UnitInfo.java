@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.io.Serializable;
+import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -30,6 +31,27 @@ public abstract class UnitInfo implements Position, Serializable {
         this.toLine = toLine;
         this.toColumn = toColumn;
     }
+
+    /**
+     * このユニット内における変数使用のSetを返す
+     * 
+     * @return このユニット内における変数使用のSet
+     */
+    public abstract Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages();
+
+    /**
+     * このユニット内で定義された変数のSetを返す
+     * 
+     * @return このユニット内で定義された変数のSet
+     */
+    public abstract Set<VariableInfo<? extends UnitInfo>> getDefinedVariables();
+
+    /**
+     * このユニット内における呼び出しのSetを返す
+     * 
+     * @return このユニット内における呼び出しのSet
+     */
+    public abstract Set<CallInfo<? extends CallableUnitInfo>> getCalls();
 
     /**
      * 開始行を返す
@@ -66,14 +88,13 @@ public abstract class UnitInfo implements Position, Serializable {
     public final int getLOC() {
         return this.getToLine() - this.getFromLine() + 1;
     }
-    
+
     /**
      * このユニットのシグネチャを返す
      * 
      * @return このユニットのシグネチャ
      */
     //public abstract String getSignature();
-
     /**
      * 終了列を返す
      * 

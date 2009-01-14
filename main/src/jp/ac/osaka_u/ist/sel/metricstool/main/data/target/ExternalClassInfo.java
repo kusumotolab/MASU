@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 
-
 /**
  * 外部クラス情報を表すクラス
  * 
@@ -124,6 +123,30 @@ public final class ExternalClassInfo extends ClassInfo {
      */
     @Override
     public Map<TypeParameterInfo, TypeInfo> getTypeParameterUsages() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalClassInfo では利用できない
+     */
+    @Override
+    public final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalClassInfo では利用できない
+     */
+    @Override
+    public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        throw new CannotUseException();
+    }
+
+    /**
+     * ExternalClassInfo では利用できない
+     */
+    @Override
+    public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
         throw new CannotUseException();
     }
 

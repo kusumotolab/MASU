@@ -28,22 +28,6 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
      * ExternalConstructorInfo‚Å‚Í—˜—p‚Å‚«‚È‚¢
      */
     @Override
-    public SortedSet<LocalVariableInfo> getLocalVariables() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalConstructorInfo‚Å‚Í—˜—p‚Å‚«‚È‚¢
-     */
-    @Override
-    public Set<FieldUsageInfo> getFieldUsages() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalConstructorInfo‚Å‚Í—˜—p‚Å‚«‚È‚¢
-     */
-    @Override
     public SortedSet<StatementInfo> getStatements() {
         throw new CannotUseException();
     }

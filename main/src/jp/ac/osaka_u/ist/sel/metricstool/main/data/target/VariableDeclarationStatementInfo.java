@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -109,6 +110,18 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
         }
 
         return Collections.unmodifiableSet(usages);
+    }
+
+    /**
+     * ’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
+     * 
+     * @return ’è‹`‚³‚ê‚½•Ï”‚ÌSet
+     */
+    @Override
+    public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        final Set<VariableInfo<? extends UnitInfo>> definedVariables = new HashSet<VariableInfo<? extends UnitInfo>>();
+        definedVariables.add(this.getDeclaredLocalVariable());
+        return Collections.unmodifiableSet(definedVariables);
     }
 
     /**

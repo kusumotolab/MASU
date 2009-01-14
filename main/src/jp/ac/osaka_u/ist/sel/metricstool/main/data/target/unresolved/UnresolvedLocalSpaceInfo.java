@@ -162,32 +162,6 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     }
 
     /**
-     * この領域で利用されている変数使用を解決する
-     * 
-     * @param usingClass この領域が存在しているクラス
-     * @param usingMethod この領域が存在しているメソッド
-     * @param classInfoManager クラスマネージャ
-     * @param fieldInfoManager フィールドマネージャ
-     * @param methodInfoManager メソッドマネージャ
-     */
-    protected final void resolveVariableUsages(final TargetClassInfo usingClass,
-            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
-            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
-
-        if (!alreadyResolved()) {
-            throw new NotResolvedException();
-        }
-
-        for (final UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> unresolvedVariableUsage : this
-                .getVariableUsages()) {
-
-            final VariableUsageInfo<?> variableUsage = unresolvedVariableUsage.resolve(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addVariableUsage(variableUsage);
-        }
-    }
-
-    /**
      * このローカル領域のインナー領域を名前解決する
      * 
      * @param usingClass この領域が存在しているクラス

@@ -76,6 +76,39 @@ public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo impl
     }
 
     /**
+     * 変数利用の一覧を返す．
+     * どの変数も用いられていないので，空のsetが返される
+     * 
+     * @return 変数利用のSet
+     */
+    @Override
+    public final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
+        return VariableUsageInfo.EmptySet;
+    }
+
+    /**
+     * 変数定義のSetを返す
+     * 
+     * @return 変数定義のSet
+     */
+    @Override
+    public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        final Set<VariableInfo<? extends UnitInfo>> definedVariables = new HashSet<VariableInfo<? extends UnitInfo>>();
+        definedVariables.add(this);
+        return Collections.unmodifiableSet(definedVariables);
+    }
+
+    /**
+     * 呼び出しのSetを返す
+     * 
+     * @return 呼び出しのSet
+     */
+    @Override
+    public final Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
+        return CallInfo.EmptySet;
+    }
+
+    /**
      * 変数オブジェクトを初期化する
      * 
      * @param modifiers 修飾子の Set
@@ -124,5 +157,11 @@ public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo impl
      * この変数を宣言しているユニットを保存するための変数
      */
     private final TUnit definitionUnit;
+
+    /**
+     * 空の変数のSetを表す
+     */
+    public static final Set<VariableInfo<? extends UnitInfo>> EmptySet = Collections
+            .unmodifiableSet(new HashSet<VariableInfo<? extends UnitInfo>>());
 
 }

@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Set;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -34,6 +36,16 @@ public abstract class ExpressionInfo implements ConditionInfo {
     }
 
     abstract public String getText();
+
+    /**
+     * 式内で定義された変数のSetを返す
+     * 
+     * @return 式内で定義された変数のSet 
+     */
+    @Override
+    public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        return VariableInfo.EmptySet;
+    }
 
     /**
      * エンティティ使用の型を返す．

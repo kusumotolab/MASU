@@ -5,7 +5,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.WhileBlockInfo;
@@ -70,16 +69,6 @@ public final class UnresolvedWhileBlockInfo extends UnresolvedConditionalBlockIn
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);
-
-        // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
-        for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addLocalVariable(variable);
-        }
-
-        this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 
         return this.resolvedInfo;

@@ -295,6 +295,93 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
     }
 
     /**
+     * このクラス内における変数使用のSetを返す
+     * 
+     * @return このクラス内における変数使用のSet
+     */
+    @Override
+    public final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
+
+        final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages = new HashSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
+
+        // メソッド内で使用されている変数を追加
+        for (final TargetMethodInfo definedMethod : this.getDefinedMethods()) {
+            variableUsages.addAll(definedMethod.getVariableUsages());
+        }
+
+        // コンストラクタ内で使用されている変数を追加
+        for (final TargetConstructorInfo definedConstructor : this.getDefinedConstructors()) {
+            variableUsages.addAll(definedConstructor.getVariableUsages());
+        }
+
+        // 内部クラスで使用されている変数を追加
+        for (final TargetInnerClassInfo innerClass : this.getInnerClasses()) {
+            variableUsages.addAll(innerClass.getVariableUsages());
+        }
+
+        return Collections.unmodifiableSet(variableUsages);
+    }
+
+    /**
+     * このクラス内で定義されている変数のSetを返す
+     * 
+     * @return このクラス内で定義されている変数のSet
+     */
+    @Override
+    public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+
+        final Set<VariableInfo<? extends UnitInfo>> definedVariables = new HashSet<VariableInfo<? extends UnitInfo>>();
+
+        // 定義されているフィールドを追加
+        definedVariables.addAll(this.getDefinedFields());
+
+        // メソッド内で定義されている変数を追加
+        for (final TargetMethodInfo definedMethod : this.getDefinedMethods()) {
+            definedVariables.addAll(definedMethod.getDefinedVariables());
+        }
+
+        // コンストラクタ内で定義されている変数を追加
+        for (final TargetConstructorInfo definedConstructor : this.getDefinedConstructors()) {
+            definedVariables.addAll(definedConstructor.getDefinedVariables());
+        }
+
+        // 内部クラスで定義されている変数を追加
+        for (final TargetInnerClassInfo innerClass : this.getInnerClasses()) {
+            definedVariables.addAll(innerClass.getDefinedVariables());
+        }
+
+        return Collections.unmodifiableSet(definedVariables);
+    }
+
+    /**
+     * このクラス内における呼び出しのSetを返す
+     * 
+     * @return このクラス内における呼び出しのSet
+     */
+    @Override
+    public final Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
+
+        final Set<CallInfo<? extends CallableUnitInfo>> calls = new HashSet<CallInfo<? extends CallableUnitInfo>>();
+
+        // メソッド内での呼び出しを追加
+        for (final TargetMethodInfo definedMethod : this.getDefinedMethods()) {
+            calls.addAll(definedMethod.getCalls());
+        }
+
+        // コンストラクタ内での呼び出しを追加
+        for (final TargetConstructorInfo definedConstructor : this.getDefinedConstructors()) {
+            calls.addAll(definedConstructor.getCalls());
+        }
+
+        // 内部クラスでの呼び出しを追加
+        for (final TargetInnerClassInfo innerClass : this.getInnerClasses()) {
+            calls.addAll(innerClass.getCalls());
+        }
+
+        return Collections.unmodifiableSet(calls);
+    }
+
+    /**
      * 子クラスから参照可能かどうかを返す
      * 
      * @return 子クラスから参照可能な場合は true, そうでない場合は false

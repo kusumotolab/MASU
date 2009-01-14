@@ -46,22 +46,6 @@ public final class ExternalMethodInfo extends MethodInfo {
      * ExternalMethodInfo‚Å‚Í—˜—p‚Å‚«‚È‚¢
      */
     @Override
-    public SortedSet<LocalVariableInfo> getLocalVariables() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalMethodInfo‚Å‚Í—˜—p‚Å‚«‚È‚¢
-     */
-    @Override
-    public Set<FieldUsageInfo> getFieldUsages() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalMethodInfo‚Å‚Í—˜—p‚Å‚«‚È‚¢
-     */
-    @Override
     public SortedSet<StatementInfo> getStatements() {
         throw new CannotUseException();
     }

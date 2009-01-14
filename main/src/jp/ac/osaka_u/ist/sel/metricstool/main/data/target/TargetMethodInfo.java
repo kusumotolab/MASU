@@ -2,15 +2,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
 /**
@@ -77,12 +71,13 @@ public final class TargetMethodInfo extends MethodInfo implements Member {
     public SortedSet<FieldInfo> getReferencees() {
 
         final SortedSet<FieldInfo> referencees = new TreeSet<FieldInfo>();
-        for (final FieldUsageInfo fieldUsage : this.getFieldUsages()) {
+        final Set<VariableUsageInfo<?>> variableUsages = this.getVariableUsages();
+        final Set<FieldUsageInfo> fieldUsages = FieldUsageInfo.getFieldUsages(variableUsages);
+        for (final FieldUsageInfo fieldUsage : fieldUsages) {
             if (fieldUsage.isReference()) {
                 referencees.add(fieldUsage.getUsedVariable());
             }
         }
-
         return Collections.unmodifiableSortedSet(referencees);
     }
 
@@ -93,12 +88,13 @@ public final class TargetMethodInfo extends MethodInfo implements Member {
      */
     public SortedSet<FieldInfo> getAssignmentees() {
         final SortedSet<FieldInfo> assignmentees = new TreeSet<FieldInfo>();
-        for (final FieldUsageInfo fieldUsage : this.getFieldUsages()) {
+        final Set<VariableUsageInfo<?>> variableUsages = this.getVariableUsages();
+        final Set<FieldUsageInfo> fieldUsages = FieldUsageInfo.getFieldUsages(variableUsages);
+        for (final FieldUsageInfo fieldUsage : fieldUsages) {
             if (fieldUsage.isAssignment()) {
                 assignmentees.add(fieldUsage.getUsedVariable());
             }
         }
-
         return Collections.unmodifiableSortedSet(assignmentees);
     }
 

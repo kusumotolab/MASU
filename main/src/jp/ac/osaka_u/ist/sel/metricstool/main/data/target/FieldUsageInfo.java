@@ -1,8 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -45,7 +47,9 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         // フィールドの使用情報を格納
         if (reference) {
             usedField.addReferencer(ownerMethod);
-        } else {
+        }
+
+        if (assignment) {
             usedField.addAssignmenter(ownerMethod);
         }
     }
@@ -166,6 +170,23 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         } else {
             return Collections.<FieldUsageInfo> emptySet();
         }
+    }
+
+    /**
+     * 与えられた変数利用のCollectionに含まれるフィールド利用のSetを返す
+     * 
+     * @param variableUsages 変数利用のCollection
+     * @return 与えられた変数利用のCollectionに含まれるフィールド利用のSet
+     */
+    public final static Set<FieldUsageInfo> getFieldUsages(
+            Collection<VariableUsageInfo<?>> variableUsages) {
+        final Set<FieldUsageInfo> fieldUsages = new HashSet<FieldUsageInfo>();
+        for (final VariableUsageInfo<?> variableUsage : variableUsages) {
+            if (variableUsage instanceof FieldUsageInfo) {
+                fieldUsages.add((FieldUsageInfo) variableUsage);
+            }
+        }
+        return Collections.unmodifiableSet(fieldUsages);
     }
 
     private static final Map<FieldInfo, TreeSet<FieldUsageInfo>> USAGE_MAP = new HashMap<FieldInfo, TreeSet<FieldUsageInfo>>();

@@ -61,6 +61,19 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
+     * 定義された変数のSetを返す
+     * 
+     * @return 定義された変数のSet
+     */
+    @Override
+    public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        final Set<VariableInfo<? extends UnitInfo>> definedVariables = new HashSet<VariableInfo<? extends UnitInfo>>();
+        definedVariables.addAll(super.getDefinedVariables());
+        definedVariables.addAll(this.getParameters());
+        return Collections.unmodifiableSet(definedVariables);
+    }
+
+    /**
      * メソッド間の順序関係を定義するメソッド．以下の順序で順序を決める．
      * <ol>
      * <li>メソッドを定義しているクラスの名前空間名</li>

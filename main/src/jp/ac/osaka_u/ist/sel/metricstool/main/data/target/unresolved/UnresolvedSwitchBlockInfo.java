@@ -73,37 +73,6 @@ public final class UnresolvedSwitchBlockInfo extends
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 
-        // ローカル変数情報を解決し，解決済みcaseエントリオブジェクトに追加
-        for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addLocalVariable(variable);
-        }
-
-        this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);
-
         return this.resolvedInfo;
     }
-
-    /**
-     * このswitch ブロックに case エントリを追加する
-     * 
-     * @param innerBlock 追加する case エントリ
-     */
-    //    @Override
-    //    public void addInnerBlock(final UnresolvedBlockInfo<?> innerBlock) {
-    //
-    //        MetricsToolSecurityManager.getInstance().checkAccess();
-    //        if (null == innerBlock) {
-    //            throw new NullPointerException();
-    //        }
-    //
-    //        if (!(innerBlock instanceof UnresolvedCaseEntryInfo)) {
-    //            throw new IllegalArgumentException(
-    //                    "Inner block of switch statement must be case or default entry!");
-    //        }
-    //
-    //        super.addInnerBlock(innerBlock);
-    //    }
 }

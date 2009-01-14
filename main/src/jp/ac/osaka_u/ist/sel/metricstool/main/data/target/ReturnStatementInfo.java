@@ -51,6 +51,16 @@ public class ReturnStatementInfo extends SingleStatementInfo {
     }
 
     /**
+     * 定義された変数のSetを返す
+     * 
+     * @return 定義された変数のSet
+     */
+    @Override
+    public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        return VariableInfo.EmptySet;
+    }
+
+    /**
      * 呼び出しのSetを返す
      * 
      * @return 呼び出しのSet

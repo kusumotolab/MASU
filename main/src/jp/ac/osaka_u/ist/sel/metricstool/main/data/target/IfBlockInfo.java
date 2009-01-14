@@ -28,7 +28,7 @@ public final class IfBlockInfo extends ConditionalBlockInfo {
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         super(ownerClass, outerSpace, fromLine, fromColumn, toLine, toColumn);
     }
-
+    
     /**
      * else •¶‚ð’Ç‰Á‚·‚é
      * 

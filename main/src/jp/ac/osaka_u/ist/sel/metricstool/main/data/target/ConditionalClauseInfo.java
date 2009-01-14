@@ -1,13 +1,16 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Set;
+
+
 /**
  * 条件文の条件節の情報を表すクラス
  * 
  * @author t-miyake
  *
  */
-public class ConditionalClauseInfo extends UnitInfo {
+public final class ConditionalClauseInfo extends UnitInfo {
 
     /**
      * 条件節を保持するブロック文と位置情報
@@ -59,6 +62,36 @@ public class ConditionalClauseInfo extends UnitInfo {
 
     public final String getText() {
         return "";
+    }
+
+    /**
+     * 条件節内における変数使用のSetを返す
+     * 
+     * @return 条件節内における変数使用のSet 
+     */
+    @Override
+    public final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
+        return this.getCondition().getVariableUsages();
+    }
+
+    /**
+     * 条件節で定義された変数のSetを返す
+     * 
+     * @return 条件節で定義された変数のSet
+     */
+    @Override
+    public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        return this.getCondition().getDefinedVariables();
+    }
+
+    /**
+     * 条件節における呼び出しのSetを返す
+     * 
+     * @return 条件sつにおける呼び出しのSet
+     */
+    @Override
+    public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
+        return this.getCondition().getCalls();
     }
 
     /**

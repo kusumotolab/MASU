@@ -72,17 +72,6 @@ public final class UnresolvedSynchronizedBlockInfo extends
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 
-        // ローカル変数情報を解決し，解決済みsynchronizedブロックオブジェクトに追加
-        for (final UnresolvedLocalVariableInfo unresolvedVariable : this.getLocalVariables()) {
-            final LocalVariableInfo variable = unresolvedVariable.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addLocalVariable(variable);
-        }
-
-        this.resolveVariableUsages(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);
-
         return this.resolvedInfo;
     }
-
 }

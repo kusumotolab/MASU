@@ -1,8 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -93,6 +95,23 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
         } else {
             return Collections.<ParameterUsageInfo> emptySet();
         }
+    }
+
+    /**
+     * 与えられた変数利用のCollectionに含まれる引数利用のSetを返す
+     * 
+     * @param variableUsages 変数利用のCollection
+     * @return 与えられた変数利用のCollectionに含まれる引数利用のSet
+     */
+    public final static Set<ParameterUsageInfo> getParameterUsages(
+            Collection<VariableUsageInfo<?>> variableUsages) {
+        final Set<ParameterUsageInfo> parameterUsages = new HashSet<ParameterUsageInfo>();
+        for (final VariableUsageInfo<?> variableUsage : variableUsages) {
+            if (variableUsage instanceof ParameterUsageInfo) {
+                parameterUsages.add((ParameterUsageInfo) variableUsage);
+            }
+        }
+        return Collections.unmodifiableSet(parameterUsages);
     }
 
     private static final Map<ParameterInfo, TreeSet<ParameterUsageInfo>> USAGE_MAP = new HashMap<ParameterInfo, TreeSet<ParameterUsageInfo>>();

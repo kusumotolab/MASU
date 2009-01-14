@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.HashSet;
-
+import java.util.Set;
 
 
 /**
@@ -36,6 +36,37 @@ public final class ArrayTypeClassInfo extends ClassInfo {
      */
     public ArrayTypeInfo getArrayType() {
         return this.arrayType;
+    }
+
+    /**
+     * 変数利用の一覧を返す．
+     * どの変数も用いられていないので，空のsetが返される
+     * 
+     * @return 変数利用のSet
+     */
+    @Override
+    public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
+        return VariableUsageInfo.EmptySet;
+    }
+
+    /**
+     * 定義された変数のSetを返す
+     * 
+     * @return 定義された変数のSet
+     */
+    @Override
+    public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        return VariableInfo.EmptySet;
+    }
+
+    /**
+     * 呼び出しのSetを返す
+     * 
+     * @return 呼び出しのSet
+     */
+    @Override
+    public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
+        return CallInfo.EmptySet;
     }
 
     private final ArrayTypeInfo arrayType;
