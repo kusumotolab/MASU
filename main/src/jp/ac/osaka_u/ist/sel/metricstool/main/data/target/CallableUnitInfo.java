@@ -119,8 +119,8 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             while (parameterIterator.hasNext() && correspondParameterIterator.hasNext()) {
                 final ParameterInfo parameter = parameterIterator.next();
                 final ParameterInfo correspondParameter = correspondParameterIterator.next();
-                final String typeName = parameter.getName();
-                final String correspondTypeName = correspondParameter.getName();
+                final String typeName = parameter.getType().getTypeName();
+                final String correspondTypeName = correspondParameter.getType().getTypeName();
                 final int typeOrder = typeName.compareTo(correspondTypeName);
                 if (typeOrder != 0) {
                     return typeOrder;
