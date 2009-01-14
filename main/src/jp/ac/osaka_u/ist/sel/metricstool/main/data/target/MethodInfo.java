@@ -158,10 +158,28 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
      */
     public final String getMeasuredUnitName() {
 
-        final StringBuilder sb = new StringBuilder(this.getMethodName());
+        final StringBuilder sb = new StringBuilder();
+
+        final String fullQualifiedName = this.getOwnerClass().getFullQualifiedName(
+                Settings.getInstance().getLanguage().getNamespaceDelimiter());
+        sb.append(fullQualifiedName);
+
         sb.append("#");
-        sb.append(this.getOwnerClass().getFullQualifiedName(
-                Settings.getInstance().getLanguage().getNamespaceDelimiter()));
+
+        final String methodName = this.getMethodName();
+        sb.append(methodName);
+
+        sb.append("(");
+
+        for (final ParameterInfo parameter : this.getParameters()) {
+            final TypeInfo parameterType = parameter.getType();
+            sb.append(parameterType.getTypeName());
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length()-1);
+
+        sb.append(")");
+
         return sb.toString();
     }
 
