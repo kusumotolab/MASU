@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-
 /**
  * 外部メソッドの引数情報を保存するためのクラス
  * 
@@ -47,38 +46,6 @@ public final class ExternalParameterInfo extends ParameterInfo {
      */
     public ExternalParameterInfo(final TypeInfo type, final MethodInfo definitionMethod) {
         super(new HashSet<ModifierInfo>(), UNKNOWN_NAME, type, definitionMethod, 0, 0, 0, 0);
-    }
-
-    /**
-     * ExternalParameterInfo では利用できない
-     */
-    @Override
-    public int getFromLine() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalParameterInfo では利用できない
-     */
-    @Override
-    public int getFromColumn() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalParameterInfo では利用できない
-     */
-    @Override
-    public int getToLine() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalParameterInfo では利用できない
-     */
-    @Override
-    public int getToColumn() {
-        throw new CannotUseException();
     }
 
     /**

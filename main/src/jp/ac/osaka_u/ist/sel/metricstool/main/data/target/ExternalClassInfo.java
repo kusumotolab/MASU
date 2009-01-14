@@ -50,38 +50,6 @@ public final class ExternalClassInfo extends ClassInfo {
      * ExternalClassInfo では利用できない
      */
     @Override
-    public int getFromLine() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalClassInfo では利用できない
-     */
-    @Override
-    public int getFromColumn() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalClassInfo では利用できない
-     */
-    @Override
-    public int getToLine() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalClassInfo では利用できない
-     */
-    @Override
-    public int getToColumn() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalClassInfo では利用できない
-     */
-    @Override
     public Set<ModifierInfo> getModifiers() {
         throw new CannotUseException();
     }

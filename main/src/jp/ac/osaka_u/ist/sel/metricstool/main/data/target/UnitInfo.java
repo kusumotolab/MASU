@@ -58,7 +58,8 @@ public abstract class UnitInfo implements Position, Serializable {
      * 
      * @return 開始行
      */
-    public int getFromLine() {
+    @Override
+    public final int getFromLine() {
         return this.fromLine;
     }
 
@@ -67,7 +68,8 @@ public abstract class UnitInfo implements Position, Serializable {
      * 
      * @return 開始列
      */
-    public int getFromColumn() {
+    @Override
+    public final int getFromColumn() {
         return this.fromColumn;
     }
 
@@ -76,8 +78,19 @@ public abstract class UnitInfo implements Position, Serializable {
      * 
      * @return 終了行
      */
-    public int getToLine() {
+    @Override
+    public final int getToLine() {
         return this.toLine;
+    }
+
+    /**
+     * 終了列を返す
+     * 
+     * @return 終了列
+     */
+    @Override
+    public final int getToColumn() {
+        return this.toColumn;
     }
 
     /**
@@ -87,21 +100,6 @@ public abstract class UnitInfo implements Position, Serializable {
      */
     public final int getLOC() {
         return this.getToLine() - this.getFromLine() + 1;
-    }
-
-    /**
-     * このユニットのシグネチャを返す
-     * 
-     * @return このユニットのシグネチャ
-     */
-    //public abstract String getSignature();
-    /**
-     * 終了列を返す
-     * 
-     * @return 終了列
-     */
-    public int getToColumn() {
-        return this.toColumn;
     }
 
     /**

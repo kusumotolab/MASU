@@ -38,38 +38,6 @@ public final class ExternalFieldInfo extends FieldInfo {
      * ExternalFieldInfo では利用できない
      */
     @Override
-    public int getFromLine() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalFieldInfo では利用できない
-     */
-    @Override
-    public int getFromColumn() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalFieldInfo では利用できない
-     */
-    @Override
-    public int getToLine() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalFieldInfo では利用できない
-     */
-    @Override
-    public int getToColumn() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalFieldInfo では利用できない
-     */
-    @Override
     public Set<ModifierInfo> getModifiers() {
         throw new CannotUseException();
     }

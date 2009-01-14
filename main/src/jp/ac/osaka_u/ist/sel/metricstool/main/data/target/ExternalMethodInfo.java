@@ -54,38 +54,6 @@ public final class ExternalMethodInfo extends MethodInfo {
      * ExternalMethodInfo では利用できない
      */
     @Override
-    public int getFromLine() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalMethodInfo では利用できない
-     */
-    @Override
-    public int getFromColumn() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalMethodInfo では利用できない
-     */
-    @Override
-    public int getToLine() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalMethodInfo では利用できない
-     */
-    @Override
-    public int getToColumn() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalMethodInfo では利用できない
-     */
-    @Override
     public final boolean isInheritanceVisible() {
         throw new CannotUseException();
     }

@@ -36,38 +36,6 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
      * ExternalConstructorInfo では利用できない
      */
     @Override
-    public int getFromLine() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalConstructorInfo では利用できない
-     */
-    @Override
-    public int getFromColumn() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalConstructorInfo では利用できない
-     */
-    @Override
-    public int getToLine() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalConstructorInfo では利用できない
-     */
-    @Override
-    public int getToColumn() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalConstructorInfo では利用できない
-     */
-    @Override
     public final boolean isInheritanceVisible() {
         throw new CannotUseException();
     }
