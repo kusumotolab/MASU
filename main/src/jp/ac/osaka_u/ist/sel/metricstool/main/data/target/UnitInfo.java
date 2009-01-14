@@ -103,6 +103,14 @@ public abstract class UnitInfo implements Position, Serializable {
     }
 
     /**
+     * 子クラスによるオーバーライドを避けるための処置
+     */
+    @Override
+    public final int hashCode() {
+        return super.hashCode();
+    }
+
+    /**
      * 開始行を保存するための変数
      */
     private final int fromLine;

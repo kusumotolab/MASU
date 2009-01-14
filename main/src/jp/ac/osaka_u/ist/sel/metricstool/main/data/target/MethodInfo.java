@@ -136,22 +136,6 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
-     * このメソッドのハッシュコードを返す
-     * 
-     * @return このメソッドのハッシュコード
-     */
-    @Override
-    public final int hashCode() {
-
-        final StringBuilder sb = new StringBuilder();
-        sb.append(this.getOwnerClass().getFullQualifiedName(
-                Settings.getInstance().getLanguage().getNamespaceDelimiter()));
-        sb.append(this.methodName);
-
-        return sb.toString().hashCode();
-    }
-
-    /**
      * メトリクス計測対象としての名前を返す
      * 
      * @return メトリクス計測対象としての名前
@@ -176,7 +160,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
             sb.append(parameterType.getTypeName());
             sb.append(" ");
         }
-        sb.deleteCharAt(sb.length()-1);
+        sb.deleteCharAt(sb.length() - 1);
 
         sb.append(")");
 
