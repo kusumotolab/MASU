@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetAnonymousClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
@@ -206,6 +207,11 @@ public final class NameResolver {
             return;
         }
 
+        // インナークラスの場合は追加せずに終了する
+        if (classInfo instanceof TargetAnonymousClassInfo) {
+            return;
+        }
+
         availableClasses.add(classInfo);
 
         // 内部クラスを追加
@@ -311,6 +317,11 @@ public final class NameResolver {
 
         // 既にチェックしたクラスである場合は何もせずに終了する
         if (checkedClasses.contains(classInfo)) {
+            return new LinkedList<TargetFieldInfo>();
+        }
+
+        // 無名クラスであれば何もせずに終了する
+        if (classInfo instanceof TargetAnonymousClassInfo) {
             return new LinkedList<TargetFieldInfo>();
         }
 
@@ -515,14 +526,13 @@ public final class NameResolver {
             return new LinkedList<TargetMethodInfo>();
         }
 
+        // 無名クラスであれば何もせずに終了する
+        if (classInfo instanceof TargetAnonymousClassInfo) {
+            return new LinkedList<TargetMethodInfo>();
+        }
+
         final List<TargetMethodInfo> availableMethods = new LinkedList<TargetMethodInfo>();
 
-        // 自クラスで定義されており，名前空間可視性を持つメソッドを追加
-        // for (final TargetFieldInfo definedField : classInfo.getDefinedFields()) {
-        // if (definedField.isNamespaceVisible()) {
-        // availableFields.add(definedField);
-        // }
-        // }
         availableMethods.addAll(classInfo.getDefinedMethods());
         checkedClasses.add(classInfo);
 
