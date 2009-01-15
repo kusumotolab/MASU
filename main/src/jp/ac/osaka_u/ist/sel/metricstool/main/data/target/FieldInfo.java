@@ -1,7 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -51,6 +53,21 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
         this.ownerClass = definitionClass;
         this.referencers = new TreeSet<CallableUnitInfo>();
         this.assignmenters = new TreeSet<CallableUnitInfo>();
+    }
+
+    /**
+     * 与えられた変数のSetに含まれているフィールドをSetとして返す
+     * @param variables 変数のSet
+     * @return 与えられた変数のSetに含まれるフィールドのSet
+     */
+    public static Set<FieldInfo> getLocalVariables(Collection<VariableInfo<?>> variables) {
+        final Set<FieldInfo> fields = new HashSet<FieldInfo>();
+        for (final VariableInfo<?> variable : variables) {
+            if (variable instanceof FieldInfo) {
+                fields.add((FieldInfo) variable);
+            }
+        }
+        return Collections.unmodifiableSet(fields);
     }
 
     /**

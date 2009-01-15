@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -28,5 +31,20 @@ public abstract class ParameterInfo extends VariableInfo<CallableUnitInfo> {
             final CallableUnitInfo definitionMethod, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
         super(modifiers, name, type, definitionMethod, fromLine, fromColumn, toLine, toColumn);
+    }
+
+    /**
+     * —^‚¦‚ç‚ê‚½•Ï”‚ÌSet‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚éˆø”‚ğSet‚Æ‚µ‚Ä•Ô‚·
+     * @param variables •Ï”‚ÌSet
+     * @return —^‚¦‚ç‚ê‚½•Ï”‚ÌSet‚ÉŠÜ‚Ü‚ê‚éˆø”‚ÌSet
+     */
+    public static Set<ParameterInfo> getLocalVariables(Collection<VariableInfo<?>> variables) {
+        final Set<ParameterInfo> parameters = new HashSet<ParameterInfo>();
+        for (final VariableInfo<?> variable : variables) {
+            if (variable instanceof ParameterInfo) {
+                parameters.add((ParameterInfo) variable);
+            }
+        }
+        return Collections.unmodifiableSet(parameters);
     }
 }
