@@ -118,6 +118,11 @@ public abstract class ExpressionInfo implements ConditionInfo {
         return 0;
     }
 
+    /**
+     * ŠO‘¤‚ÌExecutableElement‚ğ•Ô‚·
+     * 
+     * @return ŠO‘¤‚ÌExecutableElement
+     */
     public final ExecutableElementInfo getOwnerExecutableElement() {
 
         if (null == this.ownerExecutableElement) {
@@ -127,6 +132,11 @@ public abstract class ExpressionInfo implements ConditionInfo {
         return this.ownerExecutableElement;
     }
 
+    /**
+     * ‚±‚Ì®‚ğ‚Â•¶‚ğ•Ô‚·
+     * 
+     * @return ‚±‚Ì®‚ğ‚Â•¶
+     */
     public final StatementInfo getOwnerStatement() {
 
         final ExecutableElementInfo ownerExecutableElement = this.getOwnerExecutableElement();

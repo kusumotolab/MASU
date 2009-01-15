@@ -16,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * ファイルの情報を表すクラス．
  */
+@SuppressWarnings("serial")
 public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, Serializable {
 
     /**

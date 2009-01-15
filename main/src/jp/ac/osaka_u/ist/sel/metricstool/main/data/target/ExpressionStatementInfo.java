@@ -10,6 +10,7 @@ import java.util.Set;
  * @author t-miyake
  *
  */
+@SuppressWarnings("serial")
 public class ExpressionStatementInfo extends SingleStatementInfo {
 
     /**

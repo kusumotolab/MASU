@@ -24,7 +24,8 @@ public final class UnresolvedParameterUsageInfo extends
      * 使用されている引数，参照かどうかを与えて初期化
      * 
      * @param usedVariable 使用されている変数
-     * @param reference 参照の場合はtrue, 代入の場合はfalse
+     * @param reference 参照かどうか
+     * @param assignment 代入かどうか
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行

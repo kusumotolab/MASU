@@ -12,6 +12,7 @@ import java.util.List;
  * 
  * @author higo
  */
+@SuppressWarnings("serial")
 public final class ExternalParameterInfo extends ParameterInfo {
 
     /**

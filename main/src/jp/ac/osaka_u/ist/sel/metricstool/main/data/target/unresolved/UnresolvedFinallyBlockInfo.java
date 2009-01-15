@@ -6,7 +6,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
@@ -65,8 +64,8 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
 
         // この finally 節が属する try ブロックを取得
         final UnresolvedTryBlockInfo unresolvedOwnerTryBlock = this.getOwnerTryBlock();
-        final TryBlockInfo ownerTryBlock = unresolvedOwnerTryBlock.resolve(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final TryBlockInfo ownerTryBlock = unresolvedOwnerTryBlock.resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
 
         // この finally 節の位置情報を取得
         final int fromLine = this.getFromLine();
@@ -78,12 +77,12 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
-        this.resolvedInfo = new FinallyBlockInfo(usingClass, outerSpace, fromLine,
-                fromColumn, toLine, toColumn, ownerTryBlock);
+        this.resolvedInfo = new FinallyBlockInfo(usingClass, outerSpace, fromLine, fromColumn,
+                toLine, toColumn, ownerTryBlock);
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);    
+                methodInfoManager);
 
         return this.resolvedInfo;
     }

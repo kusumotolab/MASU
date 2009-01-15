@@ -10,6 +10,7 @@ import java.util.Set;
  * @author higo
  *
  */
+@SuppressWarnings("serial")
 public final class LabelInfo extends UnitInfo implements StatementInfo {
 
     /**

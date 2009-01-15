@@ -10,6 +10,7 @@ import java.util.Set;
  * @author higo, t-miyake
  * 
  */
+@SuppressWarnings("serial")
 public final class NullUsageInfo extends ExpressionInfo {
 
     /**

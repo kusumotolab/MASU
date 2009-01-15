@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
+
 import java.util.Collections;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * @author higo
  *
  */
+@SuppressWarnings("serial")
 public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTypeInfo> {
 
     /**
@@ -33,12 +35,12 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
             throw new IllegalArgumentException();
         }
         this.indexExpressions = Collections.unmodifiableList(indexExpressions);
-        
-        for(final ExpressionInfo element : this.indexExpressions) {
+
+        for (final ExpressionInfo element : this.indexExpressions) {
             element.setOwnerExecutableElement(this);
         }
     }
-    
+
     /**
      * インデックスの式を取得
      * @param dimention インデックスの式を取得する配列の次元

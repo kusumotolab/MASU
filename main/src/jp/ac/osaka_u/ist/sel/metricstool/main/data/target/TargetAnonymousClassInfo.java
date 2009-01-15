@@ -10,6 +10,7 @@ import java.util.HashSet;
  * @author higo
  *
  */
+@SuppressWarnings("serial")
 public final class TargetAnonymousClassInfo extends TargetInnerClassInfo {
 
     /**

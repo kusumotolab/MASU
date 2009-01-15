@@ -9,6 +9,7 @@ import java.util.Set;
  * 
  * @author higo
  */
+@SuppressWarnings("serial")
 public class TargetInnerClassInfo extends TargetClassInfo {
 
     /**

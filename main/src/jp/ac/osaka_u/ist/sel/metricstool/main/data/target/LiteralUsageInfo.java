@@ -9,6 +9,7 @@ import java.util.Set;
  * @author t-miyake
  *
  */
+@SuppressWarnings("serial")
 public final class LiteralUsageInfo extends ExpressionInfo {
 
     /**

@@ -14,6 +14,7 @@ import java.util.TreeSet;
  * @author t-miyakeÅChigo
  *
  */
+@SuppressWarnings("serial")
 public final class AssertStatementInfo extends SingleStatementInfo {
 
     /**

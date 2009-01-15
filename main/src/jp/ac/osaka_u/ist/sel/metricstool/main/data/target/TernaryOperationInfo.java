@@ -12,6 +12,7 @@ import java.util.Set;
  * @author t-miyake
  *
  */
+@SuppressWarnings("serial")
 public class TernaryOperationInfo extends ExpressionInfo {
 
     /**
@@ -56,7 +57,7 @@ public class TernaryOperationInfo extends ExpressionInfo {
      * @return O€‰‰Z‚ÌğŒ®(‘æˆê€)
      */
     public ConditionInfo getCondition() {
-        return condition;
+        return this.condition;
     }
 
     /**
@@ -64,7 +65,7 @@ public class TernaryOperationInfo extends ExpressionInfo {
      * @return O€‰‰Z‚ÌğŒ®‚ªtrue‚Ì‚Æ‚«‚É•Ô‚³‚ê‚é®(‘æ“ñ€)
      */
     public ExpressionInfo getTrueExpression() {
-        return trueExpression;
+        return this.trueExpression;
     }
 
     /**
@@ -72,7 +73,7 @@ public class TernaryOperationInfo extends ExpressionInfo {
      * @return O€‰‰Z‚ÌğŒ®‚ªfalse‚Ì‚Æ‚«‚É•Ô‚³‚ê‚é®(‘æO€)
      */
     public ExpressionInfo getFalseExpression() {
-        return falseExpression;
+        return this.falseExpression;
     }
 
     @Override

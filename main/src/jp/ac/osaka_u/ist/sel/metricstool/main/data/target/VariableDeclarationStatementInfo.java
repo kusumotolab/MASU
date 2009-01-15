@@ -13,6 +13,7 @@ import java.util.TreeSet;
  * @author t-miyake
  *
  */
+@SuppressWarnings("serial")
 public class VariableDeclarationStatementInfo extends SingleStatementInfo implements ConditionInfo {
 
     /**

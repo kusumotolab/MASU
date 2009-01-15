@@ -11,6 +11,7 @@ import java.util.Map;
  * @author higo
  *
  */
+@SuppressWarnings("serial")
 public final class VariableLengthTypeInfo extends ArrayTypeInfo {
 
     /**

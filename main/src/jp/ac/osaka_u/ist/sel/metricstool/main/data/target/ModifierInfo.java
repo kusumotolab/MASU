@@ -18,6 +18,7 @@ import java.util.Map;
  * @author higo
  * 
  */
+@SuppressWarnings("serial")
 public final class ModifierInfo implements Serializable {
 
     /**

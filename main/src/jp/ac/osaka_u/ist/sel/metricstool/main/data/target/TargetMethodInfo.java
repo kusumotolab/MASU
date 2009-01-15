@@ -29,6 +29,7 @@ import java.util.TreeSet;
  * @author higo
  * 
  */
+@SuppressWarnings("serial")
 public final class TargetMethodInfo extends MethodInfo implements Member {
 
     /**

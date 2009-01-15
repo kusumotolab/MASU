@@ -41,7 +41,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
      * @param availableNamespaces 利用可能な名前空間
      * @param qualifierUsage フィールド使用が実行される親エンティティ
      * @param fieldName 変数名
-     * @param reference フィールド使用が参照である場合は true，代入である場合は false を指定
+     * @param reference フィールド使用が参照か
+     * @param assignment フィールド使用が代入か
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行

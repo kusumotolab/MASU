@@ -1,12 +1,20 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-public class ClassConstructorCallInfo extends ConstructorCallInfo<ClassTypeInfo> {
+/**
+ * クラスのコンストラクタ呼び出しを表すクラス
+ * 
+ * @author higo
+ *
+ */
+@SuppressWarnings("serial")
+public final class ClassConstructorCallInfo extends ConstructorCallInfo<ClassTypeInfo> {
 
     /**
      * 型を与えてコンストラクタ呼び出しを初期化
      * 
      * @param classType 呼び出しの型
+     * @param callee 呼び出されているコンストラクタ
      * @param ownerMethod オーナーメソッド 
      * @param fromLine 開始行
      * @param fromColumn 開始列

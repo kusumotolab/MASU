@@ -110,7 +110,8 @@ public class UnresolvedArrayConstructorCallInfo extends
     /**
      * インデックスの式をセット
      * 
-     * @param indexExpression
+     * @param dimention 配列の次元を表す
+     * @param indexExpression 配列の要素指定部分の式を表す
      */
     public void addIndexExpression(final int dimention,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> indexExpression) {

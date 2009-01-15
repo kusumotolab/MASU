@@ -10,6 +10,7 @@ import java.util.SortedSet;
  * @author higo
  * 
  */
+@SuppressWarnings("serial")
 public final class SimpleBlockInfo extends BlockInfo {
 
     /**

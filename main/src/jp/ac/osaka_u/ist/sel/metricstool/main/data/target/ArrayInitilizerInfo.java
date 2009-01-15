@@ -9,6 +9,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 
+/**
+ * 配列の初期化を表すクラス
+ * 
+ * @author t-miyake
+ *
+ */
+@SuppressWarnings("serial")
 public final class ArrayInitilizerInfo extends ExpressionInfo {
 
     public ArrayInitilizerInfo(List<ExpressionInfo> elements, final CallableUnitInfo ownerMethod,

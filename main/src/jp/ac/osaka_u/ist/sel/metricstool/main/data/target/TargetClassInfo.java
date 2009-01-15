@@ -30,6 +30,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
+@SuppressWarnings("serial")
 public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
 
     /**

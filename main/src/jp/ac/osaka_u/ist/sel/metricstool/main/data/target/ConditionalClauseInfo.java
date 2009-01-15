@@ -10,6 +10,7 @@ import java.util.Set;
  * @author t-miyake
  *
  */
+@SuppressWarnings("serial")
 public final class ConditionalClauseInfo extends UnitInfo {
 
     /**
@@ -60,8 +61,13 @@ public final class ConditionalClauseInfo extends UnitInfo {
         return this.condition;
     }
 
+    /**
+     * 条件節のテキスト表現を返す
+     * 
+     * @return 条件節のテキスト表現
+     */
     public final String getText() {
-        return "";
+        return this.getCondition().getText();
     }
 
     /**

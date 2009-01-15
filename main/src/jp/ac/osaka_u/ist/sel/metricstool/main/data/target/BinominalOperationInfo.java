@@ -18,6 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
  * @author higo
  * 
  */
+@SuppressWarnings("serial")
 public final class BinominalOperationInfo extends ExpressionInfo {
 
     /**

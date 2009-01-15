@@ -13,6 +13,7 @@ import java.util.Set;
  * @author higo
  * 
  */
+@SuppressWarnings("serial")
 public final class LocalVariableInfo extends VariableInfo<LocalSpaceInfo> {
 
     /**

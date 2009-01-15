@@ -89,7 +89,6 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             throw new IllegalArgumentException();
         }
 
-        
         // クラスオブジェクトの compareTo を用いる．
         // クラスの名前空間名，クラス名が比較に用いられている．
         final ClassInfo ownerClass = this.getOwnerClass();
@@ -98,12 +97,18 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
         if (classOrder != 0) {
             return classOrder;
         }
-        
+
         return this.compareArgumentsTo(target);
     }
-    
+
+    /**
+     * 引数の型による比較を行う
+     * 
+     * @param target 比較対象ユニット
+     * @return
+     */
     public int compareArgumentsTo(final CallableUnitInfo target) {
-     // 引数の個数で比較
+        // 引数の個数で比較
         final int parameterNumber = this.getParameterNumber();
         final int correspondParameterNumber = target.getParameterNumber();
         if (parameterNumber < correspondParameterNumber) {

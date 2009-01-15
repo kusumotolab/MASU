@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import java.util.Iterator;
 
 
+@SuppressWarnings("serial")
 public class BreakStatementInfo extends JumpStatementInfo {
 
     public BreakStatementInfo(LocalSpaceInfo ownerSpace, LabelInfo destinationLabel, int fromLine,

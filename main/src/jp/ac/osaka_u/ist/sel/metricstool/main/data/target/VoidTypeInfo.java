@@ -10,6 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
  * @author higo
  * 
  */
+@SuppressWarnings("serial")
 public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo<VoidTypeInfo> {
 
     /**

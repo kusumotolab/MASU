@@ -11,6 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.StringArrayComparator;
  * 
  * @author higo
  */
+@SuppressWarnings("serial")
 public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializable {
 
     /**
