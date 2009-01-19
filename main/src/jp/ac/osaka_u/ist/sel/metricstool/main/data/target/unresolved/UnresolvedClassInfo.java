@@ -7,11 +7,14 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetAnonymousClassInfo;
@@ -71,6 +74,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         this.definedMethods = new HashSet<UnresolvedMethodInfo>();
         this.definedConstructors = new HashSet<UnresolvedConstructorInfo>();
         this.definedFields = new HashSet<UnresolvedFieldInfo>();
+        this.importStatements = new LinkedList<UnresolvedImportStatementInfo>();
 
         this.privateVisible = false;
         this.inheritanceVisible = false;
@@ -342,6 +346,38 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
+     * このクラスにおいて利用可能な（インポートされている）クラスを追加する
+     * 
+     * @param importStatement このクラスにおいて利用可能な（インポートされている）クラス
+     */
+    public void addImportStatement(final UnresolvedImportStatementInfo importStatement) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == importStatement) {
+            throw new IllegalArgumentException();
+        }
+
+        this.importStatements.add(importStatement);
+    }
+
+    /**
+     * このクラスにおいて利用可能な（インポートされている）クラス群を追加する
+     * 
+     * @param importStatements このクラスにおいて利用可能な（インポートされている）クラス群
+     */
+    public void addImportStatement(final List<UnresolvedImportStatementInfo> importStatements) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == importStatements) {
+            throw new IllegalArgumentException();
+        }
+
+        this.importStatements.addAll(importStatements);
+    }
+
+    /**
      * 親クラス名のセットを返す
      * 
      * @return 親クラス名のセット
@@ -393,6 +429,15 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      */
     public Set<UnresolvedFieldInfo> getDefinedFields() {
         return Collections.unmodifiableSet(this.definedFields);
+    }
+
+    /**
+     * 利用可能なクラス（インポートされているクラス）のListを返す
+     * 
+     * @return　利用可能なクラス（インポートされているクラス）のListを返す
+     */
+    public List<UnresolvedImportStatementInfo> getImportStatements() {
+        return Collections.unmodifiableList(this.importStatements);
     }
 
     /**
@@ -601,6 +646,15 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         }
 
         // 利用可能なクラスを名前解決し，解決済みクラスに登録
+        final List<UnresolvedImportStatementInfo> unresolvedImportStatements = this
+                .getImportStatements();
+        for (final UnresolvedImportStatementInfo unresolvedImportStatement : unresolvedImportStatements) {
+            final ImportStatementInfo importStatement = unresolvedImportStatement.resolve(
+                    usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            final SortedSet<ClassInfo> importedClasses = importStatement.getImportClasses();
+            this.resolvedInfo.addaccessibleClasses(importedClasses);
+        }
+
         return this.resolvedInfo;
     }
 
@@ -694,6 +748,11 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 定義しているフィールドを保存するためのセット
      */
     private final Set<UnresolvedFieldInfo> definedFields;
+
+    /**
+     * 利用可能な名前空間を保存するためのセット
+     */
+    private final List<UnresolvedImportStatementInfo> importStatements;
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数

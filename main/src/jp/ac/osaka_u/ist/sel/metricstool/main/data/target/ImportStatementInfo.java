@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -15,6 +16,10 @@ public class ImportStatementInfo extends UnitInfo {
 
         this.importedClasses = new TreeSet<ClassInfo>();
         this.importedClasses.addAll(importedClasses);
+    }
+
+    public SortedSet<ClassInfo> getImportClasses() {
+        return Collections.unmodifiableSortedSet(this.importedClasses);
     }
 
     @Override

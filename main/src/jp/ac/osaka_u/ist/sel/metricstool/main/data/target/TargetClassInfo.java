@@ -290,7 +290,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @param accessibleClasses アクセス可能なクラス群
      */
-    public final void AddaccessibleClasses(final SortedSet<ClassInfo> accessibleClasses) {
+    public final void addaccessibleClasses(final SortedSet<ClassInfo> accessibleClasses) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == accessibleClasses) {
