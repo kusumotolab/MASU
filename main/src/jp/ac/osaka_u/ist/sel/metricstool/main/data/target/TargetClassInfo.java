@@ -151,7 +151,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
 
         this.instance = instance;
 
-        this.fileInfo = fileInfo;
+        this.ownerFile = fileInfo;
     }
 
     /**
@@ -196,7 +196,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
 
         this.instance = instance;
 
-        this.fileInfo = fileInfo;
+        this.ownerFile = fileInfo;
     }
 
     /**
@@ -459,8 +459,8 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * 
      * @return このクラスを宣言しているファイル情報
      */
-    public final FileInfo getFileInfo() {
-        return this.fileInfo;
+    public final FileInfo getOwnerFile() {
+        return this.ownerFile;
     }
 
     /**
@@ -516,5 +516,5 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
     /**
      * このクラスを宣言しているファイル情報を保存するための変数
      */
-    private final FileInfo fileInfo;
+    private final FileInfo ownerFile;
 }
