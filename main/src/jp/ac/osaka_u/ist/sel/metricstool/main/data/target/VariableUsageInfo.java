@@ -28,12 +28,50 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     public static Set<VariableInfo<?>> getUsedVariables(
             Collection<VariableUsageInfo<?>> variableUsages) {
 
-        Set<VariableInfo<?>> usedVariables = new HashSet<VariableInfo<?>>();
+        final Set<VariableInfo<?>> usedVariables = new HashSet<VariableInfo<?>>();
         for (final VariableUsageInfo<?> variableUsage : variableUsages) {
             final VariableInfo<?> variable = variableUsage.getUsedVariable();
             usedVariables.add(variable);
         }
         return usedVariables;
+    }
+
+    /**
+     * 引数で与えられてた変数使用に含まれる変数参照のSetを返す
+     * 
+     * @param variableUsages 変数使用のSet
+     * @return 引数で与えられてた変数使用に含まれる変数参照のSet
+     */
+    public static Set<VariableUsageInfo<?>> getReferencees(
+            Collection<VariableUsageInfo<?>> variableUsages) {
+
+        final Set<VariableUsageInfo<?>> references = new HashSet<VariableUsageInfo<?>>();
+        for (final VariableUsageInfo<?> variableUsage : variableUsages) {
+            if (variableUsage.isReference()) {
+                references.add(variableUsage);
+            }
+        }
+
+        return Collections.unmodifiableSet(references);
+    }
+
+    /**
+     * 引数で与えられてた変数使用に含まれる変数代入のSetを返す
+     * 
+     * @param variableUsages 変数使用のSet
+     * @return 引数で与えられてた変数使用に含まれる変数代入のSet
+     */
+    public static Set<VariableUsageInfo<?>> getAssignments(
+            Collection<VariableUsageInfo<?>> variableUsages) {
+
+        final Set<VariableUsageInfo<?>> assignments = new HashSet<VariableUsageInfo<?>>();
+        for (final VariableUsageInfo<?> variableUsage : variableUsages) {
+            if (variableUsage.isAssignment()) {
+                assignments.add(variableUsage);
+            }
+        }
+
+        return Collections.unmodifiableSet(assignments);
     }
 
     /**
@@ -108,7 +146,7 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
      * @return この変数使用のテキスト表現（型）
      */
     @Override
-    public final String getText() {
+    public String getText() {
         final T variable = this.getUsedVariable();
         return variable.getName();
     }

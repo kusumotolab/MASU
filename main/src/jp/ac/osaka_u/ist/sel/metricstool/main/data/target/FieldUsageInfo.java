@@ -79,6 +79,27 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     }
 
     /**
+     * この変数使用のテキスト表現（型）を返す
+     * 
+     * @return この変数使用のテキスト表現（型）
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        final ExpressionInfo quantifierExpression = this.getQualifierExpression();
+        sb.append(quantifierExpression.getText());
+
+        sb.append(".");
+
+        final FieldInfo field = this.getUsedVariable();
+        sb.append(field.getName());
+
+        return sb.toString();
+    }
+
+    /**
      * この式（フィールド使用）における変数利用の一覧を返す
      * 
      * @return 変数利用のSet

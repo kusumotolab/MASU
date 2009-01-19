@@ -1,10 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.Collections;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 
 /**
@@ -62,41 +59,6 @@ public final class TargetMethodInfo extends MethodInfo implements Member {
         }
 
         this.instance = instance;
-    }
-
-    /**
-     * このメソッドが参照しているフィールドの SortedSet を返す．
-     * 
-     * @return このメソッドが参照しているフィールドの SortedSet
-     */
-    public SortedSet<FieldInfo> getReferencees() {
-
-        final SortedSet<FieldInfo> referencees = new TreeSet<FieldInfo>();
-        final Set<VariableUsageInfo<?>> variableUsages = this.getVariableUsages();
-        final Set<FieldUsageInfo> fieldUsages = FieldUsageInfo.getFieldUsages(variableUsages);
-        for (final FieldUsageInfo fieldUsage : fieldUsages) {
-            if (fieldUsage.isReference()) {
-                referencees.add(fieldUsage.getUsedVariable());
-            }
-        }
-        return Collections.unmodifiableSortedSet(referencees);
-    }
-
-    /**
-     * このメソッドが代入しているフィールドの SortedSet を返す．
-     * 
-     * @return このメソッドが代入しているフィールドの SortedSet
-     */
-    public SortedSet<FieldInfo> getAssignmentees() {
-        final SortedSet<FieldInfo> assignmentees = new TreeSet<FieldInfo>();
-        final Set<VariableUsageInfo<?>> variableUsages = this.getVariableUsages();
-        final Set<FieldUsageInfo> fieldUsages = FieldUsageInfo.getFieldUsages(variableUsages);
-        for (final FieldUsageInfo fieldUsage : fieldUsages) {
-            if (fieldUsage.isAssignment()) {
-                assignmentees.add(fieldUsage.getUsedVariable());
-            }
-        }
-        return Collections.unmodifiableSortedSet(assignmentees);
     }
 
     /**
