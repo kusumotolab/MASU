@@ -28,7 +28,7 @@ public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInf
 
         this.ownerSpace = ownerSpace;
         this.setFromLine(fromLine);
-        this.setFromColumn(fromLine);
+        this.setFromColumn(fromColumn);
         this.setToLine(toLine);
         this.setToColumn(toColumn);
     }
