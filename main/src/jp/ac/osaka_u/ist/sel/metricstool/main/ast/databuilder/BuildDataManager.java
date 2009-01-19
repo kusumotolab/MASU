@@ -11,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
@@ -132,11 +132,11 @@ public interface BuildDataManager {
 
     public void enterMethodBlock();
 
-    public List<AvailableNamespaceInfo> getAvailableNameSpaceSet();
+    public List<UnresolvedImportStatementInfo> getAvailableNameSpaceSet();
 
-    public List<AvailableNamespaceInfo> getAvailableAliasSet();
+    public List<UnresolvedImportStatementInfo> getAvailableAliasSet();
 
-    public List<AvailableNamespaceInfo> getAllAvaliableNames();
+    public List<UnresolvedImportStatementInfo> getAllAvaliableNames();
 
     public String[] getAliasedName(String name);
 

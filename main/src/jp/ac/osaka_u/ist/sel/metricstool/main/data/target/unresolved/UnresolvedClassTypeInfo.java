@@ -36,7 +36,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
      * @param availableNamespaces 名前空間名
      * @param referenceName 参照名
      */
-    public UnresolvedClassTypeInfo(final List<AvailableNamespaceInfo> availableNamespaces,
+    public UnresolvedClassTypeInfo(final List<UnresolvedImportStatementInfo> availableNamespaces,
             final String[] referenceName) {
 
         // 不正な呼び出しでないかをチェック
@@ -87,7 +87,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
         }
 
         // import 文で指定されているクラスが登録されていないなら，外部クラスとして登録する
-        for (final AvailableNamespaceInfo availableNamespace : this.getAvailableNamespaces()) {
+        for (final UnresolvedImportStatementInfo availableNamespace : this.getAvailableNamespaces()) {
 
             if (!availableNamespace.isAllClasses()) {
                 final String[] fullQualifiedName = availableNamespace.getImportName();
@@ -148,7 +148,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
             // 単項演算の場合は，インポートされているクラスから検索
             if (this.isMoniminalReference()) {
 
-                for (final AvailableNamespaceInfo availableNamespace : this
+                for (final UnresolvedImportStatementInfo availableNamespace : this
                         .getAvailableNamespaces()) {
 
                     final String[] importedNamespace = availableNamespace.getNamespace();
@@ -205,7 +205,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
             // 複数項参照の場合は，importされているクラスのインナークラスを調べる
             if (!this.isMoniminalReference()) {
 
-                for (final AvailableNamespaceInfo availableNamespace : this
+                for (final UnresolvedImportStatementInfo availableNamespace : this
                         .getAvailableNamespaces()) {
 
                     final String[] importedNamespace = availableNamespace.getNamespace();
@@ -537,7 +537,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
      * @param referenceName 型の完全修飾名
      */
     public UnresolvedClassTypeInfo(final String[] referenceName) {
-        this(new LinkedList<AvailableNamespaceInfo>(), referenceName);
+        this(new LinkedList<UnresolvedImportStatementInfo>(), referenceName);
     }
 
     /**
@@ -610,7 +610,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
      * 
      * @return この参照型の完全限定名として可能性のある名前空間名の一覧
      */
-    public final List<AvailableNamespaceInfo> getAvailableNamespaces() {
+    public final List<UnresolvedImportStatementInfo> getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
@@ -661,7 +661,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
     /**
      * 利用可能な名前空間名を保存するための変数，名前解決処理の際に用いる
      */
-    private final List<AvailableNamespaceInfo> availableNamespaces;
+    private final List<UnresolvedImportStatementInfo> availableNamespaces;
 
     /**
      * 参照名を保存する変数

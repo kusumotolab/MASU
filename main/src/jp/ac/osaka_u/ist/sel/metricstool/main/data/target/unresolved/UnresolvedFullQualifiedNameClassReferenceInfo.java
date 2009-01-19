@@ -32,7 +32,7 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
      * @param referencedClass QÆ‚³‚ê‚Ä‚¢‚éƒNƒ‰ƒX
      */
     public UnresolvedFullQualifiedNameClassReferenceInfo(final UnresolvedClassInfo referencedClass) {
-        super(new LinkedList<AvailableNamespaceInfo>(), referencedClass.getFullQualifiedName());
+        super(new LinkedList<UnresolvedImportStatementInfo>(), referencedClass.getFullQualifiedName());
         this.referencedClass = referencedClass;
     }
 

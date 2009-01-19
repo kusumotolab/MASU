@@ -142,6 +142,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedConstructors = new TreeSet<TargetConstructorInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
+        this.accessibleClasses = new TreeSet<ClassInfo>();
 
         this.privateVisible = privateVisible;
         this.namespaceVisible = namespaceVisible;
@@ -187,6 +188,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedConstructors = new TreeSet<TargetConstructorInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
+        this.accessibleClasses = new TreeSet<ClassInfo>();
 
         this.privateVisible = privateVisible;
         this.namespaceVisible = namespaceVisible;
@@ -269,6 +271,36 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
     }
 
     /**
+     * このクラスにおいてアクセス可能なクラスを追加する．プラグインから呼ぶとランタイムエラー.
+     * 
+     * @param accessibleClass アクセス可能なクラス
+     */
+    public final void addAccessibleClass(final ClassInfo accessibleClass) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == accessibleClass) {
+            throw new IllegalArgumentException();
+        }
+
+        this.accessibleClasses.add(accessibleClass);
+    }
+
+    /**
+     * このクラスにおいてアクセス可能なクラス群を追加する．プラグインから呼ぶとランタイムエラー
+     * 
+     * @param accessibleClasses アクセス可能なクラス群
+     */
+    public final void AddaccessibleClasses(final SortedSet<ClassInfo> accessibleClasses) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == accessibleClasses) {
+            throw new IllegalArgumentException();
+        }
+
+        this.accessibleClasses.addAll(accessibleClasses);
+    }
+
+    /**
      * このクラスに定義されているメソッドの SortedSet を返す．
      * 
      * @return 定義されているメソッドの SortedSet
@@ -293,6 +325,15 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      */
     public final SortedSet<TargetFieldInfo> getDefinedFields() {
         return Collections.unmodifiableSortedSet(this.definedFields);
+    }
+
+    /**
+     * このクラスにおいてアクセス可能なクラスのSortedSetを返す．
+     * 
+     * @return このクラスにおいてアクセス可能なクラスのSortedSet
+     */
+    public final SortedSet<ClassInfo> getAccessibleClasses() {
+        return Collections.unmodifiableSortedSet(this.accessibleClasses);
     }
 
     /**
@@ -482,6 +523,11 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * このクラスで定義されているフィールド一覧を保存するための変数．
      */
     private final SortedSet<TargetFieldInfo> definedFields;
+
+    /**
+     * このクラス内からアクセス可能なクラス
+     */
+    private final SortedSet<ClassInfo> accessibleClasses;
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数

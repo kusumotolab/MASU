@@ -1,6 +1,19 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Collection;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ImportStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -10,7 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class AvailableNamespaceInfo {
+public final class UnresolvedImportStatementInfo extends UnresolvedUnitInfo<ImportStatementInfo> {
 
     /**
      * 利用可能名前空間名とそれ以下のクラス全てのクラスが利用可能かどうかを表すbooleanを与えてオブジェクトを初期化.
@@ -22,7 +35,7 @@ public final class AvailableNamespaceInfo {
      * @param namespace 利用可能名前空間名
      * @param allClasses 全てのクラスが利用可能かどうか
      */
-    public AvailableNamespaceInfo(final String[] namespace, final boolean allClasses) {
+    public UnresolvedImportStatementInfo(final String[] namespace, final boolean allClasses) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -47,12 +60,12 @@ public final class AvailableNamespaceInfo {
             throw new NullPointerException();
         }
 
-        if (!(o instanceof AvailableNamespaceInfo)) {
+        if (!(o instanceof UnresolvedImportStatementInfo)) {
             return false;
         }
 
         String[] importName = this.getImportName();
-        String[] correspondImportName = ((AvailableNamespaceInfo) o).getImportName();
+        String[] correspondImportName = ((UnresolvedImportStatementInfo) o).getImportName();
         if (importName.length != correspondImportName.length) {
             return false;
         }
@@ -64,6 +77,48 @@ public final class AvailableNamespaceInfo {
         }
 
         return true;
+    }
+
+    @Override
+    public ImportStatementInfo resolve(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
+                || (null == methodInfoManager)) {
+            throw new NullPointerException();
+        }
+
+        // 既に解決済みである場合は，キャッシュを返す
+        if (this.alreadyResolved()) {
+            return this.getResolved();
+        }
+
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final SortedSet<ClassInfo> accessibleClasses = new TreeSet<ClassInfo>();
+        if (this.isAllClasses()) {
+            final String[] namespace = this.getNamespace();
+            final Collection<ClassInfo> specifiedClasses = DataManager.getInstance()
+                    .getClassInfoManager().getClassInfos(namespace);
+            accessibleClasses.addAll(specifiedClasses);
+        } else {
+            final String[] importName = this.getImportName();
+            ClassInfo specifiedClass = DataManager.getInstance().getClassInfoManager()
+                    .getClassInfo(importName);
+            if (null == specifiedClass) {
+                specifiedClass = new ExternalClassInfo(importName);
+            }
+        }
+
+        this.resolvedInfo = new ImportStatementInfo(fromLine, fromColumn, toLine, toColumn,
+                accessibleClasses);
+        return this.resolvedInfo;
     }
 
     /**

@@ -599,6 +599,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
                     publicVisible, instance, this.isInterface, this.fileInfo, fromLine, fromColumn,
                     toLine, toColumn);
         }
+
+        // 利用可能なクラスを名前解決し，解決済みクラスに登録
         return this.resolvedInfo;
     }
 
@@ -630,12 +632,11 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         if (null != this.classType) {
             return this.classType;
         }
-        final List<AvailableNamespaceInfo> namespaces = new LinkedList<AvailableNamespaceInfo>();
-        final AvailableNamespaceInfo namespace = new AvailableNamespaceInfo(this
+        final List<UnresolvedImportStatementInfo> namespaces = new LinkedList<UnresolvedImportStatementInfo>();
+        final UnresolvedImportStatementInfo namespace = new UnresolvedImportStatementInfo(this
                 .getFullQualifiedName(), false);
         namespaces.add(namespace);
-        this.classType = new UnresolvedClassTypeInfo(namespaces,
-                this.getFullQualifiedName());
+        this.classType = new UnresolvedClassTypeInfo(namespaces, this.getFullQualifiedName());
         return this.classType;
     }
 

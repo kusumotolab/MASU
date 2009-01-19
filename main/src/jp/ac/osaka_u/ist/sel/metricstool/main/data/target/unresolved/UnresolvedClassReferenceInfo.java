@@ -36,7 +36,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
      * @param availableNamespaces 名前空間名
      * @param referenceName 参照名
      */
-    public UnresolvedClassReferenceInfo(final List<AvailableNamespaceInfo> availableNamespaces,
+    public UnresolvedClassReferenceInfo(final List<UnresolvedImportStatementInfo> availableNamespaces,
             final String[] referenceName) {
 
         // 不正な呼び出しでないかをチェック
@@ -59,7 +59,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
      * @param referenceName 参照名
      * @param ownerUsage 親参照
      */
-    public UnresolvedClassReferenceInfo(final List<AvailableNamespaceInfo> availableNamespaces,
+    public UnresolvedClassReferenceInfo(final List<UnresolvedImportStatementInfo> availableNamespaces,
             final String[] referenceName, final UnresolvedClassReferenceInfo ownerUsage) {
 
         // 不正な呼び出しでないかをチェック
@@ -290,7 +290,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
             // 利用可能な名前空間から型名を探す
             {
-                for (final AvailableNamespaceInfo availableNamespace : this
+                for (final UnresolvedImportStatementInfo availableNamespace : this
                         .getAvailableNamespaces()) {
 
                     // 名前空間名.* となっている場合
@@ -566,7 +566,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
      * 
      * @return この参照型の完全限定名として可能性のある名前空間名の一覧
      */
-    public final List<AvailableNamespaceInfo> getAvailableNamespaces() {
+    public final List<UnresolvedImportStatementInfo> getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
@@ -588,7 +588,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
         final String[] referenceName = unresolvedReferenceType.getReferenceName();
 
         // 利用可能な名前空間を検索し，未解決クラス情報の完全限定名を決定
-        for (final AvailableNamespaceInfo availableNamespace : unresolvedReferenceType
+        for (final UnresolvedImportStatementInfo availableNamespace : unresolvedReferenceType
                 .getAvailableNamespaces()) {
 
             // 名前空間名.* となっている場合は，見つけることができない
@@ -647,7 +647,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
     /**
      * 利用可能な名前空間名を保存するための変数，名前解決処理の際に用いる
      */
-    private final List<AvailableNamespaceInfo> availableNamespaces;
+    private final List<UnresolvedImportStatementInfo> availableNamespaces;
 
     /**
      * 参照名を保存する変数

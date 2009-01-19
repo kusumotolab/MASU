@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.TypeBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.AvailableNamespaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
@@ -50,8 +50,8 @@ public class JavaTypeBuilder extends TypeBuilder {
      * java.lang.ObjectÇï\Ç∑å^éQè∆
      */
     public final static UnresolvedClassTypeInfo JAVA_LANG_OBJECT = new UnresolvedClassTypeInfo(
-            new LinkedList<AvailableNamespaceInfo>(), new String[] { "java", "lang", "Object" });
+            new LinkedList<UnresolvedImportStatementInfo>(), new String[] { "java", "lang", "Object" });
 
     public final static UnresolvedClassTypeInfo JAVA_LANG_STRIG = new UnresolvedClassTypeInfo(
-            new LinkedList<AvailableNamespaceInfo>(), new String[] { "java", "lang", "String" });
+            new LinkedList<UnresolvedImportStatementInfo>(), new String[] { "java", "lang", "String" });
 }
