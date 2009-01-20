@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
