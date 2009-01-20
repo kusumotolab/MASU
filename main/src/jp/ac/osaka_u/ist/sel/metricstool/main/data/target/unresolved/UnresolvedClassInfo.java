@@ -366,7 +366,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 
      * @param importStatements このクラスにおいて利用可能な（インポートされている）クラス群
      */
-    public void addImportStatement(final List<UnresolvedImportStatementInfo> importStatements) {
+    public void addImportStatements(final List<UnresolvedImportStatementInfo> importStatements) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();

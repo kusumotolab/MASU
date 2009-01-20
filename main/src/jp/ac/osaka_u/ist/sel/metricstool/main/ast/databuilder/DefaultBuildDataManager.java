@@ -596,7 +596,11 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
 
         classInfo.setNamespace(this.getCurrentFullNameSpace());
-
+        
+        final BlockScope currentScope = scopeStack.peek();
+        classInfo.addImportStatements(currentScope.getAvailableAliases());
+        classInfo.addImportStatements(currentScope.getAvailableNameSpaces());
+        
         this.classStack.push(classInfo);
 
         this.toClassMode();
