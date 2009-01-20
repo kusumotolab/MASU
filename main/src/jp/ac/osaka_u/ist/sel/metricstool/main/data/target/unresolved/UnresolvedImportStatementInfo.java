@@ -86,8 +86,7 @@ public final class UnresolvedImportStatementInfo extends UnresolvedUnitInfo<Impo
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
-                || (null == methodInfoManager)) {
+        if (null == classInfoManager) {
             throw new NullPointerException();
         }
 
@@ -104,13 +103,12 @@ public final class UnresolvedImportStatementInfo extends UnresolvedUnitInfo<Impo
         final SortedSet<ClassInfo> accessibleClasses = new TreeSet<ClassInfo>();
         if (this.isAllClasses()) {
             final String[] namespace = this.getNamespace();
-            final Collection<ClassInfo> specifiedClasses = DataManager.getInstance()
-                    .getClassInfoManager().getClassInfos(namespace);
+            final Collection<ClassInfo> specifiedClasses = classInfoManager
+                    .getClassInfos(namespace);
             accessibleClasses.addAll(specifiedClasses);
         } else {
             final String[] importName = this.getImportName();
-            ClassInfo specifiedClass = DataManager.getInstance().getClassInfoManager()
-                    .getClassInfo(importName);
+            ClassInfo specifiedClass = classInfoManager.getClassInfo(importName);
             if (null == specifiedClass) {
                 specifiedClass = new ExternalClassInfo(importName);
             }
