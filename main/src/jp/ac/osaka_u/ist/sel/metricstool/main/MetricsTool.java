@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main;
 
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -226,6 +225,13 @@ public class MetricsTool {
             options.addOption(A);
         }
 
+        {
+            final Option s = new Option("s", "AnalyzeStatement", false,
+                    "specify this option if you don't need statement information");
+            s.setRequired(false);
+            options.addOption(s);
+        }
+
         final MetricsTool metricsTool = new MetricsTool();
 
         try {
@@ -288,6 +294,7 @@ public class MetricsTool {
             if (cmd.hasOption("A")) {
                 Settings.getInstance().setFieldMetricsFile(cmd.getOptionValue("A"));
             }
+            Settings.getInstance().setStatement(!cmd.hasOption("s"));
 
             metricsTool.loadPlugins(Settings.getInstance().getMetrics());
 
@@ -575,10 +582,12 @@ public class MetricsTool {
             out.println("STEP7 : resolve method overrides.");
         }
         addOverrideRelation();
-        if (Settings.getInstance().isVerbose()) {
-            out.println("STEP8 : resolve field and method usages.");
+        if (Settings.getInstance().isStatement()) {
+            if (Settings.getInstance().isVerbose()) {
+                out.println("STEP8 : resolve field and method usages.");
+            }
+            addReferenceAssignmentCallRelateion();
         }
-        addReferenceAssignmentCallRelateion();
 
         // 文法誤りのあるファイル一覧を表示
         // err.println("The following files includes uncorrect syntax.");
@@ -1335,8 +1344,8 @@ public class MetricsTool {
             if (!methodInfo.getMethodName().equals(overrider.getMethodName())) {
                 continue;
             }
-            
-            if(0 != methodInfo.compareArgumentsTo(overrider)) {
+
+            if (0 != methodInfo.compareArgumentsTo(overrider)) {
                 continue;
             }
 

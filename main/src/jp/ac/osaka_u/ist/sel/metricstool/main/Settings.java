@@ -36,6 +36,7 @@ public class Settings {
         this.classMetricsFile = null;
         this.methodMetricsFile = null;
         this.fieldMetricsFile = null;
+        this.statement = true;
     }
 
     /**
@@ -115,7 +116,7 @@ public class Settings {
      * 
      */
     public String getListFile() {
-        return listFile;
+        return this.listFile;
     }
 
     public void setListFile(final String listFile) {
@@ -177,7 +178,7 @@ public class Settings {
      * 
      */
     public String getClassMetricsFile() {
-        return classMetricsFile;
+        return this.classMetricsFile;
     }
 
     public void setClassMetricsFile(final String classMetricsFile) {
@@ -212,7 +213,7 @@ public class Settings {
      * @return フィールドタイプのメトリクスを出力するファイル
      */
     public String getFieldMetricsFile() {
-        return fieldMetricsFile;
+        return this.fieldMetricsFile;
     }
 
     public void setFieldMetricsFile(final String fieldMetricsFile) {
@@ -221,6 +222,24 @@ public class Settings {
             throw new IllegalArgumentException();
         }
         this.fieldMetricsFile = fieldMetricsFile;
+    }
+
+    /**
+     * 文情報を解析するかどうかを返す
+     * 
+     * @return　解析する場合はtrue,しない場合はfalse
+     */
+    public boolean isStatement() {
+        return this.statement;
+    }
+
+    /**
+     * 文情報を解析するかどうかをセットする
+     * 
+     * @param statement 解析する場合はtrue, しない場合はfalse
+     */
+    public void setStatement(final boolean statement) {
+        this.statement = statement;
     }
 
     /**
@@ -267,4 +286,9 @@ public class Settings {
      * フィールドタイプのメトリクスを出力するファイルのパスを記録するための変数
      */
     private String fieldMetricsFile;
+
+    /**
+     * 文情報を取得するかどうかを記録するための変数
+     */
+    private boolean statement;
 }
