@@ -111,6 +111,7 @@ public final class UnresolvedImportStatementInfo extends UnresolvedUnitInfo<Impo
             ClassInfo specifiedClass = classInfoManager.getClassInfo(importName);
             if (null == specifiedClass) {
                 specifiedClass = new ExternalClassInfo(importName);
+                accessibleClasses.add(specifiedClass);
             }
         }
 
