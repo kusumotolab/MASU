@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 import java.util.Stack;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
@@ -54,7 +55,7 @@ public abstract class InitializableVariableBuilder<TVar extends UnresolvedVariab
 
             ExpressionElement lastExpression = expressionManager.getPeekExpressionElement();
 
-            assert (lastExpression.getUsage() instanceof UnresolvedExpressionInfo) : "Illegal state: variable initilizer was not a expression";
+            assert (!Settings.getInstance().isStatement() || lastExpression.getUsage() instanceof UnresolvedExpressionInfo) : "Illegal state: variable initilizer was not a expression";
 
             if (null != lastExpression) {
                 this.builtInitializerStack
