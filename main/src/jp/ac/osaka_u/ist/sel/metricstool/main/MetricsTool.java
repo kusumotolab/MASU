@@ -424,23 +424,23 @@ public class MetricsTool {
         // ëŒè€ÉtÉ@ÉCÉãÇâêÕ
 
         AstVisitorManager<AST> visitorManager = null;
-
+        
         switch (Settings.getInstance().getLanguage()) {
         case JAVA15:
             visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
-                    new Java15AntlrAstTranslator()));
+                    new Java15AntlrAstTranslator()), Settings.getInstance());
             break;
         case JAVA14:
             visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
-                    new Java14AntlrAstTranslator()));
+                    new Java14AntlrAstTranslator()), Settings.getInstance());
             break;
         case JAVA13:
             visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
-                    new Java13AntlrAstTranslator()));
+                    new Java13AntlrAstTranslator()), Settings.getInstance());
             break;
         case CSHARP:
             visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
-                    new CSharpAntlrAstTranslator()));
+                    new CSharpAntlrAstTranslator()), Settings.getInstance());
             break;
         default:
             assert false : "here shouldn't be reached!";

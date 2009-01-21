@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.csharp.MethodBuilderFromPropertyAST;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BlockScopeBuilder;
@@ -18,7 +19,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.MethodParameterBui
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameSpaceBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ArrayInitializerBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionDescriptionBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.InstanceElementBuilder;
@@ -60,7 +60,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
      * 
      * @param visitor
      */
-    public JavaAstVisitorManager(final AstVisitor<T> visitor) {
+    public JavaAstVisitorManager(final AstVisitor<T> visitor, final Settings settings) {
 
         final JavaModifiersInterpriter modifiersInterpriter = new JavaModifiersInterpriter();
 
@@ -99,14 +99,24 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
                 this.buildDataManager, this.expressionManager, new ModifiersBuilder(),
                 new JavaTypeBuilder(this.buildDataManager), new NameBuilder(), modifiersInterpriter);
         this.builders.add(localVariableBuilder);
-        /*this.builders.add(new LocalParameterBuilder(this.buildDataManager, this.expressionManager,
-                new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
-                new NameBuilder(), modifiersInterpriter));*/
 
-        // for expressions
+        if (settings.isStatement()) {
+            // for expressions
+            this.addExpressionBuilder();
+
+            this.addStatementBuilder(localVariableBuilder);
+        }
+
+        for (final DataBuilder<?> builder : this.builders) {
+            visitor.addVisitListener(builder);
+        }
+
+        this.visitor = visitor;
+    }
+
+    private void addExpressionBuilder() {
         this.builders.add(new ExpressionDescriptionBuilder(this.expressionManager,
                 this.buildDataManager));
-
         this.builders
                 .add(new SingleIdentifierBuilder(this.expressionManager, this.buildDataManager));
         this.builders.add(new JavaCompoundIdentifierBuilder(this.expressionManager,
@@ -125,7 +135,9 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
 
         this.builders.add(new JavaExpressionElementBuilder(this.expressionManager,
                 this.buildDataManager));
+    }
 
+    private void addStatementBuilder(final LocalVariableBuilder localVariableBuilder) {
         final LocalVariableDeclarationStatementBuilder localVariableDeclarationBuilder = new LocalVariableDeclarationStatementBuilder(
                 localVariableBuilder, this.buildDataManager);
 
@@ -140,17 +152,9 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new ContinueStatementBuilder(this.expressionManager,
                 this.buildDataManager));
 
-        this.builders
-                .add(new ArrayInitializerBuilder(this.expressionManager, this.buildDataManager));
-
         this.addInnerBlockBuilder(localVariableDeclarationBuilder);
 
         this.builders.add(new LabelBuilder(this.buildDataManager));
-        for (final DataBuilder<?> builder : this.builders) {
-            visitor.addVisitListener(builder);
-        }
-
-        this.visitor = visitor;
     }
 
     private void addInnerBlockBuilder(final LocalVariableDeclarationStatementBuilder variableBuilder) {
