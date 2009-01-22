@@ -3,6 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.SortedSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * catch ブロック情報を表すクラス
@@ -22,6 +24,7 @@ public final class CatchBlockInfo extends BlockInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      * @param ownerTryBlock このcatch節が属するtryブロック
+     * @param caughtException このcatch節がキャッチする例外
      */
     public CatchBlockInfo(final TargetClassInfo ownerClass, final LocalSpaceInfo outerSpace,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn,
@@ -41,8 +44,29 @@ public final class CatchBlockInfo extends BlockInfo {
      * 
      * @return 対応する try ブロック
      */
-    public TryBlockInfo getOwnerTryBlock() {
+    public final TryBlockInfo getOwnerTryBlock() {
         return this.ownerTryBlock;
+    }
+    
+    /**
+     * catchする例外を表す変数の情報を返す
+     * @return catchする例外を表す変数の情報
+     */
+    public final LocalVariableInfo getCaughtException() {
+        return caughtException;
+    }
+    
+    public void setCaughtException(LocalVariableInfo caughtException) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == caughtException) {
+            throw new NullPointerException();
+        }
+        
+        if(null != this.caughtException) {
+            throw new IllegalStateException();
+        }
+
+        this.caughtException = caughtException;
     }
 
     /**
@@ -70,4 +94,6 @@ public final class CatchBlockInfo extends BlockInfo {
     }
 
     private final TryBlockInfo ownerTryBlock;
+
+    private LocalVariableInfo caughtException;
 }

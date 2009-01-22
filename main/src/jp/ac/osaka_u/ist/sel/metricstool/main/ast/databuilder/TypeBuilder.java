@@ -114,7 +114,8 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
             } else if (type
                     .equals(TypeArgumentStateManager.TYPE_ARGUMENT_STATE.ENTER_TYPE_ARGUMENTS)) {
                 //型引数群の定義部に入ったので，新たな型引数群の情報を入れるリストをスタックにつむ
-                this.typeArgumentsLists.push(new ArrayList<UnresolvedTypeInfo<? extends TypeInfo>>());
+                this.typeArgumentsLists
+                        .push(new ArrayList<UnresolvedTypeInfo<? extends TypeInfo>>());
             } else if (type
                     .equals(TypeArgumentStateManager.TYPE_ARGUMENT_STATE.EXIT_TYPE_ARGUMENTS)) {
                 //型引数群の定義部が終わったので，スタックの一番上のリストを，今現在利用できる型パラメータ群として取り出す．
@@ -137,7 +138,8 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
                 this.inWildCardCount++;
             } else if (type.equals(TypeArgumentStateManager.TYPE_ARGUMENT_STATE.EXIT_TYPE_WILDCARD)) {
                 //ワイルドカード記述部から出るので，型上限情報を取得して型情報を登録
-                final UnresolvedTypeInfo<? extends TypeInfo> upperBounds = this.getCurrentUpperBounds();
+                final UnresolvedTypeInfo<? extends TypeInfo> upperBounds = this
+                        .getCurrentUpperBounds();
                 this.currentUpperBounds = null;
                 if (null != upperBounds) {
                     this.registBuiltData(upperBounds);
@@ -180,37 +182,36 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
             final String[] identifier = this.identifierBuilder.popLastBuiltData();
 
             assert (0 != identifier.length) : "Illegal state: identifier was not built.";
-            
+
             UnresolvedTypeParameterInfo typeParameter = null;
-            
+
             //この名前で型パラメータを探してみる
-            if (identifier.length == 1){
+            if (identifier.length == 1) {
                 typeParameter = this.buildDataManager.getTypeParameter(identifier[0]);
             }
-            
-            if (null != typeParameter){
+
+            if (null != typeParameter) {
                 //見つかったので型パラメータ
                 resultType = typeParameter;
-                
+
                 //TODO 型パラメータに型引数が付く言語があったらそれを登録する仕組みを作る必要があるかも
-                
+
             } else {
                 //見つからなかったので参照型
                 //参照型を作成
                 final UnresolvedClassTypeInfo referenceType = new UnresolvedClassTypeInfo(
                         this.buildDataManager.getAllAvaliableNames(), identifier);
-    
+
                 //使える型引数があれば登録してしまう．
                 if (null != this.availableTypeArugments) {
                     for (final UnresolvedTypeInfo<? extends TypeInfo> type : this.availableTypeArugments) {
-                    	
-                    	// C#などは参照型以外も型引数に指定可能なので対処するひつようがあるかも
-                    	if (type instanceof UnresolvedReferenceTypeInfo) {
-                        referenceType
-                                .addTypeArgument((UnresolvedReferenceTypeInfo<?>) type);
-                    	}
+
+                        // C#などは参照型以外も型引数に指定可能なので対処するひつようがあるかも
+                        if (type instanceof UnresolvedReferenceTypeInfo) {
+                            referenceType.addTypeArgument((UnresolvedReferenceTypeInfo<?>) type);
+                        }
                     }
-    
+
                     this.availableTypeArugments = null;
                 }
                 resultType = referenceType;
@@ -267,16 +268,14 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
             }*/
         }
     }
-    
+
     @Override
     public void clearBuiltData() {
         super.clearBuiltData();
-        
+
         this.typeArgumentsLists.clear();
         this.availableTypeArugments = null;
     }
-    
-    
 
     /**
      * 配列記述子の数をカウントする

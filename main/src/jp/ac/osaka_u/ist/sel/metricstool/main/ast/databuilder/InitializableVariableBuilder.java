@@ -22,11 +22,24 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedV
 public abstract class InitializableVariableBuilder<TVar extends UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>>, TUnit extends UnresolvedUnitInfo<? extends UnitInfo>>
         extends VariableBuilder<TVar, TUnit> {
 
-    public InitializableVariableBuilder(BuildDataManager buildDataManager,
+    public InitializableVariableBuilder(final BuildDataManager buildDataManager,
             final ExpressionElementManager expressionManager,
-            VariableDefinitionStateManager variableStateManager, ModifiersBuilder modifiersBuilder,
-            TypeBuilder typeBuilder, NameBuilder nameBuilder) {
+            final VariableDefinitionStateManager variableStateManager,
+            final ModifiersBuilder modifiersBuilder, final TypeBuilder typeBuilder,
+            final NameBuilder nameBuilder) {
         super(buildDataManager, variableStateManager, modifiersBuilder, typeBuilder, nameBuilder);
+
+        if (null == expressionManager) {
+            throw new IllegalArgumentException("expressionManager is null");
+        }
+
+        this.expressionManager = expressionManager;
+    }
+
+    public InitializableVariableBuilder(final BuildDataManager buildDataManager,
+            final ExpressionElementManager expressionManager,
+            final VariableDefinitionStateManager variableStateManager) {
+        super(buildDataManager, variableStateManager);
 
         if (null == expressionManager) {
             throw new IllegalArgumentException("expressionManager is null");

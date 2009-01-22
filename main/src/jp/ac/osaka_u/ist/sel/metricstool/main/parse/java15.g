@@ -217,7 +217,7 @@ tokens {
 	STATIC_IMPORT; ENUM_DEF; ENUM_CONSTANT_DEF; FOR_EACH_CLAUSE; ANNOTATION_DEF; ANNOTATIONS;
 	ANNOTATION; ANNOTATION_MEMBER_VALUE_PAIR; ANNOTATION_FIELD_DEF; ANNOTATION_ARRAY_INIT;
 	TYPE_ARGUMENTS; TYPE_ARGUMENT; TYPE_PARAMETERS; TYPE_PARAMETER; WILDCARD_TYPE;
-	TYPE_UPPER_BOUNDS; TYPE_LOWER_BOUNDS; COND_CLAUSE;
+	TYPE_UPPER_BOUNDS; TYPE_LOWER_BOUNDS; COND_CLAUSE; LOCAL_VARIABLE_DEF_STATE;
 }
 
 {
@@ -1221,7 +1221,9 @@ statement
 	// statements. Must backtrack to be sure. Could use a semantic
 	// predicate to test symbol table to see what the type was coming
 	// up, but that's pretty hard without a symbol table ;)
-	|	(declaration[false])=> declaration[false] SEMI!
+	|	(declaration[false])=> dec:declaration[false] SEMI!
+		{#statement = #(#[LOCAL_VARIABLE_DEF_STATE, "LOCAL_VARIABLE_DEF_STATE"], dec);}
+	
 
 	// An expression statement. This could be a method call,
 	// assignment statement, or any other expression evaluated for

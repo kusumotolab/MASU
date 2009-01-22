@@ -32,6 +32,14 @@ public class LocalVariableBuilder
             TypeBuilder typeBuilder, NameBuilder nameBuilder, ModifiersInterpriter interpriter) {
         super(buildDataManager, expressionManager, new LocalVariableStateManager(),
                 modifiersBuilder, typeBuilder, nameBuilder);
+        this.interpriter = interpriter;
+        this.declarationUsageTriggerStack = new Stack<AstVisitEvent>();
+        this.declarationUsageStack = new Stack<UnresolvedLocalVariableUsageInfo>();
+    }
+    
+    public LocalVariableBuilder(final BuildDataManager buildDataManager,
+            final ExpressionElementManager expressionManager, final ModifiersInterpriter interpriter) {
+        super(buildDataManager, expressionManager, new LocalVariableStateManager());
 
         this.interpriter = interpriter;
         this.declarationUsageTriggerStack = new Stack<AstVisitEvent>();

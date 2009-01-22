@@ -6,6 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
@@ -81,6 +82,10 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
         this.resolvedInfo = new CatchBlockInfo(usingClass, outerSpace, fromLine, fromColumn,
                 toLine, toColumn, ownerTryBlock);
 
+        final LocalVariableInfo caughtException = this.caughtException.resolve(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        this.resolvedInfo.setCaughtException(caughtException);
+        
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
@@ -97,5 +102,15 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
         return this.ownerTryBlock;
     }
 
+    public void setCaughtException(UnresolvedLocalVariableInfo caughtException) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == caughtException) {
+            throw new IllegalArgumentException("caughtException is null");
+        }
+        this.caughtException = caughtException;
+    }
+
     private final UnresolvedTryBlockInfo ownerTryBlock;
+
+    private UnresolvedLocalVariableInfo caughtException;
 }
