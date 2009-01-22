@@ -171,7 +171,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         //this.builders.add(new SimpleBlockBuilder(this.buildDataManager));
         this.builders.add(new SwitchBlockBuilder(this.buildDataManager, this.expressionManager,
                 variableBuilder));
-        this.builders.add(new SynchronizedBlockBuilder(this.buildDataManager));
+        this.builders.add(new SynchronizedBlockBuilder(this.buildDataManager, this.expressionManager));
         this.builders.add(new TryBlockBuilder(this.buildDataManager));
         this.builders.add(new WhileBlockBuilder(this.buildDataManager, this.expressionManager,
                 variableBuilder));

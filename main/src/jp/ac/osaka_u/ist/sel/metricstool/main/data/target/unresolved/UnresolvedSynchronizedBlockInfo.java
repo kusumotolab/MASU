@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -63,9 +64,11 @@ public final class UnresolvedSynchronizedBlockInfo extends
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
+        final ExpressionInfo synchronizedExpression = this.synchronizedExpression.resolve(
+                usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        this.resolvedInfo = new SynchronizedBlockInfo(usingClass, outerSpace, fromLine, fromColumn,
-                toLine, toColumn);
+        this.resolvedInfo = new SynchronizedBlockInfo(usingClass, outerSpace,
+                synchronizedExpression, fromLine, fromColumn, toLine, toColumn);
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
@@ -73,4 +76,15 @@ public final class UnresolvedSynchronizedBlockInfo extends
 
         return this.resolvedInfo;
     }
+
+    public void setSynchronizedExpression(
+            UnresolvedExpressionInfo<? extends ExpressionInfo> synchronizedExpression) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == synchronizedExpression) {
+            throw new IllegalArgumentException("synchronizedExpression is null");
+        }
+        this.synchronizedExpression = synchronizedExpression;
+    }
+
+    private UnresolvedExpressionInfo<? extends ExpressionInfo> synchronizedExpression;
 }

@@ -24,8 +24,16 @@ public final class SynchronizedBlockInfo extends BlockInfo {
      * @param toColumn èIóπóÒ
      */
     public SynchronizedBlockInfo(final TargetClassInfo ownerClass, final LocalSpaceInfo outerSpace,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final ExpressionInfo synchronizedExpression, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
         super(ownerClass, outerSpace, fromLine, fromColumn, toLine, toColumn);
+
+        if (null == synchronizedExpression) {
+            throw new IllegalArgumentException();
+        }
+        
+        this.synchronizedExpression = synchronizedExpression;
+        this.synchronizedExpression.setOwnerExecutableElement(this);
     }
 
     /**
@@ -55,4 +63,10 @@ public final class SynchronizedBlockInfo extends BlockInfo {
 
         return sb.toString();
     }
+
+    public final ExpressionInfo getSynchronizedExpression() {
+        return synchronizedExpression;
+    }
+
+    private final ExpressionInfo synchronizedExpression;
 }
