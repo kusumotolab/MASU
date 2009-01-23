@@ -86,6 +86,11 @@ public class AstTokenAdapter implements AstToken {
     public boolean isExpressionStatement() {
         return false;
     }
+    
+    @Override
+    public boolean isAssertStatement() {
+        return false;
+    }
 
     public boolean isLabeledStatement() {
         return false;

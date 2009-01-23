@@ -82,7 +82,7 @@ public class SyntaxToken extends AstTokenAdapter {
         public boolean isJump() {
             return true;
         }
-        
+
         @Override
         public boolean isStatement() {
             return true;
@@ -94,7 +94,7 @@ public class SyntaxToken extends AstTokenAdapter {
         public boolean isJump() {
             return true;
         }
-        
+
         @Override
         public boolean isStatement() {
             return true;
@@ -109,7 +109,7 @@ public class SyntaxToken extends AstTokenAdapter {
         public boolean isReturn() {
             return true;
         }
-        
+
         @Override
         public boolean isStatement() {
             return true;
@@ -124,11 +124,28 @@ public class SyntaxToken extends AstTokenAdapter {
         public boolean isThrow() {
             return true;
         }
+
+        @Override
+        public boolean isStatement() {
+            return true;
+        }
+    };
+
+    /**
+     * assert文を表す定数インスタンス
+     */
+    public static final SyntaxToken ASSERT = new SyntaxToken("ASSERT") {
+
+        @Override
+        public boolean isAssertStatement() {
+            return true;
+        }
         
         @Override
         public boolean isStatement() {
             return true;
         }
+
     };
 
     /**

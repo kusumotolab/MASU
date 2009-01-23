@@ -108,6 +108,12 @@ public interface AstToken {
     public boolean isExpressionStatement();
     
     /**
+     * トークンがasset文を表すかどうか返す．
+     * @return assert文を表すトークンならtrue
+     */
+    public boolean isAssertStatement();
+    
+    /**
      * トークンがラベル付き文を表すどうかを返す.
      * @return ラベル付き文を表すトークンならtrue
      */

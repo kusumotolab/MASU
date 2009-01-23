@@ -22,6 +22,8 @@ public class AssertStatementBuilder extends StateDrivenDataBuilder<UnresolvedAss
         this.buildDaraManager = buildDataManager;
 
         this.stateManager = new AssertStatementStateManager();
+        
+        this.addStateManager(this.stateManager);
     }
 
     protected UnresolvedAssertStatementInfo buildStatement(

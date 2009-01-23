@@ -57,7 +57,7 @@ public abstract class SingleStatementStateManager extends
     }
     
     protected boolean isInStatement() {
-        return STATE.OUT == this.getState();
+        return STATE.IN == this.getState();
     }
 
     public abstract StateChangeEventType getStatementEnterEventType();

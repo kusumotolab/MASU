@@ -26,6 +26,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.Instanc
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.MethodCallBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.OperatorExpressionBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.SingleIdentifierBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.AssertStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.BreakStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.ContinueStatementBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.ExpressionStatementBuilder;
@@ -150,6 +151,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new BreakStatementBuilder(this.expressionManager, this.buildDataManager));
         this.builders.add(new ContinueStatementBuilder(this.expressionManager,
                 this.buildDataManager));
+        this.builders.add(new AssertStatementBuilder(this.expressionManager, this.buildDataManager));
 
         this.addInnerBlockBuilder(localVariableDeclarationBuilder);
 

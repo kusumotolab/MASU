@@ -64,8 +64,9 @@ public class UnresolvedAssertStatementInfo extends
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         final UnresolvedExpressionInfo<?> unresolvedMessageExpression = this.getMessageExpression();
-        final ExpressionInfo messageExpression = unresolvedMessageExpression.resolve(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final ExpressionInfo messageExpression = null == unresolvedMessageExpression ? null
+                : unresolvedMessageExpression.resolve(usingClass, usingMethod, classInfoManager,
+                        fieldInfoManager, methodInfoManager);
 
         this.resolvedInfo = new AssertStatementInfo(ownerSpace, assertedExpression,
                 messageExpression, fromLine, fromColumn, toLine, toColumn);
