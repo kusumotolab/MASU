@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -47,7 +50,7 @@ public final class CatchBlockInfo extends BlockInfo {
     public final TryBlockInfo getOwnerTryBlock() {
         return this.ownerTryBlock;
     }
-    
+
     /**
      * catchする例外を表す変数の情報を返す
      * @return catchする例外を表す変数の情報
@@ -55,18 +58,27 @@ public final class CatchBlockInfo extends BlockInfo {
     public final LocalVariableInfo getCaughtException() {
         return caughtException;
     }
-    
+
     public void setCaughtException(LocalVariableInfo caughtException) {
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == caughtException) {
             throw new NullPointerException();
         }
-        
-        if(null != this.caughtException) {
+
+        if (null != this.caughtException) {
             throw new IllegalStateException();
         }
 
         this.caughtException = caughtException;
+    }
+
+    @Override
+    public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        final Set<VariableInfo<? extends UnitInfo>> definedVariables = new HashSet<VariableInfo<? extends UnitInfo>>(
+                super.getDefinedVariables());
+        definedVariables.add(this.caughtException);
+        return Collections.unmodifiableSet(definedVariables);
+
     }
 
     /**
