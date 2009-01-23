@@ -1390,7 +1390,6 @@ public class MetricsTool {
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
      * @param methodInfoManager 用いるメソッドマネージャ
-     * @param resolvedCache 解決済み呼び出し情報のキャッシュ
      */
     private void addReferenceAssignmentCallRelation(final UnresolvedClassInfo unresolvedClassInfo,
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
@@ -1430,7 +1429,6 @@ public class MetricsTool {
      * @param classInfoManager 用いるクラスマネージャ
      * @param fieldInfoManager 用いるフィールドマネージャ
      * @param methodInfoManager 用いるメソッドマネージャ
-     * @param resolvedCache 解決済み呼び出し情報のキャッシュ
      */
     private void addReferenceAssignmentCallRelation(
             final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace,
@@ -1503,5 +1501,6 @@ public class MetricsTool {
                         classInfoManager, fieldInfoManager, methodInfoManager);
             }
         }
+        
     }
 }
