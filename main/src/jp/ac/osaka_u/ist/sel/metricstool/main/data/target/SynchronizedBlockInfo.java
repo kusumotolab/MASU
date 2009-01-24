@@ -31,7 +31,7 @@ public final class SynchronizedBlockInfo extends BlockInfo {
         if (null == synchronizedExpression) {
             throw new IllegalArgumentException();
         }
-        
+
         this.synchronizedExpression = synchronizedExpression;
         this.synchronizedExpression.setOwnerExecutableElement(this);
     }
@@ -48,7 +48,8 @@ public final class SynchronizedBlockInfo extends BlockInfo {
 
         sb.append("synchronized (");
 
-        sb.append("UNDER IMPLEMENTATION");
+        final ExpressionInfo expression = this.getSynchronizedExpression();
+        sb.append(expression.getText());
 
         sb.append(") {");
         sb.append(System.getProperty("line.separator"));
