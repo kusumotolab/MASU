@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main;
 
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,6 +37,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
@@ -46,6 +49,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFile;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
@@ -424,7 +428,7 @@ public class MetricsTool {
         // 対象ファイルを解析
 
         AstVisitorManager<AST> visitorManager = null;
-        
+
         switch (Settings.getInstance().getLanguage()) {
         case JAVA15:
             visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
@@ -471,10 +475,12 @@ public class MetricsTool {
                         fileInformationBuffer.append("]");
                         out.println(fileInformationBuffer.toString());
                     }
+                    
+                    final BufferedInputStream stream = new BufferedInputStream(new FileInputStream(name));
 
                     switch (Settings.getInstance().getLanguage()) {
                     case JAVA15:
-                        final Java15Lexer java15lexer = new Java15Lexer(new FileInputStream(name));
+                        final Java15Lexer java15lexer = new Java15Lexer(stream);
                         java15lexer.setTabSize(1);
                         final Java15Parser java15parser = new Java15Parser(java15lexer);
 
@@ -495,7 +501,7 @@ public class MetricsTool {
                         break;
 
                     case JAVA14:
-                        final Java14Lexer java14lexer = new Java14Lexer(new FileInputStream(name));
+                        final Java14Lexer java14lexer = new Java14Lexer(stream);
                         java14lexer.setTabSize(1);
                         final Java14Parser java14parser = new Java14Parser(java14lexer);
 
@@ -514,7 +520,7 @@ public class MetricsTool {
                         fileInfo.setLOC(java14lexer.getLine());
                         break;
                     case CSHARP:
-                        final CSharpLexer csharpLexer = new CSharpLexer(new FileInputStream(name));
+                        final CSharpLexer csharpLexer = new CSharpLexer(stream);
                         csharpLexer.setTabSize(1);
                         final CSharpParser csharpParser = new CSharpParser(csharpLexer);
 
@@ -1394,6 +1400,18 @@ public class MetricsTool {
     private void addReferenceAssignmentCallRelation(final UnresolvedClassInfo unresolvedClassInfo,
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
             final MethodInfoManager methodInfoManager) {
+        
+        final TargetClassInfo classInfo = unresolvedClassInfo.getResolved();
+        // 未解決フィールド情報に対して
+        for (final UnresolvedFieldInfo unresolvedFieldInfo : unresolvedClassInfo.getDefinedFields()) {
+            final TargetFieldInfo fieldInfo = unresolvedFieldInfo.getResolved();
+            /*if (null != unresolvedFieldInfo.getInitilizer()) {
+                final ExpressionInfo initilizer = unresolvedFieldInfo.getInitilizer().resolve(
+                        classInfo, null, classInfoManager, fieldInfoManager,
+                        methodInfoManager);
+                fieldInfo.setInitilzer(initilizer);
+            }*/
+        }
 
         // 各未解決メソッド情報に対して
         for (final UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo
@@ -1501,6 +1519,6 @@ public class MetricsTool {
                         classInfoManager, fieldInfoManager, methodInfoManager);
             }
         }
-        
+
     }
 }
