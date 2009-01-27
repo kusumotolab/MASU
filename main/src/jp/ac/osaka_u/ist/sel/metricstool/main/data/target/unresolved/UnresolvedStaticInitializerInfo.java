@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -48,19 +47,12 @@ public class UnresolvedStaticInitializerInfo extends
             return this.getResolved();
         }
 
-        // 使用位置を取得
-        final int fromLine = this.getFromLine();
-        final int fromColumn = this.getFromColumn();
-        final int toLine = this.getToLine();
-        final int toColumn = this.getToColumn();
-
         // 所有クラスを取得
         final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
-        final ClassInfo ownerClass = unresolvedOwnerClass.resolve(usingClass, usingMethod,
+        final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
-        this.resolvedInfo = new StaticInitializerInfo(ownerClass, fromLine, fromColumn, toLine,
-                toColumn);
+        this.resolvedInfo = ownerClass.getStaticInitializer();
         return this.resolvedInfo;
     }
 
