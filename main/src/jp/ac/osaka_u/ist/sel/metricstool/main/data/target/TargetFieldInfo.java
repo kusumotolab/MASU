@@ -39,7 +39,7 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
 
         super(modifiers, name, type, definitionClass, fromLine, fromColumn, toLine, toColumn);
 
-        this.initilzer = null;
+        this.initializer = null;
         
         this.privateVisible = privateVisible;
         this.namespaceVisible = namespaceVisible;
@@ -49,13 +49,13 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
         this.instance = instance;
     }
     
-    public final void setInitilzer(final ExpressionInfo initilzer) {
+    public final void setInitializer(final ExpressionInfo initilzer) {
         MetricsToolSecurityManager.getInstance().checkAccess();
-        this.initilzer = initilzer;
+        this.initializer = initilzer;
     }
     
-    public final ExpressionInfo getInitilzer() {
-        return initilzer;
+    public final ExpressionInfo getInitializer() {
+        return initializer;
     }
     
     /**
@@ -112,7 +112,7 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
         return !this.instance;
     }
     
-    private ExpressionInfo initilzer;
+    private ExpressionInfo initializer;
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数
