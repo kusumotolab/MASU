@@ -37,6 +37,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
@@ -128,7 +129,7 @@ public class MetricsTool {
     public static void main(String[] args) {
 
         initSecurityManager();
-        
+
         // 情報表示用のリスナを作成
         final MessageListener outListener = new MessageListener() {
             public void messageReceived(MessageEvent event) {
@@ -417,7 +418,7 @@ public class MetricsTool {
      * 引数無しコンストラクタ． セキュリティマネージャの初期化を行う．
      */
     public MetricsTool() {
-        
+
     }
 
     /**
@@ -458,7 +459,7 @@ public class MetricsTool {
             final StringBuffer fileInformationBuffer = new StringBuffer();
 
             for (final TargetFile targetFile : DataManager.getInstance().getTargetFileManager()) {
-                
+
                 BufferedInputStream stream = null;
                 try {
                     final String name = targetFile.getName();
@@ -477,7 +478,7 @@ public class MetricsTool {
                         fileInformationBuffer.append("]");
                         out.println(fileInformationBuffer.toString());
                     }
-                    
+
                     stream = new BufferedInputStream(new FileInputStream(name));
 
                     switch (Settings.getInstance().getLanguage()) {
@@ -557,14 +558,13 @@ public class MetricsTool {
                 } catch (ASTParseException e) {
                     err.println(e.getMessage());
                 } finally {
-                    if(null != stream) {
+                    if (null != stream) {
                         try {
                             stream.close();
                         } catch (IOException e) {
                             err.print(e.getMessage());
                         }
                     }
-                    
                 }
             }
         }
@@ -1411,17 +1411,18 @@ public class MetricsTool {
     private void addReferenceAssignmentCallRelation(final UnresolvedClassInfo unresolvedClassInfo,
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
             final MethodInfoManager methodInfoManager) {
-        
+
         final TargetClassInfo classInfo = unresolvedClassInfo.getResolved();
         // 未解決フィールド情報に対して
         for (final UnresolvedFieldInfo unresolvedFieldInfo : unresolvedClassInfo.getDefinedFields()) {
             final TargetFieldInfo fieldInfo = unresolvedFieldInfo.getResolved();
-            /*if (null != unresolvedFieldInfo.getInitilizer()) {
-                final ExpressionInfo initilizer = unresolvedFieldInfo.getInitilizer().resolve(
-                        classInfo, null, classInfoManager, fieldInfoManager,
-                        methodInfoManager);
-                fieldInfo.setInitilzer(initilizer);
-            }*/
+            if (null != unresolvedFieldInfo.getInitilizer()) {
+                final CallableUnitInfo initializerUnit = fieldInfo.isInstanceMember() ? classInfo
+                        .getInstanceInitializer() : classInfo.getStaticInitializer();
+                final ExpressionInfo initializerExpression = unresolvedFieldInfo.getInitilizer().resolve(
+                        classInfo, initializerUnit, classInfoManager, fieldInfoManager, methodInfoManager);
+                fieldInfo.setInitilzer(initializerExpression);
+            }
         }
 
         // 各未解決メソッド情報に対して
