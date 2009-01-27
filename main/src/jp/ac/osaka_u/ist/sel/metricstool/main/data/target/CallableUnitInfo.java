@@ -448,7 +448,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == caller) {
-            throw new NullPointerException();
+            return;
         }
 
         this.callers.add(caller);

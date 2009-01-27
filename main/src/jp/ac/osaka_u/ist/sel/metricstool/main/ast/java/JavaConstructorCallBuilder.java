@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayConstructorCallInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayInitilizerInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
@@ -110,7 +110,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
         private final List<ExpressionElement> arguments;
 
-        private UnresolvedArrayInitilizerInfo arrayInitilizer;
+        private UnresolvedArrayInitializerInfo arrayInitilizer;
 
         private final List<JavaArrayInstantiationElement> arrayInstaiationElements;
 
@@ -133,8 +133,8 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
                     this.typeElement = (TypeElement) element;
                 } else if (element instanceof JavaArrayInstantiationElement) {
                     this.arrayInstaiationElements.add((JavaArrayInstantiationElement) element);
-                } else if (element.getUsage() instanceof UnresolvedArrayInitilizerInfo) {
-                    this.arrayInitilizer = (UnresolvedArrayInitilizerInfo) element.getUsage();
+                } else if (element.getUsage() instanceof UnresolvedArrayInitializerInfo) {
+                    this.arrayInitilizer = (UnresolvedArrayInitializerInfo) element.getUsage();
                 } else {
                     this.arguments.add(element);
                 }
@@ -142,7 +142,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
         }
 
-        UnresolvedArrayInitilizerInfo getArrayInitilizer() {
+        UnresolvedArrayInitializerInfo getArrayInitilizer() {
             return arrayInitilizer;
         }
 

@@ -3,6 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * 対象クラスに定義されているフィールドの情報を現すクラス．
@@ -37,12 +39,23 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
 
         super(modifiers, name, type, definitionClass, fromLine, fromColumn, toLine, toColumn);
 
+        this.initilzer = null;
+        
         this.privateVisible = privateVisible;
         this.namespaceVisible = namespaceVisible;
         this.inheritanceVisible = inheritanceVisible;
         this.publicVisible = publicVisible;
 
         this.instance = instance;
+    }
+    
+    public final void setInitilzer(final ExpressionInfo initilzer) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.initilzer = initilzer;
+    }
+    
+    public final ExpressionInfo getInitilzer() {
+        return initilzer;
     }
     
     /**
@@ -98,6 +111,8 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
     public boolean isStaticMember() {
         return !this.instance;
     }
+    
+    private ExpressionInfo initilzer;
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数

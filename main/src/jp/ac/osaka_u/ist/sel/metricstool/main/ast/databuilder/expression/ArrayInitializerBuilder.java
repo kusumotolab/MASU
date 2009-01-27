@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayInitilizerInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 
 
@@ -26,7 +26,7 @@ public class ArrayInitializerBuilder extends ExpressionBuilder {
             throw new IllegalArgumentException("expressionManager is null");
         }
 
-        this.buildingInitilizerStack = new Stack<UnresolvedArrayInitilizerInfo>();
+        this.buildingInitilizerStack = new Stack<UnresolvedArrayInitializerInfo>();
 
         this.stateManager = new ArrayInitializerStateManager();
         this.addStateManager(this.stateManager);
@@ -52,12 +52,12 @@ public class ArrayInitializerBuilder extends ExpressionBuilder {
         final StateChangeEventType type = event.getType();
         if (type.equals(ARRAY_INITILIZER_STATE.ENTER_ARRAY_INIT)) {
 
-            final UnresolvedArrayInitilizerInfo initializer = new UnresolvedArrayInitilizerInfo();
+            final UnresolvedArrayInitializerInfo initializer = new UnresolvedArrayInitializerInfo();
             this.buildingInitilizerStack.push(initializer);
 
         } else if (type.equals(ARRAY_INITILIZER_STATE.EXIT_ARRAY_INIT)) {
 
-            final UnresolvedArrayInitilizerInfo builtInitilizer = this.buildingInitilizerStack
+            final UnresolvedArrayInitializerInfo builtInitilizer = this.buildingInitilizerStack
                     .pop();
             this.pushElement(new UsageElement(builtInitilizer));
 
@@ -72,7 +72,7 @@ public class ArrayInitializerBuilder extends ExpressionBuilder {
         }
     }
 
-    private final UnresolvedArrayInitilizerInfo getBuildingInitilizer() {
+    private final UnresolvedArrayInitializerInfo getBuildingInitilizer() {
         return this.buildingInitilizerStack.peek();
     }
 
@@ -83,7 +83,7 @@ public class ArrayInitializerBuilder extends ExpressionBuilder {
         this.buildingInitilizerStack.clear();
     }
     
-    private final Stack<UnresolvedArrayInitilizerInfo> buildingInitilizerStack;
+    private final Stack<UnresolvedArrayInitializerInfo> buildingInitilizerStack;
 
     private final ArrayInitializerStateManager stateManager;
 }

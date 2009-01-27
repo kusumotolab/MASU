@@ -93,7 +93,7 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == referencer) {
-            throw new NullPointerException();
+            return;
         }
 
         this.referencers.add(referencer);
