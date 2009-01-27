@@ -40,7 +40,8 @@ public final class SwitchBlockInfo extends ConditionalBlockInfo {
 
         sb.append("switch (");
 
-        sb.append("UNDER IMPLLEMENTATION");
+        final ConditionInfo conditionInfo = this.getConditionalClause().getCondition();
+        sb.append(conditionInfo.getText());
 
         sb.append(") {");
         sb.append(System.getProperty("line.separator"));
