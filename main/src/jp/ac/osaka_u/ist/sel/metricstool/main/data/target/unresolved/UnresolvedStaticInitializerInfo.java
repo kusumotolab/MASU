@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake, higo
  */
 public class UnresolvedStaticInitializerInfo extends
-        UnresolvedLocalSpaceInfo<StaticInitializerInfo> {
+        UnresolvedCallableUnitInfo<StaticInitializerInfo> {
 
     /**
      * 所有クラスを与えて，オブジェクトを初期化
@@ -25,13 +25,7 @@ public class UnresolvedStaticInitializerInfo extends
      * @param ownerClass 所有クラス
      */
     public UnresolvedStaticInitializerInfo(final UnresolvedClassInfo ownerClass) {
-        super();
-
-        if (null == ownerClass) {
-            throw new IllegalArgumentException("ownerClass is null");
-        }
-
-        this.ownerClass = ownerClass;
+        super(ownerClass);
     }
 
     /**
@@ -70,15 +64,20 @@ public class UnresolvedStaticInitializerInfo extends
         return this.resolvedInfo;
     }
 
-    /**
-     * このスタティックイニシャライザーを定義しているクラスを返す
-     * 
-     * @return このスタティックイニシャライザーを定義しているクラス
-     */
-    public final UnresolvedClassInfo getOwnerClass() {
-        return this.ownerClass;
+    @Override
+    public boolean isStaticMember() {
+        return true;
     }
-
-    private final UnresolvedClassInfo ownerClass;
-
+    
+    @Override
+    public boolean isInstanceMember() {
+        return true;
+    }
+    
+    /**
+     * なにもしない
+     */
+    @Override
+    public void setInstanceMember(boolean instance) {
+    }
 }
