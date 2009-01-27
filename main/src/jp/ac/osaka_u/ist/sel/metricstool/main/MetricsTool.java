@@ -458,6 +458,8 @@ public class MetricsTool {
             final StringBuffer fileInformationBuffer = new StringBuffer();
 
             for (final TargetFile targetFile : DataManager.getInstance().getTargetFileManager()) {
+                
+                BufferedInputStream stream = null;
                 try {
                     final String name = targetFile.getName();
 
@@ -476,7 +478,7 @@ public class MetricsTool {
                         out.println(fileInformationBuffer.toString());
                     }
                     
-                    final BufferedInputStream stream = new BufferedInputStream(new FileInputStream(name));
+                    stream = new BufferedInputStream(new FileInputStream(name));
 
                     switch (Settings.getInstance().getLanguage()) {
                     case JAVA15:
@@ -554,6 +556,15 @@ public class MetricsTool {
                     // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
                 } catch (ASTParseException e) {
                     err.println(e.getMessage());
+                } finally {
+                    if(null != stream) {
+                        try {
+                            stream.close();
+                        } catch (IOException e) {
+                            err.print(e.getMessage());
+                        }
+                    }
+                    
                 }
             }
         }
