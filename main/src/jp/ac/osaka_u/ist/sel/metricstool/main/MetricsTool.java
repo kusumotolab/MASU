@@ -37,8 +37,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
@@ -129,6 +127,8 @@ public class MetricsTool {
      */
     public static void main(String[] args) {
 
+        initSecurityManager();
+        
         // 情報表示用のリスナを作成
         final MessageListener outListener = new MessageListener() {
             public void messageReceived(MessageEvent event) {
@@ -417,7 +417,7 @@ public class MetricsTool {
      * 引数無しコンストラクタ． セキュリティマネージャの初期化を行う．
      */
     public MetricsTool() {
-        initSecurityManager();
+        
     }
 
     /**
@@ -791,7 +791,7 @@ public class MetricsTool {
     /**
      * {@link MetricsToolSecurityManager} の初期化を行う. システムに登録できれば，システムのセキュリティマネージャにも登録する.
      */
-    private final void initSecurityManager() {
+    private static final void initSecurityManager() {
         try {
             // MetricsToolSecurityManagerのシングルトンインスタンスを構築し，初期特別権限スレッドになる
             System.setSecurityManager(MetricsToolSecurityManager.getInstance());
