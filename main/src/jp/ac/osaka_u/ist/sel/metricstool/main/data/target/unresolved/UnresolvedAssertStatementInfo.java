@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.AssertStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
@@ -64,7 +65,8 @@ public class UnresolvedAssertStatementInfo extends
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         final UnresolvedExpressionInfo<?> unresolvedMessageExpression = this.getMessageExpression();
-        final ExpressionInfo messageExpression = null == unresolvedMessageExpression ? null
+        final ExpressionInfo messageExpression = null == unresolvedMessageExpression ? new EmptyExpressionInfo(
+                usingMethod, toLine, toLine, toColumn, toColumn)
                 : unresolvedMessageExpression.resolve(usingClass, usingMethod, classInfoManager,
                         fieldInfoManager, methodInfoManager);
 
