@@ -142,6 +142,8 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedConstructors = new TreeSet<TargetConstructorInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
+        this.instanceInitializer = new InstanceInitializerInfo(this, 0, 0, 0, 0);
+        this.staticInitializer = new StaticInitializerInfo(this, 0, 0, 0, 0);
         this.accessibleClasses = new TreeSet<ClassInfo>();
 
         this.privateVisible = privateVisible;
@@ -188,6 +190,8 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         this.definedMethods = new TreeSet<TargetMethodInfo>();
         this.definedConstructors = new TreeSet<TargetConstructorInfo>();
         this.definedFields = new TreeSet<TargetFieldInfo>();
+        this.instanceInitializer = new InstanceInitializerInfo(this, 0, 0, 0, 0);
+        this.staticInitializer = new StaticInitializerInfo(this, 0, 0, 0, 0);
         this.accessibleClasses = new TreeSet<ClassInfo>();
 
         this.privateVisible = privateVisible;
@@ -327,6 +331,22 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
         return Collections.unmodifiableSortedSet(this.definedFields);
     }
 
+    /**
+     * このクラスのインスタンスイニシャライザを返す
+     * @return このクラスのインスタンスイニシャライザ
+     */
+    public InstanceInitializerInfo getInstanceInitializer() {
+        return instanceInitializer;
+    }
+    
+    /**
+     * このクラスのスタティックイニシャライザを返す
+     * @return スタティックイニシャライザ
+     */
+    public StaticInitializerInfo getStaticInitializer() {
+        return staticInitializer;
+    }
+    
     /**
      * このクラスにおいてアクセス可能なクラスのSortedSetを返す．
      * 
@@ -523,6 +543,16 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * このクラスで定義されているフィールド一覧を保存するための変数．
      */
     private final SortedSet<TargetFieldInfo> definedFields;
+
+    /**
+     * このクラスのインスタンスイニシャライザを保存するための変数
+     */
+    private final InstanceInitializerInfo instanceInitializer;
+
+    /**
+     * このクラスのスタティックイニシャライザを保存するための変数
+     */
+    private final StaticInitializerInfo staticInitializer;
 
     /**
      * このクラス内からアクセス可能なクラス

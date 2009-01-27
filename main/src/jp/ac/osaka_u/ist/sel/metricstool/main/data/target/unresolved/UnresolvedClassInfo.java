@@ -74,6 +74,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         this.definedMethods = new HashSet<UnresolvedMethodInfo>();
         this.definedConstructors = new HashSet<UnresolvedConstructorInfo>();
         this.definedFields = new HashSet<UnresolvedFieldInfo>();
+        this.staticInitializer = new UnresolvedStaticInitializerInfo(this);
+        this.instanceInitializer = new UnresolvedInstanceInitializerInfo(this);
         this.importStatements = new LinkedList<UnresolvedImportStatementInfo>();
 
         this.privateVisible = false;
@@ -439,6 +441,22 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     public List<UnresolvedImportStatementInfo> getImportStatements() {
         return Collections.unmodifiableList(this.importStatements);
     }
+    
+    /**
+     * インスタンスイニシャライザを返す
+     * @return インスランスイニシャライザ
+     */
+    public UnresolvedInstanceInitializerInfo getInstanceInitializer() {
+        return instanceInitializer;
+    }
+    
+    /**
+     * スタティックイニシャライザを返す
+     * @return スタティックイニシャライザ
+     */
+    public UnresolvedStaticInitializerInfo getStaticInitializer() {
+        return staticInitializer;
+    }
 
     /**
      * 子クラスから参照可能かどうかを設定する
@@ -749,6 +767,16 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      */
     private final Set<UnresolvedFieldInfo> definedFields;
 
+    /**
+     * スタティックイニシャライザを保存するための変数
+     */
+    private final UnresolvedStaticInitializerInfo staticInitializer;
+    
+    /**
+     * インスタンスイニシャライザを保存するための変数
+     */
+    private final UnresolvedInstanceInitializerInfo instanceInitializer;
+    
     /**
      * 利用可能な名前空間を保存するためのセット
      */
