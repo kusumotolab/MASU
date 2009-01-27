@@ -1421,7 +1421,7 @@ public class MetricsTool {
                         .getInstanceInitializer() : classInfo.getStaticInitializer();
                 final ExpressionInfo initializerExpression = unresolvedFieldInfo.getInitilizer().resolve(
                         classInfo, initializerUnit, classInfoManager, fieldInfoManager, methodInfoManager);
-                fieldInfo.setInitilzer(initializerExpression);
+                fieldInfo.setInitializer(initializerExpression);
             }
         }
 
