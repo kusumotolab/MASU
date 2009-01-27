@@ -98,7 +98,7 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
      * @return éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ª‰Šú‰»‚³‚ê‚Ä‚¢‚ê‚Îtrue
      */
     public boolean isInitialized() {
-        return null != this.initializationExpression;
+        return !(this.initializationExpression instanceof EmptyExpressionInfo);
     }
 
     @Override

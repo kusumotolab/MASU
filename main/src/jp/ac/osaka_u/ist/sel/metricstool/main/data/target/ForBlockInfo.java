@@ -89,7 +89,13 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
         final SortedSet<ConditionInfo> initializerExpressions = this.getInitializerExpressions();
         for (final ConditionInfo initializerExpression : initializerExpressions) {
             sb.append(initializerExpression.getText());
+            if (initializerExpression instanceof StatementInfo) {
+                sb.deleteCharAt(sb.length() - 1);
+            }
             sb.append(",");
+        }
+        if (0 < initializerExpressions.size()) {
+            sb.deleteCharAt(sb.length() - 1);
         }
 
         sb.append(" ; ");
@@ -103,6 +109,9 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
         for (final ExpressionInfo iteratorExpression : iteratorExpressions) {
             sb.append(iteratorExpression.getText());
             sb.append(",");
+        }
+        if (0 < initializerExpressions.size()) {
+            sb.deleteCharAt(sb.length() - 1);
         }
 
         sb.append(") {");

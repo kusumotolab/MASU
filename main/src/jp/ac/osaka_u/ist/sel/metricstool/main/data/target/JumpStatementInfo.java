@@ -17,7 +17,7 @@ public abstract class JumpStatementInfo extends SingleStatementInfo {
     public final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
         return VariableUsageInfo.EmptySet;
     }
-    
+
     /**
      * ’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
      * 
@@ -42,8 +42,9 @@ public abstract class JumpStatementInfo extends SingleStatementInfo {
     public String getText() {
         final StringBuilder text = new StringBuilder(this.getReservedKeyword());
         if (null != this.getDestinationLabel()) {
-            text.append(" ").append(this.getDestinationLabel().getText());
+            text.append(" ").append(this.getDestinationLabel().getName());
         }
+        text.append(";");
         return text.toString();
     }
 

@@ -158,6 +158,9 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
             sb.append(argument.getText());
             sb.append(",");
         }
+        if (0 < this.getArguments().size()) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
 
         sb.append(")");
 

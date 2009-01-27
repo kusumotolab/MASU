@@ -22,4 +22,14 @@ public final class DefaultEntryInfo extends CaseEntryInfo {
             final int fromColumn, final int toLine, final int toColumn) {
         super(ownerSwitchBlock, fromLine, fromColumn, toLine, toColumn);
     }
+
+    /**
+     * このdefaultエントリのテキスト表現（String型）を返す
+     * 
+     * @return このdefaultエントリのテキスト表現（String型）
+     */
+    @Override
+    public String getText() {
+        return "default:";
+    }
 }

@@ -84,6 +84,9 @@ public abstract class ConstructorCallInfo<T extends ReferenceTypeInfo> extends
             sb.append(argument.getText());
             sb.append(",");
         }
+        if (0 < this.getArguments().size()) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
 
         sb.append(")");
 

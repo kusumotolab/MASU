@@ -99,14 +99,8 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
     public String getText() {
 
         final StringBuilder sb = new StringBuilder();
-
         sb.append(this.getName());
-
         sb.append(" : ");
-
-        final StatementInfo labeledStatement = this.getLabeledStatement();
-        sb.append(labeledStatement.getText());
-
         return sb.toString();
     }
 

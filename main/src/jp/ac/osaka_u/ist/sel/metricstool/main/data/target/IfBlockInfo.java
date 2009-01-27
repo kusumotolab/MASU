@@ -29,7 +29,7 @@ public final class IfBlockInfo extends ConditionalBlockInfo {
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         super(ownerClass, outerSpace, fromLine, fromColumn, toLine, toColumn);
     }
-    
+
     /**
      * else •¶‚ð’Ç‰Á‚·‚é
      * 
@@ -72,13 +72,14 @@ public final class IfBlockInfo extends ConditionalBlockInfo {
 
         final StringBuilder sb = new StringBuilder();
 
-        sb.append("if (");
+        sb.append("if (");       
 
         final ConditionalClauseInfo conditionalClause = this.getConditionalClause();
         sb.append(conditionalClause.getText());
 
         sb.append(") {");
-
+        sb.append(System.getProperty("line.separator"));
+        
         final SortedSet<StatementInfo> statements = this.getStatements();
         for (final StatementInfo statement : statements) {
             sb.append(statement.getText());
