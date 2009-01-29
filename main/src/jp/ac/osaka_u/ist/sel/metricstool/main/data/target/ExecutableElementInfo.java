@@ -21,18 +21,24 @@ public interface ExecutableElementInfo extends Position, Comparable<ExecutableEl
      */
     Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages();
 
-
     /**
      * 定義されている変数のSetを返す
      * 
      * @return 文の中で定義されている変数のSet
      */
     Set<VariableInfo<? extends UnitInfo>> getDefinedVariables();
-    
+
     /**
      * メソッド呼び出しを返す
      * 
      * @return メソッド呼び出し
      */
     Set<CallInfo<?>> getCalls();
+
+    /**
+     * オーナーメソッドを返す
+     * 
+     * @return オーナーメソッド
+     */
+    CallableUnitInfo getOwnerMethod();
 }

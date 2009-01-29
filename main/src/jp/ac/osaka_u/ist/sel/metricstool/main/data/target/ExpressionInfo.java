@@ -174,6 +174,7 @@ public abstract class ExpressionInfo implements ConditionInfo {
      * 
      * @return オーナーメソッド
      */
+    @Override
     public final CallableUnitInfo getOwnerMethod() {
         return this.ownerMethod;
     }

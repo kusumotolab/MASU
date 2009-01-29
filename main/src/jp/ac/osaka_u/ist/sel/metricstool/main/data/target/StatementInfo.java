@@ -19,11 +19,4 @@ public interface StatementInfo extends ExecutableElementInfo {
      * @return 文を直接所有する空間
      */
     public LocalSpaceInfo getOwnerSpace();
-
-    /**
-     * 文を所有するメソッドまたはコンストラクタを返す
-     * 
-     * @return 文を所有するメソッドまたはコンストラクタ
-     */
-    public CallableUnitInfo getOwnerMethod();
 }
