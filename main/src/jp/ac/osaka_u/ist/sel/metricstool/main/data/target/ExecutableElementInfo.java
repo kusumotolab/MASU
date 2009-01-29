@@ -41,4 +41,18 @@ public interface ExecutableElementInfo extends Position, Comparable<ExecutableEl
      * @return オーナーメソッド
      */
     CallableUnitInfo getOwnerMethod();
+
+    /**
+     * 直接所有する空間を返す
+     * 
+     * @return 直接所有する空間
+     */
+    LocalSpaceInfo getOwnerSpace();
+
+    /**
+     * テキスト表現(String型)を返す
+     * 
+     * @return　テキスト表現(String型)を返す
+     */
+    String getText();
 }

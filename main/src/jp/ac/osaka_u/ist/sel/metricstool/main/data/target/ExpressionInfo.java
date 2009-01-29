@@ -35,8 +35,6 @@ public abstract class ExpressionInfo implements ConditionInfo {
         this.toColumn = toColumn;
     }
 
-    abstract public String getText();
-
     /**
      * ®“à‚Å’è‹`‚³‚ê‚½•Ï”‚ÌSet‚ğ•Ô‚·
      * 
@@ -177,6 +175,16 @@ public abstract class ExpressionInfo implements ConditionInfo {
     @Override
     public final CallableUnitInfo getOwnerMethod() {
         return this.ownerMethod;
+    }
+
+    /**
+     * •¶‚ğ’¼ÚŠ—L‚·‚é‹óŠÔ‚ğ•Ô‚·
+     * 
+     * @return •¶‚ğ’¼ÚŠ—L‚·‚é‹óŠÔ
+     */
+    @Override
+    public final LocalSpaceInfo getOwnerSpace() {
+        return this.getOwnerStatement().getOwnerSpace();
     }
 
     private ExecutableElementInfo ownerExecutableElement;
