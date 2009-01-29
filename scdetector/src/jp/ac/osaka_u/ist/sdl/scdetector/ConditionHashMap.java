@@ -3,10 +3,13 @@ package jp.ac.osaka_u.ist.sdl.scdetector;
 
 import java.util.HashMap;
 import java.util.Set;
+import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 
@@ -22,6 +25,21 @@ public class ConditionHashMap extends HashMap<ConditionInfo, ConditionalBlockInf
                     .getConditionalClause();
             final ConditionInfo condition = conditionalClauseInfo.getCondition();
             INSTANCE.put(condition, (ConditionalBlockInfo) localSpace);
+
+            //forBlockInfo‚Å‚ ‚ê‚ÎC‰Šú‰»Ž®CŒJ‚è•Ô‚µŽ®‚à’Ç‰Á
+            if (localSpace instanceof ForBlockInfo) {
+                final SortedSet<ConditionInfo> initializerExpressions = ((ForBlockInfo) localSpace)
+                        .getInitializerExpressions();
+                for (final ConditionInfo initializerExpression : initializerExpressions) {
+                    INSTANCE.put(initializerExpression, (ConditionalBlockInfo) localSpace);
+                }
+
+                final SortedSet<ExpressionInfo> iteratorExpressions = ((ForBlockInfo) localSpace)
+                        .getIteratorExpressions();
+                for (final ConditionInfo iteratorExpression : iteratorExpressions) {
+                    INSTANCE.put(iteratorExpression, (ConditionalBlockInfo) localSpace);
+                }
+            }
         }
 
         final Set<StatementInfo> innerStatements = localSpace.getStatements();

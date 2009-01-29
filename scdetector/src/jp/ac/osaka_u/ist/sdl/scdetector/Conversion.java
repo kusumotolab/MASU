@@ -6,7 +6,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeReferenceInfo
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.AssertStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BinominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CastUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
@@ -227,14 +226,15 @@ public class Conversion {
 
         } else if (expression instanceof MethodCallInfo) {
 
-            final MethodInfo method = ((MethodCallInfo) expression).getCallee();
+            final MethodCallInfo methodCall = (MethodCallInfo) expression;
+            final MethodInfo method = methodCall.getCallee();
 
             switch (Configuration.INSTANCE.getPI()) {
 
             case 0: // 正規化レベル0，メソッド名はそのまま，引数情報も用いる
                 sb.append(method.getMethodName());
                 sb.append("(");
-                for (final ExpressionInfo argument : ((CallInfo) expression).getArguments()) {
+                for (final ExpressionInfo argument : methodCall.getArguments()) {
                     final String argumentString = Conversion.getNormalizedString(argument);
                     sb.append(argumentString);
                     sb.append(",");
@@ -245,7 +245,7 @@ public class Conversion {
             case 1: // 正規化レベル1，メソッド名を返り値の型名に正規化する，引数情報も用いる
                 sb.append(method.getReturnType().getTypeName());
                 sb.append("(");
-                for (final ExpressionInfo argument : ((CallInfo) expression).getArguments()) {
+                for (final ExpressionInfo argument : methodCall.getArguments()) {
                     final String argumentString = Conversion.getNormalizedString(argument);
                     sb.append(argumentString);
                     sb.append(",");
@@ -267,7 +267,7 @@ public class Conversion {
 
         } else if (expression instanceof ConstructorCallInfo) {
 
-            final ConstructorCallInfo constructorCall = ((ConstructorCallInfo) expression);
+            final ConstructorCallInfo<?> constructorCall = ((ConstructorCallInfo<?>) expression);
 
             switch (Configuration.INSTANCE.getPI()) {
 
@@ -275,7 +275,8 @@ public class Conversion {
                 sb.append("new ");
                 sb.append(constructorCall.getType().getTypeName());
                 sb.append("(");
-                for (final ExpressionInfo argument : ((CallInfo) expression).getArguments()) {
+
+                for (final ExpressionInfo argument : constructorCall.getArguments()) {
                     final String argumentString = Conversion.getNormalizedString(argument);
                     sb.append(argumentString);
                     sb.append(",");
@@ -286,7 +287,7 @@ public class Conversion {
             case 1: // 正規化レベル1，コンストラクタ呼び出しを型に正規化する(new 演算子を取る)，引数情報は用いる
                 sb.append(constructorCall.getType().getTypeName());
                 sb.append("(");
-                for (final ExpressionInfo argument : ((CallInfo) expression).getArguments()) {
+                for (final ExpressionInfo argument : constructorCall.getArguments()) {
                     final String argumentString = Conversion.getNormalizedString(argument);
                     sb.append(argumentString);
                     sb.append(",");

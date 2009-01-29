@@ -105,6 +105,6 @@ public class SourceCodeView extends JSplitPane implements Observer {
 
         final LocalSpaceInfo ownerSpace = statement.getOwnerSpace();
         final ClassInfo ownerClass = ownerSpace.getOwnerClass();
-        return ((TargetClassInfo) ownerClass).getFileInfo();
+        return ((TargetClassInfo) ownerClass).getOwnerFile();
     }
 }

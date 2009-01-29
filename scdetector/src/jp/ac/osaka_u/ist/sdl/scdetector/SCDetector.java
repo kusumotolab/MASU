@@ -227,16 +227,9 @@ public class SCDetector extends MetricsTool {
         try {
 
             // 解析用設定
-            final Class<?> settings = Settings.class;
-            final Field language = settings.getDeclaredField("language");
-            language.setAccessible(true);
-            language.set(null, Configuration.INSTANCE.getL());
-            final Field directory = settings.getDeclaredField("targetDirectory");
-            directory.setAccessible(true);
-            directory.set(null, Configuration.INSTANCE.getD());
-            final Field verbose = settings.getDeclaredField("verbose");
-            verbose.setAccessible(true);
-            verbose.set(null, Boolean.TRUE);
+            Settings.getInstance().setLanguage(Configuration.INSTANCE.getL());
+            Settings.getInstance().setTargetDirectory(Configuration.INSTANCE.getD());
+            Settings.getInstance().setVerbose(true);
 
             // 情報表示用設定
             final Class<?> metricstool = MetricsTool.class;
@@ -275,7 +268,7 @@ public class SCDetector extends MetricsTool {
 
         // 対象ディレクトリ以下のJavaファイルを登録し，解析
         final SCDetector scdetector = new SCDetector();
-        scdetector.registerFilesFromDirectory();
+        scdetector.readTargetFiles();
         scdetector.analyzeTargetFiles();
 
         // 変数を指定することにより，その変数に対して代入を行っている文を取得するためのハッシュを構築する
