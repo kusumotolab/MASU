@@ -154,6 +154,18 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
         }
 
         this.iteratorExpressions.add(iteratorExpression);
+
+        // ï÷ãXè„ÅCiteratorExpression Ç ExpressionExpressionInfoÇ≈ïÔÇﬁ
+        {
+            final int fromLine = iteratorExpression.getFromLine();
+            final int fromColumn = iteratorExpression.getFromColumn();
+            final int toLine = iteratorExpression.getToLine();
+            final int toColumn = iteratorExpression.getToColumn();
+
+            final ExpressionStatementInfo ownerStatement = new ExpressionStatementInfo(this,
+                    iteratorExpression, fromLine, fromColumn, toLine, toColumn);
+            iteratorExpression.setOwnerExecutableElement(ownerStatement);
+        }
     }
 
     /**
