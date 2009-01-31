@@ -39,9 +39,6 @@ public class UnresolvedBinominalOperationInfo extends
         this.firstOperand = firstOperand;
         this.secondOperand = secondOperand;
         this.resolvedInfo = null;
-
-        this.firstOperand.setOwnerExecutableElementInfo(this);
-        this.secondOperand.setOwnerExecutableElementInfo(this);
     }
 
     /**

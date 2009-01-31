@@ -10,7 +10,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalFieldInfo;
@@ -62,14 +61,6 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
         this.availableNamespaces = availableNamespaces;
         this.qualifierUsage = qualifierUsage;
         this.fieldName = fieldName;
-    }
-
-    @Override
-    public void setOwnerExecutableElementInfo(
-            UnresolvedExecutableElementInfo<? extends ExecutableElementInfo> ownerExecutableElement) {
-        super.setOwnerExecutableElementInfo(ownerExecutableElement);
-
-        this.qualifierUsage.setOwnerExecutableElementInfo(ownerExecutableElement);
     }
 
     /**

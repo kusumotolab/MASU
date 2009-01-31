@@ -28,7 +28,7 @@ public class UnresolvedReturnStatementInfo extends
      */
     public UnresolvedReturnStatementInfo(
             final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace) {
-        this(ownerSpace, 0, 0 ,0, 0);
+        this(ownerSpace, 0, 0, 0, 0);
     }
 
     public UnresolvedReturnStatementInfo(
@@ -82,9 +82,6 @@ public class UnresolvedReturnStatementInfo extends
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         this.returnedExpression = returnedExpression;
-        if (null != this.returnedExpression) {
-            this.returnedExpression.setOwnerExecutableElementInfo(this);
-        }
     }
 
     /**

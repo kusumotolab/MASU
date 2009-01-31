@@ -36,11 +36,6 @@ public class UnresolvedConditionalClauseInfo extends UnresolvedUnitInfo<Conditio
         }
         this.condition = condition;
         this.ownerConditionalBlock = ownerConditionalBlockInfo;
-
-        if (this.condition instanceof UnresolvedExpressionInfo) {
-            ((UnresolvedExpressionInfo<?>) this.condition)
-                    .setOwnerExecutableElementInfo(this.ownerConditionalBlock);
-        }
     }
 
     @Override

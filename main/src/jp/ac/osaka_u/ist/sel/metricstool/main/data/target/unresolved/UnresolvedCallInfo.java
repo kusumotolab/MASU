@@ -31,7 +31,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake, higo
  * @param <T> 解決済みの型
  */
-public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedExpressionInfo<T> {
+public abstract class UnresolvedCallInfo<T extends CallInfo<?>> extends UnresolvedExpressionInfo<T> {
 
     /**
      * オブジェクトを初期化
@@ -59,7 +59,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
 
         this.typeArguments.add(typeParameterUsage);
     }
-    
+
     /**
      * 引数を追加
      * 
@@ -73,7 +73,6 @@ public abstract class UnresolvedCallInfo<T extends CallInfo> extends UnresolvedE
         }
 
         this.arguments.add(argument);
-        argument.setOwnerExecutableElementInfo(this);
     }
 
     /**

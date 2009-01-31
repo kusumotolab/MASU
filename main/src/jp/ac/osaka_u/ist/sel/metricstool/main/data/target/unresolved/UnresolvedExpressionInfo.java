@@ -27,7 +27,6 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
         this.toColumn = toColumn;
         
         this.resolvedInfo = null;
-        this.ownerExecutableElement = null;
     }
 
     @Override
@@ -82,36 +81,6 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
         }
 
         return this.resolvedInfo;
-    }
-
-    /**
-     * オーナーエレメントをセットする
-     * 
-     * @param ownerExecutableElement オーナーエレメント
-     */
-    public void setOwnerExecutableElementInfo(
-            final UnresolvedExecutableElementInfo<? extends ExecutableElementInfo> ownerExecutableElement) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == ownerExecutableElement) {
-            throw new IllegalArgumentException();
-        }
-
-        this.ownerExecutableElement = ownerExecutableElement;
-    }
-
-    /**
-     * オーナーエレメントを返す
-     * 
-     * @return　オーナーエレメント
-     */
-    public final UnresolvedExecutableElementInfo<? extends ExecutableElementInfo> getOwnerExecutableElement() {
-
-        if (null == this.ownerExecutableElement) {
-            throw new NullPointerException();
-        }
-
-        return this.ownerExecutableElement;
     }
 
     /**
@@ -209,8 +178,6 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
      * 解決済み情報を保存するための変数
      */
     protected T resolvedInfo;
-
-    private UnresolvedExecutableElementInfo<? extends ExecutableElementInfo> ownerExecutableElement;
 
     /**
      * 開始行を保存するための変数

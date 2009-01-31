@@ -77,7 +77,6 @@ public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<
         }
 
         this.thrownExpression = thrownExpression;
-        this.thrownExpression.setOwnerExecutableElementInfo(this);
     }
 
     /**

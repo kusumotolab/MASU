@@ -4,7 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -37,8 +36,6 @@ public final class UnresolvedArrayElementUsageInfo extends
         this.qualifierArrayType = qualifierArrayType;
         this.indexExpression = indexExpression;
         this.resolvedInfo = null;
-
-        this.indexExpression.setOwnerExecutableElementInfo(this);
     }
 
     /**
@@ -86,7 +83,6 @@ public final class UnresolvedArrayElementUsageInfo extends
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert qualifierUsage != null : "method \"resolve\" returned null!";
 
-
         // 親が特定できない場合も配列の要素使用を作成して返す
         // もしかすると，UnknownEntityUsageInfoを返す方が適切かもしれない
         this.resolvedInfo = new ArrayElementUsageInfo(qualifierUsage, indexExpression, usingMethod,
@@ -111,13 +107,6 @@ public final class UnresolvedArrayElementUsageInfo extends
      */
     public UnresolvedExpressionInfo<?> getIndexExpression() {
         return this.indexExpression;
-    }
-
-    @Override
-    public void setOwnerExecutableElementInfo(
-            UnresolvedExecutableElementInfo<? extends ExecutableElementInfo> ownerExecutableElement) {
-        super.setOwnerExecutableElementInfo(ownerExecutableElement);
-        this.qualifierArrayType.setOwnerExecutableElementInfo(ownerExecutableElement);
     }
 
     /**

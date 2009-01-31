@@ -39,12 +39,6 @@ public class UnresolvedTernaryOperationInfo extends UnresolvedExpressionInfo<Ter
         this.condition = condition;
         this.trueExpression = trueExpression;
         this.falseExpression = falseExpression;
-
-        if (this.condition instanceof UnresolvedExpressionInfo) {
-            ((UnresolvedExpressionInfo<?>) this.condition).setOwnerExecutableElementInfo(this);
-        }
-        this.trueExpression.setOwnerExecutableElementInfo(this);
-        this.falseExpression.setOwnerExecutableElementInfo(this);
     }
 
     @Override
