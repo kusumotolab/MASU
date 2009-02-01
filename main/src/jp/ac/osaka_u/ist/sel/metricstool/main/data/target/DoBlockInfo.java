@@ -52,7 +52,7 @@ public final class DoBlockInfo extends ConditionalBlockInfo {
         final ConditionalClauseInfo conditionalClause = this.getConditionalClause();
         sb.append(conditionalClause.getText());
 
-        sb.append(")");
+        sb.append(");");
 
         return sb.toString();
 
