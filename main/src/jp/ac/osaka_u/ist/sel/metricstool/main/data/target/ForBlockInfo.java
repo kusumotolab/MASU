@@ -110,7 +110,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
             sb.append(iteratorExpression.getText());
             sb.append(",");
         }
-        if (0 < initializerExpressions.size()) {
+        if (0 < iteratorExpressions.size()) {
             sb.deleteCharAt(sb.length() - 1);
         }
 
