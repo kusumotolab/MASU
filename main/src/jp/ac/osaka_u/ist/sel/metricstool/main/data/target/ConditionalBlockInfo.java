@@ -58,6 +58,22 @@ public abstract class ConditionalBlockInfo extends BlockInfo {
     }
 
     /**
+     * 呼び出し一覧を返す
+     * 
+     * @return 呼び出し一覧
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        final Set<CallInfo<?>> calls = new HashSet<CallInfo<?>>();
+        calls.addAll(super.getCalls());
+
+        final ConditionInfo condition = this.getConditionalClause().getCondition();
+        calls.addAll(condition.getCalls());
+
+        return Collections.unmodifiableSet(calls);
+    }
+
+    /**
      * この条件付ブロックの条件節を返す
      * 
      * @return　この条件付ブロックの条件節

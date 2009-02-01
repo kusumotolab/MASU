@@ -75,6 +75,29 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
+     * 呼び出し一覧を返す
+     * 
+     * @return 呼び出し一覧
+     */
+    @Override
+    public Set<CallInfo<?>> getCalls() {
+        final Set<CallInfo<?>> calls = new HashSet<CallInfo<?>>();
+        calls.addAll(super.getCalls());
+
+        final SortedSet<ConditionInfo> initializerExpressions = this.getInitializerExpressions();
+        for (final ConditionInfo initializerExpression : initializerExpressions) {
+            calls.addAll(initializerExpression.getCalls());
+        }
+
+        final SortedSet<ExpressionInfo> iteratorExpressions = this.getIteratorExpressions();
+        for (final ExpressionInfo iteratorExpression : iteratorExpressions) {
+            calls.addAll(iteratorExpression.getCalls());
+        }
+
+        return Collections.unmodifiableSet(calls);
+    }
+
+    /**
      * このfor文のテキスト表現（String型）を返す
      * 
      * @return このfor文のテキスト表現（String型）
@@ -140,6 +163,18 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
         }
 
         this.initilizerExpressions.add(initializerExpression);
+
+        // 便宜上，initializerExpression を ExpressionExpressionInfoで包む
+        if (initializerExpression instanceof ExpressionInfo) {
+            final int fromLine = initializerExpression.getFromLine();
+            final int fromColumn = initializerExpression.getFromColumn();
+            final int toLine = initializerExpression.getToLine();
+            final int toColumn = initializerExpression.getToColumn();
+
+            final ExpressionStatementInfo ownerStatement = new ExpressionStatementInfo(this,
+                    (ExpressionInfo) initializerExpression, fromLine, fromColumn, toLine, toColumn);
+            ((ExpressionInfo) initializerExpression).setOwnerExecutableElement(ownerStatement);
+        }
     }
 
     /**
