@@ -59,5 +59,32 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
         return this.indexExpressions;
     }
 
+    /**
+     * 配列の初期化式のテキスト表現を返す
+     * 
+     * @return 配列の初期化式のテキスト表現
+     * 
+     */
+    @Override
+    public String getText() {
+
+        final StringBuilder text = new StringBuilder();
+        text.append("new ");
+
+        final ArrayTypeInfo arrayType = (ArrayTypeInfo) this.getType();
+        final TypeInfo elementType = arrayType.getElementType();
+        text.append(elementType.getTypeName());
+
+        final int dimension = arrayType.getDimension();
+        for (int i = 1; i <= dimension; i++) {
+            final ExpressionInfo indexExpression = this.getIndexExpression(i);
+            text.append("[");
+            text.append(indexExpression.getText());
+            text.append("]");
+        }
+
+        return text.toString();
+    }
+
     private final List<ExpressionInfo> indexExpressions;
 }

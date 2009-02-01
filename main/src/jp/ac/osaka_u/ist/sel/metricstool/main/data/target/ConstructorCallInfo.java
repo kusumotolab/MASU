@@ -63,36 +63,6 @@ public abstract class ConstructorCallInfo<T extends ReferenceTypeInfo> extends
         return Collections.unmodifiableSet(calls);
     }
 
-    /**
-     * このコンストラクタ呼び出しのテキスト表現（型）を返す
-     * 
-     * @return このコンストラクタ呼び出しのテキスト表現（型）を返す
-     */
-    @Override
-    public String getText() {
-
-        final StringBuilder sb = new StringBuilder();
-
-        sb.append("new ");
-
-        final TypeInfo type = this.getType();
-        sb.append(type.getTypeName());
-
-        sb.append("(");
-
-        for (final ExpressionInfo argument : this.getArguments()) {
-            sb.append(argument.getText());
-            sb.append(",");
-        }
-        if (0 < this.getArguments().size()) {
-            sb.deleteCharAt(sb.length() - 1);
-        }
-
-        sb.append(")");
-
-        return sb.toString();
-    }
-
     private final T referenceType;
 
 }
