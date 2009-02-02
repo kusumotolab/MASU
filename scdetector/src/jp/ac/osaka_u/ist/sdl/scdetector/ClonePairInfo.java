@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sdl.scdetector;
 
 import java.io.Serializable;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 
@@ -13,8 +12,8 @@ public class ClonePairInfo implements Serializable, Entity {
     public ClonePairInfo(final ExecutableElementInfo statementA,
             final ExecutableElementInfo statementB) {
 
-        this.cloneA = new TreeSet<ExecutableElementInfo>();
-        this.cloneB = new TreeSet<ExecutableElementInfo>();
+        this.cloneA = new CodeFragmentInfo();
+        this.cloneB = new CodeFragmentInfo();
 
         this.cloneA.add(statementA);
         this.cloneB.add(statementB);
@@ -30,11 +29,11 @@ public class ClonePairInfo implements Serializable, Entity {
         return (this.cloneA.size() + this.cloneB.size()) / 2;
     }
 
-    public SortedSet<ExecutableElementInfo> getCloneA() {
+    public CodeFragmentInfo getCloneA() {
         return this.cloneA;
     }
 
-    public SortedSet<ExecutableElementInfo> getCloneB() {
+    public CodeFragmentInfo getCloneB() {
         return this.cloneB;
     }
 
@@ -53,9 +52,9 @@ public class ClonePairInfo implements Serializable, Entity {
         return this.id;
     }
 
-    final private SortedSet<ExecutableElementInfo> cloneA;
+    final private CodeFragmentInfo cloneA;
 
-    final private SortedSet<ExecutableElementInfo> cloneB;
+    final private CodeFragmentInfo cloneB;
 
     final private int id;
 

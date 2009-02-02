@@ -6,10 +6,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
@@ -333,8 +334,8 @@ public class SCDetector extends MetricsTool {
 
             // コード片のサイズが閾値以上違う場合はフィルタリングする
             {
-                final SortedSet<ExecutableElementInfo> cloneA = clonePair.getCloneA();
-                final SortedSet<ExecutableElementInfo> cloneB = clonePair.getCloneB();
+                final CodeFragmentInfo cloneA = clonePair.getCloneA();
+                final CodeFragmentInfo cloneB = clonePair.getCloneB();
                 if (((cloneA.size() + Configuration.INSTANCE.getFL()) < cloneB.size())
                         || ((cloneA.size() - Configuration.INSTANCE.getFL()) > cloneB.size())) {
                     continue CLONEPAIR;
@@ -343,8 +344,8 @@ public class SCDetector extends MetricsTool {
 
             // はじめと終りが一致しているコード片はフィルタリングする
             if (Configuration.INSTANCE.getFJ()) {
-                final SortedSet<ExecutableElementInfo> cloneA = clonePair.getCloneA();
-                final SortedSet<ExecutableElementInfo> cloneB = clonePair.getCloneB();
+                final CodeFragmentInfo cloneA = clonePair.getCloneA();
+                final CodeFragmentInfo cloneB = clonePair.getCloneB();
                 if ((cloneA.first() == cloneB.first()) && (cloneA.last() == cloneB.last())) {
                     continue CLONEPAIR;
                 }
@@ -352,8 +353,8 @@ public class SCDetector extends MetricsTool {
 
             // 閾値以上重複しているコード片はフィルタリングする
             {
-                final SortedSet<ExecutableElementInfo> cloneA = clonePair.getCloneA();
-                final SortedSet<ExecutableElementInfo> cloneB = clonePair.getCloneB();
+                final CodeFragmentInfo cloneA = clonePair.getCloneA();
+                final CodeFragmentInfo cloneB = clonePair.getCloneB();
                 int sharedElementCount = 0;
                 for (final ExecutableElementInfo element : cloneA) {
                     if (cloneB.contains(element)) {
@@ -384,6 +385,64 @@ public class SCDetector extends MetricsTool {
         }
 
         System.out.println(refinedClonePairs.size() + ":" + clonePairs.size());
+
+        {
+            final Map<CodeFragmentInfo, Set<CodeFragmentInfo>> cloneSets = new HashMap<CodeFragmentInfo, Set<CodeFragmentInfo>>();
+            for (final ClonePairInfo clonePair : refinedClonePairs) {
+
+                final CodeFragmentInfo cloneA = clonePair.getCloneA();
+                final CodeFragmentInfo cloneB = clonePair.getCloneB();
+
+                Set<CodeFragmentInfo> cloneSetA = cloneSets.get(cloneA);
+                Set<CodeFragmentInfo> cloneSetB = cloneSets.get(cloneB);
+
+                // コード片A，Bともすでに登録されている場合
+                if ((null != cloneSetA) && (null != cloneSetB)) {
+
+                    //A と Bの所属するクローンセットが違う場合は，統合する
+                    if (cloneSetA != cloneSetB) {
+                        final Set<CodeFragmentInfo> cloneSetC = new HashSet<CodeFragmentInfo>();
+                        cloneSetC.addAll(cloneSetA);
+                        cloneSetC.addAll(cloneSetB);
+
+                        for (final CodeFragmentInfo codeFragment : cloneSetA) {
+                            cloneSets.remove(codeFragment);
+                        }
+                        for (final CodeFragmentInfo codeFragment : cloneSetB) {
+                            cloneSets.remove(codeFragment);
+                        }
+
+                        for (final CodeFragmentInfo codeFragment : cloneSetC) {
+                            cloneSets.put(codeFragment, cloneSetC);
+                        }
+
+                    }
+
+                    cloneSetA.addAll(cloneSetB);
+                    cloneSetB.addAll(cloneSetA);
+
+                } else if ((null != cloneSetA) && (null == cloneSetB)) {
+
+                    cloneSetA.add(cloneB);
+                    cloneSets.put(cloneB, cloneSetA);
+
+                } else if ((null == cloneSetA) && (null != cloneSetB)) {
+
+                    cloneSetB.add(cloneA);
+                    cloneSets.put(cloneA, cloneSetB);
+
+                } else {
+
+                    final Set<CodeFragmentInfo> cloneSet = new HashSet<CodeFragmentInfo>();
+                    cloneSet.add(cloneA);
+                    cloneSet.add(cloneB);
+
+                    cloneSets.put(cloneA, cloneSet);
+                    cloneSets.put(cloneB, cloneSet);
+
+                }
+            }
+        }
 
         try {
 

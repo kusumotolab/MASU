@@ -11,6 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
@@ -119,6 +120,11 @@ public class ProgramSlice {
                                 relatedElementArrayB[b], clonePair, Collections
                                         .unmodifiableSet(usedVariableHashesA), Collections
                                         .unmodifiableSet(usedVariableHashesB));
+
+                        ProgramSlice.checkOwnerSpace(relatedElementArrayA[a],
+                                relatedElementArrayB[b], clonePair, Collections
+                                        .unmodifiableSet(usedVariableHashesA), Collections
+                                        .unmodifiableSet(usedVariableHashesB));
                     }
 
                 } else if ((relatedElementArrayA[a] instanceof ConditionInfo)
@@ -139,6 +145,9 @@ public class ProgramSlice {
                         ProgramSlice.performForwardSlice(conditionA, conditionB, clonePair,
                                 Collections.unmodifiableSet(usedVariableHashesA), Collections
                                         .unmodifiableSet(usedVariableHashesB));
+                        ProgramSlice.checkOwnerSpace(conditionA, conditionB, clonePair, Collections
+                                .unmodifiableSet(usedVariableHashesA), Collections
+                                .unmodifiableSet(usedVariableHashesB));
                     }
                 }
             }
@@ -195,6 +204,35 @@ public class ProgramSlice {
                     ProgramSlice.performBackwordSlice(conditionA, conditionB, clonePair,
                             unmodifiableUsedVariableHashesA, unmodifiableUsedVariableHashesB);
                 }
+            }
+        }
+    }
+
+    private static void checkOwnerSpace(final ExecutableElementInfo element1,
+            final ExecutableElementInfo element2, final ClonePairInfo clonePair,
+            final Set<VariableInfo<?>> unmodifiableUsedVariableHashesA,
+            final Set<VariableInfo<?>> unmodifiableUsedVariableHashesB) {
+
+        final LocalSpaceInfo ownerSpace1 = element1.getOwnerSpace();
+        final LocalSpaceInfo ownerSpace2 = element2.getOwnerSpace();
+
+        if ((ownerSpace1 instanceof ConditionalBlockInfo)
+                && (ownerSpace2 instanceof ConditionalBlockInfo)) {
+
+            final ConditionInfo condition1 = ((ConditionalBlockInfo) ownerSpace1)
+                    .getConditionalClause().getCondition();
+            final ConditionInfo condition2 = ((ConditionalBlockInfo) ownerSpace2)
+                    .getConditionalClause().getCondition();
+            final int hash1 = NormalizedElementHashMap.INSTANCE.getHash(condition1);
+            final int hash2 = NormalizedElementHashMap.INSTANCE.getHash(condition2);
+
+            if (hash1 == hash2) {
+                clonePair.add(condition1, condition2);
+
+                ProgramSlice.performBackwordSlice(condition1, condition2, clonePair,
+                        unmodifiableUsedVariableHashesA, unmodifiableUsedVariableHashesB);
+                ProgramSlice.performForwardSlice(condition1, condition2, clonePair,
+                        unmodifiableUsedVariableHashesA, unmodifiableUsedVariableHashesB);
             }
         }
     }
