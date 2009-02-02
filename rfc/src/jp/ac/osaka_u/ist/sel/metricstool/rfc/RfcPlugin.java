@@ -6,7 +6,8 @@ import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractClassMetricPlugin;
@@ -31,7 +32,7 @@ public class RfcPlugin extends AbstractClassMetricPlugin {
     @Override
     protected Number measureClassMetric(TargetClassInfo targetClass) {
         // この数が RFC
-        final Set<MethodInfo> rfcMethods = new HashSet<MethodInfo>();
+        final Set<CallableUnitInfo> rfcMethods = new HashSet<CallableUnitInfo>();
 
         // 現在のクラスで定義されているメソッド
         final Set<TargetMethodInfo> localMethods = targetClass.getDefinedMethods();
@@ -39,7 +40,8 @@ public class RfcPlugin extends AbstractClassMetricPlugin {
 
         // localMethods で呼ばれているメソッド
         for (final TargetMethodInfo m : localMethods) {
-            rfcMethods.addAll(m.getCallees());
+        	
+            rfcMethods.addAll(MethodCallInfo.getCallees(m.getCalls()));
         }
 
         return new Integer(rfcMethods.size());
