@@ -52,7 +52,8 @@ public class UnresolvedStaticInitializerInfo extends
         final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
-        this.resolvedInfo = ownerClass.getStaticInitializer();
+        this.resolvedInfo = new StaticInitializerInfo(ownerClass, this.getFromLine(), this
+                .getFromColumn(), this.getToLine(), this.getToColumn());
         return this.resolvedInfo;
     }
 
@@ -60,12 +61,12 @@ public class UnresolvedStaticInitializerInfo extends
     public boolean isStaticMember() {
         return true;
     }
-    
+
     @Override
     public boolean isInstanceMember() {
         return true;
     }
-    
+
     /**
      * ‚È‚É‚à‚µ‚È‚¢
      */

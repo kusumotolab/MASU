@@ -74,8 +74,12 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         this.definedMethods = new HashSet<UnresolvedMethodInfo>();
         this.definedConstructors = new HashSet<UnresolvedConstructorInfo>();
         this.definedFields = new HashSet<UnresolvedFieldInfo>();
-        this.staticInitializer = new UnresolvedStaticInitializerInfo(this);
-        this.instanceInitializer = new UnresolvedInstanceInitializerInfo(this);
+        this.implicitStaticInitializer = new UnresolvedStaticInitializerInfo(this);
+        this.implicitInstanceInitializer = new UnresolvedInstanceInitializerInfo(this);
+        this.instanceInitializers = new HashSet<UnresolvedInstanceInitializerInfo>();
+        this.instanceInitializers.add(this.implicitInstanceInitializer);
+        this.staticInitializers = new HashSet<UnresolvedStaticInitializerInfo>();
+        this.staticInitializers.add(this.implicitStaticInitializer);
         this.importStatements = new LinkedList<UnresolvedImportStatementInfo>();
 
         this.privateVisible = false;
@@ -120,6 +124,32 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         }
 
         this.typeParameters.add(typeParameter);
+    }
+
+    /**
+     * 未解決インスタンスイニシャライザを追加
+     * 
+     * @param instanceInitializer 未解決インスタンスイニシャライザ
+     */
+    public void addInstanceInitializer(final UnresolvedInstanceInitializerInfo instanceInitializer) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == instanceInitializer) {
+            throw new NullPointerException("instanceInitializer is null");
+        }
+        this.instanceInitializers.add(instanceInitializer);
+    }
+
+    /**
+     * 未解決スタティックイニシャライザを追加
+     * 
+     * @param staticInitialzer 未解決スタティックイニシャライザ
+     */
+    public void addStaticInitializer(final UnresolvedStaticInitializerInfo staticInitialzer) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == staticInitialzer) {
+            throw new NullPointerException("staticInitializer is null");
+        }
+        this.staticInitializers.add(staticInitialzer);
     }
 
     /**
@@ -434,6 +464,22 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
+     * インスタンスイニシャライザのセットを返す
+     * @return インスタンスイニシャライザのセット
+     */
+    public final Set<UnresolvedInstanceInitializerInfo> getInstanceInitializers() {
+        return Collections.unmodifiableSet(this.instanceInitializers);
+    }
+
+    /**
+     * スタティックイニシャライザのセットを返す
+     * @return スタティックイニシャライザのセット
+     */
+    public final Set<UnresolvedStaticInitializerInfo> getStaticInitializers() {
+        return Collections.unmodifiableSet(this.staticInitializers);
+    }
+
+    /**
      * 利用可能なクラス（インポートされているクラス）のListを返す
      * 
      * @return　利用可能なクラス（インポートされているクラス）のListを返す
@@ -441,21 +487,23 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     public List<UnresolvedImportStatementInfo> getImportStatements() {
         return Collections.unmodifiableList(this.importStatements);
     }
-    
+
     /**
      * インスタンスイニシャライザを返す
+     * 
      * @return インスランスイニシャライザ
      */
     public UnresolvedInstanceInitializerInfo getInstanceInitializer() {
-        return instanceInitializer;
+        return implicitInstanceInitializer;
     }
-    
+
     /**
      * スタティックイニシャライザを返す
+     * 
      * @return スタティックイニシャライザ
      */
     public UnresolvedStaticInitializerInfo getStaticInitializer() {
-        return staticInitializer;
+        return implicitStaticInitializer;
     }
 
     /**
@@ -768,15 +816,25 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     private final Set<UnresolvedFieldInfo> definedFields;
 
     /**
-     * スタティックイニシャライザを保存するための変数
+     * 暗黙のスタティックイニシャライザを保存するための変数
      */
-    private final UnresolvedStaticInitializerInfo staticInitializer;
-    
+    private final UnresolvedStaticInitializerInfo implicitStaticInitializer;
+
     /**
-     * インスタンスイニシャライザを保存するための変数
+     * 暗黙のインスタンスイニシャライザを保存するための変数
      */
-    private final UnresolvedInstanceInitializerInfo instanceInitializer;
-    
+    private final UnresolvedInstanceInitializerInfo implicitInstanceInitializer;
+
+    /**
+     * スタティックイニシャライザ一覧を保存するための変数
+     */
+    private final Set<UnresolvedStaticInitializerInfo> staticInitializers;
+
+    /**
+     * インスタンスイニシャライザ一覧を保存するための変数
+     */
+    private final Set<UnresolvedInstanceInitializerInfo> instanceInitializers;
+
     /**
      * 利用可能な名前空間を保存するためのセット
      */

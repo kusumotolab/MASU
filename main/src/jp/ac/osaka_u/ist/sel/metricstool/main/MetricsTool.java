@@ -1418,7 +1418,7 @@ public class MetricsTool {
             final TargetFieldInfo fieldInfo = unresolvedFieldInfo.getResolved();
             if (null != unresolvedFieldInfo.getInitilizer()) {
                 final CallableUnitInfo initializerUnit = fieldInfo.isInstanceMember() ? classInfo
-                        .getInstanceInitializer() : classInfo.getStaticInitializer();
+                        .getImplicitInstanceInitializer() : classInfo.getImplicitStaticInitializer();
                 final ExpressionInfo initializerExpression = unresolvedFieldInfo.getInitilizer().resolve(
                         classInfo, initializerUnit, classInfoManager, fieldInfoManager, methodInfoManager);
                 fieldInfo.setInitializer(initializerExpression);

@@ -25,8 +25,8 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
      * @param variableUsages 変数使用のCollection
      * @return 使用されている変数のSet
      */
-    public static Set<VariableInfo<?>> getUsedVariables(
-            Collection<VariableUsageInfo<?>> variableUsages) {
+    public static Set<VariableInfo<? extends UnitInfo>> getUsedVariables(
+            Collection<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages) {
 
         final Set<VariableInfo<?>> usedVariables = new HashSet<VariableInfo<?>>();
         for (final VariableUsageInfo<?> variableUsage : variableUsages) {
@@ -42,8 +42,8 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
      * @param variableUsages 変数使用のSet
      * @return 引数で与えられてた変数使用に含まれる変数参照のSet
      */
-    public static Set<VariableUsageInfo<?>> getReferencees(
-            Collection<VariableUsageInfo<?>> variableUsages) {
+    public static Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getReferencees(
+            Collection<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages) {
 
         final Set<VariableUsageInfo<?>> references = new HashSet<VariableUsageInfo<?>>();
         for (final VariableUsageInfo<?> variableUsage : variableUsages) {
@@ -61,8 +61,8 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
      * @param variableUsages 変数使用のSet
      * @return 引数で与えられてた変数使用に含まれる変数代入のSet
      */
-    public static Set<VariableUsageInfo<?>> getAssignments(
-            Collection<VariableUsageInfo<?>> variableUsages) {
+    public static Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getAssignments(
+            Collection<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages) {
 
         final Set<VariableUsageInfo<?>> assignments = new HashSet<VariableUsageInfo<?>>();
         for (final VariableUsageInfo<?> variableUsage : variableUsages) {

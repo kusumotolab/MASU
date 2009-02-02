@@ -39,7 +39,7 @@ public final class LocalVariableInfo extends VariableInfo<LocalSpaceInfo> {
      * @param variables •Ï”‚ÌSet
      * @return —^‚¦‚ç‚ê‚½•Ï”‚ÌSet‚ÉŠÜ‚Ü‚ê‚éƒ[ƒJƒ‹•Ï”‚ÌSet
      */
-    public static Set<LocalVariableInfo> getLocalVariables(Collection<VariableInfo<?>> variables) {
+    public static Set<LocalVariableInfo> getLocalVariables(Collection<VariableInfo<? extends UnitInfo>> variables) {
         final Set<LocalVariableInfo> localVariables = new HashSet<LocalVariableInfo>();
         for (final VariableInfo<?> variable : variables) {
             if (variable instanceof LocalVariableInfo) {

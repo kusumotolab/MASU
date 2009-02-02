@@ -11,35 +11,19 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 
 
 /**
- * クラスのインスタンスイニシャライザの未解決情報を保存するクラス
+ * 未解決暗黙スタティックイニシャライザを表すクラス
  * 
  * @author t-miyake
  *
  */
-public class UnresolvedInstanceInitializerInfo extends
-        UnresolvedCallableUnitInfo<InstanceInitializerInfo> {
+public class UnresolvedImplicitInstanceInitializerInfo extends UnresolvedInstanceInitializerInfo {
 
     /**
-     * このインスタンスイニシャライザを所有するクラスを与えて初期化
-     * @param ownerClass インスタンスイニシャライザを所有するクラス
+     * このスタティックイニシャライザを所有するクラスの未解決情報をあえて初期化
+     * @param ownerClass このスタティックイニシャライザを所有するクラスの未解決情報
      */
-    public UnresolvedInstanceInitializerInfo(UnresolvedClassInfo ownerClass) {
+    public UnresolvedImplicitInstanceInitializerInfo(UnresolvedClassInfo ownerClass) {
         super(ownerClass);
-    }
-
-    @Override
-    public void setInstanceMember(boolean instance) {
-
-    }
-
-    @Override
-    public boolean isInstanceMember() {
-        return true;
-    }
-
-    @Override
-    public boolean isStaticMember() {
-        return false;
     }
 
     @Override
@@ -57,14 +41,11 @@ public class UnresolvedInstanceInitializerInfo extends
             return this.getResolved();
         }
 
-        // 所有クラスを取得
-        final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
-        final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(usingClass, usingMethod,
+        final TargetClassInfo ownerClass = this.getOwnerClass().resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
+        
+        this.resolvedInfo = ownerClass.getImplicitInstanceInitializer();
 
-        this.resolvedInfo = new InstanceInitializerInfo(ownerClass, this.getFromLine(), this
-                .getFromColumn(), this.getToLine(), this.getToColumn());
         return this.resolvedInfo;
     }
-
 }

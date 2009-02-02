@@ -201,7 +201,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
      * @return 与えられた変数利用のCollectionに含まれるフィールド利用のSet
      */
     public final static Set<FieldUsageInfo> getFieldUsages(
-            Collection<VariableUsageInfo<?>> variableUsages) {
+            Collection<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages) {
         final Set<FieldUsageInfo> fieldUsages = new HashSet<FieldUsageInfo>();
         for (final VariableUsageInfo<?> variableUsage : variableUsages) {
             if (variableUsage instanceof FieldUsageInfo) {
