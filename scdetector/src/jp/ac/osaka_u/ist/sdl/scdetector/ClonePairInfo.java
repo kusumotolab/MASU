@@ -2,27 +2,39 @@ package jp.ac.osaka_u.ist.sdl.scdetector;
 
 
 import java.io.Serializable;
+import java.util.Set;
 import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 
 
-public class ClonePairInfo implements Serializable, Entity {
+public class ClonePairInfo implements Serializable, Entity, Cloneable {
 
-    public ClonePairInfo(final ExecutableElementInfo statementA,
-            final ExecutableElementInfo statementB) {
+    public ClonePairInfo() {
 
         this.cloneA = new CodeFragmentInfo();
         this.cloneB = new CodeFragmentInfo();
 
-        this.cloneA.add(statementA);
-        this.cloneB.add(statementB);
         this.id = number++;
+    }
+
+    public ClonePairInfo(final ExecutableElementInfo statementA,
+            final ExecutableElementInfo statementB) {
+
+        this();
+
+        this.add(statementA, statementB);
     }
 
     public void add(final ExecutableElementInfo statementA, final ExecutableElementInfo statementB) {
         this.cloneA.add(statementA);
         this.cloneB.add(statementB);
+    }
+
+    public void addAll(final Set<ExecutableElementInfo> statementsA,
+            final Set<ExecutableElementInfo> statementsB) {
+        this.cloneA.addAll(statementsA);
+        this.cloneB.addAll(statementsB);
     }
 
     public int size() {
@@ -50,6 +62,17 @@ public class ClonePairInfo implements Serializable, Entity {
 
     public int getID() {
         return this.id;
+    }
+
+    @Override
+    public ClonePairInfo clone() {
+
+        final ClonePairInfo clonePair = new ClonePairInfo();
+        final Set<ExecutableElementInfo> statementsA = this.getCloneA();
+        final Set<ExecutableElementInfo> statementsB = this.getCloneB();
+        clonePair.addAll(statementsA, statementsB);
+
+        return clonePair;
     }
 
     final private CodeFragmentInfo cloneA;

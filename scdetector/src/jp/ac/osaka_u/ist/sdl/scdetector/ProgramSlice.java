@@ -29,11 +29,13 @@ public class ProgramSlice {
      * @param clonePair
      * @param usedVariableHashesA
      * @param usedVariableHashesB
+     * @param clonePairs
      */
     static void performBackwordSlice(final ExecutableElementInfo elementA,
             final ExecutableElementInfo elementB, final ClonePairInfo clonePair,
             final Set<VariableInfo<?>> unmodifiableUsedVariableHashesA,
-            final Set<VariableInfo<?>> unmodifiableUsedVariableHashesB) {
+            final Set<VariableInfo<?>> unmodifiableUsedVariableHashesB,
+            final Set<ClonePairInfo> clonePairs) {
 
         //í≤ç∏ÇµÇΩïœêîÇÃÉnÉbÉVÉÖÇçÏê¨
         final Set<VariableInfo<?>> usedVariableHashesA = new HashSet<VariableInfo<?>>(
@@ -114,17 +116,18 @@ public class ProgramSlice {
                     final int hashB = NormalizedElementHashMap.INSTANCE
                             .getHash(relatedElementArrayB[b]);
                     if (hashA == hashB) {
+
                         clonePair.add(relatedElementArrayA[a], relatedElementArrayB[b]);
 
                         ProgramSlice.performBackwordSlice(relatedElementArrayA[a],
                                 relatedElementArrayB[b], clonePair, Collections
                                         .unmodifiableSet(usedVariableHashesA), Collections
-                                        .unmodifiableSet(usedVariableHashesB));
+                                        .unmodifiableSet(usedVariableHashesB), clonePairs);
 
                         ProgramSlice.checkOwnerSpace(relatedElementArrayA[a],
                                 relatedElementArrayB[b], clonePair, Collections
                                         .unmodifiableSet(usedVariableHashesA), Collections
-                                        .unmodifiableSet(usedVariableHashesB));
+                                        .unmodifiableSet(usedVariableHashesB), clonePairs);
                     }
 
                 } else if ((relatedElementArrayA[a] instanceof ConditionInfo)
@@ -141,13 +144,13 @@ public class ProgramSlice {
 
                         ProgramSlice.performBackwordSlice(conditionA, conditionB, clonePair,
                                 Collections.unmodifiableSet(usedVariableHashesA), Collections
-                                        .unmodifiableSet(usedVariableHashesB));
+                                        .unmodifiableSet(usedVariableHashesB), clonePairs);
                         ProgramSlice.performForwardSlice(conditionA, conditionB, clonePair,
                                 Collections.unmodifiableSet(usedVariableHashesA), Collections
-                                        .unmodifiableSet(usedVariableHashesB));
+                                        .unmodifiableSet(usedVariableHashesB), clonePairs);
                         ProgramSlice.checkOwnerSpace(conditionA, conditionB, clonePair, Collections
                                 .unmodifiableSet(usedVariableHashesA), Collections
-                                .unmodifiableSet(usedVariableHashesB));
+                                .unmodifiableSet(usedVariableHashesB), clonePairs);
                     }
                 }
             }
@@ -157,7 +160,8 @@ public class ProgramSlice {
     private static void performForwardSlice(final ConditionInfo conditionA,
             final ConditionInfo conditionB, final ClonePairInfo clonePair,
             final Set<VariableInfo<?>> unmodifiableUsedVariableHashesA,
-            final Set<VariableInfo<?>> unmodifiableUsedVariableHashesB) {
+            final Set<VariableInfo<?>> unmodifiableUsedVariableHashesB,
+            final Set<ClonePairInfo> clonePairs) {
 
         final Set<VariableUsageInfo<?>> variableUsagesA = conditionA.getVariableUsages();
         final Set<VariableUsageInfo<?>> variableUsagesB = conditionB.getVariableUsages();
@@ -202,7 +206,8 @@ public class ProgramSlice {
                     clonePair.add(innerElementArrayA[a], innerElementArrayB[b]);
 
                     ProgramSlice.performBackwordSlice(conditionA, conditionB, clonePair,
-                            unmodifiableUsedVariableHashesA, unmodifiableUsedVariableHashesB);
+                            unmodifiableUsedVariableHashesA, unmodifiableUsedVariableHashesB,
+                            clonePairs);
                 }
             }
         }
@@ -211,7 +216,8 @@ public class ProgramSlice {
     private static void checkOwnerSpace(final ExecutableElementInfo element1,
             final ExecutableElementInfo element2, final ClonePairInfo clonePair,
             final Set<VariableInfo<?>> unmodifiableUsedVariableHashesA,
-            final Set<VariableInfo<?>> unmodifiableUsedVariableHashesB) {
+            final Set<VariableInfo<?>> unmodifiableUsedVariableHashesB,
+            final Set<ClonePairInfo> clonePairs) {
 
         final LocalSpaceInfo ownerSpace1 = element1.getOwnerSpace();
         final LocalSpaceInfo ownerSpace2 = element2.getOwnerSpace();
@@ -230,9 +236,11 @@ public class ProgramSlice {
                 clonePair.add(condition1, condition2);
 
                 ProgramSlice.performBackwordSlice(condition1, condition2, clonePair,
-                        unmodifiableUsedVariableHashesA, unmodifiableUsedVariableHashesB);
+                        unmodifiableUsedVariableHashesA, unmodifiableUsedVariableHashesB,
+                        clonePairs);
                 ProgramSlice.performForwardSlice(condition1, condition2, clonePair,
-                        unmodifiableUsedVariableHashesA, unmodifiableUsedVariableHashesB);
+                        unmodifiableUsedVariableHashesA, unmodifiableUsedVariableHashesB,
+                        clonePairs);
             }
         }
     }

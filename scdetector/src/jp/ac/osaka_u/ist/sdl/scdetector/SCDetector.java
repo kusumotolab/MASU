@@ -16,7 +16,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
@@ -295,6 +294,7 @@ public class SCDetector extends MetricsTool {
         }
 
         // ハッシュ値が同じ2つの文を基点にしてコードクローンを検出
+        final long detectionStart = System.nanoTime();
         out.println("detecting clone pairs ...");
         final Set<ClonePairInfo> clonePairs = new HashSet<ClonePairInfo>();
         for (final Integer hash : NormalizedElementHashMap.INSTANCE.keySet()) {
@@ -302,10 +302,12 @@ public class SCDetector extends MetricsTool {
             final List<ExecutableElementInfo> elements = NormalizedElementHashMap.INSTANCE
                     .get(hash);
 
+            /*
             if ((Configuration.INSTANCE.getC() < elements.size())
                     && !(elements.get(0) instanceof ReturnStatementInfo)) {
                 continue;
             }
+            */
 
             for (int i = 0; i < elements.size(); i++) {
                 for (int j = i + 1; j < elements.size(); j++) {
@@ -319,7 +321,7 @@ public class SCDetector extends MetricsTool {
                     final Set<VariableInfo<?>> usedVariableHashesB = new HashSet<VariableInfo<?>>();
 
                     ProgramSlice.performBackwordSlice(elementA, elementB, clonePair,
-                            usedVariableHashesA, usedVariableHashesB);
+                            usedVariableHashesA, usedVariableHashesB, clonePairs);
 
                     if (Configuration.INSTANCE.getS() <= clonePair.size()) {
                         clonePairs.add(clonePair);
@@ -327,6 +329,8 @@ public class SCDetector extends MetricsTool {
                 }
             }
         }
+        final long detectionEnd = System.nanoTime();
+        out.println("elapsed time: " + (detectionEnd - detectionStart) / 1000000000);
 
         out.println("filtering out uninterested clone pairs ...");
         final Set<ClonePairInfo> refinedClonePairs = new HashSet<ClonePairInfo>();
