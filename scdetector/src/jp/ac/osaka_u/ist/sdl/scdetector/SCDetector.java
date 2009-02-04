@@ -16,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
@@ -302,12 +303,11 @@ public class SCDetector extends MetricsTool {
             final List<ExecutableElementInfo> elements = NormalizedElementHashMap.INSTANCE
                     .get(hash);
 
-            /*
             if ((Configuration.INSTANCE.getC() < elements.size())
                     && !(elements.get(0) instanceof ReturnStatementInfo)) {
+                System.out.println(elements.size());
                 continue;
             }
-            */
 
             for (int i = 0; i < elements.size(); i++) {
                 for (int j = i + 1; j < elements.size(); j++) {
