@@ -342,6 +342,12 @@ public interface AstToken {
     public boolean isForIterator();
     
     /**
+     * トークンがforeach文の節を表すかどうか返す
+     * @return foreach文の節ならtrue
+     */
+    public boolean isForEachClause();
+    
+    /**
      * トークンがtryを表すかどうかを返す
      * @return tryを表すトークンならtrue
      */

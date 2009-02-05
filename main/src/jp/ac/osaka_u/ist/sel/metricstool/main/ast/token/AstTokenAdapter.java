@@ -263,6 +263,10 @@ public class AstTokenAdapter implements AstToken {
     public boolean isForIterator() {
         return false;
     }
+    
+    public boolean isForEachClause() {
+        return false;
+    }
 
     public boolean isIf() {
         return false;

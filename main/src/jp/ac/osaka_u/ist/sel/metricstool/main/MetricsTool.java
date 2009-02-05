@@ -408,8 +408,8 @@ public class MetricsTool {
                 loc += file.getLOC();
             }
             out.println("analyzed lines of code: " + loc);
+            
         }
-
         MessagePool.getInstance(MESSAGE_TYPE.OUT).removeMessageListener(outListener);
         MessagePool.getInstance(MESSAGE_TYPE.ERROR).removeMessageListener(errListener);
     }

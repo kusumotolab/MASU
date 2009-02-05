@@ -26,7 +26,7 @@ public class DescriptionToken extends AstTokenAdapter {
         @Override
         public boolean isForInit() {
             return true;
-        };
+        }
     };
     
     /**
@@ -37,6 +37,16 @@ public class DescriptionToken extends AstTokenAdapter {
         public boolean isForIterator() {
             return true;
         };
+    };
+    
+    /**
+     * foreach文の節を表すインスタンス
+     */
+    public static final DescriptionToken FOR_EACH_CLAUSE = new DescriptionToken("FOR_EACH_CLAUSE") {
+        @Override
+        public boolean isForEachClause() {
+            return true;
+        }
     };
     
     /**

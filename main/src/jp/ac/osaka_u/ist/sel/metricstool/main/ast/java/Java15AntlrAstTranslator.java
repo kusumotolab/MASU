@@ -423,8 +423,10 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             break;
         case Java15TokenTypes.COND_CLAUSE:
         case Java15TokenTypes.FOR_CONDITION:
-        case Java15TokenTypes.FOR_EACH_CLAUSE:
             result = DescriptionToken.CONDITIONAL_CLAUSE;
+            break;
+        case Java15TokenTypes.FOR_EACH_CLAUSE:
+            result = DescriptionToken.FOR_EACH_CLAUSE;
             break;
         case Java15TokenTypes.FOR_INIT:
             result = DescriptionToken.FOR_INIT;

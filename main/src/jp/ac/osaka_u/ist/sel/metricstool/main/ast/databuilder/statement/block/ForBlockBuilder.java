@@ -13,6 +13,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalClauseInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedForBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
@@ -63,6 +65,14 @@ public class ForBlockBuilder extends ConditionalBlockBuilder<ForBlockInfo, Unres
             this.conditionBuilder.deactivate();
 
             this.getBuildingBlock().initBody();
+        } else if (type.equals(FOR_BLOCK_STATE_CHANGE.EXIT_FOR_EACH_CLAUSE)) {
+            // TODO ‚ ‚Æ‚ÅForEachBlockLBuilder‚Æ‚©ForEachBlockInfo‚ð‚Â‚­‚é‚×‚«
+            final UnresolvedForBlockInfo buildingBlock = this.getBuildingBlock();
+            this.getBuildingBlock().addInitializerExpression(
+                    this.expressionManager.getPeekExpressionElement().getUsage());
+            final UnresolvedConditionalClauseInfo conditionalCluase = new UnresolvedConditionalClauseInfo(
+                    buildingBlock, new UnresolvedEmptyExpressionInfo(0, 0, 0, 0));
+            buildingBlock.setConditionalClause(conditionalCluase);
         }
     }
 
