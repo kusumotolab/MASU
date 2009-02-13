@@ -1,11 +1,13 @@
 package jp.ac.osaka_u.ist.sel.metricstool.tcc;
 
 
+import java.util.Set;
 import java.util.SortedSet;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractClassMetricPlugin;
 
 
@@ -30,11 +32,11 @@ public class TCCPlugin extends AbstractClassMetricPlugin {
 
         int couplings = 0;
         final SortedSet<TargetMethodInfo> methods = targetClass.getDefinedMethods();
-        for (final TargetMethodInfo method1 : methods) {
+        METHOD1: for (final TargetMethodInfo method1 : methods) {
 
             // method1 が参照している変数，代入している変数を取得
-            final SortedSet<FieldInfo> method1Referencees = method1.getReferencees();
-            final SortedSet<FieldInfo> method1Assignmentees = method1.getAssignmentees();
+            final Set<VariableInfo<?>> usedVariables = VariableUsageInfo.getUsedVariables(method1
+                    .getVariableUsages());
 
             METHOD2: for (final TargetMethodInfo method2 : methods.tailSet(method1)) {
 
@@ -44,20 +46,12 @@ public class TCCPlugin extends AbstractClassMetricPlugin {
                 }
 
                 // method2 が参照している変数，代入している変数を取得
-                final SortedSet<FieldInfo> method2Referencees = method2.getReferencees();
-                final SortedSet<FieldInfo> method2Assignmentees = method2.getAssignmentees();
+                Set<VariableUsageInfo<?>> variableUsages = method2.getVariableUsages();
 
                 // method1 が参照している変数を method2 が利用していたら．．．
-                for (final FieldInfo field : method1Referencees) {
-                    if (method2Referencees.contains(field) || method2Assignmentees.contains(field)) {
-                        couplings++;
-                        continue METHOD2;
-                    }
-                }
-
-                // method1 が代入している変数を method2 が利用していたら．．．
-                for (final FieldInfo field : method1Assignmentees) {
-                    if (method2Referencees.contains(field) || method2Assignmentees.contains(field)) {
+                for (final VariableUsageInfo<?> variableUsage : variableUsages) {
+                    final VariableInfo<?> usedVariable = variableUsage.getUsedVariable();
+                    if (usedVariables.contains(usedVariable)) {
                         couplings++;
                         continue METHOD2;
                     }
