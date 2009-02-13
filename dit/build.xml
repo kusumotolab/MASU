@@ -1,43 +1,62 @@
 <?xml version="1.0" encoding="Windows-31J"?>
 
 <project name="dit" default="deploy">
+	
+	<tstamp />
+	
 	<property name="masu.dir" location="../main" />
 	<property file="${masu.dir}/build.properties" />
 
 	<property name="masu.cls.dir" location="${masu.dir}/${CLS.DIR}" />
 	<property name="deploy.target.dir" location="${masu.dir}/${PACKAGE.PLUGIN.DIR}/${ant.project.name}" />
 
-	<property name="src.dir" location="src" />
-	<property name="cls.dir" location="cls" />
-	<property name="resource.dir" location="resource" />
-	<property name="build.root.dir" location="plugins" />
-	<property name="build.target.dir" location="${build.root.dir}/${ant.project.name}" />
-	<property name="jar.file" value="${build.target.dir}/${ant.project.name}.jar" />
+	<property name="src.dir" value="src" />
+	<property name="cls.dir" value="cls" />
+	<property name="tool.name" value="${ant.project.name}" />
+	<property name="package.name" value="${tool.name}" />
+	<property name="package.dir" value="${package.name}" />
+	<property name="package.bin.dir" value="${package.dir}/bin" />
+	<property name="package.src.dir" value="${package.dir}/src" />
+	<property name="resource.dir" value="resource" />
+	<property name="build.root.dir" value="plugins" />
 
+	<property name="zip.name" value="${tool.name}${DSTAMP}${TSTAMP}.zip" />
+		
 	<target name="compile">
 		<mkdir dir="${cls.dir}" />
 		<javac classpath="${masu.cls.dir}" srcdir="${src.dir}" destdir="${cls.dir}" encoding="Windows-31J" />
 	</target>
 
-	<target name="jar" depends="compile">
-		<mkdir dir="${build.target.dir}" />
-		<jar basedir="${cls.dir}" destfile="${jar.file}" />
-	</target>
+	<target name="build" depends="compile" >
+		<mkdir dir="${package.dir}" />
+		<mkdir dir="${package.bin.dir}" />
 
-	<target name="build" depends="jar" />
+		<jar basedir="${cls.dir}" jarfile="${package.bin.dir}/${tool.name}.jar" />
+		<copy todir="${package.bin.dir}">
+					<fileset dir="${resource.dir}" />
+		</copy>
+	</target>
 
 	<target name="deploy" depends="build">
 		<mkdir dir="${deploy.target.dir}" />
-		<copy todir="${build.target.dir}">
-			<fileset dir="${resource.dir}" />
-		</copy>
 		<copy todir="${deploy.target.dir}">
-			<fileset dir="${build.target.dir}" />
+			<fileset dir="${package.bin.dir}" />
 		</copy>
 	</target>
 
+	<target name="package" depends="build">
+		<copy todir="${package.src.dir}">
+			<fileset dir="${src.dir}" />
+		</copy>
+		<zip destfile="${zip.name}" basedir="${package.dir}" />
+	</target>
+
 	<target name="clean">
-		<delete dir="${cls.dir}" />
-		<delete dir="${build.root.dir}" />
+		<delete verbose="true" dir="${cls.dir}" />
+		<delete verbose="true" dir="${build.root.dir}" />
+		<delete verbose="true" dir="${package.dir}" />
+		<delete verbose="true">
+			<fileset dir="." includes="${tool.name}*.zip" />
+		</delete>
 	</target>
 </project>
