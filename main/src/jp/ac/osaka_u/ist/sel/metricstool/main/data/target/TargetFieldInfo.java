@@ -40,7 +40,7 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
         super(modifiers, name, type, definitionClass, fromLine, fromColumn, toLine, toColumn);
 
         this.initializer = null;
-        
+
         this.privateVisible = privateVisible;
         this.namespaceVisible = namespaceVisible;
         this.inheritanceVisible = inheritanceVisible;
@@ -48,16 +48,26 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
 
         this.instance = instance;
     }
-    
+
+    /**
+     * フィールドの初期化式をセットする
+     * 
+     * @param initilzer フィールドの初期化式
+     */
     public final void setInitializer(final ExpressionInfo initilzer) {
         MetricsToolSecurityManager.getInstance().checkAccess();
         this.initializer = initilzer;
     }
-    
+
+    /**
+     * フィールドの初期化式を返す
+     * 
+     * @return　フィールドの初期化式
+     */
     public final ExpressionInfo getInitializer() {
-        return initializer;
+        return this.initializer;
     }
-    
+
     /**
      * 子クラスから参照可能かどうかを返す
      * 
@@ -111,7 +121,7 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
     public boolean isStaticMember() {
         return !this.instance;
     }
-    
+
     private ExpressionInfo initializer;
 
     /**

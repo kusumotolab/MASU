@@ -237,11 +237,11 @@ public enum OPERATOR {
     }
     
     public boolean isFirstIsAssignmentee() {
-        return firstIsAssignmentee;
+        return this.firstIsAssignmentee;
     }
     
     public boolean isFirstIsReferencee() {
-        return firstIsReferencee;
+        return this.firstIsReferencee;
     }
 
     /**

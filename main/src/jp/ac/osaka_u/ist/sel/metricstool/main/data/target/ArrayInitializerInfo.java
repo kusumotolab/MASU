@@ -18,6 +18,16 @@ import java.util.TreeSet;
 @SuppressWarnings("serial")
 public final class ArrayInitializerInfo extends ExpressionInfo {
 
+    /**
+     * オブジェクトを初期化
+     * 
+     * @param elements 初期化式
+     * @param ownerMethod オーナーメソッド
+     * @param fromLine 開始行
+     * @param fromColumn 開始列
+     * @param toLine 終了行
+     * @param toColumn 終了列
+     */
     public ArrayInitializerInfo(List<ExpressionInfo> elements, final CallableUnitInfo ownerMethod,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
@@ -25,19 +35,29 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
         if (null == elements) {
             throw new IllegalArgumentException("elements is null");
         }
-        this.elements = Collections.unmodifiableList(elements);
+        this.elementInitialiers = Collections.unmodifiableList(elements);
 
-        for (final ExpressionInfo element : this.elements) {
+        for (final ExpressionInfo element : this.elementInitialiers) {
             element.setOwnerExecutableElement(this);
         }
     }
 
-    public List<ExpressionInfo> getElements() {
-        return elements;
+    /**
+     * 要素の初期化式を返す
+     * 
+     * @return 要素の初期化式
+     */
+    public List<ExpressionInfo> getElementInitializers() {
+        return this.elementInitialiers;
     }
 
+    /**
+     * 配列の長さを返す
+     * 
+     * @return　配列の長さ
+     */
     public final int getArrayLength() {
-        return this.elements.size();
+        return this.elementInitialiers.size();
     }
 
     @Override
@@ -45,7 +65,7 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
         final StringBuilder text = new StringBuilder();
         text.append("{");
 
-        final Iterator<ExpressionInfo> elements = this.elements.iterator();
+        final Iterator<ExpressionInfo> elements = this.elementInitialiers.iterator();
         if (elements.hasNext()) {
             text.append(elements.next().getText());
         }
@@ -67,7 +87,7 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
     @Override
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
         final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> usages = new TreeSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
-        for (final ExpressionInfo element : this.getElements()) {
+        for (final ExpressionInfo element : this.getElementInitializers()) {
             usages.addAll(element.getVariableUsages());
         }
         return Collections.unmodifiableSet(usages);
@@ -80,12 +100,12 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
      */
     public Set<CallInfo<?>> getCalls() {
         final Set<CallInfo<?>> calls = new HashSet<CallInfo<?>>();
-        for (final ExpressionInfo element : this.getElements()) {
+        for (final ExpressionInfo element : this.getElementInitializers()) {
             calls.addAll(element.getCalls());
         }
         return Collections.unmodifiableSet(calls);
     }
 
-    private final List<ExpressionInfo> elements;
+    private final List<ExpressionInfo> elementInitialiers;
 
 }

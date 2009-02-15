@@ -56,10 +56,15 @@ public final class CatchBlockInfo extends BlockInfo {
      * @return catchする例外を表す変数の情報
      */
     public final LocalVariableInfo getCaughtException() {
-        return caughtException;
+        return this.caughtException;
     }
 
-    public void setCaughtException(LocalVariableInfo caughtException) {
+    /**
+     * このcatch節で受ける例外をセットする
+     *  
+     * @param caughtException このcatch節で受ける例外
+     */
+    public void setCaughtException(final LocalVariableInfo caughtException) {
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == caughtException) {
             throw new NullPointerException();
@@ -92,12 +97,12 @@ public final class CatchBlockInfo extends BlockInfo {
         final StringBuilder sb = new StringBuilder();
 
         sb.append("catch (");
-        
+
         final LocalVariableInfo caughtException = this.getCaughtException();
         sb.append(caughtException.getType().getTypeName());
         sb.append(" ");
         sb.append(caughtException.getName());
-        
+
         sb.append(") {");
         sb.append(System.getProperty("line.separator"));
 

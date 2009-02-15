@@ -281,24 +281,34 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
 
         this.definedFields.add(definedField);
     }
-    
+
+    /**
+     * インスタンスイニシャライザーを追加する
+     * 
+     * @param instanceInitializer 追加されるインスタンスイニシャライザー
+     */
     public final void addInstanceInitializer(final InstanceInitializerInfo instanceInitializer) {
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == instanceInitializer) {
             throw new NullPointerException();
         }
-        
+
         this.instanceInitializers.add(instanceInitializer);
     }
-    
+
+    /**
+     * スタティックイニシャライザーを追加する
+     * 
+     * @param staticInitializer 追加されるスタティックイニシャライザー
+     */
     public final void addStaticInitializer(final StaticInitializerInfo staticInitializer) {
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == staticInitializer) {
             throw new NullPointerException();
         }
-        
+
         this.staticInitializers.add(staticInitializer);
-    }    
+    }
 
     /**
      * このクラスにおいてアクセス可能なクラスを追加する．プラグインから呼ぶとランタイムエラー.
@@ -362,7 +372,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * @return 暗黙のインスタンスイニシャライザ
      */
     public InstanceInitializerInfo getImplicitInstanceInitializer() {
-        return implicitInstanceInitializer;
+        return this.implicitInstanceInitializer;
     }
 
     /**
@@ -370,25 +380,25 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * @return このクラスのインスタンスイニシャライザ一覧
      */
     public SortedSet<InstanceInitializerInfo> getInstanceInitializers() {
-        return instanceInitializers;
+        return this.instanceInitializers;
     }
-    
+
     /**
      * このクラスの暗黙のスタティックイニシャライザを返す
      * @return 暗黙のスタティックイニシャライザ
      */
     public StaticInitializerInfo getImplicitStaticInitializer() {
-        return implicitStaticInitializer;
+        return this.implicitStaticInitializer;
     }
-    
+
     /**
      * このクラスのスタティックイニシャライザ一覧を返す
      * @return スタティックイニシャライザ一覧
      */
     public SortedSet<StaticInitializerInfo> getStaticInitializers() {
-        return staticInitializers;
+        return this.staticInitializers;
     }
-    
+
     /**
      * このクラスにおいてアクセス可能なクラスのSortedSetを返す．
      * 
@@ -590,12 +600,12 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
      * このクラスのスタティックイニシャライザ一覧を保存するための変数
      */
     private final SortedSet<StaticInitializerInfo> staticInitializers;
-    
+
     /**
      * このクラスのインスタンスイニシャライザ一覧を保存するための変数
      */
     private final SortedSet<InstanceInitializerInfo> instanceInitializers;
-    
+
     /**
      * このクラスの暗黙のインスタンスイニシャライザを保存するための変数
      */

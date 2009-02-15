@@ -114,8 +114,8 @@ public final class UnresolvedImportStatementInfo extends UnresolvedUnitInfo<Impo
             }
         }
 
-        this.resolvedInfo = new ImportStatementInfo(fromLine, fromColumn, toLine, toColumn,
-                accessibleClasses);
+        this.resolvedInfo = new ImportStatementInfo(accessibleClasses, fromLine, fromColumn,
+                toLine, toColumn);
         return this.resolvedInfo;
     }
 

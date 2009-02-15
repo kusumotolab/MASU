@@ -18,6 +18,7 @@ public final class SynchronizedBlockInfo extends BlockInfo {
      * 
      * @param ownerClass 所有クラス
      * @param outerSpace 外側のブロック
+     * @param synchronizedExpression 同期式
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
@@ -65,8 +66,13 @@ public final class SynchronizedBlockInfo extends BlockInfo {
         return sb.toString();
     }
 
+    /**
+     * 同期式を返す
+     * 
+     * @return　同期式
+     */
     public final ExpressionInfo getSynchronizedExpression() {
-        return synchronizedExpression;
+        return this.synchronizedExpression;
     }
 
     private final ExpressionInfo synchronizedExpression;
