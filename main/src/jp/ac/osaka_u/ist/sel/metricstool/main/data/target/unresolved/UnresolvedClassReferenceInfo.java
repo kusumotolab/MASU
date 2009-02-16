@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,7 +37,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
      * @param availableNamespaces 名前空間名
      * @param referenceName 参照名
      */
-    public UnresolvedClassReferenceInfo(final List<UnresolvedImportStatementInfo> availableNamespaces,
+    public UnresolvedClassReferenceInfo(
+            final List<UnresolvedImportStatementInfo> availableNamespaces,
             final String[] referenceName) {
 
         // 不正な呼び出しでないかをチェック
@@ -46,8 +48,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
         }
 
         this.availableNamespaces = availableNamespaces;
-        this.referenceName = referenceName;
-        this.fullReferenceName = referenceName;
+        this.referenceName = Arrays.<String> copyOf(referenceName, referenceName.length);
+        this.fullReferenceName = Arrays.<String> copyOf(referenceName, referenceName.length);
         this.qualifierUsage = null;
         this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo<?>>();
     }
@@ -59,7 +61,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
      * @param referenceName 参照名
      * @param ownerUsage 親参照
      */
-    public UnresolvedClassReferenceInfo(final List<UnresolvedImportStatementInfo> availableNamespaces,
+    public UnresolvedClassReferenceInfo(
+            final List<UnresolvedImportStatementInfo> availableNamespaces,
             final String[] referenceName, final UnresolvedClassReferenceInfo ownerUsage) {
 
         // 不正な呼び出しでないかをチェック
@@ -75,7 +78,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
         System.arraycopy(referenceName, 0, fullReferenceName, ownerReferenceName.length,
                 referenceName.length);
         this.fullReferenceName = fullReferenceName;
-        this.referenceName = referenceName;
+        this.referenceName = Arrays.<String> copyOf(referenceName, referenceName.length);
         this.qualifierUsage = ownerUsage;
         this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo<?>>();
     }
@@ -510,7 +513,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
      * @return この参照型のownerも含めた参照名を返す
      */
     public final String[] getFullReferenceName() {
-        return this.fullReferenceName;
+        return Arrays.<String>copyOf(this.fullReferenceName, this.fullReferenceName.length);
     }
 
     /**
@@ -519,7 +522,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
      * @return この参照型の参照名を返す
      */
     public final String[] getReferenceName() {
-        return this.referenceName;
+        return Arrays.<String>copyOf(this.referenceName, this.referenceName.length);
     }
 
     /**

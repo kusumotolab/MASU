@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -42,7 +43,7 @@ public final class UnresolvedImportStatementInfo extends UnresolvedUnitInfo<Impo
             throw new NullPointerException();
         }
 
-        this.importName = namespace;
+        this.importName = Arrays.<String> copyOf(namespace, namespace.length);
         this.allClasses = allClasses;
     }
 
@@ -125,7 +126,7 @@ public final class UnresolvedImportStatementInfo extends UnresolvedUnitInfo<Impo
      * @return –¼‘O‹óŠÔ–¼
      */
     public String[] getImportName() {
-        return this.importName;
+        return Arrays.<String> copyOf(this.importName, this.importName.length);
     }
 
     /**
@@ -152,14 +153,8 @@ public final class UnresolvedImportStatementInfo extends UnresolvedUnitInfo<Impo
      */
     @Override
     public int hashCode() {
-
-        int hash = 0;
-        String[] namespace = this.getNamespace();
-        for (int i = 0; i < namespace.length; i++) {
-            hash += namespace.hashCode();
-        }
-
-        return hash;
+        final String[] namespace = this.getNamespace();
+        return Arrays.hashCode(namespace);
     }
 
     /**

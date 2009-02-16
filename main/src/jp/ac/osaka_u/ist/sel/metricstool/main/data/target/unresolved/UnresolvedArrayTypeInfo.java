@@ -259,6 +259,10 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
             if (null == o) {
                 throw new NullPointerException();
             }
+            
+            if(!(o instanceof Key)){
+                return false;
+            }
 
             final UnresolvedTypeInfo<?> firstKey = this.getFirstKey();
             final UnresolvedTypeInfo<?> correspondFirstKey = ((Key) o).getFirstKey();

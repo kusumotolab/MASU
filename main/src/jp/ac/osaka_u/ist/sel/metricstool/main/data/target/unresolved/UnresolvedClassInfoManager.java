@@ -49,7 +49,7 @@ public class UnresolvedClassInfoManager {
      * @author higo
      * 
      */
-    class ClassKey implements Comparable<ClassKey> {
+    static class ClassKey implements Comparable<ClassKey> {
 
         /**
          * コンストラクタ．クラスの完全修飾名を与える
@@ -117,8 +117,12 @@ public class UnresolvedClassInfoManager {
                 throw new NullPointerException();
             }
 
-            String[] fullQualifiedName = this.getFullQualifiedName();
-            String[] correspondFullQualifiedName = ((ClassKey) o).getFullQualifiedName();
+            if(!(o instanceof ClassKey)){
+                return false;
+            }
+            
+            final String[] fullQualifiedName = this.getFullQualifiedName();
+            final String[] correspondFullQualifiedName = ((ClassKey) o).getFullQualifiedName();
 
             if (fullQualifiedName.length != correspondFullQualifiedName.length) {
                 return false;

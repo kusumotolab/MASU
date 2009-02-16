@@ -46,7 +46,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
         }
 
         this.availableNamespaces = availableNamespaces;
-        this.referenceName = referenceName;
+        this.referenceName = Arrays.<String>copyOf(referenceName, referenceName.length);
         this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>>();
     }
 
@@ -581,7 +581,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
      * @return ‚±‚ÌŽQÆŒ^‚ÌŽQÆ–¼‚ð•Ô‚·
      */
     public final String[] getReferenceName() {
-        return this.referenceName;
+        return Arrays.<String>copyOf(this.referenceName, this.referenceName.length);
     }
 
     /**

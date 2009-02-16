@@ -78,7 +78,7 @@ public final class VoidTypeInfo implements TypeInfo, UnresolvedTypeInfo<VoidType
     /**
      * void 型の型名を表す定数
      */
-    public static final String VOID_STRING = new String("void");
+    public static final String VOID_STRING = "void";
 
     /**
      * 引数なしコンストラクタ

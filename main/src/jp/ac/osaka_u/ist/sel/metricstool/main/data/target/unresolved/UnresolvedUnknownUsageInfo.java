@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.SortedSet;
 
@@ -54,7 +55,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
             final int toColumn) {
 
         this.availableNamespaces = availableNamespaces;
-        this.name = name;
+        this.name = Arrays.<String>copyOf(name, name.length);
 
         this.setFromLine(fromLine);
         this.setFromColumn(fromColumn);
@@ -1217,7 +1218,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
      * @return 未解決エンティティ使用名
      */
     public String[] getName() {
-        return this.name;
+        return Arrays.<String>copyOf(this.name, this.name.length);
     }
 
     @Override

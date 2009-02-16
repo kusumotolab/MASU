@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -217,7 +218,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * @return 名前空間名
      */
     public String[] getNamespace() {
-        return this.namespace;
+        return Arrays.<String>copyOf(this.namespace, this.namespace.length);
     }
 
     /**
@@ -278,7 +279,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             throw new NullPointerException();
         }
 
-        this.namespace = namespace;
+        this.namespace = Arrays.<String>copyOf(namespace, namespace.length);
     }
 
     /**
@@ -494,7 +495,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * @return インスランスイニシャライザ
      */
     public UnresolvedInstanceInitializerInfo getInstanceInitializer() {
-        return implicitInstanceInitializer;
+        return this.implicitInstanceInitializer;
     }
 
     /**
@@ -503,7 +504,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * @return スタティックイニシャライザ
      */
     public UnresolvedStaticInitializerInfo getStaticInitializer() {
-        return implicitStaticInitializer;
+        return this.implicitStaticInitializer;
     }
 
     /**

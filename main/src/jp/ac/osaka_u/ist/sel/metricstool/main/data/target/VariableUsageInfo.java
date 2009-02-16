@@ -190,9 +190,11 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
             //　親クラスで定義された型パラメータか
             final Map<TypeParameterInfo, TypeInfo> typeParameterUsages = ownerClass
                     .getTypeParameterUsages();
-            for (final TypeParameterInfo typeParameter : typeParameterUsages.keySet()) {
+            for (final Map.Entry<TypeParameterInfo, TypeInfo> entry : typeParameterUsages
+                    .entrySet()) {
+                final TypeParameterInfo typeParameter = entry.getKey();
                 if (typeParameter.equals(definitionType)) {
-                    return typeParameterUsages.get(typeParameter);
+                    return entry.getValue();
                 }
             }
 
