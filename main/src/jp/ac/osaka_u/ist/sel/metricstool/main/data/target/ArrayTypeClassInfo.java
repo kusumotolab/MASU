@@ -76,5 +76,5 @@ public final class ArrayTypeClassInfo extends ClassInfo {
      * 配列型を表すためのクラスなので名前はない．
      * 名前がないことを表す定数．
      */
-    public static final String NONAME = new String("noname");
+    public static final String NONAME = "noname";
 }

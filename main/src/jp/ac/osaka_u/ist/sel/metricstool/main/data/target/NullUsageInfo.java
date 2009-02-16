@@ -72,5 +72,5 @@ public final class NullUsageInfo extends ExpressionInfo {
      */
     private static final TypeInfo NULLTYPE = UnknownTypeInfo.getInstance();
 
-    private static final String NULLSTRING = new String("null");
+    private static final String NULLSTRING = "null";
 }

@@ -45,9 +45,9 @@ public class UnknownTypeInfo implements TypeInfo {
     }
 
     /**
-     * void 型の型名を表す定数
+     * 不明型の型名を表す定数
      */
-    public static final String UNKNOWN_STRING = new String("unknown");
+    public static final String UNKNOWN_STRING = "UNKNOWN";
 
     /**
      * このクラスの単一オブジェクトを保存するための定数

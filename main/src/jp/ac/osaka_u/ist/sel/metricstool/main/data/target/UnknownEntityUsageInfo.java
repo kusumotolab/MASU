@@ -57,5 +57,5 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
         return UNKNOWNSTRING;
     }
 
-    private static final String UNKNOWNSTRING = new String("UNKNOWN");
+    private static final String UNKNOWNSTRING = "UNKNOWN";
 }
