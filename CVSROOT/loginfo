@@ -24,5 +24,5 @@
 #DEFAULT (echo ""; id; echo %s; date; cat) >> $CVSROOT/CVSROOT/commitlog
 # or
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
-DEFAULT  (echo "`id -un` changed %{s}"; echo ""; cat) | /usr/local/bin/nkf | Mail -s "CVS log(METRICSTOOL) : the repository was updated by `id -un`" higo@ist.osaka-u.ac.jp,m-itii@ist.osaka-u.ac.jp,t-miyake@ist.osaka-u.ac.jp
+DEFAULT  (echo "`id -un` changed %{s}"; echo ""; cat) | /usr/local/bin/nkf | Mail -s "CVS log(METRICSTOOL) : the repository was updated by `id -un`" higo@ist.osaka-u.ac.jp,m-itii@ist.osaka-u.ac.jp,t-miyake@ist.osaka-u.ac.jp,g-yamada@kir.ics.es.osaka-u.ac.jp
 
