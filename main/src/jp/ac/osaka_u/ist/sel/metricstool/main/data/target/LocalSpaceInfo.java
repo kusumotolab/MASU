@@ -111,6 +111,26 @@ public abstract class LocalSpaceInfo extends UnitInfo {
         return this.ownerClass;
     }
 
+    public static SortedSet<StatementInfo> getAllStatements(final LocalSpaceInfo localSpace) {
+        if (null == localSpace) {
+            new NullPointerException("localSpace is null");
+        }
+
+        if (localSpace instanceof ExternalMethodInfo
+                || localSpace instanceof ExternalConstructorInfo) {
+            new IllegalArgumentException("localSpace is an external local space.");
+        }
+        
+        final SortedSet<StatementInfo> allStatements = new TreeSet<StatementInfo>();
+        for (final StatementInfo innerStatement : localSpace.getStatements()) {
+            allStatements.add(innerStatement);
+            if (innerStatement instanceof BlockInfo) {
+                allStatements.addAll(LocalSpaceInfo.getAllStatements((BlockInfo) innerStatement));
+            }
+        }
+        return allStatements;
+    }
+
     /**
      * このローカルスコープの直内の文情報一覧を保存するための変数
      */

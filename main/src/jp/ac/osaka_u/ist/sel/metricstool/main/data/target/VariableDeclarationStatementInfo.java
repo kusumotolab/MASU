@@ -39,6 +39,7 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
 
         this.variableDeclaration = variableDeclaration;
         this.variableDeclaration.setOwnerExecutableElement(this);
+        this.variableDeclaration.getUsedVariable().setDeclarationStatement(this);
 
         if (null != initializationExpression) {
             this.initializationExpression = initializationExpression;

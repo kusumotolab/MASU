@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * ローカル変数を表すクラス．型を提供するのみ．
@@ -48,4 +50,18 @@ public final class LocalVariableInfo extends VariableInfo<LocalSpaceInfo> {
         }
         return Collections.unmodifiableSet(localVariables);
     }
+    
+    void setDeclarationStatement(VariableDeclarationStatementInfo declarationStatement) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if(null == declarationStatement) {
+            throw new NullPointerException("declarationStatement is null.");
+        }
+        this.declarationStatement = declarationStatement;
+    }
+    
+    public VariableDeclarationStatementInfo getDeclarationStatement() {
+        return declarationStatement;
+    }
+    
+    private VariableDeclarationStatementInfo declarationStatement;
 }
