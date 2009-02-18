@@ -52,11 +52,15 @@ public final class TargetFieldInfo extends FieldInfo implements Visualizable, Me
     /**
      * フィールドの初期化式をセットする
      * 
-     * @param initilzer フィールドの初期化式
+     * @param initializer フィールドの初期化式
      */
-    public final void setInitializer(final ExpressionInfo initilzer) {
+    public final void setInitializer(final ExpressionInfo initializer) {
         MetricsToolSecurityManager.getInstance().checkAccess();
-        this.initializer = initilzer;
+        if (null == initializer) {
+            throw new IllegalArgumentException();
+        }
+
+        this.initializer = initializer;
     }
 
     /**
