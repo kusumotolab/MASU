@@ -11,6 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.IntraProceduralCFG;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
@@ -18,7 +19,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 
@@ -31,45 +31,45 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
  */
 public class IntraProceduralPDG extends PDG {
 
-    private final TargetMethodInfo method;
+    private final CallableUnitInfo unit;
 
     /**
      * PDGを構築時に利用するCFG
      */
     private final IntraProceduralCFG cfg;
 
-    public IntraProceduralPDG(final TargetMethodInfo method, final IPDGNodeFactory pdgNodeFactory,
+    public IntraProceduralPDG(final CallableUnitInfo unit, final IPDGNodeFactory pdgNodeFactory,
             final ICFGNodeFactory cfgNodeFactory) {
         super(pdgNodeFactory);
-        if (null == method) {
+        if (null == unit) {
             throw new IllegalArgumentException("method is null.");
         }
 
-        this.method = method;
+        this.unit = unit;
 
-        this.cfg = new IntraProceduralCFG(method, cfgNodeFactory);
+        this.cfg = new IntraProceduralCFG(unit, cfgNodeFactory);
 
         this.buildPDG();
     }
 
-    public IntraProceduralPDG(final TargetMethodInfo method) {
-        this(method, new DefaultPDGNodeFactory(), new DefaultCFGNodeFactory());
+    public IntraProceduralPDG(final CallableUnitInfo unit) {
+        this(unit, new DefaultPDGNodeFactory(), new DefaultCFGNodeFactory());
     }
 
     @Override
     protected void buildPDG() {
-        if(null == this.getCFG().getEnterNode()) {
+        if (null == this.getCFG().getEnterNode()) {
             return;
         }
-        
-        for (final ParameterInfo parameter : this.method.getParameters()) {
+
+        for (final ParameterInfo parameter : this.unit.getParameters()) {
             final ParameterNode parameterNode = new ParameterNode(parameter);
             this.enterNodes.add(parameterNode);
             this.buildDataDependence(parameterNode, parameter, this.cfg.getEnterNode(),
                     new HashSet<CFGControlNode>());
         }
 
-        for (final StatementInfo statement : LocalSpaceInfo.getAllStatements(this.method)) {
+        for (final StatementInfo statement : LocalSpaceInfo.getAllStatements(this.unit)) {
 
             // statementと他の文とのデータ依存を構築
             {
@@ -191,7 +191,7 @@ public class IntraProceduralPDG extends PDG {
             }
         }
     }
-    
+
     protected PDGNode<?> getStatementNode(final StatementInfo statement) {
         final PDGNode<?> node = this.nodeFactory.makeNode(statement);
         if (statement instanceof ReturnStatementInfo) {
@@ -205,11 +205,11 @@ public class IntraProceduralPDG extends PDG {
      * @return
      */
     public IntraProceduralCFG getCFG() {
-        return cfg;
+        return this.cfg;
     }
 
-    public TargetMethodInfo getMethodInfo() {
-        return this.method;
+    public CallableUnitInfo getMethodInfo() {
+        return this.unit;
     }
 
     public final ParameterNode getParamerNode(final ParameterInfo parameter) {
