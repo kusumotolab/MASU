@@ -1,22 +1,19 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
@@ -25,6 +22,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageListener;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.DefaultPDGNodeFactory;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.IPDGNodeFactory;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -272,6 +272,67 @@ public class SCDetector extends MetricsTool {
         scdetector.readTargetFiles();
         scdetector.analyzeTargetFiles();
 
+        // PDG,CFGのノード集合を定義
+        out.println("buildeing PDGs ...");
+        final IPDGNodeFactory pdgNodeFactory = new DefaultPDGNodeFactory();
+        final ICFGNodeFactory cfgNodeFactory = new DefaultCFGNodeFactory();
+
+        // 各メソッドのPDGを構築
+        for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
+                .getTargetMethodInfos()) {
+            final IntraProceduralPDG pdg = new IntraProceduralPDG(method, pdgNodeFactory,
+                    cfgNodeFactory);
+        }
+
+        // コンストラクタのPDGを構築
+        for (final TargetConstructorInfo constructor : DataManager.getInstance()
+                .getMethodInfoManager().getTargetConstructorInfos()) {
+            final IntraProceduralPDG pdg = new IntraProceduralPDG(constructor, pdgNodeFactory,
+                    cfgNodeFactory);
+        }
+
+        //ExecutableElement単位で正規化データを構築する
+        out.println("constructing statement hashtable ...");
+        for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
+                .getTargetMethodInfos()) {
+            NormalizedElementHashMap.INSTANCE.makeHash(method);
+        }
+
+        // ハッシュ値が同じ2つのExecutableElementを基点にしてコードクローンを検出
+        for (final Integer hash : NormalizedElementHashMap.INSTANCE.keySet()) {
+
+            final List<ExecutableElementInfo> elements = NormalizedElementHashMap.INSTANCE
+                    .get(hash);
+
+            if ((Configuration.INSTANCE.getC() < elements.size())
+                    && !(elements.get(0) instanceof ReturnStatementInfo)) {
+                continue;
+            }
+
+            for (int i = 0; i < elements.size(); i++) {
+                for (int j = i + 1; j < elements.size(); j++) {
+
+                    final ExecutableElementInfo elementA = elements.get(i);
+                    final ExecutableElementInfo elementB = elements.get(j);
+                    
+
+                    final ClonePairInfo clonePair = new ClonePairInfo(elementA, elementB);
+
+                    final Set<VariableInfo<?>> usedVariableHashesA = new HashSet<VariableInfo<?>>();
+                    final Set<VariableInfo<?>> usedVariableHashesB = new HashSet<VariableInfo<?>>();
+
+                    ProgramSlice.performBackwordSlice(elementA, elementB, clonePair,
+                            usedVariableHashesA, usedVariableHashesB, clonePairs);
+
+                    if (Configuration.INSTANCE.getS() <= clonePair.size()) {
+                        clonePairs.add(clonePair);
+                    }
+                }
+            }
+        }
+        
+        
+        /*
         // 変数を指定することにより，その変数に対して代入を行っている文を取得するためのハッシュを構築する
         // ただし，条件節については，変数を参照している場合もハッシュを構築する
         out.println("constructing variable - statement relations ...");
@@ -460,6 +521,7 @@ public class SCDetector extends MetricsTool {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
 
         out.println("successifully finished.");
     }
