@@ -16,9 +16,34 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.IPDGNodeFactory;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGNode;
 
 
 public class ProgramSlice {
+
+    static void addDuplicatedStatementsWithBackwordSlice(final StatementInfo statementA,
+            final StatementInfo statementB, final IPDGNodeFactory pdgNodeFactory,
+            final ClonePairInfo clonePair) {
+
+        final PDGNode<?> nodeA = pdgNodeFactory.getNode(statementA);
+        final PDGNode<?> nodeB = pdgNodeFactory.getNode(statementB);
+
+        final Set<PDGEdge> edgesA = nodeA.getBackwardEdges();
+        final Set<PDGEdge> edgesB = nodeB.getBackwardEdges();
+
+        for (final PDGEdge edgeA : edgesA) {
+
+            final PDGNode<?> fromNodeA = edgeA.getFromNode();
+           
+            for (final PDGEdge edgeB : edgesB) {
+
+                final PDGNode<?> fromNodeB = edgeB.getFromNode();
+            }
+        }
+
+    }
 
     /**
      * 文(statementA，statementB)を基点としてバックワードスライスを行い，
@@ -31,6 +56,7 @@ public class ProgramSlice {
      * @param usedVariableHashesB
      * @param clonePairs
      */
+    /*
     static void performBackwordSlice(final ExecutableElementInfo elementA,
             final ExecutableElementInfo elementB, final ClonePairInfo clonePair,
             final Set<VariableInfo<?>> unmodifiableUsedVariableHashesA,
@@ -80,9 +106,9 @@ public class ProgramSlice {
 
             // クローンが存在しないExecutableElementについては調べる必要がない
             {
-                final int hashA = NormalizedElementHashMap.INSTANCE
+                final int hashA = NormalizedStatementHashMap.INSTANCE
                         .getHash(relatedElementArrayA[a]);
-                if (NormalizedElementHashMap.INSTANCE.get(hashA).size() < 2) {
+                if (NormalizedStatementHashMap.INSTANCE.get(hashA).size() < 2) {
                     continue;
                 }
             }
@@ -96,9 +122,9 @@ public class ProgramSlice {
 
                 // クローンが存在しないExecutableElementについては調べる必要がない
                 {
-                    final int hashB = NormalizedElementHashMap.INSTANCE
+                    final int hashB = NormalizedStatementHashMap.INSTANCE
                             .getHash(relatedElementArrayB[b]);
-                    if (NormalizedElementHashMap.INSTANCE.get(hashB).size() < 2) {
+                    if (NormalizedStatementHashMap.INSTANCE.get(hashB).size() < 2) {
                         continue;
                     }
                 }
@@ -111,9 +137,9 @@ public class ProgramSlice {
                 if ((relatedElementArrayA[a] instanceof SingleStatementInfo)
                         && (relatedElementArrayB[b] instanceof SingleStatementInfo)) {
 
-                    final int hashA = NormalizedElementHashMap.INSTANCE
+                    final int hashA = NormalizedStatementHashMap.INSTANCE
                             .getHash(relatedElementArrayA[a]);
-                    final int hashB = NormalizedElementHashMap.INSTANCE
+                    final int hashB = NormalizedStatementHashMap.INSTANCE
                             .getHash(relatedElementArrayB[b]);
                     if (hashA == hashB) {
 
@@ -187,16 +213,17 @@ public class ProgramSlice {
         for (int a = 0; a < innerElementArrayA.length; a++) {
 
             //　クローンがないExecutableElementについては調べなくてよい            
-            final int hashA = NormalizedElementHashMap.INSTANCE.getHash(innerElementArrayA[a]);
-            if (NormalizedElementHashMap.INSTANCE.get(hashA).size() < 2) {
+            final int hashA = NormalizedStatementHashMap.INSTANCE.getHash(innerElementArrayA[a]);
+            if (NormalizedStatementHashMap.INSTANCE.get(hashA).size() < 2) {
                 continue;
             }
 
             for (int b = 0; b < innerElementArrayB.length; b++) {
 
                 //　クローンがないExecutableElementについては調べなくてよい
-                final int hashB = NormalizedElementHashMap.INSTANCE.getHash(innerElementArrayB[b]);
-                if (NormalizedElementHashMap.INSTANCE.get(hashB).size() < 2) {
+                final int hashB = NormalizedStatementHashMap.INSTANCE
+                        .getHash(innerElementArrayB[b]);
+                if (NormalizedStatementHashMap.INSTANCE.get(hashB).size() < 2) {
                     continue;
                 }
 
@@ -229,8 +256,8 @@ public class ProgramSlice {
                     .getConditionalClause().getCondition();
             final ConditionInfo condition2 = ((ConditionalBlockInfo) ownerSpace2)
                     .getConditionalClause().getCondition();
-            final int hash1 = NormalizedElementHashMap.INSTANCE.getHash(condition1);
-            final int hash2 = NormalizedElementHashMap.INSTANCE.getHash(condition2);
+            final int hash1 = NormalizedStatementHashMap.INSTANCE.getHash(condition1);
+            final int hash2 = NormalizedStatementHashMap.INSTANCE.getHash(condition2);
 
             if (hash1 == hash2) {
                 clonePair.add(condition1, condition2);
@@ -243,7 +270,7 @@ public class ProgramSlice {
                         clonePairs);
             }
         }
-    }
+    }*/
 
     /**
      * 第一引数で与えられた変数を，第二引数で指定された式が使っているかを調べる

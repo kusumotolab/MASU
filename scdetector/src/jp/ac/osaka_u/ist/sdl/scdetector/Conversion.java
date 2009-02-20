@@ -118,6 +118,10 @@ public class Conversion {
         return sb.toString();
     }
 
+    public static String getNormalizedString(final ConditionalBlockInfo block) {
+        return getNormalizedString(block.getConditionalClause().getCondition());
+    }
+
     public static String getNormalizedString(final BlockInfo block) {
 
         final StringBuilder sb = new StringBuilder();

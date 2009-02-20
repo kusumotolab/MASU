@@ -2,20 +2,17 @@ package jp.ac.osaka_u.ist.sdl.scdetector;
 
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageListener;
@@ -293,45 +290,60 @@ public class SCDetector extends MetricsTool {
 
         //ExecutableElement単位で正規化データを構築する
         out.println("constructing statement hashtable ...");
+        final NormalizedStatementHashMap statementHash = new NormalizedStatementHashMap();
         for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
                 .getTargetMethodInfos()) {
-            NormalizedElementHashMap.INSTANCE.makeHash(method);
+            statementHash.addStatement(method);
         }
 
-        // ハッシュ値が同じ2つのExecutableElementを基点にしてコードクローンを検出
-        for (final Integer hash : NormalizedElementHashMap.INSTANCE.keySet()) {
+        // ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
+        for (final List<StatementInfo> statements : statementHash.values()) {
 
-            final List<ExecutableElementInfo> elements = NormalizedElementHashMap.INSTANCE
-                    .get(hash);
-
-            if ((Configuration.INSTANCE.getC() < elements.size())
-                    && !(elements.get(0) instanceof ReturnStatementInfo)) {
+            // 同じハッシュ値を持つ文が閾値以上ある場合は，その文をスライス起点にしない．
+            //　ただし，Return文は例外とする．
+            if ((Configuration.INSTANCE.getC() < statements.size())
+                    && !(statements.get(0) instanceof ReturnStatementInfo)) {
                 continue;
             }
 
-            for (int i = 0; i < elements.size(); i++) {
-                for (int j = i + 1; j < elements.size(); j++) {
+            for (int i = 0; i < statements.size(); i++) {
+                for (int j = i + 1; j < statements.size(); j++) {
 
-                    final ExecutableElementInfo elementA = elements.get(i);
-                    final ExecutableElementInfo elementB = elements.get(j);
-                    
+                    final StatementInfo statementA = statements.get(i);
+                    final StatementInfo statementB = statements.get(j);
 
-                    final ClonePairInfo clonePair = new ClonePairInfo(elementA, elementB);
+                    final ClonePairInfo clonePair = new ClonePairInfo(statementA, statementB);
 
-                    final Set<VariableInfo<?>> usedVariableHashesA = new HashSet<VariableInfo<?>>();
-                    final Set<VariableInfo<?>> usedVariableHashesB = new HashSet<VariableInfo<?>>();
+                    ProgramSlice.addDuplicatedStatementsWithBackwordSlice(statementA, statementB,
+                            pdgNodeFactory, clonePair);
+                }
+            }
 
-                    ProgramSlice.performBackwordSlice(elementA, elementB, clonePair,
-                            usedVariableHashesA, usedVariableHashesB, clonePairs);
+        }
 
-                    if (Configuration.INSTANCE.getS() <= clonePair.size()) {
-                        clonePairs.add(clonePair);
-                    }
+        /*
+        for (int i = 0; i < elements.size(); i++) {
+            for (int j = i + 1; j < elements.size(); j++) {
+
+                final ExecutableElementInfo elementA = elements.get(i);
+                final ExecutableElementInfo elementB = elements.get(j);
+                
+
+                final ClonePairInfo clonePair = new ClonePairInfo(elementA, elementB);
+
+                final Set<VariableInfo<?>> usedVariableHashesA = new HashSet<VariableInfo<?>>();
+                final Set<VariableInfo<?>> usedVariableHashesB = new HashSet<VariableInfo<?>>();
+
+                ProgramSlice.performBackwordSlice(elementA, elementB, clonePair,
+                        usedVariableHashesA, usedVariableHashesB, clonePairs);
+
+                if (Configuration.INSTANCE.getS() <= clonePair.size()) {
+                    clonePairs.add(clonePair);
                 }
             }
         }
-        
-        
+        */
+
         /*
         // 変数を指定することにより，その変数に対して代入を行っている文を取得するためのハッシュを構築する
         // ただし，条件節については，変数を参照している場合もハッシュを構築する
