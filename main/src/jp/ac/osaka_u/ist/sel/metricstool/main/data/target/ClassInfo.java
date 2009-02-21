@@ -22,8 +22,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo>,
-        MetricMeasurable, Modifier, TypeParameterizable {
+public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Modifier,
+        TypeParameterizable {
 
     /**
      * 名前空間名とクラス名からオブジェクトを生成する
@@ -117,25 +117,31 @@ public abstract class ClassInfo extends UnitInfo implements Comparable<ClassInfo
     }
 
     /**
-     * クラスオブジェクトの順序関係を定義するメソッド． 現在は，名前空間名順序を用いている．名前空間名が同じ場合は，クラス名（String）の順序になる．
+     * クラスオブジェクトの比較の場合は，名前空間に基づいた順序にするために定義している．
      */
-    public final int compareTo(final ClassInfo classInfo) {
+    @Override
+    public final int compareTo(final Position o) {
 
-        if (null == classInfo) {
-            throw new NullPointerException();
+        if (null == o) {
+            throw new IllegalArgumentException();
         }
 
-        final NamespaceInfo namespace = this.getNamespace();
-        final NamespaceInfo correspondNamespace = classInfo.getNamespace();
-        final int namespaceOrder = namespace.compareTo(correspondNamespace);
-        if (namespaceOrder != 0) {
-            return namespaceOrder;
+        if (o instanceof ClassInfo) {
+
+            final NamespaceInfo namespace = this.getNamespace();
+            final NamespaceInfo correspondNamespace = ((ClassInfo) o).getNamespace();
+            final int namespaceOrder = namespace.compareTo(correspondNamespace);
+            if (namespaceOrder != 0) {
+                return namespaceOrder;
+            }
+
+            final String name = this.getClassName();
+            final String correspondName = ((ClassInfo) o).getClassName();
+            return name.compareTo(correspondName);
+
+        } else {
+            return super.compareTo(o);
         }
-
-        final String name = this.getClassName();
-        final String correspondName = classInfo.getClassName();
-        return name.compareTo(correspondName);
-
     }
 
     /**

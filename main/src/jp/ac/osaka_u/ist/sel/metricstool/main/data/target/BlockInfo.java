@@ -52,37 +52,6 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
     }
 
     /**
-     * このブロックオブジェクトを他のブロックオブジェクトと比較する
-     */
-    @Override
-    public final int compareTo(ExecutableElementInfo o) {
-
-        if (null == o) {
-            throw new NullPointerException();
-        }
-
-        if (this.getFromLine() < o.getFromLine()) {
-            return -1;
-        } else if (this.getFromLine() > o.getFromLine()) {
-            return 1;
-        } else if (this.getFromColumn() < o.getFromColumn()) {
-            return -1;
-        } else if (this.getFromColumn() > o.getFromColumn()) {
-            return 1;
-        } else if (this.getToLine() < o.getToLine()) {
-            return -1;
-        } else if (this.getToLine() > o.getToLine()) {
-            return 1;
-        } else if (this.getToColumn() < o.getToColumn()) {
-            return -1;
-        } else if (this.getToColumn() > o.getToColumn()) {
-            return 1;
-        }
-
-        return 0;
-    }
-
-    /**
      * このブロックを所有するを返す
      * 
      * @return このブロックを所有するメソッド

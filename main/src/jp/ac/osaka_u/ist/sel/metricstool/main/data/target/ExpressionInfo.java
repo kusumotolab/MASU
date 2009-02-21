@@ -89,7 +89,7 @@ public abstract class ExpressionInfo implements ConditionInfo {
     }
 
     @Override
-    public final int compareTo(ExecutableElementInfo o) {
+    public final int compareTo(Position o) {
 
         if (null == o) {
             throw new NullPointerException();

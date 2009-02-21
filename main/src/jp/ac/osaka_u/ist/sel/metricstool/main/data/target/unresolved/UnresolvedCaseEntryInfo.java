@@ -58,38 +58,6 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
     }
 
     /**
-     * 比較用メソッド．
-     * 位置に基づいて比較する.
-     */
-    @Override
-    public final int compareTo(UnresolvedExecutableElementInfo<?> o) {
-
-        if (null == o) {
-            throw new NullPointerException();
-        }
-
-        if (this.getFromLine() < o.getFromLine()) {
-            return -1;
-        } else if (this.getFromLine() > o.getFromLine()) {
-            return 1;
-        } else if (this.getFromColumn() < o.getFromColumn()) {
-            return -1;
-        } else if (this.getFromColumn() > o.getFromColumn()) {
-            return 1;
-        } else if (this.getToLine() < o.getToLine()) {
-            return -1;
-        } else if (this.getToLine() > o.getToLine()) {
-            return 1;
-        } else if (this.getToColumn() < o.getToColumn()) {
-            return -1;
-        } else if (this.getToColumn() > o.getToColumn()) {
-            return 1;
-        }
-
-        return 0;
-    }
-
-    /**
      * この未解決 case エントリを解決する
      * 
      * @param usingClass 所属クラス

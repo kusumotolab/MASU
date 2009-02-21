@@ -52,21 +52,6 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
 
     }
 
-    @Override
-    public int compareTo(ExecutableElementInfo o) {
-        int result = super.compareTo(o);
-
-        if (0 == result && o instanceof VariableDeclarationStatementInfo) {
-            LocalVariableInfo argVariable = ((VariableDeclarationStatementInfo) o)
-                    .getDeclaredLocalVariable();
-
-            return this.getDeclaredLocalVariable().compareTo(argVariable);
-        } else {
-            return result;
-        }
-
-    }
-
     /**
      * ‚±‚ÌéŒ¾•¶‚ÅéŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ğ•Ô‚·
      * 

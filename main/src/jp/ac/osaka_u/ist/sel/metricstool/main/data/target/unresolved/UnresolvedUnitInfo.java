@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 
 
@@ -130,6 +131,30 @@ public abstract class UnresolvedUnitInfo<T extends UnitInfo> implements Resolvab
         return this.resolvedInfo;
     }
 
+    @Override
+    public int compareTo(Position o) {
+
+        if (this.getFromLine() < o.getFromLine()) {
+            return -1;
+        } else if (this.getFromLine() > o.getFromLine()) {
+            return 1;
+        } else if (this.getFromColumn() < o.getFromColumn()) {
+            return -1;
+        } else if (this.getFromColumn() > o.getFromColumn()) {
+            return 1;
+        } else if (this.getToLine() < o.getToLine()) {
+            return -1;
+        } else if (this.getToLine() > o.getToLine()) {
+            return 1;
+        } else if (this.getToColumn() < o.getToColumn()) {
+            return -1;
+        } else if (this.getToColumn() > o.getToColumn()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    
     /**
      * ŠJns‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
      */

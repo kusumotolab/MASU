@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -48,10 +49,10 @@ public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInf
     }
 
     @Override
-    public int compareTo(UnresolvedExecutableElementInfo<?> o) {
+    public int compareTo(Position o) {
 
         if (null == o) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
 
         if (this.getFromLine() < o.getFromLine()) {

@@ -23,7 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 
 public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visualizable, Modifier,
-        TypeParameterizable, Comparable<CallableUnitInfo> {
+        TypeParameterizable {
 
     /**
      * オブジェクトを初期化する
@@ -74,39 +74,28 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * メソッド間の順序関係を定義するメソッド．以下の順序で順序を決める．
-     * <ol>
-     * <li>メソッドを定義しているクラスの名前空間名</li>
-     * <li>メソッドを定義しているクラスのクラス名</li>
-     * <li>メソッド名</li>
-     * <li>メソッドの引数の個数</li>
-     * <li>メソッドの引数の型（第一引数から順番に）</li>
+     * メソッド間の順序の時は，定義されているクラスを考慮するために定義している．
      */
     @Override
-    public int compareTo(final CallableUnitInfo target) {
+    final public int compareTo(final Position o) {
 
-        if (null == target) {
+        if(null == o){
             throw new IllegalArgumentException();
         }
-
-        // クラスオブジェクトの compareTo を用いる．
-        // クラスの名前空間名，クラス名が比較に用いられている．
-        final ClassInfo ownerClass = this.getOwnerClass();
-        final ClassInfo correspondOwnerClass = target.getOwnerClass();
-        final int classOrder = ownerClass.compareTo(correspondOwnerClass);
-        if (classOrder != 0) {
-            return classOrder;
+        
+        if(o instanceof CallableUnitInfo){
+            
+            final ClassInfo ownerClass = this.getOwnerClass();
+            final ClassInfo correspondOwnerClass = ((CallableUnitInfo)o).getOwnerClass();
+            final int classOrder = ownerClass.compareTo(correspondOwnerClass);
+            if (classOrder != 0) {
+                return classOrder;
+            }               
         }
-
-        return this.compareArgumentsTo(target);
+        
+        return super.compareTo(o);
     }
 
-    /**
-     * 引数の型による比較を行う
-     * 
-     * @param target 比較対象ユニット
-     * @return
-     */
     public int compareArgumentsTo(final CallableUnitInfo target) {
         // 引数の個数で比較
         final int parameterNumber = this.getParameterNumber();

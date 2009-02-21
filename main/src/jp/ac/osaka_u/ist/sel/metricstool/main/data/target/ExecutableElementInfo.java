@@ -11,8 +11,7 @@ import java.util.Set;
  * @author higo
  *
  */
-public interface ExecutableElementInfo extends Position, Comparable<ExecutableElementInfo>,
-        Serializable {
+public interface ExecutableElementInfo extends Position, Serializable {
 
     /**
      * •Ï”‚Ìg—p‚ÌSet‚ğ•Ô‚·

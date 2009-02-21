@@ -118,37 +118,6 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
-     * 比較する
-     */
-    @Override
-    public int compareTo(ExecutableElementInfo o) {
-
-        if (null == o) {
-            throw new IllegalArgumentException();
-        }
-
-        if (this.getFromLine() < o.getFromLine()) {
-            return -1;
-        } else if (this.getFromLine() > o.getFromLine()) {
-            return 1;
-        } else if (this.getFromColumn() < o.getFromColumn()) {
-            return -1;
-        } else if (this.getFromColumn() > o.getFromColumn()) {
-            return 1;
-        } else if (this.getToLine() < o.getToLine()) {
-            return -1;
-        } else if (this.getToLine() > o.getToLine()) {
-            return 1;
-        } else if (this.getToColumn() < o.getToColumn()) {
-            return -1;
-        } else if (this.getToColumn() > o.getToColumn()) {
-            return 1;
-        }
-
-        return 0;
-    }
-
-    /**
      * この case エントリが属する switch ブロックを返す
      * 
      * @return この case エントリが属する switch ブロック

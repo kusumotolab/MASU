@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
 
 
 /**
@@ -23,16 +24,12 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
         this.fromColumn = fromColumn;
         this.toLine = toLine;
         this.toColumn = toColumn;
-        
+
         this.resolvedInfo = null;
     }
 
     @Override
-    public final int compareTo(UnresolvedExecutableElementInfo<?> o) {
-
-        if (null == o) {
-            throw new IllegalArgumentException();
-        }
+    public int compareTo(Position o) {
 
         if (this.getFromLine() < o.getFromLine()) {
             return -1;
@@ -50,9 +47,9 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
             return -1;
         } else if (this.getToColumn() > o.getToColumn()) {
             return 1;
+        } else {
+            return 0;
         }
-
-        return 0;
     }
 
     /**

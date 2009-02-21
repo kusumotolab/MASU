@@ -19,25 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * @param <TUnit> この変数を宣言しているユニット 
  */
-public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo implements Modifier,
-        Comparable<VariableInfo<TUnit>> {
-
-    /**
-     * 変数の順序を定義するメソッド．変数名（String）に従う．
-     * 
-     * @return 変数の順序関係
-     */
-    @Override
-    public int compareTo(final VariableInfo<TUnit> variable) {
-
-        if (null == variable) {
-            throw new NullPointerException();
-        }
-
-        String variableName = this.getName();
-        String correspondVariableName = variable.getName();
-        return variableName.compareTo(correspondVariableName);
-    }
+public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo implements Modifier {
 
     /**
      * 修飾子の Set を返す

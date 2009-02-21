@@ -110,6 +110,30 @@ public abstract class UnitInfo implements Position, Serializable {
         return super.hashCode();
     }
 
+    @Override
+    public int compareTo(Position o) {
+
+        if (this.getFromLine() < o.getFromLine()) {
+            return -1;
+        } else if (this.getFromLine() > o.getFromLine()) {
+            return 1;
+        } else if (this.getFromColumn() < o.getFromColumn()) {
+            return -1;
+        } else if (this.getFromColumn() > o.getFromColumn()) {
+            return 1;
+        } else if (this.getToLine() < o.getToLine()) {
+            return -1;
+        } else if (this.getToLine() > o.getToLine()) {
+            return 1;
+        } else if (this.getToColumn() < o.getToColumn()) {
+            return -1;
+        } else if (this.getToColumn() > o.getToColumn()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     /**
      * ŠJns‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
      */

@@ -82,20 +82,6 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
         return this.resolvedInfo;
     }
 
-    @Override
-    public int compareTo(UnresolvedExecutableElementInfo<?> o) {
-
-        final int result = super.compareTo(o);
-
-        if (0 == result && o instanceof UnresolvedVariableDeclarationStatementInfo) {
-            UnresolvedLocalVariableInfo argVariable = ((UnresolvedVariableDeclarationStatementInfo) o)
-                    .getDeclaredLocalVariable();
-            return this.getDeclaredLocalVariable().getName().compareTo(argVariable.getName());
-        } else {
-            return result;
-        }
-    }
-
     /**
      * ’è‹`‚³‚ê‚Ä‚¢‚é•Ï”‚ğ•Ô‚·
      * 

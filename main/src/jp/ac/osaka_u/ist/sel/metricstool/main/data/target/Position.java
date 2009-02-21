@@ -6,7 +6,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * 
  * @author higo
  */
-public interface Position {
+public interface Position extends Comparable<Position>{
 
     /**
      * ŠJns‚ğ•Ô‚·

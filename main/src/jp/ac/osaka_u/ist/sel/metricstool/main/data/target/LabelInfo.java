@@ -31,34 +31,6 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
         this.labeledStatement = labeledStatement;
     }
 
-    @Override
-    public int compareTo(ExecutableElementInfo o) {
-
-        if (null == o) {
-            throw new IllegalArgumentException();
-        }
-
-        if (this.getFromLine() < o.getFromLine()) {
-            return -1;
-        } else if (this.getFromLine() > o.getFromLine()) {
-            return 1;
-        } else if (this.getFromColumn() < o.getFromColumn()) {
-            return -1;
-        } else if (this.getFromColumn() > o.getFromColumn()) {
-            return 1;
-        } else if (this.getToLine() < o.getToLine()) {
-            return -1;
-        } else if (this.getToLine() > o.getToLine()) {
-            return 1;
-        } else if (this.getToColumn() < o.getToColumn()) {
-            return -1;
-        } else if (this.getToColumn() > o.getToColumn()) {
-            return 1;
-        }
-
-        return 0;
-    }
-
     /**
      * この文（ラベル定義）で用いられている変数利用の一覧を返す．
      * どの変数も用いられていないので，空のsetが返される
