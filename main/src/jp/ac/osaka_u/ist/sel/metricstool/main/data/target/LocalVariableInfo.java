@@ -33,7 +33,10 @@ public final class LocalVariableInfo extends VariableInfo<LocalSpaceInfo> {
     public LocalVariableInfo(final Set<ModifierInfo> modifiers, final String name,
             final TypeInfo type, final LocalSpaceInfo definitionSpace, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
+        
         super(modifiers, name, type, definitionSpace, fromLine, fromColumn, toLine, toColumn);
+        
+        this.declarationStatement = null;
     }
 
     /**
@@ -51,16 +54,24 @@ public final class LocalVariableInfo extends VariableInfo<LocalSpaceInfo> {
         return Collections.unmodifiableSet(localVariables);
     }
     
-    void setDeclarationStatement(VariableDeclarationStatementInfo declarationStatement) {
+    void setDeclarationStatement(final VariableDeclarationStatementInfo declarationStatement) {
         MetricsToolSecurityManager.getInstance().checkAccess();
         if(null == declarationStatement) {
-            throw new NullPointerException("declarationStatement is null.");
+            throw new IllegalArgumentException("declarationStatement is null.");
+        }
+        if(null != this.declarationStatement){
+            throw new IllegalStateException("this.declarationStatement isn't null.");
         }
         this.declarationStatement = declarationStatement;
     }
     
+    /**
+     * このローカル変数を定義している文を返す
+     * 
+     * @return このローカル変数を定義している文
+     */
     public VariableDeclarationStatementInfo getDeclarationStatement() {
-        return declarationStatement;
+        return this.declarationStatement;
     }
     
     private VariableDeclarationStatementInfo declarationStatement;
