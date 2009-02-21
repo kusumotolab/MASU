@@ -23,13 +23,11 @@ public class ProgramSlice {
 
     static void addDuplicatedElementsWithBackwordSlice(final PDGNode<?> nodeA,
             final PDGNode<?> nodeB, final IPDGNodeFactory pdgNodeFactory,
-            final ClonePairInfo clonePair, final Set<ClonePairInfo> clonePairs,
-            final HashSet<PDGNode<?>> checkedNodesA, final HashSet<PDGNode<?>> checkedNodesB) {
+            final ClonePairInfo clonePair, final HashSet<PDGNode<?>> checkedNodesA,
+            final HashSet<PDGNode<?>> checkedNodesB) {
 
         final Set<PDGEdge> edgesA = nodeA.getBackwardEdges();
         final Set<PDGEdge> edgesB = nodeB.getBackwardEdges();
-
-        boolean longerCloneDetected = false;
 
         for (final PDGEdge edgeA : edgesA) {
 
@@ -60,21 +58,14 @@ public class ProgramSlice {
                     checkedNodesB.add(fromNodeB);
 
                     addDuplicatedElementsWithBackwordSlice(fromNodeA, fromNodeB, pdgNodeFactory,
-                            clonePair.clone(), clonePairs, (HashSet) checkedNodesA.clone(),
-                            (HashSet) checkedNodesB.clone());
+                            clonePair, checkedNodesA, checkedNodesB);
 
                     if ((coreA instanceof ConditionalBlockInfo)
                             && (coreB instanceof ConditionalBlockInfo)) {
 
                     }
-
-                    longerCloneDetected = true;
                 }
             }
-        }
-
-        if (!longerCloneDetected) {
-            clonePairs.add(clonePair);
         }
     }
 

@@ -37,10 +37,6 @@ public class NormalizedStatementHashMap extends HashMap<Integer, List<StatementI
         }
     }
 
-    public int getHash(final StatementInfo element) {
-        return this.statementHashMap.get(element);
-    }
-
     private void addHash(final SingleStatementInfo statement) {
 
         if (null == statement) {
@@ -55,7 +51,6 @@ public class NormalizedStatementHashMap extends HashMap<Integer, List<StatementI
             this.put(hash, statements);
         }
         statements.add(statement);
-        this.statementHashMap.put(statement, hash);
     }
 
     private void addHash(final ConditionalBlockInfo block) {
@@ -73,13 +68,5 @@ public class NormalizedStatementHashMap extends HashMap<Integer, List<StatementI
             this.put(hash, statements);
         }
         statements.add(block);
-        this.statementHashMap.put(block, hash);
     }
-
-    public NormalizedStatementHashMap() {
-        super();
-        this.statementHashMap = new HashMap<StatementInfo, Integer>();
-    }
-
-    private HashMap<StatementInfo, Integer> statementHashMap;
 }

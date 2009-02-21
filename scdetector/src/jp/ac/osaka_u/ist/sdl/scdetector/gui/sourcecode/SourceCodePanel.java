@@ -19,6 +19,7 @@ import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
 
@@ -85,10 +86,21 @@ class SourceCodePanel extends JPanel {
 
             try {
 
-                final int fromLine = element.getFromLine();
-                final int fromColumn = element.getFromColumn();
-                final int toLine = element.getToLine();
-                final int toColumn = element.getToColumn();
+                final int fromLine, fromColumn, toLine, toColumn;
+                if (element instanceof ConditionalBlockInfo) {
+                    fromLine = ((ConditionalBlockInfo) element).getConditionalClause()
+                            .getFromLine();
+                    fromColumn = ((ConditionalBlockInfo) element).getConditionalClause()
+                            .getFromColumn();
+                    toLine = ((ConditionalBlockInfo) element).getConditionalClause().getToLine();
+                    toColumn = ((ConditionalBlockInfo) element).getConditionalClause()
+                            .getToColumn();
+                } else {
+                    fromLine = element.getFromLine();
+                    fromColumn = element.getFromColumn();
+                    toLine = element.getToLine();
+                    toColumn = element.getToColumn();
+                }
 
                 final int fromOffset;
                 if (0 < fromLine) {

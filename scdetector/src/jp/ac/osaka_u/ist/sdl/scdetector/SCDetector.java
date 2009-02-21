@@ -1,9 +1,15 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
@@ -11,6 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.cfg.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
@@ -300,10 +307,11 @@ public class SCDetector extends MetricsTool {
         }
 
         // ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
+        out.println("detecting code clones from PDGs ...");
         final Set<ClonePairInfo> clonePairs = new HashSet<ClonePairInfo>();
         for (final List<StatementInfo> statements : statementHash.values()) {
 
-            // 同じハッシュ値を持つ文が閾値以上ある場合は，その文をスライス起点にしない．
+            // 同じハッシュ値を持つ文が閾値以上ある場合は，その文をスライス基点にしない．
             //　ただし，Return文は例外とする．
             if ((Configuration.INSTANCE.getC() < statements.size())
                     && !(statements.get(0) instanceof ReturnStatementInfo)) {
@@ -326,95 +334,15 @@ public class SCDetector extends MetricsTool {
                     checkedNodesB.add(nodeB);
 
                     ProgramSlice.addDuplicatedElementsWithBackwordSlice(nodeA, nodeB,
-                            pdgNodeFactory, clonePair, clonePairs, checkedNodesA, checkedNodesB);
-                }
-            }
-
-        }
-
-        /*
-        for (int i = 0; i < elements.size(); i++) {
-            for (int j = i + 1; j < elements.size(); j++) {
-
-                final ExecutableElementInfo elementA = elements.get(i);
-                final ExecutableElementInfo elementB = elements.get(j);
-                
-
-                final ClonePairInfo clonePair = new ClonePairInfo(elementA, elementB);
-
-                final Set<VariableInfo<?>> usedVariableHashesA = new HashSet<VariableInfo<?>>();
-                final Set<VariableInfo<?>> usedVariableHashesB = new HashSet<VariableInfo<?>>();
-
-                ProgramSlice.performBackwordSlice(elementA, elementB, clonePair,
-                        usedVariableHashesA, usedVariableHashesB, clonePairs);
-
-                if (Configuration.INSTANCE.getS() <= clonePair.size()) {
-                    clonePairs.add(clonePair);
-                }
-            }
-        }
-        */
-
-        /*
-        // 変数を指定することにより，その変数に対して代入を行っている文を取得するためのハッシュを構築する
-        // ただし，条件節については，変数を参照している場合もハッシュを構築する
-        out.println("constructing variable - statement relations ...");
-        for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
-                .getTargetMethodInfos()) {
-            VariableHashMap.INSTANCE.makeHash(method);
-        }
-
-        // ExecutableElement単位で正規化データを構築する
-        out.println("constructing statement hashtable ...");
-        for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
-                .getTargetMethodInfos()) {
-            NormalizedElementHashMap.INSTANCE.makeHash(method);
-        }
-
-        // ConditionInfo から その所有者である ConditionalBlockInfo を取得するためのデータを作成(Forward Slice　用)
-        out.println("constructing conditional block - condition relations ...");
-        for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
-                .getTargetMethodInfos()) {
-            ConditionHashMap.INSTANCE.makeHash(method);
-        }
-
-        // ハッシュ値が同じ2つの文を基点にしてコードクローンを検出
-        final long detectionStart = System.nanoTime();
-        out.println("detecting clone pairs ...");
-        final Set<ClonePairInfo> clonePairs = new HashSet<ClonePairInfo>();
-        for (final Integer hash : NormalizedElementHashMap.INSTANCE.keySet()) {
-
-            final List<ExecutableElementInfo> elements = NormalizedElementHashMap.INSTANCE
-                    .get(hash);
-
-            if ((Configuration.INSTANCE.getC() < elements.size())
-                    && !(elements.get(0) instanceof ReturnStatementInfo)) {
-                System.out.println(elements.size());
-                continue;
-            }
-
-            for (int i = 0; i < elements.size(); i++) {
-                for (int j = i + 1; j < elements.size(); j++) {
-
-                    final ExecutableElementInfo elementA = elements.get(i);
-                    final ExecutableElementInfo elementB = elements.get(j);
-
-                    final ClonePairInfo clonePair = new ClonePairInfo(elementA, elementB);
-
-                    final Set<VariableInfo<?>> usedVariableHashesA = new HashSet<VariableInfo<?>>();
-                    final Set<VariableInfo<?>> usedVariableHashesB = new HashSet<VariableInfo<?>>();
-
-                    ProgramSlice.performBackwordSlice(elementA, elementB, clonePair,
-                            usedVariableHashesA, usedVariableHashesB, clonePairs);
+                            pdgNodeFactory, clonePair, checkedNodesA, checkedNodesB);
 
                     if (Configuration.INSTANCE.getS() <= clonePair.size()) {
                         clonePairs.add(clonePair);
                     }
                 }
             }
+
         }
-        final long detectionEnd = System.nanoTime();
-        out.println("elapsed time: " + (detectionEnd - detectionStart) / 1000000000);
 
         out.println("filtering out uninterested clone pairs ...");
         final Set<ClonePairInfo> refinedClonePairs = new HashSet<ClonePairInfo>();
@@ -444,7 +372,7 @@ public class SCDetector extends MetricsTool {
                 final CodeFragmentInfo cloneA = clonePair.getCloneA();
                 final CodeFragmentInfo cloneB = clonePair.getCloneB();
                 int sharedElementCount = 0;
-                for (final ExecutableElementInfo element : cloneA) {
+                for (final Position element : cloneA) {
                     if (cloneB.contains(element)) {
                         sharedElementCount++;
                     }
@@ -544,7 +472,6 @@ public class SCDetector extends MetricsTool {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        */
 
         out.println("successifully finished.");
     }

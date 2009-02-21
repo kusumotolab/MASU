@@ -12,9 +12,9 @@ public final class Configuration {
         this.o = null;
         this.r = true;
         this.pv = 1;
-        this.pi = 2;
+        this.pi = 1;
         this.pc = 1;
-        this.po = 1;
+        this.po = 0;
         this.pl = 1;
         this.pr = false;
         this.fi = false;
