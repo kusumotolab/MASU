@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.StringArrayComparator;
 
@@ -22,10 +23,10 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializa
     public NamespaceInfo(final String[] name) {
 
         if (null == name) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
 
-        this.name = name;
+        this.name = Arrays.<String>copyOf(name, name.length);
     }
 
     /**
@@ -102,7 +103,7 @@ public final class NamespaceInfo implements Comparable<NamespaceInfo>, Serializa
      * @return –¼‘O‹óŠÔ–¼
      */
     public String[] getName() {
-        return this.name;
+        return Arrays.<String>copyOf(this.name, this.name.length);
     }
 
     /**
