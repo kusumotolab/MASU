@@ -1,17 +1,15 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
@@ -23,26 +21,61 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGNode;
 
 public class ProgramSlice {
 
-    static void addDuplicatedStatementsWithBackwordSlice(final StatementInfo statementA,
-            final StatementInfo statementB, final IPDGNodeFactory pdgNodeFactory,
-            final ClonePairInfo clonePair) {
-
-        final PDGNode<?> nodeA = pdgNodeFactory.getNode(statementA);
-        final PDGNode<?> nodeB = pdgNodeFactory.getNode(statementB);
+    static void addDuplicatedElementsWithBackwordSlice(final PDGNode<?> nodeA,
+            final PDGNode<?> nodeB, final IPDGNodeFactory pdgNodeFactory,
+            final ClonePairInfo clonePair, final Set<ClonePairInfo> clonePairs,
+            final HashSet<PDGNode<?>> checkedNodesA, final HashSet<PDGNode<?>> checkedNodesB) {
 
         final Set<PDGEdge> edgesA = nodeA.getBackwardEdges();
         final Set<PDGEdge> edgesB = nodeB.getBackwardEdges();
 
+        boolean longerCloneDetected = false;
+
         for (final PDGEdge edgeA : edgesA) {
 
             final PDGNode<?> fromNodeA = edgeA.getFromNode();
-           
+
+            if (checkedNodesA.contains(fromNodeA)) {
+                continue;
+            }
+
+            final Position coreA = (Position) fromNodeA.getCore();
+            final int hashA = Conversion.getNormalizedString(coreA).hashCode();
+
             for (final PDGEdge edgeB : edgesB) {
 
                 final PDGNode<?> fromNodeB = edgeB.getFromNode();
+
+                if (checkedNodesB.contains(fromNodeB)) {
+                    continue;
+                }
+
+                final Position coreB = (Position) fromNodeB.getCore();
+                final int hashB = Conversion.getNormalizedString(coreB).hashCode();
+
+                if (hashA == hashB) {
+
+                    clonePair.add(coreA, coreB);
+                    checkedNodesA.add(fromNodeA);
+                    checkedNodesB.add(fromNodeB);
+
+                    addDuplicatedElementsWithBackwordSlice(fromNodeA, fromNodeB, pdgNodeFactory,
+                            clonePair.clone(), clonePairs, (HashSet) checkedNodesA.clone(),
+                            (HashSet) checkedNodesB.clone());
+
+                    if ((coreA instanceof ConditionalBlockInfo)
+                            && (coreB instanceof ConditionalBlockInfo)) {
+
+                    }
+
+                    longerCloneDetected = true;
+                }
             }
         }
 
+        if (!longerCloneDetected) {
+            clonePairs.add(clonePair);
+        }
     }
 
     /**

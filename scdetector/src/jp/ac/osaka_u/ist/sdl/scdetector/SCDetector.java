@@ -2,7 +2,9 @@ package jp.ac.osaka_u.ist.sdl.scdetector;
 
 
 import java.lang.reflect.Field;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.ICFGNodeFactory;
@@ -22,6 +24,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.DefaultPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGNode;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -297,6 +300,7 @@ public class SCDetector extends MetricsTool {
         }
 
         // ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
+        final Set<ClonePairInfo> clonePairs = new HashSet<ClonePairInfo>();
         for (final List<StatementInfo> statements : statementHash.values()) {
 
             // 同じハッシュ値を持つ文が閾値以上ある場合は，その文をスライス起点にしない．
@@ -311,11 +315,18 @@ public class SCDetector extends MetricsTool {
 
                     final StatementInfo statementA = statements.get(i);
                     final StatementInfo statementB = statements.get(j);
+                    final PDGNode<?> nodeA = pdgNodeFactory.getNode(statementA);
+                    final PDGNode<?> nodeB = pdgNodeFactory.getNode(statementB);
 
                     final ClonePairInfo clonePair = new ClonePairInfo(statementA, statementB);
 
-                    ProgramSlice.addDuplicatedStatementsWithBackwordSlice(statementA, statementB,
-                            pdgNodeFactory, clonePair);
+                    final HashSet<PDGNode<?>> checkedNodesA = new HashSet<PDGNode<?>>();
+                    final HashSet<PDGNode<?>> checkedNodesB = new HashSet<PDGNode<?>>();
+                    checkedNodesA.add(nodeA);
+                    checkedNodesB.add(nodeB);
+
+                    ProgramSlice.addDuplicatedElementsWithBackwordSlice(nodeA, nodeB,
+                            pdgNodeFactory, clonePair, clonePairs, checkedNodesA, checkedNodesB);
                 }
             }
 

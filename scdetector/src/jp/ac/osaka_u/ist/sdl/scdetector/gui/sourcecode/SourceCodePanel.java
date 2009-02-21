@@ -19,8 +19,8 @@ import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
 
 
 class SourceCodePanel extends JPanel {
@@ -77,11 +77,11 @@ class SourceCodePanel extends JPanel {
 
     }
 
-    void addHighlight(final SortedSet<ExecutableElementInfo> clone) {
+    void addHighlight(final SortedSet<Position> clone) {
 
         final DefaultHighlightPainter highlightPainter = new DefaultHighlightPainter(new Color(180,
                 180, 180, 125));
-        for (final ExecutableElementInfo element : clone) {
+        for (final Position element : clone) {
 
             try {
 
@@ -114,12 +114,12 @@ class SourceCodePanel extends JPanel {
         }
     }
 
-    void display(final SortedSet<ExecutableElementInfo> clone) {
+    void display(final SortedSet<Position> clone) {
 
         final Document doc = this.sourceCodeArea.getDocument();
         final Element root = doc.getDefaultRootElement();
 
-        final ExecutableElementInfo firstElement = clone.first();
+        final Position firstElement = clone.first();
 
         // â∫ÇÃ modelToViewÇÃï‘ÇËílÇnullÇ…ÇµÇ»Ç¢ÇΩÇﬂÇ…ã≠êßìIÇ…ê≥ÇÃílÇê›íË
         this.sourceCodeArea.setBounds(new Rectangle(10, 10));

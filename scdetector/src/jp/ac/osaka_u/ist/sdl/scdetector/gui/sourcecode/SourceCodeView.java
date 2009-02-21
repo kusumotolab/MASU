@@ -3,17 +3,17 @@ package jp.ac.osaka_u.ist.sdl.scdetector.gui.sourcecode;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.util.SortedSet;
 
 import javax.swing.JSplitPane;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.ClonePairInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.CodeFragmentInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.SelectedEntities;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
@@ -35,15 +35,15 @@ public class SourceCodeView extends JSplitPane implements Observer {
                 final ClonePairInfo clonePair = SelectedEntities.<ClonePairInfo> getInstance(
                         ClonePairInfo.CLONEPAIR).get().first();
 
-                final SortedSet<ExecutableElementInfo> cloneA = clonePair.getCloneA();
-                final SortedSet<ExecutableElementInfo> cloneB = clonePair.getCloneB();
+                final CodeFragmentInfo cloneA = clonePair.getCloneA();
+                final CodeFragmentInfo cloneB = clonePair.getCloneB();
 
                 final SourceCodePanel leftSourceCodePanel = new SourceCodePanel();
                 final SourceCodePanel rightSourceCodePanel = new SourceCodePanel();
 
                 {
                     boolean set = false;
-                    for (final ExecutableElementInfo element : cloneA) {
+                    for (final Position element : cloneA) {
 
                         if (element instanceof StatementInfo) {
                             final FileInfo ownerFile = SourceCodeView
@@ -67,7 +67,7 @@ public class SourceCodeView extends JSplitPane implements Observer {
 
                 {
                     boolean set = false;
-                    for (final ExecutableElementInfo element : cloneB) {
+                    for (final Position element : cloneB) {
 
                         if (element instanceof StatementInfo) {
                             final FileInfo ownerFile = SourceCodeView
