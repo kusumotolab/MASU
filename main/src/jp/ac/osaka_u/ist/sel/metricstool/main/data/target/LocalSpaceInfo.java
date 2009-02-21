@@ -111,14 +111,21 @@ public abstract class LocalSpaceInfo extends UnitInfo {
         return this.ownerClass;
     }
 
+    /**
+     * 与えられたLocalSpace内に存在している全てのStatementInfoのSortedSetを返す
+     * 
+     * @param localSpace ローカルスペース
+     * @return 与えられたLocalSpace内に存在している全てのStatementInfoのSortedSet
+     */
     public static SortedSet<StatementInfo> getAllStatements(final LocalSpaceInfo localSpace) {
+        
         if (null == localSpace) {
-            new NullPointerException("localSpace is null");
+            throw new IllegalArgumentException("localSpace is null.");
         }
 
         if (localSpace instanceof ExternalMethodInfo
                 || localSpace instanceof ExternalConstructorInfo) {
-            new IllegalArgumentException("localSpace is an external local space.");
+            throw new IllegalArgumentException("localSpace is an external local space.");
         }
         
         final SortedSet<StatementInfo> allStatements = new TreeSet<StatementInfo>();
