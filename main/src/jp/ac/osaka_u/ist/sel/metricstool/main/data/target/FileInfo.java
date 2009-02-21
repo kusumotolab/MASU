@@ -79,7 +79,11 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
     public boolean equals(Object o) {
 
         if (null == o) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
+        }
+        
+        if(!(o instanceof FileInfo)){
+            return false;
         }
 
         String thisName = this.getName();
