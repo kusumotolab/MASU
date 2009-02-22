@@ -63,6 +63,58 @@ public class ProgramSlice {
                     if ((coreA instanceof ConditionalBlockInfo)
                             && (coreB instanceof ConditionalBlockInfo)) {
 
+                        addDuplicatedElementsWithBackwordSlice(fromNodeA, fromNodeB,
+                                pdgNodeFactory, clonePair, checkedNodesA, checkedNodesB);
+                    }
+                }
+            }
+        }
+    }
+
+    static void addDuplicatedElementsWithForwordSlice(final PDGNode<?> nodeA,
+            final PDGNode<?> nodeB, final IPDGNodeFactory pdgNodeFactory,
+            final ClonePairInfo clonePair, final HashSet<PDGNode<?>> checkedNodesA,
+            final HashSet<PDGNode<?>> checkedNodesB) {
+
+        final Set<PDGEdge> edgesA = nodeA.getForwardEdges();
+        final Set<PDGEdge> edgesB = nodeB.getForwardEdges();
+
+        for (final PDGEdge edgeA : edgesA) {
+
+            final PDGNode<?> toNodeA = edgeA.getToNode();
+
+            if (checkedNodesA.contains(toNodeA)) {
+                continue;
+            }
+
+            final Position coreA = (Position) toNodeA.getCore();
+            final int hashA = Conversion.getNormalizedString(coreA).hashCode();
+
+            for (final PDGEdge edgeB : edgesB) {
+
+                final PDGNode<?> toNodeB = edgeB.getToNode();
+
+                if (checkedNodesB.contains(toNodeB)) {
+                    continue;
+                }
+
+                final Position coreB = (Position) toNodeB.getCore();
+                final int hashB = Conversion.getNormalizedString(coreB).hashCode();
+
+                if (hashA == hashB) {
+
+                    clonePair.add(coreA, coreB);
+                    checkedNodesA.add(toNodeA);
+                    checkedNodesB.add(toNodeB);
+
+                    addDuplicatedElementsWithBackwordSlice(toNodeA, toNodeB, pdgNodeFactory,
+                            clonePair, checkedNodesA, checkedNodesB);
+
+                    if ((coreA instanceof ConditionalBlockInfo)
+                            && (coreB instanceof ConditionalBlockInfo)) {
+
+                        addDuplicatedElementsWithForwordSlice(toNodeA, toNodeB, pdgNodeFactory,
+                                clonePair, checkedNodesA, checkedNodesB);
                     }
                 }
             }

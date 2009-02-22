@@ -17,6 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.cfg.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
@@ -336,6 +337,12 @@ public class SCDetector extends MetricsTool {
                     ProgramSlice.addDuplicatedElementsWithBackwordSlice(nodeA, nodeB,
                             pdgNodeFactory, clonePair, checkedNodesA, checkedNodesB);
 
+                    if (statementA instanceof ConditionalBlockInfo
+                            && statementB instanceof ConditionalBlockInfo) {
+
+                        ProgramSlice.addDuplicatedElementsWithForwordSlice(nodeA, nodeB,
+                                pdgNodeFactory, clonePair, checkedNodesA, checkedNodesB);
+                    }
                     if (Configuration.INSTANCE.getS() <= clonePair.size()) {
                         clonePairs.add(clonePair);
                     }
