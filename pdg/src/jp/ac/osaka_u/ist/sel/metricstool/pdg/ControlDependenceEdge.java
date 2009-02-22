@@ -7,9 +7,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
  * @author t-miyake
  *
  */
-public class ControlDepedneceEdge extends PDGEdge {
+public class ControlDependenceEdge extends PDGEdge {
 
-    public ControlDepedneceEdge(final PDGControlNode fromNode, final PDGNode<?> toNode) {
+    public ControlDependenceEdge(final PDGControlNode fromNode, final PDGNode<?> toNode) {
         super(fromNode, toNode);
         
         if(!(fromNode.getCore() instanceof ConditionalBlockInfo)) {

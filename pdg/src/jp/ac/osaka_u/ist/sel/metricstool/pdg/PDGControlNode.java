@@ -65,7 +65,7 @@ public class PDGControlNode extends ControllableNode<ConditionalBlockInfo> {
             throw new IllegalArgumentException();
         }
 
-        final ControlDepedneceEdge controlFlow = new ControlDepedneceEdge(this, controlledNode);
+        final ControlDependenceEdge controlFlow = new ControlDependenceEdge(this, controlledNode);
         this.addFowardEdge(controlFlow);
         controlledNode.addBackwardEdge(controlFlow);
     }
