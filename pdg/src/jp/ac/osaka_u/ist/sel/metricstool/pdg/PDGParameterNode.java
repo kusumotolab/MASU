@@ -9,9 +9,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 
 
-public class ParameterNode extends PDGNode<ParameterInfo> {
+public class PDGParameterNode extends PDGNode<ParameterInfo> {
 
-    public ParameterNode(final ParameterInfo parameter) {
+    public PDGParameterNode(final ParameterInfo parameter) {
         super(parameter);
         
         this.text = parameter.getType().getTypeName() + " " + parameter.getName();

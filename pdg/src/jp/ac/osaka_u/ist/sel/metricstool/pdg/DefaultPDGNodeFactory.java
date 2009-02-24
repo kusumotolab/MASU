@@ -1,53 +1,62 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
+
 
 public class DefaultPDGNodeFactory implements IPDGNodeFactory {
 
-    private final Map<StatementInfo, PDGNode<?>> statementToNodeMap;
-    
+    private final Map<Object, PDGNode<?>> elementToNodeMap;
+
     public DefaultPDGNodeFactory() {
-        this.statementToNodeMap = new HashMap<StatementInfo, PDGNode<?>>();
+        this.elementToNodeMap = new HashMap<Object, PDGNode<?>>();
     }
-    
+
     @Override
-    public PDGNode<?> makeNode(StatementInfo statement) {
-        PDGNode<?> node = this.getNode(statement);
-        
-        if(null != node) {
+    public PDGNode<?> makeNode(final Object element) {
+
+        PDGNode<?> node = this.getNode(element);
+
+        if (null != node) {
             return node;
         }
-                
-        if(statement instanceof SingleStatementInfo) {
-            node = new PDGStatementNode((SingleStatementInfo) statement);
-            this.statementToNodeMap.put(statement, node);
-        } else if(statement instanceof ConditionalBlockInfo) {
-            node = new PDGControlNode((ConditionalBlockInfo) statement);
-            this.statementToNodeMap.put(statement, node);
+
+        if (element instanceof SingleStatementInfo) {
+            node = new PDGStatementNode((SingleStatementInfo) element);
+        } else if (element instanceof ConditionalBlockInfo) {
+            node = new PDGControlNode((ConditionalBlockInfo) element);
+        } else if (element instanceof ParameterInfo) {
+            node = new PDGParameterNode((ParameterInfo) element);
         } else {
-            node = null;
+            return null;
         }
-        
+
+        this.elementToNodeMap.put(element, node);
         return node;
     }
-    
-    public PDGNode<?> getNode(final StatementInfo statement) {
-        return this.statementToNodeMap.get(statement);
+
+    public PDGNode<?> getNode(final Object element) {
+
+        if (null == element) {
+            throw new IllegalArgumentException();
+        }
+
+        return this.elementToNodeMap.get(element);
     }
-    
+
     @Override
-    public Collection<PDGNode<?>> getAllNode() {
-        return Collections.unmodifiableCollection(this.statementToNodeMap.values());
+    public Collection<PDGNode<?>> getAllNodes() {
+        return Collections.unmodifiableCollection(this.elementToNodeMap.values());
     }
-    
+
     public int getNodeCount() {
-        return this.statementToNodeMap.size();
+        return this.elementToNodeMap.size();
     }
 }

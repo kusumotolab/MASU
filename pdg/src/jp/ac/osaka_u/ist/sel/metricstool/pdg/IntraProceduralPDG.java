@@ -56,6 +56,9 @@ public class IntraProceduralPDG extends PDG {
         this(unit, new DefaultPDGNodeFactory(), new DefaultCFGNodeFactory());
     }
 
+    /**
+     * コンストラクタで与えられたCallableUnitInfoのPDGを構築する
+     */
     @Override
     protected void buildPDG() {
         if (null == this.getCFG().getEnterNode()) {
@@ -63,8 +66,10 @@ public class IntraProceduralPDG extends PDG {
         }
 
         for (final ParameterInfo parameter : this.unit.getParameters()) {
-            final ParameterNode parameterNode = new ParameterNode(parameter);
+            final PDGParameterNode parameterNode = (PDGParameterNode) this.getNodeFactory()
+                    .makeNode(parameter);
             this.enterNodes.add(parameterNode);
+            this.nodes.add(parameterNode);
             this.buildDataDependence(parameterNode, parameter, this.cfg.getEnterNode(),
                     new HashSet<CFGControlNode>());
         }
@@ -73,9 +78,15 @@ public class IntraProceduralPDG extends PDG {
 
             // statementと他の文とのデータ依存を構築
             {
-                final PDGNode<?> pdgNode = this.getStatementNode(statement);
+
+                final PDGNode<?> pdgNode = this.makeNode(statement);
                 if (null == pdgNode) {
                     continue;
+                }
+
+                // Return文なら出口ノードに追加
+                if (statement instanceof ReturnStatementInfo) {
+                    this.exitNodes.add(pdgNode);
                 }
 
                 final CFGNode<? extends StatementInfo> cfgNode = this.cfg.getCFGNode(statement);
@@ -112,7 +123,7 @@ public class IntraProceduralPDG extends PDG {
             final CFGNode<? extends StatementInfo> dependCandidates,
             final Set<CFGControlNode> passedNodeCache) {
 
-        final PDGNode<?> firstCandidate = this.getStatementNode(dependCandidates.getStatement());
+        final PDGNode<?> firstCandidate = this.makeNode(dependCandidates.getStatement());
 
         // 候補ノードが存在する場合，最初の候補ノードへのデータ依存を調査
         if (null != firstCandidate) {
@@ -152,7 +163,7 @@ public class IntraProceduralPDG extends PDG {
      * @param controlStatement
      */
     private void buildControlFlow(final ConditionalBlockInfo controlStatement) {
-        final PDGControlNode controlNode = (PDGControlNode) this.getStatementNode(controlStatement);
+        final PDGControlNode controlNode = (PDGControlNode) this.makeNode(controlStatement);
         this.buildControlFlow(controlNode, controlStatement.getStatements());
 
         if (controlStatement instanceof IfBlockInfo) {
@@ -178,7 +189,7 @@ public class IntraProceduralPDG extends PDG {
                     || controlledStatement instanceof ConditionalBlockInfo) {
                 // 単文や制御文の場合，それ自体を制御される文として追加
 
-                final PDGNode<?> controlledNode = this.getStatementNode(controlledStatement);
+                final PDGNode<?> controlledNode = this.makeNode(controlledStatement);
 
                 assert null != controlledNode;
 
@@ -192,11 +203,21 @@ public class IntraProceduralPDG extends PDG {
         }
     }
 
-    protected PDGNode<?> getStatementNode(final StatementInfo statement) {
-        final PDGNode<?> node = this.nodeFactory.makeNode(statement);
-        if (statement instanceof ReturnStatementInfo) {
-            this.exitNodes.add(node);
+    /**
+     * 引数で与えられた要素のPDGノードを作成する
+     * 
+     * @param element ノードを作成したい要素
+     * @return
+     */
+    private PDGNode<?> makeNode(final Object element) {
+
+        final IPDGNodeFactory factory = this.getNodeFactory();
+        final PDGNode<?> node = factory.makeNode(element);
+        if (null == node) {
+            return null;
         }
+
+        this.nodes.add(node);
         return node;
     }
 
@@ -211,18 +232,4 @@ public class IntraProceduralPDG extends PDG {
     public CallableUnitInfo getMethodInfo() {
         return this.unit;
     }
-
-    public final ParameterNode getParamerNode(final ParameterInfo parameter) {
-        for (final PDGNode<?> startNode : this.enterNodes) {
-            if (startNode instanceof ParameterNode) {
-                ParameterNode parameterNode = (ParameterNode) startNode;
-                if (parameterNode.getCore().equals(parameter)) {
-                    return parameterNode;
-                }
-            }
-        }
-
-        return null;
-    }
-
 }

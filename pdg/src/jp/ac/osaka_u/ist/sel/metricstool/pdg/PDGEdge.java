@@ -17,11 +17,11 @@ public abstract class PDGEdge {
     }
 
     public PDGNode<?> getFromNode() {
-        return fromNode;
+        return this.fromNode;
     }
 
     public PDGNode<?> getToNode() {
-        return toNode;
+        return this.toNode;
     }
     
     public void vanish(){
