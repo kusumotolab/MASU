@@ -6,9 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.IntraProceduralCFG;
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
@@ -162,7 +160,7 @@ public class GraphViewer extends MetricsTool {
                     final IntraProceduralPDG pdg = new IntraProceduralPDG(method);
 
                     writer.write("subgraph cluster");
-                    writer.write(Integer.toString(createdGraphNumber++));
+                    writer.write(Integer.toString(createdGraphNumber));
                     writer.write(" {");
                     writer.newLine();
 
@@ -177,6 +175,8 @@ public class GraphViewer extends MetricsTool {
                     }
 
                     for (final Map.Entry<PDGNode<?>, Integer> entry : nodeLabels.entrySet()) {
+                        writer.write(Integer.toString(createdGraphNumber));
+                        writer.write(".");
                         writer.write(Integer.toString(entry.getValue()));
                         writer.write(" [label = \"");
                         writer.write(entry.getKey().getText());
@@ -184,15 +184,13 @@ public class GraphViewer extends MetricsTool {
                         writer.newLine();
                     }
 
-                    final Set<PDGEdge> edges = new HashSet<PDGEdge>();
-                    for (final PDGNode<?> node : pdg.getAllNodes()) {
-                        edges.addAll(node.getBackwardEdges());
-                        edges.addAll(node.getForwardEdges());
-                    }
-
-                    for (final PDGEdge edge : edges) {
+                    for (final PDGEdge edge : pdg.getAllEdges()) {
+                        writer.write(Integer.toString(createdGraphNumber));
+                        writer.write(".");
                         writer.write(Integer.toString(nodeLabels.get(edge.getFromNode())));
                         writer.write(" -> ");
+                        writer.write(Integer.toString(createdGraphNumber));
+                        writer.write(".");
                         writer.write(Integer.toString(nodeLabels.get(edge.getToNode())));
                         if (edge instanceof DataDependenceEdge) {
                             writer.write(" [style = solid]");
@@ -205,6 +203,8 @@ public class GraphViewer extends MetricsTool {
 
                     writer.write("}");
                     writer.newLine();
+
+                    createdGraphNumber++;
                 }
 
                 for (final TargetConstructorInfo constructor : DataManager.getInstance()
