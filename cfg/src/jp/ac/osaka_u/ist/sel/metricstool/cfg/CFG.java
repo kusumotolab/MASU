@@ -36,7 +36,7 @@ public abstract class CFG {
      * @return CFGの入り口ノード
      */
     public CFGNode<? extends StatementInfo> getEnterNode() {
-        return enterNode;
+        return this.enterNode;
     }
 
     /**
@@ -44,7 +44,7 @@ public abstract class CFG {
      * @return CFGの出口ノード
      */
     public Set<CFGNode<? extends StatementInfo>> getExitNodes() {
-        return exitNodes;
+        return this.exitNodes;
     }
     
     public boolean isEmpty() {

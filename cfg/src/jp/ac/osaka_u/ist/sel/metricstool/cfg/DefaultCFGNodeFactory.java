@@ -43,7 +43,7 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
                 nodeFactory.statementToNodeMap);
     }
 
-    public CFGNode<? extends StatementInfo> makeNode(StatementInfo statement) {
+    public CFGNode<? extends StatementInfo> makeNode(final StatementInfo statement) {
         CFGNode<? extends StatementInfo> node = this.getNode(statement);
 
         if (null != node) {

@@ -34,37 +34,36 @@ public class IntraProceduralCFG extends CFG {
     /**
      * 生成する制御フローグラフに対応するローカル空間とCFGノードのファクトリを与えて初期化
      * 
-     * @param callableUnit
+     * @param unit
      *            生成する制御フローグラフに対応するローカル空間
      * @param nodeFactory
      *            CFGノードのファクトリ
      */
-    public IntraProceduralCFG(final CallableUnitInfo callableUnit, final ICFGNodeFactory nodeFactory) {
+    public IntraProceduralCFG(final CallableUnitInfo unit, final ICFGNodeFactory nodeFactory) {
 
         super(nodeFactory);
 
-        if (callableUnit instanceof ExternalMethodInfo
-                || callableUnit instanceof ExternalConstructorInfo) {
-            throw new IllegalArgumentException("localSpace is an external infromation.");
+        if (null == unit) {
+            throw new IllegalArgumentException("unit is null");
         }
 
-        if (null == callableUnit) {
-            throw new NullPointerException("localSpace is null");
+        if (unit instanceof ExternalMethodInfo || unit instanceof ExternalConstructorInfo) {
+            throw new IllegalArgumentException("unit is an external infromation.");
         }
 
-        this.localSpace = callableUnit;
+        this.localSpace = unit;
 
-        this.buildCFG(callableUnit);
+        this.buildCFG(unit);
     }
 
     /**
      * 生成する制御フローグラフに対応するローカル空間を与えて初期化
      * 
-     * @param callableUnit
+     * @param unit
      *            生成する制御フローグラフに対応するローカル空間
      */
-    public IntraProceduralCFG(final CallableUnitInfo callableUnit) {
-        this(callableUnit, new DefaultCFGNodeFactory());
+    public IntraProceduralCFG(final CallableUnitInfo unit) {
+        this(unit, new DefaultCFGNodeFactory());
     }
 
     private IntraProceduralCFG(final ICFGNodeFactory nodeFactory) {
@@ -78,7 +77,7 @@ public class IntraProceduralCFG extends CFG {
         if (statement instanceof BlockInfo) {
             this.localSpace = (BlockInfo) statement;
 
-            this.buildCFG(localSpace);
+            this.buildCFG(this.localSpace);
         } else {
             this.localSpace = null;
             this.enterNode = this.nodeFactory.makeNode(statement);
@@ -110,7 +109,7 @@ public class IntraProceduralCFG extends CFG {
 
         // 対応するローカル空間がif文の場合
         if (local instanceof IfBlockInfo) {
-            IfBlockInfo ifBlock = (IfBlockInfo) local;
+            final IfBlockInfo ifBlock = (IfBlockInfo) local;
             this.enterNode = this.nodeFactory.makeNode(ifBlock);
 
             if (!innerCFG.isEmpty()) {
@@ -146,7 +145,7 @@ public class IntraProceduralCFG extends CFG {
                     : this.enterNode);
 
             for (final CFGNode<? extends StatementInfo> innerExitNode : innerCFG.getExitNodes()) {
-                if (innerExitNode.isExitNode(localSpace)) {
+                if (innerExitNode.isExitNode(this.localSpace)) {
                     this.exitNodes.add(innerExitNode);
                 } else {
                     innerExitNode.addForwardNode(this.enterNode);
@@ -189,7 +188,7 @@ public class IntraProceduralCFG extends CFG {
                 continue;
             }
 
-            CFG nextSubCFG = new IntraProceduralCFG(nextStatement, this.nodeFactory);
+            final CFG nextSubCFG = new IntraProceduralCFG(nextStatement, this.nodeFactory);
 
             if (null != nextSubCFG.getEnterNode()) {
                 for (final CFGNode<? extends StatementInfo> preExitNode : preSubCFG.getExitNodes()) {
