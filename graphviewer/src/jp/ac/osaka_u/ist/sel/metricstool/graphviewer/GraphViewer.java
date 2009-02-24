@@ -169,6 +169,7 @@ public class GraphViewer extends MetricsTool {
                     writer.write("label = \"");
                     writer.write(method.getMethodName());
                     writer.write("\";");
+                    writer.newLine();
 
                     final Map<PDGNode<?>, Integer> nodeLabels = new HashMap<PDGNode<?>, Integer>();
                     for (final PDGNode<?> node : pdg.getAllNodes()) {
