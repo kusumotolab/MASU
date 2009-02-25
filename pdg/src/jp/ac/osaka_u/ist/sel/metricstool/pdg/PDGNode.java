@@ -150,6 +150,6 @@ public abstract class PDGNode<T> {
     }
     
     public String getText() {
-        return text;
+        return this.text;
     }
 }

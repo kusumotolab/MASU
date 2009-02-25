@@ -21,9 +21,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 public class PDGStatementNode extends ControllableNode<SingleStatementInfo> {
 
     public PDGStatementNode(final SingleStatementInfo statement) {
-        super(statement);
-        
-        text = statement.getText() + "<" + statement.getFromLine() + ">";
+        super(statement);        
+        this.text = statement.getText() + "<" + statement.getFromLine() + ">";
     }
 
     @Override
