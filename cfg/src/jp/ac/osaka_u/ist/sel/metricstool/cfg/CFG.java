@@ -86,6 +86,10 @@ public abstract class CFG {
             throw new IllegalArgumentException();
         }
 
+        if (nodes.contains(startNode)) {
+            return;
+        }
+
         nodes.add(startNode);
         for (final CFGNode<? extends StatementInfo> node : startNode.getForwardNodes()) {
             this.getReachableNodes(node, nodes);
