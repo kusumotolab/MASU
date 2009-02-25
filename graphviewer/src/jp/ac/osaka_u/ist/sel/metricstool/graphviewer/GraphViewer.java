@@ -6,12 +6,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.IntraProceduralCFG;
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
@@ -134,15 +139,25 @@ public class GraphViewer extends MetricsTool {
                 out.println("building and outputing CFGs ...");
                 final BufferedWriter writer = new BufferedWriter(new FileWriter(cmd
                         .getOptionValue("c")));
+
+                writer.write("digraph CFG {");
+                writer.newLine();
+
+                int createdGraphNumber = 0;
                 for (final TargetMethodInfo method : DataManager.getInstance()
                         .getMethodInfoManager().getTargetMethodInfos()) {
-                    final IntraProceduralCFG cfg = new IntraProceduralCFG(method);
+
+                    writeMethodCFG(method, createdGraphNumber++, writer);
                 }
 
                 for (final TargetConstructorInfo constructor : DataManager.getInstance()
                         .getMethodInfoManager().getTargetConstructorInfos()) {
-                    final IntraProceduralCFG cfg = new IntraProceduralCFG(constructor);
+
+                    writeMethodCFG(constructor, createdGraphNumber++, writer);
                 }
+
+                writer.write("}");
+
                 writer.close();
             }
 
@@ -150,72 +165,29 @@ public class GraphViewer extends MetricsTool {
                 out.println("building and outputing PDGs ...");
                 final BufferedWriter writer = new BufferedWriter(new FileWriter(cmd
                         .getOptionValue("p")));
-                writer.write("digraph XXX {");
+
+                writer.write("digraph PDG {");
                 writer.newLine();
 
                 int createdGraphNumber = 0;
                 for (final TargetMethodInfo method : DataManager.getInstance()
                         .getMethodInfoManager().getTargetMethodInfos()) {
 
-                    final IntraProceduralPDG pdg = new IntraProceduralPDG(method);
-
-                    writer.write("subgraph cluster");
-                    writer.write(Integer.toString(createdGraphNumber));
-                    writer.write(" {");
-                    writer.newLine();
-
-                    writer.write("label = \"");
-                    writer.write(method.getMethodName());
-                    writer.write("\";");
-                    writer.newLine();
-
-                    final Map<PDGNode<?>, Integer> nodeLabels = new HashMap<PDGNode<?>, Integer>();
-                    for (final PDGNode<?> node : pdg.getAllNodes()) {
-                        nodeLabels.put(node, nodeLabels.size());
-                    }
-
-                    for (final Map.Entry<PDGNode<?>, Integer> entry : nodeLabels.entrySet()) {
-                        writer.write(Integer.toString(createdGraphNumber));
-                        writer.write(".");
-                        writer.write(Integer.toString(entry.getValue()));
-                        writer.write(" [label = \"");
-                        writer.write(entry.getKey().getText());
-                        writer.write("\"];");
-                        writer.newLine();
-                    }
-
-                    for (final PDGEdge edge : pdg.getAllEdges()) {
-                        writer.write(Integer.toString(createdGraphNumber));
-                        writer.write(".");
-                        writer.write(Integer.toString(nodeLabels.get(edge.getFromNode())));
-                        writer.write(" -> ");
-                        writer.write(Integer.toString(createdGraphNumber));
-                        writer.write(".");
-                        writer.write(Integer.toString(nodeLabels.get(edge.getToNode())));
-                        if (edge instanceof DataDependenceEdge) {
-                            writer.write(" [style = solid]");
-                        } else if (edge instanceof ControlDependenceEdge) {
-                            writer.write(" [style = dotted]");
-                        }
-                        writer.write(";");
-                        writer.newLine();
-                    }
-
-                    writer.write("}");
-                    writer.newLine();
-
-                    createdGraphNumber++;
+                    writeMethodPDG(method, createdGraphNumber++, writer);
                 }
 
                 for (final TargetConstructorInfo constructor : DataManager.getInstance()
                         .getMethodInfoManager().getTargetConstructorInfos()) {
-                    final IntraProceduralPDG pdg = new IntraProceduralPDG(constructor);
+
+                    writeMethodPDG(constructor, createdGraphNumber++, writer);
                 }
 
                 writer.write("}");
 
                 writer.close();
             }
+
+            out.println("successfully finished.");
 
         } catch (IOException e) {
             err.println(e.getMessage());
@@ -230,5 +202,120 @@ public class GraphViewer extends MetricsTool {
             err.println(e.getMessage());
             System.exit(0);
         }
+    }
+
+    static private void writeMethodCFG(final CallableUnitInfo unit, final int createdGraphNumber,
+            final BufferedWriter writer) throws IOException {
+
+        final IntraProceduralCFG cfg = new IntraProceduralCFG(unit);
+
+        writer.write("subgraph cluster");
+        writer.write(Integer.toString(createdGraphNumber));
+        writer.write(" {");
+        writer.newLine();
+
+        writer.write("label = \"");
+        writer.write(unit.getSignatureText());
+        writer.write("\";");
+        writer.newLine();
+
+        final Map<CFGNode<? extends StatementInfo>, Integer> nodeLabels = new HashMap<CFGNode<? extends StatementInfo>, Integer>();
+        for (final CFGNode<?> node : cfg.getAllNodes()) {
+            nodeLabels.put(node, nodeLabels.size());
+        }
+
+        for (final Map.Entry<CFGNode<? extends StatementInfo>, Integer> entry : nodeLabels
+                .entrySet()) {
+            writer.write(Integer.toString(createdGraphNumber));
+            writer.write(".");
+            writer.write(Integer.toString(entry.getValue()));
+            writer.write(" [label = \"");
+            writer.write(entry.getKey().getText());
+            writer.write("\"];");
+            writer.newLine();
+        }
+
+        final Set<CFGNode<? extends StatementInfo>> checkedNodes = new HashSet<CFGNode<? extends StatementInfo>>();
+        writeCFGEdges(cfg.getEnterNode(), nodeLabels, createdGraphNumber, writer, checkedNodes);
+
+        writer.write("}");
+        writer.newLine();
+    }
+
+    static private void writeCFGEdges(final CFGNode<? extends StatementInfo> fromNode,
+            final Map<CFGNode<? extends StatementInfo>, Integer> nodeLabels,
+            final int createdGraphNumber, final BufferedWriter writer,
+            final Set<CFGNode<? extends StatementInfo>> checkedNodes) throws IOException {
+
+        if ((null == fromNode) || (checkedNodes.contains(fromNode))) {
+            return;
+        }
+
+        checkedNodes.add(fromNode);
+
+        for (final CFGNode<? extends StatementInfo> toNode : fromNode.getForwardNodes()) {
+            writer.write(Integer.toString(createdGraphNumber));
+            writer.write(".");
+            writer.write(Integer.toString(nodeLabels.get(fromNode)));
+            writer.write(" -> ");
+            writer.write(Integer.toString(createdGraphNumber));
+            writer.write(".");
+            writer.write(Integer.toString(nodeLabels.get(toNode)));
+            writer.write(" [style = solid];");
+            writer.newLine();
+
+            writeCFGEdges(toNode, nodeLabels, createdGraphNumber, writer, checkedNodes);
+        }
+    }
+
+    static private void writeMethodPDG(final CallableUnitInfo unit, final int createdGraphNumber,
+            final BufferedWriter writer) throws IOException {
+
+        final IntraProceduralPDG pdg = new IntraProceduralPDG(unit);
+
+        writer.write("subgraph cluster");
+        writer.write(Integer.toString(createdGraphNumber));
+        writer.write(" {");
+        writer.newLine();
+
+        writer.write("label = \"");
+        writer.write(unit.getSignatureText());
+        writer.write("\";");
+        writer.newLine();
+
+        final Map<PDGNode<?>, Integer> nodeLabels = new HashMap<PDGNode<?>, Integer>();
+        for (final PDGNode<?> node : pdg.getAllNodes()) {
+            nodeLabels.put(node, nodeLabels.size());
+        }
+
+        for (final Map.Entry<PDGNode<?>, Integer> entry : nodeLabels.entrySet()) {
+            writer.write(Integer.toString(createdGraphNumber));
+            writer.write(".");
+            writer.write(Integer.toString(entry.getValue()));
+            writer.write(" [label = \"");
+            writer.write(entry.getKey().getText());
+            writer.write("\"];");
+            writer.newLine();
+        }
+
+        for (final PDGEdge edge : pdg.getAllEdges()) {
+            writer.write(Integer.toString(createdGraphNumber));
+            writer.write(".");
+            writer.write(Integer.toString(nodeLabels.get(edge.getFromNode())));
+            writer.write(" -> ");
+            writer.write(Integer.toString(createdGraphNumber));
+            writer.write(".");
+            writer.write(Integer.toString(nodeLabels.get(edge.getToNode())));
+            if (edge instanceof DataDependenceEdge) {
+                writer.write(" [style = solid]");
+            } else if (edge instanceof ControlDependenceEdge) {
+                writer.write(" [style = dotted]");
+            }
+            writer.write(";");
+            writer.newLine();
+        }
+
+        writer.write("}");
+        writer.newLine();
     }
 }
