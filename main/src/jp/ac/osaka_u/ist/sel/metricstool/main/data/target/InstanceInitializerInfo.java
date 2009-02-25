@@ -12,7 +12,6 @@ import java.util.Collections;
  */
 public class InstanceInitializerInfo extends CallableUnitInfo {
 
-    
     /**
      * 
      */
@@ -31,5 +30,10 @@ public class InstanceInitializerInfo extends CallableUnitInfo {
             final int fromColumn, final int toLine, final int toColumn) {
         super(Collections.EMPTY_SET, ownerClass, true, false, false, false, fromLine, fromColumn,
                 toLine, toColumn);
+    }
+
+    @Override
+    public final String getSignatureText() {
+        return "";
     }
 }

@@ -27,4 +27,9 @@ public final class StaticInitializerInfo extends CallableUnitInfo {
         super(Collections.EMPTY_SET, ownerClass, true, false, false, false, fromLine, fromColumn,
                 toLine, toColumn);
     }
+
+    @Override
+    public final String getSignatureText() {
+        return "";
+    }
 }

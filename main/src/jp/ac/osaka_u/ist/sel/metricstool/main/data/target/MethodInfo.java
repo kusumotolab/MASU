@@ -103,6 +103,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
      * 
      * @return メトリクス計測対象としての名前
      */
+    @Override
     public final String getMeasuredUnitName() {
 
         final StringBuilder sb = new StringBuilder();
@@ -130,6 +131,28 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
         return sb.toString();
     }
 
+    @Override
+    public final String getSignatureText(){
+    
+        final StringBuilder text = new StringBuilder();
+        
+        text.append(this.getReturnType().getTypeName());
+        text.append(" ");
+        text.append(this.getMethodName());
+        
+        text.append("(");
+        for(final ParameterInfo parameter : this.getParameters()){
+            text.append(parameter.getType().getTypeName());
+            text.append(",");
+        }
+        if(0 < this.getParameterNumber()){
+            text.deleteCharAt(text.length() -1);
+        }
+        text.append(")");
+        
+        return text.toString();
+    }
+    
     /**
      * このメソッドの名前を返す
      * 

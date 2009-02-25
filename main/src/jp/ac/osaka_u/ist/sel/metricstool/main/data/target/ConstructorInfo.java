@@ -84,4 +84,24 @@ public abstract class ConstructorInfo extends CallableUnitInfo {
 
         return super.canCalledWith(actualParameters);
     }
+
+    @Override
+    public final String getSignatureText() {
+
+        final StringBuilder text = new StringBuilder();
+
+        text.append(this.getOwnerClass().getClassName());
+
+        text.append("(");
+        for (final ParameterInfo parameter : this.getParameters()) {
+            text.append(parameter.getType().getTypeName());
+            text.append(",");
+        }
+        if (0 < this.getParameterNumber()) {
+            text.deleteCharAt(text.length() - 1);
+        }
+        text.append(")");
+
+        return text.toString();
+    }
 }

@@ -451,6 +451,13 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     public final SortedSet<CallableUnitInfo> getCallers() {
         return Collections.unmodifiableSortedSet(this.callers);
     }
+    
+    /**
+     * このCallableUnitInfoのシグネチャのテキスト表現を返す
+     * 
+     * @return このCallableUnitInfoのシグネチャのテキスト表現
+     */
+    public abstract String getSignatureText();
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数
