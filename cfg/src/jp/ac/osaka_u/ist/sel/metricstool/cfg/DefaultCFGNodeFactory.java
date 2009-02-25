@@ -4,9 +4,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 
 
 /**
@@ -20,13 +21,13 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
     /**
      * 生成されたノードを管理するマップ
      */
-    private final Map<StatementInfo, CFGNode<? extends StatementInfo>> statementToNodeMap;
+    private final Map<ExecutableElementInfo, CFGNode<? extends ExecutableElementInfo>> elementToNodeMap;
 
     /**
      * オブジェクトを生成
      */
     public DefaultCFGNodeFactory() {
-        this.statementToNodeMap = new HashMap<StatementInfo, CFGNode<? extends StatementInfo>>();
+        this.elementToNodeMap = new HashMap<ExecutableElementInfo, CFGNode<? extends ExecutableElementInfo>>();
     }
 
     /**
@@ -39,31 +40,32 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
             throw new NullPointerException("nodeFactory is null");
         }
 
-        this.statementToNodeMap = new HashMap<StatementInfo, CFGNode<? extends StatementInfo>>(
-                nodeFactory.statementToNodeMap);
+        this.elementToNodeMap = new HashMap<ExecutableElementInfo, CFGNode<? extends ExecutableElementInfo>>(
+                nodeFactory.elementToNodeMap);
     }
 
-    public CFGNode<? extends StatementInfo> makeNode(final StatementInfo statement) {
-        CFGNode<? extends StatementInfo> node = this.getNode(statement);
+    public CFGNode<? extends ExecutableElementInfo> makeNode(final ExecutableElementInfo element) {
+        CFGNode<? extends ExecutableElementInfo> node = this.getNode(element);
 
         if (null != node) {
             return node;
         }
 
-        if (statement instanceof SingleStatementInfo) {
-            node = new CFGStatementNode((SingleStatementInfo) statement);
-            this.statementToNodeMap.put(statement, node);
-        } else if (statement instanceof ConditionalBlockInfo) {
-            node = new CFGControlNode((ConditionalBlockInfo) statement);
-            this.statementToNodeMap.put(statement, node);
+        if (element instanceof SingleStatementInfo) {
+            node = new CFGStatementNode((SingleStatementInfo) element);
+        } else if (element instanceof ConditionalBlockInfo) {
+            node = new CFGControlNode((ConditionalBlockInfo) element);
+        } else if (element instanceof ConditionInfo) {
+            node = new CFGConditionNode((ConditionInfo) element);
         } else {
-            node = new CFGEmptyNode(statement);
+            node = new CFGEmptyNode(element);
         }
+        this.elementToNodeMap.put(element, node);
 
         return node;
     }
 
-    public CFGNode<? extends StatementInfo> getNode(final StatementInfo statement) {
-        return this.statementToNodeMap.get(statement);
+    public CFGNode<? extends ExecutableElementInfo> getNode(final ExecutableElementInfo statement) {
+        return this.elementToNodeMap.get(statement);
     }
 }

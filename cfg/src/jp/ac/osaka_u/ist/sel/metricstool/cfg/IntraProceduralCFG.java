@@ -2,12 +2,17 @@ package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 
 
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.DoBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ElseBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
@@ -134,8 +139,8 @@ public class IntraProceduralCFG extends CFG {
             }
 
         }
-        // 対応するローカル空間がfor文もしくはwhile文の場合
-        else if (local instanceof ForBlockInfo || local instanceof WhileBlockInfo) {
+        // 対応するローカル空間がwhile文の場合
+        else if (local instanceof WhileBlockInfo) {
             // 制御文自体が入口ノードかつ出口ノード
             this.enterNode = this.nodeFactory.makeNode((ConditionalBlockInfo) local);
             this.exitNodes.add(this.enterNode);
@@ -144,11 +149,75 @@ public class IntraProceduralCFG extends CFG {
             this.enterNode.addForwardNode(!innerCFG.isEmpty() ? innerCFG.getEnterNode()
                     : this.enterNode);
 
-            for (final CFGNode<? extends StatementInfo> innerExitNode : innerCFG.getExitNodes()) {
+            for (final CFGNode<? extends ExecutableElementInfo> innerExitNode : innerCFG
+                    .getExitNodes()) {
                 if (innerExitNode.isExitNode(this.localSpace)) {
                     this.exitNodes.add(innerExitNode);
                 } else {
                     innerExitNode.addForwardNode(this.enterNode);
+                }
+            }
+        }
+        // 対応するローカル空間がfor文の場合
+        else if (local instanceof ForBlockInfo) {
+
+            //入口ノードは初期化式，もし初期化式がない場合は条件式
+            //出口は条件式
+            final List<CFGNode<? extends ExecutableElementInfo>> initializerNodes = new LinkedList<CFGNode<? extends ExecutableElementInfo>>();
+            for (final ConditionInfo initializer : ((ForBlockInfo) local)
+                    .getInitializerExpressions()) {
+
+                final CFGNode<? extends ExecutableElementInfo> initializerNode = this.nodeFactory
+                        .makeNode(initializer);
+                initializerNodes.add(initializerNode);
+            }
+
+            final CFGNode<? extends ExecutableElementInfo>[] initializerNodeArray = initializerNodes
+                    .toArray(new CFGNode<?>[0]);
+            for (int i = 0; i < initializerNodeArray.length - 1; i++) {
+                initializerNodeArray[i].addForwardNode(initializerNodeArray[i + 1]);
+            }
+
+            final CFGNode<? extends ExecutableElementInfo> conditionNode = this.nodeFactory
+                    .makeNode((ForBlockInfo) local);
+            this.exitNodes.add(conditionNode);
+
+            if (0 < initializerNodes.size()) {
+                this.enterNode = initializerNodeArray[0];
+                initializerNodeArray[initializerNodeArray.length - 1].addForwardNode(conditionNode);
+            } else {
+                this.enterNode = conditionNode;
+            }
+
+            // 内部のCFGと連結．ループ文なので内部のCFGが空の場合は入口ノードのフォワードノードは入口ノード
+            conditionNode.addForwardNode(!innerCFG.isEmpty() ? innerCFG.getEnterNode()
+                    : conditionNode);
+
+            // 繰り返し式を追加
+            final List<CFGNode<? extends ExecutableElementInfo>> iteratorNodes = new LinkedList<CFGNode<? extends ExecutableElementInfo>>();
+            for (final ExpressionInfo iterator : ((ForBlockInfo) local).getIteratorExpressions()) {
+
+                final CFGNode<? extends ExecutableElementInfo> iteratorNode = this.nodeFactory
+                        .makeNode(iterator);
+                iteratorNodes.add(iteratorNode);
+            }
+
+            final CFGNode<? extends ExecutableElementInfo>[] iteratorNodeArray = iteratorNodes
+                    .toArray(new CFGNode<?>[0]);
+            for (int i = 0; i < iteratorNodeArray.length - 1; i++) {
+                iteratorNodeArray[i].addForwardNode(iteratorNodeArray[i + 1]);
+            }
+
+            if (0 < iteratorNodes.size()) {
+                for (final CFGNode<? extends ExecutableElementInfo> innerExitNode : innerCFG
+                        .getExitNodes()) {
+                    innerExitNode.addForwardNode(iteratorNodeArray[0]);
+                }
+                iteratorNodeArray[iteratorNodeArray.length - 1].addForwardNode(conditionNode);
+            } else {
+                for (final CFGNode<? extends ExecutableElementInfo> innerExitNode : innerCFG
+                        .getExitNodes()) {
+                    innerExitNode.addForwardNode(conditionNode);
                 }
             }
 
@@ -159,7 +228,7 @@ public class IntraProceduralCFG extends CFG {
             this.exitNodes.addAll(innerCFG.exitNodes);
         } else if (local instanceof DoBlockInfo) {
 
-            final CFGNode<? extends StatementInfo> controlNode = this.nodeFactory
+            final CFGNode<? extends ExecutableElementInfo> controlNode = this.nodeFactory
                     .makeNode((ConditionalBlockInfo) local);
 
             this.enterNode = !innerCFG.isEmpty() ? innerCFG.getEnterNode() : controlNode;
@@ -191,7 +260,8 @@ public class IntraProceduralCFG extends CFG {
             final CFG nextSubCFG = new IntraProceduralCFG(nextStatement, this.nodeFactory);
 
             if (null != nextSubCFG.getEnterNode()) {
-                for (final CFGNode<? extends StatementInfo> preExitNode : preSubCFG.getExitNodes()) {
+                for (final CFGNode<? extends ExecutableElementInfo> preExitNode : preSubCFG
+                        .getExitNodes()) {
                     if (preExitNode.isExitNode(local)) {
                         innerCFG.exitNodes.add(preExitNode);
                     } else {

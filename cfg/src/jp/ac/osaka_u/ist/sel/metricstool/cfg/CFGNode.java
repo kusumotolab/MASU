@@ -7,9 +7,9 @@ import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 
 
 /**
@@ -18,17 +18,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
  *
  * @param <T> ノードの核となる情報の型
  */
-public abstract class CFGNode<T extends StatementInfo> {
+public abstract class CFGNode<T extends ExecutableElementInfo> {
 
     /**
      * このノードのフォワードノードのセット
      */
-    private final Set<CFGNode<? extends StatementInfo>> forwardNodes;
+    private final Set<CFGNode<? extends ExecutableElementInfo>> forwardNodes;
 
     /**
      * このノードのバックワードノードのセット
      */
-    private final Set<CFGNode<? extends StatementInfo>> backwardNodes;
+    private final Set<CFGNode<? extends ExecutableElementInfo>> backwardNodes;
 
     protected String text;
 
@@ -43,11 +43,11 @@ public abstract class CFGNode<T extends StatementInfo> {
             throw new IllegalArgumentException("statement is null");
         }
         this.statement = statement;
-        this.forwardNodes = new HashSet<CFGNode<? extends StatementInfo>>();
-        this.backwardNodes = new HashSet<CFGNode<? extends StatementInfo>>();
+        this.forwardNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
+        this.backwardNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
     }
 
-    public void addForwardNode(final CFGNode<? extends StatementInfo> forwardNode) {
+    public void addForwardNode(final CFGNode<? extends ExecutableElementInfo> forwardNode) {
 
         if (null == forwardNode) {
             throw new IllegalArgumentException();
@@ -72,7 +72,7 @@ public abstract class CFGNode<T extends StatementInfo> {
      * このノードのフォワードノードのセットを取得
      * @return このノードのフォワードノードのセット
      */
-    public Set<CFGNode<? extends StatementInfo>> getForwardNodes() {
+    public Set<CFGNode<? extends ExecutableElementInfo>> getForwardNodes() {
         return Collections.unmodifiableSet(this.forwardNodes);
     }
 
@@ -80,7 +80,7 @@ public abstract class CFGNode<T extends StatementInfo> {
      * このノードのバックワードノードのセットを取得
      * @return このノードのバックワードノードのセット
      */
-    public Set<CFGNode<? extends StatementInfo>> getBackwardNodes() {
+    public Set<CFGNode<? extends ExecutableElementInfo>> getBackwardNodes() {
         return this.backwardNodes;
     }
 

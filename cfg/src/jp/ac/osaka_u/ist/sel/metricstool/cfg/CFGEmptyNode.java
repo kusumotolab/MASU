@@ -1,19 +1,19 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 
 
-final class CFGEmptyNode extends CFGNode<StatementInfo> {
+final class CFGEmptyNode extends CFGNode<ExecutableElementInfo> {
 
-    CFGEmptyNode(final StatementInfo statement) {
+    CFGEmptyNode(final ExecutableElementInfo statement) {
         super(statement);
         this.text = statement.getText() + "<" + statement.getFromLine() + ">";
     }
 
     @Override
-    public void addForwardNode(final CFGNode<? extends StatementInfo> forwardNode) {
-        for (final CFGNode<? extends StatementInfo> backward : this.getBackwardNodes()) {
+    public void addForwardNode(final CFGNode<? extends ExecutableElementInfo> forwardNode) {
+        for (final CFGNode<? extends ExecutableElementInfo> backward : this.getBackwardNodes()) {
             backward.addForwardNode(forwardNode);
         }
     }
