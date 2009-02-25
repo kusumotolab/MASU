@@ -33,7 +33,7 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
             final VariableInfo<?> variable = variableUsage.getUsedVariable();
             usedVariables.add(variable);
         }
-        return usedVariables;
+        return Collections.unmodifiableSet(usedVariables);
     }
 
     /**
