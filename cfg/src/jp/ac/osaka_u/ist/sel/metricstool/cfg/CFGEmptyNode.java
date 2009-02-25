@@ -8,15 +8,13 @@ final class CFGEmptyNode extends CFGNode<StatementInfo> {
 
     CFGEmptyNode(final StatementInfo statement) {
         super(statement);
+        this.text = statement.getText() + "<" + statement.getFromLine() + ">";
     }
 
     @Override
     public void addForwardNode(final CFGNode<? extends StatementInfo> forwardNode) {
-        for(final CFGNode<? extends StatementInfo> backward : this.getBackwardNodes()) {
+        for (final CFGNode<? extends StatementInfo> backward : this.getBackwardNodes()) {
             backward.addForwardNode(forwardNode);
         }
     }
-
-
-
 }

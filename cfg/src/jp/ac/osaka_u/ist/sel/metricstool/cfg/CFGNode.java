@@ -30,14 +30,17 @@ public abstract class CFGNode<T extends StatementInfo> {
      */
     private final Set<CFGNode<? extends StatementInfo>> backwardNodes;
 
+    protected String text;
+
     /**
      * このノードに対応する文
      */
     private final T statement;
 
-    protected CFGNode(T statement) {
-        if(null == statement) {
-            throw new NullPointerException("statement is null");
+    protected CFGNode(final T statement) {
+
+        if (null == statement) {
+            throw new IllegalArgumentException("statement is null");
         }
         this.statement = statement;
         this.forwardNodes = new HashSet<CFGNode<? extends StatementInfo>>();
@@ -45,8 +48,9 @@ public abstract class CFGNode<T extends StatementInfo> {
     }
 
     public void addForwardNode(final CFGNode<? extends StatementInfo> forwardNode) {
+
         if (null == forwardNode) {
-            new IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
 
         if (!(forwardNode instanceof CFGEmptyNode)) {
@@ -61,7 +65,7 @@ public abstract class CFGNode<T extends StatementInfo> {
      * @return このノードに対応する文
      */
     public T getStatement() {
-        return statement;
+        return this.statement;
     }
 
     /**
@@ -69,7 +73,7 @@ public abstract class CFGNode<T extends StatementInfo> {
      * @return このノードのフォワードノードのセット
      */
     public Set<CFGNode<? extends StatementInfo>> getForwardNodes() {
-        return Collections.unmodifiableSet(forwardNodes);
+        return Collections.unmodifiableSet(this.forwardNodes);
     }
 
     /**
@@ -77,7 +81,7 @@ public abstract class CFGNode<T extends StatementInfo> {
      * @return このノードのバックワードノードのセット
      */
     public Set<CFGNode<? extends StatementInfo>> getBackwardNodes() {
-        return backwardNodes;
+        return this.backwardNodes;
     }
 
     /**
@@ -101,4 +105,7 @@ public abstract class CFGNode<T extends StatementInfo> {
         return false;
     }
 
+    public final String getText() {
+        return this.text;
+    }
 }
