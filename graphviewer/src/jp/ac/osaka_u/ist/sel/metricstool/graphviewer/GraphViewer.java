@@ -230,7 +230,7 @@ public class GraphViewer extends MetricsTool {
             writer.write(".");
             writer.write(Integer.toString(entry.getValue()));
             writer.write(" [label = \"");
-            writer.write(entry.getKey().getText());
+            writer.write(entry.getKey().getText().replace("\"", "\\\""));
             writer.write("\"];");
             writer.newLine();
         }
@@ -293,7 +293,7 @@ public class GraphViewer extends MetricsTool {
             writer.write(".");
             writer.write(Integer.toString(entry.getValue()));
             writer.write(" [label = \"");
-            writer.write(entry.getKey().getText());
+            writer.write(entry.getKey().getText().replace("\"", "\\\""));
             writer.write("\"];");
             writer.newLine();
         }
