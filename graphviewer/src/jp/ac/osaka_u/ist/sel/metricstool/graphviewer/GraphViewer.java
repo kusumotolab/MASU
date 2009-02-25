@@ -16,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
@@ -219,12 +219,12 @@ public class GraphViewer extends MetricsTool {
         writer.write("\";");
         writer.newLine();
 
-        final Map<CFGNode<? extends StatementInfo>, Integer> nodeLabels = new HashMap<CFGNode<? extends StatementInfo>, Integer>();
+        final Map<CFGNode<? extends ExecutableElementInfo>, Integer> nodeLabels = new HashMap<CFGNode<? extends ExecutableElementInfo>, Integer>();
         for (final CFGNode<?> node : cfg.getAllNodes()) {
             nodeLabels.put(node, nodeLabels.size());
         }
 
-        for (final Map.Entry<CFGNode<? extends StatementInfo>, Integer> entry : nodeLabels
+        for (final Map.Entry<CFGNode<? extends ExecutableElementInfo>, Integer> entry : nodeLabels
                 .entrySet()) {
             writer.write(Integer.toString(createdGraphNumber));
             writer.write(".");
@@ -235,17 +235,17 @@ public class GraphViewer extends MetricsTool {
             writer.newLine();
         }
 
-        final Set<CFGNode<? extends StatementInfo>> checkedNodes = new HashSet<CFGNode<? extends StatementInfo>>();
+        final Set<CFGNode<? extends ExecutableElementInfo>> checkedNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
         writeCFGEdges(cfg.getEnterNode(), nodeLabels, createdGraphNumber, writer, checkedNodes);
 
         writer.write("}");
         writer.newLine();
     }
 
-    static private void writeCFGEdges(final CFGNode<? extends StatementInfo> fromNode,
-            final Map<CFGNode<? extends StatementInfo>, Integer> nodeLabels,
+    static private void writeCFGEdges(final CFGNode<? extends ExecutableElementInfo> fromNode,
+            final Map<CFGNode<? extends ExecutableElementInfo>, Integer> nodeLabels,
             final int createdGraphNumber, final BufferedWriter writer,
-            final Set<CFGNode<? extends StatementInfo>> checkedNodes) throws IOException {
+            final Set<CFGNode<? extends ExecutableElementInfo>> checkedNodes) throws IOException {
 
         if ((null == fromNode) || (checkedNodes.contains(fromNode))) {
             return;
@@ -253,7 +253,7 @@ public class GraphViewer extends MetricsTool {
 
         checkedNodes.add(fromNode);
 
-        for (final CFGNode<? extends StatementInfo> toNode : fromNode.getForwardNodes()) {
+        for (final CFGNode<? extends ExecutableElementInfo> toNode : fromNode.getForwardNodes()) {
             writer.write(Integer.toString(createdGraphNumber));
             writer.write(".");
             writer.write(Integer.toString(nodeLabels.get(fromNode)));
