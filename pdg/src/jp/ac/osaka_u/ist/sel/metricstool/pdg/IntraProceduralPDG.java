@@ -13,6 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.cfg.IntraProceduralCFG;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
@@ -89,14 +90,15 @@ public class IntraProceduralPDG extends PDG {
                     this.exitNodes.add(pdgNode);
                 }
 
-                final CFGNode<? extends StatementInfo> cfgNode = this.cfg.getCFGNode(statement);
+                final CFGNode<? extends ExecutableElementInfo> cfgNode = this.cfg
+                        .getCFGNode(statement);
 
                 // このpdgNodeに対応する文で定義されている全変数に関してデータ依存辺を構築
                 for (final VariableInfo<? extends UnitInfo> definedVariable : pdgNode
                         .getDefinedVariables()) {
 
                     // cfgNodeから派生するすべての経路のデータ依存辺を構築
-                    for (final CFGNode<? extends StatementInfo> forwardCFGNode : cfgNode
+                    for (final CFGNode<? extends ExecutableElementInfo> forwardCFGNode : cfgNode
                             .getForwardNodes()) {
                         this.buildDataDependence(pdgNode, definedVariable, forwardCFGNode,
                                 new HashSet<CFGControlNode>());
@@ -120,7 +122,7 @@ public class IntraProceduralPDG extends PDG {
      */
     private void buildDataDependence(final PDGNode<?> definitionNode,
             final VariableInfo<? extends UnitInfo> definedVariable,
-            final CFGNode<? extends StatementInfo> dependCandidates,
+            final CFGNode<? extends ExecutableElementInfo> dependCandidates,
             final Set<CFGControlNode> passedNodeCache) {
 
         final PDGNode<?> firstCandidate = this.makeNode(dependCandidates.getStatement());
@@ -144,7 +146,7 @@ public class IntraProceduralPDG extends PDG {
         }
 
         // 最初の候補ノードから派生する全ノードに対してデータ依存を調査
-        for (final CFGNode<? extends StatementInfo> nextCandidate : dependCandidates
+        for (final CFGNode<? extends ExecutableElementInfo> nextCandidate : dependCandidates
                 .getForwardNodes()) {
 
             if (nextCandidate instanceof CFGControlNode) {

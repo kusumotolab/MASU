@@ -39,7 +39,7 @@ public abstract class PDGNode<T> {
     private final T core;
 
     protected String text;
-    
+
     /**
      * ノードの核となる情報を与えて初期化
      * @param core ノードの核となる情報
@@ -65,8 +65,8 @@ public abstract class PDGNode<T> {
 
     public abstract boolean isDefine(final VariableInfo<? extends UnitInfo> variable);
 
-    public  abstract boolean isReferenace(final VariableInfo<? extends UnitInfo> variable);
-    
+    public abstract boolean isReferenace(final VariableInfo<? extends UnitInfo> variable);
+
     /**
      * このノードのフォワードエッジを追加
      * @param forwardEdge このノードのフォワードエッジ
@@ -90,16 +90,14 @@ public abstract class PDGNode<T> {
     protected boolean addBackwardEdge(PDGEdge backwardEdge) {
         return this.backwardEdges.add(backwardEdge);
     }
-    
-    void removeBackwardEdge(final PDGEdge backwardEdge){
+
+    void removeBackwardEdge(final PDGEdge backwardEdge) {
         this.backwardEdges.remove(backwardEdge);
     }
-    
+
     void removeForwardEdge(final PDGEdge forwardEdge) {
         this.forwardEdges.remove(forwardEdge);
     }
-    
-    
 
     /**
      * このノードからのデータ依存変を追加
@@ -116,7 +114,7 @@ public abstract class PDGNode<T> {
         added &= dependingNode.addBackwardEdge(dataFlow);
         return added;
     }
-    
+
     /**
      * このノードのバックワードエッジを取得
      * @return このノードのバックワードエッジ
@@ -148,7 +146,7 @@ public abstract class PDGNode<T> {
     public final T getCore() {
         return this.core;
     }
-    
+
     public String getText() {
         return this.text;
     }
