@@ -12,12 +12,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.cfg.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.IntraProceduralCFG;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ElseBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
@@ -62,6 +63,26 @@ public class IntraProceduralPDG extends PDG {
      */
     @Override
     protected void buildPDG() {
+
+        final CFGNode<?> enterNode = this.cfg.getEnterNode();
+
+        // unitの引数を処理
+        for (final ParameterInfo parameter : this.unit.getParameters()) {
+
+            final PDGNode<?> pdgNode = this.makeNode(parameter);
+            if (null != enterNode) {
+                this.buildDataDependence(enterNode, pdgNode, parameter, new HashSet<CFGNode<?>>());
+            }
+        }
+
+        // CFGの入口ノードから処理を行う
+        if (null != enterNode) {
+            this.buildDependence(enterNode, new HashSet<CFGNode<?>>());
+        }
+
+        // CFGの先頭から順にたどりながら，PDGを構築する
+
+        /*
         if (null == this.getCFG().getEnterNode()) {
             return;
         }
@@ -111,6 +132,145 @@ public class IntraProceduralPDG extends PDG {
                 this.buildControlFlow((ConditionalBlockInfo) statement);
             }
         }
+        */
+    }
+
+    private void buildDependence(final CFGNode<?> cfgNode, final Set<CFGNode<?>> checkedNodes) {
+
+        if (null == cfgNode || null == checkedNodes) {
+            throw new IllegalArgumentException();
+        }
+
+        // 既に調査されているノードである場合は何もしない
+        if (checkedNodes.contains(cfgNode)) {
+            return;
+        }
+
+        // 現在のノードを調査済みに追加
+        else {
+            checkedNodes.add(cfgNode);
+        }
+
+        //与えられたCFGノードに対応するPDGノードを作成
+        final ExecutableElementInfo element = cfgNode.getCore();
+        final PDGNode<?> pdgNode = this.makeNode(element);
+
+        //与えられたCFGノードで定義された各変数に対して，
+        //その変数を参照しているノードにDataDependenceを引く
+        for (final VariableInfo<? extends UnitInfo> variable : cfgNode.getDefinedVariables()) {
+
+            for (final CFGNode<?> forwardNode : cfgNode.getForwardNodes()) {
+                final Set<CFGNode<?>> checkedNodesForDefinedVariables = new HashSet<CFGNode<?>>();
+                checkedNodesForDefinedVariables.add(cfgNode);
+                this.buildDataDependence(forwardNode, pdgNode, variable,
+                        checkedNodesForDefinedVariables);
+            }
+        }
+
+        //与えられたCFGノードからControlDependenceを引く
+        if (pdgNode instanceof PDGControlNode) {
+            this.buildControlDependence((PDGControlNode) pdgNode, (BlockInfo) element);
+        }
+
+        for (final CFGNode<?> forwardNode : cfgNode.getForwardNodes()) {
+            this.buildDependence(forwardNode, checkedNodes);
+        }
+    }
+
+    /**
+     * 第一引数で与えられたCFGのノードに対して，第二引数で与えられたPDGノードからのデータ依存があるかを調べ，
+     * 或る場合は，データ依存辺を引く
+     * 
+     * @param cfgNode
+     * @param fromPDGNode
+     * @param variable
+     */
+    private void buildDataDependence(final CFGNode<?> cfgNode, final PDGNode<?> fromPDGNode,
+            final VariableInfo<?> variable, final Set<CFGNode<?>> checkedCFGNodes) {
+
+        if (null == cfgNode || null == fromPDGNode || null == variable || null == checkedCFGNodes) {
+            throw new IllegalArgumentException();
+        }
+
+        // 既に調べているノード場合は何もしないでメソッドを抜ける
+        if (checkedCFGNodes.contains(cfgNode)) {
+            return;
+        }
+
+        // たった今調べたノードをチェックしたノードに追加
+        else {
+            checkedCFGNodes.add(cfgNode);
+        }
+
+        // cfgNodeがvariableを参照している場合は，
+        // cfgNodeからPDGNodeを作成し，fromPDGNodeからデータ依存辺を引く        
+        if (cfgNode.getUsedVariables().contains(variable)) {
+
+            final ExecutableElementInfo element = cfgNode.getCore();
+            final PDGNode<?> toPDGNode = this.makeNode(element);
+            fromPDGNode.addDataDependingNode(toPDGNode);
+        }
+
+        // cfgNodeがvariableに代入している場合は，
+        // これ以降のノードのデータ依存は調べない
+        if (cfgNode.getDefinedVariables().contains(variable)) {
+            return;
+        }
+
+        // cfgNodeのフォワードノードに対してもデータ依存を調べる
+        for (final CFGNode<?> forwardNode : cfgNode.getForwardNodes()) {
+            this.buildDataDependence(forwardNode, fromPDGNode, variable, checkedCFGNodes);
+        }
+    }
+
+    /**
+     * 第一引数で与えられたノードに対して，第二引数で与えられたblockに含まれる文に制御依存辺を引く
+     * 
+     * @param fromPDGNode
+     * @param block
+     */
+    private void buildControlDependence(final PDGControlNode fromPDGNode, final BlockInfo block) {
+
+        for (final StatementInfo innerStatement : block.getStatements()) {
+
+            // 単文やケースエントリの場合は，fromPDGNodeからの制御依存辺を引く
+            if (innerStatement instanceof SingleStatementInfo
+                    || innerStatement instanceof CaseEntryInfo) {
+                final PDGNode<?> toPDGNode = this.makeNode(innerStatement);
+                fromPDGNode.addControlDependingNode(toPDGNode);
+            }
+
+            // Block文の場合は，条件付き文であれば，単文の時と同じ処理
+            //　そうでなければ，さらに内部を調べる
+            else if (innerStatement instanceof BlockInfo) {
+
+                if (innerStatement instanceof ConditionalBlockInfo) {
+
+                    final ConditionInfo condition = ((ConditionalBlockInfo) innerStatement)
+                            .getConditionalClause().getCondition();
+                    final PDGNode<?> toPDGNode = this.makeNode(condition);
+                    fromPDGNode.addControlDependingNode(toPDGNode);
+                }
+
+                // elseブロックの場合はここでは，依存辺は引かない
+                else if (block instanceof ElseBlockInfo) {
+
+                }
+
+                else {
+                    this.buildControlDependence(fromPDGNode, (BlockInfo) innerStatement);
+                }
+            }
+        }
+
+        // if文の場合は，elseへの対応もしなければならない
+        if (block instanceof IfBlockInfo) {
+            final ElseBlockInfo elseBlock = ((IfBlockInfo) block).getSequentElseBlock();
+            if (null != elseBlock) {
+                this.buildControlDependence(fromPDGNode, elseBlock);
+            }
+        }
+
     }
 
     /**
@@ -125,7 +285,7 @@ public class IntraProceduralPDG extends PDG {
             final CFGNode<? extends ExecutableElementInfo> dependCandidates,
             final Set<CFGControlNode> passedNodeCache) {
 
-        final PDGNode<?> firstCandidate = this.makeNode(dependCandidates.getStatement());
+        final PDGNode<?> firstCandidate = this.makeNode(dependCandidates.getCore());
 
         // 候補ノードが存在する場合，最初の候補ノードへのデータ依存を調査
         if (null != firstCandidate) {

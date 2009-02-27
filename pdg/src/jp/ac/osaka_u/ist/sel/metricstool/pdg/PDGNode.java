@@ -100,7 +100,7 @@ public abstract class PDGNode<T> {
     }
 
     /**
-     * このノードからのデータ依存変を追加
+     * このノードからのデータ依存辺を追加
      * @param dependingNode
      */
     public boolean addDataDependingNode(final PDGNode<?> dependingNode) {
