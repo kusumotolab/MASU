@@ -64,7 +64,7 @@ public abstract class CFG {
     /**
      * 引数で与えられたノードから到達可能なノードを返す
      * 
-     * @param startNode　開始ノード
+     * @param startNode 開始ノード
      * @return 引数で与えられたノードから到達可能なノード
      */
     public final Set<CFGNode<? extends ExecutableElementInfo>> getReachableNodes(

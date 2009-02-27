@@ -63,7 +63,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
         this.backwardNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
     }
 
-    public void addForwardNode(final CFGNode<? extends ExecutableElementInfo> forwardNode) {
+    void addForwardNode(final CFGNode<? extends ExecutableElementInfo> forwardNode) {
 
         if (null == forwardNode) {
             throw new IllegalArgumentException();
