@@ -10,6 +10,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 
 
 /**
@@ -35,14 +37,28 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
     /**
      * このノードに対応する文
      */
-    private final T statement;
+    private final T core;
 
-    protected CFGNode(final T statement) {
+    /**
+     * このノードで定義・変更されている変数のSetを返す
+     * 
+     * @return
+     */
+    public abstract Set<VariableInfo<? extends UnitInfo>> getDefinedVariables();
 
-        if (null == statement) {
-            throw new IllegalArgumentException("statement is null");
+    /**
+     * このノードで利用（参照）されている変数のSetを返す
+     * 
+     * @return
+     */
+    public abstract Set<VariableInfo<? extends UnitInfo>> getUsedVariables();
+
+    protected CFGNode(final T core) {
+
+        if (null == core) {
+            throw new IllegalArgumentException("core is null");
         }
-        this.statement = statement;
+        this.core = core;
         this.forwardNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
         this.backwardNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
     }
@@ -64,8 +80,8 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
      * このノードに対応する文の情報を取得
      * @return このノードに対応する文
      */
-    public T getStatement() {
-        return this.statement;
+    public T getCore() {
+        return this.core;
     }
 
     /**
@@ -90,10 +106,10 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
      * @return 引数のローカル空間の出口の場合，true
      */
     public boolean isExitNode(final LocalSpaceInfo localSpace) {
-        if (this.statement instanceof ReturnStatementInfo) {
+        if (this.core instanceof ReturnStatementInfo) {
             return true;
-        } else if (this.statement instanceof BreakStatementInfo) {
-            final BreakStatementInfo breakStatement = (BreakStatementInfo) this.statement;
+        } else if (this.core instanceof BreakStatementInfo) {
+            final BreakStatementInfo breakStatement = (BreakStatementInfo) this.core;
             if (localSpace instanceof BlockInfo && ((BlockInfo) localSpace).isLoopStatement()) {
                 if (null == breakStatement.getDestinationLabel()) {
                     return true;
