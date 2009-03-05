@@ -43,6 +43,7 @@ tokens {
 	SCTOR_DEF; EXPR_STATE; FIELD_DEF; NAME; ENUM_CONSTANT_DEF; LOCAL_PARAMETER_DEF;
 	ARRAY_INSTANTIATION; COND_CLAUSE; LOCAL_VARIABLE_DEF;
 	PROPERTY_SET_BODY; PROPERTY_GET_BODY;
+	IF; ELSE;
 }
 
 {
@@ -63,20 +64,25 @@ tokens {
 //   rule for this parser
 compilationUnit
 	:	
-		//(region)
+	
+		( symbolDefinition )*
+		(region!)*
 		// Next we have a series of zero or more import statements
 		( usingDefinition )*
-	
+		(region!)*
 		// A compilation unit starts with an optional package definition
 		(	packageDefinition
 		|	/* nothing */
 		)
-		
-		//(region)
+		(region!)*
 		
 		EOF!
 	;
 
+symbolDefinition
+	:
+		HASH! "define"^ identifier
+	; 
 
 // Package statement: "package" followed by an identifier.
 packageDefinition
@@ -100,14 +106,14 @@ usingDefinition
 typeDefinition
 	options {defaultErrorHandler = true;}
 	:
-		
+		(region!)*
 		m:modifiers!
 		( classDefinition[#m]
 		| interfaceDefinition[#m]
 		| structDefinition[#m]
 		| enumDefinition[#m]
 		)
-		//( endregion )*
+		(region!)*
 	|	SEMI
 		
 	
@@ -230,10 +236,17 @@ modifier
 
 region 
 	options {defaultErrorHandler=true;}
-	: HASH IDENT 
-  
+	: HASH (IDENT | ("if" expression) | "elif" | "else" | "endif")
 ;
 
+regionNotIf
+	options {defaultErrorHandler=true;}
+	: HASH IDENT
+;
+
+//directiveIf
+//	: HASH "if"^ (expression)?
+//;
 /*
 endregion 
 	options {defaultErrorHandler = true;}	
@@ -295,7 +308,7 @@ interfaceDefinition![CommonAST modifiers]
 // That's about it (until you see what a field is...)
 classBlock
 	:	LCURLY!
-			(((region)*  field) | SEMI! )*
+			(((region!)*  field (region!)*) | SEMI! )*
 		RCURLY!
 		{#classBlock = #([OBJBLOCK, "OBJBLOCK"], #classBlock);}
 	;
@@ -303,7 +316,7 @@ classBlock
 // This is the body of a struct.  You can have fields and extra semicolons,
 structBlock
 	:	LCURLY!
-			(((region)*  field) | SEMI )*
+			(((region!)*  field (region!)*  ) | SEMI )*
 		RCURLY!
 		{#structBlock = #([OBJBLOCK, "OBJBLOCK"], #structBlock);}
 	;
@@ -335,7 +348,6 @@ implementsClause
 //   need to be some semantic checks to make sure we're doing the right thing...
 field!
 	:	// method, constructor, or variable declaration
-		
 		mods:modifiers
 		(	(ctorHead constructorBody) => h:ctorHead s:constructorBody // constructor
 			{#field = #(#[CTOR_DEF,"CTOR_DEF"], mods, h, s);}
@@ -644,7 +656,7 @@ compoundStatement
 		
 		lc:LCURLY^  {#lc.setType(BLOCK);} 		
 			// include the (possibly-empty) list of statements
-			((region)*  statement)* 			
+			((regionNotIf)*  statement)* 			
 		RCURLY!
 		
 		
@@ -682,7 +694,7 @@ traditionalStatement
 	|	IDENT c:COLON^ {#c.setType(LABELED_STAT);} statement
 
 	// If-else statement
-	|	"if"^ conditionalClause statement
+	|	i1:"if"^ conditionalClause statement
 		(
 			// CONFLICT: the old "dangling-else" problem...
 			//           ANTLR generates proper code matching
@@ -693,6 +705,24 @@ traditionalStatement
 		:
 			elseStatement
 		)?
+		
+	|	HASH! i2:"if"^ {#i2.setType(IF);} d:directiveConditionalClause (statement)*
+		
+		(
+			directiveElifStatement | directiveElseStatement[#i2]
+		)?
+		
+		{#i2 = #(#i2, #d);}
+//		(
+//			d1:directiveElifStatement
+//		)*
+//		
+//		(
+//			d2:directiveElseStatement
+//			//{if(null != #d1) #d1 = #(#d2); }
+//		)?
+//	
+		HASH! "endif"!
 
 	// For statement
 	|	"for"^
@@ -752,6 +782,38 @@ conditionalClause
 	:	LPAREN! ex:expression RPAREN!
 		{#conditionalClause = #(#[COND_CLAUSE,"COND_CLAUSE"], ex);}
 	;
+	
+directiveConditionalClause
+	:	ex:expression
+		{#directiveConditionalClause = #(#[COND_CLAUSE,"COND_CLAUSE"], ex);}
+	;
+	
+directiveElseStatement[AST parentIf]
+	:	HASH! e:"else"^ (statement)*
+		{#parentIf = #(#parentIf, #e);}
+	;
+	
+directiveElifStatement
+	:	HASH! i:"elif"^ {#i.setType(IF);} d:directiveConditionalClause (statement)*
+		(
+				d1:directiveElifStatement
+			|
+				d2:directiveElseStatement[#i]
+		)?
+			
+		{#i = #(#i, #d);}
+		{#directiveElifStatement = #(#[ELSE,"ELSE"], i);}
+	;
+
+
+//directiveElseStatement
+//	:	HASH! "else"^ (statement)*
+//	;
+//	
+//directiveElifStatement
+//	:	HASH! i:"elif"^ {#i.setType(IF);} directiveConditionalClause (statement)*
+//		{#directiveElifStatement = #(#[ELSE,"ELSE"], i);}
+//	;
 
 elseStatement
     : "else"^ statement

@@ -379,10 +379,12 @@ public class CSharpAntlrAstTranslator implements AstTokenTranslator<AST> {
             break;
         //        case CSharpTokenTypes.PARAMETERS:
         //        case CSharpTokenTypes.ELIST:
+        case CSharpTokenTypes.IF:
         case CSharpTokenTypes.LITERAL_if:
             result = BlockNameToken.IF_BLOCK;
             break;
         case CSharpTokenTypes.LITERAL_else:
+        case CSharpTokenTypes.ELSE:
             result = BlockNameToken.ELSE_BLOCK;
             break;
         case CSharpTokenTypes.LITERAL_for:
