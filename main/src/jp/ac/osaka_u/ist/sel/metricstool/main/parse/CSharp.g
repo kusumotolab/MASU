@@ -38,12 +38,12 @@ tokens {
 	PARAMETERS; PARAMETER_DEF; LABELED_STAT; TYPECAST; INDEX_OP;
 	POST_INC; POST_DEC; METHOD_CALL; EXPR; ARRAY_INIT;
 	IMPORT; UNARY_MINUS; UNARY_PLUS; CASE_GROUP; ELIST; FOR_INIT; FOR_CONDITION;
-	FOR_ITERATOR; EMPTY_STAT; FINAL="final"; ABSTRACT="abstract";
+	FOR_ITERATOR; FOR_EACH_CLAUSE; EMPTY_STAT; FINAL="final"; ABSTRACT="abstract";
 	STRICTFP="strictfp"; SUPER_CTOR_CALL; CTOR_CALL; PROPERTY_DEF; ENUM_DEF; STRUCT_DEF;
 	SCTOR_DEF; EXPR_STATE; FIELD_DEF; NAME; ENUM_CONSTANT_DEF; LOCAL_PARAMETER_DEF;
 	ARRAY_INSTANTIATION; COND_CLAUSE; LOCAL_VARIABLE_DEF;
 	PROPERTY_SET_BODY; PROPERTY_GET_BODY;
-	IF; ELSE;
+	IF; ELSE; OPER_OVERLOAD_DEF;
 }
 
 {
@@ -71,9 +71,11 @@ compilationUnit
 		( usingDefinition )*
 		(region!)*
 		// A compilation unit starts with an optional package definition
+		(customAttribute!)*
+		(region!)*
 		(	packageDefinition
-		|	/* nothing */
-		)
+		|	typeDefinition
+		)*
 		(region!)*
 		
 		EOF!
@@ -107,6 +109,7 @@ typeDefinition
 	options {defaultErrorHandler = true;}
 	:
 		(region!)*
+		(customAttribute!)*
 		m:modifiers!
 		( classDefinition[#m]
 		| interfaceDefinition[#m]
@@ -130,14 +133,15 @@ declaration!
 // A type specification is a type name with possible brackets afterwards
 //   (which would make it an array type).
 typeSpec[boolean addImagNode]
-	: classTypeSpec[addImagNode]
-	| builtInTypeSpec[addImagNode]
+	: (classTypeSpec[addImagNode]
+	| builtInTypeSpec[addImagNode])
 	;
 
 // A class type specification is a class type with possible brackets afterwards
 //   (which would make it an array type).
 classTypeSpec[boolean addImagNode]
 	:	identifier (lb:LBRACK^ (COMMA)* {#lb.setType(ARRAY_DECLARATOR);} RBRACK!)*
+		(STAR!)?
 		{
 			if ( addImagNode ) {
 				#classTypeSpec = #(#[TYPE,"TYPE"], #classTypeSpec);
@@ -150,6 +154,7 @@ classTypeSpec[boolean addImagNode]
 // afterwards (which would make it an array type).
 builtInTypeSpec[boolean addImagNode]
 	:	builtInType (lb:LBRACK^ (COMMA)* {#lb.setType(ARRAY_DECLARATOR);} RBRACK!)*
+		(STAR!)?
 		{
 			if ( addImagNode ) {
 				#builtInTypeSpec = #(#[TYPE,"TYPE"], #builtInTypeSpec);
@@ -161,7 +166,7 @@ builtInTypeSpec[boolean addImagNode]
 // A type name. which is either a (possibly qualified) class name or
 //   a primitive (builtin) type
 type
-	:	identifier
+	:	i:identifier {#type = #(#[TYPE,"TYPE"], #type);}
 	|	builtInType
 	;
 
@@ -229,6 +234,7 @@ modifier
 	|	"event"
 	|	"delegate"
 	|	"new"
+	|	"unsafe"
 	;
 
 
@@ -236,7 +242,7 @@ modifier
 
 region 
 	options {defaultErrorHandler=true;}
-	: HASH (IDENT | ("if" expression) | "elif" | "else" | "endif")
+	: HASH (IDENT | ("if" IDENT) | "elif" | "else" | "endif")
 ;
 
 regionNotIf
@@ -263,13 +269,13 @@ enumDefinition![CommonAST modifiers]
 	;
 
 structDefinition![CommonAST modifiers]
-	:	"struct" IDENT
+	:	"struct" n:name
 		// it might implement some interfaces...
 		sc:superClassClause
 		// now parse the body of the class
 		sb:structBlock
 		{#structDefinition = #(#[CLASS_DEF,"STRUCT_DEF"],
-					   modifiers,IDENT,sc,sb);}
+					   modifiers,n,sc,sb);}
 	;
 
 // Definition of a cSharp class
@@ -348,6 +354,7 @@ implementsClause
 //   need to be some semantic checks to make sure we're doing the right thing...
 field!
 	:	// method, constructor, or variable declaration
+		(customAttribute!)*
 		mods:modifiers
 		(	(ctorHead constructorBody) => h:ctorHead s:constructorBody // constructor
 			{#field = #(#[CTOR_DEF,"CTOR_DEF"], mods, h, s);}
@@ -369,8 +376,14 @@ field!
 		|	id:interfaceDefinition[#mods]   // inner interface
 			{#field = #id;}
 		
-		
-		| t:typeSpec[false]  // method or variable declaration(s)
+		|
+			("implicit"! | "explicit"!)? "operator"
+			t2:typeSpec[true]
+			LPAREN! pr:parameterDeclarationList RPAREN!
+			cs:compoundStatement
+			{#field = (#(#[OPER_OVERLOAD_DEF,"OPER_OVERLOAD_DEF"], mods, t2, pr, cs));}
+		| 
+			t:typeSpec[false]  // method or variable declaration(s)
 			(
 				modifiers
 			
@@ -588,17 +601,28 @@ initializer
 //   for the method.
 //   This also watches for a list of exception classes in a "throws" clause.
 ctorHead
-	:	name  // the name of the method
+	:	(BNOT!)?
+		name  // the name of the method
 
 		// parse the formal parameter declarations.
 		LPAREN! parameterDeclarationList RPAREN!
 		
-		(COLON^ "base" LPAREN! parameterDeclarationList RPAREN!)?
+//		(COLON^ ("base" | "this") LPAREN! parameterDeclarationList RPAREN!)?
+		(explicitCtorInvocation)?
 
 		// get the list of exceptions that this method is declared to throw
 		(throwsClause)?
 	;
 	
+explicitCtorInvocation
+	:
+		COLON!
+		(b:"base"^ {#b.setType(SUPER_CTOR_CALL);}| t:"this"^ {#t.setType(CTOR_CALL);})
+		LPAREN! argList RPAREN!
+		{#explicitCtorInvocation = #(#[EXPR_STATE,"EXPR_STATE"],
+									#explicitCtorInvocation);}
+	;
+
 // This is the header of a method.  It includes the name and parameters
 //   for the method.
 structHead
@@ -631,7 +655,8 @@ parameterDeclarationList
 
 // A formal parameter.
 parameterDeclaration!
-	:	pm:parameterModifier t:typeSpec[false] id:name
+	:	(customAttribute!)? 
+		pm:parameterModifier t:typeSpec[false] id:name
 		pd:declaratorBrackets[#t]
 		{#parameterDeclaration = #(#[PARAMETER_DEF,"PARAMETER_DEF"],
 									pm, #([TYPE,"TYPE"],pd), id);}
@@ -735,9 +760,7 @@ traditionalStatement
 			
 	// Foreach statement
 	|	"foreach"^
-			LPAREN!
-				type IDENT "in" identifier
-			RPAREN!
+			forEachClause
 			statement
 
 	// While statement
@@ -781,6 +804,21 @@ traditionalStatement
 conditionalClause
 	:	LPAREN! ex:expression RPAREN!
 		{#conditionalClause = #(#[COND_CLAUSE,"COND_CLAUSE"], ex);}
+	;
+	
+forEachClause
+	:
+		LPAREN!
+				forEachParameter "in" ex:expression
+				//t:type v:variableDeclarator[null, #t] "in" ex:expression
+		RPAREN!
+		{#forEachClause = #(#[FOR_EACH_CLAUSE,"FOR_EACH_CLAUSE"], forEachClause);}
+	;
+	
+forEachParameter
+	:
+		modifiers type name
+		{#forEachParameter = #(#[LOCAL_VARIABLE_DEF,"LOCAL_VARIABLE_DEF"], #forEachParameter);}
 	;
 	
 directiveConditionalClause
@@ -996,7 +1034,7 @@ equalityExpression
 
 // boolean relational expressions (level 5)
 relationalExpression
-	:	shiftExpression
+	:	s:shiftExpression
 		(	(	(	LT^
 				|	GT^
 				|	LE^
@@ -1005,9 +1043,17 @@ relationalExpression
 				shiftExpression
 			)*
 		|	"instanceof"^ typeSpec[true]
-		|	"as"^	typeSpec[true]
+		|	a:as[#s]!	{#relationalExpression = #a;}
+		//a:"as"^ t:typeSpec[true]  {#relationalExpression = (#(#[TYPECAST,"TYPECAST"], #t, #s));}
+		//{#field = (#(#[METHOD_DEF,"METHOD_DEF"], mods, #(#[TYPE,"TYPE"],rt),n, param, tc, s2));}
 		|	"is"^	typeSpec[true]
 		)
+	;
+	
+as[AST e]
+	:
+		"as"! t:typeSpec[true] 
+		{#as = (#(#[TYPECAST,"TYPECAST"], #t, #e));}
 	;
 
 
@@ -1213,6 +1259,12 @@ constant
 	|	NUM_FLOAT
 	|	NUM_LONG
 	|	NUM_DOUBLE
+	;
+	
+customAttribute
+	: 
+		(region!)*
+		LBRACK^ (IDENT COLON! )? expression RBRACK!
 	;
 
 
