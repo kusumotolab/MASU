@@ -83,6 +83,10 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
 
+    public boolean isParenthesesExpression() {
+        return false;
+    }
+    
     public boolean isExpressionStatement() {
         return false;
     }
@@ -315,4 +319,6 @@ public class AstTokenAdapter implements AstToken {
      * ‚±‚Ìƒg[ƒNƒ“‚Ì•¶š—ñ
      */
     private final String text;
+
+
 }

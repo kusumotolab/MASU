@@ -223,6 +223,9 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.EXPR:
             result = DescriptionToken.EXPRESSION;
             break;
+        case Java15TokenTypes.PAREN_EXPR:
+            result = DescriptionToken.PAREN_EXPR;
+            break;
         case Java15TokenTypes.EXPR_STATE:
             result = DescriptionToken.EXPRESSION_STATEMENT;
             break;

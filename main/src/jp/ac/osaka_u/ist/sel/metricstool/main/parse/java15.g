@@ -218,6 +218,7 @@ tokens {
 	ANNOTATION; ANNOTATION_MEMBER_VALUE_PAIR; ANNOTATION_FIELD_DEF; ANNOTATION_ARRAY_INIT;
 	TYPE_ARGUMENTS; TYPE_ARGUMENT; TYPE_PARAMETERS; TYPE_PARAMETER; WILDCARD_TYPE;
 	TYPE_UPPER_BOUNDS; TYPE_LOWER_BOUNDS; COND_CLAUSE; LOCAL_VARIABLE_DEF_STATE;
+    PAREN_EXPR;
 }
 
 {
@@ -1662,7 +1663,7 @@ postfixExpression
 	 	|	de:DEC^ {#de.setType(POST_DEC);}
 		)?
  	;
-
+ 	
 // the basic element of an expression
 primaryExpression
 	:	identPrimary ( options {greedy=true;} : DOT^ "class" )?
@@ -1673,7 +1674,8 @@ primaryExpression
 	|	newExpression
 	|	"this"
 	|	"super"
-	|	LPAREN! assignmentExpression RPAREN!
+	|	lp:LPAREN^ {#lp.setType(PAREN_EXPR);} assignmentExpression RPAREN!
+//	|	LPAREN! assignmentExpression RPAREN!
 		// look for int.class and int[].class
 	|	builtInType
 		( lbt:LBRACK^ {#lbt.setType(ARRAY_DECLARATOR);} RBRACK! )*

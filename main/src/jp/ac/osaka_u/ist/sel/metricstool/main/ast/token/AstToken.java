@@ -102,6 +102,12 @@ public interface AstToken {
     public boolean isExpression();
     
     /**
+     * トークンが括弧式を表すかどうかを返す
+     * @return 括弧式を表すならtrue
+     */
+    public boolean isParenthesesExpression();
+    
+    /**
      * トークンが式文を表すかどうかを返す．
      * @return 式文を表すトークンならtrue
      */

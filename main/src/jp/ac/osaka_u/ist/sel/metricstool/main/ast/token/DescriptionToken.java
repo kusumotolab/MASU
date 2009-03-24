@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.JavaAstToken;
+
 
 /**
  * 何からの要素が記述されている箇所を表すトークンクラス
@@ -55,6 +57,17 @@ public class DescriptionToken extends AstTokenAdapter {
     public static final DescriptionToken EXPRESSION = new DescriptionToken("EXPRESSION") {
         @Override
         public boolean isExpression() {
+            return true;
+        }
+    };
+    
+    
+    /**
+     * 括弧式を表す定数インスタンス
+     */
+    public static final DescriptionToken PAREN_EXPR = new DescriptionToken("PAREN_EXPR") {
+        @Override
+        public boolean isParenthesesExpression() {
             return true;
         }
     };
