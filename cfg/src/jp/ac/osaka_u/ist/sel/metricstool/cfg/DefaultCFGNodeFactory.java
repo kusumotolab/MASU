@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 
@@ -44,8 +43,13 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
                 nodeFactory.elementToNodeMap);
     }
 
-    public CFGNode<? extends ExecutableElementInfo> makeNode(final ExecutableElementInfo element) {
-        CFGNode<? extends ExecutableElementInfo> node = this.getNode(element);
+    /**
+     * ExecutableElementInfo　から CFG のノーマルノードを生成
+     */
+    public CFGNormalNode<? extends ExecutableElementInfo> makeNormalNode(
+            final ExecutableElementInfo element) {
+        CFGNormalNode<? extends ExecutableElementInfo> node = (CFGNormalNode<? extends ExecutableElementInfo>) this
+                .getNode(element);
 
         if (null != node) {
             return node;
@@ -53,14 +57,28 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
 
         if (element instanceof SingleStatementInfo) {
             node = new CFGStatementNode((SingleStatementInfo) element);
-        } else if (element instanceof ConditionalBlockInfo) {
-            node = new CFGControlNode((ConditionalBlockInfo) element);
         } else if (element instanceof ConditionInfo) {
-            node = new CFGConditionNode((ConditionInfo) element);
+            node = new CFGExpressionNode((ConditionInfo) element);
         } else {
             node = new CFGEmptyNode(element);
         }
         this.elementToNodeMap.put(element, node);
+
+        return node;
+    }
+
+    /**
+     * ConditionInfo から CFG のコントロールノードを生成
+     */
+    public CFGControlNode makeControlNode(final ConditionInfo condition) {
+
+        CFGControlNode node = (CFGControlNode) this.getNode(condition);
+        if (null != node) {
+            return node;
+        }
+
+        node = new CFGControlNode(condition);
+        this.elementToNodeMap.put(condition, node);
 
         return node;
     }

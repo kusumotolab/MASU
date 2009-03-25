@@ -12,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
 
 /**
@@ -32,26 +33,12 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
      */
     private final Set<CFGNode<? extends ExecutableElementInfo>> backwardNodes;
 
-    protected String text;
+    private final String text;
 
     /**
      * このノードに対応する文
      */
     private final T core;
-
-    /**
-     * このノードで定義・変更されている変数のSetを返す
-     * 
-     * @return
-     */
-    public abstract Set<VariableInfo<? extends UnitInfo>> getDefinedVariables();
-
-    /**
-     * このノードで利用（参照）されている変数のSetを返す
-     * 
-     * @return
-     */
-    public abstract Set<VariableInfo<? extends UnitInfo>> getUsedVariables();
 
     protected CFGNode(final T core) {
 
@@ -61,6 +48,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
         this.core = core;
         this.forwardNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
         this.backwardNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
+        this.text = core.getText() + " <" + core.getFromLine() + ">";
     }
 
     void addForwardNode(final CFGNode<? extends ExecutableElementInfo> forwardNode) {
@@ -123,5 +111,25 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
 
     public final String getText() {
         return this.text;
+    }
+
+    /**
+     * このノードで定義・変更されている変数のSetを返す
+     * 
+     * @return
+     */
+    public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getAssignments(this.getCore()
+                .getVariableUsages()));
+    }
+
+    /**
+     * このノードで利用（参照）されている変数のSetを返す
+     * 
+     * @return
+     */
+    public final Set<VariableInfo<? extends UnitInfo>> getUsedVariables() {
+        return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getReferencees(this.getCore()
+                .getVariableUsages()));
     }
 }

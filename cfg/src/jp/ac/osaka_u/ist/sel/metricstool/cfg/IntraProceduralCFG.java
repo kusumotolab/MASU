@@ -85,7 +85,7 @@ public class IntraProceduralCFG extends CFG {
             this.buildCFG(this.localSpace);
         } else {
             this.localSpace = null;
-            this.enterNode = this.nodeFactory.makeNode(statement);
+            this.enterNode = this.nodeFactory.makeNormalNode(statement);
             this.exitNodes.add(this.enterNode);
         }
     }
@@ -115,7 +115,8 @@ public class IntraProceduralCFG extends CFG {
         // 対応するローカル空間がif文の場合
         if (local instanceof IfBlockInfo) {
             final IfBlockInfo ifBlock = (IfBlockInfo) local;
-            this.enterNode = this.nodeFactory.makeNode(ifBlock);
+            this.enterNode = this.nodeFactory.makeControlNode(ifBlock.getConditionalClause()
+                    .getCondition());
 
             if (!innerCFG.isEmpty()) {
                 this.enterNode.addForwardNode(innerCFG.getEnterNode());
@@ -142,7 +143,9 @@ public class IntraProceduralCFG extends CFG {
         // 対応するローカル空間がwhile文の場合
         else if (local instanceof WhileBlockInfo) {
             // 制御文自体が入口ノードかつ出口ノード
-            this.enterNode = this.nodeFactory.makeNode((ConditionalBlockInfo) local);
+            final WhileBlockInfo whileBlock = (WhileBlockInfo) local;
+            this.enterNode = this.nodeFactory.makeControlNode(whileBlock.getConditionalClause()
+                    .getCondition());
             this.exitNodes.add(this.enterNode);
 
             // 内部のCFGと連結．ループ文なので内部のCFGが空の場合は入口ノードのフォワードノードは入口ノード
@@ -161,14 +164,15 @@ public class IntraProceduralCFG extends CFG {
         // 対応するローカル空間がfor文の場合
         else if (local instanceof ForBlockInfo) {
 
+            final ForBlockInfo forBlock = (ForBlockInfo) local;
+
             //入口ノードは初期化式，もし初期化式がない場合は条件式
             //出口は条件式
             final List<CFGNode<? extends ExecutableElementInfo>> initializerNodes = new LinkedList<CFGNode<? extends ExecutableElementInfo>>();
-            for (final ConditionInfo initializer : ((ForBlockInfo) local)
-                    .getInitializerExpressions()) {
+            for (final ConditionInfo initializer : forBlock.getInitializerExpressions()) {
 
-                final CFGNode<? extends ExecutableElementInfo> initializerNode = this.nodeFactory
-                        .makeNode(initializer);
+                final CFGNormalNode<? extends ExecutableElementInfo> initializerNode = this.nodeFactory
+                        .makeNormalNode(initializer);
                 initializerNodes.add(initializerNode);
             }
 
@@ -178,8 +182,8 @@ public class IntraProceduralCFG extends CFG {
                 initializerNodeArray[i].addForwardNode(initializerNodeArray[i + 1]);
             }
 
-            final CFGNode<? extends ExecutableElementInfo> conditionNode = this.nodeFactory
-                    .makeNode((ForBlockInfo) local);
+            final CFGControlNode conditionNode = this.nodeFactory.makeControlNode(forBlock
+                    .getConditionalClause().getCondition());
             this.exitNodes.add(conditionNode);
 
             if (0 < initializerNodes.size()) {
@@ -195,10 +199,10 @@ public class IntraProceduralCFG extends CFG {
 
             // 繰り返し式を追加
             final List<CFGNode<? extends ExecutableElementInfo>> iteratorNodes = new LinkedList<CFGNode<? extends ExecutableElementInfo>>();
-            for (final ExpressionInfo iterator : ((ForBlockInfo) local).getIteratorExpressions()) {
+            for (final ExpressionInfo iterator : forBlock.getIteratorExpressions()) {
 
-                final CFGNode<? extends ExecutableElementInfo> iteratorNode = this.nodeFactory
-                        .makeNode(iterator);
+                final CFGNormalNode<? extends ExecutableElementInfo> iteratorNode = this.nodeFactory
+                        .makeNormalNode(iterator);
                 iteratorNodes.add(iteratorNode);
             }
 
@@ -222,14 +226,21 @@ public class IntraProceduralCFG extends CFG {
             }
 
         } else if (local instanceof SwitchBlockInfo) {
+
+            final SwitchBlockInfo switchBlock = (SwitchBlockInfo) local;
+
             // TODO 面倒なので未実装
-            this.enterNode = this.nodeFactory.makeNode((ConditionalBlockInfo) local);
+            this.enterNode = this.nodeFactory.makeControlNode(switchBlock.getConditionalClause()
+                    .getCondition());
             this.enterNode.addForwardNode(innerCFG.enterNode);
             this.exitNodes.addAll(innerCFG.exitNodes);
+
         } else if (local instanceof DoBlockInfo) {
 
-            final CFGNode<? extends ExecutableElementInfo> controlNode = this.nodeFactory
-                    .makeNode((ConditionalBlockInfo) local);
+            final DoBlockInfo doBlock = (DoBlockInfo) local;
+
+            final CFGControlNode controlNode = this.nodeFactory.makeControlNode(doBlock
+                    .getConditionalClause().getCondition());
 
             this.enterNode = !innerCFG.isEmpty() ? innerCFG.getEnterNode() : controlNode;
             this.exitNodes.add(controlNode);
