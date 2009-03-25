@@ -9,17 +9,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
 
-/**
- * PDG上で制御ノードを表すクラス
- * 
- * @author t-miyake
- *
- */
-public class PDGControlNode extends PDGNode<ConditionInfo> {
+public class PDGExpressionNode extends PDGNormalNode<ConditionInfo> {
 
-    public PDGControlNode(final ConditionInfo condition) {
-        super(condition);
-        this.text = "ControlNode : " + condition.getText() + " <" + condition.getFromLine() + ">";
+    public PDGExpressionNode(final ConditionInfo expression) {
+        super(expression);
+        this.text = expression.getText() + " <" + expression.getFromLine() + ">";
     }
 
     @Override
@@ -33,19 +27,4 @@ public class PDGControlNode extends PDGNode<ConditionInfo> {
         return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getReferencees(this.getCore()
                 .getVariableUsages()));
     }
-
-    /**
-     * この制御ノードに制御されるノードを追加
-     * @param controlledNode 制御されるノード
-     */
-    public void addControlDependingNode(final PDGNode<?> controlledNode) {
-        if (null == controlledNode) {
-            throw new IllegalArgumentException();
-        }
-
-        final ControlDependenceEdge controlFlow = new ControlDependenceEdge(this, controlledNode);
-        this.addFowardEdge(controlFlow);
-        controlledNode.addBackwardEdge(controlFlow);
-    }
-
 }

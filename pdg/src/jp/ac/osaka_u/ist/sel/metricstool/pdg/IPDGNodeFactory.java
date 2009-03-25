@@ -3,14 +3,16 @@ package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 
 import java.util.Collection;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 
 
 public interface IPDGNodeFactory {
 
-    public PDGNode<?> makeNode(final Object element);
+    PDGControlNode makeControlNode(ConditionInfo condition);
 
-    public PDGNode<?> getNode(final Object element);
+    PDGNormalNode<?> makeNormalNode(Object element);
 
-    public Collection<PDGNode<?>> getAllNodes();
+    PDGNode<?> getNode(Object element);
+
+    Collection<PDGNode<?>> getAllNodes();
 }

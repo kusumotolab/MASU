@@ -7,6 +7,7 @@ import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGNormalNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.IntraProceduralCFG;
@@ -28,7 +29,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 /**
  * 手続き内PDGを表すクラス
  * 
- * @author t-miyake
+ * @author t-miyake, higo
  *
  */
 public class IntraProceduralPDG extends PDG {
@@ -69,7 +70,7 @@ public class IntraProceduralPDG extends PDG {
         // unitの引数を処理
         for (final ParameterInfo parameter : this.unit.getParameters()) {
 
-            final PDGNode<?> pdgNode = this.makeNode(parameter);
+            final PDGNode<?> pdgNode = this.makeNormalNode(parameter);
             if (null != enterNode) {
                 this.buildDataDependence(enterNode, pdgNode, parameter, new HashSet<CFGNode<?>>());
             }
@@ -79,60 +80,6 @@ public class IntraProceduralPDG extends PDG {
         if (null != enterNode) {
             this.buildDependence(enterNode, new HashSet<CFGNode<?>>());
         }
-
-        // CFGの先頭から順にたどりながら，PDGを構築する
-
-        /*
-        if (null == this.getCFG().getEnterNode()) {
-            return;
-        }
-
-        for (final ParameterInfo parameter : this.unit.getParameters()) {
-            final PDGParameterNode parameterNode = (PDGParameterNode) this.getNodeFactory()
-                    .makeNode(parameter);
-            this.enterNodes.add(parameterNode);
-            this.nodes.add(parameterNode);
-            this.buildDataDependence(parameterNode, parameter, this.cfg.getEnterNode(),
-                    new HashSet<CFGControlNode>());
-        }
-
-        for (final StatementInfo statement : LocalSpaceInfo.getAllStatements(this.unit)) {
-
-            // statementと他の文とのデータ依存を構築
-            {
-
-                final PDGNode<?> pdgNode = this.makeNode(statement);
-                if (null == pdgNode) {
-                    continue;
-                }
-
-                // Return文なら出口ノードに追加
-                if (statement instanceof ReturnStatementInfo) {
-                    this.exitNodes.add(pdgNode);
-                }
-
-                final CFGNode<? extends ExecutableElementInfo> cfgNode = this.cfg
-                        .getCFGNode(statement);
-
-                // このpdgNodeに対応する文で定義されている全変数に関してデータ依存辺を構築
-                for (final VariableInfo<? extends UnitInfo> definedVariable : pdgNode
-                        .getDefinedVariables()) {
-
-                    // cfgNodeから派生するすべての経路のデータ依存辺を構築
-                    for (final CFGNode<? extends ExecutableElementInfo> forwardCFGNode : cfgNode
-                            .getForwardNodes()) {
-                        this.buildDataDependence(pdgNode, definedVariable, forwardCFGNode,
-                                new HashSet<CFGControlNode>());
-                    }
-                }
-            }
-
-            if (statement instanceof ConditionalBlockInfo) {
-                // statementが制御文の場合は制御フローを構築
-                this.buildControlFlow((ConditionalBlockInfo) statement);
-            }
-        }
-        */
     }
 
     private void buildDependence(final CFGNode<?> cfgNode, final Set<CFGNode<?>> checkedNodes) {
@@ -152,8 +99,7 @@ public class IntraProceduralPDG extends PDG {
         }
 
         //与えられたCFGノードに対応するPDGノードを作成
-        final ExecutableElementInfo element = cfgNode.getCore();
-        final PDGNode<?> pdgNode = this.makeNode(element);
+        final PDGNode<?> pdgNode = this.makeNode(cfgNode);
 
         //与えられたCFGノードで定義された各変数に対して，
         //その変数を参照しているノードにDataDependenceを引く
@@ -169,7 +115,9 @@ public class IntraProceduralPDG extends PDG {
 
         //与えられたCFGノードからControlDependenceを引く
         if (pdgNode instanceof PDGControlNode) {
-            this.buildControlDependence((PDGControlNode) pdgNode, (BlockInfo) element);
+            final ConditionInfo condition = (ConditionInfo) cfgNode.getCore();
+            this.buildControlDependence((PDGControlNode) pdgNode, Utility
+                    .getOwnerConditionalBlock(condition));
         }
 
         for (final CFGNode<?> forwardNode : cfgNode.getForwardNodes()) {
@@ -206,8 +154,7 @@ public class IntraProceduralPDG extends PDG {
         // cfgNodeからPDGNodeを作成し，fromPDGNodeからデータ依存辺を引く        
         if (cfgNode.getUsedVariables().contains(variable)) {
 
-            final ExecutableElementInfo element = cfgNode.getCore();
-            final PDGNode<?> toPDGNode = this.makeNode(element);
+            final PDGNode<?> toPDGNode = this.makeNode(cfgNode);
             fromPDGNode.addDataDependingNode(toPDGNode);
         }
 
@@ -218,17 +165,20 @@ public class IntraProceduralPDG extends PDG {
         }
 
         // cfgNodeのフォワードノードに対してもデータ依存を調べる
-        for (final CFGNode<?> forwardNode : cfgNode.getForwardNodes()) {
-            this.buildDataDependence(forwardNode, fromPDGNode, variable, checkedCFGNodes);
+        else {
+            for (final CFGNode<?> forwardNode : cfgNode.getForwardNodes()) {
+                this.buildDataDependence(forwardNode, fromPDGNode, variable, checkedCFGNodes);
+            }
         }
     }
 
     /**
-     * 第一引数で与えられたノードに対して，第二引数で与えられたblockに含まれる文に制御依存辺を引く
-     * 
-     * @param fromPDGNode
-     * @param block
-     */
+
+      * 第一引数で与えられたノードに対して，第二引数で与えられたblockに含まれる文に制御依存辺を引く
+      * 
+      * @param fromPDGNode
+      * @param block
+      */
     private void buildControlDependence(final PDGControlNode fromPDGNode, final BlockInfo block) {
 
         for (final StatementInfo innerStatement : block.getStatements()) {
@@ -236,7 +186,7 @@ public class IntraProceduralPDG extends PDG {
             // 単文やケースエントリの場合は，fromPDGNodeからの制御依存辺を引く
             if (innerStatement instanceof SingleStatementInfo
                     || innerStatement instanceof CaseEntryInfo) {
-                final PDGNode<?> toPDGNode = this.makeNode(innerStatement);
+                final PDGNode<?> toPDGNode = this.makeNormalNode(innerStatement);
                 fromPDGNode.addControlDependingNode(toPDGNode);
             }
 
@@ -248,12 +198,12 @@ public class IntraProceduralPDG extends PDG {
 
                     final ConditionInfo condition = ((ConditionalBlockInfo) innerStatement)
                             .getConditionalClause().getCondition();
-                    final PDGNode<?> toPDGNode = this.makeNode(condition);
+                    final PDGNode<?> toPDGNode = this.makeControlNode(condition);
                     fromPDGNode.addControlDependingNode(toPDGNode);
                 }
 
                 // elseブロックの場合はここでは，依存辺は引かない
-                else if (block instanceof ElseBlockInfo) {
+                else if (innerStatement instanceof ElseBlockInfo) {
 
                 }
 
@@ -285,7 +235,7 @@ public class IntraProceduralPDG extends PDG {
             final CFGNode<? extends ExecutableElementInfo> dependCandidates,
             final Set<CFGControlNode> passedNodeCache) {
 
-        final PDGNode<?> firstCandidate = this.makeNode(dependCandidates.getCore());
+        final PDGNode<?> firstCandidate = this.makeNode(dependCandidates);
 
         // 候補ノードが存在する場合，最初の候補ノードへのデータ依存を調査
         if (null != firstCandidate) {
@@ -322,14 +272,16 @@ public class IntraProceduralPDG extends PDG {
 
     /**
      * 引数で与えられた制御文からの制御依存辺を構築
-     * @param controlStatement
+     * @param conditionalBlock
      */
-    private void buildControlFlow(final ConditionalBlockInfo controlStatement) {
-        final PDGControlNode controlNode = (PDGControlNode) this.makeNode(controlStatement);
-        this.buildControlFlow(controlNode, controlStatement.getStatements());
+    private void buildControlFlow(final ConditionalBlockInfo conditionalBlock) {
 
-        if (controlStatement instanceof IfBlockInfo) {
-            IfBlockInfo ifBlock = (IfBlockInfo) controlStatement;
+        final ConditionInfo condition = conditionalBlock.getConditionalClause().getCondition();
+        final PDGControlNode controlNode = this.makeControlNode(condition);
+        this.buildControlFlow(controlNode, conditionalBlock.getStatements());
+
+        if (conditionalBlock instanceof IfBlockInfo) {
+            IfBlockInfo ifBlock = (IfBlockInfo) conditionalBlock;
 
             if (ifBlock.hasElseBlock()) {
                 this.buildControlFlow(controlNode, ifBlock.getSequentElseBlock().getStatements());
@@ -351,7 +303,7 @@ public class IntraProceduralPDG extends PDG {
                     || controlledStatement instanceof ConditionalBlockInfo) {
                 // 単文や制御文の場合，それ自体を制御される文として追加
 
-                final PDGNode<?> controlledNode = this.makeNode(controlledStatement);
+                final PDGNode<?> controlledNode = this.makeNormalNode(controlledStatement);
 
                 assert null != controlledNode;
 
@@ -365,16 +317,46 @@ public class IntraProceduralPDG extends PDG {
         }
     }
 
+    private PDGNode<?> makeNode(final CFGNode<?> cfgNode) {
+
+        final ExecutableElementInfo element = cfgNode.getCore();
+        if (cfgNode instanceof CFGControlNode) {
+            return this.makeControlNode((ConditionInfo) element);
+        } else if (cfgNode instanceof CFGNormalNode<?>) {
+            return this.makeNormalNode(element);
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
     /**
-     * 引数で与えられた要素のPDGノードを作成する
+     * 引数で与えられた条件を表すPDG制御ノードを作成する
      * 
      * @param element ノードを作成したい要素
      * @return
      */
-    private PDGNode<?> makeNode(final Object element) {
+    private PDGControlNode makeControlNode(final ConditionInfo condition) {
 
         final IPDGNodeFactory factory = this.getNodeFactory();
-        final PDGNode<?> node = factory.makeNode(element);
+        final PDGControlNode node = factory.makeControlNode(condition);
+        if (null == node) {
+            return null;
+        }
+
+        this.nodes.add(node);
+        return node;
+    }
+
+    /**
+     * 引数で与えられた条件を表すPDG普通ノード(制御ノード以外)を作成する
+     * 
+     * @param element ノードを作成したい要素
+     * @return
+     */
+    private PDGNormalNode<?> makeNormalNode(final Object element) {
+
+        final IPDGNodeFactory factory = this.getNodeFactory();
+        final PDGNormalNode<?> node = factory.makeNormalNode(element);
         if (null == node) {
             return null;
         }

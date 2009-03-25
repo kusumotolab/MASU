@@ -18,38 +18,22 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
  * @author t-miyake
  *
  */
-public class PDGStatementNode extends ControllableNode<SingleStatementInfo> {
+public class PDGStatementNode extends PDGNormalNode<SingleStatementInfo> {
 
     public PDGStatementNode(final SingleStatementInfo statement) {
-        super(statement);        
-        this.text = statement.getText() + "<" + statement.getFromLine() + ">";
+        super(statement);
+        this.text = statement.getText() + " <" + statement.getFromLine() + ">";
     }
 
     @Override
-    protected SortedSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> extractVariableReference(
-            SingleStatementInfo core) {
-        final SortedSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> references = new TreeSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
-
-        for (VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>> usage : core
-                .getVariableUsages()) {
-            if (usage.isReference()) {
-                references.add(usage);
-            }
-        }
-        
-        return references;
+    public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getAssignments(this.getCore()
+                .getVariableUsages()));
     }
 
     @Override
-    protected Set<VariableInfo<? extends UnitInfo>> extractDefinedVariables(SingleStatementInfo core) {
-        final Set<VariableInfo<? extends UnitInfo>> definedVariables = new HashSet<VariableInfo<? extends UnitInfo>>();
-
-        for (VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>> usage : core
-                .getVariableUsages()) {
-            if (usage.isAssignment()) {
-                definedVariables.add(usage.getUsedVariable());
-            }
-        }
-        return definedVariables;
+    public Set<VariableInfo<? extends UnitInfo>> getReferencedVariables() {
+        return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getReferencees(this.getCore()
+                .getVariableUsages()));
     }
 }

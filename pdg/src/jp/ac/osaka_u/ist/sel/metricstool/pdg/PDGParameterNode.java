@@ -9,28 +9,33 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 
 
-public class PDGParameterNode extends PDGNode<ParameterInfo> {
+/**
+ * 引数を表すPDGノード
+ * 
+ * @author higo
+ *
+ */
+public class PDGParameterNode extends PDGNormalNode<ParameterInfo> {
 
+    /**
+     * 引数のオブジェクトを与えて初期化
+     * 
+     * @param parameter
+     */
     public PDGParameterNode(final ParameterInfo parameter) {
         super(parameter);
-        
         this.text = parameter.getType().getTypeName() + " " + parameter.getName();
     }
 
     @Override
-    protected Set<VariableInfo<? extends UnitInfo>> extractDefinedVariables(ParameterInfo core) {
+    public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
         final Set<VariableInfo<? extends UnitInfo>> definedVariables = new HashSet<VariableInfo<? extends UnitInfo>>();
-        definedVariables.add(core);
+        definedVariables.add(this.getCore());
         return definedVariables;
     }
-    
+
     @Override
-    public boolean isDefine(VariableInfo<? extends UnitInfo> variable) {
-        return this.getCore().equals(variable);
-    }
-    
-    @Override
-    public boolean isReferenace(VariableInfo<? extends UnitInfo> variable) {
-        return false;
+    public Set<VariableInfo<?>> getReferencedVariables() {
+        return new HashSet<VariableInfo<? extends UnitInfo>>();
     }
 }

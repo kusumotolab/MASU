@@ -5,6 +5,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGControlNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGNormalNode;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 
@@ -12,11 +18,38 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 /**
  * PDGを構成するノードを表すクラス
  * 
- * @author t-miyake
+ * @author t-miyake, higo
  *
  * @param <T> ノードの核となる情報の型
  */
 public abstract class PDGNode<T> {
+    
+    /**
+     * CFGノードからPDGノードを生成するメソッド
+     * 
+     * @param cfgNode
+     * @return
+     */
+    public static PDGNode<?> generate(final CFGNode<?> cfgNode) {
+
+        final ExecutableElementInfo element = cfgNode.getCore();
+        if (cfgNode instanceof CFGControlNode) {
+            return new PDGControlNode((ConditionInfo) element);
+
+        } else if (cfgNode instanceof CFGNormalNode<?>) {
+
+            if (element instanceof SingleStatementInfo) {
+                return new PDGStatementNode((SingleStatementInfo) element);
+            } else if (element instanceof ConditionInfo) {
+                return new PDGExpressionNode((ConditionInfo) element);
+            } else {
+                throw new IllegalStateException();
+            }
+
+        } else {
+            throw new IllegalStateException();
+        }
+    }
 
     /**
      * フォワードエッジ（このノードからの依存辺）
@@ -27,11 +60,6 @@ public abstract class PDGNode<T> {
      * バックワードエッジ（このノードへの依存辺）
      */
     private final Set<PDGEdge> backwardEdges;
-
-    /**
-     * ノード上で値が定義・変更される変数
-     */
-    private final Set<VariableInfo<? extends UnitInfo>> definedVariables;
 
     /**
      * ノードの核となる情報
@@ -45,33 +73,55 @@ public abstract class PDGNode<T> {
      * @param core ノードの核となる情報
      */
     protected PDGNode(final T core) {
+
         if (null == core) {
-            throw new IllegalArgumentException("statement is null.");
+            throw new IllegalArgumentException("core is null.");
         }
 
         this.core = core;
         this.forwardEdges = new HashSet<PDGEdge>();
         this.backwardEdges = new HashSet<PDGEdge>();
-
-        this.definedVariables = this.extractDefinedVariables(core);
     }
 
     /**
-     * ノード上で定義・変更される変数を抽出
-     * @param core ノードの核となる情報
-     * @return ノード上で定義・変更される変数
+     * このノードにて，変更または定義される変数のSet
+     * 
+     * @return
      */
-    protected abstract Set<VariableInfo<? extends UnitInfo>> extractDefinedVariables(final T core);
+    public abstract Set<VariableInfo<? extends UnitInfo>> getDefinedVariables();
 
-    public abstract boolean isDefine(final VariableInfo<? extends UnitInfo> variable);
+    /**
+     * このノードにて，参照されている変数のSet
+     * 
+     * @return
+     */
+    public abstract Set<VariableInfo<? extends UnitInfo>> getReferencedVariables();
 
-    public abstract boolean isReferenace(final VariableInfo<? extends UnitInfo> variable);
+    /**
+     * 引数で与えられた変数がこのノードで定義されているかどうかを返す
+     * 
+     * @param variable
+     * @return
+     */
+    public final boolean isDefine(final VariableInfo<? extends UnitInfo> variable) {
+        return this.getDefinedVariables().contains(variable);
+    }
+
+    /**
+     * 引数で与えられた変数がこのノードで参照されているかを返す
+     * 
+     * @param variable
+     * @return
+     */
+    public final boolean isReferenace(final VariableInfo<? extends UnitInfo> variable) {
+        return this.getReferencedVariables().contains(variable);
+    }
 
     /**
      * このノードのフォワードエッジを追加
      * @param forwardEdge このノードのフォワードエッジ
      */
-    protected boolean addFowardEdge(PDGEdge forwardEdge) {
+    protected final boolean addFowardEdge(final PDGEdge forwardEdge) {
         if (null == forwardEdge) {
             throw new IllegalArgumentException("forwardNode is null.");
         }
@@ -87,15 +137,23 @@ public abstract class PDGNode<T> {
      * このノードのバックワードエッジを追加
      * @param backwardEdge
      */
-    protected boolean addBackwardEdge(PDGEdge backwardEdge) {
+    protected final boolean addBackwardEdge(final PDGEdge backwardEdge) {
+        if (null == backwardEdge) {
+            throw new IllegalArgumentException("backwardEdge is null.");
+        }
+
+        if (!(backwardEdge.getToNode().equals(this))) {
+            throw new IllegalArgumentException();
+        }
+
         return this.backwardEdges.add(backwardEdge);
     }
 
-    void removeBackwardEdge(final PDGEdge backwardEdge) {
+    final void removeBackwardEdge(final PDGEdge backwardEdge) {
         this.backwardEdges.remove(backwardEdge);
     }
 
-    void removeForwardEdge(final PDGEdge forwardEdge) {
+    final void removeForwardEdge(final PDGEdge forwardEdge) {
         this.forwardEdges.remove(forwardEdge);
     }
 
@@ -132,14 +190,6 @@ public abstract class PDGNode<T> {
     }
 
     /**
-     * このノードで定義・変更されている変数を取得
-     * @return このノードで定義・変更されている変数
-     */
-    public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
-        return Collections.unmodifiableSet(this.definedVariables);
-    }
-
-    /**
      * このノードの核となる情報取得
      * @return このノードの核となる情報
      */
@@ -147,7 +197,7 @@ public abstract class PDGNode<T> {
         return this.core;
     }
 
-    public String getText() {
+    public final String getText() {
         return this.text;
     }
 }
