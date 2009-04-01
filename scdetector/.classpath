@@ -6,6 +6,6 @@
 	<classpathentry kind="lib" path="/main/lib/antlr.jar"/>
 	<classpathentry kind="lib" path="commons-cli-1.1/commons-cli-1.1.jar"/>
 	<classpathentry kind="lib" path="/cfg/bin"/>
-	<classpathentry kind="lib" path="/pdg/bin"/>
+	<classpathentry kind="lib" path="/pdg/bin" sourcepath="/pdg/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

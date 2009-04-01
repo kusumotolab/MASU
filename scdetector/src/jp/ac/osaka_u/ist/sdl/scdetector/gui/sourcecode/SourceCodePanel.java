@@ -18,8 +18,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
-
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
 
@@ -78,11 +78,11 @@ class SourceCodePanel extends JPanel {
 
     }
 
-    void addHighlight(final SortedSet<Position> clone) {
+    void addHighlight(final SortedSet<ExecutableElementInfo> clone) {
 
         final DefaultHighlightPainter highlightPainter = new DefaultHighlightPainter(new Color(180,
                 180, 180, 125));
-        for (final Position element : clone) {
+        for (final ExecutableElementInfo element : clone) {
 
             try {
 
@@ -126,7 +126,7 @@ class SourceCodePanel extends JPanel {
         }
     }
 
-    void display(final SortedSet<Position> clone) {
+    void display(final SortedSet<ExecutableElementInfo> clone) {
 
         final Document doc = this.sourceCodeArea.getDocument();
         final Element root = doc.getDefaultRootElement();

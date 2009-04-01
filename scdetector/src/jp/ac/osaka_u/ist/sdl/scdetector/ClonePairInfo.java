@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sdl.scdetector;
 import java.io.Serializable;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 
 
 public class ClonePairInfo implements Serializable, Entity, Cloneable {
@@ -17,19 +17,20 @@ public class ClonePairInfo implements Serializable, Entity, Cloneable {
         this.id = number++;
     }
 
-    public ClonePairInfo(final Position elementA, final Position elementB) {
+    public ClonePairInfo(final ExecutableElementInfo elementA, final ExecutableElementInfo elementB) {
 
         this();
 
         this.add(elementA, elementB);
     }
 
-    public void add(final Position elementA, final Position elementB) {
+    public void add(final ExecutableElementInfo elementA, final ExecutableElementInfo elementB) {
         this.cloneA.add(elementA);
         this.cloneB.add(elementB);
     }
 
-    public void addAll(final Set<Position> elementsA, final Set<Position> elementsB) {
+    public void addAll(final Set<ExecutableElementInfo> elementsA,
+            final Set<ExecutableElementInfo> elementsB) {
         this.cloneA.addAll(elementsA);
         this.cloneB.addAll(elementsB);
     }

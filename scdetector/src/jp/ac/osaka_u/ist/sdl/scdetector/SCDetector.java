@@ -6,10 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
@@ -17,10 +15,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.cfg.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
@@ -282,6 +278,7 @@ public class SCDetector extends MetricsTool {
 
         // PDG,CFGのノード集合を定義
         out.println("buildeing PDGs ...");
+        final long detectionStart = System.nanoTime();
         final IPDGNodeFactory pdgNodeFactory = new DefaultPDGNodeFactory();
         final ICFGNodeFactory cfgNodeFactory = new DefaultCFGNodeFactory();
 
@@ -301,33 +298,35 @@ public class SCDetector extends MetricsTool {
 
         //ExecutableElement単位で正規化データを構築する
         out.println("constructing statement hashtable ...");
-        final NormalizedStatementHashMap statementHash = new NormalizedStatementHashMap();
+        final NormalizedElementHashMap elementHash = new NormalizedElementHashMap();
         for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
                 .getTargetMethodInfos()) {
-            statementHash.addStatement(method);
+            elementHash.addStatement(method);
         }
 
         // ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
         out.println("detecting code clones from PDGs ...");
         final Set<ClonePairInfo> clonePairs = new HashSet<ClonePairInfo>();
-        for (final List<StatementInfo> statements : statementHash.values()) {
+        for (final List<ExecutableElementInfo> elements : elementHash.values()) {
 
             // 同じハッシュ値を持つ文が閾値以上ある場合は，その文をスライス基点にしない．
             //　ただし，Return文は例外とする．
-            if ((Configuration.INSTANCE.getC() < statements.size())
-                    && !(statements.get(0) instanceof ReturnStatementInfo)) {
+            if ((Configuration.INSTANCE.getC() < elements.size())
+                    && !(elements.get(0) instanceof ReturnStatementInfo)) {
                 continue;
             }
 
-            for (int i = 0; i < statements.size(); i++) {
-                for (int j = i + 1; j < statements.size(); j++) {
+            for (int i = 0; i < elements.size(); i++) {
+                for (int j = i + 1; j < elements.size(); j++) {
 
-                    final StatementInfo statementA = statements.get(i);
-                    final StatementInfo statementB = statements.get(j);
-                    final PDGNode<?> nodeA = pdgNodeFactory.getNode(statementA);
-                    final PDGNode<?> nodeB = pdgNodeFactory.getNode(statementB);
+                    final ExecutableElementInfo elementA = elements.get(i);
+                    final ExecutableElementInfo elementB = elements.get(j);
+                    final PDGNode<?> nodeA = pdgNodeFactory.getNode(elementA);
+                    final PDGNode<?> nodeB = pdgNodeFactory.getNode(elementB);
+                    assert null != nodeA : "nodeA is null!";
+                    assert null != nodeB : "nodeB is null!";
 
-                    final ClonePairInfo clonePair = new ClonePairInfo(statementA, statementB);
+                    final ClonePairInfo clonePair = new ClonePairInfo(elementA, elementB);
 
                     final HashSet<PDGNode<?>> checkedNodesA = new HashSet<PDGNode<?>>();
                     final HashSet<PDGNode<?>> checkedNodesB = new HashSet<PDGNode<?>>();
@@ -337,25 +336,20 @@ public class SCDetector extends MetricsTool {
                     ProgramSlice.addDuplicatedElementsWithBackwordSlice(nodeA, nodeB,
                             pdgNodeFactory, clonePair, checkedNodesA, checkedNodesB);
 
-                    if (statementA instanceof ConditionalBlockInfo
-                            && statementB instanceof ConditionalBlockInfo) {
-
-                        ProgramSlice.addDuplicatedElementsWithForwordSlice(nodeA, nodeB,
-                                pdgNodeFactory, clonePair, checkedNodesA, checkedNodesB);
-                    }
-                    if (Configuration.INSTANCE.getS() <= clonePair.size()) {
-                        clonePairs.add(clonePair);
-                    }
+                    clonePairs.add(clonePair);
                 }
             }
-
         }
+
+        final long detectionEnd = System.nanoTime();
+        out.println("elapsed time: " + (detectionEnd - detectionStart) / 1000000000);
 
         out.println("filtering out uninterested clone pairs ...");
         final Set<ClonePairInfo> refinedClonePairs = new HashSet<ClonePairInfo>();
         CLONEPAIR: for (final ClonePairInfo clonePair : clonePairs) {
 
             // コード片のサイズが閾値以上違う場合はフィルタリングする
+            /*
             {
                 final CodeFragmentInfo cloneA = clonePair.getCloneA();
                 final CodeFragmentInfo cloneB = clonePair.getCloneB();
@@ -363,18 +357,20 @@ public class SCDetector extends MetricsTool {
                         || ((cloneA.size() - Configuration.INSTANCE.getFL()) > cloneB.size())) {
                     continue CLONEPAIR;
                 }
-            }
+            }*/
 
             // はじめと終りが一致しているコード片はフィルタリングする
+            /*
             if (Configuration.INSTANCE.getFJ()) {
                 final CodeFragmentInfo cloneA = clonePair.getCloneA();
                 final CodeFragmentInfo cloneB = clonePair.getCloneB();
                 if ((cloneA.first() == cloneB.first()) && (cloneA.last() == cloneB.last())) {
                     continue CLONEPAIR;
                 }
-            }
+            }*/
 
             // 閾値以上重複しているコード片はフィルタリングする
+            /*
             {
                 final CodeFragmentInfo cloneA = clonePair.getCloneA();
                 final CodeFragmentInfo cloneB = clonePair.getCloneB();
@@ -389,8 +385,10 @@ public class SCDetector extends MetricsTool {
                     continue CLONEPAIR;
                 }
             }
+            */
 
             //他のクローンペアに内包されるクローンペアを除去する
+            /*
             if (Configuration.INSTANCE.getFI()) {
                 COUNTERCLONEPAIR: for (final ClonePairInfo counterClonePair : clonePairs) {
 
@@ -403,12 +401,14 @@ public class SCDetector extends MetricsTool {
                     }
                 }
             }
+            */
 
             refinedClonePairs.add(clonePair);
         }
 
         System.out.println(refinedClonePairs.size() + ":" + clonePairs.size());
 
+        /*
         {
             final Map<CodeFragmentInfo, Set<CodeFragmentInfo>> cloneSets = new HashMap<CodeFragmentInfo, Set<CodeFragmentInfo>>();
             for (final ClonePairInfo clonePair : refinedClonePairs) {
@@ -466,6 +466,7 @@ public class SCDetector extends MetricsTool {
                 }
             }
         }
+        */
 
         try {
 
