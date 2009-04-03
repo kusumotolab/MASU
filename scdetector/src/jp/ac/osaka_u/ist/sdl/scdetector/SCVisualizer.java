@@ -38,9 +38,9 @@ public class SCVisualizer {
 
             final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(cmd
                     .getOptionValue("i")));
-            final Set<ClonePairInfo> clonePairs = (Set<ClonePairInfo>) ois.readObject();
+            final Set<CloneSetInfo> cloneSets = (Set<CloneSetInfo>) ois.readObject();
 
-            final MainWindow mainWindow = new MainWindow(clonePairs);
+            final MainWindow mainWindow = new MainWindow(cloneSets);
             Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
             mainWindow.setSize(new Dimension(d.width - 5, d.height - 27));
             mainWindow.setVisible(true);

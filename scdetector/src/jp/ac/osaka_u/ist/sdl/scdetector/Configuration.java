@@ -139,6 +139,7 @@ public final class Configuration {
         this.pr = pr;
     }
 
+    // 他のクローンペアに包含されているクローンペアを取り除くオプション
     public boolean getFI() {
         return this.fi;
     }

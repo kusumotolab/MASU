@@ -15,11 +15,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
 
-import jp.ac.osaka_u.ist.sdl.scdetector.ClonePairInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.SelectedEntities;
 
 
-public class ClonePairListView extends JTable implements Observer {
+public class CloneSetListView extends JTable implements Observer {
 
     class SelectionEventHandler implements ListSelectionListener {
 
@@ -27,25 +27,25 @@ public class ClonePairListView extends JTable implements Observer {
 
             if (!e.getValueIsAdjusting()) {
 
-                final int[] selectedRow = ClonePairListView.this.getSelectedRows();
-                final SortedSet<ClonePairInfo> selectedClonePairs = new TreeSet<ClonePairInfo>();
+                final int[] selectedRow = CloneSetListView.this.getSelectedRows();
+                final SortedSet<CloneSetInfo> selectedCloneSets = new TreeSet<CloneSetInfo>();
                 for (int i = 0; i < selectedRow.length; i++) {
 
-                    final int modelIndex = ClonePairListView.this
+                    final int modelIndex = CloneSetListView.this
                             .convertRowIndexToModel(selectedRow[i]);
-                    final ClonePairListViewModel model = (ClonePairListViewModel) ClonePairListView.this
+                    final CloneSetListViewModel model = (CloneSetListViewModel) CloneSetListView.this
                             .getModel();
-                    final ClonePairInfo clonePair = model.getClonePair(modelIndex);
-                    selectedClonePairs.add(clonePair);
+                    final CloneSetInfo cloneSet = model.getClonePair(modelIndex);
+                    selectedCloneSets.add(cloneSet);
                 }
 
-                SelectedEntities.<ClonePairInfo> getInstance(ClonePairInfo.CLONEPAIR).setAll(
-                        selectedClonePairs, ClonePairListView.this);
+                SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET).setAll(
+                        selectedCloneSets, CloneSetListView.this);
             }
         }
     }
 
-    public ClonePairListView(final Set<ClonePairInfo> clonePairs) {
+    public CloneSetListView(final Set<CloneSetInfo> cloneSets) {
 
         this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -54,9 +54,9 @@ public class ClonePairListView extends JTable implements Observer {
         this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        final ClonePairListViewModel model = new ClonePairListViewModel(clonePairs);
+        final CloneSetListViewModel model = new CloneSetListViewModel(cloneSets);
         this.setModel(model);
-        final RowSorter<ClonePairListViewModel> sorter = new TableRowSorter<ClonePairListViewModel>(
+        final RowSorter<CloneSetListViewModel> sorter = new TableRowSorter<CloneSetListViewModel>(
                 model);
         this.setRowSorter(sorter);
 

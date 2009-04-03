@@ -1,28 +1,27 @@
 package jp.ac.osaka_u.ist.sdl.scdetector.gui.sourcecode;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
-import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 
-import jp.ac.osaka_u.ist.sdl.scdetector.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.CodeFragmentInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.SelectedEntities;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
 
-public class SourceCodeView extends JSplitPane implements Observer {
+public class SourceCodeView extends JTabbedPane implements Observer {
 
     public SourceCodeView() {
-        this.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-
+        this.map = new HashMap<CodeFragmentInfo, SourceCodePanel>();
     }
 
     public void update(Observable o, Object arg) {
@@ -30,81 +29,34 @@ public class SourceCodeView extends JSplitPane implements Observer {
         if (o instanceof SelectedEntities) {
 
             final SelectedEntities<?> selectedEntities = (SelectedEntities<?>) o;
-            if (selectedEntities.getLabel().equals(ClonePairInfo.CLONEPAIR)) {
+            if (selectedEntities.getLabel().equals(CodeFragmentInfo.CODEFRAGMENT)) {
 
-                final ClonePairInfo clonePair = SelectedEntities.<ClonePairInfo> getInstance(
-                        ClonePairInfo.CLONEPAIR).get().first();
+                final Set<CodeFragmentInfo> codeFragments = SelectedEntities
+                        .<CodeFragmentInfo> getInstance(CodeFragmentInfo.CODEFRAGMENT).get();
 
-                final CodeFragmentInfo cloneA = clonePair.getCloneA();
-                final CodeFragmentInfo cloneB = clonePair.getCloneB();
+                // 全てクリア
+                this.removeAll();
+                this.map.clear();
 
-                final SourceCodePanel leftSourceCodePanel = new SourceCodePanel();
-                final SourceCodePanel rightSourceCodePanel = new SourceCodePanel();
-
-                {
-                    boolean set = false;
-                    for (final Position element : cloneA) {
-
-                        if (element instanceof StatementInfo) {
-                            final FileInfo ownerFile = SourceCodeView
-                                    .getOwnerFile((StatementInfo) element);
-                            leftSourceCodePanel.readFile(ownerFile);
-                            this.setLeftComponent(leftSourceCodePanel);
-                            set = true;
-                            break;
-                        } else if (element instanceof ExpressionInfo) {
-                            final FileInfo ownerFile = SourceCodeView
-                                    .getOwnerFile(((ExpressionInfo) element).getOwnerStatement());
-                            leftSourceCodePanel.readFile(ownerFile);
-                            this.setLeftComponent(leftSourceCodePanel);
-                            set = true;
-                            break;
-                        }
-                    }
-
-                    assert set : "State is illegal!";
+                //新しく選択されているファイルを開く
+                for (final CodeFragmentInfo newCodeFragment : codeFragments) {
+                    final FileInfo ownerFile = getOwnerFile(newCodeFragment.first());
+                    final SourceCodePanel panel = new SourceCodePanel(ownerFile);
+                    this.add(panel);
+                    panel.addHighlight(newCodeFragment);
+                    panel.display(newCodeFragment);
+                    this.map.put(newCodeFragment, panel);
                 }
-
-                {
-                    boolean set = false;
-                    for (final Position element : cloneB) {
-
-                        if (element instanceof StatementInfo) {
-                            final FileInfo ownerFile = SourceCodeView
-                                    .getOwnerFile((StatementInfo) element);
-                            rightSourceCodePanel.readFile(ownerFile);
-                            this.setRightComponent(rightSourceCodePanel);
-                            set = true;
-                            break;
-                        } else if (element instanceof ExpressionInfo) {
-                            final FileInfo ownerFile = SourceCodeView
-                                    .getOwnerFile(((ExpressionInfo) element).getOwnerStatement());
-                            rightSourceCodePanel.readFile(ownerFile);
-                            this.setRightComponent(rightSourceCodePanel);
-                            set = true;
-                            break;
-                        }
-                    }
-
-                    assert set : "State is illegal!";
-                }
-
-                final int width = this.getWidth();
-                this.setDividerLocation(width / 2);
-
-                leftSourceCodePanel.addHighlight(cloneA);
-                rightSourceCodePanel.addHighlight(cloneB);
-
-                leftSourceCodePanel.display(cloneA);
-                rightSourceCodePanel.display(cloneB);
             }
         }
     }
 
-    private static FileInfo getOwnerFile(final StatementInfo statement) {
+    private static FileInfo getOwnerFile(final ExecutableElementInfo element) {
 
-        final LocalSpaceInfo ownerSpace = statement.getOwnerSpace();
+        final LocalSpaceInfo ownerSpace = element.getOwnerSpace();
         final ClassInfo ownerClass = ownerSpace.getOwnerClass();
         return ((TargetClassInfo) ownerClass).getOwnerFile();
     }
+
+    private final Map<CodeFragmentInfo, SourceCodePanel> map;
 }

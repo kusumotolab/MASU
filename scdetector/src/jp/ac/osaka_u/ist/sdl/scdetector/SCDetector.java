@@ -6,8 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
@@ -342,9 +344,11 @@ public class SCDetector extends MetricsTool {
         }
 
         final long detectionEnd = System.nanoTime();
-        out.println("elapsed time: " + (detectionEnd - detectionStart) / 1000000000);
+        out.println(clonePairs.size() + " clone pairs were detected.");
+        out.println("\t" + (detectionEnd - detectionStart) / 1000000000 + " seconds elapsed.");
 
         out.println("filtering out uninterested clone pairs ...");
+        final long filteringStart = System.nanoTime();
         final Set<ClonePairInfo> refinedClonePairs = new HashSet<ClonePairInfo>();
         CLONEPAIR: for (final ClonePairInfo clonePair : clonePairs) {
 
@@ -388,7 +392,6 @@ public class SCDetector extends MetricsTool {
             */
 
             //他のクローンペアに内包されるクローンペアを除去する
-            /*
             if (Configuration.INSTANCE.getFI()) {
                 COUNTERCLONEPAIR: for (final ClonePairInfo counterClonePair : clonePairs) {
 
@@ -401,79 +404,87 @@ public class SCDetector extends MetricsTool {
                     }
                 }
             }
-            */
 
             refinedClonePairs.add(clonePair);
         }
 
-        System.out.println(refinedClonePairs.size() + ":" + clonePairs.size());
+        final long filteringEnd = System.nanoTime();
+        out.println(refinedClonePairs.size() + " clone pairs were refined.");
+        out.println("\t" + (filteringEnd - filteringStart) / 1000000000 + " seconds elapsed.");
 
-        /*
+        out.println("converting clone pairs to clone sets ...");
+        final long convertingStart = System.nanoTime();
+        final Set<CloneSetInfo> cloneSets = new HashSet<CloneSetInfo>();
+
         {
-            final Map<CodeFragmentInfo, Set<CodeFragmentInfo>> cloneSets = new HashMap<CodeFragmentInfo, Set<CodeFragmentInfo>>();
+
+            final Map<CodeFragmentInfo, CloneSetInfo> cloneSetBag = new HashMap<CodeFragmentInfo, CloneSetInfo>();
+
             for (final ClonePairInfo clonePair : refinedClonePairs) {
 
                 final CodeFragmentInfo cloneA = clonePair.getCloneA();
                 final CodeFragmentInfo cloneB = clonePair.getCloneB();
 
-                Set<CodeFragmentInfo> cloneSetA = cloneSets.get(cloneA);
-                Set<CodeFragmentInfo> cloneSetB = cloneSets.get(cloneB);
+                final CloneSetInfo cloneSetA = cloneSetBag.get(cloneA);
+                final CloneSetInfo cloneSetB = cloneSetBag.get(cloneB);
 
                 // コード片A，Bともすでに登録されている場合
                 if ((null != cloneSetA) && (null != cloneSetB)) {
 
                     //A と Bの所属するクローンセットが違う場合は，統合する
                     if (cloneSetA != cloneSetB) {
-                        final Set<CodeFragmentInfo> cloneSetC = new HashSet<CodeFragmentInfo>();
-                        cloneSetC.addAll(cloneSetA);
-                        cloneSetC.addAll(cloneSetB);
+                        final CloneSetInfo cloneSetC = new CloneSetInfo();
+                        cloneSetC.addAll(cloneSetA.getCodeFragments());
+                        cloneSetC.addAll(cloneSetB.getCodeFragments());
 
-                        for (final CodeFragmentInfo codeFragment : cloneSetA) {
-                            cloneSets.remove(codeFragment);
+                        for (final CodeFragmentInfo codeFragment : cloneSetA.getCodeFragments()) {
+                            cloneSetBag.remove(codeFragment);
                         }
-                        for (final CodeFragmentInfo codeFragment : cloneSetB) {
-                            cloneSets.remove(codeFragment);
-                        }
-
-                        for (final CodeFragmentInfo codeFragment : cloneSetC) {
-                            cloneSets.put(codeFragment, cloneSetC);
+                        for (final CodeFragmentInfo codeFragment : cloneSetB.getCodeFragments()) {
+                            cloneSetBag.remove(codeFragment);
                         }
 
+                        for (final CodeFragmentInfo codeFragment : cloneSetC.getCodeFragments()) {
+                            cloneSetBag.put(codeFragment, cloneSetC);
+                        }
                     }
-
-                    cloneSetA.addAll(cloneSetB);
-                    cloneSetB.addAll(cloneSetA);
 
                 } else if ((null != cloneSetA) && (null == cloneSetB)) {
 
                     cloneSetA.add(cloneB);
-                    cloneSets.put(cloneB, cloneSetA);
+                    cloneSetBag.put(cloneB, cloneSetA);
 
                 } else if ((null == cloneSetA) && (null != cloneSetB)) {
 
                     cloneSetB.add(cloneA);
-                    cloneSets.put(cloneA, cloneSetB);
+                    cloneSetBag.put(cloneA, cloneSetB);
 
                 } else {
 
-                    final Set<CodeFragmentInfo> cloneSet = new HashSet<CodeFragmentInfo>();
+                    final CloneSetInfo cloneSet = new CloneSetInfo();
                     cloneSet.add(cloneA);
                     cloneSet.add(cloneB);
 
-                    cloneSets.put(cloneA, cloneSet);
-                    cloneSets.put(cloneB, cloneSet);
+                    cloneSetBag.put(cloneA, cloneSet);
+                    cloneSetBag.put(cloneB, cloneSet);
 
                 }
             }
+
+            for (final CloneSetInfo cloneSet : cloneSetBag.values()) {
+                cloneSets.add(cloneSet);
+            }
         }
-        */
+        final long convertingEnd = System.nanoTime();
+        out.println(cloneSets.size() + " clone sets were generated.");
+        out.println("\t" + (convertingEnd - convertingStart) / 1000000000 + " seconds elapsed.");
 
         try {
 
-            out.println("outputing clone pairs ...");
+            out.println("outputing clone sets ...");
             final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(
                     Configuration.INSTANCE.getO()));
-            oos.writeObject(refinedClonePairs);
+            oos.writeObject(cloneSets);
 
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());

@@ -5,17 +5,17 @@ import java.util.Set;
 
 import javax.swing.table.AbstractTableModel;
 
-import jp.ac.osaka_u.ist.sdl.scdetector.ClonePairInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.CloneSetInfo;
 
 
-public class ClonePairListViewModel extends AbstractTableModel {
+public class CloneSetListViewModel extends AbstractTableModel {
 
-    public ClonePairListViewModel(final Set<ClonePairInfo> clonePairs) {
-        this.clonePairs = clonePairs.toArray(new ClonePairInfo[] {});
+    public CloneSetListViewModel(final Set<CloneSetInfo> cloneSets) {
+        this.cloneSets = cloneSets.toArray(new CloneSetInfo[] {});
     }
 
     public int getRowCount() {
-        return this.clonePairs.length;
+        return this.cloneSets.length;
     }
 
     public int getColumnCount() {
@@ -27,9 +27,9 @@ public class ClonePairListViewModel extends AbstractTableModel {
 
         switch (col) {
         case COL_ID:
-            return this.clonePairs[row].getID();
+            return this.cloneSets[row].getID();
         case COL_SIZE:
-            return this.clonePairs[row].size();
+            return this.cloneSets[row].size();
         default:
             assert false : "Here shouldn't be reached!";
             return null;
@@ -46,12 +46,12 @@ public class ClonePairListViewModel extends AbstractTableModel {
         return TITLES[col];
     }
 
-    public ClonePairInfo getClonePair(final int row) {
-        return this.clonePairs[row];
+    public CloneSetInfo getClonePair(final int row) {
+        return this.cloneSets[row];
     }
 
-    public ClonePairInfo[] getClonePairs() {
-        return this.clonePairs;
+    public CloneSetInfo[] getCloneSets() {
+        return this.cloneSets;
     }
 
     static final int COL_ID = 0;
@@ -60,6 +60,6 @@ public class ClonePairListViewModel extends AbstractTableModel {
 
     static final String[] TITLES = new String[] { "ID", "Size" };
 
-    final private ClonePairInfo[] clonePairs;
+    final private CloneSetInfo[] cloneSets;
 
 }
