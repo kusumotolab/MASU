@@ -42,7 +42,7 @@ public class NormalizedElementHashMap extends HashMap<Integer, List<ExecutableEl
     }
 
     public int getHash(final StatementInfo element) {
-        return this.statementHashMap.get(element);
+        return this.elementsHashMap.get(element);
     }
 
     private void addHash(final SingleStatementInfo statement) {
@@ -59,7 +59,7 @@ public class NormalizedElementHashMap extends HashMap<Integer, List<ExecutableEl
             this.put(hash, elements);
         }
         elements.add(statement);
-        this.statementHashMap.put(statement, hash);
+        this.elementsHashMap.put(statement, hash);
     }
 
     private void addHash(final ConditionalBlockInfo block) {
@@ -78,9 +78,10 @@ public class NormalizedElementHashMap extends HashMap<Integer, List<ExecutableEl
                 this.put(hash, elements);
             }
             elements.add(condition);
-            this.statementHashMap.put(condition, hash);
+            this.elementsHashMap.put(condition, hash);
         }
 
+        //For•¶‚Å‚ ‚ê‚ÎC‰Šú‰»Ž®CŒJ‚è•Ô‚µŽ®‚à“o˜^‚·‚é
         if (block instanceof ForBlockInfo) {
             final ForBlockInfo forBlock = (ForBlockInfo) block;
             final Set<ConditionInfo> initializers = forBlock.getInitializerExpressions();
@@ -92,6 +93,8 @@ public class NormalizedElementHashMap extends HashMap<Integer, List<ExecutableEl
                     elements = new ArrayList<ExecutableElementInfo>();
                     this.put(hash, elements);
                 }
+                elements.add(initializer);
+                this.elementsHashMap.put(initializer, hash);
             }
 
             final Set<ExpressionInfo> iterators = forBlock.getIteratorExpressions();
@@ -103,14 +106,15 @@ public class NormalizedElementHashMap extends HashMap<Integer, List<ExecutableEl
                     elements = new ArrayList<ExecutableElementInfo>();
                     this.put(hash, elements);
                 }
-            }
+                elements.add(iterator);
+                this.elementsHashMap.put(iterator, hash);
+           }
         }
     }
-
     public NormalizedElementHashMap() {
         super();
-        this.statementHashMap = new HashMap<ExecutableElementInfo, Integer>();
+        this.elementsHashMap = new HashMap<ExecutableElementInfo, Integer>();
     }
 
-    private HashMap<ExecutableElementInfo, Integer> statementHashMap;
+    private HashMap<ExecutableElementInfo, Integer> elementsHashMap;
 }

@@ -21,7 +21,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TernaryOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ThrowStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
@@ -72,8 +71,7 @@ public class Conversion {
         } else if (statement instanceof ExpressionStatementInfo) {
 
             final ExpressionInfo expression = ((ExpressionStatementInfo) statement).getExpression();
-            final String expressionString = Conversion.getNormalizedString(expression);
-            sb.append(expressionString);
+            return Conversion.getNormalizedString(expression);
 
         } else if (statement instanceof ReturnStatementInfo) {
 
@@ -137,61 +135,20 @@ public class Conversion {
         return getNormalizedString(block.getConditionalClause().getCondition());
     }
 
-    /*
-    public static String getNormalizedString(final BlockInfo block) {
-
-        final StringBuilder sb = new StringBuilder();
-
-        if (block instanceof CatchBlockInfo) {
-
-            sb.append("CATCH");
-
-        } else if (block instanceof ConditionalBlockInfo) {
-
-            sb.append("CONDITION");
-
-        } else if (block instanceof ElseBlockInfo) {
-
-            sb.append("ELSE");
-
-        } else if (block instanceof FinallyBlockInfo) {
-
-            sb.append("FINALLY");
-
-        } else if (block instanceof SimpleBlockInfo) {
-
-            sb.append("SIMPLE");
-
-        } else if (block instanceof SynchronizedBlockInfo) {
-
-            sb.append("CYNCHRONIZED");
-
-        } else if (block instanceof TryBlockInfo) {
-
-            sb.append("TRY");
-        }
-
-        return sb.toString();
-    }
-    */
-
     public static String getNormalizedString(final ConditionInfo condition) {
-
-        final StringBuilder sb = new StringBuilder();
 
         if (condition instanceof VariableDeclarationStatementInfo) {
 
-            sb.append((StatementInfo) condition);
+            return getNormalizedString((SingleStatementInfo) condition);
 
         } else if (condition instanceof ExpressionInfo) {
 
-            final ExpressionInfo expression = (ExpressionInfo) condition;
-            final String expressionString = Conversion.getNormalizedString(expression);
-            sb.append(expressionString);
+            return Conversion.getNormalizedString((ExpressionInfo) condition);
 
         }
 
-        return sb.toString();
+        assert false : "Here shouldn't be reached!";
+        return null;
     }
 
     public static String getNormalizedString(final ExpressionInfo expression) {
