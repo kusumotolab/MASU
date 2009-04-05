@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
@@ -55,6 +56,8 @@ public class DefaultPDGNodeFactory implements IPDGNodeFactory {
             node = new PDGParameterNode((ParameterInfo) element);
         } else if (element instanceof ConditionInfo) {
             node = new PDGExpressionNode((ConditionInfo) element);
+        } else if (element instanceof CaseEntryInfo) {
+            node = new PDGCaseEntryNode((CaseEntryInfo) element);
         } else {
             return null;
         }

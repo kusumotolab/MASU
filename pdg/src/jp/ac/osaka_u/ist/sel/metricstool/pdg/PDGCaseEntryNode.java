@@ -3,27 +3,27 @@ package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
 
 /**
- * PDG上で単文を表すノード
  * 
- * @author t-miyake, higo
+ * @author higo
  *
  */
-public class PDGStatementNode extends PDGNormalNode<SingleStatementInfo> {
+public class PDGCaseEntryNode extends PDGNormalNode<CaseEntryInfo> {
 
     /**
-     * @param statement
+     * 
+     * @param entry
      */
-    public PDGStatementNode(final SingleStatementInfo statement) {
-        super(statement);
+    public PDGCaseEntryNode(final CaseEntryInfo entry) {
+        super(entry);
 
-        this.text = statement.getText() + " <" + statement.getFromLine() + ">";
+        this.text = entry.getText() + " <" + entry.getFromLine() + ">";
     }
 
     @Override
@@ -37,4 +37,5 @@ public class PDGStatementNode extends PDGNormalNode<SingleStatementInfo> {
         return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getReferencees(this.getCore()
                 .getVariableUsages()));
     }
+
 }
