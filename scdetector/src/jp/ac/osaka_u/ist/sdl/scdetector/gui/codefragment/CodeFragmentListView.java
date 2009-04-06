@@ -14,8 +14,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
 
-import jp.ac.osaka_u.ist.sdl.scdetector.CloneSetInfo;
-import jp.ac.osaka_u.ist.sdl.scdetector.CodeFragmentInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeFragmentInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.SelectedEntities;
 
 

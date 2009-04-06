@@ -4,11 +4,13 @@ package jp.ac.osaka_u.ist.sdl.scdetector;
 import java.util.HashSet;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGParameterNode;
 
 
 public class ProgramSlice {
@@ -29,6 +31,11 @@ public class ProgramSlice {
                 continue;
             }
 
+            //ParameterNodeであればとばす，将来は変更の必要あり
+            if (fromNodeA instanceof PDGParameterNode) {
+                continue;
+            }
+
             final ExecutableElementInfo coreA = (ExecutableElementInfo) fromNodeA.getCore();
             final int hashA = Conversion.getNormalizedString(coreA).hashCode();
 
@@ -37,6 +44,11 @@ public class ProgramSlice {
                 final PDGNode<?> fromNodeB = edgeB.getFromNode();
 
                 if (checkedNodesB.contains(fromNodeB)) {
+                    continue;
+                }
+
+                //ParameterNodeであればとばす，将来は変更の必要あり
+                if (fromNodeB instanceof PDGParameterNode) {
                     continue;
                 }
 

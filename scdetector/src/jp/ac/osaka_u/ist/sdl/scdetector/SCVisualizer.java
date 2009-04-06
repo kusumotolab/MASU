@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.MainWindow;
 
 import org.apache.commons.cli.CommandLine;

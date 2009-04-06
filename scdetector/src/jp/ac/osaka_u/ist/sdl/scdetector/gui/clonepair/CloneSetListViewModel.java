@@ -5,7 +5,7 @@ import java.util.Set;
 
 import javax.swing.table.AbstractTableModel;
 
-import jp.ac.osaka_u.ist.sdl.scdetector.CloneSetInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
 
 
 public class CloneSetListViewModel extends AbstractTableModel {

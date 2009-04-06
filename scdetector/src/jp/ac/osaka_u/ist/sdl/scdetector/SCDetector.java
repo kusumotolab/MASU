@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeFragmentInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;

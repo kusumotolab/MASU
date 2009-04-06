@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sdl.scdetector;
+package jp.ac.osaka_u.ist.sdl.scdetector.data;
 
 
 import java.io.Serializable;
@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import jp.ac.osaka_u.ist.sdl.scdetector.Entity;
 
 
 public class CloneSetInfo implements Entity, Serializable, Comparable<CloneSetInfo> {
