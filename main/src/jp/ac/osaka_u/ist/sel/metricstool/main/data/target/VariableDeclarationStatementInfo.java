@@ -44,8 +44,27 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
         if (null != initializationExpression) {
             this.initializationExpression = initializationExpression;
         } else {
-            this.initializationExpression = new EmptyExpressionInfo(null, toLine, toColumn - 1,
-                    toLine, toColumn - 1);
+
+            final LocalSpaceInfo ownerSpace = variableDeclaration.getUsedVariable()
+                    .getDefinitionUnit();
+
+            // ownerSpaceInfoがメソッドまたはコンストラクタの時
+            if (ownerSpace instanceof CallableUnitInfo) {
+                this.initializationExpression = new EmptyExpressionInfo(
+                        (CallableUnitInfo) ownerSpace, toLine, toColumn - 1, toLine, toColumn - 1);
+            }
+
+            // ownerSpaceInfoがブロック文の時
+            else if (ownerSpace instanceof BlockInfo) {
+                final CallableUnitInfo ownerMethod = ((BlockInfo) ownerSpace).getOwnerMethod();
+                this.initializationExpression = new EmptyExpressionInfo(null, toLine, toColumn - 1,
+                        toLine, toColumn - 1);
+            }
+            
+            // それ以外の時はエラー
+            else{
+                throw new IllegalStateException();
+            }
         }
 
         this.initializationExpression.setOwnerExecutableElement(this);

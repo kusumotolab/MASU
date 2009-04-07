@@ -16,23 +16,39 @@ public class ReturnStatementInfo extends SingleStatementInfo {
     /**
      * return文の戻り値を表す式と位置情報を与えて初期化
      * @param ownerMethod オーナーメソッド
-     * @param ownerSpaceInfo 文を直接所有する空間
+     * @param ownerSpace 文を直接所有する空間
      * @param returnedExpression
      * @param fromLine
      * @param fromColumn
      * @param toLine
      * @param toColumn
      */
-    public ReturnStatementInfo(final LocalSpaceInfo ownerSpaceInfo,
+    public ReturnStatementInfo(final LocalSpaceInfo ownerSpace,
             final ExpressionInfo returnedExpression, int fromLine, int fromColumn, int toLine,
             int toColumn) {
-        super(ownerSpaceInfo, fromLine, fromColumn, toLine, toColumn);
+        super(ownerSpace, fromLine, fromColumn, toLine, toColumn);
 
         if (null != returnedExpression) {
             this.returnedExpression = returnedExpression;
         } else {
-            this.returnedExpression = new EmptyExpressionInfo(null, toLine, toColumn - 1, toLine,
-                    toColumn - 1);
+
+            // ownerSpaceInfoがメソッドまたはコンストラクタの時
+            if (ownerSpace instanceof CallableUnitInfo) {
+                this.returnedExpression = new EmptyExpressionInfo((CallableUnitInfo) ownerSpace,
+                        toLine, toColumn - 1, toLine, toColumn - 1);
+            }
+
+            // ownerSpaceInfoがブロック文の時            
+            else if (ownerSpace instanceof BlockInfo) {
+                final CallableUnitInfo ownerMethod = ((BlockInfo) ownerSpace).getOwnerMethod();
+                this.returnedExpression = new EmptyExpressionInfo(ownerMethod, toLine,
+                        toColumn - 1, toLine, toColumn - 1);
+            }
+
+            // それ以外の時はエラー
+            else {
+                throw new IllegalStateException();
+            }
         }
         this.returnedExpression.setOwnerExecutableElement(this);
     }

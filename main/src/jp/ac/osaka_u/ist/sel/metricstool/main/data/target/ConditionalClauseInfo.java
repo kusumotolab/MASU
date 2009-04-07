@@ -39,7 +39,9 @@ public final class ConditionalClauseInfo extends UnitInfo {
                         .setOwnerExecutableElement(this.ownerConditionalBlock);
             }
         } else {
-            this.condition = new EmptyExpressionInfo(null, toLine, toColumn - 1, toLine,
+
+            final CallableUnitInfo ownerMethod = ownerConditionalBlock.getOwnerMethod();
+            this.condition = new EmptyExpressionInfo(ownerMethod, toLine, toColumn - 1, toLine,
                     toColumn - 1);
             ((ExpressionInfo) this.condition).setOwnerExecutableElement(this.ownerConditionalBlock);
         }
