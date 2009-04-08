@@ -1,48 +1,50 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 
 
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.DoBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ElseBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LabelInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SimpleBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SwitchBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SynchronizedBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.WhileBlockInfo;
 
 
 /**
- * 手続き間を横断しない制御フローグラフ(CFG)を表すクラス
  * 
- * @author t-miyake
- * 
+ * @author t-miyake, higo
+ *
  */
 public class IntraProceduralCFG extends CFG {
 
     /**
-     * 制御フローグラフに対応するローカル空間
+     * CFG構築対象要素
      */
-    private final LocalSpaceInfo localSpace;
+    private final Object element;
 
     /**
-     * 生成する制御フローグラフに対応するローカル空間とCFGノードのファクトリを与えて初期化
+     * 呼び出し可能ユニットとノードファクトリを与えて，制御フローグラフを生成
      * 
-     * @param unit
-     *            生成する制御フローグラフに対応するローカル空間
-     * @param nodeFactory
-     *            CFGノードのファクトリ
+     * @param unit 呼び出し可能ユニット
+     * @param nodeFactory ノードファクトリ
      */
     public IntraProceduralCFG(final CallableUnitInfo unit, final ICFGNodeFactory nodeFactory) {
 
@@ -52,241 +54,452 @@ public class IntraProceduralCFG extends CFG {
             throw new IllegalArgumentException("unit is null");
         }
 
+        this.element = unit;
+
         if (unit instanceof ExternalMethodInfo || unit instanceof ExternalConstructorInfo) {
             throw new IllegalArgumentException("unit is an external infromation.");
         }
 
-        this.localSpace = unit;
-
-        this.buildCFG(unit);
+        final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(unit
+                .getStatements(), nodeFactory);
+        this.enterNode = statementsCFG.getEnterNode();
+        this.exitNodes.addAll(statementsCFG.getExitNodes());
     }
 
     /**
-     * 生成する制御フローグラフに対応するローカル空間を与えて初期化
+     * 呼び出し可能ユニットを与えて，制御フローグラフを生成
      * 
-     * @param unit
-     *            生成する制御フローグラフに対応するローカル空間
+     * @param unit 呼び出し可能ユニット
      */
     public IntraProceduralCFG(final CallableUnitInfo unit) {
         this(unit, new DefaultCFGNodeFactory());
     }
 
-    private IntraProceduralCFG(final ICFGNodeFactory nodeFactory) {
+    /**
+     * 文の制御フローグラフを生成する
+     * 
+     * @param statement
+     * @param nodeFactory
+     */
+    IntraProceduralCFG(final StatementInfo statement, final ICFGNodeFactory nodeFactory) {
+
         super(nodeFactory);
 
-        this.localSpace = null;
-    }
+        if (null == statement) {
+            throw new IllegalArgumentException();
+        }
 
-    private IntraProceduralCFG(final StatementInfo statement, final ICFGNodeFactory nodeFactory) {
-        super(nodeFactory);
-        if (statement instanceof BlockInfo) {
-            this.localSpace = (BlockInfo) statement;
+        this.element = statement;
 
-            this.buildCFG(this.localSpace);
-        } else {
-            this.localSpace = null;
-            this.enterNode = this.nodeFactory.makeNormalNode(statement);
-            this.exitNodes.add(this.enterNode);
+        //単文の場合
+        if (statement instanceof SingleStatementInfo) {
+            final CFGNormalNode<?> node = nodeFactory.makeNormalNode(statement);
+            assert null != node : "node is null!";
+            this.enterNode = node;
+            this.exitNodes.add(node);
+        }
+
+        // caseエントリの場合
+        else if (statement instanceof CaseEntryInfo) {
+
+            final CaseEntryInfo caseEntry = (CaseEntryInfo) statement;
+            final CFGNormalNode<?> node = nodeFactory.makeNormalNode(caseEntry);
+            this.enterNode = node;
+            this.exitNodes.add(node);
+        }
+
+        // Labelの場合
+        else if (statement instanceof LabelInfo) {
+            // 何もしなくていいはず
+        }
+
+        // if文の場合
+        else if (statement instanceof IfBlockInfo) {
+
+            //if文の条件式からコントロールノードを生成
+            final IfBlockInfo ifBlock = (IfBlockInfo) statement;
+            final ConditionInfo condition = ifBlock.getConditionalClause().getCondition();
+            final CFGControlNode controlNode = nodeFactory.makeControlNode(condition);
+            assert null != controlNode : "controlNode is null!";
+            this.enterNode = controlNode;
+
+            // if文の内側を処理
+            {
+                final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(ifBlock
+                        .getStatements(), nodeFactory);
+
+                // if文の内部が空の場合は，if文の条件式がexitノードになる
+                if (statementsCFG.isEmpty()) {
+                    this.exitNodes.add(controlNode);
+                }
+
+                // if文の内部が空でない場合は，内部の最後の文がexitノードになる
+                else {
+                    controlNode.addForwardNode(statementsCFG.getEnterNode());
+                    this.exitNodes.addAll(statementsCFG.getExitNodes());
+                }
+            }
+
+            //対応するelse文がある場合の処理
+            if (ifBlock.hasElseBlock()) {
+                final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(ifBlock
+                        .getSequentElseBlock().getStatements(), nodeFactory);
+
+                // else文の内部が空の場合は，if文の条件式がexitノードになる
+                if (statementsCFG.isEmpty()) {
+                    this.exitNodes.add(controlNode);
+                }
+
+                // else文の内部が～でない場合は，内部の文の最後の文がexitノードになる
+                else {
+                    controlNode.addForwardNode(statementsCFG.getEnterNode());
+                    this.exitNodes.addAll(statementsCFG.getExitNodes());
+                }
+            }
+
+            //対応するelse文がない場合は，if文の条件式がexitノードになる
+            else {
+                this.exitNodes.add(controlNode);
+            }
+        }
+
+        // while文の場合
+        else if (statement instanceof WhileBlockInfo) {
+
+            // while文の条件式からコントロールノードを生成
+            final WhileBlockInfo whileBlock = (WhileBlockInfo) statement;
+            final ConditionInfo condition = whileBlock.getConditionalClause().getCondition();
+            final CFGControlNode controlNode = nodeFactory.makeControlNode(condition);
+            assert null != controlNode : "controlNode is null!";
+            this.enterNode = controlNode;
+            this.exitNodes.add(controlNode);
+
+            // while文内部の処理
+            final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(whileBlock
+                    .getStatements(), nodeFactory);
+
+            // 内部が空でない場合は処理を行う
+            if (!statementsCFG.isEmpty()) {
+                controlNode.addForwardNode(statementsCFG.getEnterNode());
+                for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
+                    exitNode.addForwardNode(controlNode);
+                }
+            }
+        }
+
+        // else 文の場合
+        else if (statement instanceof ElseBlockInfo) {
+            //else文は対応するif文で処理しているため，ここではなにもしない
+        }
+
+        // do文の場合
+        else if (statement instanceof DoBlockInfo) {
+
+            // do文の条件式からコントロールノードを生成
+            final DoBlockInfo doBlock = (DoBlockInfo) statement;
+            final ConditionInfo condition = doBlock.getConditionalClause().getCondition();
+            final CFGControlNode controlNode = nodeFactory.makeControlNode(condition);
+            assert null != controlNode : "controlNode is null!";
+            this.exitNodes.add(controlNode);
+
+            // do文内部の処理
+            final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(doBlock
+                    .getStatements(), nodeFactory);
+
+            // 内部が空の時は，do文の条件式がenterノードになる
+            if (statementsCFG.isEmpty()) {
+                this.enterNode = controlNode;
+            }
+
+            // 空でない場合は，内部CFGのenterノードが，このCFGのenterノードになる
+            else {
+                this.enterNode = statementsCFG.getEnterNode();
+                for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
+                    exitNode.addForwardNode(controlNode);
+                }
+            }
+        }
+
+        // for文の場合
+        else if (statement instanceof ForBlockInfo) {
+
+            // for文の条件式からコントロールノードを生成
+            final ForBlockInfo forBlock = (ForBlockInfo) statement;
+            final ConditionInfo condition = forBlock.getConditionalClause().getCondition();
+            final CFGControlNode controlNode = nodeFactory.makeControlNode(condition);
+            assert null != controlNode : "controlNode is null";
+            this.exitNodes.add(controlNode);
+
+            //初期化式からCFGを生成
+            final SortedSet<ConditionInfo> initializers = forBlock.getInitializerExpressions();
+            final SequentialExpressionsCFG initializersCFG = new SequentialExpressionsCFG(
+                    initializers, nodeFactory);
+
+            //初期化式をfor文のCFGに追加
+            if (initializersCFG.isEmpty()) {
+                this.enterNode = controlNode;
+            } else {
+                this.enterNode = initializersCFG.getEnterNode();
+                for (final CFGNode<?> exitNode : initializersCFG.getExitNodes()) {
+                    exitNode.addForwardNode(controlNode);
+                }
+            }
+
+            //繰り返し式からCFGを生成
+            final SortedSet<ExpressionInfo> iterators = forBlock.getIteratorExpressions();
+            final SequentialExpressionsCFG iteratorsCFG = new SequentialExpressionsCFG(iterators,
+                    nodeFactory);
+
+            // for文の内部の処理
+            final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(forBlock
+                    .getStatements(), nodeFactory);
+            // for文の内部が空の場合
+            if (statementsCFG.isEmpty()) {
+
+                //繰り返し式が空の場合
+                if (iteratorsCFG.isEmpty()) {
+                    controlNode.addForwardNode(controlNode);
+                }
+
+                //繰り返し式が空でない場合
+                else {
+                    controlNode.addForwardNode(iteratorsCFG.getEnterNode());
+                    for (final CFGNode<?> exitNode : iteratorsCFG.getExitNodes()) {
+                        exitNode.addForwardNode(controlNode);
+                    }
+                }
+            }
+
+            // for文の内部が空でない場合
+            else {
+
+                controlNode.addForwardNode(statementsCFG.getEnterNode());
+
+                //繰り返し式が空の場合
+                if (iteratorsCFG.isEmpty()) {
+
+                    for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
+                        exitNode.addForwardNode(controlNode);
+                    }
+                }
+
+                //繰り返し式が空でない場合
+                else {
+
+                    for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
+                        exitNode.addForwardNode(iteratorsCFG.getEnterNode());
+                    }
+
+                    for (final CFGNode<?> exitNode : iteratorsCFG.getExitNodes()) {
+                        exitNode.addForwardNode(controlNode);
+                    }
+                }
+            }
+        }
+
+        // switch文の場合
+        else if (statement instanceof SwitchBlockInfo) {
+
+            // switch文の条件式からコントロールノードを生成
+            final SwitchBlockInfo switchBlock = (SwitchBlockInfo) statement;
+            final ConditionInfo condition = switchBlock.getConditionalClause().getCondition();
+            final CFGControlNode controlNode = nodeFactory.makeControlNode(condition);
+            assert null != controlNode : "controlNode is null!";
+            this.enterNode = controlNode;
+
+            // 空のCFGを取り除く処理
+            final List<IntraProceduralCFG> statementCFGs = new ArrayList<IntraProceduralCFG>();
+            for (final StatementInfo innerStatement : switchBlock.getStatements()) {
+                final IntraProceduralCFG innerStatementCFG = new IntraProceduralCFG(innerStatement,
+                        nodeFactory);
+                if (!innerStatementCFG.isEmpty()) {
+                    statementCFGs.add(innerStatementCFG);
+                }
+            }
+
+            for (int i = 0; i < statementCFGs.size() - 1; i++) {
+
+                final IntraProceduralCFG fromCFG = statementCFGs.get(i);
+                final IntraProceduralCFG toCFG = statementCFGs.get(i + 1);
+
+                // fromCFGがbreak文の場合
+                if (fromCFG.getElement() instanceof BreakStatementInfo) {
+                    this.exitNodes.addAll(fromCFG.getExitNodes());
+                }
+
+                // break文でない時は，fromCFGとtoCFGをつなぐ
+                else {
+
+                    for (final CFGNode<?> exitNode : fromCFG.getExitNodes()) {
+                        exitNode.addForwardNode(toCFG.getEnterNode());
+                    }
+
+                    //fromCFGがcase文である場合は，switch文の条件式から依存辺を引く
+                    if (fromCFG.getElement() instanceof CaseEntryInfo) {
+                        controlNode.addForwardNode(fromCFG.getEnterNode());
+                    }
+                }
+            }
+
+            final IntraProceduralCFG lastCFG = statementCFGs.get(statementCFGs.size() - 1);
+            this.exitNodes.addAll(lastCFG.getExitNodes());
+        }
+
+        // try文の場合
+        else if (statement instanceof TryBlockInfo) {
+
+            final TryBlockInfo tryBlock = (TryBlockInfo) statement;
+            final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(tryBlock
+                    .getStatements(), nodeFactory);
+            this.enterNode = statementsCFG.getEnterNode();
+            this.exitNodes.addAll(statementsCFG.getExitNodes());
+        }
+
+        // catch文の場合
+        else if (statement instanceof CatchBlockInfo) {
+
+            final CatchBlockInfo catchBlock = (CatchBlockInfo) statement;
+            final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(catchBlock
+                    .getStatements(), nodeFactory);
+            this.enterNode = statementsCFG.getEnterNode();
+            this.exitNodes.addAll(statementsCFG.getExitNodes());
+        }
+
+        // finally文の場合
+        else if (statement instanceof FinallyBlockInfo) {
+
+            final FinallyBlockInfo finallyBlock = (FinallyBlockInfo) statement;
+            final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(finallyBlock
+                    .getStatements(), nodeFactory);
+            this.enterNode = statementsCFG.getEnterNode();
+            this.exitNodes.addAll(statementsCFG.getExitNodes());
+        }
+
+        // simple文の場合
+        else if (statement instanceof SimpleBlockInfo) {
+
+            final SimpleBlockInfo simpleBlock = (SimpleBlockInfo) statement;
+            final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(simpleBlock
+                    .getStatements(), nodeFactory);
+            this.enterNode = statementsCFG.getEnterNode();
+            this.exitNodes.addAll(statementsCFG.getExitNodes());
+        }
+
+        // synchorized文の場合
+        else if (statement instanceof SynchronizedBlockInfo) {
+
+            final SynchronizedBlockInfo synchronizedBlock = (SynchronizedBlockInfo) statement;
+            final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(
+                    synchronizedBlock.getStatements(), nodeFactory);
+            this.enterNode = statementsCFG.getEnterNode();
+            this.exitNodes.addAll(statementsCFG.getExitNodes());
+        }
+
+        else {
+            assert false : "Here shouldn't be reached!";
         }
     }
 
     /**
-     * CFGを構築
+     * CFG構築対象要素を返す
      * 
-     * @param local
-     *            構築されるCFGに対応するローカル空間
+     * @return CFG構築対象要素
      */
-    private void buildCFG(final LocalSpaceInfo local) {
-
-        this.enterNode = null;
-        this.exitNodes.clear();
-
-        CFG innerCFG = this.buildInnerCFG(local);
-
-        // 対応するローカル空間が制御文でない場合
-        if (!(local instanceof ConditionalBlockInfo)) {
-            // 内部CFGがそのままCFGとなる
-            this.enterNode = innerCFG.getEnterNode();
-            this.exitNodes.addAll(innerCFG.getExitNodes());
-
-            return;
-        }
-
-        // 対応するローカル空間がif文の場合
-        if (local instanceof IfBlockInfo) {
-            final IfBlockInfo ifBlock = (IfBlockInfo) local;
-            this.enterNode = this.nodeFactory.makeControlNode(ifBlock.getConditionalClause()
-                    .getCondition());
-
-            if (!innerCFG.isEmpty()) {
-                this.enterNode.addForwardNode(innerCFG.getEnterNode());
-            } else {
-                this.exitNodes.add(this.enterNode);
-            }
-
-            this.exitNodes.addAll(innerCFG.getExitNodes());
-
-            if (ifBlock.hasElseBlock()) {
-                final CFG elseCFG = new IntraProceduralCFG(ifBlock.getSequentElseBlock(),
-                        this.nodeFactory);
-                if (!elseCFG.isEmpty()) {
-                    this.enterNode.addForwardNode(elseCFG.getEnterNode());
-                    this.exitNodes.addAll(elseCFG.getExitNodes());
-                } else {
-                    this.exitNodes.add(this.enterNode);
-                }
-            } else {
-                this.exitNodes.add(this.enterNode);
-            }
-
-        }
-        // 対応するローカル空間がwhile文の場合
-        else if (local instanceof WhileBlockInfo) {
-            // 制御文自体が入口ノードかつ出口ノード
-            final WhileBlockInfo whileBlock = (WhileBlockInfo) local;
-            this.enterNode = this.nodeFactory.makeControlNode(whileBlock.getConditionalClause()
-                    .getCondition());
-            this.exitNodes.add(this.enterNode);
-
-            // 内部のCFGと連結．ループ文なので内部のCFGが空の場合は入口ノードのフォワードノードは入口ノード
-            this.enterNode.addForwardNode(!innerCFG.isEmpty() ? innerCFG.getEnterNode()
-                    : this.enterNode);
-
-            for (final CFGNode<? extends ExecutableElementInfo> innerExitNode : innerCFG
-                    .getExitNodes()) {
-                if (innerExitNode.isExitNode(this.localSpace)) {
-                    this.exitNodes.add(innerExitNode);
-                } else {
-                    innerExitNode.addForwardNode(this.enterNode);
-                }
-            }
-        }
-        // 対応するローカル空間がfor文の場合
-        else if (local instanceof ForBlockInfo) {
-
-            final ForBlockInfo forBlock = (ForBlockInfo) local;
-
-            //入口ノードは初期化式，もし初期化式がない場合は条件式
-            //出口は条件式
-            final List<CFGNode<? extends ExecutableElementInfo>> initializerNodes = new LinkedList<CFGNode<? extends ExecutableElementInfo>>();
-            for (final ConditionInfo initializer : forBlock.getInitializerExpressions()) {
-
-                final CFGNormalNode<? extends ExecutableElementInfo> initializerNode = this.nodeFactory
-                        .makeNormalNode(initializer);
-                initializerNodes.add(initializerNode);
-            }
-
-            final CFGNode<? extends ExecutableElementInfo>[] initializerNodeArray = initializerNodes
-                    .toArray(new CFGNode<?>[0]);
-            for (int i = 0; i < initializerNodeArray.length - 1; i++) {
-                initializerNodeArray[i].addForwardNode(initializerNodeArray[i + 1]);
-            }
-
-            final CFGControlNode conditionNode = this.nodeFactory.makeControlNode(forBlock
-                    .getConditionalClause().getCondition());
-            this.exitNodes.add(conditionNode);
-
-            if (0 < initializerNodes.size()) {
-                this.enterNode = initializerNodeArray[0];
-                initializerNodeArray[initializerNodeArray.length - 1].addForwardNode(conditionNode);
-            } else {
-                this.enterNode = conditionNode;
-            }
-
-            // 内部のCFGと連結．ループ文なので内部のCFGが空の場合は入口ノードのフォワードノードは入口ノード
-            conditionNode.addForwardNode(!innerCFG.isEmpty() ? innerCFG.getEnterNode()
-                    : conditionNode);
-
-            // 繰り返し式を追加
-            final List<CFGNode<? extends ExecutableElementInfo>> iteratorNodes = new LinkedList<CFGNode<? extends ExecutableElementInfo>>();
-            for (final ExpressionInfo iterator : forBlock.getIteratorExpressions()) {
-
-                final CFGNormalNode<? extends ExecutableElementInfo> iteratorNode = this.nodeFactory
-                        .makeNormalNode(iterator);
-                iteratorNodes.add(iteratorNode);
-            }
-
-            final CFGNode<? extends ExecutableElementInfo>[] iteratorNodeArray = iteratorNodes
-                    .toArray(new CFGNode<?>[0]);
-            for (int i = 0; i < iteratorNodeArray.length - 1; i++) {
-                iteratorNodeArray[i].addForwardNode(iteratorNodeArray[i + 1]);
-            }
-
-            if (0 < iteratorNodes.size()) {
-                for (final CFGNode<? extends ExecutableElementInfo> innerExitNode : innerCFG
-                        .getExitNodes()) {
-                    innerExitNode.addForwardNode(iteratorNodeArray[0]);
-                }
-                iteratorNodeArray[iteratorNodeArray.length - 1].addForwardNode(conditionNode);
-            } else {
-                for (final CFGNode<? extends ExecutableElementInfo> innerExitNode : innerCFG
-                        .getExitNodes()) {
-                    innerExitNode.addForwardNode(conditionNode);
-                }
-            }
-
-        } else if (local instanceof SwitchBlockInfo) {
-
-            final SwitchBlockInfo switchBlock = (SwitchBlockInfo) local;
-
-            // TODO 面倒なので未実装
-            this.enterNode = this.nodeFactory.makeControlNode(switchBlock.getConditionalClause()
-                    .getCondition());
-            this.enterNode.addForwardNode(innerCFG.enterNode);
-            this.exitNodes.addAll(innerCFG.exitNodes);
-
-        } else if (local instanceof DoBlockInfo) {
-
-            final DoBlockInfo doBlock = (DoBlockInfo) local;
-
-            final CFGControlNode controlNode = this.nodeFactory.makeControlNode(doBlock
-                    .getConditionalClause().getCondition());
-
-            this.enterNode = !innerCFG.isEmpty() ? innerCFG.getEnterNode() : controlNode;
-            this.exitNodes.add(controlNode);
-            controlNode.addForwardNode(this.enterNode);
-        }
+    public Object getElement() {
+        return this.element;
     }
 
-    private CFG buildInnerCFG(final LocalSpaceInfo local) {
-        final CFG innerCFG = new IntraProceduralCFG(this.nodeFactory);
+    /**
+     * StatementInfoの列からCFGを作成するクラス
+     * 
+     * @author higo
+     *
+     */
+    private class SequentialStatementsCFG extends CFG {
 
-        final Iterator<StatementInfo> innerStatements = local.getStatements().iterator();
+        SequentialStatementsCFG(final SortedSet<StatementInfo> statements,
+                final ICFGNodeFactory nodeFactory) {
 
-        if (!innerStatements.hasNext()) {
-            return innerCFG;
-        }
+            super(nodeFactory);
 
-        CFG preSubCFG = new IntraProceduralCFG(innerStatements.next(), this.nodeFactory);
-        innerCFG.enterNode = preSubCFG.getEnterNode();
-
-        while (innerStatements.hasNext()) {
-            final StatementInfo nextStatement = innerStatements.next();
-
-            if (nextStatement instanceof ElseBlockInfo) {
-                // else文はif文のCFGと同時に構築されるので個別には構築しない
-                continue;
+            // 空のCFGを除去する処理
+            final List<IntraProceduralCFG> statementCFGs = new ArrayList<IntraProceduralCFG>();
+            for (final StatementInfo statement : statements) {
+                final IntraProceduralCFG statementCFG = new IntraProceduralCFG(statement,
+                        nodeFactory);
+                if (!statementCFG.isEmpty()) {
+                    statementCFGs.add(statementCFG);
+                }
             }
 
-            final CFG nextSubCFG = new IntraProceduralCFG(nextStatement, this.nodeFactory);
+            if (0 == statementCFGs.size()) {
+                return;
+            }
 
-            if (null != nextSubCFG.getEnterNode()) {
-                for (final CFGNode<? extends ExecutableElementInfo> preExitNode : preSubCFG
-                        .getExitNodes()) {
-                    if (preExitNode.isExitNode(local)) {
-                        innerCFG.exitNodes.add(preExitNode);
-                    } else {
-                        preExitNode.addForwardNode(nextSubCFG.getEnterNode());
+            //最初の文からenterノードを生成
+            {
+                this.enterNode = statementCFGs.get(0).getEnterNode();
+            }
+
+            //最後の文からexitノードを生成
+            {
+                this.exitNodes.addAll(statementCFGs.get(statementCFGs.size() - 1).getExitNodes());
+            }
+
+            //statementsから生成したCFGを順番につないでいく
+            {
+                for (int i = 0; i < statementCFGs.size() - 1; i++) {
+                    final IntraProceduralCFG fromCFG = statementCFGs.get(i);
+                    final IntraProceduralCFG toCFG = statementCFGs.get(i + 1);
+
+                    for (final CFGNode<?> exitNode : fromCFG.getExitNodes()) {
+                        exitNode.addForwardNode(toCFG.getEnterNode());
                     }
                 }
-
-                preSubCFG = nextSubCFG;
             }
         }
-
-        innerCFG.exitNodes.addAll(preSubCFG.getExitNodes());
-
-        return innerCFG;
     }
 
+    /**
+     * ExpressionInfoの列，またはCOnditionInfoの列からCFGを作成するクラス
+     * 
+     * @author higo
+     *
+     */
+    private class SequentialExpressionsCFG extends CFG {
+
+        SequentialExpressionsCFG(final SortedSet<? extends ConditionInfo> expressions,
+                final ICFGNodeFactory nodeFactory) {
+
+            super(nodeFactory);
+
+            if (0 == expressions.size()) {
+                return;
+            }
+
+            // 最初の式からenterノードを生成
+            {
+                final ConditionInfo firstExpression = expressions.first();
+                final CFGNormalNode<?> firstExpressionNode = nodeFactory
+                        .makeNormalNode(firstExpression);
+                this.enterNode = firstExpressionNode;
+            }
+
+            // 最後の式からexitノードを生成
+            {
+                final ConditionInfo lastExpression = expressions.last();
+                final CFGNormalNode<?> lastExpressionNode = nodeFactory
+                        .makeNormalNode(lastExpression);
+                this.exitNodes.add(lastExpressionNode);
+            }
+
+            // expressions から生成したノードを順番につないでいく
+            final ConditionInfo[] expressionArray = expressions.toArray(new ConditionInfo[0]);
+            for (int i = 0; i < expressionArray.length - 1; i++) {
+                final CFGNormalNode<?> fromNode = nodeFactory.makeNormalNode(expressionArray[i]);
+                final CFGNormalNode<?> toNode = nodeFactory.makeNormalNode(expressionArray[i + 1]);
+                fromNode.addForwardNode(toNode);
+            }
+        }
+    }
 }

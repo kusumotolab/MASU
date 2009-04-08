@@ -23,7 +23,7 @@ public abstract class CFG {
         }
 
         this.nodeFactory = nodeFactory;
-
+        this.enterNode = null;
         this.exitNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
 
     }
