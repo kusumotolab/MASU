@@ -57,7 +57,7 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
             // ownerSpaceInfoÇ™ÉuÉçÉbÉNï∂ÇÃéû
             else if (ownerSpace instanceof BlockInfo) {
                 final CallableUnitInfo ownerMethod = ((BlockInfo) ownerSpace).getOwnerMethod();
-                this.initializationExpression = new EmptyExpressionInfo(null, toLine, toColumn - 1,
+                this.initializationExpression = new EmptyExpressionInfo(ownerMethod, toLine, toColumn - 1,
                         toLine, toColumn - 1);
             }
             
