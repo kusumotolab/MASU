@@ -34,6 +34,7 @@ public class UnresolvedConditionalClauseInfo extends UnresolvedUnitInfo<Conditio
         if (null == ownerConditionalBlockInfo) {
             throw new IllegalArgumentException("conditionalBlock is null.");
         }
+
         this.condition = condition;
         this.ownerConditionalBlock = ownerConditionalBlockInfo;
     }
