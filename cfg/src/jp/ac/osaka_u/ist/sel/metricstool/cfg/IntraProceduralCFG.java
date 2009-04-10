@@ -215,7 +215,11 @@ public class IntraProceduralCFG extends CFG {
             else {
                 this.enterNode = statementsCFG.getEnterNode();
                 for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
-                    exitNode.addForwardNode(controlNode);
+                    if (exitNode instanceof CFGReturnNode) {
+                        this.exitNodes.add(exitNode);
+                    } else {
+                        exitNode.addForwardNode(controlNode);
+                    }
                 }
             }
         }
@@ -265,7 +269,11 @@ public class IntraProceduralCFG extends CFG {
                 else {
                     controlNode.addForwardNode(iteratorsCFG.getEnterNode());
                     for (final CFGNode<?> exitNode : iteratorsCFG.getExitNodes()) {
-                        exitNode.addForwardNode(controlNode);
+                        if (exitNode instanceof CFGReturnNode) {
+                            this.exitNodes.add(exitNode);
+                        } else {
+                            exitNode.addForwardNode(controlNode);
+                        }
                     }
                 }
             }
@@ -279,7 +287,11 @@ public class IntraProceduralCFG extends CFG {
                 if (iteratorsCFG.isEmpty()) {
 
                     for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
-                        exitNode.addForwardNode(controlNode);
+                        if (exitNode instanceof CFGReturnNode) {
+                            this.exitNodes.add(exitNode);
+                        } else {
+                            exitNode.addForwardNode(controlNode);
+                        }
                     }
                 }
 
@@ -287,11 +299,19 @@ public class IntraProceduralCFG extends CFG {
                 else {
 
                     for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
-                        exitNode.addForwardNode(iteratorsCFG.getEnterNode());
+                        if (exitNode instanceof CFGReturnNode) {
+                            this.exitNodes.add(exitNode);
+                        } else {
+                            exitNode.addForwardNode(iteratorsCFG.getEnterNode());
+                        }
                     }
 
                     for (final CFGNode<?> exitNode : iteratorsCFG.getExitNodes()) {
-                        exitNode.addForwardNode(controlNode);
+                        if (exitNode instanceof CFGReturnNode) {
+                            this.exitNodes.add(exitNode);
+                        } else {
+                            exitNode.addForwardNode(controlNode);
+                        }
                     }
                 }
             }
@@ -331,7 +351,11 @@ public class IntraProceduralCFG extends CFG {
                 else {
 
                     for (final CFGNode<?> exitNode : fromCFG.getExitNodes()) {
-                        exitNode.addForwardNode(toCFG.getEnterNode());
+                        if (exitNode instanceof CFGReturnNode) {
+                            this.exitNodes.add(exitNode);
+                        } else {
+                            exitNode.addForwardNode(toCFG.getEnterNode());
+                        }
                     }
 
                     //fromCFGÇ™caseï∂Ç≈Ç†ÇÈèÍçáÇÕÅCswitchï∂ÇÃèåèéÆÇ©ÇÁàÀë∂ï”Çà¯Ç≠
@@ -453,7 +477,11 @@ public class IntraProceduralCFG extends CFG {
                     final IntraProceduralCFG toCFG = statementCFGs.get(i + 1);
 
                     for (final CFGNode<?> exitNode : fromCFG.getExitNodes()) {
-                        exitNode.addForwardNode(toCFG.getEnterNode());
+                        if (exitNode instanceof CFGReturnNode) {
+                            this.exitNodes.add(exitNode);
+                        } else {
+                            exitNode.addForwardNode(toCFG.getEnterNode());
+                        }
                     }
                 }
             }

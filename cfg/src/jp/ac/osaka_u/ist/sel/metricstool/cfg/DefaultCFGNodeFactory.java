@@ -7,6 +7,7 @@ import java.util.Map;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 
 
@@ -57,7 +58,11 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
         }
 
         if (element instanceof SingleStatementInfo) {
-            node = new CFGStatementNode((SingleStatementInfo) element);
+            if (element instanceof ReturnStatementInfo) {
+                node = new CFGReturnNode((ReturnStatementInfo) element);
+            } else {
+                node = new CFGStatementNode((SingleStatementInfo) element);
+            }
         } else if (element instanceof CaseEntryInfo) {
             node = new CFGCaseEntryNode((CaseEntryInfo) element);
         } else if (element instanceof ConditionInfo) {
