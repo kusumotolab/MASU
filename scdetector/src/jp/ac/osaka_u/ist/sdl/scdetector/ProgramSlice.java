@@ -23,6 +23,8 @@ public class ProgramSlice {
         final Set<PDGEdge> edgesA = nodeA.getBackwardEdges();
         final Set<PDGEdge> edgesB = nodeB.getBackwardEdges();
 
+        boolean extend = false;
+
         for (final PDGEdge edgeA : edgesA) {
 
             final PDGNode<?> fromNodeA = edgeA.getFromNode();
@@ -57,21 +59,29 @@ public class ProgramSlice {
 
                 if (hashA == hashB) {
 
+                    extend = true;
+
                     clonePair.add(coreA, coreB);
                     checkedNodesA.add(fromNodeA);
                     checkedNodesB.add(fromNodeB);
 
                     addDuplicatedElementsWithBackwordSlice(fromNodeA, fromNodeB, pdgNodeFactory,
-                            clonePairs, clonePair, checkedNodesA, checkedNodesB);
+                            clonePairs, clonePair.clone(), (HashSet<PDGNode<?>>) checkedNodesA
+                                    .clone(), (HashSet<PDGNode<?>>) checkedNodesB.clone());
 
                     if ((fromNodeA instanceof PDGControlNode)
                             && (fromNodeB instanceof PDGControlNode)) {
 
                         addDuplicatedElementsWithForwordSlice(fromNodeA, fromNodeB, pdgNodeFactory,
-                                clonePairs, clonePair, checkedNodesA, checkedNodesB);
+                                clonePairs, clonePair.clone(), (HashSet<PDGNode<?>>) checkedNodesA
+                                        .clone(), (HashSet<PDGNode<?>>) checkedNodesB.clone());
                     }
                 }
             }
+        }
+
+        if (!extend && (Configuration.INSTANCE.getS() <= clonePair.length())) {
+            clonePairs.add(clonePair);
         }
     }
 
@@ -82,6 +92,8 @@ public class ProgramSlice {
 
         final Set<PDGEdge> edgesA = nodeA.getForwardEdges();
         final Set<PDGEdge> edgesB = nodeB.getForwardEdges();
+
+        boolean extend = false;
 
         for (final PDGEdge edgeA : edgesA) {
 
@@ -117,20 +129,28 @@ public class ProgramSlice {
 
                 if (hashA == hashB) {
 
+                    extend = true;
+
                     clonePair.add(coreA, coreB);
                     checkedNodesA.add(toNodeA);
                     checkedNodesB.add(toNodeB);
 
                     addDuplicatedElementsWithBackwordSlice(toNodeA, toNodeB, pdgNodeFactory,
-                            clonePairs, clonePair, checkedNodesA, checkedNodesB);
+                            clonePairs, clonePair.clone(), (HashSet<PDGNode<?>>) checkedNodesA
+                                    .clone(), (HashSet<PDGNode<?>>) checkedNodesB.clone());
 
                     if ((toNodeA instanceof PDGControlNode) && (toNodeB instanceof PDGControlNode)) {
 
                         addDuplicatedElementsWithForwordSlice(toNodeA, toNodeB, pdgNodeFactory,
-                                clonePairs, clonePair, checkedNodesA, checkedNodesB);
+                                clonePairs, clonePair.clone(), (HashSet<PDGNode<?>>) checkedNodesA
+                                        .clone(), (HashSet<PDGNode<?>>) checkedNodesB.clone());
                     }
                 }
             }
+        }
+
+        if (!extend && (Configuration.INSTANCE.getS() <= clonePair.length())) {
+            clonePairs.add(clonePair);
         }
     }
 }

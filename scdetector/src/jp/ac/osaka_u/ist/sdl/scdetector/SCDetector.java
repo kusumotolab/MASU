@@ -349,9 +349,11 @@ public class SCDetector extends MetricsTool {
                                         checkedNodesB);
                     }
 
+                    /*
                     if (Configuration.INSTANCE.getS() <= clonePair.length()) {
                         clonePairs.add(clonePair);
                     }
+                    */
                 }
             }
         }
