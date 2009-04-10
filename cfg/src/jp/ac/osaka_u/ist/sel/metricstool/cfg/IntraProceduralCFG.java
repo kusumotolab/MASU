@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
@@ -342,25 +341,27 @@ public class IntraProceduralCFG extends CFG {
                 final IntraProceduralCFG fromCFG = statementCFGs.get(i);
                 final IntraProceduralCFG toCFG = statementCFGs.get(i + 1);
 
-                if (fromCFG.getElement() instanceof BreakStatementInfo) {
-                    this.exitNodes.addAll(fromCFG.getExitNodes());
+                for (final CFGNode<?> exitNode : fromCFG.getExitNodes()) {
+
+                    // Return文であれば，exitノードである
+                    if (exitNode instanceof CFGReturnStatementNode) {
+                        this.exitNodes.add(exitNode);
+                    }
+
+                    // Break文であればexitノードである
+                    else if (exitNode instanceof CFGBreakStatementNode) {
+                        this.exitNodes.add(exitNode);
+                    }
+
+                    // それ以外のノードであれば，つなぐ
+                    else {
+                        exitNode.addForwardNode(toCFG.getEnterNode());
+                    }
                 }
 
-                // break文でない時は，fromCFGとtoCFGをつなぐ
-                else {
-
-                    for (final CFGNode<?> exitNode : fromCFG.getExitNodes()) {
-                        if (exitNode instanceof CFGReturnStatementNode) {
-                            this.exitNodes.add(exitNode);
-                        } else {
-                            exitNode.addForwardNode(toCFG.getEnterNode());
-                        }
-                    }
-
-                    //fromCFGがcase文である場合は，switch文の条件式から依存辺を引く
-                    if (fromCFG.getElement() instanceof CaseEntryInfo) {
-                        controlNode.addForwardNode(fromCFG.getEnterNode());
-                    }
+                //fromCFGがcase文である場合は，switch文の条件式から依存辺を引く
+                if (fromCFG.getElement() instanceof CaseEntryInfo) {
+                    controlNode.addForwardNode(fromCFG.getEnterNode());
                 }
             }
 
