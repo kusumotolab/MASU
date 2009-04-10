@@ -10,14 +10,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
  * @author higo
  *
  */
-public class CFGReturnNode extends CFGStatementNode {
+public class CFGReturnStatementNode extends CFGStatementNode {
 
     /**
      * ¶¬‚·‚éƒm[ƒh‚É‘Î‰‚·‚éreturn•¶‚ğ—^‚¦‚Ä‰Šú‰»
      * 
      * @param returnStatement
      */
-    public CFGReturnNode(final ReturnStatementInfo returnStatement) {
+    public CFGReturnStatementNode(final ReturnStatementInfo returnStatement) {
         super(returnStatement);
     }
 }

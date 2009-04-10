@@ -4,8 +4,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ContinueStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
@@ -59,7 +61,11 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
 
         if (element instanceof SingleStatementInfo) {
             if (element instanceof ReturnStatementInfo) {
-                node = new CFGReturnNode((ReturnStatementInfo) element);
+                node = new CFGReturnStatementNode((ReturnStatementInfo) element);
+            } else if (element instanceof BreakStatementInfo) {
+                node = new CFGBreakStatementNode((BreakStatementInfo) element);
+            } else if (element instanceof ContinueStatementInfo) {
+                node = new CFGContinueStatementNode((ContinueStatementInfo) element);
             } else {
                 node = new CFGStatementNode((SingleStatementInfo) element);
             }
