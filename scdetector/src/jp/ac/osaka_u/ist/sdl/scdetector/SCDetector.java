@@ -33,6 +33,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.DefaultPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGNode;
 
 import org.apache.commons.cli.CommandLine;
@@ -339,7 +340,14 @@ public class SCDetector extends MetricsTool {
                     checkedNodesB.add(nodeB);
 
                     ProgramSlice.addDuplicatedElementsWithBackwordSlice(nodeA, nodeB,
-                            pdgNodeFactory, clonePair, checkedNodesA, checkedNodesB);
+                            pdgNodeFactory, clonePairs, clonePair, checkedNodesA, checkedNodesB);
+
+                    if ((nodeA instanceof PDGControlNode) && (nodeB instanceof PDGControlNode)) {
+                        ProgramSlice
+                                .addDuplicatedElementsWithForwordSlice(nodeA, nodeB,
+                                        pdgNodeFactory, clonePairs, clonePair, checkedNodesA,
+                                        checkedNodesB);
+                    }
 
                     if (Configuration.INSTANCE.getS() <= clonePair.length()) {
                         clonePairs.add(clonePair);

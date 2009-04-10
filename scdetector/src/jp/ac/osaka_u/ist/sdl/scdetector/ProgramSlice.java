@@ -17,8 +17,8 @@ public class ProgramSlice {
 
     static void addDuplicatedElementsWithBackwordSlice(final PDGNode<?> nodeA,
             final PDGNode<?> nodeB, final IPDGNodeFactory pdgNodeFactory,
-            final ClonePairInfo clonePair, final HashSet<PDGNode<?>> checkedNodesA,
-            final HashSet<PDGNode<?>> checkedNodesB) {
+            final Set<ClonePairInfo> clonePairs, final ClonePairInfo clonePair,
+            final HashSet<PDGNode<?>> checkedNodesA, final HashSet<PDGNode<?>> checkedNodesB) {
 
         final Set<PDGEdge> edgesA = nodeA.getBackwardEdges();
         final Set<PDGEdge> edgesB = nodeB.getBackwardEdges();
@@ -62,13 +62,13 @@ public class ProgramSlice {
                     checkedNodesB.add(fromNodeB);
 
                     addDuplicatedElementsWithBackwordSlice(fromNodeA, fromNodeB, pdgNodeFactory,
-                            clonePair, checkedNodesA, checkedNodesB);
+                            clonePairs, clonePair, checkedNodesA, checkedNodesB);
 
                     if ((fromNodeA instanceof PDGControlNode)
                             && (fromNodeB instanceof PDGControlNode)) {
 
                         addDuplicatedElementsWithForwordSlice(fromNodeA, fromNodeB, pdgNodeFactory,
-                                clonePair, checkedNodesA, checkedNodesB);
+                                clonePairs, clonePair, checkedNodesA, checkedNodesB);
                     }
                 }
             }
@@ -77,8 +77,8 @@ public class ProgramSlice {
 
     static void addDuplicatedElementsWithForwordSlice(final PDGNode<?> nodeA,
             final PDGNode<?> nodeB, final IPDGNodeFactory pdgNodeFactory,
-            final ClonePairInfo clonePair, final HashSet<PDGNode<?>> checkedNodesA,
-            final HashSet<PDGNode<?>> checkedNodesB) {
+            final Set<ClonePairInfo> clonePairs, final ClonePairInfo clonePair,
+            final HashSet<PDGNode<?>> checkedNodesA, final HashSet<PDGNode<?>> checkedNodesB) {
 
         final Set<PDGEdge> edgesA = nodeA.getForwardEdges();
         final Set<PDGEdge> edgesB = nodeB.getForwardEdges();
@@ -122,12 +122,12 @@ public class ProgramSlice {
                     checkedNodesB.add(toNodeB);
 
                     addDuplicatedElementsWithBackwordSlice(toNodeA, toNodeB, pdgNodeFactory,
-                            clonePair, checkedNodesA, checkedNodesB);
+                            clonePairs, clonePair, checkedNodesA, checkedNodesB);
 
                     if ((toNodeA instanceof PDGControlNode) && (toNodeB instanceof PDGControlNode)) {
 
                         addDuplicatedElementsWithForwordSlice(toNodeA, toNodeB, pdgNodeFactory,
-                                clonePair, checkedNodesA, checkedNodesB);
+                                clonePairs, clonePair, checkedNodesA, checkedNodesB);
                     }
                 }
             }

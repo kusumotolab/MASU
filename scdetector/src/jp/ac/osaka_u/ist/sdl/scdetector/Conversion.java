@@ -5,6 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.AssertStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BinominalOperationInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CastUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
@@ -49,6 +50,19 @@ public class Conversion {
 
         } else if (o instanceof VariableInfo) {
             return getNormalizedString((VariableInfo<?>) o);
+
+        } else if (o instanceof CaseEntryInfo) {
+
+            final StringBuilder text = new StringBuilder();
+            text.append("case ");
+
+            final ExpressionInfo label = ((CaseEntryInfo) o).getLabel();
+            final String labelString = getNormalizedString(label);
+            text.append(labelString);
+
+            text.append(":");
+
+            return text.toString();
         }
 
         assert false : "Here shouldn't be reached!";
