@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IPDGNodeFactory;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGParameterNode;
@@ -64,11 +64,11 @@ public class ProgramSlice {
                     addDuplicatedElementsWithBackwordSlice(fromNodeA, fromNodeB, pdgNodeFactory,
                             clonePair, checkedNodesA, checkedNodesB);
 
-                    if ((coreA instanceof ConditionalBlockInfo)
-                            && (coreB instanceof ConditionalBlockInfo)) {
+                    if ((fromNodeA instanceof PDGControlNode)
+                            && (fromNodeB instanceof PDGControlNode)) {
 
-                        addDuplicatedElementsWithBackwordSlice(fromNodeA, fromNodeB,
-                                pdgNodeFactory, clonePair, checkedNodesA, checkedNodesB);
+                        addDuplicatedElementsWithForwordSlice(fromNodeA, fromNodeB, pdgNodeFactory,
+                                clonePair, checkedNodesA, checkedNodesB);
                     }
                 }
             }
@@ -91,6 +91,11 @@ public class ProgramSlice {
                 continue;
             }
 
+            //ParameterNodeであればとばす，将来は変更の必要あり
+            if (toNodeA instanceof PDGParameterNode) {
+                continue;
+            }
+
             final ExecutableElementInfo coreA = (ExecutableElementInfo) toNodeA.getCore();
             final int hashA = Conversion.getNormalizedString(coreA).hashCode();
 
@@ -99,6 +104,11 @@ public class ProgramSlice {
                 final PDGNode<?> toNodeB = edgeB.getToNode();
 
                 if (checkedNodesB.contains(toNodeB)) {
+                    continue;
+                }
+
+                //ParameterNodeであればとばす，将来は変更の必要あり
+                if (toNodeB instanceof PDGParameterNode) {
                     continue;
                 }
 
@@ -114,8 +124,7 @@ public class ProgramSlice {
                     addDuplicatedElementsWithBackwordSlice(toNodeA, toNodeB, pdgNodeFactory,
                             clonePair, checkedNodesA, checkedNodesB);
 
-                    if ((coreA instanceof ConditionalBlockInfo)
-                            && (coreB instanceof ConditionalBlockInfo)) {
+                    if ((toNodeA instanceof PDGControlNode) && (toNodeB instanceof PDGControlNode)) {
 
                         addDuplicatedElementsWithForwordSlice(toNodeA, toNodeB, pdgNodeFactory,
                                 clonePair, checkedNodesA, checkedNodesB);

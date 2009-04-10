@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sdl.scdetector.gui.clonepair;
+package jp.ac.osaka_u.ist.sdl.scdetector.gui.cloneset;
 
 
 import java.util.Set;
@@ -19,7 +19,7 @@ public class CloneSetListViewModel extends AbstractTableModel {
     }
 
     public int getColumnCount() {
-        return 2;
+        return TITLES.length;
     }
 
     @Override
@@ -30,6 +30,8 @@ public class CloneSetListViewModel extends AbstractTableModel {
             return this.cloneSets[row].getID();
         case COL_SIZE:
             return this.cloneSets[row].size();
+        case COL_LENGTH:
+            return this.cloneSets[row].length();
         default:
             assert false : "Here shouldn't be reached!";
             return null;
@@ -58,7 +60,9 @@ public class CloneSetListViewModel extends AbstractTableModel {
 
     static final int COL_SIZE = 1;
 
-    static final String[] TITLES = new String[] { "ID", "Size" };
+    static final int COL_LENGTH = 2;
+
+    static final String[] TITLES = new String[] { "ID", "# of Instances", "size" };
 
     final private CloneSetInfo[] cloneSets;
 

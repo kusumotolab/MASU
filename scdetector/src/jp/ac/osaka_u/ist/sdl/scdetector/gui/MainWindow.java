@@ -12,7 +12,7 @@ import javax.swing.JSplitPane;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeFragmentInfo;
-import jp.ac.osaka_u.ist.sdl.scdetector.gui.clonepair.CloneSetListView;
+import jp.ac.osaka_u.ist.sdl.scdetector.gui.cloneset.CloneSetListView;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.codefragment.CodeFragmentListView;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.sourcecode.SourceCodeView;
 

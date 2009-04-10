@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sdl.scdetector.data;
 
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.Entity;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
@@ -12,8 +12,8 @@ public class ClonePairInfo implements Serializable, Entity, Cloneable {
 
     public ClonePairInfo() {
 
-        this.cloneA = new CodeFragmentInfo();
-        this.cloneB = new CodeFragmentInfo();
+        this.codeFragmentA = new CodeFragmentInfo();
+        this.codeFragmentB = new CodeFragmentInfo();
 
         this.id = number++;
     }
@@ -26,37 +26,34 @@ public class ClonePairInfo implements Serializable, Entity, Cloneable {
     }
 
     public void add(final ExecutableElementInfo elementA, final ExecutableElementInfo elementB) {
-        this.cloneA.add(elementA);
-        this.cloneB.add(elementB);
+        this.codeFragmentA.add(elementA);
+        this.codeFragmentB.add(elementB);
     }
 
-    public void addAll(final Set<ExecutableElementInfo> elementsA,
-            final Set<ExecutableElementInfo> elementsB) {
-        this.cloneA.addAll(elementsA);
-        this.cloneB.addAll(elementsB);
+    public void addAll(final SortedSet<ExecutableElementInfo> elementsA,
+            final SortedSet<ExecutableElementInfo> elementsB) {
+        this.codeFragmentA.addAll(elementsA);
+        this.codeFragmentB.addAll(elementsB);
     }
 
-    public int size() {
-        return (this.cloneA.size() + this.cloneB.size()) / 2;
+    public int length() {
+        return (this.codeFragmentA.length() + this.codeFragmentB.length()) / 2;
     }
 
-    public CodeFragmentInfo getCloneA() {
-        return this.cloneA;
+    public CodeFragmentInfo getCodeFragmentA() {
+        return this.codeFragmentA;
     }
 
-    public CodeFragmentInfo getCloneB() {
-        return this.cloneB;
+    public CodeFragmentInfo getCodeFragmentB() {
+        return this.codeFragmentB;
     }
 
-    public boolean includedBy(final ClonePairInfo counterClonePair) {
+    public boolean includedBy(final ClonePairInfo clonePair) {
 
-        final CodeFragmentInfo cloneA = this.getCloneA();
-        final CodeFragmentInfo cloneB = this.getCloneB();
-
-        final CodeFragmentInfo counterCloneA = counterClonePair.getCloneA();
-        final CodeFragmentInfo counterCloneB = counterClonePair.getCloneB();
-
-        return counterCloneA.containsAll(cloneA) && counterCloneB.containsAll(cloneB);
+        return (this.getCodeFragmentA().includedBy(clonePair.getCodeFragmentA()) && this
+                .getCodeFragmentB().includedBy(clonePair.getCodeFragmentB()))
+                || (this.getCodeFragmentB().includedBy(clonePair.getCodeFragmentA()) && this
+                        .getCodeFragmentA().includedBy(clonePair.getCodeFragmentB()));
     }
 
     public int getID() {
@@ -67,16 +64,16 @@ public class ClonePairInfo implements Serializable, Entity, Cloneable {
     public ClonePairInfo clone() {
 
         final ClonePairInfo clonePair = new ClonePairInfo();
-        final CodeFragmentInfo cloneA = this.getCloneA();
-        final CodeFragmentInfo cloneB = this.getCloneB();
-        clonePair.addAll(cloneA, cloneB);
+        final CodeFragmentInfo cloneA = this.getCodeFragmentA();
+        final CodeFragmentInfo cloneB = this.getCodeFragmentB();
+        clonePair.addAll(cloneA.getElements(), cloneB.getElements());
 
         return clonePair;
     }
 
-    final private CodeFragmentInfo cloneA;
+    final private CodeFragmentInfo codeFragmentA;
 
-    final private CodeFragmentInfo cloneB;
+    final private CodeFragmentInfo codeFragmentB;
 
     final private int id;
 

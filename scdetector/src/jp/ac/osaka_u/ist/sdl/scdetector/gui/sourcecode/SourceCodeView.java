@@ -40,7 +40,7 @@ public class SourceCodeView extends JTabbedPane implements Observer {
 
                 //新しく選択されているファイルを開く
                 for (final CodeFragmentInfo newCodeFragment : codeFragments) {
-                    final FileInfo ownerFile = getOwnerFile(newCodeFragment.first());
+                    final FileInfo ownerFile = getOwnerFile(newCodeFragment.getElements().first());
                     final SourceCodePanel panel = new SourceCodePanel(ownerFile);
                     this.add(panel);
                     panel.addHighlight(newCodeFragment);

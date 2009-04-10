@@ -37,6 +37,15 @@ public class CloneSetInfo implements Entity, Serializable, Comparable<CloneSetIn
         return this.codeFragments.size();
     }
 
+    public int length() {
+        int total = 0;
+        for (final CodeFragmentInfo codeFragment : this.getCodeFragments()) {
+            total += codeFragment.length();
+        }
+
+        return total / this.size();
+    }
+
     @Override
     public int compareTo(CloneSetInfo o) {
 

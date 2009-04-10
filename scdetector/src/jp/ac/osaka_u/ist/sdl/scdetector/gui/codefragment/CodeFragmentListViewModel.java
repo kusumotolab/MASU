@@ -1,11 +1,15 @@
 package jp.ac.osaka_u.ist.sdl.scdetector.gui.codefragment;
 
 
+import java.util.SortedSet;
+
 import javax.swing.table.AbstractTableModel;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeFragmentInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 
 
 public class CodeFragmentListViewModel extends AbstractTableModel {
@@ -55,18 +59,36 @@ public class CodeFragmentListViewModel extends AbstractTableModel {
     }
 
     private ClassInfo getOwnerClass(final CodeFragmentInfo codeFragment) {
-        return codeFragment.first().getOwnerMethod().getOwnerClass();
+
+        final SortedSet<ExecutableElementInfo> elements = codeFragment.getElements();
+        if (null == elements) {
+            System.out.println("0");
+        }
+        final ExecutableElementInfo firstElement = elements.first();
+        if (null == firstElement) {
+            System.out.println("0");
+        }
+        final CallableUnitInfo ownerMethod = firstElement.getOwnerMethod();
+        if (null == ownerMethod) {
+            System.out.println("0");
+        }
+        final ClassInfo ownerClass = ownerMethod.getOwnerClass();
+        if (null == ownerClass) {
+            System.out.println("0");
+        }
+
+        return codeFragment.getElements().first().getOwnerMethod().getOwnerClass();
     }
 
     private String getPositionText(final CodeFragmentInfo codeFragment) {
         final StringBuilder text = new StringBuilder();
-        text.append(codeFragment.first().getFromLine());
+        text.append(codeFragment.getElements().first().getFromLine());
         text.append(".");
-        text.append(codeFragment.first().getFromColumn());
+        text.append(codeFragment.getElements().first().getFromColumn());
         text.append(" - ");
-        text.append(codeFragment.last().getToLine());
+        text.append(codeFragment.getElements().last().getToLine());
         text.append(".");
-        text.append(codeFragment.last().getToColumn());
+        text.append(codeFragment.getElements().last().getToColumn());
         return text.toString();
     }
 

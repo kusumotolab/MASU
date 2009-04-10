@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sdl.scdetector.gui.clonepair;
+package jp.ac.osaka_u.ist.sdl.scdetector.gui.cloneset;
 
 
 import java.util.Observable;

@@ -341,7 +341,9 @@ public class SCDetector extends MetricsTool {
                     ProgramSlice.addDuplicatedElementsWithBackwordSlice(nodeA, nodeB,
                             pdgNodeFactory, clonePair, checkedNodesA, checkedNodesB);
 
-                    clonePairs.add(clonePair);
+                    if (Configuration.INSTANCE.getS() <= clonePair.length()) {
+                        clonePairs.add(clonePair);
+                    }
                 }
             }
         }
@@ -425,8 +427,8 @@ public class SCDetector extends MetricsTool {
 
             for (final ClonePairInfo clonePair : refinedClonePairs) {
 
-                final CodeFragmentInfo cloneA = clonePair.getCloneA();
-                final CodeFragmentInfo cloneB = clonePair.getCloneB();
+                final CodeFragmentInfo cloneA = clonePair.getCodeFragmentA();
+                final CodeFragmentInfo cloneB = clonePair.getCodeFragmentB();
 
                 final CloneSetInfo cloneSetA = cloneSetBag.get(cloneA);
                 final CloneSetInfo cloneSetB = cloneSetBag.get(cloneB);

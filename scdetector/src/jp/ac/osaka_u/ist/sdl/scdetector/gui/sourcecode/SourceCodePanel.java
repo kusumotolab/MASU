@@ -8,7 +8,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.SortedSet;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,6 +17,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
+
+import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeFragmentInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
@@ -78,11 +79,11 @@ class SourceCodePanel extends JPanel {
 
     }
 
-    void addHighlight(final SortedSet<ExecutableElementInfo> clone) {
+    void addHighlight(final CodeFragmentInfo codeFragment) {
 
         final DefaultHighlightPainter highlightPainter = new DefaultHighlightPainter(new Color(180,
                 180, 180, 125));
-        for (final ExecutableElementInfo element : clone) {
+        for (final ExecutableElementInfo element : codeFragment.getElements()) {
 
             try {
 
@@ -126,12 +127,12 @@ class SourceCodePanel extends JPanel {
         }
     }
 
-    void display(final SortedSet<ExecutableElementInfo> clone) {
+    void display(final CodeFragmentInfo codeFragment) {
 
         final Document doc = this.sourceCodeArea.getDocument();
         final Element root = doc.getDefaultRootElement();
 
-        final Position firstElement = clone.first();
+        final Position firstElement = codeFragment.getElements().first();
 
         // â∫ÇÃ modelToViewÇÃï‘ÇËílÇnullÇ…ÇµÇ»Ç¢ÇΩÇﬂÇ…ã≠êßìIÇ…ê≥ÇÃílÇê›íË
         this.sourceCodeArea.setBounds(new Rectangle(10, 10));
