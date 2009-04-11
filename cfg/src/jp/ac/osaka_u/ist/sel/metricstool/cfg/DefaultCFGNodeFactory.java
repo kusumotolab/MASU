@@ -11,6 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ContinueStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ThrowStatementInfo;
 
 
 /**
@@ -62,6 +63,8 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
         if (element instanceof SingleStatementInfo) {
             if (element instanceof ReturnStatementInfo) {
                 node = new CFGReturnStatementNode((ReturnStatementInfo) element);
+            } else if (element instanceof ThrowStatementInfo) {
+                node = new CFGThrowStatementNode((ThrowStatementInfo) element);
             } else if (element instanceof BreakStatementInfo) {
                 node = new CFGBreakStatementNode((BreakStatementInfo) element);
             } else if (element instanceof ContinueStatementInfo) {

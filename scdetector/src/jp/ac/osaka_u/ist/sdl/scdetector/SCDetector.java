@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +22,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
@@ -35,6 +35,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGParameterNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGReturnStatementNode;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -302,35 +304,47 @@ public class SCDetector extends MetricsTool {
                     cfgNodeFactory);
         }
 
-        //ExecutableElement単位で正規化データを構築する
-        out.println("constructing statement hashtable ...");
-        final NormalizedElementHashMap elementHash = new NormalizedElementHashMap();
-        for (final TargetMethodInfo method : DataManager.getInstance().getMethodInfoManager()
-                .getTargetMethodInfos()) {
-            elementHash.addStatement(method);
+        //PDGノードのハッシュデータを構築する
+        out.println("constructing PDG nodes hashtable ...");
+        final Map<Integer, List<PDGNode<?>>> pdgNodeMap = new HashMap<Integer, List<PDGNode<?>>>();
+        for (final PDGNode<?> pdgNode : pdgNodeFactory.getAllNodes()) {
+
+            // ParameterNodeの場合はハッシュ化しない
+            if (pdgNode instanceof PDGParameterNode) {
+                continue;
+            }
+
+            final Object element = pdgNode.getCore();
+            final int hash = Conversion.getNormalizedString(element).hashCode();
+            List<PDGNode<?>> pdgNodeList = pdgNodeMap.get(hash);
+            if (null == pdgNodeList) {
+                pdgNodeList = new ArrayList<PDGNode<?>>();
+                pdgNodeMap.put(hash, pdgNodeList);
+            }
+            pdgNodeList.add(pdgNode);
         }
 
         // ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
         out.println("detecting code clones from PDGs ...");
         final Set<ClonePairInfo> clonePairs = new HashSet<ClonePairInfo>();
-        for (final List<ExecutableElementInfo> elements : elementHash.values()) {
+        for (final List<PDGNode<?>> pdgNodeList : pdgNodeMap.values()) {
+
+            System.out.println(pdgNodeList.size());
 
             // 同じハッシュ値を持つ文が閾値以上ある場合は，その文をスライス基点にしない．
             //　ただし，Return文は例外とする．
-            if ((Configuration.INSTANCE.getC() < elements.size())
-                    && !(elements.get(0) instanceof ReturnStatementInfo)) {
+            if ((Configuration.INSTANCE.getC() < pdgNodeList.size())
+                    && !(pdgNodeList.get(0) instanceof PDGReturnStatementNode)) {
                 continue;
             }
 
-            for (int i = 0; i < elements.size(); i++) {
-                for (int j = i + 1; j < elements.size(); j++) {
+            for (int i = 0; i < pdgNodeList.size(); i++) {
+                for (int j = i + 1; j < pdgNodeList.size(); j++) {
 
-                    final ExecutableElementInfo elementA = elements.get(i);
-                    final ExecutableElementInfo elementB = elements.get(j);
-                    final PDGNode<?> nodeA = pdgNodeFactory.getNode(elementA);
-                    final PDGNode<?> nodeB = pdgNodeFactory.getNode(elementB);
-                    assert null != nodeA : "nodeA is null!";
-                    assert null != nodeB : "nodeB is null!";
+                    final PDGNode<?> nodeA = pdgNodeList.get(i);
+                    final PDGNode<?> nodeB = pdgNodeList.get(j);
+                    final ExecutableElementInfo elementA = (ExecutableElementInfo) nodeA.getCore();
+                    final ExecutableElementInfo elementB = (ExecutableElementInfo) nodeB.getCore();
 
                     final ClonePairInfo clonePair = new ClonePairInfo(elementA, elementB);
 

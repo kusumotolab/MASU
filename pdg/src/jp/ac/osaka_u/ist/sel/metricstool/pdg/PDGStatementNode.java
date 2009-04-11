@@ -27,13 +27,13 @@ public class PDGStatementNode extends PDGNormalNode<SingleStatementInfo> {
     }
 
     @Override
-    public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+    public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
         return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getAssignments(this.getCore()
                 .getVariableUsages()));
     }
 
     @Override
-    public Set<VariableInfo<? extends UnitInfo>> getReferencedVariables() {
+    public final Set<VariableInfo<? extends UnitInfo>> getReferencedVariables() {
         return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getReferencees(this.getCore()
                 .getVariableUsages()));
     }

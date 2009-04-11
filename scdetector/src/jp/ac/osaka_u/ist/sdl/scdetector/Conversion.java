@@ -71,89 +71,88 @@ public class Conversion {
 
     public static String getNormalizedString(final SingleStatementInfo statement) {
 
-        final StringBuilder sb = new StringBuilder();
+        final StringBuilder text = new StringBuilder();
 
         if (statement instanceof AssertStatementInfo) {
 
-            sb.append("assert");
+            text.append("assert ");
 
             final ExpressionInfo expression = ((AssertStatementInfo) statement)
                     .getAssertedExpression();
             final String expressionString = Conversion.getNormalizedString(expression);
-            sb.append(expressionString);
+            text.append(expressionString);
 
         } else if (statement instanceof ExpressionStatementInfo) {
 
             final ExpressionInfo expression = ((ExpressionStatementInfo) statement).getExpression();
-            return Conversion.getNormalizedString(expression);
+            text.append(Conversion.getNormalizedString(expression));
 
         } else if (statement instanceof ReturnStatementInfo) {
 
-            sb.append("return");
+            text.append("return ");
 
             final ExpressionInfo expression = ((ReturnStatementInfo) statement)
                     .getReturnedExpression();
             final String expressionString = Conversion.getNormalizedString(expression);
-            sb.append(expressionString);
+            text.append(expressionString);
 
         } else if (statement instanceof ThrowStatementInfo) {
 
-            sb.append("throw");
+            text.append("throw ");
 
             final ExpressionInfo expression = ((ThrowStatementInfo) statement)
                     .getThrownExpression();
             final String expressionString = Conversion.getNormalizedString(expression);
-            sb.append(expressionString);
+            text.append(expressionString);
 
         } else if (statement instanceof VariableDeclarationStatementInfo) {
 
-            final LocalVariableInfo variable = ((VariableDeclarationStatementInfo) statement)
-                    .getDeclaredLocalVariable();
-            final TypeInfo variableType = variable.getType();
-
-            switch (Configuration.INSTANCE.getPV()) {
-            case 0: // 正規化レベル0，変数名をそのまま使う
-                sb.append(variable.getType().getTypeName());
-                sb.append(" ");
-                sb.append(variable.getName());
-                break;
-
-            case 1: // 正規化レベル1，変数は型名に正規化する．変数名が異なっていても，型が同じであれば，クローンとして検出する
-                sb.append(variableType.getTypeName());
-                break;
-
-            case 2: // 正規化レベル2，全ての変数を同一字句に正規化する．
-                sb.append("TOKEN");
-                break;
-
-            default:
-                assert false : "Here shouldn't be reached!";
-            }
-
-            if (((VariableDeclarationStatementInfo) statement).isInitialized()) {
-
-                sb.append("=");
-                final ExpressionInfo expression = ((VariableDeclarationStatementInfo) statement)
-                        .getInitializationExpression();
-                final String expressionString = Conversion.getNormalizedString(expression);
-                sb.append(expressionString);
-            }
+            text.append(Conversion.getNormalizedString((ConditionInfo) statement));
         }
 
-        sb.append(";");
+        text.append(";");
 
-        return sb.toString();
-    }
-
-    public static String getNormalizedString(final ConditionalBlockInfo block) {
-        return getNormalizedString(block.getConditionalClause().getCondition());
+        return text.toString();
     }
 
     public static String getNormalizedString(final ConditionInfo condition) {
 
         if (condition instanceof VariableDeclarationStatementInfo) {
 
-            return getNormalizedString((SingleStatementInfo) condition);
+            final StringBuilder text = new StringBuilder();
+            final VariableDeclarationStatementInfo declarationStatement = (VariableDeclarationStatementInfo) condition;
+            final LocalVariableInfo variable = declarationStatement.getDeclaredLocalVariable();
+            final TypeInfo variableType = variable.getType();
+
+            switch (Configuration.INSTANCE.getPV()) {
+            case 0: // 正規化レベル0，変数名をそのまま使う
+                text.append(variable.getType().getTypeName());
+                text.append(" ");
+                text.append(variable.getName());
+                break;
+
+            case 1: // 正規化レベル1，変数は型名に正規化する．変数名が異なっていても，型が同じであれば，クローンとして検出する
+                text.append(variableType.getTypeName());
+                break;
+
+            case 2: // 正規化レベル2，全ての変数を同一字句に正規化する．
+                text.append("TOKEN");
+                break;
+
+            default:
+                assert false : "Here shouldn't be reached!";
+            }
+
+            if (declarationStatement.isInitialized()) {
+
+                text.append(" = ");
+                final ExpressionInfo expression = declarationStatement
+                        .getInitializationExpression();
+                final String expressionString = Conversion.getNormalizedString(expression);
+                text.append(expressionString);
+            }
+
+            return text.toString();
 
         } else if (condition instanceof ExpressionInfo) {
 

@@ -6,7 +6,7 @@ public final class Configuration {
     public static Configuration INSTANCE = new Configuration();
 
     private Configuration() {
-        this.c = 50;
+        this.c = 1000000;
         this.d = null;
         this.l = null;
         this.o = null;

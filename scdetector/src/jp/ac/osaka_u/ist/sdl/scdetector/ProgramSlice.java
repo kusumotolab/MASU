@@ -59,22 +59,43 @@ public class ProgramSlice {
 
                 if (hashA == hashB) {
 
-                    extend = true;
-
                     clonePair.add(coreA, coreB);
                     checkedNodesA.add(fromNodeA);
                     checkedNodesB.add(fromNodeB);
 
-                    addDuplicatedElementsWithBackwordSlice(fromNodeA, fromNodeB, pdgNodeFactory,
-                            clonePairs, clonePair.clone(), (HashSet<PDGNode<?>>) checkedNodesA
-                                    .clone(), (HashSet<PDGNode<?>>) checkedNodesB.clone());
+                    // •ªŠò‚ª‚È‚¢Žž
+                    if (!extend) {
+                        addDuplicatedElementsWithBackwordSlice(fromNodeA, fromNodeB,
+                                pdgNodeFactory, clonePairs, clonePair, checkedNodesA, checkedNodesB);
+                        extend = true;
+                    }
+
+                    // •ªŠò‚ª‚ ‚éŽž
+                    else {
+                        addDuplicatedElementsWithBackwordSlice(fromNodeA, fromNodeB,
+                                pdgNodeFactory, clonePairs, clonePair.clone(),
+                                (HashSet<PDGNode<?>>) checkedNodesA.clone(),
+                                (HashSet<PDGNode<?>>) checkedNodesB.clone());
+                    }
 
                     if ((fromNodeA instanceof PDGControlNode)
                             && (fromNodeB instanceof PDGControlNode)) {
 
-                        addDuplicatedElementsWithForwordSlice(fromNodeA, fromNodeB, pdgNodeFactory,
-                                clonePairs, clonePair.clone(), (HashSet<PDGNode<?>>) checkedNodesA
-                                        .clone(), (HashSet<PDGNode<?>>) checkedNodesB.clone());
+                        // •ªŠò‚ª‚È‚¢Žž
+                        if (!extend) {
+                            addDuplicatedElementsWithForwordSlice(fromNodeA, fromNodeB,
+                                    pdgNodeFactory, clonePairs, clonePair, checkedNodesA,
+                                    checkedNodesB);
+                            extend = true;
+                        }
+
+                        // •ªŠò‚ª‚ ‚éŽž
+                        else {
+                            addDuplicatedElementsWithForwordSlice(fromNodeA, fromNodeB,
+                                    pdgNodeFactory, clonePairs, clonePair.clone(),
+                                    (HashSet<PDGNode<?>>) checkedNodesA.clone(),
+                                    (HashSet<PDGNode<?>>) checkedNodesB.clone());
+                        }
                     }
                 }
             }
@@ -135,15 +156,37 @@ public class ProgramSlice {
                     checkedNodesA.add(toNodeA);
                     checkedNodesB.add(toNodeB);
 
-                    addDuplicatedElementsWithBackwordSlice(toNodeA, toNodeB, pdgNodeFactory,
-                            clonePairs, clonePair.clone(), (HashSet<PDGNode<?>>) checkedNodesA
-                                    .clone(), (HashSet<PDGNode<?>>) checkedNodesB.clone());
+                    // •ªŠò‚ª‚È‚¢Žž
+                    if (!extend) {
+                        addDuplicatedElementsWithBackwordSlice(toNodeA, toNodeB, pdgNodeFactory,
+                                clonePairs, clonePair, checkedNodesA, checkedNodesB);
+                        extend = true;
+                    }
+
+                    // •ªŠò‚ª‚ ‚éŽž
+                    else {
+                        addDuplicatedElementsWithBackwordSlice(toNodeA, toNodeB, pdgNodeFactory,
+                                clonePairs, clonePair.clone(), (HashSet<PDGNode<?>>) checkedNodesA
+                                        .clone(), (HashSet<PDGNode<?>>) checkedNodesB.clone());
+                    }
 
                     if ((toNodeA instanceof PDGControlNode) && (toNodeB instanceof PDGControlNode)) {
 
-                        addDuplicatedElementsWithForwordSlice(toNodeA, toNodeB, pdgNodeFactory,
-                                clonePairs, clonePair.clone(), (HashSet<PDGNode<?>>) checkedNodesA
-                                        .clone(), (HashSet<PDGNode<?>>) checkedNodesB.clone());
+                        // •ªŠò‚ª‚È‚¢Žž
+                        if (!extend) {
+                            addDuplicatedElementsWithForwordSlice(toNodeA, toNodeB, pdgNodeFactory,
+                                    clonePairs, clonePair, checkedNodesA, checkedNodesB);
+                            extend = true;
+                        }
+
+                        // •ªŠò‚ª‚ ‚éŽž
+                        else {
+                            addDuplicatedElementsWithForwordSlice(toNodeA, toNodeB, pdgNodeFactory,
+                                    clonePairs, clonePair.clone(),
+                                    (HashSet<PDGNode<?>>) checkedNodesA.clone(),
+                                    (HashSet<PDGNode<?>>) checkedNodesB.clone());
+                        }
+
                     }
                 }
             }
