@@ -353,14 +353,12 @@ public class SCDetector extends MetricsTool {
                     checkedNodesA.add(nodeA);
                     checkedNodesB.add(nodeB);
 
-                    ProgramSlice.addDuplicatedElementsWithBackwordSlice(nodeA, nodeB,
-                            pdgNodeFactory, clonePairs, clonePair, checkedNodesA, checkedNodesB);
+                    ProgramSlice.addDuplicatedElementsWithBackwordSlice(nodeA, nodeB, clonePairs,
+                            clonePair, checkedNodesA, checkedNodesB);
 
                     if ((nodeA instanceof PDGControlNode) && (nodeB instanceof PDGControlNode)) {
-                        ProgramSlice
-                                .addDuplicatedElementsWithForwordSlice(nodeA, nodeB,
-                                        pdgNodeFactory, clonePairs, clonePair, checkedNodesA,
-                                        checkedNodesB);
+                        ProgramSlice.addDuplicatedElementsWithForwordSlice(nodeA, nodeB,
+                                clonePairs, clonePair, checkedNodesA, checkedNodesB);
                     }
 
                     /*
