@@ -181,7 +181,15 @@ public class IntraProceduralCFG extends CFG {
             if (!statementsCFG.isEmpty()) {
                 controlNode.addForwardNode(statementsCFG.getEnterNode());
                 for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
-                    exitNode.addForwardNode(controlNode);
+
+                    //return文の場合はexitノードに追加
+                    if (exitNode instanceof CFGReturnStatementNode) {
+                        this.exitNodes.add(exitNode);
+                    }
+
+                    else {
+                        exitNode.addForwardNode(controlNode);
+                    }
                 }
             }
         }
@@ -214,9 +222,13 @@ public class IntraProceduralCFG extends CFG {
             else {
                 this.enterNode = statementsCFG.getEnterNode();
                 for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
+
+                    //Return文の場合はexitノードに追加
                     if (exitNode instanceof CFGReturnStatementNode) {
                         this.exitNodes.add(exitNode);
-                    } else {
+                    }
+
+                    else {
                         exitNode.addForwardNode(controlNode);
                     }
                 }
@@ -268,9 +280,13 @@ public class IntraProceduralCFG extends CFG {
                 else {
                     controlNode.addForwardNode(iteratorsCFG.getEnterNode());
                     for (final CFGNode<?> exitNode : iteratorsCFG.getExitNodes()) {
+
+                        // Return文の場合はexitノードに追加
                         if (exitNode instanceof CFGReturnStatementNode) {
                             this.exitNodes.add(exitNode);
-                        } else {
+                        }
+
+                        else {
                             exitNode.addForwardNode(controlNode);
                         }
                     }
@@ -286,9 +302,13 @@ public class IntraProceduralCFG extends CFG {
                 if (iteratorsCFG.isEmpty()) {
 
                     for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
+
+                        //Return文の場合はexitノードに追加
                         if (exitNode instanceof CFGReturnStatementNode) {
                             this.exitNodes.add(exitNode);
-                        } else {
+                        }
+
+                        else {
                             exitNode.addForwardNode(controlNode);
                         }
                     }
@@ -298,17 +318,25 @@ public class IntraProceduralCFG extends CFG {
                 else {
 
                     for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
+
+                        //Return文の場合はexitノードに追加
                         if (exitNode instanceof CFGReturnStatementNode) {
                             this.exitNodes.add(exitNode);
-                        } else {
+                        }
+
+                        else {
                             exitNode.addForwardNode(iteratorsCFG.getEnterNode());
                         }
                     }
 
                     for (final CFGNode<?> exitNode : iteratorsCFG.getExitNodes()) {
+
+                        //Return文の場合はexitノードに追加
                         if (exitNode instanceof CFGReturnStatementNode) {
                             this.exitNodes.add(exitNode);
-                        } else {
+                        }
+
+                        else {
                             exitNode.addForwardNode(controlNode);
                         }
                     }
