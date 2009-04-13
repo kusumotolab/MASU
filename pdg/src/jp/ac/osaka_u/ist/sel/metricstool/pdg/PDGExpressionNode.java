@@ -12,7 +12,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 public class PDGExpressionNode extends PDGNormalNode<ConditionInfo> {
 
     public PDGExpressionNode(final ConditionInfo expression) {
-        super(expression);
+
+        if (null == expression) {
+            throw new IllegalArgumentException();
+        }
+
+        this.core = expression;
         this.text = expression.getText() + " <" + expression.getFromLine() + ">";
     }
 

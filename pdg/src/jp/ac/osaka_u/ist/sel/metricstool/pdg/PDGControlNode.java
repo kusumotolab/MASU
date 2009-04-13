@@ -18,7 +18,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 public class PDGControlNode extends PDGNode<ConditionInfo> {
 
     public PDGControlNode(final ConditionInfo condition) {
-        super(condition);
+
+        if (null == condition) {
+            throw new IllegalArgumentException();
+        }
+
+        this.core = condition;
         this.text = "ControlNode : " + condition.getText() + " <" + condition.getFromLine() + ">";
     }
 

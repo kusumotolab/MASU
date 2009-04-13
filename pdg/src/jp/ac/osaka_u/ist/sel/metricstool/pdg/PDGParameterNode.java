@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
  * @author higo
  *
  */
-public class PDGParameterNode extends PDGNormalNode<ParameterInfo> {
+public class PDGParameterNode extends PDGNormalNode<ParameterDeclarationStatementInfo> {
 
     /**
      * 引数のオブジェクトを与えて初期化
@@ -23,14 +23,21 @@ public class PDGParameterNode extends PDGNormalNode<ParameterInfo> {
      * @param parameter
      */
     public PDGParameterNode(final ParameterInfo parameter) {
-        super(parameter);
+
+        if (null == parameter) {
+            throw new IllegalArgumentException();
+        }
+
+        this.core = new ParameterDeclarationStatementInfo(parameter, parameter.getFromLine(),
+                parameter.getFromColumn(), parameter.getToLine(), parameter.getToColumn());
+
         this.text = parameter.getType().getTypeName() + " " + parameter.getName();
     }
 
     @Override
     public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
         final Set<VariableInfo<? extends UnitInfo>> definedVariables = new HashSet<VariableInfo<? extends UnitInfo>>();
-        definedVariables.add(this.getCore());
+        definedVariables.add(this.getCore().getParameter());
         return definedVariables;
     }
 

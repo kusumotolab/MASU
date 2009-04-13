@@ -21,8 +21,12 @@ public class PDGStatementNode extends PDGNormalNode<SingleStatementInfo> {
      * @param statement
      */
     public PDGStatementNode(final SingleStatementInfo statement) {
-        super(statement);
 
+        if (null == statement) {
+            throw new IllegalArgumentException();
+        }
+
+        this.core = statement;
         this.text = statement.getText() + " <" + statement.getFromLine() + ">";
     }
 

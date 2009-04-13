@@ -22,8 +22,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
  *
  * @param <T> ƒm[ƒh‚ÌŠj‚Æ‚È‚éî•ñ‚ÌŒ^
  */
-public abstract class PDGNode<T> {
-    
+public abstract class PDGNode<T extends ExecutableElementInfo> {
+
     /**
      * CFGƒm[ƒh‚©‚çPDGƒm[ƒh‚ğ¶¬‚·‚éƒƒ\ƒbƒh
      * 
@@ -64,7 +64,7 @@ public abstract class PDGNode<T> {
     /**
      * ƒm[ƒh‚ÌŠj‚Æ‚È‚éî•ñ
      */
-    private final T core;
+    protected T core;
 
     protected String text;
 
@@ -72,13 +72,7 @@ public abstract class PDGNode<T> {
      * ƒm[ƒh‚ÌŠj‚Æ‚È‚éî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
      * @param core ƒm[ƒh‚ÌŠj‚Æ‚È‚éî•ñ
      */
-    protected PDGNode(final T core) {
-
-        if (null == core) {
-            throw new IllegalArgumentException("core is null.");
-        }
-
-        this.core = core;
+    protected PDGNode() {
         this.forwardEdges = new HashSet<PDGEdge>();
         this.backwardEdges = new HashSet<PDGEdge>();
     }

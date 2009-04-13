@@ -21,8 +21,12 @@ public class PDGCaseEntryNode extends PDGNormalNode<CaseEntryInfo> {
      * @param entry
      */
     public PDGCaseEntryNode(final CaseEntryInfo entry) {
-        super(entry);
 
+        if (null == entry) {
+            throw new IllegalArgumentException();
+        }
+
+        this.core = entry;
         this.text = entry.getText() + " <" + entry.getFromLine() + ">";
     }
 
