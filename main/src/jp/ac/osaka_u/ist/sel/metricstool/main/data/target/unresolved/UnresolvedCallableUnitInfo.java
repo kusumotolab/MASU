@@ -33,6 +33,7 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
         this.parameters = new LinkedList<UnresolvedParameterInfo>();
+        this.thrownExceptions = new LinkedList<UnresolvedClassTypeInfo>();
 
         this.privateVisible = false;
         this.inheritanceVisible = false;
@@ -122,6 +123,31 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
         }
 
         this.typeParameters.add(typeParameter);
+    }
+
+    /**
+     * 未解決例外の List を返す
+     * 
+     * @return 未解決例外の List
+    */
+    public final List<UnresolvedClassTypeInfo> getThrownExceptions() {
+        return Collections.unmodifiableList(this.thrownExceptions);
+    }
+
+    /**
+      * 未解決例外を追加する
+      * 
+      * @param typeParameter 追加する未解決例外
+      */
+    public final void addTypeParameter(final UnresolvedClassTypeInfo thrownException) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == thrownException) {
+            throw new NullPointerException();
+        }
+
+        this.thrownExceptions.add(thrownException);
     }
 
     /**
@@ -239,6 +265,11 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
      * コンストラクタ引数を保存するための変数
      */
     private final List<UnresolvedParameterInfo> parameters;
+
+    /**
+     * throwされる例外を保存するための変数
+     */
+    private final List<UnresolvedClassTypeInfo> thrownExceptions;
 
     /**
      * 修飾子を保存する

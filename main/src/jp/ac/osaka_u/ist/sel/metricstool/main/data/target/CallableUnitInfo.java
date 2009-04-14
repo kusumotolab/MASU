@@ -51,6 +51,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.typeParameterUsages = new HashMap<TypeParameterInfo, TypeInfo>();
+        this.thrownExceptions = new LinkedList<ClassTypeInfo>();
 
         this.unresolvedUsage = new HashSet<UnresolvedExpressionInfo<?>>();
 
@@ -79,20 +80,20 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     @Override
     final public int compareTo(final Position o) {
 
-        if(null == o){
+        if (null == o) {
             throw new IllegalArgumentException();
         }
-        
-        if(o instanceof CallableUnitInfo){
-            
+
+        if (o instanceof CallableUnitInfo) {
+
             final ClassInfo ownerClass = this.getOwnerClass();
-            final ClassInfo correspondOwnerClass = ((CallableUnitInfo)o).getOwnerClass();
+            final ClassInfo correspondOwnerClass = ((CallableUnitInfo) o).getOwnerClass();
             final int classOrder = ownerClass.compareTo(correspondOwnerClass);
             if (classOrder != 0) {
                 return classOrder;
-            }               
+            }
         }
-        
+
         return super.compareTo(o);
     }
 
@@ -345,13 +346,37 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * このクラスの型パラメータの List を返す．
+     * 型パラメータの List を返す．
      * 
      * @return このクラスの型パラメータの List
      */
     @Override
     public List<TypeParameterInfo> getTypeParameters() {
         return Collections.unmodifiableList(this.typeParameters);
+    }
+
+    /**
+     * 引数で指定された例外を追加する
+     * 
+     * @param thrownException 追加する例外
+     */
+    public final void addThrownException(final ClassTypeInfo thrownException) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == thrownException) {
+            throw new IllegalArgumentException();
+        }
+
+        this.thrownExceptions.add(thrownException);
+    }
+
+    /**
+     * スローされる例外の List を返す．
+     * 
+     * @return スローされる例外の List
+     */
+    public final List<ClassTypeInfo> getThrownExceptions() {
+        return Collections.unmodifiableList(this.thrownExceptions);
     }
 
     /**
@@ -451,7 +476,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     public final SortedSet<CallableUnitInfo> getCallers() {
         return Collections.unmodifiableSortedSet(this.callers);
     }
-    
+
     /**
      * このCallableUnitInfoのシグネチャのテキスト表現を返す
      * 
@@ -488,6 +513,11 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 型パラメータを保存する変数
      */
     private final List<TypeParameterInfo> typeParameters;
+
+    /**
+     * スローされる例外を保存する変数
+     */
+    private final List<ClassTypeInfo> thrownExceptions;
 
     /**
      * このクラスで使用されている型パラメータと実際に型パラメータに代入されている型のペア.
