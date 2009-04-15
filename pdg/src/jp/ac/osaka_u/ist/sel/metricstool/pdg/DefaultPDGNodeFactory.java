@@ -9,7 +9,9 @@ import java.util.Map;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
 
 
 public class DefaultPDGNodeFactory implements IPDGNodeFactory {
@@ -50,7 +52,12 @@ public class DefaultPDGNodeFactory implements IPDGNodeFactory {
             return node;
         }
 
-        if (element instanceof SingleStatementInfo) {
+        if (element instanceof ReturnStatementInfo) {
+            node = new PDGReturnStatementNode((ReturnStatementInfo) element);
+        } else if (element instanceof VariableDeclarationStatementInfo) {
+            node = new PDGVariableDeclarationStatementNode(
+                    (VariableDeclarationStatementInfo) element);
+        } else if (element instanceof SingleStatementInfo) {
             node = new PDGStatementNode((SingleStatementInfo) element);
         } else if (element instanceof ParameterInfo) {
             node = new PDGParameterNode((ParameterInfo) element);
