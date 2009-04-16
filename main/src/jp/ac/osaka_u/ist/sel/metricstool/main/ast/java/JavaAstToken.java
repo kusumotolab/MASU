@@ -18,6 +18,17 @@ public class JavaAstToken extends AstTokenAdapter {
     public static final JavaAstToken IMPORT = new JavaAstToken("import");
 
     /**
+     * throw記述部を表す定数インスタンス
+     */
+    //TODO: 場所ここでいいのかな?
+    public static final JavaAstToken THROWS = new JavaAstToken("THROWS") {
+        @Override
+        public boolean isThrows(){
+            return true;
+        }
+    };
+    
+    /**
      * enum要素の記述部を表す定数インスタンス
      */
     public static final JavaAstToken ENUM_CONSTANT = new JavaAstToken("ENUM_CONST");

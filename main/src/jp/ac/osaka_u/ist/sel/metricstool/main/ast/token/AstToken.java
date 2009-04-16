@@ -419,6 +419,11 @@ public interface AstToken {
      */
     public boolean isReturn();
     
+    /**トークンがthurows文を表すかどうか返す
+     * @return throws文を表すトークンならtrue
+     */
+    public boolean isThrows();
+    
     /**
      * トークンがthrow文を表すかどうか返す
      * @return throw文を表すトークンならtrue

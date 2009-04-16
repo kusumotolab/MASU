@@ -20,6 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersInterpriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameSpaceBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ThrowsBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ArrayInitializerBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionDescriptionBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
@@ -72,6 +73,8 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new ClassBuilder(this.buildDataManager, this.modifiersInterpriter));
         this.builders.add(new InheritanceBuilder(this.buildDataManager, new JavaTypeBuilder(
                 this.buildDataManager)));
+        this.builders.add(new ThrowsBuilder(this.buildDataManager, 
+                new JavaTypeBuilder(this.buildDataManager)));
         this.builders.add(new JavaAnonymousClassBuilder(this.buildDataManager));
         this.builders.add(new JavaEnumElementBuilder(this.buildDataManager));
         this.builders.add(new JavaIntefaceMarker(this.buildDataManager));
@@ -82,7 +85,6 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
                 new NameBuilder(), new MethodParameterBuilder(this.buildDataManager,
                         new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
                         new NameBuilder(), modifiersInterpriter)));
-
         this.builders.add(new MethodBuilder(this.buildDataManager, this.modifiersInterpriter,
                 new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
                 new NameBuilder(), new MethodParameterBuilder(this.buildDataManager,

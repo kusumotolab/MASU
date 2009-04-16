@@ -218,7 +218,7 @@ tokens {
 	ANNOTATION; ANNOTATION_MEMBER_VALUE_PAIR; ANNOTATION_FIELD_DEF; ANNOTATION_ARRAY_INIT;
 	TYPE_ARGUMENTS; TYPE_ARGUMENT; TYPE_PARAMETERS; TYPE_PARAMETER; WILDCARD_TYPE;
 	TYPE_UPPER_BOUNDS; TYPE_LOWER_BOUNDS; COND_CLAUSE; LOCAL_VARIABLE_DEF_STATE;
-    PAREN_EXPR;
+    PAREN_EXPR; THROWS_CLAUSE;
 }
 
 {
@@ -1135,9 +1135,15 @@ ctorHead
 	;
 
 // This is a list of exception classes that the method is declared to throw
+//throwsClause
+//	:	"throws"^ identifier ( COMMA! identifier )*
+//	;
 throwsClause
-	:	"throws"^ identifier ( COMMA! identifier )*
-	;
+    :  
+        t:"throws"! classOrInterfaceType[true] ( COMMA! classOrInterfaceType[true] )*
+   
+        {#throwsClause = #(#[THROWS_CLAUSE, "THROWS_CLAUSE"], #throwsClause);}
+    ;
 
 // A list of formal parameters
 //	 Zero or more parameters

@@ -299,6 +299,11 @@ public class AstTokenAdapter implements AstToken {
     public boolean isReturn() {
         return false;
     }
+    
+    @Override
+    public boolean isThrows(){
+        return false;
+    }
 
     @Override
     public boolean isThrow() {

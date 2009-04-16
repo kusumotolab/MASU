@@ -370,8 +370,10 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
 
         case Java15TokenTypes.INSTANCE_INIT:
         case Java15TokenTypes.ANNOTATION:
-        case Java15TokenTypes.LITERAL_throws:
             result = VisitControlToken.SKIP;
+            break;
+        case Java15TokenTypes.THROWS_CLAUSE:
+            result = JavaAstToken.THROWS;
             break;
         case Java15TokenTypes.LITERAL_break:
             result = SyntaxToken.BREAK;
