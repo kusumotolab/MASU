@@ -393,8 +393,12 @@ public class IntraProceduralCFG extends CFG {
                 }
             }
 
-            final IntraProceduralCFG lastCFG = statementCFGs.get(statementCFGs.size() - 1);
-            this.exitNodes.addAll(lastCFG.getExitNodes());
+            if (0 < statementCFGs.size()) {
+                final IntraProceduralCFG lastCFG = statementCFGs.get(statementCFGs.size() - 1);
+                this.exitNodes.addAll(lastCFG.getExitNodes());
+            } else {
+                this.exitNodes.add(controlNode);
+            }
         }
 
         // try•¶‚Ìê‡
