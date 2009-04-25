@@ -66,20 +66,35 @@ public class IntraProceduralPDG extends PDG {
     @Override
     protected void buildPDG() {
 
-        final CFGNode<?> enterNode = this.cfg.getEnterNode();
+        final CFGNode<?> cfgEnterNode = this.cfg.getEnterNode();
 
         // unitの引数を処理
         for (final ParameterInfo parameter : this.unit.getParameters()) {
 
             final PDGNode<?> pdgNode = this.makeNormalNode(parameter);
-            if (null != enterNode) {
-                this.buildDataDependence(enterNode, pdgNode, parameter, new HashSet<CFGNode<?>>());
+            this.enterNodes.add(pdgNode);
+            if (null != cfgEnterNode) {
+                this.buildDataDependence(cfgEnterNode, pdgNode, parameter,
+                        new HashSet<CFGNode<?>>());
             }
         }
 
         // CFGの入口ノードから処理を行う
-        if (null != enterNode) {
-            this.buildDependence(enterNode, new HashSet<CFGNode<?>>());
+        if (null != cfgEnterNode) {
+
+            //引数がない場合は，CFGの入口ノードがPDGの入口ノードになる            
+            if (0 == this.unit.getParameters().size()) {
+                final PDGNode<?> pdgEnterNode = this.makeNode(cfgEnterNode);
+                this.enterNodes.add(pdgEnterNode);
+            }
+
+            this.buildDependence(cfgEnterNode, new HashSet<CFGNode<?>>());
+        }
+
+        // CFGの出口ノードはPDGの出口ノードになる
+        for (final CFGNode<?> cfgExitNode : this.cfg.getExitNodes()) {
+            final PDGNode<?> pdgExitNode = this.makeNode(cfgExitNode);
+            this.exitNodes.add(pdgExitNode);
         }
     }
 

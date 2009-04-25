@@ -24,7 +24,7 @@ public class PDGControlNode extends PDGNode<ConditionInfo> {
         }
 
         this.core = condition;
-        this.text = "ControlNode : " + condition.getText() + " <" + condition.getFromLine() + ">";
+        this.text = condition.getText() + " <" + condition.getFromLine() + ">";
     }
 
     @Override
