@@ -6,14 +6,16 @@
 	<property file="build.properties" />
 
 	<property name="masu.dir" location="../main" />
+	<property name="cfg.dir" location="../cfg" />
 	<property name="masu.cls.dir" location="${masu.dir}/${CLS.DIR}" />
+	<property name="cfg.cls.dir" location="${cfg.dir}/${CLS.DIR}" />
 	<property name="manifest.mf" value="resource/manifest.mf" />
 	<property name="zip.bin.name" value="${TOOL.NAME}bin${DSTAMP}${TSTAMP}.zip" />
 	<property name="zip.src.name" value="${TOOL.NAME}src${DSTAMP}${TSTAMP}.zip" />
 	
 	<target name="compile">
 		<mkdir dir="${CLS.DIR}" />
-		<javac classpath="${masu.cls.dir}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
+		<javac classpath="${masu.cls.dir};${cfg.cls.dir}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
 	</target>
 
 	<target name="build" depends="compile">

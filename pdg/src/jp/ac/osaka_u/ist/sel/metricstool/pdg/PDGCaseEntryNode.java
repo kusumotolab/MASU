@@ -31,13 +31,13 @@ public class PDGCaseEntryNode extends PDGNormalNode<CaseEntryInfo> {
     }
 
     @Override
-    public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+    public Set<VariableInfo<?>> getDefinedVariables() {
         return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getAssignments(this.getCore()
                 .getVariableUsages()));
     }
 
     @Override
-    public Set<VariableInfo<? extends UnitInfo>> getReferencedVariables() {
+    public Set<VariableInfo<?>> getReferencedVariables() {
         return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getReferencees(this.getCore()
                 .getVariableUsages()));
     }
