@@ -73,10 +73,10 @@ public abstract class PDG {
 
     /**
      * PDG内のノード数を取得
-     * @return 
+     * @return PDG内のノード数
      */
-    public final int getNodeCount() {
-        return this.nodeFactory.getAllNodes().size();
+    public final int getNumberOfNodes() {
+        return this.nodes.size();
     }
 
     /**
