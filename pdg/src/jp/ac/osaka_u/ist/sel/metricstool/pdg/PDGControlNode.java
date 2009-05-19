@@ -43,12 +43,14 @@ public class PDGControlNode extends PDGNode<ConditionInfo> {
      * この制御ノードに制御されるノードを追加
      * @param controlledNode 制御されるノード
      */
-    public void addControlDependingNode(final PDGNode<?> controlledNode) {
+    public void addControlDependingNode(final PDGNode<?> controlledNode,
+            final boolean trueDependence) {
         if (null == controlledNode) {
             throw new IllegalArgumentException();
         }
 
-        final ControlDependenceEdge controlFlow = new ControlDependenceEdge(this, controlledNode);
+        final PDGControlDependenceEdge controlFlow = new PDGControlDependenceEdge(this,
+                controlledNode, trueDependence);
         this.addFowardEdge(controlFlow);
         controlledNode.addBackwardEdge(controlFlow);
     }

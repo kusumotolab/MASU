@@ -26,10 +26,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageListener;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.ControlDependenceEdge;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.DataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGControlDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGControlNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGNode;
 
@@ -234,23 +234,23 @@ public class GraphViewer extends MetricsTool {
             writer.write(" [style = filled, label = \"");
             writer.write(entry.getKey().getText().replace("\"", "\\\""));
             writer.write("\"");
-            
+
             //ノードの色
-            if(cfg.getEnterNode() == entry.getKey()){
+            if (cfg.getEnterNode() == entry.getKey()) {
                 writer.write(", fillcolor = aquamarine");
-            }else if(cfg.getExitNodes().contains(entry.getKey())){
+            } else if (cfg.getExitNodes().contains(entry.getKey())) {
                 writer.write(", fillcolor = deeppink");
-            }else{
+            } else {
                 writer.write(", fillcolor = white");
             }
-            
+
             //ノードの形
-            if(entry.getKey() instanceof CFGControlNode){
+            if (entry.getKey() instanceof CFGControlNode) {
                 writer.write(", shape = diamond");
-            }else{
+            } else {
                 writer.write(", shape = ellipse");
             }
-            
+
             writer.write("];");
             writer.newLine();
         }
@@ -315,23 +315,23 @@ public class GraphViewer extends MetricsTool {
             writer.write(" [style = filled, label = \"");
             writer.write(entry.getKey().getText().replace("\"", "\\\""));
             writer.write("\"");
-            
+
             //ノードの色
-            if(pdg.getEnterNodes().contains(entry.getKey())){
+            if (pdg.getEnterNodes().contains(entry.getKey())) {
                 writer.write(", fillcolor = aquamarine");
-            }else if(pdg.getExitNodes().contains(entry.getKey())){
+            } else if (pdg.getExitNodes().contains(entry.getKey())) {
                 writer.write(", fillcolor = deeppink");
-            }else{
+            } else {
                 writer.write(", fillcolor = white");
             }
-            
+
             //ノードの形
-            if(entry.getKey() instanceof PDGControlNode){
+            if (entry.getKey() instanceof PDGControlNode) {
                 writer.write(", shape = diamond");
-            }else{
+            } else {
                 writer.write(", shape = ellipse");
             }
-            
+
             writer.write("];");
             writer.newLine();
         }
@@ -344,10 +344,10 @@ public class GraphViewer extends MetricsTool {
             writer.write(Integer.toString(createdGraphNumber));
             writer.write(".");
             writer.write(Integer.toString(nodeLabels.get(edge.getToNode())));
-            if (edge instanceof DataDependenceEdge) {
-                writer.write(" [style = solid]");
-            } else if (edge instanceof ControlDependenceEdge) {
-                writer.write(" [style = dotted]");
+            if (edge instanceof PDGDataDependenceEdge) {
+                writer.write(" [style = solid, label=\"" + edge.getDependenceString() + "\"]");
+            } else if (edge instanceof PDGControlDependenceEdge) {
+                writer.write(" [style = dotted, label=\"" + edge.getDependenceString() + "\"]");
             }
             writer.write(";");
             writer.newLine();

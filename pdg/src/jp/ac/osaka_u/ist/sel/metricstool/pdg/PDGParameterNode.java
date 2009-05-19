@@ -31,7 +31,9 @@ public class PDGParameterNode extends PDGNormalNode<ParameterDeclarationStatemen
         this.core = new ParameterDeclarationStatementInfo(parameter, parameter.getFromLine(),
                 parameter.getFromColumn(), parameter.getToLine(), parameter.getToColumn());
 
-        this.text = parameter.getType().getTypeName() + " " + parameter.getName();
+        this.text = parameter.getType().getTypeName() + " " + parameter.getName() + " <"
+                + parameter.getFromLine() + ">";
+        ;
     }
 
     @Override

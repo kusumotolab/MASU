@@ -155,13 +155,13 @@ public abstract class PDGNode<T extends ExecutableElementInfo> {
      * このノードからのデータ依存辺を追加
      * @param dependingNode
      */
-    public boolean addDataDependingNode(final PDGNode<?> dependingNode) {
+    public boolean addDataDependingNode(final PDGNode<?> dependingNode, final VariableInfo<?> data) {
         if (null == dependingNode) {
             throw new IllegalArgumentException();
         }
 
         boolean added = false;
-        final DataDependenceEdge dataFlow = new DataDependenceEdge(this, dependingNode);
+        final PDGDataDependenceEdge dataFlow = new PDGDataDependenceEdge(this, dependingNode, data);
         added = this.addFowardEdge(dataFlow);
         added &= dependingNode.addBackwardEdge(dataFlow);
         return added;

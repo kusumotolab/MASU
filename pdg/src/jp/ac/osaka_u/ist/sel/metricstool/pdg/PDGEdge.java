@@ -16,11 +16,13 @@ public abstract class PDGEdge {
         this.toNode = toNode;
     }
 
-    public PDGNode<?> getFromNode() {
+    public abstract String getDependenceString();
+    
+    public final PDGNode<?> getFromNode() {
         return this.fromNode;
     }
 
-    public PDGNode<?> getToNode() {
+    public final PDGNode<?> getToNode() {
         return this.toNode;
     }
     

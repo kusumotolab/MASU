@@ -171,7 +171,7 @@ public class IntraProceduralPDG extends PDG {
         if (cfgNode.getUsedVariables().contains(variable)) {
 
             final PDGNode<?> toPDGNode = this.makeNode(cfgNode);
-            fromPDGNode.addDataDependingNode(toPDGNode);
+            fromPDGNode.addDataDependingNode(toPDGNode, variable);
         }
 
         // cfgNodeがvariableに代入している場合は，
@@ -203,7 +203,11 @@ public class IntraProceduralPDG extends PDG {
             if (innerStatement instanceof SingleStatementInfo
                     || innerStatement instanceof CaseEntryInfo) {
                 final PDGNode<?> toPDGNode = this.makeNormalNode(innerStatement);
-                fromPDGNode.addControlDependingNode(toPDGNode);
+                if (block instanceof ElseBlockInfo) {
+                    fromPDGNode.addControlDependingNode(toPDGNode, false);
+                } else {
+                    fromPDGNode.addControlDependingNode(toPDGNode, true);
+                }
             }
 
             // Block文の場合は，条件付き文であれば，単文の時と同じ処理
@@ -216,14 +220,22 @@ public class IntraProceduralPDG extends PDG {
                         final ConditionInfo condition = ((ConditionalBlockInfo) innerStatement)
                                 .getConditionalClause().getCondition();
                         final PDGNode<?> toPDGNode = this.makeControlNode(condition);
-                        fromPDGNode.addControlDependingNode(toPDGNode);
+                        if (block instanceof ElseBlockInfo) {
+                            fromPDGNode.addControlDependingNode(toPDGNode, false);
+                        } else {
+                            fromPDGNode.addControlDependingNode(toPDGNode, true);
+                        }
                     }
 
                     if (innerStatement instanceof ForBlockInfo) {
                         final ForBlockInfo forBlock = (ForBlockInfo) innerStatement;
                         for (final ConditionInfo expression : forBlock.getInitializerExpressions()) {
                             final PDGNode<?> toPDGNode = this.makeNormalNode(expression);
-                            fromPDGNode.addControlDependingNode(toPDGNode);
+                            if (block instanceof ElseBlockInfo) {
+                                fromPDGNode.addControlDependingNode(toPDGNode, false);
+                            } else {
+                                fromPDGNode.addControlDependingNode(toPDGNode, true);
+                            }
                         }
                     }
                 }
@@ -256,7 +268,7 @@ public class IntraProceduralPDG extends PDG {
 
             for (final ExpressionInfo expression : forBlock.getIteratorExpressions()) {
                 final PDGNode<?> extraToPDGNode = this.makeNormalNode(expression);
-                extraFromPDGNode.addControlDependingNode(extraToPDGNode);
+                extraFromPDGNode.addControlDependingNode(extraToPDGNode, true);
             }
         }
     }
