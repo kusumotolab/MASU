@@ -14,6 +14,7 @@ public class ContinueStatementInfo extends JumpStatementInfo {
         return "continue";
     }
 
+    /*
     @Override
     public StatementInfo getFollowingStatement() {
         if (null != this.getDestinationLabel()) {
@@ -36,5 +37,5 @@ public class ContinueStatementInfo extends JumpStatementInfo {
             return null;
         }
     }
-
+    */
 }

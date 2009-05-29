@@ -33,16 +33,24 @@ public class BreakStatementInfo extends JumpStatementInfo {
         return "break";
     }
 
-    @Override
+    /*
     public StatementInfo getFollowingStatement() {
         if (null != this.getDestinationLabel()) {
             return this.getFollowingStatement(this.getDestinationLabel().getLabeledStatement());
         } else {
-            if (this.getOwnerSpace() instanceof BlockInfo
-                    && ((BlockInfo) this.getOwnerSpace()).isLoopStatement()) {
-                return this.getFollowingStatement((BlockInfo) this.getOwnerSpace());
+            for (BlockInfo ownerBlock = (BlockInfo) this.getOwnerSpace();; ownerBlock = (BlockInfo) ownerBlock
+                    .getOwnerSpace()) {
+
+                if (ownerBlock.isLoopStatement()) {
+                    return this.getFollowingStatement(ownerBlock);
+                }
+
+                if (!(ownerBlock.getOwnerSpace() instanceof BlockInfo)) {
+                    break;
+                }
             }
-            assert false;
+
+            assert false : "Here shouldn't be reached!";
             return null;
         }
     }
@@ -64,5 +72,5 @@ public class BreakStatementInfo extends JumpStatementInfo {
 
         return null;
     }
-
+    */
 }

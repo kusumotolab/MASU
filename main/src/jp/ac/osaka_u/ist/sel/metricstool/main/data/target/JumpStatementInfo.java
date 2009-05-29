@@ -50,7 +50,30 @@ public abstract class JumpStatementInfo extends SingleStatementInfo {
 
     protected abstract String getReservedKeyword();
 
-    public abstract StatementInfo getFollowingStatement();
+    public BlockInfo getCorrespondingBlock() {
+
+        if (null != this.getDestinationLabel()) {
+            return (BlockInfo) this.getDestinationLabel().getLabeledStatement();
+        } else {
+
+            for (BlockInfo ownerBlock = (BlockInfo) this.getOwnerSpace();; ownerBlock = (BlockInfo) ownerBlock
+                    .getOwnerSpace()) {
+
+                if (ownerBlock.isLoopStatement()) {
+                    return ownerBlock;
+                }
+
+                if (!(ownerBlock.getOwnerSpace() instanceof BlockInfo)) {
+                    break;
+                }
+            }
+
+            assert false : "Here shouldn't be reached!";
+            return null;
+        }
+    }
+
+    //public abstract StatementInfo getFollowingStatement();
 
     public LabelInfo getDestinationLabel() {
         return this.destinationLabel;
