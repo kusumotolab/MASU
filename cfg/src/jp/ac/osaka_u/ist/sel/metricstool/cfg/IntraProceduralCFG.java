@@ -21,6 +21,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LabelInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SimpleBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
@@ -820,7 +821,40 @@ public class IntraProceduralCFG extends CFG {
                         if (exitNode instanceof CFGReturnStatementNode) {
                             this.exitNodes.add(exitNode);
                         } else if (exitNode instanceof CFGContinueStatementNode) {
-                            this.exitNodes.add(exitNode);
+
+                            final ContinueStatementInfo continueStatement = (ContinueStatementInfo) exitNode
+                                    .getCore();
+                            final BlockInfo correspondingBlock = continueStatement
+                                    .getCorrespondingBlock();
+                            final SortedSet<StatementInfo> innerStatements = LocalSpaceInfo
+                                    .getAllStatements(correspondingBlock);
+
+                            final StatementInfo statement = (StatementInfo) toCFG.getElement();
+
+                            // statement が innerStatements に含まれている場合は，break文の支配下にある                           
+                            if (innerStatements.contains(statement)) {
+                                this.exitNodes.add(exitNode);
+                            } else {
+                                exitNode.addForwardNode(toCFG.getEnterNode());
+                            }
+
+                        } else if (exitNode instanceof CFGBreakStatementNode) {
+                            final BreakStatementInfo breakStatement = (BreakStatementInfo) exitNode
+                                    .getCore();
+                            final BlockInfo correspondingBlock = breakStatement
+                                    .getCorrespondingBlock();
+                            final SortedSet<StatementInfo> innerStatements = LocalSpaceInfo
+                                    .getAllStatements(correspondingBlock);
+
+                            final StatementInfo statement = (StatementInfo) toCFG.getElement();
+
+                            // statement が innerStatements に含まれている場合は，break文の支配下にある                           
+                            if (innerStatements.contains(statement)) {
+                                this.exitNodes.add(exitNode);
+                            } else {
+                                exitNode.addForwardNode(toCFG.getEnterNode());
+                            }
+
                         } else {
                             exitNode.addForwardNode(toCFG.getEnterNode());
                         }
