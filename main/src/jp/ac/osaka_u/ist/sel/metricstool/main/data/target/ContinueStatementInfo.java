@@ -19,11 +19,20 @@ public class ContinueStatementInfo extends JumpStatementInfo {
         if (null != this.getDestinationLabel()) {
             return this.getDestinationLabel().getLabeledStatement();
         } else {
-            if (this.getOwnerSpace() instanceof BlockInfo
-                    && ((BlockInfo) this.getOwnerSpace()).isLoopStatement()) {
-                return (BlockInfo) this.getOwnerSpace();
+
+            for (BlockInfo ownerBlock = (BlockInfo) this.getOwnerSpace();; ownerBlock = (BlockInfo) ownerBlock
+                    .getOwnerSpace()) {
+
+                if (ownerBlock.isLoopStatement()) {
+                    return ownerBlock;
+                }
+
+                if (!(ownerBlock.getOwnerSpace() instanceof BlockInfo)) {
+                    break;
+                }
             }
-            assert false;
+
+            assert false : "Here shouldn't be reached!";
             return null;
         }
     }
