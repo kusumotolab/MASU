@@ -2,7 +2,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
@@ -84,7 +86,7 @@ public class IntraProceduralCFG extends CFG {
      * @param statement
      * @param nodeFactory
      */
-    IntraProceduralCFG(final StatementInfo statement, final ICFGNodeFactory nodeFactory) {
+    private IntraProceduralCFG(final StatementInfo statement, final ICFGNodeFactory nodeFactory) {
 
         super(nodeFactory);
 
@@ -94,12 +96,23 @@ public class IntraProceduralCFG extends CFG {
 
         this.element = statement;
 
+        // 作成したCFGをキャッシュとして持つ
+        statementCFG.put(statement, this);
+
         //単文の場合
         if (statement instanceof SingleStatementInfo) {
             final CFGNormalNode<?> node = nodeFactory.makeNormalNode(statement);
             assert null != node : "node is null!";
             this.enterNode = node;
             this.exitNodes.add(node);
+
+            // break文の場合は対応するブロックのexitNodesに追加する
+            if (statement instanceof BreakStatementInfo) {
+                final BreakStatementInfo breakStatement = (BreakStatementInfo) statement;
+                final BlockInfo correspondingBlock = breakStatement.getCorrespondingBlock();
+                final CFG correspondingBlockCFG = statementCFG.get(correspondingBlock);
+                correspondingBlockCFG.exitNodes.add(node);
+            }
         }
 
         // caseエントリの場合
@@ -206,19 +219,6 @@ public class IntraProceduralCFG extends CFG {
 
                         // continue文のに対応しているのがこのwhile文ではない時
                         else {
-                            this.exitNodes.add(exitNode);
-                        }
-                    }
-
-                    // break文の場合
-                    else if (exitNode instanceof CFGBreakStatementNode) {
-
-                        final BreakStatementInfo breakStatement = (BreakStatementInfo) exitNode
-                                .getCore();
-                        final BlockInfo correspondingBlock = breakStatement.getCorrespondingBlock();
-
-                        // break文に対応しているのがこのwhile文の時
-                        if (statement == correspondingBlock) {
                             this.exitNodes.add(exitNode);
                         }
                     }
@@ -341,20 +341,6 @@ public class IntraProceduralCFG extends CFG {
 
                         }
 
-                        // break文の場合
-                        else if (exitNode instanceof CFGBreakStatementNode) {
-
-                            final BreakStatementInfo breakStatement = (BreakStatementInfo) exitNode
-                                    .getCore();
-                            final BlockInfo correspondingBlock = breakStatement
-                                    .getCorrespondingBlock();
-
-                            // break文に対応しているのがこのwhile文の時
-                            if (statement == correspondingBlock) {
-                                this.exitNodes.add(exitNode);
-                            }
-                        }
-
                         else {
                             exitNode.addForwardNode(controlNode);
                         }
@@ -396,20 +382,6 @@ public class IntraProceduralCFG extends CFG {
 
                         }
 
-                        // break文の場合
-                        else if (exitNode instanceof CFGBreakStatementNode) {
-
-                            final BreakStatementInfo breakStatement = (BreakStatementInfo) exitNode
-                                    .getCore();
-                            final BlockInfo correspondingBlock = breakStatement
-                                    .getCorrespondingBlock();
-
-                            // break文に対応しているのがこのwhile文の時
-                            if (statement == correspondingBlock) {
-                                this.exitNodes.add(exitNode);
-                            }
-                        }
-
                         else {
                             exitNode.addForwardNode(controlNode);
                         }
@@ -445,20 +417,6 @@ public class IntraProceduralCFG extends CFG {
 
                         }
 
-                        // break文の場合
-                        else if (exitNode instanceof CFGBreakStatementNode) {
-
-                            final BreakStatementInfo breakStatement = (BreakStatementInfo) exitNode
-                                    .getCore();
-                            final BlockInfo correspondingBlock = breakStatement
-                                    .getCorrespondingBlock();
-
-                            // break文に対応しているのがこのwhile文の時
-                            if (statement == correspondingBlock) {
-                                this.exitNodes.add(exitNode);
-                            }
-                        }
-
                         else {
                             exitNode.addForwardNode(iteratorsCFG.getEnterNode());
                         }
@@ -488,20 +446,6 @@ public class IntraProceduralCFG extends CFG {
                                 this.exitNodes.add(exitNode);
                             }
 
-                        }
-
-                        // break文の場合
-                        else if (exitNode instanceof CFGBreakStatementNode) {
-
-                            final BreakStatementInfo breakStatement = (BreakStatementInfo) exitNode
-                                    .getCore();
-                            final BlockInfo correspondingBlock = breakStatement
-                                    .getCorrespondingBlock();
-
-                            // break文に対応しているのがこのwhile文の時
-                            if (statement == correspondingBlock) {
-                                this.exitNodes.add(exitNode);
-                            }
                         }
 
                         else {
@@ -541,11 +485,6 @@ public class IntraProceduralCFG extends CFG {
 
                     // Return文であれば，exitノードである
                     if (exitNode instanceof CFGReturnStatementNode) {
-                        this.exitNodes.add(exitNode);
-                    }
-
-                    // Break文であればexitノードである
-                    else if (exitNode instanceof CFGBreakStatementNode) {
                         this.exitNodes.add(exitNode);
                     }
 
@@ -808,7 +747,13 @@ public class IntraProceduralCFG extends CFG {
 
             //最後の文からexitノードを生成
             {
-                this.exitNodes.addAll(statementCFGs.get(statementCFGs.size() - 1).getExitNodes());
+
+                // break文でなければexitノードに追加
+                final StatementInfo lastStatement = statements.last();
+                if (!(lastStatement instanceof BreakStatementInfo)) {
+                    final int lastIndex = statementCFGs.size() - 1;
+                    this.exitNodes.addAll(statementCFGs.get(lastIndex).getExitNodes());
+                }
             }
 
             //statementsから生成したCFGを順番につないでいく
@@ -831,31 +776,15 @@ public class IntraProceduralCFG extends CFG {
 
                             final StatementInfo statement = (StatementInfo) toCFG.getElement();
 
-                            // statement が innerStatements に含まれている場合は，break文の支配下にある                           
+                            // statement が innerStatements に含まれている場合は，continue文の支配下にある                           
                             if (innerStatements.contains(statement)) {
                                 this.exitNodes.add(exitNode);
                             } else {
                                 exitNode.addForwardNode(toCFG.getEnterNode());
                             }
+                        }
 
-                        } else if (exitNode instanceof CFGBreakStatementNode) {
-                            final BreakStatementInfo breakStatement = (BreakStatementInfo) exitNode
-                                    .getCore();
-                            final BlockInfo correspondingBlock = breakStatement
-                                    .getCorrespondingBlock();
-                            final SortedSet<StatementInfo> innerStatements = LocalSpaceInfo
-                                    .getAllStatements(correspondingBlock);
-
-                            final StatementInfo statement = (StatementInfo) toCFG.getElement();
-
-                            // statement が innerStatements に含まれている場合は，break文の支配下にある                           
-                            if (innerStatements.contains(statement)) {
-                                this.exitNodes.add(exitNode);
-                            } else {
-                                exitNode.addForwardNode(toCFG.getEnterNode());
-                            }
-
-                        } else {
+                        else {
                             exitNode.addForwardNode(toCFG.getEnterNode());
                         }
                     }
@@ -905,5 +834,16 @@ public class IntraProceduralCFG extends CFG {
                 fromNode.addForwardNode(toNode);
             }
         }
+    }
+
+    private static final Map<StatementInfo, CFG> statementCFG = new HashMap<StatementInfo, CFG>();
+
+    static CFG getCFG(final StatementInfo statement, final ICFGNodeFactory nodeFactory) {
+
+        CFG cfg = statementCFG.get(statement);
+        if (null == cfg) {
+            throw new IllegalStateException();
+        }
+        return cfg;
     }
 }
