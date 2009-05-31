@@ -63,6 +63,16 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
 
         forwardNode.backwardNodes.add(this);
     }
+    
+    void removeForwardNode(final CFGNode<? extends ExecutableElementInfo> forwardNode){
+        
+        if(null == forwardNode){
+            throw new IllegalArgumentException();            
+        }
+        
+        this.forwardNodes.remove(forwardNode);
+        forwardNode.backwardNodes.remove(this);        
+    }
 
     /**
      * ‚±‚Ìƒm[ƒh‚É‘Î‰‚·‚é•¶‚Ìî•ñ‚ğæ“¾

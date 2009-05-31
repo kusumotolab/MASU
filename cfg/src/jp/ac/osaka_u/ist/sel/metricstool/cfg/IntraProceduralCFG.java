@@ -69,6 +69,31 @@ public class IntraProceduralCFG extends CFG {
                 .getStatements(), nodeFactory);
         this.enterNode = statementsCFG.getEnterNode();
         this.exitNodes.addAll(statementsCFG.getExitNodes());
+
+        /*
+        //Emptyノードを削除
+        for (final CFGNode<?> node : this.getAllNodes()) {
+            final Object core = node.getCore();
+            if (core instanceof EmptyExpressionInfo) {
+
+            }
+        }
+        
+        //Caseエントリを削除
+        for(final CFGNode<?> node : this.getAllNodes()){
+            if(node instanceof CFGCaseEntryNode){               
+                for(final CFGNode<?> backwardNode : node.getBackwardNodes()){
+                    backwardNode.removeForwardNode(node);
+                    for(final CFGNode<?> forwardNode : node.getForwardNodes()){
+                        backwardNode.addForwardNode(forwardNode);
+                    }
+                }
+                for(final CFGNode<?> forwardNode : node.getForwardNodes()){
+                    
+                }
+            }
+        }
+        */
     }
 
     /**
