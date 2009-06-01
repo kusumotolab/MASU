@@ -205,6 +205,17 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
 
         throw new IllegalStateException();
     }
+    
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public final Set<ClassTypeInfo> getThrownExceptions() {
+        return Collections.unmodifiableSet(new HashSet<ClassTypeInfo>());
+    }
+
 
     private final T usedVariable;
 

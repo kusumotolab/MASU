@@ -300,6 +300,19 @@ public final class BinominalOperationInfo extends ExpressionInfo {
         return sb.toString();
     }
 
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
+        thrownExpressions.addAll(this.getFirstOperand().getThrownExceptions());
+        thrownExpressions.addAll(this.getSecondOperand().getThrownExceptions());
+        return Collections.unmodifiableSet(thrownExpressions);
+    }
+    
     private final ExpressionInfo firstOperand;
 
     private final ExpressionInfo secondOperand;

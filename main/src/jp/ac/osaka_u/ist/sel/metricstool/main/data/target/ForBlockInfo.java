@@ -225,6 +225,24 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
     }
 
     /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
+        thrownExpressions.addAll(super.getThrownExceptions());
+        for (final ConditionInfo initializerExpression : this.getInitializerExpressions()) {
+            thrownExpressions.addAll(initializerExpression.getThrownExceptions());
+        }
+        for (final ExpressionInfo iteratorExpression : this.getIteratorExpressions()) {
+            thrownExpressions.addAll(iteratorExpression.getThrownExceptions());
+        }
+        return Collections.unmodifiableSet(thrownExpressions);
+    }
+
+    /**
      * 初期化式を保存するための変数
      */
     private final SortedSet<ConditionInfo> initilizerExpressions;

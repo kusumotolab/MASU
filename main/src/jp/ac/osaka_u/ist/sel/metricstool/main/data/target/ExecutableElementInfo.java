@@ -54,4 +54,11 @@ public interface ExecutableElementInfo extends Position, Serializable {
      * @return　テキスト表現(String型)を返す
      */
     String getText();
+    
+    /**
+     * 投げられる可能性がある例外のSetを返す
+     * 
+     * @return　投げられる可能性がある例外のSet
+     */
+    Set<ClassTypeInfo> getThrownExceptions();
 }

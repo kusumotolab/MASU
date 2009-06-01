@@ -1,6 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -87,6 +91,20 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
     @Override
     public final LocalSpaceInfo getOwnerSpace() {
         return this.outerSpace;
+    }
+
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
+        for (final StatementInfo innerStatement : this.getStatements()) {
+            thrownExpressions.addAll(innerStatement.getThrownExceptions());
+        }
+        return Collections.unmodifiableSet(thrownExpressions);
     }
 
     /**

@@ -57,12 +57,12 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
             // ownerSpaceInfoがブロック文の時
             else if (ownerSpace instanceof BlockInfo) {
                 final CallableUnitInfo ownerMethod = ((BlockInfo) ownerSpace).getOwnerMethod();
-                this.initializationExpression = new EmptyExpressionInfo(ownerMethod, toLine, toColumn - 1,
-                        toLine, toColumn - 1);
+                this.initializationExpression = new EmptyExpressionInfo(ownerMethod, toLine,
+                        toColumn - 1, toLine, toColumn - 1);
             }
-            
+
             // それ以外の時はエラー
-            else{
+            else {
                 throw new IllegalStateException();
             }
         }
@@ -177,6 +177,20 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
      */
     public TypeInfo getType() {
         return this.variableDeclaration.getType();
+    }
+
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
+        if (this.isInitialized()) {
+            thrownExpressions.addAll(this.getInitializationExpression().getThrownExceptions());
+        }
+        return Collections.unmodifiableSet(thrownExpressions);
     }
 
     /**

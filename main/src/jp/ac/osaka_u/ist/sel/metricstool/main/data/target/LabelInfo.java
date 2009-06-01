@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -102,6 +104,16 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
     @Override
     public CallableUnitInfo getOwnerMethod() {
         return this.labeledStatement.getOwnerMethod();
+    }
+
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        return Collections.unmodifiableSet(new HashSet<ClassTypeInfo>());
     }
 
     /**

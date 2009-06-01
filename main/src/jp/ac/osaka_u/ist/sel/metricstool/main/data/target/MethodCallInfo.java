@@ -168,6 +168,18 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
     }
 
     /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        final Set<ClassTypeInfo> thrownExceptions = new HashSet<ClassTypeInfo>();
+        thrownExceptions.addAll(this.getCallee().getThrownExceptions());
+        return Collections.unmodifiableSet(thrownExceptions);
+    }
+
+    /**
      * このメソッド呼び出しの親，つまりこのメソッド呼び出しがくっついている要素を返す
      * 
      * @return このメソッド呼び出しの親

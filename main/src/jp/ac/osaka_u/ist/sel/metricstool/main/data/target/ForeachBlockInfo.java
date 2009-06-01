@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
 
 
@@ -66,7 +69,7 @@ public final class ForeachBlockInfo extends BlockInfo {
         text.deleteCharAt(text.length() - 1);
 
         text.append(":");
-        
+
         text.append(this.getIteratorExpression().getText());
 
         text.append(") {");
@@ -81,6 +84,20 @@ public final class ForeachBlockInfo extends BlockInfo {
         text.append("}");
 
         return text.toString();
+    }
+
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
+        thrownExpressions.addAll(super.getThrownExceptions());
+        thrownExpressions.addAll(this.getIteratorVariableDeclaration().getThrownExceptions());
+        thrownExpressions.addAll(this.getIteratorExpression().getThrownExceptions());
+        return Collections.unmodifiableSet(thrownExpressions);
     }
 
     private final VariableDeclarationStatementInfo iteratorVariableDeclaration;

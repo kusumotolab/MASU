@@ -117,6 +117,19 @@ public final class AssertStatementInfo extends SingleStatementInfo {
         return sb.toString();
     }
 
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        final Set<ClassTypeInfo> thrownExceptions = new HashSet<ClassTypeInfo>();
+        thrownExceptions.addAll(this.getAssertedExpression().getThrownExceptions());
+        thrownExceptions.addAll(this.getMessageExpression().getThrownExceptions());
+        return Collections.unmodifiableSet(thrownExceptions);
+    }
+    
     private final ExpressionInfo assertedExpression;
 
     private final ExpressionInfo messageExpression;

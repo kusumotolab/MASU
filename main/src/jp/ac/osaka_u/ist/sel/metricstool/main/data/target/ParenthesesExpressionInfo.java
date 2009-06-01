@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
 import java.util.Set;
 
 
@@ -95,6 +96,16 @@ public final class ParenthesesExpressionInfo extends ExpressionInfo {
     @Override
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
         return this.getParnentheticExpression().getVariableUsages();
+    }
+
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        return Collections.unmodifiableSet(this.getParnentheticExpression().getThrownExceptions());
     }
 
     final ExpressionInfo parentheticExpression;

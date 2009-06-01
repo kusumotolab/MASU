@@ -82,5 +82,18 @@ public abstract class ConditionalBlockInfo extends BlockInfo {
         return this.conditionalClause;
     }
 
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
+        thrownExpressions.addAll(super.getThrownExceptions());
+        thrownExpressions.addAll(this.getConditionalClause().getCondition().getThrownExceptions());
+        return Collections.unmodifiableSet(thrownExpressions);
+    }
+
     private ConditionalClauseInfo conditionalClause;
 }

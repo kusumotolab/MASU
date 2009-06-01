@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -88,6 +90,16 @@ public final class TypeParameterUsageInfo extends ExpressionInfo {
         sb.append(">");
 
         return sb.toString();
+    }
+
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        return Collections.unmodifiableSet(new HashSet<ClassTypeInfo>());
     }
 
     private final ExpressionInfo expression;

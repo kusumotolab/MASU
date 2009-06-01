@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -50,6 +52,16 @@ public abstract class JumpStatementInfo extends SingleStatementInfo {
 
     protected abstract String getReservedKeyword();
 
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        return Collections.unmodifiableSet(new HashSet<ClassTypeInfo>());
+    }
+
     public BlockInfo getCorrespondingBlock() {
 
         if (null != this.getDestinationLabel()) {
@@ -59,7 +71,9 @@ public abstract class JumpStatementInfo extends SingleStatementInfo {
             for (BlockInfo ownerBlock = (BlockInfo) this.getOwnerSpace();; ownerBlock = (BlockInfo) ownerBlock
                     .getOwnerSpace()) {
 
-                if (ownerBlock instanceof SwitchBlockInfo || ownerBlock instanceof SynchronizedBlockInfo || ownerBlock.isLoopStatement()) {
+                if (ownerBlock instanceof SwitchBlockInfo
+                        || ownerBlock instanceof SynchronizedBlockInfo
+                        || ownerBlock.isLoopStatement()) {
                     return ownerBlock;
                 }
 

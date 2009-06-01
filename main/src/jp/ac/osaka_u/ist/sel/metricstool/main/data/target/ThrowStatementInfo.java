@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -87,6 +89,18 @@ public class ThrowStatementInfo extends SingleStatementInfo {
         sb.append(";");
 
         return sb.toString();
+    }
+
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
+        thrownExpressions.add((ClassTypeInfo) this.getThrownExpression().getType());
+        return Collections.unmodifiableSet(thrownExpressions);
     }
 
     /**

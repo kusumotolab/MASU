@@ -1,6 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+
 /**
  * クラスのコンストラクタ呼び出しを表すクラス
  * 
@@ -27,7 +32,7 @@ public final class ClassConstructorCallInfo extends ConstructorCallInfo<ClassTyp
         super(classType, callee, ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
     }
-    
+
     /**
      * このコンストラクタ呼び出しのテキスト表現（型）を返す
      * 
@@ -56,5 +61,17 @@ public final class ClassConstructorCallInfo extends ConstructorCallInfo<ClassTyp
         sb.append(")");
 
         return sb.toString();
+    }
+
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        final Set<ClassTypeInfo> thrownExceptions = new HashSet<ClassTypeInfo>();
+        thrownExceptions.addAll(this.getCallee().getThrownExceptions());
+        return Collections.unmodifiableSet(thrownExceptions);
     }
 }

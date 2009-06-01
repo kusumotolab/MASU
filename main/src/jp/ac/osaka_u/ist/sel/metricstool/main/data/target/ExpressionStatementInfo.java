@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
 import java.util.Set;
 
 
@@ -90,6 +91,16 @@ public class ExpressionStatementInfo extends SingleStatementInfo {
         sb.append(";");
 
         return sb.toString();
+    }
+
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        return Collections.unmodifiableSet(this.getExpression().getThrownExceptions());
     }
 
     /**

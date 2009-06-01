@@ -98,12 +98,27 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
      * 
      * @return 呼び出しのSet
      */
+    @Override
     public Set<CallInfo<?>> getCalls() {
         final Set<CallInfo<?>> calls = new HashSet<CallInfo<?>>();
         for (final ExpressionInfo element : this.getElementInitializers()) {
             calls.addAll(element.getCalls());
         }
         return Collections.unmodifiableSet(calls);
+    }
+
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
+        for (final ExpressionInfo elementInitializer : this.getElementInitializers()) {
+            thrownExpressions.addAll(elementInitializer.getThrownExceptions());
+        }
+        return Collections.unmodifiableSet(thrownExpressions);
     }
 
     private final List<ExpressionInfo> elementInitialiers;

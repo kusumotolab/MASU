@@ -2,7 +2,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -71,7 +73,7 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
         final StringBuilder text = new StringBuilder();
         text.append("new ");
 
-        final ArrayTypeInfo arrayType = (ArrayTypeInfo) this.getType();
+        final ArrayTypeInfo arrayType = this.getType();
         final TypeInfo elementType = arrayType.getElementType();
         text.append(elementType.getTypeName());
 
@@ -84,6 +86,20 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
         }
 
         return text.toString();
+    }
+
+    /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        final Set<ClassTypeInfo> thrownExceptions = new HashSet<ClassTypeInfo>();
+        for (final ExpressionInfo indexExpression : this.getIndexExpressions()) {
+            thrownExceptions.addAll(indexExpression.getThrownExceptions());
+        }
+        return Collections.unmodifiableSet(thrownExceptions);
     }
 
     private final List<ExpressionInfo> indexExpressions;

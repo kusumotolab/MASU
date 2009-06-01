@@ -127,6 +127,20 @@ public class TernaryOperationInfo extends ExpressionInfo {
     }
 
     /**
+     * この式で投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ClassTypeInfo> getThrownExceptions() {
+        final Set<ClassTypeInfo> thrownExceptions = new HashSet<ClassTypeInfo>();
+        thrownExceptions.addAll(this.getCondition().getThrownExceptions());
+        thrownExceptions.addAll(this.getTrueExpression().getThrownExceptions());
+        thrownExceptions.addAll(this.getFalseExpression().getThrownExceptions());
+        return Collections.unmodifiableSet(thrownExceptions);
+    }
+
+    /**
      * 三項演算の条件式(第一項)を保存する変数
      */
     private final ConditionInfo condition;
