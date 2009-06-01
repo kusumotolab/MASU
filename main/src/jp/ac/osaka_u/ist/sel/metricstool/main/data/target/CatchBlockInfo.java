@@ -18,6 +18,35 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public final class CatchBlockInfo extends BlockInfo {
 
     /**
+     * ExecutableElementと例外を入力として，そのExecutableElementを含むtry文に対応して，exceptionをキャッチするcatchBlockを返す．
+     * もし，そのようなキャッチ説がない場合はnull を返す．
+     * 
+     * @param element
+     * @param exception
+     * @return
+     */
+    public static CatchBlockInfo getCorrespondingCatchBlock(final ExecutableElementInfo element,
+            final ClassTypeInfo exception) {
+
+        for (LocalSpaceInfo ownerSpace = element.getOwnerSpace(); ownerSpace instanceof BlockInfo; ownerSpace = ((BlockInfo) ownerSpace)
+                .getOwnerSpace()) {
+
+            if (ownerSpace instanceof TryBlockInfo) {
+                for (final CatchBlockInfo catchBlock : ((TryBlockInfo) ownerSpace)
+                        .getSequentCatchBlocks()) {
+                    final VariableInfo<?> caughtVariable = catchBlock.getCaughtException();
+                    if (exception.equals(caughtVariable.getType())) {
+                        return catchBlock;
+                    }
+                }
+
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * 対応する try ブロック情報を与えて catch ブロックを初期化
      * 
      * @param ownerClass 所有クラス
