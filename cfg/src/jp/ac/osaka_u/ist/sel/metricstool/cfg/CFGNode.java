@@ -26,12 +26,12 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
     /**
      * このノードのフォワードノードのセット
      */
-    private final Set<CFGNode<? extends ExecutableElementInfo>> forwardNodes;
+    protected final Set<CFGNode<? extends ExecutableElementInfo>> forwardNodes;
 
     /**
      * このノードのバックワードノードのセット
      */
-    private final Set<CFGNode<? extends ExecutableElementInfo>> backwardNodes;
+    protected final Set<CFGNode<? extends ExecutableElementInfo>> backwardNodes;
 
     private final String text;
 
@@ -64,16 +64,14 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
         forwardNode.backwardNodes.add(this);
     }
     
-    void removeForwardNode(final CFGNode<? extends ExecutableElementInfo> forwardNode){
-        
-        if(null == forwardNode){
-            throw new IllegalArgumentException();            
-        }
-        
-        this.forwardNodes.remove(forwardNode);
-        forwardNode.backwardNodes.remove(this);        
+    /**
+     * 必要のないノードの場合は削除
+     */
+    protected void removeIfUnnecessarily(){                
     }
-
+    
+    
+    
     /**
      * このノードに対応する文の情報を取得
      * @return このノードに対応する文
@@ -95,7 +93,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
      * @return このノードのバックワードノードのセット
      */
     public Set<CFGNode<? extends ExecutableElementInfo>> getBackwardNodes() {
-        return this.backwardNodes;
+        return Collections.unmodifiableSet(this.backwardNodes);
     }
 
     /**
