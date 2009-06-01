@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.MethodParameterSt
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ModifiersDefinitionStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.NameStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ThrownExceptionsDefinitionStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.TypeDescriptionStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.TypeParameterStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.VariableDefinitionStateManager;
@@ -19,8 +20,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 
 
-public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<? extends CallableUnitInfo>> extends
-        CompoundDataBuilder<T> {
+/**
+ * 呼び出し可能な単位(メソッドやコンストラクタ)を表すクラスのビルダ
+ * @author t-miyake
+ *
+ * @param <T> 呼び出し可能な単位の種類
+ */
+
+public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<? extends CallableUnitInfo>>
+        extends CompoundDataBuilder<T> {
 
     protected CallableUnitBuilder(BuildDataManager buildDataManager,
             CallableUnitStateManager stateManager, ModifiersInterpriter interpriter) {
@@ -62,6 +70,7 @@ public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?
         addStateManager(this.parameterStateManager);
         addStateManager(this.typeStateManager);
         addStateManager(this.typeParameterStateManager);
+        addStateManager(this.throwsStateManager);
         addStateManager(new ModifiersDefinitionStateManager());
         addStateManager(new NameStateManager());
     }
@@ -104,7 +113,9 @@ public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?
                         registName();
                         nameBuilder.clearBuiltData();
                     }
-                } else if (!typeParameterStateManager.isInTypeParameterDefinition()) {
+                } else if (!typeParameterStateManager.isInTypeParameterDefinition()
+                        && !throwsStateManager.isEntered()) {
+                    // 返り値の型
                     if (type.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)) {
                         if (null != typeBuilder) {
                             typeBuilder.activate();
@@ -189,4 +200,6 @@ public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?
     protected final TypeDescriptionStateManager typeStateManager = new TypeDescriptionStateManager();
 
     protected final TypeParameterStateManager typeParameterStateManager = new TypeParameterStateManager();
+
+    protected final ThrownExceptionsDefinitionStateManager throwsStateManager = new ThrownExceptionsDefinitionStateManager();
 }
