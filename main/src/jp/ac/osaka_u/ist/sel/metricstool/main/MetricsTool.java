@@ -1205,10 +1205,6 @@ public class MetricsTool {
             // メソッド情報を解決
             final TargetMethodInfo methodInfo = unresolvedMethodInfo.resolve(ownerClass, null,
                     classInfoManager, fieldInfoManager, methodInfoManager);
-
-            if(methodInfo.getMethodName().equals("getSecret2")){
-                System.out.println();
-            }
             
             // メソッド情報を登録
             ownerClass.addDefinedMethod(methodInfo);
