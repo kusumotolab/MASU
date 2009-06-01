@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<project default="build">
+
+	<tstamp />
+
+	<property file="build.properties" />
+
+	<property name="masu.dir" location="../main" />
+	<property name="cfg.dir" location="../cfg" />
+	<property name="pdg.dir" location="../pdg" />
+	<property name="masu.cls.dir" location="${masu.dir}/${CLS.DIR}" />
+	<property name="cfg.cls.dir" location="${cfg.dir}/${CLS.DIR}" />
+	<property name="pdg.cls.dir" location="${pdg.dir}/${CLS.DIR}" />
+	<property name="manifest.mf" value="resource/manifest.mf" />
+	<property name="cli.jar" value="lib/commons-cli-1.1.jar" />
+	<property name="zip.bin.name" value="${TOOL.NAME}bin${DSTAMP}${TSTAMP}.zip" />
+	<property name="zip.src.name" value="${TOOL.NAME}src${DSTAMP}${TSTAMP}.zip" />
+	
+	<target name="compile">
+		<mkdir dir="${CLS.DIR}" />
+		<javac classpath="${cli.jar};${masu.cls.dir};${cfg.cls.dir};${pdg.cls.dir}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
+	</target>
+
+	<target name="build" depends="compile">
+		<mkdir dir="${PACKAGE.DIR}" />
+		<mkdir dir="${PACKAGE.BIN.DIR}" />
+		<mkdir dir="${PACKAGE.DOC.DIR}" />
+
+		<jar basedir="${CLS.DIR}" jarfile="${PACKAGE.BIN.DIR}/${TOOL.NAME}.jar" />
+		<copy file="${cli.jar}" todir="${PACKAGE.BIN.DIR}" />
+	</target>
+
+	<target name="binpackage" depends="build">
+		<javadoc packagenames="jp.ac.osaka_u.ist.sel.metricstool.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" encoding="Windows-31J"/>
+		<zip destfile="${zip.bin.name}" basedir="${PACKAGE.DIR}" />
+	</target>
+
+	<target name="srcpackage" depends="build">
+		<javadoc packagenames="jp.ac.osaka_u.ist.sel.metricstool.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" encoding="Windows-31J" />
+
+		<copy todir="${PACKAGE.SRC.DIR}">
+			<fileset dir="${SRC.DIR}" />
+		</copy>
+
+		<zip destfile="${zip.src.name}" basedir="${PACKAGE.DIR}" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${CLS.DIR}" />
+		<delete dir="${PACKAGE.DIR}" />
+		<delete verbose="true">
+			<fileset dir="." includes="${TOOL.NAME}*.zip" />
+		</delete>
+	</target>
+
+	<target name="all" depends="clean, srcpackage" />
+</project>
