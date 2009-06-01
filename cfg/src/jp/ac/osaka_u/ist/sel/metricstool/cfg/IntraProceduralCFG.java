@@ -116,7 +116,7 @@ public class IntraProceduralCFG extends CFG {
             if (statement instanceof BreakStatementInfo) {
                 final BreakStatementInfo breakStatement = (BreakStatementInfo) statement;
                 final BlockInfo correspondingBlock = breakStatement.getCorrespondingBlock();
-                final CFG correspondingBlockCFG = statementCFG.get(correspondingBlock);
+                final CFG correspondingBlockCFG = getCFG(correspondingBlock, nodeFactory);
                 correspondingBlockCFG.exitNodes.add(node);
             }
 
@@ -124,7 +124,12 @@ public class IntraProceduralCFG extends CFG {
             for (final ClassTypeInfo thrownException : statement.getThrownExceptions()) {
                 final CatchBlockInfo correspondingCatchBlock = CatchBlockInfo
                         .getCorrespondingCatchBlock(statement, thrownException);
-                //CatchBlockInfoの処理を追加
+
+                if (null != correspondingCatchBlock) {
+                    final CFG catchBlockCFG = new IntraProceduralCFG(correspondingCatchBlock,
+                            nodeFactory);
+                    node.addForwardNode(catchBlockCFG.getEnterNode());
+                }
             }
         }
 
@@ -531,7 +536,38 @@ public class IntraProceduralCFG extends CFG {
             final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(tryBlock
                     .getStatements(), nodeFactory);
             this.enterNode = statementsCFG.getEnterNode();
-            this.exitNodes.addAll(statementsCFG.getExitNodes());
+
+            final FinallyBlockInfo finallyBlock = tryBlock.getSequentFinallyBlock();
+            //finallyブロックがない場合
+            if (null == finallyBlock) {
+                this.exitNodes.addAll(statementsCFG.getExitNodes());
+
+                // 対応するcatch文のexitノードも，このtry文のexitノードとみなす
+                for (final CatchBlockInfo catchBlock : tryBlock.getSequentCatchBlocks()) {
+                    final CFG catchBlockCFG = new IntraProceduralCFG(catchBlock, nodeFactory);
+                    this.exitNodes.addAll(catchBlockCFG.getExitNodes());
+                }
+            }
+
+            // finallyブロックがある場合
+            else {
+
+                final CFG finallyBlockCFG = new IntraProceduralCFG(finallyBlock, nodeFactory);
+                this.exitNodes.addAll(finallyBlockCFG.getExitNodes());
+
+                //try文の内部からつなぐ
+                for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
+                    exitNode.addForwardNode(finallyBlockCFG.getEnterNode());
+                }
+
+                // 各catch文からつなぐ 
+                for (final CatchBlockInfo catchBlock : tryBlock.getSequentCatchBlocks()) {
+                    final CFG catchBlockCFG = new IntraProceduralCFG(catchBlock, nodeFactory);
+                    for (final CFGNode<?> exitNode : catchBlockCFG.getExitNodes()) {
+                        exitNode.addForwardNode(finallyBlockCFG.getEnterNode());
+                    }
+                }
+            }
         }
 
         // catch文の場合
