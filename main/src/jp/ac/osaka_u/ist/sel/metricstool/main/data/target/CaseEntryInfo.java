@@ -75,7 +75,7 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
      * @return •Ï”—˜—p‚ÌSet
      */
     @Override
-    public Set<VariableUsageInfo<?>> getVariableUsages() {
+    public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
         return VariableUsageInfo.EmptySet;
     }
 

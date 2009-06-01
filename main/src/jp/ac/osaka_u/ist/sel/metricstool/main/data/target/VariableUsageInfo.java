@@ -205,7 +205,7 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
 
         throw new IllegalStateException();
     }
-    
+
     /**
      * この式で投げられる可能性がある例外のSetを返す
      * 
@@ -216,7 +216,6 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
         return Collections.unmodifiableSet(new HashSet<ClassTypeInfo>());
     }
 
-
     private final T usedVariable;
 
     private final boolean reference;
@@ -226,6 +225,6 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     /**
      * 空の変数利用のSetを表す
      */
-    public static final SortedSet<VariableUsageInfo<?>> EmptySet = Collections
-            .unmodifiableSortedSet(new TreeSet<VariableUsageInfo<?>>());
+    public static final SortedSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> EmptySet = Collections
+            .unmodifiableSortedSet(new TreeSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>());
 }
