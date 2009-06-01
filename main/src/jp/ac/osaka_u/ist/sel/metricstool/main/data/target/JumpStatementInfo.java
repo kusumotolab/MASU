@@ -59,7 +59,7 @@ public abstract class JumpStatementInfo extends SingleStatementInfo {
             for (BlockInfo ownerBlock = (BlockInfo) this.getOwnerSpace();; ownerBlock = (BlockInfo) ownerBlock
                     .getOwnerSpace()) {
 
-                if (ownerBlock.isLoopStatement()) {
+                if (ownerBlock instanceof SwitchBlockInfo || ownerBlock.isLoopStatement()) {
                     return ownerBlock;
                 }
 
