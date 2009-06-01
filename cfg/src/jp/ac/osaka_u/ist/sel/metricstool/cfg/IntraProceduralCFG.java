@@ -12,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ContinueStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.DoBlockInfo;
@@ -114,9 +115,16 @@ public class IntraProceduralCFG extends CFG {
             // break文の場合は対応するブロックのexitNodesに追加する
             if (statement instanceof BreakStatementInfo) {
                 final BreakStatementInfo breakStatement = (BreakStatementInfo) statement;
-                final BlockInfo correspondingBlock = breakStatement.getCorrespondingBlock();                
+                final BlockInfo correspondingBlock = breakStatement.getCorrespondingBlock();
                 final CFG correspondingBlockCFG = statementCFG.get(correspondingBlock);
                 correspondingBlockCFG.exitNodes.add(node);
+            }
+
+            // 例外に関する処理
+            for (final ClassTypeInfo thrownException : statement.getThrownExceptions()) {
+                final CatchBlockInfo correspondingCatchBlock = CatchBlockInfo
+                        .getCorrespondingCatchBlock(statement, thrownException);
+                //CatchBlockInfoの処理を追加
             }
         }
 
