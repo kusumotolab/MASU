@@ -540,6 +540,7 @@ public class IntraProceduralCFG extends CFG {
             final FinallyBlockInfo finallyBlock = tryBlock.getSequentFinallyBlock();
             //finallyブロックがない場合
             if (null == finallyBlock) {
+                //try文の最後が，exitノードになりうる
                 this.exitNodes.addAll(statementsCFG.getExitNodes());
 
                 // 対応するcatch文のexitノードも，このtry文のexitノードとみなす
