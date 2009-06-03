@@ -51,7 +51,7 @@ public class PDGControlNode extends PDGNode<ConditionInfo> {
 
         final PDGControlDependenceEdge controlFlow = new PDGControlDependenceEdge(this,
                 controlledNode, trueDependence);
-        this.addFowardEdge(controlFlow);
+        this.addForwardEdge(controlFlow);
         controlledNode.addBackwardEdge(controlFlow);
     }
 

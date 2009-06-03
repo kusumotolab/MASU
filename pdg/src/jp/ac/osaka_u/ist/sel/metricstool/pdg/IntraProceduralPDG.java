@@ -139,6 +139,13 @@ public class IntraProceduralPDG extends PDG {
         for (final CFGNode<?> forwardNode : cfgNode.getForwardNodes()) {
             this.buildDependence(forwardNode, checkedNodes);
         }
+
+        //ó^Ç¶ÇÁÇÍÇΩCFGÉmÅ[ÉhÇ©ÇÁExecutionDependenceÇà¯Ç≠
+        final PDGNode<?> fromPDGNode = this.makeNode(cfgNode);
+        for (final CFGNode<?> toNode : cfgNode.getForwardNodes()) {
+            final PDGNode<?> toPDGNode = this.makeNode(toNode);
+            fromPDGNode.addExecutionDependingNode(toPDGNode);
+        }
     }
 
     /**

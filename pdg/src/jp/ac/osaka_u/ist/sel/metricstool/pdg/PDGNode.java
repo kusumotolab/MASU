@@ -115,7 +115,7 @@ public abstract class PDGNode<T extends ExecutableElementInfo> {
      * このノードのフォワードエッジを追加
      * @param forwardEdge このノードのフォワードエッジ
      */
-    protected final boolean addFowardEdge(final PDGEdge forwardEdge) {
+    protected final boolean addForwardEdge(final PDGEdge forwardEdge) {
         if (null == forwardEdge) {
             throw new IllegalArgumentException("forwardNode is null.");
         }
@@ -160,10 +160,22 @@ public abstract class PDGNode<T extends ExecutableElementInfo> {
             throw new IllegalArgumentException();
         }
 
-        boolean added = false;
-        final PDGDataDependenceEdge dataFlow = new PDGDataDependenceEdge(this, dependingNode, data);
-        added = this.addFowardEdge(dataFlow);
-        added &= dependingNode.addBackwardEdge(dataFlow);
+        final PDGDataDependenceEdge dataEdge = new PDGDataDependenceEdge(this, dependingNode, data);
+        boolean added = this.addForwardEdge(dataEdge);
+        added &= dependingNode.addBackwardEdge(dataEdge);
+        return added;
+    }
+
+    public boolean addExecutionDependingNode(final PDGNode<?> dependingNode) {
+
+        if (null == dependingNode) {
+            throw new IllegalArgumentException();
+        }
+
+        final PDGExecutionDependenceEdge executionEdge = new PDGExecutionDependenceEdge(this, 
+                dependingNode);
+        boolean added = this.addForwardEdge(executionEdge);
+        added &= dependingNode.addBackwardEdge(executionEdge);
         return added;
     }
 
