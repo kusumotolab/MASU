@@ -58,6 +58,7 @@ public class LabelStateManager extends StackedAstVisitStateManager<LabelStateMan
         }
         
         if (token.isStatement() && this.isInDefinition()) {
+            this.setState(STATE.OUT);
             this.fireStateChangeEvent(LABEL_STATE.EXIT_LABELED_STATEMENT, event);
         }
     }
