@@ -99,7 +99,9 @@ public class ThrowStatementInfo extends SingleStatementInfo {
     @Override
     public Set<ClassTypeInfo> getThrownExceptions() {
         final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
-        thrownExpressions.add((ClassTypeInfo) this.getThrownExpression().getType());
+        if(this.getThrownExpression().getType() instanceof ClassTypeInfo){
+            thrownExpressions.add((ClassTypeInfo) this.getThrownExpression().getType());
+        }
         return Collections.unmodifiableSet(thrownExpressions);
     }
 
