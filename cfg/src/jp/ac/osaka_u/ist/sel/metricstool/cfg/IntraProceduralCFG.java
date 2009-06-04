@@ -554,18 +554,35 @@ public class IntraProceduralCFG extends CFG {
             else {
 
                 final CFG finallyBlockCFG = new IntraProceduralCFG(finallyBlock, nodeFactory);
-                this.exitNodes.addAll(finallyBlockCFG.getExitNodes());
 
-                //try文の内部からつなぐ
-                for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
-                    exitNode.addForwardNode(finallyBlockCFG.getEnterNode());
+                // finallyブロックが空の場合は，finallyブロックがない場合と同様の処理
+                if (finallyBlockCFG.isEmpty()) {
+
+                    //try文の最後が，exitノードになりうる
+                    this.exitNodes.addAll(statementsCFG.getExitNodes());
+
+                    // 対応するcatch文のexitノードも，このtry文のexitノードとみなす
+                    for (final CatchBlockInfo catchBlock : tryBlock.getSequentCatchBlocks()) {
+                        final CFG catchBlockCFG = new IntraProceduralCFG(catchBlock, nodeFactory);
+                        this.exitNodes.addAll(catchBlockCFG.getExitNodes());
+                    }
                 }
 
-                // 各catch文からつなぐ 
-                for (final CatchBlockInfo catchBlock : tryBlock.getSequentCatchBlocks()) {
-                    final CFG catchBlockCFG = new IntraProceduralCFG(catchBlock, nodeFactory);
-                    for (final CFGNode<?> exitNode : catchBlockCFG.getExitNodes()) {
+                //finallyブロックが空でない場合は，finallyブロックの最後がtryブロックの出口になる
+                else {
+                    this.exitNodes.addAll(finallyBlockCFG.getExitNodes());
+
+                    //try文の内部からつなぐ
+                    for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
                         exitNode.addForwardNode(finallyBlockCFG.getEnterNode());
+                    }
+
+                    // 各catch文からつなぐ 
+                    for (final CatchBlockInfo catchBlock : tryBlock.getSequentCatchBlocks()) {
+                        final CFG catchBlockCFG = new IntraProceduralCFG(catchBlock, nodeFactory);
+                        for (final CFGNode<?> exitNode : catchBlockCFG.getExitNodes()) {
+                            exitNode.addForwardNode(finallyBlockCFG.getEnterNode());
+                        }
                     }
                 }
             }
