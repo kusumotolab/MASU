@@ -43,6 +43,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.El
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.FinallyBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.ForBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.IfBlockBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.SimpleBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.SwitchBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.SynchronizedBlockBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.statement.block.TryBlockBuilder;
@@ -176,7 +177,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
                 variableBuilder));
         this.builders.add(new IfBlockBuilder(this.buildDataManager, this.expressionManager,
                 variableBuilder));
-        //this.builders.add(new SimpleBlockBuilder(this.buildDataManager));
+        this.builders.add(new SimpleBlockBuilder(this.buildDataManager));
         this.builders.add(new SwitchBlockBuilder(this.buildDataManager, this.expressionManager,
                 variableBuilder));
         this.builders.add(new SynchronizedBlockBuilder(this.buildDataManager, this.expressionManager));
