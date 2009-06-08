@@ -11,7 +11,7 @@ public class SimpleBlockStateManager extends InnerBlockStateManager {
     protected boolean isDefinitionEvent(final AstVisitEvent event) {
         AstToken parentToken = event.getParentToken();
         return  event.getToken().isBlock() && !parentToken.isBlockDefinition()
-                && !parentToken.isSynchronized();
+                && !parentToken.isSynchronized() && !parentToken.isInstantiation();
     }
 
 }
