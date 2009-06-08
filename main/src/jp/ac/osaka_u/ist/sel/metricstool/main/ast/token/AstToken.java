@@ -95,6 +95,8 @@ public interface AstToken {
      */
     public boolean isInheritanceDescription();
 
+    public boolean isEnumConstant();
+    
     /**
      * トークンが式を表すかどうかを返す.
      * @return 式を表すトークンならtrue
@@ -173,6 +175,12 @@ public interface AstToken {
      */
     public boolean isStaticInitializerDefinition();
     
+    /**
+     * トークンが instance initializer の定義部を表すかどうかを返す
+     * @return instance initializer の定義部であれば true
+     */
+    public boolean isInstanceInitializerDefinition();
+   
     /**
      * トークンがメソッド呼び出しを表すかどうかを返す.
      * @return メソッド呼び出しを表すトークンならtrue

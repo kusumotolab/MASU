@@ -31,7 +31,12 @@ public class JavaAstToken extends AstTokenAdapter {
     /**
      * enum要素の記述部を表す定数インスタンス
      */
-    public static final JavaAstToken ENUM_CONSTANT = new JavaAstToken("ENUM_CONST");
+    public static final JavaAstToken ENUM_CONSTANT = new JavaAstToken("ENUM_CONST"){
+        @Override
+        public boolean isEnumConstant() {
+            return true;
+        }
+    };
 
     /**
      * super記述しを表す定数インスタンス

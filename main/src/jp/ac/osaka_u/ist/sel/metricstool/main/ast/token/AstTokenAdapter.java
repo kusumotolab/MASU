@@ -86,6 +86,10 @@ public class AstTokenAdapter implements AstToken {
     public boolean isParenthesesExpression() {
         return false;
     }
+
+    public boolean isEnumConstant() {
+        return false;
+    }
     
     public boolean isExpressionStatement() {
         return false;
@@ -137,6 +141,10 @@ public class AstTokenAdapter implements AstToken {
     }
 
     public boolean isStaticInitializerDefinition() {
+        return false;
+    }
+    
+    public boolean isInstanceInitializerDefinition() {
         return false;
     }
 
