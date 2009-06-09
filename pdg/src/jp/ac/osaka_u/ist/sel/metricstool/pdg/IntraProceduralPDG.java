@@ -37,13 +37,31 @@ public class IntraProceduralPDG extends PDG {
 
     private final CallableUnitInfo unit;
 
+    private final boolean buildDataDependence;
+
+    private final boolean buildControlDependence;
+
+    private final boolean buildExecutionDependence;
+
     /**
      * PDGを構築時に利用するCFG
      */
     private final IntraProceduralCFG cfg;
 
+    /**
+     * PDGを生成する
+     * 
+     * @param unit pdgを生成するユニット
+     * @param pdgNodeFactory PDGのノード生成に用いるファクトリ
+     * @param cfgNodeFactory CFGのノード生成に用いるファクトリ
+     * @param buildDataDependency Data Dependencyを生成するか？
+     * @param buildControlDependencey Control Dependencyを生成するか？
+     * @param buildExecutionDependency Execution Dependencyを生成するか？
+     */
     public IntraProceduralPDG(final CallableUnitInfo unit, final IPDGNodeFactory pdgNodeFactory,
-            final ICFGNodeFactory cfgNodeFactory) {
+            final ICFGNodeFactory cfgNodeFactory, final boolean buildDataDependency,
+            final boolean buildControlDependencey, final boolean buildExecutionDependency) {
+
         super(pdgNodeFactory);
         if (null == unit) {
             throw new IllegalArgumentException("method is null.");
@@ -51,13 +69,40 @@ public class IntraProceduralPDG extends PDG {
 
         this.unit = unit;
 
+        this.buildDataDependence = buildDataDependency;
+        this.buildControlDependence = buildControlDependencey;
+        this.buildExecutionDependence = buildExecutionDependency;
+
         this.cfg = new IntraProceduralCFG(unit, cfgNodeFactory);
 
         this.buildPDG();
     }
 
+    public IntraProceduralPDG(final CallableUnitInfo unit, final IPDGNodeFactory pdgNodeFactory,
+            final ICFGNodeFactory cfgNodeFactory) {
+        this(unit, pdgNodeFactory, cfgNodeFactory, true, true, true);
+    }
+
     public IntraProceduralPDG(final CallableUnitInfo unit) {
         this(unit, new DefaultPDGNodeFactory(), new DefaultCFGNodeFactory());
+    }
+
+    public IntraProceduralPDG(final CallableUnitInfo unit, final boolean buildDataDependency,
+            final boolean buildControlDependencey, final boolean buildExecutionDependency) {
+        this(unit, new DefaultPDGNodeFactory(), new DefaultCFGNodeFactory(), buildDataDependency,
+                buildControlDependencey, buildExecutionDependency);
+    }
+
+    public boolean isBuiltDataDependency() {
+        return this.buildDataDependence;
+    }
+
+    public boolean isBuiltControlDependency() {
+        return this.buildControlDependence;
+    }
+
+    public boolean isBuiltExecutionDependency() {
+        return this.buildExecutionDependence;
     }
 
     /**
@@ -119,32 +164,38 @@ public class IntraProceduralPDG extends PDG {
 
         //与えられたCFGノードで定義された各変数に対して，
         //その変数を参照しているノードにDataDependenceを引く
-        for (final VariableInfo<? extends UnitInfo> variable : cfgNode.getDefinedVariables()) {
+        if (this.isBuiltDataDependency()) {
+            for (final VariableInfo<? extends UnitInfo> variable : cfgNode.getDefinedVariables()) {
 
-            for (final CFGNode<?> forwardNode : cfgNode.getForwardNodes()) {
-                final Set<CFGNode<?>> checkedNodesForDefinedVariables = new HashSet<CFGNode<?>>();
-                checkedNodesForDefinedVariables.add(cfgNode);
-                this.buildDataDependence(forwardNode, pdgNode, variable,
-                        checkedNodesForDefinedVariables);
+                for (final CFGNode<?> forwardNode : cfgNode.getForwardNodes()) {
+                    final Set<CFGNode<?>> checkedNodesForDefinedVariables = new HashSet<CFGNode<?>>();
+                    checkedNodesForDefinedVariables.add(cfgNode);
+                    this.buildDataDependence(forwardNode, pdgNode, variable,
+                            checkedNodesForDefinedVariables);
+                }
             }
         }
 
         //与えられたCFGノードからControlDependenceを引く
-        if (pdgNode instanceof PDGControlNode) {
-            final ConditionInfo condition = (ConditionInfo) cfgNode.getCore();
-            this.buildControlDependence((PDGControlNode) pdgNode, Utility
-                    .getOwnerConditionalBlock(condition));
+        if (this.isBuiltControlDependency()) {
+            if (pdgNode instanceof PDGControlNode) {
+                final ConditionInfo condition = (ConditionInfo) cfgNode.getCore();
+                this.buildControlDependence((PDGControlNode) pdgNode, Utility
+                        .getOwnerConditionalBlock(condition));
+            }
+        }
+
+        //与えられたCFGノードからExecutionDependenceを引く
+        if (this.isBuiltExecutionDependency()) {
+            final PDGNode<?> fromPDGNode = this.makeNode(cfgNode);
+            for (final CFGNode<?> toNode : cfgNode.getForwardNodes()) {
+                final PDGNode<?> toPDGNode = this.makeNode(toNode);
+                fromPDGNode.addExecutionDependingNode(toPDGNode);
+            }
         }
 
         for (final CFGNode<?> forwardNode : cfgNode.getForwardNodes()) {
             this.buildDependence(forwardNode, checkedNodes);
-        }
-
-        //与えられたCFGノードからExecutionDependenceを引く
-        final PDGNode<?> fromPDGNode = this.makeNode(cfgNode);
-        for (final CFGNode<?> toNode : cfgNode.getForwardNodes()) {
-            final PDGNode<?> toPDGNode = this.makeNode(toNode);
-            fromPDGNode.addExecutionDependingNode(toPDGNode);
         }
     }
 
