@@ -60,7 +60,7 @@ public abstract class PDG {
      * @return 入口ノード
      */
     public final Set<PDGNode<?>> getEnterNodes() {
-        return this.enterNodes;
+        return Collections.unmodifiableSet(this.enterNodes);
     }
 
     /**
@@ -68,7 +68,7 @@ public abstract class PDG {
      * @return 出口ノード
      */
     public final Set<PDGNode<?>> getExitNodes() {
-        return this.exitNodes;
+        return Collections.unmodifiableSet(this.exitNodes);
     }
 
     /**
