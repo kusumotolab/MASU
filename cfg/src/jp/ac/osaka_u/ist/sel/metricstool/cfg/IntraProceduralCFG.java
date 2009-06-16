@@ -15,8 +15,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ContinueStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.DefaultEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.DoBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ElseBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalMethodInfo;
@@ -298,7 +300,11 @@ public class IntraProceduralCFG extends CFG {
             final ConditionInfo condition = forBlock.getConditionalClause().getCondition();
             final CFGControlNode controlNode = nodeFactory.makeControlNode(condition);
             assert null != controlNode : "controlNode is null";
-            this.exitNodes.add(controlNode);
+
+            //EmptyExpression‚Å‚È‚¯‚ê‚ÎCexitNodes‚É’Ç‰Á
+            if (!(condition instanceof EmptyExpressionInfo)) {
+                this.exitNodes.add(controlNode);
+            }
 
             //‰Šú‰»®‚©‚çCFG‚ğ¶¬
             final SortedSet<ConditionInfo> initializers = forBlock.getInitializerExpressions();
@@ -484,6 +490,7 @@ public class IntraProceduralCFG extends CFG {
             final CFGControlNode controlNode = nodeFactory.makeControlNode(condition);
             assert null != controlNode : "controlNode is null!";
             this.enterNode = controlNode;
+            this.exitNodes.add(controlNode);
 
             // ‹ó‚ÌCFG‚ğæ‚èœ‚­ˆ—
             final List<IntraProceduralCFG> statementCFGs = new ArrayList<IntraProceduralCFG>();
@@ -522,6 +529,11 @@ public class IntraProceduralCFG extends CFG {
                 //fromCFG‚ªcase•¶‚Å‚ ‚éê‡‚ÍCswitch•¶‚ÌğŒ®‚©‚çˆË‘¶•Ó‚ğˆø‚­
                 if (fromCFG.getElement() instanceof CaseEntryInfo) {
                     controlNode.addTrueForwardNode(fromCFG.getEnterNode());
+                }
+
+                //fromCFG‚ªdefault•¶‚Å‚ ‚éê‡‚ÍCswitch•¶‚ÌexitNodes‚©‚çcontrolNode‚ğœ‚­
+                if (toCFG.getElement() instanceof DefaultEntryInfo) {
+                    this.exitNodes.remove(controlNode);
                 }
             }
 
