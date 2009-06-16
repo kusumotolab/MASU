@@ -26,12 +26,12 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
     /**
      * このノードのフォワードノードのセット
      */
-    protected final Set<CFGNode<? extends ExecutableElementInfo>> forwardNodes;
+    protected final Set<CFGNode<?>> forwardNodes;
 
     /**
      * このノードのバックワードノードのセット
      */
-    protected final Set<CFGNode<? extends ExecutableElementInfo>> backwardNodes;
+    protected final Set<CFGNode<?>> backwardNodes;
 
     private final String text;
 
@@ -57,21 +57,70 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
             throw new IllegalArgumentException();
         }
 
-        if (!(forwardNode instanceof CFGEmptyNode)) {
-            this.forwardNodes.add(forwardNode);
+        if (this.forwardNodes.add(forwardNode)) {
+            forwardNode.addBackwardNode(this);
+        }
+    }
+
+    void addBackwardNode(final CFGNode<? extends ExecutableElementInfo> backwardNode) {
+
+        if (null == backwardNode) {
+            throw new IllegalArgumentException();
         }
 
-        forwardNode.backwardNodes.add(this);
+        if (this.backwardNodes.add(backwardNode)) {
+            backwardNode.addForwardNode(this);
+        }
     }
-    
-    /**
-     * 必要のないノードの場合は削除
-     */
-    protected void removeIfUnnecessarily(){                
+
+    void addForwardNodes(final Set<CFGNode<? extends ExecutableElementInfo>> forwardNodes) {
+
+        if (null == forwardNodes) {
+            throw new IllegalArgumentException();
+        }
+
+        if (this.forwardNodes.addAll(forwardNodes)) {
+            for (final CFGNode<? extends ExecutableElementInfo> forwardNode : forwardNodes) {
+                forwardNode.addBackwardNode(this);
+            }
+        }
     }
-    
-    
-    
+
+    void addBackwardNodes(final Set<CFGNode<? extends ExecutableElementInfo>> backwardNodes) {
+
+        if (null == backwardNodes) {
+            throw new IllegalArgumentException();
+        }
+
+        if (this.backwardNodes.addAll(backwardNodes)) {
+            for (final CFGNode<? extends ExecutableElementInfo> backwardNode : backwardNodes) {
+                backwardNode.addForwardNode(this);
+            }
+        }
+    }
+
+    void removeForwardNode(final CFGNode<? extends ExecutableElementInfo> forwardNode) {
+
+        if (null == forwardNode) {
+            throw new IllegalArgumentException();
+        }
+
+        if (this.forwardNodes.remove(forwardNode)) {
+            this.addForwardNodes(forwardNode.getForwardNodes());
+        }
+    }
+
+    final void removeBackwardNode(final CFGNode<? extends ExecutableElementInfo> backwardNode) {
+
+        if (null == backwardNode) {
+            throw new IllegalArgumentException();
+        }
+
+        if (this.backwardNodes.remove(backwardNode)) {
+            this.addBackwardNodes(backwardNode.getBackwardNodes());
+        }
+    }
+
     /**
      * このノードに対応する文の情報を取得
      * @return このノードに対応する文
@@ -94,6 +143,12 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
      */
     public Set<CFGNode<? extends ExecutableElementInfo>> getBackwardNodes() {
         return Collections.unmodifiableSet(this.backwardNodes);
+    }
+
+    /**
+     * 必要のないノードの場合は，このメソッドをオーバーライドすることによって，削除される
+     */
+    protected void optimize() {
     }
 
     /**

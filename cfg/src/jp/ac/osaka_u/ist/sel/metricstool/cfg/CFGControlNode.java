@@ -52,6 +52,18 @@ public class CFGControlNode extends CFGNode<ConditionInfo> {
         forwardNode.backwardNodes.add(this);
     }
 
+    void addTrueForwardNodes(final Set<CFGNode<? extends ExecutableElementInfo>> forwardNodes) {
+
+        if (null == forwardNodes) {
+            throw new IllegalArgumentException();
+        }
+
+        this.trueForwardNodes.addAll(forwardNodes);
+        for (final CFGNode<?> forwardNode : forwardNodes) {
+            forwardNode.backwardNodes.add(this);
+        }
+    }
+
     /**
      * 条件式がFalseの場合のフォワードノードを追加
      * 
@@ -67,6 +79,18 @@ public class CFGControlNode extends CFGNode<ConditionInfo> {
         forwardNode.backwardNodes.add(this);
     }
 
+    void addFalseForwardNodes(final Set<CFGNode<? extends ExecutableElementInfo>> forwardNodes) {
+
+        if (null == forwardNodes) {
+            throw new IllegalArgumentException();
+        }
+
+        this.falseForwardNodes.addAll(forwardNodes);
+        for (final CFGNode<?> forwardNode : forwardNodes) {
+            forwardNode.backwardNodes.add(this);
+        }
+    }
+
     /**
      * 通常のフォワードノードとして登録する場合はFalseフォワード
      * 
@@ -76,21 +100,19 @@ public class CFGControlNode extends CFGNode<ConditionInfo> {
         this.addFalseForwardNode(forwardNode);
     }
 
-    /**
-     * 必要のないノードの場合は削除
-     */
     @Override
-    protected void removeIfUnnecessarily() {
-        final Object core = this.getCore();
-        if (core instanceof EmptyExpressionInfo) {
-            for (final CFGNode<?> backwardNode : this.getBackwardNodes()) {
-                backwardNode.forwardNodes.remove(this);
-                backwardNode.forwardNodes.addAll(this.getTrueForwardNodes());
-            }
-            for (final CFGNode<?> forwardNode : this.getForwardNodes()) {
-                forwardNode.backwardNodes.remove(this);
-                forwardNode.backwardNodes.addAll(this.getBackwardNodes());
-            }
+    void removeForwardNode(final CFGNode<? extends ExecutableElementInfo> forwardNode) {
+
+        if (null == forwardNode) {
+            throw new IllegalArgumentException();
+        }
+
+        if (this.trueForwardNodes.remove(forwardNode)) {
+            this.addTrueForwardNodes(forwardNode.getForwardNodes());
+        }
+
+        if (this.falseForwardNodes.remove(forwardNode)) {
+            this.addFalseForwardNodes(forwardNode.getForwardNodes());
         }
     }
 
@@ -120,5 +142,25 @@ public class CFGControlNode extends CFGNode<ConditionInfo> {
      */
     public Set<CFGNode<? extends ExecutableElementInfo>> getFalseForwardNodes() {
         return Collections.unmodifiableSet(this.falseForwardNodes);
+    }
+
+    @Override
+    protected void optimize() {
+
+        if (this.getCore() instanceof EmptyExpressionInfo) {
+
+            final Set<CFGNode<?>> forwardNodes = (HashSet<CFGNode<?>>) ((HashSet<CFGNode<?>>) this.forwardNodes)
+                    .clone();
+            final Set<CFGNode<?>> backwardNodes = (HashSet<CFGNode<?>>) ((HashSet<CFGNode<?>>) this.backwardNodes)
+                    .clone();
+
+            for (final CFGNode<?> forwardNode : forwardNodes) {
+                forwardNode.removeBackwardNode(this);
+            }
+
+            for (final CFGNode<?> backwardNode : backwardNodes) {
+                backwardNode.removeForwardNode(this);
+            }
+        }
     }
 }

@@ -72,9 +72,7 @@ public class IntraProceduralCFG extends CFG {
         this.exitNodes.addAll(statementsCFG.getExitNodes());
 
         //必要のないノードを削除
-        for (final CFGNode<?> node : this.getAllNodes()) {
-            node.removeIfUnnecessarily();
-        }
+        this.optimizeCFG();
     }
 
     /**
@@ -509,6 +507,12 @@ public class IntraProceduralCFG extends CFG {
                         this.exitNodes.add(exitNode);
                     }
 
+                    // 要素数が1であり，そればBreak文であれば，それはswitch文のbreakである
+                    else if (exitNode instanceof CFGBreakStatementNode
+                            && 1 == fromCFG.getAllNodes().size()) {
+                        this.exitNodes.add(exitNode);
+                    }
+
                     // それ以外のノードであれば，つなぐ
                     else {
                         exitNode.addForwardNode(toCFG.getEnterNode());
@@ -781,6 +785,16 @@ public class IntraProceduralCFG extends CFG {
 
         assert false : "Here shouldn't be reached!";
         return null;
+    }
+
+    /**
+     * EmptyExpressionやCaseEntryを削除
+     */
+    private void optimizeCFG() {
+
+        for (final CFGNode<?> node : this.getAllNodes()) {
+            node.optimize();
+        }
     }
 
     /**
