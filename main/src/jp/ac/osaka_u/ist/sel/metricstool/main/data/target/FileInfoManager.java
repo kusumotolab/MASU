@@ -58,6 +58,19 @@ public final class FileInfoManager {
     }
 
     /**
+     * 登録されているファイルの総行数を返す
+     * 
+     * @return 登録されているファイルの総行数
+     */
+    public int getTotalLOC() {
+        int loc = 0;
+        for (final FileInfo file : this.getFileInfos()) {
+            loc += file.getLOC();
+        }
+        return loc;
+    }
+
+    /**
      * ファイル情報をクリア
      */
     public void clear() {
