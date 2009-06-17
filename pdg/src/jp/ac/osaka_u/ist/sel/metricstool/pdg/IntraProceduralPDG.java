@@ -11,10 +11,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.IntraProceduralCFG;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ContinueStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ElseBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
@@ -257,9 +258,12 @@ public class IntraProceduralPDG extends PDG {
 
         for (final StatementInfo innerStatement : block.getStatements()) {
 
-            // 単文やケースエントリの場合は，fromPDGNodeからの制御依存辺を引く
+            // 単文の場合は，fromPDGNodeからの制御依存辺を引く
+            // CaseEntryの場合は，制御依存辺はいらない
+            // Break文の場合，Continue文の場合も制御依存辺はいらない
             if (innerStatement instanceof SingleStatementInfo
-                    || innerStatement instanceof CaseEntryInfo) {
+                    && !(innerStatement instanceof BreakStatementInfo)
+                    && !(innerStatement instanceof ContinueStatementInfo)) {
                 final PDGNode<?> toPDGNode = this.makeNormalNode(innerStatement);
                 if (block instanceof ElseBlockInfo) {
                     fromPDGNode.addControlDependingNode(toPDGNode, false);
