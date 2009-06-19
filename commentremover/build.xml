@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<project default="build">
+
+	<tstamp />
+
+	<property file="build.properties" />
+
+	<property name="cli.jar" value="lib/commons-cli-1.1.jar" />
+	<property name="manifest.mf" value="resource/manifest.mf" />
+	<property name="license.txt" value="resource/LICENSE-2.0.txt" />
+	<property name="zip.bin.name" value="${TOOL.NAME}bin${DSTAMP}${TSTAMP}.zip" />
+	<property name="zip.src.name" value="${TOOL.NAME}src${DSTAMP}${TSTAMP}.zip" />
+	
+	<target name="compile">
+		<mkdir dir="${CLS.DIR}" />
+		<javac classpath="${cli.jar}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
+	</target>
+
+
+	<target name="build" depends="compile">
+		<mkdir dir="${PACKAGE.DIR}" />
+		<mkdir dir="${PACKAGE.BIN.DIR}" />
+		<mkdir dir="${PACKAGE.DOC.DIR}" />
+
+		<jar basedir="${CLS.DIR}" jarfile="${PACKAGE.BIN.DIR}/${TOOL.NAME}.jar" manifest="${manifest.mf}" />
+		<copy file="${cli.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${license.txt}" todir="${PACKAGE.BIN.DIR}" />
+	</target>
+
+	<target name="binpackage" depends="build">
+		<zip destfile="${zip.bin.name}" basedir="${PACKAGE.DIR}" />
+	</target>
+
+	<target name="srcpackage" depends="build">
+		<copy todir="${PACKAGE.SRC.DIR}">
+			<fileset dir="${SRC.DIR}" />
+		</copy>
+
+		<zip destfile="${zip.src.name}" basedir="${PACKAGE.DIR}" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${CLS.DIR}" />
+		<delete dir="${PACKAGE.DIR}" />
+		<delete verbose="true">
+			<fileset dir="." includes="${TOOL.NAME}*.zip" />
+		</delete>
+	</target>
+
+	<target name="all" depends="clean, binpackage" />
+</project>

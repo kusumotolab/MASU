@@ -48,6 +48,14 @@ public class CommentRemover {
             }
 
             {
+                final Option l = new Option("l", "language", true, "language");
+                l.setArgName("language");
+                l.setArgs(1);
+                l.setRequired(true);
+                options.addOption(l);
+            }
+
+            {
                 final Option a = new Option("a", "blankline", false, "blank line");
                 a.setArgName("blankline");
                 a.setRequired(false);
@@ -78,16 +86,34 @@ public class CommentRemover {
             final CommandLineParser parser = new PosixParser();
             final CommandLine cmd = parser.parse(options, args);
 
+            // -lオプションのチェック
+            {
+                final String language = cmd.getOptionValue("l");
+                if (!language.equalsIgnoreCase("java") && !language.equalsIgnoreCase("c")
+                        && !language.equalsIgnoreCase("charp")) {
+                    System.out.print("unavailable language: ");
+                    System.out.println(language);
+                    System.exit(0);
+                }
+            }
+
             final String inputPath = cmd.getOptionValue("i");
             final String outputPath = cmd.getOptionValue("o");
 
-            for (final File file : getFiles(new File(inputPath))) {
+            int index = 0;
+            final Set<File> files = getFiles(new File(inputPath), cmd.getOptionValue("l"));
+            for (final File file : files) {
 
                 if (cmd.hasOption("v")) {
                     System.out.print("processing ... ");
-                    System.out.println(file.getAbsolutePath());
+                    System.out.print(file.getAbsolutePath());
+                    System.out.print(" [");
+                    System.out.print(index++ + 1);
+                    System.out.print("/");
+                    System.out.print(files.size());
+                    System.out.println("]");
                 }
-                
+
                 String text = readFile(file);
                 if (!cmd.hasOption("c")) {
                     text = deleteLineComment(text);
@@ -112,7 +138,7 @@ public class CommentRemover {
     }
 
     // ファイルのSetを取得
-    public static Set<File> getFiles(final File file) {
+    public static Set<File> getFiles(final File file, final String language) {
 
         final Set<File> files = new HashSet<File>();
 
@@ -120,15 +146,26 @@ public class CommentRemover {
         if (file.isDirectory()) {
             File[] subfiles = file.listFiles();
             for (int i = 0; i < subfiles.length; i++) {
-                files.addAll(getFiles(subfiles[i]));
+                files.addAll(getFiles(subfiles[i], language));
             }
 
             // ファイルならば，拡張子が対象言語と一致すれば登録
         } else if (file.isFile()) {
 
             final String path = file.getAbsolutePath();
-            if (path.endsWith(".java")) {
-                files.add(file);
+            if (language.equals("java")) {
+                if (path.endsWith(".java")) {
+                    files.add(file);
+                }
+            } else if (language.equals("csharp")) {
+                if (path.endsWith(".cs")) {
+                    files.add(file);
+                }
+            } else if (language.equals("c")) {
+                if (path.endsWith(".c") || path.endsWith("cpp") || path.endsWith("cxx")
+                        || path.endsWith(".h") || path.endsWith(".hpp") || path.endsWith(".hxx")) {
+                    files.add(file);
+                }
             }
 
             // ディレクトリでもファイルでもない場合は不正
