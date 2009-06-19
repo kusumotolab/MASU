@@ -47,6 +47,34 @@ public class CommentRemover {
                 options.addOption(o);
             }
 
+            {
+                final Option a = new Option("a", "blankline", false, "blank line");
+                a.setArgName("blankline");
+                a.setRequired(false);
+                options.addOption(a);
+            }
+
+            {
+                final Option b = new Option("b", "blockcomment", false, "block comment");
+                b.setArgName("blockcomment");
+                b.setRequired(false);
+                options.addOption(b);
+            }
+
+            {
+                final Option c = new Option("c", "linecomment", false, "line comment");
+                c.setArgName("linecomment");
+                c.setRequired(false);
+                options.addOption(c);
+            }
+
+            {
+                final Option v = new Option("v", "verbose", false, "verbose output");
+                v.setArgName("verbose");
+                v.setRequired(false);
+                options.addOption(v);
+            }
+
             final CommandLineParser parser = new PosixParser();
             final CommandLine cmd = parser.parse(options, args);
 
@@ -55,10 +83,21 @@ public class CommentRemover {
 
             for (final File file : getFiles(new File(inputPath))) {
 
+                if (cmd.hasOption("v")) {
+                    System.out.print("processing ... ");
+                    System.out.println(file.getAbsolutePath());
+                }
+                
                 String text = readFile(file);
-                text = deleteLineComment(text);
-                text = deleteBlockComment(text);
-                text = deleteBlankLine(text);
+                if (!cmd.hasOption("c")) {
+                    text = deleteLineComment(text);
+                }
+                if (!cmd.hasOption("b")) {
+                    text = deleteBlockComment(text);
+                }
+                if (!cmd.hasOption("a")) {
+                    text = deleteBlankLine(text);
+                }
 
                 writeFile(text, file.getAbsolutePath().replace(inputPath, outputPath));
             }
