@@ -23,7 +23,6 @@ public class CommentRemover {
 
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
-    // 標準入力(Javaソース)→処理→標準出力(コメントを削除したソース)
     public static void main(String[] args) throws IOException {
 
         try {
@@ -77,6 +76,13 @@ public class CommentRemover {
             }
 
             {
+                final Option d = new Option("d", "normalize", false, "normalize");
+                d.setArgName("normalize");
+                d.setRequired(false);
+                options.addOption(d);
+            }
+
+            {
                 final Option v = new Option("v", "verbose", false, "verbose output");
                 v.setArgName("verbose");
                 v.setRequired(false);
@@ -123,6 +129,9 @@ public class CommentRemover {
                 }
                 if (!cmd.hasOption("a")) {
                     text = deleteBlankLine(text);
+                }
+                if (!cmd.hasOption("d")) {
+                    text = normalize(text);
                 }
 
                 writeFile(text, file.getAbsolutePath().replace(inputPath, outputPath));
@@ -260,6 +269,33 @@ public class CommentRemover {
         }
 
         return buf.toString();
+    }
+
+    public static String normalize(String src) throws IOException {
+
+        // delete all line separators
+        final StringBuilder text = new StringBuilder();
+        for (int i = 0; i < src.length(); i++) {
+            final String c = src.substring(i, i + 1);
+            if (c.equals("\n")) {
+                continue;
+            } else if (c.equals("\r")) {
+                continue;
+            }
+            text.append(c);
+        }
+
+        // add line separators after "{", "}", and ";"
+        for (int i = 0; i < text.length(); i++) {
+            final char c = text.charAt(i);
+            if ('{' == c || '}' == c || ';' == c) {
+                text.insert(i + 1, LINE_SEPARATOR);
+            }
+        }
+
+        // delete line separators that are only a character in the line
+        return text.toString().replaceAll(LINE_SEPARATOR + "[ \t]*[{]", "{").replaceAll(
+                LINE_SEPARATOR + "[ \t]*[}]", "}");
     }
 
     public static void writeFile(final String text, final String path) {
