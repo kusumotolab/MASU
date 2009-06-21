@@ -76,10 +76,17 @@ public class CommentRemover {
             }
 
             {
-                final Option d = new Option("d", "normalize", false, "normalize");
-                d.setArgName("normalize");
+                final Option d = new Option("d", "bracketline", false, "bracket line");
+                d.setArgName("bracketline");
                 d.setRequired(false);
                 options.addOption(d);
+            }
+
+            {
+                final Option e = new Option("e", "indent", false, "indent");
+                e.setArgName("indent");
+                e.setRequired(false);
+                options.addOption(e);
             }
 
             {
@@ -131,7 +138,10 @@ public class CommentRemover {
                     text = deleteBlankLine(text);
                 }
                 if (!cmd.hasOption("d")) {
-                    text = normalize(text);
+                    text = deleteBracketLine(text);
+                }
+                if (!cmd.hasOption("e")) {
+                    text = deleteIndent(text);
                 }
 
                 writeFile(text, file.getAbsolutePath().replace(inputPath, outputPath));
@@ -271,31 +281,36 @@ public class CommentRemover {
         return buf.toString();
     }
 
-    public static String normalize(String src) throws IOException {
+    public static String deleteBracketLine(String src) {
 
-        // delete all line separators
-        final StringBuilder text = new StringBuilder();
-        for (int i = 0; i < src.length(); i++) {
-            final String c = src.substring(i, i + 1);
-            if (c.equals("\n")) {
-                continue;
-            } else if (c.equals("\r")) {
-                continue;
-            }
-            text.append(c);
-        }
+        final String OPEN_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[{][ \t]*" + LINE_SEPARATOR;
+        final String CLOSE_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[}][ \t]*" + LINE_SEPARATOR;
 
-        // add line separators after "{", "}", and ";"
-        for (int i = 0; i < text.length(); i++) {
-            final char c = text.charAt(i);
-            if ('{' == c || '}' == c || ';' == c) {
-                text.insert(i + 1, LINE_SEPARATOR);
+        String text1 = src;
+        while (true) {
+            int beforeLength = text1.length();
+            text1 = text1.replaceAll(OPEN_BRACKET_LINE, "{" + LINE_SEPARATOR);
+            int afterLength = text1.length();
+            if (beforeLength == afterLength) {
+                break;
             }
         }
 
-        // delete line separators that are only a character in the line
-        return text.toString().replaceAll(LINE_SEPARATOR + "[ \t]*[{]", "{").replaceAll(
-                LINE_SEPARATOR + "[ \t]*[}]", "}");
+        String text2 = text1;
+        while (true) {
+            int beforeLength = text2.length();
+            text2 = text2.replaceAll(CLOSE_BRACKET_LINE, "}" + LINE_SEPARATOR);
+            int afterLength = text2.length();
+            if (beforeLength == afterLength) {
+                break;
+            }
+        }
+
+        return text2;
+    }
+
+    public static String deleteIndent(String src) {
+        return src.replaceAll(LINE_SEPARATOR + "[ \t]+", LINE_SEPARATOR);
     }
 
     public static void writeFile(final String text, final String path) {
