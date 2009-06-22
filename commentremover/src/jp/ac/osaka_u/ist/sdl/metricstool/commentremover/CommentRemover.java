@@ -99,7 +99,6 @@ public class CommentRemover {
             final CommandLineParser parser = new PosixParser();
             final CommandLine cmd = parser.parse(options, args);
 
-            // -lオプションのチェック
             {
                 final String language = cmd.getOptionValue("l");
                 if (!language.equalsIgnoreCase("java") && !language.equalsIgnoreCase("c")
@@ -156,7 +155,9 @@ public class CommentRemover {
         }
     }
 
-    // ファイルのSetを取得
+    /**
+     * ファイルのSetを取得
+     */
     public static Set<File> getFiles(final File file, final String language) {
 
         final Set<File> files = new HashSet<File>();
@@ -196,7 +197,9 @@ public class CommentRemover {
         return files;
     }
 
-    // ファイルを読み込む
+    /**
+     * ファイルを読み込む
+     */
     public static String readFile(final File file) {
 
         try {
@@ -218,7 +221,9 @@ public class CommentRemover {
         return null;
     }
 
-    // 行コメント（「//」以降）削除
+    /**
+     * ラインコメントを削除
+     */
     public static String deleteLineComment(String src) {
 
         StringBuilder buf = new StringBuilder();
@@ -241,7 +246,9 @@ public class CommentRemover {
         return buf.toString();
     }
 
-    // ブロックコメント（「/*」から「*/」まで）削除
+    /**
+     * ブロックコメントを削除
+     */
     public static String deleteBlockComment(String src) {
 
         StringBuilder buf = new StringBuilder();
@@ -264,7 +271,9 @@ public class CommentRemover {
         return buf.toString();
     }
 
-    // 空行削除
+    /**
+     * 空白行を削除
+     */
     public static String deleteBlankLine(String src) throws IOException {
 
         StringBuilder buf = new StringBuilder();
@@ -281,6 +290,9 @@ public class CommentRemover {
         return buf.toString();
     }
 
+    /**
+     * 中括弧のみの行を削除
+     */
     public static String deleteBracketLine(String src) {
 
         final String OPEN_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[{][ \t]*" + LINE_SEPARATOR;
@@ -309,10 +321,16 @@ public class CommentRemover {
         return text2;
     }
 
+    /**
+     * インデントを削除
+     */
     public static String deleteIndent(String src) {
         return src.replaceAll(LINE_SEPARATOR + "[ \t]+", LINE_SEPARATOR);
     }
 
+    /**
+     * ファイルに出力
+     */
     public static void writeFile(final String text, final String path) {
 
         try {

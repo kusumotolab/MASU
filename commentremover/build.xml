@@ -8,9 +8,11 @@
 	<property name="cli.jar" value="lib/commons-cli-1.1.jar" />
 	<property name="manifest.mf" value="resource/manifest.mf" />
 	<property name="license.txt" value="resource/LICENSE-2.0.txt" />
+	<property name="build.xml" value="build.xml" />
+	<property name="build.properties" value="build.properties" />
 	<property name="zip.bin.name" value="${TOOL.NAME}bin${DSTAMP}${TSTAMP}.zip" />
 	<property name="zip.src.name" value="${TOOL.NAME}src${DSTAMP}${TSTAMP}.zip" />
-	
+
 	<target name="compile">
 		<mkdir dir="${CLS.DIR}" />
 		<javac classpath="${cli.jar}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
@@ -35,6 +37,8 @@
 		<copy todir="${PACKAGE.SRC.DIR}">
 			<fileset dir="${SRC.DIR}" />
 		</copy>
+		<!-- <copy file="${build.properties}" todir="${PACKAGE.DIR}" /> -->
+		<!-- <copy file="${build.xml}" todir="${PACKAGE.DIR}" /> -->
 
 		<zip destfile="${zip.src.name}" basedir="${PACKAGE.DIR}" />
 	</target>
