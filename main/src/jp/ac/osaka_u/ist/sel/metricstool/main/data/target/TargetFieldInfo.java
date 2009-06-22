@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  */
 @SuppressWarnings("serial")
-public final class TargetFieldInfo extends FieldInfo implements Visualizable, Member {
+public final class TargetFieldInfo extends FieldInfo implements Visualizable, StaticOrInstance {
 
     /**
      * フィールド情報オブジェクトを初期化

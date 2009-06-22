@@ -3,13 +3,13 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersInterpriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.MemberSetting;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.StaticOrInstanceSetting;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.VisualizableSetting;
 
 
 public class JavaModifiersInterpriter implements ModifiersInterpriter {
     public void interprit(ModifierInfo[] modifiers, VisualizableSetting visualizable,
-            MemberSetting member) {
+            StaticOrInstanceSetting member) {
         analyze(modifiers);
 
         if (null != visualizable) {

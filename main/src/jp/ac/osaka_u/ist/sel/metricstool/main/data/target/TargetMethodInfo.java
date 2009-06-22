@@ -27,7 +27,7 @@ import java.util.Set;
  * 
  */
 @SuppressWarnings("serial")
-public final class TargetMethodInfo extends MethodInfo implements Member {
+public final class TargetMethodInfo extends MethodInfo implements StaticOrInstance {
 
     /**
      * メソッドオブジェクトを初期化する．

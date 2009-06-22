@@ -16,7 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Members;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticOrInstanceProcessing;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
@@ -100,7 +100,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
         // 利用可能なインスタンスフィールド名からエンティティ名を検索
         {
             // このクラスで利用可能なインスタンスフィールド一覧を取得
-            final List<TargetFieldInfo> availableFieldsOfThisClass = Members
+            final List<TargetFieldInfo> availableFieldsOfThisClass = StaticOrInstanceProcessing
                     .<TargetFieldInfo> getInstanceMembers(NameResolver
                             .getAvailableFields(usingClass));
 
@@ -151,7 +151,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 boolean found = false;
                                 {
                                     // 利用可能なインスタンスフィールド一覧を取得
-                                    final List<TargetFieldInfo> availableFields = Members
+                                    final List<TargetFieldInfo> availableFields = StaticOrInstanceProcessing
                                             .getInstanceMembers(NameResolver.getAvailableFields(
                                                     (TargetClassInfo) ownerClass, usingClass));
 
@@ -237,7 +237,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
         // 利用可能なスタティックフィールド名からエンティティ名を検索
         {
             // このクラスで利用可能なスタティックフィールド一覧を取得
-            final List<TargetFieldInfo> availableFieldsOfThisClass = Members
+            final List<TargetFieldInfo> availableFieldsOfThisClass = StaticOrInstanceProcessing
                     .<TargetFieldInfo> getStaticMembers(NameResolver.getAvailableFields(usingClass));
 
             for (final TargetFieldInfo availableFieldOfThisClass : availableFieldsOfThisClass) {
@@ -287,7 +287,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 boolean found = false;
                                 {
                                     // 利用可能なスタティックフィールド一覧を取得
-                                    final List<TargetFieldInfo> availableFields = Members
+                                    final List<TargetFieldInfo> availableFields = StaticOrInstanceProcessing
                                             .getStaticMembers(NameResolver.getAvailableFields(
                                                     (TargetClassInfo) ownerClass, usingClass));
 
@@ -438,7 +438,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 boolean found = false;
                                 {
                                     // 利用可能なフィールド一覧を取得
-                                    final List<TargetFieldInfo> availableFields = Members
+                                    final List<TargetFieldInfo> availableFields = StaticOrInstanceProcessing
                                             .getStaticMembers(NameResolver.getAvailableFields(
                                                     (TargetClassInfo) ownerClass, usingClass));
 

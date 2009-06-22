@@ -28,7 +28,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 public final class UnresolvedFieldInfo extends
         UnresolvedVariableInfo<TargetFieldInfo, UnresolvedClassInfo> implements
-        VisualizableSetting, MemberSetting {
+        VisualizableSetting, StaticOrInstanceSetting {
 
     /**
      * Unresolvedフィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．

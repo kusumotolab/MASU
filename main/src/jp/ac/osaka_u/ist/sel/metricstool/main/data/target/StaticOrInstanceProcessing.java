@@ -14,7 +14,7 @@ import java.util.TreeSet;
  * @author higo
  * 
  */
-public class Members {
+public class StaticOrInstanceProcessing {
 
     /**
      * 引数で与えられたメンバーのうち，スタティックなものだけを抽出して返す．
@@ -23,7 +23,7 @@ public class Members {
      * @param members メンバーの List
      * @return スタティックなメンバーの List
      */
-    public static final <T extends Member> List<T> getInstanceMembers(final List<T> members) {
+    public static final <T extends StaticOrInstance> List<T> getInstanceMembers(final List<T> members) {
 
         final List<T> instanceMembers = new ArrayList<T>();
         for (T member : members) {
@@ -42,7 +42,7 @@ public class Members {
      * @param members メンバーの List
      * @return インスタンスメンバーの List
      */
-    public static final <T extends Member> List<T> getStaticMembers(final List<T> members) {
+    public static final <T extends StaticOrInstance> List<T> getStaticMembers(final List<T> members) {
 
         final List<T> staticMembers = new ArrayList<T>();
         for (T member : members) {
@@ -61,7 +61,7 @@ public class Members {
      * @param members メンバーの SortedSet
      * @return スタティックなメンバーの SortedSet
      */
-    public static final <T extends Member> SortedSet<T> getInstanceMembers(
+    public static final <T extends StaticOrInstance> SortedSet<T> getInstanceMembers(
             final SortedSet<T> members) {
 
         final SortedSet<T> instanceMembers = new TreeSet<T>();
@@ -81,7 +81,7 @@ public class Members {
      * @param members メンバーの SortedSet
      * @return インスタンスメンバーの SortedSet
      */
-    public static final <T extends Member> SortedSet<T> getStaticMembers(final SortedSet<T> members) {
+    public static final <T extends StaticOrInstance> SortedSet<T> getStaticMembers(final SortedSet<T> members) {
 
         final SortedSet<T> staticMembers = new TreeSet<T>();
         for (T member : members) {

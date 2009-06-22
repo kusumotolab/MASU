@@ -31,7 +31,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 @SuppressWarnings("serial")
-public class TargetClassInfo extends ClassInfo implements Visualizable, Member {
+public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOrInstance {
 
     /**
      * 指定されたクラスに含まれる全てのインナークラスを返す

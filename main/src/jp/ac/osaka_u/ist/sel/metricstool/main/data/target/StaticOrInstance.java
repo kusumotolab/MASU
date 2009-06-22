@@ -6,7 +6,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
  * 
  * @author higo
  */
-public interface Member {
+public interface StaticOrInstance {
 
     /**
      * インスタンスメンバーかどうかを返す

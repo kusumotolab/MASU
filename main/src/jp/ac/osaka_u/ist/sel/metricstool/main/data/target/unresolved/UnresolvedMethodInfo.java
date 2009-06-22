@@ -28,7 +28,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<TargetMethodInfo>
-        implements MemberSetting {
+        implements StaticOrInstanceSetting {
 
     /**
      * 未解決メソッド定義情報オブジェクトを初期化
