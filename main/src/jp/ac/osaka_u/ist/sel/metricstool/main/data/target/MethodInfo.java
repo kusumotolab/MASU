@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  *
  */
-public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasurable {
+public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasurable, Member {
 
     /**
      * メソッドオブジェクトを初期化する

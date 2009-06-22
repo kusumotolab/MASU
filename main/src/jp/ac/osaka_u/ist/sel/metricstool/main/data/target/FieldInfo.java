@@ -26,7 +26,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  */
-public abstract class FieldInfo extends VariableInfo<ClassInfo> implements MetricMeasurable {
+public abstract class FieldInfo extends VariableInfo<ClassInfo> implements MetricMeasurable, Member {
 
     /**
      * フィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．
