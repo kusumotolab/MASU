@@ -22,7 +22,6 @@
 	<target name="build" depends="compile">
 		<mkdir dir="${PACKAGE.DIR}" />
 		<mkdir dir="${PACKAGE.BIN.DIR}" />
-		<mkdir dir="${PACKAGE.DOC.DIR}" />
 
 		<jar basedir="${CLS.DIR}" jarfile="${PACKAGE.BIN.DIR}/${TOOL.NAME}.jar" manifest="${manifest.mf}" />
 		<copy file="${cli.jar}" todir="${PACKAGE.BIN.DIR}" />
