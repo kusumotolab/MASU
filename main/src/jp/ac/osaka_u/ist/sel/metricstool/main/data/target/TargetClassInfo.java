@@ -330,7 +330,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
      * 
      * @param accessibleClasses アクセス可能なクラス群
      */
-    public final void addaccessibleClasses(final SortedSet<ClassInfo> accessibleClasses) {
+    public final void addaccessibleClasses(final Set<ClassInfo> accessibleClasses) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == accessibleClasses) {
@@ -404,8 +404,8 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
      * 
      * @return このクラスにおいてアクセス可能なクラスのSortedSet
      */
-    public final SortedSet<ClassInfo> getAccessibleClasses() {
-        return Collections.unmodifiableSortedSet(this.accessibleClasses);
+    public final Set<ClassInfo> getAccessibleClasses() {
+        return Collections.unmodifiableSet(this.accessibleClasses);
     }
 
     /**
@@ -619,7 +619,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
     /**
      * このクラス内からアクセス可能なクラス
      */
-    private final SortedSet<ClassInfo> accessibleClasses;
+    private final Set<ClassInfo> accessibleClasses;
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数

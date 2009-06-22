@@ -2,40 +2,27 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 
-/**
- * import文を表すクラス
- * 
- * @author higo
- *
- */
-public class ImportStatementInfo extends UnitInfo {
-
-    
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -855270889117061510L;
+public abstract class ImportStatementInfo<T> extends UnitInfo {
 
     /**
      * オブジェクトを初期化
-     * @param importedClasses
+     * @param importedUnits
      * @param fromLine 
      * @param fromColumn
      * @param toLine
      * @param toColumn
      */
-    public ImportStatementInfo(final SortedSet<ClassInfo> importedClasses, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    ImportStatementInfo(final Set<T> importedUnits, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
-        this.importedClasses = new TreeSet<ClassInfo>();
-        this.importedClasses.addAll(importedClasses);
+        this.importedUnits = new HashSet<T>();
+        this.importedUnits.addAll(importedUnits);
     }
 
     /**
@@ -43,27 +30,25 @@ public class ImportStatementInfo extends UnitInfo {
      * 
      * @return　インポートされたクラスのSortedSet
      */
-    public SortedSet<ClassInfo> getImportClasses() {
-        return Collections.unmodifiableSortedSet(this.importedClasses);
+    Set<T> getImportedUnits() {
+        return Collections.unmodifiableSet(this.importedUnits);
     }
 
     @Override
-    public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
-        // TODO Auto-generated method stub
-        return null;
+    final public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
+        return Collections.unmodifiableSet(new HashSet<CallInfo<? extends CallableUnitInfo>>());
     }
 
     @Override
-    public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
-        // TODO Auto-generated method stub
-        return null;
+    final public Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        return Collections.unmodifiableSet(new HashSet<VariableInfo<? extends UnitInfo>>());
     }
 
     @Override
-    public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
-        // TODO Auto-generated method stub
-        return null;
+    final public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
+        return Collections
+                .unmodifiableSet(new HashSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>());
     }
 
-    private final SortedSet<ClassInfo> importedClasses;
+    private final Set<T> importedUnits;
 }

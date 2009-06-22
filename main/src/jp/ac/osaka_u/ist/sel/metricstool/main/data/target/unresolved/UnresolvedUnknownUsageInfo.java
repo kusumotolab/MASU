@@ -50,7 +50,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public UnresolvedUnknownUsageInfo(final List<UnresolvedImportStatementInfo> availableNamespaces,
+    public UnresolvedUnknownUsageInfo(final List<UnresolvedClassImportStatementInfo> availableNamespaces,
             final String[] name, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
 
@@ -713,7 +713,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
             // 利用可能な名前空間から検索
             {
-                for (final UnresolvedImportStatementInfo availableNamespace : this
+                for (final UnresolvedClassImportStatementInfo availableNamespace : this
                         .getAvailableNamespaces()) {
 
                     // 名前空間名.* となっている場合
@@ -1236,14 +1236,14 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
      * 
      * @return この未解決エンティティ使用が利用することのできる名前空間
      */
-    public List<UnresolvedImportStatementInfo> getAvailableNamespaces() {
+    public List<UnresolvedClassImportStatementInfo> getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
     /**
      * この未解決エンティティ使用が利用することのできる名前空間を保存するための変数
      */
-    private final List<UnresolvedImportStatementInfo> availableNamespaces;
+    private final List<UnresolvedClassImportStatementInfo> availableNamespaces;
 
     /**
      * この未解決エンティティ使用名を保存するための変数

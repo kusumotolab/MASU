@@ -47,7 +47,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public UnresolvedFieldUsageInfo(final List<UnresolvedImportStatementInfo> availableNamespaces,
+    public UnresolvedFieldUsageInfo(final List<UnresolvedClassImportStatementInfo> availableNamespaces,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> qualifierUsage,
             final String fieldName, final boolean reference, final boolean assignment,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
@@ -258,7 +258,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
      * 
      * @return 使用可能な名前空間を返す
      */
-    public List<UnresolvedImportStatementInfo> getAvailableNamespaces() {
+    public List<UnresolvedClassImportStatementInfo> getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
@@ -283,7 +283,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
     /**
      * 使用可能な名前空間を保存するための変数
      */
-    private final List<UnresolvedImportStatementInfo> availableNamespaces;
+    private final List<UnresolvedClassImportStatementInfo> availableNamespaces;
 
     /**
      * フィールド名を保存するための変数

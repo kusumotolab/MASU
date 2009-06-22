@@ -21,7 +21,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedImportStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
@@ -287,14 +287,14 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     }
 
-    public List<UnresolvedImportStatementInfo> getAllAvaliableNames() {
+    public List<UnresolvedClassImportStatementInfo> getAllAvaliableNames() {
         //      nullじゃなければ変化してないのでキャッシュ使いまわし
         if (null != allAvaliableNameSetCache) {
             return allAvaliableNameSetCache;
         }
 
-        List<UnresolvedImportStatementInfo> resultSet = getAvailableAliasSet();
-        for (UnresolvedImportStatementInfo info : getAvailableNameSpaceSet()) {
+        List<UnresolvedClassImportStatementInfo> resultSet = getAvailableAliasSet();
+        for (UnresolvedClassImportStatementInfo info : getAvailableNameSpaceSet()) {
             resultSet.add(info);
         }
 
@@ -303,25 +303,25 @@ public class DefaultBuildDataManager implements BuildDataManager {
         return resultSet;
     }
 
-    public List<UnresolvedImportStatementInfo> getAvailableNameSpaceSet() {
+    public List<UnresolvedClassImportStatementInfo> getAvailableNameSpaceSet() {
         //nullじゃなければ変化してないのでキャッシュ使いまわし
         if (null != availableNameSpaceSetCache) {
             return availableNameSpaceSetCache;
         }
 
-        final List<UnresolvedImportStatementInfo> result = new LinkedList<UnresolvedImportStatementInfo>();
+        final List<UnresolvedClassImportStatementInfo> result = new LinkedList<UnresolvedClassImportStatementInfo>();
         //まず先に今の名前空間を登録
         if (null == currentNameSpaceCache) {
-            currentNameSpaceCache = new UnresolvedImportStatementInfo(getCurrentNameSpace(), true);
+            currentNameSpaceCache = new UnresolvedClassImportStatementInfo(getCurrentNameSpace(), true);
         }
         result.add(currentNameSpaceCache);
 
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
             final BlockScope scope = this.scopeStack.get(i);
-            final List<UnresolvedImportStatementInfo> scopeLocalNameSpaceSet = scope
+            final List<UnresolvedClassImportStatementInfo> scopeLocalNameSpaceSet = scope
                     .getAvailableNameSpaces();
-            for (final UnresolvedImportStatementInfo info : scopeLocalNameSpaceSet) {
+            for (final UnresolvedClassImportStatementInfo info : scopeLocalNameSpaceSet) {
                 result.add(info);
             }
         }
@@ -330,18 +330,18 @@ public class DefaultBuildDataManager implements BuildDataManager {
         return result;
     }
 
-    public List<UnresolvedImportStatementInfo> getAvailableAliasSet() {
+    public List<UnresolvedClassImportStatementInfo> getAvailableAliasSet() {
         //nullじゃなければ変化してないのでキャッシュ使いまわし
         if (null != aliaseNameSetCache) {
             return aliaseNameSetCache;
         }
 
-        final List<UnresolvedImportStatementInfo> result = new LinkedList<UnresolvedImportStatementInfo>();
+        final List<UnresolvedClassImportStatementInfo> result = new LinkedList<UnresolvedClassImportStatementInfo>();
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
             final BlockScope scope = this.scopeStack.get(i);
-            final List<UnresolvedImportStatementInfo> scopeLocalNameSpaceSet = scope.getAvailableAliases();
-            for (final UnresolvedImportStatementInfo info : scopeLocalNameSpaceSet) {
+            final List<UnresolvedClassImportStatementInfo> scopeLocalNameSpaceSet = scope.getAvailableAliases();
+            for (final UnresolvedClassImportStatementInfo info : scopeLocalNameSpaceSet) {
                 result.add(info);
             }
         }
@@ -654,9 +654,9 @@ public class DefaultBuildDataManager implements BuildDataManager {
         private final Map<String, UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>>> variables = new LinkedHashMap<String, UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>>>();
 
         //        private final Map<String, String[]> nameAliases = new LinkedHashMap<String, String[]>();
-        private final Map<String, UnresolvedImportStatementInfo> nameAliases = new LinkedHashMap<String, UnresolvedImportStatementInfo>();
+        private final Map<String, UnresolvedClassImportStatementInfo> nameAliases = new LinkedHashMap<String, UnresolvedClassImportStatementInfo>();
 
-        private final List<UnresolvedImportStatementInfo> availableNameSpaces = new LinkedList<UnresolvedImportStatementInfo>();
+        private final List<UnresolvedClassImportStatementInfo> availableNameSpaces = new LinkedList<UnresolvedClassImportStatementInfo>();
 
         public void addVariable(
                 final UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> variable) {
@@ -671,7 +671,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
             final String[] tmp = new String[name.length];
             System.arraycopy(name, 0, tmp, 0, name.length);
 
-            UnresolvedImportStatementInfo info = new UnresolvedImportStatementInfo(tmp, false);
+            UnresolvedClassImportStatementInfo info = new UnresolvedClassImportStatementInfo(tmp, false);
 
             this.nameAliases.put(alias, info);
         }
@@ -679,17 +679,17 @@ public class DefaultBuildDataManager implements BuildDataManager {
         public void addUsingNameSpace(final String[] name) {
             final String[] tmp = new String[name.length];
             System.arraycopy(name, 0, tmp, 0, name.length);
-            final UnresolvedImportStatementInfo info = new UnresolvedImportStatementInfo(tmp, true);
+            final UnresolvedClassImportStatementInfo info = new UnresolvedClassImportStatementInfo(tmp, true);
             this.availableNameSpaces.add(info);
         }
 
-        public List<UnresolvedImportStatementInfo> getAvailableNameSpaces() {
+        public List<UnresolvedClassImportStatementInfo> getAvailableNameSpaces() {
             return this.availableNameSpaces;
         }
 
-        public List<UnresolvedImportStatementInfo> getAvailableAliases() {
-            List<UnresolvedImportStatementInfo> resultSet = new LinkedList<UnresolvedImportStatementInfo>();
-            for (UnresolvedImportStatementInfo info : this.nameAliases.values()) {
+        public List<UnresolvedClassImportStatementInfo> getAvailableAliases() {
+            List<UnresolvedClassImportStatementInfo> resultSet = new LinkedList<UnresolvedClassImportStatementInfo>();
+            for (UnresolvedClassImportStatementInfo info : this.nameAliases.values()) {
                 resultSet.add(info);
             }
             return resultSet;
@@ -757,13 +757,13 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     private static final String[] EMPTY_NAME = new String[0];
 
-    private List<UnresolvedImportStatementInfo> aliaseNameSetCache = null;
+    private List<UnresolvedClassImportStatementInfo> aliaseNameSetCache = null;
 
-    private List<UnresolvedImportStatementInfo> availableNameSpaceSetCache = null;
+    private List<UnresolvedClassImportStatementInfo> availableNameSpaceSetCache = null;
 
-    private List<UnresolvedImportStatementInfo> allAvaliableNameSetCache = null;
+    private List<UnresolvedClassImportStatementInfo> allAvaliableNameSetCache = null;
 
-    private UnresolvedImportStatementInfo currentNameSpaceCache = null;
+    private UnresolvedClassImportStatementInfo currentNameSpaceCache = null;
 
     private final Stack<BlockScope> scopeStack = new Stack<BlockScope>();
 
