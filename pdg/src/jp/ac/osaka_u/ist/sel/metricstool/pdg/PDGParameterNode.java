@@ -1,8 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
@@ -37,14 +37,14 @@ public class PDGParameterNode extends PDGNormalNode<ParameterDeclarationStatemen
     }
 
     @Override
-    public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
-        final Set<VariableInfo<? extends UnitInfo>> definedVariables = new HashSet<VariableInfo<? extends UnitInfo>>();
+    public final SortedSet<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        final SortedSet<VariableInfo<? extends UnitInfo>> definedVariables = new TreeSet<VariableInfo<? extends UnitInfo>>();
         definedVariables.add(this.getCore().getParameter());
         return definedVariables;
     }
 
     @Override
-    public Set<VariableInfo<?>> getReferencedVariables() {
-        return new HashSet<VariableInfo<? extends UnitInfo>>();
+    public SortedSet<VariableInfo<?>> getReferencedVariables() {
+        return new TreeSet<VariableInfo<? extends UnitInfo>>();
     }
 }

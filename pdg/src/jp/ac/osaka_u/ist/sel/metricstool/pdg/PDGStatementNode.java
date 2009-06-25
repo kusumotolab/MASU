@@ -1,7 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 
 
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
@@ -31,14 +32,18 @@ public class PDGStatementNode extends PDGNormalNode<SingleStatementInfo> {
     }
 
     @Override
-    public final Set<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
-        return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getAssignments(this.getCore()
-                .getVariableUsages()));
+    public final SortedSet<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        final SortedSet<VariableInfo<?>> definedVariables = new TreeSet<VariableInfo<?>>();
+        definedVariables.addAll(VariableUsageInfo.getUsedVariables(VariableUsageInfo
+                .getAssignments(this.getCore().getVariableUsages())));
+        return definedVariables;
     }
 
     @Override
-    public final Set<VariableInfo<? extends UnitInfo>> getReferencedVariables() {
-        return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getReferencees(this.getCore()
-                .getVariableUsages()));
+    public final SortedSet<VariableInfo<? extends UnitInfo>> getReferencedVariables() {
+        final SortedSet<VariableInfo<?>> referencedVariables = new TreeSet<VariableInfo<?>>();
+        referencedVariables.addAll(VariableUsageInfo.getUsedVariables(VariableUsageInfo
+                .getReferencees(this.getCore().getVariableUsages())));
+        return referencedVariables;
     }
 }

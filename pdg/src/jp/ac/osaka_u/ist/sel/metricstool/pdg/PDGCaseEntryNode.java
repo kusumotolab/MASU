@@ -2,9 +2,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 
 
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
@@ -31,15 +32,19 @@ public class PDGCaseEntryNode extends PDGNormalNode<CaseEntryInfo> {
     }
 
     @Override
-    public Set<VariableInfo<?>> getDefinedVariables() {
-        return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getAssignments(this.getCore()
-                .getVariableUsages()));
+    public SortedSet<VariableInfo<?>> getDefinedVariables() {
+        final SortedSet<VariableInfo<?>> definedVariables = new TreeSet<VariableInfo<?>>();
+        definedVariables.addAll(VariableUsageInfo.getUsedVariables(VariableUsageInfo
+                .getAssignments(this.getCore().getVariableUsages())));
+        return definedVariables;
     }
 
     @Override
-    public Set<VariableInfo<?>> getReferencedVariables() {
-        return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getReferencees(this.getCore()
-                .getVariableUsages()));
+    public SortedSet<VariableInfo<?>> getReferencedVariables() {
+        final SortedSet<VariableInfo<?>> referencedVariables = new TreeSet<VariableInfo<?>>();
+        referencedVariables.addAll(VariableUsageInfo.getUsedVariables(VariableUsageInfo
+                .getReferencees(this.getCore().getVariableUsages())));
+        return referencedVariables;
     }
 
 }

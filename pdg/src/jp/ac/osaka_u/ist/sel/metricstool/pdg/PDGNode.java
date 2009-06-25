@@ -2,8 +2,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGNode;
@@ -22,7 +22,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
  *
  * @param <T> ノードの核となる情報の型
  */
-public abstract class PDGNode<T extends ExecutableElementInfo> {
+public abstract class PDGNode<T extends ExecutableElementInfo> implements
+        Comparable<PDGNode<? extends ExecutableElementInfo>> {
 
     /**
      * CFGノードからPDGノードを生成するメソッド
@@ -54,12 +55,12 @@ public abstract class PDGNode<T extends ExecutableElementInfo> {
     /**
      * フォワードエッジ（このノードからの依存辺）
      */
-    private final Set<PDGEdge> forwardEdges;
+    private final SortedSet<PDGEdge> forwardEdges;
 
     /**
      * バックワードエッジ（このノードへの依存辺）
      */
-    private final Set<PDGEdge> backwardEdges;
+    private final SortedSet<PDGEdge> backwardEdges;
 
     /**
      * ノードの核となる情報
@@ -73,8 +74,8 @@ public abstract class PDGNode<T extends ExecutableElementInfo> {
      * @param core ノードの核となる情報
      */
     protected PDGNode() {
-        this.forwardEdges = new HashSet<PDGEdge>();
-        this.backwardEdges = new HashSet<PDGEdge>();
+        this.forwardEdges = new TreeSet<PDGEdge>();
+        this.backwardEdges = new TreeSet<PDGEdge>();
     }
 
     /**
@@ -82,14 +83,14 @@ public abstract class PDGNode<T extends ExecutableElementInfo> {
      * 
      * @return
      */
-    public abstract Set<VariableInfo<? extends UnitInfo>> getDefinedVariables();
+    public abstract SortedSet<VariableInfo<? extends UnitInfo>> getDefinedVariables();
 
     /**
      * このノードにて，参照されている変数のSet
      * 
      * @return
      */
-    public abstract Set<VariableInfo<? extends UnitInfo>> getReferencedVariables();
+    public abstract SortedSet<VariableInfo<? extends UnitInfo>> getReferencedVariables();
 
     /**
      * 引数で与えられた変数がこのノードで定義されているかどうかを返す
@@ -172,7 +173,7 @@ public abstract class PDGNode<T extends ExecutableElementInfo> {
             throw new IllegalArgumentException();
         }
 
-        final PDGExecutionDependenceEdge executionEdge = new PDGExecutionDependenceEdge(this, 
+        final PDGExecutionDependenceEdge executionEdge = new PDGExecutionDependenceEdge(this,
                 dependingNode);
         boolean added = this.addForwardEdge(executionEdge);
         added &= dependingNode.addBackwardEdge(executionEdge);
@@ -183,16 +184,32 @@ public abstract class PDGNode<T extends ExecutableElementInfo> {
      * このノードのバックワードエッジを取得
      * @return このノードのバックワードエッジ
      */
-    public final Set<PDGEdge> getBackwardEdges() {
-        return Collections.unmodifiableSet(this.backwardEdges);
+    public final SortedSet<PDGEdge> getBackwardEdges() {
+        return Collections.unmodifiableSortedSet(this.backwardEdges);
     }
 
     /**
      * このノードのフォワードエッジを取得
      * @return このノードのフォワードエッジ
      */
-    public final Set<PDGEdge> getForwardEdges() {
-        return Collections.unmodifiableSet(this.forwardEdges);
+    public final SortedSet<PDGEdge> getForwardEdges() {
+        return Collections.unmodifiableSortedSet(this.forwardEdges);
+    }
+
+    @Override
+    public int compareTo(final PDGNode<? extends ExecutableElementInfo> node) {
+
+        if (null == node) {
+            throw new IllegalArgumentException();
+        }
+
+        final int methodOrder = this.getCore().getOwnerMethod().compareTo(
+                node.getCore().getOwnerMethod());
+        if (0 != methodOrder) {
+            return methodOrder;
+        }
+
+        return this.getCore().compareTo(node.getCore());
     }
 
     /**

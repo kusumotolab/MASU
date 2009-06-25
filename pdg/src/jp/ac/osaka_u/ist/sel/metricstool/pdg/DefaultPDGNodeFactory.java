@@ -1,10 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
@@ -83,8 +83,10 @@ public class DefaultPDGNodeFactory implements IPDGNodeFactory {
     }
 
     @Override
-    public Collection<PDGNode<?>> getAllNodes() {
-        return Collections.unmodifiableCollection(this.elementToNodeMap.values());
+    public SortedSet<PDGNode<?>> getAllNodes() {
+        final SortedSet<PDGNode<?>> nodes = new TreeSet<PDGNode<?>>();
+        nodes.addAll(this.elementToNodeMap.values());
+        return nodes;
     }
 
     public int getNodeCount() {

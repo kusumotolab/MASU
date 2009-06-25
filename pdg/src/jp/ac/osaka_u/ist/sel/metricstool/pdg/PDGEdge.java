@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 
 
-public abstract class PDGEdge {
+public abstract class PDGEdge implements Comparable<PDGEdge> {
 
     private final PDGNode<?> fromNode;
 
@@ -17,7 +17,9 @@ public abstract class PDGEdge {
     }
 
     public abstract String getDependenceString();
-    
+
+    public abstract String getDependenceTypeString();
+
     public final PDGNode<?> getFromNode() {
         return this.fromNode;
     }
@@ -25,8 +27,8 @@ public abstract class PDGEdge {
     public final PDGNode<?> getToNode() {
         return this.toNode;
     }
-    
-    public void vanish(){
+
+    public void vanish() {
         this.fromNode.removeForwardEdge(this);
         this.toNode.removeBackwardEdge(this);
     }
@@ -48,4 +50,23 @@ public abstract class PDGEdge {
         return fromHash + toHash;
     }
 
+    @Override
+    public int compareTo(final PDGEdge edge) {
+
+        if (null == edge) {
+            throw new IllegalArgumentException();
+        }
+
+        final int fromOrder = this.getFromNode().compareTo(edge.getFromNode());
+        if (0 != fromOrder) {
+            return fromOrder;
+        }
+
+        final int toOrder = this.getToNode().compareTo(edge.getToNode());
+        if (0 != toOrder) {
+            return toOrder;
+        }
+
+        return this.getDependenceTypeString().compareTo(edge.getDependenceTypeString());
+    }
 }

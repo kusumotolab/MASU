@@ -1,10 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 
 
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 
 /**
@@ -18,17 +17,17 @@ public abstract class PDG {
     /**
      * PDGの入口ノード
      */
-    protected final Set<PDGNode<?>> enterNodes;
+    protected final SortedSet<PDGNode<?>> enterNodes;
 
     /**
      * PDGの出口ノード
      */
-    protected final Set<PDGNode<?>> exitNodes;
+    protected final SortedSet<PDGNode<?>> exitNodes;
 
     /**
      * PDGを構成するノード
      */
-    protected final Set<PDGNode<?>> nodes;
+    protected final SortedSet<PDGNode<?>> nodes;
 
     /**
      * 
@@ -43,9 +42,9 @@ public abstract class PDG {
         }
         this.nodeFactory = nodeFactory;
 
-        this.enterNodes = new HashSet<PDGNode<?>>();
-        this.exitNodes = new HashSet<PDGNode<?>>();
-        this.nodes = new HashSet<PDGNode<?>>();
+        this.enterNodes = new TreeSet<PDGNode<?>>();
+        this.exitNodes = new TreeSet<PDGNode<?>>();
+        this.nodes = new TreeSet<PDGNode<?>>();
         //this.statementNodeCache = new HashMap<StatementInfo, ControllableNode<? extends StatementInfo>>();
 
     }
@@ -59,16 +58,16 @@ public abstract class PDG {
      * 入口ノードを取得
      * @return 入口ノード
      */
-    public final Set<PDGNode<?>> getEnterNodes() {
-        return Collections.unmodifiableSet(this.enterNodes);
+    public final SortedSet<PDGNode<?>> getEnterNodes() {
+        return Collections.unmodifiableSortedSet(this.enterNodes);
     }
 
     /**
      * 出口ノードを取得
      * @return 出口ノード
      */
-    public final Set<PDGNode<?>> getExitNodes() {
-        return Collections.unmodifiableSet(this.exitNodes);
+    public final SortedSet<PDGNode<?>> getExitNodes() {
+        return Collections.unmodifiableSortedSet(this.exitNodes);
     }
 
     /**
@@ -99,8 +98,8 @@ public abstract class PDG {
      * PDGの全ノードを返す
      * @return PDGの全ノード
      */
-    public final Collection<? extends PDGNode<?>> getAllNodes() {
-        return Collections.unmodifiableSet(this.nodes);
+    public final SortedSet<? extends PDGNode<?>> getAllNodes() {
+        return Collections.unmodifiableSortedSet(this.nodes);
     }
 
     /**
@@ -108,13 +107,13 @@ public abstract class PDG {
      * 
      * @return PDGの全エッジ
      */
-    public final Collection<? extends PDGEdge> getAllEdges() {
-        final Set<PDGEdge> edges = new HashSet<PDGEdge>();
+    public final SortedSet<? extends PDGEdge> getAllEdges() {
+        final SortedSet<PDGEdge> edges = new TreeSet<PDGEdge>();
         for (final PDGNode<?> node : this.getAllNodes()) {
             edges.addAll(node.getBackwardEdges());
             edges.addAll(node.getForwardEdges());
         }
-        return Collections.unmodifiableSet(edges);
+        return Collections.unmodifiableSortedSet(edges);
     }
 
     /**

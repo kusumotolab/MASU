@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 
 
-import java.util.Collection;
+import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 
@@ -14,5 +14,5 @@ public interface IPDGNodeFactory {
 
     PDGNode<?> getNode(Object element);
 
-    Collection<PDGNode<?>> getAllNodes();
+    SortedSet<PDGNode<?>> getAllNodes();
 }

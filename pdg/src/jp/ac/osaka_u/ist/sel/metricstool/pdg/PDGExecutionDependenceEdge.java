@@ -39,4 +39,9 @@ public class PDGExecutionDependenceEdge extends PDGEdge {
     public String getDependenceString() {
         return "";
     }
+
+    @Override
+    public String getDependenceTypeString() {
+        return "Execution Dependency";
+    }
 }

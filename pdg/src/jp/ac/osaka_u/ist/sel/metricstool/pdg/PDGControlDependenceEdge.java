@@ -49,6 +49,11 @@ public class PDGControlDependenceEdge extends PDGEdge {
     public String getDependenceString() {
         return this.trueDependence ? "true" : "false";
     }
+    
+    @Override
+    public String getDependenceTypeString() {
+        return "Control Dependency";
+    }
 
     private final boolean trueDependence;
 }
