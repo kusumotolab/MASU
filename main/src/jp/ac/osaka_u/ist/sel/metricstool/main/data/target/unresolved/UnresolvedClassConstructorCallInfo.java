@@ -15,8 +15,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalConstructorInf
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SuperConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ThisConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -42,8 +44,7 @@ public class UnresolvedClassConstructorCallInfo extends
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == classInfoManager)
-                || (null == methodInfoManager)) {
+        if ((null == usingClass) || (null == classInfoManager) || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
@@ -70,13 +71,21 @@ public class UnresolvedClassConstructorCallInfo extends
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
         final List<TargetConstructorInfo> constructors = NameResolver
-                .getAvailableConstructors((ClassTypeInfo) classType);
+                .getAvailableConstructors(classType);
 
         for (final ConstructorInfo constructor : constructors) {
 
             if (constructor.canCalledWith(actualParameters)) {
-                this.resolvedInfo = new ClassConstructorCallInfo(classType, constructor,
-                        usingMethod, fromLine, fromColumn, toLine, toColumn);
+                if (this instanceof UnresolvedThisConstructorCallInfo) {
+                    this.resolvedInfo = new ThisConstructorCallInfo(classType, constructor,
+                            usingMethod, fromLine, fromColumn, toLine, toColumn);
+                } else if (this instanceof UnresolvedSuperConstructorCallInfo) {
+                    this.resolvedInfo = new SuperConstructorCallInfo(classType, constructor,
+                            usingMethod, fromLine, fromColumn, toLine, toColumn);
+                } else {
+                    this.resolvedInfo = new ClassConstructorCallInfo(classType, constructor,
+                            usingMethod, fromLine, fromColumn, toLine, toColumn);
+                }
                 this.resolvedInfo.addArguments(actualParameters);
                 this.resolvedInfo.addTypeArguments(typeArguments);
                 return this.resolvedInfo;
@@ -85,7 +94,7 @@ public class UnresolvedClassConstructorCallInfo extends
 
         // 対象クラスに定義されたコンストラクタで該当するものがないので，外部クラスに定義されたコンストラクタを呼び出していることにする
         {
-            ClassInfo classInfo = ((ClassTypeInfo) classType).getReferencedClass();
+            ClassInfo classInfo = classType.getReferencedClass();
             if (classInfo instanceof TargetClassInfo) {
                 final ExternalClassInfo externalSuperClass = NameResolver
                         .getExternalSuperClass((TargetClassInfo) classInfo);
