@@ -61,6 +61,17 @@ public class DefinitionToken extends AstTokenAdapter {
             return true;
         }
     };
+    
+    /**
+     * インスタンスイニシャライザを表す定数インスタンス
+     */
+    public static final DefinitionToken INSTANCE_INIT = new DefinitionToken("INSTANCE_INIT") {
+
+        @Override
+        public boolean isInstanceInitializerDefinition() {
+            return true;
+        }
+    };    
 
     /**
      * フィールド定義部を表す定数インスタンス.

@@ -16,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageEl
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayInitializerInfo;
@@ -23,8 +24,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedA
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSuperConstructorCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedThisConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 
 
@@ -47,7 +53,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         final int toColumn = event.getEndColumn();
 
         if (token.equals(JavaAstToken.CONSTRUCTOR_CALL)) {
-            buildInnerConstructorCall(buildDataManager.getCurrentClass(), fromLine, fromColumn,
+            buildThisConstructorCall(buildDataManager.getCurrentClass(), fromLine, fromColumn,
                     toLine, toColumn);
         } else if (token.equals(JavaAstToken.SUPER_CONSTRUCTOR_CALL)) {
             buildSuperConstructorCall(buildDataManager.getCurrentClass().getSuperClasses()
@@ -98,6 +104,7 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
             //それ以外は普通に処理する
             super.buildNewConstructorCall(fromLine, fromColumn, toLine, toColumn);
         }
+
     }
 
     class ConstructorCallElements {
@@ -181,16 +188,18 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
     }
 
-    protected void buildInnerConstructorCall(final UnresolvedClassInfo currentClass,
+    protected void buildThisConstructorCall(final UnresolvedClassInfo currentClass,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         final UnresolvedClassTypeInfo classType = currentClass.getClassType();
 
-        final UnresolvedClassConstructorCallInfo constructorCall = new UnresolvedClassConstructorCallInfo(
+        final UnresolvedThisConstructorCallInfo constructorCall = new UnresolvedThisConstructorCallInfo(
                 classType, fromLine, fromColumn, toLine, toColumn);
 
         resolveParameters(constructorCall, Arrays.asList(this.getAvailableElements()));
         pushElement(new UsageElement(constructorCall));
         buildDataManager.addMethodCall(constructorCall);
+        registStatement(constructorCall, buildDataManager.getCurrentLocalSpace(), fromLine,
+                fromColumn, toLine, toColumn);
     }
 
     protected void buildSuperConstructorCall(final UnresolvedClassTypeInfo superClass,
@@ -232,13 +241,36 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
         assert (null != className) : "Illegal state: unexpected ownerClass type.";
 
-        final UnresolvedClassConstructorCallInfo constructorCall = new UnresolvedClassConstructorCallInfo(
+        final UnresolvedSuperConstructorCallInfo constructorCall = new UnresolvedSuperConstructorCallInfo(
                 superClass, fromLine, fromColumn, toLine, toColumn);
 
         List<ExpressionElement> paramters = Arrays.asList(elements);
         resolveParameters(constructorCall, paramters.subList(argStartIndex, paramters.size()));
         pushElement(new UsageElement(constructorCall));
         buildDataManager.addMethodCall(constructorCall);
+        registStatement(constructorCall, buildDataManager.getCurrentLocalSpace(), fromLine,
+                fromColumn, toLine, toColumn);
+    }
+
+    /*FIXME this()やsuper()はExpressoinStatementではなく、単純なExpressionである。Statementの登録はこのビルダではなく、それ以前に起動している
+     * ExpressionStatementBuilderが行っている。だから、new によるコンストラクタ呼び出し(これはExpressionStatement)のようにStatementを
+     * 勝手に登録してくれない。
+     * 応急処置として、本ビルダ単独でStatementの登録を行っているが、これは他の言語仕様なども考慮し、場合によっては修正されるべきである。
+     */
+    private void registStatement(final UnresolvedExpressionInfo<? extends ExpressionInfo> callInfo,
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        assert ownerSpace != null;
+        if (null != ownerSpace) {
+            final UnresolvedExpressionStatementInfo statement = new UnresolvedExpressionStatementInfo(
+                    ownerSpace, callInfo);
+            statement.setFromLine(fromLine);
+            statement.setFromColumn(fromColumn);
+            statement.setToLine(toLine);
+            statement.setToColumn(toColumn);
+
+            ownerSpace.addStatement(statement);
+        }
     }
 
     /*protected boolean isJavaArrayInstantiation(final ExpressionElement[] elements) {

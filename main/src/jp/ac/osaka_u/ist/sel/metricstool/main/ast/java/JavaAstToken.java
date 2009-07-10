@@ -61,13 +61,23 @@ public class JavaAstToken extends AstTokenAdapter {
     /**
      * this()のような自コンストラクタの呼び出しを表す定数インスタンス
      */
-    public static final JavaAstToken CONSTRUCTOR_CALL = new JavaAstToken("CONSTRUCTOR_CALL");
+    public static final JavaAstToken CONSTRUCTOR_CALL = new JavaAstToken("CONSTRUCTOR_CALL") {
+        @Override
+        public boolean isThisConstructorCall(){
+            return true;
+        }
+    };
 
     /**
      * super()のような親コンストラクタの呼び出しを表す定数インスタンス
      */
     public static final JavaAstToken SUPER_CONSTRUCTOR_CALL = new JavaAstToken(
-            "SUPER_CONSTRUCTOR_CALL");
+            "SUPER_CONSTRUCTOR_CALL"){
+        @Override
+        public boolean isSuperConstructorCall(){
+            return true;
+        }
+    };
 
     /**
      * .classを記述を表す定数インスタンス

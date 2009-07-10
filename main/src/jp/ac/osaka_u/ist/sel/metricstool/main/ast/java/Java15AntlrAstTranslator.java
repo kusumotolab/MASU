@@ -365,10 +365,11 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.NUM_DOUBLE:
             return new ConstantToken(node.getText(), PrimitiveTypeInfo.DOUBLE);
         case Java15TokenTypes.STATIC_INIT:
-            //result = DefinitionToken.STATIC_INIT;
-            //break;
-
+            result = DefinitionToken.STATIC_INIT;
+            break;
         case Java15TokenTypes.INSTANCE_INIT:
+            result = DefinitionToken.INSTANCE_INIT;
+            break;
         case Java15TokenTypes.ANNOTATION:
             result = VisitControlToken.SKIP;
             break;

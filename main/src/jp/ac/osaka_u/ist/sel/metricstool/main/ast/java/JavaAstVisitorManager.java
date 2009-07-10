@@ -20,6 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersInterpriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameSpaceBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StaticInitializerBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ThrowsBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ArrayInitializerBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionDescriptionBuilder;
@@ -95,7 +96,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
                 modifiersInterpriter, new ModifiersBuilder(), new JavaTypeBuilder(
                         this.buildDataManager), new NameBuilder()));
         //this.builders.add(new Initializerbuilder());
-        //this.builders.add(new StaticInitializerBuilder());
+        this.builders.add(new StaticInitializerBuilder(this.buildDataManager, this.modifiersInterpriter));
 
         this.builders.add(new FieldBuilder(this.buildDataManager, this.expressionManager,
                 new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
@@ -135,6 +136,9 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
                 this.buildDataManager));
         this.builders.add(new JavaConstructorCallBuilder(this.expressionManager,
                 this.buildDataManager));
+        //this.builders.add(new ThisConstructorCallBuilder(this.expressionManager,
+          //      this.buildDataManager));
+        
         this.builders.add(new JavaArrayInstantiationBuilder(this.expressionManager,
                 this.buildDataManager));
 

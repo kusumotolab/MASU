@@ -26,6 +26,16 @@ public class UnresolvedStaticInitializerInfo extends
     public UnresolvedStaticInitializerInfo(final UnresolvedClassInfo ownerClass) {
         super(ownerClass);
     }
+    
+    /**
+     * 所有クラスを与えて，オブジェクトを初期化
+     * 
+     * @param ownerClass 所有クラス
+     */
+    public UnresolvedStaticInitializerInfo(final UnresolvedClassInfo ownerClass, int fromLine,
+            int fromColumn, int toLine, int toColumn) {
+        super(ownerClass, fromLine, fromColumn, toLine, toColumn);
+    }
 
     /**
      * 名前解決を行う

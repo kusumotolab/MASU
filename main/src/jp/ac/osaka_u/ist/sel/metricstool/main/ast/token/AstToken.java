@@ -182,6 +182,18 @@ public interface AstToken {
     public boolean isInstanceInitializerDefinition();
    
     /**
+     * トークンがthis()による自クラスのコンストラクタ呼び出しを表すかどうかを返す.
+     * @return メソッド呼び出しを表すトークンならtrue
+     */
+    public boolean isThisConstructorCall();
+
+    /**
+     * トークンがsuper()による親クラスのコンストラクタ呼び出しを表すかどうかを返す.
+     * @return メソッド呼び出しを表すトークンならtrue
+     */
+    public boolean isSuperConstructorCall();
+    
+    /**
      * トークンがメソッド呼び出しを表すかどうかを返す.
      * @return メソッド呼び出しを表すトークンならtrue
      */

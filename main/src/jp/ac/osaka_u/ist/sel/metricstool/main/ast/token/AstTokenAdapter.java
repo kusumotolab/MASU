@@ -135,6 +135,15 @@ public class AstTokenAdapter implements AstToken {
     public boolean isMethodCall() {
         return false;
     }
+    
+    public boolean isThisConstructorCall() {
+        return false;
+    }
+
+    public boolean isSuperConstructorCall() {
+        return false;
+        
+    }
 
     public boolean isMethodDefinition() {
         return false;
