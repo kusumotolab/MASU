@@ -1342,10 +1342,12 @@ forStatement!
 		
 		{
 		  if (null != #h1){
-			#forStatement = #(#[FOR,"for"], #h1,#(#[BLOCK,"{"], #s));
+			//#forStatement = #(#[FOR,"for"], #h1,#(#[BLOCK,"{"], #s));
+			#forStatement = #(#[FOR,"for"], #h1, #s);
 		  }
 		  else {
-		  	#forStatement = #(#[FOR,"for"], #h2, #(#[BLOCK,"{"], #s));
+    		//#forStatement = #(#[FOR,"for"], #h2, #(#[BLOCK,"{"], #s));
+		  	#forStatement = #(#[FOR,"for"], #h2, #s);
 		  }
 		}	
 	;
