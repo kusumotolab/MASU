@@ -6,6 +6,7 @@ import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.DoBlockInfo;
@@ -15,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LabelInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SimpleBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
@@ -69,6 +71,10 @@ public class CallEdgeBuilder {
             this.addCallEdges((TryBlockInfo) statement);
         } else if (statement instanceof WhileBlockInfo) {
             this.addCallEdges((WhileBlockInfo) statement);
+        } else if (statement instanceof CaseEntryInfo) {
+            this.addCallEdges((CaseEntryInfo) statement);
+        } else if (statement instanceof LabelInfo) {
+            this.addCallEdges((LabelInfo) statement);
         } else if (statement instanceof SingleStatementInfo) {
             this.addCallEdges((SingleStatementInfo) statement);
         } else if (statement instanceof ConditionInfo) {
@@ -160,6 +166,12 @@ public class CallEdgeBuilder {
         for (final StatementInfo statement : whileBlock.getStatements()) {
             this.addCallEdges(statement);
         }
+    }
+
+    private void addCallEdges(final CaseEntryInfo caseEntry) {
+    }
+
+    private void addCallEdges(final LabelInfo label) {
     }
 
     private void addCallEdges(final SingleStatementInfo statement) {
