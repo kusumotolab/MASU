@@ -211,7 +211,7 @@ tokens {
 	PACKAGE_DEF; ARRAY_DECLARATOR; ARRAY_INSTANTIATION; EXTENDS_CLAUSE; IMPLEMENTS_CLAUSE;
 	PARAMETERS; METHOD_PARAMETER_DEF; LOCAL_PARAMETER_DEF;LABELED_STAT; TYPECAST; INDEX_OP;
 	POST_INC; POST_DEC; METHOD_CALL; EXPR; EXPR_STATE; ARRAY_INIT;
-	IMPORT; UNARY_MINUS; UNARY_PLUS; CASE_GROUP; ELIST; FOR;FOR_INIT; FOR_CONDITION;
+	IMPORT; UNARY_MINUS; UNARY_PLUS; CASE_GROUP; ELIST; FOR;FOREACH;FOR_INIT; FOR_CONDITION;
 	FOR_ITERATOR; EMPTY_STAT; FINAL="final"; ABSTRACT="abstract";
 	STRICTFP="strictfp"; SUPER_CTOR_CALL; CTOR_CALL; VARIABLE_PARAMETER_DEF;
 	STATIC_IMPORT; ENUM_DEF; ENUM_CONSTANT_DEF; FOR_EACH_CLAUSE; ANNOTATION_DEF; ANNOTATIONS;
@@ -1343,11 +1343,10 @@ forStatement!
 		{
 		  if (null != #h1){
 			//#forStatement = #(#[FOR,"for"], #h1,#(#[BLOCK,"{"], #s));
-			#forStatement = #(#[FOR,"for"], #h1, #s);
-		  }
+			#forStatement = #(#[FOR,"for"], #h1, #s);		  }
 		  else {
     		//#forStatement = #(#[FOR,"for"], #h2, #(#[BLOCK,"{"], #s));
-		  	#forStatement = #(#[FOR,"for"], #h2, #s);
+		  	#forStatement = #(#[FOREACH,"foreach"], #h2, #s);
 		  }
 		}	
 	;
@@ -1356,6 +1355,7 @@ traditionalForClause
 	:
 		forInit SEMI!	// initializer
 		forCond SEMI!	// condition test
+        
 		forIter			// updater
 	;
 
@@ -1414,6 +1414,8 @@ forInit
 forCond
 	:	(expression)?
 		{#forCond = #(#[FOR_CONDITION,"FOR_CONDITION"],#forCond);}
+      //  {registLineColum(#forCond);}
+
 	;
 
 forIter
@@ -1517,7 +1519,7 @@ conditionalExpression
 // logical or (||) (level 11)
 logicalOrExpression
 	:	logicalAndExpression (LOR^ logicalAndExpression)*
-	;
+;	
 
 
 // logical and (&&) (level 10)

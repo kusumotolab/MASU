@@ -277,6 +277,10 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
 
+    public boolean isForeach() {
+        return false;
+    }
+
     public boolean isForInit() {
         return false;
     }

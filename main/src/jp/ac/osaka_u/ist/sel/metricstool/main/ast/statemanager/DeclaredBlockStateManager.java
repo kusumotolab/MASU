@@ -102,8 +102,8 @@ public abstract class DeclaredBlockStateManager extends
             //スタックの一番上の状態に戻す
             super.exited(event);
 
-            fireStateChangeExitEvent(event);
         }
+        fireStateChangeExitEvent(event);
     }
 
     /**

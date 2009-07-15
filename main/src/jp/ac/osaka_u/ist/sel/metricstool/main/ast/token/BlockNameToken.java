@@ -66,6 +66,16 @@ public abstract class BlockNameToken extends AstTokenAdapter {
 		}
 
 	};
+	
+	public static BlockNameToken FOREACH_BLOCK = new BlockNameToken("foreach"){
+
+	    @Override
+	    public boolean isForeach() {
+	        return true;
+	   }
+
+	};
+
 
 	public static BlockNameToken TRY_BLOCK = new BlockNameToken("try"){
 

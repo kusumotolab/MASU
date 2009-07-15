@@ -356,6 +356,12 @@ public interface AstToken {
     public boolean isFor();
     
     /**
+     * トークンがforeachを表すかどうかを返す
+     * @return foreachを表すトークンならtrue
+     */
+    public boolean isForeach();
+    
+    /**
      * トークンがfor文の初期節を表すかどうか返す
      * @return for文の初期節ならtrue
      */

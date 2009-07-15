@@ -13,11 +13,10 @@ public class ForBlockStateManager extends InnerBlockStateManager {
 
         ENTER_FOR_ITERATOR, EXIT_FOR_ITERATOR,
 
-        ENTER_FOR_EACH_CLAUSE, EXIT_FOR_EACH_CLAUSE
     }
 
     public static enum FOR_BLOCK_STATE implements DeclaredBlockState {
-        FOR_INIT, FOR_ITERATOR, FOR_EACH_CLAUSE,
+        FOR_INIT, FOR_ITERATOR,
     }
 
     @Override
@@ -38,10 +37,6 @@ public class ForBlockStateManager extends InnerBlockStateManager {
             } else if (this.isForIteratorClause(token)) {
                 this.setState(FOR_BLOCK_STATE.FOR_ITERATOR);
                 this.fireStateChangeEvent(FOR_BLOCK_STATE_CHANGE.ENTER_FOR_ITERATOR, event);
-                isFired = true;
-            } else if (this.isForEachClause(token)) {
-                this.setState(FOR_BLOCK_STATE.FOR_EACH_CLAUSE);
-                this.fireStateChangeEvent(FOR_BLOCK_STATE_CHANGE.ENTER_FOR_EACH_CLAUSE, event);
                 isFired = true;
             }
         }
@@ -66,10 +61,7 @@ public class ForBlockStateManager extends InnerBlockStateManager {
             } else if (this.isForIteratorClause(token)) {
                 this.fireStateChangeEvent(FOR_BLOCK_STATE_CHANGE.EXIT_FOR_ITERATOR, event);
                 isFired = true;
-            } else if (this.isForEachClause(token)) {
-                this.fireStateChangeEvent(FOR_BLOCK_STATE_CHANGE.EXIT_FOR_EACH_CLAUSE, event);
-                isFired = true;
-            }
+            } 
         }
 
         return isFired;
@@ -79,8 +71,7 @@ public class ForBlockStateManager extends InnerBlockStateManager {
     protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
         final AstToken token = event.getToken();
         return super.isStateChangeTriggerEvent(event) || this.isConditionalClause(token)
-                || this.isForInitClause(token) || this.isForIteratorClause(token)
-                || this.isForEachClause(token);
+                || this.isForInitClause(token) || this.isForIteratorClause(token);
     }
 
     protected boolean isForEachClause(final AstToken token) {

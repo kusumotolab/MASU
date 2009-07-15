@@ -65,7 +65,7 @@ public class ForBlockBuilder extends ConditionalBlockBuilder<ForBlockInfo, Unres
             this.conditionBuilder.deactivate();
 
             this.getBuildingBlock().initBody();
-        } else if (type.equals(FOR_BLOCK_STATE_CHANGE.EXIT_FOR_EACH_CLAUSE)) {
+        } /*else if (type.equals(FOR_BLOCK_STATE_CHANGE.EXIT_FOR_EACH_CLAUSE)) {
             // TODO ‚ ‚Æ‚ÅForEachBlockLBuilder‚Æ‚©ForEachBlockInfo‚ð‚Â‚­‚é‚×‚«
             final UnresolvedForBlockInfo buildingBlock = this.getBuildingBlock();
             this.getBuildingBlock().addInitializerExpression(
@@ -73,7 +73,7 @@ public class ForBlockBuilder extends ConditionalBlockBuilder<ForBlockInfo, Unres
             final UnresolvedConditionalClauseInfo conditionalCluase = new UnresolvedConditionalClauseInfo(
                     buildingBlock, new UnresolvedEmptyExpressionInfo(0, 0, 0, 0));
             buildingBlock.setConditionalClause(conditionalCluase);
-        }
+        }*/
     }
 
     @Override

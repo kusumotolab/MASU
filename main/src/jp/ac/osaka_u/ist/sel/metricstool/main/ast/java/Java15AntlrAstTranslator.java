@@ -399,6 +399,9 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.FOR:
             result = BlockNameToken.FOR_BLOCK;
             break;
+        case Java15TokenTypes.FOREACH:
+            result = BlockNameToken.FOREACH_BLOCK;
+            break;
         case Java15TokenTypes.LITERAL_try:
             result = BlockNameToken.TRY_BLOCK;
             break;

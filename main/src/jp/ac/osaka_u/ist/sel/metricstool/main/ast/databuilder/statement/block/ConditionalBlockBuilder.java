@@ -79,11 +79,12 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
 
             final UnresolvedConditionalClauseInfo conditionalCluase = new UnresolvedConditionalClauseInfo(
                     buildingBlock, condition);
-            conditionalCluase.setFromLine(fromLine);
-            conditionalCluase.setFromColumn(fromColumn);
-            conditionalCluase.setToLine(toLine);
-            conditionalCluase.setToColumn(toColumn);
 
+                conditionalCluase.setFromLine(fromLine);
+                conditionalCluase.setFromColumn(fromColumn);
+                conditionalCluase.setToLine(toLine);
+                conditionalCluase.setToColumn(toColumn);
+              
             buildingBlock.setConditionalClause(conditionalCluase);
 
             //assert buildingBlock.getStatements().size() <= 1 : "Illegal state: the number of conditional statements is more than one.";
