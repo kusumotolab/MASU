@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
+
 
 /**
  * PDG‚ð•\‚·ƒNƒ‰ƒX

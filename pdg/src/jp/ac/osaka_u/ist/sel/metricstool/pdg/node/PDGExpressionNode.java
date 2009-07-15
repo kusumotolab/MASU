@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sel.metricstool.pdg;
+package jp.ac.osaka_u.ist.sel.metricstool.pdg.node;
 
 
 import java.util.SortedSet;
@@ -10,22 +10,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
 
-/**
- * PDG上で制御ノードを表すクラス
- * 
- * @author t-miyake
- *
- */
-public class PDGControlNode extends PDGNode<ConditionInfo> {
+public class PDGExpressionNode extends PDGNormalNode<ConditionInfo> {
 
-    public PDGControlNode(final ConditionInfo condition) {
+    public PDGExpressionNode(final ConditionInfo expression) {
 
-        if (null == condition) {
+        if (null == expression) {
             throw new IllegalArgumentException();
         }
 
-        this.core = condition;
-        this.text = condition.getText() + " <" + condition.getFromLine() + ">";
+        this.core = expression;
+        this.text = expression.getText() + " <" + expression.getFromLine() + ">";
     }
 
     @Override
@@ -43,21 +37,4 @@ public class PDGControlNode extends PDGNode<ConditionInfo> {
                 .getReferencees(this.getCore().getVariableUsages())));
         return referencedVariables;
     }
-
-    /**
-     * この制御ノードに制御されるノードを追加
-     * @param controlledNode 制御されるノード
-     */
-    public void addControlDependingNode(final PDGNode<?> controlledNode,
-            final boolean trueDependence) {
-        if (null == controlledNode) {
-            throw new IllegalArgumentException();
-        }
-
-        final PDGControlDependenceEdge controlFlow = new PDGControlDependenceEdge(this,
-                controlledNode, trueDependence);
-        this.addForwardEdge(controlFlow);
-        controlledNode.addBackwardEdge(controlFlow);
-    }
-
 }

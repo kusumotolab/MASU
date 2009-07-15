@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sel.metricstool.pdg;
+package jp.ac.osaka_u.ist.sel.metricstool.pdg.node;
 
 
 import java.util.SortedSet;
@@ -7,6 +7,7 @@ import java.util.TreeSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.ParameterDeclarationStatementInfo;
 
 
 /**

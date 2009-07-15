@@ -1,9 +1,11 @@
-package jp.ac.osaka_u.ist.sel.metricstool.pdg;
+package jp.ac.osaka_u.ist.sel.metricstool.pdg.edge;
 
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 
 /**

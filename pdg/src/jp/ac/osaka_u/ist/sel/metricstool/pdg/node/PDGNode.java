@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sel.metricstool.pdg;
+package jp.ac.osaka_u.ist.sel.metricstool.pdg.node;
 
 
 import java.util.Collections;
@@ -8,11 +8,16 @@ import java.util.TreeSet;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGNormalNode;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGCallDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
 
 
 /**
@@ -144,11 +149,11 @@ public abstract class PDGNode<T extends ExecutableElementInfo> implements
         return this.backwardEdges.add(backwardEdge);
     }
 
-    final void removeBackwardEdge(final PDGEdge backwardEdge) {
+    final public void removeBackwardEdge(final PDGEdge backwardEdge) {
         this.backwardEdges.remove(backwardEdge);
     }
 
-    final void removeForwardEdge(final PDGEdge forwardEdge) {
+    final public void removeForwardEdge(final PDGEdge forwardEdge) {
         this.forwardEdges.remove(forwardEdge);
     }
 
@@ -157,6 +162,7 @@ public abstract class PDGNode<T extends ExecutableElementInfo> implements
      * @param dependingNode
      */
     public boolean addDataDependingNode(final PDGNode<?> dependingNode, final VariableInfo<?> data) {
+
         if (null == dependingNode) {
             throw new IllegalArgumentException();
         }
@@ -177,6 +183,18 @@ public abstract class PDGNode<T extends ExecutableElementInfo> implements
                 dependingNode);
         boolean added = this.addForwardEdge(executionEdge);
         added &= dependingNode.addBackwardEdge(executionEdge);
+        return added;
+    }
+
+    public boolean addCallDependingNode(final PDGNode<?> dependingNode, final CallInfo call) {
+
+        if (null == dependingNode) {
+            throw new IllegalArgumentException();
+        }
+
+        final PDGCallDependenceEdge callEdge = new PDGCallDependenceEdge(this, dependingNode, call);
+        boolean added = this.addForwardEdge(callEdge);
+        added &= dependingNode.addBackwardEdge(callEdge);
         return added;
     }
 

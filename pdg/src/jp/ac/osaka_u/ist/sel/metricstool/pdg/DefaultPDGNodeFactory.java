@@ -12,6 +12,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGCaseEntryNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGControlNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGExpressionNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNormalNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGParameterNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGReturnStatementNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGStatementNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGVariableDeclarationStatementNode;
 
 
 public class DefaultPDGNodeFactory implements IPDGNodeFactory {

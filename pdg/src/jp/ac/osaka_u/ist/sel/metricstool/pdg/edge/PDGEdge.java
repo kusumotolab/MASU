@@ -1,4 +1,6 @@
-package jp.ac.osaka_u.ist.sel.metricstool.pdg;
+package jp.ac.osaka_u.ist.sel.metricstool.pdg.edge;
+
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 
 public abstract class PDGEdge implements Comparable<PDGEdge> {

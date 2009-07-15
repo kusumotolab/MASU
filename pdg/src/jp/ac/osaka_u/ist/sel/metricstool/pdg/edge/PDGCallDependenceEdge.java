@@ -1,17 +1,16 @@
-package jp.ac.osaka_u.ist.sel.metricstool.pdg;
+package jp.ac.osaka_u.ist.sel.metricstool.pdg.edge;
 
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
-/**
- * 制御依存辺を表すクラス
- * @author t-miyake, higo
- *
- */
-public class PDGControlDependenceEdge extends PDGEdge {
+
+public class PDGCallDependenceEdge extends PDGEdge {
 
     /**
      * エッジの集合から，制御依存を表すエッジのみを抽出し，そのSetを返す
@@ -29,31 +28,25 @@ public class PDGControlDependenceEdge extends PDGEdge {
         return Collections.unmodifiableSet(controlDependenceEdges);
     }
 
-    public PDGControlDependenceEdge(final PDGControlNode fromNode, final PDGNode<?> toNode,
-            final boolean trueDependence) {
+    public PDGCallDependenceEdge(final PDGNode<?> fromNode, final PDGNode<?> toNode,
+            final CallInfo<?> call) {
         super(fromNode, toNode);
-
-        this.trueDependence = trueDependence;
-
+        this.call = call;
     }
 
-    public boolean isTrueDependence() {
-        return this.trueDependence;
-    }
-
-    public boolean isFalseDependence() {
-        return !this.trueDependence;
+    public CallInfo<? extends CallableUnitInfo> getCallInfo() {
+        return this.call;
     }
 
     @Override
     public String getDependenceString() {
-        return this.trueDependence ? "true" : "false";
+        return this.getCallInfo().getText();
     }
-    
+
     @Override
     public String getDependenceTypeString() {
         return "Control Dependency";
     }
 
-    private final boolean trueDependence;
+    private final CallInfo<? extends CallableUnitInfo> call;
 }
