@@ -55,7 +55,7 @@ public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlock
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-
+        
         // 繰り返し用の式を取得
         final UnresolvedExpressionInfo<?> unresolvedIteratorExpression = this
                 .getIteratorExpression();
@@ -76,6 +76,10 @@ public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlock
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         this.resolvedInfo.setIteratorVariable(iteratorVariable);
 
+        // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
+        this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);
+        
         return this.resolvedInfo;
     }
 
