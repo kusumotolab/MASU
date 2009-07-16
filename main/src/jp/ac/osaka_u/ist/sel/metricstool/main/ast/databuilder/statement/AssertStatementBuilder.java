@@ -41,7 +41,7 @@ public class AssertStatementBuilder extends StateDrivenDataBuilder<UnresolvedAss
     }
 
     @Override
-    public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(StateChangeEvent<AstVisitEvent> event) {
         final StateChangeEventType type = event.getType();
         final AstVisitEvent trigger = event.getTrigger();
 

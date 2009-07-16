@@ -31,7 +31,7 @@ public class ConditionBuilder extends
     }
 
     @Override
-    public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(StateChangeEvent<AstVisitEvent> event) {
         final StateChangeEventType type = event.getType();
 
         if (type.equals(CONDITION_STATE_CHANGE.ENTER_CONDITION)) {

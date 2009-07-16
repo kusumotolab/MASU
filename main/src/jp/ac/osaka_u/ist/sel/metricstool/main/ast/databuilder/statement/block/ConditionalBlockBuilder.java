@@ -44,8 +44,8 @@ public abstract class ConditionalBlockBuilder<TResolved extends ConditionalBlock
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
-        super.stateChangend(event);
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
+        super.stateChanged(event);
         final StateChangeEventType type = event.getType();
 
         if (type.equals(INNER_BLOCK_STATE_CHANGE.ENTER_CLAUSE)) {

@@ -65,7 +65,7 @@ public class MethodBuilderFromPropertyAST extends CompoundDataBuilder<Unresolved
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
         StateChangeEventType type = event.getType();
 
         if (type.equals(CALLABLE_UNIT_STATE_CHANGE.ENTER_DEF)) {

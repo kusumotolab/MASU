@@ -97,7 +97,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
         if (this.isActive()) {
             final StateChangeEventType type = event.getType();
             if (type.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)) {

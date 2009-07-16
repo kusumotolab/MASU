@@ -27,7 +27,7 @@ public class ModifiersBuilder extends StateDrivenDataBuilder<ModifierInfo[]>{
     }
     
     @Override
-    public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(StateChangeEvent<AstVisitEvent> event) {
         if (isActive()){
             if (event.getType().equals(ModifiersDefinitionStateManager.MODIFIERS_STATE.EXIT_MODIFIERS_DEF)){
                 registBuiltData(buildModifiers());

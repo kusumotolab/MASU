@@ -34,7 +34,7 @@ public class LabelBuilder extends StateDrivenDataBuilder<UnresolvedLabelInfo> {
     }
 
     @Override
-    public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(StateChangeEvent<AstVisitEvent> event) {
         final StateChangeEventType type = event.getType();
 
         if (type.equals(LABEL_STATE.ENTER_LABEL_DEF)) {

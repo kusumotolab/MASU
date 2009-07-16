@@ -45,7 +45,7 @@ public abstract class SingleStatementBuilder<T extends UnresolvedStatementInfo<?
     }
 
     @Override
-    public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(StateChangeEvent<AstVisitEvent> event) {
         
     }    
 

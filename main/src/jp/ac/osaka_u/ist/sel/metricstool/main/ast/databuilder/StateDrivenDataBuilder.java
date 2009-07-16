@@ -49,7 +49,7 @@ public abstract class StateDrivenDataBuilder<T> extends DataBuilderAdapter<T> im
     /* (non-Javadoc)
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeListener#stateChangend(jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent)
      */
-    public abstract void stateChangend(StateChangeEvent<AstVisitEvent> event);
+    public abstract void stateChanged(StateChangeEvent<AstVisitEvent> event);
 
     /**
      * ASTの解析状態をのマネージャーを追加

@@ -36,7 +36,7 @@ public class InheritanceBuilder extends CompoundDataBuilder<UnresolvedClassTypeI
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
         final StateChangeEventType type = event.getType();
         if (isActive() && inheritanceStateManager.isEntered()) {
             if (type.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)) {

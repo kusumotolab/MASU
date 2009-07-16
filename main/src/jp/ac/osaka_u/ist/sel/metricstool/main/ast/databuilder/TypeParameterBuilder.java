@@ -67,10 +67,10 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
     /**
      * 状態変化イベントの通知を受けるメソッド．
      * @param event 状態変化イベント
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder#stateChangend(jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder#stateChanged(jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent)
      */
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
         final StateChangeEventType type = event.getType();
 
         if (this.isActive()) {

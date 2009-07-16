@@ -40,7 +40,7 @@ public class MethodParameterBuilder
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
         final StateChangeEventType eventType = event.getType();
         if (eventType.equals(VARIABLE_STATE.ENTER_VARIABLE_DEF)) {
             if (event.getTrigger().getToken().isVariableParameterDefinition()) {
@@ -52,7 +52,7 @@ public class MethodParameterBuilder
             this.isVariableParameterStack.pop();
         }
 
-        super.stateChangend(event);
+        super.stateChanged(event);
     }
 
     @Override

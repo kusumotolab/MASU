@@ -19,7 +19,7 @@ public class NameBuilder extends CompoundDataBuilder<String[]>{
     }
     
     @Override
-    public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(StateChangeEvent<AstVisitEvent> event) {
         if (isActive()){
             StateChangeEventType type = event.getType();
             if (type.equals(NameStateManager.NAME_STATE.ENTER_NAME)){

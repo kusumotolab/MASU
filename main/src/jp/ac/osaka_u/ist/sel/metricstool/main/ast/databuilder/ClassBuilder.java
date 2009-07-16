@@ -76,10 +76,10 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
     /**
      * 登録されたステートマネージャから状態変化を受け取るメソッド．
      * @param event 状態変化イベント
-     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder#stateChangend(jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent)
+     * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder#stateChanged(jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent)
      */
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
         final StateChangeEventType type = event.getType();
         if (type.equals(CLASS_STATE_CHANGE.ENTER_CLASS_DEF)) {
             //クラス定義に入ったら，とりあえず新しいクラス定義を登録しに行く

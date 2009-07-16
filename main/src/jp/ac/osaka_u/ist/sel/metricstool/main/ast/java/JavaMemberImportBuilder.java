@@ -46,7 +46,7 @@ public class JavaMemberImportBuilder extends CompoundDataBuilder<Object> {
     }
 
     @Override
-    public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(StateChangeEvent<AstVisitEvent> event) {
         StateChangeEventType type = event.getType();
         if (type.equals(JavaMemberImportStateManager.IMPORT_STATE_CHANGE.ENTER_MEMBER_IMPORT)) {
             identifierBuilder.activate();

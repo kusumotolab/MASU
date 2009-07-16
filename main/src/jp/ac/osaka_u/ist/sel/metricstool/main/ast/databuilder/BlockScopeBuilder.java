@@ -17,7 +17,7 @@ public class BlockScopeBuilder extends StateDrivenDataBuilder{
     }
 
     @Override
-    public void stateChangend(StateChangeEvent event) {
+    public void stateChanged(StateChangeEvent event) {
         StateChangeEventType type = event.getType();
         if (type.equals(BLOCK_STATE_CHANGE.ENTER)){
             buildManager.startScopedBlock();

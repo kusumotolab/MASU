@@ -27,8 +27,8 @@ public class SwitchBlockBuilder extends
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
-        super.stateChangend(event);
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
+        super.stateChanged(event);
         final StateChangeEventType type = event.getType();
 
         if (this.getCurrentSpace() instanceof UnresolvedSwitchBlockInfo) {

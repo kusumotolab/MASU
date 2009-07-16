@@ -75,7 +75,7 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
 
     }
 

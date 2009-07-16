@@ -32,7 +32,7 @@ public abstract class InnerBlockBuilder<TResolved extends BlockInfo, T extends U
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
         StateChangeEventType type = event.getType();
 
         if (type.equals(INNER_BLOCK_STATE_CHANGE.ENTER_BLOCK_DEF)) {

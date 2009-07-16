@@ -48,7 +48,7 @@ public class ArrayInitializerBuilder extends ExpressionBuilder {
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
         final StateChangeEventType type = event.getType();
         if (type.equals(ARRAY_INITILIZER_STATE.ENTER_ARRAY_INIT)) {
 

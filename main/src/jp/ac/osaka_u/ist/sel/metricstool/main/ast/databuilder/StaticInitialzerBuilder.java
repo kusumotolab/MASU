@@ -21,7 +21,7 @@ public class StaticInitialzerBuilder extends
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
         AstToken token = event.getTrigger().getToken();
     }
 

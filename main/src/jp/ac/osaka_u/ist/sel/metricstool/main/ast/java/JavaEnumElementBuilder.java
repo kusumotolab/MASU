@@ -36,7 +36,7 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
     }
 
     @Override
-    public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(StateChangeEvent<AstVisitEvent> event) {
         StateChangeEventType type = event.getType();
         if (isActive()) {
             if (type.equals(JavaEnumElementStateManager.ENUM_ELEMENT_STATE.ENTER_ENUM_ELEMENT)) {

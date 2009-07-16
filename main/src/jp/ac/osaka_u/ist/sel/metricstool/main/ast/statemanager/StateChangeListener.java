@@ -17,5 +17,5 @@ public interface StateChangeListener<T> extends EventListener {
      * 状態変化を通知するメソッド
      * @param event 状態変化を表すイベント
      */
-    public void stateChangend(StateChangeEvent<T> event);
+    public void stateChanged(StateChangeEvent<T> event);
 }

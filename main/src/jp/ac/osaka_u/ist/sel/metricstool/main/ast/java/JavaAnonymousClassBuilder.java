@@ -45,7 +45,7 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
         final StateChangeEventType type = event.getType();
         if (type.equals(ANONYMOUSCLASS_STATE.ENTER_ANONYMOUSCLASS)) {
             identifierBuilder.deactivate();

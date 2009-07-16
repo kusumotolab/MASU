@@ -98,7 +98,7 @@ public abstract class StackedAstVisitStateManager<T> implements AstVisitStateMan
         final StateChangeEvent<AstVisitEvent> event = new StateChangeEvent<AstVisitEvent>(this, type,
                 triggerEvent);
         for (final StateChangeListener<AstVisitEvent> listener : this.getListeners()) {
-            listener.stateChangend(event);
+            listener.stateChanged(event);
         }
     }
 

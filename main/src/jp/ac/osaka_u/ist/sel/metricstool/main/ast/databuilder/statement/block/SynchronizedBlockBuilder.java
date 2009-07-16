@@ -30,8 +30,8 @@ public class SynchronizedBlockBuilder extends
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
-        super.stateChangend(event);
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
+        super.stateChanged(event);
 
         final StateChangeEventType type = event.getType();
         if (type.equals(SYNCHRONIZED_BLOCK_STATE_CHANGE.EXIT_SYNCHRONIZED_EXPRESSION)) {

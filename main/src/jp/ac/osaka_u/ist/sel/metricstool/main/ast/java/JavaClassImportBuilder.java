@@ -43,7 +43,7 @@ public class JavaClassImportBuilder extends CompoundDataBuilder<Object>{
     }
 
     @Override
-    public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(StateChangeEvent<AstVisitEvent> event) {
         StateChangeEventType type = event.getType();
         if (type.equals(JavaClassImportStateManager.IMPORT_STATE_CHANGE.ENTER_CLASS_IMPORT)){
             identifierBuilder.activate();

@@ -35,7 +35,7 @@ public class LocalVariableDeclarationStatementBuilder extends
     }
 
     @Override
-    public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(StateChangeEvent<AstVisitEvent> event) {
         final StateChangeEventType eventType = event.getType();
         if (eventType.equals(VARIABLE_STATE.EXIT_VARIABLE_DEF)) {
             final AstVisitEvent trigger = event.getTrigger();

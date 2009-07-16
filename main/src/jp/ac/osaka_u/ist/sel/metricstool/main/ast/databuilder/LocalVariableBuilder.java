@@ -47,8 +47,8 @@ public class LocalVariableBuilder
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
-        super.stateChangend(event);
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
+        super.stateChanged(event);
 
         final StateChangeEventType eventType = event.getType();
         if (eventType.equals(VARIABLE_STATE.EXIT_VARIABLE_DEF)) {

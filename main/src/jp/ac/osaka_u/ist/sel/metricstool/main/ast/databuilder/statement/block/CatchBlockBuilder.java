@@ -29,8 +29,8 @@ public class CatchBlockBuilder extends InnerBlockBuilder<CatchBlockInfo, Unresol
     }
 
     @Override
-    public void stateChangend(final StateChangeEvent<AstVisitEvent> event) {
-        super.stateChangend(event);
+    public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
+        super.stateChanged(event);
 
         final StateChangeEventType type = event.getType();
         if (type.equals(CATCH_BLOCK_STATE_CHANGE.ENTER_LOCAL_PARAMETER)) {

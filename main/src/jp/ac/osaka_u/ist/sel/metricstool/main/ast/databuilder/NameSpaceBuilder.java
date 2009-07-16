@@ -33,7 +33,7 @@ public class NameSpaceBuilder extends CompoundDataBuilder<Object> {
     }
     
     @Override
-    public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(StateChangeEvent<AstVisitEvent> event) {
         StateChangeEventType type = event.getType();
         
         if (type.equals(NAMESPACE_STATE_CHANGE.ENTER_NAMESPACE_DEF)){

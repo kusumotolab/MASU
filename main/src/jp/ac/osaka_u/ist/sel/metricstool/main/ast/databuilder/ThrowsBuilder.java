@@ -33,7 +33,7 @@ public class ThrowsBuilder extends CompoundDataBuilder<UnresolvedClassTypeInfo>{
     }
 
     @Override
-    public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
+    public void stateChanged(StateChangeEvent<AstVisitEvent> event) {
         final StateChangeEventType type = event.getType();
         if (isActive() && throwsStateManager.isEntered()){
             if (type.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)){
