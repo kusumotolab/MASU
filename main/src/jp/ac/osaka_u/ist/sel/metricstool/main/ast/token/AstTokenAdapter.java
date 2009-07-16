@@ -34,7 +34,7 @@ public class AstTokenAdapter implements AstToken {
     public boolean isArrayDeclarator() {
         return false;
     }
-    
+
     public boolean isArrayInitilizer() {
         return false;
     }
@@ -71,6 +71,10 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
 
+    public boolean isClassImport() {
+        return false;
+    }
+
     public boolean isConstant() {
         return false;
     }
@@ -90,11 +94,11 @@ public class AstTokenAdapter implements AstToken {
     public boolean isEnumConstant() {
         return false;
     }
-    
+
     public boolean isExpressionStatement() {
         return false;
     }
-    
+
     @Override
     public boolean isAssertStatement() {
         return false;
@@ -132,17 +136,21 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
 
+    public boolean isMemberImport() {
+        return false;
+    }
+
     public boolean isMethodCall() {
         return false;
     }
-    
+
     public boolean isThisConstructorCall() {
         return false;
     }
 
     public boolean isSuperConstructorCall() {
         return false;
-        
+
     }
 
     public boolean isMethodDefinition() {
@@ -152,7 +160,7 @@ public class AstTokenAdapter implements AstToken {
     public boolean isStaticInitializerDefinition() {
         return false;
     }
-    
+
     public boolean isInstanceInitializerDefinition() {
         return false;
     }
@@ -288,15 +296,15 @@ public class AstTokenAdapter implements AstToken {
     public boolean isForIterator() {
         return false;
     }
-    
+
     public boolean isForeachClause() {
         return false;
     }
-    
+
     public boolean isForeachVariable() {
         return false;
     }
-    
+
     public boolean isForeachExpression() {
         return false;
     }
@@ -328,9 +336,9 @@ public class AstTokenAdapter implements AstToken {
     public boolean isReturn() {
         return false;
     }
-    
+
     @Override
-    public boolean isThrows(){
+    public boolean isThrows() {
         return false;
     }
 
@@ -338,7 +346,7 @@ public class AstTokenAdapter implements AstToken {
     public boolean isThrow() {
         return false;
     }
-    
+
     @Override
     public boolean isStatement() {
         return false;
@@ -353,6 +361,5 @@ public class AstTokenAdapter implements AstToken {
      * Ç±ÇÃÉgÅ[ÉNÉìÇÃï∂éöóÒ
      */
     private final String text;
-
 
 }

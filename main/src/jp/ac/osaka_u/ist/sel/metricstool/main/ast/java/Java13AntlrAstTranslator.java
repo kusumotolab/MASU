@@ -71,7 +71,7 @@ public class Java13AntlrAstTranslator implements AstTokenTranslator<AST> {
             break;
         case Java13TokenTypes.IMPORT:
             //        case Java15TokenTypes.STATIC_IMPORT:
-            result = JavaAstToken.IMPORT;
+            result = JavaAstToken.CLASS_IMPORT;
             break;
         case Java13TokenTypes.DOT:
             result = SyntaxToken.NAME_SEPARATOR;

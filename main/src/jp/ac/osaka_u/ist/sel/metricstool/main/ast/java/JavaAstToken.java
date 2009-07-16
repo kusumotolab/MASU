@@ -15,8 +15,23 @@ public class JavaAstToken extends AstTokenAdapter {
     /**
      * import記述部を表す定数インスタンス
      */
-    public static final JavaAstToken IMPORT = new JavaAstToken("import");
+    public static final JavaAstToken CLASS_IMPORT = new JavaAstToken("CLASS_IMPORT"){
+        @Override
+        public boolean isClassImport(){
+            return true;
+        }        
+    };
 
+    /**
+     * import記述部を表す定数インスタンス
+     */
+    public static final JavaAstToken MEMBER_IMPORT = new JavaAstToken("MEMBER_IMPORT"){
+        @Override
+        public boolean isMemberImport(){
+            return true;
+        } 
+    };
+    
     /**
      * throw記述部を表す定数インスタンス
      */

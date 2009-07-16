@@ -72,6 +72,12 @@ public interface AstToken {
     public boolean isClassBlock();
     
     /**
+     * トークンがクラスのインポートを表すかどうかを返す．
+     * @return クラスのインポートを表すトークンならtrue
+     */
+    public boolean isClassImport();
+    
+    /**
      * トークンが条件文の条件節を表すかどうか返す．
      * @return 条件節定義部を表すトークンならtrue
      */
@@ -211,6 +217,12 @@ public interface AstToken {
      */
     public boolean isVariableParameterDefinition();
 
+    /**
+     * トークンがメンバーのインポートを表すかどうかを返す．
+     * @return メンバーのインポートを表すトークンならtrue
+     */
+    public boolean isMemberImport();
+    
     /**
      * トークンが修飾子を表すかどうかを返す.
      * @return 修飾子を表すトークンならtrue

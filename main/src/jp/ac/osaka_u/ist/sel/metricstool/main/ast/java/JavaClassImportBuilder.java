@@ -8,19 +8,19 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 
-public class JavaImportBuilder extends CompoundDataBuilder<Object>{
+public class JavaClassImportBuilder extends CompoundDataBuilder<Object>{
     
-    public JavaImportBuilder(BuildDataManager buildDataManager){
+    public JavaClassImportBuilder(BuildDataManager buildDataManager){
         this(buildDataManager,new IdentifierBuilder());
     }
 
-    public JavaImportBuilder(BuildDataManager buildDataManager,IdentifierBuilder identifierBuilder) {
+    public JavaClassImportBuilder(BuildDataManager buildDataManager,IdentifierBuilder identifierBuilder) {
         if (null == buildDataManager){
             throw new NullPointerException("builderManager is null.");
         }
         
         if (null == identifierBuilder){
-            throw new NullPointerException("identifierBuilde is null.");
+            throw new NullPointerException("identifierBuilder is null.");
         }
         
         this.buildDataManager = buildDataManager;
@@ -45,9 +45,9 @@ public class JavaImportBuilder extends CompoundDataBuilder<Object>{
     @Override
     public void stateChangend(StateChangeEvent<AstVisitEvent> event) {
         StateChangeEventType type = event.getType();
-        if (type.equals(JavaImportStateManager.IMPORT_STATE_CHANGE.ENTER_IMPORT)){
+        if (type.equals(JavaClassImportStateManager.IMPORT_STATE_CHANGE.ENTER_CLASS_IMPORT)){
             identifierBuilder.activate();
-        } else if (type.equals(JavaImportStateManager.IMPORT_STATE_CHANGE.EXIT_IMPORT)){
+        } else if (type.equals(JavaClassImportStateManager.IMPORT_STATE_CHANGE.EXIT_CLASS_IMPORT)){
             identifierBuilder.deactivate();
             registImportData();
         }
@@ -76,5 +76,5 @@ public class JavaImportBuilder extends CompoundDataBuilder<Object>{
     
     private final IdentifierBuilder identifierBuilder;
     
-    private final JavaImportStateManager stateManager = new JavaImportStateManager();;
+    private final JavaClassImportStateManager stateManager = new JavaClassImportStateManager();;
 }

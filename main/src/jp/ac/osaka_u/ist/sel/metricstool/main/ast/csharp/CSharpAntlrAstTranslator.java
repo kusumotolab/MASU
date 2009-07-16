@@ -72,7 +72,7 @@ public class CSharpAntlrAstTranslator implements AstTokenTranslator<AST> {
             break;*/
         case CSharpTokenTypes.IMPORT:
             //        case CSharpTokenTypes.STATIC_IMPORT:
-            result = JavaAstToken.IMPORT;
+            result = JavaAstToken.CLASS_IMPORT;
             break;
         case CSharpTokenTypes.DOT:
             result = SyntaxToken.NAME_SEPARATOR;

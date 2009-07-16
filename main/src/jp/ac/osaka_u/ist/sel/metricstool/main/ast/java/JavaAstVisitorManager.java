@@ -72,7 +72,8 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
 
         this.builders.add(new BlockScopeBuilder(this.buildDataManager));
         this.builders.add(new NameSpaceBuilder(this.buildDataManager));
-        this.builders.add(new JavaImportBuilder(this.buildDataManager));
+        this.builders.add(new JavaClassImportBuilder(this.buildDataManager));
+        //this.builders.add(new JavaMemberImportBuilder(this.buildDataManager));
         this.builders.add(new ClassBuilder(this.buildDataManager, this.modifiersInterpriter));
         this.builders.add(new InheritanceBuilder(this.buildDataManager, new JavaTypeBuilder(
                 this.buildDataManager)));

@@ -68,9 +68,11 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             result = VisitControlToken.SKIP;
             //アノテーション関連は全部無視
             break;
-        case Java15TokenTypes.IMPORT:
-            //        case Java15TokenTypes.STATIC_IMPORT:
-            result = JavaAstToken.IMPORT;
+        case Java15TokenTypes.CLASS_IMPORT:
+            result = JavaAstToken.CLASS_IMPORT;
+            break;
+        case Java15TokenTypes.MEMBER_IMPORT:
+            result = JavaAstToken.MEMBER_IMPORT;
             break;
         case Java15TokenTypes.DOT:
             result = SyntaxToken.NAME_SEPARATOR;

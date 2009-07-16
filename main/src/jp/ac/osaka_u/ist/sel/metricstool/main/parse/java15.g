@@ -211,8 +211,8 @@ tokens {
 	PACKAGE_DEF; ARRAY_DECLARATOR; ARRAY_INSTANTIATION; EXTENDS_CLAUSE; IMPLEMENTS_CLAUSE;
 	PARAMETERS; METHOD_PARAMETER_DEF; LOCAL_PARAMETER_DEF;LABELED_STAT; TYPECAST; INDEX_OP;
 	POST_INC; POST_DEC; METHOD_CALL; EXPR; EXPR_STATE; ARRAY_INIT;
-	IMPORT; UNARY_MINUS; UNARY_PLUS; CASE_GROUP; ELIST; FOR;FOREACH;FOR_INIT; FOR_CONDITION;
-	FOR_ITERATOR; EMPTY_STAT; FINAL="final"; ABSTRACT="abstract";
+	CLASS_IMPORT; MEMBER_IMPORT; UNARY_MINUS; UNARY_PLUS; CASE_GROUP; ELIST; FOR;
+	FOREACH;FOR_INIT; FOR_CONDITION;FOR_ITERATOR; EMPTY_STAT; FINAL="final"; ABSTRACT="abstract";
 	STRICTFP="strictfp"; SUPER_CTOR_CALL; CTOR_CALL; VARIABLE_PARAMETER_DEF;
 	STATIC_IMPORT; ENUM_DEF; ENUM_CONSTANT_DEF; FOREACH_CLAUSE; FOREACH_VARIABLE; 
 	FOREACH_EXPRESSION; ANNOTATION_DEF; ANNOTATIONS; ANNOTATION; 
@@ -314,9 +314,30 @@ packageDefinition
 
 // Import statement: import followed by a package or class name
 importDefinition
-	options {defaultErrorHandler = true;}
-	{ boolean isStatic = false; }
-	:	i:"import"^ {#i.setType(IMPORT);} ( "static"! {#i.setType(STATIC_IMPORT);} )? identifierStar SEMI!
+	:	
+	(    ("import" "static") => h1:memberImportDefinition
+	|    h2:classImportDefinition
+	)
+	{
+		if(null != #h1){
+			#importDefinition = #(#[MEMBER_IMPORT, "import"], #h1);
+		}else{
+			#importDefinition = #(#[CLASS_IMPORT, "import"], #h2);
+		}
+	}
+	;
+//	options {defaultErrorHandler = true;}
+//	{ boolean isStatic = false; }
+//	:	i:"import"^ {#i.setType(IMPORT);} ( "static"! {#i.setType(STATIC_IMPORT);} )? identifierStar SEMI!
+		
+classImportDefinition
+	:
+	i:"import"^ identifierStar SEMI!
+	;
+	
+memberImportDefinition
+	:
+	i:"import"^ s:"static"! identifierStar SEMI!
 	;
 
 // A type definition is either a class, interface, enum or annotation with possible additional semis.
