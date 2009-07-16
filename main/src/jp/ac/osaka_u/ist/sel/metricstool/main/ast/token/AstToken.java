@@ -377,7 +377,19 @@ public interface AstToken {
      * トークンがforeach文の節を表すかどうか返す
      * @return foreach文の節ならtrue
      */
-    public boolean isForEachClause();
+    public boolean isForeachClause();
+    
+    /**
+     * トークンがforeach文の変数を表すかどうか返す
+     * @return foreach文の変数ならtrue
+     */
+    public boolean isForeachVariable();
+    
+    /**
+     * トークンがforeach文の式を表すかどうか返す
+     * @return foreach文の式ならtrue
+     */
+    public boolean isForeachExpression();
     
     /**
      * トークンがtryを表すかどうかを返す

@@ -1,6 +1,5 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.token;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.JavaAstToken;
 
 
 /**
@@ -44,9 +43,29 @@ public class DescriptionToken extends AstTokenAdapter {
     /**
      * foreach文の節を表すインスタンス
      */
-    public static final DescriptionToken FOR_EACH_CLAUSE = new DescriptionToken("FOR_EACH_CLAUSE") {
+    public static final DescriptionToken FOREACH_CLAUSE = new DescriptionToken("FOREACH_CLAUSE") {
         @Override
-        public boolean isForEachClause() {
+        public boolean isForeachClause() {
+            return true;
+        }
+    };
+    
+    /**
+     * foreach文の変数を表すインスタンス
+     */
+    public static final DescriptionToken FOREACH_VARIABLE = new DescriptionToken("FOREACH_VARIABLE") {
+        @Override
+        public boolean isForeachVariable() {
+            return true;
+        }
+    };
+    
+    /**
+     * foreach文の式を表すインスタンス
+     */
+    public static final DescriptionToken FOREACH_EXPRESSION = new DescriptionToken("FOREACH_VARIABLE") {
+        @Override
+        public boolean isForeachExpression() {
             return true;
         }
     };

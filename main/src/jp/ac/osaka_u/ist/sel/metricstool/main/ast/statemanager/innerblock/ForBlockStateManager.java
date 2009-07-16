@@ -9,9 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 public class ForBlockStateManager extends InnerBlockStateManager {
 
     public static enum FOR_BLOCK_STATE_CHANGE implements StateChangeEventType {
-        ENTER_FOR_INIT, EXIT_FOR_INIT,
-
-        ENTER_FOR_ITERATOR, EXIT_FOR_ITERATOR,
+        ENTER_FOR_INIT, EXIT_FOR_INIT, ENTER_FOR_ITERATOR, EXIT_FOR_ITERATOR;
 
     }
 
@@ -72,10 +70,6 @@ public class ForBlockStateManager extends InnerBlockStateManager {
         final AstToken token = event.getToken();
         return super.isStateChangeTriggerEvent(event) || this.isConditionalClause(token)
                 || this.isForInitClause(token) || this.isForIteratorClause(token);
-    }
-
-    protected boolean isForEachClause(final AstToken token) {
-        return token.isForEachClause();
     }
 
     protected boolean isForInitClause(final AstToken token) {

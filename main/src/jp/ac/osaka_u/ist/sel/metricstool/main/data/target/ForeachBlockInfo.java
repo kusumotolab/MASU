@@ -24,16 +24,13 @@ public final class ForeachBlockInfo extends BlockInfo {
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
-     * @param iteratorVariable 繰り返し用の変数
      * @param iteratorExpression 繰り返し用の式
      */
     public ForeachBlockInfo(final TargetClassInfo ownerClass, final LocalSpaceInfo outerSpace,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn,
-            final VariableDeclarationStatementInfo iteratorVariableDeclaration,
             final ExpressionInfo iteratorExpression) {
         super(ownerClass, outerSpace, fromLine, fromColumn, toLine, toColumn);
 
-        this.iteratorVariableDeclaration = iteratorVariableDeclaration;
         this.iteratorExpression = iteratorExpression;
     }
 
@@ -42,8 +39,12 @@ public final class ForeachBlockInfo extends BlockInfo {
      * 
      * @return　繰り返し用の変数
      */
-    public VariableDeclarationStatementInfo getIteratorVariableDeclaration() {
-        return this.iteratorVariableDeclaration;
+    public LocalVariableInfo getIteratorVariable() {
+        return this.iteratorVariable;
+    }
+
+    public void setIteratorVariable(final LocalVariableInfo iteratorVariable) {
+        this.iteratorVariable = iteratorVariable;
     }
 
     /**
@@ -65,8 +66,10 @@ public final class ForeachBlockInfo extends BlockInfo {
 
         text.append("for (");
 
-        text.append(this.getIteratorVariableDeclaration().getText());
-        text.deleteCharAt(text.length() - 1);
+        final LocalVariableInfo iteratorVariable = this.getIteratorVariable();
+        text.append(iteratorVariable.getType().getTypeName());
+        text.append(" ");
+        text.append(iteratorVariable.getName());
 
         text.append(":");
 
@@ -95,12 +98,11 @@ public final class ForeachBlockInfo extends BlockInfo {
     public Set<ClassTypeInfo> getThrownExceptions() {
         final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
         thrownExpressions.addAll(super.getThrownExceptions());
-        thrownExpressions.addAll(this.getIteratorVariableDeclaration().getThrownExceptions());
         thrownExpressions.addAll(this.getIteratorExpression().getThrownExceptions());
         return Collections.unmodifiableSet(thrownExpressions);
     }
 
-    private final VariableDeclarationStatementInfo iteratorVariableDeclaration;
+    private LocalVariableInfo iteratorVariable;
 
     private final ExpressionInfo iteratorExpression;
 }

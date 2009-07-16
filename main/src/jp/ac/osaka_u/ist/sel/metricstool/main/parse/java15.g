@@ -214,8 +214,9 @@ tokens {
 	IMPORT; UNARY_MINUS; UNARY_PLUS; CASE_GROUP; ELIST; FOR;FOREACH;FOR_INIT; FOR_CONDITION;
 	FOR_ITERATOR; EMPTY_STAT; FINAL="final"; ABSTRACT="abstract";
 	STRICTFP="strictfp"; SUPER_CTOR_CALL; CTOR_CALL; VARIABLE_PARAMETER_DEF;
-	STATIC_IMPORT; ENUM_DEF; ENUM_CONSTANT_DEF; FOR_EACH_CLAUSE; ANNOTATION_DEF; ANNOTATIONS;
-	ANNOTATION; ANNOTATION_MEMBER_VALUE_PAIR; ANNOTATION_FIELD_DEF; ANNOTATION_ARRAY_INIT;
+	STATIC_IMPORT; ENUM_DEF; ENUM_CONSTANT_DEF; FOREACH_CLAUSE; FOREACH_VARIABLE; 
+	FOREACH_EXPRESSION; ANNOTATION_DEF; ANNOTATIONS; ANNOTATION; 
+	ANNOTATION_MEMBER_VALUE_PAIR; ANNOTATION_FIELD_DEF; ANNOTATION_ARRAY_INIT;
 	TYPE_ARGUMENTS; TYPE_ARGUMENT; TYPE_PARAMETERS; TYPE_PARAMETER; WILDCARD_TYPE;
 	TYPE_UPPER_BOUNDS; TYPE_LOWER_BOUNDS; COND_CLAUSE; LOCAL_VARIABLE_DEF_STATE;
     PAREN_EXPR; THROWS_CLAUSE;
@@ -1335,7 +1336,7 @@ forStatement!
 	:	f:"for"^
 		LPAREN!
 			(	(forInit SEMI)=> h1:traditionalForClause
-			|	h2:forEachClause
+			|	h2:foreachClause
 			)
 		RPAREN!
 		s:statement
@@ -1343,7 +1344,8 @@ forStatement!
 		{
 		  if (null != #h1){
 			//#forStatement = #(#[FOR,"for"], #h1,#(#[BLOCK,"{"], #s));
-			#forStatement = #(#[FOR,"for"], #h1, #s);		  }
+			#forStatement = #(#[FOR,"for"], #h1, #s);		  
+  			}
 		  else {
     		//#forStatement = #(#[FOR,"for"], #h2, #(#[BLOCK,"{"], #s));
 		  	#forStatement = #(#[FOREACH,"foreach"], #h2, #s);
@@ -1359,12 +1361,24 @@ traditionalForClause
 		forIter			// updater
 	;
 
-forEachClause
+foreachClause
 	:
-		p:localParameterDeclaration COLON! expression
-		{#forEachClause = #(#[FOR_EACH_CLAUSE,"FOR_EACH_CLAUSE"], #forEachClause);}
+		foreachVariable COLON! foreachExpression
+		//{#foreachClause = #(#[FOREACH_CLAUSE,"FOREACH_CLAUSE"], #foreachClause);}
 	;
 
+foreachVariable
+    :
+    p:localParameterDeclaration
+    {#foreachVariable = #(#[FOREACH_VARIABLE, "FOREACH_VARIABLE"], #foreachVariable);}
+	;
+	
+foreachExpression
+	:
+	e:expression
+	{#foreachExpression = #([FOREACH_EXPRESSION, "FOREACH_EXPRESSION"], #foreachExpression);}
+	;
+	
 localParameterDeclaration!
 	:
 		{pushStartLineColumn();}

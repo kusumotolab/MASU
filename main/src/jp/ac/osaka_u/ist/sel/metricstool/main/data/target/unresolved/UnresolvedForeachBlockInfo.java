@@ -7,9 +7,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -56,13 +56,6 @@ public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlock
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        // ŒJ‚è•Ô‚µ—p‚Ì•Ï”‚ðŽæ“¾
-        final UnresolvedVariableDeclarationStatementInfo unresolvedVariableDeclaration = this
-                .getIteratorVariableDeclaration();
-        final VariableDeclarationStatementInfo variableDeclaration = unresolvedVariableDeclaration
-                .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                        methodInfoManager);
-
         // ŒJ‚è•Ô‚µ—p‚ÌŽ®‚ðŽæ“¾
         final UnresolvedExpressionInfo<?> unresolvedIteratorExpression = this
                 .getIteratorExpression();
@@ -75,7 +68,14 @@ public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlock
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
         this.resolvedInfo = new ForeachBlockInfo(usingClass, outerSpace, fromLine, fromColumn,
-                toLine, toColumn, variableDeclaration, iteratorExpression);
+                toLine, toColumn, iteratorExpression);
+
+        // ŒJ‚è•Ô‚µ—p‚Ì•Ï”‚ðŽæ“¾
+        final UnresolvedLocalVariableInfo unresolvedIteratorVariable = this.getIteratorVariable();
+        final LocalVariableInfo iteratorVariable = unresolvedIteratorVariable.resolve(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        this.resolvedInfo.setIteratorVariable(iteratorVariable);
+
         return this.resolvedInfo;
     }
 
@@ -84,9 +84,8 @@ public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlock
      * 
      * @param iteraotorVariableDeclaration •Ï”’è‹`
      */
-    public void setIteratorVariableDeclaration(
-            final UnresolvedVariableDeclarationStatementInfo iteraotorVariableDeclaration) {
-        this.iteratorVariableDeclaration = iteraotorVariableDeclaration;
+    public void setIteratorVariable(final UnresolvedLocalVariableInfo iteraotorVariable) {
+        this.iteratorVariable = iteraotorVariable;
     }
 
     /**
@@ -103,8 +102,8 @@ public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlock
      * 
      * @return •Ï”’è‹`
      */
-    public UnresolvedVariableDeclarationStatementInfo getIteratorVariableDeclaration() {
-        return this.iteratorVariableDeclaration;
+    public UnresolvedLocalVariableInfo getIteratorVariable() {
+        return this.iteratorVariable;
     }
 
     /**
@@ -116,7 +115,7 @@ public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlock
         return this.iteratorExpression;
     }
 
-    private UnresolvedVariableDeclarationStatementInfo iteratorVariableDeclaration;
+    private UnresolvedLocalVariableInfo iteratorVariable;
 
     private UnresolvedExpressionInfo<?> iteratorExpression;
 }

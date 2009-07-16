@@ -76,8 +76,8 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new ClassBuilder(this.buildDataManager, this.modifiersInterpriter));
         this.builders.add(new InheritanceBuilder(this.buildDataManager, new JavaTypeBuilder(
                 this.buildDataManager)));
-        this.builders.add(new ThrowsBuilder(this.buildDataManager, 
-                new JavaTypeBuilder(this.buildDataManager)));
+        this.builders.add(new ThrowsBuilder(this.buildDataManager, new JavaTypeBuilder(
+                this.buildDataManager)));
         this.builders.add(new JavaAnonymousClassBuilder(this.buildDataManager));
         this.builders.add(new JavaEnumElementBuilder(this.buildDataManager));
         this.builders.add(new JavaIntefaceMarker(this.buildDataManager));
@@ -97,14 +97,16 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
                 modifiersInterpriter, new ModifiersBuilder(), new JavaTypeBuilder(
                         this.buildDataManager), new NameBuilder()));
         //this.builders.add(new Initializerbuilder());
-        this.builders.add(new StaticInitializerBuilder(this.buildDataManager, this.modifiersInterpriter));
+        this.builders.add(new StaticInitializerBuilder(this.buildDataManager,
+                this.modifiersInterpriter));
 
         this.builders.add(new FieldBuilder(this.buildDataManager, this.expressionManager,
                 new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager),
                 new NameBuilder(), modifiersInterpriter));
         final LocalVariableBuilder localVariableBuilder = new LocalVariableBuilder(
                 this.buildDataManager, this.expressionManager, new ModifiersBuilder(),
-                new JavaTypeBuilder(this.buildDataManager), new NameBuilder(), this.modifiersInterpriter);
+                new JavaTypeBuilder(this.buildDataManager), new NameBuilder(),
+                this.modifiersInterpriter);
         this.builders.add(localVariableBuilder);
 
         if (settings.isStatement()) {
@@ -138,15 +140,17 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new JavaConstructorCallBuilder(this.expressionManager,
                 this.buildDataManager));
         //this.builders.add(new ThisConstructorCallBuilder(this.expressionManager,
-          //      this.buildDataManager));
-        
+        //      this.buildDataManager));
+
         this.builders.add(new JavaArrayInstantiationBuilder(this.expressionManager,
                 this.buildDataManager));
 
         this.builders.add(new JavaExpressionElementBuilder(this.expressionManager,
                 this.buildDataManager));
-        this.builders.add(new ArrayInitializerBuilder(this.expressionManager, this.buildDataManager));
-        this.builders.add(new ParenthesesExpressionBuilder(this.expressionManager, this.buildDataManager));
+        this.builders
+                .add(new ArrayInitializerBuilder(this.expressionManager, this.buildDataManager));
+        this.builders.add(new ParenthesesExpressionBuilder(this.expressionManager,
+                this.buildDataManager));
     }
 
     private void addStatementBuilder(final LocalVariableBuilder localVariableBuilder) {
@@ -163,7 +167,8 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new BreakStatementBuilder(this.expressionManager, this.buildDataManager));
         this.builders.add(new ContinueStatementBuilder(this.expressionManager,
                 this.buildDataManager));
-        this.builders.add(new AssertStatementBuilder(this.expressionManager, this.buildDataManager));
+        this.builders
+                .add(new AssertStatementBuilder(this.expressionManager, this.buildDataManager));
 
         this.addInnerBlockBuilder(localVariableDeclarationBuilder);
 
@@ -173,21 +178,25 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
     private void addInnerBlockBuilder(final LocalVariableDeclarationStatementBuilder variableBuilder) {
         this.builders.add(new CatchBlockBuilder(this.buildDataManager, new LocalVariableBuilder(
                 this.buildDataManager, this.expressionManager, new ModifiersBuilder(),
-                new JavaTypeBuilder(this.buildDataManager), new NameBuilder(), this.modifiersInterpriter)));
+                new JavaTypeBuilder(this.buildDataManager), new NameBuilder(),
+                this.modifiersInterpriter)));
         this.builders.add(new DoBlockBuilder(this.buildDataManager, this.expressionManager,
                 variableBuilder));
         this.builders.add(new ElseBlockBuilder(this.buildDataManager));
         this.builders.add(new FinallyBlockBuilder(this.buildDataManager));
         this.builders.add(new ForBlockBuilder(this.buildDataManager, this.expressionManager,
                 variableBuilder));
-        this.builders.add(new ForeachBlockBuilder(this.buildDataManager, new LocalVariableBuilder(this.buildDataManager, this.expressionManager
-                , new ModifiersBuilder(), new JavaTypeBuilder(this.buildDataManager), new NameBuilder(), this.modifiersInterpriter),this.expressionManager, variableBuilder));
+        this.builders.add(new ForeachBlockBuilder(this.buildDataManager, new LocalVariableBuilder(
+                this.buildDataManager, this.expressionManager, new ModifiersBuilder(),
+                new JavaTypeBuilder(this.buildDataManager), new NameBuilder(),
+                this.modifiersInterpriter), this.expressionManager));
         this.builders.add(new IfBlockBuilder(this.buildDataManager, this.expressionManager,
                 variableBuilder));
         this.builders.add(new SimpleBlockBuilder(this.buildDataManager));
         this.builders.add(new SwitchBlockBuilder(this.buildDataManager, this.expressionManager,
                 variableBuilder));
-        this.builders.add(new SynchronizedBlockBuilder(this.buildDataManager, this.expressionManager));
+        this.builders.add(new SynchronizedBlockBuilder(this.buildDataManager,
+                this.expressionManager));
         this.builders.add(new TryBlockBuilder(this.buildDataManager));
         this.builders.add(new WhileBlockBuilder(this.buildDataManager, this.expressionManager,
                 variableBuilder));

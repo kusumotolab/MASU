@@ -289,7 +289,15 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
     
-    public boolean isForEachClause() {
+    public boolean isForeachClause() {
+        return false;
+    }
+    
+    public boolean isForeachVariable() {
+        return false;
+    }
+    
+    public boolean isForeachExpression() {
         return false;
     }
 
