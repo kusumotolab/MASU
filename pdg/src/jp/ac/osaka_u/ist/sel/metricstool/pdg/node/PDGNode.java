@@ -18,6 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGCallDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGReturnDependenceEdge;
 
 
 /**
@@ -195,6 +196,18 @@ public abstract class PDGNode<T extends ExecutableElementInfo> implements
         final PDGCallDependenceEdge callEdge = new PDGCallDependenceEdge(this, dependingNode, call);
         boolean added = this.addForwardEdge(callEdge);
         added &= dependingNode.addBackwardEdge(callEdge);
+        return added;
+    }
+
+    public boolean addReturnDependingNode(final PDGNode<?> dependingNode) {
+
+        if (null == dependingNode) {
+            throw new IllegalArgumentException();
+        }
+
+        final PDGReturnDependenceEdge returnEdge = new PDGReturnDependenceEdge(this, dependingNode);
+        boolean added = this.addForwardEdge(returnEdge);
+        added &= dependingNode.addBackwardEdge(returnEdge);
         return added;
     }
 

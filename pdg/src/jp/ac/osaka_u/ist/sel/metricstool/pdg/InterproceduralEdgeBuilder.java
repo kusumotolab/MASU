@@ -31,150 +31,150 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.WhileBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 
-public class CallEdgeBuilder {
+public class InterproceduralEdgeBuilder {
 
-    public CallEdgeBuilder(final InterProceduralPDG pdg) {
+    public InterproceduralEdgeBuilder(final InterProceduralPDG pdg) {
         this.pdg = pdg;
     }
 
-    public void addCallEdges() {
+    public void addEdges() {
 
         final CallableUnitInfo unit = this.pdg.getMethodInfo();
         for (final StatementInfo statement : unit.getStatements()) {
-            this.addCallEdges(statement);
+            this.addEdges(statement);
         }
     }
 
-    private void addCallEdges(final StatementInfo statement) {
+    private void addEdges(final StatementInfo statement) {
 
         if (statement instanceof CatchBlockInfo) {
-            this.addCallEdges((CatchBlockInfo) statement);
+            this.addEdges((CatchBlockInfo) statement);
         } else if (statement instanceof DoBlockInfo) {
-            this.addCallEdges((DoBlockInfo) statement);
+            this.addEdges((DoBlockInfo) statement);
         } else if (statement instanceof ElseBlockInfo) {
-            this.addCallEdges((ElseBlockInfo) statement);
+            this.addEdges((ElseBlockInfo) statement);
         } else if (statement instanceof FinallyBlockInfo) {
-            this.addCallEdges((FinallyBlockInfo) statement);
+            this.addEdges((FinallyBlockInfo) statement);
         } else if (statement instanceof ForBlockInfo) {
-            this.addCallEdges((ForBlockInfo) statement);
+            this.addEdges((ForBlockInfo) statement);
         } else if (statement instanceof ForeachBlockInfo) {
-            this.addCallEdges((ForeachBlockInfo) statement);
+            this.addEdges((ForeachBlockInfo) statement);
         } else if (statement instanceof IfBlockInfo) {
-            this.addCallEdges((IfBlockInfo) statement);
+            this.addEdges((IfBlockInfo) statement);
         } else if (statement instanceof SimpleBlockInfo) {
-            this.addCallEdges((SimpleBlockInfo) statement);
+            this.addEdges((SimpleBlockInfo) statement);
         } else if (statement instanceof SwitchBlockInfo) {
-            this.addCallEdges((SwitchBlockInfo) statement);
+            this.addEdges((SwitchBlockInfo) statement);
         } else if (statement instanceof SynchronizedBlockInfo) {
-            this.addCallEdges((SynchronizedBlockInfo) statement);
+            this.addEdges((SynchronizedBlockInfo) statement);
         } else if (statement instanceof TryBlockInfo) {
-            this.addCallEdges((TryBlockInfo) statement);
+            this.addEdges((TryBlockInfo) statement);
         } else if (statement instanceof WhileBlockInfo) {
-            this.addCallEdges((WhileBlockInfo) statement);
+            this.addEdges((WhileBlockInfo) statement);
         } else if (statement instanceof CaseEntryInfo) {
-            this.addCallEdges((CaseEntryInfo) statement);
+            this.addEdges((CaseEntryInfo) statement);
         } else if (statement instanceof LabelInfo) {
-            this.addCallEdges((LabelInfo) statement);
+            this.addEdges((LabelInfo) statement);
         } else if (statement instanceof SingleStatementInfo) {
-            this.addCallEdges((SingleStatementInfo) statement);
+            this.addEdges((SingleStatementInfo) statement);
         } else if (statement instanceof ConditionInfo) {
-            this.addCallEdges((ConditionInfo) statement);
+            this.addEdges((ConditionInfo) statement);
         } else {
             throw new IllegalStateException();
         }
     }
 
-    private void addCallEdges(final CatchBlockInfo catchBlock) {
+    private void addEdges(final CatchBlockInfo catchBlock) {
         for (final StatementInfo statement : catchBlock.getStatements()) {
-            this.addCallEdges(statement);
+            this.addEdges(statement);
         }
     }
 
-    private void addCallEdges(final DoBlockInfo doBlock) {
+    private void addEdges(final DoBlockInfo doBlock) {
         for (final StatementInfo statement : doBlock.getStatements()) {
-            this.addCallEdges(statement);
+            this.addEdges(statement);
         }
     }
 
-    private void addCallEdges(final ElseBlockInfo elseBlock) {
+    private void addEdges(final ElseBlockInfo elseBlock) {
         for (final StatementInfo statement : elseBlock.getStatements()) {
-            this.addCallEdges(statement);
+            this.addEdges(statement);
         }
     }
 
-    private void addCallEdges(final FinallyBlockInfo finallyBlock) {
+    private void addEdges(final FinallyBlockInfo finallyBlock) {
         for (final StatementInfo statement : finallyBlock.getStatements()) {
-            this.addCallEdges(statement);
+            this.addEdges(statement);
         }
     }
 
-    private void addCallEdges(final ForBlockInfo forBlock) {
+    private void addEdges(final ForBlockInfo forBlock) {
         for (final ConditionInfo expression : forBlock.getInitializerExpressions()) {
-            this.addCallEdges(expression);
+            this.addEdges(expression);
         }
-        this.addCallEdges(forBlock.getConditionalClause().getCondition());
+        this.addEdges(forBlock.getConditionalClause().getCondition());
         for (final ExpressionInfo expression : forBlock.getIteratorExpressions()) {
-            this.addCallEdges(expression);
+            this.addEdges(expression);
         }
         for (final StatementInfo statement : forBlock.getStatements()) {
-            this.addCallEdges(statement);
+            this.addEdges(statement);
         }
     }
 
-    private void addCallEdges(final ForeachBlockInfo foreachBlock) {
-        this.addCallEdges(foreachBlock.getIteratorExpression());
+    private void addEdges(final ForeachBlockInfo foreachBlock) {
+        this.addEdges(foreachBlock.getIteratorExpression());
         for (final StatementInfo statement : foreachBlock.getStatements()) {
-            this.addCallEdges(statement);
+            this.addEdges(statement);
         }
     }
 
-    private void addCallEdges(final IfBlockInfo ifBlock) {
-        this.addCallEdges(ifBlock.getConditionalClause().getCondition());
+    private void addEdges(final IfBlockInfo ifBlock) {
+        this.addEdges(ifBlock.getConditionalClause().getCondition());
         for (final StatementInfo statement : ifBlock.getStatements()) {
-            this.addCallEdges(statement);
+            this.addEdges(statement);
         }
     }
 
-    private void addCallEdges(final SimpleBlockInfo simpleBlock) {
+    private void addEdges(final SimpleBlockInfo simpleBlock) {
         for (final StatementInfo statement : simpleBlock.getStatements()) {
-            this.addCallEdges(statement);
+            this.addEdges(statement);
         }
     }
 
-    private void addCallEdges(final SwitchBlockInfo switchBlock) {
-        this.addCallEdges(switchBlock.getConditionalClause().getCondition());
+    private void addEdges(final SwitchBlockInfo switchBlock) {
+        this.addEdges(switchBlock.getConditionalClause().getCondition());
         for (final StatementInfo statement : switchBlock.getStatements()) {
-            this.addCallEdges(statement);
+            this.addEdges(statement);
         }
     }
 
-    private void addCallEdges(final SynchronizedBlockInfo synchronizedBlock) {
-        this.addCallEdges(synchronizedBlock.getSynchronizedExpression());
+    private void addEdges(final SynchronizedBlockInfo synchronizedBlock) {
+        this.addEdges(synchronizedBlock.getSynchronizedExpression());
         for (final StatementInfo statement : synchronizedBlock.getStatements()) {
-            this.addCallEdges(statement);
+            this.addEdges(statement);
         }
     }
 
-    private void addCallEdges(final TryBlockInfo tryBlock) {
+    private void addEdges(final TryBlockInfo tryBlock) {
         for (final StatementInfo statement : tryBlock.getStatements()) {
-            this.addCallEdges(statement);
+            this.addEdges(statement);
         }
     }
 
-    private void addCallEdges(final WhileBlockInfo whileBlock) {
-        this.addCallEdges(whileBlock.getConditionalClause().getCondition());
+    private void addEdges(final WhileBlockInfo whileBlock) {
+        this.addEdges(whileBlock.getConditionalClause().getCondition());
         for (final StatementInfo statement : whileBlock.getStatements()) {
-            this.addCallEdges(statement);
+            this.addEdges(statement);
         }
     }
 
-    private void addCallEdges(final CaseEntryInfo caseEntry) {
+    private void addEdges(final CaseEntryInfo caseEntry) {
     }
 
-    private void addCallEdges(final LabelInfo label) {
+    private void addEdges(final LabelInfo label) {
     }
 
-    private void addCallEdges(final SingleStatementInfo statement) {
+    private void addEdges(final SingleStatementInfo statement) {
         for (final CallInfo<?> call : statement.getCalls()) {
             final CallableUnitInfo callee = call.getCallee();
             final Set<CallableUnitInfo> callees = new HashSet<CallableUnitInfo>();
@@ -190,16 +190,28 @@ public class CallEdgeBuilder {
                     final PDG pdg = InterProceduralPDG.PDG_MAP.get(unit);
                     assert null != pdg : "Illegal State!";
 
-                    final PDGNode<?> fromNode = this.pdg.nodeFactory.getNode(statement);
-                    for (final PDGNode<?> toNode : pdg.getEnterNodes()) {
-                        fromNode.addCallDependingNode(toNode, call);
+                    // Call DependenceÅ@Çí«â¡
+                    {
+                        final PDGNode<?> fromNode = this.pdg.nodeFactory.getNode(statement);
+                        for (final PDGNode<?> toNode : pdg.getEnterNodes()) {
+                            fromNode.addCallDependingNode(toNode, call);
+                        }
+                    }
+
+                    // Return Dependence Çí«â¡
+                    {
+                        final PDGNode<?> toNode = this.pdg.nodeFactory.getNode(statement);
+                        for (final PDGNode<?> fromNode : pdg.getExitNodes()) {
+                            fromNode.addReturnDependingNode(toNode);
+                        }
                     }
                 }
             }
+
         }
     }
 
-    private void addCallEdges(final ConditionInfo condition) {
+    private void addEdges(final ConditionInfo condition) {
         for (final CallInfo<?> call : condition.getCalls()) {
             final CallableUnitInfo callee = call.getCallee();
             final Set<CallableUnitInfo> callees = new HashSet<CallableUnitInfo>();
@@ -215,9 +227,20 @@ public class CallEdgeBuilder {
                     final PDG pdg = InterProceduralPDG.PDG_MAP.get(unit);
                     assert null != pdg : "Illegal State!";
 
-                    final PDGNode<?> fromNode = this.pdg.nodeFactory.getNode(condition);
-                    for (final PDGNode<?> toNode : pdg.getEnterNodes()) {
-                        fromNode.addCallDependingNode(toNode, call);
+                    // Call DependenceÅ@Çí«â¡
+                    {
+                        final PDGNode<?> fromNode = this.pdg.nodeFactory.getNode(condition);
+                        for (final PDGNode<?> toNode : pdg.getEnterNodes()) {
+                            fromNode.addCallDependingNode(toNode, call);
+                        }
+                    }
+
+                    // Return Dependence Çí«â¡
+                    {
+                        final PDGNode<?> toNode = this.pdg.nodeFactory.getNode(condition);
+                        for (final PDGNode<?> fromNode : pdg.getExitNodes()) {
+                            fromNode.addReturnDependingNode(toNode);
+                        }
                     }
                 }
             }

@@ -26,12 +26,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageListener;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.InterProceduralPDG;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.InterproceduralEdgeBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGControlDependenceEdge;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGControlNode;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGDataDependenceEdge;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGEdge;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGCallDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGControlDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGReturnDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGControlNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -82,8 +87,17 @@ public class GraphViewer extends MetricsTool {
             }
 
             {
-                final Option p = new Option("p", "ProgramDepencenceGraph", true,
-                        "program dependence graph");
+                final Option p = new Option("p", "IntraProceduralProgramDepencenceGraph", true,
+                        "intraprocedural program dependence graph");
+                p.setArgName("file");
+                p.setArgs(1);
+                p.setRequired(false);
+                options.addOption(p);
+            }
+
+            {
+                final Option p = new Option("q", "InterProceduralProgramDepencenceGraph", true,
+                        "interprocedural program dependence graph");
                 p.setArgName("file");
                 p.setArgs(1);
                 p.setRequired(false);
@@ -164,26 +178,58 @@ public class GraphViewer extends MetricsTool {
             }
 
             if (cmd.hasOption("p")) {
-                out.println("building and outputing PDGs ...");
+                out.println("building and outputing intraprocedural PDGs ...");
                 final BufferedWriter writer = new BufferedWriter(new FileWriter(cmd
                         .getOptionValue("p")));
 
-                writer.write("digraph PDG {");
+                writer.write("digraph IntraproceduralPDG {");
                 writer.newLine();
 
                 int createdGraphNumber = 0;
                 for (final TargetMethodInfo method : DataManager.getInstance()
                         .getMethodInfoManager().getTargetMethodInfos()) {
 
-                    writeMethodPDG(method, createdGraphNumber++, writer);
+                    final IntraProceduralPDG pdg = new IntraProceduralPDG(method);
+                    writeIntraproceduralPDG(pdg, createdGraphNumber++, writer);
                 }
 
                 for (final TargetConstructorInfo constructor : DataManager.getInstance()
                         .getMethodInfoManager().getTargetConstructorInfos()) {
 
-                    writeMethodPDG(constructor, createdGraphNumber++, writer);
+                    final IntraProceduralPDG pdg = new IntraProceduralPDG(constructor);
+                    writeIntraproceduralPDG(pdg, createdGraphNumber++, writer);
                 }
 
+                writer.write("}");
+
+                writer.close();
+            }
+
+            if (cmd.hasOption("q")) {
+                out.println("building and outputing interprocedural PDGs ...");
+                final BufferedWriter writer = new BufferedWriter(new FileWriter(cmd
+                        .getOptionValue("q")));
+
+                writer.write("digraph InterproceduralPDG {");
+                writer.newLine();
+
+                final Map<CallableUnitInfo, InterProceduralPDG> UNIT_PDG_MAP = new HashMap<CallableUnitInfo, InterProceduralPDG>();
+                for (final TargetMethodInfo method : DataManager.getInstance()
+                        .getMethodInfoManager().getTargetMethodInfos()) {
+                    final InterProceduralPDG pdg = new InterProceduralPDG(method);
+                    UNIT_PDG_MAP.put(method, pdg);
+                }
+                for (final TargetConstructorInfo constructor : DataManager.getInstance()
+                        .getMethodInfoManager().getTargetConstructorInfos()) {
+                    final InterProceduralPDG pdg = new InterProceduralPDG(constructor);
+                    UNIT_PDG_MAP.put(constructor, pdg);
+                }
+                //メソッド呼び出し依存関係を構築
+                for (final InterProceduralPDG pdg : UNIT_PDG_MAP.values()) {
+                    (new InterproceduralEdgeBuilder(pdg)).addEdges();
+                }
+
+                writeInterproceduralPDG(writer);
                 writer.write("}");
 
                 writer.close();
@@ -288,10 +334,10 @@ public class GraphViewer extends MetricsTool {
         }
     }
 
-    static private void writeMethodPDG(final CallableUnitInfo unit, final int createdGraphNumber,
-            final BufferedWriter writer) throws IOException {
+    static private void writeIntraproceduralPDG(final IntraProceduralPDG pdg,
+            final int createdGraphNumber, final BufferedWriter writer) throws IOException {
 
-        final IntraProceduralPDG pdg = new IntraProceduralPDG(unit);
+        final CallableUnitInfo method = pdg.getMethodInfo();
 
         writer.write("subgraph cluster");
         writer.write(Integer.toString(createdGraphNumber));
@@ -299,7 +345,7 @@ public class GraphViewer extends MetricsTool {
         writer.newLine();
 
         writer.write("label = \"");
-        writer.write(unit.getSignatureText());
+        writer.write(method.getSignatureText());
         writer.write("\";");
         writer.newLine();
 
@@ -348,12 +394,118 @@ public class GraphViewer extends MetricsTool {
                 writer.write(" [style = solid, label=\"" + edge.getDependenceString() + "\"]");
             } else if (edge instanceof PDGControlDependenceEdge) {
                 writer.write(" [style = dotted, label=\"" + edge.getDependenceString() + "\"]");
+            } else if (edge instanceof PDGExecutionDependenceEdge) {
+                writer.write(" [style = bold, label=\"" + edge.getDependenceString() + "\"]");
             }
             writer.write(";");
             writer.newLine();
         }
 
         writer.write("}");
+        writer.newLine();
+    }
+
+    static private void writeInterproceduralPDG(final BufferedWriter writer) throws IOException {
+
+        //　ノードのIDを作成
+        int nodeID = 0;
+        final Map<PDGNode<?>, Integer> NODE_ID_MAP = new HashMap<PDGNode<?>, Integer>();
+        for (final InterProceduralPDG pdg : InterProceduralPDG.PDG_MAP.values()) {
+            for (final PDGNode<?> node : pdg.getAllNodes()) {
+                NODE_ID_MAP.put(node, new Integer(nodeID++));
+            }
+        }
+
+        //メソッド内グラフを作成
+        int graphID = 0;
+        for (final InterProceduralPDG pdg : InterProceduralPDG.PDG_MAP.values()) {
+
+            writer.write("subgraph cluster");
+            writer.write(Integer.toString(graphID++));
+            writer.write(" {");
+            writer.newLine();
+
+            final CallableUnitInfo method = pdg.getMethodInfo();
+            writer.write("label = \"");
+            writer.write(method.getSignatureText());
+            writer.write("\";");
+            writer.newLine();
+
+            // ノード情報の出力
+            for (final PDGNode<?> node : pdg.getAllNodes()) {
+                final Integer id = NODE_ID_MAP.get(node);
+                writer.write(id.toString());
+                writer.write(" [style = filled, label = \"");
+                writer.write(node.getText().replace("\"", "\\\""));
+                writer.write("\"");
+
+                //ノードの色
+                if (pdg.getEnterNodes().contains(node)) {
+                    writer.write(", fillcolor = aquamarine");
+                } else if (pdg.getExitNodes().contains(node)) {
+                    writer.write(", fillcolor = deeppink");
+                } else {
+                    writer.write(", fillcolor = white");
+                }
+
+                //ノードの形
+                if (node instanceof PDGControlNode) {
+                    writer.write(", shape = diamond");
+                } else {
+                    writer.write(", shape = ellipse");
+                }
+
+                writer.write("];");
+                writer.newLine();
+            }
+
+            // エッジ情報の出力
+            for (final PDGEdge edge : pdg.getAllEdges()) {
+
+                //エッジの開始頂点と終了頂点が共にメソッド内にあるときに，エッジを描画する
+                if (!pdg.getAllNodes().contains(edge.getFromNode())
+                        || !pdg.getAllNodes().contains(edge.getToNode())) {
+                    continue;
+                }
+
+                writer.write(NODE_ID_MAP.get(edge.getFromNode()).toString());
+                writer.write(" -> ");
+                writer.write(NODE_ID_MAP.get(edge.getToNode()).toString());
+                if (edge instanceof PDGDataDependenceEdge) {
+                    writer.write(" [style = solid, label=\"" + edge.getDependenceString() + "\"]");
+                } else if (edge instanceof PDGControlDependenceEdge) {
+                    writer.write(" [style = dotted, label=\"" + edge.getDependenceString() + "\"]");
+                } else if (edge instanceof PDGExecutionDependenceEdge) {
+                    writer.write(" [style = bold, label=\"" + edge.getDependenceString() + "\"]");
+                }
+                writer.write(";");
+                writer.newLine();
+            }
+            writer.write("}");
+            writer.newLine();
+        }
+
+        //メソッドをまたがるエッジ情報を出力
+        final Set<PDGEdge> EDGES = new HashSet<PDGEdge>();
+        for (final InterProceduralPDG pdg : InterProceduralPDG.PDG_MAP.values()) {
+            for (final PDGEdge edge : pdg.getAllEdges()) {
+
+                if (!(edge instanceof PDGCallDependenceEdge)
+                        && !(edge instanceof PDGReturnDependenceEdge)) {
+                    continue;
+                }
+                if (EDGES.contains(edge)) {
+                    continue;
+                }
+                writer.write(NODE_ID_MAP.get(edge.getFromNode()).toString());
+                writer.write(" -> ");
+                writer.write(NODE_ID_MAP.get(edge.getToNode()).toString());
+                writer.write(" [style = bold, label=\"" + edge.getDependenceString() + "\"];");
+                writer.newLine();
+                EDGES.add(edge);
+            }
+        }
+
         writer.newLine();
     }
 }
