@@ -122,7 +122,7 @@ public class InterproceduralEdgeBuilder {
     }
 
     private void addEdges(final ForeachBlockInfo foreachBlock) {
-        this.addEdges(foreachBlock.getIteratorExpression());
+        this.addEdges(foreachBlock.getConditionalClause().getCondition());
         for (final StatementInfo statement : foreachBlock.getStatements()) {
             this.addEdges(statement);
         }

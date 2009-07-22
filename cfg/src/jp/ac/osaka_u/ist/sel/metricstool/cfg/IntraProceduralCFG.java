@@ -24,6 +24,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalConstructorInf
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LabelInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
@@ -476,6 +478,57 @@ public class IntraProceduralCFG extends CFG {
                         else {
                             exitNode.addForwardNode(controlNode);
                         }
+                    }
+                }
+            }
+        }
+
+        else if (statement instanceof ForeachBlockInfo) {
+
+            // foreach文の変数，式からコントロールノードを生成
+            final ForeachBlockInfo foreachBlock = (ForeachBlockInfo) statement;
+            final ForeachConditionInfo condition = (ForeachConditionInfo) foreachBlock
+                    .getConditionalClause().getCondition();
+            final CFGControlNode controlNode = nodeFactory.makeControlNode(condition);
+            assert null != controlNode : "controlNode is null!";
+            this.enterNode = controlNode;
+            this.exitNodes.add(controlNode);
+
+            // foreach文内部の処理
+            final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(foreachBlock
+                    .getStatements(), nodeFactory);
+
+            // 内部が空でない場合は処理を行う
+            if (!statementsCFG.isEmpty()) {
+                controlNode.addTrueForwardNode(statementsCFG.getEnterNode());
+                for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
+
+                    //return文の場合はexitノードに追加
+                    if (exitNode instanceof CFGReturnStatementNode) {
+                        this.exitNodes.add(exitNode);
+                    }
+
+                    // continue文の場合
+                    else if (exitNode instanceof CFGContinueStatementNode) {
+
+                        final ContinueStatementInfo continueStatement = (ContinueStatementInfo) exitNode
+                                .getCore();
+                        final BlockInfo correspondingBlock = continueStatement
+                                .getCorrespondingBlock();
+
+                        // continue文のに対応しているのがこのwhile文の時
+                        if (statement == correspondingBlock) {
+                            exitNode.addForwardNode(controlNode);
+                        }
+
+                        // continue文のに対応しているのがこのwhile文ではない時
+                        else {
+                            this.exitNodes.add(exitNode);
+                        }
+                    }
+
+                    else {
+                        exitNode.addForwardNode(controlNode);
                     }
                 }
             }

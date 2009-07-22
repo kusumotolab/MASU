@@ -9,6 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ContinueStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ThrowStatementInfo;
@@ -94,8 +95,13 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
             return node;
         }
 
-        node = new CFGControlNode(condition);
-        this.elementToNodeMap.put(condition, node);
+        if (condition instanceof ForeachConditionInfo) {
+            node = new CFGForeachControlNode((ForeachConditionInfo) condition);
+            this.elementToNodeMap.put(condition, node);
+        } else {
+            node = new CFGControlNode(condition);
+            this.elementToNodeMap.put(condition, node);
+        }
 
         return node;
     }
