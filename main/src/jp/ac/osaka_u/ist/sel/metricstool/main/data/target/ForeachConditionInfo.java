@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -20,6 +22,8 @@ public final class ForeachConditionInfo extends ExpressionInfo {
 
         this.iteratorVariable = iteratorVariable;
         this.iteratorExpression = iteratorExpression;
+
+        this.iteratorExpression.setOwnerExecutableElement(this);
     }
 
     public LocalVariableInfo getIteratorVariable() {
@@ -61,7 +65,12 @@ public final class ForeachConditionInfo extends ExpressionInfo {
 
     @Override
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
-        return this.getIteratorExpression().getVariableUsages();
+        final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages = new HashSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
+        variableUsages.addAll(this.getIteratorExpression().getVariableUsages());
+        variableUsages.add(LocalVariableUsageInfo.getInstance(this.getIteratorVariable(), false,
+                true, this.getOwnerMethod(), this.getFromLine(), this.getFromColumn(), this
+                        .getToLine(), this.getToColumn()));
+        return Collections.unmodifiableSet(variableUsages);
     }
 
     private final LocalVariableInfo iteratorVariable;

@@ -3,18 +3,15 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
-public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlockInfo> {
+public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<ForeachBlockInfo> {
 
     /**
      * 外側のブロック情報を与えて，foreach ブロック情報を初期化
@@ -23,6 +20,8 @@ public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlock
      */
     public UnresolvedForeachBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
         super(outerSpace);
+        this.iteratorExpression = null;
+        this.iteratorVariable = null;
     }
 
     /**
@@ -65,24 +64,6 @@ public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlock
         this.resolvedInfo = new ForeachBlockInfo(usingClass, outerSpace, fromLine, fromColumn,
                 toLine, toColumn);
 
-        // 繰り返し用の式を取得
-        final UnresolvedExpressionInfo<?> unresolvedIteratorExpression = this
-                .getIteratorExpression();
-        final ExpressionInfo iteratorExpression = unresolvedIteratorExpression.resolve(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-
-        // 繰り返し用の変数を取得
-        final UnresolvedLocalVariableInfo unresolvedIteratorVariable = this.getIteratorVariable();
-        final LocalVariableInfo iteratorVariable = unresolvedIteratorVariable.resolve(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-
-        // 式を生成
-        final ForeachConditionInfo condition = new ForeachConditionInfo(usingMethod,
-                iteratorVariable.getFromLine(), iteratorVariable.getFromColumn(),
-                iteratorExpression.getToLine(), iteratorExpression.getToColumn(), iteratorVariable,
-                iteratorExpression);
-        this.resolvedInfo.setCondition(condition);
-
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
@@ -95,8 +76,30 @@ public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlock
     * 
     * @param iteraotorVariableDeclaration 変数定義
     */
-    public void setIteratorVariable(final UnresolvedLocalVariableInfo iteraotorVariable) {
-        this.iteratorVariable = iteraotorVariable;
+    public void setIteratorVariable(final UnresolvedLocalVariableInfo iteratorVariable) {
+
+        if (null == iteratorVariable) {
+            throw new IllegalArgumentException();
+        }
+
+        this.iteratorVariable = iteratorVariable;
+
+        if (null != this.iteratorExpression) {
+
+            final int fromLine = this.iteratorVariable.getFromLine();
+            final int fromColumn = this.iteratorVariable.getFromColumn();
+            final int toLine = this.iteratorExpression.getToLine();
+            final int toColumn = this.iteratorExpression.getToColumn();
+
+            final UnresolvedForeachConditionInfo condition = new UnresolvedForeachConditionInfo(
+                    fromLine, fromColumn, toLine, toColumn);
+            condition.setIteratorVariable(this.iteratorVariable);
+            condition.setIteratorExpression(this.iteratorExpression);
+
+            final UnresolvedConditionalClauseInfo conditionalClause = new UnresolvedConditionalClauseInfo(
+                    this, condition);
+            this.setConditionalClause(conditionalClause);
+        }
     }
 
     /**
@@ -105,7 +108,28 @@ public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlock
      * @param iteratorExpression 繰り返し用の式
      */
     public void setIteratorExpression(final UnresolvedExpressionInfo<?> iteratorExpression) {
+
+        if (null == iteratorExpression) {
+            throw new IllegalArgumentException();
+        }
+
         this.iteratorExpression = iteratorExpression;
+
+        if (null != this.iteratorVariable) {
+            final int fromLine = this.iteratorVariable.getFromLine();
+            final int fromColumn = this.iteratorVariable.getFromColumn();
+            final int toLine = this.iteratorExpression.getToLine();
+            final int toColumn = this.iteratorExpression.getToColumn();
+
+            final UnresolvedForeachConditionInfo condition = new UnresolvedForeachConditionInfo(
+                    fromLine, fromColumn, toLine, toColumn);
+            condition.setIteratorVariable(this.iteratorVariable);
+            condition.setIteratorExpression(this.iteratorExpression);
+
+            final UnresolvedConditionalClauseInfo conditionalClause = new UnresolvedConditionalClauseInfo(
+                    this, condition);
+            this.setConditionalClause(conditionalClause);
+        }
     }
 
     /**

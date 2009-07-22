@@ -13,7 +13,7 @@ import java.util.SortedSet;
  * @author higo
  *
  */
-public final class ForeachBlockInfo extends BlockInfo {
+public final class ForeachBlockInfo extends ConditionalBlockInfo {
 
     /**
      * 位置情報を与えてForeachブロックを初期化
@@ -40,7 +40,7 @@ public final class ForeachBlockInfo extends BlockInfo {
 
         text.append("for (");
 
-        text.append(this.getCondition().getText());
+        text.append(this.getConditionalClause().getText());
 
         text.append(") {");
         text.append(System.getProperty("line.separator"));
@@ -65,22 +65,7 @@ public final class ForeachBlockInfo extends BlockInfo {
     public Set<ClassTypeInfo> getThrownExceptions() {
         final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
         thrownExpressions.addAll(super.getThrownExceptions());
-        thrownExpressions.addAll(this.getCondition().getThrownExceptions());
+        thrownExpressions.addAll(this.getConditionalClause().getCondition().getThrownExceptions());
         return Collections.unmodifiableSet(thrownExpressions);
     }
-
-    /**
-     * 式を返す
-     * 
-     * @return 式
-     */
-    public ForeachConditionInfo getCondition() {
-        return this.condition;
-    }
-
-    public void setCondition(final ForeachConditionInfo condition) {
-        this.condition = condition;
-    }
-
-    private ForeachConditionInfo condition;
 }
