@@ -59,9 +59,9 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         }
 
         //ÉLÉÉÉbÉVÉÖÇ™Ç»Ç¢ÇÃÇ≈ëçìñÇË
-        switch (type) {
+       switch (type) {
         case Java15TokenTypes.PACKAGE_DEF:
-            result = DefinitionToken.NAMESPACE_DEFINITION;
+           result = DefinitionToken.NAMESPACE_DEFINITION;
             break;
         case Java15TokenTypes.ANNOTATIONS:
         case Java15TokenTypes.ANNOTATION_DEF:

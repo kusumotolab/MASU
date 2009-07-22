@@ -24,36 +24,10 @@ public final class ForeachBlockInfo extends BlockInfo {
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
-     * @param iteratorExpression 繰り返し用の式
      */
     public ForeachBlockInfo(final TargetClassInfo ownerClass, final LocalSpaceInfo outerSpace,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
-            final ExpressionInfo iteratorExpression) {
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         super(ownerClass, outerSpace, fromLine, fromColumn, toLine, toColumn);
-
-        this.iteratorExpression = iteratorExpression;
-    }
-
-    /**
-     * 繰り返し用の変数を返す
-     * 
-     * @return　繰り返し用の変数
-     */
-    public LocalVariableInfo getIteratorVariable() {
-        return this.iteratorVariable;
-    }
-
-    public void setIteratorVariable(final LocalVariableInfo iteratorVariable) {
-        this.iteratorVariable = iteratorVariable;
-    }
-
-    /**
-     * 繰り返し用の式を返す
-     * 
-     * @return 繰り返し用の式
-     */
-    public ExpressionInfo getIteratorExpression() {
-        return this.iteratorExpression;
     }
 
     /**
@@ -66,14 +40,7 @@ public final class ForeachBlockInfo extends BlockInfo {
 
         text.append("for (");
 
-        final LocalVariableInfo iteratorVariable = this.getIteratorVariable();
-        text.append(iteratorVariable.getType().getTypeName());
-        text.append(" ");
-        text.append(iteratorVariable.getName());
-
-        text.append(":");
-
-        text.append(this.getIteratorExpression().getText());
+        text.append(this.getCondition().getText());
 
         text.append(") {");
         text.append(System.getProperty("line.separator"));
@@ -98,11 +65,22 @@ public final class ForeachBlockInfo extends BlockInfo {
     public Set<ClassTypeInfo> getThrownExceptions() {
         final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
         thrownExpressions.addAll(super.getThrownExceptions());
-        thrownExpressions.addAll(this.getIteratorExpression().getThrownExceptions());
+        thrownExpressions.addAll(this.getCondition().getThrownExceptions());
         return Collections.unmodifiableSet(thrownExpressions);
     }
 
-    private LocalVariableInfo iteratorVariable;
+    /**
+     * 式を返す
+     * 
+     * @return 式
+     */
+    public ForeachConditionInfo getCondition() {
+        return this.condition;
+    }
 
-    private final ExpressionInfo iteratorExpression;
+    public void setCondition(final ForeachConditionInfo condition) {
+        this.condition = condition;
+    }
+
+    private ForeachConditionInfo condition;
 }

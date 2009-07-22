@@ -6,6 +6,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -55,12 +56,6 @@ public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlock
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        
-        // 繰り返し用の式を取得
-        final UnresolvedExpressionInfo<?> unresolvedIteratorExpression = this
-                .getIteratorExpression();
-        final ExpressionInfo iteratorExpression = unresolvedIteratorExpression.resolve(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         // 外側の空間を取得
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
@@ -68,26 +63,38 @@ public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlock
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
         this.resolvedInfo = new ForeachBlockInfo(usingClass, outerSpace, fromLine, fromColumn,
-                toLine, toColumn, iteratorExpression);
+                toLine, toColumn);
+
+        // 繰り返し用の式を取得
+        final UnresolvedExpressionInfo<?> unresolvedIteratorExpression = this
+                .getIteratorExpression();
+        final ExpressionInfo iteratorExpression = unresolvedIteratorExpression.resolve(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         // 繰り返し用の変数を取得
         final UnresolvedLocalVariableInfo unresolvedIteratorVariable = this.getIteratorVariable();
         final LocalVariableInfo iteratorVariable = unresolvedIteratorVariable.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-        this.resolvedInfo.setIteratorVariable(iteratorVariable);
+
+        // 式を生成
+        final ForeachConditionInfo condition = new ForeachConditionInfo(usingMethod,
+                iteratorVariable.getFromLine(), iteratorVariable.getFromColumn(),
+                iteratorExpression.getToLine(), iteratorExpression.getToColumn(), iteratorVariable,
+                iteratorExpression);
+        this.resolvedInfo.setCondition(condition);
 
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
-        
+
         return this.resolvedInfo;
     }
 
     /**
-     * 変数定義を設定する
-     * 
-     * @param iteraotorVariableDeclaration 変数定義
-     */
+    * 変数定義を設定する
+    * 
+    * @param iteraotorVariableDeclaration 変数定義
+    */
     public void setIteratorVariable(final UnresolvedLocalVariableInfo iteraotorVariable) {
         this.iteratorVariable = iteraotorVariable;
     }
@@ -122,4 +129,5 @@ public class UnresolvedForeachBlockInfo extends UnresolvedBlockInfo<ForeachBlock
     private UnresolvedLocalVariableInfo iteratorVariable;
 
     private UnresolvedExpressionInfo<?> iteratorExpression;
+
 }
