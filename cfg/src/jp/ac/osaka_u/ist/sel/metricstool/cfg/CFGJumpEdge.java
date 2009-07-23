@@ -11,4 +11,9 @@ public class CFGJumpEdge extends CFGEdge {
     public String getDependenceTypeString() {
         return "jump";
     }
+    
+    @Override
+    public String getDependenceString() {
+        return "jump";
+    }
 }

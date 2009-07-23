@@ -17,7 +17,9 @@ public abstract class CFGEdge implements Comparable<CFGEdge> {
     }
 
     public abstract String getDependenceTypeString();
-    
+
+    public abstract String getDependenceString();
+
     public final CFGNode<?> getFromNode() {
         return this.fromNode;
     }

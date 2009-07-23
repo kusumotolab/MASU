@@ -131,7 +131,7 @@ public class IntraProceduralCFG extends CFG {
                     final CFG catchBlockCFG = new IntraProceduralCFG(correspondingCatchBlock,
                             nodeFactory);
                     final CFGExceptionEdge edge = new CFGExceptionEdge(node, catchBlockCFG
-                            .getEnterNode());
+                            .getEnterNode(), correspondingCatchBlock.getCaughtException().getType());
                     node.addForwardEdge(edge);
                 }
             }
@@ -173,7 +173,9 @@ public class IntraProceduralCFG extends CFG {
 
                 // if文の内部が空でない場合は，内部の最後の文がexitノードになる
                 else {
-                    controlNode.addTrueForwardNode(statementsCFG.getEnterNode());
+                    final CFGControlEdge edge = new CFGControlEdge(controlNode, statementsCFG
+                            .getEnterNode(), true);
+                    controlNode.addForwardEdge(edge);
                     this.exitNodes.addAll(statementsCFG.getExitNodes());
                 }
             }
@@ -190,7 +192,9 @@ public class IntraProceduralCFG extends CFG {
 
                 // else文の内部が～でない場合は，内部の文の最後の文がexitノードになる
                 else {
-                    controlNode.addFalseForwardNode(statementsCFG.getEnterNode());
+                    final CFGControlEdge edge = new CFGControlEdge(controlNode, statementsCFG
+                            .getEnterNode(), false);
+                    controlNode.addForwardEdge(edge);
                     this.exitNodes.addAll(statementsCFG.getExitNodes());
                 }
             }
@@ -218,7 +222,13 @@ public class IntraProceduralCFG extends CFG {
 
             // 内部が空でない場合は処理を行う
             if (!statementsCFG.isEmpty()) {
-                controlNode.addTrueForwardNode(statementsCFG.getEnterNode());
+
+                {
+                    final CFGControlEdge edge = new CFGControlEdge(controlNode, statementsCFG
+                            .getEnterNode(), true);
+                    controlNode.addForwardEdge(edge);
+                }
+
                 for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
 
                     //return文の場合はexitノードに追加
@@ -274,7 +284,11 @@ public class IntraProceduralCFG extends CFG {
                     .getStatements(), nodeFactory);
 
             // コントロールノードからdo文内部へ遷移
-            controlNode.addTrueForwardNode(statementsCFG.getEnterNode());
+            {
+                final CFGControlEdge edge = new CFGControlEdge(controlNode, statementsCFG
+                        .getEnterNode(), true);
+                controlNode.addForwardEdge(edge);
+            }
 
             // 内部が空の時は，do文の条件式がenterノードになる
             if (statementsCFG.isEmpty()) {
@@ -342,12 +356,17 @@ public class IntraProceduralCFG extends CFG {
 
                 //繰り返し式が空の場合
                 if (iteratorsCFG.isEmpty()) {
-                    controlNode.addTrueForwardNode(controlNode);
+                    final CFGControlEdge edge = new CFGControlEdge(controlNode, controlNode, true);
+                    controlNode.addForwardEdge(edge);
                 }
 
                 //繰り返し式が空でない場合
                 else {
-                    controlNode.addTrueForwardNode(iteratorsCFG.getEnterNode());
+                    {
+                        final CFGControlEdge edge = new CFGControlEdge(controlNode, iteratorsCFG
+                                .getEnterNode(), true);
+                        controlNode.addForwardEdge(edge);
+                    }
                     for (final CFGNode<?> exitNode : iteratorsCFG.getExitNodes()) {
 
                         // Return文の場合はexitノードに追加
@@ -386,7 +405,11 @@ public class IntraProceduralCFG extends CFG {
             // for文の内部が空でない場合
             else {
 
-                controlNode.addTrueForwardNode(statementsCFG.getEnterNode());
+                {
+                    final CFGControlEdge edge = new CFGControlEdge(controlNode, statementsCFG
+                            .getEnterNode(), true);
+                    controlNode.addForwardEdge(edge);
+                }
 
                 //繰り返し式が空の場合
                 if (iteratorsCFG.isEmpty()) {
@@ -515,7 +538,11 @@ public class IntraProceduralCFG extends CFG {
 
             // 内部が空でない場合は処理を行う
             if (!statementsCFG.isEmpty()) {
-                controlNode.addTrueForwardNode(statementsCFG.getEnterNode());
+                {
+                    final CFGControlEdge edge = new CFGControlEdge(controlNode, statementsCFG
+                            .getEnterNode(), true);
+                    controlNode.addForwardEdge(edge);
+                }
                 for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
 
                     //return文の場合はexitノードに追加
@@ -599,7 +626,9 @@ public class IntraProceduralCFG extends CFG {
 
                 //fromCFGがcase文である場合は，switch文の条件式から依存辺を引く
                 if (fromCFG.getElement() instanceof CaseEntryInfo) {
-                    controlNode.addTrueForwardNode(fromCFG.getEnterNode());
+                    final CFGControlEdge edge = new CFGControlEdge(controlNode, fromCFG
+                            .getEnterNode(), true);
+                    controlNode.addForwardEdge(edge);
                 }
 
                 //fromCFGがdefault文である場合は，switch文のexitNodesからcontrolNodeを除く
@@ -964,7 +993,9 @@ public class IntraProceduralCFG extends CFG {
 
                         // controlNodeの場合
                         else if (exitNode instanceof CFGControlNode) {
-                            ((CFGControlNode) exitNode).addFalseForwardNode(toCFG.getEnterNode());
+                            final CFGControlEdge edge = new CFGControlEdge(exitNode, toCFG
+                                    .getEnterNode(), false);
+                            exitNode.addForwardEdge(edge);
                         }
 
                         else {

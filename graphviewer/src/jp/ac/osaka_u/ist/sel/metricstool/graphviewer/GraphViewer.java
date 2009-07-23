@@ -328,7 +328,7 @@ public class GraphViewer extends MetricsTool {
             writer.write(Integer.toString(createdGraphNumber));
             writer.write(".");
             writer.write(Integer.toString(nodeLabels.get(forwardEdge.getToNode())));
-            writer.write(" [style = solid, label=\"" + forwardEdge.getDependenceTypeString()
+            writer.write(" [style = solid, label=\"" + forwardEdge.getDependenceString()
                     + "\"];");
             writer.newLine();
 

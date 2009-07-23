@@ -11,4 +11,9 @@ public class CFGNormalEdge extends CFGEdge {
     public String getDependenceTypeString() {
         return "normal";
     }
+
+    @Override
+    public String getDependenceString() {
+        return "";
+    }
 }
