@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGControlNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.IntraProceduralCFG;
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
@@ -319,18 +320,20 @@ public class GraphViewer extends MetricsTool {
 
         checkedNodes.add(fromNode);
 
-        for (final CFGNode<? extends ExecutableElementInfo> toNode : fromNode.getForwardNodes()) {
+        for (final CFGEdge forwardEdge : fromNode.getForwardEdges()) {
             writer.write(Integer.toString(createdGraphNumber));
             writer.write(".");
             writer.write(Integer.toString(nodeLabels.get(fromNode)));
             writer.write(" -> ");
             writer.write(Integer.toString(createdGraphNumber));
             writer.write(".");
-            writer.write(Integer.toString(nodeLabels.get(toNode)));
-            writer.write(" [style = solid];");
+            writer.write(Integer.toString(nodeLabels.get(forwardEdge.getToNode())));
+            writer.write(" [style = solid, label=\"" + forwardEdge.getDependenceTypeString()
+                    + "\"];");
             writer.newLine();
 
-            writeCFGEdges(toNode, nodeLabels, createdGraphNumber, writer, checkedNodes);
+            writeCFGEdges(forwardEdge.getToNode(), nodeLabels, createdGraphNumber, writer,
+                    checkedNodes);
         }
     }
 
