@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,17 +22,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
  *
  * @param <T> ノードの核となる情報の型
  */
-public abstract class CFGNode<T extends ExecutableElementInfo> {
+public abstract class CFGNode<T extends ExecutableElementInfo> implements
+        Comparable<CFGNode<? extends ExecutableElementInfo>> {
 
     /**
      * このノードのフォワードノードのセット
      */
-    protected final Set<CFGNode<?>> forwardNodes;
+    protected final Set<CFGEdge> forwardEdges;
 
     /**
      * このノードのバックワードノードのセット
      */
-    protected final Set<CFGNode<?>> backwardNodes;
+    protected final Set<CFGEdge> backwardEdges;
 
     private final String text;
 
@@ -46,79 +48,57 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
             throw new IllegalArgumentException("core is null");
         }
         this.core = core;
-        this.forwardNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
-        this.backwardNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
+        this.forwardEdges = new HashSet<CFGEdge>();
+        this.backwardEdges = new HashSet<CFGEdge>();
         this.text = core.getText() + " <" + core.getFromLine() + ">";
     }
 
-    void addForwardNode(final CFGNode<? extends ExecutableElementInfo> forwardNode) {
+    void addForwardEdge(final CFGEdge forwardEdge) {
 
-        if (null == forwardNode) {
+        if (null == forwardEdge) {
             throw new IllegalArgumentException();
         }
 
-        if (this.forwardNodes.add(forwardNode)) {
-            forwardNode.addBackwardNode(this);
+        if (!this.equals(forwardEdge.getFromNode())) {
+            throw new IllegalArgumentException();
+        }
+
+        if (this.forwardEdges.add(forwardEdge)) {
+            forwardEdge.getToNode().backwardEdges.add(forwardEdge);
         }
     }
 
-    void addBackwardNode(final CFGNode<? extends ExecutableElementInfo> backwardNode) {
+    void addBackwardEdge(final CFGEdge backwardEdge) {
 
-        if (null == backwardNode) {
+        if (null == backwardEdge) {
             throw new IllegalArgumentException();
         }
 
-        if (this.backwardNodes.add(backwardNode)) {
-            backwardNode.addForwardNode(this);
+        if (!this.equals(backwardEdge.getToNode())) {
+            throw new IllegalArgumentException();
+        }
+
+        if (this.backwardEdges.add(backwardEdge)) {
+            backwardEdge.getFromNode().forwardEdges.add(backwardEdge);
         }
     }
 
-    void addForwardNodes(final Set<CFGNode<? extends ExecutableElementInfo>> forwardNodes) {
+    void removeForwardEdges(final Collection<CFGEdge> forwardEdges) {
 
-        if (null == forwardNodes) {
+        if (null == forwardEdges) {
             throw new IllegalArgumentException();
         }
 
-        if (this.forwardNodes.addAll(forwardNodes)) {
-            for (final CFGNode<? extends ExecutableElementInfo> forwardNode : forwardNodes) {
-                forwardNode.addBackwardNode(this);
-            }
-        }
+        this.forwardEdges.removeAll(forwardEdges);
     }
 
-    void addBackwardNodes(final Set<CFGNode<? extends ExecutableElementInfo>> backwardNodes) {
+    void removeBackwardEdges(final Collection<CFGEdge> backwardEdges) {
 
-        if (null == backwardNodes) {
+        if (null == backwardEdges) {
             throw new IllegalArgumentException();
         }
 
-        if (this.backwardNodes.addAll(backwardNodes)) {
-            for (final CFGNode<? extends ExecutableElementInfo> backwardNode : backwardNodes) {
-                backwardNode.addForwardNode(this);
-            }
-        }
-    }
-
-    void removeForwardNode(final CFGNode<? extends ExecutableElementInfo> forwardNode) {
-
-        if (null == forwardNode) {
-            throw new IllegalArgumentException();
-        }
-
-        if (this.forwardNodes.remove(forwardNode)) {
-            this.addForwardNodes(forwardNode.getForwardNodes());
-        }
-    }
-
-    final void removeBackwardNode(final CFGNode<? extends ExecutableElementInfo> backwardNode) {
-
-        if (null == backwardNode) {
-            throw new IllegalArgumentException();
-        }
-
-        if (this.backwardNodes.remove(backwardNode)) {
-            this.addBackwardNodes(backwardNode.getBackwardNodes());
-        }
+        this.backwardEdges.removeAll(backwardEdges);
     }
 
     /**
@@ -134,7 +114,19 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
      * @return このノードのフォワードノードのセット
      */
     public Set<CFGNode<? extends ExecutableElementInfo>> getForwardNodes() {
-        return Collections.unmodifiableSet(this.forwardNodes);
+        final Set<CFGNode<? extends ExecutableElementInfo>> forwardNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
+        for (final CFGEdge forwardEdge : this.getForwardEdges()) {
+            forwardNodes.add(forwardEdge.getToNode());
+        }
+        return Collections.unmodifiableSet(forwardNodes);
+    }
+
+    /**
+     * このノードのフォワードエッジのセットを取得
+     * @return このノードのフォワードエッジのセット
+     */
+    public Set<CFGEdge> getForwardEdges() {
+        return Collections.unmodifiableSet(this.forwardEdges);
     }
 
     /**
@@ -142,7 +134,35 @@ public abstract class CFGNode<T extends ExecutableElementInfo> {
      * @return このノードのバックワードノードのセット
      */
     public Set<CFGNode<? extends ExecutableElementInfo>> getBackwardNodes() {
-        return Collections.unmodifiableSet(this.backwardNodes);
+        final Set<CFGNode<? extends ExecutableElementInfo>> backwardNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
+        for (final CFGEdge backwardEdge : this.getBackwardEdges()) {
+            backwardNodes.add(backwardEdge.getFromNode());
+        }
+        return Collections.unmodifiableSet(backwardNodes);
+    }
+
+    /**
+     * このノードのバックワードエッジのセットを取得
+     * @return このノードのバックワードエッジのセット
+     */
+    public Set<CFGEdge> getBackwardEdges() {
+        return Collections.unmodifiableSet(this.backwardEdges);
+    }
+
+    @Override
+    public int compareTo(final CFGNode<? extends ExecutableElementInfo> node) {
+
+        if (null == node) {
+            throw new IllegalArgumentException();
+        }
+
+        final int methodOrder = this.getCore().getOwnerMethod().compareTo(
+                node.getCore().getOwnerMethod());
+        if (0 != methodOrder) {
+            return methodOrder;
+        }
+
+        return this.getCore().compareTo(node.getCore());
     }
 
     /**

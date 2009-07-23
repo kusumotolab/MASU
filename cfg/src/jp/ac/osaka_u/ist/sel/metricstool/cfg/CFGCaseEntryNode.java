@@ -16,17 +16,34 @@ public class CFGCaseEntryNode extends CFGNormalNode<CaseEntryInfo> {
     @Override
     protected void optimize() {
 
-        final Set<CFGNode<?>> forwardNodes = (HashSet<CFGNode<?>>) ((HashSet<CFGNode<?>>) this.forwardNodes)
-                .clone();
-        final Set<CFGNode<?>> backwardNodes = (HashSet<CFGNode<?>>) ((HashSet<CFGNode<?>>) this.backwardNodes)
-                .clone();
-
-        for (final CFGNode<?> forwardNode : forwardNodes) {
-            forwardNode.removeBackwardNode(this);
+        //このノードのバックワードノード群を取得
+        final Set<CFGNode<?>> backwardNodes = new HashSet<CFGNode<?>>();
+        for (final CFGEdge backwardEdge : this.getBackwardEdges()) {
+            backwardNodes.add(backwardEdge.getFromNode());
         }
 
+        // このノードのフォワードノード群を取得
+        final Set<CFGNode<?>> forwardNodes = new HashSet<CFGNode<?>>();
+        for (final CFGEdge forwardEdge : this.getForwardEdges()) {
+            forwardNodes.add(forwardEdge.getFromNode());
+        }
+
+        // バックワードノードから，このノードをフォワードノードとするエッジを削除
+        for (final CFGNode<?> backwardNode : this.getBackwardNodes()) {
+            backwardNode.removeForwardEdges(this.getBackwardEdges());
+        }
+
+        // フォワードノードから，このノードをバックワードノードとするエッジを削除
+        for (final CFGNode<?> forwardNode : this.getForwardNodes()) {
+            forwardNode.removeBackwardEdges(this.getForwardEdges());
+        }
+
+        // バックワードノード群とフォワードノード群をつなぐ
         for (final CFGNode<?> backwardNode : backwardNodes) {
-            backwardNode.removeForwardNode(this);
+            for (final CFGNode<?> forwardNode : forwardNodes) {
+                final CFGNormalEdge edge = new CFGNormalEdge(backwardNode, forwardNode);
+                backwardNode.addForwardEdge(edge);
+            }
         }
     }
 }

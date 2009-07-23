@@ -130,7 +130,9 @@ public class IntraProceduralCFG extends CFG {
                 if (null != correspondingCatchBlock) {
                     final CFG catchBlockCFG = new IntraProceduralCFG(correspondingCatchBlock,
                             nodeFactory);
-                    node.addForwardNode(catchBlockCFG.getEnterNode());
+                    final CFGExceptionEdge edge = new CFGExceptionEdge(node, catchBlockCFG
+                            .getEnterNode());
+                    node.addForwardEdge(edge);
                 }
             }
         }
@@ -234,7 +236,8 @@ public class IntraProceduralCFG extends CFG {
 
                         // continue文のに対応しているのがこのwhile文の時
                         if (statement == correspondingBlock) {
-                            exitNode.addForwardNode(controlNode);
+                            final CFGJumpEdge edge = new CFGJumpEdge(exitNode, controlNode);
+                            exitNode.addForwardEdge(edge);
                         }
 
                         // continue文のに対応しているのがこのwhile文ではない時
@@ -244,7 +247,8 @@ public class IntraProceduralCFG extends CFG {
                     }
 
                     else {
-                        exitNode.addForwardNode(controlNode);
+                        final CFGNormalEdge edge = new CFGNormalEdge(exitNode, controlNode);
+                        exitNode.addForwardEdge(edge);
                     }
                 }
             }
@@ -288,7 +292,8 @@ public class IntraProceduralCFG extends CFG {
                     }
 
                     else {
-                        exitNode.addForwardNode(controlNode);
+                        final CFGNormalEdge edge = new CFGNormalEdge(exitNode, controlNode);
+                        exitNode.addForwardEdge(edge);
                     }
                 }
             }
@@ -319,7 +324,8 @@ public class IntraProceduralCFG extends CFG {
             } else {
                 this.enterNode = initializersCFG.getEnterNode();
                 for (final CFGNode<?> exitNode : initializersCFG.getExitNodes()) {
-                    exitNode.addForwardNode(controlNode);
+                    final CFGNormalEdge edge = new CFGNormalEdge(exitNode, controlNode);
+                    exitNode.addForwardEdge(edge);
                 }
             }
 
@@ -358,7 +364,8 @@ public class IntraProceduralCFG extends CFG {
                                     .getCorrespondingBlock();
                             // continue文の次に実行されるのが，このwhile文の条件式の時
                             if (statement == correspondingBlock) {
-                                exitNode.addForwardNode(controlNode);
+                                final CFGJumpEdge edge = new CFGJumpEdge(exitNode, controlNode);
+                                exitNode.addForwardEdge(edge);
                             }
 
                             // continue文の次に実行されるのが，このwhile文の条件式ではない時
@@ -369,7 +376,8 @@ public class IntraProceduralCFG extends CFG {
                         }
 
                         else {
-                            exitNode.addForwardNode(controlNode);
+                            final CFGNormalEdge edge = new CFGNormalEdge(exitNode, controlNode);
+                            exitNode.addForwardEdge(edge);
                         }
                     }
                 }
@@ -399,7 +407,8 @@ public class IntraProceduralCFG extends CFG {
                                     .getCorrespondingBlock();
                             // continue文の次に実行されるのが，このwhile文の条件式の時
                             if (statement == correspondingBlock) {
-                                exitNode.addForwardNode(controlNode);
+                                final CFGJumpEdge edge = new CFGJumpEdge(exitNode, controlNode);
+                                exitNode.addForwardEdge(edge);
                             }
 
                             // continue文の次に実行されるのが，このwhile文の条件式ではない時
@@ -410,7 +419,8 @@ public class IntraProceduralCFG extends CFG {
                         }
 
                         else {
-                            exitNode.addForwardNode(controlNode);
+                            final CFGNormalEdge edge = new CFGNormalEdge(exitNode, controlNode);
+                            exitNode.addForwardEdge(edge);
                         }
                     }
                 }
@@ -434,7 +444,8 @@ public class IntraProceduralCFG extends CFG {
                                     .getCorrespondingBlock();
                             // continue文の次に実行されるのが，このwhile文の条件式の時
                             if (statement == correspondingBlock) {
-                                exitNode.addForwardNode(controlNode);
+                                final CFGJumpEdge edge = new CFGJumpEdge(exitNode, controlNode);
+                                exitNode.addForwardEdge(edge);
                             }
 
                             // continue文の次に実行されるのが，このwhile文の条件式ではない時
@@ -445,7 +456,9 @@ public class IntraProceduralCFG extends CFG {
                         }
 
                         else {
-                            exitNode.addForwardNode(iteratorsCFG.getEnterNode());
+                            final CFGNormalEdge edge = new CFGNormalEdge(exitNode, iteratorsCFG
+                                    .getEnterNode());
+                            exitNode.addForwardEdge(edge);
                         }
                     }
 
@@ -465,7 +478,8 @@ public class IntraProceduralCFG extends CFG {
                                     .getCorrespondingBlock();
                             // continue文の次に実行されるのが，このwhile文の条件式の時
                             if (statement == correspondingBlock) {
-                                exitNode.addForwardNode(controlNode);
+                                final CFGJumpEdge edge = new CFGJumpEdge(exitNode, controlNode);
+                                exitNode.addForwardEdge(edge);
                             }
 
                             // continue文の次に実行されるのが，このwhile文の条件式ではない時
@@ -476,7 +490,8 @@ public class IntraProceduralCFG extends CFG {
                         }
 
                         else {
-                            exitNode.addForwardNode(controlNode);
+                            final CFGNormalEdge edge = new CFGNormalEdge(exitNode, controlNode);
+                            exitNode.addForwardEdge(edge);
                         }
                     }
                 }
@@ -518,7 +533,8 @@ public class IntraProceduralCFG extends CFG {
 
                         // continue文のに対応しているのがこのwhile文の時
                         if (statement == correspondingBlock) {
-                            exitNode.addForwardNode(controlNode);
+                            final CFGJumpEdge edge = new CFGJumpEdge(exitNode, controlNode);
+                            exitNode.addForwardEdge(edge);
                         }
 
                         // continue文のに対応しているのがこのwhile文ではない時
@@ -528,7 +544,8 @@ public class IntraProceduralCFG extends CFG {
                     }
 
                     else {
-                        exitNode.addForwardNode(controlNode);
+                        final CFGNormalEdge edge = new CFGNormalEdge(exitNode, controlNode);
+                        exitNode.addForwardEdge(edge);
                     }
                 }
             }
@@ -575,7 +592,8 @@ public class IntraProceduralCFG extends CFG {
 
                     // それ以外のノードであれば，つなぐ
                     else {
-                        exitNode.addForwardNode(toCFG.getEnterNode());
+                        final CFGNormalEdge edge = new CFGNormalEdge(exitNode, toCFG.getEnterNode());
+                        exitNode.addForwardEdge(edge);
                     }
                 }
 
@@ -643,14 +661,18 @@ public class IntraProceduralCFG extends CFG {
 
                     //try文の内部からつなぐ
                     for (final CFGNode<?> exitNode : statementsCFG.getExitNodes()) {
-                        exitNode.addForwardNode(finallyBlockCFG.getEnterNode());
+                        final CFGNormalEdge edge = new CFGNormalEdge(exitNode, finallyBlockCFG
+                                .getEnterNode());
+                        exitNode.addForwardEdge(edge);
                     }
 
                     // 各catch文からつなぐ 
                     for (final CatchBlockInfo catchBlock : tryBlock.getSequentCatchBlocks()) {
                         final CFG catchBlockCFG = new IntraProceduralCFG(catchBlock, nodeFactory);
                         for (final CFGNode<?> exitNode : catchBlockCFG.getExitNodes()) {
-                            exitNode.addForwardNode(finallyBlockCFG.getEnterNode());
+                            final CFGNormalEdge edge = new CFGNormalEdge(exitNode, finallyBlockCFG
+                                    .getEnterNode());
+                            exitNode.addForwardEdge(edge);
                         }
                     }
                 }
@@ -934,7 +956,9 @@ public class IntraProceduralCFG extends CFG {
                             if (innerStatements.contains(statement)) {
                                 this.exitNodes.add(exitNode);
                             } else {
-                                exitNode.addForwardNode(toCFG.getEnterNode());
+                                final CFGNormalEdge edge = new CFGNormalEdge(exitNode, toCFG
+                                        .getEnterNode());
+                                exitNode.addForwardEdge(edge);
                             }
                         }
 
@@ -944,7 +968,9 @@ public class IntraProceduralCFG extends CFG {
                         }
 
                         else {
-                            exitNode.addForwardNode(toCFG.getEnterNode());
+                            final CFGNormalEdge edge = new CFGNormalEdge(exitNode, toCFG
+                                    .getEnterNode());
+                            exitNode.addForwardEdge(edge);
                         }
                     }
                 }
@@ -990,7 +1016,8 @@ public class IntraProceduralCFG extends CFG {
             for (int i = 0; i < expressionArray.length - 1; i++) {
                 final CFGNormalNode<?> fromNode = nodeFactory.makeNormalNode(expressionArray[i]);
                 final CFGNormalNode<?> toNode = nodeFactory.makeNormalNode(expressionArray[i + 1]);
-                fromNode.addForwardNode(toNode);
+                final CFGNormalEdge edge = new CFGNormalEdge(fromNode, toNode);
+                fromNode.addForwardEdge(edge);
             }
         }
     }

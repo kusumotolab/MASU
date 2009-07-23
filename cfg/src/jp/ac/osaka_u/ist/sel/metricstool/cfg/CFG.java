@@ -28,12 +28,13 @@ public abstract class CFG {
 
     }
 
+    /*
     protected void connectNodes(final Set<CFGNode<? extends StatementInfo>> fromNodes,
             CFGNode<? extends StatementInfo> toNode) {
         for (final CFGNode<? extends StatementInfo> fromNode : fromNodes) {
             fromNode.addForwardNode(toNode);
         }
-    }
+    }*/
 
     /**
      * CFG‚Ì“ü‚èŒûƒm[ƒh‚ğ•Ô‚·
