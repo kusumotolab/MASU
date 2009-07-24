@@ -39,6 +39,7 @@ public class CatchBlockBuilder extends InnerBlockBuilder<CatchBlockInfo, Unresol
             this.getBuildingBlock().setCaughtException(
                     this.exceptionParameterBuilder.getLastBuildData());
             this.exceptionParameterBuilder.deactivate();
+            this.getBuildingBlock().initBody();
         }
     }
 
