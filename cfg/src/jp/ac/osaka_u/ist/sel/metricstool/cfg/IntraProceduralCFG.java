@@ -29,12 +29,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LabelInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SimpleBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SwitchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SynchronizedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.WhileBlockInfo;
 
 
@@ -712,9 +715,34 @@ public class IntraProceduralCFG extends CFG {
         else if (statement instanceof CatchBlockInfo) {
 
             final CatchBlockInfo catchBlock = (CatchBlockInfo) statement;
+
+            final LocalVariableInfo exception = catchBlock.getCaughtException();
+            exception.getDeclarationStatement();
+            final VariableDeclarationStatementInfo declarationStatement;
+            if (null == exception.getDeclarationStatement()) {
+                final int fromLine = exception.getFromLine();
+                final int fromColumn = exception.getFromColumn();
+                final int toLine = exception.getToLine();
+                final int toColumn = exception.getToColumn();
+                final LocalVariableUsageInfo exceptionUsage = LocalVariableUsageInfo.getInstance(
+                        exception, false, true, catchBlock.getOwnerMethod(), fromLine, fromColumn,
+                        toLine, toColumn);
+                declarationStatement = new VariableDeclarationStatementInfo(exceptionUsage, null,
+                        fromLine, fromColumn, toLine, toColumn);
+            } else {
+                declarationStatement = exception.getDeclarationStatement();
+            }
+            final CFG declarationStatementCFG = new IntraProceduralCFG(declarationStatement,
+                    nodeFactory);
             final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(catchBlock
                     .getStatements(), nodeFactory);
-            this.enterNode = statementsCFG.getEnterNode();
+
+            //例外のCFGと内部ステートメントの文をつなぐ
+            this.enterNode = declarationStatementCFG.getEnterNode();
+            for (final CFGNode<?> exitNode : declarationStatementCFG.getExitNodes()) {
+                final CFGNormalEdge edge = new CFGNormalEdge(exitNode, statementsCFG.getEnterNode());
+                exitNode.addForwardEdge(edge);
+            }
             this.exitNodes.addAll(statementsCFG.getExitNodes());
         }
 
@@ -926,14 +954,22 @@ public class IntraProceduralCFG extends CFG {
 
             super(nodeFactory);
 
-            // 空のCFGを除去する処理
+            // 空のCFG, catch文，finally文，else文のCFGを除去する処理
             final List<IntraProceduralCFG> statementCFGs = new ArrayList<IntraProceduralCFG>();
             for (final StatementInfo statement : statements) {
+
+                if (statement instanceof CatchBlockInfo || statement instanceof FinallyBlockInfo
+                        || statement instanceof ElseBlockInfo) {
+                    continue;
+                }
+
                 final IntraProceduralCFG statementCFG = new IntraProceduralCFG(statement,
                         nodeFactory);
-                if (!statementCFG.isEmpty()) {
-                    statementCFGs.add(statementCFG);
+                if (statementCFG.isEmpty()) {
+                    continue;
                 }
+
+                statementCFGs.add(statementCFG);
             }
 
             if (0 == statementCFGs.size()) {
