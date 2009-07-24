@@ -19,7 +19,7 @@ public final class CatchBlockInfo extends BlockInfo {
 
     /**
      * ExecutableElementと例外を入力として，そのExecutableElementを含むtry文に対応して，exceptionをキャッチするcatchBlockを返す．
-     * もし，そのようなキャッチ説がない場合はnull を返す．
+     * もし，そのようなキャッチ節がない場合はnull を返す．
      * 
      * @param element
      * @param exception
