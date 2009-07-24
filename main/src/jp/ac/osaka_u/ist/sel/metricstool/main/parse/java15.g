@@ -257,7 +257,9 @@ tokens {
 		if (null != lexer){
 		    Token token = LT(1);
     		lineStack.push(token.getLine());
+   // 		System.out.println(token.getLine() + " ");
     		columnStack.push(token.getColumn());
+	//		System.out.println(token.getColumn() + " ");
 		}	
 	}
 	
@@ -1376,7 +1378,10 @@ forStatement!
 
 traditionalForClause
 	:
+
 		forInit SEMI!	// initializer
+
+
 		forCond SEMI!	// condition test
         
 		forIter			// updater
@@ -1441,21 +1446,34 @@ forInit
 		// if it looks like a declaration, it is
 	:	((declaration[true])=> declaration[true]
 		// otherwise it could be an expression list...
-		|	expressionList
+		| expressionList
 		)?
+		
 		{#forInit = #(#[FOR_INIT,"FOR_INIT"],#forInit);}
+		{registLineColumn(#forInit); }
+		{pushStartLineColumn();}
+
 	;
 
 forCond
-	:	(expression)?
+	:	
+		
+		(
+		expression
+		)?
 		{#forCond = #(#[FOR_CONDITION,"FOR_CONDITION"],#forCond);}
-      //  {registLineColum(#forCond);}
+		{registLineColumn(#forCond); }
+		{pushStartLineColumn();}
 
 	;
 
 forIter
-	:	(expressionList)?
+	:	
+		(expressionList)?
 		{#forIter = #(#[FOR_ITERATOR,"FOR_ITERATOR"],#forIter);}
+		{registLineColumn(#forIter); }
+		{pushStartLineColumn();}
+	
 	;
 
 // an exception handler try/catch block
