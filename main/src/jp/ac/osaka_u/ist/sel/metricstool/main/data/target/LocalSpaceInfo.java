@@ -95,11 +95,39 @@ public abstract class LocalSpaceInfo extends UnitInfo {
 
     /**
      * このローカルスペースの直内の文情報の SortedSet を返す．
+     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfoなど，SubsequentialBlockInfoを含む
+     * 
+     * @return このローカルスペースの内のSubsequentialBlockを含む文情報の SortedSet
+     */
+    public SortedSet<StatementInfo> getStatements() {
+        return getStatementsWithSubsequencialBlocks();
+    }
+
+    /**
+     * このローカルスペースの直内の文情報の SortedSet を返す．
+     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfoなど，SubsequentialBlockInfoを含む
+     * 
+     * @return このローカルスペースの内のSubsequentialBlockを含む文情報の SortedSet
+     */
+    public SortedSet<StatementInfo> getStatementsWithSubsequencialBlocks() {
+        return Collections.unmodifiableSortedSet(this.statements);
+    }
+
+    /** 
+     * このローカルスペースの直内の文情報の SortedSet を返す．
+     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfoは含まれない．
      * 
      * @return このローカルスペースの直内の文情報の SortedSet
      */
-    public SortedSet<StatementInfo> getStatements() {
-        return Collections.unmodifiableSortedSet(this.statements);
+    public SortedSet<StatementInfo> getStatementsWithoutSubsequencialBlocks() {
+        final SortedSet<StatementInfo> statements = new TreeSet<StatementInfo>();
+        for(final StatementInfo statementInfo : this.statements){
+            if (!(statementInfo instanceof SubsequentialBlockInfo<?>)){
+                statements.add(statementInfo);
+            }
+        }
+
+        return Collections.unmodifiableSortedSet(statements);
     }
 
     /**
@@ -113,12 +141,13 @@ public abstract class LocalSpaceInfo extends UnitInfo {
 
     /**
      * 与えられたLocalSpace内に存在している全てのStatementInfoのSortedSetを返す
+     * これにはElseBlockInfo, CatchBlockInfo, FinallyBlockInfoが含まれる．
      * 
      * @param localSpace ローカルスペース
      * @return 与えられたLocalSpace内に存在している全てのStatementInfoのSortedSet
      */
     public static SortedSet<StatementInfo> getAllStatements(final LocalSpaceInfo localSpace) {
-        
+
         if (null == localSpace) {
             throw new IllegalArgumentException("localSpace is null.");
         }
@@ -127,12 +156,30 @@ public abstract class LocalSpaceInfo extends UnitInfo {
                 || localSpace instanceof ExternalConstructorInfo) {
             throw new IllegalArgumentException("localSpace is an external local space.");
         }
-        
+
         final SortedSet<StatementInfo> allStatements = new TreeSet<StatementInfo>();
         for (final StatementInfo innerStatement : localSpace.getStatements()) {
             allStatements.add(innerStatement);
             if (innerStatement instanceof BlockInfo) {
                 allStatements.addAll(LocalSpaceInfo.getAllStatements((BlockInfo) innerStatement));
+                /*                
+                                // Else, Catch, Finally の特別処理
+                                // FIXME 共通の親クラスを作るなどして体対処すべき
+                                if (innerStatement instanceof IfBlockInfo) {
+                                    final ElseBlockInfo elseStatement = ((IfBlockInfo) innerStatement).getSequentElseBlock();
+                                    allStatements.add(elseStatement);
+                                    allStatements.addAll(LocalSpaceInfo.getAllStatements(elseStatement));
+                                } else if (innerStatement instanceof TryBlockInfo) {
+                                    final TryBlockInfo parentTryStatement = (TryBlockInfo)innerStatement;
+                                    for (final CatchBlockInfo catchStatement : parentTryStatement.getSequentCatchBlocks()){
+                                        allStatements.add(catchStatement);
+                                        allStatements.addAll(LocalSpaceInfo.getAllStatements(catchStatement));
+                                    }
+                                    final FinallyBlockInfo finallyStatement = parentTryStatement.getSequentFinallyBlock();
+                                    allStatements.add(finallyStatement);
+                                    allStatements.addAll(LocalSpaceInfo.getAllStatements(finallyStatement));
+                                }
+                */
             }
         }
         return allStatements;

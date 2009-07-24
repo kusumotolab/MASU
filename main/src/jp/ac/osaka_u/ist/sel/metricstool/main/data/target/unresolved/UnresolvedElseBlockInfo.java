@@ -17,7 +17,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  */
-public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlockInfo> {
+public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlockInfo> implements
+        UnresolvedSubsequentialBlockInfo<UnresolvedIfBlockInfo> {
 
     /**
      * 外側のブロックと対応する if ブロックを与えて，else ブロック情報を初期化
@@ -63,7 +64,7 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
         }
 
         // この else ブロックが属する if ブロックを取得
-        final UnresolvedIfBlockInfo unresolvedOwnerIfBlock = this.getOwnerIfBlock();
+        final UnresolvedIfBlockInfo unresolvedOwnerIfBlock = this.getOwnerBlock();
         final IfBlockInfo ownerIfBlock = unresolvedOwnerIfBlock.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
@@ -89,10 +90,23 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
 
     /**
      * この else ブロックと対応する if ブロックを返す
+     * このメソッドは将来廃止予定であり，使用は推奨されない
+     * {@link UnresolvedElseBlockInfo#getOwnerBlock()}を使用すべきである．
+     * 
+     * @return この else ブロックと対応する if ブロック
+     * @deprecated
+     */
+    public UnresolvedIfBlockInfo getOwnerIfBlock() {
+        return this.ownerIfBlock;
+    }
+
+    /**
+     * この else ブロックと対応する if ブロックを返す
      * 
      * @return この else ブロックと対応する if ブロック
      */
-    public UnresolvedIfBlockInfo getOwnerIfBlock() {
+    @Override
+    public UnresolvedIfBlockInfo getOwnerBlock() {
         return this.ownerIfBlock;
     }
 
@@ -100,4 +114,5 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
      * この else ブロックと対応する if ブロックを保存するための変数
      */
     private final UnresolvedIfBlockInfo ownerIfBlock;
+
 }

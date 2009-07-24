@@ -18,7 +18,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  */
-public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlockInfo> {
+public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlockInfo> implements
+        UnresolvedSubsequentialBlockInfo<UnresolvedTryBlockInfo> {
 
     /**
      * 対応するtry文と外側のブロックを与えて catch ブロックを初期化
@@ -64,7 +65,7 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
         }
 
         // この catch 節が属する try 文を取得
-        final UnresolvedTryBlockInfo unresolvedOwnerTryBlock = this.getOwnerTryBlock();
+        final UnresolvedTryBlockInfo unresolvedOwnerTryBlock = this.getOwnerBlock();
         final TryBlockInfo ownerTryBlock = unresolvedOwnerTryBlock.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
@@ -85,7 +86,7 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
         final LocalVariableInfo caughtException = this.caughtException.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         this.resolvedInfo.setCaughtException(caughtException);
-        
+
         // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
         this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
@@ -95,10 +96,23 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
 
     /**
      * 対応する try ブロックを返す
+     * このメソッドは将来廃止予定であり，使用は推奨されない
+     * {@link UnresolvedCatchBlockInfo#getOwnerBlock()} を使用すべきである．
+     * 
+     * @return 対応する try ブロック
+     * @deprecated
+     */
+    public UnresolvedTryBlockInfo getOwnerTryBlock() {
+        return this.ownerTryBlock;
+    }
+
+    /**
+     * 対応する try ブロックを返す
      * 
      * @return 対応する try ブロック
      */
-    public UnresolvedTryBlockInfo getOwnerTryBlock() {
+    @Override
+    public UnresolvedTryBlockInfo getOwnerBlock() {
         return this.ownerTryBlock;
     }
 
@@ -113,4 +127,5 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
     private final UnresolvedTryBlockInfo ownerTryBlock;
 
     private UnresolvedLocalVariableInfo caughtException;
+
 }

@@ -10,7 +10,8 @@ import java.util.SortedSet;
  * @author higo
  */
 @SuppressWarnings("serial")
-public final class FinallyBlockInfo extends BlockInfo {
+public final class FinallyBlockInfo extends BlockInfo implements
+        SubsequentialBlockInfo<TryBlockInfo> {
 
     /**
      * 対応する try ブロック情報を与えて finally ブロックを初期化
@@ -62,12 +63,26 @@ public final class FinallyBlockInfo extends BlockInfo {
 
     /**
      * 対応する try ブロックを返す
+     * このメソッドは将来廃止されるため，使用は推奨されない
+     * {@link FinallyBlockInfo#getOwnerBlock()} を使用すべきである．
      * 
      * @return 対応する try ブロック
+     * @deprecated
      */
     public TryBlockInfo getOwnerTryBlock() {
         return this.ownerTryBlock;
     }
 
+    /**
+     * 対応する try ブロックを返す
+     * 
+     * @return 対応する try ブロック
+     */
+    @Override
+    public TryBlockInfo getOwnerBlock() {
+        return this.ownerTryBlock;
+    }
+
     private final TryBlockInfo ownerTryBlock;
+
 }

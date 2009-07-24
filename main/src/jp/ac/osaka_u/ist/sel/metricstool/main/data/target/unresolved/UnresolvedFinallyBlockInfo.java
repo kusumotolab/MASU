@@ -17,7 +17,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  */
-public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<FinallyBlockInfo> {
+public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<FinallyBlockInfo>
+        implements UnresolvedSubsequentialBlockInfo<UnresolvedTryBlockInfo> {
 
     /**
      * 対応する try ブロック情報と外側のブロック情報を与えて finally ブロックを初期化
@@ -63,7 +64,7 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
         }
 
         // この finally 節が属する try ブロックを取得
-        final UnresolvedTryBlockInfo unresolvedOwnerTryBlock = this.getOwnerTryBlock();
+        final UnresolvedTryBlockInfo unresolvedOwnerTryBlock = this.getOwnerBlock();
         final TryBlockInfo ownerTryBlock = unresolvedOwnerTryBlock.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
@@ -89,12 +90,26 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
 
     /**
      * 対応する try ブロックを返す
+     * このメソッドは将来廃止されるため，使用は推奨されない
+     * {@link UnresolvedFinallyBlockInfo#getOwnerBlock()} を使用すべきである．
      * 
      * @return 対応する try ブロック
+     * @deprecated
      */
     public UnresolvedTryBlockInfo getOwnerTryBlock() {
         return this.ownerTryBlock;
     }
 
+    /**
+     * 対応する try ブロックを返す
+     * 
+     * @return 対応する try ブロック
+     */
+    @Override
+    public UnresolvedTryBlockInfo getOwnerBlock() {
+        return this.ownerTryBlock;
+    }
+
     private final UnresolvedTryBlockInfo ownerTryBlock;
+
 }

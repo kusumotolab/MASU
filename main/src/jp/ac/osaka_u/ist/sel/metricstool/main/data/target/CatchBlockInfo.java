@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  */
 @SuppressWarnings("serial")
-public final class CatchBlockInfo extends BlockInfo {
+public final class CatchBlockInfo extends BlockInfo implements SubsequentialBlockInfo<TryBlockInfo> {
 
     /**
      * ExecutableElementと例外を入力として，そのExecutableElementを含むtry文に対応して，exceptionをキャッチするcatchBlockを返す．
@@ -73,10 +73,23 @@ public final class CatchBlockInfo extends BlockInfo {
 
     /**
      * 対応する try ブロックを返す
+     * このメソッドは将来廃止されるため，使用は推奨されない
+     * {@link CatchBlockInfo#getOwnerBlock()} を使用すべきである．
+     * 
+     * @return 対応する try ブロック
+     * @deprecated
+     */
+    public final TryBlockInfo getOwnerTryBlock() {
+        return this.ownerTryBlock;
+    }
+
+    /**
+     * 対応する try ブロックを返す
      * 
      * @return 対応する try ブロック
      */
-    public final TryBlockInfo getOwnerTryBlock() {
+    @Override
+    public TryBlockInfo getOwnerBlock() {
         return this.ownerTryBlock;
     }
 

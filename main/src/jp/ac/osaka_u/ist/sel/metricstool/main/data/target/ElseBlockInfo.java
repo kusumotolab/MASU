@@ -10,7 +10,7 @@ import java.util.SortedSet;
  * @author higo
  */
 @SuppressWarnings("serial")
-public final class ElseBlockInfo extends BlockInfo {
+public final class ElseBlockInfo extends BlockInfo implements SubsequentialBlockInfo<IfBlockInfo> {
 
     /**
      * 対応する if ブロックを与えて，else ブロック情報を初期化
@@ -62,15 +62,30 @@ public final class ElseBlockInfo extends BlockInfo {
 
     /**
      * この else ブロックと対応する if ブロックを返す
+     * このメソッドは将来廃止予定であり，使用は推奨されない
+     * {@link ElseBlockInfo#getOwnerBlock()} を使用すべきである．
      * 
      * @return この else ブロックと対応する if ブロック
+     * @deprecated
      */
     public IfBlockInfo getOwnerIfBlock() {
         return this.ownerIfBlock;
     }
 
     /**
+     * この else ブロックと対応する if ブロックを返す
+     * 
+     * @return この else ブロックと対応する if ブロック
+     */
+    @Override
+    public IfBlockInfo getOwnerBlock() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
      * この else ブロックと対応する if ブロックを保存するための変数
      */
     private final IfBlockInfo ownerIfBlock;
+
 }

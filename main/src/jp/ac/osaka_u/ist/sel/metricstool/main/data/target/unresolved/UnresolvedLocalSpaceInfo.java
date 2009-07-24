@@ -154,12 +154,45 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
 
     /**
      * このブロック内の未解決内部ブロックの Set を返す
+     * else, catch, finallyブロックは含まれない
      * 
      * @return このブロック内の未解決内部ブロックの Set
      */
     public final Set<UnresolvedStatementInfo<? extends StatementInfo>> getStatements() {
         return Collections.unmodifiableSet(this.statements);
     }
+
+    /**
+     * このローカルスペースの直内の文情報の SortedSet を返す．
+     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfoなど，SubsequentialBlockInfoを含む
+     * 
+     * @return このローカルスペースの内のSubsequentialBlockを含む文情報の SortedSet
+     */
+    public final SortedSet<UnresolvedStatementInfo<? extends StatementInfo>> getStatementsWithSubsequencialBlocks() {
+        return Collections.unmodifiableSortedSet(this.statements);
+    }
+
+    /** 
+     * このローカルスペースの直内の文情報の SortedSet を返す．
+     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfoは含まれない．
+     * 
+     * @return このローカルスペースの直内の文情報の SortedSet
+     */
+    public final SortedSet<UnresolvedStatementInfo<? extends StatementInfo>> getStatementsWithOutSubsequencialBlocks() {
+        final SortedSet<UnresolvedStatementInfo<? extends StatementInfo>> statements = new TreeSet<UnresolvedStatementInfo<? extends StatementInfo>>();
+        for (final UnresolvedStatementInfo<? extends StatementInfo> statementInfo : this.statements) {
+            if (!(statementInfo instanceof UnresolvedSubsequentialBlockInfo<?>)) {
+                statements.add(statementInfo);
+            }
+        }
+
+        return Collections.unmodifiableSortedSet(this.statements);
+    }
+
+    /**
+     * このブロック内の未解決内部ブロック
+     * 
+     */
 
     /**
      * このローカル領域のインナー領域を名前解決する
