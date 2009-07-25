@@ -737,13 +737,19 @@ public class IntraProceduralCFG extends CFG {
             final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(catchBlock
                     .getStatements(), nodeFactory);
 
-            //例外のCFGと内部ステートメントの文をつなぐ
             this.enterNode = declarationStatementCFG.getEnterNode();
-            for (final CFGNode<?> exitNode : declarationStatementCFG.getExitNodes()) {
-                final CFGNormalEdge edge = new CFGNormalEdge(exitNode, statementsCFG.getEnterNode());
-                exitNode.addForwardEdge(edge);
+
+            //内部ステートメントが存在する場合は，例外のCFGと内部ステートメントの文をつなぐ
+            if (!statementsCFG.isEmpty()) {
+                for (final CFGNode<?> exitNode : declarationStatementCFG.getExitNodes()) {
+                    final CFGNormalEdge edge = new CFGNormalEdge(exitNode, statementsCFG
+                            .getEnterNode());
+                    exitNode.addForwardEdge(edge);
+                }
+                this.exitNodes.addAll(statementsCFG.getExitNodes());
+            } else {
+                this.exitNodes.addAll(declarationStatementCFG.getExitNodes());
             }
-            this.exitNodes.addAll(statementsCFG.getExitNodes());
         }
 
         // finally文の場合
