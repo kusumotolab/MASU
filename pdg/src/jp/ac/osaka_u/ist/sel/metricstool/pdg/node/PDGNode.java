@@ -187,7 +187,7 @@ public abstract class PDGNode<T extends ExecutableElementInfo> implements
         return added;
     }
 
-    public boolean addCallDependingNode(final PDGNode<?> dependingNode, final CallInfo call) {
+    public boolean addCallDependingNode(final PDGNode<?> dependingNode, final CallInfo<?> call) {
 
         if (null == dependingNode) {
             throw new IllegalArgumentException();

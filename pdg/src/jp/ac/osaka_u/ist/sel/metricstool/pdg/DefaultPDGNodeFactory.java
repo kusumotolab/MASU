@@ -8,6 +8,7 @@ import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
@@ -15,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationSta
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGCaseEntryNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGExpressionNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGForeachControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNormalNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGParameterNode;
@@ -43,7 +45,11 @@ public class DefaultPDGNodeFactory implements IPDGNodeFactory {
             return node;
         }
 
-        node = new PDGControlNode(condition);
+        if (condition instanceof ForeachConditionInfo) {
+            node = new PDGForeachControlNode((ForeachConditionInfo) condition);
+        } else {
+            node = new PDGControlNode(condition);
+        }
         this.elementToNodeMap.put(condition, node);
 
         return node;
