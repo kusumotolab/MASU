@@ -90,17 +90,20 @@ public class Java14AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java14TokenTypes.INTERFACE_DEF:
             result = JavaAstToken.INTERFACE_DEFINITION;
             break;
-//        case Java14TokenTypes.ENUM_DEF://enumはクラスとして扱う
-//            result = DefinitionToken.CLASS_DEFINITION;
-//            break;
-//        case Java14TokenTypes.ENUM_CONSTANT_DEF:
-//            result = JavaAstToken.ENUM_CONSTANT;
-//            break;
+        //        case Java14TokenTypes.ENUM_DEF://enumはクラスとして扱う
+        //            result = DefinitionToken.CLASS_DEFINITION;
+        //            break;
+        //        case Java14TokenTypes.ENUM_CONSTANT_DEF:
+        //            result = JavaAstToken.ENUM_CONSTANT;
+        //            break;
         case Java14TokenTypes.FIELD_DEF:
             result = DefinitionToken.FIELD_DEFINITION;
             break;
         case Java14TokenTypes.METHOD_PARAMETER_DEF:
             result = DefinitionToken.METHOD_PARAMETER_DEFINITION;
+            break;
+        case Java14TokenTypes.VARIABLE_PARAMETER_DEF:
+            result = DefinitionToken.VARIABLE_PARAMETER_DEFINTION;
             break;
         case Java14TokenTypes.METHOD_DEF:
             result = DefinitionToken.METHOD_DEFINITION;
@@ -219,6 +222,9 @@ public class Java14AntlrAstTranslator implements AstTokenTranslator<AST> {
             break;
         case Java14TokenTypes.EXPR:
             result = DescriptionToken.EXPRESSION;
+            break;
+        case Java14TokenTypes.PAREN_EXPR:
+            result = DescriptionToken.PAREN_EXPR;
             break;
         case Java14TokenTypes.EXPR_STATE:
             result = DescriptionToken.EXPRESSION_STATEMENT;
@@ -363,9 +369,14 @@ public class Java14AntlrAstTranslator implements AstTokenTranslator<AST> {
             //break;
 
         case Java14TokenTypes.INSTANCE_INIT:
+            result = VisitControlToken.SKIP;
+            break;
         case Java14TokenTypes.ANNOTATION:
         case Java14TokenTypes.LITERAL_throws:
             result = VisitControlToken.SKIP;
+            break;
+        case Java14TokenTypes.THROWS_CLAUSE:
+            result = JavaAstToken.THROWS;
             break;
         case Java14TokenTypes.LITERAL_break:
             result = SyntaxToken.BREAK;
@@ -414,6 +425,19 @@ public class Java14AntlrAstTranslator implements AstTokenTranslator<AST> {
             break;
         case Java14TokenTypes.LITERAL_default:
             result = BlockNameToken.DEFAULT_ENTRY;
+            break;
+        case Java14TokenTypes.COND_CLAUSE:
+        case Java14TokenTypes.FOR_CONDITION:
+            result = DescriptionToken.CONDITIONAL_CLAUSE;
+            break;
+        case Java14TokenTypes.FOR_INIT:
+            result = DescriptionToken.FOR_INIT;
+            break;
+        case Java14TokenTypes.FOR_ITERATOR:
+            result = DescriptionToken.FOR_ITERATOR;
+            break;
+        case Java14TokenTypes.LITERAL_assert:
+            result = SyntaxToken.ASSERT;
             break;
         default:
             //変換できなかったノードは取りあえずその子供に進む

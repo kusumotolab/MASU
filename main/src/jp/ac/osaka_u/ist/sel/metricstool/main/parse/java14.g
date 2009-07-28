@@ -217,7 +217,8 @@ tokens {
 	STATIC_IMPORT; FOR_EACH_CLAUSE; ANNOTATION_DEF; ANNOTATIONS;
 	ANNOTATION; ANNOTATION_MEMBER_VALUE_PAIR; ANNOTATION_FIELD_DEF; ANNOTATION_ARRAY_INIT;
 	TYPE_ARGUMENTS; TYPE_ARGUMENT; TYPE_PARAMETERS; TYPE_PARAMETER; WILDCARD_TYPE;
-	TYPE_UPPER_BOUNDS; TYPE_LOWER_BOUNDS;
+	TYPE_UPPER_BOUNDS; TYPE_LOWER_BOUNDS;COND_CLAUSE; LOCAL_VARIABLE_DEF_STATE;
+    PAREN_EXPR; THROWS_CLAUSE;
 }
 
 {
@@ -251,16 +252,35 @@ tokens {
 		this.positionManager = manager;
 	}
 	
-	private void pushStartLineColumn(){
+	private void pushStartLineColumn() throws TokenStreamException {
 		if (null != lexer){
-    		lineStack.push(lexer.getTokenStartLine());
-    		columnStack.push(lexer.getTokenStartColumn());
+		    Token token = LT(1);
+    		lineStack.push(token.getLine());
+    		columnStack.push(token.getColumn());
 		}	
 	}
+		
+	private void registLineColumn(AST node) throws TokenStreamException {
+		if (null != lexer && !lineStack.isEmpty() && !columnStack.isEmpty()){
+		    final Token lastToken = LT(0);
+		    final int fromLine = this.lineStack.pop();
+		    final int fromColumn = this.columnStack.pop();
+		    final int toLine = lastToken.getLine();
+            final int toColumn = lastToken.getColumn() + lastToken.getText().length();
+
+    		if(node instanceof CommonASTWithLineNumber) {
+    		    ((CommonASTWithLineNumber) node).setPosition(fromLine, fromColumn, toLine, toColumn);
+    		}
+		}
+	}
 	
-	private void registLineColumnInfo(AST node){
-		if (null != lexer && null != positionManager && !lineStack.isEmpty() && !columnStack.isEmpty()){
-    		positionManager.setPosition(node, lineStack.pop(), columnStack.pop(), lexer.getTokenStartLine(), lexer.getTokenStartColumn());
+	private void registLineColumn(AST node, int toLine, int toColumn) throws TokenStreamException {
+		if (null != lexer && !lineStack.isEmpty() && !columnStack.isEmpty()){
+		    final int fromLine = this.lineStack.pop();
+		    final int fromColumn = this.columnStack.pop();
+    		if(node instanceof CommonASTWithLineNumber) {
+    		    ((CommonASTWithLineNumber) node).setPosition(fromLine, fromColumn, toLine, toColumn);
+    		}
 		}
 	}
 }
@@ -307,7 +327,7 @@ typeDefinition
 		m:modifiers!
 		typeDefinitionInternal[#m]
 		
-		{registLineColumnInfo(#typeDefinition);}
+		{registLineColumn(#typeDefinition);}
 		
 	|	SEMI!
 	;
@@ -328,7 +348,7 @@ declaration![boolean isParameter]
 		m:modifiers t:typeSpec[false] v:variableDefinitions[#m,#t,isParameter]
 		{#declaration = #v;}
 		
-		{registLineColumnInfo(#declaration);}
+		{registLineColumn(#declaration);}
 	;
 
 // A type specification is a type name with possible brackets afterwards
@@ -390,13 +410,13 @@ wildcardType
 
 // Type arguments to a class or interface type
 typeArguments
-{int currentLtLevel = 0;}
+//{int currentLtLevel = 0;}
 	:
-		{currentLtLevel = ltCounter;}
-		LT! {ltCounter++;}
+	//	{currentLtLevel = ltCounter;}
+		LT! //{ltCounter++;}
 		typeArgument
 		(options{greedy=true;}: // match as many as possible
-			{inputState.guessing !=0 || ltCounter == currentLtLevel + 1}?
+			//{inputState.guessing !=0 || ltCounter == currentLtLevel + 1}?
 			COMMA! typeArgument
 		)*
 
@@ -408,7 +428,7 @@ typeArguments
 
 		// make sure we have gobbled up enough '>' characters
 		// if we are at the "top level" of nested typeArgument productions
-		{(currentLtLevel != 0) || ltCounter == currentLtLevel}?
+		//{(currentLtLevel != 0) || ltCounter == currentLtLevel}?
 
 		{#typeArguments = #(#[TYPE_ARGUMENTS, "TYPE_ARGUMENTS"], #typeArguments);}
 	;
@@ -416,16 +436,46 @@ typeArguments
 // this gobbles up *some* amount of '>' characters, and counts how many
 // it gobbled.
 protected typeArgumentsOrParametersEnd
-	:	GT! {ltCounter-=1;}
-	|	SR! {ltCounter-=2;}
-	|	BSR! {ltCounter-=3;}
+	{
+		int mark = this.mark();
+		int gtCount = 0; 
+	}
+	:
+	(
+		GT! {gtCount = 1;} //{ltCounter-=1;}
+	|	SR! {gtCount = 2;} //{ltCounter-=2;}
+	|	BSR! {gtCount = 3;}  //{ltCounter-=3;}
+	)
+
+	{
+		
+		Token nextToken;
+		switch (gtCount) {
+			case 1:
+				break;
+			case 2:
+				this.rewind(mark);
+				nextToken = this.LT(1);
+				nextToken.setType(GT);
+				nextToken.setText(">");
+				break;
+			case 3:
+				this.rewind(mark);
+				nextToken = this.LT(1);
+				nextToken.setType(SR);
+				nextToken.setText(">>");
+				break;
+			default :
+				break;
+		}
+	}
 	;
 
 // Restriction on wildcard types based on super class or derrived class
 typeArgumentBounds
 	{boolean isUpperBounds = false;}
 	:
-		( "extends"! {isUpperBounds=true;} | "super"! ) classOrInterfaceType[true]
+		( "extends"! {isUpperBounds=true;} | "super"! ) classTypeSpec[true]
 		{
 			if (isUpperBounds)
 			{
@@ -469,8 +519,12 @@ builtInTypeSpec[boolean addImagNode]
 // A type name. which is either a (possibly qualified and parameterized)
 // class name or a primitive (builtin) type
 type
-	:	classOrInterfaceType[true]
+	:
+	(	
+		classOrInterfaceType[true]
 	|	builtInType
+	)
+	{#type = #(#[TYPE,"TYPE"], #type);}
 	;
 
 // The primitive types.
@@ -649,16 +703,16 @@ annotationDefinition![AST modifiers]
 	;
 
 typeParameters
-{int currentLtLevel = 0;}
+//{int currentLtLevel = 0;}
 	:
-		{currentLtLevel = ltCounter;}
-		LT! {ltCounter++;}
+		//{currentLtLevel = ltCounter;}
+		LT! //{ltCounter++;}
 		typeParameter (COMMA! typeParameter)*
 		(typeArgumentsOrParametersEnd)?
 
 		// make sure we have gobbled up enough '>' characters
 		// if we are at the "top level" of nested typeArgument productions
-		{(currentLtLevel != 0) || ltCounter == currentLtLevel}?
+		//{(currentLtLevel != 0) || ltCounter == currentLtLevel}?
 
 		{#typeParameters = #(#[TYPE_PARAMETERS, "TYPE_PARAMETERS"], #typeParameters);}
 	;
@@ -686,7 +740,7 @@ classBlock
 		RCURLY!
 		{#classBlock = #([OBJBLOCK, "OBJBLOCK"], #classBlock);}
 		
-		{registLineColumnInfo(#classBlock);}
+		{registLineColumn(#classBlock);}
 	;
 
 // This is the body of an interface. You can have interfaceField and extra semicolons.
@@ -738,7 +792,7 @@ annotationField!
     		)
 		)
 		
-		{registLineColumnInfo(#annotationField);}
+		{registLineColumn(#annotationField);}
 	;
 
 // An interface can extend several other interfaces...
@@ -814,7 +868,7 @@ classField!
     		{#classField = #(#[INSTANCE_INIT,"INSTANCE_INIT"], s4);}
 		)
 		
-		{registLineColumnInfo(#classField);}
+		{registLineColumn(#classField);}
 	;
 
 // Now the various things that can be defined inside a interface
@@ -859,7 +913,7 @@ interfaceField!
     		)
     	)
     	
-		{registLineColumnInfo(#interfaceField);}
+		{registLineColumn(#interfaceField);}
 	;
 
 constructorBody
@@ -871,11 +925,15 @@ constructorBody
 
 /** Catch obvious constructor calls, but not the expr.super(...) calls */
 explicitConstructorInvocation
-	:	(typeArguments)?
+	:	
+		{pushStartLineColumn();}
+		(typeArguments)?
 		(	"this"! lp1:LPAREN^ argList RPAREN! SEMI!
 			{#lp1.setType(CTOR_CALL);}
+			{registLineColumn(#lp1);}
 		|	"super"! lp2:LPAREN^ argList RPAREN! SEMI!
 			{#lp2.setType(SUPER_CTOR_CALL);}
+			{registLineColumn(#lp2);}
 		)
 		
 		{#explicitConstructorInvocation = #(#[EXPR,"EXPR"],#explicitConstructorInvocation);}
@@ -976,9 +1034,12 @@ ctorHead
 
 // This is a list of exception classes that the method is declared to throw
 throwsClause
-	:	"throws"^ identifier ( COMMA! identifier )*
-	;
-
+    :  
+        t:"throws"! classOrInterfaceType[true] ( COMMA! classOrInterfaceType[true] )*
+   
+        {#throwsClause = #(#[THROWS_CLAUSE, "THROWS_CLAUSE"], #throwsClause);}
+    ;
+    
 // A list of formal parameters
 //	 Zero or more parameters
 //	 If a parameter is variable length (e.g. String... myArg) it is the right-most parameter
@@ -1006,7 +1067,7 @@ parameterDeclaration!
 		{#parameterDeclaration = #(#[METHOD_PARAMETER_DEF,"METHOD_PARAMETER_DEF"],
 									pm, #([TYPE,"TYPE"],pd), id);}
 									
-		{registLineColumnInfo(#parameterDeclaration);}
+		{registLineColumn(#parameterDeclaration);}
 	;
 
 variableLengthParameterDeclaration!
@@ -1018,7 +1079,7 @@ variableLengthParameterDeclaration!
 		{#variableLengthParameterDeclaration = #(#[VARIABLE_PARAMETER_DEF,"VARIABLE_PARAMETER_DEF"],
 												pm, #([TYPE,"TYPE"],pd), id);}
 												
-	{registLineColumnInfo(#variableLengthParameterDeclaration);}
+	{registLineColumn(#variableLengthParameterDeclaration);}
 	;
 
 parameterModifier
@@ -1047,13 +1108,23 @@ compoundStatement
 
 statement
 	// A list of statements in curly braces -- start a new scope!
-	:	compoundStatement
+	{
+		boolean isIf = false;
+		int ifToLine = 0;
+		int ifToColumn = 0;
+	}
+	:
+	{pushStartLineColumn();}
+	(
+		compoundStatement
 
 	// declarations are ambiguous with "ID DOT" relative to expression
 	// statements. Must backtrack to be sure. Could use a semantic
 	// predicate to test symbol table to see what the type was coming
 	// up, but that's pretty hard without a symbol table ;)
-	|	(declaration[false])=> declaration[false] SEMI!
+	|	(declaration[false])=> dec:declaration[false] SEMI!
+		{#statement = #(#[LOCAL_VARIABLE_DEF_STATE, "LOCAL_VARIABLE_DEF_STATE"], dec);}
+	
 
 	// An expression statement. This could be a method call,
 	// assignment statement, or any other expression evaluated for
@@ -1064,17 +1135,23 @@ statement
 	//TODO: what abour interfaces, enums and annotations
 	// class definition
 	|
-		{pushStartLineColumn();}
+		//{pushStartLineColumn();}
 		
 		m:modifiers! classDefinition[#m]
 		
-		{registLineColumnInfo(#statement);}
+		//{registLineColumn(#statement);}
 
 	// Attach a label to the front of a statement
 	|	IDENT c:COLON^ {#c.setType(LABELED_STAT);} statement
 
 	// If-else statement
-	|	"if"^ LPAREN! expression RPAREN! statement
+	|	i:"if"^ conditionalClause statement
+		{
+			final Token lastToken = LT(0);
+			ifToLine = lastToken.getLine();
+			ifToColumn = lastToken.getColumn() + lastToken.getText().length();
+			isIf = true;
+		}
 		(
 			// CONFLICT: the old "dangling-else" problem...
 			// ANTLR generates proper code matching
@@ -1083,17 +1160,19 @@ statement
 				warnWhenFollowAmbig = false;
 			}
 		:
-			elseStatement
+			{pushStartLineColumn();}
+			e:elseStatement
+			{registLineColumn(#e);}
 		)?
 
 	// For statement
 	|	forStatement
 
 	// While statement
-	|	"while"^ LPAREN! expression RPAREN! statement
+	|	"while"^  conditionalClause statement
 
 	// do-while statement
-	|	"do"^ statement "while"! LPAREN! expression RPAREN! SEMI!
+	|	"do"^ statement "while"! conditionalClause SEMI!
 
 	// get out of a loop (or switch)
 	|	"break"^ (IDENT)? SEMI!
@@ -1105,7 +1184,7 @@ statement
 	|	"return"^ (expression)? SEMI!
 
 	// switch/case statement
-	|	"switch"^ LPAREN! expression RPAREN! LCURLY!
+	|	"switch"^ conditionalClause lc:LCURLY! {#lc.setType(BLOCK);}
 			( casesGroup )*
 		RCURLY!
 
@@ -1123,7 +1202,25 @@ statement
 
 	// empty statement
 	|	s:SEMI {#s.setType(EMPTY_STAT);}
+	)
+	
+	{
+		if(isIf) {
+			registLineColumn(#statement, ifToLine, ifToColumn);
+		} else {
+			registLineColumn(#statement);
+		}
+	}
 	;
+
+conditionalClause
+	:	
+		{pushStartLineColumn();}
+		LPAREN! ex:expression RPAREN!
+		{#conditionalClause = #(#[COND_CLAUSE,"COND_CLAUSE"], ex);}
+		{registLineColumn(#conditionalClause);}
+	;
+	
 
 elseStatement
 	:	"else"^ statement
@@ -1170,7 +1267,7 @@ localParameterDeclaration!
 		{#localParameterDeclaration = #(#[LOCAL_PARAMETER_DEF,"LOCAL_PARAMETER_DEF"],
 									pm, #([TYPE,"TYPE"],pd), id);}
 									
-		{registLineColumnInfo(#localParameterDeclaration);}
+		{registLineColumn(#localParameterDeclaration);}
 	;
 
 casesGroup
@@ -1205,16 +1302,22 @@ forInit
 		|	expressionList
 		)?
 		{#forInit = #(#[FOR_INIT,"FOR_INIT"],#forInit);}
+		{registLineColumn(#forInit); }
+		{pushStartLineColumn();}
 	;
 
 forCond
 	:	(expression)?
 		{#forCond = #(#[FOR_CONDITION,"FOR_CONDITION"],#forCond);}
+		{registLineColumn(#forCond); }
+		{pushStartLineColumn();}
 	;
 
 forIter
 	:	(expressionList)?
 		{#forIter = #(#[FOR_ITERATOR,"FOR_ITERATOR"],#forIter);}
+		{registLineColumn(#forIter); }
+		{pushStartLineColumn();}
 	;
 
 // an exception handler try/catch block
@@ -1430,23 +1533,32 @@ postfixExpression
 		:	*/
 			//type arguments are only appropriate for a parameterized method/ctor invocations
 			//semantic check may be needed here to ensure that this is the case
-			DOT^ (typeArguments)?
+			DOT^ 
+				{pushStartLineColumn();}
+				(typeArguments)?
 				(	IDENT
 					(	lp:LPAREN^ {#lp.setType(METHOD_CALL);}
 						argList
 						RPAREN!
 					)?
-				|	"super"
+				|	
+					{pushStartLineColumn();}
+					"super"
 					(	// (new Outer()).super() (create enclosing instance)
 						lp3:LPAREN^ argList RPAREN!
 						{#lp3.setType(SUPER_CTOR_CALL);}
-					|	DOT^ (typeArguments)? IDENT
+					|	DOT^ 
+						{pushStartLineColumn();}
+						(typeArguments)? IDENT
 						(	lps:LPAREN^ {#lps.setType(METHOD_CALL);}
 							argList
 							RPAREN!
 						)?
+						{registLineColumn(#lps);}
 					)
+					{registLineColumn(#lp3);}
 				)
+				{registLineColumn(#lp);}
 		|	DOT^ "this"
 		|	DOT^ newExpression
 		|	lb:LBRACK^ {#lb.setType(INDEX_OP);} expression RBRACK!
@@ -1469,7 +1581,8 @@ primaryExpression
 	|	newExpression
 	|	"this"
 	|	"super"
-	|	LPAREN! assignmentExpression RPAREN!
+	|	lp:LPAREN^ {#lp.setType(PAREN_EXPR);} assignmentExpression RPAREN!
+		//LPAREN! assignmentExpression RPAREN!
 		// look for int.class and int[].class
 	|	builtInType
 		( lbt:LBRACK^ {#lbt.setType(ARRAY_DECLARATOR);} RBRACK! )*
@@ -1481,7 +1594,9 @@ primaryExpression
  *  this or super.
  */
 identPrimary
-	:	(ta1:typeArguments!)?
+	:	
+		{pushStartLineColumn();}
+		(ta1:typeArguments!)?
 		IDENT
 		// Syntax for method invocation with type arguments is
 		// <String>foo("blah")
@@ -1499,8 +1614,8 @@ identPrimary
 			// The problem is that this loop here conflicts with
 			// DOT typeArguments "super" in postfixExpression (k=2)
 			// A proper solution would require a lot of refactoring...
-		:	(DOT (typeArguments)? IDENT) =>
-				DOT^ (ta2:typeArguments!)? IDENT
+		:	(DOT {registLineColumn(null); pushStartLineColumn();}(typeArguments)? IDENT) =>
+				DOT^ {registLineColumn(null); pushStartLineColumn();} (ta2:typeArguments!)? IDENT
 		|	{false}?	// FIXME: this is very ugly but it seems to work...
 						// this will also produce an ANTLR warning!
 				// Unfortunately a syntactic predicate can only select one of
@@ -1528,6 +1643,7 @@ identPrimary
 				lbc:LBRACK^ {#lbc.setType(ARRAY_DECLARATOR);} RBRACK!
 			)+
 		)?
+		{registLineColumn(#lp);}
 	;
 
 /** object instantiation.
@@ -1580,7 +1696,9 @@ identPrimary
  *
  */
 newExpression
-	:		"new"^ (typeArguments)? type
+	:		
+		{pushStartLineColumn();}
+		"new"^ (typeArguments)? type
 		(	LPAREN! argList RPAREN! (classBlock)?
 
 			//java 1.1
@@ -1593,6 +1711,7 @@ newExpression
 
 		|	newArrayDeclarator (arrayInitializer)?
 		)
+		{registLineColumn(#newExpression);;}
 	;
 
 argList
