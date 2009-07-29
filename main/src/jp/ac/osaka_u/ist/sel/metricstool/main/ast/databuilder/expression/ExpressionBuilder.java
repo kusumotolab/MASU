@@ -35,9 +35,7 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
 
         final AstToken token = e.getToken();
 
-        // parentheses token is not stacked to expressionstack
-        if ((this.isRelated(token)
-                || isExpressionDelimiterToken(token)) && !isParenthesesToken(token)) {
+        if (this.isRelated(token) || isExpressionDelimiterToken(token)) {
             this.expressionStackCountStack.push(this.expressionManager.getExpressionStackSize());
         }
     }
@@ -47,7 +45,7 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
         final AstToken token = e.getToken();
 
         final boolean isRelated = this.isRelated(token);
-        if ((isRelated || isExpressionDelimiterToken(token)) && !isParenthesesToken(token)) {
+        if (isRelated || isExpressionDelimiterToken(token)) {
             assert (!this.expressionStackCountStack.isEmpty()) : "Illegal state: illegal stack size.";
 
             final int availableElementCount = this.expressionManager.getExpressionStackSize()
@@ -69,7 +67,7 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
         }
 
     }
-    
+
     protected boolean isRelated(final AstToken token) {
         return this.isActive() && isInExpression() && this.isTriggerToken(token);
     }
@@ -97,10 +95,6 @@ public abstract class ExpressionBuilder extends StateDrivenDataBuilder<Expressio
 
     private boolean isExpressionDelimiterToken(AstToken token) {
         return token.isBlock();
-    }
-    
-    private boolean isParenthesesToken(AstToken token) {
-        return token.isParenthesesExpression();
     }
 
     protected final ExpressionElementManager expressionManager;

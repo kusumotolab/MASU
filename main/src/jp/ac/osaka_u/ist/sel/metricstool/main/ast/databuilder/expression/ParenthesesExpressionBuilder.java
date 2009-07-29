@@ -3,6 +3,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ExpressionStateManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
@@ -11,12 +14,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedP
 
 
 /**
- * 括弧式情報を構築するクラス
+ * 括弧式情報を構築するクラス 
+ * <br>
+ * 式を構成する要素ではあるが，式の構文木情報に影響を与えてはいけないため， 
+ * {@link ExpressionBuilder}の子クラスにはしていない．
  * 
  * @author g-yamada
  * 
  */
-public class ParenthesesExpressionBuilder extends ExpressionBuilder {
+public class ParenthesesExpressionBuilder extends
+        StateDrivenDataBuilder<UnresolvedParenthesesExpressionInfo> {
 
     /**
      * オブジェクトを初期化する
@@ -26,16 +33,29 @@ public class ParenthesesExpressionBuilder extends ExpressionBuilder {
      */
     public ParenthesesExpressionBuilder(final ExpressionElementManager expressionManager,
             BuildDataManager buildDataManager) {
-        super(expressionManager, buildDataManager);
+        if (null == buildDataManager || null == expressionManager) {
+            throw new IllegalArgumentException();
+        }
+
+        this.buildDataManager = buildDataManager;
+        this.expressionManager = expressionManager;
+
+        this.addStateManager(this.expressionStateManger);
+    }
+
+    @Override
+    public void entered(final AstVisitEvent e) {
+        super.entered(e);
     }
 
     /**
      * exit したノードが括弧式なら，UnresolvedParenthesesExpressionInfoをつくる命令をする
      */
     @Override
-    protected void afterExited(AstVisitEvent event) throws ASTParseException {
-        final AstToken token = event.getToken();
-        if (isTriggerToken(token)) {
+    public void exited(AstVisitEvent e) throws ASTParseException {
+        super.exited(e);
+        final AstToken token = e.getToken();
+        if (this.isActive() && this.expressionStateManger.inExpression() && token.isParenthesesExpression()) {
             this.buildParenthesesExpressionBuilder();
         }
     }
@@ -44,33 +64,45 @@ public class ParenthesesExpressionBuilder extends ExpressionBuilder {
      * 命令されて実際にUnresolvedParenthesesExpressionInfoをつくる
      */
     protected void buildParenthesesExpressionBuilder() {
-        final ExpressionElement[] elements = this.getAvailableElements();
-        if (elements.length > 0) {
-            final ExpressionElement from = elements[0];
-            final ExpressionElement to = elements[elements.length - 1];
-            // expressionManager から最後に pop された ExpressionElement が
-            // 括弧内の式(UnresolvedExpressionInfo)を持つ
-            final UnresolvedExpressionInfo<? extends ExpressionInfo> parentheticExpression = expressionManager
-                    .getLastPoppedExpressionElement().getUsage();
+        // ExpressionManagerのexpressionAnalyzeStackの頭の要素が，括弧式の直下にくるExpressionElement
+        // ポップする必要があるかわからないのでスタックはいじらない
+        final ExpressionElement parentheticElement = expressionManager.getPeekExpressionElement();
+        final UnresolvedExpressionInfo<? extends ExpressionInfo> parentheticExpression = parentheticElement
+                .getUsage();
 
-            if (null != parentheticExpression) {
-                final UnresolvedParenthesesExpressionInfo paren = new UnresolvedParenthesesExpressionInfo(
-                        parentheticExpression);
-                paren.setFromLine(from.fromLine);
-                paren.setFromColumn(from.fromColumn);
-                paren.setToLine(to.toLine);
-                paren.setToColumn(to.toColumn);
-                expressionManager.pushExpressionElement(new UsageElement(paren));
-            }
+        if (null != parentheticExpression) {
+            // expressionAnalyzeStackの頭の要素をポップして，かわりに括弧式をプッシュする
+            expressionManager.popExpressionElement();
+            final UnresolvedParenthesesExpressionInfo paren = new UnresolvedParenthesesExpressionInfo(
+                    parentheticExpression);
+            paren.setFromLine(parentheticElement.fromLine);
+            paren.setFromColumn(parentheticElement.fromColumn);
+            paren.setToLine(parentheticElement.toLine);
+            paren.setToColumn(parentheticElement.toColumn);
+            expressionManager.pushExpressionElement(new UsageElement(paren));
+        } else {
+            // TODO (a)のような場合の括弧もとれるようにする
+            /*
+             * ここにくるのは(a)みたいに括弧式の直下に変数がきているとき．
+             * expressionAnalyzeStackをいじらないため，結果として括弧式がなかったかのような
+             * 振る舞いをする．
+             * 
+             * カッコ式直下に変数がきている場合，ASTの括弧式からexitする時点では
+             * まだ内部の変数のUsageが存在しない．
+             * 変数ElementのresolveAsVariableを呼び出すことでUsageを生成するのだが，
+             * この場所では変数が被代入なのか代入なのかわからないため呼び出せない．
+             */
         }
     }
 
-    /**
-     * token が括弧式を表すのかどうかを返す
-     */
     @Override
-    protected boolean isTriggerToken(AstToken token) {
-        return token.isParenthesesExpression();
+    public void stateChanged(StateChangeEvent<AstVisitEvent> event) {
+        // nothing to do
     }
 
+    protected final ExpressionElementManager expressionManager;
+
+    protected final BuildDataManager buildDataManager;
+
+    private final ExpressionStateManager expressionStateManger = new ExpressionStateManager();
 }
