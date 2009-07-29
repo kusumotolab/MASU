@@ -126,6 +126,6 @@ public class JavaModifiersInterpriter implements ModifiersInterpriter {
 
     private static final ModifierInfo abstractModifier = ModifierInfo.getModifierInfo("abstract");
     
-    private static final ModifierInfo synchronizedModifier = ModifierInfo.getModifierInfo("syncronized");
+    private static final ModifierInfo synchronizedModifier = ModifierInfo.getModifierInfo("synchronized");
     
 }
