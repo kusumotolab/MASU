@@ -55,6 +55,11 @@ public final class ModifierInfo implements Serializable {
      * virtual を表す定数
      */
     public static final String VIRTUAL_STRING = "virtual";
+    
+    /**
+     * synchronized を表す定数
+     */
+    public static final String SYNCHRONIZED_STRING = "synchronized";
 
     /**
      * abstract を表す定数
@@ -90,6 +95,11 @@ public final class ModifierInfo implements Serializable {
      * virtual を表す定数
      */
     public static final ModifierInfo VIRTUAL = new ModifierInfo(VIRTUAL_STRING);
+
+    /**
+     * synchronized を表す定数
+     */
+    public static final ModifierInfo SYNCHRONIZED = new ModifierInfo(SYNCHRONIZED_STRING);
 
     /**
      * 修飾子名から，修飾子オブジェクトを生成するファクトリメソッド
@@ -139,6 +149,7 @@ public final class ModifierInfo implements Serializable {
         MODIFIERS.put(PUBLIC_STRING, PUBLIC);
         MODIFIERS.put(STATIC_STRING, STATIC);
         MODIFIERS.put(VIRTUAL_STRING, VIRTUAL);
+        MODIFIERS.put(SYNCHRONIZED_STRING, SYNCHRONIZED);
     }
 
     /**

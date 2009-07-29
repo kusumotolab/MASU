@@ -40,6 +40,8 @@ public class JavaModifiersInterpriter implements ModifiersInterpriter {
                 this.reassignable = false;
             } else if (info.equals(abstractModifier)) {
                 this.pureVirtual = true;
+            } else if (info.equals(synchronizedModifier)) {
+                this.synchronizedAccess = true;
             }
         }
 
@@ -83,6 +85,10 @@ public class JavaModifiersInterpriter implements ModifiersInterpriter {
     private boolean isPureVirtual() {
         return pureVirtual;
     }
+    
+    private boolean isSynchronized() {
+        return synchronizedAccess; 
+    }
 
     private void reset() {
         publicAccess = false;
@@ -90,6 +96,8 @@ public class JavaModifiersInterpriter implements ModifiersInterpriter {
         inheritanceAccess = false;
         staticMember = false;
         reassignable = true;
+        pureVirtual = false;
+        synchronizedAccess = false;
     }
 
     private boolean publicAccess = false;
@@ -103,6 +111,8 @@ public class JavaModifiersInterpriter implements ModifiersInterpriter {
     private boolean reassignable = true;
 
     private boolean pureVirtual = false;
+    
+    private boolean synchronizedAccess = false;
 
     private static final ModifierInfo finalModifier = ModifierInfo.getModifierInfo("final");
 
@@ -115,5 +125,7 @@ public class JavaModifiersInterpriter implements ModifiersInterpriter {
     private static final ModifierInfo staticModifier = ModifierInfo.getModifierInfo("static");
 
     private static final ModifierInfo abstractModifier = ModifierInfo.getModifierInfo("abstract");
-
+    
+    private static final ModifierInfo synchronizedModifier = ModifierInfo.getModifierInfo("syncronized");
+    
 }
