@@ -1,9 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -33,7 +32,7 @@ public final class TryBlockInfo extends BlockInfo {
         super(ownerClass, outerSpace, fromLine, fromColumn, toLine, toColumn);
 
         this.sequentFinallyBlock = null;
-        this.sequentCatchBlocks = new HashSet<CatchBlockInfo>();
+        this.sequentCatchBlocks = new TreeSet<CatchBlockInfo>();
     }
 
     /**
@@ -78,7 +77,7 @@ public final class TryBlockInfo extends BlockInfo {
      * 対応するcatchブロックのSetを返す
      * @return 対応するcatchブロックのSet
      */
-    public Set<CatchBlockInfo> getSequentCatchBlocks() {
+    public SortedSet<CatchBlockInfo> getSequentCatchBlocks() {
         return this.sequentCatchBlocks;
     }
 
@@ -117,7 +116,7 @@ public final class TryBlockInfo extends BlockInfo {
     /**
      * 対応するcatchブロックを保存する変数
      */
-    private final Set<CatchBlockInfo> sequentCatchBlocks;
+    private final SortedSet<CatchBlockInfo> sequentCatchBlocks;
 
     private FinallyBlockInfo sequentFinallyBlock;
 }
