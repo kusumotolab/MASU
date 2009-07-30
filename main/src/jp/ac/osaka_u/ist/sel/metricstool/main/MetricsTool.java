@@ -80,6 +80,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CSharpLexer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CSharpParser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CommonASTWithLineNumber;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java13Lexer;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java13Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14Lexer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
@@ -521,6 +523,25 @@ public class MetricsTool {
                         }
 
                         fileInfo.setLOC(java14lexer.getLine());
+                        break;
+                    case JAVA13:
+                        final jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java13Lexer java13lexer = new Java13Lexer(
+                                stream);
+                        java13lexer.setTabSize(1);
+                        final Java13Parser java13parser = new Java13Parser(java13lexer);
+
+                        final ASTFactory java13factory = new MasuAstFactory();
+                        java13factory.setASTNodeClass(CommonASTWithLineNumber.class);
+
+                        java13parser.setASTFactory(java13factory);
+
+                        java13parser.compilationUnit();
+                        targetFile.setCorrectSytax(true);
+
+                        if (visitorManager != null) {
+                            visitorManager.visitStart(java13parser.getAST());
+                        }
+                        fileInfo.setLOC(java13lexer.getLine());
                         break;
                     case CSHARP:
                         final CSharpLexer csharpLexer = new CSharpLexer(stream);
@@ -1531,6 +1552,7 @@ public class MetricsTool {
                         classInfoManager, fieldInfoManager, methodInfoManager);
             }
         }
+
 
     }
 }

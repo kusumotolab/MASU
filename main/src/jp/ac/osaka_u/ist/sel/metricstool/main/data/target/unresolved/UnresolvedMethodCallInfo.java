@@ -265,7 +265,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             // •¶Žš—ñ‚Éƒƒ\ƒbƒh‚ª‚­‚Á‚Â‚¢‚Ä‚¢‚é‚©‚ð”»’è
             final Settings settings = Settings.getInstance();
             switch (settings.getLanguage()) {
-            case JAVA15:
+            case JAVA13:
             case JAVA14:
 
                 // java ‚Ìê‡‚Í java.lang.String ‚©‚Ç‚¤‚©‚ð”»’è

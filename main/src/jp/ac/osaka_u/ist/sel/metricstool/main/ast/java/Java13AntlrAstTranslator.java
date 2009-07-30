@@ -103,6 +103,9 @@ public class Java13AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java13TokenTypes.METHOD_PARAMETER_DEF:
             result = DefinitionToken.METHOD_PARAMETER_DEFINITION;
             break;
+        case Java13TokenTypes.VARIABLE_PARAMETER_DEF:
+            result = DefinitionToken.VARIABLE_PARAMETER_DEFINTION;
+            break;
         case Java13TokenTypes.METHOD_DEF:
             result = DefinitionToken.METHOD_DEFINITION;
             break;
@@ -220,6 +223,9 @@ public class Java13AntlrAstTranslator implements AstTokenTranslator<AST> {
             break;
         case Java13TokenTypes.EXPR:
             result = DescriptionToken.EXPRESSION;
+            break;
+        case Java13TokenTypes.PAREN_EXPR:
+            result = DescriptionToken.PAREN_EXPR;
             break;
         case Java13TokenTypes.EXPR_STATE:
             result = DescriptionToken.EXPRESSION_STATEMENT;
@@ -364,9 +370,14 @@ public class Java13AntlrAstTranslator implements AstTokenTranslator<AST> {
             //break;
 
         case Java13TokenTypes.INSTANCE_INIT:
+            result = VisitControlToken.SKIP;
+            break;          
         case Java13TokenTypes.ANNOTATION:
         case Java13TokenTypes.LITERAL_throws:
             result = VisitControlToken.SKIP;
+            break;
+        case Java13TokenTypes.THROWS_CLAUSE:
+            result = JavaAstToken.THROWS;
             break;
         case Java13TokenTypes.LITERAL_break:
             result = SyntaxToken.BREAK;
@@ -416,6 +427,16 @@ public class Java13AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java13TokenTypes.LITERAL_default:
             result = BlockNameToken.DEFAULT_ENTRY;
             break;
+        case Java13TokenTypes.COND_CLAUSE:
+        case Java13TokenTypes.FOR_CONDITION:
+            result = DescriptionToken.CONDITIONAL_CLAUSE;
+            break;
+        case Java13TokenTypes.FOR_INIT:
+            result = DescriptionToken.FOR_INIT;
+            break;
+        case Java13TokenTypes.FOR_ITERATOR:
+            result = DescriptionToken.FOR_ITERATOR;
+            break;            
         default:
             //変換できなかったノードは取りあえずその子供に進む
             result = VisitControlToken.ENTER;
