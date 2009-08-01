@@ -89,7 +89,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
         // import 文で指定されているクラスが登録されていないなら，外部クラスとして登録する
         for (final UnresolvedClassImportStatementInfo availableNamespace : this.getAvailableNamespaces()) {
 
-            if (!availableNamespace.isAllClasses()) {
+            if (!availableNamespace.isAll()) {
                 final String[] fullQualifiedName = availableNamespace.getImportName();
                 if (!classInfoManager.hasClassInfo(fullQualifiedName)) {
                     final ExternalClassInfo externalClassInfo = new ExternalClassInfo(
@@ -155,7 +155,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
                     if (namespace.equals(importedNamespace)) {
 
                         // import aaa.bbb.*の場合 (クラス名の部分が*)
-                        if (availableNamespace.isAllClasses()) {
+                        if (availableNamespace.isAll()) {
 
                             Collection<ClassInfo> importedClassInfos = classInfoManager
                                     .getClassInfos(importedNamespace);
@@ -212,7 +212,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
                     if (namespace.equals(importedNamespace)) {
 
                         // import aaa.bbb.*の場合 (クラス名の部分が*)
-                        if (availableNamespace.isAllClasses()) {
+                        if (availableNamespace.isAll()) {
 
                             final Collection<ClassInfo> importedClassInfos = classInfoManager
                                     .getClassInfos(importedNamespace);

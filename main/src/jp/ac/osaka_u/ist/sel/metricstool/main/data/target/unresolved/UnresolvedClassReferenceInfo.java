@@ -297,7 +297,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                         .getAvailableNamespaces()) {
 
                     // 名前空間名.* となっている場合
-                    if (availableNamespace.isAllClasses()) {
+                    if (availableNamespace.isAll()) {
                         final String[] namespace = availableNamespace.getNamespace();
 
                         // 名前空間の下にある各クラスに対して
@@ -595,7 +595,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                 .getAvailableNamespaces()) {
 
             // 名前空間名.* となっている場合は，見つけることができない
-            if (availableNamespace.isAllClasses()) {
+            if (availableNamespace.isAll()) {
                 continue;
             }
 

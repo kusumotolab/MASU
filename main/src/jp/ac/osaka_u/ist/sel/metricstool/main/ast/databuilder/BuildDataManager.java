@@ -98,15 +98,17 @@ public interface BuildDataManager {
      * 
      * @param aliase
      * @param realName
+     * @param type
      */
-    public void addUsingAliase(String aliase, String[] realName);
+    public void addUsingAliase(String aliase, String[] realName, ImportType type);
 
     /**
      * 現在のブロックスコープ内で有効な，名前空間利用情報を追加する
      * 
      * @param nameSpace
+     * @param type
      */
-    public void addUsingNameSpace(String[] nameSpace);
+    public void addUsingNameSpace(String[] nameSpace, ImportType type);
 
     public void addStatement(final UnresolvedStatementInfo<? extends StatementInfo> statement);
     

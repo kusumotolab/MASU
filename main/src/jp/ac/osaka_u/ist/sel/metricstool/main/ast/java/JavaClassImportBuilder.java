@@ -1,8 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.CompoundDataBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.IdentifierBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ImportType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
@@ -60,10 +61,10 @@ public class JavaClassImportBuilder extends CompoundDataBuilder<Object>{
             if (lastTokenIsAsterisk){//Using name space
                 String[] tmp = new String[length];
                 System.arraycopy(importedElement, 0,tmp, 0, length);
-                buildDataManager.addUsingNameSpace(tmp);
+                buildDataManager.addUsingNameSpace(tmp, ImportType.Class);
             } else {//Aliase 
                 String aliase = importedElement[length-1];
-                buildDataManager.addUsingAliase(aliase, importedElement);
+                buildDataManager.addUsingAliase(aliase, importedElement, ImportType.Class);
             }
         }
         

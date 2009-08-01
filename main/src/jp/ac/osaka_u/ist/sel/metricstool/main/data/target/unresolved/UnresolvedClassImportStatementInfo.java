@@ -1,17 +1,16 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -23,7 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class UnresolvedClassImportStatementInfo extends UnresolvedUnitInfo<ClassImportStatementInfo> {
+public final class UnresolvedClassImportStatementInfo extends UnresolvedImportStatementInfo<ClassImportStatementInfo> {
 
     /**
      * 利用可能名前空間名とそれ以下のクラス全てのクラスが利用可能かどうかを表すbooleanを与えてオブジェクトを初期化.
@@ -36,47 +35,7 @@ public final class UnresolvedClassImportStatementInfo extends UnresolvedUnitInfo
      * @param allClasses 全てのクラスが利用可能かどうか
      */
     public UnresolvedClassImportStatementInfo(final String[] namespace, final boolean allClasses) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == namespace) {
-            throw new NullPointerException();
-        }
-
-        this.importName = Arrays.<String> copyOf(namespace, namespace.length);
-        this.allClasses = allClasses;
-    }
-
-    /**
-     * 対象オブジェクトと等しいかどうかを返す
-     * 
-     * @param o 対象オブジェクト
-     * @return 等しい場合 true，そうでない場合 false
-     */
-    @Override
-    public boolean equals(Object o) {
-
-        if (null == o) {
-            throw new NullPointerException();
-        }
-
-        if (!(o instanceof UnresolvedClassImportStatementInfo)) {
-            return false;
-        }
-
-        String[] importName = this.getImportName();
-        String[] correspondImportName = ((UnresolvedClassImportStatementInfo) o).getImportName();
-        if (importName.length != correspondImportName.length) {
-            return false;
-        }
-
-        for (int i = 0; i < importName.length; i++) {
-            if (!importName[i].equals(correspondImportName[i])) {
-                return false;
-            }
-        }
-
-        return true;
+        super(namespace, allClasses);
     }
 
     @Override
@@ -101,7 +60,7 @@ public final class UnresolvedClassImportStatementInfo extends UnresolvedUnitInfo
         final int toColumn = this.getToColumn();
 
         final SortedSet<ClassInfo> accessibleClasses = new TreeSet<ClassInfo>();
-        if (this.isAllClasses()) {
+        if (this.isAll()) {
             final String[] namespace = this.getNamespace();
             final Collection<ClassInfo> specifiedClasses = classInfoManager
                     .getClassInfos(namespace);
@@ -119,16 +78,7 @@ public final class UnresolvedClassImportStatementInfo extends UnresolvedUnitInfo
                 toLine, toColumn);
         return this.resolvedInfo;
     }
-
-    /**
-     * 名前空間名を返す
-     * 
-     * @return 名前空間名
-     */
-    public String[] getImportName() {
-        return Arrays.<String> copyOf(this.importName, this.importName.length);
-    }
-
+    
     /**
      * 名前空間名を返す．
      * 
@@ -137,7 +87,7 @@ public final class UnresolvedClassImportStatementInfo extends UnresolvedUnitInfo
     public String[] getNamespace() {
 
         final String[] importName = this.getImportName();
-        if (this.isAllClasses()) {
+        if (this.isAll()) {
             return importName;
         }
 
@@ -145,34 +95,4 @@ public final class UnresolvedClassImportStatementInfo extends UnresolvedUnitInfo
         System.arraycopy(importName, 0, namespace, 0, importName.length - 1);
         return namespace;
     }
-
-    /**
-     * このオブジェクトのハッシュコードを返す
-     * 
-     * @return このオブジェクトのハッシュコード
-     */
-    @Override
-    public int hashCode() {
-        final String[] namespace = this.getNamespace();
-        return Arrays.hashCode(namespace);
-    }
-
-    /**
-     * 全てのクラスが利用可能かどうか
-     * 
-     * @return 利用可能である場合は true, そうでない場合は false
-     */
-    public boolean isAllClasses() {
-        return this.allClasses;
-    }
-
-    /**
-     * 名前空間名を表す変数
-     */
-    private final String[] importName;
-
-    /**
-     * 全てのクラスが利用可能かどうかを表す変数
-     */
-    private final boolean allClasses;
 }
