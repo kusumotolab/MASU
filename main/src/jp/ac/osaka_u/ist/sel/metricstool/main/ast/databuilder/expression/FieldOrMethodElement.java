@@ -7,6 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
@@ -40,9 +41,10 @@ public class FieldOrMethodElement extends IdentifierElement {
     public UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsVariable(
             final BuildDataManager buildDataManager, final boolean reference,
             final boolean assignment) {
-        UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
-                .getAllAvaliableNames(), this.ownerUsage, this.name, reference, assignment,
-                this.fromLine, this.fromColumn, this.toLine, this.toColumn);
+        UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(
+                UnresolvedClassImportStatementInfo.getClassImportStatements(buildDataManager
+                        .getAllAvaliableNames()), this.ownerUsage, this.name, reference,
+                assignment, this.fromLine, this.fromColumn, this.toLine, this.toColumn);
         buildDataManager.addVariableUsage(fieldUsage);
 
         this.usage = fieldUsage;

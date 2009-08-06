@@ -3,7 +3,12 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import java.util.Arrays;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ImportStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -33,6 +38,10 @@ public abstract class UnresolvedImportStatementInfo<T extends ImportStatementInf
         this.importName = Arrays.<String> copyOf(namespace, namespace.length);
         this.all = all;
     }
+
+    public abstract T resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
+            ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
+            MethodInfoManager methodInfoManager);
 
     /**
      * 対象オブジェクトと等しいかどうかを返す

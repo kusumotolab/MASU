@@ -13,6 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
@@ -93,8 +94,9 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
         if (null != builtName) {
             assert (null != builtName && 0 < builtName.length) : "Illegal state: resolved super type name was empty.";
 
-            final UnresolvedClassTypeInfo superType = new UnresolvedClassTypeInfo(buildDataManager
-                    .getAllAvaliableNames(), builtName);
+            final UnresolvedClassTypeInfo superType = new UnresolvedClassTypeInfo(
+                    UnresolvedClassImportStatementInfo.getClassImportStatements(buildDataManager
+                            .getAllAvaliableNames()), builtName);
             anonymous.addSuperClass(superType);
         }
 

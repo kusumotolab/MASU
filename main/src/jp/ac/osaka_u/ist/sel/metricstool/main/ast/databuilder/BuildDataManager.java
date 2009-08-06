@@ -11,12 +11,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLabelInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
@@ -111,7 +111,7 @@ public interface BuildDataManager {
     public void addUsingNameSpace(String[] nameSpace, ImportType type);
 
     public void addStatement(final UnresolvedStatementInfo<? extends StatementInfo> statement);
-    
+
     public void addLabel(final UnresolvedLabelInfo label);
 
     public UnresolvedLabelInfo getAvailableLabel(final String labelName);
@@ -134,11 +134,11 @@ public interface BuildDataManager {
 
     public void enterMethodBlock();
 
-    public List<UnresolvedClassImportStatementInfo> getAvailableNameSpaceSet();
+    public List<UnresolvedImportStatementInfo<?>> getAvailableNameSpaceSet();
 
-    public List<UnresolvedClassImportStatementInfo> getAvailableAliasSet();
+    public List<UnresolvedImportStatementInfo<?>> getAvailableAliasSet();
 
-    public List<UnresolvedClassImportStatementInfo> getAllAvaliableNames();
+    public List<UnresolvedImportStatementInfo<?>> getAllAvaliableNames();
 
     public String[] getAliasedName(String name);
 

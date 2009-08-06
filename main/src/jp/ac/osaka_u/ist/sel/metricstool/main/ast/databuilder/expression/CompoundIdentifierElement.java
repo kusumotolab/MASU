@@ -7,6 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
@@ -57,9 +58,10 @@ public class CompoundIdentifierElement extends IdentifierElement {
             final BuildDataManager buildDataManager, final boolean reference,
             final boolean assignment) {
         this.ownerUsage = this.resolveOwner(buildDataManager);
-        final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(buildDataManager
-                .getAllAvaliableNames(), this.ownerUsage, this.name, reference, assignment,
-                this.fromLine, this.fromColumn, this.toLine, this.toColumn);
+        final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(
+                UnresolvedClassImportStatementInfo.getClassImportStatements(buildDataManager
+                        .getAllAvaliableNames()), this.ownerUsage, this.name, reference,
+                assignment, this.fromLine, this.fromColumn, this.toLine, this.toColumn);
         buildDataManager.addVariableUsage(fieldUsage);
 
         this.usage = fieldUsage;
@@ -74,8 +76,9 @@ public class CompoundIdentifierElement extends IdentifierElement {
 
         if (this.ownerUsage != null) {
             final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(
-                    buildDataManager.getAllAvaliableNames(), this.ownerUsage, this.name, true,
-                    false, this.fromLine, this.fromColumn, this.toLine, this.toColumn);
+                    UnresolvedClassImportStatementInfo.getClassImportStatements(buildDataManager
+                            .getAllAvaliableNames()), this.ownerUsage, this.name, true, false,
+                    this.fromLine, this.fromColumn, this.toLine, this.toColumn);
             buildDataManager.addVariableUsage(fieldUsage);
 
             this.usage = fieldUsage;

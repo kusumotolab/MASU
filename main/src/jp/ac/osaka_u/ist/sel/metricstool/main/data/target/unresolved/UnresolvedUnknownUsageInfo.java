@@ -16,8 +16,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticOrInstanceProcessing;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticOrInstanceProcessing;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
@@ -50,12 +50,12 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public UnresolvedUnknownUsageInfo(final List<UnresolvedClassImportStatementInfo> availableNamespaces,
-            final String[] name, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+    public UnresolvedUnknownUsageInfo(
+            final List<UnresolvedImportStatementInfo<?>> availableNamespaces, final String[] name,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         this.availableNamespaces = availableNamespaces;
-        this.name = Arrays.<String>copyOf(name, name.length);
+        this.name = Arrays.<String> copyOf(name, name.length);
 
         this.setFromLine(fromLine);
         this.setFromColumn(fromColumn);
@@ -713,8 +713,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
             // 利用可能な名前空間から検索
             {
-                for (final UnresolvedClassImportStatementInfo availableNamespace : this
-                        .getAvailableNamespaces()) {
+                for (final UnresolvedClassImportStatementInfo availableNamespace : UnresolvedClassImportStatementInfo
+                        .getClassImportStatements(this.getAvailableNamespaces())) {
 
                     // 名前空間名.* となっている場合
                     if (availableNamespace.isAll()) {
@@ -1198,10 +1198,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
             }
         }
 
-        err
-                .println("Remain unresolved \"" + this.toString() + "\"" + " line:"
-                        + this.getFromLine() + " column:" + this.getFromColumn() + " on \""
-                        + usingClass.getOwnerFile().getName());
+        err.println("Remain unresolved \"" + this.toString() + "\"" + " line:" + this.getFromLine()
+                + " column:" + this.getFromColumn() + " on \""
+                + usingClass.getOwnerFile().getName());
 
         // 見つからなかった処理を行う
         usingMethod.addUnresolvedUsage(this);
@@ -1218,7 +1217,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
      * @return 未解決エンティティ使用名
      */
     public String[] getName() {
-        return Arrays.<String>copyOf(this.name, this.name.length);
+        return Arrays.<String> copyOf(this.name, this.name.length);
     }
 
     @Override
@@ -1236,14 +1235,14 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
      * 
      * @return この未解決エンティティ使用が利用することのできる名前空間
      */
-    public List<UnresolvedClassImportStatementInfo> getAvailableNamespaces() {
+    public List<UnresolvedImportStatementInfo<?>> getAvailableNamespaces() {
         return this.availableNamespaces;
     }
 
     /**
      * この未解決エンティティ使用が利用することのできる名前空間を保存するための変数
      */
-    private final List<UnresolvedClassImportStatementInfo> availableNamespaces;
+    private final List<UnresolvedImportStatementInfo<?>> availableNamespaces;
 
     /**
      * この未解決エンティティ使用名を保存するための変数

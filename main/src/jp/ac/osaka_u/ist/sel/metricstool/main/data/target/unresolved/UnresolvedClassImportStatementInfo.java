@@ -2,6 +2,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -22,7 +25,20 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public final class UnresolvedClassImportStatementInfo extends UnresolvedImportStatementInfo<ClassImportStatementInfo> {
+public final class UnresolvedClassImportStatementInfo extends
+        UnresolvedImportStatementInfo<ClassImportStatementInfo> {
+
+    public static List<UnresolvedClassImportStatementInfo> getClassImportStatements(
+            final Collection<UnresolvedImportStatementInfo<?>> importStatements) {
+
+        final List<UnresolvedClassImportStatementInfo> classImportStatements = new LinkedList<UnresolvedClassImportStatementInfo>();
+        for (final UnresolvedImportStatementInfo<?> importStatement : importStatements) {
+            if (importStatement instanceof UnresolvedClassImportStatementInfo) {
+                classImportStatements.add((UnresolvedClassImportStatementInfo) importStatement);
+            }
+        }
+        return Collections.unmodifiableList(classImportStatements);
+    }
 
     /**
      * 利用可能名前空間名とそれ以下のクラス全てのクラスが利用可能かどうかを表すbooleanを与えてオブジェクトを初期化.
@@ -78,7 +94,7 @@ public final class UnresolvedClassImportStatementInfo extends UnresolvedImportSt
                 toLine, toColumn);
         return this.resolvedInfo;
     }
-    
+
     /**
      * 名前空間名を返す．
      * 

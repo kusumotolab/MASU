@@ -15,6 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BuiltinTypeToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
@@ -200,7 +201,9 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
                 //Œ©‚Â‚©‚ç‚È‚©‚Á‚½‚Ì‚ÅŽQÆŒ^
                 //ŽQÆŒ^‚ðì¬
                 final UnresolvedClassTypeInfo referenceType = new UnresolvedClassTypeInfo(
-                        this.buildDataManager.getAllAvaliableNames(), identifier);
+                        UnresolvedClassImportStatementInfo
+                                .getClassImportStatements(this.buildDataManager
+                                        .getAllAvaliableNames()), identifier);
 
                 //Žg‚¦‚éŒ^ˆø”‚ª‚ ‚ê‚Î“o˜^‚µ‚Ä‚µ‚Ü‚¤D
                 if (null != this.availableTypeArugments) {

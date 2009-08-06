@@ -1,6 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -29,6 +33,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 public class UnresolvedMemberImportStatementInfo extends
         UnresolvedImportStatementInfo<MemberImportStatementInfo> {
 
+    public static List<UnresolvedMemberImportStatementInfo> getMemberImportStatements(
+            final Collection<UnresolvedImportStatementInfo<?>> importStatements) {
+
+        final List<UnresolvedMemberImportStatementInfo> memberImportStatements = new LinkedList<UnresolvedMemberImportStatementInfo>();
+        for (final UnresolvedImportStatementInfo<?> importStatement : importStatements) {
+            if (importStatement instanceof UnresolvedMemberImportStatementInfo) {
+                memberImportStatements.add((UnresolvedMemberImportStatementInfo) importStatement);
+            }
+        }
+        return Collections.unmodifiableList(memberImportStatements);
+    }
+    
     /**
      * クラス名とそれ以下staticメンバー全てが利用可能かどうかを表すbooleanを与えてオブジェクトを初期化.
      * <p>

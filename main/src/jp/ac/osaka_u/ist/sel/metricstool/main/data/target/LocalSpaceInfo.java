@@ -183,7 +183,7 @@ public abstract class LocalSpaceInfo extends UnitInfo {
             }
         }
         return allStatements;
-    }
+    }    
 
     /**
      * このローカルスコープの直内の文情報一覧を保存するための変数

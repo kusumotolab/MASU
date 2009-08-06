@@ -7,11 +7,12 @@ import java.util.Stack;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DefaultBuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedImportStatementInfo;
 
 
 /**
@@ -111,8 +112,8 @@ public class JavaBuildManager extends DefaultBuildDataManager {
     }
 
     @Override
-    public List<UnresolvedClassImportStatementInfo> getAvailableNameSpaceSet() {
-        List<UnresolvedClassImportStatementInfo> result = super.getAvailableNameSpaceSet();
+    public List<UnresolvedImportStatementInfo<?>> getAvailableNameSpaceSet() {
+        List<UnresolvedImportStatementInfo<?>> result = super.getAvailableNameSpaceSet();
         result.add(JAVA_LANG);
         return result;
     }
@@ -121,7 +122,8 @@ public class JavaBuildManager extends DefaultBuildDataManager {
             new String[] { "java", "lang" }, true);
 
     private static final UnresolvedClassTypeInfo OBJECT = new UnresolvedClassTypeInfo(
-            new LinkedList<UnresolvedClassImportStatementInfo>(), new String[] { "java", "lang", "Object" });
+            new LinkedList<UnresolvedClassImportStatementInfo>(), new String[] { "java", "lang",
+                    "Object" });
 
     private static enum CLASS_OR_INTERFACE {
         CLASS, INTERFACE

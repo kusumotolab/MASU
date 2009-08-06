@@ -410,7 +410,7 @@ public class MetricsTool {
                 loc += file.getLOC();
             }
             out.println("analyzed lines of code: " + loc);
-            
+
         }
         MessagePool.getInstance(MESSAGE_TYPE.OUT).removeMessageListener(outListener);
         MessagePool.getInstance(MESSAGE_TYPE.ERROR).removeMessageListener(errListener);
@@ -1226,7 +1226,7 @@ public class MetricsTool {
             // メソッド情報を解決
             final TargetMethodInfo methodInfo = unresolvedMethodInfo.resolve(ownerClass, null,
                     classInfoManager, fieldInfoManager, methodInfoManager);
-            
+
             // メソッド情報を登録
             ownerClass.addDefinedMethod(methodInfo);
             methodInfoManager.add(methodInfo);
@@ -1439,9 +1439,11 @@ public class MetricsTool {
             final TargetFieldInfo fieldInfo = unresolvedFieldInfo.getResolved();
             if (null != unresolvedFieldInfo.getInitilizer()) {
                 final CallableUnitInfo initializerUnit = fieldInfo.isInstanceMember() ? classInfo
-                        .getImplicitInstanceInitializer() : classInfo.getImplicitStaticInitializer();
-                final ExpressionInfo initializerExpression = unresolvedFieldInfo.getInitilizer().resolve(
-                        classInfo, initializerUnit, classInfoManager, fieldInfoManager, methodInfoManager);
+                        .getImplicitInstanceInitializer() : classInfo
+                        .getImplicitStaticInitializer();
+                final ExpressionInfo initializerExpression = unresolvedFieldInfo.getInitilizer()
+                        .resolve(classInfo, initializerUnit, classInfoManager, fieldInfoManager,
+                                methodInfoManager);
                 fieldInfo.setInitializer(initializerExpression);
             }
         }
@@ -1552,7 +1554,6 @@ public class MetricsTool {
                         classInfoManager, fieldInfoManager, methodInfoManager);
             }
         }
-
 
     }
 }

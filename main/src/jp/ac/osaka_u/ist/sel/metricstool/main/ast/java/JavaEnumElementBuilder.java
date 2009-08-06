@@ -12,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
@@ -76,8 +77,9 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
             enumAnonymous.setClassName(enumClass.getClassName()
                     + JavaAnonymousClassBuilder.JAVA_ANONYMOUSCLASS_NAME_MARKER + count);
 
-            UnresolvedClassTypeInfo superClassReference = new UnresolvedClassTypeInfo(buildManager
-                    .getAllAvaliableNames(), enumClass.getFullQualifiedName());
+            UnresolvedClassTypeInfo superClassReference = new UnresolvedClassTypeInfo(
+                    UnresolvedClassImportStatementInfo.getClassImportStatements(buildManager
+                            .getAllAvaliableNames()), enumClass.getFullQualifiedName());
 
             enumAnonymous.addSuperClass(superClassReference);
 
