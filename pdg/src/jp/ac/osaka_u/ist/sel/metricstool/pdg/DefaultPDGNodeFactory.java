@@ -1,10 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
@@ -27,10 +27,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGVariableDeclarationStatemen
 
 public class DefaultPDGNodeFactory implements IPDGNodeFactory {
 
-    private final Map<Object, PDGNode<?>> elementToNodeMap;
+    private final ConcurrentMap<Object, PDGNode<?>> elementToNodeMap;
 
     public DefaultPDGNodeFactory() {
-        this.elementToNodeMap = new HashMap<Object, PDGNode<?>>();
+        this.elementToNodeMap = new ConcurrentHashMap<Object, PDGNode<?>>();
     }
 
     @Override

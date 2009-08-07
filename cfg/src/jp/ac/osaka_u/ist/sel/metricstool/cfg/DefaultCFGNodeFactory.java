@@ -3,8 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
@@ -28,13 +28,13 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
     /**
      * 生成されたノードを管理するマップ
      */
-    private final Map<ExecutableElementInfo, CFGNode<? extends ExecutableElementInfo>> elementToNodeMap;
+    private final ConcurrentMap<ExecutableElementInfo, CFGNode<? extends ExecutableElementInfo>> elementToNodeMap;
 
     /**
      * オブジェクトを生成
      */
     public DefaultCFGNodeFactory() {
-        this.elementToNodeMap = new HashMap<ExecutableElementInfo, CFGNode<? extends ExecutableElementInfo>>();
+        this.elementToNodeMap = new ConcurrentHashMap<ExecutableElementInfo, CFGNode<? extends ExecutableElementInfo>>();
     }
 
     /**
@@ -47,7 +47,7 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
             throw new NullPointerException("nodeFactory is null");
         }
 
-        this.elementToNodeMap = new HashMap<ExecutableElementInfo, CFGNode<? extends ExecutableElementInfo>>(
+        this.elementToNodeMap = new ConcurrentHashMap<ExecutableElementInfo, CFGNode<? extends ExecutableElementInfo>>(
                 nodeFactory.elementToNodeMap);
     }
 
