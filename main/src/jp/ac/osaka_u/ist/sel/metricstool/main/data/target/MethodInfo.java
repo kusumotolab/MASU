@@ -119,12 +119,14 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
 
         sb.append("(");
 
-        for (final ParameterInfo parameter : this.getParameters()) {
-            final TypeInfo parameterType = parameter.getType();
-            sb.append(parameterType.getTypeName());
-            sb.append(" ");
+        if (this.getParameters().size() > 0){
+            for (final ParameterInfo parameter : this.getParameters()) {
+                final TypeInfo parameterType = parameter.getType();
+                sb.append(parameterType.getTypeName());
+                sb.append(" ");
+            }
+            sb.deleteCharAt(sb.length() - 1);
         }
-        sb.deleteCharAt(sb.length() - 1);
 
         sb.append(")");
 
