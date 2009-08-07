@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +54,7 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
     /**
      * ExecutableElementInfo　から CFG のノーマルノードを生成
      */
+    @Override
     public CFGNormalNode<? extends ExecutableElementInfo> makeNormalNode(
             final ExecutableElementInfo element) {
         CFGNormalNode<? extends ExecutableElementInfo> node = (CFGNormalNode<? extends ExecutableElementInfo>) this
@@ -88,6 +91,7 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
     /**
      * ConditionInfo から CFG のコントロールノードを生成
      */
+    @Override
     public CFGControlNode makeControlNode(final ConditionInfo condition) {
 
         CFGControlNode node = (CFGControlNode) this.getNode(condition);
@@ -106,7 +110,18 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
         return node;
     }
 
+    @Override
     public CFGNode<? extends ExecutableElementInfo> getNode(final ExecutableElementInfo statement) {
         return this.elementToNodeMap.get(statement);
+    }
+
+    @Override
+    public boolean removeNode(final ExecutableElementInfo element) {
+        return null != this.elementToNodeMap.remove(element) ? true : false;
+    }
+
+    @Override
+    public Collection<CFGNode<? extends ExecutableElementInfo>> getAllNodes() {
+        return Collections.unmodifiableCollection(this.elementToNodeMap.values());
     }
 }

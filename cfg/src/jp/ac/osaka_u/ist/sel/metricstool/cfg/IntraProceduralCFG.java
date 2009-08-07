@@ -3,8 +3,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
@@ -19,6 +21,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.DefaultEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.DoBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ElseBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalMethodInfo;
@@ -942,8 +945,24 @@ public class IntraProceduralCFG extends CFG {
      */
     private void optimizeCFG() {
 
+        // ノード間の関係を最適化
         for (final CFGNode<?> node : this.getAllNodes()) {
             node.optimize();
+        }
+
+        // ノードファクトリを最適化
+        {
+            final Set<ExecutableElementInfo> removeElements = new HashSet<ExecutableElementInfo>();
+            for (final CFGNode<? extends ExecutableElementInfo> node : this.nodeFactory
+                    .getAllNodes()) {
+                if (node instanceof CFGJumpStatementNode || node instanceof CFGCaseEntryNode) {
+                    final ExecutableElementInfo element = node.getCore();
+                    removeElements.add(element);
+                }
+            }
+            for (final ExecutableElementInfo removeElement : removeElements) {
+                this.nodeFactory.removeNode(removeElement);
+            }
         }
     }
 

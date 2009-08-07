@@ -47,6 +47,8 @@ public class IntraProceduralPDG extends PDG {
 
     private final boolean buildExecutionDependence;
 
+    private final int dataDependencyDistance;
+
     /**
      * PDGを構築時に利用するCFG
      */
@@ -61,10 +63,12 @@ public class IntraProceduralPDG extends PDG {
      * @param buildDataDependency Data Dependencyを生成するか？
      * @param buildControlDependencey Control Dependencyを生成するか？
      * @param buildExecutionDependency Execution Dependencyを生成するか？
+     * @param dataDependencyDistance データ依存辺を引く頂点間の距離の閾値（行の差）
      */
     public IntraProceduralPDG(final CallableUnitInfo unit, final IPDGNodeFactory pdgNodeFactory,
             final ICFGNodeFactory cfgNodeFactory, final boolean buildDataDependency,
-            final boolean buildControlDependencey, final boolean buildExecutionDependency) {
+            final boolean buildControlDependencey, final boolean buildExecutionDependency,
+            final int dataDependencyDistance) {
 
         super(pdgNodeFactory);
         if (null == unit) {
@@ -76,10 +80,29 @@ public class IntraProceduralPDG extends PDG {
         this.buildDataDependence = buildDataDependency;
         this.buildControlDependence = buildControlDependencey;
         this.buildExecutionDependence = buildExecutionDependency;
+        this.dataDependencyDistance = dataDependencyDistance;
 
         this.cfg = new IntraProceduralCFG(unit, cfgNodeFactory);
 
         this.buildPDG();
+    }
+
+    /**
+     * PDGを生成する
+     * 
+     * @param unit pdgを生成するユニット
+     * @param pdgNodeFactory PDGのノード生成に用いるファクトリ
+     * @param cfgNodeFactory CFGのノード生成に用いるファクトリ
+     * @param buildDataDependency Data Dependencyを生成するか？
+     * @param buildControlDependencey Control Dependencyを生成するか？
+     * @param buildExecutionDependency Execution Dependencyを生成するか？
+     */
+    public IntraProceduralPDG(final CallableUnitInfo unit, final IPDGNodeFactory pdgNodeFactory,
+            final ICFGNodeFactory cfgNodeFactory, final boolean buildDataDependency,
+            final boolean buildControlDependency, final boolean buildExecutionDependency) {
+
+        this(unit, pdgNodeFactory, cfgNodeFactory, buildDataDependency, buildControlDependency,
+                buildExecutionDependency, Integer.MAX_VALUE);
     }
 
     public IntraProceduralPDG(final CallableUnitInfo unit, final IPDGNodeFactory pdgNodeFactory,
@@ -129,6 +152,7 @@ public class IntraProceduralPDG extends PDG {
         }
 
         // CFGの入口ノードから処理を行う
+        final Set<CFGNode<?>> checkedNodes = new HashSet<CFGNode<?>>();
         if (null != cfgEnterNode) {
 
             //引数がない場合は，CFGの入口ノードがPDGの入口ノードになる            
@@ -137,13 +161,23 @@ public class IntraProceduralPDG extends PDG {
                 this.enterNodes.add(pdgEnterNode);
             }
 
-            this.buildDependence(cfgEnterNode, new HashSet<CFGNode<?>>());
+            this.buildDependence(cfgEnterNode, checkedNodes);
         }
 
         // CFGの出口ノードはPDGの出口ノードになる
         for (final CFGNode<?> cfgExitNode : this.cfg.getExitNodes()) {
             final PDGNode<?> pdgExitNode = this.makeNode(cfgExitNode);
             this.exitNodes.add(pdgExitNode);
+        }
+
+        //Unreablebleなノードに対しても処理を行う
+        if (!this.cfg.isEmpty()) {
+            final Set<CFGNode<?>> unreachableNodes = new HashSet<CFGNode<?>>();
+            unreachableNodes.addAll(this.cfg.getAllNodes());
+            unreachableNodes.removeAll(this.cfg.getReachableNodes(cfgEnterNode));
+            for (final CFGNode<?> unreachableNode : unreachableNodes) {
+                this.buildDependence(unreachableNode, checkedNodes);
+            }
         }
     }
 
@@ -211,7 +245,8 @@ public class IntraProceduralPDG extends PDG {
      * @param fromPDGNode
      * @param variable
      */
-    private void buildDataDependence(final CFGNode<?> cfgNode, final PDGNode<?> fromPDGNode,
+    private void buildDataDependence(final CFGNode<?> cfgNode,
+            final PDGNode<? extends ExecutableElementInfo> fromPDGNode,
             final VariableInfo<?> variable, final Set<CFGNode<?>> checkedCFGNodes) {
 
         if (null == cfgNode || null == fromPDGNode || null == variable || null == checkedCFGNodes) {
@@ -232,8 +267,14 @@ public class IntraProceduralPDG extends PDG {
         // cfgNodeからPDGNodeを作成し，fromPDGNodeからデータ依存辺を引く        
         if (cfgNode.getUsedVariables().contains(variable)) {
 
-            final PDGNode<?> toPDGNode = this.makeNode(cfgNode);
-            fromPDGNode.addDataDependingNode(toPDGNode, variable);
+            final PDGNode<? extends ExecutableElementInfo> toPDGNode = this.makeNode(cfgNode);
+
+            //fromノードとtoノードの距離が閾値以内であればエッジを引く
+            final int distance = Math.abs(toPDGNode.getCore().getFromLine()
+                    - fromPDGNode.getCore().getToLine()) + 1;
+            if (distance <= this.dataDependencyDistance) {
+                fromPDGNode.addDataDependingNode(toPDGNode, variable);
+            } 
         }
 
         // cfgNodeがvariableに代入している場合は，

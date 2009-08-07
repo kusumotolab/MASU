@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 
 
+import java.util.Collection;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 
@@ -33,4 +35,8 @@ public interface ICFGNodeFactory {
      * @return このファクトリで生成されたノード．対応するノードが生成済みでない場合はnull．
      */
     public CFGNode<? extends ExecutableElementInfo> getNode(ExecutableElementInfo element);
+
+    public boolean removeNode(ExecutableElementInfo element);
+
+    public Collection<CFGNode<? extends ExecutableElementInfo>> getAllNodes();
 }

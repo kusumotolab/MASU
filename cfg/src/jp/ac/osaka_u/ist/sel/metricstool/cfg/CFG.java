@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -57,9 +58,8 @@ public abstract class CFG {
      * 
      * @return CFGÇÃëSÉmÅ[Éh
      */
-    public final Set<CFGNode<? extends ExecutableElementInfo>> getAllNodes() {
-        return null != this.enterNode ? this.getReachableNodes(this.enterNode)
-                : new HashSet<CFGNode<? extends ExecutableElementInfo>>();
+    public final Collection<CFGNode<? extends ExecutableElementInfo>> getAllNodes() {
+        return this.nodeFactory.getAllNodes();
     }
 
     /**
