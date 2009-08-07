@@ -25,7 +25,7 @@ abstract public class CFGJumpStatementNode extends CFGStatementNode {
         // このノードのフォワードノード群を取得
         final Set<CFGNode<?>> forwardNodes = new HashSet<CFGNode<?>>();
         for (final CFGEdge forwardEdge : this.getForwardEdges()) {
-            forwardNodes.add(forwardEdge.getFromNode());
+            forwardNodes.add(forwardEdge.getToNode());
         }
 
         // バックワードノードから，このノードをフォワードノードとするエッジを削除
