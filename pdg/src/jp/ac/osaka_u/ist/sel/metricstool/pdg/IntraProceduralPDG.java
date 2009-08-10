@@ -171,6 +171,7 @@ public class IntraProceduralPDG extends PDG {
         }
 
         //Unreablebleなノードに対しても処理を行う
+
         if (!this.cfg.isEmpty()) {
             final Set<CFGNode<?>> unreachableNodes = new HashSet<CFGNode<?>>();
             unreachableNodes.addAll(this.cfg.getAllNodes());
@@ -274,7 +275,7 @@ public class IntraProceduralPDG extends PDG {
                     - fromPDGNode.getCore().getToLine()) + 1;
             if (distance <= this.dataDependencyDistance) {
                 fromPDGNode.addDataDependingNode(toPDGNode, variable);
-            } 
+            }
         }
 
         // cfgNodeがvariableに代入している場合は，

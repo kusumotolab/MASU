@@ -6,7 +6,6 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.CaughtExceptionDeclarationStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachConditionInfo;
@@ -15,7 +14,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGCaseEntryNode;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGCaughtExceptionNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGExpressionNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGForeachControlNode;
@@ -82,10 +80,7 @@ public class DefaultPDGNodeFactory implements IPDGNodeFactory {
             node = new PDGExpressionNode((ConditionInfo) element);
         } else if (element instanceof CaseEntryInfo) {
             node = new PDGCaseEntryNode((CaseEntryInfo) element);
-        } else if (element instanceof CaughtExceptionDeclarationStatementInfo) {
-            node = new PDGCaughtExceptionNode((CaughtExceptionDeclarationStatementInfo) element);
         } else {
-            assert false : "Here shouldn't be reached!";
             return null;
         }
         this.elementToNodeMap.put(element, node);

@@ -80,8 +80,6 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
             node = new CFGCaseEntryNode((CaseEntryInfo) element);
         } else if (element instanceof ConditionInfo) {
             node = new CFGExpressionNode((ConditionInfo) element);
-        } else if (element instanceof CaughtExceptionDeclarationStatementInfo) {
-            node = new CFGCaughtExceptionNode((CaughtExceptionDeclarationStatementInfo) element);
         } else {
             node = new CFGEmptyNode(element);
         }

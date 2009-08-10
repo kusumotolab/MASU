@@ -6,12 +6,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
@@ -24,7 +21,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
  * @author higo
  *
  */
-public class ParameterDeclarationStatementInfo implements ExecutableElementInfo {
+public class ParameterDeclarationStatementInfo extends SingleStatementInfo {
 
     /**
      * 宣言されているパラメータ，位置情報を与えて初期化
@@ -38,11 +35,8 @@ public class ParameterDeclarationStatementInfo implements ExecutableElementInfo 
     public ParameterDeclarationStatementInfo(final ParameterInfo parameter, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
+        super(parameter.getDefinitionUnit(), fromLine, fromColumn, toLine, toColumn);
         this.parameter = parameter;
-        this.fromLine = fromLine;
-        this.fromColumn = fromColumn;
-        this.toLine = toLine;
-        this.toColumn = toColumn;
     }
 
     @Override
@@ -85,48 +79,5 @@ public class ParameterDeclarationStatementInfo implements ExecutableElementInfo 
         return this.parameter;
     }
 
-    @Override
-    public CallableUnitInfo getOwnerMethod() {
-        return this.parameter.getDefinitionUnit();
-    }
-
-    @Override
-    public LocalSpaceInfo getOwnerSpace() {
-        return this.parameter.getDefinitionUnit();
-    }
-
-    @Override
-    public int getFromColumn() {
-        return this.fromColumn;
-    }
-
-    @Override
-    public int getFromLine() {
-        return this.fromLine;
-    }
-
-    @Override
-    public int getToColumn() {
-        return this.toColumn;
-    }
-
-    @Override
-    public int getToLine() {
-        return this.toLine;
-    }
-
-    @Override
-    public int compareTo(Position o) {
-        return this.parameter.compareTo(o);
-    }
-
     private final ParameterInfo parameter;
-
-    private final int fromLine;
-
-    private final int fromColumn;
-
-    private final int toLine;
-
-    private final int toColumn;
 }

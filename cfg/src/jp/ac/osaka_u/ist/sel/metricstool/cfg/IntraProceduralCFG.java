@@ -33,12 +33,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LabelInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SimpleBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SwitchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SynchronizedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.WhileBlockInfo;
 
 
@@ -716,29 +718,40 @@ public class IntraProceduralCFG extends CFG {
         else if (statement instanceof CatchBlockInfo) {
 
             final CatchBlockInfo catchBlock = (CatchBlockInfo) statement;
+
             final LocalVariableInfo exception = catchBlock.getCaughtException();
-            final int fromLine = exception.getFromLine();
-            final int fromColumn = exception.getFromColumn();
-            final int toLine = exception.getToLine();
-            final int toColumn = exception.getToColumn();
-
-            final CaughtExceptionDeclarationStatementInfo caughtVariableDeclarationStatement = new CaughtExceptionDeclarationStatementInfo(
-                    catchBlock, fromLine, fromColumn, toLine, toColumn);
-            final CFGNode<?> exceptionNode = this.nodeFactory
-                    .makeNormalNode(caughtVariableDeclarationStatement);
-            this.enterNode = exceptionNode;
-
+            exception.getDeclarationStatement();
+            final VariableDeclarationStatementInfo declarationStatement;
+            if (null == exception.getDeclarationStatement()) {
+                final int fromLine = exception.getFromLine();
+                final int fromColumn = exception.getFromColumn();
+                final int toLine = exception.getToLine();
+                final int toColumn = exception.getToColumn();
+                final LocalVariableUsageInfo exceptionUsage = LocalVariableUsageInfo.getInstance(
+                        exception, false, true, catchBlock.getOwnerMethod(), fromLine, fromColumn,
+                        toLine, toColumn);
+                declarationStatement = new VariableDeclarationStatementInfo(exceptionUsage, null,
+                        fromLine, fromColumn, toLine, toColumn);
+            } else {
+                declarationStatement = exception.getDeclarationStatement();
+            }
+            final CFG declarationStatementCFG = new IntraProceduralCFG(declarationStatement,
+                    nodeFactory);
             final SequentialStatementsCFG statementsCFG = new SequentialStatementsCFG(catchBlock
                     .getStatements(), nodeFactory);
 
+            this.enterNode = declarationStatementCFG.getEnterNode();
+
             //内部ステートメントが存在する場合は，例外のCFGと内部ステートメントの文をつなぐ
             if (!statementsCFG.isEmpty()) {
-                final CFGNormalEdge edge = new CFGNormalEdge(exceptionNode, statementsCFG
-                        .getEnterNode());
-                exceptionNode.addForwardEdge(edge);
+                for (final CFGNode<?> exitNode : declarationStatementCFG.getExitNodes()) {
+                    final CFGNormalEdge edge = new CFGNormalEdge(exitNode, statementsCFG
+                            .getEnterNode());
+                    exitNode.addForwardEdge(edge);
+                }
                 this.exitNodes.addAll(statementsCFG.getExitNodes());
             } else {
-                this.exitNodes.add(exceptionNode);
+                this.exitNodes.addAll(declarationStatementCFG.getExitNodes());
             }
         }
 
