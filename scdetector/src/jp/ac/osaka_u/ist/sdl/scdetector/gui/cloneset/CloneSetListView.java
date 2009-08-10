@@ -15,12 +15,24 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
 
-import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.SelectedEntities;
+import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.CloneSetInfo;
 
 
+/**
+ * クローンセット一覧を表示するパネル
+ * 
+ *  * @author higo
+ *
+ */
 public class CloneSetListView extends JTable implements Observer {
 
+    /**
+     * クローンセットの選択を制御するクラス
+     * 
+     * @author higo
+     *
+     */
     class SelectionEventHandler implements ListSelectionListener {
 
         public void valueChanged(ListSelectionEvent e) {
@@ -35,7 +47,7 @@ public class CloneSetListView extends JTable implements Observer {
                             .convertRowIndexToModel(selectedRow[i]);
                     final CloneSetListViewModel model = (CloneSetListViewModel) CloneSetListView.this
                             .getModel();
-                    final CloneSetInfo cloneSet = model.getClonePair(modelIndex);
+                    final CloneSetInfo cloneSet = model.getCloneset(modelIndex);
                     selectedCloneSets.add(cloneSet);
                 }
 
@@ -45,9 +57,14 @@ public class CloneSetListView extends JTable implements Observer {
         }
     }
 
+    /**
+     * コンストラクタ
+     * 
+     * @param cloneSets クローンセット群
+     */
     public CloneSetListView(final Set<CloneSetInfo> cloneSets) {
 
-        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         this.scrollPane = new JScrollPane();
         this.scrollPane.setViewportView(this);
@@ -64,6 +81,10 @@ public class CloneSetListView extends JTable implements Observer {
         this.getSelectionModel().addListSelectionListener(this.selectionEventHandler);
     }
 
+    /**
+     * オブザーバパターン用
+     */
+    @Override
     public void update(Observable o, Object arg) {
 
     }

@@ -1,49 +1,105 @@
 package jp.ac.osaka_u.ist.sdl.scdetector.data;
 
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sdl.scdetector.Entity;
 
+/**
+ * クローンセットを表すクラス
+ * 
+ * @author higo
+ *
+ */
+public class CloneSetInfo implements Comparable<CloneSetInfo> {
 
-public class CloneSetInfo implements Entity, Serializable, Comparable<CloneSetInfo> {
-
+    /**
+     * コンストラクタ
+     */
     public CloneSetInfo() {
-        this.codeFragments = new HashSet<CodeFragmentInfo>();
+        this.codeclones = new HashSet<CodeCloneInfo>();
         this.id = number++;
     }
 
-    public void add(final CodeFragmentInfo codeFragment) {
-        this.codeFragments.add(codeFragment);
+    /**
+     * コードクローンを追加する
+     * 
+     * @param codeclone 追加するコードクローン
+     * @return 追加した場合はtrue,　すでに含まれており追加しなかった場合はfalse
+     */
+    public boolean add(final CodeCloneInfo codeclone) {
+        return this.codeclones.add(codeclone);
     }
 
-    public void addAll(final Collection<CodeFragmentInfo> codeFragments) {
-        this.codeFragments.addAll(codeFragments);
+    /**
+     * コードクローン群を追加する
+     * 
+     * @param codeclones 追加するコードクローン群
+     */
+    public void addAll(final Collection<CodeCloneInfo> codeclones) {
+
+        for (final CodeCloneInfo codeFragment : codeclones) {
+            this.add(codeFragment);
+        }
     }
 
-    public Set<CodeFragmentInfo> getCodeFragments() {
-        return Collections.unmodifiableSet(this.codeFragments);
+    /**
+     * クローンセットを構成するコードクローン群を返す
+     * 
+     * @return　クローンセットを構成するコードクローン群
+     */
+    public Set<CodeCloneInfo> getCodeClones() {
+        return Collections.unmodifiableSet(this.codeclones);
     }
 
+    /**
+     * クローンセットのIDを返す
+     * 
+     * @return　クローンセットのID
+     */
     public int getID() {
         return this.id;
     }
 
-    public int size() {
-        return this.codeFragments.size();
+    /**
+     * クローンセットに含まれるコードクローンの数を返す
+     * 
+     * @return　クローンセットに含まれるコードクローンの数
+     */
+    public int getNumberOfCodeclones() {
+        return this.codeclones.size();
     }
 
-    public int length() {
+    /**
+     * クローンセットに含まれるギャップの数を返す
+     * 
+     * @return　クローンセットに含まれるギャップの数
+     */
+    public int getGapsNumber() {
+
+        int gap = 0;
+
+        for (final CodeCloneInfo codeFragment : this.getCodeClones()) {
+            gap += codeFragment.getGapsNumber();
+        }
+
+        return gap;
+    }
+
+    /**
+     * クローンセットの長さ（含まれるコードクローンの大きさ）を返す
+     * 
+     * @return　クローンセットの長さ（含まれるコードクローンの大きさ）
+     */
+    public int getLength() {
         int total = 0;
-        for (final CodeFragmentInfo codeFragment : this.getCodeFragments()) {
+        for (final CodeCloneInfo codeFragment : this.getCodeClones()) {
             total += codeFragment.length();
         }
 
-        return total / this.size();
+        return total / this.getNumberOfCodeclones();
     }
 
     @Override
@@ -58,11 +114,9 @@ public class CloneSetInfo implements Entity, Serializable, Comparable<CloneSetIn
         }
     }
 
-    final private Set<CodeFragmentInfo> codeFragments;
+    final private Set<CodeCloneInfo> codeclones;
 
     final private int id;
 
     private static int number = 0;
-
-    public static String CLONESET = new String("CLONESET");
 }

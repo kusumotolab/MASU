@@ -4,39 +4,46 @@ package jp.ac.osaka_u.ist.sdl.scdetector.gui;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 
-import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
-import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
-import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeFragmentInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.Scorpioui;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.cloneset.CloneSetListView;
-import jp.ac.osaka_u.ist.sdl.scdetector.gui.codefragment.CodeFragmentListView;
+import jp.ac.osaka_u.ist.sdl.scdetector.gui.codeclone.CodeCloneListView;
+import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.CloneSetInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.CodeCloneController;
+import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.sourcecode.SourceCodeView;
 
 
+/**
+ * GUIのメインウィンドウ
+ * 
+ * @author higo
+ *
+ */
 public class MainWindow extends JFrame {
 
-    public MainWindow(final Set<CloneSetInfo> cloneSets) {
+    public MainWindow() {
 
-        final CloneSetListView cloneSetListView = new CloneSetListView(cloneSets);
+        final CloneSetListView cloneSetListView = new CloneSetListView(CodeCloneController
+                .getInstance(Scorpioui.ID).getCloneSets());
         SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET).addObserver(
                 cloneSetListView);
-        SelectedEntities.<CodeFragmentInfo> getInstance(CodeFragmentInfo.CODEFRAGMENT).addObserver(
+        SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE).addObserver(
                 cloneSetListView);
 
-        final CodeFragmentListView codeFragmentListView = new CodeFragmentListView();
+        final CodeCloneListView codeFragmentListView = new CodeCloneListView();
         SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET).addObserver(
                 codeFragmentListView);
-        SelectedEntities.<ClonePairInfo> getInstance(CodeFragmentInfo.CODEFRAGMENT).addObserver(
+        SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE).addObserver(
                 codeFragmentListView);
 
         final SourceCodeView sourceCodeView = new SourceCodeView();
-        SelectedEntities.<ClonePairInfo> getInstance(CloneSetInfo.CLONESET).addObserver(
+        SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET).addObserver(
                 sourceCodeView);
-        SelectedEntities.<ClonePairInfo> getInstance(CodeFragmentInfo.CODEFRAGMENT).addObserver(
+        SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE).addObserver(
                 sourceCodeView);
 
         final JSplitPane westPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);

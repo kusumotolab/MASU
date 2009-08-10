@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
 
+import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.AssertStatementInfo;
@@ -9,7 +10,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CastUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionStatementInfo;
@@ -32,24 +32,30 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
 
+/**
+ * プログラム要素の文字列変換をするためのクラス
+ * 
+ * @author higo
+ *
+ */
 public class Conversion {
 
+    /**
+     * オブジェクト型を変換するためのメソッド
+     * 
+     * @param o
+     * @return
+     */
     public static String getNormalizedString(final Object o) {
 
         if (o instanceof SingleStatementInfo) {
             return getNormalizedString((SingleStatementInfo) o);
-
-        } else if (o instanceof ConditionalBlockInfo) {
-            return getNormalizedString((ConditionalBlockInfo) o);
 
         } else if (o instanceof ExpressionInfo) {
             return getNormalizedString((ExpressionInfo) o);
 
         } else if (o instanceof ConditionInfo) {
             return getNormalizedString((ConditionInfo) o);
-
-        } else if (o instanceof VariableInfo) {
-            return getNormalizedString((VariableInfo<?>) o);
 
         } else if (o instanceof CaseEntryInfo) {
 
@@ -69,6 +75,12 @@ public class Conversion {
         return null;
     }
 
+    /**
+     * 単文を変換するためのメソッド
+     * 
+     * @param statement
+     * @return
+     */
     public static String getNormalizedString(final SingleStatementInfo statement) {
 
         final StringBuilder text = new StringBuilder();
@@ -110,11 +122,15 @@ public class Conversion {
             text.append(Conversion.getNormalizedString((ConditionInfo) statement));
         }
 
-        text.append(";");
-
         return text.toString();
     }
 
+    /**
+     * 条件式を変換するためのメソッド
+     * 
+     * @param condition
+     * @return
+     */
     public static String getNormalizedString(final ConditionInfo condition) {
 
         if (condition instanceof VariableDeclarationStatementInfo) {
@@ -125,17 +141,17 @@ public class Conversion {
             final TypeInfo variableType = variable.getType();
 
             switch (Configuration.INSTANCE.getPV()) {
-            case 0: // 正規化レベル0，変数名をそのまま使う
+            case NO: // 正規化レベル0，変数名をそのまま使う
                 text.append(variable.getType().getTypeName());
                 text.append(" ");
                 text.append(variable.getName());
                 break;
 
-            case 1: // 正規化レベル1，変数は型名に正規化する．変数名が異なっていても，型が同じであれば，クローンとして検出する
+            case TYPE: // 正規化レベル1，変数は型名に正規化する．変数名が異なっていても，型が同じであれば，クローンとして検出する
                 text.append(variableType.getTypeName());
                 break;
 
-            case 2: // 正規化レベル2，全ての変数を同一字句に正規化する．
+            case ALL: // 正規化レベル2，全ての変数を同一字句に正規化する．
                 text.append("TOKEN");
                 break;
 
@@ -164,6 +180,12 @@ public class Conversion {
         return null;
     }
 
+    /**
+     * 式を変換するためのメソッド
+     * 
+     * @param expression
+     * @return
+     */
     public static String getNormalizedString(final ExpressionInfo expression) {
 
         final StringBuilder sb = new StringBuilder();
@@ -192,7 +214,7 @@ public class Conversion {
 
             switch (Configuration.INSTANCE.getPO()) {
 
-            case 0: // 演算をそのまま用いる
+            case NO: // 演算をそのまま用いる
                 final ExpressionInfo firstOperand = operation.getFirstOperand();
                 final String firstOperandString = Conversion.getNormalizedString(firstOperand);
                 sb.append(firstOperandString);
@@ -206,11 +228,11 @@ public class Conversion {
                 sb.append(secondOperandString);
                 break;
 
-            case 1: // 演算をその型に正規化する
+            case TYPE: // 演算をその型に正規化する
                 sb.append(operation.getType().getTypeName());
                 break;
 
-            case 2: // 全ての演算を同一の字句に正規化する
+            case ALL: // 全ての演算を同一の字句に正規化する
                 sb.append("TOKEN");
                 break;
             }
@@ -222,7 +244,7 @@ public class Conversion {
 
             switch (Configuration.INSTANCE.getPI()) {
 
-            case 0: // 正規化レベル0，メソッド名はそのまま，引数情報も用いる
+            case NO: // 正規化レベル0，メソッド名はそのまま，引数情報も用いる
                 sb.append(method.getMethodName());
                 sb.append("(");
                 for (final ExpressionInfo argument : methodCall.getArguments()) {
@@ -233,7 +255,7 @@ public class Conversion {
                 sb.deleteCharAt(sb.length() - 1);
                 sb.append(")");
                 break;
-            case 1: // 正規化レベル1，メソッド名を返り値の型名に正規化する，引数情報も用いる
+            case TYPE_WITH_ARG: // 正規化レベル1，メソッド名を返り値の型名に正規化する，引数情報も用いる
                 sb.append(method.getReturnType().getTypeName());
                 sb.append("(");
                 for (final ExpressionInfo argument : methodCall.getArguments()) {
@@ -244,10 +266,10 @@ public class Conversion {
                 sb.deleteCharAt(sb.length() - 1);
                 sb.append(")");
                 break;
-            case 2: // 正規化レベル1，メソッド名を返り値の型名に正規化する，引数情報は用いない
+            case TYPE_WITHOUT_ARG: // 正規化レベル1，メソッド名を返り値の型名に正規化する，引数情報は用いない
                 sb.append(method.getReturnType().getTypeName());
                 break;
-            case 3: // 正規化レベル1，全てのメソッドを同一字句に正規化する．引数情報は用いない
+            case ALL: // 正規化レベル1，全てのメソッドを同一字句に正規化する．引数情報は用いない
                 sb.append("TOKEN");
                 break;
             default:
@@ -262,7 +284,7 @@ public class Conversion {
 
             switch (Configuration.INSTANCE.getPI()) {
 
-            case 0: // 正規化レベル0，コンストラクタ名はそのまま，引数情報も用いる
+            case NO: // 正規化レベル0，コンストラクタ名はそのまま，引数情報も用いる
                 sb.append("new ");
                 sb.append(constructorCall.getType().getTypeName());
                 sb.append("(");
@@ -275,7 +297,7 @@ public class Conversion {
                 sb.deleteCharAt(sb.length() - 1);
                 sb.append(")");
                 break;
-            case 1: // 正規化レベル1，コンストラクタ呼び出しを型に正規化する(new 演算子を取る)，引数情報は用いる
+            case TYPE_WITH_ARG: // 正規化レベル1，コンストラクタ呼び出しを型に正規化する(new 演算子を取る)，引数情報は用いる
                 sb.append(constructorCall.getType().getTypeName());
                 sb.append("(");
                 for (final ExpressionInfo argument : constructorCall.getArguments()) {
@@ -286,10 +308,10 @@ public class Conversion {
                 sb.deleteCharAt(sb.length() - 1);
                 sb.append(")");
                 break;
-            case 2: // 正規化レベル2，コンストラクタ呼び出しを型に正規化する（new 演算子を取る），引数情報は用いない
+            case TYPE_WITHOUT_ARG: // 正規化レベル2，コンストラクタ呼び出しを型に正規化する（new 演算子を取る），引数情報は用いない
                 sb.append(constructorCall.getType().getTypeName());
                 break;
-            case 3: // 正規化レベル3，全てのコンストラクタ呼び出しを同一字句に正規化する，引数情報は用いない
+            case ALL: // 正規化レベル3，全てのコンストラクタ呼び出しを同一字句に正規化する，引数情報は用いない
                 sb.append("TOKEN");
                 break;
             default:
@@ -301,7 +323,7 @@ public class Conversion {
             final CastUsageInfo cast = (CastUsageInfo) expression;
 
             switch (Configuration.INSTANCE.getPC()) {
-            case 0:
+            case NO:
                 sb.append("(");
 
                 sb.append(cast.getType().getTypeName());
@@ -314,22 +336,26 @@ public class Conversion {
                 sb.append(castedExpressionString);
                 break;
 
-            case 1:
+            case TYPE:
                 sb.append(cast.getType().getTypeName());
                 break;
 
-            case 2:
+            case ALL:
                 sb.append("TOKEN");
                 break;
             }
 
         } else if (expression instanceof ClassReferenceInfo) {
 
-            if (Configuration.INSTANCE.getPR()) {
+            switch (Configuration.INSTANCE.getPR()) {
+
+            case NO: //クラス参照を正規化しない
                 final ClassReferenceInfo reference = (ClassReferenceInfo) expression;
                 sb.append(reference.getType().getTypeName());
-            } else {
+                break;
+            case ALL: //すべて同一トークンに正規化
                 sb.append("TOKEN");
+                break;
             }
 
         } else if (expression instanceof LiteralUsageInfo) {
@@ -338,13 +364,13 @@ public class Conversion {
 
             switch (Configuration.INSTANCE.getPL()) {
 
-            case 0: // リテラルをそのまま用いる
+            case NO: // リテラルをそのまま用いる
                 sb.append(literal.getLiteral());
                 break;
-            case 1: // リテラルをその型の正規化する
+            case TYPE: // リテラルをその型の正規化する
                 sb.append(literal.getType().getTypeName());
                 break;
-            case 2: // 全てのリテラルを同一の字句に正規化する 
+            case ALL: // 全てのリテラルを同一の字句に正規化する 
                 sb.append("TOKEN");
                 break;
             }
@@ -355,7 +381,7 @@ public class Conversion {
 
             switch (Configuration.INSTANCE.getPO()) {
 
-            case 0: // 演算をそのまま用いる
+            case NO: // 演算をそのまま用いる
                 final OPERATOR operator = operation.getOperator();
                 sb.append(operator.getToken());
 
@@ -364,11 +390,11 @@ public class Conversion {
                 sb.append(operandString);
                 break;
 
-            case 1: // 演算をその型に正規化する
+            case TYPE: // 演算をその型に正規化する
                 sb.append(operation.getType().getTypeName());
                 break;
 
-            case 2: // 全ての演算を同一の字句に正規化する
+            case ALL: // 全ての演算を同一の字句に正規化する
                 sb.append("TOKEN");
                 break;
             }
@@ -383,7 +409,7 @@ public class Conversion {
 
             switch (Configuration.INSTANCE.getPO()) {
 
-            case 0: // 演算をそのまま用いる
+            case NO: // 演算をそのまま用いる
 
                 final ConditionInfo condition = operation.getCondition();
                 final String conditionExpressionString = Conversion.getNormalizedString(condition);
@@ -402,11 +428,11 @@ public class Conversion {
                 sb.append(falseExpressionString);
                 break;
 
-            case 1: // 演算をその型に正規化する
+            case TYPE: // 演算をその型に正規化する
                 sb.append(operation.getType().getTypeName());
                 break;
 
-            case 2: // 全ての演算を同一の字句に正規化する
+            case ALL: // 全ての演算を同一の字句に正規化する
                 sb.append("TOKEN");
                 break;
             }
@@ -434,15 +460,15 @@ public class Conversion {
             final TypeInfo variableType = usedVariable.getType();
 
             switch (Configuration.INSTANCE.getPV()) {
-            case 0: // 正規化レベル0，変数名をそのまま使う
+            case NO: // 正規化レベル0，変数名をそのまま使う
                 sb.append(usedVariable.getName());
                 break;
 
-            case 1: // 正規化レベル1，変数は型名に正規化する．変数名が異なっていても，型が同じであれば，クローンとして検出する
+            case TYPE: // 正規化レベル1，変数は型名に正規化する．変数名が異なっていても，型が同じであれば，クローンとして検出する
                 sb.append(variableType.getTypeName());
                 break;
 
-            case 2: // 正規化レベル2，全ての変数を同一字句に正規化する．
+            case ALL: // 正規化レベル2，全ての変数を同一字句に正規化する．
                 sb.append("TOKEN");
                 break;
 
@@ -452,29 +478,5 @@ public class Conversion {
         }
 
         return sb.toString();
-    }
-
-    public static String getNormalizedString(final VariableInfo<?> variable) {
-
-        final StringBuilder text = new StringBuilder();
-
-        switch (Configuration.INSTANCE.getPV()) {
-        case 0: // 正規化レベル0，変数名をそのまま使う
-            text.append(variable.getName());
-            break;
-
-        case 1: // 正規化レベル1，変数は型名に正規化する．変数名が異なっていても，型が同じであれば，クローンとして検出する
-            text.append(variable.getType().getTypeName());
-            break;
-
-        case 2: // 正規化レベル2，全ての変数を同一字句に正規化する．
-            text.append("TOKEN");
-            break;
-
-        default:
-            assert false : "Here shouldn't be reached!";
-        }
-
-        return text.toString();
     }
 }

@@ -2,27 +2,40 @@ package jp.ac.osaka_u.ist.sdl.scdetector;
 
 
 import java.util.HashSet;
-import java.util.Set;
+import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeCloneInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
+import jp.ac.osaka_u.ist.sdl.scdetector.settings.SLICE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGControlNode;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGEdge;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGNode;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDGParameterNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 
-public class ProgramSlice {
+/**
+ * フォワードスライス，バックワードスライスを行うクラス
+ * 
+ * @author higo
+ *
+ */
+class ProgramSlice {
 
+    /**
+     * バックワードスライスを行う
+     * 
+     * @param nodeA　たどる元となる頂点A
+     * @param nodeB　たどる元となる頂点B
+     * @param clonePair 現在構築中のクローンペア
+     * @param checkedNodesA 調査済み頂点群を保存するためのキャッシュA
+     * @param checkedNodesB 調査済み頂点群を保存するためのキャッシュB
+     */
     static void addDuplicatedElementsWithBackwordSlice(final PDGNode<?> nodeA,
-            final PDGNode<?> nodeB, final Set<ClonePairInfo> clonePairs,
-            final ClonePairInfo clonePair, final HashSet<PDGNode<?>> checkedNodesA,
-            final HashSet<PDGNode<?>> checkedNodesB) {
+            final PDGNode<?> nodeB, final ClonePairInfo clonePair,
+            final HashSet<PDGNode<?>> checkedNodesA, final HashSet<PDGNode<?>> checkedNodesB) {
 
-        final Set<PDGEdge> edgesA = nodeA.getBackwardEdges();
-        final Set<PDGEdge> edgesB = nodeB.getBackwardEdges();
-
-        boolean extend = false;
+        final SortedSet<PDGEdge> edgesA = nodeA.getBackwardEdges();
+        final SortedSet<PDGEdge> edgesB = nodeB.getBackwardEdges();
 
         for (final PDGEdge edgeA : edgesA) {
 
@@ -32,15 +45,15 @@ public class ProgramSlice {
                 continue;
             }
 
-            //ParameterNodeであればとばす，将来は変更の必要あり
-            if (fromNodeA instanceof PDGParameterNode) {
-                continue;
-            }
-
-            final ExecutableElementInfo coreA = (ExecutableElementInfo) fromNodeA.getCore();
+            final ExecutableElementInfo coreA = fromNodeA.getCore();
             final int hashA = Conversion.getNormalizedString(coreA).hashCode();
 
             for (final PDGEdge edgeB : edgesB) {
+
+                //　エッジの種類が違う場合は何もしない
+                if (edgeA.getClass() != edgeB.getClass()) {
+                    continue;
+                }
 
                 final PDGNode<?> fromNodeB = edgeB.getFromNode();
 
@@ -48,69 +61,62 @@ public class ProgramSlice {
                     continue;
                 }
 
-                //ParameterNodeであればとばす，将来は変更の必要あり
-                if (fromNodeB instanceof PDGParameterNode) {
-                    continue;
-                }
-
-                final ExecutableElementInfo coreB = (ExecutableElementInfo) fromNodeB.getCore();
+                final ExecutableElementInfo coreB = fromNodeB.getCore();
                 final int hashB = Conversion.getNormalizedString(coreB).hashCode();
 
+                DetectionThread.increaseNumberOfComparison();
+               
                 if (hashA == hashB) {
+
+                    //A,Bどちらからの要素がすでにクローンペアに含まれている場合は何もしない
+                    final CodeCloneInfo codeFragmentA = clonePair.getCodeFragmentA();
+                    final CodeCloneInfo codeFragmentB = clonePair.getCodeFragmentB();
+                    if (codeFragmentA.contain(coreA) || codeFragmentB.contain(coreB)) {
+                        continue;
+                    }
+
+                    //A,Bどちらがの要素が，相手側のクローンペアに含まれている場合は何もしない
+                    if (codeFragmentA.contain(coreB) || codeFragmentB.contain(coreA)) {
+                        continue;
+                    }
+
+                    //coreAとcoreBが同じExecutableElementであれば何もしない
+                    if (coreA == coreB) {
+                        continue;
+                    }
 
                     clonePair.add(coreA, coreB);
                     checkedNodesA.add(fromNodeA);
                     checkedNodesB.add(fromNodeB);
 
-                    // 分岐がない時
-                    if (!extend) {
-                        addDuplicatedElementsWithBackwordSlice(fromNodeA, fromNodeB, clonePairs,
-                                clonePair, checkedNodesA, checkedNodesB);
-                        extend = true;
+                    if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
+                        addDuplicatedElementsWithBackwordSlice(fromNodeA, fromNodeB, clonePair,
+                                checkedNodesA, checkedNodesB);
                     }
-
-                    // 分岐がある時
-                    else {
-                        addDuplicatedElementsWithBackwordSlice(fromNodeA, fromNodeB, clonePairs,
-                                clonePair.clone(), (HashSet<PDGNode<?>>) checkedNodesA.clone(),
-                                (HashSet<PDGNode<?>>) checkedNodesB.clone());
-                    }
-
-                    if ((fromNodeA instanceof PDGControlNode)
-                            && (fromNodeB instanceof PDGControlNode)) {
-
-                        // 分岐がない時
-                        if (!extend) {
-                            addDuplicatedElementsWithForwordSlice(fromNodeA, fromNodeB, clonePairs,
-                                    clonePair, checkedNodesA, checkedNodesB);
-                            extend = true;
-                        }
-
-                        // 分岐がある時
-                        else {
-                            addDuplicatedElementsWithForwordSlice(fromNodeA, fromNodeB, clonePairs,
-                                    clonePair.clone(), (HashSet<PDGNode<?>>) checkedNodesA.clone(),
-                                    (HashSet<PDGNode<?>>) checkedNodesB.clone());
-                        }
+                    if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.FORWARD)) {
+                        addDuplicatedElementsWithForwordSlice(fromNodeA, fromNodeB, clonePair,
+                                checkedNodesA, checkedNodesB);
                     }
                 }
             }
         }
-
-        if (!extend && (Configuration.INSTANCE.getS() <= clonePair.length())) {
-            clonePairs.add(clonePair);
-        }
     }
 
+    /**
+     * フォワードスライスを行う
+     * 
+     * @param nodeA　たどる元となる頂点A
+     * @param nodeB　たどる元となる頂点B
+     * @param clonePair 現在構築中のクローンペア
+     * @param checkedNodesA 調査済み頂点群を保存するためのキャッシュA
+     * @param checkedNodesB 調査済み頂点群を保存するためのキャッシュB
+     */
     static void addDuplicatedElementsWithForwordSlice(final PDGNode<?> nodeA,
-            final PDGNode<?> nodeB, final Set<ClonePairInfo> clonePairs,
-            final ClonePairInfo clonePair, final HashSet<PDGNode<?>> checkedNodesA,
-            final HashSet<PDGNode<?>> checkedNodesB) {
+            final PDGNode<?> nodeB, final ClonePairInfo clonePair,
+            final HashSet<PDGNode<?>> checkedNodesA, final HashSet<PDGNode<?>> checkedNodesB) {
 
-        final Set<PDGEdge> edgesA = nodeA.getForwardEdges();
-        final Set<PDGEdge> edgesB = nodeB.getForwardEdges();
-
-        boolean extend = false;
+        final SortedSet<PDGEdge> edgesA = nodeA.getForwardEdges();
+        final SortedSet<PDGEdge> edgesB = nodeB.getForwardEdges();
 
         for (final PDGEdge edgeA : edgesA) {
 
@@ -120,15 +126,15 @@ public class ProgramSlice {
                 continue;
             }
 
-            //ParameterNodeであればとばす，将来は変更の必要あり
-            if (toNodeA instanceof PDGParameterNode) {
-                continue;
-            }
-
-            final ExecutableElementInfo coreA = (ExecutableElementInfo) toNodeA.getCore();
+            final ExecutableElementInfo coreA = toNodeA.getCore();
             final int hashA = Conversion.getNormalizedString(coreA).hashCode();
 
             for (final PDGEdge edgeB : edgesB) {
+
+                //　エッジの種類が違う場合は何もしない
+                if (edgeA.getClass() != edgeB.getClass()) {
+                    continue;
+                }
 
                 final PDGNode<?> toNodeB = edgeB.getToNode();
 
@@ -136,59 +142,44 @@ public class ProgramSlice {
                     continue;
                 }
 
-                //ParameterNodeであればとばす，将来は変更の必要あり
-                if (toNodeB instanceof PDGParameterNode) {
-                    continue;
-                }
-
-                final ExecutableElementInfo coreB = (ExecutableElementInfo) toNodeB.getCore();
+                final ExecutableElementInfo coreB = toNodeB.getCore();
                 final int hashB = Conversion.getNormalizedString(coreB).hashCode();
 
+                DetectionThread.increaseNumberOfComparison();
+                
                 if (hashA == hashB) {
 
-                    extend = true;
+                    //A,Bどちらからの要素がすでにクローンペアに含まれている場合は何もしない
+                    final CodeCloneInfo codeFragmentA = clonePair.getCodeFragmentA();
+                    final CodeCloneInfo codeFragmentB = clonePair.getCodeFragmentB();
+                    if (codeFragmentA.contain(coreA) || codeFragmentB.contain(coreB)) {
+                        continue;
+                    }
+
+                    //A,Bどちらがの要素が，相手側のクローンペアに含まれている場合は何もしない
+                    if (codeFragmentA.contain(coreB) || codeFragmentB.contain(coreA)) {
+                        continue;
+                    }
+
+                    //coreAとcoreBが同じExecutableElementであれば何もしない
+                    if (coreA == coreB) {
+                        continue;
+                    }
 
                     clonePair.add(coreA, coreB);
                     checkedNodesA.add(toNodeA);
                     checkedNodesB.add(toNodeB);
 
-                    // 分岐がない時
-                    if (!extend) {
-                        addDuplicatedElementsWithBackwordSlice(toNodeA, toNodeB, clonePairs,
-                                clonePair, checkedNodesA, checkedNodesB);
-                        extend = true;
+                    if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
+                        addDuplicatedElementsWithBackwordSlice(toNodeA, toNodeB, clonePair,
+                                checkedNodesA, checkedNodesB);
                     }
-
-                    // 分岐がある時
-                    else {
-                        addDuplicatedElementsWithBackwordSlice(toNodeA, toNodeB, clonePairs,
-                                clonePair.clone(), (HashSet<PDGNode<?>>) checkedNodesA.clone(),
-                                (HashSet<PDGNode<?>>) checkedNodesB.clone());
-                    }
-
-                    if ((toNodeA instanceof PDGControlNode) && (toNodeB instanceof PDGControlNode)) {
-
-                        // 分岐がない時
-                        if (!extend) {
-                            addDuplicatedElementsWithForwordSlice(toNodeA, toNodeB, clonePairs,
-                                    clonePair, checkedNodesA, checkedNodesB);
-                            extend = true;
-                        }
-
-                        // 分岐がある時
-                        else {
-                            addDuplicatedElementsWithForwordSlice(toNodeA, toNodeB, clonePairs,
-                                    clonePair.clone(), (HashSet<PDGNode<?>>) checkedNodesA.clone(),
-                                    (HashSet<PDGNode<?>>) checkedNodesB.clone());
-                        }
-
+                    if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.FORWARD)) {
+                        addDuplicatedElementsWithForwordSlice(toNodeA, toNodeB, clonePair,
+                                checkedNodesA, checkedNodesB);
                     }
                 }
             }
-        }
-
-        if (!extend && (Configuration.INSTANCE.getS() <= clonePair.length())) {
-            clonePairs.add(clonePair);
         }
     }
 }

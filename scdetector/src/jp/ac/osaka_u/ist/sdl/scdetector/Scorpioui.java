@@ -3,13 +3,9 @@ package jp.ac.osaka_u.ist.sdl.scdetector;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.Set;
 
-import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.MainWindow;
+import jp.ac.osaka_u.ist.sdl.scdetector.io.XMLReader;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -19,7 +15,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
 
-public class SCVisualizer {
+public class Scorpioui {
 
     public static void main(String[] args) {
 
@@ -37,11 +33,8 @@ public class SCVisualizer {
             final CommandLineParser parser = new PosixParser();
             final CommandLine cmd = parser.parse(options, args);
 
-            final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(cmd
-                    .getOptionValue("i")));
-            final Set<CloneSetInfo> cloneSets = (Set<CloneSetInfo>) ois.readObject();
-
-            final MainWindow mainWindow = new MainWindow(cloneSets);
+            XMLReader.read(cmd.getOptionValue("i"), Scorpioui.ID);
+            final MainWindow mainWindow = new MainWindow();
             Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
             mainWindow.setSize(new Dimension(d.width - 5, d.height - 27));
             mainWindow.setVisible(true);
@@ -49,12 +42,8 @@ public class SCVisualizer {
         } catch (ParseException e) {
             e.printStackTrace();
             System.exit(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(0);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            System.exit(0);
         }
     }
+
+    public static final String ID = "SCVISUALIZER";
 }

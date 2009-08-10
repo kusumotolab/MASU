@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sdl.scdetector.gui.codefragment;
+package jp.ac.osaka_u.ist.sdl.scdetector.gui.codeclone;
 
 
 import java.util.Observable;
@@ -14,38 +14,53 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
 
-import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
-import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeFragmentInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.SelectedEntities;
+import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.CloneSetInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.CodeCloneInfo;
 
 
-public class CodeFragmentListView extends JTable implements Observer {
+/**
+ * コードクローン一覧を表示するためのパネル
+ * 
+ * @author higo
+ *
+ */
+public class CodeCloneListView extends JTable implements Observer {
 
+    /**
+     * コードクローンの選択を制御するためのクラス
+     * 
+     * @author higo
+     *
+     */
     class SelectionEventHandler implements ListSelectionListener {
 
         public void valueChanged(ListSelectionEvent e) {
 
             if (!e.getValueIsAdjusting()) {
 
-                final int[] selectedRow = CodeFragmentListView.this.getSelectedRows();
-                final SortedSet<CodeFragmentInfo> selectedCodeFragments = new TreeSet<CodeFragmentInfo>();
+                final int[] selectedRow = CodeCloneListView.this.getSelectedRows();
+                final SortedSet<CodeCloneInfo> selectedCodeFragments = new TreeSet<CodeCloneInfo>();
                 for (int i = 0; i < selectedRow.length; i++) {
 
-                    final int modelIndex = CodeFragmentListView.this
+                    final int modelIndex = CodeCloneListView.this
                             .convertRowIndexToModel(selectedRow[i]);
-                    final CodeFragmentListViewModel model = (CodeFragmentListViewModel) CodeFragmentListView.this
+                    final CodeCloneListViewModel model = (CodeCloneListViewModel) CodeCloneListView.this
                             .getModel();
-                    final CodeFragmentInfo codeFragment = model.getCodeFragment(modelIndex);
+                    final CodeCloneInfo codeFragment = model.getCodeClone(modelIndex);
                     selectedCodeFragments.add(codeFragment);
                 }
 
-                SelectedEntities.<CodeFragmentInfo> getInstance(CodeFragmentInfo.CODEFRAGMENT)
-                        .setAll(selectedCodeFragments, CodeFragmentListView.this);
+                SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE).setAll(
+                        selectedCodeFragments, CodeCloneListView.this);
             }
         }
     }
 
-    public CodeFragmentListView() {
+    /**
+     * コンストラクタ
+     */
+    public CodeCloneListView() {
 
         this.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -58,6 +73,9 @@ public class CodeFragmentListView extends JTable implements Observer {
         this.getSelectionModel().addListSelectionListener(this.selectionEventHandler);
     }
 
+    /**
+     * オブザーバパターン用メソッド
+     */
     public void update(Observable o, Object arg) {
 
         if (o instanceof SelectedEntities) {
@@ -68,9 +86,9 @@ public class CodeFragmentListView extends JTable implements Observer {
                 final CloneSetInfo cloneSet = SelectedEntities.<CloneSetInfo> getInstance(
                         CloneSetInfo.CLONESET).get().first();
 
-                final CodeFragmentListViewModel model = new CodeFragmentListViewModel(cloneSet);
+                final CodeCloneListViewModel model = new CodeCloneListViewModel(cloneSet);
                 this.setModel(model);
-                final RowSorter<CodeFragmentListViewModel> sorter = new TableRowSorter<CodeFragmentListViewModel>(
+                final RowSorter<CodeCloneListViewModel> sorter = new TableRowSorter<CodeCloneListViewModel>(
                         model);
                 this.setRowSorter(sorter);
             }

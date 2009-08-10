@@ -18,13 +18,17 @@ import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
-import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeFragmentInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
+import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.CodeCloneInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.ElementInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.FileInfo;
 
 
+/**
+ * ソースコードを表示するパネル
+ * 
+ * @author higo
+ *
+ */
 class SourceCodePanel extends JPanel {
 
     SourceCodePanel() {
@@ -47,6 +51,11 @@ class SourceCodePanel extends JPanel {
         this.add(this.sourceCodeScrollPane, BorderLayout.CENTER);
     }
 
+    /**
+     * コンストラクタ
+     * 
+     * @param file 表示するファイル
+     */
     SourceCodePanel(final FileInfo file) {
 
         this();
@@ -54,6 +63,11 @@ class SourceCodePanel extends JPanel {
         this.readFile(file);
     }
 
+    /**
+     * ファイルを読み込む
+     *  
+     * @param file　読み込むファイル
+     */
     void readFile(final FileInfo file) {
 
         this.fileNameField.setText(file.getName());
@@ -79,44 +93,27 @@ class SourceCodePanel extends JPanel {
 
     }
 
-    void addHighlight(final CodeFragmentInfo codeFragment) {
+    /**
+     * コードクローン部分を強調表示する
+     * 
+     * @param codeclone　強調表示するコードクローン
+     */
+    void addHighlight(final CodeCloneInfo codeclone) {
 
         final DefaultHighlightPainter highlightPainter = new DefaultHighlightPainter(new Color(180,
                 180, 180, 125));
-        for (final ExecutableElementInfo element : codeFragment.getElements()) {
+        for (final ElementInfo element : codeclone.getElements()) {
 
             try {
+                final int fromLine = element.getFromLine();
+                final int fromColumn = element.getFromColumn();
+                final int toLine = element.getToLine();
+                final int toColumn = element.getToColumn();
 
-                final int fromLine, fromColumn, toLine, toColumn;
-                if (element instanceof ConditionalBlockInfo) {
-                    fromLine = ((ConditionalBlockInfo) element).getConditionalClause()
-                            .getFromLine();
-                    fromColumn = ((ConditionalBlockInfo) element).getConditionalClause()
-                            .getFromColumn();
-                    toLine = ((ConditionalBlockInfo) element).getConditionalClause().getToLine();
-                    toColumn = ((ConditionalBlockInfo) element).getConditionalClause()
-                            .getToColumn();
-                } else {
-                    fromLine = element.getFromLine();
-                    fromColumn = element.getFromColumn();
-                    toLine = element.getToLine();
-                    toColumn = element.getToColumn();
-                }
-
-                final int fromOffset;
-                if (0 < fromLine) {
-                    fromOffset = this.sourceCodeArea.getLineStartOffset(fromLine - 1)
-                            + (fromColumn - 1);
-                } else {
-                    fromOffset = (fromColumn - 1);
-                }
-
-                final int toOffset;
-                if (0 < toLine) {
-                    toOffset = this.sourceCodeArea.getLineStartOffset(toLine - 1) + (toColumn - 1);
-                } else {
-                    toOffset = (toColumn - 1);
-                }
+                final int fromOffset = this.sourceCodeArea.getLineStartOffset(fromLine - 1)
+                        + (fromColumn - 1);
+                final int toOffset = this.sourceCodeArea.getLineStartOffset(toLine - 1)
+                        + (toColumn - 1);
 
                 this.sourceCodeArea.getHighlighter().addHighlight(fromOffset, toOffset,
                         highlightPainter);
@@ -127,12 +124,17 @@ class SourceCodePanel extends JPanel {
         }
     }
 
-    void display(final CodeFragmentInfo codeFragment) {
+    /**
+     * コードクローンを表示する（スクロールする）
+     * 
+     * @param codeclone　表示するコードクローン
+     */
+    void display(final CodeCloneInfo codeclone) {
 
         final Document doc = this.sourceCodeArea.getDocument();
         final Element root = doc.getDefaultRootElement();
 
-        final Position firstElement = codeFragment.getElements().first();
+        final ElementInfo firstElement = codeclone.getFirstElement();
 
         // 下の modelToViewの返り値をnullにしないために強制的に正の値を設定
         this.sourceCodeArea.setBounds(new Rectangle(10, 10));
