@@ -28,6 +28,8 @@ public final class Configuration {
         this.v = VERBOSE.FALSE;
         this.w = 1;
         this.x = Integer.MAX_VALUE;
+        this.y = Integer.MAX_VALUE;
+        this.z = Integer.MAX_VALUE;
         this.pv = VARIABLE_NORMALIZATION.TYPE;
         this.pi = CALL_NORMALIZATION.NO;
         this.pc = CAST_NORMALIZATION.NO;
@@ -140,6 +142,22 @@ public final class Configuration {
         this.x = x;
     }
 
+    public int getY() {
+        return this.y;
+    }
+
+    public void setY(final int y) {
+        this.y = y;
+    }
+
+    public int getZ() {
+        return this.z;
+    }
+
+    public void setZ(final int z) {
+        this.z = z;
+    }
+
     public VARIABLE_NORMALIZATION getPV() {
         return this.pv;
     }
@@ -248,6 +266,16 @@ public final class Configuration {
      * データ依存辺を引く頂点がソースコード上で離れていてもよい上限の値
      */
     private int x;
+
+    /**
+     * 制御依存を引く頂点がソースコード上で離れていてもよい上限の値
+     */
+    private int y;
+
+    /**
+     * 実行依存を引く頂点がソースコード上で離れていてもよい上限の値
+     */
+    private int z;
 
     /**
      * 変数利用の正規化レベルを指定するためのオプション

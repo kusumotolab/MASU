@@ -12,7 +12,8 @@ public class PDGBuildingThread implements Runnable {
 
     public PDGBuildingThread(final CallableUnitInfo method, final IPDGNodeFactory pdgNodeFactory,
             final ICFGNodeFactory cfgNodeFactory, final boolean data, final boolean control,
-            final boolean execution, final int distance) {
+            final boolean execution, final int dataDistance, final int controlDistance,
+            final int executionDistance) {
 
         if (null == method || null == pdgNodeFactory || null == cfgNodeFactory) {
             throw new IllegalArgumentException();
@@ -24,13 +25,16 @@ public class PDGBuildingThread implements Runnable {
         this.data = data;
         this.control = control;
         this.execution = execution;
-        this.distance = distance;
+        this.dataDistance = dataDistance;
+        this.controlDistance = controlDistance;
+        this.executionDistance = executionDistance;
     }
 
     @Override
     public void run() {
         final IntraProceduralPDG pdg = new IntraProceduralPDG(this.method, this.pdgNodeFactory,
-                this.cfgNodeFactory, this.data, this.control, this.execution, this.distance);
+                this.cfgNodeFactory, this.data, this.control, this.execution, this.dataDistance,
+                this.controlDistance, this.executionDistance);
         PDGController.getInstance(Scorpio.ID).put(this.method, pdg);
     }
 
@@ -46,5 +50,9 @@ public class PDGBuildingThread implements Runnable {
 
     private final boolean execution;
 
-    private final int distance;
+    private final int dataDistance;
+
+    private final int controlDistance;
+
+    private final int executionDistance;
 }

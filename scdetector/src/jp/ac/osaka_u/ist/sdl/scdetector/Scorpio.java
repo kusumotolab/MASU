@@ -179,6 +179,23 @@ public class Scorpio extends MetricsTool {
             }
 
             {
+                final Option y = new Option("y", "distance", true, "distance of control dependency");
+                y.setArgName("distance");
+                y.setArgs(1);
+                y.setRequired(false);
+                options.addOption(y);
+            }
+
+            {
+                final Option z = new Option("z", "distance", true,
+                        "distance of execution dependency");
+                z.setArgName("distance");
+                z.setArgs(1);
+                z.setRequired(false);
+                options.addOption(z);
+            }
+
+            {
                 final Option pv = new Option("pv", true, "parameterize variables");
                 pv.setArgName("variable parameterization level");
                 pv.setArgs(1);
@@ -321,6 +338,12 @@ public class Scorpio extends MetricsTool {
             }
             if (cmd.hasOption("x")) {
                 Configuration.INSTANCE.setX(Integer.valueOf(cmd.getOptionValue("x")));
+            }
+            if (cmd.hasOption("y")) {
+                Configuration.INSTANCE.setY(Integer.valueOf(cmd.getOptionValue("y")));
+            }
+            if (cmd.hasOption("z")) {
+                Configuration.INSTANCE.setZ(Integer.valueOf(cmd.getOptionValue("z")));
             }
             if (cmd.hasOption("pv")) {
                 final String text = cmd.getOptionValue("pv");
@@ -469,7 +492,9 @@ public class Scorpio extends MetricsTool {
         final boolean data = Configuration.INSTANCE.getQ().contains(DEPENDENCY_TYPE.DATA);
         final boolean control = Configuration.INSTANCE.getQ().contains(DEPENDENCY_TYPE.CONTROL);
         final boolean execution = Configuration.INSTANCE.getQ().contains(DEPENDENCY_TYPE.EXECUTION);
-        final int distance = Configuration.INSTANCE.getX();
+        final int dataDistance = Configuration.INSTANCE.getX();
+        final int controlDistance = Configuration.INSTANCE.getY();
+        final int executionDistance = Configuration.INSTANCE.getZ();
         switch (Configuration.INSTANCE.getP()) {
 
         case INTRA: // 各メソッドのPDGを構築        
@@ -478,7 +503,8 @@ public class Scorpio extends MetricsTool {
                     .getTargetMethodInfos()) {
 
                 final IntraProceduralPDG pdg = new IntraProceduralPDG(method, pdgNodeFactory,
-                        new DefaultCFGNodeFactory(), data, control, execution, distance);
+                        new DefaultCFGNodeFactory(), data, control, execution, dataDistance,
+                        controlDistance, executionDistance);
                 PDGController.getInstance(Scorpio.ID).put(method, pdg);
 
                 /*
@@ -496,7 +522,8 @@ public class Scorpio extends MetricsTool {
                     .getMethodInfoManager().getTargetConstructorInfos()) {
 
                 final IntraProceduralPDG pdg = new IntraProceduralPDG(constructor, pdgNodeFactory,
-                        new DefaultCFGNodeFactory(), data, control, execution, distance);
+                        new DefaultCFGNodeFactory(), data, control, execution, dataDistance,
+                        controlDistance, executionDistance);
                 PDGController.getInstance(Scorpio.ID).put(constructor, pdg);
 
                 /*
