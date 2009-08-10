@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<project default="build">
+
+	<tstamp />
+
+	<property file="build.properties" />
+
+	<property name="cli.jar" value="lib/commons-cli-1.1.jar" />
+	<property name="antlr.jar" value="lib/antlr.jar" />
+	<property name="icca.dir" location="../icca" />
+	<property name="masu.dir" location="../main" />
+	<property name="cfg.dir" location="../cfg" />
+	<property name="pdg.dir" location="../pdg" />
+	
+	<property name="icca.cls.dir" location="${icca.dir}/${CLS.DIR}" />
+	<property name="masu.cls.dir" location="${masu.dir}/${CLS.DIR}" />
+	<property name="cfg.cls.dir" location="${cfg.dir}/${CLS.DIR}" />
+	<property name="pdg.cls.dir" location="${pdg.dir}/${CLS.DIR}" />
+
+	<property name="scorpio.manifest" value="resource/scorpio/manifest.mf" />
+	<property name="scorpioui.manifest" value="resource/scorpioui/manifest.mf" />
+	<property name="license.txt" value="resource/LICENSE-2.0.txt" />
+	<property name="readmej.txt" value="resource/readme_japanese.txt" />
+	<property name="zip.bin.name" value="${TOOL.NAME}bin${DSTAMP}${TSTAMP}.zip" />
+	<property name="zip.src.name" value="${TOOL.NAME}src${DSTAMP}${TSTAMP}.zip" />
+
+	<target name="compile">
+		<mkdir dir="${CLS.DIR}" />
+		<javac classpath="${cli.jar};${icca.cls.dir};${masu.cls.dir};${cfg.cls.dir};${pdg.cls.dir}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
+	</target>
+
+	<target name="build" depends="compile">
+		<mkdir dir="${PACKAGE.DIR}" />
+		<mkdir dir="${PACKAGE.BIN.DIR}" />
+		<jar basedir="${CLS.DIR}" jarfile="${PACKAGE.BIN.DIR}/scorpio.jar" manifest="${scorpio.manifest}" />
+		<jar basedir="${CLS.DIR}" jarfile="${PACKAGE.BIN.DIR}/scorpioui.jar" manifest="${scorpioui.manifest}" />	
+		<copy file="${cli.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${antlr.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${license.txt}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${readmej.txt}" todir="${PACKAGE.BIN.DIR}" />
+	</target>
+
+	<target name="binpackage" depends="build">
+		<zip destfile="${zip.bin.name}" basedir="${PACKAGE.BIN.DIR}" />
+	</target>
+
+	<target name="srcpackage" depends="build">
+		<mkdir dir="${PACKAGE.DOC.DIR}" />
+		<javadoc packagenames="jp.ac.osaka_u.ist.sdl.scdetector.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" encoding="Windows-31J">
+			<classpath path="${cli.jar};${masu.dir};${cfg.cls.dir};${pdg.cls.dir}" />
+		</javadoc>
+		<copy todir="${PACKAGE.SRC.DIR}">
+			<fileset dir="${SRC.DIR}" />
+		</copy>
+
+		<zip destfile="${zip.src.name}" basedir="${PACKAGE.DIR}" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${CLS.DIR}" />
+		<delete dir="${PACKAGE.DIR}" />
+		<delete verbose="true">
+			<fileset dir="." includes="${TOOL.NAME}*.zip" />
+		</delete>
+	</target>
+
+	<target name="all" depends="clean, binpackage" />
+</project>
