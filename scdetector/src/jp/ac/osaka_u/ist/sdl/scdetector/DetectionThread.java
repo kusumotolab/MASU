@@ -9,11 +9,9 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
-import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.SLICE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.DoBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
@@ -59,8 +57,8 @@ public class DetectionThread implements Runnable {
                 checkedNodesB.add(nodeB);
 
                 increaseNumberOfPairs();
-               
-                 if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
+
+                if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
                     ProgramSlice.addDuplicatedElementsWithBackwordSlice(nodeA, nodeB, clonePair,
                             checkedNodesA, checkedNodesB);
                 }

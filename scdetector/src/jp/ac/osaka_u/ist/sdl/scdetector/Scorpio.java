@@ -3,11 +3,13 @@ package jp.ac.osaka_u.ist.sdl.scdetector;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
@@ -645,31 +647,33 @@ public class Scorpio extends MetricsTool {
                 e.printStackTrace();
             }
         }
+        threads.clear();
 
         out.println("filtering out uninterested clone pairs ...");
 
         final long time = System.nanoTime() - start;
         //System.out.println(time / (float) 1000000000);
 
-        final SortedSet<ClonePairInfo> refinedClonePairs = new TreeSet<ClonePairInfo>();
+        final Set<ClonePairInfo> refinedClonePairs = Collections
+                .synchronizedSet(new TreeSet<ClonePairInfo>());
         for (final SortedSet<ClonePairInfo> pairs : clonePairs.values()) {
-            CLONEPAIR: for (final ClonePairInfo clonePair : pairs) {
 
-                //他のクローンペアに内包されるクローンペアを除去する
-                COUNTERCLONEPAIR: for (final ClonePairInfo counterClonePair : pairs) {
+            final Thread thread = new Thread(new CloneFilteringThread(pairs, refinedClonePairs));
+            threads.add(thread);
+            thread.start();
 
-                    if (clonePair == counterClonePair) {
-                        continue COUNTERCLONEPAIR;
-                    }
-
-                    if (clonePair.subsumedBy(counterClonePair)) {
-                        continue CLONEPAIR;
-                    }
-                }
-
-                refinedClonePairs.add(clonePair);
+            while (Configuration.INSTANCE.getW() < Thread.activeCount())
+                ;
+        }
+        //全てのスレッドが終わるのを待つ
+        for (final Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
+        threads.clear();
 
         out.println("converting clone pairs to clone sets ...");
         final SortedSet<CloneSetInfo> cloneSets = new TreeSet<CloneSetInfo>();
