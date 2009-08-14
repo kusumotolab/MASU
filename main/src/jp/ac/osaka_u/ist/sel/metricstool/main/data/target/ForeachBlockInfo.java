@@ -56,6 +56,11 @@ public final class ForeachBlockInfo extends ConditionalBlockInfo {
         return text.toString();
     }
 
+    @Override
+    public boolean isLoopStatement() {
+        return true;
+    }
+
     /**
      * ‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet‚ğ•Ô‚·
      * 
