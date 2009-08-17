@@ -33,6 +33,7 @@ import jp.ac.osaka_u.ist.sdl.scdetector.settings.OPERATION_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.PDG_TYPE;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.REFERENCE_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.SLICE_TYPE;
+import jp.ac.osaka_u.ist.sdl.scdetector.settings.SMALL_METHOD;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.VARIABLE_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.VERBOSE;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
@@ -40,6 +41,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
@@ -106,6 +108,14 @@ public class Scorpio extends MetricsTool {
                 l.setArgs(1);
                 l.setRequired(true);
                 options.addOption(l);
+            }
+
+            {
+                final Option m = new Option("m", "method", true, "small method");
+                m.setArgName("method");
+                m.setArgs(1);
+                m.setRequired(false);
+                options.addOption(m);
             }
 
             {
@@ -256,6 +266,18 @@ public class Scorpio extends MetricsTool {
             }
             Configuration.INSTANCE.setD(cmd.getOptionValue("d"));
             Configuration.INSTANCE.setL(cmd.getOptionValue("l"));
+            if (cmd.hasOption("m")) {
+                final String smallmethod = cmd.getOptionValue("m");
+                if (smallmethod.equalsIgnoreCase("hashed")) {
+                    Configuration.INSTANCE.setM(SMALL_METHOD.HASHED);
+                } else if (smallmethod.equalsIgnoreCase("unhashed")) {
+                    Configuration.INSTANCE.setM(SMALL_METHOD.UNHASHED);
+                } else {
+                    err.println("Unknown option : " + smallmethod);
+                    err.println("\"-m\" option must have \"hashed\" or \"unhashed\"");
+                    System.exit(0);
+                }
+            }
             Configuration.INSTANCE.setO(cmd.getOptionValue("o"));
             if (cmd.hasOption("p")) {
                 final String pdg = cmd.getOptionValue("p");
@@ -331,7 +353,7 @@ public class Scorpio extends MetricsTool {
                     Configuration.INSTANCE.setV(VERBOSE.FALSE);
                 } else {
                     err.println("Unknown option : " + verbose);
-                    err.println("\"-u\" option must have \"yes\" or \"no\"");
+                    err.println("\"-v\" option must have \"yes\" or \"no\"");
                     System.exit(0);
                 }
             }
@@ -488,6 +510,12 @@ public class Scorpio extends MetricsTool {
         scorpio.readTargetFiles();
         scorpio.analyzeTargetFiles();
 
+        int totalline = 0;
+        for (final FileInfo file : DataManager.getInstance().getFileInfoManager().getFileInfos()) {
+            totalline += file.getLOC();
+        }
+        System.out.println("total line: " + totalline);
+
         // PDGのノード集合を定義
         out.println("buildeing PDGs ...");
         final IPDGNodeFactory pdgNodeFactory = new DefaultPDGNodeFactory();
@@ -578,14 +606,17 @@ public class Scorpio extends MetricsTool {
         out.println("constructing PDG nodes hashtable ...");
         final SortedMap<Integer, List<PDGNode<?>>> pdgNodeMap = new TreeMap<Integer, List<PDGNode<?>>>();
 
-        for (final PDGNode<?> pdgNode : pdgNodeFactory.getAllNodes()) {
+        ALLNODE: for (final PDGNode<?> pdgNode : pdgNodeFactory.getAllNodes()) {
 
             // 小さいメソッドは登録しない
-            {
+            switch (Configuration.INSTANCE.getM()) {
+            case UNHASHED:
                 final PDG pdg = PDGController.getInstance(Scorpio.ID).getPDG(pdgNode);
                 if (pdg.getNumberOfNodes() < Configuration.INSTANCE.getS()) {
-                    continue;
+                    continue ALLNODE;
                 }
+                break;
+            default:
             }
 
             final ExecutableElementInfo element = pdgNode.getCore();

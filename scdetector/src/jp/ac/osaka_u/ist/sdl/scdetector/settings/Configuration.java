@@ -14,6 +14,8 @@ public final class Configuration {
         this.c = Integer.MAX_VALUE;
         this.d = null;
         this.l = null;
+        this.m = SMALL_METHOD.UNHASHED;
+
         this.o = null;
         this.p = PDG_TYPE.INTRA;
         this.q = new HashSet<DEPENDENCY_TYPE>();
@@ -60,6 +62,14 @@ public final class Configuration {
 
     public void setL(final String l) {
         this.l = l;
+    }
+
+    public SMALL_METHOD getM() {
+        return this.m;
+    }
+
+    public void setM(final SMALL_METHOD m) {
+        this.m = m;
     }
 
     public String getO() {
@@ -220,6 +230,12 @@ public final class Configuration {
      * 解析対象プログラミング言語を指定するためのオプション
      */
     private String l;
+
+    /**
+     * 閾値よりも小さいメソッドをハッシュ化するかどうかを指定するためのオプション
+
+     */
+    private SMALL_METHOD m;
 
     /**
      * 解析結果を出力するファイルを指定するためのオプション
