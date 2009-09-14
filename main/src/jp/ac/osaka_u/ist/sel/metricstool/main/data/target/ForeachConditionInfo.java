@@ -12,11 +12,13 @@ import java.util.Set;
  * @author higo
  *
  */
+@SuppressWarnings("serial")
 public final class ForeachConditionInfo extends ExpressionInfo {
 
     public ForeachConditionInfo(final CallableUnitInfo ownerMethod, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn,
-            final LocalVariableInfo iteratorVariable, final ExpressionInfo iteratorExpression) {
+            final VariableDeclarationStatementInfo iteratorVariable,
+            final ExpressionInfo iteratorExpression) {
 
         super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
@@ -26,7 +28,7 @@ public final class ForeachConditionInfo extends ExpressionInfo {
         this.iteratorExpression.setOwnerExecutableElement(this);
     }
 
-    public LocalVariableInfo getIteratorVariable() {
+    public VariableDeclarationStatementInfo getIteratorVariable() {
         return this.iteratorVariable;
     }
 
@@ -51,7 +53,7 @@ public final class ForeachConditionInfo extends ExpressionInfo {
 
         text.append(this.getIteratorVariable().getType().getTypeName());
         text.append(" ");
-        text.append(this.getIteratorVariable().getName());
+        text.append(this.getIteratorVariable().getDeclaredLocalVariable().getName());
         text.append(" : ");
         text.append(this.getIteratorExpression().getText());
 
@@ -67,13 +69,11 @@ public final class ForeachConditionInfo extends ExpressionInfo {
     public Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> getVariableUsages() {
         final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages = new HashSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
         variableUsages.addAll(this.getIteratorExpression().getVariableUsages());
-        variableUsages.add(LocalVariableUsageInfo.getInstance(this.getIteratorVariable(), false,
-                true, this.getOwnerMethod(), this.getFromLine(), this.getFromColumn(), this
-                        .getToLine(), this.getToColumn()));
+        variableUsages.addAll(iteratorVariable.getVariableUsages());
         return Collections.unmodifiableSet(variableUsages);
     }
 
-    private final LocalVariableInfo iteratorVariable;
+    private final VariableDeclarationStatementInfo iteratorVariable;
 
     private final ExpressionInfo iteratorExpression;
 }

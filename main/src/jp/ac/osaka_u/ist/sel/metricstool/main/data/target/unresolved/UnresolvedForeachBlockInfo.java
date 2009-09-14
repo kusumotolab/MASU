@@ -76,7 +76,8 @@ public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<F
     * 
     * @param iteraotorVariableDeclaration •Ï”’è‹`
     */
-    public void setIteratorVariable(final UnresolvedLocalVariableInfo iteratorVariable) {
+    public void setIteratorVariable(
+            final UnresolvedVariableDeclarationStatementInfo iteratorVariable) {
 
         if (null == iteratorVariable) {
             throw new IllegalArgumentException();
@@ -137,7 +138,7 @@ public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<F
      * 
      * @return •Ï”’è‹`
      */
-    public UnresolvedLocalVariableInfo getIteratorVariable() {
+    public UnresolvedVariableDeclarationStatementInfo getIteratorVariable() {
         return this.iteratorVariable;
     }
 
@@ -150,7 +151,7 @@ public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<F
         return this.iteratorExpression;
     }
 
-    private UnresolvedLocalVariableInfo iteratorVariable;
+    private UnresolvedVariableDeclarationStatementInfo iteratorVariable;
 
     private UnresolvedExpressionInfo<?> iteratorExpression;
 

@@ -9,6 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -49,20 +50,23 @@ public class UnresolvedForeachConditionInfo extends UnresolvedExpressionInfo<For
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         // ŒJ‚è•Ô‚µ—p‚Ì•Ï”‚ðŽæ“¾
-        final UnresolvedLocalVariableInfo unresolvedIteratorVariable = this.getIteratorVariable();
-        final LocalVariableInfo iteratorVariable = unresolvedIteratorVariable.resolve(usingClass,
-                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        final UnresolvedVariableDeclarationStatementInfo unresolvedIteratorVariable = this
+                .getIteratorVariable();
+        final VariableDeclarationStatementInfo iteratorVariable = unresolvedIteratorVariable
+                .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                        methodInfoManager);
 
         this.resolvedInfo = new ForeachConditionInfo(usingMethod, fromLine, fromColumn, toLine,
                 toColumn, iteratorVariable, iteratorExpression);
         return this.resolvedInfo;
     }
 
-    public UnresolvedLocalVariableInfo getIteratorVariable() {
+    public UnresolvedVariableDeclarationStatementInfo getIteratorVariable() {
         return this.iteratorVariable;
     }
 
-    public void setIteratorVariable(final UnresolvedLocalVariableInfo iteratorVariable) {
+    public void setIteratorVariable(
+            final UnresolvedVariableDeclarationStatementInfo iteratorVariable) {
         this.iteratorVariable = iteratorVariable;
     }
 
@@ -74,7 +78,7 @@ public class UnresolvedForeachConditionInfo extends UnresolvedExpressionInfo<For
         this.iteratorExpression = iteratorExpression;
     }
 
-    private UnresolvedLocalVariableInfo iteratorVariable;
+    private UnresolvedVariableDeclarationStatementInfo iteratorVariable;
 
     private UnresolvedExpressionInfo iteratorExpression;
 }
