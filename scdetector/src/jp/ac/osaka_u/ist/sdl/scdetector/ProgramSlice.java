@@ -64,7 +64,7 @@ class ProgramSlice {
                 final ExecutableElementInfo coreB = fromNodeB.getCore();
                 final int hashB = Conversion.getNormalizedString(coreB).hashCode();
 
-                DetectionThread.increaseNumberOfComparison();
+                //DetectionThread.increaseNumberOfComparison();
                
                 if (hashA == hashB) {
 
@@ -145,7 +145,7 @@ class ProgramSlice {
                 final ExecutableElementInfo coreB = toNodeB.getCore();
                 final int hashB = Conversion.getNormalizedString(coreB).hashCode();
 
-                DetectionThread.increaseNumberOfComparison();
+                //DetectionThread.increaseNumberOfComparison();
                 
                 if (hashA == hashB) {
 

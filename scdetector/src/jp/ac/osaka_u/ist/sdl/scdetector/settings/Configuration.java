@@ -26,7 +26,7 @@ public final class Configuration {
         this.t = new HashSet<SLICE_TYPE>();
         this.t.add(SLICE_TYPE.BACKWARD);
         this.t.add(SLICE_TYPE.FORWARD);
-        this.u = CONTROL_FILTER.USE;
+        this.u = CONTROL_FILTER.NO_USE;
         this.v = VERBOSE.FALSE;
         this.w = 1;
         this.x = Integer.MAX_VALUE;

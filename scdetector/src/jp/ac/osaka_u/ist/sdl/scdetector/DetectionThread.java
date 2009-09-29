@@ -32,16 +32,63 @@ public class DetectionThread implements Runnable {
 
     private final List<PDGNode<?>> nodeList;
 
+    private final int index;
+
     private final ConcurrentMap<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs;
 
+    /*
     DetectionThread(final List<PDGNode<?>> nodeList,
             final ConcurrentMap<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs2) {
         this.nodeList = nodeList;
         this.clonePairs = clonePairs2;
+    }*/
+
+    DetectionThread(final List<PDGNode<?>> nodeList, final int index,
+            ConcurrentMap<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs) {
+        this.nodeList = nodeList;
+        this.index = index;
+        this.clonePairs = clonePairs;
     }
 
     @Override
     public void run() {
+
+        for (int j = this.index + 1; j < this.nodeList.size(); j++) {
+
+            final PDGNode<?> nodeA = this.nodeList.get(this.index);
+            final PDGNode<?> nodeB = this.nodeList.get(j);
+            final ExecutableElementInfo elementA = nodeA.getCore();
+            final ExecutableElementInfo elementB = nodeB.getCore();
+            final ClonePairInfo clonePair = new ClonePairInfo(elementA, elementB);
+
+            final HashSet<PDGNode<?>> checkedNodesA = new HashSet<PDGNode<?>>();
+            final HashSet<PDGNode<?>> checkedNodesB = new HashSet<PDGNode<?>>();
+            checkedNodesA.add(nodeA);
+            checkedNodesB.add(nodeB);
+
+            //increaseNumberOfPairs();
+
+            if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
+                ProgramSlice.addDuplicatedElementsWithBackwordSlice(nodeA, nodeB, clonePair,
+                        checkedNodesA, checkedNodesB);
+            }
+            if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.FORWARD)) {
+                ProgramSlice.addDuplicatedElementsWithForwordSlice(nodeA, nodeB, clonePair,
+                        checkedNodesA, checkedNodesB);
+            }
+
+            if (Configuration.INSTANCE.getS() <= clonePair.length()) {
+                SortedSet<ClonePairInfo> pairs = this.clonePairs.get(new TwoClassHash(clonePair));
+                if (null == pairs) {
+                    pairs = Collections
+                            .<ClonePairInfo> synchronizedSortedSet(new TreeSet<ClonePairInfo>());
+                    this.clonePairs.put(new TwoClassHash(clonePair), pairs);
+                }
+                pairs.add(clonePair);
+            }
+        }
+
+        /*
         for (int i = 0; i < this.nodeList.size(); i++) {
             J: for (int j = i + 1; j < this.nodeList.size(); j++) {
 
@@ -56,7 +103,7 @@ public class DetectionThread implements Runnable {
                 checkedNodesA.add(nodeA);
                 checkedNodesB.add(nodeB);
 
-                increaseNumberOfPairs();
+                //increaseNumberOfPairs();
 
                 if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
                     ProgramSlice.addDuplicatedElementsWithBackwordSlice(nodeA, nodeB, clonePair,
@@ -78,7 +125,8 @@ public class DetectionThread implements Runnable {
                     pairs.add(clonePair);
                 }
             }
-        }
+        }*/
+
     }
 
     static private SortedSet<ExecutableElementInfo> getAllElements(final LocalSpaceInfo localSpace) {

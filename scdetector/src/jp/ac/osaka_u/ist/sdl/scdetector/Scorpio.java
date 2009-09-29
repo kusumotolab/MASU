@@ -505,6 +505,8 @@ public class Scorpio extends MetricsTool {
             System.out.println(e.getMessage());
         }
 
+        final long start = System.nanoTime();
+
         // 対象ディレクトリ以下のJavaファイルを登録し，解析
         final Scorpio scorpio = new Scorpio();
         scorpio.readTargetFiles();
@@ -629,8 +631,6 @@ public class Scorpio extends MetricsTool {
             pdgNodeList.add(pdgNode);
         }
 
-        final long start = System.nanoTime();
-
         // ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
         out.println("detecting code clones from PDGs ... (the number of PDG nodes is "
                 + pdgNodeFactory.getAllNodes().size() + ")");
@@ -662,12 +662,14 @@ public class Scorpio extends MetricsTool {
                 continue;
             }
 
-            final Thread thread = new Thread(new DetectionThread(pdgNodeList, clonePairs));
-            threads.add(thread);
-            thread.start();
+            for (int index = 0; index < pdgNodeList.size(); index++) {
 
-            while (Configuration.INSTANCE.getW() < Thread.activeCount())
-                ;
+                final Thread thread = new Thread(new DetectionThread(pdgNodeList, index, clonePairs));
+                threads.add(thread);
+                thread.start();
+                while (Configuration.INSTANCE.getW() < Thread.activeCount())
+                    ;
+            }
         }
 
         //全てのスレッドが終わるのを待つ
@@ -681,9 +683,6 @@ public class Scorpio extends MetricsTool {
         threads.clear();
 
         out.println("filtering out uninterested clone pairs ...");
-
-        final long time = System.nanoTime() - start;
-        //System.out.println(time / (float) 1000000000);
 
         final Set<ClonePairInfo> refinedClonePairs = Collections
                 .synchronizedSet(new TreeSet<ClonePairInfo>());
@@ -779,5 +778,8 @@ public class Scorpio extends MetricsTool {
         writer.close();
         out.println(DetectionThread.numberOfPairs + " : " + DetectionThread.numberOfComparion);
         out.println("successifully finished.");
+
+        final long time = System.nanoTime() - start;
+        System.out.println(time / (float) 1000000000);
     }
 }
