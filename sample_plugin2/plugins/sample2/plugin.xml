@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<plugin class = "jp.ac.osaka_u.ist.sel.metricstool.sample2.SamplePlugin2">
-  <classpath>
-     <file path = "sample_plugin2.jar"/>
-  </classpath>
-</plugin>
-
