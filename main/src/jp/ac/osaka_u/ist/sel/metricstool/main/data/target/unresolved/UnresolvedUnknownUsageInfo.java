@@ -16,11 +16,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticOrInstanceProcessing;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
@@ -1027,6 +1029,57 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             }
 
                             this.resolvedInfo = entityUsage;
+                            return this.resolvedInfo;
+                        }
+                    }
+                }
+            }
+
+            //利用可能な名前空間から検索
+            // 利用可能な名前空間から検索
+            {
+                for (final UnresolvedMemberImportStatementInfo availableNamespace : UnresolvedMemberImportStatementInfo
+                        .getMemberImportStatements(this.getAvailableNamespaces())) {
+
+                    final String[] importedFullQualifiedName = availableNamespace
+                            .getFullQualifiedName();
+                    if (importedFullQualifiedName[importedFullQualifiedName.length - 1]
+                            .equals(name[0])) {
+                        final String[] ownerClassFullQualifiedName = Arrays.<String> copyOf(
+                                importedFullQualifiedName, importedFullQualifiedName.length - 1);
+                        final ClassInfo ownerClass = classInfoManager
+                                .getClassInfo(ownerClassFullQualifiedName);
+
+                        if (ownerClass instanceof TargetClassInfo) {
+
+                            for (final TargetFieldInfo field : ((TargetClassInfo) ownerClass)
+                                    .getDefinedFields()) {
+                                if (field.getName().equals(name[0])) {
+                                    final FieldUsageInfo fieldUsage = FieldUsageInfo.getInstance(
+                                            null, new ClassTypeInfo(ownerClass), field, true,
+                                            false, usingMethod, fromLine, fromColumn, toLine,
+                                            toColumn);
+                                    return fieldUsage;
+                                }
+                            }
+
+                            for (final TargetMethodInfo method : ((TargetClassInfo) ownerClass)
+                                    .getDefinedMethods()) {
+                                if (method.getMethodName().equals(name[0])) {
+                                    final MethodCallInfo methodCall = new MethodCallInfo(
+                                            new ClassTypeInfo(ownerClass), null, method,
+                                            usingMethod, fromLine, fromColumn, toLine, toColumn);
+                                    return methodCall;
+                                }
+                            }
+
+                            assert false : "Here shouldn't be reached!";
+                        }
+
+                        // 外部クラスだったらどうしようもない
+                        else {
+                            this.resolvedInfo = new UnknownEntityUsageInfo(usingMethod, fromLine,
+                                    fromColumn, toLine, toColumn);
                             return this.resolvedInfo;
                         }
                     }
