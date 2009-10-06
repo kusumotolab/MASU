@@ -8,7 +8,7 @@
 	<property name="cli.jar" value="lib/commons-cli-1.1.jar" />
 	<property name="antlr.jar" value="lib/antlr.jar" />
 	<property name="icca.dir" location="../icca" />
-	<property name="masu.dir" location="../main" />
+	<property name="masu.dir" location="../masu" />
 	<property name="cfg.dir" location="../cfg" />
 	<property name="pdg.dir" location="../pdg" />
 	
