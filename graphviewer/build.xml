@@ -5,14 +5,14 @@
 
 	<property file="build.properties" />
 
-	<property name="masu.dir" location="../main" />
+	<property name="masu.dir" location="../masu" />
 	<property name="cfg.dir" location="../cfg" />
 	<property name="pdg.dir" location="../pdg" />
 	<property name="masu.cls.dir" location="${masu.dir}/${CLS.DIR}" />
 	<property name="cfg.cls.dir" location="${cfg.dir}/${CLS.DIR}" />
 	<property name="pdg.cls.dir" location="${pdg.dir}/${CLS.DIR}" />
 	<property name="manifest.mf" value="resource/manifest.mf" />
-	<property name="cli.jar" value="lib/commons-cli-1.1.jar" />
+	<property name="cli.jar" value="commons-cli-1.1/commons-cli-1.1.jar" />
 	<property name="zip.bin.name" value="${TOOL.NAME}bin${DSTAMP}${TSTAMP}.zip" />
 	<property name="zip.src.name" value="${TOOL.NAME}src${DSTAMP}${TSTAMP}.zip" />
 	
