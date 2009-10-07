@@ -13,8 +13,6 @@ import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
@@ -679,7 +677,7 @@ public class Scorpio extends MetricsTool {
 		out
 				.println("detecting code clones from PDGs ... (the number of PDG nodes is "
 						+ pdgNodeFactory.getAllNodes().size() + ")");
-		final ConcurrentMap<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs = new ConcurrentHashMap<TwoClassHash, SortedSet<ClonePairInfo>>();
+		final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs = new HashMap<TwoClassHash, SortedSet<ClonePairInfo>>();
 		final List<Thread> threads = new LinkedList<Thread>();
 		final NodePairListInfo nodePairList = new NodePairListInfo(pdgNodeMap
 				.values());
@@ -810,9 +808,8 @@ public class Scorpio extends MetricsTool {
 		 */
 		out.println("successifully finished.");
 
-		/*
-		 * final long time = System.nanoTime() - start; System.out.println(time
-		 * / (float) 1000000000);
-		 */
+		final long time = System.nanoTime() - start;
+		System.out.println(time / (float) 1000000000);
+
 	}
 }
