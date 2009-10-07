@@ -3,9 +3,10 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="commons-cli-1.1/commons-cli-1.1.jar"/>
-	<classpathentry kind="lib" path="/main/bin" sourcepath="/main/src"/>
-	<classpathentry kind="lib" path="/pdg/bin" sourcepath="/pdg/src"/>
-	<classpathentry kind="lib" path="/main/lib/antlr.jar"/>
-	<classpathentry kind="lib" path="/cfg/bin" sourcepath="/cfg/src"/>
+	<classpathentry exported="true" kind="lib" path="/pdg/bin" sourcepath="/pdg/src"/>
+	<classpathentry exported="true" kind="lib" path="/cfg/bin" sourcepath="/cfg/src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/cfg"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/masu"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pdg"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
