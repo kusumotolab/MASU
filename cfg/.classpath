@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/main"/>
-	<classpathentry kind="lib" path="/main/bin" sourcepath="/main/src"/>
+	<classpathentry exported="true" kind="lib" path="/masu/bin"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/masu"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
