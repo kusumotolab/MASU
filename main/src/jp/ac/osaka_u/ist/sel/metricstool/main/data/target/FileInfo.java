@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -33,6 +34,7 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
 
         this.name = name;
         this.definedClasses = new TreeSet<ClassInfo>();
+        this.comments = new TreeSet<CommentInfo>();
     }
 
     /**
@@ -81,8 +83,8 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
         if (null == o) {
             throw new IllegalArgumentException();
         }
-        
-        if(!(o instanceof FileInfo)){
+
+        if (!(o instanceof FileInfo)) {
             return false;
         }
 
@@ -145,6 +147,29 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
     }
 
     /**
+     * コメントを追加する
+     * 
+     * @param comment
+     */
+    public void addComment(final CommentInfo comment) {
+
+        if (null == comment) {
+            throw new IllegalArgumentException();
+        }
+
+        this.comments.add(comment);
+    }
+
+    /**
+     * コメント一覧を返す
+     * 
+     * @return
+     */
+    public Set<CommentInfo> getComments() {
+        return Collections.unmodifiableSet(this.comments);
+    }
+
+    /**
      * ファイルの行数を表す変数．
      */
     private int loc;
@@ -158,6 +183,11 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
      * このファイルで宣言されているクラス一覧を保存するための変数
      */
     private final SortedSet<ClassInfo> definedClasses;
+
+    /**
+     * このファイル内のコメント一覧を保存するための変数
+     */
+    private final SortedSet<CommentInfo> comments;
 
     // TODO importしているクラスの情報を追加
     // TODO includeしているファイルの情報を追加
