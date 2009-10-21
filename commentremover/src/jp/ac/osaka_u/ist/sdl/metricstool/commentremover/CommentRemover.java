@@ -1,11 +1,11 @@
 package jp.ac.osaka_u.ist.sdl.metricstool.commentremover;
 
-
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.HashSet;
@@ -18,334 +18,364 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
-
 public class CommentRemover {
 
-    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+	private static final String LINE_SEPARATOR = System
+			.getProperty("line.separator");
 
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
 
-        try {
+		try {
 
-            //　コマンドライン引数を処理
-            final Options options = new Options();
+			// 　コマンドライン引数を処理
+			final Options options = new Options();
 
-            {
-                final Option i = new Option("i", "input", true, "input directory");
-                i.setArgName("input");
-                i.setArgs(1);
-                i.setRequired(true);
-                options.addOption(i);
-            }
+			{
+				final Option i = new Option("i", "input", true,
+						"input directory");
+				i.setArgName("input");
+				i.setArgs(1);
+				i.setRequired(true);
+				options.addOption(i);
+			}
 
-            {
-                final Option o = new Option("o", "output", true, "output directory");
-                o.setArgName("output");
-                o.setArgs(1);
-                o.setRequired(true);
-                options.addOption(o);
-            }
+			{
+				final Option o = new Option("o", "output", true,
+						"output directory");
+				o.setArgName("output");
+				o.setArgs(1);
+				o.setRequired(true);
+				options.addOption(o);
+			}
 
-            {
-                final Option l = new Option("l", "language", true, "language");
-                l.setArgName("language");
-                l.setArgs(1);
-                l.setRequired(true);
-                options.addOption(l);
-            }
+			{
+				final Option l = new Option("l", "language", true, "language");
+				l.setArgName("language");
+				l.setArgs(1);
+				l.setRequired(true);
+				options.addOption(l);
+			}
 
-            {
-                final Option a = new Option("a", "blankline", false, "blank line");
-                a.setArgName("blankline");
-                a.setRequired(false);
-                options.addOption(a);
-            }
+			{
+				final Option x = new Option("x", "encoding", true, "encoding");
+				x.setArgName("encoding");
+				x.setArgs(1);
+				x.setRequired(false);
+				options.addOption(x);
+			}
 
-            {
-                final Option b = new Option("b", "blockcomment", false, "block comment");
-                b.setArgName("blockcomment");
-                b.setRequired(false);
-                options.addOption(b);
-            }
+			{
+				final Option a = new Option("a", "blankline", false,
+						"blank line");
+				a.setArgName("blankline");
+				a.setRequired(false);
+				options.addOption(a);
+			}
 
-            {
-                final Option c = new Option("c", "linecomment", false, "line comment");
-                c.setArgName("linecomment");
-                c.setRequired(false);
-                options.addOption(c);
-            }
+			{
+				final Option b = new Option("b", "blockcomment", false,
+						"block comment");
+				b.setArgName("blockcomment");
+				b.setRequired(false);
+				options.addOption(b);
+			}
 
-            {
-                final Option d = new Option("d", "bracketline", false, "bracket line");
-                d.setArgName("bracketline");
-                d.setRequired(false);
-                options.addOption(d);
-            }
+			{
+				final Option c = new Option("c", "linecomment", false,
+						"line comment");
+				c.setArgName("linecomment");
+				c.setRequired(false);
+				options.addOption(c);
+			}
 
-            {
-                final Option e = new Option("e", "indent", false, "indent");
-                e.setArgName("indent");
-                e.setRequired(false);
-                options.addOption(e);
-            }
+			{
+				final Option d = new Option("d", "bracketline", false,
+						"bracket line");
+				d.setArgName("bracketline");
+				d.setRequired(false);
+				options.addOption(d);
+			}
 
-            {
-                final Option v = new Option("v", "verbose", false, "verbose output");
-                v.setArgName("verbose");
-                v.setRequired(false);
-                options.addOption(v);
-            }
+			{
+				final Option e = new Option("e", "indent", false, "indent");
+				e.setArgName("indent");
+				e.setRequired(false);
+				options.addOption(e);
+			}
 
-            final CommandLineParser parser = new PosixParser();
-            final CommandLine cmd = parser.parse(options, args);
+			{
+				final Option v = new Option("v", "verbose", false,
+						"verbose output");
+				v.setArgName("verbose");
+				v.setRequired(false);
+				options.addOption(v);
+			}
 
-            {
-                final String language = cmd.getOptionValue("l");
-                if (!language.equalsIgnoreCase("java") && !language.equalsIgnoreCase("c")
-                        && !language.equalsIgnoreCase("charp")) {
-                    System.out.print("unavailable language: ");
-                    System.out.println(language);
-                    System.exit(0);
-                }
-            }
+			final CommandLineParser parser = new PosixParser();
+			final CommandLine cmd = parser.parse(options, args);
 
-            final String inputPath = cmd.getOptionValue("i");
-            final String outputPath = cmd.getOptionValue("o");
+			{
+				final String language = cmd.getOptionValue("l");
+				if (!language.equalsIgnoreCase("java")
+						&& !language.equalsIgnoreCase("c")
+						&& !language.equalsIgnoreCase("charp")) {
+					System.out.print("unavailable language: ");
+					System.out.println(language);
+					System.exit(0);
+				}
+			}
 
-            int index = 0;
-            final Set<File> files = getFiles(new File(inputPath), cmd.getOptionValue("l"));
-            for (final File file : files) {
+			final String inputPath = cmd.getOptionValue("i");
+			final String outputPath = cmd.getOptionValue("o");
 
-                if (cmd.hasOption("v")) {
-                    System.out.print("processing ... ");
-                    System.out.print(file.getAbsolutePath());
-                    System.out.print(" [");
-                    System.out.print(index++ + 1);
-                    System.out.print("/");
-                    System.out.print(files.size());
-                    System.out.println("]");
-                }
+			int index = 0;
+			final Set<File> files = getFiles(new File(inputPath), cmd
+					.getOptionValue("l"));
+			for (final File file : files) {
 
-                String text = readFile(file);
-                if (!cmd.hasOption("c")) {
-                    text = deleteLineComment(text);
-                }
-                if (!cmd.hasOption("b")) {
-                    text = deleteBlockComment(text);
-                }
-                if (!cmd.hasOption("a")) {
-                    text = deleteBlankLine(text);
-                }
-                if (!cmd.hasOption("d")) {
-                    text = deleteBracketLine(text);
-                }
-                if (!cmd.hasOption("e")) {
-                    text = deleteIndent(text);
-                }
+				if (cmd.hasOption("v")) {
+					System.out.print("processing ... ");
+					System.out.print(file.getAbsolutePath());
+					System.out.print(" [");
+					System.out.print(index++ + 1);
+					System.out.print("/");
+					System.out.print(files.size());
+					System.out.println("]");
+				}
 
-                writeFile(text, file.getAbsolutePath().replace(inputPath, outputPath));
-            }
+				String text = readFile(file, cmd.hasOption("x") ? cmd
+						.getOptionValue("x") : null);
+				if (!cmd.hasOption("c")) {
+					text = deleteLineComment(text);
+				}
+				if (!cmd.hasOption("b")) {
+					text = deleteBlockComment(text);
+				}
+				if (!cmd.hasOption("a")) {
+					text = deleteBlankLine(text);
+				}
+				if (!cmd.hasOption("d")) {
+					text = deleteBracketLine(text);
+				}
+				if (!cmd.hasOption("e")) {
+					text = deleteIndent(text);
+				}
 
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            System.exit(0);
-        } catch (ParseException e) {
-            System.err.println(e.getMessage());
-            System.exit(0);
-        }
-    }
+				writeFile(text, file.getAbsolutePath().replace(inputPath,
+						outputPath));
+			}
 
-    /**
-     * ファイルのSetを取得
-     */
-    public static Set<File> getFiles(final File file, final String language) {
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+			System.exit(0);
+		} catch (ParseException e) {
+			System.err.println(e.getMessage());
+			System.exit(0);
+		}
+	}
 
-        final Set<File> files = new HashSet<File>();
+	/**
+	 * ファイルのSetを取得
+	 */
+	public static Set<File> getFiles(final File file, final String language) {
 
-        // ディレクトリならば，再帰的に処理
-        if (file.isDirectory()) {
-            File[] subfiles = file.listFiles();
-            for (int i = 0; i < subfiles.length; i++) {
-                files.addAll(getFiles(subfiles[i], language));
-            }
+		final Set<File> files = new HashSet<File>();
 
-            // ファイルならば，拡張子が対象言語と一致すれば登録
-        } else if (file.isFile()) {
+		// ディレクトリならば，再帰的に処理
+		if (file.isDirectory()) {
+			File[] subfiles = file.listFiles();
+			for (int i = 0; i < subfiles.length; i++) {
+				files.addAll(getFiles(subfiles[i], language));
+			}
 
-            final String path = file.getAbsolutePath();
-            if (language.equals("java")) {
-                if (path.endsWith(".java")) {
-                    files.add(file);
-                }
-            } else if (language.equals("csharp")) {
-                if (path.endsWith(".cs")) {
-                    files.add(file);
-                }
-            } else if (language.equals("c")) {
-                if (path.endsWith(".c") || path.endsWith("cpp") || path.endsWith("cxx")
-                        || path.endsWith(".h") || path.endsWith(".hpp") || path.endsWith(".hxx")) {
-                    files.add(file);
-                }
-            }
+			// ファイルならば，拡張子が対象言語と一致すれば登録
+		} else if (file.isFile()) {
 
-            // ディレクトリでもファイルでもない場合は不正
-        } else {
-            System.err.println("\"" + file.getAbsolutePath() + "\" is not a vaild file!");
-            System.exit(0);
-        }
+			final String path = file.getAbsolutePath();
+			if (language.equals("java")) {
+				if (path.endsWith(".java")) {
+					files.add(file);
+				}
+			} else if (language.equals("csharp")) {
+				if (path.endsWith(".cs")) {
+					files.add(file);
+				}
+			} else if (language.equals("c")) {
+				if (path.endsWith(".c") || path.endsWith("cpp")
+						|| path.endsWith("cxx") || path.endsWith(".h")
+						|| path.endsWith(".hpp") || path.endsWith(".hxx")) {
+					files.add(file);
+				}
+			}
 
-        return files;
-    }
+			// ディレクトリでもファイルでもない場合は不正
+		} else {
+			System.err.println("\"" + file.getAbsolutePath()
+					+ "\" is not a vaild file!");
+			System.exit(0);
+		}
 
-    /**
-     * ファイルを読み込む
-     */
-    public static String readFile(final File file) {
+		return files;
+	}
 
-        try {
+	/**
+	 * ファイルを読み込む
+	 */
+	public static String readFile(final File file, final String encoding) {
 
-            final StringBuilder text = new StringBuilder();
-            final BufferedReader reader = new BufferedReader(new FileReader(file));
-            while (reader.ready()) {
-                String line = reader.readLine();
-                text.append(line);
-                text.append(LINE_SEPARATOR);
-            }
+		try {
 
-            return text.toString();
+			final StringBuilder text = new StringBuilder();
+			final InputStreamReader reader = new InputStreamReader(
+					new FileInputStream(file), null != encoding ? encoding
+							: "JISAutoDetect");
+			while (reader.ready()) {
+				final int c = reader.read();
+				text.append((char) c);
+			}
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+			/*
+			 * final BufferedReader reader = new BufferedReader(new FileReader(
+			 * file)); while (reader.ready()) { String line = reader.readLine();
+			 * text.append(line); text.append(LINE_SEPARATOR); }
+			 */
 
-        return null;
-    }
+			return text.toString();
 
-    /**
-     * ラインコメントを削除
-     */
-    public static String deleteLineComment(String src) {
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-        StringBuilder buf = new StringBuilder();
+		return null;
+	}
 
-        boolean isLineComment = false;
-        for (int i = 0; i < src.length(); i++) {
-            char ch = src.charAt(i);
+	/**
+	 * ラインコメントを削除
+	 */
+	public static String deleteLineComment(String src) {
 
-            if (isLineComment) {
-                if (ch == LINE_SEPARATOR.charAt(0)) {
-                    isLineComment = false;
-                }
-            } else if (ch == '/' && src.charAt(i + 1) == '/') {
-                isLineComment = true;
-            } else {
-                buf.append(ch);
-            }
-        }
+		StringBuilder buf = new StringBuilder();
 
-        return buf.toString();
-    }
+		boolean isLineComment = false;
+		for (int i = 0; i < src.length(); i++) {
+			char ch = src.charAt(i);
 
-    /**
-     * ブロックコメントを削除
-     */
-    public static String deleteBlockComment(String src) {
+			if (isLineComment) {
+				if (ch == LINE_SEPARATOR.charAt(0)) {
+					isLineComment = false;
+				}
+			} else if (ch == '/' && src.charAt(i + 1) == '/') {
+				isLineComment = true;
+			} else {
+				buf.append(ch);
+			}
+		}
 
-        StringBuilder buf = new StringBuilder();
+		return buf.toString();
+	}
 
-        boolean isBlockComment = false;
-        for (int i = 0; i < src.length(); i++) {
-            char ch = src.charAt(i);
+	/**
+	 * ブロックコメントを削除
+	 */
+	public static String deleteBlockComment(String src) {
 
-            if (isBlockComment) {
-                if (ch == '/' && src.charAt(i - 1) == '*') {
-                    isBlockComment = false;
-                }
-            } else if (ch == '/' && src.charAt(i + 1) == '*') {
-                isBlockComment = true;
-            } else {
-                buf.append(ch);
-            }
-        }
+		StringBuilder buf = new StringBuilder();
 
-        return buf.toString();
-    }
+		boolean isBlockComment = false;
+		for (int i = 0; i < src.length(); i++) {
+			char ch = src.charAt(i);
 
-    /**
-     * 空白行を削除
-     */
-    public static String deleteBlankLine(String src) throws IOException {
+			if (isBlockComment) {
+				if (ch == '/' && src.charAt(i - 1) == '*') {
+					isBlockComment = false;
+				}
+			} else if (ch == '/' && src.charAt(i + 1) == '*') {
+				isBlockComment = true;
+			} else {
+				buf.append(ch);
+			}
+		}
 
-        StringBuilder buf = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new StringReader(src));
+		return buf.toString();
+	}
 
-        String inLine;
-        while ((inLine = reader.readLine()) != null) {
-            if (!inLine.matches("^\\s*$")) {
-                buf.append(inLine);
-                buf.append(LINE_SEPARATOR);
-            }
-        }
+	/**
+	 * 空白行を削除
+	 */
+	public static String deleteBlankLine(String src) throws IOException {
 
-        return buf.toString();
-    }
+		StringBuilder buf = new StringBuilder();
+		BufferedReader reader = new BufferedReader(new StringReader(src));
 
-    /**
-     * 中括弧のみの行を削除
-     */
-    public static String deleteBracketLine(String src) {
+		String inLine;
+		while ((inLine = reader.readLine()) != null) {
+			if (!inLine.matches("^\\s*$")) {
+				buf.append(inLine);
+				buf.append(LINE_SEPARATOR);
+			}
+		}
 
-        final String OPEN_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[{][ \t]*" + LINE_SEPARATOR;
-        final String CLOSE_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[}][ \t]*" + LINE_SEPARATOR;
+		return buf.toString();
+	}
 
-        String text1 = src;
-        while (true) {
-            int beforeLength = text1.length();
-            text1 = text1.replaceAll(OPEN_BRACKET_LINE, "{" + LINE_SEPARATOR);
-            int afterLength = text1.length();
-            if (beforeLength == afterLength) {
-                break;
-            }
-        }
+	/**
+	 * 中括弧のみの行を削除
+	 */
+	public static String deleteBracketLine(String src) {
 
-        String text2 = text1;
-        while (true) {
-            int beforeLength = text2.length();
-            text2 = text2.replaceAll(CLOSE_BRACKET_LINE, "}" + LINE_SEPARATOR);
-            int afterLength = text2.length();
-            if (beforeLength == afterLength) {
-                break;
-            }
-        }
+		final String OPEN_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[{][ \t]*"
+				+ LINE_SEPARATOR;
+		final String CLOSE_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[}][ \t]*"
+				+ LINE_SEPARATOR;
 
-        return text2;
-    }
+		String text1 = src;
+		while (true) {
+			int beforeLength = text1.length();
+			text1 = text1.replaceAll(OPEN_BRACKET_LINE, "{" + LINE_SEPARATOR);
+			int afterLength = text1.length();
+			if (beforeLength == afterLength) {
+				break;
+			}
+		}
 
-    /**
-     * インデントを削除
-     */
-    public static String deleteIndent(String src) {
-        return src.replaceAll(LINE_SEPARATOR + "[ \t]+", LINE_SEPARATOR);
-    }
+		String text2 = text1;
+		while (true) {
+			int beforeLength = text2.length();
+			text2 = text2.replaceAll(CLOSE_BRACKET_LINE, "}" + LINE_SEPARATOR);
+			int afterLength = text2.length();
+			if (beforeLength == afterLength) {
+				break;
+			}
+		}
 
-    /**
-     * ファイルに出力
-     */
-    public static void writeFile(final String text, final String path) {
+		return text2;
+	}
 
-        try {
+	/**
+	 * インデントを削除
+	 */
+	public static String deleteIndent(String src) {
+		return src.replaceAll(LINE_SEPARATOR + "[ \t]+", LINE_SEPARATOR);
+	}
 
-            final File file = new File(path);
-            file.getParentFile().mkdirs();
+	/**
+	 * ファイルに出力
+	 */
+	public static void writeFile(final String text, final String path) {
 
-            final OutputStream out = new FileOutputStream(path);
-            for (int i = 0; i < text.length(); i++) {
-                out.write(text.charAt(i));
-            }
-            out.close();
+		try {
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+			final File file = new File(path);
+			file.getParentFile().mkdirs();
+
+			final OutputStream out = new FileOutputStream(path);
+			for (int i = 0; i < text.length(); i++) {
+				out.write(text.charAt(i));
+			}
+			out.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
