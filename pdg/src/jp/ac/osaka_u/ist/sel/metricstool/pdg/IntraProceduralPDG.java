@@ -215,7 +215,7 @@ public class IntraProceduralPDG extends PDG {
 
                 for (final CFGNode<?> forwardNode : cfgNode.getForwardNodes()) {
                     final Set<CFGNode<?>> checkedNodesForDefinedVariables = new HashSet<CFGNode<?>>();
-                    checkedNodesForDefinedVariables.add(cfgNode);
+                    //checkedNodesForDefinedVariables.add(cfgNode);
                     this.buildDataDependence(forwardNode, pdgNode, variable,
                             checkedNodesForDefinedVariables);
                 }
