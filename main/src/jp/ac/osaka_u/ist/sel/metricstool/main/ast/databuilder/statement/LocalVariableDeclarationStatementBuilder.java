@@ -54,10 +54,13 @@ public class LocalVariableDeclarationStatementBuilder extends
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         final UnresolvedVariableDeclarationStatementInfo declarationStatement = new UnresolvedVariableDeclarationStatementInfo(
                 declarationUsage, initializerExpression);
+        // FIXME: this is temporal patch. fix ANTLR grammar file
+        final int correctToLine = declarationUsage.getToLine();
+        final int correctToColumn = declarationUsage.getToColumn();
         declarationStatement.setFromLine(fromLine);
         declarationStatement.setFromColumn(fromColumn);
-        declarationStatement.setToLine(toLine);
-        declarationStatement.setToColumn(toColumn);
+        declarationStatement.setToLine(correctToLine);
+        declarationStatement.setToColumn(correctToColumn);
 
         final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = this.buildDataManager
                 .getCurrentLocalSpace();
