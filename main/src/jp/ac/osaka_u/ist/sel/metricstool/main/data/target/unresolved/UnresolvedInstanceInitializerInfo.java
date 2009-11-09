@@ -1,13 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InstanceInitializerInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
 /**
@@ -17,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  *
  */
 public class UnresolvedInstanceInitializerInfo extends
-        UnresolvedCallableUnitInfo<InstanceInitializerInfo> {
+        UnresolvedInitializerInfo<InstanceInitializerInfo> {
 
     /**
      * このインスタンスイニシャライザを所有するクラスを与えて初期化
@@ -27,9 +22,14 @@ public class UnresolvedInstanceInitializerInfo extends
         super(ownerClass);
     }
 
-    @Override
-    public void setInstanceMember(boolean instance) {
-
+    /**
+     * 所有クラスを与えて，オブジェクトを初期化
+     * 
+     * @param ownerClass 所有クラス
+     */
+    public UnresolvedInstanceInitializerInfo(final UnresolvedClassInfo ownerClass, int fromLine,
+            int fromColumn, int toLine, int toColumn) {
+        super(ownerClass, fromLine, fromColumn, toLine, toColumn);
     }
 
     @Override
@@ -43,28 +43,8 @@ public class UnresolvedInstanceInitializerInfo extends
     }
 
     @Override
-    public InstanceInitializerInfo resolve(TargetClassInfo usingClass,
-            CallableUnitInfo usingMethod, ClassInfoManager classInfoManager,
-            FieldInfoManager fieldInfoManager, MethodInfoManager methodInfoManager) {
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == usingClass) {
-            throw new NullPointerException();
-        }
-
-        // 既に解決済みである場合は，キャッシュを返す
-        if (this.alreadyResolved()) {
-            return this.getResolved();
-        }
-
-        // 所有クラスを取得
-        final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
-        final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(usingClass, usingMethod,
-                classInfoManager, fieldInfoManager, methodInfoManager);
-
-        this.resolvedInfo = new InstanceInitializerInfo(ownerClass, this.getFromLine(), this
-                .getFromColumn(), this.getToLine(), this.getToColumn());
-        return this.resolvedInfo;
+    protected InstanceInitializerInfo buildResolvedInfo(ClassInfo ownerClass, int fromLine,
+            int fromColumn, int toLine, int toColumn) {
+        return new InstanceInitializerInfo(ownerClass, fromLine, fromColumn, toLine, toColumn);
     }
-
 }

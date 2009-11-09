@@ -13,6 +13,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ConstructorBuilder
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.DataBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.FieldBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.InheritanceBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.InstanceInitializerBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.LocalVariableBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.MethodBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.MethodParameterBuilder;
@@ -99,6 +100,8 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
                         this.buildDataManager), new NameBuilder()));
         //this.builders.add(new Initializerbuilder());
         this.builders.add(new StaticInitializerBuilder(this.buildDataManager,
+                this.modifiersInterpriter));
+        this.builders.add(new InstanceInitializerBuilder(this.buildDataManager,
                 this.modifiersInterpriter));
 
         this.builders.add(new FieldBuilder(this.buildDataManager, this.expressionManager,

@@ -5,8 +5,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StaticInitializer
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedStaticInitializerInfo;
 
 
-// TODO 結局InstanceInitializerと同じになるからうまいことまとめれるはず．ていうかCallableUnitBuilderでいいの?
-public class StaticInitializerBuilder extends CallableUnitBuilder<UnresolvedStaticInitializerInfo> {
+/**
+ * スタティックイニシャライザのビルダ
+ * 
+ * @author g-yamada
+ *
+ */
+public class StaticInitializerBuilder extends InitializerBuilder<UnresolvedStaticInitializerInfo> {
 
     public StaticInitializerBuilder(BuildDataManager buildDataManager,
             ModifiersInterpriter interpriter) {
@@ -14,28 +19,14 @@ public class StaticInitializerBuilder extends CallableUnitBuilder<UnresolvedStat
     }
 
     @Override
-    protected UnresolvedStaticInitializerInfo startUnitDefinition(final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
-        UnresolvedStaticInitializerInfo initializer = super.startUnitDefinition(fromLine, fromColumn, toLine, toColumn);
+    protected final void registToOwnerClass(final UnresolvedStaticInitializerInfo initializer) {
         initializer.getOwnerClass().addStaticInitializer(initializer);
-        return initializer;
     }
 
     @Override
-    protected UnresolvedStaticInitializerInfo createUnresolvedCallableUnitInfo(int fromLine,
+    protected final UnresolvedStaticInitializerInfo createUnresolvedCallableUnitInfo(int fromLine,
             int fromColumn, int toLine, int toColumn) {
         return new UnresolvedStaticInitializerInfo(this.buildManager.getCurrentClass(), fromLine,
                 fromColumn, toLine, toColumn);
     }
-
-    @Override
-    protected void registName() {
-        // i have no name
-    }
-
-    @Override
-    protected void registType() {
-        // and no type
-    }
-
 }

@@ -1,13 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticInitializerInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
 /**
@@ -16,7 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author t-miyake, higo
  */
 public class UnresolvedStaticInitializerInfo extends
-        UnresolvedCallableUnitInfo<StaticInitializerInfo> {
+        UnresolvedInitializerInfo<StaticInitializerInfo> {
 
     /**
      * 所有クラスを与えて，オブジェクトを初期化
@@ -26,7 +21,7 @@ public class UnresolvedStaticInitializerInfo extends
     public UnresolvedStaticInitializerInfo(final UnresolvedClassInfo ownerClass) {
         super(ownerClass);
     }
-    
+
     /**
      * 所有クラスを与えて，オブジェクトを初期化
      * 
@@ -35,36 +30,6 @@ public class UnresolvedStaticInitializerInfo extends
     public UnresolvedStaticInitializerInfo(final UnresolvedClassInfo ownerClass, int fromLine,
             int fromColumn, int toLine, int toColumn) {
         super(ownerClass, fromLine, fromColumn, toLine, toColumn);
-    }
-
-    /**
-     * 名前解決を行う
-     */
-    @Override
-    public StaticInitializerInfo resolve(final TargetClassInfo usingClass,
-            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
-            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
-                || (null == methodInfoManager)) {
-            throw new NullPointerException();
-        }
-
-        // 既に解決済みである場合は，キャッシュを返す
-        if (this.alreadyResolved()) {
-            return this.getResolved();
-        }
-
-        // 所有クラスを取得
-        final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
-        final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(usingClass, usingMethod,
-                classInfoManager, fieldInfoManager, methodInfoManager);
-
-        this.resolvedInfo = new StaticInitializerInfo(ownerClass, this.getFromLine(), this
-                .getFromColumn(), this.getToLine(), this.getToColumn());
-        return this.resolvedInfo;
     }
 
     @Override
@@ -77,10 +42,9 @@ public class UnresolvedStaticInitializerInfo extends
         return true;
     }
 
-    /**
-     * なにもしない
-     */
     @Override
-    public void setInstanceMember(boolean instance) {
+    protected StaticInitializerInfo buildResolvedInfo(ClassInfo ownerClass, int fromLine,
+            int fromColumn, int toLine, int toColumn) {
+        return new StaticInitializerInfo(ownerClass, fromLine, fromColumn, toLine, toColumn);
     }
 }

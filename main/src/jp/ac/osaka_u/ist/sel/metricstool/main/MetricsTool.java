@@ -41,11 +41,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InstanceInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
@@ -63,9 +65,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedInstanceInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedStaticInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVClassMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVFileMetricsWriter;
@@ -1247,6 +1251,28 @@ public class MetricsTool {
 
         }
 
+        // for unresolved instance initializers
+        for (final UnresolvedInstanceInitializerInfo unresolvedInstanceInitializer : unresolvedClassInfo.getInstanceInitializers()) {
+            // resolve
+            final InstanceInitializerInfo instanceInitializer = unresolvedInstanceInitializer
+                    .resolve(ownerClass, null, classInfoManager, fieldInfoManager,
+                            methodInfoManager);
+            
+            // register
+            ownerClass.addInstanceInitializer(instanceInitializer);
+        }
+        
+        // for unresolved static initializers
+        for (final UnresolvedStaticInitializerInfo unresolvedStaticInitializer : unresolvedClassInfo.getStaticInitializers()) {
+            // resolve
+            final StaticInitializerInfo staticInitializer = unresolvedStaticInitializer
+                    .resolve(ownerClass, null, classInfoManager, fieldInfoManager,
+                            methodInfoManager);
+            
+            // register
+            ownerClass.addStaticInitializer(staticInitializer);
+        }
+
         // 未解決コンストラクタが0の場合は，デフォルトコンストラクタを追加
         if (0 == unresolvedClassInfo.getDefinedConstructors().size()) {
             final TargetConstructorInfo defaultConstructor = new TargetConstructorInfo(
@@ -1464,6 +1490,22 @@ public class MetricsTool {
             // 未解決コンストラクタ情報内の利用関係を解決
             this.addReferenceAssignmentCallRelation(unresolvedConstructorInfo, unresolvedClassInfo,
                     classInfoManager, fieldInfoManager, methodInfoManager);
+        }
+
+        // resolve UnresolvedInstanceInitializers and register them
+        for (final UnresolvedInstanceInitializerInfo unresolvedInstanceInitializer : unresolvedClassInfo
+                .getInstanceInitializers()) {
+            // resolve
+            this.addReferenceAssignmentCallRelation(unresolvedInstanceInitializer,
+                    unresolvedClassInfo, classInfoManager, fieldInfoManager, methodInfoManager);
+        }
+
+        // resolve UnresolvedStaticInitializers and register them
+        for (final UnresolvedStaticInitializerInfo unresolvedStaticInitializer : unresolvedClassInfo
+                .getStaticInitializers()) {
+            // resolve
+            this.addReferenceAssignmentCallRelation(unresolvedStaticInitializer,
+                    unresolvedClassInfo, classInfoManager, fieldInfoManager, methodInfoManager);
         }
 
         // 各インナークラスに対して
