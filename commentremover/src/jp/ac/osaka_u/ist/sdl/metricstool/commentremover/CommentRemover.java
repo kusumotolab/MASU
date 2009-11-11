@@ -259,26 +259,28 @@ public class CommentRemover {
 		boolean isLineComment = false;
 		boolean isString = false;
 
-		for (int i = 0; i < src.length(); i++) {
+		for (int i = 0; i < src.length() - 1; i++) {
 			final char ch = src.charAt(i);
 
 			// ラインコメントの中にいるとき
 			if (isLineComment) {
-				if (ch == LINE_SEPARATOR.charAt(0)) {
+				// if (ch == LINE_SEPARATOR.charAt(0)) {
+				if (ch == '\n' || ch == '\r') {
 					isLineComment = false;
+					buf.append(LINE_SEPARATOR);
 				}
 			}
 
 			// String型のリテラルの中にいるとき
 			else if (isString) {
 				buf.append(ch);
-				
-				//エスケープシーケンスだったら次の文字も追加				
+
+				// エスケープシーケンスだったら次の文字も追加
 				if (ch == '\\') {
 					buf.append(src.charAt(i++));
-				} 
-				
-				//リテラルを抜ける
+				}
+
+				// リテラルを抜ける
 				else if (ch == '\"') {
 					isString = false;
 				}
@@ -288,9 +290,9 @@ public class CommentRemover {
 			else if (ch == '/' && src.charAt(i + 1) == '/') {
 				isLineComment = true;
 			}
-			
+
 			// Stringのリテラル開始
-			else if(ch == '\"'){
+			else if (ch == '\"') {
 				isString = true;
 				buf.append(ch);
 			}
@@ -316,36 +318,34 @@ public class CommentRemover {
 		for (int i = 0; i < src.length(); i++) {
 			char ch = src.charAt(i);
 
-			//ブロックコメントの中にいるとき
+			// ブロックコメントの中にいるとき
 			if (isBlockComment) {
-				buf.append(ch);
 				if (ch == '/' && src.charAt(i - 1) == '*') {
 					isBlockComment = false;
 				}
-			} 
-			
+			}
+
 			// String型のリテラルの中にいるとき
 			else if (isString) {
 				buf.append(ch);
-				
-				//エスケープシーケンスだったら次の文字も追記				
+
+				// エスケープシーケンスだったら次の文字も追記
 				if (ch == '\\') {
 					buf.append(src.charAt(i++));
-				} 
-				
-				//リテラルを抜ける
+				}
+
+				// リテラルを抜ける
 				else if (ch == '\"') {
 					isString = false;
 				}
 			}
-			
-			//　ブロックコメントに入る
+
+			// ブロックコメントに入る
 			else if (ch == '/' && src.charAt(i + 1) == '*') {
-				buf.append("/*");
-				i++;
 				isBlockComment = true;
-			} 
-			
+				i++;
+			}
+
 			// そのまま処理
 			else {
 				buf.append(ch);
