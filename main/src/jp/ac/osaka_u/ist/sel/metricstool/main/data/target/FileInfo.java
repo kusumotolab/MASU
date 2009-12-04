@@ -161,6 +161,14 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
     }
 
     /**
+     * コメントのセットを追加する
+     * @param commentSet
+     */
+    public void addAllComments(final SortedSet<CommentInfo> commentSet){
+        this.comments.addAll(commentSet);
+    }
+    
+    /**
      * コメント一覧を返す
      * 
      * @return

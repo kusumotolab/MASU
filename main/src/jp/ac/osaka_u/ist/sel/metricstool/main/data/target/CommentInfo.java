@@ -31,4 +31,9 @@ public abstract class CommentInfo extends UnitInfo {
         return Collections
                 .unmodifiableSet(new HashSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>());
     }
+    
+    @Override
+    public String toString(){
+        return content;
+    }
 }

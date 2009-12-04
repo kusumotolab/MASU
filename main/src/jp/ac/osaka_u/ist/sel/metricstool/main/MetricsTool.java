@@ -35,6 +35,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CommentInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
@@ -426,11 +427,12 @@ public class MetricsTool {
     public MetricsTool() {
 
     }
-
+    
     /**
      * {@link #readTargetFiles()} で読み込んだ対象ファイル群を解析する.
      * 
      */
+    
     public void analyzeTargetFiles() {
         // 対象ファイルを解析
 
@@ -502,11 +504,12 @@ public class MetricsTool {
                         targetFile.setCorrectSytax(true);
 
                         if (visitorManager != null) {
-
                             visitorManager.visitStart(java15parser.getAST());
                         }
 
+                        fileInfo.addAllComments(java15lexer.getCommentSet());
                         fileInfo.setLOC(java15lexer.getLine());
+                        
                         break;
 
                     case JAVA14:

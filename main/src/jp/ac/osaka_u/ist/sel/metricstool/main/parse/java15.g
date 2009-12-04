@@ -2,6 +2,9 @@ header {
 	package jp.ac.osaka_u.ist.sel.metricstool.main.parse;
 	
 	import java.util.Stack;
+	import java.util.SortedSet;
+	import java.util.TreeSet;
+	import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.*;
 }
 
 /** Java 1.5 Recognizer
@@ -295,6 +298,8 @@ compilationUnit
 		(	(annotations "package")=> packageDefinition
 		|	/* nothing */
 		)
+
+		
 
 		// Next we have a series of zero or more import statements
 		( importDefinition )*
@@ -1914,7 +1919,7 @@ options {
 	exportVocab=Java15;		// call the vocabulary "Java15"
 	testLiterals=false;		// don't automatically test for literals
 	k=4;					// four characters of lookahead
-	charVocabulary='\u0003'..'\uFFFF';
+	charVocabulary='\u0003'..'\uFFFE';
 	// without inlining some bitset tests, couldn't do unicode;
 	// I need to make ANTLR generate smaller bitsets; see
 	// bottom of JavaLexer.java
@@ -1927,6 +1932,9 @@ options {
 	/** flag for enabling the "enum" keyword */
 	private boolean enumEnabled = true;
 	
+	/** list that stores commentinfo*/
+	private SortedSet<CommentInfo> commentSet = new TreeSet<CommentInfo>();
+	
 	/** Enable the "assert" keyword */
 	public void enableAssert(boolean shouldEnable) { assertEnabled = shouldEnable; }
 	/** Query the "assert" keyword state */
@@ -1936,12 +1944,23 @@ options {
 	/** Query the "enum" keyword state */
 	public boolean isEnumEnabled() { return enumEnabled; }
 	
+	public SortedSet<CommentInfo> getCommentSet(){
+		return commentSet;	
+	}
+	
 	public int getTokenStartColumn(){
 		return inputState.getTokenStartColumn();
 	}
 	
 	public int getTokenStartLine(){
 		return inputState.getTokenStartLine();
+	}
+	
+	public int getLine(){
+		return inputState.getLine();
+	}
+	public int getColumn(){
+		return inputState.getColumn();
 	}
 }
 
@@ -2006,7 +2025,7 @@ WS	:	(	' '
 			{ newline(); }
 		)+
 		{ _ttype = Token.SKIP; }
-		//{System.out.println(inputState.getTokenStartLine());}//to check wheare does lexer reach.
+		//{System.out.println("EMBEDED:::" + inputState.getTokenStartLine());}//to check wheare does lexer reach.
 	;
 
 // Single-line comments
@@ -2021,15 +2040,28 @@ SL_COMMENT
 						return;
 					}
 				}
-			)* 
+			)*
+
+			//regists line comment			 
+			{
+					final CommentInfo lineCommentInfo = new LineCommentInfo(
+						$getText, inputState.getTokenStartLine(), inputState.getTokenStartColumn(), inputState.getColumn() 						
+					);
+					commentSet.add(lineCommentInfo);		
+			}
 			
 			("\r\n" |'\n'|'\r')
-			{$setType(Token.SKIP); newline();}
+			{$setType(Token.SKIP);
+				 newline();}
+
+
+				 
+	
 	;
 
 // multiple-line comments
 ML_COMMENT
-	:	"/*"
+	:	"/*" ~'*'
 		(	/*	'\r' '\n' can be matched in one alternative or by matching
 				'\r' in one iteration and '\n' in another. I am trying to
 				handle any flavor of newline that comes in, but the language
@@ -2048,6 +2080,48 @@ ML_COMMENT
 		|	~('*'|'\n'|'\r')
 		)*
 		"*/"
+			
+		//regists multi-block comment	
+			{
+				final CommentInfo blockCommentInfo = new BlockCommentInfo(
+					$getText, inputState.getTokenStartLine(), inputState.getTokenStartColumn(),
+					inputState.getLine(), inputState.getColumn() 						
+				);
+				commentSet.add(blockCommentInfo);		
+			}
+		{$setType(Token.SKIP);}
+	;
+	
+// javadoc comments
+DOC_COMMENT
+	:	"/**"
+		(	/*	'\r' '\n' can be matched in one alternative or by matching
+				'\r' in one iteration and '\n' in another. I am trying to
+				handle any flavor of newline that comes in, but the language
+				that allows both "\r\n" and "\r" and "\n" to all be valid
+				newline is ambiguous. Consequently, the resulting grammar
+				must be ambiguous. I'm shutting this warning off.
+			 */
+			options {
+				generateAmbigWarnings=false;
+			}
+		:
+			{ LA(2)!='/' }? '*'
+		|	'\r' '\n'		{newline();}
+		|	'\r'			{newline();}
+		|	'\n'			{newline();}
+		|	~('*'|'\n'|'\r')
+		)*
+		"*/"
+			
+		//regists javadoc comment
+			{
+				final CommentInfo documentCommentInfo = new DocumentCommentInfo(
+					$getText, inputState.getTokenStartLine(), inputState.getTokenStartColumn(),
+					inputState.getLine(), inputState.getColumn() 						
+				);
+				commentSet.add(documentCommentInfo);		
+			}
 		{$setType(Token.SKIP);}
 	;
 
