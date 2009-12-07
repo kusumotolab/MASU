@@ -317,6 +317,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
      * 
      * @return 型名
      */
+    @Override
     public String getTypeName() {
         return this.type.getName();
     }
@@ -324,6 +325,7 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
     /**
      * オブジェクトの等価性のチェックを行う
      */
+    @Override
     public boolean equals(final TypeInfo typeInfo) {
 
         if (null == typeInfo) {

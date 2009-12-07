@@ -1,13 +1,17 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LiteralUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -61,7 +65,21 @@ public final class UnresolvedLiteralUsageInfo extends UnresolvedExpressionInfo<L
         final int toColumn = this.getToColumn();
 
         final String literal = this.getLiteral();
-        final PrimitiveTypeInfo type = (PrimitiveTypeInfo) this.getType();
+        TypeInfo type = (PrimitiveTypeInfo) this.getType();
+
+        if (type.getTypeName().equalsIgnoreCase("STRING")) {
+            switch (Settings.getInstance().getLanguage()) {
+            case JAVA13:
+            case JAVA14:
+            case JAVA15:
+                final ClassInfo stringClass = classInfoManager.getClassInfo(new String[] { "java",
+                        "lang", "String" });
+                type = new ClassTypeInfo(stringClass);
+                break;
+            default:
+                break;
+            }
+        }
 
         /*// 要素使用のオーナー要素を返す
         final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this

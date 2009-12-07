@@ -25,7 +25,7 @@ public final class LiteralUsageInfo extends ExpressionInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public LiteralUsageInfo(final String literal, final PrimitiveTypeInfo type,
+    public LiteralUsageInfo(final String literal, final TypeInfo type,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 
@@ -92,7 +92,7 @@ public final class LiteralUsageInfo extends ExpressionInfo {
     public Set<ClassTypeInfo> getThrownExceptions() {
         return Collections.unmodifiableSet(new HashSet<ClassTypeInfo>());
     }
-    
+
     /**
      * リテラルを保存するための変数
      */
@@ -101,5 +101,5 @@ public final class LiteralUsageInfo extends ExpressionInfo {
     /**
      * リテラルの型を保存するための変数
      */
-    private final PrimitiveTypeInfo type;
+    private final TypeInfo type;
 }

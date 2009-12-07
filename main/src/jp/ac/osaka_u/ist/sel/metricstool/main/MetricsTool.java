@@ -1580,7 +1580,7 @@ public class MetricsTool {
         // Še–¢‰ğŒˆ•¶î•ñ‚Ì–¼‘O‰ğŒˆˆ—
         for (final UnresolvedStatementInfo<? extends StatementInfo> unresolvedStatement : unresolvedLocalSpace
                 .getStatements()) {
-            if (!(unresolvedStatement instanceof UnresolvedBlockInfo)) {
+            if (!(unresolvedStatement instanceof UnresolvedBlockInfo<?>)) {
                 final StatementInfo statement = unresolvedStatement.resolve(ownerClass,
                         ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
                 localSpace.addStatement(statement);

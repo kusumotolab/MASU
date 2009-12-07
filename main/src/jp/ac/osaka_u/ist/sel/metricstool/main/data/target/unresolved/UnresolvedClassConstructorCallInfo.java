@@ -12,8 +12,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalConstructorInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SuperConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -100,6 +102,9 @@ public class UnresolvedClassConstructorCallInfo extends
                         .getExternalSuperClass((TargetClassInfo) classInfo);
             }
             final ExternalConstructorInfo constructor = new ExternalConstructorInfo(classInfo);
+            final List<ParameterInfo> externalParameters = ExternalParameterInfo.createParameters(
+                    actualParameters, constructor);
+            constructor.addParameters(externalParameters);
             this.resolvedInfo = new ClassConstructorCallInfo(classType, constructor, usingMethod,
                     fromLine, fromColumn, toLine, toColumn);
             this.resolvedInfo.addArguments(actualParameters);
