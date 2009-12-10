@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -180,6 +181,12 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 // 仮引数の型のクラスを取得
                 final ClassInfo dummyParameterClass = ((ClassTypeInfo) dummyParameter.getType())
                         .getReferencedClass();
+                
+                // 仮引数の型がObjectの場合は，呼び出し可能である
+                final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager().getClassInfo(new String[]{"java", "lang", "Object"});
+                if(dummyParameterClass.equals(objectClass)){
+                    continue NEXT_PARAMETER;
+                }
 
                 // 仮引数，実引数共に対象クラスである場合は，その継承関係を考慮する．つまり，実引数が仮引数のサブクラスでない場合は，呼び出し可能ではない
                 if ((actualParameterClass instanceof TargetClassInfo)
