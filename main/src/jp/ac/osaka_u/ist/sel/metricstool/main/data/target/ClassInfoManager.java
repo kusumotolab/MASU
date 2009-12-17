@@ -115,7 +115,7 @@ public final class ClassInfoManager {
      * @return ŠO•”ƒNƒ‰ƒX‚Ì”
      */
     public int getExternalClassCount() {
-        return this.targetClassInfos.size();
+        return this.externalClassInfos.size();
     }
 
     /**
