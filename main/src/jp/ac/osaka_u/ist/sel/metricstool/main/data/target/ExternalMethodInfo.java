@@ -1,11 +1,13 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 
 /**
@@ -44,11 +46,11 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ExternalMethodInfo‚Å‚Í—˜—p‚Å‚«‚È‚¢
+     * ExternalMethodInfo‚Å‚Í’†g‚Í‚È‚¢
      */
     @Override
     public SortedSet<StatementInfo> getStatements() {
-        throw new CannotUseException();
+        return Collections.unmodifiableSortedSet(new TreeSet<StatementInfo>());
     }
 
     /**

@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -119,7 +120,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
 
         sb.append("(");
 
-        if (this.getParameters().size() > 0){
+        if (this.getParameters().size() > 0) {
             for (final ParameterInfo parameter : this.getParameters()) {
                 final TypeInfo parameterType = parameter.getType();
                 sb.append(parameterType.getTypeName());
@@ -134,27 +135,27 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     @Override
-    public final String getSignatureText(){
-    
+    public final String getSignatureText() {
+
         final StringBuilder text = new StringBuilder();
-        
+
         text.append(this.getReturnType().getTypeName());
         text.append(" ");
         text.append(this.getMethodName());
-        
+
         text.append("(");
-        for(final ParameterInfo parameter : this.getParameters()){
+        for (final ParameterInfo parameter : this.getParameters()) {
             text.append(parameter.getType().getTypeName());
             text.append(",");
         }
-        if(0 < this.getParameterNumber()){
-            text.deleteCharAt(text.length() -1);
+        if (0 < this.getParameterNumber()) {
+            text.deleteCharAt(text.length() - 1);
         }
         text.append(")");
-        
+
         return text.toString();
     }
-    
+
     /**
      * このメソッドの名前を返す
      * 
@@ -270,6 +271,76 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
      */
     public SortedSet<MethodInfo> getOverriders() {
         return Collections.unmodifiableSortedSet(this.overriders);
+    }
+
+    /**
+     * このメソッド呼び出しが，オブジェクトの状態を変更しているかを返す．
+     * 現在のところ，変更しているのは下記のいずれかの条件を満たすとき
+     * 1. フィールドに対して代入処理を行っている．
+     * 2. フィールドに張り付いたメソッド呼び出しがオブジェクトの状態を変更している．
+     * 
+     * @return　変更しているときはtrue, 変更していない場合はfalse．
+     */
+    public boolean stateChange() {
+
+        // フィールドに対して代入処理があるかどうかを調べる
+        for (final VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>> variableUsage : this
+                .getVariableUsages()) {
+            final VariableInfo<?> variable = variableUsage.getUsedVariable();
+            if (variable instanceof FieldInfo) {
+                return true;
+            }
+        }
+
+        // メソッド呼び出しについて，オブジェクトの内容が変化しているかを調べる
+        final Set<MethodInfo> checkedMethods = new HashSet<MethodInfo>();
+        checkedMethods.add(this);
+        for (final CallInfo<?> call : this.getCalls()) {
+            if (call instanceof MethodCallInfo) {
+                final MethodCallInfo methodCall = (MethodCallInfo) call;
+                final ExpressionInfo qualifier = methodCall.getQualifierExpression();
+                if (qualifier instanceof VariableUsageInfo<?>) {
+                    if (methodCall.getCallee().stateChange(checkedMethods)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean stateChange(final Set<MethodInfo> checkedMethods) {
+
+        if (checkedMethods.contains(this)) {
+            return false;
+        } else {
+            checkedMethods.add(this);
+        }
+
+        // フィールドに対して代入処理があるかどうかを調べる
+        for (final VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>> variableUsage : this
+                .getVariableUsages()) {
+            final VariableInfo<?> variable = variableUsage.getUsedVariable();
+            if (variable instanceof FieldInfo) {
+                return true;
+            }
+        }
+
+        // メソッド呼び出しについて，オブジェクトの内容が変化しているかを調べる
+        for (final CallInfo<?> call : this.getCalls()) {
+            if (call instanceof MethodCallInfo) {
+                final MethodCallInfo methodCall = (MethodCallInfo) call;
+                final ExpressionInfo qualifier = methodCall.getQualifierExpression();
+                if (qualifier instanceof VariableUsageInfo<?>) {
+                    if (methodCall.getCallee().stateChange(checkedMethods)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

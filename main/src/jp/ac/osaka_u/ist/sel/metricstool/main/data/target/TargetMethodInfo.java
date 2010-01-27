@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -80,6 +81,7 @@ public final class TargetMethodInfo extends MethodInfo implements StaticOrInstan
     public boolean isStaticMember() {
         return !this.instance;
     }
+
 
     /**
      * インスタンスメンバーかどうかを保存するための変数
