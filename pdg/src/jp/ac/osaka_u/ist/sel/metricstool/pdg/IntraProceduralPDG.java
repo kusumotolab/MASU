@@ -295,7 +295,7 @@ public class IntraProceduralPDG extends PDG {
 			if (pdgNode instanceof PDGControlNode) {
 				final ConditionInfo condition = (ConditionInfo) cfgNode
 						.getCore();
-				this.buildControlDependence((PDGControlNode) pdgNode, Utility
+				this.buildControlDependence((PDGControlNode) pdgNode, PDGUtility
 						.getOwnerConditionalBlock(condition));
 			}
 		}

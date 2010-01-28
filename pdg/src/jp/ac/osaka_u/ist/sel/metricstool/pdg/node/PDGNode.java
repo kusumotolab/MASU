@@ -7,6 +7,7 @@ import java.util.TreeSet;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGNormalNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGUtility;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
@@ -252,7 +253,7 @@ public abstract class PDGNode<T extends ExecutableElementInfo> implements
 		for (final CallInfo<?> call : this.getCore().getCalls()) {
 			if (call instanceof MethodCallInfo) {
 				final MethodCallInfo methodCall = (MethodCallInfo) call;
-				if (methodCall.getCallee().stateChange()) {
+				if (CFGUtility.stateChange(methodCall.getCallee())) {
 					return true;
 				}
 			}
