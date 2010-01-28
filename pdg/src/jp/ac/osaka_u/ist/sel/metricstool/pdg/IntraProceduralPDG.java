@@ -169,7 +169,7 @@ public class IntraProceduralPDG extends PDG {
 			final boolean buildExecutionDependency) {
 
 		this(unit, pdgNodeFactory, cfgNodeFactory, buildDataDependency,
-				buildControlDependency, buildExecutionDependency, true,
+				buildControlDependency, buildExecutionDependency, false,
 				Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
 	}
 
