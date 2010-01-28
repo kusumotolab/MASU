@@ -210,8 +210,9 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 	/**
 	 * このノードで定義・変更されている変数のSetを返す
 	 * 
-	 * @param countObjectStateChange 呼び出されたメソッドないでのオブジェクトの状態変更
-	 * （フィールドへの代入など）を参照されている変数の変更とする場合はtrue．
+	 * @param countObjectStateChange
+	 *            呼び出されたメソッドないでのオブジェクトの状態変更
+	 *            （フィールドへの代入など）を参照されている変数の変更とする場合はtrue．
 	 * 
 	 * @return
 	 */
@@ -226,7 +227,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 			for (final CallInfo<?> call : this.getCore().getCalls()) {
 				if (call instanceof MethodCallInfo) {
 					final MethodCallInfo methodCall = (MethodCallInfo) call;
-					if (methodCall.getCallee().stateChange()) {
+					if (CFGUtility.stateChange(methodCall.getCallee())) {
 						final ExpressionInfo qualifier = methodCall
 								.getQualifierExpression();
 						if (qualifier instanceof VariableUsageInfo<?>) {
