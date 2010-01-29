@@ -568,8 +568,8 @@ public class Scorpio extends MetricsTool {
 
 				final IntraProceduralPDG pdg = new IntraProceduralPDG(method,
 						pdgNodeFactory, new DefaultCFGNodeFactory(), data,
-						control, execution, dataDistance, controlDistance,
-						executionDistance);
+						control, execution, true, dataDistance,
+						controlDistance, executionDistance);
 				PDGController.getInstance(Scorpio.ID).put(method, pdg);
 
 				/*
@@ -591,7 +591,7 @@ public class Scorpio extends MetricsTool {
 				final IntraProceduralPDG pdg = new IntraProceduralPDG(
 						constructor, pdgNodeFactory,
 						new DefaultCFGNodeFactory(), data, control, execution,
-						dataDistance, controlDistance, executionDistance);
+						true, dataDistance, controlDistance, executionDistance);
 				PDGController.getInstance(Scorpio.ID).put(constructor, pdg);
 
 				/*
