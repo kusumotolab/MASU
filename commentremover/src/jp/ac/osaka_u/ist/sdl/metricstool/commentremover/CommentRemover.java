@@ -27,7 +27,7 @@ public class CommentRemover {
 
 		try {
 
-			// 　コマンドライン引数を処理
+			// コマンドライン引数を処理
 			final Options options = new Options();
 
 			{
@@ -259,13 +259,15 @@ public class CommentRemover {
 		boolean isLineComment = false;
 		boolean isString = false;
 
-		for (int i = 0; i < src.length() - 1; i++) {
+		for (int i = 0; i < src.length(); i++) {
+			final char prev = 0 < i ? src.charAt(i - 1) : '0';
 			final char ch = src.charAt(i);
+			final char next = (i < src.length() - 1) ? src.charAt(i + 1) : '0';
 
 			// ラインコメントの中にいるとき
 			if (isLineComment) {
 				// if (ch == LINE_SEPARATOR.charAt(0)) {
-				if (ch == '\n' || ch == '\r') {
+				if (ch == '\n' || ((ch != '\n') && (prev == '\r'))) {
 					isLineComment = false;
 					buf.append(LINE_SEPARATOR);
 				}
@@ -287,7 +289,7 @@ public class CommentRemover {
 			}
 
 			// ラインコメント開始
-			else if (ch == '/' && src.charAt(i + 1) == '/') {
+			else if (ch == '/' && next == '/') {
 				isLineComment = true;
 			}
 
@@ -371,7 +373,7 @@ public class CommentRemover {
 			}
 		}
 
-		return buf.toString();
+		return buf.toString().replaceFirst("\\s*$", "");
 	}
 
 	/**
@@ -384,27 +386,32 @@ public class CommentRemover {
 		final String CLOSE_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[}][ \t]*"
 				+ LINE_SEPARATOR;
 
+		// final String OPEN_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[{]";
+		// final String CLOSE_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[}]";
+
 		String text1 = src;
 		while (true) {
-			int beforeLength = text1.length();
-			text1 = text1.replaceAll(OPEN_BRACKET_LINE, "{" + LINE_SEPARATOR);
-			int afterLength = text1.length();
-			if (beforeLength == afterLength) {
+			final String before = text1;
+			text1 = text1.replaceFirst(OPEN_BRACKET_LINE, "{" + LINE_SEPARATOR);
+			final String after = text1;
+			if (before.equals(after)) {
 				break;
 			}
 		}
 
 		String text2 = text1;
 		while (true) {
-			int beforeLength = text2.length();
-			text2 = text2.replaceAll(CLOSE_BRACKET_LINE, "}" + LINE_SEPARATOR);
-			int afterLength = text2.length();
-			if (beforeLength == afterLength) {
+			final String before = text2;
+			text2 = text2
+					.replaceFirst(CLOSE_BRACKET_LINE, "}" + LINE_SEPARATOR);
+			final String after = text2;
+			if (before.equals(after)) {
 				break;
 			}
 		}
 
-		return text2;
+		return text2.replaceFirst(LINE_SEPARATOR + "[ \t]*[}][ \t]*$", "}"
+				+ LINE_SEPARATOR);
 	}
 
 	/**
