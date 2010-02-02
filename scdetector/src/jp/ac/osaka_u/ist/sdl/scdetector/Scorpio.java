@@ -88,8 +88,11 @@ public class Scorpio extends MetricsTool {
 			}
 
 			{
-				final Option d = new Option("d", "directory", true,
-						"target directory");
+				final Option d = new Option(
+						"d",
+						"directory",
+						true,
+						"specify target directories (separate with comma \',\' if you specify multiple directories");
 				d.setArgName("directory");
 				d.setArgs(1);
 				d.setRequired(true);
@@ -272,7 +275,14 @@ public class Scorpio extends MetricsTool {
 				Configuration.INSTANCE.setC(Integer.valueOf(cmd
 						.getOptionValue("c")));
 			}
-			Configuration.INSTANCE.setD(cmd.getOptionValue("d"));
+			{
+				final StringTokenizer tokenizer = new StringTokenizer(cmd
+						.getOptionValue("d"), ",");
+				while (tokenizer.hasMoreElements()) {
+					final String directory = tokenizer.nextToken();
+					Configuration.INSTANCE.addD(directory);
+				}
+			}
 			Configuration.INSTANCE.setL(cmd.getOptionValue("l"));
 			if (cmd.hasOption("m")) {
 				final String smallmethod = cmd.getOptionValue("m");
@@ -489,8 +499,9 @@ public class Scorpio extends MetricsTool {
 
 			// âêÕópê›íË
 			Settings.getInstance().setLanguage(Configuration.INSTANCE.getL());
-			Settings.getInstance().setTargetDirectory(
-					Configuration.INSTANCE.getD());
+			for (final String directory : Configuration.INSTANCE.getD()) {
+				Settings.getInstance().addTargetDirectory(directory);
+			}
 			Settings.getInstance().setVerbose(true);
 
 			// èÓïÒï\é¶ópê›íË
