@@ -113,7 +113,7 @@ public class GraphViewer extends MetricsTool {
 
 			// ‰ğÍ—pİ’è
 			Settings.getInstance().setLanguage(cmd.getOptionValue("l"));
-			Settings.getInstance().setTargetDirectory(cmd.getOptionValue("d"));
+			Settings.getInstance().addTargetDirectory(cmd.getOptionValue("d"));
 			Settings.getInstance().setVerbose(true);
 
 			// î•ñ•\¦—pİ’è

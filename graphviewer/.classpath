@@ -3,10 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="commons-cli-1.1/commons-cli-1.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="/pdg/bin" sourcepath="/pdg/src"/>
-	<classpathentry exported="true" kind="lib" path="/cfg/bin" sourcepath="/cfg/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/cfg"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/masu"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pdg"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/main"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
