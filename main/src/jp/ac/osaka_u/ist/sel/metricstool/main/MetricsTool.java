@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.csharp.CSharpAntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
@@ -35,7 +36,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CommentInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
@@ -168,16 +168,20 @@ public class MetricsTool {
         }
 
         {
-            final Option d = new Option("d", "directory", true, "specify target directory");
-            d.setArgName("directory");
+            final Option d = new Option("d", "directores", true,
+                    "specify target directories (separate with comma \',\' if you specify multiple directories");
+            d.setArgName("directories");
             d.setArgs(1);
             d.setRequired(false);
             options.addOption(d);
         }
 
         {
-            final Option i = new Option("i", "input", true,
-                    "specify the input that contains the list of target files");
+            final Option i = new Option(
+                    "i",
+                    "input",
+                    true,
+                    "specify the input that contains the list of target files (separate with comma \',\' if you specify multiple inputs)");
             i.setArgName("input");
             i.setArgs(1);
             i.setRequired(false);
@@ -285,10 +289,18 @@ public class MetricsTool {
 
             Settings.getInstance().setVerbose(cmd.hasOption("v"));
             if (cmd.hasOption("d")) {
-                Settings.getInstance().setTargetDirectory(cmd.getOptionValue("d"));
+                final StringTokenizer tokenizer = new StringTokenizer(cmd.getOptionValue("d"), ",");
+                while (tokenizer.hasMoreElements()) {
+                    final String directory = tokenizer.nextToken();
+                    Settings.getInstance().addTargetDirectory(directory);
+                }
             }
             if (cmd.hasOption("i")) {
-                Settings.getInstance().setListFile(cmd.getOptionValue("i"));
+                final StringTokenizer tokenizer = new StringTokenizer(cmd.getOptionValue("i"), ",");
+                while (tokenizer.hasMoreElements()) {
+                    final String listFile = tokenizer.nextToken();
+                    Settings.getInstance().addListFile(listFile);
+                }
             }
             Settings.getInstance().setLanguage(cmd.getOptionValue("l"));
             if (cmd.hasOption("m")) {
@@ -427,12 +439,12 @@ public class MetricsTool {
     public MetricsTool() {
 
     }
-    
+
     /**
      * {@link #readTargetFiles()} で読み込んだ対象ファイル群を解析する.
      * 
      */
-    
+
     public void analyzeTargetFiles() {
         // 対象ファイルを解析
 
@@ -509,7 +521,7 @@ public class MetricsTool {
 
                         fileInfo.addAllComments(java15lexer.getCommentSet());
                         fileInfo.setLOC(java15lexer.getLine());
-                        
+
                         break;
 
                     case JAVA14:
@@ -716,30 +728,29 @@ public class MetricsTool {
         final Settings settings = Settings.getInstance();
 
         // ディレクトリから読み込み
-        if (null != settings.getTargetDirectory()) {
+        for (final String directory : settings.getTargetDirectories()) {
+            registerFilesFromDirectory(new File(directory));
+        }
 
-            File targetDirectory = new File(settings.getTargetDirectory());
-            registerFilesFromDirectory(targetDirectory);
-
-            // リストファイルから読み込み
-        } else if (null != settings.getListFile()) {
+        // リストファイルから読み込み
+        for (final String file : settings.getListFiles()) {
 
             try {
 
                 final TargetFileManager targetFiles = DataManager.getInstance()
                         .getTargetFileManager();
-                for (BufferedReader reader = new BufferedReader(new FileReader(settings
-                        .getListFile())); reader.ready();) {
+                final BufferedReader reader = new BufferedReader(new FileReader(file));
+                while (reader.ready()) {
                     final String line = reader.readLine();
                     final TargetFile targetFile = new TargetFile(line);
                     targetFiles.add(targetFile);
                 }
-
+                reader.close();
             } catch (FileNotFoundException e) {
-                err.println("\"" + settings.getListFile() + "\" is not a valid file!");
+                err.println("\"" + file + "\" is not a valid file!");
                 System.exit(0);
             } catch (IOException e) {
-                err.println("\"" + settings.getListFile() + "\" can\'t read!");
+                err.println("\"" + file + "\" can\'t read!");
                 System.exit(0);
             }
         }
@@ -1255,23 +1266,24 @@ public class MetricsTool {
         }
 
         // for unresolved instance initializers
-        for (final UnresolvedInstanceInitializerInfo unresolvedInstanceInitializer : unresolvedClassInfo.getInstanceInitializers()) {
+        for (final UnresolvedInstanceInitializerInfo unresolvedInstanceInitializer : unresolvedClassInfo
+                .getInstanceInitializers()) {
             // resolve
             final InstanceInitializerInfo instanceInitializer = unresolvedInstanceInitializer
                     .resolve(ownerClass, null, classInfoManager, fieldInfoManager,
                             methodInfoManager);
-            
+
             // register
             ownerClass.addInstanceInitializer(instanceInitializer);
         }
-        
+
         // for unresolved static initializers
-        for (final UnresolvedStaticInitializerInfo unresolvedStaticInitializer : unresolvedClassInfo.getStaticInitializers()) {
+        for (final UnresolvedStaticInitializerInfo unresolvedStaticInitializer : unresolvedClassInfo
+                .getStaticInitializers()) {
             // resolve
-            final StaticInitializerInfo staticInitializer = unresolvedStaticInitializer
-                    .resolve(ownerClass, null, classInfoManager, fieldInfoManager,
-                            methodInfoManager);
-            
+            final StaticInitializerInfo staticInitializer = unresolvedStaticInitializer.resolve(
+                    ownerClass, null, classInfoManager, fieldInfoManager, methodInfoManager);
+
             // register
             ownerClass.addStaticInitializer(staticInitializer);
         }

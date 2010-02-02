@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main;
 
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -28,8 +31,8 @@ public class Settings {
 
     private Settings() {
         this.verbose = false;
-        this.targetDirectory = null;
-        this.listFile = null;
+        this.targetDirectories = new HashSet<String>();
+        this.listFiles = new HashSet<String>();
         this.language = null;
         this.metrics = null;
         this.fileMetricsFile = null;
@@ -60,16 +63,16 @@ public class Settings {
      * 解析対象ディレクトリを返す．
      * 
      */
-    public String getTargetDirectory() {
-        return this.targetDirectory;
+    public Set<String> getTargetDirectories() {
+        return Collections.unmodifiableSet(this.targetDirectories);
     }
 
-    public void setTargetDirectory(final String targetDirectory) {
+    public void addTargetDirectory(final String targetDirectory) {
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == targetDirectory) {
             throw new IllegalArgumentException();
         }
-        this.targetDirectory = targetDirectory;
+        this.targetDirectories.add(targetDirectory);
     }
 
     /**
@@ -115,16 +118,16 @@ public class Settings {
      * 解析対象ファイルのパスを記述しているファイルのパスを返す
      * 
      */
-    public String getListFile() {
-        return this.listFile;
+    public Set<String> getListFiles() {
+        return Collections.unmodifiableSet(this.listFiles);
     }
 
-    public void setListFile(final String listFile) {
+    public void addListFile(final String listFile) {
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == listFile) {
             throw new IllegalArgumentException();
         }
-        this.listFile = listFile;
+        this.listFiles.add(listFile);
     }
 
     /**
@@ -250,12 +253,12 @@ public class Settings {
     /**
      * 解析対象ディレクトリを記録するための変数
      */
-    private String targetDirectory;
+    private final Set<String> targetDirectories;
 
     /**
      * 解析対象ファイルのパスを記述したファイルのパスを記録するための変数
      */
-    private String listFile;
+    private final Set<String> listFiles;
 
     /**
      * 解析対象ファイルの記述言語を記録するための変数
