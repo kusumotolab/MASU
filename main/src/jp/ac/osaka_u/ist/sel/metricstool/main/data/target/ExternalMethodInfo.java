@@ -20,14 +20,31 @@ public final class ExternalMethodInfo extends MethodInfo {
 
     /**
      * 外部クラスに定義されているメソッドオブジェクトを初期化する
+     * アクセス制御子まで分かっている場合
+     *  
+     * @param methodName メソッド名
+     * @param ownerClass このメソッドを定義しているクラス
+     */
+    public ExternalMethodInfo(final String methodName, final ExternalClassInfo ownerClass,
+            final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
+
+        super(new HashSet<ModifierInfo>(), methodName, ownerClass, privateVisible,
+                namespaceVisible, inheritanceVisible, publicVisible, instance, 0, 0, 0, 0);
+
+        this.setReturnType(UnknownTypeInfo.getInstance());
+    }
+
+    /**
+     * 外部クラスに定義されているメソッドオブジェクトを初期化する
      * 
      * @param methodName メソッド名
      * @param ownerClass このメソッドを定義しているクラス
      */
     public ExternalMethodInfo(final String methodName, final ExternalClassInfo ownerClass) {
 
-        super(new HashSet<ModifierInfo>(), methodName, ownerClass, false, true, true, true, 0, 0,
-                0, 0);
+        super(new HashSet<ModifierInfo>(), methodName, ownerClass, false, true, true, true, true,
+                0, 0, 0, 0);
 
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
@@ -41,7 +58,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     public ExternalMethodInfo(final String methodName) {
 
         super(new HashSet<ModifierInfo>(), methodName, ExternalClassInfo.UNKNOWN, false, true,
-                true, true, 0, 0, 0, 0);
+                true, true, true, 0, 0, 0, 0);
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
 

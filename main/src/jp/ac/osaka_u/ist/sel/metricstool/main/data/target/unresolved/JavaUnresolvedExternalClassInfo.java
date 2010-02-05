@@ -26,6 +26,7 @@ public class JavaUnresolvedExternalClassInfo {
         this.interfaces = new HashSet<String>();
         this.methods = new HashSet<JavaUnresolvedExternalMethodInfo>();
         this.fields = new HashSet<JavaUnresolvedExternalFieldInfo>();
+        this.modifiers = new HashSet<String>();
     }
 
     public void setName(final String name) {
@@ -46,6 +47,10 @@ public class JavaUnresolvedExternalClassInfo {
         }
 
         this.superName = superName;
+    }
+
+    public void isInterface(final boolean isInterface) {
+        this.isInterface = isInterface;
     }
 
     public void addInterface(final String interfaceName) {
@@ -78,6 +83,16 @@ public class JavaUnresolvedExternalClassInfo {
         this.fields.add(field);
     }
 
+    public void addModifier(final String modifier) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == modifier) {
+            throw new IllegalArgumentException();
+        }
+
+        this.modifiers.add(modifier);
+    }
+
     public String getName() {
         return this.name;
     }
@@ -98,6 +113,10 @@ public class JavaUnresolvedExternalClassInfo {
         return Collections.unmodifiableSet(this.fields);
     }
 
+    public Set<String> getModifiers() {
+        return Collections.unmodifiableSet(this.modifiers);
+    }
+
     @Override
     public int hashCode() {
         return this.getName().hashCode();
@@ -113,13 +132,21 @@ public class JavaUnresolvedExternalClassInfo {
         return false;
     }
 
+    public boolean isInterface() {
+        return this.isInterface;
+    }
+
     private String name;
 
     private String superName;
+
+    private boolean isInterface;
 
     private final Set<String> interfaces;
 
     private final Set<JavaUnresolvedExternalMethodInfo> methods;
 
     private final Set<JavaUnresolvedExternalFieldInfo> fields;
+
+    private final Set<String> modifiers;
 }

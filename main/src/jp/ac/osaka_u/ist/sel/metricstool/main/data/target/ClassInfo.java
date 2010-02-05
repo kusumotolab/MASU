@@ -38,7 +38,9 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * @param toColumn 終了列
      */
     ClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
-            final String className, final int fromLine, final int fromColumn, final int toLine,
+            final String className, final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
+            final boolean isInterface, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
@@ -64,6 +66,14 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
+
+        this.privateVisible = privateVisible;
+        this.namespaceVisible = namespaceVisible;
+        this.inheritanceVisible = inheritanceVisible;
+        this.publicVisible = publicVisible;
+        this.isInterface = isInterface;
+
+        this.instance = instance;
     }
 
     /**
@@ -77,7 +87,10 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * @param toColumn 終了列
      */
     public ClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
+            final boolean isInterface, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
@@ -107,6 +120,14 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
+
+        this.privateVisible = privateVisible;
+        this.namespaceVisible = namespaceVisible;
+        this.inheritanceVisible = inheritanceVisible;
+        this.publicVisible = publicVisible;
+        this.isInterface = isInterface;
+
+        this.instance = instance;
     }
 
     /**
@@ -530,6 +551,78 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
     }
 
     /**
+     * 子クラスから参照可能かどうかを返す
+     * 
+     * @return 子クラスから参照可能な場合は true, そうでない場合は false
+     */
+    public final boolean isInheritanceVisible() {
+        return this.inheritanceVisible;
+    }
+
+    /**
+     * 同じ名前空間から参照可能かどうかを返す
+     * 
+     * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
+     */
+    public final boolean isNamespaceVisible() {
+        return this.namespaceVisible;
+    }
+
+    /**
+     * クラス内からのみ参照可能かどうかを返す
+     * 
+     * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
+     */
+    public final boolean isPrivateVisible() {
+        return this.privateVisible;
+    }
+
+    /**
+     * どこからでも参照可能かどうかを返す
+     * 
+     * @return どこからでも参照可能な場合は true, そうでない場合は false
+     */
+    public final boolean isPublicVisible() {
+        return this.publicVisible;
+    }
+
+    /**
+     * インスタンスメンバーかどうかを返す
+     * 
+     * @return インスタンスメンバーの場合 true，そうでない場合 false
+     */
+    public final boolean isInstanceMember() {
+        return this.instance;
+    }
+
+    /**
+     * スタティックメンバーかどうかを返す
+     * 
+     * @return スタティックメンバーの場合 true，そうでない場合 false
+     */
+    public final boolean isStaticMember() {
+        return !this.instance;
+    }
+
+    /**
+     * インターフェースかどうか返す．
+     * 
+     * @return インターフェースの場合 true，クラスの場合 false
+     */
+    public final boolean isInterface() {
+        return this.isInterface;
+    }
+
+    /**
+     * クラスかどうか返す．
+     * 
+     *  @return クラスの場合 true，インターフェースの場合 false
+     */
+    public final boolean isClass() {
+        return !this.isInterface;
+    }
+
+    /**
      * クラス名を保存するための変数
      */
     private final String className;
@@ -587,4 +680,33 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      */
     private final SortedSet<I> innerClasses;
 
+    /**
+     * クラス内からのみ参照可能かどうか保存するための変数
+     */
+    private final boolean privateVisible;
+
+    /**
+     * 同じ名前空間から参照可能かどうか保存するための変数
+     */
+    private final boolean namespaceVisible;
+
+    /**
+     * 子クラスから参照可能かどうか保存するための変数
+     */
+    private final boolean inheritanceVisible;
+
+    /**
+     * どこからでも参照可能かどうか保存するための変数
+     */
+    private final boolean publicVisible;
+
+    /**
+     * インスタンスメンバーかどうかを保存するための変数
+     */
+    private final boolean instance;
+
+    /**
+     * インターフェースであるかどうかを保存するための変数
+     */
+    private final boolean isInterface;
 }

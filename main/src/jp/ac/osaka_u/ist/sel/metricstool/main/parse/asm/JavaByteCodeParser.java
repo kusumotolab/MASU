@@ -1,6 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm;
 
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalMethodInfo;
@@ -11,6 +16,7 @@ import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 import com.sun.xml.internal.ws.org.objectweb.asm.Type;
 
@@ -39,6 +45,12 @@ public class JavaByteCodeParser implements ClassVisitor {
 
         for (final String interfaceName : interfaces) {
             this.classInfo.addInterface(interfaceName);
+        }
+
+        this.classInfo.isInterface(0 != (access & Opcodes.ACC_INTERFACE));
+
+        for (final String modifier : this.getModifiers(access)) {
+            this.classInfo.addModifier(modifier);
         }
     }
 
@@ -131,6 +143,42 @@ public class JavaByteCodeParser implements ClassVisitor {
         }
 
         return this.classInfo;
+    }
+
+    private Set<String> getModifiers(final int access) {
+
+        final Set<String> modifiers = new HashSet<String>();
+
+        // Ç±Ç±Ç©ÇÁèCè¸éq
+        if (0 != (access & Opcodes.ACC_PUBLIC)) {
+            modifiers.add(ModifierInfo.PUBLIC_STRING);
+        }
+
+        if (0 != (access & Opcodes.ACC_PROTECTED)) {
+            modifiers.add(ModifierInfo.PROTECTED_STRING);
+        }
+
+        if (0 != (access & Opcodes.ACC_PRIVATE)) {
+            modifiers.add(ModifierInfo.PRIVATE_STRING);
+        }
+
+        if (0 != (access & Opcodes.ACC_FINAL)) {
+            modifiers.add(ModifierInfo.FINAL_STRING);
+        }
+
+        if (0 != (access & Opcodes.ACC_STATIC)) {
+            modifiers.add(ModifierInfo.STATIC_STRING);
+        }
+
+        if (0 != (access & Opcodes.ACC_ABSTRACT)) {
+            modifiers.add(ModifierInfo.ABSTRACT_STRING);
+        }
+
+        if (0 != (access & Opcodes.ACC_SYNCHRONIZED)) {
+            modifiers.add(ModifierInfo.SYNCHRONIZED_STRING);
+        }
+
+        return Collections.unmodifiableSet(modifiers);
     }
 
     private final JavaUnresolvedExternalClassInfo classInfo;

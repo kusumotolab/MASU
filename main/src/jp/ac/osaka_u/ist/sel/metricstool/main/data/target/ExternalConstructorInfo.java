@@ -21,6 +21,18 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
      * 
      * @param ownerClass このメソッドを定義しているクラス
      */
+    public ExternalConstructorInfo(final ExternalClassInfo ownerClass,
+            final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible) {
+        super(new HashSet<ModifierInfo>(), ownerClass, privateVisible, namespaceVisible,
+                inheritanceVisible, publicVisible, 0, 0, 0, 0);
+    }
+
+    /**
+     * 外部クラスに定義されているコンストラクタオブジェクトを初期化する
+     * 
+     * @param ownerClass このメソッドを定義しているクラス
+     */
     public ExternalConstructorInfo(final ExternalClassInfo ownerClass) {
         super(new HashSet<ModifierInfo>(), ownerClass, false, true, true, true, 0, 0, 0, 0);
     }

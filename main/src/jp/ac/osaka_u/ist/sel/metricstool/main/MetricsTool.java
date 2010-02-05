@@ -44,7 +44,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalFieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InnerClassInfo;
@@ -67,6 +70,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalFieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
@@ -101,7 +105,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.MasuAstFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeParser;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.Transrator;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.Translator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.DefaultPluginLauncher;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginLauncher;
@@ -494,8 +498,17 @@ public class MetricsTool {
         for (final JavaUnresolvedExternalClassInfo unresolvedClassInfo : unresolvedExternalClasses) {
 
             final String unresolvedName = unresolvedClassInfo.getName();
-            final String[] name = Transrator.transrateName(unresolvedName);
-            final ExternalClassInfo classInfo = new ExternalClassInfo(name);
+            final String[] name = Translator.transrateName(unresolvedName);
+            final Set<String> modifiers = unresolvedClassInfo.getModifiers();
+            final boolean isPublicVisible = modifiers.contains(ModifierInfo.PUBLIC_STRING);
+            final boolean isNamespaceVisible = !modifiers.contains(ModifierInfo.PRIVATE_STRING);
+            final boolean isInheritanceVisible = !modifiers.contains(ModifierInfo.PROTECTED_STRING);
+            final boolean isPrivateVisible = modifiers.contains(ModifierInfo.PRIVATE_STRING);
+            final boolean isStatic = modifiers.contains(ModifierInfo.STATIC_STRING);
+            final boolean isInterface = unresolvedClassInfo.isInterface();
+            final ExternalClassInfo classInfo = new ExternalClassInfo(name, isPrivateVisible,
+                    isNamespaceVisible, isInheritanceVisible, isPublicVisible, !isStatic,
+                    isInterface);
             classInfoManager.add(classInfo);
         }
 
@@ -504,7 +517,7 @@ public class MetricsTool {
 
             // まずは，解決済みオブジェクトを取得            
             final String unresolvedClassName = unresolvedClassInfo.getName();
-            final String[] className = Transrator.transrateName(unresolvedClassName);
+            final String[] className = Translator.transrateName(unresolvedClassName);
             final ExternalClassInfo classInfo = (ExternalClassInfo) classInfoManager
                     .getClassInfo(className);
 
@@ -512,7 +525,7 @@ public class MetricsTool {
             {
                 final String unresolvedSuperName = unresolvedClassInfo.getSuperName();
                 if (null != unresolvedSuperName) {
-                    final String[] superName = Transrator.transrateName(unresolvedSuperName);
+                    final String[] superName = Translator.transrateName(unresolvedSuperName);
                     ExternalClassInfo superClassInfo = (ExternalClassInfo) classInfoManager
                             .getClassInfo(superName);
                     if (null == superClassInfo) {
@@ -526,7 +539,7 @@ public class MetricsTool {
 
             // インターフェースがあれば解決
             for (final String unresolvedInterfaceName : unresolvedClassInfo.getInterfaces()) {
-                final String[] interfaceName = Transrator.transrateName(unresolvedInterfaceName);
+                final String[] interfaceName = Translator.transrateName(unresolvedInterfaceName);
                 ExternalClassInfo interfaceInfo = (ExternalClassInfo) classInfoManager
                         .getClassInfo(interfaceName);
                 if (null == interfaceInfo) {
@@ -543,14 +556,76 @@ public class MetricsTool {
 
                 final String fieldName = unresolvedField.getName();
                 final String unresolvedType = unresolvedField.getType();
-                final TypeInfo fieldType = Transrator.translateType(unresolvedType, 0, null);
+                final TypeInfo fieldType = Translator.translateType(unresolvedType, 0, null);
+                final Set<String> modifiers = unresolvedField.getModifiers();
+                final boolean isPublicVisible = modifiers.contains(ModifierInfo.PUBLIC_STRING);
+                final boolean isNamespaceVisible = !modifiers.contains(ModifierInfo.PRIVATE_STRING);
+                final boolean isInheritanceVisible = !modifiers
+                        .contains(ModifierInfo.PROTECTED_STRING);
+                final boolean isPrivateVisible = modifiers.contains(ModifierInfo.PRIVATE_STRING);
+                final boolean isStatic = modifiers.contains(ModifierInfo.STATIC_STRING);
                 final ExternalFieldInfo field = new ExternalFieldInfo(fieldName, fieldType,
-                        classInfo, true, true, true, true, true);
+                        classInfo, isPrivateVisible, isNamespaceVisible, isInheritanceVisible,
+                        isPublicVisible, isStatic);
                 classInfo.addDefinedField(field);
             }
-            
+
             // メソッドの解決
-            
+            for (final JavaUnresolvedExternalMethodInfo unresolvedMethod : unresolvedClassInfo
+                    .getMethods()) {
+
+                final String name = unresolvedMethod.getName();
+
+                final Set<String> modifiers = unresolvedMethod.getModifiers();
+                final boolean isPublicVisible = modifiers.contains(ModifierInfo.PUBLIC_STRING);
+                final boolean isNamespaceVisible = !modifiers.contains(ModifierInfo.PRIVATE_STRING);
+                final boolean isInheritanceVisible = !modifiers
+                        .contains(ModifierInfo.PROTECTED_STRING);
+                final boolean isPrivateVisible = modifiers.contains(ModifierInfo.PRIVATE_STRING);
+                final boolean isStatic = modifiers.contains(ModifierInfo.STATIC_STRING);
+
+                // コンストラクタのとき
+                if (name.equals("<init>")) {
+
+                    final ExternalConstructorInfo constructor = new ExternalConstructorInfo(
+                            classInfo, isPrivateVisible, isNamespaceVisible, isInheritanceVisible,
+                            isPublicVisible);
+
+                    final List<String> unresolvedParameters = unresolvedMethod.getArgumentTypes();
+                    for (final String unresolvedParameter : unresolvedParameters) {
+                        final TypeInfo parameterType = Translator.translateType(
+                                unresolvedParameter, 0, null);
+                        final ExternalParameterInfo parameter = new ExternalParameterInfo(
+                                parameterType, constructor);
+                        constructor.addParameter(parameter);
+                    }
+
+                    classInfo.addDefinedConstructor(constructor);
+                }
+
+                // メソッドのとき
+                else {
+                    final ExternalMethodInfo method = new ExternalMethodInfo(name, classInfo,
+                            isPrivateVisible, isNamespaceVisible, isInheritanceVisible,
+                            isPublicVisible, !isStatic);
+
+                    final String unresolvedReturnType = unresolvedMethod.getReturnType();
+                    final TypeInfo returnType = Translator.translateType(unresolvedReturnType, 0,
+                            null);
+                    method.setReturnType(returnType);
+
+                    final List<String> unresolvedParameters = unresolvedMethod.getArgumentTypes();
+                    for (final String unresolvedParameter : unresolvedParameters) {
+                        final TypeInfo parameterType = Translator.translateType(
+                                unresolvedParameter, 0, null);
+                        final ExternalParameterInfo parameter = new ExternalParameterInfo(
+                                parameterType, method);
+                        method.addParameter(parameter);
+                    }
+
+                    classInfo.addDefinedMethod(method);
+                }
+            }
         }
     }
 

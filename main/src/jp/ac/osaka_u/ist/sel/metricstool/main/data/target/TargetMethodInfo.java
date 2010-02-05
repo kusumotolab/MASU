@@ -52,37 +52,6 @@ public final class TargetMethodInfo extends MethodInfo implements StaticOrInstan
             final int fromColumn, final int toLine, final int toColumn) {
 
         super(modifiers, name, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible, fromLine, fromColumn, toLine, toColumn);
-
-        if (null == modifiers) {
-            throw new NullPointerException();
-        }
-
-        this.instance = instance;
+                publicVisible, instance, fromLine, fromColumn, toLine, toColumn);
     }
-
-    /**
-     * インスタンスメンバーかどうかを返す
-     * 
-     * @return インスタンスメンバーの場合 true，そうでない場合 false
-     */
-    @Override
-    public boolean isInstanceMember() {
-        return this.instance;
-    }
-
-    /**
-     * スタティックメンバーかどうかを返す
-     * 
-     * @return スタティックメンバーの場合 true，そうでない場合 false
-     */
-    @Override
-    public boolean isStaticMember() {
-        return !this.instance;
-    }
-
-    /**
-     * インスタンスメンバーかどうかを保存するための変数
-     */
-    private final boolean instance;
 }

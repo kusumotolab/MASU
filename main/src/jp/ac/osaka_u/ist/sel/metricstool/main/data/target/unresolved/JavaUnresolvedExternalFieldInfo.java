@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Collections;
+import java.util.Set;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -32,6 +35,16 @@ public class JavaUnresolvedExternalFieldInfo {
         this.type = type;
     }
 
+    public void addModifier(final String modifier) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == modifier) {
+            throw new IllegalArgumentException();
+        }
+
+        this.modifiers.add(modifier);
+    }
+
     public String getName() {
         return this.name;
     }
@@ -40,7 +53,13 @@ public class JavaUnresolvedExternalFieldInfo {
         return this.type;
     }
 
+    public Set<String> getModifiers() {
+        return Collections.unmodifiableSet(this.modifiers);
+    }
+
     private String name;
 
     private String type;
+
+    private Set<String> modifiers;
 }

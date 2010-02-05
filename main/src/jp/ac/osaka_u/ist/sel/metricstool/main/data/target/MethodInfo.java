@@ -19,7 +19,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  *
  */
 @SuppressWarnings("serial")
-public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasurable, Member {
+public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasurable, Member,
+        StaticOrInstance {
 
     /**
      * メソッドオブジェクトを初期化する
@@ -31,16 +32,17 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
      * @param namespaceVisible 名前空間可視か
      * @param inheritanceVisible 子クラスから可視か
      * @param publicVisible public可視か
+     * @param instance インスタンスかスタティックか
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
     MethodInfo(final Set<ModifierInfo> modifiers, final String methodName,
-            final ClassInfo<?,?,?,?> ownerClass, final boolean privateVisible,
+            final ClassInfo<?, ?, ?, ?> ownerClass, final boolean privateVisible,
             final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+            final boolean publicVisible, final boolean instance, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(modifiers, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
                 publicVisible, fromLine, fromColumn, toLine, toColumn);
@@ -55,6 +57,8 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
 
         this.overridees = new TreeSet<MethodInfo>();
         this.overriders = new TreeSet<MethodInfo>();
+
+        this.instance = instance;
     }
 
     /**
@@ -274,6 +278,26 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
+     * インスタンスメンバーかどうかを返す
+     * 
+     * @return インスタンスメンバーの場合 true，そうでない場合 false
+     */
+    @Override
+    public final boolean isInstanceMember() {
+        return this.instance;
+    }
+
+    /**
+     * スタティックメンバーかどうかを返す
+     * 
+     * @return スタティックメンバーの場合 true，そうでない場合 false
+     */
+    @Override
+    public final boolean isStaticMember() {
+        return !this.instance;
+    }
+
+    /**
      * メソッド名を保存するための変数
      */
     private final String methodName;
@@ -292,4 +316,9 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
      * オーバーライドされているメソッドを保存するための変数
      */
     protected final SortedSet<MethodInfo> overriders;
+
+    /**
+     * インスタンスメンバーかどうかを保存するための変数
+     */
+    private final boolean instance;
 }

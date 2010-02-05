@@ -15,9 +15,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SuperTypeParameterInfo
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterizable;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VoidTypeInfo;
 
 
-public class Transrator {
+public class Translator {
 
     public static String[] transrateName(final String unresolvedName) {
 
@@ -53,7 +54,7 @@ public class Transrator {
 
         // àÍï∂éöÇ»ÇÁÇŒÅCprimitiveTypeÇ≈Ç»ÇØÇÍÇŒÇ»ÇÁÇ»Ç¢
         if (1 == unresolvedType.length()) {
-            return translatePrimitiveType(unresolvedType.charAt(0));
+            return translateSingleCharacterType(unresolvedType.charAt(0));
         }
 
         // '['Ç≈énÇ‹Ç¡ÇƒÇ¢ÇÈÇ∆Ç´ÇÕîzóÒ
@@ -176,7 +177,7 @@ public class Transrator {
         throw new IllegalArgumentException();
     }
 
-    private static TypeInfo translatePrimitiveType(final char c) {
+    private static TypeInfo translateSingleCharacterType(final char c) {
 
         switch (c) {
         case 'Z':
@@ -195,6 +196,8 @@ public class Transrator {
             return PrimitiveTypeInfo.LONG;
         case 'D':
             return PrimitiveTypeInfo.DOUBLE;
+        case 'V':
+            return VoidTypeInfo.getInstance();
         default:
             throw new IllegalArgumentException();
         }

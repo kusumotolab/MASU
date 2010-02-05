@@ -9,13 +9,11 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
@@ -250,16 +248,6 @@ public final class ClassInfoManager {
 
         this.targetClassInfos = new TreeSet<TargetClassInfo>();
         this.externalClassInfos = new TreeSet<ExternalClassInfo>();
-
-        // java言語の場合は，暗黙にインポートされるクラスを追加しておく
-        final Settings settings = Settings.getInstance();
-        if (settings.getLanguage().equals(LANGUAGE.JAVA15)
-                || settings.getLanguage().equals(LANGUAGE.JAVA14)
-                || settings.getLanguage().equals(LANGUAGE.JAVA13)) {
-            for (int i = 0; i < ExternalClassInfo.JAVA_PREIMPORTED_CLASSES.length; i++) {
-                this.add(ExternalClassInfo.JAVA_PREIMPORTED_CLASSES[i]);
-            }
-        }
     }
 
     /**
