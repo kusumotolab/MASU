@@ -117,10 +117,10 @@ public class UnresolvedClassInfoManager {
                 throw new NullPointerException();
             }
 
-            if(!(o instanceof ClassKey)){
+            if (!(o instanceof ClassKey)) {
                 return false;
             }
-            
+
             final String[] fullQualifiedName = this.getFullQualifiedName();
             final String[] correspondFullQualifiedName = ((ClassKey) o).getFullQualifiedName();
 

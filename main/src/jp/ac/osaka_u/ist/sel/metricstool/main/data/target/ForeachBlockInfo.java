@@ -13,6 +13,7 @@ import java.util.SortedSet;
  * @author higo
  *
  */
+@SuppressWarnings("serial")
 public final class ForeachBlockInfo extends ConditionalBlockInfo {
 
     /**

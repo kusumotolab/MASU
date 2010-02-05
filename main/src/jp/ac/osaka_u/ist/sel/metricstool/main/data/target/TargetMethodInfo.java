@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -47,7 +46,7 @@ public final class TargetMethodInfo extends MethodInfo implements StaticOrInstan
      * @param toColumn 終了列
      */
     public TargetMethodInfo(final Set<ModifierInfo> modifiers, final String name,
-            final ClassInfo ownerClass, final boolean privateVisible,
+            final TargetClassInfo ownerClass, final boolean privateVisible,
             final boolean namespaceVisible, final boolean inheritanceVisible,
             final boolean publicVisible, final boolean instance, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -81,7 +80,6 @@ public final class TargetMethodInfo extends MethodInfo implements StaticOrInstan
     public boolean isStaticMember() {
         return !this.instance;
     }
-
 
     /**
      * インスタンスメンバーかどうかを保存するための変数

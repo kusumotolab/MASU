@@ -16,12 +16,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
@@ -151,18 +151,19 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             // 親がクラス型だった場合
         } else if (ownerType instanceof ClassTypeInfo) {
 
-            final ClassInfo ownerClass = ((ClassTypeInfo) ownerType).getReferencedClass();
+            final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) ownerType)
+                    .getReferencedClass();
             if (ownerClass instanceof TargetClassInfo) {
 
                 // まずは利用可能なメソッドから検索
                 {
                     // 利用可能なメソッド一覧を取得
-                    final List<TargetMethodInfo> availableMethods = NameResolver
-                            .getAvailableMethods((TargetClassInfo) ownerClass, usingClass);
+                    final List<MethodInfo> availableMethods = NameResolver.getAvailableMethods(
+                            (TargetClassInfo) ownerClass, usingClass);
 
                     // 利用可能なメソッドから，未解決メソッドと一致するものを検索
                     // メソッド名，引数の型のリストを用いて，このメソッドの呼び出しであるかどうかを判定
-                    for (final TargetMethodInfo availableMethod : availableMethods) {
+                    for (final MethodInfo availableMethod : availableMethods) {
 
                         // 呼び出し可能なメソッドが見つかった場合
                         if (availableMethod.canCalledWith(name, actualParameters)) {
@@ -181,7 +182,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 // そのクラスのメソッドを使用しているとみなす
                 {
                     final ExternalClassInfo externalSuperClass = NameResolver
-                            .getExternalSuperClass((TargetClassInfo) ownerClass);
+                            .getExternalSuperClass((ClassInfo<?, ?, ?, ?>) ownerClass);
                     if (null != externalSuperClass) {
 
                         final ExternalMethodInfo methodInfo = new ExternalMethodInfo(
@@ -218,7 +219,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             } else if (ownerClass instanceof ExternalClassInfo) {
 
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
-                        ownerClass);
+                        (ExternalClassInfo) ownerClass);
                 final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(
                         actualParameters, methodInfo);
                 methodInfo.addParameters(parameters);
@@ -241,10 +242,10 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             if (settings.getLanguage().equals(LANGUAGE.JAVA15)
                     || settings.getLanguage().equals(LANGUAGE.JAVA14)
                     || settings.getLanguage().equals(LANGUAGE.JAVA13)) {
-                final ClassInfo ownerClass = classInfoManager.getClassInfo(new String[] { "java",
-                        "lang", "Object" });
+                final ClassInfo<?, ?, ?, ?> ownerClass = classInfoManager
+                        .getClassInfo(new String[] { "java", "lang", "Object" });
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
-                        ownerClass);
+                        (ExternalClassInfo) ownerClass);
                 final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(
                         actualParameters, methodInfo);
                 methodInfo.addParameters(parameters);

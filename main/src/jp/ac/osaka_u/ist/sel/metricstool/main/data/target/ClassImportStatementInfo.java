@@ -10,7 +10,8 @@ import java.util.Set;
  * @author higo
  *
  */
-public class ClassImportStatementInfo extends ImportStatementInfo<ClassInfo> {
+@SuppressWarnings("serial")
+public class ClassImportStatementInfo extends ImportStatementInfo<ClassInfo<?, ?, ?, ?>> {
 
     /**
      * オブジェクトを初期化
@@ -20,8 +21,8 @@ public class ClassImportStatementInfo extends ImportStatementInfo<ClassInfo> {
      * @param toLine
      * @param toColumn
      */
-    public ClassImportStatementInfo(final Set<ClassInfo> importedClasses, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    public ClassImportStatementInfo(final Set<ClassInfo<?, ?, ?, ?>> importedClasses,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(importedClasses, fromLine, fromColumn, toLine, toColumn);
     }
@@ -31,7 +32,7 @@ public class ClassImportStatementInfo extends ImportStatementInfo<ClassInfo> {
      * 
      * @return　インポートされたクラスのSortedSet
      */
-    public Set<ClassInfo> getImportedClasses() {
+    public Set<ClassInfo<?, ?, ?, ?>> getImportedClasses() {
         return this.getImportedUnits();
     }
 }

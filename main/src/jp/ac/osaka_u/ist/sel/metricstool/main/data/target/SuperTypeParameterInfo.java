@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
+
 /**
  * 型パラメータ（表記法式が <X super Y>）を表すクラス
  * 
@@ -21,8 +22,8 @@ public final class SuperTypeParameterInfo extends TypeParameterInfo {
      * @param extendsType 基底クラス型
      * @param superType 派生クラス型
      */
-    public SuperTypeParameterInfo(final UnitInfo ownerUnit, final String name, final int index,
-            final TypeInfo extendsType, final TypeInfo superType) {
+    public SuperTypeParameterInfo(final TypeParameterizable ownerUnit, final String name,
+            final int index, final TypeInfo extendsType, final TypeInfo superType) {
 
         super(ownerUnit, name, index, extendsType);
 

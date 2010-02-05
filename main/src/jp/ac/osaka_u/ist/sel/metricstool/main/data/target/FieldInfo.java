@@ -26,7 +26,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  * @author higo
  */
-public abstract class FieldInfo extends VariableInfo<ClassInfo> implements MetricMeasurable, Member {
+@SuppressWarnings("serial")
+public abstract class FieldInfo extends VariableInfo<ClassInfo<?, ?, ?, ?>> implements
+        MetricMeasurable, Member, Visualizable, StaticOrInstance {
 
     /**
      * フィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．
@@ -41,14 +43,22 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
      * @param toColumn 終了列
      */
     FieldInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type,
-            final ClassInfo definitionClass, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+            final ClassInfo<?, ?, ?, ?> definitionClass, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final boolean instance, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(modifiers, name, type, definitionClass, fromLine, fromColumn, toLine, toColumn);
 
         if (null == definitionClass) {
             throw new NullPointerException();
         }
+
+        this.privateVisible = privateVisible;
+        this.namespaceVisible = namespaceVisible;
+        this.inheritanceVisible = inheritanceVisible;
+        this.publicVisible = publicVisible;
+        this.instance = instance;
 
         this.ownerClass = definitionClass;
         this.referencers = new TreeSet<CallableUnitInfo>();
@@ -136,7 +146,7 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
      * 
      * @return このフィールドを定義しているクラス
      */
-    public final ClassInfo getOwnerClass() {
+    public final ClassInfo<?, ?, ?, ?> getOwnerClass() {
         return this.ownerClass;
     }
 
@@ -159,9 +169,63 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
     }
 
     /**
+     * 子クラスから参照可能かどうかを返す
+     * 
+     * @return 子クラスから参照可能な場合は true, そうでない場合は false
+     */
+    public final boolean isInheritanceVisible() {
+        return this.inheritanceVisible;
+    }
+
+    /**
+     * 同じ名前空間から参照可能かどうかを返す
+     * 
+     * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
+     */
+    public final boolean isNamespaceVisible() {
+        return this.namespaceVisible;
+    }
+
+    /**
+     * クラス内からのみ参照可能かどうかを返す
+     * 
+     * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
+     */
+    public final boolean isPrivateVisible() {
+        return this.privateVisible;
+    }
+
+    /**
+     * どこからでも参照可能かどうかを返す
+     * 
+     * @return どこからでも参照可能な場合は true, そうでない場合は false
+     */
+    public final boolean isPublicVisible() {
+        return this.publicVisible;
+    }
+
+    /**
+     * インスタンスメンバーかどうかを返す
+     * 
+     * @return インスタンスメンバーの場合 true，そうでない場合 false
+     */
+    public final boolean isInstanceMember() {
+        return this.instance;
+    }
+
+    /**
+     * スタティックメンバーかどうかを返す
+     * 
+     * @return スタティックメンバーの場合 true，そうでない場合 false
+     */
+    public final boolean isStaticMember() {
+        return !this.instance;
+    }
+
+    /**
      * このフィールドを定義しているクラスを保存する変数
      */
-    protected final ClassInfo ownerClass;
+    protected final ClassInfo<?, ?, ?, ?> ownerClass;
 
     /**
      * このフィールドを参照しているメソッド群を保存するための変数
@@ -173,4 +237,28 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
      */
     protected final SortedSet<CallableUnitInfo> assignmenters;
 
+    /**
+     * クラス内からのみ参照可能かどうか保存するための変数
+     */
+    private final boolean privateVisible;
+
+    /**
+     * 同じ名前空間から参照可能かどうか保存するための変数
+     */
+    private final boolean namespaceVisible;
+
+    /**
+     * 子クラスから参照可能かどうか保存するための変数
+     */
+    private final boolean inheritanceVisible;
+
+    /**
+     * どこからでも参照可能かどうか保存するための変数
+     */
+    private final boolean publicVisible;
+
+    /**
+     * インスタンスメンバーかどうかを保存するための変数
+     */
+    private final boolean instance;
 }

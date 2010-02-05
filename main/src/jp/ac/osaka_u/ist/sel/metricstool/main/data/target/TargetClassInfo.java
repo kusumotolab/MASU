@@ -31,7 +31,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 @SuppressWarnings("serial")
-public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOrInstance {
+public class TargetClassInfo extends
+        ClassInfo<TargetFieldInfo, TargetMethodInfo, TargetConstructorInfo, TargetInnerClassInfo>
+        implements Visualizable, StaticOrInstance {
 
     /**
      * 指定されたクラスに含まれる全てのインナークラスを返す
@@ -95,7 +97,8 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
             innerClassInfos.addAll(getAccessibleInnerClasses(innerClassInfo, classCache));
         }
 
-        for (final ClassInfo superClassInfo : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
+        for (final ClassInfo<?, ?, ?, ?> superClassInfo : ClassTypeInfo.convert(classInfo
+                .getSuperClasses())) {
             if (superClassInfo instanceof TargetClassInfo) {
                 if (superClassInfo instanceof TargetInnerClassInfo) {
                     innerClassInfos.add((TargetInnerClassInfo) superClassInfo);
@@ -138,17 +141,13 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
             throw new NullPointerException();
         }
 
-        this.innerClasses = new TreeSet<TargetInnerClassInfo>();
-        this.definedMethods = new TreeSet<TargetMethodInfo>();
-        this.definedConstructors = new TreeSet<TargetConstructorInfo>();
-        this.definedFields = new TreeSet<TargetFieldInfo>();
         this.implicitInstanceInitializer = new InstanceInitializerInfo(this, 0, 0, 0, 0);
         this.implicitStaticInitializer = new StaticInitializerInfo(this, 0, 0, 0, 0);
         this.instanceInitializers = new TreeSet<InstanceInitializerInfo>();
         this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new TreeSet<StaticInitializerInfo>();
         this.staticInitializers.add(this.implicitStaticInitializer);
-        this.accessibleClasses = new TreeSet<ClassInfo>();
+        this.accessibleClasses = new TreeSet<ClassInfo<?, ?, ?, ?>>();
 
         this.privateVisible = privateVisible;
         this.namespaceVisible = namespaceVisible;
@@ -190,17 +189,13 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
             throw new NullPointerException();
         }
 
-        this.innerClasses = new TreeSet<TargetInnerClassInfo>();
-        this.definedMethods = new TreeSet<TargetMethodInfo>();
-        this.definedConstructors = new TreeSet<TargetConstructorInfo>();
-        this.definedFields = new TreeSet<TargetFieldInfo>();
         this.implicitInstanceInitializer = new InstanceInitializerInfo(this, 0, 0, 0, 0);
         this.implicitStaticInitializer = new StaticInitializerInfo(this, 0, 0, 0, 0);
         this.instanceInitializers = new TreeSet<InstanceInitializerInfo>();
         this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new TreeSet<StaticInitializerInfo>();
         this.staticInitializers.add(this.implicitStaticInitializer);
-        this.accessibleClasses = new TreeSet<ClassInfo>();
+        this.accessibleClasses = new TreeSet<ClassInfo<?, ?, ?, ?>>();
 
         this.privateVisible = privateVisible;
         this.namespaceVisible = namespaceVisible;
@@ -211,75 +206,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
         this.instance = instance;
 
         this.ownerFile = fileInfo;
-    }
-
-    /**
-     * このクラスにインナークラスを追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param innerClass 追加するインナークラス
-     */
-    public final void addInnerClass(final TargetInnerClassInfo innerClass) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == innerClass) {
-            throw new NullPointerException();
-        }
-
-        this.innerClasses.add(innerClass);
-    }
-
-    /**
-     * このクラスのインナークラスの SortedSet を返す．
-     * 
-     * @return インナークラスの SortedSet
-     */
-    public final SortedSet<TargetInnerClassInfo> getInnerClasses() {
-        return Collections.unmodifiableSortedSet(this.innerClasses);
-    }
-
-    /**
-     * このクラスに定義されたメソッド情報を追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param definedMethod 追加する定義されたメソッド
-     */
-    public final void addDefinedMethod(final TargetMethodInfo definedMethod) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == definedMethod) {
-            throw new NullPointerException();
-        }
-
-        this.definedMethods.add(definedMethod);
-    }
-
-    /**
-     * このクラスに定義されたコンストラクタ情報を追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param definedConstructor 追加する定義されたコンストラクタ
-     */
-    public final void addDefinedConstructor(final TargetConstructorInfo definedConstructor) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == definedConstructor) {
-            throw new NullPointerException();
-        }
-
-        this.definedConstructors.add(definedConstructor);
-    }
-
-    /**
-     * このクラスに定義されたフィールド情報を追加する．プラグインから呼ぶとランタイムエラー．
-     * 
-     * @param definedField 追加する定義されたフィールド
-     */
-    public final void addDefinedField(final TargetFieldInfo definedField) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == definedField) {
-            throw new NullPointerException();
-        }
-
-        this.definedFields.add(definedField);
     }
 
     /**
@@ -315,7 +241,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
      * 
      * @param accessibleClass アクセス可能なクラス
      */
-    public final void addAccessibleClass(final ClassInfo accessibleClass) {
+    public final void addAccessibleClass(final ClassInfo<?, ?, ?, ?> accessibleClass) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == accessibleClass) {
@@ -330,7 +256,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
      * 
      * @param accessibleClasses アクセス可能なクラス群
      */
-    public final void addaccessibleClasses(final Set<ClassInfo> accessibleClasses) {
+    public final void addaccessibleClasses(final Set<ClassInfo<?, ?, ?, ?>> accessibleClasses) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == accessibleClasses) {
@@ -338,33 +264,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
         }
 
         this.accessibleClasses.addAll(accessibleClasses);
-    }
-
-    /**
-     * このクラスに定義されているメソッドの SortedSet を返す．
-     * 
-     * @return 定義されているメソッドの SortedSet
-     */
-    public final SortedSet<TargetMethodInfo> getDefinedMethods() {
-        return Collections.unmodifiableSortedSet(this.definedMethods);
-    }
-
-    /**
-     * このクラスに定義されているコンストラクタの SortedSet を返す．
-     * 
-     * @return 定義されているメソッドの SortedSet
-     */
-    public final SortedSet<TargetConstructorInfo> getDefinedConstructors() {
-        return Collections.unmodifiableSortedSet(this.definedConstructors);
-    }
-
-    /**
-     * このクラスに定義されているフィールドの SortedSet を返す．
-     * 
-     * @return 定義されているフィールドの SortedSet
-     */
-    public final SortedSet<TargetFieldInfo> getDefinedFields() {
-        return Collections.unmodifiableSortedSet(this.definedFields);
     }
 
     /**
@@ -404,7 +303,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
      * 
      * @return このクラスにおいてアクセス可能なクラスのSortedSet
      */
-    public final Set<ClassInfo> getAccessibleClasses() {
+    public final Set<ClassInfo<?, ?, ?, ?>> getAccessibleClasses() {
         return Collections.unmodifiableSet(this.accessibleClasses);
     }
 
@@ -577,26 +476,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
     }
 
     /**
-     * このクラスの内部クラス一覧を保存するための変数．直接の内部クラスのみを保有する．
-     */
-    private final SortedSet<TargetInnerClassInfo> innerClasses;
-
-    /**
-     * このクラスで定義されているメソッド一覧を保存するための変数．
-     */
-    private final SortedSet<TargetMethodInfo> definedMethods;
-
-    /**
-     * このクラスで定義されているコンストラクタ一覧を保存するための変数．
-     */
-    private final SortedSet<TargetConstructorInfo> definedConstructors;
-
-    /**
-     * このクラスで定義されているフィールド一覧を保存するための変数．
-     */
-    private final SortedSet<TargetFieldInfo> definedFields;
-
-    /**
      * このクラスのスタティックイニシャライザ一覧を保存するための変数
      */
     private final SortedSet<StaticInitializerInfo> staticInitializers;
@@ -619,7 +498,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
     /**
      * このクラス内からアクセス可能なクラス
      */
-    private final Set<ClassInfo> accessibleClasses;
+    private final Set<ClassInfo<?, ?, ?, ?>> accessibleClasses;
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数

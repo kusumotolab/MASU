@@ -10,12 +10,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.csharp.CSharpAntlrAstTranslator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
@@ -40,8 +44,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InstanceInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
@@ -59,6 +65,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
@@ -92,6 +100,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.MasuAstFactory;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeParser;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.Transrator;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.DefaultPluginLauncher;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginLauncher;
@@ -109,6 +119,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.objectweb.asm.ClassReader;
 
 import antlr.ASTFactory;
 import antlr.RecognitionException;
@@ -407,6 +418,7 @@ public class MetricsTool {
 
         final long start = System.nanoTime();
 
+        metricsTool.analyzeLibraries();
         metricsTool.readTargetFiles();
         metricsTool.analyzeTargetFiles();
         metricsTool.launchPlugins();
@@ -441,10 +453,111 @@ public class MetricsTool {
     }
 
     /**
+     * ライブラリを解析し，その情報をExternalClassInfoとして登録する．
+     * readTargetFiles()の前に呼び出されなければならない
+     */
+    public void analyzeLibraries() {
+
+        final Set<JavaUnresolvedExternalClassInfo> unresolvedExternalClasses = new HashSet<JavaUnresolvedExternalClassInfo>();
+
+        // バイトコードから読み込み
+        for (final String path : Settings.getInstance().getLibraries()) {
+
+            try {
+                final File library = new File(path);
+
+                // jarファイルの場合
+                if (library.isFile() && path.endsWith(".jar")) {
+
+                    final JarFile jar = new JarFile(library);
+                    for (final Enumeration<JarEntry> entries = jar.entries(); entries
+                            .hasMoreElements();) {
+                        final JarEntry entry = entries.nextElement();
+                        if (entry.getName().endsWith(".class")
+                        /*&& (entry.getName().indexOf('$') < 0)*/) {
+
+                            final ClassReader reader = new ClassReader(jar.getInputStream(entry));
+                            final JavaByteCodeParser parser = new JavaByteCodeParser();
+                            reader.accept(parser, ClassReader.SKIP_CODE);
+                            unresolvedExternalClasses.add(parser.getClassInfo());
+                        }
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // クラスそのもののみ名前解決（型は解決しない）
+        final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
+        for (final JavaUnresolvedExternalClassInfo unresolvedClassInfo : unresolvedExternalClasses) {
+
+            final String unresolvedName = unresolvedClassInfo.getName();
+            final String[] name = Transrator.transrateName(unresolvedName);
+            final ExternalClassInfo classInfo = new ExternalClassInfo(name);
+            classInfoManager.add(classInfo);
+        }
+
+        //　各クラスで表われている型を解決していく
+        for (final JavaUnresolvedExternalClassInfo unresolvedClassInfo : unresolvedExternalClasses) {
+
+            // まずは，解決済みオブジェクトを取得            
+            final String unresolvedClassName = unresolvedClassInfo.getName();
+            final String[] className = Transrator.transrateName(unresolvedClassName);
+            final ExternalClassInfo classInfo = (ExternalClassInfo) classInfoManager
+                    .getClassInfo(className);
+
+            // 親クラスがあれば解決
+            {
+                final String unresolvedSuperName = unresolvedClassInfo.getSuperName();
+                if (null != unresolvedSuperName) {
+                    final String[] superName = Transrator.transrateName(unresolvedSuperName);
+                    ExternalClassInfo superClassInfo = (ExternalClassInfo) classInfoManager
+                            .getClassInfo(superName);
+                    if (null == superClassInfo) {
+                        superClassInfo = new ExternalClassInfo(superName);
+                        classInfoManager.add(superClassInfo);
+                    }
+                    final ClassTypeInfo superClassType = new ClassTypeInfo(superClassInfo);
+                    classInfo.addSuperClass(superClassType);
+                }
+            }
+
+            // インターフェースがあれば解決
+            for (final String unresolvedInterfaceName : unresolvedClassInfo.getInterfaces()) {
+                final String[] interfaceName = Transrator.transrateName(unresolvedInterfaceName);
+                ExternalClassInfo interfaceInfo = (ExternalClassInfo) classInfoManager
+                        .getClassInfo(interfaceName);
+                if (null == interfaceInfo) {
+                    interfaceInfo = new ExternalClassInfo(interfaceName);
+                    classInfoManager.add(interfaceInfo);
+                }
+                final ClassTypeInfo superClassType = new ClassTypeInfo(interfaceInfo);
+                classInfo.addSuperClass(superClassType);
+            }
+
+            // フィールドの解決            
+            for (final JavaUnresolvedExternalFieldInfo unresolvedField : unresolvedClassInfo
+                    .getFields()) {
+
+                final String fieldName = unresolvedField.getName();
+                final String unresolvedType = unresolvedField.getType();
+                final TypeInfo fieldType = Transrator.translateType(unresolvedType, 0, null);
+                final ExternalFieldInfo field = new ExternalFieldInfo(fieldName, fieldType,
+                        classInfo, true, true, true, true, true);
+                classInfo.addDefinedField(field);
+            }
+            
+            // メソッドの解決
+            
+        }
+    }
+
+    /**
      * {@link #readTargetFiles()} で読み込んだ対象ファイル群を解析する.
      * 
      */
-
     public void analyzeTargetFiles() {
         // 対象ファイルを解析
 
@@ -1306,20 +1419,20 @@ public class MetricsTool {
 
     private void addClassTypeParameterInfos() {
 
-        for (final TargetClassInfo classInfo : DataManager.getInstance().getClassInfoManager()
-                .getTargetClassInfos()) {
+        for (final ClassInfo<?, ?, ?, ?> classInfo : DataManager.getInstance()
+                .getClassInfoManager().getTargetClassInfos()) {
             addClassTypeParameterInfos(classInfo);
         }
     }
 
-    private void addClassTypeParameterInfos(final TargetClassInfo classInfo) {
+    private void addClassTypeParameterInfos(final ClassInfo<?, ?, ?, ?> classInfo) {
 
         final List<ClassTypeInfo> superClassTypes = classInfo.getSuperClasses();
         for (final ClassTypeInfo superClassType : superClassTypes) {
 
-            final ClassInfo superClassInfo = superClassType.getReferencedClass();
+            final ClassInfo<?, ?, ?, ?> superClassInfo = superClassType.getReferencedClass();
             if (superClassInfo instanceof TargetClassInfo) {
-                addClassTypeParameterInfos((TargetClassInfo) superClassInfo);
+                addClassTypeParameterInfos((ClassInfo<?, ?, ?, ?>) superClassInfo);
 
                 // 親クラス以上における型パラメータの使用を取得
                 final Map<TypeParameterInfo, TypeInfo> typeParameterUsages = ((TargetClassInfo) superClassInfo)
@@ -1383,10 +1496,11 @@ public class MetricsTool {
      * 
      * @param classInfo 対象クラス
      */
-    private void addOverrideRelation(final TargetClassInfo classInfo) {
+    private void addOverrideRelation(final ClassInfo<?, ?, ?, ?> classInfo) {
 
         // 各親クラスに対して
-        for (final ClassInfo superClassInfo : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
+        for (final ClassInfo<?, ?, ?, ?> superClassInfo : ClassTypeInfo.convert(classInfo
+                .getSuperClasses())) {
 
             // 各対象クラスの各メソッドについて，親クラスのメソッドをオーバーライドしているかを調査
             for (final MethodInfo methodInfo : classInfo.getDefinedMethods()) {
@@ -1395,8 +1509,8 @@ public class MetricsTool {
         }
 
         // 各インナークラスに対して
-        for (ClassInfo innerClassInfo : classInfo.getInnerClasses()) {
-            addOverrideRelation((TargetClassInfo) innerClassInfo);
+        for (InnerClassInfo<?> innerClassInfo : classInfo.getInnerClasses()) {
+            addOverrideRelation((ClassInfo<?, ?, ?, ?>) innerClassInfo);
         }
     }
 
@@ -1407,7 +1521,8 @@ public class MetricsTool {
      * @param classInfo クラス情報
      * @param overrider オーバーライド対象のメソッド
      */
-    private void addOverrideRelation(final ClassInfo classInfo, final MethodInfo overrider) {
+    private void addOverrideRelation(final ClassInfo<?, ?, ?, ?> classInfo,
+            final MethodInfo overrider) {
 
         if ((null == classInfo) || (null == overrider)) {
             throw new NullPointerException();
@@ -1417,7 +1532,7 @@ public class MetricsTool {
             return;
         }
 
-        for (final TargetMethodInfo methodInfo : ((TargetClassInfo) classInfo).getDefinedMethods()) {
+        for (final MethodInfo methodInfo : classInfo.getDefinedMethods()) {
 
             // メソッド名が違う場合はオーバーライドされない
             if (!methodInfo.getMethodName().equals(overrider.getMethodName())) {
@@ -1437,7 +1552,8 @@ public class MetricsTool {
         }
 
         // 親クラス群に対して再帰的に処理
-        for (final ClassInfo superClassInfo : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
+        for (final ClassInfo<?, ?, ?, ?> superClassInfo : ClassTypeInfo.convert(classInfo
+                .getSuperClasses())) {
             addOverrideRelation(superClassInfo, overrider);
         }
     }
@@ -1604,7 +1720,7 @@ public class MetricsTool {
                 .getStatements()) {
 
             // 未解決メソッド情報内の利用関係を解決
-            if (unresolvedStatement instanceof UnresolvedBlockInfo) {
+            if (unresolvedStatement instanceof UnresolvedBlockInfo<?>) {
 
                 this.addReferenceAssignmentCallRelation(
                         (UnresolvedBlockInfo<?>) unresolvedStatement, unresolvedClassInfo,

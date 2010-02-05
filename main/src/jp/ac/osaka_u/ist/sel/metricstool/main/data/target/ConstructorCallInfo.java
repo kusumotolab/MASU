@@ -13,6 +13,7 @@ import java.util.Set;
 
  * @param <T> Œ^‚Ìî•ñCƒNƒ‰ƒXŒ^‚©”z—ñŒ^‚©
  */
+@SuppressWarnings("serial")
 public abstract class ConstructorCallInfo<T extends ReferenceTypeInfo> extends
         CallInfo<ConstructorInfo> {
 

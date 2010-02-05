@@ -22,8 +22,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Modifier,
-        TypeParameterizable {
+@SuppressWarnings("serial")
+public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C extends ConstructorInfo, I extends InnerClassInfo<?>>
+        extends UnitInfo implements MetricMeasurable, Modifier, TypeParameterizable {
 
     /**
      * 名前空間名とクラス名からオブジェクトを生成する
@@ -48,10 +49,15 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
             throw new NullPointerException();
         }
 
+        this.definedMethods = new TreeSet<M>();
+        this.definedConstructors = new TreeSet<C>();
+        this.definedFields = new TreeSet<F>();
+        this.innerClasses = new TreeSet<I>();
+
         this.namespace = namespace;
         this.className = className;
         this.superClasses = new LinkedList<ClassTypeInfo>();
-        this.subClasses = new TreeSet<ClassInfo>();
+        this.subClasses = new TreeSet<ClassInfo<?, ?, ?, ?>>();
 
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.typeParameterUsages = new HashMap<TypeParameterInfo, TypeInfo>();
@@ -84,12 +90,17 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
             throw new IllegalArgumentException("Full Qualified Name must has at least 1 word!");
         }
 
+        this.definedMethods = new TreeSet<M>();
+        this.definedConstructors = new TreeSet<C>();
+        this.definedFields = new TreeSet<F>();
+        this.innerClasses = new TreeSet<I>();
+
         String[] namespace = new String[fullQualifiedName.length - 1];
         System.arraycopy(fullQualifiedName, 0, namespace, 0, fullQualifiedName.length - 1);
         this.namespace = new NamespaceInfo(namespace);
         this.className = fullQualifiedName[fullQualifiedName.length - 1];
         this.superClasses = new LinkedList<ClassTypeInfo>();
-        this.subClasses = new TreeSet<ClassInfo>();
+        this.subClasses = new TreeSet<ClassInfo<?, ?, ?, ?>>();
 
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.typeParameterUsages = new HashMap<TypeParameterInfo, TypeInfo>();
@@ -126,17 +137,17 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
             throw new IllegalArgumentException();
         }
 
-        if (o instanceof ClassInfo) {
+        if (o instanceof ClassInfo<?, ?, ?, ?>) {
 
             final NamespaceInfo namespace = this.getNamespace();
-            final NamespaceInfo correspondNamespace = ((ClassInfo) o).getNamespace();
+            final NamespaceInfo correspondNamespace = ((ClassInfo<?, ?, ?, ?>) o).getNamespace();
             final int namespaceOrder = namespace.compareTo(correspondNamespace);
             if (namespaceOrder != 0) {
                 return namespaceOrder;
             }
 
             final String name = this.getClassName();
-            final String correspondName = ((ClassInfo) o).getClassName();
+            final String correspondName = ((ClassInfo<?, ?, ?, ?>) o).getClassName();
             return name.compareTo(correspondName);
 
         } else {
@@ -185,7 +196,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * 
      * @param subClass 追加する子クラス
      */
-    public void addSubClass(final ClassInfo subClass) {
+    public void addSubClass(final ClassInfo<?, ?, ?, ?> subClass) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == subClass) {
@@ -209,7 +220,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * 
      * @return サブクラスの SortedSet
      */
-    public SortedSet<ClassInfo> getSubClasses() {
+    public SortedSet<ClassInfo<?, ?, ?, ?>> getSubClasses() {
         return Collections.unmodifiableSortedSet(this.subClasses);
     }
 
@@ -258,7 +269,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     @Override
     public final boolean equals(final Object o) {
 
-        if (!(o instanceof ClassInfo)) {
+        if (!(o instanceof ClassInfo<?, ?, ?, ?>)) {
             return false;
         }
 
@@ -267,13 +278,13 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
         }
 
         final NamespaceInfo namespace = this.getNamespace();
-        final NamespaceInfo correspondNamespace = ((ClassInfo) o).getNamespace();
+        final NamespaceInfo correspondNamespace = ((ClassInfo<?, ?, ?, ?>) o).getNamespace();
         if (!namespace.equals(correspondNamespace)) {
             return false;
         }
 
         final String className = this.getClassName();
-        final String correspondClassName = ((ClassInfo) o).getClassName();
+        final String correspondClassName = ((ClassInfo<?, ?, ?, ?>) o).getClassName();
         return className.equals(correspondClassName);
     }
 
@@ -283,10 +294,11 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * @param classInfo 対象クラス
      * @return このクラスが引数で与えられたクラスの親クラスである場合は true，そうでない場合は false
      */
-    public final boolean isSuperClass(final ClassInfo classInfo) {
+    public final boolean isSuperClass(final ClassInfo<?, ?, ?, ?> classInfo) {
 
         // 引数の直接の親クラスに対して
-        for (final ClassInfo superClass : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
+        for (final ClassInfo<?, ?, ?, ?> superClass : ClassTypeInfo.convert(classInfo
+                .getSuperClasses())) {
 
             // 対象クラスの直接の親クラスがこのクラスと等しい場合は true を返す
             if (this.equals(superClass)) {
@@ -308,10 +320,10 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * @param classInfo 対象クラス
      * @return このクラスが引数で与えられたクラスの子クラスである場合は true，そうでない場合は false
      */
-    public final boolean isSubClass(final ClassInfo classInfo) {
+    public final boolean isSubClass(final ClassInfo<?, ?, ?, ?> classInfo) {
 
         // 引数の直接の子クラスに対して
-        for (final ClassInfo subClassInfo : classInfo.getSubClasses()) {
+        for (final ClassInfo<?, ?, ?, ?> subClassInfo : classInfo.getSubClasses()) {
 
             // 対象クラスの直接の親クラスがこのクラスと等しい場合は true を返す
             if (this.equals(subClassInfo)) {
@@ -333,14 +345,14 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * @param classInfo 対象クラス
      * @return このクラスが引数で与えられたクラスのインナークラスである場合は true，そうでない場合は false
      */
-    public final boolean isInnerClass(final ClassInfo classInfo) {
+    public final boolean isInnerClass(final ClassInfo<?, ?, ?, ?> classInfo) {
 
-        // 引数で与えられたクラスが TargetClassInfo 出ない場合は false
-        if (!(classInfo instanceof TargetClassInfo)) {
+        // 引数がnullのときはfalse
+        if (null == classInfo) {
             return false;
         }
 
-        for (final ClassInfo innerClassInfo : ((TargetClassInfo) classInfo).getInnerClasses()) {
+        for (final InnerClassInfo<?> innerClassInfo : classInfo.getInnerClasses()) {
 
             // このクラスが引数の直接の子クラスと等しい場合は true を返す
             if (innerClassInfo.equals(this)) {
@@ -348,7 +360,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
             }
 
             // このクラスが引数の間接的な子クラスである場合も true を返す
-            if (this.isInnerClass(innerClassInfo)) {
+            if (this.isInnerClass((ClassInfo<?, ?, ?, ?>) innerClassInfo)) {
                 return true;
             }
         }
@@ -422,6 +434,102 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
+     * このクラスに定義されたメソッド情報を追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param definedMethod 追加する定義されたメソッド
+     */
+    public final void addDefinedMethod(final M definedMethod) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == definedMethod) {
+            throw new NullPointerException();
+        }
+
+        this.definedMethods.add(definedMethod);
+    }
+
+    /**
+     * このクラスに定義されたコンストラクタ情報を追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param definedConstructor 追加する定義されたコンストラクタ
+     */
+    public final void addDefinedConstructor(final C definedConstructor) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == definedConstructor) {
+            throw new NullPointerException();
+        }
+
+        this.definedConstructors.add(definedConstructor);
+    }
+
+    /**
+     * このクラスに定義されたフィールド情報を追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param definedField 追加する定義されたフィールド
+     */
+    public final void addDefinedField(final F definedField) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == definedField) {
+            throw new NullPointerException();
+        }
+
+        this.definedFields.add(definedField);
+    }
+
+    /**
+     * このクラスに定義されているメソッドの SortedSet を返す．
+     * 
+     * @return 定義されているメソッドの SortedSet
+     */
+    public final SortedSet<M> getDefinedMethods() {
+        return Collections.unmodifiableSortedSet(this.definedMethods);
+    }
+
+    /**
+     * このクラスに定義されているコンストラクタの SortedSet を返す．
+     * 
+     * @return 定義されているメソッドの SortedSet
+     */
+    public final SortedSet<C> getDefinedConstructors() {
+        return Collections.unmodifiableSortedSet(this.definedConstructors);
+    }
+
+    /**
+     * このクラスに定義されているフィールドの SortedSet を返す．
+     * 
+     * @return 定義されているフィールドの SortedSet
+     */
+    public final SortedSet<F> getDefinedFields() {
+        return Collections.unmodifiableSortedSet(this.definedFields);
+    }
+
+    /**
+     * このクラスにインナークラスを追加する．プラグインから呼ぶとランタイムエラー．
+     * 
+     * @param innerClass 追加するインナークラス
+     */
+    public final void addInnerClass(final I innerClass) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == innerClass) {
+            throw new NullPointerException();
+        }
+
+        this.innerClasses.add(innerClass);
+    }
+
+    /**
+     * このクラスのインナークラスの SortedSet を返す．
+     * 
+     * @return インナークラスの SortedSet
+     */
+    public final SortedSet<I> getInnerClasses() {
+        return Collections.unmodifiableSortedSet(this.innerClasses);
+    }
+
+    /**
      * クラス名を保存するための変数
      */
     private final String className;
@@ -444,7 +552,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     /**
      * このクラスを継承しているクラス一覧を保存するための変数．直接の子クラスのみを保有する．
      */
-    private final SortedSet<ClassInfo> subClasses;
+    private final SortedSet<ClassInfo<?, ?, ?, ?>> subClasses;
 
     /**
      * このクラスで使用されている型パラメータと実際に型パラメータに代入されている型のペア.
@@ -458,5 +566,25 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * 型パラメータを保存する変数
      */
     private final List<TypeParameterInfo> typeParameters;
+
+    /**
+     * このクラスで定義されているメソッド一覧を保存するための変数．
+     */
+    protected final SortedSet<M> definedMethods;
+
+    /**
+     * このクラスで定義されているコンストラクタ一覧を保存するための変数．
+     */
+    protected final SortedSet<C> definedConstructors;
+
+    /**
+     * このクラスで定義されているフィールド一覧を保存するための変数．
+     */
+    protected final SortedSet<F> definedFields;
+
+    /**
+     * このクラスの内部クラス一覧を保存するための変数．直接の内部クラスのみを保有する．
+     */
+    private final SortedSet<I> innerClasses;
 
 }

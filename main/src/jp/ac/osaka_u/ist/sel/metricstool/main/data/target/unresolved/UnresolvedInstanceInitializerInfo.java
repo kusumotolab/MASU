@@ -1,8 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InstanceInitializerInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
 
 /**
@@ -43,7 +43,7 @@ public class UnresolvedInstanceInitializerInfo extends
     }
 
     @Override
-    protected InstanceInitializerInfo buildResolvedInfo(ClassInfo ownerClass, int fromLine,
+    protected InstanceInitializerInfo buildResolvedInfo(TargetClassInfo ownerClass, int fromLine,
             int fromColumn, int toLine, int toColumn) {
         return new InstanceInitializerInfo(ownerClass, fromLine, fromColumn, toLine, toColumn);
     }

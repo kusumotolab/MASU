@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-
 /**
  * 外部クラスに定義されているフィールドの情報を保存するためのクラス．
  * 
@@ -15,14 +14,29 @@ import java.util.Set;
 public final class ExternalFieldInfo extends FieldInfo {
 
     /**
+     * 名前，型，定義しているクラス情報を与えて初期化． 
+     * 
+     * @param name フィールド名
+     * @param type 型
+     * @param definitionClass フィールドを定義しているクラス
+     */
+    public ExternalFieldInfo(final String name, final TypeInfo type,
+            final ExternalClassInfo definitionClass, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final boolean instance) {
+        super(new HashSet<ModifierInfo>(), name, type, definitionClass, privateVisible,
+                namespaceVisible, inheritanceVisible, publicVisible, instance, 0, 0, 0, 0);
+    }
+
+    /**
      * 名前と定義しているクラス情報を与えて初期化． 型は不明．
      * 
      * @param name フィールド名
      * @param definitionClass フィールドを定義しているクラス
      */
-    public ExternalFieldInfo(final String name, final ClassInfo definitionClass) {
-        super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(), definitionClass, 0,
-                0, 0, 0);
+    public ExternalFieldInfo(final String name, final ExternalClassInfo definitionClass) {
+        super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(), definitionClass,
+                true, true, true, true, true, 0, 0, 0, 0);
     }
 
     /**
@@ -32,7 +46,7 @@ public final class ExternalFieldInfo extends FieldInfo {
      */
     public ExternalFieldInfo(final String name) {
         super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(),
-                ExternalClassInfo.UNKNOWN, 0, 0, 0, 0);
+                ExternalClassInfo.UNKNOWN, true, true, true, true, true, 0, 0, 0, 0);
     }
 
     /**

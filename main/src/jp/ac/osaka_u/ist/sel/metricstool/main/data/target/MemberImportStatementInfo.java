@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import java.util.Set;
 
 
+@SuppressWarnings("serial")
 public class MemberImportStatementInfo extends ImportStatementInfo<Member> {
 
     /**

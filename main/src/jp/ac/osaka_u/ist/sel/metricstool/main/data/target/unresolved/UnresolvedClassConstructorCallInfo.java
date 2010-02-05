@@ -19,7 +19,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SuperConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ThisConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -72,8 +71,7 @@ public class UnresolvedClassConstructorCallInfo extends
         final ClassTypeInfo classType = unresolvedReferenceType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
-        final List<TargetConstructorInfo> constructors = NameResolver
-                .getAvailableConstructors(classType);
+        final List<ConstructorInfo> constructors = NameResolver.getAvailableConstructors(classType);
 
         for (final ConstructorInfo constructor : constructors) {
 
@@ -96,12 +94,12 @@ public class UnresolvedClassConstructorCallInfo extends
 
         // 対象クラスに定義されたコンストラクタで該当するものがないので，外部クラスに定義されたコンストラクタを呼び出していることにする
         {
-            ClassInfo classInfo = classType.getReferencedClass();
+            ClassInfo<?, ?, ?, ?> classInfo = classType.getReferencedClass();
             if (classInfo instanceof TargetClassInfo) {
-                final ExternalClassInfo externalSuperClass = NameResolver
-                        .getExternalSuperClass((TargetClassInfo) classInfo);
+                classInfo = NameResolver.getExternalSuperClass(classInfo);
             }
-            final ExternalConstructorInfo constructor = new ExternalConstructorInfo(classInfo);
+            final ExternalConstructorInfo constructor = new ExternalConstructorInfo(
+                    (ExternalClassInfo) classInfo);
             final List<ParameterInfo> externalParameters = ExternalParameterInfo.createParameters(
                     actualParameters, constructor);
             constructor.addParameters(externalParameters);

@@ -23,6 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  */
 
+@SuppressWarnings("serial")
 public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visualizable, Modifier,
         TypeParameterizable {
 
@@ -36,7 +37,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    CallableUnitInfo(final Set<ModifierInfo> modifiers, final ClassInfo ownerClass,
+    CallableUnitInfo(final Set<ModifierInfo> modifiers, final ClassInfo<?, ?, ?, ?> ownerClass,
             final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -87,8 +88,9 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
         if (o instanceof CallableUnitInfo) {
 
-            final ClassInfo ownerClass = this.getOwnerClass();
-            final ClassInfo correspondOwnerClass = ((CallableUnitInfo) o).getOwnerClass();
+            final ClassInfo<?, ?, ?, ?> ownerClass = this.getOwnerClass();
+            final ClassInfo<?, ?, ?, ?> correspondOwnerClass = ((CallableUnitInfo) o)
+                    .getOwnerClass();
             final int classOrder = ownerClass.compareTo(correspondOwnerClass);
             if (classOrder != 0) {
                 return classOrder;
@@ -170,7 +172,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             if (actualParameterType instanceof ClassTypeInfo) {
 
                 // 実引数の型のクラスを取得
-                final ClassInfo actualParameterClass = ((ClassTypeInfo) actualParameterType)
+                final ClassInfo<?, ?, ?, ?> actualParameterClass = ((ClassTypeInfo) actualParameterType)
                         .getReferencedClass();
 
                 // 仮引数が参照型でない場合は該当しない
@@ -179,12 +181,14 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 }
 
                 // 仮引数の型のクラスを取得
-                final ClassInfo dummyParameterClass = ((ClassTypeInfo) dummyParameter.getType())
-                        .getReferencedClass();
-                
+                final ClassInfo<?, ?, ?, ?> dummyParameterClass = ((ClassTypeInfo) dummyParameter
+                        .getType()).getReferencedClass();
+
                 // 仮引数の型がObjectの場合は，呼び出し可能である
-                final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager().getClassInfo(new String[]{"java", "lang", "Object"});
-                if(dummyParameterClass.equals(objectClass)){
+                final ClassInfo<?, ?, ?, ?> objectClass = DataManager.getInstance()
+                        .getClassInfoManager().getClassInfo(
+                                new String[] { "java", "lang", "Object" });
+                if (dummyParameterClass.equals(objectClass)) {
                     continue NEXT_PARAMETER;
                 }
 
@@ -259,7 +263,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             } else if (actualParameter instanceof NullUsageInfo) {
 
                 // 仮引数が参照型でない場合は該当しない
-                if (!(dummyParameter.getType() instanceof ClassInfo)) {
+                if (!(dummyParameter.getType() instanceof ClassInfo<?, ?, ?, ?>)) {
                     return false;
                 }
 

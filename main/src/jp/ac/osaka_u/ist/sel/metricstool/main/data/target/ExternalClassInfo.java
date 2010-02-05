@@ -14,7 +14,9 @@ import java.util.Set;
  * 
  */
 @SuppressWarnings("serial")
-public final class ExternalClassInfo extends ClassInfo {
+public class ExternalClassInfo
+        extends
+        ClassInfo<ExternalFieldInfo, ExternalMethodInfo, ExternalConstructorInfo, ExternalInnerClassInfo> {
 
     /**
      * 名前空間名とクラス名を与えて，オブジェクトを初期化

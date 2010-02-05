@@ -10,7 +10,8 @@ import java.util.Set;
  * @author higo
  */
 @SuppressWarnings("serial")
-public class TargetInnerClassInfo extends TargetClassInfo {
+public class TargetInnerClassInfo extends TargetClassInfo implements
+        InnerClassInfo<TargetClassInfo> {
 
     /**
      * インナークラスオブジェクトを初期化する
@@ -98,6 +99,7 @@ public class TargetInnerClassInfo extends TargetClassInfo {
      * 
      * @return 外側のユニット
      */
+    @Override
     public final UnitInfo getOuterUnit() {
         return this.outerUnit;
     }
@@ -109,6 +111,7 @@ public class TargetInnerClassInfo extends TargetClassInfo {
      * 
      * @return　外側のクラス
      */
+    @Override
     public final TargetClassInfo getOuterClass() {
 
         final UnitInfo unitInfo = this.getOuterUnit();
@@ -120,7 +123,7 @@ public class TargetInnerClassInfo extends TargetClassInfo {
             // 外側のユニットがメソッドであれば，その所有クラスを返す
         } else if (unitInfo instanceof TargetMethodInfo) {
 
-            final ClassInfo ownerClass = ((TargetMethodInfo) unitInfo).getOwnerClass();
+            final ClassInfo<?, ?, ?, ?> ownerClass = ((TargetMethodInfo) unitInfo).getOwnerClass();
             return (TargetClassInfo) ownerClass;
         }
 

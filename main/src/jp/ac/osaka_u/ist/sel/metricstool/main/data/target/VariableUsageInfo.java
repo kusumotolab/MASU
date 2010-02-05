@@ -177,7 +177,7 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
         }
 
         // クラスの型パラメータかどうか
-        for (ClassInfo ownerClass = ownerMethod.getOwnerClass(); true; ownerClass = ((TargetInnerClassInfo) ownerClass)
+        for (ClassInfo<?, ?, ?, ?> ownerClass = ownerMethod.getOwnerClass(); true; ownerClass = ((TargetInnerClassInfo) ownerClass)
                 .getOuterClass()) {
 
             //　型パラメータがそのままか

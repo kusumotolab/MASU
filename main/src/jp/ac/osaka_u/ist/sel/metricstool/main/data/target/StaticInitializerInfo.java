@@ -18,7 +18,7 @@ public final class StaticInitializerInfo extends InitializerInfo {
      * @param toLine èIóπçs
      * @param toColumn èIóπóÒ
      */
-    public StaticInitializerInfo(final ClassInfo ownerClass, final int fromLine,
+    public StaticInitializerInfo(final TargetClassInfo ownerClass, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
         super(ownerClass, fromLine, fromColumn, toLine, toColumn);
     }

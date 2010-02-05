@@ -16,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  *
  */
+@SuppressWarnings("serial")
 public abstract class LocalSpaceInfo extends UnitInfo {
 
     /**
@@ -27,8 +28,8 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * @param toLine 終了行
      * @param toColumn終了列
      */
-    LocalSpaceInfo(final ClassInfo ownerClass, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+    LocalSpaceInfo(final ClassInfo<?, ?, ?, ?> ownerClass, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
@@ -121,8 +122,8 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      */
     public SortedSet<StatementInfo> getStatementsWithoutSubsequencialBlocks() {
         final SortedSet<StatementInfo> statements = new TreeSet<StatementInfo>();
-        for(final StatementInfo statementInfo : this.statements){
-            if (!(statementInfo instanceof SubsequentialBlockInfo<?>)){
+        for (final StatementInfo statementInfo : this.statements) {
+            if (!(statementInfo instanceof SubsequentialBlockInfo<?>)) {
                 statements.add(statementInfo);
             }
         }
@@ -135,7 +136,7 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * 
      * @return 所属しているクラス
      */
-    public final ClassInfo getOwnerClass() {
+    public final ClassInfo<?, ?, ?, ?> getOwnerClass() {
         return this.ownerClass;
     }
 
@@ -183,7 +184,7 @@ public abstract class LocalSpaceInfo extends UnitInfo {
             }
         }
         return allStatements;
-    }    
+    }
 
     /**
      * このローカルスコープの直内の文情報一覧を保存するための変数
@@ -193,5 +194,5 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     /**
      * 所属しているクラスを保存するための変数
      */
-    private final ClassInfo ownerClass;
+    private final ClassInfo<?, ?, ?, ?> ownerClass;
 }

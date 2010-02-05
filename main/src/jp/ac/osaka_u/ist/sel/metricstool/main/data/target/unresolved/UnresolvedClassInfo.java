@@ -81,7 +81,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new HashSet<UnresolvedStaticInitializerInfo>();
         this.staticInitializers.add(this.implicitStaticInitializer);
-        this.importStatements = new LinkedList<UnresolvedImportStatementInfo>();
+        this.importStatements = new LinkedList<UnresolvedImportStatementInfo<?>>();
 
         this.privateVisible = false;
         this.inheritanceVisible = false;
@@ -399,7 +399,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 
      * @param importStatements このクラスにおいて利用可能な（インポートされている）クラス群
      */
-    public void addImportStatements(final List<UnresolvedImportStatementInfo> importStatements) {
+    public void addImportStatements(final List<UnresolvedImportStatementInfo<?>> importStatements) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -485,7 +485,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 
      * @return　利用可能なクラス（インポートされているクラス）とメンバ（インポートされているメンバ）のListを返す
      */
-    public List<UnresolvedImportStatementInfo> getImportStatements() {
+    public List<UnresolvedImportStatementInfo<?>> getImportStatements() {
         return Collections.unmodifiableList(this.importStatements);
     }
 
@@ -713,13 +713,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         }
 
         // 利用可能なクラスを名前解決し，解決済みクラスに登録
-        final List<UnresolvedImportStatementInfo> unresolvedImportStatements = this
+        final List<UnresolvedImportStatementInfo<?>> unresolvedImportStatements = this
                 .getImportStatements();
-        for (final UnresolvedImportStatementInfo unresolvedImportStatement : unresolvedImportStatements) {
-            final ImportStatementInfo importStatement = unresolvedImportStatement.resolve(
+        for (final UnresolvedImportStatementInfo<?> unresolvedImportStatement : unresolvedImportStatements) {
+            final ImportStatementInfo<?> importStatement = unresolvedImportStatement.resolve(
                     usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             if (importStatement instanceof ClassImportStatementInfo) {
-                final Set<ClassInfo> importedClasses = ((ClassImportStatementInfo) importStatement)
+                final Set<ClassInfo<?, ?, ?, ?>> importedClasses = ((ClassImportStatementInfo) importStatement)
                         .getImportedClasses();
                 this.resolvedInfo.addaccessibleClasses(importedClasses);
             }
@@ -842,7 +842,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     /**
      * 利用可能な名前空間を保存するためのセット
      */
-    private final List<UnresolvedImportStatementInfo> importStatements;
+    private final List<UnresolvedImportStatementInfo<?>> importStatements;
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数

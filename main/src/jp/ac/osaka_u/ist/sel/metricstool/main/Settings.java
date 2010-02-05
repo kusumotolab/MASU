@@ -3,6 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -40,6 +42,7 @@ public class Settings {
         this.methodMetricsFile = null;
         this.fieldMetricsFile = null;
         this.statement = true;
+        this.libraries = new LinkedList<String>();
     }
 
     /**
@@ -95,10 +98,13 @@ public class Settings {
 
         if (language.equalsIgnoreCase("java") || language.equalsIgnoreCase("java15")) {
             this.language = LANGUAGE.JAVA15;
+            this.libraries.add("./resource/jdk160java.lang.jar");
         } else if (language.equalsIgnoreCase("java14")) {
             this.language = LANGUAGE.JAVA14;
+            this.libraries.add("./resource/jdk142java.lang.jar");
         } else if (language.equalsIgnoreCase("java13")) {
             this.language = LANGUAGE.JAVA13;
+            this.libraries.add("./resource/jdk142java.lang.jar");
             // }else if (language.equalsIgnoreCase("cpp")) {
             // return LANGUAGE.C_PLUS_PLUS;
             // }else if (language.equalsIgnoreCase("csharp")) {
@@ -246,6 +252,30 @@ public class Settings {
     }
 
     /**
+     * ライブラリの位置を追加する．
+     * ライブラリとは，対象クラスの解析精度を上げるために与える解析対象外クラスのjarファイルや
+     * classファイルを置いているディレクトリ
+     * 
+     * @param library
+     */
+    public void addLibrary(final String library) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == library) {
+            throw new IllegalArgumentException();
+        }
+        this.libraries.add(library);
+    }
+
+    /**
+     * ライブラリのListを返す
+     * 
+     * @return ライブラリのList
+     */
+    public List<String> getLibraries() {
+        return Collections.unmodifiableList(this.libraries);
+    }
+
+    /**
      * 冗長出力モードかどうかを記録するための変数
      */
     private boolean verbose;
@@ -294,4 +324,9 @@ public class Settings {
      * 文情報を取得するかどうかを記録するための変数
      */
     private boolean statement;
+
+    /**
+     * 外部クラスのパスを保存するための変数
+     */
+    private List<String> libraries;
 }

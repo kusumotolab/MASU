@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.ClassInfoAccessor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricAlreadyRegisteredException;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LanguageUtil;
@@ -43,7 +44,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
             final int maxClassCount = classAccessor.getClassCount();
 
             // 全クラスについて
-            for (final TargetClassInfo targetClass : classAccessor) {
+            for (final ClassInfo targetClass : classAccessor) {
                 
                 // クラスのメトリクスを登録する
                 registClassMetric(targetClass);
@@ -80,7 +81,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
      * 
      * @param targetClass 対象のクラス
      */
-    protected void registClassMetric(TargetClassInfo targetClass) {
+    protected void registClassMetric(ClassInfo targetClass) {
         try {
             this.registMetric(targetClass, measureClassMetric(targetClass));
         } catch (final MetricAlreadyRegisteredException e) {
@@ -93,7 +94,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
      * 
      * @param targetClass 対象のクラス
      */
-    abstract protected Number measureClassMetric(TargetClassInfo targetClass);
+    abstract protected Number measureClassMetric(ClassInfo targetClass);
 
     /**
      * このプラグインがメトリクスを計測できる言語を返す.

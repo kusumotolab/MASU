@@ -14,7 +14,7 @@ import java.util.Collections;
 @SuppressWarnings("serial")
 public class InitializerInfo extends CallableUnitInfo {
 
-    public InitializerInfo(final ClassInfo ownerClass, final int fromLine, final int fromColumn,
+    public InitializerInfo(final TargetClassInfo ownerClass, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
         super(Collections.<ModifierInfo>emptySet(), ownerClass, true, false, false, false, fromLine, fromColumn,
                 toLine, toColumn);

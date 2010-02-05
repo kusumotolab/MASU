@@ -33,7 +33,7 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
         }
 
         this.name = name;
-        this.definedClasses = new TreeSet<ClassInfo>();
+        this.definedClasses = new TreeSet<TargetClassInfo>();
         this.comments = new TreeSet<CommentInfo>();
     }
 
@@ -42,7 +42,7 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
      * 
      * @param definedClass 定義されたクラス．
      */
-    public void addDefinedClass(final ClassInfo definedClass) {
+    public void addDefinedClass(final TargetClassInfo definedClass) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == definedClass) {
@@ -67,7 +67,7 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
      * 
      * @return このファイルに定義されているクラスのSortedSet
      */
-    public SortedSet<ClassInfo> getDefinedClasses() {
+    public SortedSet<TargetClassInfo> getDefinedClasses() {
         return Collections.unmodifiableSortedSet(this.definedClasses);
     }
 
@@ -190,7 +190,7 @@ public final class FileInfo implements Comparable<FileInfo>, MetricMeasurable, S
     /**
      * このファイルで宣言されているクラス一覧を保存するための変数
      */
-    private final SortedSet<ClassInfo> definedClasses;
+    private final SortedSet<TargetClassInfo> definedClasses;
 
     /**
      * このファイル内のコメント一覧を保存するための変数

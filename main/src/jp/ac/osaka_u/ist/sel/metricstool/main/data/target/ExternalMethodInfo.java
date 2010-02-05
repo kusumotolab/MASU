@@ -24,7 +24,7 @@ public final class ExternalMethodInfo extends MethodInfo {
      * @param methodName メソッド名
      * @param ownerClass このメソッドを定義しているクラス
      */
-    public ExternalMethodInfo(final String methodName, final ClassInfo ownerClass) {
+    public ExternalMethodInfo(final String methodName, final ExternalClassInfo ownerClass) {
 
         super(new HashSet<ModifierInfo>(), methodName, ownerClass, false, true, true, true, 0, 0,
                 0, 0);

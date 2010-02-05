@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+@SuppressWarnings("serial")
 public abstract class CommentInfo extends UnitInfo {
 
     final String content;

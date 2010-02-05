@@ -36,7 +36,8 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
      * @param availableNamespaces 名前空間名
      * @param referenceName 参照名
      */
-    public UnresolvedClassTypeInfo(final List<UnresolvedClassImportStatementInfo> availableNamespaces,
+    public UnresolvedClassTypeInfo(
+            final List<UnresolvedClassImportStatementInfo> availableNamespaces,
             final String[] referenceName) {
 
         // 不正な呼び出しでないかをチェック
@@ -46,7 +47,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
         }
 
         this.availableNamespaces = availableNamespaces;
-        this.referenceName = Arrays.<String>copyOf(referenceName, referenceName.length);
+        this.referenceName = Arrays.<String> copyOf(referenceName, referenceName.length);
         this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>>();
     }
 
@@ -87,7 +88,8 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
         }
 
         // import 文で指定されているクラスが登録されていないなら，外部クラスとして登録する
-        for (final UnresolvedClassImportStatementInfo availableNamespace : this.getAvailableNamespaces()) {
+        for (final UnresolvedClassImportStatementInfo availableNamespace : this
+                .getAvailableNamespaces()) {
 
             if (!availableNamespace.isAll()) {
                 final String[] fullQualifiedName = availableNamespace.getImportName();
@@ -100,9 +102,9 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
         }
 
         final String[] referenceName = this.getReferenceName();
-        final Collection<ClassInfo> classInfos = classInfoManager
+        final Collection<ClassInfo<?, ?, ?, ?>> classInfos = classInfoManager
                 .getClassInfos(referenceName[referenceName.length - 1]);
-        for (final ClassInfo classInfo : classInfos) {
+        for (final ClassInfo<?, ?, ?, ?> classInfo : classInfos) {
 
             final String className = classInfo.getClassName();
             final NamespaceInfo namespace = classInfo.getNamespace();
@@ -127,7 +129,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
             // 単項参照の場合は，デフォルトパッケージからクラスを検索
             if (this.isMoniminalReference()) {
 
-                for (final ClassInfo defaultClassInfo : classInfoManager
+                for (final ClassInfo<?, ?, ?, ?> defaultClassInfo : classInfoManager
                         .getClassInfos(new String[0])) {
 
                     // 参照されているクラスが見つかった
@@ -157,9 +159,9 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
                         // import aaa.bbb.*の場合 (クラス名の部分が*)
                         if (availableNamespace.isAll()) {
 
-                            Collection<ClassInfo> importedClassInfos = classInfoManager
+                            Collection<ClassInfo<?, ?, ?, ?>> importedClassInfos = classInfoManager
                                     .getClassInfos(importedNamespace);
-                            for (final ClassInfo importedClassInfo : importedClassInfos) {
+                            for (final ClassInfo<?, ?, ?, ?> importedClassInfo : importedClassInfos) {
 
                                 //クラスが見つかった
                                 if (className.equals(importedClassInfo.getClassName())) {
@@ -178,7 +180,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
                             // import aaa.bbb.Ccc の場合 (クラス名まで明示的に記述されている)
                         } else {
 
-                            ClassInfo importedClassInfo = classInfoManager
+                            ClassInfo<?, ?, ?, ?> importedClassInfo = classInfoManager
                                     .getClassInfo(availableNamespace.getImportName());
                             if (null == importedClassInfo) {
                                 importedClassInfo = new ExternalClassInfo(referenceName);
@@ -214,15 +216,15 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
                         // import aaa.bbb.*の場合 (クラス名の部分が*)
                         if (availableNamespace.isAll()) {
 
-                            final Collection<ClassInfo> importedClassInfos = classInfoManager
+                            final Collection<ClassInfo<?, ?, ?, ?>> importedClassInfos = classInfoManager
                                     .getClassInfos(importedNamespace);
-                            for (final ClassInfo importedClassInfo : importedClassInfos) {
+                            for (final ClassInfo<?, ?, ?, ?> importedClassInfo : importedClassInfos) {
 
                                 if (importedClassInfo instanceof TargetClassInfo) {
                                     final Collection<TargetInnerClassInfo> importedInnerClassInfos = TargetClassInfo
                                             .getAccessibleInnerClasses((TargetClassInfo) importedClassInfo);
 
-                                    for (final ClassInfo importedInnerClassInfo : importedInnerClassInfos) {
+                                    for (final ClassInfo<?, ?, ?, ?> importedInnerClassInfo : importedInnerClassInfos) {
 
                                         if (importedInnerClassInfo.equals(classInfo)) {
                                             this.resolvedInfo = new ClassTypeInfo(classInfo);
@@ -245,13 +247,13 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
 
                             final String[] importedFullQualifiedName = availableNamespace
                                     .getImportName();
-                            final ClassInfo importedClassInfo = classInfoManager
+                            final ClassInfo<?, ?, ?, ?> importedClassInfo = classInfoManager
                                     .getClassInfo(importedFullQualifiedName);
                             if (importedClassInfo instanceof TargetClassInfo) {
                                 final Collection<TargetInnerClassInfo> importedInnerClassInfos = TargetClassInfo
                                         .getAllInnerClasses((TargetClassInfo) importedClassInfo);
 
-                                for (final ClassInfo importedInnerClassInfo : importedInnerClassInfos) {
+                                for (final ClassInfo<?, ?, ?, ?> importedInnerClassInfo : importedInnerClassInfos) {
 
                                     if (importedInnerClassInfo.equals(classInfo)) {
                                         this.resolvedInfo = new ClassTypeInfo(classInfo);
@@ -581,7 +583,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
      * @return この参照型の参照名を返す
      */
     public final String[] getReferenceName() {
-        return Arrays.<String>copyOf(this.referenceName, this.referenceName.length);
+        return Arrays.<String> copyOf(this.referenceName, this.referenceName.length);
     }
 
     /**

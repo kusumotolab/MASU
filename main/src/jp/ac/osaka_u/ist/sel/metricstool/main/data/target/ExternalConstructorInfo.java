@@ -21,7 +21,7 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
      * 
      * @param ownerClass このメソッドを定義しているクラス
      */
-    public ExternalConstructorInfo(final ClassInfo ownerClass) {
+    public ExternalConstructorInfo(final ExternalClassInfo ownerClass) {
         super(new HashSet<ModifierInfo>(), ownerClass, false, true, true, true, 0, 0, 0, 0);
     }
 

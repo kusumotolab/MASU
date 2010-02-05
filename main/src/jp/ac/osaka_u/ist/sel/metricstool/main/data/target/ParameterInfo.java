@@ -13,6 +13,7 @@ import java.util.Set;
  * @author higo
  * 
  */
+@SuppressWarnings("serial")
 public abstract class ParameterInfo extends VariableInfo<CallableUnitInfo> {
 
     /**

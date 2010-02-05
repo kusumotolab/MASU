@@ -296,7 +296,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
 
         List<UnresolvedImportStatementInfo<?>> resultSet = getAvailableAliasSet();
-        for (UnresolvedImportStatementInfo info : getAvailableNameSpaceSet()) {
+        for (UnresolvedImportStatementInfo<?> info : getAvailableNameSpaceSet()) {
             resultSet.add(info);
         }
 
@@ -322,9 +322,9 @@ public class DefaultBuildDataManager implements BuildDataManager {
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
             final BlockScope scope = this.scopeStack.get(i);
-            final List<UnresolvedImportStatementInfo> scopeLocalNameSpaceSet = scope
+            final List<UnresolvedImportStatementInfo<?>> scopeLocalNameSpaceSet = scope
                     .getAvailableNameSpaces();
-            for (final UnresolvedImportStatementInfo info : scopeLocalNameSpaceSet) {
+            for (final UnresolvedImportStatementInfo<?> info : scopeLocalNameSpaceSet) {
                 result.add(info);
             }
         }
@@ -343,9 +343,9 @@ public class DefaultBuildDataManager implements BuildDataManager {
         final int size = this.scopeStack.size();
         for (int i = size - 1; i >= 0; i--) {//Stackの実体はVectorなので後ろからランダムアクセス
             final BlockScope scope = this.scopeStack.get(i);
-            final List<UnresolvedImportStatementInfo> scopeLocalNameSpaceSet = scope
+            final List<UnresolvedImportStatementInfo<?>> scopeLocalNameSpaceSet = scope
                     .getAvailableAliases();
-            for (final UnresolvedImportStatementInfo info : scopeLocalNameSpaceSet) {
+            for (final UnresolvedImportStatementInfo<?> info : scopeLocalNameSpaceSet) {
                 result.add(info);
             }
         }
@@ -658,9 +658,9 @@ public class DefaultBuildDataManager implements BuildDataManager {
         private final Map<String, UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>>> variables = new LinkedHashMap<String, UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>>>();
 
         //        private final Map<String, String[]> nameAliases = new LinkedHashMap<String, String[]>();
-        private final Map<String, UnresolvedImportStatementInfo> nameAliases = new LinkedHashMap<String, UnresolvedImportStatementInfo>();
+        private final Map<String, UnresolvedImportStatementInfo<?>> nameAliases = new LinkedHashMap<String, UnresolvedImportStatementInfo<?>>();
 
-        private final List<UnresolvedImportStatementInfo> availableNameSpaces = new LinkedList<UnresolvedImportStatementInfo>();
+        private final List<UnresolvedImportStatementInfo<?>> availableNameSpaces = new LinkedList<UnresolvedImportStatementInfo<?>>();
 
         public void addVariable(
                 final UnresolvedVariableInfo<? extends VariableInfo<? extends UnitInfo>, ? extends UnresolvedUnitInfo<? extends UnitInfo>> variable) {
@@ -706,13 +706,13 @@ public class DefaultBuildDataManager implements BuildDataManager {
             }
         }
 
-        public List<UnresolvedImportStatementInfo> getAvailableNameSpaces() {
+        public List<UnresolvedImportStatementInfo<?>> getAvailableNameSpaces() {
             return this.availableNameSpaces;
         }
 
-        public List<UnresolvedImportStatementInfo> getAvailableAliases() {
-            List<UnresolvedImportStatementInfo> resultSet = new LinkedList<UnresolvedImportStatementInfo>();
-            for (UnresolvedImportStatementInfo info : this.nameAliases.values()) {
+        public List<UnresolvedImportStatementInfo<?>> getAvailableAliases() {
+            List<UnresolvedImportStatementInfo<?>> resultSet = new LinkedList<UnresolvedImportStatementInfo<?>>();
+            for (UnresolvedImportStatementInfo<?> info : this.nameAliases.values()) {
                 resultSet.add(info);
             }
             return resultSet;

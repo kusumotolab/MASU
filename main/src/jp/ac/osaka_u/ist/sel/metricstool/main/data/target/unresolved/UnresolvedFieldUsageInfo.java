@@ -13,11 +13,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalFieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
@@ -47,7 +47,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public UnresolvedFieldUsageInfo(final List<UnresolvedClassImportStatementInfo> availableNamespaces,
+    public UnresolvedFieldUsageInfo(
+            final List<UnresolvedClassImportStatementInfo> availableNamespaces,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> qualifierUsage,
             final String fieldName, final boolean reference, final boolean assignment,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
@@ -142,7 +143,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
             //親がクラス型の場合
         } else if (ownerType instanceof ClassTypeInfo) {
 
-            final ClassInfo ownerClass = ((ClassTypeInfo) qualifierUsage.getType())
+            final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) qualifierUsage.getType())
                     .getReferencedClass();
             // 親が対象クラス(TargetClassInfo)だった場合
             if (ownerClass instanceof TargetClassInfo) {
@@ -150,11 +151,11 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                 // まずは利用可能なフィールドから検索
                 {
                     // 利用可能なフィールド一覧を取得
-                    final List<TargetFieldInfo> availableFields = NameResolver.getAvailableFields(
+                    final List<FieldInfo> availableFields = NameResolver.getAvailableFields(
                             (TargetClassInfo) ownerClass, usingClass);
 
                     // 利用可能なフィールドを，未解決フィールド名で検索
-                    for (final TargetFieldInfo availableField : availableFields) {
+                    for (final FieldInfo availableField : availableFields) {
 
                         // 一致するフィールド名が見つかった場合
                         if (fieldName.equals(availableField.getName())) {
@@ -172,7 +173,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                 // 利用可能なフィールドが見つからなかった場合は，外部クラスである親クラスがあるはず
                 // そのクラスの変数を使用しているとみなす
                 {
-                    for (TargetClassInfo classInfo = (TargetClassInfo) ownerClass; true; classInfo = ((TargetInnerClassInfo) classInfo)
+                    for (ClassInfo<?, ?, ?, ?> classInfo = (ClassInfo<?, ?, ?, ?>) ownerClass; true; classInfo = ((TargetInnerClassInfo) classInfo)
                             .getOuterClass()) {
 
                         final ExternalClassInfo externalSuperClass = NameResolver
@@ -212,7 +213,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                 // 親が外部クラス（ExternalClassInfo）だった場合
             } else if (ownerClass instanceof ExternalClassInfo) {
 
-                final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName, ownerClass);
+                final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(fieldName,
+                        (ExternalClassInfo) ownerClass);
                 fieldInfoManager.add(fieldInfo);
 
                 // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．

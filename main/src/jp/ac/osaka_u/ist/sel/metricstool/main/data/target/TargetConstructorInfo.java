@@ -27,7 +27,7 @@ public final class TargetConstructorInfo extends ConstructorInfo {
      * @param toLine èIóπçs
      * @param toColumn èIóπóÒ
      */
-    public TargetConstructorInfo(final Set<ModifierInfo> modifiers, final ClassInfo ownerClass,
+    public TargetConstructorInfo(final Set<ModifierInfo> modifiers, final TargetClassInfo ownerClass,
             final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {

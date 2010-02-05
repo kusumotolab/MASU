@@ -21,8 +21,8 @@ public class TypeParameterInfo implements ReferenceTypeInfo {
      * @param index 何番目の型パラメータかを表す
      * @param extendsType 継承している型
      */
-    public TypeParameterInfo(final UnitInfo ownerUnit, final String name, final int index,
-            final TypeInfo extendsType) {
+    public TypeParameterInfo(final TypeParameterizable ownerUnit, final String name,
+            final int index, final TypeInfo extendsType) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == ownerUnit) || (null == name)) {
@@ -63,7 +63,7 @@ public class TypeParameterInfo implements ReferenceTypeInfo {
      * 
      * @return  型パラメータを宣言しているユニット(クラス or メソッド)
      */
-    public final UnitInfo getOwnerUnit() {
+    public final TypeParameterizable getOwnerUnit() {
         return this.ownerUnit;
     }
 
@@ -122,7 +122,7 @@ public class TypeParameterInfo implements ReferenceTypeInfo {
     /**
      * 型パラメータを所有しているユニットを保存するための変数
      */
-    private final UnitInfo ownerUnit;
+    private final TypeParameterizable ownerUnit;
 
     /**
      * 型パラメータ名を保存するための変数

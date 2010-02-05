@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InitializerInfo;
@@ -64,16 +63,17 @@ public abstract class UnresolvedInitializerInfo<T extends InitializerInfo> exten
         // èäóLÉNÉâÉXÇéÊìæ
         //final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
         //final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(usingClass, usingMethod,
-//                classInfoManager, fieldInfoManager, methodInfoManager);
+        //                classInfoManager, fieldInfoManager, methodInfoManager);
 
         this.resolvedInfo = this.buildResolvedInfo(usingClass, this.getFromLine(), this
                 .getFromColumn(), this.getToLine(), this.getToColumn());
-        
-        this.resolveInnerBlock(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
+
+        this.resolveInnerBlock(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
+                methodInfoManager);
         return this.resolvedInfo;
     }
 
-    protected abstract T buildResolvedInfo(final ClassInfo usingClass, final int fromLine,
+    protected abstract T buildResolvedInfo(final TargetClassInfo usingClass, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn);
 
     /**

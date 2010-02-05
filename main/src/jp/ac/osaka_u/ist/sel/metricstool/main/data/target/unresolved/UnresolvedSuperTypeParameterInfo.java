@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SuperTypeParameterInfo
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterizable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -76,8 +76,8 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
 
         //　型パラメータの所有ユニットを解決
         final UnresolvedUnitInfo<?> unresolvedOwnerUnit = this.getOwnerUnit();
-        final UnitInfo ownerUnit = unresolvedOwnerUnit.resolve(usingClass, usingMethod,
-                classInfoManager, fieldInfoManager, methodInfoManager);
+        final TypeParameterizable ownerUnit = (TypeParameterizable) unresolvedOwnerUnit.resolve(
+                usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         // extends 節 がある場合
         if (this.hasExtendsType()) {

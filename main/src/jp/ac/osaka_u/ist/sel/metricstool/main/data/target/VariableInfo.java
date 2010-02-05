@@ -19,6 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * @param <TUnit> ‚±‚Ì•Ï”‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg 
  */
+@SuppressWarnings("serial")
 public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo implements Modifier {
 
     /**

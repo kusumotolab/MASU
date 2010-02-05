@@ -44,7 +44,7 @@ public class UnresolvedMemberImportStatementInfo extends
         }
         return Collections.unmodifiableList(memberImportStatements);
     }
-    
+
     /**
      * クラス名とそれ以下staticメンバー全てが利用可能かどうかを表すbooleanを与えてオブジェクトを初期化.
      * <p>
@@ -82,7 +82,7 @@ public class UnresolvedMemberImportStatementInfo extends
         final int toColumn = this.getToColumn();
 
         final String[] fullQualifiedName = this.getFullQualifiedName();
-        ClassInfo classInfo = classInfoManager.getClassInfo(fullQualifiedName);
+        ClassInfo<?, ?, ?, ?> classInfo = classInfoManager.getClassInfo(fullQualifiedName);
         final Set<Member> accessibleMembers = new TreeSet<Member>();
         if (null == classInfo) {
             classInfo = new ExternalClassInfo(fullQualifiedName);
@@ -92,12 +92,12 @@ public class UnresolvedMemberImportStatementInfo extends
         if (this.isAll()) {
 
             if (classInfo instanceof TargetClassInfo) {
-                final SortedSet<TargetFieldInfo> fields = ((TargetClassInfo) classInfo)
+                final SortedSet<TargetFieldInfo> fields = ((ClassInfo) classInfo)
                         .getDefinedFields();
                 final SortedSet<TargetFieldInfo> staticFields = StaticOrInstanceProcessing
                         .getStaticMembers(fields);
                 accessibleMembers.addAll(staticFields);
-                final SortedSet<TargetMethodInfo> methods = ((TargetClassInfo) classInfo)
+                final SortedSet<TargetMethodInfo> methods = ((ClassInfo) classInfo)
                         .getDefinedMethods();
                 final SortedSet<TargetMethodInfo> staticMethods = StaticOrInstanceProcessing
                         .getStaticMembers(methods);
@@ -111,14 +111,14 @@ public class UnresolvedMemberImportStatementInfo extends
             final String memberName = importName[importName.length - 1];
 
             if (classInfo instanceof TargetClassInfo) {
-                final SortedSet<TargetFieldInfo> fields = ((TargetClassInfo) classInfo)
+                final SortedSet<TargetFieldInfo> fields = ((ClassInfo) classInfo)
                         .getDefinedFields();
                 for (TargetFieldInfo field : fields) {
                     if (memberName.equals(field.getName())) {
                         accessibleMembers.add(field);
                     }
                 }
-                final SortedSet<TargetMethodInfo> methods = ((TargetClassInfo) classInfo)
+                final SortedSet<TargetMethodInfo> methods = ((ClassInfo) classInfo)
                         .getDefinedMethods();
                 for (TargetMethodInfo method : methods) {
                     if (memberName.equals(method.getMethodName())) {

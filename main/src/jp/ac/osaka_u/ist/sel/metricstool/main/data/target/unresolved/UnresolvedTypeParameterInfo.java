@@ -9,7 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterizable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -98,8 +98,8 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo<
 
         //　型パラメータの所有ユニットを解決
         final UnresolvedUnitInfo<?> unresolvedOwnerUnit = this.getOwnerUnit();
-        final UnitInfo ownerUnit = unresolvedOwnerUnit.resolve(usingClass, usingMethod,
-                classInfoManager, fieldInfoManager, methodInfoManager);
+        final TypeParameterizable ownerUnit = (TypeParameterizable) unresolvedOwnerUnit.resolve(
+                usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         final String name = this.getName();
         final int index = this.getIndex();

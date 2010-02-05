@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+@SuppressWarnings("serial")
 public abstract class JumpStatementInfo extends SingleStatementInfo {
 
     public JumpStatementInfo(final LocalSpaceInfo ownerSpace, final LabelInfo destinationLabel,
