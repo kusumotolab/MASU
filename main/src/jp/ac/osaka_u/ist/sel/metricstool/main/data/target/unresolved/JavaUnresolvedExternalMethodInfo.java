@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -16,6 +17,8 @@ public class JavaUnresolvedExternalMethodInfo {
         this.name = null;
         this.returnType = null;
         this.argumentTypes = new LinkedList<String>();
+        this.modifiers = new HashSet<String>();
+        this.typeParameters = new LinkedList<String>();
     }
 
     public void setName(final String name) {
@@ -58,6 +61,16 @@ public class JavaUnresolvedExternalMethodInfo {
         this.modifiers.add(modifier);
     }
 
+    public void addTypeParameter(final String typeParameter) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == typeParameter) {
+            throw new IllegalArgumentException();
+        }
+
+        this.typeParameters.add(typeParameter);
+    }
+    
     public String getName() {
         return this.name;
     }
@@ -74,11 +87,17 @@ public class JavaUnresolvedExternalMethodInfo {
         return Collections.unmodifiableSet(this.modifiers);
     }
 
+    public List<String> getTypeParameters() {
+        return Collections.unmodifiableList(this.typeParameters);
+    }
+    
     private String name;
 
     private String returnType;
 
-    private List<String> argumentTypes;
+    private final List<String> argumentTypes;
 
-    private Set<String> modifiers;
+    private final Set<String> modifiers;
+    
+    private final List<String> typeParameters;
 }

@@ -69,38 +69,6 @@ public class ExternalClassInfo
      * ExternalClassInfo では利用できない
      */
     @Override
-    public Set<ModifierInfo> getModifiers() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalClassInfo では利用できない
-     */
-    @Override
-    public TypeParameterInfo getTypeParameter(int index) {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalClassInfo では利用できない
-     */
-    @Override
-    public List<TypeParameterInfo> getTypeParameters() {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalClassInfo では利用できない
-     */
-    @Override
-    public void addTypeParameter(TypeParameterInfo typeParameter) {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalClassInfo では利用できない
-     */
-    @Override
     public void addTypeParameterUsage(TypeParameterInfo typeParameterInfo, TypeInfo usedType) {
         throw new CannotUseException();
     }

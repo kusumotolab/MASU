@@ -3,6 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -27,6 +29,7 @@ public class JavaUnresolvedExternalClassInfo {
         this.methods = new HashSet<JavaUnresolvedExternalMethodInfo>();
         this.fields = new HashSet<JavaUnresolvedExternalFieldInfo>();
         this.modifiers = new HashSet<String>();
+        this.typeParameters = new LinkedList<String>();
     }
 
     public void setName(final String name) {
@@ -93,6 +96,16 @@ public class JavaUnresolvedExternalClassInfo {
         this.modifiers.add(modifier);
     }
 
+    public void addTypeParameter(final String typeParameter) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == typeParameter) {
+            throw new IllegalArgumentException();
+        }
+
+        this.typeParameters.add(typeParameter);
+    }
+
     public String getName() {
         return this.name;
     }
@@ -115,6 +128,10 @@ public class JavaUnresolvedExternalClassInfo {
 
     public Set<String> getModifiers() {
         return Collections.unmodifiableSet(this.modifiers);
+    }
+
+    public List<String> getTypeParameters() {
+        return Collections.unmodifiableList(this.typeParameters);
     }
 
     @Override
@@ -149,4 +166,6 @@ public class JavaUnresolvedExternalClassInfo {
     private final Set<JavaUnresolvedExternalFieldInfo> fields;
 
     private final Set<String> modifiers;
+
+    private final List<String> typeParameters;
 }

@@ -29,10 +29,6 @@ public class TypeParameterInfo implements ReferenceTypeInfo {
             throw new NullPointerException();
         }
 
-        if ((!(ownerUnit instanceof TargetClassInfo)) && (!(ownerUnit instanceof CallableUnitInfo))) {
-            throw new NullPointerException();
-        }
-
         this.ownerUnit = ownerUnit;
         this.name = name;
         this.index = index;

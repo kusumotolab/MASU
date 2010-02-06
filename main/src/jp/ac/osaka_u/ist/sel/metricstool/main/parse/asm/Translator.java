@@ -52,7 +52,7 @@ public class Translator {
             throw new IllegalArgumentException();
         }
 
-        // 一文字ならば，primitiveTypeでなければならない
+        // 一文字ならば，primitiveTypeかVoidでなければならない
         if (1 == unresolvedType.length()) {
             return translateSingleCharacterType(unresolvedType.charAt(0));
         }
@@ -129,8 +129,8 @@ public class Translator {
             }
         }
 
-        // ジェネリクス(L...;)の場合
-        else if ('T' == unresolvedType.charAt(0)
+        // ジェネリクス(TE(別にEじゃなくてもいいけど);)の場合
+        else if ('T' == unresolvedType.charAt(0) && (':' != unresolvedType.charAt(1))
                 && ';' == unresolvedType.charAt(unresolvedType.length() - 1)) {
 
             final String identifier = unresolvedType.substring(1, unresolvedType.length() - 1);
@@ -157,7 +157,7 @@ public class Translator {
 
         // ジェネリクス(-...;)の場合
         else if ('-' == unresolvedType.charAt(0)
-                && ';' == unresolvedType.charAt(unresolvedType.length() - 1)) {
+                && (';' == unresolvedType.charAt(unresolvedType.length() - 1))) {
 
             final String unresolvedSuperName = unresolvedType.substring(1,
                     unresolvedType.length() - 1);
@@ -172,6 +172,19 @@ public class Translator {
             }
             return new SuperTypeParameterInfo(ownerUnit, "?", index, null, new ClassTypeInfo(
                     superClass));
+        }
+
+        // ジェネリクス(T:Ljava/lang/Object;)の場合
+        else if ((':' == unresolvedType.charAt(1))
+                && (';' == unresolvedType.charAt(unresolvedType.length() - 1))) {
+
+            final String identifier = unresolvedType.substring(0, unresolvedType.indexOf(':'));
+            final String unresolvedExtendsType = unresolvedType.substring(unresolvedType
+                    .lastIndexOf(':') + 1);
+            final TypeInfo extendsType = translateType(unresolvedExtendsType, 0, ownerUnit);
+            final TypeParameterInfo typeParameter = new TypeParameterInfo(ownerUnit, identifier,
+                    index, extendsType);
+            return typeParameter;
         }
 
         throw new IllegalArgumentException();

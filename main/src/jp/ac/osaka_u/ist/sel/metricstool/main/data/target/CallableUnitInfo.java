@@ -335,7 +335,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * @param typeParameter 追加する型パラメータ
      */
     @Override
-    public void addTypeParameter(final TypeParameterInfo typeParameter) {
+    public final void addTypeParameter(final TypeParameterInfo typeParameter) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == typeParameter) {
@@ -352,7 +352,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * @return　指定されたインデックスの型パラメータ
      */
     @Override
-    public TypeParameterInfo getTypeParameter(final int index) {
+    public final TypeParameterInfo getTypeParameter(final int index) {
         return this.typeParameters.get(index);
     }
 
@@ -362,7 +362,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * @return このクラスの型パラメータの List
      */
     @Override
-    public List<TypeParameterInfo> getTypeParameters() {
+    public final List<TypeParameterInfo> getTypeParameters() {
         return Collections.unmodifiableList(this.typeParameters);
     }
 
@@ -420,7 +420,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * @return 修飾子の Set
      */
     @Override
-    public Set<ModifierInfo> getModifiers() {
+    public final Set<ModifierInfo> getModifiers() {
         return Collections.unmodifiableSet(this.modifiers);
     }
 
@@ -430,7 +430,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * @return 子クラスから参照可能な場合は true, そうでない場合は false
      */
     @Override
-    public boolean isInheritanceVisible() {
+    public final boolean isInheritanceVisible() {
         return this.inheritanceVisible;
     }
 
@@ -440,7 +440,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
      */
     @Override
-    public boolean isNamespaceVisible() {
+    public final boolean isNamespaceVisible() {
         return this.namespaceVisible;
     }
 
@@ -450,7 +450,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
      */
     @Override
-    public boolean isPrivateVisible() {
+    public final boolean isPrivateVisible() {
         return this.privateVisible;
     }
 
@@ -460,7 +460,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * @return どこからでも参照可能な場合は true, そうでない場合は false
      */
     @Override
-    public boolean isPublicVisible() {
+    public final boolean isPublicVisible() {
         return this.publicVisible;
     }
 

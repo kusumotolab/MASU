@@ -499,6 +499,9 @@ public class MetricsTool {
 
             final String unresolvedName = unresolvedClassInfo.getName();
             final String[] name = Translator.transrateName(unresolvedName);
+            if(name[2].equals("String")){
+                System.out.println();
+            }
             final Set<String> modifiers = unresolvedClassInfo.getModifiers();
             final boolean isPublicVisible = modifiers.contains(ModifierInfo.PUBLIC_STRING);
             final boolean isNamespaceVisible = !modifiers.contains(ModifierInfo.PRIVATE_STRING);
@@ -520,6 +523,18 @@ public class MetricsTool {
             final String[] className = Translator.transrateName(unresolvedClassName);
             final ExternalClassInfo classInfo = (ExternalClassInfo) classInfoManager
                     .getClassInfo(className);
+
+            // 型パラメータがあれば解決
+            {
+                final List<String> unresolvedTypeParameters = unresolvedClassInfo
+                        .getTypeParameters();
+                for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
+                    final String unresolvedTypeParameter = unresolvedTypeParameters.get(index);
+                    TypeParameterInfo typeParameter = (TypeParameterInfo) Translator.translateType(
+                            unresolvedTypeParameter, index, classInfo);
+                    classInfo.addTypeParameter(typeParameter);
+                }
+            }
 
             // 親クラスがあれば解決
             {
@@ -600,6 +615,16 @@ public class MetricsTool {
                         constructor.addParameter(parameter);
                     }
 
+                    // 型パラメータの解決
+                    final List<String> unresolvedTypeParameters = unresolvedMethod
+                            .getTypeParameters();
+                    for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
+                        final String unresolvedTypeParameter = unresolvedTypeParameters.get(index);
+                        TypeParameterInfo typeParameter = (TypeParameterInfo) Translator
+                                .translateType(unresolvedTypeParameter, index, constructor);
+                        constructor.addTypeParameter(typeParameter);
+                    }
+
                     classInfo.addDefinedConstructor(constructor);
                 }
 
@@ -621,6 +646,16 @@ public class MetricsTool {
                         final ExternalParameterInfo parameter = new ExternalParameterInfo(
                                 parameterType, method);
                         method.addParameter(parameter);
+                    }
+
+                    // 型パラメータの解決
+                    final List<String> unresolvedTypeParameters = unresolvedMethod
+                            .getTypeParameters();
+                    for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
+                        final String unresolvedTypeParameter = unresolvedTypeParameters.get(index);
+                        TypeParameterInfo typeParameter = (TypeParameterInfo) Translator
+                                .translateType(unresolvedTypeParameter, index, method);
+                        method.addTypeParameter(typeParameter);
                     }
 
                     classInfo.addDefinedMethod(method);

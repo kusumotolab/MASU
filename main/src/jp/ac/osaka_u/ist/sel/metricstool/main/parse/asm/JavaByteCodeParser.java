@@ -3,6 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
@@ -51,6 +53,15 @@ public class JavaByteCodeParser implements ClassVisitor {
 
         for (final String modifier : this.getModifiers(access)) {
             this.classInfo.addModifier(modifier);
+        }
+
+        // 型パラメータがある場合はその文字列を取得
+        if ((null != signature) && (signature.startsWith("<"))) {
+
+            final List<String> typeParameters = this.getTypeParameters(signature);
+            for (final String typeParameter : typeParameters) {
+                this.classInfo.addTypeParameter(typeParameter);
+            }
         }
     }
 
@@ -120,6 +131,15 @@ public class JavaByteCodeParser implements ClassVisitor {
             method.setReturnType(Type.getReturnType(desc).toString());
         }
 
+        // 型パラメータある場合はその文字列を取得
+        if ((null != signature) && (signature.startsWith("<"))) {
+
+            final List<String> typeParameters = this.getTypeParameters(signature);
+            for (final String typeParameter : typeParameters) {
+                method.addTypeParameter(typeParameter);
+            }
+        }
+
         this.classInfo.addMethod(method);
         return null;
     }
@@ -179,6 +199,67 @@ public class JavaByteCodeParser implements ClassVisitor {
         }
 
         return Collections.unmodifiableSet(modifiers);
+    }
+
+    private List<String> getTypeParameters(final String signature) {
+
+        if (null == signature) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!signature.startsWith("<")) {
+            throw new IllegalArgumentException();
+        }
+
+        if (-1 == signature.indexOf('>')) {
+            throw new IllegalArgumentException();
+        }
+
+        // ジェネリクス情報がおわる位置を取得し，その部分を切り出す        
+        int toIndex = 0;
+        for (int nestLevel = 0; true; toIndex++) {
+
+            if ('<' == signature.charAt(toIndex)) {
+                nestLevel++;
+            }
+
+            else if ('>' == signature.charAt(toIndex)) {
+                nestLevel--;
+                if (0 == nestLevel) {
+                    break;
+                }
+            }
+        }
+        final String typeParameterString = signature.substring(1, toIndex);
+
+        // ジェネリクス情報を1つ１つ分解し，Setに入れる
+        final List<String> typeParameters = new LinkedList<String>();
+        int startIndex = 0;
+        int endIndex = 0;
+        for (int nestLevel = 0; endIndex < typeParameterString.length(); endIndex++) {
+
+            if ('<' == typeParameterString.charAt(endIndex)) {
+                nestLevel++;
+            }
+
+            else if ('>' == typeParameterString.charAt(endIndex)) {
+                nestLevel--;
+            }
+
+            else if (';' == typeParameterString.charAt(endIndex) && (0 == nestLevel)) {
+                if (endIndex < typeParameterString.length()) {
+                    final String typeParameter = typeParameterString.substring(startIndex,
+                            endIndex + 1);
+                    typeParameters.add(typeParameter);
+                } else {
+                    final String typeParameter = typeParameterString.substring(startIndex);
+                    typeParameters.add(typeParameter);
+                }
+            }
+        }
+
+        return Collections.unmodifiableList(typeParameters);
+
     }
 
     private final JavaUnresolvedExternalClassInfo classInfo;
