@@ -153,6 +153,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
             final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) ownerType)
                     .getReferencedClass();
+                        
             if (ownerClass instanceof TargetClassInfo) {
 
                 // まずは利用可能なメソッドから検索

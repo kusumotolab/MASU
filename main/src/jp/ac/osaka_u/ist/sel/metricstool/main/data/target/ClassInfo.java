@@ -27,6 +27,27 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
         extends UnitInfo implements MetricMeasurable, Modifier, TypeParameterizable {
 
     /**
+     * InnerClassInfo<?>のSortedSetをClassInfo<?,?,?,?>のSortedSetに変換する
+     * @param innerClasses
+     * @return
+     */
+    public static SortedSet<ClassInfo<?, ?, ?, ?>> convert(
+            final SortedSet<InnerClassInfo<?>> innerClasses) {
+
+        if (null == innerClasses) {
+            throw new IllegalArgumentException();
+        }
+
+        final SortedSet<ClassInfo<?, ?, ?, ?>> classes = new TreeSet<ClassInfo<?, ?, ?, ?>>();
+
+        for (final InnerClassInfo<?> innerClass : innerClasses) {
+            classes.add((ClassInfo<?, ?, ?, ?>) innerClass);
+        }
+
+        return Collections.unmodifiableSortedSet(classes);
+    }
+
+    /**
      * 名前空間名とクラス名からオブジェクトを生成する
      * 
      * @param modifiers 修飾子のSet

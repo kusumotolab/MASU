@@ -11,7 +11,8 @@ import java.util.HashSet;
  *
  */
 @SuppressWarnings("serial")
-public final class TargetAnonymousClassInfo extends TargetInnerClassInfo {
+public final class TargetAnonymousClassInfo extends TargetInnerClassInfo implements
+        AnonymousClassInfo {
 
     /**
      * 無名インナークラスオブジェクトを初期化する

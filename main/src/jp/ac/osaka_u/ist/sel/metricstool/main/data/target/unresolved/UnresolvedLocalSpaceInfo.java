@@ -214,7 +214,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
 
         // 内部ブロック情報を解決し，解決済みオブジェクトに追加
         for (final UnresolvedStatementInfo<?> unresolvedStatement : this.getStatements()) {
-            if (unresolvedStatement instanceof UnresolvedBlockInfo) {
+            if (unresolvedStatement instanceof UnresolvedBlockInfo<?>) {
                 final StatementInfo statement = unresolvedStatement.resolve(usingClass,
                         usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
                 this.resolvedInfo.addStatement(statement);

@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -29,7 +29,9 @@ public final class ExternalMethodInfo extends MethodInfo {
             final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
 
         super(new HashSet<ModifierInfo>(), methodName, ownerClass, privateVisible,
-                namespaceVisible, inheritanceVisible, publicVisible, instance, 0, 0, 0, 0);
+                namespaceVisible, inheritanceVisible, publicVisible, instance, new Random()
+                        .nextInt(), new Random().nextInt(), new Random().nextInt(), new Random()
+                        .nextInt());
 
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
@@ -43,7 +45,8 @@ public final class ExternalMethodInfo extends MethodInfo {
     public ExternalMethodInfo(final String methodName, final ExternalClassInfo ownerClass) {
 
         super(new HashSet<ModifierInfo>(), methodName, ownerClass, false, true, true, true, true,
-                0, 0, 0, 0);
+                new Random().nextInt(), new Random().nextInt(), new Random().nextInt(),
+                new Random().nextInt());
 
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
@@ -57,7 +60,8 @@ public final class ExternalMethodInfo extends MethodInfo {
     public ExternalMethodInfo(final String methodName) {
 
         super(new HashSet<ModifierInfo>(), methodName, ExternalClassInfo.UNKNOWN, false, true,
-                true, true, true, 0, 0, 0, 0);
+                true, true, true, new Random().nextInt(), new Random().nextInt(), new Random()
+                        .nextInt(), new Random().nextInt());
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
 

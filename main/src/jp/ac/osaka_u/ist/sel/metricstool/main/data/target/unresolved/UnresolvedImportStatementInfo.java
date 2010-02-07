@@ -56,12 +56,13 @@ public abstract class UnresolvedImportStatementInfo<T extends ImportStatementInf
             throw new NullPointerException();
         }
 
-        if (!(o instanceof UnresolvedImportStatementInfo)) {
+        if (!(o instanceof UnresolvedImportStatementInfo<?>)) {
             return false;
         }
 
         final String[] importName = this.getImportName();
-        final String[] correspondImportName = ((UnresolvedImportStatementInfo) o).getImportName();
+        final String[] correspondImportName = ((UnresolvedImportStatementInfo<?>) o)
+                .getImportName();
         if (importName.length != correspondImportName.length) {
             return false;
         }

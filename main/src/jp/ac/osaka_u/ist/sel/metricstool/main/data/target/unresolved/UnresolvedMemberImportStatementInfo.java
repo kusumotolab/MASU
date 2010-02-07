@@ -13,6 +13,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalFieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Member;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MemberImportStatementInfo;
@@ -92,14 +94,25 @@ public class UnresolvedMemberImportStatementInfo extends
         if (this.isAll()) {
 
             if (classInfo instanceof TargetClassInfo) {
-                final SortedSet<TargetFieldInfo> fields = ((ClassInfo) classInfo)
-                        .getDefinedFields();
+                final TargetClassInfo targetClassInfo = (TargetClassInfo) classInfo;
+                final SortedSet<TargetFieldInfo> fields = targetClassInfo.getDefinedFields();
                 final SortedSet<TargetFieldInfo> staticFields = StaticOrInstanceProcessing
                         .getStaticMembers(fields);
                 accessibleMembers.addAll(staticFields);
-                final SortedSet<TargetMethodInfo> methods = ((ClassInfo) classInfo)
-                        .getDefinedMethods();
+                final SortedSet<TargetMethodInfo> methods = targetClassInfo.getDefinedMethods();
                 final SortedSet<TargetMethodInfo> staticMethods = StaticOrInstanceProcessing
+                        .getStaticMembers(methods);
+                accessibleMembers.addAll(staticMethods);
+            }
+
+            else if (classInfo instanceof ExternalClassInfo) {
+                final ExternalClassInfo externalClassInfo = (ExternalClassInfo) classInfo;
+                final SortedSet<ExternalFieldInfo> fields = externalClassInfo.getDefinedFields();
+                final SortedSet<ExternalFieldInfo> staticFields = StaticOrInstanceProcessing
+                        .getStaticMembers(fields);
+                accessibleMembers.addAll(staticFields);
+                final SortedSet<ExternalMethodInfo> methods = externalClassInfo.getDefinedMethods();
+                final SortedSet<ExternalMethodInfo> staticMethods = StaticOrInstanceProcessing
                         .getStaticMembers(methods);
                 accessibleMembers.addAll(staticMethods);
             }
@@ -111,25 +124,35 @@ public class UnresolvedMemberImportStatementInfo extends
             final String memberName = importName[importName.length - 1];
 
             if (classInfo instanceof TargetClassInfo) {
-                final SortedSet<TargetFieldInfo> fields = ((ClassInfo) classInfo)
-                        .getDefinedFields();
-                for (TargetFieldInfo field : fields) {
+                final TargetClassInfo targetClassInfo = (TargetClassInfo) classInfo;
+                final SortedSet<TargetFieldInfo> fields = targetClassInfo.getDefinedFields();
+                for (final TargetFieldInfo field : fields) {
                     if (memberName.equals(field.getName())) {
                         accessibleMembers.add(field);
                     }
                 }
-                final SortedSet<TargetMethodInfo> methods = ((ClassInfo) classInfo)
-                        .getDefinedMethods();
-                for (TargetMethodInfo method : methods) {
+                final SortedSet<TargetMethodInfo> methods = targetClassInfo.getDefinedMethods();
+                for (final TargetMethodInfo method : methods) {
                     if (memberName.equals(method.getMethodName())) {
                         accessibleMembers.add(method);
                     }
                 }
             }
 
-            // 外部メンバを追加する処理が必要
-            else {
-
+            else if (classInfo instanceof ExternalClassInfo) {
+                final ExternalClassInfo externalClassInfo = (ExternalClassInfo) classInfo;
+                final SortedSet<ExternalFieldInfo> fields = externalClassInfo.getDefinedFields();
+                for (final ExternalFieldInfo field : fields) {
+                    if (memberName.equals(field.getName())) {
+                        accessibleMembers.add(field);
+                    }
+                }
+                final SortedSet<ExternalMethodInfo> methods = externalClassInfo.getDefinedMethods();
+                for (final ExternalMethodInfo method : methods) {
+                    if (memberName.equals(method.getMethodName())) {
+                        accessibleMembers.add(method);
+                    }
+                }
             }
         }
 

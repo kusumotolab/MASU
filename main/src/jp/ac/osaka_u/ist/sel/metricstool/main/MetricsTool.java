@@ -499,9 +499,6 @@ public class MetricsTool {
 
             final String unresolvedName = unresolvedClassInfo.getName();
             final String[] name = Translator.transrateName(unresolvedName);
-            if(name[2].equals("String")){
-                System.out.println();
-            }
             final Set<String> modifiers = unresolvedClassInfo.getModifiers();
             final boolean isPublicVisible = modifiers.contains(ModifierInfo.PUBLIC_STRING);
             final boolean isNamespaceVisible = !modifiers.contains(ModifierInfo.PRIVATE_STRING);

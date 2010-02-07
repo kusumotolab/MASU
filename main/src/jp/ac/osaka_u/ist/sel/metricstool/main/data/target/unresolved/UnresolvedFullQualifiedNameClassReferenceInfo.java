@@ -32,7 +32,8 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
      * @param referencedClass 参照されているクラス
      */
     public UnresolvedFullQualifiedNameClassReferenceInfo(final UnresolvedClassInfo referencedClass) {
-        super(new LinkedList<UnresolvedClassImportStatementInfo>(), referencedClass.getFullQualifiedName());
+        super(new LinkedList<UnresolvedClassImportStatementInfo>(), referencedClass
+                .getFullQualifiedName());
         this.referencedClass = referencedClass;
     }
 
@@ -59,7 +60,8 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
         final int toColumn = this.getToColumn();
 
         final String[] fullQualifiedReferenceName = this.getReferenceName();
-        ClassInfo referencedClass = classInfoManager.getClassInfo(fullQualifiedReferenceName);
+        ClassInfo<?, ?, ?, ?> referencedClass = classInfoManager
+                .getClassInfo(fullQualifiedReferenceName);
 
         // 参照されたクラスが登録されていない場合は，ここで登録する
         if (null == referencedClass) {

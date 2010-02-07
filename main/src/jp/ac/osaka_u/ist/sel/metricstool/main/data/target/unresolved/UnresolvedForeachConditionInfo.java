@@ -6,7 +6,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachConditionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
@@ -70,15 +69,15 @@ public class UnresolvedForeachConditionInfo extends UnresolvedExpressionInfo<For
         this.iteratorVariable = iteratorVariable;
     }
 
-    public UnresolvedExpressionInfo getIteratorExpression() {
+    public UnresolvedExpressionInfo<?> getIteratorExpression() {
         return this.iteratorExpression;
     }
 
-    public void setIteratorExpression(final UnresolvedExpressionInfo iteratorExpression) {
+    public void setIteratorExpression(final UnresolvedExpressionInfo<?> iteratorExpression) {
         this.iteratorExpression = iteratorExpression;
     }
 
     private UnresolvedVariableDeclarationStatementInfo iteratorVariable;
 
-    private UnresolvedExpressionInfo iteratorExpression;
+    private UnresolvedExpressionInfo<?> iteratorExpression;
 }
