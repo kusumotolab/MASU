@@ -462,6 +462,23 @@ public class MetricsTool {
      */
     public void analyzeLibraries() {
 
+        final Settings settings = Settings.getInstance();
+
+        // java言語の場合
+        if (settings.getLanguage().equals(LANGUAGE.JAVA15)
+                || settings.getLanguage().equals(LANGUAGE.JAVA14)
+                || settings.getLanguage().equals(LANGUAGE.JAVA13)) {
+
+            this.analyzeJavaLibraries();
+        }
+
+        else if (settings.getLanguage().equals(LANGUAGE.CSHARP)) {
+
+        }
+    }
+
+    private void analyzeJavaLibraries() {
+
         final Set<JavaUnresolvedExternalClassInfo> unresolvedExternalClasses = new HashSet<JavaUnresolvedExternalClassInfo>();
 
         // バイトコードから読み込み
