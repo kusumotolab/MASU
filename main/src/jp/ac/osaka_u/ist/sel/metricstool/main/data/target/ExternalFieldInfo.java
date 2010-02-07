@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 
@@ -25,7 +26,8 @@ public final class ExternalFieldInfo extends FieldInfo {
             final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
         super(modifiers, name, type, definitionClass, privateVisible, namespaceVisible,
-                inheritanceVisible, publicVisible, instance, 0, 0, 0, 0);
+                inheritanceVisible, publicVisible, instance, new Random().nextInt(), new Random()
+                        .nextInt(), new Random().nextInt(), new Random().nextInt());
     }
 
     /**
@@ -36,7 +38,8 @@ public final class ExternalFieldInfo extends FieldInfo {
      */
     public ExternalFieldInfo(final String name, final ExternalClassInfo definitionClass) {
         super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(), definitionClass,
-                true, true, true, true, true, 0, 0, 0, 0);
+                true, true, true, true, true, new Random().nextInt(), new Random().nextInt(),
+                new Random().nextInt(), new Random().nextInt());
     }
 
     /**
@@ -46,7 +49,8 @@ public final class ExternalFieldInfo extends FieldInfo {
      */
     public ExternalFieldInfo(final String name) {
         super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(),
-                ExternalClassInfo.UNKNOWN, true, true, true, true, true, 0, 0, 0, 0);
+                ExternalClassInfo.UNKNOWN, true, true, true, true, true, new Random().nextInt(),
+                new Random().nextInt(), new Random().nextInt(), new Random().nextInt());
     }
 
     /**
