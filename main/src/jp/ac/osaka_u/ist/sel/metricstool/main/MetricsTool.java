@@ -483,31 +483,7 @@ public class MetricsTool {
 
         // バイトコードから読み込み
         for (final String path : Settings.getInstance().getLibraries()) {
-
-            try {
-                final File library = new File(path);
-
-                // jarファイルの場合
-                if (library.isFile() && path.endsWith(".jar")) {
-
-                    final JarFile jar = new JarFile(library);
-                    for (final Enumeration<JarEntry> entries = jar.entries(); entries
-                            .hasMoreElements();) {
-                        final JarEntry entry = entries.nextElement();
-                        if (entry.getName().endsWith(".class")
-                        /*&& (entry.getName().indexOf('$') < 0)*/) {
-
-                            final ClassReader reader = new ClassReader(jar.getInputStream(entry));
-                            final JavaByteCodeParser parser = new JavaByteCodeParser();
-                            reader.accept(parser, ClassReader.SKIP_CODE);
-                            unresolvedExternalClasses.add(parser.getClassInfo());
-                        }
-                    }
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            readJavaLibraries(new File(path), unresolvedExternalClasses);
         }
 
         // クラスそのもののみ名前解決（型は解決しない）
@@ -697,6 +673,69 @@ public class MetricsTool {
                     classInfo.addDefinedMethod(method);
                 }
             }
+        }
+    }
+
+    private void readJavaLibraries(final File file,
+            final Set<JavaUnresolvedExternalClassInfo> unresolvedExternalClasses) {
+
+        try {
+
+            // jarファイルの場合
+            if (file.isFile() && file.getName().endsWith(".jar")) {
+
+                final JarFile jar = new JarFile(file);
+                for (final Enumeration<JarEntry> entries = jar.entries(); entries.hasMoreElements();) {
+                    final JarEntry entry = entries.nextElement();
+                    if (entry.getName().endsWith(".class")) {
+
+                        final ClassReader reader = new ClassReader(jar.getInputStream(entry));
+                        final JavaByteCodeParser parser = new JavaByteCodeParser();
+                        reader.accept(parser, ClassReader.SKIP_CODE);
+                        unresolvedExternalClasses.add(parser.getClassInfo());
+                    }
+                }
+            }
+
+            // classファイルの場合
+            else if (file.isFile() && file.getName().endsWith(".class")) {
+
+                final ClassReader reader = new ClassReader(new FileInputStream(file));
+                final JavaByteCodeParser parser = new JavaByteCodeParser();
+                reader.accept(parser, ClassReader.SKIP_CODE);
+                unresolvedExternalClasses.add(parser.getClassInfo());
+            }
+
+            // ディレクトリの場合
+            else if (file.isDirectory()) {
+
+                for (final File subfile : file.listFiles()) {
+
+                    if (subfile.isFile()) {
+                        final String name = subfile.getName();
+                        if (name.endsWith(".jar") || name.endsWith(".class")) {
+                            readJavaLibraries(subfile, unresolvedExternalClasses);
+                        }
+                    }
+
+                    else if (subfile.isDirectory()) {
+                        readJavaLibraries(subfile, unresolvedExternalClasses);
+                    }
+                }
+            }
+
+            //上記以外の場合は正しくないファイルがJavaのライブラリとして指定されていることになり，終了            
+            else {
+                err.println("file <" + file.getAbsolutePath()
+                        + "> is inappropriate as a Java library.");
+                System.exit(0);
+            }            
+        } 
+        
+        // ライブラリの読み込みで例外が発生した場合はプログラムを終了
+        catch (IOException e) {
+            e.printStackTrace();
+            System.exit(0);
         }
     }
 
