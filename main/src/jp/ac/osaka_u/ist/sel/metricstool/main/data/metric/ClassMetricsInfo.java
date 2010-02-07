@@ -10,14 +10,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
  * @author higo
  * 
  */
-public final class ClassMetricsInfo extends MetricsInfo<ClassInfo> {
+public final class ClassMetricsInfo extends MetricsInfo<ClassInfo<?, ?, ?, ?>> {
 
     /**
      * 計測対象クラスを与えて初期化
      * 
      * @param classInfo 計測対象クラス
      */
-    public ClassMetricsInfo(final ClassInfo classInfo) {
+    public ClassMetricsInfo(final ClassInfo<?, ?, ?, ?> classInfo) {
         super(classInfo);
     }
 

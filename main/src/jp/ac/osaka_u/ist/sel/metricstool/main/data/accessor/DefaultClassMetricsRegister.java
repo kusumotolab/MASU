@@ -42,7 +42,7 @@ public class DefaultClassMetricsRegister implements ClassMetricsRegister {
      * @throws MetricAlreadyRegisteredException すでにメトリクスが登録されている場合にスローされる例外
      */
     @Override
-    public void registMetric(final ClassInfo classInfo, final Number value)
+    public void registMetric(final ClassInfo<?, ?, ?, ?> classInfo, final Number value)
             throws MetricAlreadyRegisteredException {
 
         if ((null == classInfo) || (null == value)) {

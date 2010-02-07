@@ -90,7 +90,7 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
             final MethodMetricsInfo methodMetricsInfo = this.get(methodInfo);
             if (null == methodMetricsInfo) {
                 final String methodName = methodInfo.getMethodName();
-                final ClassInfo ownerClassInfo = methodInfo.getOwnerClass();
+                final ClassInfo<?, ?, ?, ?> ownerClassInfo = methodInfo.getOwnerClass();
                 final String ownerClassName = ownerClassInfo.getFullQualifiedName(".");
                 final String message = "Metrics of " + ownerClassName + "::" + methodName
                         + " are not registered!";

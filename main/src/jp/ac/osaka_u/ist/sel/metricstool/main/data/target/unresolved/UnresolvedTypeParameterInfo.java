@@ -41,7 +41,7 @@ public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo<
 
         // ownerUnitがメソッドかクラスでない場合はエラー
         if ((!(ownerUnit instanceof UnresolvedClassInfo))
-                && (!(ownerUnit instanceof UnresolvedCallableUnitInfo))) {
+                && (!(ownerUnit instanceof UnresolvedCallableUnitInfo<?>))) {
             throw new IllegalArgumentException();
         }
 

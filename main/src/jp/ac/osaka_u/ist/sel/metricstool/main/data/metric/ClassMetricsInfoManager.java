@@ -42,7 +42,7 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
      * @param classInfo ほしいメトリクス情報のクラス
      * @return メトリクス情報
      */
-    public ClassMetricsInfo get(final ClassInfo classInfo) {
+    public ClassMetricsInfo get(final ClassInfo<?, ?, ?, ?> classInfo) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfo) {
@@ -60,8 +60,8 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
      * @param value メトリクス値
      * @throws MetricAlreadyRegisteredException 登録しようとしているメトリクスが既に登録されている
      */
-    public void putMetric(final ClassInfo classInfo, final AbstractPlugin plugin, final Number value)
-            throws MetricAlreadyRegisteredException {
+    public void putMetric(final ClassInfo<?, ?, ?, ?> classInfo, final AbstractPlugin plugin,
+            final Number value) throws MetricAlreadyRegisteredException {
 
         ClassMetricsInfo classMetricsInfo = this.classMetricsInfos.get(classInfo);
 
@@ -83,8 +83,8 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        for (final ClassInfo classInfo : DataManager.getInstance().getClassInfoManager()
-                .getTargetClassInfos()) {
+        for (final ClassInfo<?, ?, ?, ?> classInfo : DataManager.getInstance()
+                .getClassInfoManager().getTargetClassInfos()) {
 
             ClassMetricsInfo classMetricsInfo = this.get(classInfo);
             if (null == classMetricsInfo) {
@@ -115,11 +115,11 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
     public ClassMetricsInfoManager() {
         //MetricsToolSecurityManager.getInstance().checkAccess();
         this.classMetricsInfos = Collections
-                .synchronizedSortedMap(new TreeMap<ClassInfo, ClassMetricsInfo>());
+                .synchronizedSortedMap(new TreeMap<ClassInfo<?, ?, ?, ?>, ClassMetricsInfo>());
     }
 
     /**
      * クラスメトリクスのマップを保存するための変数
      */
-    private final SortedMap<ClassInfo, ClassMetricsInfo> classMetricsInfos;
+    private final SortedMap<ClassInfo<?, ?, ?, ?>, ClassMetricsInfo> classMetricsInfos;
 }

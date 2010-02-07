@@ -16,6 +16,7 @@ import java.util.TreeSet;
  * @author higo
  * @param <T> g—p‚³‚ê‚Ä‚¢‚é•Ï”
  */
+@SuppressWarnings("serial")
 public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInfo>> extends
         ExpressionInfo {
 
