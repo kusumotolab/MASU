@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 
 
@@ -19,11 +20,12 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
      * 
      * @param ownerClass このメソッドを定義しているクラス
      */
-    public ExternalConstructorInfo(final ExternalClassInfo ownerClass,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible) {
-        super(new HashSet<ModifierInfo>(), ownerClass, privateVisible, namespaceVisible,
-                inheritanceVisible, publicVisible, 0, 0, 0, 0);
+    public ExternalConstructorInfo(final Set<ModifierInfo> modifiers,
+            final ExternalClassInfo ownerClass, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible) {
+        super(modifiers, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
+                publicVisible, 0, 0, 0, 0);
     }
 
     /**

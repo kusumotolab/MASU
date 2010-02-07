@@ -20,12 +20,12 @@ public final class ExternalFieldInfo extends FieldInfo {
      * @param type 型
      * @param definitionClass フィールドを定義しているクラス
      */
-    public ExternalFieldInfo(final String name, final TypeInfo type,
-            final ExternalClassInfo definitionClass, final boolean privateVisible,
-            final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final boolean instance) {
-        super(new HashSet<ModifierInfo>(), name, type, definitionClass, privateVisible,
-                namespaceVisible, inheritanceVisible, publicVisible, instance, 0, 0, 0, 0);
+    public ExternalFieldInfo(final Set<ModifierInfo> modifiers, final String name,
+            final TypeInfo type, final ExternalClassInfo definitionClass,
+            final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
+        super(modifiers, name, type, definitionClass, privateVisible, namespaceVisible,
+                inheritanceVisible, publicVisible, instance, 0, 0, 0, 0);
     }
 
     /**

@@ -30,16 +30,17 @@ public class ExternalClassInfo
     }
 
     /**
-     * 完全限定名とアクセス制御子を与えて，クラス情報オブジェクトを初期化
+     * 修飾子，完全限定名，アクセス制御子を与えて，クラス情報オブジェクトを初期化
      * 
      * @param fullQualifiedName 完全限定名
      */
-    public ExternalClassInfo(final String[] fullQualifiedName, final boolean privateVisible,
-            final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final boolean instance, final boolean isInterface) {
+    public ExternalClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
+            final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
+            final boolean isInterface) {
 
-        super(new HashSet<ModifierInfo>(), fullQualifiedName, privateVisible, namespaceVisible,
-                inheritanceVisible, publicVisible, instance, isInterface, 0, 0, 0, 0);
+        super(modifiers, fullQualifiedName, privateVisible, namespaceVisible, inheritanceVisible,
+                publicVisible, instance, isInterface, 0, 0, 0, 0);
     }
 
     /**

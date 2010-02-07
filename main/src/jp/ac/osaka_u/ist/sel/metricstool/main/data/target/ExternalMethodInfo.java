@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -24,14 +25,14 @@ public final class ExternalMethodInfo extends MethodInfo {
      * @param methodName メソッド名
      * @param ownerClass このメソッドを定義しているクラス
      */
-    public ExternalMethodInfo(final String methodName, final ExternalClassInfo ownerClass,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
+    public ExternalMethodInfo(final Set<ModifierInfo> modifiers, final String methodName,
+            final ExternalClassInfo ownerClass, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final boolean instance) {
 
-        super(new HashSet<ModifierInfo>(), methodName, ownerClass, privateVisible,
-                namespaceVisible, inheritanceVisible, publicVisible, instance, new Random()
-                        .nextInt(), new Random().nextInt(), new Random().nextInt(), new Random()
-                        .nextInt());
+        super(modifiers, methodName, ownerClass, privateVisible, namespaceVisible,
+                inheritanceVisible, publicVisible, instance, new Random().nextInt(), new Random()
+                        .nextInt(), new Random().nextInt(), new Random().nextInt());
 
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
