@@ -105,7 +105,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.MasuAstFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeParser;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.Translator;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeNameResolver;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.DefaultPluginLauncher;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginLauncher;
@@ -507,7 +507,7 @@ public class MetricsTool {
         for (final JavaUnresolvedExternalClassInfo unresolvedClassInfo : unresolvedExternalClasses) {
 
             final String unresolvedName = unresolvedClassInfo.getName();
-            final String[] name = Translator.transrateName(unresolvedName);
+            final String[] name = JavaByteCodeNameResolver.resolveName(unresolvedName);
             final Set<String> unresolvedModifiers = unresolvedClassInfo.getModifiers();
             final boolean isPublicVisible = unresolvedModifiers
                     .contains(ModifierInfo.PUBLIC_STRING);
@@ -534,7 +534,7 @@ public class MetricsTool {
 
             // まずは，解決済みオブジェクトを取得            
             final String unresolvedClassName = unresolvedClassInfo.getName();
-            final String[] className = Translator.transrateName(unresolvedClassName);
+            final String[] className = JavaByteCodeNameResolver.resolveName(unresolvedClassName);
             final ExternalClassInfo classInfo = (ExternalClassInfo) classInfoManager
                     .getClassInfo(className);
 
@@ -544,7 +544,7 @@ public class MetricsTool {
                         .getTypeParameters();
                 for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
                     final String unresolvedTypeParameter = unresolvedTypeParameters.get(index);
-                    TypeParameterInfo typeParameter = (TypeParameterInfo) Translator.translateType(
+                    TypeParameterInfo typeParameter = (TypeParameterInfo) JavaByteCodeNameResolver.resolveType(
                             unresolvedTypeParameter, index, classInfo);
                     classInfo.addTypeParameter(typeParameter);
                 }
@@ -554,7 +554,7 @@ public class MetricsTool {
             {
                 final String unresolvedSuperName = unresolvedClassInfo.getSuperName();
                 if (null != unresolvedSuperName) {
-                    final String[] superName = Translator.transrateName(unresolvedSuperName);
+                    final String[] superName = JavaByteCodeNameResolver.resolveName(unresolvedSuperName);
                     ExternalClassInfo superClassInfo = (ExternalClassInfo) classInfoManager
                             .getClassInfo(superName);
                     if (null == superClassInfo) {
@@ -568,7 +568,7 @@ public class MetricsTool {
 
             // インターフェースがあれば解決
             for (final String unresolvedInterfaceName : unresolvedClassInfo.getInterfaces()) {
-                final String[] interfaceName = Translator.transrateName(unresolvedInterfaceName);
+                final String[] interfaceName = JavaByteCodeNameResolver.resolveName(unresolvedInterfaceName);
                 ExternalClassInfo interfaceInfo = (ExternalClassInfo) classInfoManager
                         .getClassInfo(interfaceName);
                 if (null == interfaceInfo) {
@@ -585,7 +585,7 @@ public class MetricsTool {
 
                 final String fieldName = unresolvedField.getName();
                 final String unresolvedType = unresolvedField.getType();
-                final TypeInfo fieldType = Translator.translateType(unresolvedType, 0, null);
+                final TypeInfo fieldType = JavaByteCodeNameResolver.resolveType(unresolvedType, 0, null);
                 final Set<String> unresolvedModifiers = unresolvedField.getModifiers();
                 final boolean isPublicVisible = unresolvedModifiers
                         .contains(ModifierInfo.PUBLIC_STRING);
@@ -636,7 +636,7 @@ public class MetricsTool {
 
                     final List<String> unresolvedParameters = unresolvedMethod.getArgumentTypes();
                     for (final String unresolvedParameter : unresolvedParameters) {
-                        final TypeInfo parameterType = Translator.translateType(
+                        final TypeInfo parameterType = JavaByteCodeNameResolver.resolveType(
                                 unresolvedParameter, 0, null);
                         final ExternalParameterInfo parameter = new ExternalParameterInfo(
                                 parameterType, constructor);
@@ -648,8 +648,8 @@ public class MetricsTool {
                             .getTypeParameters();
                     for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
                         final String unresolvedTypeParameter = unresolvedTypeParameters.get(index);
-                        TypeParameterInfo typeParameter = (TypeParameterInfo) Translator
-                                .translateType(unresolvedTypeParameter, index, constructor);
+                        TypeParameterInfo typeParameter = (TypeParameterInfo) JavaByteCodeNameResolver
+                                .resolveType(unresolvedTypeParameter, index, constructor);
                         constructor.addTypeParameter(typeParameter);
                     }
 
@@ -663,13 +663,13 @@ public class MetricsTool {
                             isPublicVisible, !isStatic);
 
                     final String unresolvedReturnType = unresolvedMethod.getReturnType();
-                    final TypeInfo returnType = Translator.translateType(unresolvedReturnType, 0,
+                    final TypeInfo returnType = JavaByteCodeNameResolver.resolveType(unresolvedReturnType, 0,
                             null);
                     method.setReturnType(returnType);
 
                     final List<String> unresolvedParameters = unresolvedMethod.getArgumentTypes();
                     for (final String unresolvedParameter : unresolvedParameters) {
-                        final TypeInfo parameterType = Translator.translateType(
+                        final TypeInfo parameterType = JavaByteCodeNameResolver.resolveType(
                                 unresolvedParameter, 0, null);
                         final ExternalParameterInfo parameter = new ExternalParameterInfo(
                                 parameterType, method);
@@ -681,8 +681,8 @@ public class MetricsTool {
                             .getTypeParameters();
                     for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
                         final String unresolvedTypeParameter = unresolvedTypeParameters.get(index);
-                        TypeParameterInfo typeParameter = (TypeParameterInfo) Translator
-                                .translateType(unresolvedTypeParameter, index, method);
+                        TypeParameterInfo typeParameter = (TypeParameterInfo) JavaByteCodeNameResolver
+                                .resolveType(unresolvedTypeParameter, index, method);
                         method.addTypeParameter(typeParameter);
                     }
 

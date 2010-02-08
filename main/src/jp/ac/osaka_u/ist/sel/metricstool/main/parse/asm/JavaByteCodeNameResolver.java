@@ -24,9 +24,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VoidTypeInfo;
  * @author higo
  *
  */
-public class Translator {
+public class JavaByteCodeNameResolver {
 
-    public static String[] transrateName(final String unresolvedName) {
+    public static String[] resolveName(final String unresolvedName) {
 
         if (null == unresolvedName) {
             throw new IllegalArgumentException();
@@ -51,7 +51,7 @@ public class Translator {
      * @param ownerUnit
      * @return
      */
-    public static TypeInfo translateType(final String unresolvedType, final int index,
+    public static TypeInfo resolveType(final String unresolvedType, final int index,
             final TypeParameterizable ownerUnit) {
 
         if (null == unresolvedType) {
@@ -65,7 +65,7 @@ public class Translator {
 
         // '['で始まっているときは配列
         else if ('[' == unresolvedType.charAt(0)) {
-            final TypeInfo subType = translateType(unresolvedType.substring(1), index, ownerUnit);
+            final TypeInfo subType = resolveType(unresolvedType.substring(1), index, ownerUnit);
 
             // もともと配列ならば事件を1つ増やす
             if (subType instanceof ArrayTypeInfo) {
@@ -94,7 +94,7 @@ public class Translator {
             if ((-1 == unresolvedReferenceType.indexOf('<'))
                     && (-1 == unresolvedReferenceType.lastIndexOf('>'))) {
 
-                final String[] referenceTypeName = transrateName(unresolvedReferenceType);
+                final String[] referenceTypeName = resolveName(unresolvedReferenceType);
                 ExternalClassInfo referenceClass = (ExternalClassInfo) classInfoManager
                         .getClassInfo(referenceTypeName);
                 if (null == referenceClass) {
@@ -109,7 +109,7 @@ public class Translator {
             else if ((0 <= unresolvedReferenceType.indexOf('<'))
                     && (0 <= unresolvedReferenceType.lastIndexOf('>'))) {
 
-                final String[] referenceTypeName = transrateName(unresolvedReferenceType.substring(
+                final String[] referenceTypeName = resolveName(unresolvedReferenceType.substring(
                         0, unresolvedReferenceType.indexOf('<')));
 
                 // クラス名の部分を解決
@@ -124,7 +124,7 @@ public class Translator {
                 //ジェネリクス部分を解決し，順次クラス参照にその情報を追加                
                 final String[] typeArguments = getTypeArguments(unresolvedReferenceType);
                 for (int i = 0; i < typeArguments.length; i++) {
-                    final TypeInfo typeParameter = translateType(typeArguments[i], i, ownerUnit);
+                    final TypeInfo typeParameter = resolveType(typeArguments[i], i, ownerUnit);
                     referenceType.addTypeArgument(typeParameter);
                 }
 
@@ -147,7 +147,7 @@ public class Translator {
         else if ('+' == unresolvedType.charAt(0)) {
 
             final String unresolvedExtendsType = unresolvedType.substring(1);
-            final TypeInfo extendsType = translateType(unresolvedExtendsType, 0, ownerUnit);
+            final TypeInfo extendsType = resolveType(unresolvedExtendsType, 0, ownerUnit);
             return new TypeParameterInfo(ownerUnit, "?", index, extendsType);
         }
 
@@ -155,7 +155,7 @@ public class Translator {
         else if ('-' == unresolvedType.charAt(0)) {
 
             final String unresolvedSuperType = unresolvedType.substring(1);
-            final TypeInfo superType = translateType(unresolvedSuperType, 0, ownerUnit);
+            final TypeInfo superType = resolveType(unresolvedSuperType, 0, ownerUnit);
             return new SuperTypeParameterInfo(ownerUnit, "?", index, null, superType);
         }
 
@@ -166,7 +166,7 @@ public class Translator {
             final String identifier = unresolvedType.substring(0, unresolvedType.indexOf(':'));
             final String unresolvedExtendsType = unresolvedType.substring(unresolvedType
                     .lastIndexOf(':') + 1);
-            final TypeInfo extendsType = translateType(unresolvedExtendsType, 0, ownerUnit);
+            final TypeInfo extendsType = resolveType(unresolvedExtendsType, 0, ownerUnit);
             final TypeParameterInfo typeParameter = new TypeParameterInfo(ownerUnit, identifier,
                     index, extendsType);
             return typeParameter;
