@@ -17,6 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterizable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VoidTypeInfo;
 
+
 /**
  * バイトコードから得た未解決情報を名前解決するためのクラス
  * 
@@ -180,7 +181,7 @@ public class Translator {
         }
 
         // ジェネリクス(T:Ljava/lang/Object;)の場合
-        else if ((':' == unresolvedType.charAt(1))
+        else if ((-1 != unresolvedType.indexOf(':'))
                 && (';' == unresolvedType.charAt(unresolvedType.length() - 1))) {
 
             final String identifier = unresolvedType.substring(0, unresolvedType.indexOf(':'));
