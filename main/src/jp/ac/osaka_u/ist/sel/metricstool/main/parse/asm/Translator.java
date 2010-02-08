@@ -136,7 +136,7 @@ public class Translator {
         }
 
         // ジェネリクス(TE(別にEじゃなくてもいいけど);)の場合
-        else if ('T' == unresolvedType.charAt(0) && (':' != unresolvedType.charAt(1))
+        else if ('T' == unresolvedType.charAt(0) && (-1 == unresolvedType.indexOf(':'))
                 && ';' == unresolvedType.charAt(unresolvedType.length() - 1)) {
 
             final String identifier = unresolvedType.substring(1, unresolvedType.length() - 1);
@@ -144,40 +144,19 @@ public class Translator {
         }
 
         // ジェネリクス(+...;)の場合
-        else if ('+' == unresolvedType.charAt(0)
-                && ';' == unresolvedType.charAt(unresolvedType.length() - 1)) {
+        else if ('+' == unresolvedType.charAt(0)) {
 
-            final String unresolvedExtendsName = unresolvedType.substring(1, unresolvedType
-                    .length() - 1);
-            final String[] extendsName = transrateName(unresolvedExtendsName);
-            final ClassInfoManager classInfoManager = DataManager.getInstance()
-                    .getClassInfoManager();
-            ExternalClassInfo extendsClass = (ExternalClassInfo) classInfoManager
-                    .getClassInfo(extendsName);
-            if (null == extendsClass) {
-                extendsClass = new ExternalClassInfo(extendsName);
-                classInfoManager.add(extendsClass);
-            }
-            return new TypeParameterInfo(ownerUnit, "?", index, new ClassTypeInfo(extendsClass));
+            final String unresolvedExtendsType = unresolvedType.substring(1);
+            final TypeInfo extendsType = translateType(unresolvedExtendsType, 0, ownerUnit);
+            return new TypeParameterInfo(ownerUnit, "?", index, extendsType);
         }
 
         // ジェネリクス(-...;)の場合
-        else if ('-' == unresolvedType.charAt(0)
-                && (';' == unresolvedType.charAt(unresolvedType.length() - 1))) {
+        else if ('-' == unresolvedType.charAt(0)) {
 
-            final String unresolvedSuperName = unresolvedType.substring(1,
-                    unresolvedType.length() - 1);
-            final String[] superName = transrateName(unresolvedSuperName);
-            final ClassInfoManager classInfoManager = DataManager.getInstance()
-                    .getClassInfoManager();
-            ExternalClassInfo superClass = (ExternalClassInfo) classInfoManager
-                    .getClassInfo(superName);
-            if (null == superClass) {
-                superClass = new ExternalClassInfo(superName);
-                classInfoManager.add(superClass);
-            }
-            return new SuperTypeParameterInfo(ownerUnit, "?", index, null, new ClassTypeInfo(
-                    superClass));
+            final String unresolvedSuperType = unresolvedType.substring(1);
+            final TypeInfo superType = translateType(unresolvedSuperType, 0, ownerUnit);
+            return new SuperTypeParameterInfo(ownerUnit, "?", index, null, superType);
         }
 
         // ジェネリクス(T:Ljava/lang/Object;)の場合
