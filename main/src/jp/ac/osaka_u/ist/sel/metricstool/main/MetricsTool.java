@@ -729,9 +729,9 @@ public class MetricsTool {
                 err.println("file <" + file.getAbsolutePath()
                         + "> is inappropriate as a Java library.");
                 System.exit(0);
-            }            
-        } 
-        
+            }
+        }
+
         // ライブラリの読み込みで例外が発生した場合はプログラムを終了
         catch (IOException e) {
             e.printStackTrace();
@@ -1669,6 +1669,13 @@ public class MetricsTool {
      */
     private void addOverrideRelation() {
 
+        // 全ての外部クラスに対して
+        for (final ExternalClassInfo classInfo : DataManager.getInstance().getClassInfoManager()
+                .getExternalClassInfos()) {
+            addOverrideRelation(classInfo);
+
+        }
+
         // 全ての対象クラスに対して
         for (final TargetClassInfo classInfo : DataManager.getInstance().getClassInfoManager()
                 .getTargetClassInfos()) {
@@ -1710,11 +1717,7 @@ public class MetricsTool {
             final MethodInfo overrider) {
 
         if ((null == classInfo) || (null == overrider)) {
-            throw new NullPointerException();
-        }
-
-        if (!(classInfo instanceof TargetClassInfo)) {
-            return;
+            throw new IllegalArgumentException();
         }
 
         for (final MethodInfo methodInfo : classInfo.getDefinedMethods()) {
