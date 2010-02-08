@@ -38,6 +38,7 @@ public final class ParenthesesExpressionInfo extends ExpressionInfo {
             throw new IllegalArgumentException();
         }
         this.parentheticExpression = parentheticExpression;
+        this.parentheticExpression.setOwnerExecutableElement(this);
     }
 
     /**
