@@ -263,6 +263,15 @@ public class MetricsTool {
             options.addOption(s);
         }
 
+        {
+            final Option b = new Option("b", "libraries", true,
+                    "specify libraries (.jar file or .class file or directory that contains .jar and .class files)");
+            b.setArgName("libraries");
+            b.setArgs(1);
+            b.setRequired(false);
+            options.addOption(b);
+        }
+
         final MetricsTool metricsTool = new MetricsTool();
 
         try {
@@ -334,6 +343,13 @@ public class MetricsTool {
                 Settings.getInstance().setFieldMetricsFile(cmd.getOptionValue("A"));
             }
             Settings.getInstance().setStatement(!cmd.hasOption("s"));
+            if (cmd.hasOption("b")) {
+                final StringTokenizer tokenizer = new StringTokenizer(cmd.getOptionValue("b"), ",");
+                while (tokenizer.hasMoreElements()) {
+                    final String library = tokenizer.nextToken();
+                    Settings.getInstance().addLibrary(library);
+                }
+            }
 
             metricsTool.loadPlugins(Settings.getInstance().getMetrics());
 
