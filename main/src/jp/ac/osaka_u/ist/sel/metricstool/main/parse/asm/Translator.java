@@ -17,7 +17,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterizable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VoidTypeInfo;
 
-
+/**
+ * バイトコードから得た未解決情報を名前解決するためのクラス
+ * 
+ * @author higo
+ *
+ */
 public class Translator {
 
     public static String[] transrateName(final String unresolvedName) {
