@@ -44,7 +44,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
             final int maxClassCount = classAccessor.getClassCount();
 
             // 全クラスについて
-            for (final ClassInfo targetClass : classAccessor) {
+            for (final TargetClassInfo targetClass : classAccessor) {
                 
                 // クラスのメトリクスを登録する
                 registClassMetric(targetClass);
@@ -81,7 +81,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
      * 
      * @param targetClass 対象のクラス
      */
-    protected void registClassMetric(ClassInfo targetClass) {
+    protected void registClassMetric(TargetClassInfo targetClass) {
         try {
             this.registMetric(targetClass, measureClassMetric(targetClass));
         } catch (final MetricAlreadyRegisteredException e) {
@@ -94,7 +94,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
      * 
      * @param targetClass 対象のクラス
      */
-    abstract protected Number measureClassMetric(ClassInfo targetClass);
+    abstract protected Number measureClassMetric(TargetClassInfo targetClass);
 
     /**
      * このプラグインがメトリクスを計測できる言語を返す.

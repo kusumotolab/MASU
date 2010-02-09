@@ -11,18 +11,21 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.ClassInfoAccessor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.ClassMetricsRegister;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.DefaultClassInfoAccessor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.DefaultClassMetricsRegister;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.DefaultFieldMetricsRegister;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.DefaultFileInfoAccessor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.DefaultFileMetricsRegister;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.DefaultMethodInfoAccessor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.DefaultMethodMetricsRegister;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.FieldMetricsRegister;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.FileInfoAccessor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.FileMetricsRegister;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.MethodInfoAccessor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.MethodMetricsRegister;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricAlreadyRegisteredException;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.AlreadyConnectedException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultProgressReporter;
@@ -459,7 +462,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * @param value メトリクス値
      * @throws MetricAlreadyRegisteredException 既にこのプラグインからこのクラスに関するメトリクス値の報告がされている場合.
      */
-    protected final void registMetric(final ClassInfo classInfo, final Number value)
+    protected final void registMetric(final TargetClassInfo classInfo, final Number value)
             throws MetricAlreadyRegisteredException {
 
         if ((null == classInfo) || (null == value)) {
@@ -483,7 +486,7 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * @param value メトリクス値
      * @throws MetricAlreadyRegisteredException 既にこのプラグインからこのメソッドに関するメトリクス値の報告がされている場合.
      */
-    protected final void registMetric(final MethodInfo methodInfo, final Number value)
+    protected final void registMetric(final TargetMethodInfo methodInfo, final Number value)
             throws MetricAlreadyRegisteredException {
 
         if ((null == methodInfo) || (null == value)) {
@@ -498,6 +501,30 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
             }
         }
         this.methodMetricsRegister.registMetric(methodInfo, value);
+    }
+
+    /**
+     * フィールド単位のメトリクス値を登録するメソッド.
+     * 
+     * @param fieldInfo メトリクス値を登録するメソッド
+     * @param value メトリクス値
+     * @throws MetricAlreadyRegisteredException 既にこのプラグインからこのメソッドに関するメトリクス値の報告がされている場合.
+     */
+    protected final void registMetric(final TargetFieldInfo fieldInfo, final Number value)
+            throws MetricAlreadyRegisteredException {
+
+        if ((null == fieldInfo) || (null == value)) {
+            throw new NullPointerException();
+        }
+
+        if (null == this.fieldMetricsRegister) {
+            synchronized (this) {
+                if (null == this.fieldMetricsRegister) {
+                    this.fieldMetricsRegister = new DefaultFieldMetricsRegister(this);
+                }
+            }
+        }
+        this.fieldMetricsRegister.registMetric(fieldInfo, value);
     }
 
     /**
@@ -631,6 +658,11 @@ public abstract class AbstractPlugin implements MessageSource, ProgressSource {
      * メソッド単位のメトリクス値を登録するレジスタ.
      */
     private MethodMetricsRegister methodMetricsRegister;
+    
+    /**
+     * 
+     */
+    private FieldMetricsRegister fieldMetricsRegister; 
 
     /**
      * 進捗情報送信用のレポーター
