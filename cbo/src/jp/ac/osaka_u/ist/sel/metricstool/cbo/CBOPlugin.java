@@ -38,7 +38,7 @@ public class CBOPlugin extends AbstractClassMetricPlugin {
     @Override
     protected Number measureClassMetric(TargetClassInfo targetClass) {
 
-        SortedSet<ClassInfo<?, ?, ?, ?>> classes = new TreeSet<ClassInfo<?, ?, ?, ?>>();
+        SortedSet<ClassInfo> classes = new TreeSet<ClassInfo>();
 
         // フィールドで使用されているクラス型を取得
         for (final TargetFieldInfo field : targetClass.getDefinedFields()) {
@@ -81,9 +81,9 @@ public class CBOPlugin extends AbstractClassMetricPlugin {
      * @param type 対象の型
      * @return typeで利用されているクラスのSortedSet
      */
-    private SortedSet<ClassInfo<?, ?, ?, ?>> getCohesiveClasses(final TypeInfo type) {
+    private SortedSet<ClassInfo> getCohesiveClasses(final TypeInfo type) {
 
-        final SortedSet<ClassInfo<?, ?, ?, ?>> cohesiveClasses = new TreeSet<ClassInfo<?, ?, ?, ?>>();
+        final SortedSet<ClassInfo> cohesiveClasses = new TreeSet<ClassInfo>();
 
         if (type instanceof ClassTypeInfo) {
             final ClassTypeInfo classType = (ClassTypeInfo) type;
