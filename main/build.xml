@@ -6,6 +6,7 @@
 	<property file="build.properties" />
 
 	<property name="grammer.dir" value="${SRC.DIR}/jp/ac/osaka_u/ist/sel/metricstool/main/parse" />
+	<property name="resource.dir" value="resource" />
 
 	<property name="java15grammer" value="${grammer.dir}/java15.g" />
 	<property name="java14grammer" value="${grammer.dir}/java14.g" />
@@ -15,11 +16,12 @@
 
 	<property name="antlr.jar" value="lib/antlr.jar" />
 	<property name="cli.jar" value="lib/commons-cli-1.1.jar" />
+	<property name="asm.jar" value="lib/asm-all-3.2.jar" />
 	<property name="manifest.mf" value="resource/manifest.mf" />
 	<property name="zip.bin.name" value="${TOOL.NAME}bin${DSTAMP}${TSTAMP}.zip" />
 	<property name="zip.src.name" value="${TOOL.NAME}src${DSTAMP}${TSTAMP}.zip" />
-	
-	
+
+
 	<target name="antlr">
 		<antlr target="${java15grammer}">
 			<classpath path="${antlr.jar}" />
@@ -37,7 +39,7 @@
 
 	<target name="compile" depends="antlr">
 		<mkdir dir="${CLS.DIR}" />
-		<javac classpath="${cli.jar};${antlr.jar}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
+		<javac classpath="${cli.jar};${antlr.jar};${asm.jar}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
 	</target>
 
 
@@ -50,11 +52,17 @@
 		<jar basedir="${CLS.DIR}" jarfile="${PACKAGE.BIN.DIR}/${TOOL.NAME}.jar" manifest="${manifest.mf}" />
 		<copy file="${cli.jar}" todir="${PACKAGE.BIN.DIR}" />
 		<copy file="${antlr.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${asm.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<mkdir dir="${PACKAGE.BIN.DIR}/${resource.dir}" />
+		<copy todir="${PACKAGE.BIN.DIR}/${resource.dir}" >
+			<fileset dir="${resource.dir}" />
+		</copy>
+		
 	</target>
 
 	<target name="binpackage" depends="build">
 		<javadoc packagenames="jp.ac.osaka_u.ist.sel.metricstool.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" encoding="Windows-31J">
-			<classpath path="${cli.jar};${antlr.jar}" />
+			<classpath path="${cli.jar};${antlr.jar};${asm.jar}" />
 		</javadoc>
 
 		<zip destfile="${zip.bin.name}" basedir="${PACKAGE.DIR}" />
@@ -62,7 +70,7 @@
 
 	<target name="srcpackage" depends="build">
 		<javadoc packagenames="jp.ac.osaka_u.ist.sel.metricstool.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" encoding="Windows-31J">
-			<classpath path="${cli.jar};${antlr.jar}" />
+			<classpath path="${cli.jar};${antlr.jar};${asm.jar}" />
 		</javadoc>
 
 		<copy todir="${PACKAGE.SRC.DIR}">
