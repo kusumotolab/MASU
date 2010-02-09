@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  */
 @SuppressWarnings("serial")
-public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo {
+public abstract class BlockInfo extends LocalSpaceInfo<TargetClassInfo> implements StatementInfo {
 
     /**
      * 位置情報を与えて初期化
@@ -26,7 +26,7 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    BlockInfo(final TargetClassInfo ownerClass, final LocalSpaceInfo outerSpace,
+    BlockInfo(final TargetClassInfo ownerClass, final LocalSpaceInfo<?> outerSpace,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(ownerClass, fromLine, fromColumn, toLine, toColumn);
@@ -64,7 +64,7 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
     @Override
     public final CallableUnitInfo getOwnerMethod() {
 
-        final LocalSpaceInfo outerSpace = this.getOwnerSpace();
+        final LocalSpaceInfo<?> outerSpace = this.getOwnerSpace();
         if (outerSpace instanceof CallableUnitInfo) {
             return (CallableUnitInfo) outerSpace;
         }
@@ -90,7 +90,7 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
      * @return このブロックを直接所有するローカル空間
      */
     @Override
-    public final LocalSpaceInfo getOwnerSpace() {
+    public final LocalSpaceInfo<?> getOwnerSpace() {
         return this.outerSpace;
     }
 
@@ -111,5 +111,5 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
     /**
      * このブロックを直接所有するローカル空間を保存するための変数
      */
-    private final LocalSpaceInfo outerSpace;
+    private final LocalSpaceInfo<?> outerSpace;
 }

@@ -11,7 +11,7 @@ import java.util.Set;
  *
  */
 @SuppressWarnings("serial")
-public final class TargetConstructorInfo extends ConstructorInfo {
+public final class TargetConstructorInfo extends ConstructorInfo<TargetClassInfo> {
 
     /**
      * 必要な情報を与えてオブジェクトを初期化
@@ -27,10 +27,11 @@ public final class TargetConstructorInfo extends ConstructorInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public TargetConstructorInfo(final Set<ModifierInfo> modifiers, final TargetClassInfo ownerClass,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    public TargetConstructorInfo(final Set<ModifierInfo> modifiers,
+            final TargetClassInfo ownerClass, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
         super(modifiers, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
                 publicVisible, fromLine, fromColumn, toLine, toColumn);

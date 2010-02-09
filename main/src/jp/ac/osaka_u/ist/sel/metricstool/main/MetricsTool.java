@@ -1711,7 +1711,7 @@ public class MetricsTool {
                 .getSuperClasses())) {
 
             // 各対象クラスの各メソッドについて，親クラスのメソッドをオーバーライドしているかを調査
-            for (final MethodInfo methodInfo : classInfo.getDefinedMethods()) {
+            for (final MethodInfo<?> methodInfo : classInfo.getDefinedMethods()) {
                 addOverrideRelation(superClassInfo, methodInfo);
             }
         }
@@ -1730,13 +1730,13 @@ public class MetricsTool {
      * @param overrider オーバーライド対象のメソッド
      */
     private void addOverrideRelation(final ClassInfo<?, ?, ?, ?> classInfo,
-            final MethodInfo overrider) {
+            final MethodInfo<?> overrider) {
 
         if ((null == classInfo) || (null == overrider)) {
             throw new IllegalArgumentException();
         }
 
-        for (final MethodInfo methodInfo : classInfo.getDefinedMethods()) {
+        for (final MethodInfo<?> methodInfo : classInfo.getDefinedMethods()) {
 
             // メソッド名が違う場合はオーバーライドされない
             if (!methodInfo.getMethodName().equals(overrider.getMethodName())) {
@@ -1799,7 +1799,7 @@ public class MetricsTool {
         for (final UnresolvedFieldInfo unresolvedFieldInfo : unresolvedClassInfo.getDefinedFields()) {
             final TargetFieldInfo fieldInfo = unresolvedFieldInfo.getResolved();
             if (null != unresolvedFieldInfo.getInitilizer()) {
-                final CallableUnitInfo initializerUnit = fieldInfo.isInstanceMember() ? classInfo
+                final CallableUnitInfo<?> initializerUnit = fieldInfo.isInstanceMember() ? classInfo
                         .getImplicitInstanceInitializer() : classInfo
                         .getImplicitStaticInitializer();
                 final ExpressionInfo initializerExpression = unresolvedFieldInfo.getInitilizer()
@@ -1866,14 +1866,14 @@ public class MetricsTool {
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 未解決メソッド情報から，解決済みメソッド情報を取得
-        final LocalSpaceInfo localSpace = unresolvedLocalSpace.getResolved();
+        final LocalSpaceInfo<?> localSpace = unresolvedLocalSpace.getResolved();
         assert null != localSpace : "UnresolvedLocalSpaceInfo#getResolvedInfo is null!";
 
         // 所有クラスを取得
         final TargetClassInfo ownerClass = (TargetClassInfo) localSpace.getOwnerClass();
-        final CallableUnitInfo ownerMethod;
-        if (localSpace instanceof CallableUnitInfo) {
-            ownerMethod = (CallableUnitInfo) localSpace;
+        final CallableUnitInfo<?> ownerMethod;
+        if (localSpace instanceof CallableUnitInfo<?>) {
+            ownerMethod = (CallableUnitInfo<?>) localSpace;
         } else if (localSpace instanceof BlockInfo) {
             ownerMethod = ((BlockInfo) localSpace).getOwnerMethod();
         } else {

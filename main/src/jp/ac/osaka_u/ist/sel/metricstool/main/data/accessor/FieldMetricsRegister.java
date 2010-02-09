@@ -2,7 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricAlreadyRegisteredException;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 
 
 /**
@@ -20,5 +20,6 @@ public interface FieldMetricsRegister {
      * @param value メトリクス値
      * @throws MetricAlreadyRegisteredException 登録しようとしているメトリクスが既に登録されている場合にスローされる
      */
-    void registMetric(FieldInfo fieldInfo, Number value) throws MetricAlreadyRegisteredException;
+    void registMetric(TargetFieldInfo fieldInfo, Number value)
+            throws MetricAlreadyRegisteredException;
 }

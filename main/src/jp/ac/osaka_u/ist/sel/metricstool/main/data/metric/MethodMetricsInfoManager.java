@@ -8,8 +8,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
@@ -43,7 +43,7 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
      * @param methodInfo ほしいメトリクス情報のメソッド
      * @return メトリクス情報
      */
-    public MethodMetricsInfo get(final MethodInfo methodInfo) {
+    public MethodMetricsInfo get(final TargetMethodInfo methodInfo) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == methodInfo) {
@@ -61,7 +61,7 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
      * @param value メトリクス値
      * @throws MetricAlreadyRegisteredException 登録しようとしているメトリクスが既に登録されている
      */
-    public void putMetric(final MethodInfo methodInfo, final AbstractPlugin plugin,
+    public void putMetric(final TargetMethodInfo methodInfo, final AbstractPlugin plugin,
             final Number value) throws MetricAlreadyRegisteredException {
 
         MethodMetricsInfo methodMetricsInfo = this.methodMetricsInfos.get(methodInfo);
@@ -84,13 +84,13 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        for (final MethodInfo methodInfo : DataManager.getInstance().getMethodInfoManager()
+        for (final TargetMethodInfo methodInfo : DataManager.getInstance().getMethodInfoManager()
                 .getTargetMethodInfos()) {
 
             final MethodMetricsInfo methodMetricsInfo = this.get(methodInfo);
             if (null == methodMetricsInfo) {
                 final String methodName = methodInfo.getMethodName();
-                final ClassInfo<?, ?, ?, ?> ownerClassInfo = methodInfo.getOwnerClass();
+                final TargetClassInfo ownerClassInfo = methodInfo.getOwnerClass();
                 final String ownerClassName = ownerClassInfo.getFullQualifiedName(".");
                 final String message = "Metrics of " + ownerClassName + "::" + methodName
                         + " are not registered!";
@@ -120,11 +120,11 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
     public MethodMetricsInfoManager() {
         //MetricsToolSecurityManager.getInstance().checkAccess();
         this.methodMetricsInfos = Collections
-                .synchronizedSortedMap(new TreeMap<MethodInfo, MethodMetricsInfo>());
+                .synchronizedSortedMap(new TreeMap<TargetMethodInfo, MethodMetricsInfo>());
     }
 
     /**
      * メソッドメトリクスのマップを保存するための変数
      */
-    private final SortedMap<MethodInfo, MethodMetricsInfo> methodMetricsInfos;
+    private final SortedMap<TargetMethodInfo, MethodMetricsInfo> methodMetricsInfos;
 }

@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  *
  */
 @SuppressWarnings("serial")
-public abstract class ConstructorInfo extends CallableUnitInfo {
+public abstract class ConstructorInfo<T extends ClassInfo<?, ?, ?, ?>> extends CallableUnitInfo<T> {
 
     /**
      * 必要な情報を与えて初期化
@@ -30,7 +30,7 @@ public abstract class ConstructorInfo extends CallableUnitInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    ConstructorInfo(final Set<ModifierInfo> modifiers, final ClassInfo<?, ?, ?, ?> ownerClass,
+    ConstructorInfo(final Set<ModifierInfo> modifiers, final T ownerClass,
             final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {

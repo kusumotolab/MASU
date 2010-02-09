@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FieldMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricAlreadyRegisteredException;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.METRIC_TYPE;
@@ -42,7 +42,7 @@ public class DefaultFieldMetricsRegister implements FieldMetricsRegister {
      * @param value 登録するメトリクス値
      * @throws MetricAlreadyRegisteredException すでにメトリクスが登録されている場合にスローされる例外
      */
-    public void registMetric(final FieldInfo fieldInfo, final Number value)
+    public void registMetric(final TargetFieldInfo fieldInfo, final Number value)
             throws MetricAlreadyRegisteredException {
 
         if ((null == fieldInfo) || (null == value)) {

@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  *
  */
 @SuppressWarnings("serial")
-public abstract class LocalSpaceInfo extends UnitInfo {
+public abstract class LocalSpaceInfo<T extends ClassInfo<?,?,?,?>> extends UnitInfo {
 
     /**
      * 必要な情報を与えてオブジェクトを居幾何
@@ -28,7 +28,7 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * @param toLine 終了行
      * @param toColumn終了列
      */
-    LocalSpaceInfo(final ClassInfo<?, ?, ?, ?> ownerClass, final int fromLine,
+    LocalSpaceInfo(final T ownerClass, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
@@ -136,7 +136,7 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * 
      * @return 所属しているクラス
      */
-    public final ClassInfo<?, ?, ?, ?> getOwnerClass() {
+    public final T getOwnerClass() {
         return this.ownerClass;
     }
 
@@ -147,7 +147,7 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * @param localSpace ローカルスペース
      * @return 与えられたLocalSpace内に存在している全てのStatementInfoのSortedSet
      */
-    public static SortedSet<StatementInfo> getAllStatements(final LocalSpaceInfo localSpace) {
+    public static SortedSet<StatementInfo> getAllStatements(final LocalSpaceInfo<?> localSpace) {
 
         if (null == localSpace) {
             throw new IllegalArgumentException("localSpace is null.");
@@ -194,5 +194,5 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     /**
      * 所属しているクラスを保存するための変数
      */
-    private final ClassInfo<?, ?, ?, ?> ownerClass;
+    private final T ownerClass;
 }

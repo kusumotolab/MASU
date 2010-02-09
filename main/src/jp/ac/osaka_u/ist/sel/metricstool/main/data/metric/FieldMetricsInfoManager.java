@@ -8,7 +8,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
@@ -42,7 +42,7 @@ public final class FieldMetricsInfoManager implements Iterable<FieldMetricsInfo>
      * @param fieldInfo フィールド
      * @return メトリクス情報
      */
-    public FieldMetricsInfo get(final FieldInfo fieldInfo) {
+    public FieldMetricsInfo get(final TargetFieldInfo fieldInfo) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == fieldInfo) {
@@ -60,8 +60,8 @@ public final class FieldMetricsInfoManager implements Iterable<FieldMetricsInfo>
      * @param value メトリクス値
      * @throws MetricAlreadyRegisteredException 登録しようとしているメトリクスが既に登録されている
      */
-    public void putMetric(final FieldInfo fieldInfo, final AbstractPlugin plugin, final Number value)
-            throws MetricAlreadyRegisteredException {
+    public void putMetric(final TargetFieldInfo fieldInfo, final AbstractPlugin plugin,
+            final Number value) throws MetricAlreadyRegisteredException {
 
         FieldMetricsInfo fieldMetricsInfo = this.fieldMetricsInfos.get(fieldInfo);
 
@@ -83,7 +83,7 @@ public final class FieldMetricsInfoManager implements Iterable<FieldMetricsInfo>
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        for (final FieldInfo fieldInfo : DataManager.getInstance().getFieldInfoManager()
+        for (final TargetFieldInfo fieldInfo : DataManager.getInstance().getFieldInfoManager()
                 .getTargetFieldInfos()) {
 
             final FieldMetricsInfo fieldMetricsInfo = this.get(fieldInfo);
@@ -116,11 +116,11 @@ public final class FieldMetricsInfoManager implements Iterable<FieldMetricsInfo>
     public FieldMetricsInfoManager() {
         //MetricsToolSecurityManager.getInstance().checkAccess();
         this.fieldMetricsInfos = Collections
-                .synchronizedSortedMap(new TreeMap<FieldInfo, FieldMetricsInfo>());
+                .synchronizedSortedMap(new TreeMap<TargetFieldInfo, FieldMetricsInfo>());
     }
 
     /**
     * ファイルメトリクスのマップを保存するための変数
     */
-    private final SortedMap<FieldInfo, FieldMetricsInfo> fieldMetricsInfos;
+    private final SortedMap<TargetFieldInfo, FieldMetricsInfo> fieldMetricsInfos;
 }

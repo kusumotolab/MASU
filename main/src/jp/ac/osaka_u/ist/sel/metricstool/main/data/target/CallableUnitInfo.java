@@ -24,8 +24,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 
 @SuppressWarnings("serial")
-public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visualizable, Modifier,
-        TypeParameterizable {
+public abstract class CallableUnitInfo<T extends ClassInfo<?, ?, ?, ?>> extends LocalSpaceInfo<T>
+        implements Visualizable, Modifier, TypeParameterizable {
 
     /**
      * オブジェクトを初期化する
@@ -37,7 +37,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    CallableUnitInfo(final Set<ModifierInfo> modifiers, final ClassInfo<?, ?, ?, ?> ownerClass,
+    CallableUnitInfo(final Set<ModifierInfo> modifiers, final T ownerClass,
             final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -57,7 +57,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
         this.unresolvedUsage = new HashSet<UnresolvedExpressionInfo<?>>();
 
-        this.callers = new TreeSet<CallableUnitInfo>();
+        this.callers = new TreeSet<CallableUnitInfo<?>>();
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
@@ -86,10 +86,10 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             throw new IllegalArgumentException();
         }
 
-        if (o instanceof CallableUnitInfo) {
+        if (o instanceof CallableUnitInfo<?>) {
 
             final ClassInfo<?, ?, ?, ?> ownerClass = this.getOwnerClass();
-            final ClassInfo<?, ?, ?, ?> correspondOwnerClass = ((CallableUnitInfo) o)
+            final ClassInfo<?, ?, ?, ?> correspondOwnerClass = ((CallableUnitInfo<?>) o)
                     .getOwnerClass();
             final int classOrder = ownerClass.compareTo(correspondOwnerClass);
             if (classOrder != 0) {
@@ -100,7 +100,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
         return super.compareTo(o);
     }
 
-    public int compareArgumentsTo(final CallableUnitInfo target) {
+    public int compareArgumentsTo(final CallableUnitInfo<?> target) {
         // 引数の個数で比較
         final int parameterNumber = this.getParameterNumber();
         final int correspondParameterNumber = target.getParameterNumber();
@@ -469,7 +469,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @param caller 追加する呼び出すメソッド
      */
-    public final void addCaller(final CallableUnitInfo caller) {
+    public final void addCaller(final CallableUnitInfo<?> caller) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == caller) {
@@ -484,7 +484,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @return このメソッドを呼び出しているメソッドの SortedSet
      */
-    public final SortedSet<CallableUnitInfo> getCallers() {
+    public final SortedSet<CallableUnitInfo<?>> getCallers() {
         return Collections.unmodifiableSortedSet(this.callers);
     }
 
@@ -544,7 +544,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     /**
      * このメソッドを呼び出しているメソッド一覧を保存するための変数
      */
-    private final SortedSet<CallableUnitInfo> callers;
+    private final SortedSet<CallableUnitInfo<?>> callers;
 
     /**
      * 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しなどを保存するための変数

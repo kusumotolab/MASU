@@ -19,8 +19,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  *
  */
 @SuppressWarnings("serial")
-public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasurable, Member,
-        StaticOrInstance {
+public abstract class MethodInfo<T extends ClassInfo<?, ?, ?, ?>> extends CallableUnitInfo<T>
+        implements MetricMeasurable, Member, StaticOrInstance {
 
     /**
      * メソッドオブジェクトを初期化する
@@ -38,11 +38,10 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    MethodInfo(final Set<ModifierInfo> modifiers, final String methodName,
-            final ClassInfo<?, ?, ?, ?> ownerClass, final boolean privateVisible,
-            final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final boolean instance, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    MethodInfo(final Set<ModifierInfo> modifiers, final String methodName, final T ownerClass,
+            final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(modifiers, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
                 publicVisible, fromLine, fromColumn, toLine, toColumn);
@@ -55,8 +54,8 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
         this.methodName = methodName;
         this.returnType = null;
 
-        this.overridees = new TreeSet<MethodInfo>();
-        this.overriders = new TreeSet<MethodInfo>();
+        this.overridees = new TreeSet<MethodInfo<?>>();
+        this.overriders = new TreeSet<MethodInfo<?>>();
 
         this.instance = instance;
     }
@@ -96,11 +95,11 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
             return true;
         }
 
-        if (!(o instanceof MethodInfo)) {
+        if (!(o instanceof MethodInfo<?>)) {
             return false;
         }
 
-        return 0 == this.compareTo((MethodInfo) o);
+        return 0 == this.compareTo((MethodInfo<?>) o);
     }
 
     /**
@@ -233,7 +232,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
      * 
      * @param overridee 追加するオーバーライドされているメソッド
      */
-    public void addOverridee(final MethodInfo overridee) {
+    public void addOverridee(final MethodInfo<?> overridee) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == overridee) {
@@ -249,7 +248,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
      * @param overrider 追加するオーバーライドしているメソッド
      * 
      */
-    public void addOverrider(final MethodInfo overrider) {
+    public void addOverrider(final MethodInfo<?> overrider) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == overrider) {
@@ -264,7 +263,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
      * 
      * @return このメソッドがオーバーライドしているメソッドの SortedSet
      */
-    public SortedSet<MethodInfo> getOverridees() {
+    public SortedSet<MethodInfo<?>> getOverridees() {
         return Collections.unmodifiableSortedSet(this.overridees);
     }
 
@@ -273,7 +272,7 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
      * 
      * @return このメソッドをオーバーライドしているメソッドの SortedSet
      */
-    public SortedSet<MethodInfo> getOverriders() {
+    public SortedSet<MethodInfo<?>> getOverriders() {
         return Collections.unmodifiableSortedSet(this.overriders);
     }
 
@@ -310,12 +309,12 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     /**
      * このメソッドがオーバーライドしているメソッド一覧を保存するための変数
      */
-    protected final SortedSet<MethodInfo> overridees;
+    protected final SortedSet<MethodInfo<?>> overridees;
 
     /**
      * オーバーライドされているメソッドを保存するための変数
      */
-    protected final SortedSet<MethodInfo> overriders;
+    protected final SortedSet<MethodInfo<?>> overriders;
 
     /**
      * インスタンスメンバーかどうかを保存するための変数
