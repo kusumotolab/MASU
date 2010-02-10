@@ -30,7 +30,7 @@ public final class ClassInfoManager {
      * @param classInfo 追加するクラス情報
      * @return 引数クラスを追加した場合は true,しなかった場合はfalse
      */
-    public boolean add(final ClassInfo<?, ?, ?, ?> classInfo) {
+    public boolean add(final ClassInfo classInfo) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfo) {
@@ -58,9 +58,9 @@ public final class ClassInfoManager {
         // クラス名からクラスオブジェクトを得るためのマップに追加
         {
             final String name = classInfo.getClassName();
-            SortedSet<ClassInfo<?, ?, ?, ?>> classInfos = this.classNameMap.get(name);
+            SortedSet<ClassInfo> classInfos = this.classNameMap.get(name);
             if (null == classInfos) {
-                classInfos = new TreeSet<ClassInfo<?, ?, ?, ?>>();
+                classInfos = new TreeSet<ClassInfo>();
                 this.classNameMap.put(name, classInfos);
             }
             classInfos.add(classInfo);
@@ -69,9 +69,9 @@ public final class ClassInfoManager {
         //　名前空間からクラスオブジェクトを得るためのマップに追加
         {
             final NamespaceInfo namespace = classInfo.getNamespace();
-            SortedSet<ClassInfo<?, ?, ?, ?>> classInfos = this.namespaceMap.get(namespace);
+            SortedSet<ClassInfo> classInfos = this.namespaceMap.get(namespace);
             if (null == classInfos) {
-                classInfos = new TreeSet<ClassInfo<?, ?, ?, ?>>();
+                classInfos = new TreeSet<ClassInfo>();
                 this.namespaceMap.put(namespace, classInfos);
             }
             classInfos.add(classInfo);
@@ -123,7 +123,7 @@ public final class ClassInfoManager {
      * @param fullQualifiedName 完全限定名
      * @return クラス情報
      */
-    public ClassInfo<?, ?, ?, ?> getClassInfo(final String[] fullQualifiedName) {
+    public ClassInfo getClassInfo(final String[] fullQualifiedName) {
 
         if ((null == fullQualifiedName) || (0 == fullQualifiedName.length)) {
             throw new IllegalArgumentException();
@@ -135,10 +135,10 @@ public final class ClassInfoManager {
         final String className = fullQualifiedName[namespaceLength];
 
         // 同じクラス名を持つクラス一覧を取得
-        final SortedSet<ClassInfo<?, ?, ?, ?>> classInfos = this.classNameMap.get(className);
+        final SortedSet<ClassInfo> classInfos = this.classNameMap.get(className);
         if (null != classInfos) {
             // 名前空間が等しいクラスを返す
-            for (final ClassInfo<?, ?, ?, ?> classInfo : classInfos) {
+            for (final ClassInfo classInfo : classInfos) {
                 if (classInfo.getNamespace().equals(namespace)) {
                     return classInfo;
                 }
@@ -165,11 +165,11 @@ public final class ClassInfoManager {
         final String className = fullQualifiedName[namespaceLength];
 
         //同じクラス名を持つクラス一覧を取得
-        final SortedSet<ClassInfo<?, ?, ?, ?>> classInfos = this.classNameMap.get(className);
+        final SortedSet<ClassInfo> classInfos = this.classNameMap.get(className);
         if (null != classInfos) {
 
             // 名前空間が等しいクラスがあれば，trueを返す
-            for (final ClassInfo<?, ?, ?, ?> classInfo : classInfos) {
+            for (final ClassInfo classInfo : classInfos) {
                 if (classInfo.getNamespace().equals(namespace)) {
                     return true;
                 }
@@ -185,7 +185,7 @@ public final class ClassInfoManager {
      * @param namespace 名前空間
      * @return 引数で指定した名前空間を持つクラス情報の Collection
      */
-    public Collection<ClassInfo<?, ?, ?, ?>> getClassInfos(final String[] namespace) {
+    public Collection<ClassInfo> getClassInfos(final String[] namespace) {
 
         if (null == namespace) {
             throw new IllegalArgumentException();
@@ -200,15 +200,15 @@ public final class ClassInfoManager {
      * @param namespace 名前空間
      * @return 引数で指定した名前空間を持つクラス情報の Collection
      */
-    public Collection<ClassInfo<?, ?, ?, ?>> getClassInfos(final NamespaceInfo namespace) {
+    public Collection<ClassInfo> getClassInfos(final NamespaceInfo namespace) {
 
         if (null == namespace) {
             throw new IllegalArgumentException();
         }
 
-        final SortedSet<ClassInfo<?, ?, ?, ?>> classInfos = this.namespaceMap.get(namespace);
+        final SortedSet<ClassInfo> classInfos = this.namespaceMap.get(namespace);
         return null != classInfos ? Collections.unmodifiableSortedSet(classInfos) : Collections
-                .unmodifiableSortedSet(new TreeSet<ClassInfo<?, ?, ?, ?>>());
+                .unmodifiableSortedSet(new TreeSet<ClassInfo>());
     }
 
     /**
@@ -217,15 +217,15 @@ public final class ClassInfoManager {
      * @param className クラス名
      * @return 引数で指定したクラス名を持つクラス情報の Collection
      */
-    public Collection<ClassInfo<?, ?, ?, ?>> getClassInfos(final String className) {
+    public Collection<ClassInfo> getClassInfos(final String className) {
 
         if (null == className) {
             throw new IllegalArgumentException();
         }
 
-        final SortedSet<ClassInfo<?, ?, ?, ?>> classInfos = this.classNameMap.get(className);
+        final SortedSet<ClassInfo> classInfos = this.classNameMap.get(className);
         return null != classInfos ? Collections.unmodifiableSortedSet(classInfos) : Collections
-                .unmodifiableSortedSet(new TreeSet<ClassInfo<?, ?, ?, ?>>());
+                .unmodifiableSortedSet(new TreeSet<ClassInfo>());
     }
 
     /**
@@ -243,8 +243,8 @@ public final class ClassInfoManager {
      */
     public ClassInfoManager() {
 
-        this.classNameMap = new HashMap<String, SortedSet<ClassInfo<?, ?, ?, ?>>>();
-        this.namespaceMap = new HashMap<NamespaceInfo, SortedSet<ClassInfo<?, ?, ?, ?>>>();
+        this.classNameMap = new HashMap<String, SortedSet<ClassInfo>>();
+        this.namespaceMap = new HashMap<NamespaceInfo, SortedSet<ClassInfo>>();
 
         this.targetClassInfos = new TreeSet<TargetClassInfo>();
         this.externalClassInfos = new TreeSet<ExternalClassInfo>();
@@ -253,12 +253,12 @@ public final class ClassInfoManager {
     /**
      * クラス名から，クラスオブジェクトを得るためのマップ
      */
-    private final Map<String, SortedSet<ClassInfo<?, ?, ?, ?>>> classNameMap;
+    private final Map<String, SortedSet<ClassInfo>> classNameMap;
 
     /**
      * 名前空間名から，クラスオブジェクトを得るためのマップ
      */
-    private final Map<NamespaceInfo, SortedSet<ClassInfo<?, ?, ?, ?>>> namespaceMap;
+    private final Map<NamespaceInfo, SortedSet<ClassInfo>> namespaceMap;
 
     /**
      * 対象クラス一覧を保存するためのセット

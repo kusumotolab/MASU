@@ -72,8 +72,8 @@ public final class UnresolvedLiteralUsageInfo extends UnresolvedExpressionInfo<L
             case JAVA13:
             case JAVA14:
             case JAVA15:
-                final ClassInfo<?, ?, ?, ?> stringClass = classInfoManager
-                        .getClassInfo(new String[] { "java", "lang", "String" });
+                final ClassInfo stringClass = classInfoManager.getClassInfo(new String[] { "java",
+                        "lang", "String" });
                 type = new ClassTypeInfo(stringClass);
                 break;
             default:

@@ -87,7 +87,7 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
      * @param toColumn 終了列
      */
     VariableUsageInfo(final T usedVariable, final boolean reference, final boolean assignment,
-            final CallableUnitInfo<?> ownerMethod, final int fromLine, final int fromColumn,
+            final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 
         super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
@@ -170,7 +170,7 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
 
         // 型パラメータから，実際に使用されている型を取得し返す
         // メソッドの型パラメータかどうか
-        final CallableUnitInfo<?> ownerMethod = this.getOwnerMethod();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
         for (final TypeParameterInfo typeParameter : ownerMethod.getTypeParameters()) {
             if (typeParameter.equals(definitionType)) {
                 return ((TypeParameterInfo) definitionType).getExtendsType();
@@ -178,7 +178,7 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
         }
 
         // クラスの型パラメータかどうか
-        for (ClassInfo<?, ?, ?, ?> ownerClass = ownerMethod.getOwnerClass(); true; ownerClass = ((TargetInnerClassInfo) ownerClass)
+        for (ClassInfo ownerClass = ownerMethod.getOwnerClass(); true; ownerClass = ((TargetInnerClassInfo) ownerClass)
                 .getOuterClass()) {
 
             //　型パラメータがそのままか

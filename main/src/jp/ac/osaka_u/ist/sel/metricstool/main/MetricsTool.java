@@ -104,8 +104,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.MasuAstFactory;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeParser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeNameResolver;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeParser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.DefaultPluginLauncher;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginLauncher;
@@ -544,8 +544,8 @@ public class MetricsTool {
                         .getTypeParameters();
                 for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
                     final String unresolvedTypeParameter = unresolvedTypeParameters.get(index);
-                    TypeParameterInfo typeParameter = (TypeParameterInfo) JavaByteCodeNameResolver.resolveType(
-                            unresolvedTypeParameter, index, classInfo);
+                    TypeParameterInfo typeParameter = (TypeParameterInfo) JavaByteCodeNameResolver
+                            .resolveType(unresolvedTypeParameter, index, classInfo);
                     classInfo.addTypeParameter(typeParameter);
                 }
             }
@@ -554,7 +554,8 @@ public class MetricsTool {
             {
                 final String unresolvedSuperName = unresolvedClassInfo.getSuperName();
                 if (null != unresolvedSuperName) {
-                    final String[] superName = JavaByteCodeNameResolver.resolveName(unresolvedSuperName);
+                    final String[] superName = JavaByteCodeNameResolver
+                            .resolveName(unresolvedSuperName);
                     ExternalClassInfo superClassInfo = (ExternalClassInfo) classInfoManager
                             .getClassInfo(superName);
                     if (null == superClassInfo) {
@@ -568,7 +569,8 @@ public class MetricsTool {
 
             // インターフェースがあれば解決
             for (final String unresolvedInterfaceName : unresolvedClassInfo.getInterfaces()) {
-                final String[] interfaceName = JavaByteCodeNameResolver.resolveName(unresolvedInterfaceName);
+                final String[] interfaceName = JavaByteCodeNameResolver
+                        .resolveName(unresolvedInterfaceName);
                 ExternalClassInfo interfaceInfo = (ExternalClassInfo) classInfoManager
                         .getClassInfo(interfaceName);
                 if (null == interfaceInfo) {
@@ -585,7 +587,8 @@ public class MetricsTool {
 
                 final String fieldName = unresolvedField.getName();
                 final String unresolvedType = unresolvedField.getType();
-                final TypeInfo fieldType = JavaByteCodeNameResolver.resolveType(unresolvedType, 0, null);
+                final TypeInfo fieldType = JavaByteCodeNameResolver.resolveType(unresolvedType, 0,
+                        null);
                 final Set<String> unresolvedModifiers = unresolvedField.getModifiers();
                 final boolean isPublicVisible = unresolvedModifiers
                         .contains(ModifierInfo.PUBLIC_STRING);
@@ -663,8 +666,8 @@ public class MetricsTool {
                             isPublicVisible, !isStatic);
 
                     final String unresolvedReturnType = unresolvedMethod.getReturnType();
-                    final TypeInfo returnType = JavaByteCodeNameResolver.resolveType(unresolvedReturnType, 0,
-                            null);
+                    final TypeInfo returnType = JavaByteCodeNameResolver.resolveType(
+                            unresolvedReturnType, 0, null);
                     method.setReturnType(returnType);
 
                     final List<String> unresolvedParameters = unresolvedMethod.getArgumentTypes();
@@ -1620,20 +1623,20 @@ public class MetricsTool {
 
     private void addClassTypeParameterInfos() {
 
-        for (final ClassInfo<?, ?, ?, ?> classInfo : DataManager.getInstance()
-                .getClassInfoManager().getTargetClassInfos()) {
+        for (final ClassInfo classInfo : DataManager.getInstance().getClassInfoManager()
+                .getTargetClassInfos()) {
             addClassTypeParameterInfos(classInfo);
         }
     }
 
-    private void addClassTypeParameterInfos(final ClassInfo<?, ?, ?, ?> classInfo) {
+    private void addClassTypeParameterInfos(final ClassInfo classInfo) {
 
         final List<ClassTypeInfo> superClassTypes = classInfo.getSuperClasses();
         for (final ClassTypeInfo superClassType : superClassTypes) {
 
-            final ClassInfo<?, ?, ?, ?> superClassInfo = superClassType.getReferencedClass();
+            final ClassInfo superClassInfo = superClassType.getReferencedClass();
             if (superClassInfo instanceof TargetClassInfo) {
-                addClassTypeParameterInfos((ClassInfo<?, ?, ?, ?>) superClassInfo);
+                addClassTypeParameterInfos((ClassInfo) superClassInfo);
 
                 // 親クラス以上における型パラメータの使用を取得
                 final Map<TypeParameterInfo, TypeInfo> typeParameterUsages = ((TargetClassInfo) superClassInfo)
@@ -1704,21 +1707,20 @@ public class MetricsTool {
      * 
      * @param classInfo 対象クラス
      */
-    private void addOverrideRelation(final ClassInfo<?, ?, ?, ?> classInfo) {
+    private void addOverrideRelation(final ClassInfo classInfo) {
 
         // 各親クラスに対して
-        for (final ClassInfo<?, ?, ?, ?> superClassInfo : ClassTypeInfo.convert(classInfo
-                .getSuperClasses())) {
+        for (final ClassInfo superClassInfo : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
 
             // 各対象クラスの各メソッドについて，親クラスのメソッドをオーバーライドしているかを調査
-            for (final MethodInfo<?> methodInfo : classInfo.getDefinedMethods()) {
+            for (final MethodInfo methodInfo : classInfo.getDefinedMethods()) {
                 addOverrideRelation(superClassInfo, methodInfo);
             }
         }
 
         // 各インナークラスに対して
-        for (InnerClassInfo<?> innerClassInfo : classInfo.getInnerClasses()) {
-            addOverrideRelation((ClassInfo<?, ?, ?, ?>) innerClassInfo);
+        for (InnerClassInfo innerClassInfo : classInfo.getInnerClasses()) {
+            addOverrideRelation((ClassInfo) innerClassInfo);
         }
     }
 
@@ -1729,14 +1731,13 @@ public class MetricsTool {
      * @param classInfo クラス情報
      * @param overrider オーバーライド対象のメソッド
      */
-    private void addOverrideRelation(final ClassInfo<?, ?, ?, ?> classInfo,
-            final MethodInfo<?> overrider) {
+    private void addOverrideRelation(final ClassInfo classInfo, final MethodInfo overrider) {
 
         if ((null == classInfo) || (null == overrider)) {
             throw new IllegalArgumentException();
         }
 
-        for (final MethodInfo<?> methodInfo : classInfo.getDefinedMethods()) {
+        for (final MethodInfo methodInfo : classInfo.getDefinedMethods()) {
 
             // メソッド名が違う場合はオーバーライドされない
             if (!methodInfo.getMethodName().equals(overrider.getMethodName())) {
@@ -1756,8 +1757,7 @@ public class MetricsTool {
         }
 
         // 親クラス群に対して再帰的に処理
-        for (final ClassInfo<?, ?, ?, ?> superClassInfo : ClassTypeInfo.convert(classInfo
-                .getSuperClasses())) {
+        for (final ClassInfo superClassInfo : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
             addOverrideRelation(superClassInfo, overrider);
         }
     }
@@ -1799,7 +1799,7 @@ public class MetricsTool {
         for (final UnresolvedFieldInfo unresolvedFieldInfo : unresolvedClassInfo.getDefinedFields()) {
             final TargetFieldInfo fieldInfo = unresolvedFieldInfo.getResolved();
             if (null != unresolvedFieldInfo.getInitilizer()) {
-                final CallableUnitInfo<?> initializerUnit = fieldInfo.isInstanceMember() ? classInfo
+                final CallableUnitInfo initializerUnit = fieldInfo.isInstanceMember() ? classInfo
                         .getImplicitInstanceInitializer() : classInfo
                         .getImplicitStaticInitializer();
                 final ExpressionInfo initializerExpression = unresolvedFieldInfo.getInitilizer()
@@ -1866,14 +1866,14 @@ public class MetricsTool {
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 未解決メソッド情報から，解決済みメソッド情報を取得
-        final LocalSpaceInfo<?> localSpace = unresolvedLocalSpace.getResolved();
+        final LocalSpaceInfo localSpace = unresolvedLocalSpace.getResolved();
         assert null != localSpace : "UnresolvedLocalSpaceInfo#getResolvedInfo is null!";
 
         // 所有クラスを取得
         final TargetClassInfo ownerClass = (TargetClassInfo) localSpace.getOwnerClass();
-        final CallableUnitInfo<?> ownerMethod;
-        if (localSpace instanceof CallableUnitInfo<?>) {
-            ownerMethod = (CallableUnitInfo<?>) localSpace;
+        final CallableUnitInfo ownerMethod;
+        if (localSpace instanceof CallableUnitInfo) {
+            ownerMethod = (CallableUnitInfo) localSpace;
         } else if (localSpace instanceof BlockInfo) {
             ownerMethod = ((BlockInfo) localSpace).getOwnerMethod();
         } else {

@@ -719,7 +719,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             final ImportStatementInfo<?> importStatement = unresolvedImportStatement.resolve(
                     usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             if (importStatement instanceof ClassImportStatementInfo) {
-                final Set<ClassInfo<?, ?, ?, ?>> importedClasses = ((ClassImportStatementInfo) importStatement)
+                final Set<ClassInfo> importedClasses = ((ClassImportStatementInfo) importStatement)
                         .getImportedClasses();
                 this.resolvedInfo.addaccessibleClasses(importedClasses);
             }

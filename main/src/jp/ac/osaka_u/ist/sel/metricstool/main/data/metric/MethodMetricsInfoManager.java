@@ -8,7 +8,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
@@ -90,7 +90,7 @@ public final class MethodMetricsInfoManager implements Iterable<MethodMetricsInf
             final MethodMetricsInfo methodMetricsInfo = this.get(methodInfo);
             if (null == methodMetricsInfo) {
                 final String methodName = methodInfo.getMethodName();
-                final TargetClassInfo ownerClassInfo = methodInfo.getOwnerClass();
+                final ClassInfo ownerClassInfo = methodInfo.getOwnerClass();
                 final String ownerClassName = ownerClassInfo.getFullQualifiedName(".");
                 final String message = "Metrics of " + ownerClassName + "::" + methodName
                         + " are not registered!";

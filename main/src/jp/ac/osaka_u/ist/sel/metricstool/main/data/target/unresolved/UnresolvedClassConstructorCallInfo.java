@@ -94,7 +94,7 @@ public class UnresolvedClassConstructorCallInfo extends
 
         // 対象クラスに定義されたコンストラクタで該当するものがないので，外部クラスに定義されたコンストラクタを呼び出していることにする
         {
-            ClassInfo<?, ?, ?, ?> classInfo = classType.getReferencedClass();
+            ClassInfo classInfo = classType.getReferencedClass();
             if (classInfo instanceof TargetClassInfo) {
                 classInfo = NameResolver.getExternalSuperClass(classInfo);
             }

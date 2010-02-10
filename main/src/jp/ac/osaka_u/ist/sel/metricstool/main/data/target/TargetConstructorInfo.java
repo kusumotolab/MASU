@@ -11,7 +11,7 @@ import java.util.Set;
  *
  */
 @SuppressWarnings("serial")
-public final class TargetConstructorInfo extends ConstructorInfo<TargetClassInfo> {
+public final class TargetConstructorInfo extends ConstructorInfo {
 
     /**
      * 必要な情報を与えてオブジェクトを初期化

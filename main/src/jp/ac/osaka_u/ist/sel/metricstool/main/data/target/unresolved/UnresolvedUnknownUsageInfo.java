@@ -142,8 +142,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             // 親がクラス型の場合
                         } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
-                            final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) entityUsage
-                                    .getType()).getReferencedClass();
+                            final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage.getType())
+                                    .getReferencedClass();
 
                             // まずは利用可能なフィールド一覧を取得
                             boolean found = false;
@@ -177,11 +177,11 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             {
                                 if (!found) {
 
-                                    final ClassInfo<?, ?, ?, ?> referencedClass = ((ClassTypeInfo) entityUsage
+                                    final ClassInfo referencedClass = ((ClassTypeInfo) entityUsage
                                             .getType()).getReferencedClass();
                                     final ExternalClassInfo externalSuperClass = NameResolver
                                             .getExternalSuperClass(referencedClass);
-                                    if (!(referencedClass instanceof InnerClassInfo<?>)
+                                    if (!(referencedClass instanceof InnerClassInfo)
                                             && (null != externalSuperClass)) {
 
                                         final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -267,8 +267,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             // 親がクラス型の場合
                         } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
-                            final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) entityUsage
-                                    .getType()).getReferencedClass();
+                            final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage.getType())
+                                    .getReferencedClass();
 
                             // まずは利用可能なフィールド一覧を取得
                             boolean found = false;
@@ -302,9 +302,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             {
                                 if (!found) {
                                     // インナークラス一覧を取得
-                                    final SortedSet<InnerClassInfo<?>> innerClasses = NameResolver
+                                    final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                             .getAvailableDirectInnerClasses(ownerClass);
-                                    for (final ClassInfo<?, ?, ?, ?> innerClass : ClassInfo
+                                    for (final ClassInfo innerClass : ClassInfo
                                             .convert(innerClasses)) {
 
                                         // 一致するクラス名が見つかった場合
@@ -330,11 +330,11 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             {
                                 if (!found) {
 
-                                    final ClassInfo<?, ?, ?, ?> referencedClass = ((ClassTypeInfo) entityUsage
+                                    final ClassInfo referencedClass = ((ClassTypeInfo) entityUsage
                                             .getType()).getReferencedClass();
                                     final ExternalClassInfo externalSuperClass = NameResolver
                                             .getExternalSuperClass(referencedClass);
-                                    if (!(referencedClass instanceof InnerClassInfo<?>)
+                                    if (!(referencedClass instanceof InnerClassInfo)
                                             && (null != externalSuperClass)) {
 
                                         final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -387,8 +387,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                 final String[] searchingName = new String[length];
                 System.arraycopy(name, 0, searchingName, 0, length);
 
-                final ClassInfo<?, ?, ?, ?> searchingClass = classInfoManager
-                        .getClassInfo(searchingName);
+                final ClassInfo searchingClass = classInfoManager.getClassInfo(searchingName);
                 if (null != searchingClass) {
 
                     final ClassReferenceInfo searchedClassReference = new ClassReferenceInfo(
@@ -410,8 +409,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             // 親がクラス型の場合
                         } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
-                            final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) entityUsage
-                                    .getType()).getReferencedClass();
+                            final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage.getType())
+                                    .getReferencedClass();
 
                             // まずは利用可能なフィールド一覧を取得
                             boolean found = false;
@@ -445,9 +444,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 if (!found) {
 
                                     // インナークラス一覧を取得
-                                    final SortedSet<InnerClassInfo<?>> innerClasses = NameResolver
+                                    final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                             .getAvailableDirectInnerClasses(ownerClass);
-                                    for (final ClassInfo<?, ?, ?, ?> innerClass : ClassInfo
+                                    for (final ClassInfo innerClass : ClassInfo
                                             .convert(innerClasses)) {
 
                                         // 一致するクラス名が見つかった場合
@@ -473,11 +472,11 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             {
                                 if (!found) {
 
-                                    final ClassInfo<?, ?, ?, ?> referencedClass = ((ClassTypeInfo) entityUsage
+                                    final ClassInfo referencedClass = ((ClassTypeInfo) entityUsage
                                             .getType()).getReferencedClass();
                                     final ExternalClassInfo externalSuperClass = NameResolver
                                             .getExternalSuperClass(referencedClass);
-                                    if (!(referencedClass instanceof InnerClassInfo<?>)
+                                    if (!(referencedClass instanceof InnerClassInfo)
                                             && (null != externalSuperClass)) {
 
                                         final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -526,14 +525,14 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
             // 内部クラス名から検索
             {
-                final ClassInfo<?, ?, ?, ?> outestClass;
-                if (usingClass instanceof InnerClassInfo<?>) {
-                    outestClass = NameResolver.getOuterstClass((InnerClassInfo<?>) usingClass);
+                final ClassInfo outestClass;
+                if (usingClass instanceof InnerClassInfo) {
+                    outestClass = NameResolver.getOuterstClass((InnerClassInfo) usingClass);
                 } else {
                     outestClass = usingClass;
                 }
 
-                for (final ClassInfo<?, ?, ?, ?> innerClassInfo : ClassInfo.convert(NameResolver
+                for (final ClassInfo innerClassInfo : ClassInfo.convert(NameResolver
                         .getAvailableInnerClasses(outestClass))) {
 
                     // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
@@ -558,8 +557,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 // 親がクラス型の場合
                             } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
-                                final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) entityUsage
-                                        .getType()).getReferencedClass();
+                                final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage.getType())
+                                        .getReferencedClass();
 
                                 // まずは利用可能なフィールド一覧を取得
                                 boolean found = false;
@@ -591,9 +590,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 {
                                     if (!found) {
                                         // インナークラス一覧を取得
-                                        final SortedSet<InnerClassInfo<?>> innerClasses = NameResolver
+                                        final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                                 .getAvailableDirectInnerClasses(ownerClass);
-                                        for (final ClassInfo<?, ?, ?, ?> innerClass : ClassInfo
+                                        for (final ClassInfo innerClass : ClassInfo
                                                 .convert(innerClasses)) {
 
                                             // 一致するクラス名が見つかった場合
@@ -619,11 +618,11 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 {
                                     if (!found) {
 
-                                        final ClassInfo<?, ?, ?, ?> referencedClass = ((ClassTypeInfo) entityUsage
+                                        final ClassInfo referencedClass = ((ClassTypeInfo) entityUsage
                                                 .getType()).getReferencedClass();
                                         final ExternalClassInfo externalSuperClass = NameResolver
                                                 .getExternalSuperClass(referencedClass);
-                                        if (!(referencedClass instanceof InnerClassInfo<?>)
+                                        if (!(referencedClass instanceof InnerClassInfo)
                                                 && (null != externalSuperClass)) {
 
                                             final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -676,8 +675,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                         final String[] namespace = availableNamespace.getNamespace();
 
                         // 名前空間の下にある各クラスに対して
-                        for (final ClassInfo<?, ?, ?, ?> classInfo : classInfoManager
-                                .getClassInfos(namespace)) {
+                        for (final ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
                             final String className = classInfo.getClassName();
 
                             // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
@@ -703,7 +701,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                         // 親がクラス型の場合
                                     } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
-                                        final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) entityUsage
+                                        final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage
                                                 .getType()).getReferencedClass();
 
                                         // まずは利用可能なフィールド一覧を取得
@@ -737,9 +735,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                         {
                                             if (!found) {
                                                 // インナークラス一覧を取得
-                                                final SortedSet<InnerClassInfo<?>> innerClasses = NameResolver
+                                                final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                                         .getAvailableDirectInnerClasses(ownerClass);
-                                                for (final ClassInfo<?, ?, ?, ?> innerClass : ClassInfo
+                                                for (final ClassInfo innerClass : ClassInfo
                                                         .convert(innerClasses)) {
 
                                                     // 一致するクラス名が見つかった場合
@@ -766,11 +764,11 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                         {
                                             if (!found) {
 
-                                                final ClassInfo<?, ?, ?, ?> referencedClass = ((ClassTypeInfo) entityUsage
+                                                final ClassInfo referencedClass = ((ClassTypeInfo) entityUsage
                                                         .getType()).getReferencedClass();
                                                 final ExternalClassInfo externalSuperClass = NameResolver
                                                         .getExternalSuperClass(referencedClass);
-                                                if (!(referencedClass instanceof InnerClassInfo<?>)
+                                                if (!(referencedClass instanceof InnerClassInfo)
                                                         && (null != externalSuperClass)) {
 
                                                     final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -821,7 +819,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                         // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
                         if (importName[importName.length - 1].equals(name[0])) {
 
-                            ClassInfo<?, ?, ?, ?> specifiedClassInfo = classInfoManager
+                            ClassInfo specifiedClassInfo = classInfoManager
                                     .getClassInfo(importName);
                             if (null == specifiedClassInfo) {
                                 specifiedClassInfo = new ExternalClassInfo(importName);
@@ -848,7 +846,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                     // 親がクラス型の場合
                                 } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
-                                    final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) entityUsage
+                                    final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage
                                             .getType()).getReferencedClass();
 
                                     // まずは利用可能なフィールド一覧を取得
@@ -881,9 +879,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                     {
                                         if (!found) {
                                             // インナークラス一覧を取得
-                                            final SortedSet<InnerClassInfo<?>> innerClasses = NameResolver
+                                            final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                                     .getAvailableDirectInnerClasses(ownerClass);
-                                            for (final ClassInfo<?, ?, ?, ?> innerClass : ClassInfo
+                                            for (final ClassInfo innerClass : ClassInfo
                                                     .convert(innerClasses)) {
 
                                                 // 一致するクラス名が見つかった場合
@@ -909,11 +907,11 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                     {
                                         if (!found) {
 
-                                            final ClassInfo<?, ?, ?, ?> referencedClass = ((ClassTypeInfo) entityUsage
+                                            final ClassInfo referencedClass = ((ClassTypeInfo) entityUsage
                                                     .getType()).getReferencedClass();
                                             final ExternalClassInfo externalSuperClass = NameResolver
                                                     .getExternalSuperClass(referencedClass);
-                                            if (!(referencedClass instanceof InnerClassInfo<?>)
+                                            if (!(referencedClass instanceof InnerClassInfo)
                                                     && (null != externalSuperClass)) {
 
                                                 final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(
@@ -969,7 +967,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             .equals(name[0])) {
                         final String[] ownerClassFullQualifiedName = Arrays.<String> copyOf(
                                 importedFullQualifiedName, importedFullQualifiedName.length - 1);
-                        final ClassInfo<?, ?, ?, ?> ownerClass = classInfoManager
+                        final ClassInfo ownerClass = classInfoManager
                                 .getClassInfo(ownerClassFullQualifiedName);
 
                         for (final FieldInfo field : ownerClass.getDefinedFields()) {
@@ -996,8 +994,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
             //　親クラスから検索
             {
                 // 利用可能な各親クラスに対して
-                for (final ClassInfo<?, ?, ?, ?> classInfo : NameResolver
-                        .getAvailableClasses(usingClass)) {
+                for (final ClassInfo classInfo : NameResolver.getAvailableClasses(usingClass)) {
                     final String className = classInfo.getClassName();
 
                     // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
@@ -1022,8 +1019,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 // 親がクラス型の場合
                             } else if (entityUsage.getType() instanceof ClassTypeInfo) {
 
-                                final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) entityUsage
-                                        .getType()).getReferencedClass();
+                                final ClassInfo ownerClass = ((ClassTypeInfo) entityUsage.getType())
+                                        .getReferencedClass();
 
                                 // まずは利用可能なフィールド一覧を取得
                                 boolean found = false;
@@ -1055,9 +1052,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 {
                                     if (!found) {
                                         // インナークラス一覧を取得
-                                        final SortedSet<InnerClassInfo<?>> innerClasses = NameResolver
+                                        final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                                 .getAvailableDirectInnerClasses(ownerClass);
-                                        for (final ClassInfo<?, ?, ?, ?> innerClass : ClassInfo
+                                        for (final ClassInfo innerClass : ClassInfo
                                                 .convert(innerClasses)) {
 
                                             // 一致するクラス名が見つかった場合
@@ -1083,11 +1080,11 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 {
                                     if (!found) {
 
-                                        final ClassInfo<?, ?, ?, ?> referencedClass = ((ClassTypeInfo) entityUsage
+                                        final ClassInfo referencedClass = ((ClassTypeInfo) entityUsage
                                                 .getType()).getReferencedClass();
                                         final ExternalClassInfo externalSuperClass = NameResolver
                                                 .getExternalSuperClass(referencedClass);
-                                        if (!(referencedClass instanceof InnerClassInfo<?>)
+                                        if (!(referencedClass instanceof InnerClassInfo)
                                                 && (null != externalSuperClass)) {
 
                                             final ExternalFieldInfo fieldInfo = new ExternalFieldInfo(

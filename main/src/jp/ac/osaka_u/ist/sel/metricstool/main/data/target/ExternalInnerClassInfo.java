@@ -2,8 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 @SuppressWarnings("serial")
-public class ExternalInnerClassInfo extends ExternalClassInfo implements
-        InnerClassInfo<ExternalClassInfo> {
+public class ExternalInnerClassInfo extends ExternalClassInfo implements InnerClassInfo {
 
     public ExternalInnerClassInfo(final String[] fullQualifiedName, final UnitInfo outerUnit) {
         super(fullQualifiedName);
@@ -32,7 +31,7 @@ public class ExternalInnerClassInfo extends ExternalClassInfo implements
      * @return　外側のクラス
      */
     @Override
-    public final ExternalClassInfo getOuterClass() {
+    public final ClassInfo getOuterClass() {
 
         final UnitInfo unitInfo = this.getOuterUnit();
 
@@ -43,7 +42,7 @@ public class ExternalInnerClassInfo extends ExternalClassInfo implements
             // 外側のユニットがメソッドであれば，その所有クラスを返す
         } else if (unitInfo instanceof ExternalMethodInfo) {
 
-            final ClassInfo<?, ?, ?, ?> ownerClass = ((TargetMethodInfo) unitInfo).getOwnerClass();
+            final ClassInfo ownerClass = ((ExternalMethodInfo) unitInfo).getOwnerClass();
             return (ExternalClassInfo) ownerClass;
         }
 

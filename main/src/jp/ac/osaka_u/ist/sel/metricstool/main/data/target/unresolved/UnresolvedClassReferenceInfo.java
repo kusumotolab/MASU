@@ -134,16 +134,16 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                     // 親が対象クラス(TargetClassInfo)の場合
                 } else if (classReference.getType() instanceof ClassTypeInfo) {
 
-                    final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) classReference
+                    final ClassInfo ownerClass = ((ClassTypeInfo) classReference
                             .getType()).getReferencedClass();
 
                     // インナークラスから探すので一覧を取得
-                    final SortedSet<InnerClassInfo<?>> innerClasses = NameResolver
+                    final SortedSet<InnerClassInfo> innerClasses = NameResolver
                             .getAvailableDirectInnerClasses(((ClassTypeInfo) classReference
                                     .getType()).getReferencedClass());
-                    for (final InnerClassInfo<?> innerClass : innerClasses) {
+                    for (final InnerClassInfo innerClass : innerClasses) {
 
-                        final ClassInfo<?, ?, ?, ?> innerClassInfo = (ClassInfo<?, ?, ?, ?>) innerClass;
+                        final ClassInfo innerClassInfo = (ClassInfo) innerClass;
 
                         // 一致するクラス名が見つかった場合
                         if (referenceName[i].equals(innerClassInfo.getClassName())) {
@@ -180,7 +180,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
             // 未解決参照型が UnresolvedFullQualifiedNameReferenceTypeInfo ならば，完全限定名参照であると判断できる
             if (this instanceof UnresolvedFullQualifiedNameClassReferenceInfo) {
 
-                ClassInfo<?, ?, ?, ?> classInfo = classInfoManager.getClassInfo(referenceName);
+                ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
                 if (null == classInfo) {
                     classInfo = new ExternalClassInfo(referenceName);
                     classInfoManager.add(classInfo);
@@ -196,7 +196,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
             // 参照名が完全限定名であるとして検索
             {
-                final ClassInfo<?, ?, ?, ?> classInfo = classInfoManager
+                final ClassInfo classInfo = classInfoManager
                         .getClassInfo(referenceName);
                 if (null != classInfo) {
 
@@ -211,14 +211,14 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
             // 利用可能なインナークラス名から探す
             {
-                final ClassInfo<?, ?, ?, ?> outestClass;
-                if (usingClass instanceof InnerClassInfo<?>) {
-                    outestClass = NameResolver.getOuterstClass((InnerClassInfo<?>) usingClass);
+                final ClassInfo outestClass;
+                if (usingClass instanceof InnerClassInfo) {
+                    outestClass = NameResolver.getOuterstClass((InnerClassInfo) usingClass);
                 } else {
                     outestClass = usingClass;
                 }
 
-                for (final ClassInfo<?, ?, ?, ?> innerClassInfo : ClassInfo.convert(NameResolver
+                for (final ClassInfo innerClassInfo : ClassInfo.convert(NameResolver
                         .getAvailableInnerClasses(outestClass))) {
 
                     if (innerClassInfo.getClassName().equals(referenceName[0])) {
@@ -243,14 +243,14 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                 // 親がクラス型の場合
                             } else if (classReference.getType() instanceof ClassTypeInfo) {
 
-                                final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) classReference
+                                final ClassInfo ownerClass = ((ClassTypeInfo) classReference
                                         .getType()).getReferencedClass();
 
                                 // インナークラスから探すので一覧を取得
-                                final SortedSet<InnerClassInfo<?>> innerClasses = NameResolver
-                                        .getAvailableDirectInnerClasses((TargetClassInfo) ((ClassTypeInfo) classReference
+                                final SortedSet<InnerClassInfo> innerClasses = NameResolver
+                                        .getAvailableDirectInnerClasses(((ClassTypeInfo) classReference
                                                 .getType()).getReferencedClass());
-                                for (final ClassInfo<?, ?, ?, ?> innerClass : ClassInfo
+                                for (final ClassInfo innerClass : ClassInfo
                                         .convert(innerClasses)) {
 
                                     // 一致するクラス名が見つかった場合
@@ -297,7 +297,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                         final String[] namespace = availableNamespace.getNamespace();
 
                         // 名前空間の下にある各クラスに対して
-                        for (final ClassInfo<?, ?, ?, ?> classInfo : classInfoManager
+                        for (final ClassInfo classInfo : classInfoManager
                                 .getClassInfos(namespace)) {
 
                             // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
@@ -325,14 +325,14 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                         // 親がクラス型の場合
                                     } else if (classReference.getType() instanceof ClassTypeInfo) {
 
-                                        final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) classReference
+                                        final ClassInfo ownerClass = ((ClassTypeInfo) classReference
                                                 .getType()).getReferencedClass();
 
                                         // インナークラスから探すので一覧を取得
-                                        final SortedSet<InnerClassInfo<?>> innerClasses = NameResolver
+                                        final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                                 .getAvailableDirectInnerClasses(((ClassTypeInfo) classReference
                                                         .getType()).getReferencedClass());
-                                        for (final ClassInfo<?, ?, ?, ?> innerClass : ClassInfo
+                                        for (final ClassInfo innerClass : ClassInfo
                                                 .convert(innerClasses)) {
 
                                             // 一致するクラス名が見つかった場合
@@ -378,7 +378,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                         // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
                         if (importName[importName.length - 1].equals(referenceName[0])) {
 
-                            ClassInfo<?, ?, ?, ?> specifiedClassInfo = classInfoManager
+                            ClassInfo specifiedClassInfo = classInfoManager
                                     .getClassInfo(importName);
                             if (null == specifiedClassInfo) {
                                 specifiedClassInfo = new ExternalClassInfo(importName);
@@ -405,14 +405,14 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                     // 親がクラス型の場合
                                 } else if (classReference.getType() instanceof ClassTypeInfo) {
 
-                                    final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) classReference
+                                    final ClassInfo ownerClass = ((ClassTypeInfo) classReference
                                             .getType()).getReferencedClass();
 
                                     // インナークラス一覧を取得
-                                    final SortedSet<InnerClassInfo<?>> innerClasses = NameResolver
+                                    final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                             .getAvailableDirectInnerClasses(((ClassTypeInfo) classReference
                                                     .getType()).getReferencedClass());
-                                    for (final ClassInfo<?, ?, ?, ?> innerClass : ClassInfo
+                                    for (final ClassInfo innerClass : ClassInfo
                                             .convert(innerClasses)) {
 
                                         // 一致するクラス名が見つかった場合

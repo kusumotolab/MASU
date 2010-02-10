@@ -12,7 +12,7 @@ import java.util.Set;
  * @author higo
  *
  */
-@SuppressWarnings( { "serial", "unchecked" })
+@SuppressWarnings( { "serial" })
 public final class ArrayTypeClassInfo extends ClassInfo {
 
     /**

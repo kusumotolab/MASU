@@ -27,8 +27,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  */
 @SuppressWarnings("serial")
-public abstract class FieldInfo extends VariableInfo<ClassInfo<?, ?, ?, ?>> implements
-        MetricMeasurable, Member, Visualizable, StaticOrInstance {
+public abstract class FieldInfo extends VariableInfo<ClassInfo> implements MetricMeasurable,
+        Member, Visualizable, StaticOrInstance {
 
     /**
      * フィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．
@@ -43,7 +43,7 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo<?, ?, ?, ?>> impl
      * @param toColumn 終了列
      */
     FieldInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type,
-            final ClassInfo<?, ?, ?, ?> definitionClass, final boolean privateVisible,
+            final ClassInfo definitionClass, final boolean privateVisible,
             final boolean namespaceVisible, final boolean inheritanceVisible,
             final boolean publicVisible, final boolean instance, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -146,7 +146,7 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo<?, ?, ?, ?>> impl
      * 
      * @return このフィールドを定義しているクラス
      */
-    public final ClassInfo<?, ?, ?, ?> getOwnerClass() {
+    public final ClassInfo getOwnerClass() {
         return this.ownerClass;
     }
 
@@ -225,7 +225,7 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo<?, ?, ?, ?>> impl
     /**
      * このフィールドを定義しているクラスを保存する変数
      */
-    protected final ClassInfo<?, ?, ?, ?> ownerClass;
+    protected final ClassInfo ownerClass;
 
     /**
      * このフィールドを参照しているメソッド群を保存するための変数

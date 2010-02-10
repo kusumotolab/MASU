@@ -60,7 +60,7 @@ public final class UnresolvedFullQualifiedNameClassReferenceInfo extends
         final int toColumn = this.getToColumn();
 
         final String[] fullQualifiedReferenceName = this.getReferenceName();
-        ClassInfo<?, ?, ?, ?> referencedClass = classInfoManager
+        ClassInfo referencedClass = classInfoManager
                 .getClassInfo(fullQualifiedReferenceName);
 
         // QÆ‚³‚ê‚½ƒNƒ‰ƒX‚ª“o˜^‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍC‚±‚±‚Å“o˜^‚·‚é

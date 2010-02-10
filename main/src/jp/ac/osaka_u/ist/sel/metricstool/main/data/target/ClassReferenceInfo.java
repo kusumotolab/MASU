@@ -55,7 +55,7 @@ public final class ClassReferenceInfo extends ExpressionInfo {
      * 
      * @return このクラス参照で参照されているクラス
      */
-    public ClassInfo<?,?,?,?> getReferencedClass() {
+    public ClassInfo getReferencedClass() {
         return this.referenceType.getReferencedClass();
     }
 
@@ -87,7 +87,7 @@ public final class ClassReferenceInfo extends ExpressionInfo {
     @Override
     public String getText() {
 
-        final ClassInfo<?,?,?,?> classInfo = this.getReferencedClass();
+        final ClassInfo classInfo = this.getReferencedClass();
         return classInfo.getFullQualifiedName(".");
     }
 

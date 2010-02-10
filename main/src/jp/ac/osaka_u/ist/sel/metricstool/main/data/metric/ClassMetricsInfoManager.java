@@ -43,7 +43,7 @@ public final class ClassMetricsInfoManager implements Iterable<ClassMetricsInfo>
      * @param classInfo ほしいメトリクス情報のクラス
      * @return メトリクス情報
      */
-    public ClassMetricsInfo get(final ClassInfo<?, ?, ?, ?> classInfo) {
+    public ClassMetricsInfo get(final ClassInfo classInfo) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfo) {

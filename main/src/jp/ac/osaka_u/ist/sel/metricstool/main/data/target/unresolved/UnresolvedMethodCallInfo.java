@@ -151,9 +151,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             // 親がクラス型だった場合
         } else if (ownerType instanceof ClassTypeInfo) {
 
-            final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) ownerType)
-                    .getReferencedClass();
-                        
+            final ClassInfo ownerClass = ((ClassTypeInfo) ownerType).getReferencedClass();
+
             if (ownerClass instanceof TargetClassInfo) {
 
                 // まずは利用可能なメソッドから検索
@@ -183,7 +182,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 // そのクラスのメソッドを使用しているとみなす
                 {
                     final ExternalClassInfo externalSuperClass = NameResolver
-                            .getExternalSuperClass((ClassInfo<?, ?, ?, ?>) ownerClass);
+                            .getExternalSuperClass(ownerClass);
                     if (null != externalSuperClass) {
 
                         final ExternalMethodInfo methodInfo = new ExternalMethodInfo(
@@ -243,8 +242,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             if (settings.getLanguage().equals(LANGUAGE.JAVA15)
                     || settings.getLanguage().equals(LANGUAGE.JAVA14)
                     || settings.getLanguage().equals(LANGUAGE.JAVA13)) {
-                final ClassInfo<?, ?, ?, ?> ownerClass = classInfoManager
-                        .getClassInfo(new String[] { "java", "lang", "Object" });
+                final ClassInfo ownerClass = classInfoManager.getClassInfo(new String[] { "java",
+                        "lang", "Object" });
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
                         (ExternalClassInfo) ownerClass);
                 final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(

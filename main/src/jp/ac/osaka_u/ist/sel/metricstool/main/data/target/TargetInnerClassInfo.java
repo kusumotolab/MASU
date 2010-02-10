@@ -11,7 +11,7 @@ import java.util.Set;
  */
 @SuppressWarnings("serial")
 public class TargetInnerClassInfo extends TargetClassInfo implements
-        InnerClassInfo<TargetClassInfo> {
+        InnerClassInfo {
 
     /**
      * インナークラスオブジェクトを初期化する
@@ -112,7 +112,7 @@ public class TargetInnerClassInfo extends TargetClassInfo implements
      * @return　外側のクラス
      */
     @Override
-    public final TargetClassInfo getOuterClass() {
+    public final ClassInfo getOuterClass() {
 
         final UnitInfo unitInfo = this.getOuterUnit();
 
@@ -123,7 +123,7 @@ public class TargetInnerClassInfo extends TargetClassInfo implements
             // 外側のユニットがメソッドであれば，その所有クラスを返す
         } else if (unitInfo instanceof TargetMethodInfo) {
 
-            final ClassInfo<?, ?, ?, ?> ownerClass = ((TargetMethodInfo) unitInfo).getOwnerClass();
+            final ClassInfo ownerClass = ((TargetMethodInfo) unitInfo).getOwnerClass();
             return (TargetClassInfo) ownerClass;
         }
 

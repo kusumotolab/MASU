@@ -27,9 +27,9 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
      * @param references 参照型のList
      * @return クラスのList
      */
-    public static List<ClassInfo<?,?,?,?>> convert(final List<ClassTypeInfo> references) {
+    public static List<ClassInfo> convert(final List<ClassTypeInfo> references) {
 
-        final List<ClassInfo<?,?,?,?>> classInfos = new LinkedList<ClassInfo<?,?,?,?>>();
+        final List<ClassInfo> classInfos = new LinkedList<ClassInfo>();
         for (final ClassTypeInfo reference : references) {
             classInfos.add(reference.getReferencedClass());
         }
@@ -43,9 +43,9 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
      * @param references 参照型のSortedSet
      * @return クラスのSortedSet
      */
-    public static SortedSet<ClassInfo<?,?,?,?>> convert(final SortedSet<ClassTypeInfo> references) {
+    public static SortedSet<ClassInfo> convert(final SortedSet<ClassTypeInfo> references) {
 
-        final SortedSet<ClassInfo<?,?,?,?>> classInfos = new TreeSet<ClassInfo<?,?,?,?>>();
+        final SortedSet<ClassInfo> classInfos = new TreeSet<ClassInfo>();
         for (final ClassTypeInfo reference : references) {
             classInfos.add(reference.getReferencedClass());
         }
@@ -58,7 +58,7 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
      * 
      * @param referencedClass 参照されるクラス
      */
-    public ClassTypeInfo(final ClassInfo<?,?,?,?> referencedClass) {
+    public ClassTypeInfo(final ClassInfo referencedClass) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == referencedClass) {
@@ -89,7 +89,7 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
         // 引数が参照型の場合，
         // 参照されているクラスが等しくない場合は，参照型は等しくない
         final ClassTypeInfo targetReferenceType = (ClassTypeInfo) typeInfo;
-        final ClassInfo<?,?,?,?> targetReferencedClass = targetReferenceType.getReferencedClass();
+        final ClassInfo targetReferencedClass = targetReferenceType.getReferencedClass();
         if (!this.referencedClass.equals(targetReferencedClass)) {
             return false;
         }
@@ -143,7 +143,7 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
      * 
      * @return 参照されているクラス
      */
-    public ClassInfo<?,?,?,?> getReferencedClass() {
+    public ClassInfo getReferencedClass() {
         return this.referencedClass;
     }
 
@@ -178,7 +178,7 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
     /**
      * この参照型が表すクラスを保存するための変数
      */
-    private final ClassInfo<?,?,?,?> referencedClass;
+    private final ClassInfo referencedClass;
 
     /**
      * この参照型の型パラメータを保存するための変数

@@ -23,25 +23,24 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 @SuppressWarnings("serial")
-public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C extends ConstructorInfo, I extends InnerClassInfo<?>>
-        extends UnitInfo implements MetricMeasurable, Modifier, TypeParameterizable {
+public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Modifier,
+        TypeParameterizable {
 
     /**
      * InnerClassInfo<?>のSortedSetをClassInfo<?,?,?,?>のSortedSetに変換する
      * @param innerClasses
      * @return
      */
-    public static SortedSet<ClassInfo<?, ?, ?, ?>> convert(
-            final SortedSet<InnerClassInfo<?>> innerClasses) {
+    public static SortedSet<ClassInfo> convert(final SortedSet<InnerClassInfo> innerClasses) {
 
         if (null == innerClasses) {
             throw new IllegalArgumentException();
         }
 
-        final SortedSet<ClassInfo<?, ?, ?, ?>> classes = new TreeSet<ClassInfo<?, ?, ?, ?>>();
+        final SortedSet<ClassInfo> classes = new TreeSet<ClassInfo>();
 
-        for (final InnerClassInfo<?> innerClass : innerClasses) {
-            classes.add((ClassInfo<?, ?, ?, ?>) innerClass);
+        for (final InnerClassInfo innerClass : innerClasses) {
+            classes.add((ClassInfo) innerClass);
         }
 
         return Collections.unmodifiableSortedSet(classes);
@@ -72,15 +71,15 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
             throw new NullPointerException();
         }
 
-        this.definedMethods = new TreeSet<M>();
-        this.definedConstructors = new TreeSet<C>();
-        this.definedFields = new TreeSet<F>();
-        this.innerClasses = new TreeSet<I>();
+        this.definedMethods = new TreeSet<MethodInfo>();
+        this.definedConstructors = new TreeSet<ConstructorInfo>();
+        this.definedFields = new TreeSet<FieldInfo>();
+        this.innerClasses = new TreeSet<InnerClassInfo>();
 
         this.namespace = namespace;
         this.className = className;
         this.superClasses = new LinkedList<ClassTypeInfo>();
-        this.subClasses = new TreeSet<ClassInfo<?, ?, ?, ?>>();
+        this.subClasses = new TreeSet<ClassInfo>();
 
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.typeParameterUsages = new HashMap<TypeParameterInfo, TypeInfo>();
@@ -124,17 +123,17 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
             throw new IllegalArgumentException("Full Qualified Name must has at least 1 word!");
         }
 
-        this.definedMethods = new TreeSet<M>();
-        this.definedConstructors = new TreeSet<C>();
-        this.definedFields = new TreeSet<F>();
-        this.innerClasses = new TreeSet<I>();
+        this.definedMethods = new TreeSet<MethodInfo>();
+        this.definedConstructors = new TreeSet<ConstructorInfo>();
+        this.definedFields = new TreeSet<FieldInfo>();
+        this.innerClasses = new TreeSet<InnerClassInfo>();
 
         String[] namespace = new String[fullQualifiedName.length - 1];
         System.arraycopy(fullQualifiedName, 0, namespace, 0, fullQualifiedName.length - 1);
         this.namespace = new NamespaceInfo(namespace);
         this.className = fullQualifiedName[fullQualifiedName.length - 1];
         this.superClasses = new LinkedList<ClassTypeInfo>();
-        this.subClasses = new TreeSet<ClassInfo<?, ?, ?, ?>>();
+        this.subClasses = new TreeSet<ClassInfo>();
 
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.typeParameterUsages = new HashMap<TypeParameterInfo, TypeInfo>();
@@ -179,17 +178,17 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
             throw new IllegalArgumentException();
         }
 
-        if (o instanceof ClassInfo<?, ?, ?, ?>) {
+        if (o instanceof ClassInfo) {
 
             final NamespaceInfo namespace = this.getNamespace();
-            final NamespaceInfo correspondNamespace = ((ClassInfo<?, ?, ?, ?>) o).getNamespace();
+            final NamespaceInfo correspondNamespace = ((ClassInfo) o).getNamespace();
             final int namespaceOrder = namespace.compareTo(correspondNamespace);
             if (namespaceOrder != 0) {
                 return namespaceOrder;
             }
 
             final String name = this.getClassName();
-            final String correspondName = ((ClassInfo<?, ?, ?, ?>) o).getClassName();
+            final String correspondName = ((ClassInfo) o).getClassName();
             return name.compareTo(correspondName);
 
         } else {
@@ -238,7 +237,7 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * 
      * @param subClass 追加する子クラス
      */
-    public void addSubClass(final ClassInfo<?, ?, ?, ?> subClass) {
+    public void addSubClass(final ClassInfo subClass) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == subClass) {
@@ -262,7 +261,7 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * 
      * @return サブクラスの SortedSet
      */
-    public SortedSet<ClassInfo<?, ?, ?, ?>> getSubClasses() {
+    public SortedSet<ClassInfo> getSubClasses() {
         return Collections.unmodifiableSortedSet(this.subClasses);
     }
 
@@ -311,7 +310,7 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
     @Override
     public final boolean equals(final Object o) {
 
-        if (!(o instanceof ClassInfo<?, ?, ?, ?>)) {
+        if (!(o instanceof ClassInfo)) {
             return false;
         }
 
@@ -320,13 +319,13 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
         }
 
         final NamespaceInfo namespace = this.getNamespace();
-        final NamespaceInfo correspondNamespace = ((ClassInfo<?, ?, ?, ?>) o).getNamespace();
+        final NamespaceInfo correspondNamespace = ((ClassInfo) o).getNamespace();
         if (!namespace.equals(correspondNamespace)) {
             return false;
         }
 
         final String className = this.getClassName();
-        final String correspondClassName = ((ClassInfo<?, ?, ?, ?>) o).getClassName();
+        final String correspondClassName = ((ClassInfo) o).getClassName();
         return className.equals(correspondClassName);
     }
 
@@ -336,11 +335,10 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * @param classInfo 対象クラス
      * @return このクラスが引数で与えられたクラスの親クラスである場合は true，そうでない場合は false
      */
-    public final boolean isSuperClass(final ClassInfo<?, ?, ?, ?> classInfo) {
+    public final boolean isSuperClass(final ClassInfo classInfo) {
 
         // 引数の直接の親クラスに対して
-        for (final ClassInfo<?, ?, ?, ?> superClass : ClassTypeInfo.convert(classInfo
-                .getSuperClasses())) {
+        for (final ClassInfo superClass : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
 
             // 対象クラスの直接の親クラスがこのクラスと等しい場合は true を返す
             if (this.equals(superClass)) {
@@ -362,10 +360,10 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * @param classInfo 対象クラス
      * @return このクラスが引数で与えられたクラスの子クラスである場合は true，そうでない場合は false
      */
-    public final boolean isSubClass(final ClassInfo<?, ?, ?, ?> classInfo) {
+    public final boolean isSubClass(final ClassInfo classInfo) {
 
         // 引数の直接の子クラスに対して
-        for (final ClassInfo<?, ?, ?, ?> subClassInfo : classInfo.getSubClasses()) {
+        for (final ClassInfo subClassInfo : classInfo.getSubClasses()) {
 
             // 対象クラスの直接の親クラスがこのクラスと等しい場合は true を返す
             if (this.equals(subClassInfo)) {
@@ -387,14 +385,14 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * @param classInfo 対象クラス
      * @return このクラスが引数で与えられたクラスのインナークラスである場合は true，そうでない場合は false
      */
-    public final boolean isInnerClass(final ClassInfo<?, ?, ?, ?> classInfo) {
+    public final boolean isInnerClass(final ClassInfo classInfo) {
 
         // 引数がnullのときはfalse
         if (null == classInfo) {
             return false;
         }
 
-        for (final InnerClassInfo<?> innerClassInfo : classInfo.getInnerClasses()) {
+        for (final InnerClassInfo innerClassInfo : classInfo.getInnerClasses()) {
 
             // このクラスが引数の直接の子クラスと等しい場合は true を返す
             if (innerClassInfo.equals(this)) {
@@ -402,7 +400,7 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
             }
 
             // このクラスが引数の間接的な子クラスである場合も true を返す
-            if (this.isInnerClass((ClassInfo<?, ?, ?, ?>) innerClassInfo)) {
+            if (this.isInnerClass((ClassInfo) innerClassInfo)) {
                 return true;
             }
         }
@@ -480,7 +478,7 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * 
      * @param definedMethod 追加する定義されたメソッド
      */
-    public final void addDefinedMethod(final M definedMethod) {
+    public final void addDefinedMethod(final MethodInfo definedMethod) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == definedMethod) {
@@ -495,7 +493,7 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * 
      * @param definedConstructor 追加する定義されたコンストラクタ
      */
-    public final void addDefinedConstructor(final C definedConstructor) {
+    public final void addDefinedConstructor(final ConstructorInfo definedConstructor) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == definedConstructor) {
@@ -510,7 +508,7 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * 
      * @param definedField 追加する定義されたフィールド
      */
-    public final void addDefinedField(final F definedField) {
+    public final void addDefinedField(final FieldInfo definedField) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == definedField) {
@@ -525,7 +523,7 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * 
      * @return 定義されているメソッドの SortedSet
      */
-    public final SortedSet<M> getDefinedMethods() {
+    public final SortedSet<MethodInfo> getDefinedMethods() {
         return Collections.unmodifiableSortedSet(this.definedMethods);
     }
 
@@ -534,7 +532,7 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * 
      * @return 定義されているメソッドの SortedSet
      */
-    public final SortedSet<C> getDefinedConstructors() {
+    public final SortedSet<ConstructorInfo> getDefinedConstructors() {
         return Collections.unmodifiableSortedSet(this.definedConstructors);
     }
 
@@ -543,7 +541,7 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * 
      * @return 定義されているフィールドの SortedSet
      */
-    public final SortedSet<F> getDefinedFields() {
+    public final SortedSet<FieldInfo> getDefinedFields() {
         return Collections.unmodifiableSortedSet(this.definedFields);
     }
 
@@ -552,7 +550,7 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * 
      * @param innerClass 追加するインナークラス
      */
-    public final void addInnerClass(final I innerClass) {
+    public final void addInnerClass(final InnerClassInfo innerClass) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == innerClass) {
@@ -567,7 +565,7 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
      * 
      * @return インナークラスの SortedSet
      */
-    public final SortedSet<I> getInnerClasses() {
+    public final SortedSet<InnerClassInfo> getInnerClasses() {
         return Collections.unmodifiableSortedSet(this.innerClasses);
     }
 
@@ -666,7 +664,7 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
     /**
      * このクラスを継承しているクラス一覧を保存するための変数．直接の子クラスのみを保有する．
      */
-    private final SortedSet<ClassInfo<?, ?, ?, ?>> subClasses;
+    private final SortedSet<ClassInfo> subClasses;
 
     /**
      * このクラスで使用されている型パラメータと実際に型パラメータに代入されている型のペア.
@@ -684,22 +682,22 @@ public abstract class ClassInfo<F extends FieldInfo, M extends MethodInfo, C ext
     /**
      * このクラスで定義されているメソッド一覧を保存するための変数．
      */
-    protected final SortedSet<M> definedMethods;
+    protected final SortedSet<MethodInfo> definedMethods;
 
     /**
      * このクラスで定義されているコンストラクタ一覧を保存するための変数．
      */
-    protected final SortedSet<C> definedConstructors;
+    protected final SortedSet<ConstructorInfo> definedConstructors;
 
     /**
      * このクラスで定義されているフィールド一覧を保存するための変数．
      */
-    protected final SortedSet<F> definedFields;
+    protected final SortedSet<FieldInfo> definedFields;
 
     /**
      * このクラスの内部クラス一覧を保存するための変数．直接の内部クラスのみを保有する．
      */
-    private final SortedSet<I> innerClasses;
+    private final SortedSet<InnerClassInfo> innerClasses;
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数

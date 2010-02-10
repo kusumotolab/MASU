@@ -75,15 +75,15 @@ public final class UnresolvedClassImportStatementInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final SortedSet<ClassInfo<?, ?, ?, ?>> accessibleClasses = new TreeSet<ClassInfo<?, ?, ?, ?>>();
+        final SortedSet<ClassInfo> accessibleClasses = new TreeSet<ClassInfo>();
         if (this.isAll()) {
             final String[] namespace = this.getNamespace();
-            final Collection<ClassInfo<?, ?, ?, ?>> specifiedClasses = classInfoManager
+            final Collection<ClassInfo> specifiedClasses = classInfoManager
                     .getClassInfos(namespace);
             accessibleClasses.addAll(specifiedClasses);
         } else {
             final String[] importName = this.getImportName();
-            ClassInfo<?, ?, ?, ?> specifiedClass = classInfoManager.getClassInfo(importName);
+            ClassInfo specifiedClass = classInfoManager.getClassInfo(importName);
             if (null == specifiedClass) {
                 specifiedClass = new ExternalClassInfo(importName);
                 accessibleClasses.add(specifiedClass);

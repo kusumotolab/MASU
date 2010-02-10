@@ -16,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
@@ -143,7 +144,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
             //親がクラス型の場合
         } else if (ownerType instanceof ClassTypeInfo) {
 
-            final ClassInfo<?, ?, ?, ?> ownerClass = ((ClassTypeInfo) qualifierUsage.getType())
+            final ClassInfo ownerClass = ((ClassTypeInfo) qualifierUsage.getType())
                     .getReferencedClass();
             // 親が対象クラス(TargetClassInfo)だった場合
             if (ownerClass instanceof TargetClassInfo) {
@@ -173,7 +174,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                 // 利用可能なフィールドが見つからなかった場合は，外部クラスである親クラスがあるはず
                 // そのクラスの変数を使用しているとみなす
                 {
-                    for (ClassInfo<?, ?, ?, ?> classInfo = (ClassInfo<?, ?, ?, ?>) ownerClass; true; classInfo = ((TargetInnerClassInfo) classInfo)
+                    for (ClassInfo classInfo = ownerClass; true; classInfo = ((InnerClassInfo) classInfo)
                             .getOuterClass()) {
 
                         final ExternalClassInfo externalSuperClass = NameResolver

@@ -24,8 +24,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 
 @SuppressWarnings("serial")
-public abstract class CallableUnitInfo<T extends ClassInfo<?, ?, ?, ?>> extends LocalSpaceInfo<T>
-        implements Visualizable, Modifier, TypeParameterizable {
+public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visualizable, Modifier,
+        TypeParameterizable {
 
     /**
      * オブジェクトを初期化する
@@ -37,7 +37,7 @@ public abstract class CallableUnitInfo<T extends ClassInfo<?, ?, ?, ?>> extends 
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    CallableUnitInfo(final Set<ModifierInfo> modifiers, final T ownerClass,
+    CallableUnitInfo(final Set<ModifierInfo> modifiers, final ClassInfo ownerClass,
             final boolean privateVisible, final boolean namespaceVisible,
             final boolean inheritanceVisible, final boolean publicVisible, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
@@ -57,7 +57,7 @@ public abstract class CallableUnitInfo<T extends ClassInfo<?, ?, ?, ?>> extends 
 
         this.unresolvedUsage = new HashSet<UnresolvedExpressionInfo<?>>();
 
-        this.callers = new TreeSet<CallableUnitInfo<?>>();
+        this.callers = new TreeSet<CallableUnitInfo>();
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
@@ -86,11 +86,10 @@ public abstract class CallableUnitInfo<T extends ClassInfo<?, ?, ?, ?>> extends 
             throw new IllegalArgumentException();
         }
 
-        if (o instanceof CallableUnitInfo<?>) {
+        if (o instanceof CallableUnitInfo) {
 
-            final ClassInfo<?, ?, ?, ?> ownerClass = this.getOwnerClass();
-            final ClassInfo<?, ?, ?, ?> correspondOwnerClass = ((CallableUnitInfo<?>) o)
-                    .getOwnerClass();
+            final ClassInfo ownerClass = this.getOwnerClass();
+            final ClassInfo correspondOwnerClass = ((CallableUnitInfo) o).getOwnerClass();
             final int classOrder = ownerClass.compareTo(correspondOwnerClass);
             if (classOrder != 0) {
                 return classOrder;
@@ -100,7 +99,7 @@ public abstract class CallableUnitInfo<T extends ClassInfo<?, ?, ?, ?>> extends 
         return super.compareTo(o);
     }
 
-    public int compareArgumentsTo(final CallableUnitInfo<?> target) {
+    public int compareArgumentsTo(final CallableUnitInfo target) {
         // 引数の個数で比較
         final int parameterNumber = this.getParameterNumber();
         final int correspondParameterNumber = target.getParameterNumber();
@@ -172,7 +171,7 @@ public abstract class CallableUnitInfo<T extends ClassInfo<?, ?, ?, ?>> extends 
             if (actualParameterType instanceof ClassTypeInfo) {
 
                 // 実引数の型のクラスを取得
-                final ClassInfo<?, ?, ?, ?> actualParameterClass = ((ClassTypeInfo) actualParameterType)
+                final ClassInfo actualParameterClass = ((ClassTypeInfo) actualParameterType)
                         .getReferencedClass();
 
                 // 仮引数が参照型でない場合は該当しない
@@ -181,13 +180,12 @@ public abstract class CallableUnitInfo<T extends ClassInfo<?, ?, ?, ?>> extends 
                 }
 
                 // 仮引数の型のクラスを取得
-                final ClassInfo<?, ?, ?, ?> dummyParameterClass = ((ClassTypeInfo) dummyParameter
-                        .getType()).getReferencedClass();
+                final ClassInfo dummyParameterClass = ((ClassTypeInfo) dummyParameter.getType())
+                        .getReferencedClass();
 
                 // 仮引数の型がObjectの場合は，呼び出し可能である
-                final ClassInfo<?, ?, ?, ?> objectClass = DataManager.getInstance()
-                        .getClassInfoManager().getClassInfo(
-                                new String[] { "java", "lang", "Object" });
+                final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
+                        .getClassInfo(new String[] { "java", "lang", "Object" });
                 if (dummyParameterClass.equals(objectClass)) {
                     continue NEXT_PARAMETER;
                 }
@@ -263,7 +261,7 @@ public abstract class CallableUnitInfo<T extends ClassInfo<?, ?, ?, ?>> extends 
             } else if (actualParameter instanceof NullUsageInfo) {
 
                 // 仮引数が参照型でない場合は該当しない
-                if (!(dummyParameter.getType() instanceof ClassInfo<?, ?, ?, ?>)) {
+                if (!(dummyParameter.getType() instanceof ClassInfo)) {
                     return false;
                 }
 
@@ -469,7 +467,7 @@ public abstract class CallableUnitInfo<T extends ClassInfo<?, ?, ?, ?>> extends 
      * 
      * @param caller 追加する呼び出すメソッド
      */
-    public final void addCaller(final CallableUnitInfo<?> caller) {
+    public final void addCaller(final CallableUnitInfo caller) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == caller) {
@@ -484,7 +482,7 @@ public abstract class CallableUnitInfo<T extends ClassInfo<?, ?, ?, ?>> extends 
      * 
      * @return このメソッドを呼び出しているメソッドの SortedSet
      */
-    public final SortedSet<CallableUnitInfo<?>> getCallers() {
+    public final SortedSet<CallableUnitInfo> getCallers() {
         return Collections.unmodifiableSortedSet(this.callers);
     }
 
@@ -544,7 +542,7 @@ public abstract class CallableUnitInfo<T extends ClassInfo<?, ?, ?, ?>> extends 
     /**
      * このメソッドを呼び出しているメソッド一覧を保存するための変数
      */
-    private final SortedSet<CallableUnitInfo<?>> callers;
+    private final SortedSet<CallableUnitInfo> callers;
 
     /**
      * 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しなどを保存するための変数

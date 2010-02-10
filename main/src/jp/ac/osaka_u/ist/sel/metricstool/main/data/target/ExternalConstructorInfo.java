@@ -13,7 +13,7 @@ import java.util.SortedSet;
  * @author higo
  */
 @SuppressWarnings("serial")
-public final class ExternalConstructorInfo extends ConstructorInfo<ExternalClassInfo> {
+public final class ExternalConstructorInfo extends ConstructorInfo {
 
     /**
      * 外部クラスに定義されているコンストラクタオブジェクトを初期化する

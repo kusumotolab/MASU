@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,9 +30,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 @SuppressWarnings("serial")
-public class TargetClassInfo extends
-        ClassInfo<TargetFieldInfo, TargetMethodInfo, TargetConstructorInfo, TargetInnerClassInfo>
-        implements Visualizable, StaticOrInstance {
+public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOrInstance {
 
     /**
      * 指定されたクラスに含まれる全てのインナークラスを返す
@@ -41,18 +38,17 @@ public class TargetClassInfo extends
      * @param classInfo 指定するクラス
      * @return　指定されたクラスに含まれる全てのインナークラス
      */
-    static public Collection<TargetInnerClassInfo> getAllInnerClasses(
-            final TargetClassInfo classInfo) {
+    static public SortedSet<ClassInfo> getAllInnerClasses(final ClassInfo classInfo) {
 
         if (null == classInfo) {
             throw new IllegalArgumentException();
         }
 
-        final SortedSet<TargetInnerClassInfo> innerClassInfos = new TreeSet<TargetInnerClassInfo>();
-        for (final TargetInnerClassInfo innerClassInfo : classInfo.getInnerClasses()) {
+        final SortedSet<ClassInfo> innerClassInfos = new TreeSet<ClassInfo>();
+        for (final InnerClassInfo innerClassInfo : classInfo.getInnerClasses()) {
 
-            innerClassInfos.add(innerClassInfo);
-            innerClassInfos.addAll(getAllInnerClasses(innerClassInfo));
+            innerClassInfos.add((ClassInfo) innerClassInfo);
+            innerClassInfos.addAll(getAllInnerClasses((ClassInfo) innerClassInfo));
         }
 
         return Collections.unmodifiableSortedSet(innerClassInfos);
@@ -65,50 +61,46 @@ public class TargetClassInfo extends
      * @param classInfo 指定されたクラス
      * @return 指定したクラスにおいてアクセス可能なインナークラス一覧を返す．
      */
-    static public Collection<TargetInnerClassInfo> getAccessibleInnerClasses(
-            final TargetClassInfo classInfo) {
+    static public SortedSet<ClassInfo> getAccessibleInnerClasses(final ClassInfo classInfo) {
 
         if (null == classInfo) {
             throw new IllegalArgumentException();
         }
 
-        final Set<TargetClassInfo> classCache = new HashSet<TargetClassInfo>();
+        final SortedSet<ClassInfo> classCache = new TreeSet<ClassInfo>();
 
-        return Collections.unmodifiableCollection(getAccessibleInnerClasses(classInfo, classCache));
+        return Collections.unmodifiableSortedSet(getAccessibleInnerClasses(classInfo, classCache));
     }
 
-    static private Collection<TargetInnerClassInfo> getAccessibleInnerClasses(
-            final TargetClassInfo classInfo, final Set<TargetClassInfo> classCache) {
+    static private SortedSet<ClassInfo> getAccessibleInnerClasses(final ClassInfo classInfo,
+            final SortedSet<ClassInfo> classCache) {
 
         if ((null == classInfo) || (null == classCache)) {
             throw new IllegalArgumentException();
         }
 
         if (classCache.contains(classInfo)) {
-            return Collections.unmodifiableCollection(new TreeSet<TargetInnerClassInfo>());
+            return Collections.unmodifiableSortedSet(new TreeSet<ClassInfo>());
         }
 
         classCache.add(classInfo);
 
-        final SortedSet<TargetInnerClassInfo> innerClassInfos = new TreeSet<TargetInnerClassInfo>();
+        final SortedSet<ClassInfo> innerClassInfos = new TreeSet<ClassInfo>();
 
-        for (final TargetInnerClassInfo innerClassInfo : classInfo.getInnerClasses()) {
-            innerClassInfos.add(innerClassInfo);
-            innerClassInfos.addAll(getAccessibleInnerClasses(innerClassInfo, classCache));
+        for (final InnerClassInfo innerClassInfo : classInfo.getInnerClasses()) {
+            innerClassInfos.add((ClassInfo) innerClassInfo);
+            innerClassInfos
+                    .addAll(getAccessibleInnerClasses((ClassInfo) innerClassInfo, classCache));
         }
 
-        for (final ClassInfo<?, ?, ?, ?> superClassInfo : ClassTypeInfo.convert(classInfo
-                .getSuperClasses())) {
-            if (superClassInfo instanceof TargetClassInfo) {
-                if (superClassInfo instanceof TargetInnerClassInfo) {
-                    innerClassInfos.add((TargetInnerClassInfo) superClassInfo);
-                }
-                innerClassInfos.addAll(getAccessibleInnerClasses((TargetClassInfo) superClassInfo,
-                        classCache));
+        for (final ClassInfo superClassInfo : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
+            if (superClassInfo instanceof InnerClassInfo) {
+                innerClassInfos.add(superClassInfo);
             }
+            innerClassInfos.addAll(getAccessibleInnerClasses(superClassInfo, classCache));
         }
 
-        return Collections.unmodifiableCollection(innerClassInfos);
+        return Collections.unmodifiableSortedSet(innerClassInfos);
     }
 
     /**
@@ -149,7 +141,7 @@ public class TargetClassInfo extends
         this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new TreeSet<StaticInitializerInfo>();
         this.staticInitializers.add(this.implicitStaticInitializer);
-        this.accessibleClasses = new TreeSet<ClassInfo<?, ?, ?, ?>>();
+        this.accessibleClasses = new TreeSet<ClassInfo>();
 
         this.ownerFile = fileInfo;
     }
@@ -190,7 +182,7 @@ public class TargetClassInfo extends
         this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new TreeSet<StaticInitializerInfo>();
         this.staticInitializers.add(this.implicitStaticInitializer);
-        this.accessibleClasses = new TreeSet<ClassInfo<?, ?, ?, ?>>();
+        this.accessibleClasses = new TreeSet<ClassInfo>();
 
         this.ownerFile = fileInfo;
     }
@@ -228,7 +220,7 @@ public class TargetClassInfo extends
      * 
      * @param accessibleClass アクセス可能なクラス
      */
-    public final void addAccessibleClass(final ClassInfo<?, ?, ?, ?> accessibleClass) {
+    public final void addAccessibleClass(final ClassInfo accessibleClass) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == accessibleClass) {
@@ -243,7 +235,7 @@ public class TargetClassInfo extends
      * 
      * @param accessibleClasses アクセス可能なクラス群
      */
-    public final void addaccessibleClasses(final Set<ClassInfo<?, ?, ?, ?>> accessibleClasses) {
+    public final void addaccessibleClasses(final Set<ClassInfo> accessibleClasses) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == accessibleClasses) {
@@ -290,7 +282,7 @@ public class TargetClassInfo extends
      * 
      * @return このクラスにおいてアクセス可能なクラスのSortedSet
      */
-    public final Set<ClassInfo<?, ?, ?, ?>> getAccessibleClasses() {
+    public final Set<ClassInfo> getAccessibleClasses() {
         return Collections.unmodifiableSet(this.accessibleClasses);
     }
 
@@ -305,18 +297,18 @@ public class TargetClassInfo extends
         final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> variableUsages = new HashSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>();
 
         // メソッド内で使用されている変数を追加
-        for (final TargetMethodInfo definedMethod : this.getDefinedMethods()) {
+        for (final MethodInfo definedMethod : this.getDefinedMethods()) {
             variableUsages.addAll(definedMethod.getVariableUsages());
         }
 
         // コンストラクタ内で使用されている変数を追加
-        for (final TargetConstructorInfo definedConstructor : this.getDefinedConstructors()) {
+        for (final ConstructorInfo definedConstructor : this.getDefinedConstructors()) {
             variableUsages.addAll(definedConstructor.getVariableUsages());
         }
 
         // 内部クラスで使用されている変数を追加
-        for (final TargetInnerClassInfo innerClass : this.getInnerClasses()) {
-            variableUsages.addAll(innerClass.getVariableUsages());
+        for (final InnerClassInfo innerClass : this.getInnerClasses()) {
+            variableUsages.addAll(((ClassInfo) innerClass).getVariableUsages());
         }
 
         return Collections.unmodifiableSet(variableUsages);
@@ -336,18 +328,18 @@ public class TargetClassInfo extends
         definedVariables.addAll(this.getDefinedFields());
 
         // メソッド内で定義されている変数を追加
-        for (final TargetMethodInfo definedMethod : this.getDefinedMethods()) {
+        for (final MethodInfo definedMethod : this.getDefinedMethods()) {
             definedVariables.addAll(definedMethod.getDefinedVariables());
         }
 
         // コンストラクタ内で定義されている変数を追加
-        for (final TargetConstructorInfo definedConstructor : this.getDefinedConstructors()) {
+        for (final ConstructorInfo definedConstructor : this.getDefinedConstructors()) {
             definedVariables.addAll(definedConstructor.getDefinedVariables());
         }
 
         // 内部クラスで定義されている変数を追加
-        for (final TargetInnerClassInfo innerClass : this.getInnerClasses()) {
-            definedVariables.addAll(innerClass.getDefinedVariables());
+        for (final InnerClassInfo innerClass : this.getInnerClasses()) {
+            definedVariables.addAll(((ClassInfo) innerClass).getDefinedVariables());
         }
 
         return Collections.unmodifiableSet(definedVariables);
@@ -364,18 +356,18 @@ public class TargetClassInfo extends
         final Set<CallInfo<? extends CallableUnitInfo>> calls = new HashSet<CallInfo<? extends CallableUnitInfo>>();
 
         // メソッド内での呼び出しを追加
-        for (final TargetMethodInfo definedMethod : this.getDefinedMethods()) {
+        for (final MethodInfo definedMethod : this.getDefinedMethods()) {
             calls.addAll(definedMethod.getCalls());
         }
 
         // コンストラクタ内での呼び出しを追加
-        for (final TargetConstructorInfo definedConstructor : this.getDefinedConstructors()) {
+        for (final ConstructorInfo definedConstructor : this.getDefinedConstructors()) {
             calls.addAll(definedConstructor.getCalls());
         }
 
         // 内部クラスでの呼び出しを追加
-        for (final TargetInnerClassInfo innerClass : this.getInnerClasses()) {
-            calls.addAll(innerClass.getCalls());
+        for (final InnerClassInfo innerClass : this.getInnerClasses()) {
+            calls.addAll(((ClassInfo) innerClass).getCalls());
         }
 
         return Collections.unmodifiableSet(calls);
@@ -413,7 +405,7 @@ public class TargetClassInfo extends
     /**
      * このクラス内からアクセス可能なクラス
      */
-    private final Set<ClassInfo<?, ?, ?, ?>> accessibleClasses;
+    private final Set<ClassInfo> accessibleClasses;
 
     /**
      * このクラスを宣言しているファイル情報を保存するための変数

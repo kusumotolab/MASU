@@ -47,15 +47,15 @@ public abstract class SingleStatementInfo implements StatementInfo {
         }
 
         if (o instanceof ExecutableElementInfo) {
-            final ClassInfo<?,?,?,?> ownerClass1 = this.getOwnerMethod().getOwnerClass();
-            final ClassInfo<?,?,?,?> ownerClass2 = ((ExecutableElementInfo) o).getOwnerMethod()
+            final ClassInfo ownerClass1 = this.getOwnerMethod().getOwnerClass();
+            final ClassInfo ownerClass2 = ((ExecutableElementInfo) o).getOwnerMethod()
                     .getOwnerClass();
             int classOrder = ownerClass1.compareTo(ownerClass2);
-            if(0 != classOrder){
+            if (0 != classOrder) {
                 return classOrder;
             }
         }
-        
+
         if (this.getFromLine() < o.getFromLine()) {
             return -1;
         } else if (this.getFromLine() > o.getFromLine()) {

@@ -16,7 +16,7 @@ import java.util.TreeSet;
  * @author higo
  */
 @SuppressWarnings("serial")
-public final class ExternalMethodInfo extends MethodInfo<ExternalClassInfo> {
+public final class ExternalMethodInfo extends MethodInfo {
 
     /**
      * 外部クラスに定義されているメソッドオブジェクトを初期化する

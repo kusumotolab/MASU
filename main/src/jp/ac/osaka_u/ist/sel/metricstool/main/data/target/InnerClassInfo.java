@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-public interface InnerClassInfo<T extends ClassInfo<?, ?, ?, ?>> {
+public interface InnerClassInfo {
 
     /**
      * 外側のユニットを返す
@@ -17,5 +17,5 @@ public interface InnerClassInfo<T extends ClassInfo<?, ?, ?, ?>> {
      * 
      * @return　外側のクラス
      */
-    T getOuterClass();
+    ClassInfo getOuterClass();
 }
