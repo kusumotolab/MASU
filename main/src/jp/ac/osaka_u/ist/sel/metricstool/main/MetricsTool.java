@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main;
 
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,14 +20,6 @@ import java.util.StringTokenizer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.csharp.CSharpAntlrAstTranslator;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java13AntlrAstTranslator;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java14AntlrAstTranslator;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.Java15AntlrAstTranslator;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.JavaAstVisitorManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitorManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.antlr.AntlrAstVisitor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.ClassMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FieldMetricsInfoManager;
@@ -94,16 +85,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CSharpLexer;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CSharpParser;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CommonASTWithLineNumber;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java13Lexer;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java13Parser;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14Lexer;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14Parser;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Lexer;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
-import jp.ac.osaka_u.ist.sel.metricstool.main.parse.MasuAstFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeNameResolver;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeParser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
@@ -124,11 +105,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.objectweb.asm.ClassReader;
-
-import antlr.ASTFactory;
-import antlr.RecognitionException;
-import antlr.TokenStreamException;
-import antlr.collections.AST;
 
 
 /**
@@ -272,6 +248,15 @@ public class MetricsTool {
             options.addOption(b);
         }
 
+        {
+            final Option t = new Option("t", "threads", true,
+                    "specify thread number used for multi-thread processings");
+            t.setArgName("number");
+            t.setArgs(1);
+            t.setRequired(false);
+            options.addOption(t);
+        }
+
         final MetricsTool metricsTool = new MetricsTool();
 
         try {
@@ -349,6 +334,9 @@ public class MetricsTool {
                     final String library = tokenizer.nextToken();
                     Settings.getInstance().addLibrary(library);
                 }
+            }
+            if (cmd.hasOption("t")) {
+                Settings.getInstance().setThreadNumber(Integer.parseInt(cmd.getOptionValue("t")));
             }
 
             metricsTool.loadPlugins(Settings.getInstance().getMetrics());
@@ -763,165 +751,38 @@ public class MetricsTool {
      * 
      */
     public void analyzeTargetFiles() {
-        // 対象ファイルを解析
-
-        AstVisitorManager<AST> visitorManager = null;
-
-        switch (Settings.getInstance().getLanguage()) {
-        case JAVA15:
-            visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
-                    new Java15AntlrAstTranslator()), Settings.getInstance());
-            break;
-        case JAVA14:
-            visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
-                    new Java14AntlrAstTranslator()), Settings.getInstance());
-            break;
-        case JAVA13:
-            visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
-                    new Java13AntlrAstTranslator()), Settings.getInstance());
-            break;
-        case CSHARP:
-            visitorManager = new JavaAstVisitorManager<AST>(new AntlrAstVisitor(
-                    new CSharpAntlrAstTranslator()), Settings.getInstance());
-            break;
-        default:
-            assert false : "here shouldn't be reached!";
-        }
 
         // 対象ファイルのASTから未解決クラス，フィールド，メソッド情報を取得
         {
             out.println("parsing all target files.");
             final int totalFileNumber = DataManager.getInstance().getTargetFileManager().size();
             int currentFileNumber = 1;
-            final StringBuffer fileInformationBuffer = new StringBuffer();
+            final List<Thread> threads = new LinkedList<Thread>();
 
             for (final TargetFile targetFile : DataManager.getInstance().getTargetFileManager()) {
 
-                BufferedInputStream stream = null;
+                final Thread thread = new Thread(new TargetFileParser(targetFile,
+                        currentFileNumber++, totalFileNumber, out, err));
+
+                MetricsToolSecurityManager.getInstance().addPrivilegeThread(thread);
+                threads.add(thread);
+                thread.start();
+
+                while (Settings.getInstance().getThreadNumber() < Thread.activeCount()) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            // 全てのスレッドが終わるのを待つ
+            for (final Thread thread : threads) {
                 try {
-                    final String name = targetFile.getName();
-
-                    final FileInfo fileInfo = new FileInfo(name);
-                    DataManager.getInstance().getFileInfoManager().add(fileInfo);
-
-                    if (Settings.getInstance().isVerbose()) {
-                        fileInformationBuffer.delete(0, fileInformationBuffer.length());
-                        fileInformationBuffer.append("parsing ");
-                        fileInformationBuffer.append(name);
-                        fileInformationBuffer.append(" [");
-                        fileInformationBuffer.append(currentFileNumber++);
-                        fileInformationBuffer.append("/");
-                        fileInformationBuffer.append(totalFileNumber);
-                        fileInformationBuffer.append("]");
-                        out.println(fileInformationBuffer.toString());
-                    }
-
-                    stream = new BufferedInputStream(new FileInputStream(name));
-
-                    switch (Settings.getInstance().getLanguage()) {
-                    case JAVA15:
-                        final Java15Lexer java15lexer = new Java15Lexer(stream);
-                        java15lexer.setTabSize(1);
-                        final Java15Parser java15parser = new Java15Parser(java15lexer);
-
-                        final ASTFactory java15factory = new MasuAstFactory();
-                        java15factory.setASTNodeClass(CommonASTWithLineNumber.class);
-
-                        java15parser.setASTFactory(java15factory);
-
-                        java15parser.compilationUnit();
-                        targetFile.setCorrectSytax(true);
-
-                        if (visitorManager != null) {
-                            visitorManager.visitStart(java15parser.getAST());
-                        }
-
-                        fileInfo.addAllComments(java15lexer.getCommentSet());
-                        fileInfo.setLOC(java15lexer.getLine());
-
-                        break;
-
-                    case JAVA14:
-                        final Java14Lexer java14lexer = new Java14Lexer(stream);
-                        java14lexer.setTabSize(1);
-                        final Java14Parser java14parser = new Java14Parser(java14lexer);
-
-                        final ASTFactory java14factory = new MasuAstFactory();
-                        java14factory.setASTNodeClass(CommonASTWithLineNumber.class);
-
-                        java14parser.setASTFactory(java14factory);
-
-                        java14parser.compilationUnit();
-                        targetFile.setCorrectSytax(true);
-
-                        if (visitorManager != null) {
-                            visitorManager.visitStart(java14parser.getAST());
-                        }
-
-                        fileInfo.setLOC(java14lexer.getLine());
-                        break;
-                    case JAVA13:
-                        final jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java13Lexer java13lexer = new Java13Lexer(
-                                stream);
-                        java13lexer.setTabSize(1);
-                        final Java13Parser java13parser = new Java13Parser(java13lexer);
-
-                        final ASTFactory java13factory = new MasuAstFactory();
-                        java13factory.setASTNodeClass(CommonASTWithLineNumber.class);
-
-                        java13parser.setASTFactory(java13factory);
-
-                        java13parser.compilationUnit();
-                        targetFile.setCorrectSytax(true);
-
-                        if (visitorManager != null) {
-                            visitorManager.visitStart(java13parser.getAST());
-                        }
-                        fileInfo.setLOC(java13lexer.getLine());
-                        break;
-                    case CSHARP:
-                        final CSharpLexer csharpLexer = new CSharpLexer(stream);
-                        csharpLexer.setTabSize(1);
-                        final CSharpParser csharpParser = new CSharpParser(csharpLexer);
-
-                        final ASTFactory cshaprFactory = new MasuAstFactory();
-                        cshaprFactory.setASTNodeClass(CommonASTWithLineNumber.class);
-
-                        csharpParser.setASTFactory(cshaprFactory);
-
-                        csharpParser.compilationUnit();
-                        targetFile.setCorrectSytax(true);
-
-                        if (visitorManager != null) {
-                            visitorManager.visitStart(csharpParser.getAST());
-                        }
-
-                        fileInfo.setLOC(csharpLexer.getLine());
-                        break;
-                    default:
-                        assert false : "here shouldn't be reached!";
-                    }
-
-                } catch (FileNotFoundException e) {
-                    err.println(e.getMessage());
-                } catch (RecognitionException e) {
-                    targetFile.setCorrectSytax(false);
-                    err.println(e.getMessage());
-                    // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
-                } catch (TokenStreamException e) {
-                    targetFile.setCorrectSytax(false);
-                    err.println(e.getMessage());
-                    // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
-                } catch (ASTParseException e) {
-                    err.println(e.getMessage());
-                } finally {
-                    if (null != stream) {
-                        try {
-                            stream.close();
-                        } catch (IOException e) {
-                            err.print(e.getMessage());
-                        }
-                    }
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }

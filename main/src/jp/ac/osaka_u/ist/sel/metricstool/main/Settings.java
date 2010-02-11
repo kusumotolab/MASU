@@ -43,6 +43,7 @@ public class Settings {
         this.fieldMetricsFile = null;
         this.statement = true;
         this.libraries = new LinkedList<String>();
+        this.threadNumber = 1;
     }
 
     /**
@@ -276,6 +277,25 @@ public class Settings {
     }
 
     /**
+     * マルチスレッドの数を設定する．
+     * 
+     * @param threadNumber
+     */
+    public void setThreadNumber(final int threadNumber) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.threadNumber = threadNumber;
+    }
+
+    /**
+     * マルチスレッド数を返す
+     * 
+     * @return マルチスレッド数
+     */
+    public int getThreadNumber() {
+        return this.threadNumber;
+    }
+
+    /**
      * 冗長出力モードかどうかを記録するための変数
      */
     private boolean verbose;
@@ -329,4 +349,9 @@ public class Settings {
      * 外部クラスのパスを保存するための変数
      */
     private List<String> libraries;
+
+    /**
+     * マルチスレッド数
+     */
+    private int threadNumber;
 }

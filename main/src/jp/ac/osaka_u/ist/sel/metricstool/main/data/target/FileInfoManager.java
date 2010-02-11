@@ -20,7 +20,7 @@ public final class FileInfoManager {
      * 
      * @param fileInfo ’Ç‰Á‚·‚éƒNƒ‰ƒXî•ñ
      */
-    public void add(final FileInfo fileInfo) {
+    public synchronized void add(final FileInfo fileInfo) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == fileInfo) {

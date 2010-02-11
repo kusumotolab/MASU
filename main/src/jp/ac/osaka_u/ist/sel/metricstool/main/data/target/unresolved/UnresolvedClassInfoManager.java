@@ -3,8 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -79,6 +79,7 @@ public class UnresolvedClassInfoManager {
         /**
          * キーの順序を定義する
          */
+        @Override
         public int compareTo(final ClassKey classKey) {
 
             if (null == classKey) {
@@ -162,11 +163,11 @@ public class UnresolvedClassInfoManager {
      * 
      */
     public UnresolvedClassInfoManager() {
-        this.classInfos = new HashMap<ClassKey, UnresolvedClassInfo>();
+        this.classInfos = new ConcurrentHashMap<ClassKey, UnresolvedClassInfo>();
     }
 
     /**
      * UnresolvedClassInfo を保存するためのセット
      */
-    private final Map<ClassKey, UnresolvedClassInfo> classInfos;
+    private final ConcurrentMap<ClassKey, UnresolvedClassInfo> classInfos;
 }

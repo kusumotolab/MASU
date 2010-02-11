@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.plugin;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.accessor.ClassInfoAccessor;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricAlreadyRegisteredException;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LanguageUtil;
@@ -45,7 +44,7 @@ public abstract class AbstractClassMetricPlugin extends AbstractPlugin {
 
             // 全クラスについて
             for (final TargetClassInfo targetClass : classAccessor) {
-                
+
                 // クラスのメトリクスを登録する
                 registClassMetric(targetClass);
 
