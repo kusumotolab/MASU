@@ -7,9 +7,9 @@ import java.io.StringWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractClassMetricPlugin;
 
 
@@ -35,26 +35,26 @@ public class WmcPlugin extends AbstractClassMetricPlugin {
         int wmc = 0;
 
         // localMethods で呼ばれているメソッド
-        for (final TargetMethodInfo m : targetClass.getDefinedMethods()) {
+        for (final MethodInfo m : targetClass.getDefinedMethods()) {
             wmc += this.measureMethodWeight(m).intValue();
         }
 
         return new Integer(wmc);
     }
-    
+
     /**
      * 引数で与えられたメソッドの重みを返す
      * 
      * @param method 重みを計測したいメソッド
      * @return メソッドの重み
      */
-    protected Number measureMethodWeight(final TargetMethodInfo method) {
-        
+    protected Number measureMethodWeight(final MethodInfo method) {
+
         // メソッドの重みにはサイクロマチック数を用いる
         int weight = this.measureCyclomatic(method);
         return weight;
     }
-    
+
     /**
      * 引数で与えられた空間のサイクロマチック数を返す
      * 
@@ -63,17 +63,16 @@ public class WmcPlugin extends AbstractClassMetricPlugin {
      */
     private int measureCyclomatic(final LocalSpaceInfo block) {
         int cyclomatic = 1;
-        for(final StatementInfo statement: block.getStatements()) {
-            if(statement instanceof BlockInfo) {
+        for (final StatementInfo statement : block.getStatements()) {
+            if (statement instanceof BlockInfo) {
                 cyclomatic += this.measureCyclomatic((BlockInfo) statement);
-                if(!(statement instanceof ConditionalBlockInfo)) {
+                if (!(statement instanceof ConditionalBlockInfo)) {
                     cyclomatic--;
                 }
             }
         }
         return cyclomatic;
     }
-    
 
     /**
      * このプラグインの簡易説明を1行で返す
