@@ -7,11 +7,11 @@ import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
@@ -41,13 +41,13 @@ public class CBOPlugin extends AbstractClassMetricPlugin {
         SortedSet<ClassInfo> classes = new TreeSet<ClassInfo>();
 
         // フィールドで使用されているクラス型を取得
-        for (final TargetFieldInfo field : targetClass.getDefinedFields()) {
+        for (final FieldInfo field : targetClass.getDefinedFields()) {
             final TypeInfo type = field.getType();
             classes.addAll(this.getCohesiveClasses(type));
         }
 
         // メソッドで使用されているクラス型を取得
-        for (final TargetMethodInfo method : targetClass.getDefinedMethods()) {
+        for (final MethodInfo method : targetClass.getDefinedMethods()) {
 
             // 返り値についての処理
             {
