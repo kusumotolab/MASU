@@ -8,8 +8,8 @@ import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractClassMetricPlugin;
 
 
@@ -35,12 +35,12 @@ public class RfcPlugin extends AbstractClassMetricPlugin {
         final Set<CallableUnitInfo> rfcMethods = new HashSet<CallableUnitInfo>();
 
         // 現在のクラスで定義されているメソッド
-        final Set<TargetMethodInfo> localMethods = targetClass.getDefinedMethods();
+        final Set<MethodInfo> localMethods = targetClass.getDefinedMethods();
         rfcMethods.addAll(localMethods);
 
         // localMethods で呼ばれているメソッド
-        for (final TargetMethodInfo m : localMethods) {
-        	
+        for (final MethodInfo m : localMethods) {
+
             rfcMethods.addAll(MethodCallInfo.getCallees(m.getCalls()));
         }
 
