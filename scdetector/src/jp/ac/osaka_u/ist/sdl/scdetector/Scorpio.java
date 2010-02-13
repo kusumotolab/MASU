@@ -841,7 +841,6 @@ public class Scorpio extends MetricsTool {
 		out.println("successifully finished.");
 
 		final long time = System.nanoTime() - start;
-		System.out.println(time / (float) 1000000000);
-
+		out.println("elapsed time: " + time / (float) 1000000000);
 	}
 }
