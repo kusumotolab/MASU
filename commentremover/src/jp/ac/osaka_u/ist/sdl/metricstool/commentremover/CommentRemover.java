@@ -258,6 +258,7 @@ public class CommentRemover {
 
 		boolean isLineComment = false;
 		boolean isString = false;
+		boolean isChar = false;
 
 		for (int i = 0; i < src.length(); i++) {
 			final char prev = 0 < i ? src.charAt(i - 1) : '0';
@@ -288,6 +289,21 @@ public class CommentRemover {
 				}
 			}
 
+			// charのリテラルの中にいるとき
+			else if (isChar) {
+				buf.append(ch);
+
+				// エスケープシーケンスだったら次の文字も追加
+				if (ch == '\\') {
+					buf.append(src.charAt(i++));
+				}
+
+				// リテラルを抜ける
+				else if (ch == '\'') {
+					isChar = false;
+				}
+			}
+
 			// ラインコメント開始
 			else if (ch == '/' && next == '/') {
 				isLineComment = true;
@@ -296,6 +312,12 @@ public class CommentRemover {
 			// Stringのリテラル開始
 			else if (ch == '\"') {
 				isString = true;
+				buf.append(ch);
+			}
+
+			// charの開始
+			else if (ch == '\'') {
+				isChar = true;
 				buf.append(ch);
 			}
 
@@ -317,6 +339,7 @@ public class CommentRemover {
 
 		boolean isBlockComment = false;
 		boolean isString = false;
+		boolean isChar = false;
 		for (int i = 0; i < src.length(); i++) {
 			char ch = src.charAt(i);
 
@@ -342,10 +365,37 @@ public class CommentRemover {
 				}
 			}
 
+			// charのリテラルの中にいるとき
+			else if (isChar) {
+				buf.append(ch);
+
+				// エスケープシーケンスだったら次の文字も追加
+				if (ch == '\\') {
+					buf.append(src.charAt(i++));
+				}
+
+				// リテラルを抜ける
+				else if (ch == '\'') {
+					isChar = false;
+				}
+			}
+			
 			// ブロックコメントに入る
 			else if (ch == '/' && src.charAt(i + 1) == '*') {
 				isBlockComment = true;
 				i++;
+			}
+
+			// Stringのリテラル開始
+			else if (ch == '\"') {
+				isString = true;
+				buf.append(ch);
+			}
+
+			// charの開始
+			else if (ch == '\'') {
+				isChar = true;
+				buf.append(ch);
 			}
 
 			// そのまま処理
