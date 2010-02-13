@@ -75,8 +75,20 @@ public class Scorpio extends MetricsTool {
 
 		try {
 
-			// 　コマンドライン引数を処理
+			// コマンドライン引数を処理
 			final Options options = new Options();
+
+			{
+				final Option b = new Option(
+						"b",
+						"libraries",
+						true,
+						"specify libraries (.jar file or .class file or directory that contains .jar and .class files)");
+				b.setArgName("libraries");
+				b.setArgs(1);
+				b.setRequired(false);
+				options.addOption(b);
+			}
 
 			{
 				final Option c = new Option("c", "count", true,
@@ -271,6 +283,14 @@ public class Scorpio extends MetricsTool {
 			final CommandLineParser parser = new PosixParser();
 			final CommandLine cmd = parser.parse(options, args);
 
+			if (cmd.hasOption("b")) {
+				final StringTokenizer tokenizer = new StringTokenizer(cmd
+						.getOptionValue("b"), ",");
+				while (tokenizer.hasMoreElements()) {
+					final String library = tokenizer.nextToken();
+					Settings.getInstance().addLibrary(library);
+				}
+			}
 			if (cmd.hasOption("c")) {
 				Configuration.INSTANCE.setC(Integer.valueOf(cmd
 						.getOptionValue("c")));
@@ -549,6 +569,7 @@ public class Scorpio extends MetricsTool {
 
 		// 対象ディレクトリ以下のJavaファイルを登録し，解析
 		final Scorpio scorpio = new Scorpio();
+		scorpio.analyzeLibraries();
 		scorpio.readTargetFiles();
 		scorpio.analyzeTargetFiles();
 
