@@ -99,6 +99,14 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
         return super.compareTo(o);
     }
 
+    /**
+     * 呼び出しユニットのハッシュコードを返す
+     */
+    @Override
+    final public int hashCode() {
+        return this.getFromLine() + this.getFromColumn() + this.getToLine() + this.getToColumn();
+    }
+
     public int compareArgumentsTo(final CallableUnitInfo target) {
         // 引数の個数で比較
         final int parameterNumber = this.getParameterNumber();

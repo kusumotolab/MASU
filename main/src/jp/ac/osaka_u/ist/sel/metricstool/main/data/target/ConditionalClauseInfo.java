@@ -73,6 +73,14 @@ public final class ConditionalClauseInfo extends UnitInfo {
     }
 
     /**
+     * この条件節のハッシュコードを返す
+     */
+    @Override
+    public final int hashCode() {
+        return this.getCondition().hashCode();
+    }
+
+    /**
      * 条件節内における変数使用のSetを返す
      * 
      * @return 条件節内における変数使用のSet 

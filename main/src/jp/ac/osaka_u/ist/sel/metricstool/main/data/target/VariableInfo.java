@@ -59,6 +59,14 @@ public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo impl
     }
 
     /**
+     * 変数のハッシュコードを返す
+     */
+    @Override
+    public final int hashCode() {
+        return this.getName().hashCode();
+    }
+
+    /**
      * 変数利用の一覧を返す．
      * どの変数も用いられていないので，空のsetが返される
      * 

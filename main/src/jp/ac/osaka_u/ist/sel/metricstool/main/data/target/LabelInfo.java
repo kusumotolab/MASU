@@ -117,6 +117,14 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
+     * このラベルのハッシュコードを返す
+     */
+    @Override
+    public final int hashCode() {
+        return this.getName().hashCode();
+    }
+
+    /**
      * ラベルの名前を表す変数
      */
     private final String name;

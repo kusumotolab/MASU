@@ -51,5 +51,11 @@ public abstract class ImportStatementInfo<T> extends UnitInfo {
                 .unmodifiableSet(new HashSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>());
     }
 
+    @Override
+    final public int hashCode() {
+        return this.getImportedUnits().hashCode() + this.getFromLine() + this.getFromColumn()
+                + this.getToLine() + this.getToColumn();
+    }
+
     private final Set<T> importedUnits;
 }

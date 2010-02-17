@@ -32,9 +32,14 @@ public abstract class CommentInfo extends UnitInfo {
         return Collections
                 .unmodifiableSet(new HashSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>());
     }
-    
+
     @Override
-    public String toString(){
+    public final int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public String toString() {
         return content;
     }
 }

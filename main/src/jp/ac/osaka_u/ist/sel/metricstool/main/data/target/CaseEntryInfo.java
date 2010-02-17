@@ -148,6 +148,14 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
     }
 
     /**
+     * caseエントリのハッシュコードを返す
+     */
+    @Override
+    public final int hashCode() {
+        return this.getOwnerSwitchBlock().hashCode() + this.getLabel().hashCode();
+    }
+
+    /**
      * この式で投げられる可能性がある例外のSetを返す
      * 
      * @return　この式で投げられる可能性がある例外のSet

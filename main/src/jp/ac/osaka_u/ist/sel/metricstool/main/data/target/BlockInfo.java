@@ -57,6 +57,15 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
     }
 
     /**
+     * このブロック文のハッシュコードを返す
+     */
+    @Override
+    public final int hashCode() {
+        return this.getOwnerClass().hashCode() + this.getFromLine() + this.getFromColumn()
+                + this.getToLine() + this.getToColumn();
+    }
+
+    /**
      * このブロックを所有するを返す
      * 
      * @return このブロックを所有するメソッド
