@@ -106,10 +106,7 @@ public abstract class UnitInfo implements Position, Serializable {
     /**
      * 子クラスによるオーバーライドを避けるための処置
      */
-    @Override
-    public final int hashCode() {
-        return super.hashCode();
-    }
+    //public abstract int hashCode();
 
     @Override
     public int compareTo(Position o) {
