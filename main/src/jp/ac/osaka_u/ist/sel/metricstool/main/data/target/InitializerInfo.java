@@ -12,7 +12,7 @@ import java.util.Collections;
  *
  */
 @SuppressWarnings("serial")
-public class InitializerInfo extends CallableUnitInfo {
+public abstract class InitializerInfo extends CallableUnitInfo {
 
     public InitializerInfo(final TargetClassInfo ownerClass, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
