@@ -13,7 +13,7 @@ public final class Configuration {
 		this.d = new HashSet<String>();
 		this.l = null;
 		this.m = SMALL_METHOD.UNHASHED;
-
+		this.e = MERGE.TRUE;
 		this.o = null;
 		this.p = PDG_TYPE.INTRA;
 		this.q = new HashSet<DEPENDENCY_TYPE>();
@@ -52,6 +52,14 @@ public final class Configuration {
 
 	public void addD(final String d) {
 		this.d.add(d);
+	}
+
+	public MERGE getE() {
+		return this.e;
+	}
+
+	public void setE(final MERGE e) {
+		this.e = e;
 	}
 
 	public String getL() {
@@ -223,6 +231,11 @@ public final class Configuration {
 	 * 解析対象ディレクトリを指定するためのオプション
 	 */
 	private Set<String> d;
+
+	/**
+	 * ハッシュ値が同じで連続して存在している頂点を集約するかを指定するためのオプション
+	 */
+	private MERGE e;
 
 	/**
 	 * 解析対象プログラミング言語を指定するためのオプション

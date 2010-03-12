@@ -26,6 +26,7 @@ import jp.ac.osaka_u.ist.sdl.scdetector.settings.CONTROL_FILTER;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.DEPENDENCY_TYPE;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.LITERAL_NORMALIZATION;
+import jp.ac.osaka_u.ist.sdl.scdetector.settings.MERGE;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.OPERATION_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.PDG_TYPE;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.REFERENCE_NORMALIZATION;
@@ -118,6 +119,14 @@ public class Scorpio extends MetricsTool {
 				l.setArgs(1);
 				l.setRequired(true);
 				options.addOption(l);
+			}
+
+			{
+				final Option e = new Option("e", "merge", true, "merge");
+				e.setArgName("merge");
+				e.setArgs(1);
+				e.setRequired(false);
+				options.addOption(e);
 			}
 
 			{
@@ -301,6 +310,18 @@ public class Scorpio extends MetricsTool {
 				while (tokenizer.hasMoreElements()) {
 					final String directory = tokenizer.nextToken();
 					Configuration.INSTANCE.addD(directory);
+				}
+			}
+			if (cmd.hasOption("e")) {
+				final String merge = cmd.getOptionValue("e");
+				if (merge.equalsIgnoreCase("yes")) {
+					Configuration.INSTANCE.setE(MERGE.TRUE);
+				} else if (merge.equalsIgnoreCase("no")) {
+					Configuration.INSTANCE.setE(MERGE.FALSE);
+				} else {
+					err.println("Unknown option : " + merge);
+					err.println("\"-m\" option must have \"yes\" or \"no\"");
+					System.exit(0);
 				}
 			}
 			Configuration.INSTANCE.setL(cmd.getOptionValue("l"));
@@ -677,6 +698,11 @@ public class Scorpio extends MetricsTool {
 			assert false : "Here shouldn't be reached!";
 		}
 
+		// 頂点集約が指定されている場合は，PDGを変換する
+		if(Configuration.INSTANCE.getE().equals(MERGE.TRUE)){
+			
+		}
+		
 		// PDGノードのハッシュデータを構築する
 		out.println("constructing PDG nodes hashtable ...");
 		final SortedMap<Integer, List<PDGNode<?>>> pdgNodeMap = new TreeMap<Integer, List<PDGNode<?>>>();
