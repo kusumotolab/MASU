@@ -2,8 +2,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.pdg.edge;
 
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
@@ -22,14 +23,15 @@ public class PDGControlDependenceEdge extends PDGEdge {
      * @param edges
      * @return
      */
-    public static Set<PDGControlDependenceEdge> getControlDependenceEdge(final Set<PDGEdge> edges) {
-        final Set<PDGControlDependenceEdge> controlDependenceEdges = new HashSet<PDGControlDependenceEdge>();
+    public static SortedSet<PDGControlDependenceEdge> getControlDependenceEdge(
+            final Set<PDGEdge> edges) {
+        final SortedSet<PDGControlDependenceEdge> controlDependenceEdges = new TreeSet<PDGControlDependenceEdge>();
         for (final PDGEdge edge : edges) {
             if (edge instanceof PDGControlDependenceEdge) {
                 controlDependenceEdges.add((PDGControlDependenceEdge) edge);
             }
         }
-        return Collections.unmodifiableSet(controlDependenceEdges);
+        return Collections.unmodifiableSortedSet(controlDependenceEdges);
     }
 
     public PDGControlDependenceEdge(final PDGControlNode fromNode, final PDGNode<?> toNode,
@@ -52,7 +54,7 @@ public class PDGControlDependenceEdge extends PDGEdge {
     public String getDependenceString() {
         return this.trueDependence ? "true" : "false";
     }
-    
+
     @Override
     public String getDependenceTypeString() {
         return "Control Dependency";

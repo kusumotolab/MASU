@@ -129,7 +129,7 @@ public abstract class PDGNode<T extends ExecutableElementInfo> implements
 	 * @param forwardEdge
 	 *            このノードのフォワードエッジ
 	 */
-	protected final boolean addForwardEdge(final PDGEdge forwardEdge) {
+	public final boolean addForwardEdge(final PDGEdge forwardEdge) {
 		if (null == forwardEdge) {
 			throw new IllegalArgumentException("forwardNode is null.");
 		}
@@ -146,7 +146,7 @@ public abstract class PDGNode<T extends ExecutableElementInfo> implements
 	 * 
 	 * @param backwardEdge
 	 */
-	protected final boolean addBackwardEdge(final PDGEdge backwardEdge) {
+	public final boolean addBackwardEdge(final PDGEdge backwardEdge) {
 		if (null == backwardEdge) {
 			throw new IllegalArgumentException("backwardEdge is null.");
 		}

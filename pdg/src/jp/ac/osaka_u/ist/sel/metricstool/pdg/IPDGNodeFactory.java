@@ -18,4 +18,8 @@ public interface IPDGNodeFactory {
     PDGNode<?> getNode(Object element);
 
     SortedSet<PDGNode<?>> getAllNodes();
+
+    void removeNode(Object element);
+
+    void addNode(PDGNode<?> node);
 }

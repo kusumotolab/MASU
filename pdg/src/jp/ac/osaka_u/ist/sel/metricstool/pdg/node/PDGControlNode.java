@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg.node;
 
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -18,6 +20,22 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGControlDependenceEdge;
  *
  */
 public class PDGControlNode extends PDGNode<ConditionInfo> {
+
+    /**
+     * ノードの集合から，制御ノードのみを抽出し，そのSortedSetを返す
+     * 
+     * @param nodes
+     * @return
+     */
+    public static SortedSet<PDGControlNode> getControlNodes(final Set<? extends PDGNode<?>> nodes) {
+        final SortedSet<PDGControlNode> controlNodes = new TreeSet<PDGControlNode>();
+        for (final PDGNode<?> node : nodes) {
+            if (node instanceof PDGControlNode) {
+                controlNodes.add((PDGControlNode) node);
+            }
+        }
+        return Collections.unmodifiableSortedSet(controlNodes);
+    }
 
     public PDGControlNode(final ConditionInfo condition) {
 

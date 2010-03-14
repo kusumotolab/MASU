@@ -2,8 +2,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.pdg.edge;
 
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
@@ -23,14 +24,14 @@ public class PDGDataDependenceEdge extends PDGEdge {
      * @param edges
      * @return
      */
-    public static Set<PDGDataDependenceEdge> getDataDependenceEdge(final Set<PDGEdge> edges) {
-        final Set<PDGDataDependenceEdge> dataDependenceEdges = new HashSet<PDGDataDependenceEdge>();
+    public static SortedSet<PDGDataDependenceEdge> getDataDependenceEdge(final Set<PDGEdge> edges) {
+        final SortedSet<PDGDataDependenceEdge> dataDependenceEdges = new TreeSet<PDGDataDependenceEdge>();
         for (final PDGEdge edge : edges) {
             if (edge instanceof PDGDataDependenceEdge) {
                 dataDependenceEdges.add((PDGDataDependenceEdge) edge);
             }
         }
-        return Collections.unmodifiableSet(dataDependenceEdges);
+        return Collections.unmodifiableSortedSet(dataDependenceEdges);
     }
 
     public PDGDataDependenceEdge(final PDGNode<?> fromNode, final PDGNode<?> toNode,

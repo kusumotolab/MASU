@@ -104,6 +104,17 @@ public class DefaultPDGNodeFactory implements IPDGNodeFactory {
         return nodes;
     }
 
+    @Override
+    public void addNode(PDGNode<?> node) {
+        Object element = node.getCore();
+        this.elementToNodeMap.put(element, node);
+    }
+
+    @Override
+    public void removeNode(Object element) {
+        this.elementToNodeMap.remove(element);
+    }
+
     public int getNodeCount() {
         return this.elementToNodeMap.size();
     }
