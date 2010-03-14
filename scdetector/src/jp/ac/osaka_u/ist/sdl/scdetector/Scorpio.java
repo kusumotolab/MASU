@@ -650,8 +650,9 @@ public class Scorpio extends MetricsTool {
 
         // 頂点集約が指定されている場合は，PDGを変換する
         if (Configuration.INSTANCE.getE().equals(MERGE.TRUE)) {
+            out.println("optimizing PDGs ... ");
             for (final PDG pdg : PDGController.getInstance(Scorpio.ID).getPDGs()) {
-                final PDGNode<?> enterNode = pdg.getEnterNodes().first();
+                PDGMergedNode.merge(pdg, pdgNodeFactory);
             }
         }
 
@@ -664,9 +665,18 @@ public class Scorpio extends MetricsTool {
             // 小さいメソッドは登録しない
             switch (Configuration.INSTANCE.getM()) {
             case UNHASHED:
-                final PDG pdg = PDGController.getInstance(Scorpio.ID).getPDG(pdgNode);
-                if (pdg.getNumberOfNodes() < Configuration.INSTANCE.getS()) {
-                    continue ALLNODE;
+
+                // 集約ノードのときは特別処理
+                if (pdgNode instanceof PDGMergedNode) {
+
+                }
+
+                // 集約ノード以外の時は普通に処理
+                else {
+                    final PDG pdg = PDGController.getInstance(Scorpio.ID).getPDG(pdgNode);
+                    if (pdg.getNumberOfNodes() < Configuration.INSTANCE.getS()) {
+                        continue ALLNODE;
+                    }
                 }
                 break;
             default:
@@ -803,10 +813,9 @@ public class Scorpio extends MetricsTool {
          */
         writer.write();
         writer.close();
-        /*
-         * out.println(DetectionThread.numberOfPairs + " : " +
-         * DetectionThread.numberOfComparion);
-         */
+
+        //out.println(DetectionThread.numberOfPairs + " : " + DetectionThread.numberOfComparion);
+
         out.println("successifully finished.");
 
         final long time = System.nanoTime() - start;

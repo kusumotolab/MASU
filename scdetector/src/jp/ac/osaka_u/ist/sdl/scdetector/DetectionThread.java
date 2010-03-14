@@ -106,7 +106,7 @@ class DetectionThread implements Runnable {
         numberOfComparion++;
     }
 
-    static int numberOfPairs;
+    static int numberOfPairs = 0;
 
-    static long numberOfComparion;
+    static long numberOfComparion = 0;
 }
