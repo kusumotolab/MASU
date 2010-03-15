@@ -152,7 +152,8 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
      */
     @Override
     public final int hashCode() {
-        return this.getOwnerSwitchBlock().hashCode() + this.getLabel().hashCode();
+        return this.getOwnerSwitchBlock().hashCode()
+                + ((null != this.getLabel()) ? this.getLabel().hashCode() : 0);
     }
 
     /**
