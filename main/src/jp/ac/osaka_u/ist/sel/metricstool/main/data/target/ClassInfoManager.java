@@ -41,9 +41,12 @@ public final class ClassInfoManager {
         if (this.targetClassInfos.contains(classInfo)) {
             err.println(classInfo.getFullQualifiedName(".") + " is already registered!");
             return false;
-        } else if (this.externalClassInfos.contains(classInfo)) {
-            // 外部クラスと重複している場合はエラー出力しない
-            return false;
+        } 
+        
+        // 外部クラスと重複している場合は，外部クラスの方を取り除く
+        // 例えば，java.lang.*を解析対象として含めた場合は，java.lang.*のExternalClassInfoはいらない
+        else if (this.externalClassInfos.contains(classInfo)) {
+            this.externalClassInfos.remove(classInfo);
         }
 
         // クラス一覧のセットに登録
