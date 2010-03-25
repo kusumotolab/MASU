@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
@@ -13,7 +14,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
 public class CFGUtility {
-
 
 	/**
 	 * このメソッド呼び出しが，オブジェクトの状態を変更しているかを返す． 現在のところ，変更しているのは下記のいずれかの条件を満たすとき 1.
@@ -35,7 +35,8 @@ public class CFGUtility {
 		// メソッド呼び出しについて，オブジェクトの内容が変化しているかを調べる
 		final Set<MethodInfo> checkedMethods = new HashSet<MethodInfo>();
 		checkedMethods.add(method);
-		for (final CallInfo<?> call : method.getCalls()) {
+		for (final CallInfo<? extends CallableUnitInfo> call : method
+				.getCalls()) {
 			if (call instanceof MethodCallInfo) {
 				final MethodCallInfo methodCall = (MethodCallInfo) call;
 				final ExpressionInfo qualifier = methodCall
@@ -70,7 +71,8 @@ public class CFGUtility {
 		}
 
 		// メソッド呼び出しについて，オブジェクトの内容が変化しているかを調べる
-		for (final CallInfo<?> call : method.getCalls()) {
+		for (final CallInfo<? extends CallableUnitInfo> call : method
+				.getCalls()) {
 			if (call instanceof MethodCallInfo) {
 				final MethodCallInfo methodCall = (MethodCallInfo) call;
 				final ExpressionInfo qualifier = methodCall
