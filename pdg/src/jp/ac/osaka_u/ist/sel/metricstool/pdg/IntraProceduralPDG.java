@@ -1,7 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGNode;
@@ -20,12 +23,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGControlNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGMethodEnterNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNormalNode;
 
@@ -36,6 +41,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNormalNode;
  * 
  */
 public class IntraProceduralPDG extends PDG {
+
+	/**
+	 * PDGの入口ノード
+	 */
+	// protected final SortedSet<PDGNode<?>> enterNodes;
+	protected final PDGMethodEnterNode enterNode;
+
+	/**
+	 * PDGの出口ノード
+	 */
+	protected final SortedSet<PDGNode<?>> exitNodes;
 
 	final CallableUnitInfo unit;
 
@@ -73,14 +89,14 @@ public class IntraProceduralPDG extends PDG {
 	 *            Control Dependencyを生成するか？
 	 * @param buildExecutionDependency
 	 *            Execution Dependencyを生成するか？
-	 * @param countObjectStateChange 
-	 *            メソッド内部によるオブジェクトの変更を考慮するか          
+	 * @param countObjectStateChange
+	 *            メソッド内部によるオブジェクトの変更を考慮するか
 	 * @param dataDependencyDistance
 	 *            データ依存辺を引く頂点間の距離の閾値（行の差）
- 	 * @param controlDependencyDistance
+	 * @param controlDependencyDistance
 	 *            制御依存辺を引く頂点間の距離の閾値（行の差）
 	 * @param executionDependencyDistance
-	 *            実行依存辺を引く頂点間の距離の閾値（行の差）                         
+	 *            実行依存辺を引く頂点間の距離の閾値（行の差）
 	 */
 	public IntraProceduralPDG(final CallableUnitInfo unit,
 			final IPDGNodeFactory pdgNodeFactory,
@@ -97,6 +113,9 @@ public class IntraProceduralPDG extends PDG {
 		if (null == unit) {
 			throw new IllegalArgumentException("method is null.");
 		}
+
+		this.enterNode = PDGMethodEnterNode.createNode(unit);
+		this.exitNodes = new TreeSet<PDGNode<?>>();
 
 		this.unit = unit;
 
@@ -128,7 +147,7 @@ public class IntraProceduralPDG extends PDG {
 	 *            Control Dependencyを生成するか？
 	 * @param buildExecutionDependency
 	 *            Execution Dependencyを生成するか？
-	 * @param countObjectStateChange 
+	 * @param countObjectStateChange
 	 *            メソッド内部によるオブジェクトの変更を考慮するか
 	 */
 	public IntraProceduralPDG(final CallableUnitInfo unit,
@@ -192,6 +211,24 @@ public class IntraProceduralPDG extends PDG {
 				buildExecutionDependency);
 	}
 
+	/**
+	 * 入口ノードを取得
+	 * 
+	 * @return 入口ノード
+	 */
+	public final PDGMethodEnterNode getMethodEnterNode() {
+		return this.enterNode;
+	}
+
+	/**
+	 * 出口ノードを取得
+	 * 
+	 * @return 出口ノード
+	 */
+	public final SortedSet<PDGNode<?>> getExitNodes() {
+		return Collections.unmodifiableSortedSet(this.exitNodes);
+	}
+
 	public boolean isBuiltDataDependency() {
 		return this.buildDataDependence;
 	}
@@ -212,11 +249,17 @@ public class IntraProceduralPDG extends PDG {
 
 		final CFGNode<?> cfgEnterNode = this.cfg.getEnterNode();
 
+		// メソッドのエンターノードから直接の内部文に対して制御依存辺を引く
+		final PDGMethodEnterNode enterNode = this.getMethodEnterNode();
+		this.nodes.add(enterNode);
+		final CallableUnitInfo unit = this.getMethodInfo();
+		this.buildControlDependence(enterNode, unit);
+
 		// unitの引数を処理
 		for (final ParameterInfo parameter : this.unit.getParameters()) {
 
 			final PDGNode<?> pdgNode = this.makeNormalNode(parameter);
-			this.enterNodes.add(pdgNode);
+			// this.enterNodes.add(pdgNode);
 			if (null != cfgEnterNode) {
 				this.buildDataDependence(cfgEnterNode, pdgNode, parameter,
 						new HashSet<CFGNode<?>>());
@@ -228,10 +271,11 @@ public class IntraProceduralPDG extends PDG {
 		if (null != cfgEnterNode) {
 
 			// 引数がない場合は，CFGの入口ノードがPDGの入口ノードになる
-			if (0 == this.unit.getParameters().size()) {
-				final PDGNode<?> pdgEnterNode = this.makeNode(cfgEnterNode);
-				this.enterNodes.add(pdgEnterNode);
-			}
+			/*
+			 * if (0 == this.unit.getParameters().size()) { final PDGNode<?>
+			 * pdgEnterNode = this.makeNode(cfgEnterNode);
+			 * this.enterNodes.add(pdgEnterNode); }
+			 */
 
 			this.buildDependence(cfgEnterNode, checkedNodes);
 		}
@@ -295,8 +339,8 @@ public class IntraProceduralPDG extends PDG {
 			if (pdgNode instanceof PDGControlNode) {
 				final ConditionInfo condition = (ConditionInfo) cfgNode
 						.getCore();
-				this.buildControlDependence((PDGControlNode) pdgNode, PDGUtility
-						.getOwnerConditionalBlock(condition));
+				this.buildControlDependence((PDGControlNode) pdgNode,
+						PDGUtility.getOwnerConditionalBlock(condition));
 			}
 		}
 
@@ -385,7 +429,7 @@ public class IntraProceduralPDG extends PDG {
 	 * @param block
 	 */
 	private void buildControlDependence(final PDGControlNode fromPDGNode,
-			final BlockInfo block) {
+			final LocalSpaceInfo block) {
 
 		for (final StatementInfo innerStatement : block.getStatements()) {
 
@@ -408,7 +452,7 @@ public class IntraProceduralPDG extends PDG {
 			}
 
 			// Block文の場合は，条件付き文であれば，単文の時と同じ処理
-			// 　そうでなければ，さらに内部を調べる
+			// そうでなければ，さらに内部を調べる
 			else if (innerStatement instanceof BlockInfo) {
 
 				if (innerStatement instanceof ConditionalBlockInfo) {
