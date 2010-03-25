@@ -37,6 +37,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGReturnDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGControlNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGMethodEnterNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 import org.apache.commons.cli.CommandLine;
@@ -154,6 +155,7 @@ public class GraphViewer extends MetricsTool {
 			// 対象ディレクトリ以下のJavaファイルを登録し，解析
 			{
 				final GraphViewer viewer = new GraphViewer();
+				viewer.analyzeLibraries();
 				viewer.readTargetFiles();
 				viewer.analyzeTargetFiles();
 			}
@@ -383,7 +385,7 @@ public class GraphViewer extends MetricsTool {
 			writer.write("\"");
 
 			// ノードの色
-			if (pdg.getEnterNodes().contains(entry.getKey())) {
+			if (entry.getKey() instanceof PDGMethodEnterNode) {
 				writer.write(", fillcolor = aquamarine");
 			} else if (pdg.getExitNodes().contains(entry.getKey())) {
 				writer.write(", fillcolor = deeppink");
@@ -464,7 +466,7 @@ public class GraphViewer extends MetricsTool {
 				writer.write("\"");
 
 				// ノードの色
-				if (pdg.getEnterNodes().contains(node)) {
+				if (pdg.getMethodEnterNode() instanceof PDGMethodEnterNode) {
 					writer.write(", fillcolor = aquamarine");
 				} else if (pdg.getExitNodes().contains(node)) {
 					writer.write(", fillcolor = deeppink");
