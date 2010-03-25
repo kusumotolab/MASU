@@ -60,7 +60,7 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
      * @return ŒÄ‚Ño‚µ‚ÌSet
      */
     @Override
-    public Set<CallInfo<?>> getCalls() {
+    public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
         return CallInfo.EmptySet;
     }
 

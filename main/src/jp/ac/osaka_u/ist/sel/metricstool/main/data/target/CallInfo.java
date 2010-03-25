@@ -169,6 +169,6 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
     /**
      * ‹ó‚ÌŒÄ‚Ño‚µ‚ÌSet‚ğ•\‚·
      */
-    public static final SortedSet<CallInfo<?>> EmptySet = Collections
-            .unmodifiableSortedSet(new TreeSet<CallInfo<?>>());
+    public static final SortedSet<CallInfo<? extends CallableUnitInfo>> EmptySet = Collections
+            .unmodifiableSortedSet(new TreeSet<CallInfo<? extends CallableUnitInfo>>());
 }

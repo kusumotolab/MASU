@@ -72,8 +72,8 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * @return メソッドおよびコンストラクタ呼び出し
      */
     @Override
-    public Set<CallInfo<?>> getCalls() {
-        final Set<CallInfo<?>> calls = new HashSet<CallInfo<?>>();
+    public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
+        final Set<CallInfo<? extends CallableUnitInfo>> calls = new HashSet<CallInfo<? extends CallableUnitInfo>>();
         for (final StatementInfo statement : this.getStatements()) {
             calls.addAll(statement.getCalls());
         }

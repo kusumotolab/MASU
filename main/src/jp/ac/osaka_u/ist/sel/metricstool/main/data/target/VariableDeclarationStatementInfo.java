@@ -136,7 +136,7 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
      * @return åƒÇ—èoÇµÇÃSet
      */
     @Override
-    public Set<CallInfo<?>> getCalls() {
+    public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
         return this.isInitialized() ? this.getInitializationExpression().getCalls()
                 : CallInfo.EmptySet;
     }

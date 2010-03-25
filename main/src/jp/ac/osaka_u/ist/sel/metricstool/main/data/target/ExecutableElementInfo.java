@@ -32,7 +32,7 @@ public interface ExecutableElementInfo extends Position, Serializable {
      * 
      * @return メソッド呼び出し
      */
-    Set<CallInfo<?>> getCalls();
+    Set<CallInfo<? extends CallableUnitInfo>> getCalls();
 
     /**
      * オーナーメソッドを返す
