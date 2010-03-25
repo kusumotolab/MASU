@@ -1,6 +1,5 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -15,98 +14,101 @@ import jp.ac.osaka_u.ist.sdl.scdetector.settings.SLICE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
-
 class DetectionThread implements Runnable {
 
-    private final NodePairListInfo nodePairList;
+	private final NodePairListInfo nodePairList;
 
-    private final int id;
+	private final int id;
 
-    private final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs;
+	private final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs;
 
-    DetectionThread(final int id, final NodePairListInfo nodePairList,
-            final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs) {
-        this.id = id;
-        this.nodePairList = nodePairList;
-        this.clonePairs = clonePairs;
-    }
+	DetectionThread(final int id, final NodePairListInfo nodePairList,
+			final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs) {
+		this.id = id;
+		this.nodePairList = nodePairList;
+		this.clonePairs = clonePairs;
+	}
 
-    @Override
-    public void run() {
+	@Override
+	public void run() {
 
-        final Set<ClonePairInfo> pairs = new HashSet<ClonePairInfo>();
-        while (nodePairList.hasNext()) {
-            final NodePairInfo nodePair = this.nodePairList.next();
+		final Set<ClonePairInfo> pairs = new HashSet<ClonePairInfo>();
+		while (nodePairList.hasNext()) {
+			final NodePairInfo nodePair = this.nodePairList.next();
 
-            // System.out.println(this.id);
-            final PDGNode<?> nodeA = nodePair.getNodeA();
-            final PDGNode<?> nodeB = nodePair.getNodeB();
+			// System.out.println(this.id);
+			final PDGNode<?> nodeA = nodePair.getNodeA();
+			final PDGNode<?> nodeB = nodePair.getNodeB();
 
-            // nodeAとnodeBの間がすべて同値ノードである場合はクローンを検出しない
-            // 一時的な処理，これを改良するのは1つの研究テーマになる
-            if (Utility.getEquivalenceNodesFollowedWithExecutionDependency(nodeA).contains(nodeB)
-                    || Utility.getEquivalenceNodesFollowedWithExecutionDependency(nodeB).contains(
-                            nodeA)) {
-                continue;
-            }
+			/*
+			 * // nodeAとnodeBの間がすべて同値ノードである場合はクローンを検出しない //
+			 * 一時的な処理，これを改良するのは1つの研究テーマになる if
+			 * (Utility.getEquivalenceNodesFollowedWithExecutionDependency
+			 * (nodeA).contains(nodeB) ||
+			 * Utility.getEquivalenceNodesFollowedWithExecutionDependency
+			 * (nodeB).contains( nodeA)) { continue; }
+			 */
 
-            final ExecutableElementInfo elementA = nodeA.getCore();
-            final ExecutableElementInfo elementB = nodeB.getCore();
-            final ClonePairInfo clonePair = new ClonePairInfo(elementA, elementB);
+			final ExecutableElementInfo elementA = nodeA.getCore();
+			final ExecutableElementInfo elementB = nodeB.getCore();
+			final ClonePairInfo clonePair = new ClonePairInfo(elementA,
+					elementB);
 
-            final HashSet<PDGNode<?>> checkedNodesA = new HashSet<PDGNode<?>>();
-            final HashSet<PDGNode<?>> checkedNodesB = new HashSet<PDGNode<?>>();
-            checkedNodesA.add(nodeA);
-            checkedNodesB.add(nodeB);
+			final HashSet<PDGNode<?>> checkedNodesA = new HashSet<PDGNode<?>>();
+			final HashSet<PDGNode<?>> checkedNodesB = new HashSet<PDGNode<?>>();
+			checkedNodesA.add(nodeA);
+			checkedNodesB.add(nodeB);
 
-            // increaseNumberOfPairs();
+			increaseNumberOfPairs();
 
-            if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
-                ProgramSlice.addDuplicatedElementsWithBackwordSlice(nodeA, nodeB, clonePair,
-                        checkedNodesA, checkedNodesB);
-            }
-            if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.FORWARD)) {
-                ProgramSlice.addDuplicatedElementsWithForwordSlice(nodeA, nodeB, clonePair,
-                        checkedNodesA, checkedNodesB);
-            }
+			if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
+				ProgramSlice.addDuplicatedElementsWithBackwordSlice(nodeA,
+						nodeB, clonePair, checkedNodesA, checkedNodesB);
+			}
+			if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.FORWARD)) {
+				ProgramSlice.addDuplicatedElementsWithForwordSlice(nodeA,
+						nodeB, clonePair, checkedNodesA, checkedNodesB);
+			}
 
-            if (Configuration.INSTANCE.getS() <= clonePair.length()) {
-                pairs.add(clonePair);
-                /*
-                 * SortedSet<ClonePairInfo> pairs = this.clonePairs .get(new
-                 * TwoClassHash(clonePair)); if (null == pairs) { pairs =
-                 * Collections .<ClonePairInfo> synchronizedSortedSet(new
-                 * TreeSet<ClonePairInfo>()); this.clonePairs.put(new
-                 * TwoClassHash(clonePair), pairs); } pairs.add(clonePair);
-                 */
-            }
-        }
+			if (Configuration.INSTANCE.getS() <= clonePair.length()) {
+				pairs.add(clonePair);
+				/*
+				 * SortedSet<ClonePairInfo> pairs = this.clonePairs .get(new
+				 * TwoClassHash(clonePair)); if (null == pairs) { pairs =
+				 * Collections .<ClonePairInfo> synchronizedSortedSet(new
+				 * TreeSet<ClonePairInfo>()); this.clonePairs.put(new
+				 * TwoClassHash(clonePair), pairs); } pairs.add(clonePair);
+				 */
+			}
+		}
 
-        addClonePairs(this.clonePairs, pairs);
-    }
+		addClonePairs(this.clonePairs, pairs);
+	}
 
-    synchronized static void addClonePairs(Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs,
-            Set<ClonePairInfo> detectedPairs) {
+	synchronized static void addClonePairs(
+			Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs,
+			Set<ClonePairInfo> detectedPairs) {
 
-        for (final ClonePairInfo detectedPair : detectedPairs) {
-            SortedSet<ClonePairInfo> pairs = clonePairs.get(new TwoClassHash(detectedPair));
-            if (null == pairs) {
-                pairs = new TreeSet<ClonePairInfo>();
-                clonePairs.put(new TwoClassHash(detectedPair), pairs);
-            }
-            pairs.add(detectedPair);
-        }
-    }
+		for (final ClonePairInfo detectedPair : detectedPairs) {
+			SortedSet<ClonePairInfo> pairs = clonePairs.get(new TwoClassHash(
+					detectedPair));
+			if (null == pairs) {
+				pairs = new TreeSet<ClonePairInfo>();
+				clonePairs.put(new TwoClassHash(detectedPair), pairs);
+			}
+			pairs.add(detectedPair);
+		}
+	}
 
-    synchronized static void increaseNumberOfPairs() {
-        numberOfPairs++;
-    }
+	synchronized static void increaseNumberOfPairs() {
+		numberOfPairs++;
+	}
 
-    synchronized static void increaseNumberOfComparison() {
-        numberOfComparion++;
-    }
+	synchronized static void increaseNumberOfComparison() {
+		numberOfComparion++;
+	}
 
-    static int numberOfPairs = 0;
+	static int numberOfPairs = 0;
 
-    static long numberOfComparion = 0;
+	static long numberOfComparion = 0;
 }

@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGControlNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGMethodEnterNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 public class NodePairListInfo {
@@ -19,6 +20,11 @@ public class NodePairListInfo {
 		this.index = new AtomicInteger(0);
 		this.nodePairList = new ArrayList<NodePairInfo>();
 		for (final List<PDGNode<?>> nodeList : nodeListSet) {
+
+			// メソッド入口ノードの場合は読み飛ばす
+			if (nodeList.get(0) instanceof PDGMethodEnterNode) {
+				continue;
+			}
 
 			// 閾値以上一致するノードがある場合は読み飛ばす
 			if (Configuration.INSTANCE.getC() <= nodeList.size()) {

@@ -46,27 +46,6 @@ public class PDGMergedNode extends PDGNormalNode<ExecutableElementInfo> {
 				}
 			}
 		}
-
-		// エンターノードの次がノーマルノードである場合も圧縮可能かどうかを調べる
-		final SortedSet<PDGNode<?>> enterNodes = pdg.getEnterNodes();
-		if (!enterNodes.isEmpty()) {
-			final PDGNode<?> enterNode = enterNodes.first();
-
-			// エンターノードが引数ノードのとき
-			if (enterNode instanceof PDGParameterNode) {
-				final PDGNode<?> toNode = PDGExecutionDependenceEdge
-						.getExecutionDependenceEdge(enterNode.getForwardEdges())
-						.first().getToNode();
-				if (toNode instanceof PDGNormalNode<?>) {
-					findMergedNodes((PDGNormalNode<?>) toNode, pdgNodeFactory);
-				}
-			}
-
-			// エンターノードがノーマルノードのとき
-			else if (enterNode instanceof PDGNormalNode<?>) {
-				findMergedNodes((PDGNormalNode<?>) enterNode, pdgNodeFactory);
-			}
-		}
 	}
 
 	/**
@@ -81,9 +60,13 @@ public class PDGMergedNode extends PDGNormalNode<ExecutableElementInfo> {
 				.hashCode();
 		final PDGMergedNode mergedNode = new PDGMergedNode(node);
 
-		PDGNode<?> toNode = PDGExecutionDependenceEdge
-				.getExecutionDependenceEdge(node.getForwardEdges()).first()
-				.getToNode();
+		final SortedSet<PDGExecutionDependenceEdge> toEdges = PDGExecutionDependenceEdge
+				.getExecutionDependenceEdge(node.getForwardEdges());
+		if (toEdges.isEmpty()) {
+			return;
+		}
+
+		PDGNode<?> toNode = toEdges.first().getToNode();
 		if (!(toNode instanceof PDGNormalNode<?>)) { // このtoNodeがノーマルでない場合は何もしなくていい
 			return;
 		}

@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.NodePairListInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.PDGController;
-import jp.ac.osaka_u.ist.sdl.scdetector.io.XMLWriter;
+import jp.ac.osaka_u.ist.sdl.scdetector.io.BellonWriter;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.CALL_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.CAST_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.CONTROL_FILTER;
@@ -595,7 +595,7 @@ public class Scorpio extends MetricsTool {
 		scorpio.analyzeLibraries();
 		scorpio.readTargetFiles();
 		scorpio.analyzeTargetFiles();
-
+		
 		int totalline = 0;
 		for (final FileInfo file : DataManager.getInstance()
 				.getFileInfoManager().getFileInfos()) {
@@ -864,20 +864,21 @@ public class Scorpio extends MetricsTool {
 			}
 		}
 
-		final XMLWriter writer = new XMLWriter(Configuration.INSTANCE.getO(),
-				DataManager.getInstance().getFileInfoManager().getFileInfos(),
-				cloneSets, pdgNodeFactory);
 		/*
-		 * final BellonWriter writer = new
-		 * BellonWriter(Configuration.INSTANCE.getO(), DataManager
-		 * 
-		 * .getInstance().getFileInfoManager().getFileInfos(), cloneSets);
+		 * final XMLWriter writer = new XMLWriter(Configuration.INSTANCE.getO(),
+		 * DataManager.getInstance().getFileInfoManager().getFileInfos(),
+		 * cloneSets, pdgNodeFactory);
 		 */
+
+		final BellonWriter writer = new BellonWriter(Configuration.INSTANCE
+				.getO(), DataManager.getInstance().getFileInfoManager()
+				.getFileInfos(), cloneSets);
+
 		writer.write();
 		writer.close();
 
-		// out.println(DetectionThread.numberOfPairs + " : " +
-		// DetectionThread.numberOfComparion);
+		out.println(DetectionThread.numberOfPairs + " : "
+				+ DetectionThread.numberOfComparion);
 
 		out.println("successifully finished.");
 

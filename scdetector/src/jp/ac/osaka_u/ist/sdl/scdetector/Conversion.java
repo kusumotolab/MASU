@@ -29,6 +29,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGMethodEnterNode.PseudoConditionInfo;
 
 /**
  * プログラム要素の文字列変換をするためのクラス
@@ -179,6 +180,9 @@ public class Conversion {
 
 			return Conversion.getNormalizedString((ExpressionInfo) condition);
 
+		} else if (condition instanceof PseudoConditionInfo) {
+
+			return "PseudoConditionInfo";
 		}
 
 		assert false : "Here shouldn't be reached!";
