@@ -103,4 +103,11 @@ public abstract class PDG {
 		return this.nodeFactory;
 	}
 
+	public void addNode(final PDGNode<?> node) {
+		this.nodes.add(node);
+	}
+
+	public void removeNode(final PDGNode<?> node) {
+		this.nodes.remove(node);
+	}
 }
