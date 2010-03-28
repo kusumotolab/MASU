@@ -10,7 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IPDGNodeFactory;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDG;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGControlDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
@@ -26,7 +26,8 @@ public class PDGMergedNode extends PDGNormalNode<ExecutableElementInfo> {
 	 * 
 	 * @param pdg
 	 */
-	public static void merge(final PDG pdg, final IPDGNodeFactory pdgNodeFactory) {
+	public static void merge(final IntraProceduralPDG pdg,
+			final IPDGNodeFactory pdgNodeFactory) {
 
 		for (final PDGNode<?> node : PDGControlNode.getControlNodes(pdg
 				.getAllNodes())) {
@@ -37,7 +38,7 @@ public class PDGMergedNode extends PDGNormalNode<ExecutableElementInfo> {
 						.getExecutionDependenceEdge(node.getForwardEdges())) {
 					final PDGNode<?> toNode = edge.getToNode();
 					if (toNode instanceof PDGNormalNode<?>) {
-						findMergedNodes((PDGNormalNode<?>) toNode,
+						findMergedNodes(pdg, (PDGNormalNode<?>) toNode,
 								pdgNodeFactory);
 					}
 				}
@@ -50,8 +51,8 @@ public class PDGMergedNode extends PDGNormalNode<ExecutableElementInfo> {
 	 * 
 	 * @param node
 	 */
-	private static void findMergedNodes(final PDGNormalNode<?> node,
-			final IPDGNodeFactory pdgNodeFactory) {
+	private static void findMergedNodes(final IntraProceduralPDG pdg,
+			final PDGNormalNode<?> node, final IPDGNodeFactory pdgNodeFactory) {
 
 		final int hash = Conversion.getNormalizedString(node.getCore())
 				.hashCode();
@@ -75,23 +76,23 @@ public class PDGMergedNode extends PDGNormalNode<ExecutableElementInfo> {
 			final SortedSet<PDGExecutionDependenceEdge> forwardEdges = PDGExecutionDependenceEdge
 					.getExecutionDependenceEdge(toNode.getForwardEdges());
 			if (forwardEdges.isEmpty()) {
-				insertMergedNode(mergedNode, pdgNodeFactory);
+				insertMergedNode(pdg, mergedNode, pdgNodeFactory);
 				return;
 			}
 			toNode = forwardEdges.first().getToNode();
 			if (!(toNode instanceof PDGNormalNode<?>)) {
-				insertMergedNode(mergedNode, pdgNodeFactory);
+				insertMergedNode(pdg, mergedNode, pdgNodeFactory);
 				return;
 			}
 			toHash = Conversion.getNormalizedString(toNode.getCore())
 					.hashCode();
 		}
-		insertMergedNode(mergedNode, pdgNodeFactory);
-		findMergedNodes((PDGNormalNode<?>) toNode, pdgNodeFactory);
+		insertMergedNode(pdg, mergedNode, pdgNodeFactory);
+		findMergedNodes(pdg, (PDGNormalNode<?>) toNode, pdgNodeFactory);
 	}
 
-	private static void insertMergedNode(final PDGMergedNode mergedNode,
-			final IPDGNodeFactory pdgNodeFactory) {
+	private static void insertMergedNode(final IntraProceduralPDG pdg,
+			final PDGMergedNode mergedNode, final IPDGNodeFactory pdgNodeFactory) {
 
 		final List<PDGNormalNode<?>> originalNodes = mergedNode
 				.getOriginalNodes();
@@ -166,6 +167,12 @@ public class PDGMergedNode extends PDGNormalNode<ExecutableElementInfo> {
 			pdgNodeFactory.removeNode(element);
 		}
 		pdgNodeFactory.addNode(mergedNode);
+
+		// PDGへの登録と削除
+		for (final PDGNode<?> node : originalNodes) {
+			pdg.removeNode(node);
+		}
+		pdg.addNode(mergedNode);
 
 		// 集約ノードに対するデータ依存辺，制御依存辺の構築
 		for (final PDGNode<?> originalNode : originalNodes) {

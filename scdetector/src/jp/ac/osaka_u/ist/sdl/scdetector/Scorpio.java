@@ -595,7 +595,7 @@ public class Scorpio extends MetricsTool {
 		scorpio.analyzeLibraries();
 		scorpio.readTargetFiles();
 		scorpio.analyzeTargetFiles();
-		
+
 		int totalline = 0;
 		for (final FileInfo file : DataManager.getInstance()
 				.getFileInfoManager().getFileInfos()) {
@@ -705,7 +705,7 @@ public class Scorpio extends MetricsTool {
 			out.println("optimizing PDGs ... ");
 			for (final PDG pdg : PDGController.getInstance(Scorpio.ID)
 					.getPDGs()) {
-				PDGMergedNode.merge(pdg, pdgNodeFactory);
+				PDGMergedNode.merge((IntraProceduralPDG) pdg, pdgNodeFactory);
 			}
 		}
 
