@@ -1,10 +1,8 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -20,7 +18,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNormalNode;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGParameterNode;
 
 public class PDGMergedNode extends PDGNormalNode<ExecutableElementInfo> {
 
@@ -125,7 +122,7 @@ public class PDGMergedNode extends PDGNormalNode<ExecutableElementInfo> {
 					}
 				}
 
-				// 　集約ノードを追加
+				// 集約ノードを追加
 				final PDGEdge mergedEdge = new PDGExecutionDependenceEdge(
 						previousNode, mergedNode);
 				previousNode.addForwardEdge(mergedEdge);
@@ -171,52 +168,48 @@ public class PDGMergedNode extends PDGNormalNode<ExecutableElementInfo> {
 		pdgNodeFactory.addNode(mergedNode);
 
 		// 集約ノードに対するデータ依存辺，制御依存辺の構築
-		{
-			final Set<PDGNode<?>> backwardDataDependenceNodes = new HashSet<PDGNode<?>>();
-			final Set<PDGNode<?>> forwardDataDependenceNodes = new HashSet<PDGNode<?>>();
-			final Set<PDGControlNode> backwardControlDependenceNodes = new HashSet<PDGControlNode>();
+		for (final PDGNode<?> originalNode : originalNodes) {
 
-			for (final PDGNode<?> originalNode : originalNodes) {
+			for (final PDGDataDependenceEdge edge : PDGDataDependenceEdge
+					.getDataDependenceEdge(originalNode.getBackwardEdges())) {
 
-				for (final PDGDataDependenceEdge edge : PDGDataDependenceEdge
-						.getDataDependenceEdge(originalNode.getBackwardEdges())) {
-
-					final PDGNode<?> fromNode = edge.getFromNode();
-					if (!originalNodes.contains(fromNode)) {
-						final VariableInfo<?> variable = edge.getVariable();
-						final PDGDataDependenceEdge newEdge = new PDGDataDependenceEdge(
-								fromNode, mergedNode, variable);
-						fromNode.addForwardEdge(newEdge);
-						mergedNode.addBackwardEdge(newEdge);
-					}
+				final PDGNode<?> fromNode = edge.getFromNode();
+				if (!originalNodes.contains(fromNode)) {
+					final VariableInfo<?> variable = edge.getVariable();
+					final PDGDataDependenceEdge newEdge = new PDGDataDependenceEdge(
+							fromNode, mergedNode, variable);
+					fromNode.addForwardEdge(newEdge);
+					mergedNode.addBackwardEdge(newEdge);
+					fromNode.removeForwardEdge(edge);
 				}
+			}
 
-				for (final PDGDataDependenceEdge edge : PDGDataDependenceEdge
-						.getDataDependenceEdge(originalNode.getForwardEdges())) {
+			for (final PDGDataDependenceEdge edge : PDGDataDependenceEdge
+					.getDataDependenceEdge(originalNode.getForwardEdges())) {
 
-					final PDGNode<?> toNode = edge.getToNode();
-					if (!originalNodes.contains(toNode)) {
-						final VariableInfo<?> variable = edge.getVariable();
-						final PDGDataDependenceEdge newEdge = new PDGDataDependenceEdge(
-								mergedNode, toNode, variable);
-						mergedNode.addForwardEdge(newEdge);
-						toNode.addBackwardEdge(newEdge);
-					}
+				final PDGNode<?> toNode = edge.getToNode();
+				if (!originalNodes.contains(toNode)) {
+					final VariableInfo<?> variable = edge.getVariable();
+					final PDGDataDependenceEdge newEdge = new PDGDataDependenceEdge(
+							mergedNode, toNode, variable);
+					mergedNode.addForwardEdge(newEdge);
+					toNode.addBackwardEdge(newEdge);
+					toNode.removeBackwardEdge(edge);
 				}
+			}
 
-				for (final PDGControlDependenceEdge edge : PDGControlDependenceEdge
-						.getControlDependenceEdge(originalNode
-								.getBackwardEdges())) {
+			for (final PDGControlDependenceEdge edge : PDGControlDependenceEdge
+					.getControlDependenceEdge(originalNode.getBackwardEdges())) {
 
-					final PDGControlNode fromNode = (PDGControlNode) edge
-							.getFromNode();
-					if (!originalNodes.contains(fromNode)) {
-						final boolean flag = edge.isTrueDependence();
-						final PDGControlDependenceEdge newEdge = new PDGControlDependenceEdge(
-								fromNode, mergedNode, flag);
-						fromNode.addForwardEdge(newEdge);
-						mergedNode.addBackwardEdge(newEdge);
-					}
+				final PDGControlNode fromNode = (PDGControlNode) edge
+						.getFromNode();
+				if (!originalNodes.contains(fromNode)) {
+					final boolean flag = edge.isTrueDependence();
+					final PDGControlDependenceEdge newEdge = new PDGControlDependenceEdge(
+							fromNode, mergedNode, flag);
+					fromNode.addForwardEdge(newEdge);
+					mergedNode.addBackwardEdge(newEdge);
+					fromNode.removeForwardEdge(edge);
 				}
 			}
 		}
