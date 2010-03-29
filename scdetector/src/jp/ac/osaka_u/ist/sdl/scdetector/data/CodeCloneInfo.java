@@ -1,6 +1,6 @@
 package jp.ac.osaka_u.ist.sdl.scdetector.data;
 
-
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,262 +24,275 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
-
 /**
  * コードクローンを表すクラス
  * 
  * @author higo
- *
+ * 
  */
 public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 
-    final private SortedSet<ExecutableElementInfo> elements;
+	final private SortedSet<ExecutableElementInfo> elements;
 
-    /**
-     * コンストラクタ 
-     */
-    public CodeCloneInfo() {
-        this.elements = new TreeSet<ExecutableElementInfo>();
-    }
+	/**
+	 * コンストラクタ
+	 */
+	public CodeCloneInfo() {
+		this.elements = new TreeSet<ExecutableElementInfo>();
+	}
 
-    /**
-     * コンストラクタ
-     * 
-     * @param element 初期要素
-     */
-    public CodeCloneInfo(final ExecutableElementInfo element) {
-        this();
-        this.elements.add(element);
-    }
+	/**
+	 * コンストラクタ
+	 * 
+	 * @param element
+	 *            初期要素
+	 */
+	public CodeCloneInfo(final ExecutableElementInfo element) {
+		this();
+		this.elements.add(element);
+	}
 
-    /**
-     * コンストラクタ
-     * 
-     * @param elements 初期要素群
-     */
-    public CodeCloneInfo(final SortedSet<ExecutableElementInfo> elements) {
-        this();
-        this.elements.addAll(elements);
-    }
+	/**
+	 * コンストラクタ
+	 * 
+	 * @param elements
+	 *            初期要素群
+	 */
+	public CodeCloneInfo(final SortedSet<ExecutableElementInfo> elements) {
+		this();
+		this.elements.addAll(elements);
+	}
 
-    /**
-     * 要素を追加する
-     * 
-     * @param element 追加する要素
-     */
-    public void add(final ExecutableElementInfo element) {
-        this.elements.add(element);
-    }
+	/**
+	 * 要素を追加する
+	 * 
+	 * @param element
+	 *            追加する要素
+	 */
+	public void add(final ExecutableElementInfo element) {
+		this.elements.add(element);
+	}
 
-    /**
-     * 要素群を追加する
-     * 
-     * @param elements 追加する要素群
-     */
-    public void addAll(final SortedSet<ExecutableElementInfo> elements) {
-        this.elements.addAll(elements);
-    }
+	/**
+	 * 要素群を追加する
+	 * 
+	 * @param elements
+	 *            追加する要素群
+	 */
+	public void addAll(final Collection<ExecutableElementInfo> elements) {
+		this.elements.addAll(elements);
+	}
 
-    /**
-     * 引数で与えられた要素が，このコードクローンに含まれるか判定する
-     * 
-     * @param element 対象要素
-     * @return　含まれる場合はtrue,　そうでない場合はfalse
-     */
-    public boolean contain(final ExecutableElementInfo element) {
-        return this.elements.contains(element);
-    }
+	/**
+	 * 引数で与えられた要素が，このコードクローンに含まれるか判定する
+	 * 
+	 * @param element
+	 *            対象要素
+	 * @return　含まれる場合はtrue,　そうでない場合はfalse
+	 */
+	public boolean contain(final ExecutableElementInfo element) {
+		return this.elements.contains(element);
+	}
 
-    public FileInfo getOwnerFile() {
-        return ((TargetClassInfo) this.elements.first().getOwnerMethod().getOwnerClass())
-                .getOwnerFile();
-    }
+	public FileInfo getOwnerFile() {
+		return ((TargetClassInfo) this.elements.first().getOwnerMethod()
+				.getOwnerClass()).getOwnerFile();
+	}
 
-    /**
-     * コードクローンの長さを返す
-     * 
-     * @return　コードクローンの長さ
-     */
-    public int length() {
-        return this.elements.size();
-    }
+	/**
+	 * コードクローンの長さを返す
+	 * 
+	 * @return　コードクローンの長さ
+	 */
+	public int length() {
+		return this.elements.size();
+	}
 
-    /**
-     * 引数で与えられたコードクローンに，このコードクローンが包含されているか判定する
-     * 
-     * @param codeclone 対象コードクローン
-     * @return 包含される場合はtrue, そうでない場合はfalse
-     */
-    public boolean subsumedBy(final CodeCloneInfo codeclone) {
-        return codeclone.getElements().containsAll(this.getElements())
-                && (this.elements.size() < codeclone.getElements().size());
-    }
+	/**
+	 * 引数で与えられたコードクローンに，このコードクローンが包含されているか判定する
+	 * 
+	 * @param codeclone
+	 *            対象コードクローン
+	 * @return 包含される場合はtrue, そうでない場合はfalse
+	 */
+	public boolean subsumedBy(final CodeCloneInfo codeclone) {
+		return codeclone.getElements().containsAll(this.getElements())
+				&& (this.elements.size() < codeclone.getElements().size());
+	}
 
-    @Override
-    public boolean equals(Object o) {
+	@Override
+	public boolean equals(Object o) {
 
-        if (null == o) {
-            return false;
-        }
+		if (null == o) {
+			return false;
+		}
 
-        if (!(o instanceof CodeCloneInfo)) {
-            return false;
-        }
+		if (!(o instanceof CodeCloneInfo)) {
+			return false;
+		}
 
-        final CodeCloneInfo target = (CodeCloneInfo) o;
-        return this.getElements().containsAll(target.getElements())
-                && target.getElements().containsAll(this.getElements());
-    }
+		final CodeCloneInfo target = (CodeCloneInfo) o;
+		return this.getElements().containsAll(target.getElements())
+				&& target.getElements().containsAll(this.getElements());
+	}
 
-    /**
-     * コードクローンを構成する要素群を返す
-     * 
-     * @return　コードクローンを構成する要素群
-     */
-    public SortedSet<ExecutableElementInfo> getElements() {
-        return Collections.unmodifiableSortedSet(this.elements);
-    }
+	/**
+	 * コードクローンを構成する要素群を返す
+	 * 
+	 * @return　コードクローンを構成する要素群
+	 */
+	public SortedSet<ExecutableElementInfo> getElements() {
+		return Collections.unmodifiableSortedSet(this.elements);
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        for (final ExecutableElementInfo element : this.getElements()) {
-            hash += element.hashCode();
-        }
-        return hash;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		for (final ExecutableElementInfo element : this.getElements()) {
+			hash += element.hashCode();
+		}
+		return hash;
+	}
 
-    public float density() {
-        final Set<Integer> duplication = new HashSet<Integer>();
-        for (final ExecutableElementInfo element : this.getElements()) {
-            for (int line = element.getFromLine(); line <= element.getToColumn(); line++) {
-                duplication.add(new Integer(line));
-            }
-        }
-        return (float) duplication.size()
-                / (float) (this.getElements().last().getToLine()
-                        - this.getElements().first().getFromLine() + 1);
-    }
+	public float density() {
+		final Set<Integer> duplication = new HashSet<Integer>();
+		for (final ExecutableElementInfo element : this.getElements()) {
+			for (int line = element.getFromLine(); line <= element
+					.getToColumn(); line++) {
+				duplication.add(new Integer(line));
+			}
+		}
+		return (float) duplication.size()
+				/ (float) (this.getElements().last().getToLine()
+						- this.getElements().first().getFromLine() + 1);
+	}
 
-    @Override
-    public int compareTo(final CodeCloneInfo o) {
+	@Override
+	public int compareTo(final CodeCloneInfo o) {
 
-        final Iterator<ExecutableElementInfo> thisIterator = this.getElements().iterator();
-        final Iterator<ExecutableElementInfo> targetIterator = o.getElements().iterator();
+		final Iterator<ExecutableElementInfo> thisIterator = this.getElements()
+				.iterator();
+		final Iterator<ExecutableElementInfo> targetIterator = o.getElements()
+				.iterator();
 
-        // 両方の要素がある限り
-        while (thisIterator.hasNext() && targetIterator.hasNext()) {
+		// 両方の要素がある限り
+		while (thisIterator.hasNext() && targetIterator.hasNext()) {
 
-            final int elementOrder = thisIterator.next().compareTo(targetIterator.next());
-            if (0 != elementOrder) {
-                return elementOrder;
-            }
-        }
+			final int elementOrder = thisIterator.next().compareTo(
+					targetIterator.next());
+			if (0 != elementOrder) {
+				return elementOrder;
+			}
+		}
 
-        if (!thisIterator.hasNext() && !targetIterator.hasNext()) {
-            return 0;
-        }
+		if (!thisIterator.hasNext() && !targetIterator.hasNext()) {
+			return 0;
+		}
 
-        if (!thisIterator.hasNext()) {
-            return -1;
-        }
+		if (!thisIterator.hasNext()) {
+			return -1;
+		}
 
-        if (!targetIterator.hasNext()) {
-            return 1;
-        }
+		if (!targetIterator.hasNext()) {
+			return 1;
+		}
 
-        assert false : "Here shouldn't be reached!";
-        return 0;
-    }
+		assert false : "Here shouldn't be reached!";
+		return 0;
+	}
 
-    /**
-     * このコードクローン内に存在するギャップの数を返す
-     * 
-     * @return このコードクローン内に存在するギャップの数
-     */
-    public int getGapsNumber() {
-        int gap = 0;
+	/**
+	 * このコードクローン内に存在するギャップの数を返す
+	 * 
+	 * @return このコードクローン内に存在するギャップの数
+	 */
+	public int getGapsNumber() {
+		int gap = 0;
 
-        final CallableUnitInfo ownerMethod = this.getElements().first().getOwnerMethod();
-        final SortedSet<ExecutableElementInfo> elements = getAllExecutableElements(ownerMethod);
-        final ExecutableElementInfo[] elementArray = elements.toArray(new ExecutableElementInfo[0]);
+		final CallableUnitInfo ownerMethod = this.getElements().first()
+				.getOwnerMethod();
+		final SortedSet<ExecutableElementInfo> elements = getAllExecutableElements(ownerMethod);
+		final ExecutableElementInfo[] elementArray = elements
+				.toArray(new ExecutableElementInfo[0]);
 
-        final ExecutableElementInfo[] clonedElementArray = this.getElements().toArray(
-                new ExecutableElementInfo[0]);
-        CLONE: for (int i = 0; i < clonedElementArray.length - 1; i++) {
-            for (int j = 0; j < elementArray.length - 1; j++) {
+		final ExecutableElementInfo[] clonedElementArray = this.getElements()
+				.toArray(new ExecutableElementInfo[0]);
+		CLONE: for (int i = 0; i < clonedElementArray.length - 1; i++) {
+			for (int j = 0; j < elementArray.length - 1; j++) {
 
-                // i番目とj番目の要素が等しいかをチェック
-                if (equals(clonedElementArray[i], elementArray[j])) {
+				// i番目とj番目の要素が等しいかをチェック
+				if (equals(clonedElementArray[i], elementArray[j])) {
 
-                    //i+1番目とj+1番目が等しくないのであれば，ギャップあり
-                    if (!equals(clonedElementArray[i + 1], elementArray[j + 1])) {
-                        gap++;
-                    }
+					// i+1番目とj+1番目が等しくないのであれば，ギャップあり
+					if (!equals(clonedElementArray[i + 1], elementArray[j + 1])) {
+						gap++;
+					}
 
-                    continue CLONE;
-                }
-            }
-        }
+					continue CLONE;
+				}
+			}
+		}
 
-        return gap;
-    }
+		return gap;
+	}
 
-    private static SortedSet<ExecutableElementInfo> getAllExecutableElements(
-            final LocalSpaceInfo localSpace) {
+	private static SortedSet<ExecutableElementInfo> getAllExecutableElements(
+			final LocalSpaceInfo localSpace) {
 
-        if (null == localSpace) {
-            throw new IllegalArgumentException("localSpace is null.");
-        }
+		if (null == localSpace) {
+			throw new IllegalArgumentException("localSpace is null.");
+		}
 
-        if (localSpace instanceof ExternalMethodInfo
-                || localSpace instanceof ExternalConstructorInfo) {
-            throw new IllegalArgumentException("localSpace is an external local space.");
-        }
+		if (localSpace instanceof ExternalMethodInfo
+				|| localSpace instanceof ExternalConstructorInfo) {
+			throw new IllegalArgumentException(
+					"localSpace is an external local space.");
+		}
 
-        final SortedSet<ExecutableElementInfo> allElements = new TreeSet<ExecutableElementInfo>();
-        for (final StatementInfo innerStatement : localSpace.getStatements()) {
+		final SortedSet<ExecutableElementInfo> allElements = new TreeSet<ExecutableElementInfo>();
+		for (final StatementInfo innerStatement : localSpace.getStatements()) {
 
-            // 単文の場合
-            if (innerStatement instanceof SingleStatementInfo
-                    || innerStatement instanceof CaseEntryInfo
-                    || innerStatement instanceof LabelInfo) {
-                allElements.add(innerStatement);
-            }
+			// 単文の場合
+			if (innerStatement instanceof SingleStatementInfo
+					|| innerStatement instanceof CaseEntryInfo
+					|| innerStatement instanceof LabelInfo) {
+				allElements.add(innerStatement);
+			}
 
-            // ブロック文の場合
-            else if (innerStatement instanceof BlockInfo) {
+			// ブロック文の場合
+			else if (innerStatement instanceof BlockInfo) {
 
-                if (innerStatement instanceof ConditionalBlockInfo) {
-                    final ConditionInfo condition = ((ConditionalBlockInfo) innerStatement)
-                            .getConditionalClause().getCondition();
-                    allElements.add(condition);
+				if (innerStatement instanceof ConditionalBlockInfo) {
+					final ConditionInfo condition = ((ConditionalBlockInfo) innerStatement)
+							.getConditionalClause().getCondition();
+					allElements.add(condition);
 
-                    if (innerStatement instanceof ForBlockInfo) {
-                        allElements.addAll(((ForBlockInfo) innerStatement)
-                                .getInitializerExpressions());
-                        allElements
-                                .addAll(((ForBlockInfo) innerStatement).getIteratorExpressions());
-                    }
-                }
+					if (innerStatement instanceof ForBlockInfo) {
+						allElements.addAll(((ForBlockInfo) innerStatement)
+								.getInitializerExpressions());
+						allElements.addAll(((ForBlockInfo) innerStatement)
+								.getIteratorExpressions());
+					}
+				}
 
-                allElements.addAll(getAllExecutableElements((BlockInfo) innerStatement));
-            }
+				allElements
+						.addAll(getAllExecutableElements((BlockInfo) innerStatement));
+			}
 
-            else {
-                assert false : "Here shouldn't be reached!";
-            }
-        }
+			else {
+				assert false : "Here shouldn't be reached!";
+			}
+		}
 
-        return allElements;
-    }
+		return allElements;
+	}
 
-    private static boolean equals(final ExecutableElementInfo element1,
-            final ExecutableElementInfo element2) {
+	private static boolean equals(final ExecutableElementInfo element1,
+			final ExecutableElementInfo element2) {
 
-        return (element1.getFromLine() == element2.getFromLine())
-                && (element1.getFromColumn() == element2.getFromColumn())
-                && (element1.getToLine() == element2.getToLine())
-                && (element1.getToColumn() == element2.getToColumn());
-    }
+		return (element1.getFromLine() == element2.getFromLine())
+				&& (element1.getFromColumn() == element2.getFromColumn())
+				&& (element1.getToLine() == element2.getToLine())
+				&& (element1.getToColumn() == element2.getToColumn());
+	}
 }

@@ -20,7 +20,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IPDGNodeFactory;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDG;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 public class XMLWriter {
@@ -270,10 +270,10 @@ public class XMLWriter {
 
 	private int getNumberOfNodes(final FileInfo file) {
 
-		final Set<PDG> pdgs = PDGController.getInstance(Scorpio.ID).getPDGs(
-				file.getName());
+		final Set<IntraProceduralPDG> pdgs = PDGController.getInstance(
+				Scorpio.ID).getPDGs(file.getName());
 		int number = 0;
-		for (final PDG pdg : pdgs) {
+		for (final IntraProceduralPDG pdg : pdgs) {
 			number += pdg.getNumberOfNodes();
 		}
 

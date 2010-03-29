@@ -11,7 +11,6 @@ import jp.ac.osaka_u.ist.sdl.scdetector.data.NodePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.NodePairListInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.SLICE_TYPE;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 class DetectionThread implements Runnable {
@@ -49,10 +48,20 @@ class DetectionThread implements Runnable {
 			 * (nodeB).contains( nodeA)) { continue; }
 			 */
 
-			final ExecutableElementInfo elementA = nodeA.getCore();
-			final ExecutableElementInfo elementB = nodeB.getCore();
-			final ClonePairInfo clonePair = new ClonePairInfo(elementA,
-					elementB);
+			final ClonePairInfo clonePair = new ClonePairInfo();
+			if (nodeA instanceof PDGMergedNode) {
+				clonePair.getCodeFragmentA().addAll(
+						((PDGMergedNode) nodeA).getCores());
+			} else {
+				clonePair.getCodeFragmentA().add(nodeA.getCore());
+			}
+
+			if (nodeB instanceof PDGMergedNode) {
+				clonePair.getCodeFragmentB().addAll(
+						((PDGMergedNode) nodeB).getCores());
+			} else {
+				clonePair.getCodeFragmentB().add(nodeB.getCore());
+			}
 
 			final HashSet<PDGNode<?>> checkedNodesA = new HashSet<PDGNode<?>>();
 			final HashSet<PDGNode<?>> checkedNodesB = new HashSet<PDGNode<?>>();

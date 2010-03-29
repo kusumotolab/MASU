@@ -703,8 +703,8 @@ public class Scorpio extends MetricsTool {
 		// 頂点集約が指定されている場合は，PDGを変換する
 		if (Configuration.INSTANCE.getE().equals(MERGE.TRUE)) {
 			out.println("optimizing PDGs ... ");
-			for (final PDG pdg : PDGController.getInstance(Scorpio.ID)
-					.getPDGs()) {
+			for (final IntraProceduralPDG pdg : PDGController.getInstance(
+					Scorpio.ID).getPDGs()) {
 				PDGMergedNode.merge((IntraProceduralPDG) pdg, pdgNodeFactory);
 			}
 		}

@@ -256,5 +256,13 @@ public class PDGMergedNode extends PDGNormalNode<ExecutableElementInfo> {
 		return Collections.unmodifiableList(this.originalNodes);
 	}
 
+	public SortedSet<ExecutableElementInfo> getCores() {
+		final SortedSet<ExecutableElementInfo> cores = new TreeSet<ExecutableElementInfo>();
+		for (final PDGNode<?> originalNode : this.getOriginalNodes()) {
+			cores.add(originalNode.getCore());
+		}
+		return Collections.unmodifiableSortedSet(cores);
+	}
+
 	private final List<PDGNormalNode<?>> originalNodes;
 }
