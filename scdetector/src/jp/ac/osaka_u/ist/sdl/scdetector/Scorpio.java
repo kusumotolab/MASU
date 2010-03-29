@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
@@ -775,8 +774,8 @@ public class Scorpio extends MetricsTool {
 
 		out.println("filtering out uninterested clone pairs ...");
 
-		final Set<ClonePairInfo> refinedClonePairs = Collections
-				.synchronizedSet(new TreeSet<ClonePairInfo>());
+		final SortedSet<ClonePairInfo> refinedClonePairs = Collections
+				.synchronizedSortedSet(new TreeSet<ClonePairInfo>());
 		for (final SortedSet<ClonePairInfo> pairs : clonePairs.values()) {
 
 			final Thread thread = new Thread(new CloneFilteringThread(pairs,

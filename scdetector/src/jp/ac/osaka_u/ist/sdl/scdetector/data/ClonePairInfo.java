@@ -169,16 +169,13 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 		final CodeCloneInfo targetCodeA = clonePair.getCodeFragmentA();
 		final CodeCloneInfo targetCodeB = clonePair.getCodeFragmentB();
 
-		// コードクローンを構成する要素数で比較
-		if (thisCodeA.length() > targetCodeA.length()) {
-			return 1;
-		} else if (thisCodeA.length() < targetCodeA.length()) {
-			return -1;
-		} else if (thisCodeB.length() > targetCodeB.length()) {
-			return 1;
-		} else if (thisCodeB.length() < targetCodeB.length()) {
-			return -1;
-		}
+		/*
+		 * // コードクローンを構成する要素数で比較 if (thisCodeA.length() > targetCodeA.length())
+		 * { return 1; } else if (thisCodeA.length() < targetCodeA.length()) {
+		 * return -1; } else if (thisCodeB.length() > targetCodeB.length()) {
+		 * return 1; } else if (thisCodeB.length() < targetCodeB.length()) {
+		 * return -1; }
+		 */
 
 		// コードクローンAの位置情報で比較
 		{

@@ -60,7 +60,6 @@ public class BellonWriter {
                             this.writer.write(Integer.toString(firstJ.getFromLine()));
                             this.writer.write("\t");
                             this.writer.write(Integer.toString(lastJ.getToLine()));
-                            this.writer.write("\t");
                             this.writer.newLine();
                         }
                     }
