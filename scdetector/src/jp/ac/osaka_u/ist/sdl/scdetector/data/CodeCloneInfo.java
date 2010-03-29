@@ -23,6 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGMethodEnterNode.PseudoConditionInfo;
 
 /**
  * コードクローンを表すクラス
@@ -49,7 +50,7 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 */
 	public CodeCloneInfo(final ExecutableElementInfo element) {
 		this();
-		this.elements.add(element);
+		this.add(element);
 	}
 
 	/**
@@ -60,7 +61,7 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 */
 	public CodeCloneInfo(final SortedSet<ExecutableElementInfo> elements) {
 		this();
-		this.elements.addAll(elements);
+		this.addAll(elements);
 	}
 
 	/**
@@ -70,7 +71,9 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 *            追加する要素
 	 */
 	public void add(final ExecutableElementInfo element) {
-		this.elements.add(element);
+		if (!(element instanceof PseudoConditionInfo)) {
+			this.elements.add(element);
+		}
 	}
 
 	/**
@@ -80,7 +83,11 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 *            追加する要素群
 	 */
 	public void addAll(final Collection<ExecutableElementInfo> elements) {
-		this.elements.addAll(elements);
+		for (final ExecutableElementInfo element : elements) {
+			if (!(element instanceof PseudoConditionInfo)) {
+				this.elements.add(element);
+			}
+		}
 	}
 
 	/**
