@@ -177,6 +177,11 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	@Override
 	public int compareTo(final CodeCloneInfo o) {
 
+		// 必要な処理，消さないこと！
+		if (this.equals(o)) {
+			return 0;
+		}
+
 		final Iterator<ExecutableElementInfo> thisIterator = this.getElements()
 				.iterator();
 		final Iterator<ExecutableElementInfo> targetIterator = o.getElements()

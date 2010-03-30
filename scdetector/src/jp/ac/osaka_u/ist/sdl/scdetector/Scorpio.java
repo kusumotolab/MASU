@@ -543,8 +543,8 @@ public class Scorpio extends MetricsTool {
 				Settings.getInstance().addTargetDirectory(directory);
 			}
 			Settings.getInstance().setVerbose(true);
-			Settings.getInstance().setThreadNumber(
-					Configuration.INSTANCE.getW());
+			// Settings.getInstance().setThreadNumber(
+			// Configuration.INSTANCE.getW());
 
 			// î•ñ•\¦—pİ’è
 			final Class<?> metricstool = MetricsTool.class;
