@@ -7,6 +7,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.AssertStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BinominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CastUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
@@ -258,8 +259,15 @@ public class Conversion {
 			final ExpressionInfo qualifier = methodCall
 					.getQualifierExpression();
 
-			text.append(Conversion.getNormalizedString(qualifier));
-			text.append(".");
+			final ClassInfo ownerClass = methodCall.getOwnerMethod()
+					.getOwnerClass();
+			if ((qualifier instanceof ClassReferenceInfo)
+					&& (((ClassReferenceInfo) qualifier).getReferencedClass()
+							.equals(ownerClass))) {
+			} else {
+				text.append(Conversion.getNormalizedString(qualifier));
+				text.append(".");
+			}
 
 			switch (Configuration.INSTANCE.getPI()) {
 
