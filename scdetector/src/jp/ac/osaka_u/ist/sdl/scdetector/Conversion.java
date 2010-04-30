@@ -1,5 +1,8 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeReferenceInfo;
@@ -48,14 +51,25 @@ public class Conversion {
 	 */
 	public static String getNormalizedString(final Object o) {
 
+		String converted = ORIGINAL_TO_CONVERTED_MAP.get(o);
+		if (null != converted) {
+			return converted;
+		}
+
 		if (o instanceof SingleStatementInfo) {
-			return getNormalizedString((SingleStatementInfo) o);
+			converted = getNormalizedString((SingleStatementInfo) o);
+			ORIGINAL_TO_CONVERTED_MAP.put(o, converted);
+			return converted;
 
 		} else if (o instanceof ExpressionInfo) {
-			return getNormalizedString((ExpressionInfo) o);
+			converted = getNormalizedString((ExpressionInfo) o);
+			ORIGINAL_TO_CONVERTED_MAP.put(o, converted);
+			return converted;
 
 		} else if (o instanceof ConditionInfo) {
-			return getNormalizedString((ConditionInfo) o);
+			converted = getNormalizedString((ConditionInfo) o);
+			ORIGINAL_TO_CONVERTED_MAP.put(o, converted);
+			return converted;
 
 		} else if (o instanceof CaseEntryInfo) {
 
@@ -68,7 +82,9 @@ public class Conversion {
 
 			text.append(":");
 
-			return text.toString();
+			converted = text.toString();
+			ORIGINAL_TO_CONVERTED_MAP.put(o, converted);
+			return converted;
 		}
 
 		assert false : "Here shouldn't be reached!";
@@ -521,4 +537,6 @@ public class Conversion {
 
 		return text.toString();
 	}
+
+	private static final Map<Object, String> ORIGINAL_TO_CONVERTED_MAP = new HashMap<Object, String>();
 }

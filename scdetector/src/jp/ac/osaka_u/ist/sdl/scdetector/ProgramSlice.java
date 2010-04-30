@@ -8,7 +8,10 @@ import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.SLICE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGControlDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 /**
@@ -41,6 +44,78 @@ class ProgramSlice {
 		final SortedSet<PDGEdge> edgesA = nodeA.getBackwardEdges();
 		final SortedSet<PDGEdge> edgesB = nodeB.getBackwardEdges();
 
+		final SortedSet<PDGExecutionDependenceEdge> executionEdgesA = PDGExecutionDependenceEdge
+				.getExecutionDependenceEdge(edgesA);
+		final SortedSet<PDGDataDependenceEdge> dataEdgesA = PDGDataDependenceEdge
+				.getDataDependenceEdge(edgesA);
+		final SortedSet<PDGControlDependenceEdge> controlEdgesA = PDGControlDependenceEdge
+				.getControlDependenceEdge(edgesA);
+		final SortedSet<PDGExecutionDependenceEdge> executionEdgesB = PDGExecutionDependenceEdge
+				.getExecutionDependenceEdge(edgesB);
+		final SortedSet<PDGDataDependenceEdge> dataEdgesB = PDGDataDependenceEdge
+				.getDataDependenceEdge(edgesB);
+		final SortedSet<PDGControlDependenceEdge> controlEdgesB = PDGControlDependenceEdge
+				.getControlDependenceEdge(edgesB);
+
+		backwardSlicing(executionEdgesA, executionEdgesB, clonePair,
+				checkedNodesA, checkedNodesB);
+		backwardSlicing(dataEdgesA, dataEdgesB, clonePair, checkedNodesA,
+				checkedNodesB);
+		backwardSlicing(controlEdgesA, controlEdgesB, clonePair, checkedNodesA,
+				checkedNodesB);
+	}
+
+	/**
+	 * フォワードスライスを行う
+	 * 
+	 * @param nodeA
+	 *            　たどる元となる頂点A
+	 * @param nodeB
+	 *            　たどる元となる頂点B
+	 * @param clonePair
+	 *            現在構築中のクローンペア
+	 * @param checkedNodesA
+	 *            調査済み頂点群を保存するためのキャッシュA
+	 * @param checkedNodesB
+	 *            調査済み頂点群を保存するためのキャッシュB
+	 */
+	static void addDuplicatedElementsWithForwordSlice(final PDGNode<?> nodeA,
+			final PDGNode<?> nodeB, final ClonePairInfo clonePair,
+			final HashSet<PDGNode<?>> checkedNodesA,
+			final HashSet<PDGNode<?>> checkedNodesB) {
+
+		final SortedSet<PDGEdge> edgesA = nodeA.getForwardEdges();
+		final SortedSet<PDGEdge> edgesB = nodeB.getForwardEdges();
+
+		final SortedSet<PDGExecutionDependenceEdge> executionEdgesA = PDGExecutionDependenceEdge
+				.getExecutionDependenceEdge(edgesA);
+		final SortedSet<PDGDataDependenceEdge> dataEdgesA = PDGDataDependenceEdge
+				.getDataDependenceEdge(edgesA);
+		final SortedSet<PDGControlDependenceEdge> controlEdgesA = PDGControlDependenceEdge
+				.getControlDependenceEdge(edgesA);
+		final SortedSet<PDGExecutionDependenceEdge> executionEdgesB = PDGExecutionDependenceEdge
+				.getExecutionDependenceEdge(edgesB);
+		final SortedSet<PDGDataDependenceEdge> dataEdgesB = PDGDataDependenceEdge
+				.getDataDependenceEdge(edgesB);
+		final SortedSet<PDGControlDependenceEdge> controlEdgesB = PDGControlDependenceEdge
+				.getControlDependenceEdge(edgesB);
+
+		forwardSlicing(executionEdgesA, executionEdgesB, clonePair,
+				checkedNodesA, checkedNodesB);
+		forwardSlicing(dataEdgesA, dataEdgesB, clonePair, checkedNodesA,
+				checkedNodesB);
+		forwardSlicing(controlEdgesA, controlEdgesB, clonePair, checkedNodesA,
+				checkedNodesB);
+
+	}
+
+	private static void backwardSlicing(
+			final SortedSet<? extends PDGEdge> edgesA,
+			final SortedSet<? extends PDGEdge> edgesB,
+			final ClonePairInfo clonePair,
+			final HashSet<PDGNode<?>> checkedNodesA,
+			final HashSet<PDGNode<?>> checkedNodesB) {
+
 		for (final PDGEdge edgeA : edgesA) {
 
 			final PDGNode<?> fromNodeA = edgeA.getFromNode();
@@ -54,7 +129,7 @@ class ProgramSlice {
 
 			for (final PDGEdge edgeB : edgesB) {
 
-				// 　エッジの種類が違う場合は何もしない
+				// エッジの種類が違う場合は何もしない
 				if (edgeA.getClass() != edgeB.getClass()) {
 					continue;
 				}
@@ -129,27 +204,12 @@ class ProgramSlice {
 		}
 	}
 
-	/**
-	 * フォワードスライスを行う
-	 * 
-	 * @param nodeA
-	 *            　たどる元となる頂点A
-	 * @param nodeB
-	 *            　たどる元となる頂点B
-	 * @param clonePair
-	 *            現在構築中のクローンペア
-	 * @param checkedNodesA
-	 *            調査済み頂点群を保存するためのキャッシュA
-	 * @param checkedNodesB
-	 *            調査済み頂点群を保存するためのキャッシュB
-	 */
-	static void addDuplicatedElementsWithForwordSlice(final PDGNode<?> nodeA,
-			final PDGNode<?> nodeB, final ClonePairInfo clonePair,
+	private static void forwardSlicing(
+			final SortedSet<? extends PDGEdge> edgesA,
+			final SortedSet<? extends PDGEdge> edgesB,
+			final ClonePairInfo clonePair,
 			final HashSet<PDGNode<?>> checkedNodesA,
 			final HashSet<PDGNode<?>> checkedNodesB) {
-
-		final SortedSet<PDGEdge> edgesA = nodeA.getForwardEdges();
-		final SortedSet<PDGEdge> edgesB = nodeB.getForwardEdges();
 
 		for (final PDGEdge edgeA : edgesA) {
 
@@ -164,7 +224,7 @@ class ProgramSlice {
 
 			for (final PDGEdge edgeB : edgesB) {
 
-				// 　エッジの種類が違う場合は何もしない
+				// エッジの種類が違う場合は何もしない
 				if (edgeA.getClass() != edgeB.getClass()) {
 					continue;
 				}
