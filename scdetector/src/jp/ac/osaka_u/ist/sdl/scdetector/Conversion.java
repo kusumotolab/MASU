@@ -99,6 +99,11 @@ public class Conversion {
 	 */
 	public static String getNormalizedString(final SingleStatementInfo statement) {
 
+		String converted = ORIGINAL_TO_CONVERTED_MAP.get(statement);
+		if (null != converted) {
+			return converted;
+		}
+
 		final StringBuilder text = new StringBuilder();
 
 		if (statement instanceof AssertStatementInfo) {
@@ -143,7 +148,9 @@ public class Conversion {
 					.getNormalizedString((ConditionInfo) statement));
 		}
 
-		return text.toString();
+		converted = text.toString();
+		ORIGINAL_TO_CONVERTED_MAP.put(statement, converted);
+		return converted;
 	}
 
 	/**
@@ -153,6 +160,11 @@ public class Conversion {
 	 * @return
 	 */
 	public static String getNormalizedString(final ConditionInfo condition) {
+
+		String converted = ORIGINAL_TO_CONVERTED_MAP.get(condition);
+		if (null != converted) {
+			return converted;
+		}
 
 		if (condition instanceof VariableDeclarationStatementInfo) {
 
@@ -191,15 +203,22 @@ public class Conversion {
 				text.append(expressionString);
 			}
 
-			return text.toString();
+			converted = text.toString();
+			ORIGINAL_TO_CONVERTED_MAP.put(condition, converted);
+			return converted;
 
 		} else if (condition instanceof ExpressionInfo) {
 
-			return Conversion.getNormalizedString((ExpressionInfo) condition);
+			converted = Conversion
+					.getNormalizedString((ExpressionInfo) condition);
+			ORIGINAL_TO_CONVERTED_MAP.put(condition, converted);
+			return converted;
 
 		} else if (condition instanceof PseudoConditionInfo) {
 
-			return "PseudoConditionInfo";
+			converted = "PseudoConditionInfo";
+			ORIGINAL_TO_CONVERTED_MAP.put(condition, converted);
+			return converted;
 		}
 
 		assert false : "Here shouldn't be reached!";
@@ -213,6 +232,11 @@ public class Conversion {
 	 * @return
 	 */
 	public static String getNormalizedString(final ExpressionInfo expression) {
+
+		String converted = ORIGINAL_TO_CONVERTED_MAP.get(expression);
+		if (null != converted) {
+			return converted;
+		}
 
 		final StringBuilder text = new StringBuilder();
 
@@ -535,7 +559,9 @@ public class Conversion {
 			}
 		}
 
-		return text.toString();
+		converted = text.toString();
+		ORIGINAL_TO_CONVERTED_MAP.put(expression, converted);
+		return converted;
 	}
 
 	private static final ConcurrentMap<Object, String> ORIGINAL_TO_CONVERTED_MAP = new ConcurrentHashMap<Object, String>();
