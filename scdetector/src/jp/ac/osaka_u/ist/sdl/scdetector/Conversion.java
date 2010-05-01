@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayElementUsageInfo;
@@ -538,5 +538,5 @@ public class Conversion {
 		return text.toString();
 	}
 
-	private static final Map<Object, String> ORIGINAL_TO_CONVERTED_MAP = new HashMap<Object, String>();
+	private static final ConcurrentMap<Object, String> ORIGINAL_TO_CONVERTED_MAP = new ConcurrentHashMap<Object, String>();
 }
