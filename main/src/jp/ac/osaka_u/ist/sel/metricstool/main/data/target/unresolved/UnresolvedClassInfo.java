@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
@@ -692,7 +693,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         // –³–¼ƒNƒ‰ƒX‚Ìê‡
         if (this.isAnonymous()) {
             final UnitInfo resolvedOuterUnit = this.outerUnit.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
+                    classInfoManager, DataManager.getInstance().getFieldInfoManager(),
+                    DataManager.getInstance().getMethodInfoManager());
             this.resolvedInfo = new TargetAnonymousClassInfo(fullQualifiedName, resolvedOuterUnit,
                     this.fileInfo, fromLine, fromColumn, toLine, toColumn);
 
@@ -762,6 +764,11 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         namespaces.add(namespace);
         this.classType = new UnresolvedClassTypeInfo(namespaces, this.getFullQualifiedName());
         return this.classType;
+    }
+    
+    @Override
+    public String toString(){
+        return "class \"" + this.className + "\" in file \"" + this.fileInfo.getName() + "\"";
     }
 
     /**

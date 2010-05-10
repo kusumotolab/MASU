@@ -279,9 +279,24 @@ public class DefaultBuildDataManager implements BuildDataManager {
         int size = classStack.size();
         if (size > 1) {
             UnresolvedClassInfo current = classStack.peek();
-            UnresolvedClassInfo outer = classStack.get(size - 2);
-            outer.addInnerClass(current);
-            current.setOuterUnit(outer);
+            UnresolvedClassInfo outerClass = classStack.get(size - 2);
+            UnresolvedUnitInfo<?> outerUnit = outerClass;
+            if (current.isAnonymous()) {
+                // 匿名クラスの場合、その直近の親がメソッドだかクラスだかifだかわからない。
+                // ここで登録すべきはメソッドおよびクラスなので、それが見つかるまで探索したいが
+                // その術がない。とりあえず位置情報でごまかしておく
+                // TODO: need more sophisticated solution
+                if (!callableUnitStack.isEmpty()) {
+                    UnresolvedCallableUnitInfo<?> callable = callableUnitStack
+                            .get(callableUnitStack.size() - 1);
+                    if ((callable.getFromLine() >= outerClass.getFromLine()) 
+                            && (callable.getFromColumn() > outerClass.getFromColumn())){
+                        outerUnit = callable;
+                    }
+                }
+            }
+            current.setOuterUnit(outerUnit);
+            outerClass.addInnerClass(current);
         }
     }
 
