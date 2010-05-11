@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.JavaPredefinedModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalFieldInfo;
@@ -169,31 +170,31 @@ public class JavaByteCodeParser implements ClassVisitor {
 
         // Ç±Ç±Ç©ÇÁèCè¸éq
         if (0 != (access & Opcodes.ACC_PUBLIC)) {
-            modifiers.add(ModifierInfo.PUBLIC_STRING);
+            modifiers.add(JavaPredefinedModifierInfo.PUBLIC_STRING);
         }
 
         if (0 != (access & Opcodes.ACC_PROTECTED)) {
-            modifiers.add(ModifierInfo.PROTECTED_STRING);
+            modifiers.add(JavaPredefinedModifierInfo.PROTECTED_STRING);
         }
 
         if (0 != (access & Opcodes.ACC_PRIVATE)) {
-            modifiers.add(ModifierInfo.PRIVATE_STRING);
+            modifiers.add(JavaPredefinedModifierInfo.PRIVATE_STRING);
         }
 
         if (0 != (access & Opcodes.ACC_FINAL)) {
-            modifiers.add(ModifierInfo.FINAL_STRING);
+            modifiers.add(JavaPredefinedModifierInfo.FINAL_STRING);
         }
 
         if (0 != (access & Opcodes.ACC_STATIC)) {
-            modifiers.add(ModifierInfo.STATIC_STRING);
+            modifiers.add(JavaPredefinedModifierInfo.STATIC_STRING);
         }
 
         if (0 != (access & Opcodes.ACC_ABSTRACT)) {
-            modifiers.add(ModifierInfo.ABSTRACT_STRING);
+            modifiers.add(JavaPredefinedModifierInfo.ABSTRACT_STRING);
         }
 
         if (0 != (access & Opcodes.ACC_SYNCHRONIZED)) {
-            modifiers.add(ModifierInfo.SYNCHRONIZED_STRING);
+            modifiers.add(JavaPredefinedModifierInfo.SYNCHRONIZED_STRING);
         }
 
         return Collections.unmodifiableSet(modifiers);

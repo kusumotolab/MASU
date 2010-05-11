@@ -353,13 +353,55 @@ public class AstTokenAdapter implements AstToken {
     }
 
     @Override
-    public String toString() {
-        return this.text;
+    public boolean isAnnotations(){
+        return false;
+    }
+    
+    @Override
+    public boolean isAnnotation(){
+        return false;
     }
 
+    @Override
+    public boolean isAnnotationArrayInit() {
+        return false;
+    }
+
+    @Override
+    public boolean isAnnotationMemberValuePair() {
+        return false;
+    }
+    
+
+    @Override
+    public boolean isAnnotationMember() {
+        return false;
+    }
+
+    @Override
+    public boolean isAnnotationString() {
+        return false;
+    }
+
+    
+    @Override
+    public String toString() {
+        return this.text;
+    }    
+
+
+    
     /**
      * ‚±‚Ìƒg[ƒNƒ“‚Ì•¶š—ñ
      */
     private final String text;
+
+
+
+
+
+
+
+
 
 }

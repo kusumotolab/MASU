@@ -218,7 +218,7 @@ tokens {
 	FOREACH;FOR_INIT; FOR_CONDITION;FOR_ITERATOR; EMPTY_STAT; FINAL="final"; ABSTRACT="abstract";
 	STRICTFP="strictfp"; SUPER_CTOR_CALL; CTOR_CALL; VARIABLE_PARAMETER_DEF;
 	STATIC_IMPORT; ENUM_DEF; ENUM_CONSTANT_DEF; FOREACH_CLAUSE; FOREACH_VARIABLE; 
-	FOREACH_EXPRESSION; ANNOTATION_DEF; ANNOTATIONS; ANNOTATION; 
+	FOREACH_EXPRESSION; ANNOTATION_DEF; ANNOTATION_MEMBER;ANNOTATIONS; ANNOTATION; ANNOTATION_STRING; 
 	ANNOTATION_MEMBER_VALUE_PAIR; ANNOTATION_FIELD_DEF; ANNOTATION_ARRAY_INIT;
 	TYPE_ARGUMENTS; TYPE_ARGUMENT; TYPE_PARAMETERS; TYPE_PARAMETER; WILDCARD_TYPE;
 	TYPE_UPPER_BOUNDS; TYPE_LOWER_BOUNDS; COND_CLAUSE; LOCAL_VARIABLE_DEF_STATE;
@@ -619,9 +619,12 @@ modifier
 	|	"strictfp"
 	;
 
+//**** change annotationArguments to annotationString, for eisily analyzing annotation arguments.
 annotation!
-	:	AT! i:identifier ( LPAREN! ( args:annotationArguments )? RPAREN! )?
+	:	AT! i:identifier ( LPAREN! ( args:annotationString/*annotationArguments*/ )? RPAREN! )?
 		{#annotation = #(#[ANNOTATION,"ANNOTATION"], i, args);}
+		//{#args = #([ANNOTATION_STRING, "ANNOTATION_STRING"], #args);}
+		
 	;
 
 annotations
@@ -629,6 +632,7 @@ annotations
 		{#annotations = #([ANNOTATIONS, "ANNOTATIONS"], #annotations);}
     ;
 
+/* if you want to analyze annotation precisely, replace "annotationString" rule to below rules.
 annotationArguments
 	:	annotationMemberValueInitializer | anntotationMemberValuePairs
 	;
@@ -641,10 +645,12 @@ annotationMemberValuePair!
 	:	i:IDENT ASSIGN! v:annotationMemberValueInitializer
 		{#annotationMemberValuePair = #(#[ANNOTATION_MEMBER_VALUE_PAIR,"ANNOTATION_MEMBER_VALUE_PAIR"], i, v);}
 	;
-
+*/
 annotationMemberValueInitializer
 	:
+		{#annotationMemberValueInitializer = #([ANNOTATION_MEMBER, "ANNOTATION_MEMBER"], #annotationMemberValueInitializer);}
 		conditionalExpression | annotation | annotationMemberArrayInitializer
+
 	;
 
 // This is an initializer used to set up an annotation member array.
@@ -673,6 +679,15 @@ annotationMemberArrayValueInitializer
 	:	conditionalExpression
 	|	annotation
 	;
+
+
+annotationString
+	:
+	(CHAR_LITERAL | STRING_LITERAL  |  ~RPAREN )*
+	{#annotationString = #([ANNOTATION_STRING, "ANNOTATION_STRING"], #annotationString);}
+	
+	;
+
 
 superClassClause!
 	:	( "extends" c:classOrInterfaceType[true] )?
@@ -2315,3 +2330,5 @@ protected
 FLOAT_SUFFIX
 	:	'f'|'F'|'d'|'D'
 	;
+
+

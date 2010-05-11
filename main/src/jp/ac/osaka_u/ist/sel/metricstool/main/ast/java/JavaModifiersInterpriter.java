@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersInterpriter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.JavaPredefinedModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.StaticOrInstanceSetting;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.VisualizableSetting;
@@ -66,6 +67,7 @@ public class JavaModifiersInterpriter implements ModifiersInterpriter {
         //Javaは常にデータ自体の編集操作は可能
         return true;
     }
+
     private boolean isStaticMember() {
         return staticMember;
     }
@@ -85,9 +87,9 @@ public class JavaModifiersInterpriter implements ModifiersInterpriter {
     private boolean isPureVirtual() {
         return pureVirtual;
     }
-    
+
     private boolean isSynchronized() {
-        return synchronizedAccess; 
+        return synchronizedAccess;
     }
 
     private void reset() {
@@ -111,21 +113,28 @@ public class JavaModifiersInterpriter implements ModifiersInterpriter {
     private boolean reassignable = true;
 
     private boolean pureVirtual = false;
-    
+
     private boolean synchronizedAccess = false;
 
-    private static final ModifierInfo finalModifier = ModifierInfo.getModifierInfo("final");
+    private static final ModifierInfo finalModifier = JavaPredefinedModifierInfo
+            .getModifierInfo("final");
 
-    private static final ModifierInfo publicModifier = ModifierInfo.getModifierInfo("public");
+    private static final ModifierInfo publicModifier = JavaPredefinedModifierInfo
+            .getModifierInfo("public");
 
-    private static final ModifierInfo protectedModifier = ModifierInfo.getModifierInfo("protected");
+    private static final ModifierInfo protectedModifier = JavaPredefinedModifierInfo
+            .getModifierInfo("protected");
 
-    private static final ModifierInfo privateModifier = ModifierInfo.getModifierInfo("private");
+    private static final ModifierInfo privateModifier = JavaPredefinedModifierInfo
+            .getModifierInfo("private");
 
-    private static final ModifierInfo staticModifier = ModifierInfo.getModifierInfo("static");
+    private static final ModifierInfo staticModifier = JavaPredefinedModifierInfo
+            .getModifierInfo("static");
 
-    private static final ModifierInfo abstractModifier = ModifierInfo.getModifierInfo("abstract");
-    
-    private static final ModifierInfo synchronizedModifier = ModifierInfo.getModifierInfo("synchronized");
-    
+    private static final ModifierInfo abstractModifier = JavaPredefinedModifierInfo
+            .getModifierInfo("abstract");
+
+    private static final ModifierInfo synchronizedModifier = JavaPredefinedModifierInfo
+            .getModifierInfo("synchronized");
+
 }

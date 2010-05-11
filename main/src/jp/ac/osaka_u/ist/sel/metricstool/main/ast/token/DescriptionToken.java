@@ -230,6 +230,7 @@ public class DescriptionToken extends AstTokenAdapter {
         }
     };
     
+    
     /**
      * 指定された文字列で初期化するコンストラクタ.
      * @param text このトークンを表す文字列.

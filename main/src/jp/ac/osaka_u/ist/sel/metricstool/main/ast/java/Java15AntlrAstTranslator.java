@@ -64,9 +64,23 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
            result = DefinitionToken.NAMESPACE_DEFINITION;
             break;
         case Java15TokenTypes.ANNOTATIONS:
+//            result = JavaAstToken.ANNOTATIONS;
+//           break;
         case Java15TokenTypes.ANNOTATION_DEF:
             result = VisitControlToken.SKIP;
-            //アノテーション関連は全部無視
+            //アノテーション定義は無視 
+            break;
+        case Java15TokenTypes.ANNOTATION_MEMBER:
+            result = JavaAstToken.ANNOTATION_MEMBER;
+            break;
+        case Java15TokenTypes.ANNOTATION_MEMBER_VALUE_PAIR:
+            result = JavaAstToken.ANNOTATION_MEMBER_VALUE_PAIR;
+            break;
+        case Java15TokenTypes.ANNOTATION_ARRAY_INIT:
+            result = JavaAstToken.ANNOTATION_ARRAY_INIT;
+            break;
+        case Java15TokenTypes.ANNOTATION_STRING:
+            result = JavaAstToken.ANNOTATION_STRING;
             break;
         case Java15TokenTypes.CLASS_IMPORT:
             result = JavaAstToken.CLASS_IMPORT;
@@ -373,7 +387,8 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             result = DefinitionToken.INSTANCE_INIT;
             break;
         case Java15TokenTypes.ANNOTATION:
-            result = VisitControlToken.SKIP;
+            result = JavaAstToken.ANNOTATION;
+            //result = VisitControlToken.SKIP;
             break;
         case Java15TokenTypes.THROWS_CLAUSE:
             result = JavaAstToken.THROWS;

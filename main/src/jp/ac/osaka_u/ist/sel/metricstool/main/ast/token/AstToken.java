@@ -485,4 +485,40 @@ public interface AstToken {
      * @return 文を表すトークンならtrue
      */
     public boolean isStatement();
+
+    /**
+     * トークンがアノテーション列を表すかどうか返す
+     * @return アノテーション列を表すトークンならtrue
+     */
+    public boolean isAnnotations();
+    
+    /**
+     * トークンがアノテーションを表すかどうか返す
+     * @return アノテーションを表すトークンならtrue
+     */
+    public boolean isAnnotation();
+    
+    /**
+     * トークンがアノテーションに渡す引数(省略形式)かどうか返す
+     * @return アノテーションに渡す引数(省略形式)トークンならtrue
+     */
+    public boolean isAnnotationMember();
+    /**
+     * トークンがアノテーションに渡す引数列かどうか返す
+     * @return アノテーションに渡す引数列トークンならtrue
+     */
+    public boolean isAnnotationMemberValuePair();
+
+    /**
+     * トークンがアノテーションに渡す配列かどうか返す
+     * @return アノテーションに渡す配列トークンならtrue
+     */
+    public boolean isAnnotationArrayInit();
+    
+    /**
+     * トークンがアノテーション引数(文字列として認識)かどうか返す
+     */
+    public boolean isAnnotationString();
+    
+
 }
