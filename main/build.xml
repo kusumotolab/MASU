@@ -47,7 +47,6 @@
 		<mkdir dir="${PACKAGE.DIR}" />
 		<mkdir dir="${PACKAGE.BIN.DIR}" />
 		<mkdir dir="${PACKAGE.PLUGIN.DIR}" />
-		<mkdir dir="${PACKAGE.DOC.DIR}" />
 
 		<jar basedir="${CLS.DIR}" jarfile="${PACKAGE.BIN.DIR}/${TOOL.NAME}.jar" manifest="${manifest.mf}" />
 		<copy file="${cli.jar}" todir="${PACKAGE.BIN.DIR}" />
@@ -65,6 +64,10 @@
 			<classpath path="${cli.jar};${antlr.jar};${asm.jar}" />
 		</javadoc>
 
+		<copy todir="${PACKAGE.DOC.DIR}">
+			<fileset dir="${DOC.DIR}" />
+		</copy>
+	
 		<zip destfile="${zip.bin.name}" basedir="${PACKAGE.DIR}" />
 	</target>
 
@@ -77,6 +80,10 @@
 			<fileset dir="${SRC.DIR}" />
 		</copy>
 
+		<copy todir="${PACKAGE.DOC.DIR}">
+			<fileset dir="${DOC.DIR}" />
+		</copy>
+		
 		<zip destfile="${zip.src.name}" basedir="${PACKAGE.DIR}" />
 	</target>
 
