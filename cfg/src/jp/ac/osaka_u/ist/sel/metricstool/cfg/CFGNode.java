@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
@@ -227,11 +228,27 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 			for (final CallInfo<?> call : this.getCore().getCalls()) {
 				if (call instanceof MethodCallInfo) {
 					final MethodCallInfo methodCall = (MethodCallInfo) call;
+
+					// methodCallÇÃquantifierÇí≤ç∏
 					if (CFGUtility.stateChange(methodCall.getCallee())) {
 						final ExpressionInfo qualifier = methodCall
 								.getQualifierExpression();
 						if (qualifier instanceof VariableUsageInfo<?>) {
 							assignments.add(((VariableUsageInfo<?>) qualifier)
+									.getUsedVariable());
+						}
+					}
+				}
+
+				// methodCallÇÃparameterÇí≤ç∏
+				final List<ExpressionInfo> arguments = call.getArguments();
+				for (int index = 0; index < arguments.size(); index++) {
+
+					if (CFGUtility.stateChange(call.getCallee(), index)) {
+						final ExpressionInfo argument = call.getArguments()
+								.get(index);
+						if (argument instanceof VariableUsageInfo<?>) {
+							assignments.add(((VariableUsageInfo<?>) argument)
 									.getUsedVariable());
 						}
 					}
