@@ -203,6 +203,12 @@ public class IntraProceduralPDG extends PDG {
 	}
 
 	public IntraProceduralPDG(final CallableUnitInfo unit,
+			final boolean countObjectStateChange) {
+		this(unit, new DefaultPDGNodeFactory(), new DefaultCFGNodeFactory(),
+				true, true, true, countObjectStateChange);
+	}
+
+	public IntraProceduralPDG(final CallableUnitInfo unit,
 			final boolean buildDataDependency,
 			final boolean buildControlDependencey,
 			final boolean buildExecutionDependency) {
