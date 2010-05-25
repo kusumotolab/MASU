@@ -7,6 +7,7 @@ import java.util.SortedSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
@@ -115,7 +116,8 @@ public class CFGUtility {
 			}
 
 			// parameter ‚ð’²‚×‚é
-			{
+			if (call instanceof MethodCallInfo
+					|| call instanceof ClassConstructorCallInfo) {
 				final List<ExpressionInfo> arguments = call.getArguments();
 				for (int i = 0; i < arguments.size(); i++) {
 					if (arguments.get(i) instanceof VariableUsageInfo<?>) {

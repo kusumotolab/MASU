@@ -9,6 +9,7 @@ import java.util.Set;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
@@ -240,16 +241,20 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 					}
 				}
 
-				// methodCallÇÃparameterÇí≤ç∏
-				final List<ExpressionInfo> arguments = call.getArguments();
-				for (int index = 0; index < arguments.size(); index++) {
+				if (call instanceof MethodCallInfo
+						|| call instanceof ClassConstructorCallInfo) {
+					// methodCallÇÃparameterÇí≤ç∏
+					final List<ExpressionInfo> arguments = call.getArguments();
+					for (int index = 0; index < arguments.size(); index++) {
 
-					if (CFGUtility.stateChange(call.getCallee(), index)) {
-						final ExpressionInfo argument = call.getArguments()
-								.get(index);
-						if (argument instanceof VariableUsageInfo<?>) {
-							assignments.add(((VariableUsageInfo<?>) argument)
-									.getUsedVariable());
+						if (CFGUtility.stateChange(call.getCallee(), index)) {
+							final ExpressionInfo argument = call.getArguments()
+									.get(index);
+							if (argument instanceof VariableUsageInfo<?>) {
+								assignments
+										.add(((VariableUsageInfo<?>) argument)
+												.getUsedVariable());
+							}
 						}
 					}
 				}
