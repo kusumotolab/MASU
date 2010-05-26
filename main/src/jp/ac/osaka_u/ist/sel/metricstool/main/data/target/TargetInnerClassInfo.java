@@ -10,8 +10,7 @@ import java.util.Set;
  * @author higo
  */
 @SuppressWarnings("serial")
-public class TargetInnerClassInfo extends TargetClassInfo implements
-        InnerClassInfo {
+public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassInfo {
 
     /**
      * インナークラスオブジェクトを初期化する
@@ -87,7 +86,9 @@ public class TargetInnerClassInfo extends TargetClassInfo implements
             throw new NullPointerException();
         }
 
-        if (!(outerUnit instanceof TargetClassInfo) && !(outerUnit instanceof TargetMethodInfo)) {
+        if (!(outerUnit instanceof TargetClassInfo) && !(outerUnit instanceof TargetMethodInfo)
+                && !(outerUnit instanceof TargetConstructorInfo)
+                && !(outerUnit instanceof InitializerInfo)) {
             throw new IllegalArgumentException();
         }
 

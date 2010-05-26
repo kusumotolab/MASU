@@ -506,7 +506,8 @@ public class MetricsTool {
                     .contains(JavaPredefinedModifierInfo.PROTECTED_STRING);
             final boolean isPrivateVisible = unresolvedModifiers
                     .contains(JavaPredefinedModifierInfo.PRIVATE_STRING);
-            final boolean isStatic = unresolvedModifiers.contains(JavaPredefinedModifierInfo.STATIC_STRING);
+            final boolean isStatic = unresolvedModifiers
+                    .contains(JavaPredefinedModifierInfo.STATIC_STRING);
             final boolean isInterface = unresolvedClassInfo.isInterface();
             final Set<ModifierInfo> modifiers = new HashSet<ModifierInfo>();
             for (final String unresolvedModifier : unresolvedModifiers) {
@@ -587,7 +588,8 @@ public class MetricsTool {
                         .contains(JavaPredefinedModifierInfo.PROTECTED_STRING);
                 final boolean isPrivateVisible = unresolvedModifiers
                         .contains(JavaPredefinedModifierInfo.PRIVATE_STRING);
-                final boolean isStatic = unresolvedModifiers.contains(JavaPredefinedModifierInfo.STATIC_STRING);
+                final boolean isStatic = unresolvedModifiers
+                        .contains(JavaPredefinedModifierInfo.STATIC_STRING);
                 final Set<ModifierInfo> modifiers = new HashSet<ModifierInfo>();
                 for (final String unresolvedModifier : unresolvedModifiers) {
                     modifiers.add(JavaPredefinedModifierInfo.getModifierInfo(unresolvedModifier));
@@ -613,7 +615,8 @@ public class MetricsTool {
                         .contains(JavaPredefinedModifierInfo.PROTECTED_STRING);
                 final boolean isPrivateVisible = unresolvedModifiers
                         .contains(JavaPredefinedModifierInfo.PRIVATE_STRING);
-                final boolean isStatic = unresolvedModifiers.contains(JavaPredefinedModifierInfo.STATIC_STRING);
+                final boolean isStatic = unresolvedModifiers
+                        .contains(JavaPredefinedModifierInfo.STATIC_STRING);
                 final Set<ModifierInfo> modifiers = new HashSet<ModifierInfo>();
                 for (final String unresolvedModifier : unresolvedModifiers) {
                     modifiers.add(JavaPredefinedModifierInfo.getModifierInfo(unresolvedModifier));
@@ -822,7 +825,7 @@ public class MetricsTool {
             if (Settings.getInstance().isVerbose()) {
                 out.println("STEP8 : resolve field and method usages.");
             }
-            addReferenceAssignmentCallRelateion();
+            addMethodInsideInfomation();
         }
 
         // 文法誤りのあるファイル一覧を表示
@@ -1627,7 +1630,7 @@ public class MetricsTool {
     /**
      * エンティティ（フィールドやクラス）の代入・参照，メソッドの呼び出し関係を追加する．
      */
-    private void addReferenceAssignmentCallRelateion() {
+    private void addMethodInsideInfomation() {
 
         final UnresolvedClassInfoManager unresolvedClassInfoManager = DataManager.getInstance()
                 .getUnresolvedClassInfoManager();
@@ -1639,8 +1642,8 @@ public class MetricsTool {
         // 各未解決クラス情報 に対して
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
-            addReferenceAssignmentCallRelation(unresolvedClassInfo, classInfoManager,
-                    fieldInfoManager, methodInfoManager);
+            addMethodInsideInformation(unresolvedClassInfo, classInfoManager, fieldInfoManager,
+                    methodInfoManager);
         }
     }
 
@@ -1652,7 +1655,7 @@ public class MetricsTool {
      * @param fieldInfoManager 用いるフィールドマネージャ
      * @param methodInfoManager 用いるメソッドマネージャ
      */
-    private void addReferenceAssignmentCallRelation(final UnresolvedClassInfo unresolvedClassInfo,
+    private void addMethodInsideInformation(final UnresolvedClassInfo unresolvedClassInfo,
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
             final MethodInfoManager methodInfoManager) {
 
@@ -1675,40 +1678,42 @@ public class MetricsTool {
         for (final UnresolvedMethodInfo unresolvedMethodInfo : unresolvedClassInfo
                 .getDefinedMethods()) {
 
-            // 未解決メソッド情報内の利用関係を解決
-            this.addReferenceAssignmentCallRelation(unresolvedMethodInfo, unresolvedClassInfo,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
+            final TargetMethodInfo method = unresolvedMethodInfo.getResolved();
+            unresolvedMethodInfo.resolveInnerBlock(classInfo, method, classInfoManager,
+                    fieldInfoManager, methodInfoManager);
         }
 
         // 各未解決コンストラクタ情報に対して
         for (final UnresolvedConstructorInfo unresolvedConstructorInfo : unresolvedClassInfo
                 .getDefinedConstructors()) {
 
-            // 未解決コンストラクタ情報内の利用関係を解決
-            this.addReferenceAssignmentCallRelation(unresolvedConstructorInfo, unresolvedClassInfo,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
+            final TargetConstructorInfo constructor = unresolvedConstructorInfo.getResolved();
+            unresolvedConstructorInfo.resolveInnerBlock(classInfo, constructor, classInfoManager,
+                    fieldInfoManager, methodInfoManager);
         }
 
         // resolve UnresolvedInstanceInitializers and register them
         for (final UnresolvedInstanceInitializerInfo unresolvedInstanceInitializer : unresolvedClassInfo
                 .getInstanceInitializers()) {
-            // resolve
-            this.addReferenceAssignmentCallRelation(unresolvedInstanceInitializer,
-                    unresolvedClassInfo, classInfoManager, fieldInfoManager, methodInfoManager);
+
+            final InstanceInitializerInfo initializer = unresolvedInstanceInitializer.getResolved();
+            unresolvedInstanceInitializer.resolveInnerBlock(classInfo, initializer,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
         }
 
         // resolve UnresolvedStaticInitializers and register them
         for (final UnresolvedStaticInitializerInfo unresolvedStaticInitializer : unresolvedClassInfo
                 .getStaticInitializers()) {
-            // resolve
-            this.addReferenceAssignmentCallRelation(unresolvedStaticInitializer,
-                    unresolvedClassInfo, classInfoManager, fieldInfoManager, methodInfoManager);
+
+            final StaticInitializerInfo initializer = unresolvedStaticInitializer.getResolved();
+            unresolvedStaticInitializer.resolveInnerBlock(classInfo, initializer, classInfoManager,
+                    fieldInfoManager, methodInfoManager);
         }
 
         // 各インナークラスに対して
         for (final UnresolvedClassInfo unresolvedInnerClassInfo : unresolvedClassInfo
                 .getInnerClasses()) {
-            addReferenceAssignmentCallRelation(unresolvedInnerClassInfo, classInfoManager,
+            addMethodInsideInformation(unresolvedInnerClassInfo, classInfoManager,
                     fieldInfoManager, methodInfoManager);
         }
     }
