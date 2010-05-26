@@ -67,7 +67,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     }
 
     /**
-     * ExternalMethodInfo‚Å‚Í’†g‚Í‚È‚¢
+     * ‹ó‚ÌSortedSet‚ğ•Ô‚·
      */
     @Override
     public SortedSet<StatementInfo> getStatements() {

@@ -1,10 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 
 /**
@@ -38,11 +40,11 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
     }
 
     /**
-     * ExternalConstructorInfo‚Å‚Í—˜—p‚Å‚«‚È‚¢
+     * ‹ó‚ÌSortedSet‚ð•Ô‚·
      */
     @Override
     public SortedSet<StatementInfo> getStatements() {
-        throw new CannotUseException();
+        return Collections.unmodifiableSortedSet(new TreeSet<StatementInfo>());
     }
 
     /**
