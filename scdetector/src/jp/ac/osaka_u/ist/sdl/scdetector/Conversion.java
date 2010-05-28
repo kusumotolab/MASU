@@ -14,6 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.DefaultEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LiteralUsageInfo;
@@ -74,13 +75,17 @@ public class Conversion {
 		} else if (o instanceof CaseEntryInfo) {
 
 			final StringBuilder text = new StringBuilder();
-			text.append("case ");
+			if (o instanceof DefaultEntryInfo) {
+				text.append("default:");
+			} else {
+				text.append("case ");
 
-			final ExpressionInfo label = ((CaseEntryInfo) o).getLabel();
-			final String labelString = getNormalizedString(label);
-			text.append(labelString);
+				final ExpressionInfo label = ((CaseEntryInfo) o).getLabel();
+				final String labelString = getNormalizedString(label);
+				text.append(labelString);
 
-			text.append(":");
+				text.append(":");
+			}
 
 			converted = text.toString();
 			ORIGINAL_TO_CONVERTED_MAP.put(o, converted);
