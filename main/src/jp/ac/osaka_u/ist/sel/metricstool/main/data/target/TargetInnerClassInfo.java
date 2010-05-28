@@ -46,7 +46,9 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
             throw new NullPointerException();
         }
 
-        if (!(outerUnit instanceof TargetClassInfo) && !(outerUnit instanceof TargetMethodInfo)) {
+        if (!(outerUnit instanceof TargetClassInfo) && !(outerUnit instanceof TargetMethodInfo)
+                && !(outerUnit instanceof TargetConstructorInfo)
+                && !(outerUnit instanceof InitializerInfo)) {
             throw new IllegalArgumentException();
         }
 
@@ -121,10 +123,11 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
         if (unitInfo instanceof TargetClassInfo) {
             return (TargetClassInfo) unitInfo;
 
-            // 外側のユニットがメソッドであれば，その所有クラスを返す
-        } else if (unitInfo instanceof TargetMethodInfo) {
+            // 外側のユニットがTargetなCallableUnitInfoであれば，その所有クラスを返す
+        } else if (unitInfo instanceof TargetMethodInfo || unitInfo instanceof TargetConstructorInfo
+                || unitInfo instanceof InitializerInfo) {
 
-            final ClassInfo ownerClass = ((TargetMethodInfo) unitInfo).getOwnerClass();
+            final ClassInfo ownerClass = ((CallableUnitInfo) unitInfo).getOwnerClass();
             return (TargetClassInfo) ownerClass;
         }
 
