@@ -100,10 +100,6 @@ public final class UnresolvedConstructorInfo extends
             this.resolvedInfo.addThrownException(thrownException);
         }
 
-        // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
-        this.resolveInnerBlock(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
-                methodInfoManager);
-
         return this.resolvedInfo;
     }
 
