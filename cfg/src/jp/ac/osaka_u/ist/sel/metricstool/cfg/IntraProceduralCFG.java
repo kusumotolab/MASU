@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1034,6 +1035,19 @@ public class IntraProceduralCFG extends CFG {
 		// ノード間の関係を最適化
 		for (final CFGNode<?> node : this.getAllNodes()) {
 			node.optimize();
+		}
+
+		// 終了ノード群を最適化
+		{
+			Iterator<CFGNode<? extends ExecutableElementInfo>> iterator = this.exitNodes
+					.iterator();
+			while (iterator.hasNext()) {
+				final CFGNode<? extends ExecutableElementInfo> node = iterator
+						.next();
+				if (node instanceof CFGCaseEntryNode) {
+					iterator.remove();
+				}
+			}
 		}
 
 		// ノードファクトリを最適化
