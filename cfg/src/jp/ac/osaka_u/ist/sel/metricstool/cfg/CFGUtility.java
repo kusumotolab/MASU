@@ -225,7 +225,8 @@ public class CFGUtility {
 			}
 
 			// parameter ‚ð’²‚×‚é
-			{
+			if (call instanceof MethodCallInfo
+					|| call instanceof ClassConstructorCallInfo) {
 				final List<ExpressionInfo> arguments = call.getArguments();
 				for (int i = 0; i < arguments.size(); i++) {
 					if (arguments.get(i) instanceof VariableUsageInfo<?>) {
