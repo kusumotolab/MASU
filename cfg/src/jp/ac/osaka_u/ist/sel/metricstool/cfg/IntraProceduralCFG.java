@@ -1044,7 +1044,8 @@ public class IntraProceduralCFG extends CFG {
 			while (iterator.hasNext()) {
 				final CFGNode<? extends ExecutableElementInfo> node = iterator
 						.next();
-				if (node instanceof CFGCaseEntryNode) {
+				if (node instanceof CFGCaseEntryNode
+						|| node instanceof CFGJumpStatementNode) {
 					iterator.remove();
 				}
 			}
