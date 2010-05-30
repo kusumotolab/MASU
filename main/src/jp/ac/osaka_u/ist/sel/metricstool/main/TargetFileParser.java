@@ -76,7 +76,7 @@ class TargetFileParser implements Runnable {
             }
 
             final FileInfo fileInfo = new FileInfo(this.file.getName());
-            DataManager.getInstance().getFileInfoManager().add(fileInfo);
+            DataManager.getInstance().getFileInfoManager().add(fileInfo, Thread.currentThread());
 
             BufferedInputStream stream = new BufferedInputStream(new FileInputStream(this.file
                     .getName()));

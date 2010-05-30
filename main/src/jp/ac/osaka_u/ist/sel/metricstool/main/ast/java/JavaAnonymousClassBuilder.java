@@ -73,8 +73,8 @@ public class JavaAnonymousClassBuilder extends CompoundDataBuilder<UnresolvedCla
         final UnresolvedClassInfo outer = buildDataManager.getCurrentClass();
         final int anonymousCount = buildDataManager.getAnonymousClassCount(outer);
 
-        final FileInfo currentFile = DataManager.getInstance().getFileInfoManager()
-                .getCurrentFile();
+        final FileInfo currentFile = DataManager.getInstance().getFileInfoManager().getCurrentFile(
+                Thread.currentThread());
         assert null != currentFile : "Illegal state: the file information was not registered to FileInfoManager";
 
         final UnresolvedUnitInfo<? extends UnitInfo> currentUnit = this.buildDataManager
