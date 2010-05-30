@@ -50,17 +50,15 @@ class DetectionThread implements Runnable {
 
 			final ClonePairInfo clonePair = new ClonePairInfo();
 			if (nodeA instanceof PDGMergedNode) {
-				clonePair.getCodeFragmentA().addAll(
-						((PDGMergedNode) nodeA).getCores());
+				clonePair.codecloneA.addAll(((PDGMergedNode) nodeA).getCores());
 			} else {
-				clonePair.getCodeFragmentA().add(nodeA.getCore());
+				clonePair.codecloneA.add(nodeA.getCore());
 			}
 
 			if (nodeB instanceof PDGMergedNode) {
-				clonePair.getCodeFragmentB().addAll(
-						((PDGMergedNode) nodeB).getCores());
+				clonePair.codecloneB.addAll(((PDGMergedNode) nodeB).getCores());
 			} else {
-				clonePair.getCodeFragmentB().add(nodeB.getCore());
+				clonePair.codecloneB.add(nodeB.getCore());
 			}
 
 			final HashSet<PDGNode<?>> checkedNodesA = new HashSet<PDGNode<?>>();
@@ -79,8 +77,11 @@ class DetectionThread implements Runnable {
 						nodeB, clonePair, checkedNodesA, checkedNodesB);
 			}
 
-			if (Configuration.INSTANCE.getS() <= clonePair.length()) {
+			if ((Configuration.INSTANCE.getS() <= clonePair.codecloneA.length())
+					&& (Configuration.INSTANCE.getS() <= clonePair.codecloneB
+							.length())) {
 				pairs.add(clonePair);
+
 				/*
 				 * SortedSet<ClonePairInfo> pairs = this.clonePairs .get(new
 				 * TwoClassHash(clonePair)); if (null == pairs) { pairs =

@@ -18,7 +18,7 @@ import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.NodePairListInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.PDGController;
-import jp.ac.osaka_u.ist.sdl.scdetector.io.BellonWriter;
+import jp.ac.osaka_u.ist.sdl.scdetector.io.XMLWriter;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.CALL_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.CAST_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.CONTROL_FILTER;
@@ -543,8 +543,8 @@ public class Scorpio extends MetricsTool {
 				Settings.getInstance().addTargetDirectory(directory);
 			}
 			Settings.getInstance().setVerbose(true);
-			// Settings.getInstance().setThreadNumber(
-			// Configuration.INSTANCE.getW());
+			Settings.getInstance().setThreadNumber(
+					Configuration.INSTANCE.getW());
 
 			// èÓïÒï\é¶ópê›íË
 			final Class<?> metricstool = MetricsTool.class;
@@ -804,8 +804,8 @@ public class Scorpio extends MetricsTool {
 
 			for (final ClonePairInfo clonePair : refinedClonePairs) {
 
-				final CodeCloneInfo cloneA = clonePair.getCodeFragmentA();
-				final CodeCloneInfo cloneB = clonePair.getCodeFragmentB();
+				final CodeCloneInfo cloneA = clonePair.codecloneA;
+				final CodeCloneInfo cloneB = clonePair.codecloneB;
 
 				final CloneSetInfo cloneSetA = cloneSetBag.get(cloneA);
 				final CloneSetInfo cloneSetB = cloneSetBag.get(cloneB);
@@ -863,15 +863,15 @@ public class Scorpio extends MetricsTool {
 			}
 		}
 
-		/*
-		 * final XMLWriter writer = new XMLWriter(Configuration.INSTANCE.getO(),
-		 * DataManager.getInstance().getFileInfoManager().getFileInfos(),
-		 * cloneSets, pdgNodeFactory);
-		 */
+		final XMLWriter writer = new XMLWriter(Configuration.INSTANCE.getO(),
+				DataManager.getInstance().getFileInfoManager().getFileInfos(),
+				cloneSets, pdgNodeFactory);
 
-		final BellonWriter writer = new BellonWriter(Configuration.INSTANCE
-				.getO(), DataManager.getInstance().getFileInfoManager()
-				.getFileInfos(), cloneSets);
+		/*
+		 * final BellonWriter writer = new BellonWriter(Configuration.INSTANCE
+		 * .getO(), DataManager.getInstance().getFileInfoManager()
+		 * .getFileInfos(), cloneSets);
+		 */
 
 		writer.write();
 		writer.close();

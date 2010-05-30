@@ -18,8 +18,8 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 	 */
 	public ClonePairInfo() {
 
-		this.codeFragmentA = new CodeCloneInfo();
-		this.codeFragmentB = new CodeCloneInfo();
+		this.codecloneA = new CodeCloneInfo();
+		this.codecloneB = new CodeCloneInfo();
 
 		this.id = number++;
 	}
@@ -50,8 +50,8 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 	 */
 	public void add(final ExecutableElementInfo elementA,
 			final ExecutableElementInfo elementB) {
-		this.codeFragmentA.add(elementA);
-		this.codeFragmentB.add(elementB);
+		this.codecloneA.add(elementA);
+		this.codecloneB.add(elementB);
 	}
 
 	/**
@@ -64,8 +64,8 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 	 */
 	public void addAll(final Collection<ExecutableElementInfo> elementsA,
 			final Collection<ExecutableElementInfo> elementsB) {
-		this.codeFragmentA.addAll(elementsA);
-		this.codeFragmentB.addAll(elementsB);
+		this.codecloneA.addAll(elementsA);
+		this.codecloneB.addAll(elementsB);
 	}
 
 	/**
@@ -74,25 +74,7 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 	 * @return　クローンペアの長さ
 	 */
 	public int length() {
-		return (this.codeFragmentA.length() + this.codeFragmentB.length()) / 2;
-	}
-
-	/**
-	 * コードクローンAを返す
-	 * 
-	 * @return　コードクローンA
-	 */
-	public CodeCloneInfo getCodeFragmentA() {
-		return this.codeFragmentA;
-	}
-
-	/**
-	 * コードクローンBを返す
-	 * 
-	 * @return　コードクローンB
-	 */
-	public CodeCloneInfo getCodeFragmentB() {
-		return this.codeFragmentB;
+		return (this.codecloneA.length() + this.codecloneB.length()) / 2;
 	}
 
 	/**
@@ -104,13 +86,10 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 	 */
 	public boolean subsumedBy(final ClonePairInfo clonePair) {
 
-		return (this.getCodeFragmentA()
-				.subsumedBy(clonePair.getCodeFragmentA()) && this
-				.getCodeFragmentB().subsumedBy(clonePair.getCodeFragmentB()))
-				|| (this.getCodeFragmentB().subsumedBy(
-						clonePair.getCodeFragmentA()) && this
-						.getCodeFragmentA().subsumedBy(
-								clonePair.getCodeFragmentB()));
+		return (this.codecloneA.subsumedBy(clonePair.codecloneA) && this.codecloneB
+				.subsumedBy(clonePair.codecloneB))
+				|| (this.codecloneB.subsumedBy(clonePair.codecloneA) && this.codecloneA
+						.subsumedBy(clonePair.codecloneB));
 	}
 
 	/**
@@ -124,8 +103,7 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 
 	@Override
 	public int hashCode() {
-		return this.getCodeFragmentA().hashCode()
-				+ this.getCodeFragmentB().hashCode();
+		return this.codecloneA.hashCode() + this.codecloneB.hashCode();
 	}
 
 	@Override
@@ -140,18 +118,18 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 		}
 
 		final ClonePairInfo target = (ClonePairInfo) o;
-		return (this.getCodeFragmentA().equals(target.getCodeFragmentA()) && this
-				.getCodeFragmentB().equals(target.getCodeFragmentB()))
-				|| (this.getCodeFragmentA().equals(target.getCodeFragmentB()) && this
-						.getCodeFragmentB().equals(target.getCodeFragmentA()));
+		return (this.codecloneA.equals(target.codecloneA) && this.codecloneB
+				.equals(target.codecloneB))
+				|| (this.codecloneA.equals(target.codecloneB) && this.codecloneB
+						.equals(target.codecloneA));
 	}
 
 	@Override
 	public ClonePairInfo clone() {
 
 		final ClonePairInfo clonePair = new ClonePairInfo();
-		final CodeCloneInfo cloneA = this.getCodeFragmentA();
-		final CodeCloneInfo cloneB = this.getCodeFragmentB();
+		final CodeCloneInfo cloneA = this.codecloneA;
+		final CodeCloneInfo cloneB = this.codecloneB;
 		clonePair.addAll(cloneA.getElements(), cloneB.getElements());
 
 		return clonePair;
@@ -164,10 +142,10 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 			throw new IllegalArgumentException();
 		}
 
-		final CodeCloneInfo thisCodeA = this.getCodeFragmentA();
-		final CodeCloneInfo thisCodeB = this.getCodeFragmentB();
-		final CodeCloneInfo targetCodeA = clonePair.getCodeFragmentA();
-		final CodeCloneInfo targetCodeB = clonePair.getCodeFragmentB();
+		final CodeCloneInfo thisCodeA = this.codecloneA;
+		final CodeCloneInfo thisCodeB = this.codecloneB;
+		final CodeCloneInfo targetCodeA = clonePair.codecloneA;
+		final CodeCloneInfo targetCodeB = clonePair.codecloneB;
 
 		/*
 		 * // コードクローンを構成する要素数で比較 if (thisCodeA.length() > targetCodeA.length())
@@ -210,9 +188,9 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 		return 0;
 	}
 
-	final private CodeCloneInfo codeFragmentA;
+	final public CodeCloneInfo codecloneA;
 
-	final private CodeCloneInfo codeFragmentB;
+	final public CodeCloneInfo codecloneB;
 
 	final private int id;
 

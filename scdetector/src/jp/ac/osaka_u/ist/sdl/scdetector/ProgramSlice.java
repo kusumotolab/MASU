@@ -149,18 +149,14 @@ class ProgramSlice {
 				if (hashA == hashB) {
 
 					// A,Bどちらからの要素がすでにクローンペアに含まれている場合は何もしない
-					final CodeCloneInfo codeFragmentA = clonePair
-							.getCodeFragmentA();
-					final CodeCloneInfo codeFragmentB = clonePair
-							.getCodeFragmentB();
-					if (codeFragmentA.contain(coreA)
-							|| codeFragmentB.contain(coreB)) {
+					final CodeCloneInfo codecloneA = clonePair.codecloneA;
+					final CodeCloneInfo codecloneB = clonePair.codecloneB;
+					if (codecloneA.contain(coreA) || codecloneB.contain(coreB)) {
 						continue;
 					}
 
 					// A,Bどちらがの要素が，相手側のクローンペアに含まれている場合は何もしない
-					if (codeFragmentA.contain(coreB)
-							|| codeFragmentB.contain(coreA)) {
+					if (codecloneA.contain(coreB) || codecloneB.contain(coreA)) {
 						continue;
 					}
 
@@ -170,17 +166,17 @@ class ProgramSlice {
 					}
 
 					if (fromNodeA instanceof PDGMergedNode) {
-						clonePair.getCodeFragmentA().addAll(
-								((PDGMergedNode) fromNodeA).getCores());
+						clonePair.codecloneA.addAll(((PDGMergedNode) fromNodeA)
+								.getCores());
 					} else {
-						clonePair.getCodeFragmentA().add(fromNodeA.getCore());
+						clonePair.codecloneA.add(fromNodeA.getCore());
 					}
 
 					if (fromNodeB instanceof PDGMergedNode) {
-						clonePair.getCodeFragmentB().addAll(
-								((PDGMergedNode) fromNodeB).getCores());
+						clonePair.codecloneB.addAll(((PDGMergedNode) fromNodeB)
+								.getCores());
 					} else {
-						clonePair.getCodeFragmentB().add(fromNodeB.getCore());
+						clonePair.codecloneB.add(fromNodeB.getCore());
 					}
 
 					// clonePair.add(coreA, coreB);
@@ -244,18 +240,14 @@ class ProgramSlice {
 				if (hashA == hashB) {
 
 					// A,Bどちらからの要素がすでにクローンペアに含まれている場合は何もしない
-					final CodeCloneInfo codeFragmentA = clonePair
-							.getCodeFragmentA();
-					final CodeCloneInfo codeFragmentB = clonePair
-							.getCodeFragmentB();
-					if (codeFragmentA.contain(coreA)
-							|| codeFragmentB.contain(coreB)) {
+					final CodeCloneInfo codecloneA = clonePair.codecloneA;
+					final CodeCloneInfo codecloneB = clonePair.codecloneB;
+					if (codecloneA.contain(coreA) || codecloneB.contain(coreB)) {
 						continue;
 					}
 
 					// A,Bどちらがの要素が，相手側のクローンペアに含まれている場合は何もしない
-					if (codeFragmentA.contain(coreB)
-							|| codeFragmentB.contain(coreA)) {
+					if (codecloneA.contain(coreB) || codecloneB.contain(coreA)) {
 						continue;
 					}
 
@@ -265,17 +257,17 @@ class ProgramSlice {
 					}
 
 					if (toNodeA instanceof PDGMergedNode) {
-						clonePair.getCodeFragmentA().addAll(
-								((PDGMergedNode) toNodeA).getCores());
+						clonePair.codecloneA.addAll(((PDGMergedNode) toNodeA)
+								.getCores());
 					} else {
-						clonePair.getCodeFragmentA().add(toNodeA.getCore());
+						clonePair.codecloneA.add(toNodeA.getCore());
 					}
 
 					if (toNodeB instanceof PDGMergedNode) {
-						clonePair.getCodeFragmentB().addAll(
-								((PDGMergedNode) toNodeB).getCores());
+						clonePair.codecloneB.addAll(((PDGMergedNode) toNodeB)
+								.getCores());
 					} else {
-						clonePair.getCodeFragmentB().add(toNodeB.getCore());
+						clonePair.codecloneB.add(toNodeB.getCore());
 					}
 
 					// clonePair.add(coreA, coreB);
