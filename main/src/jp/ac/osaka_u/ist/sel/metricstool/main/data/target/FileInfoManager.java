@@ -3,11 +3,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -95,7 +95,7 @@ public final class FileInfoManager {
      */
     public FileInfoManager() {
         this.fileInfos = new TreeSet<FileInfo>();
-        this.threadMap = new HashMap<Thread, List<FileInfo>>();
+        this.threadMap = new ConcurrentHashMap<Thread, List<FileInfo>>();
     }
 
     /**
@@ -107,5 +107,5 @@ public final class FileInfoManager {
     /**
      * スレッドと登録されたファイルの対応関係を保存するための変数
      */
-    private final Map<Thread, List<FileInfo>> threadMap;
+    private final ConcurrentMap<Thread, List<FileInfo>> threadMap;
 }
