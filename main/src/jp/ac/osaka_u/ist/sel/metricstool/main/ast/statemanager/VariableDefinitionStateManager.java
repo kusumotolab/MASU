@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.JavaAstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
@@ -47,10 +48,17 @@ public abstract class VariableDefinitionStateManager extends
                 //定義部に入ったので状態遷移をしてイベントを発行する
                 this.setState(STATE.DEFINITION);
                 this.fireStateChangeEvent(VARIABLE_STATE.ENTER_VARIABLE_DEF, event);
-            } else if (token.isAssignmentOperator() && STATE.DEFINITION == this.getState()) {
-                //定義部内に代入演算子があったので，初期化部へと常態遷移をしてイベントを発行する
-                this.setState(STATE.INITIALIZER);
-                this.fireStateChangeEvent(VARIABLE_STATE.ENTER_VARIABLE_INITIALIZER, event);
+            } /*else if (this.isInDefinition() && token.isAnnotation()) {
+                System.out.println("annotation");
+              }*/
+
+            else if (token.isAssignmentOperator() && STATE.DEFINITION == this.getState()) {
+                //アノテーション内の代入演算子は無視
+                if (!event.getParentToken().isAnnotationString()) {
+                    //定義部内に代入演算子があったので，初期化部へと常態遷移をしてイベントを発行する                    
+                    this.setState(STATE.INITIALIZER);
+                    this.fireStateChangeEvent(VARIABLE_STATE.ENTER_VARIABLE_INITIALIZER, event);
+                }
             }
         }
     }
@@ -70,8 +78,11 @@ public abstract class VariableDefinitionStateManager extends
                 //定義部から出たのでイベントを発行する
                 this.fireStateChangeEvent(VARIABLE_STATE.EXIT_VARIABLE_DEF, event);
             } else if (token.isAssignmentOperator() && STATE.DEFINITION == this.getState()) {
-                //初期化部から出たのでイベントを発行する
-                this.fireStateChangeEvent(VARIABLE_STATE.EXIT_VARIABLE_INITIALIZER, event);
+                //アノテーション内の代入演算子は無視
+                if (!event.getParentToken().isAnnotationString()) {
+                    //初期化部から出たのでイベントを発行する
+                    this.fireStateChangeEvent(VARIABLE_STATE.EXIT_VARIABLE_INITIALIZER, event);
+                }
             }
         }
     }
@@ -112,6 +123,7 @@ public abstract class VariableDefinitionStateManager extends
     protected boolean isStateChangeTriggerEvent(final AstVisitEvent event) {
         AstToken token = event.getToken();
         return token.isAssignmentOperator() || this.isDefinitionToken(token);
+        // || token.isAnnotation();
     }
 
     /**

@@ -36,6 +36,7 @@ public class AnnotationBuilder extends CompoundDataBuilder<ModifierInfo[]> {
             this.identifierBuilder.activate();
         } else if (eventType
                 .equals(AnnotationStateManager.ANNOTATION_STATE.ENTER_ANNOTATION_STRING)) {
+            this.identifierBuilder.deactivate();
             this.annotationStatementBuilder.activate();
         } else if (eventType.equals(AnnotationStateManager.ANNOTATION_STATE.EXIT_ANNOTATION_STRING)) {
             this.annotationStatementBuilder.deactivate();
@@ -45,7 +46,6 @@ public class AnnotationBuilder extends CompoundDataBuilder<ModifierInfo[]> {
             this.annotationStatementBuilder.clearAnnotationArguments();
             final ModifierInfo modifierInfo = new AnnotationInfo(annotationName, annotationArgument);//ModifierInfo.getModifierInfo(annotationTypeName);
             this.annotations.add(modifierInfo);
-            this.identifierBuilder.deactivate();
             this.annotationStatementBuilder.deactivate();
         }
 

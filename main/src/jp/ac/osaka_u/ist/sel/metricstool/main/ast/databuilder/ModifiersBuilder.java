@@ -49,6 +49,7 @@ public class ModifiersBuilder extends CompoundDataBuilder<ModifierInfo[]> { //St
     private ModifierInfo[] buildModifiers() {
         //アノテーションをModifierとして追加
         modifiers.addAll(this.annotationBuilder.getAnnotations());
+        this.annotationBuilder.clearAnnotations(); 
         ModifierInfo[] result = new ModifierInfo[modifiers.size()];
         modifiers.toArray(result);
         modifiers.clear();
