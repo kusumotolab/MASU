@@ -493,6 +493,13 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     public final SortedSet<CallableUnitInfo> getCallers() {
         return Collections.unmodifiableSortedSet(this.callers);
     }
+    
+    /**
+     * 外部クラスのコンストラクタ、メソッドの位置情報に入れるダミーの値をかえす 
+     */
+    protected final static int getDummyPosition(){
+        return dummyPosition--;
+    }
 
     /**
      * このCallableUnitInfoのシグネチャのテキスト表現を返す
@@ -556,4 +563,9 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しなどを保存するための変数
      */
     private final transient Set<UnresolvedExpressionInfo<?>> unresolvedUsage;
+    
+    /**
+     * 外部クラスのコンストラクタ、メソッドの位置情報に入れるダミーの値。
+     */
+    private static int dummyPosition = -1;
 }

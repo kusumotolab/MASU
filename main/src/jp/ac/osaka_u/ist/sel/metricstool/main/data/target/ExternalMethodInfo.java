@@ -31,8 +31,8 @@ public final class ExternalMethodInfo extends MethodInfo {
             final boolean publicVisible, final boolean instance) {
 
         super(modifiers, methodName, ownerClass, privateVisible, namespaceVisible,
-                inheritanceVisible, publicVisible, instance, new Random().nextInt(), new Random()
-                        .nextInt(), new Random().nextInt(), new Random().nextInt());
+                inheritanceVisible, publicVisible, instance, getDummyPosition(),
+                getDummyPosition(), getDummyPosition(), getDummyPosition());
 
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
@@ -46,8 +46,7 @@ public final class ExternalMethodInfo extends MethodInfo {
     public ExternalMethodInfo(final String methodName, final ExternalClassInfo ownerClass) {
 
         super(new HashSet<ModifierInfo>(), methodName, ownerClass, false, true, true, true, true,
-                new Random().nextInt(), new Random().nextInt(), new Random().nextInt(),
-                new Random().nextInt());
+                getDummyPosition(), getDummyPosition(), getDummyPosition(), getDummyPosition());
 
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
@@ -61,8 +60,8 @@ public final class ExternalMethodInfo extends MethodInfo {
     public ExternalMethodInfo(final String methodName) {
 
         super(new HashSet<ModifierInfo>(), methodName, ExternalClassInfo.UNKNOWN, false, true,
-                true, true, true, new Random().nextInt(), new Random().nextInt(), new Random()
-                        .nextInt(), new Random().nextInt());
+                true, true, true, getDummyPosition(), getDummyPosition(), getDummyPosition(),
+                getDummyPosition());
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
 

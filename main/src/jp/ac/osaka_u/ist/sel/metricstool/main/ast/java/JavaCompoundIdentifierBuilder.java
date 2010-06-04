@@ -12,9 +12,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.FieldOr
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.IdentifierElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.InstanceSpecificElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.UsageElement;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassReferenceInfo;
@@ -166,6 +168,9 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                 currentClass = (UnresolvedClassInfo) outerUnit;
             } else if (null == outerUnit) {
                 currentClass = null;
+            } else if (outerUnit instanceof UnresolvedCallableUnitInfo<?>) {
+                UnresolvedCallableUnitInfo<?> outerCallable = (UnresolvedCallableUnitInfo<CallableUnitInfo>) outerUnit;
+                currentClass = outerCallable.getOwnerClass();
             } else {
                 // TODO 今のところメソッド内で宣言されたクラスのコンストラクタ内で"識別子.super()"という構文はサポートしていない
                 throw new ASTParseException("unsupported super constructor call");

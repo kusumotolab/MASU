@@ -27,7 +27,8 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
             final boolean namespaceVisible, final boolean inheritanceVisible,
             final boolean publicVisible) {
         super(modifiers, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible, 0, 0, 0, 0);
+                publicVisible, getDummyPosition(), getDummyPosition(), getDummyPosition(),
+                getDummyPosition());
     }
 
     /**
@@ -36,7 +37,8 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
      * @param ownerClass このメソッドを定義しているクラス
      */
     public ExternalConstructorInfo(final ExternalClassInfo ownerClass) {
-        super(new HashSet<ModifierInfo>(), ownerClass, false, true, true, true, 0, 0, 0, 0);
+        super(new HashSet<ModifierInfo>(), ownerClass, false, true, true, true, getDummyPosition(),
+                getDummyPosition(), getDummyPosition(), getDummyPosition());
     }
 
     /**
