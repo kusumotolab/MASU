@@ -308,10 +308,10 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * @return ハッシュコード
      */
     @Override
-    public final int hashCode(){
-        return this.getFullQualifiedName(".").hashCode(); 
+    public final int hashCode() {
+        return this.getFullQualifiedName(".").hashCode();
     }
-    
+
     /**
      * 等しいかどうかのチェック
      * 
@@ -650,7 +650,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     public final boolean isClass() {
         return !this.isInterface;
     }
-    
+
     /**
      * クラス名を保存するための変数
      */
