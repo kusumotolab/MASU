@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
@@ -41,6 +41,6 @@ public abstract class TypeConverter {
      * @param primitiveType プリミティブ型
      * @return 対応するラッパークラス
      */
-    public abstract ExternalClassInfo getWrapperClass(PrimitiveTypeInfo primitiveType);
+    public abstract ClassInfo getWrapperClass(PrimitiveTypeInfo primitiveType);
 
 }

@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
@@ -692,11 +691,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
         // 無名クラスの場合
         if (this.isAnonymous()) {
-            final UnitInfo resolvedOuterUnit = this.outerUnit.resolve(usingClass, usingMethod,
-                    classInfoManager, DataManager.getInstance().getFieldInfoManager(),
-                    DataManager.getInstance().getMethodInfoManager());
-            this.resolvedInfo = new TargetAnonymousClassInfo(fullQualifiedName, resolvedOuterUnit,
-                    this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+            // outerUnitは後で解決する．ここでは登録しない
+            this.resolvedInfo = new TargetAnonymousClassInfo(fullQualifiedName, this.fileInfo,
+                    fromLine, fromColumn, toLine, toColumn);
 
             // 一番外側のクラスの場合
         } else if (null == this.outerUnit) {
@@ -706,12 +703,10 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
             // インナークラスの場合
         } else {
-            final UnitInfo resolvedOuterUnit = this.outerUnit.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
+            // outerUnitは後で解決する．ここでは登録しない
             this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
-                    resolvedOuterUnit, privateVisible, namespaceVisible, inheritanceVisible,
-                    publicVisible, instance, this.isInterface, this.fileInfo, fromLine, fromColumn,
-                    toLine, toColumn);
+                    privateVisible, namespaceVisible, inheritanceVisible, publicVisible, instance,
+                    this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
         }
 
         // 利用可能なクラスを名前解決し，解決済みクラスに登録
@@ -765,9 +760,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         this.classType = new UnresolvedClassTypeInfo(namespaces, this.getFullQualifiedName());
         return this.classType;
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         return "class \"" + this.className + "\" in file \"" + this.fileInfo.getName() + "\"";
     }
 

@@ -59,6 +59,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalFieldInfo;
@@ -76,6 +77,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedM
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedStaticInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVClassMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVFileMetricsWriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.CSVMethodMetricsWriter;
@@ -813,17 +815,21 @@ public class MetricsTool {
         }
         registMethodInfos();
         if (Settings.getInstance().isVerbose()) {
-            out.println("STEP6 : resolve type parameter usages.");
+            out.println("STEP6 : resolve outer unit for inner classes.");
+        }
+        addOuterUnitInfos();
+        if (Settings.getInstance().isVerbose()) {
+            out.println("STEP7 : resolve type parameter usages.");
         }
         addClassTypeParameterInfos();
         addMethodTypeParameterInfos();
         if (Settings.getInstance().isVerbose()) {
-            out.println("STEP7 : resolve method overrides.");
+            out.println("STEP8 : resolve method overrides.");
         }
         addOverrideRelation();
         if (Settings.getInstance().isStatement()) {
             if (Settings.getInstance().isVerbose()) {
-                out.println("STEP8 : resolve field and method usages.");
+                out.println("STEP9 : resolve field and method usages.");
             }
             addMethodInsideInfomation();
         }
@@ -1483,6 +1489,61 @@ public class MetricsTool {
                 .getInnerClasses()) {
             registMethodInfos(unresolvedInnerClassInfo, classInfoManager, fieldInfoManager,
                     methodInfoManager);
+        }
+    }
+
+    private void addOuterUnitInfos() {
+
+        // Unresolved クラス情報マネージャ， クラス情報マネージャ，メソッド情報マネージャを取得
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = DataManager.getInstance()
+                .getUnresolvedClassInfoManager();
+        final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
+        final FieldInfoManager fieldInfoManager = DataManager.getInstance().getFieldInfoManager();
+        final MethodInfoManager methodInfoManager = DataManager.getInstance()
+                .getMethodInfoManager();
+
+        // 各 Unresolvedクラスに対して
+        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+                .getClassInfos()) {
+            addOuterUnitInfos(unresolvedClassInfo, classInfoManager, fieldInfoManager,
+                    methodInfoManager);
+        }
+    }
+
+    private void addOuterUnitInfos(final UnresolvedClassInfo unresolvedClassInfo,
+            final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
+            final MethodInfoManager methodInfoManager) {
+
+        // ClassInfo を取得
+        final TargetClassInfo classInfo = unresolvedClassInfo.getResolved();
+        if (classInfo instanceof InnerClassInfo) {
+
+            final TargetInnerClassInfo innerClass = (TargetInnerClassInfo) classInfo;
+            final UnresolvedUnitInfo<?> unresolvedOuterUnit = unresolvedClassInfo.getOuterUnit();
+            final UnitInfo outerUnit = unresolvedOuterUnit.resolve(classInfo, null,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+            if (innerClass.getClassName().equals("MapperType")) {
+                System.out.println();
+            }
+            try {
+                final Class<?> cls = Class
+                        .forName("jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo");
+                final Field filed = cls.getDeclaredField("outerUnit");
+
+                filed.setAccessible(true);
+                filed.set(innerClass, outerUnit);
+            } catch (ClassNotFoundException e) {
+                assert false : "Illegal state: TargetInnerClassInfo was not found";
+            } catch (NoSuchFieldException e) {
+                assert false : "Illegal state: outerUnit wad not found";
+            } catch (IllegalAccessException e) {
+                assert false;
+            }
+        }
+
+        // インナークラスに対して実行
+        for (final UnresolvedClassInfo innerClass : unresolvedClassInfo.getInnerClasses()) {
+            addOuterUnitInfos(innerClass, classInfoManager, fieldInfoManager, methodInfoManager);
         }
     }
 

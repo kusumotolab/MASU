@@ -62,21 +62,21 @@ public final class BinominalOperationInfo extends ExpressionInfo {
 
         final LANGUAGE language = Settings.getInstance().getLanguage();
 
-        final ExternalClassInfo DOUBLE = TypeConverter.getTypeConverter(language).getWrapperClass(
+        final ClassInfo DOUBLE = TypeConverter.getTypeConverter(language).getWrapperClass(
                 PrimitiveTypeInfo.DOUBLE);
-        final ExternalClassInfo FLOAT = TypeConverter.getTypeConverter(language).getWrapperClass(
+        final ClassInfo FLOAT = TypeConverter.getTypeConverter(language).getWrapperClass(
                 PrimitiveTypeInfo.FLOAT);
-        final ExternalClassInfo LONG = TypeConverter.getTypeConverter(language).getWrapperClass(
+        final ClassInfo LONG = TypeConverter.getTypeConverter(language).getWrapperClass(
                 PrimitiveTypeInfo.LONG);
-        final ExternalClassInfo INTEGER = TypeConverter.getTypeConverter(language).getWrapperClass(
+        final ClassInfo INTEGER = TypeConverter.getTypeConverter(language).getWrapperClass(
                 PrimitiveTypeInfo.INT);
-        final ExternalClassInfo SHORT = TypeConverter.getTypeConverter(language).getWrapperClass(
+        final ClassInfo SHORT = TypeConverter.getTypeConverter(language).getWrapperClass(
                 PrimitiveTypeInfo.SHORT);
-        final ExternalClassInfo CHARACTER = TypeConverter.getTypeConverter(language)
-                .getWrapperClass(PrimitiveTypeInfo.CHAR);
-        final ExternalClassInfo BYTE = TypeConverter.getTypeConverter(language).getWrapperClass(
+        final ClassInfo CHARACTER = TypeConverter.getTypeConverter(language).getWrapperClass(
+                PrimitiveTypeInfo.CHAR);
+        final ClassInfo BYTE = TypeConverter.getTypeConverter(language).getWrapperClass(
                 PrimitiveTypeInfo.BYTE);
-        final ExternalClassInfo BOOLEAN = TypeConverter.getTypeConverter(language).getWrapperClass(
+        final ClassInfo BOOLEAN = TypeConverter.getTypeConverter(language).getWrapperClass(
                 PrimitiveTypeInfo.BOOLEAN);
 
         final TypeInfo firstOperandType = this.getFirstOperand().getType();
@@ -312,7 +312,7 @@ public final class BinominalOperationInfo extends ExpressionInfo {
         thrownExpressions.addAll(this.getSecondOperand().getThrownExceptions());
         return Collections.unmodifiableSet(thrownExpressions);
     }
-    
+
     private final ExpressionInfo firstOperand;
 
     private final ExpressionInfo secondOperand;

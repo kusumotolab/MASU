@@ -149,11 +149,22 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             return this.resolvedInfo;
 
             // 親がクラス型だった場合
-        } else if (ownerType instanceof ClassTypeInfo) {
+        } else if (ownerType instanceof ClassTypeInfo || ownerType instanceof PrimitiveTypeInfo) {
 
-            final ClassInfo ownerClass = ((ClassTypeInfo) ownerType).getReferencedClass();
+            final ClassInfo ownerClass;
+            if (ownerType instanceof PrimitiveTypeInfo) {
+                final Settings settings = Settings.getInstance();
+                ownerClass = TypeConverter.getTypeConverter(settings.getLanguage())
+                        .getWrapperClass((PrimitiveTypeInfo) ownerType);
+            } else {
+                ownerClass = ((ClassTypeInfo) ownerType).getReferencedClass();
+            }
 
             if (ownerClass instanceof TargetClassInfo) {
+
+                if (name.equals("createMap")) {
+                    System.out.println();
+                }
 
                 // まずは利用可能なメソッドから検索
                 {
@@ -257,68 +268,6 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                 this.resolvedInfo.addArguments(actualParameters);
                 this.resolvedInfo.addTypeArguments(typeArguments);
-                return this.resolvedInfo;
-            }
-
-            // 親がプリミティブ型だった場合
-        } else if (ownerType instanceof PrimitiveTypeInfo) {
-
-            // 文字列にメソッドがくっついているかを判定
-            final Settings settings = Settings.getInstance();
-            switch (settings.getLanguage()) {
-            case JAVA13:
-            case JAVA14:
-
-                // java の場合は java.lang.String かどうかを判定
-                if (ownerType.equals(PrimitiveTypeInfo.STRING)) {
-
-                    final ExternalClassInfo wrapperClass = TypeConverter.getTypeConverter(
-                            settings.getLanguage()).getWrapperClass((PrimitiveTypeInfo) ownerType);
-                    final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
-                            wrapperClass);
-                    final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(
-                            actualParameters, methodInfo);
-                    methodInfo.addParameters(parameters);
-                    methodInfoManager.add(methodInfo);
-
-                    // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
-                    this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage, methodInfo,
-                            usingMethod, fromLine, fromColumn, toLine, toColumn);
-                    /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                    this.resolvedInfo.addArguments(actualParameters);
-                    this.resolvedInfo.addTypeArguments(typeArguments);
-                    return this.resolvedInfo;
-                }
-                break;
-            }
-
-            switch (settings.getLanguage()) {
-            // Java の場合はオートボクシングでのメソッド呼び出しが可能
-            // TODO 将来的にはこの switch文はとる．なぜなら TypeConverter.getTypeConverter(LANGUAGE)があるから．
-            case JAVA15:
-                final ExternalClassInfo wrapperClass = TypeConverter.getTypeConverter(
-                        settings.getLanguage()).getWrapperClass((PrimitiveTypeInfo) ownerType);
-                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
-                        wrapperClass);
-                final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(
-                        actualParameters, methodInfo);
-                methodInfo.addParameters(parameters);
-                methodInfoManager.add(methodInfo);
-
-                // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
-                this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage, methodInfo,
-                        usingMethod, fromLine, fromColumn, toLine, toColumn);
-                /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                this.resolvedInfo.addArguments(actualParameters);
-                this.resolvedInfo.addTypeArguments(typeArguments);
-                return this.resolvedInfo;
-
-            default:
-                assert false : "Here shouldn't be reached!";
-                final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
-                this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage, unknownMethod,
-                        usingMethod, fromLine, fromColumn, toLine, toColumn);
-                /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                 return this.resolvedInfo;
             }
         }

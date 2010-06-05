@@ -258,6 +258,17 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                     return false;
                 }
 
+                // dummyParameterの型がObjectの時はactualが何であろうと呼び出し可能
+                final TypeInfo dummyParameterElementType = ((ArrayTypeInfo) dummyParameter
+                        .getType()).getElementType();
+                final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
+                        .getClassInfo(new String[] { "java", "lang", "Object" });
+                if ((dummyParameterElementType instanceof ClassTypeInfo)
+                        && ((ClassTypeInfo) dummyParameterElementType).getReferencedClass().equals(
+                                objectClass)) {
+                    continue NEXT_PARAMETER;
+                }
+
                 if (!actualParameter.getType().equals(dummyParameter.getType())) {
                     return false;
                 }
@@ -269,7 +280,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             } else if (actualParameter instanceof NullUsageInfo) {
 
                 // 仮引数が参照型でない場合は該当しない
-                if (!(dummyParameter.getType() instanceof ClassInfo)) {
+                if (!(dummyParameter.getType() instanceof ReferenceTypeInfo)) {
                     return false;
                 }
 
@@ -493,11 +504,11 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     public final SortedSet<CallableUnitInfo> getCallers() {
         return Collections.unmodifiableSortedSet(this.callers);
     }
-    
+
     /**
      * 外部クラスのコンストラクタ、メソッドの位置情報に入れるダミーの値をかえす 
      */
-    protected final static int getDummyPosition(){
+    protected final static int getDummyPosition() {
         return dummyPosition--;
     }
 
@@ -563,7 +574,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 名前解決できなかったクラス参照，フィールド参照・代入，メソッド呼び出しなどを保存するための変数
      */
     private final transient Set<UnresolvedExpressionInfo<?>> unresolvedUsage;
-    
+
     /**
      * 外部クラスのコンストラクタ、メソッドの位置情報に入れるダミーの値。
      */
