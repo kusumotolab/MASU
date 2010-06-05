@@ -87,6 +87,13 @@ public class JavaBuildManager extends DefaultBuildDataManager {
 
         UnresolvedClassInfo classInfo = getCurrentClass();
         if (classInfo.getSuperClasses().isEmpty()) {
+            final String[] fqname = classInfo.getFullQualifiedName();
+            if (3 == fqname.length) {
+                if (fqname[0].equals("java") && fqname[1].equals("lang")
+                        && fqname[2].equals("Object")) {
+                    return;
+                }
+            }
             classInfo.addSuperClass(OBJECT);
         }
     }
