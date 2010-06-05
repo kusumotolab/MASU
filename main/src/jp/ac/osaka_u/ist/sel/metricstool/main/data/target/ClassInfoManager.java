@@ -37,24 +37,51 @@ public final class ClassInfoManager {
             throw new IllegalArgumentException();
         }
 
-        // 二重登録チェック
-        if (this.targetClassInfos.contains(classInfo)) {
-            err.println(classInfo.getFullQualifiedName(".") + " is already registered!");
-            return false;
-        } 
-        
-        // 外部クラスと重複している場合は，外部クラスの方を取り除く
-        // 例えば，java.lang.*を解析対象として含めた場合は，java.lang.*のExternalClassInfoはいらない
-        else if (this.externalClassInfos.contains(classInfo)) {
-            this.externalClassInfos.remove(classInfo);
+        // 追加するクラスが対象クラスの時
+        if (classInfo instanceof TargetClassInfo) {
+
+            //二重登録チェック
+            if (this.targetClassInfos.contains(classInfo)) {
+                err.println(classInfo.getFullQualifiedName(".") + " is already registered!");
+                return false;
+            }
+
+            // すでに外部クラスとして登録されている場合は，その情報を削除する
+            if (this.externalClassInfos.contains(classInfo)) {
+                this.externalClassInfos.remove(classInfo);
+
+                {
+                    final String name = classInfo.getClassName();
+                    SortedSet<ClassInfo> classInfos = this.classNameMap.get(name);
+                    classInfos.remove(classInfo);
+                }
+
+                {
+                    final NamespaceInfo namespace = classInfo.getNamespace();
+                    SortedSet<ClassInfo> classInfos = this.namespaceMap.get(namespace);
+                    classInfos.remove(classInfo);
+                }
+            }
+
+            this.targetClassInfos.add((TargetClassInfo) classInfo);
         }
 
-        // クラス一覧のセットに登録
-        if (classInfo instanceof TargetClassInfo) {
-            this.targetClassInfos.add((TargetClassInfo) classInfo);
-        } else if (classInfo instanceof ExternalClassInfo) {
+        else if (classInfo instanceof ExternalClassInfo) {
+
+            // すでに対象クラスに登録されている場合は何もしない
+            if (this.targetClassInfos.contains(classInfo)) {
+                return false;
+            }
+
+            // 二重登録チェック，ただしエラーは出さない
+            if (this.externalClassInfos.contains(classInfo)) {
+                return false;
+            }
+
             this.externalClassInfos.add((ExternalClassInfo) classInfo);
-        } else {
+        }
+
+        else {
             assert false : "Here shouldn't be reached!";
         }
 
