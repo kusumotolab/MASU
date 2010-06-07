@@ -154,10 +154,18 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 new ParameterInfo[0]);
         for (int index = 0; index < dummyParameterArray.length; index++) {
 
-            final TypeInfo dummyType = dummyParameterArray[index].getType();
+            final ParameterInfo dummyParameter = dummyParameterArray[index];
+            final TypeInfo dummyType = dummyParameter.getType();
+
+            //仮引数が可変長引数の場合
+            if (dummyParameter instanceof VariableLengthParameterInfo) {
+
+                // TODO 今のところ条件なしでOKにしている．実装の必要あり
+                continue;
+            }
 
             //仮引数がクラス参照型の場合
-            if (dummyType instanceof ClassTypeInfo) {
+            else if (dummyType instanceof ClassTypeInfo) {
 
                 // 引数の数が合わないので呼び出し不可
                 if (!(index < actualParameterArray.length)) {
@@ -319,7 +327,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 continue;
             }
 
-            // 仮引数が可変長配列の場合
+            // 仮引数が可変長配列の場合(古い実装)
             else if (dummyType instanceof VariableLengthTypeInfo) {
 
                 // TODO 今のところ，条件なしでOKにしている．実装の必要あり

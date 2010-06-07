@@ -11,7 +11,7 @@ import java.util.Set;
  *
  */
 @SuppressWarnings("serial")
-public final class TargetParameterInfo extends ParameterInfo {
+public class TargetParameterInfo extends ParameterInfo {
 
     /**
      * 引数名，引数の型を与えてオブジェクトを初期化
