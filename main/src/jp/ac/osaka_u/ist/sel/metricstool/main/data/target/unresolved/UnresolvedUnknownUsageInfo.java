@@ -23,7 +23,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticOrInstanceProcessing;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
@@ -114,9 +113,6 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                     // 親の型を生成
                     final ClassTypeInfo usingClassType = new ClassTypeInfo(usingClass);
-                    for (final TypeParameterInfo typeParameter : usingClass.getTypeParameters()) {
-                        usingClassType.addTypeArgument(typeParameter);
-                    }
 
                     // 暗黙的なクラス参照なので位置情報はすべて0
                     final ClassReferenceInfo classReference = new ClassReferenceInfo(
@@ -239,9 +235,6 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
                     // 親の型を生成
                     final ClassTypeInfo usingClassType = new ClassTypeInfo(usingClass);
-                    for (final TypeParameterInfo typeParameter : usingClass.getTypeParameters()) {
-                        usingClassType.addTypeArgument(typeParameter);
-                    }
 
                     // 暗黙的なクラス参照なので位置情報はすべて0
                     final ClassReferenceInfo classReference = new ClassReferenceInfo(

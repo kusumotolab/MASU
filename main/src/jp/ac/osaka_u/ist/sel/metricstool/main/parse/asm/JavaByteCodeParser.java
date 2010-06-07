@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.JavaPredefinedModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalMethodInfo;
@@ -21,6 +20,7 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+
 
 public class JavaByteCodeParser implements ClassVisitor {
 
@@ -125,9 +125,11 @@ public class JavaByteCodeParser implements ClassVisitor {
             throw new IllegalArgumentException();
         } else {
             for (final Type type : Type.getArgumentTypes(desc)) {
-                method.addArgumentType(type.toString());
+                final String typeName = type.toString();
+                method.addArgumentType(typeName);
             }
-            method.setReturnType(Type.getReturnType(desc).toString());
+            final String typeName = Type.getReturnType(desc).toString();
+            method.setReturnType(typeName);
         }
 
         // å^ÉpÉâÉÅÅ[É^Ç†ÇÈèÍçáÇÕÇªÇÃï∂éöóÒÇéÊìæ

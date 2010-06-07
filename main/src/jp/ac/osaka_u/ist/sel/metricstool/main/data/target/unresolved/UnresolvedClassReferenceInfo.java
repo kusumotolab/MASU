@@ -51,7 +51,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
         this.referenceName = Arrays.<String> copyOf(referenceName, referenceName.length);
         this.fullReferenceName = Arrays.<String> copyOf(referenceName, referenceName.length);
         this.qualifierUsage = null;
-        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo<?>>();
+        this.typeArguments = new LinkedList<UnresolvedTypeInfo<?>>();
     }
 
     /**
@@ -80,7 +80,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
         this.fullReferenceName = fullReferenceName;
         this.referenceName = Arrays.<String> copyOf(referenceName, referenceName.length);
         this.qualifierUsage = ownerUsage;
-        this.typeArguments = new LinkedList<UnresolvedReferenceTypeInfo<?>>();
+        this.typeArguments = new LinkedList<UnresolvedTypeInfo<?>>();
     }
 
     @Override
@@ -134,8 +134,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                     // 親が対象クラス(TargetClassInfo)の場合
                 } else if (classReference.getType() instanceof ClassTypeInfo) {
 
-                    final ClassInfo ownerClass = ((ClassTypeInfo) classReference
-                            .getType()).getReferencedClass();
+                    final ClassInfo ownerClass = ((ClassTypeInfo) classReference.getType())
+                            .getReferencedClass();
 
                     // インナークラスから探すので一覧を取得
                     final SortedSet<InnerClassInfo> innerClasses = NameResolver
@@ -196,8 +196,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
             // 参照名が完全限定名であるとして検索
             {
-                final ClassInfo classInfo = classInfoManager
-                        .getClassInfo(referenceName);
+                final ClassInfo classInfo = classInfoManager.getClassInfo(referenceName);
                 if (null != classInfo) {
 
                     // TODO　型パラメータ情報を追記する処理が必要
@@ -250,8 +249,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                 final SortedSet<InnerClassInfo> innerClasses = NameResolver
                                         .getAvailableDirectInnerClasses(((ClassTypeInfo) classReference
                                                 .getType()).getReferencedClass());
-                                for (final ClassInfo innerClass : ClassInfo
-                                        .convert(innerClasses)) {
+                                for (final ClassInfo innerClass : ClassInfo.convert(innerClasses)) {
 
                                     // 一致するクラス名が見つかった場合
                                     if (referenceName[i].equals(innerClass.getClassName())) {
@@ -297,8 +295,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                         final String[] namespace = availableNamespace.getNamespace();
 
                         // 名前空間の下にある各クラスに対して
-                        for (final ClassInfo classInfo : classInfoManager
-                                .getClassInfos(namespace)) {
+                        for (final ClassInfo classInfo : classInfoManager.getClassInfos(namespace)) {
 
                             // クラス名と参照名の先頭が等しい場合は，そのクラス名が参照先であると決定する
                             final String className = classInfo.getClassName();
@@ -474,7 +471,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
      * 
      * @param typeArgument 追加する型パラメータ使用
      */
-    public final void addTypeArgument(final UnresolvedReferenceTypeInfo<?> typeArgument) {
+    public final void addTypeArgument(final UnresolvedTypeInfo<?> typeArgument) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -490,7 +487,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
      * 
      * @return このクラス参照で使用されている型パラメータの List
      */
-    public final List<UnresolvedReferenceTypeInfo<?>> getTypeArguments() {
+    public final List<UnresolvedTypeInfo<?>> getTypeArguments() {
         return Collections.unmodifiableList(this.typeArguments);
     }
 
@@ -657,6 +654,6 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
     /**
      * 未解決型パラメータ使用を保存するための変数
      */
-    private final List<UnresolvedReferenceTypeInfo<?>> typeArguments;
+    private final List<UnresolvedTypeInfo<?>> typeArguments;
 
 }

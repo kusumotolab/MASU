@@ -8,6 +8,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.TypeConverter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
@@ -87,8 +88,9 @@ public final class BinominalOperationInfo extends ExpressionInfo {
         case JAVA14:
         case JAVA13:
 
-            final TypeInfo STRING = new ClassTypeInfo(TypeConverter.getTypeConverter(language)
-                    .getWrapperClass(PrimitiveTypeInfo.STRING));
+            final ClassInfo stringClass = DataManager.getInstance().getClassInfoManager()
+                    .getClassInfo(new String[] { "java", "lang", "String" });
+            final TypeInfo STRING = new ClassTypeInfo(stringClass);
 
             switch (this.getOperator().getOperatorType()) {
             case ARITHMETIC:
@@ -97,7 +99,7 @@ public final class BinominalOperationInfo extends ExpressionInfo {
                         || firstOperandType.equals(PrimitiveTypeInfo.STRING)
                         || secondOperandType.equals(STRING)
                         || secondOperandType.equals(PrimitiveTypeInfo.STRING)) {
-                    return PrimitiveTypeInfo.STRING;
+                    return STRING;
 
                 } else if (firstOperandType.equals(DOUBLE)
                         || firstOperandType.equals(PrimitiveTypeInfo.DOUBLE)

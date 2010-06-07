@@ -19,8 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public class UnresolvedTypeParameterInfo implements UnresolvedReferenceTypeInfo<TypeParameterInfo> {
-    // TODO 多言語対応時にUnresolvedTypeInfoに変更すべき
+public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo> {
 
     /**
      * 型パラメータ名を与えてオブジェクトを初期化する

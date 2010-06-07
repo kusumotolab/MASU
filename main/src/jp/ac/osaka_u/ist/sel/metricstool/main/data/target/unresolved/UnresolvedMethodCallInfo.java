@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.LinkedList;
 import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
@@ -162,10 +163,6 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
             if (ownerClass instanceof TargetClassInfo) {
 
-                if (name.equals("createMap")) {
-                    System.out.println();
-                }
-
                 // まずは利用可能なメソッドから検索
                 {
                     // 利用可能なメソッド一覧を取得
@@ -255,20 +252,46 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                     || settings.getLanguage().equals(LANGUAGE.JAVA13)) {
                 final ClassInfo ownerClass = classInfoManager.getClassInfo(new String[] { "java",
                         "lang", "Object" });
-                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
-                        (ExternalClassInfo) ownerClass);
-                final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(
-                        actualParameters, methodInfo);
-                methodInfo.addParameters(parameters);
-                methodInfoManager.add(methodInfo);
 
-                // 外部クラスに新規で外部メソッドを追加したので型は不明
-                this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage, methodInfo,
-                        usingMethod, fromLine, fromColumn, toLine, toColumn);
-                /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                this.resolvedInfo.addArguments(actualParameters);
-                this.resolvedInfo.addTypeArguments(typeArguments);
-                return this.resolvedInfo;
+                if (ownerClass instanceof ExternalClassInfo) {
+                    final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
+                            (ExternalClassInfo) ownerClass);
+                    final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(
+                            actualParameters, methodInfo);
+                    methodInfo.addParameters(parameters);
+                    methodInfoManager.add(methodInfo);
+
+                    // 外部クラスに新規で外部メソッドを追加したので型は不明
+                    this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage, methodInfo,
+                            usingMethod, fromLine, fromColumn, toLine, toColumn);
+                    /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
+                    this.resolvedInfo.addArguments(actualParameters);
+                    this.resolvedInfo.addTypeArguments(typeArguments);
+                    return this.resolvedInfo;
+                }
+
+                else if (ownerClass instanceof TargetClassInfo) {
+
+                    // 利用可能なメソッド一覧を取得, NameResolver.getAvailableMethodはつかってはだめ．
+                    //　なぜなら，このコンテキストでは可視化修飾子に関係なく，すべてのメソッドが利用可能
+                    final List<MethodInfo> availableMethods = new LinkedList<MethodInfo>();
+                    availableMethods.addAll(((TargetClassInfo) ownerClass).getDefinedMethods());
+
+                    // 利用可能なメソッドから，未解決メソッドと一致するものを検索
+                    // メソッド名，引数の型のリストを用いて，このメソッドの呼び出しであるかどうかを判定
+                    for (final MethodInfo availableMethod : availableMethods) {
+
+                        // 呼び出し可能なメソッドが見つかった場合
+                        if (availableMethod.canCalledWith(name, actualParameters)) {
+                            this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage,
+                                    availableMethod, usingMethod, fromLine, fromColumn, toLine,
+                                    toColumn);
+                            this.resolvedInfo.addArguments(actualParameters);
+                            this.resolvedInfo.addTypeArguments(typeArguments);
+                            return this.resolvedInfo;
+                        }
+                    }
+                }
             }
         }
 

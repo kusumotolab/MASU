@@ -483,6 +483,11 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
         return Collections.unmodifiableMap(this.typeParameterUsages);
     }
 
+    @Override
+    public TypeParameterizable getOuterTypeParameterizableUnit() {
+        return null;
+    }
+
     /**
      * このクラスに定義されたメソッド情報を追加する．プラグインから呼ぶとランタイムエラー．
      * 

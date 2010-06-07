@@ -46,4 +46,11 @@ public interface TypeParameterizable {
      * @return 型パラメータと実際に使用されている型のマップ
      */
     Map<TypeParameterInfo, TypeInfo> getTypeParameterUsages();
+    
+    /**
+     * 外側にある，型パラメータを定義可能なユニットを返す．
+     * 
+     * @return 外側にある，型パラメータを定義可能なユニット
+     */
+    TypeParameterizable getOuterTypeParameterizableUnit();
 }

@@ -10,8 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-@SuppressWarnings("serial")
-public class TypeParameterInfo implements ReferenceTypeInfo {
+public class TypeParameterInfo {
 
     /**
      * 型パラメータ名を与えてオブジェクトを初期化する
@@ -33,6 +32,10 @@ public class TypeParameterInfo implements ReferenceTypeInfo {
         this.name = name;
         this.index = index;
         this.extendsType = extendsType;
+    }
+
+    public TypeParameterInfo(final TypeParameterizable ownerUnit, final String name, final int index) {
+        this(ownerUnit, name, index, null);
     }
 
     /**
@@ -106,6 +109,19 @@ public class TypeParameterInfo implements ReferenceTypeInfo {
         return this.extendsType;
     }
 
+    public void setExtendsType(final TypeInfo extendsType) {
+
+        if (null == extendsType) {
+            throw new IllegalArgumentException();
+        }
+
+        if (null != this.extendsType) {
+            throw new IllegalStateException();
+        }
+
+        this.extendsType = extendsType;
+    }
+
     /**
      * * 基底クラスを持つかどうかを返す
      * 
@@ -133,5 +149,5 @@ public class TypeParameterInfo implements ReferenceTypeInfo {
     /**
      * 未解決基底クラス型を保存するための変数
      */
-    private final TypeInfo extendsType;
+    private TypeInfo extendsType;
 }

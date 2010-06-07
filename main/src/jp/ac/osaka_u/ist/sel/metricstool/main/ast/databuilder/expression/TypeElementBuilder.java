@@ -12,7 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLiteralUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterTypeInfo;
 
 
 /**
@@ -182,9 +182,9 @@ public abstract class TypeElementBuilder extends ExpressionBuilder {
         IdentifierElement element = (IdentifierElement) elements[0];
         final String[] typeName = element.getQualifiedName();
 
-        UnresolvedTypeParameterInfo typeParameter = null;
+        UnresolvedTypeParameterTypeInfo typeParameter = null;
         if (typeName.length == 1) {
-            typeParameter = this.buildDataManager.getTypeParameter(typeName[0]);
+            typeParameter = this.buildDataManager.getTypeParameterType(typeName[0]);
         }
 
         if (null != typeParameter) {

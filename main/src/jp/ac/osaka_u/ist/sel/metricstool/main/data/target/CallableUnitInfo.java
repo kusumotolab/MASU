@@ -148,153 +148,187 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             throw new IllegalArgumentException();
         }
 
-        // 引数の数が等しくない場合は該当しない
-        final List<ParameterInfo> dummyParameters = this.getParameters();
-        if (dummyParameters.size() != actualParameters.size()) {
-            return false;
-        }
+        final ExpressionInfo[] actualParameterArray = actualParameters
+                .toArray(new ExpressionInfo[0]);
+        final ParameterInfo[] dummyParameterArray = this.getParameters().toArray(
+                new ParameterInfo[0]);
+        for (int index = 0; index < dummyParameterArray.length; index++) {
 
-        // 引数の型を先頭からチェック等しくない場合は該当しない
-        final Iterator<ParameterInfo> dummyParameterIterator = dummyParameters.iterator();
-        final Iterator<ExpressionInfo> actualParameterIterator = actualParameters.iterator();
-        NEXT_PARAMETER: while (dummyParameterIterator.hasNext()
-                && actualParameterIterator.hasNext()) {
-            final ParameterInfo dummyParameter = dummyParameterIterator.next();
-            final ExpressionInfo actualParameter = actualParameterIterator.next();
+            final TypeInfo dummyType = dummyParameterArray[index].getType();
 
-            TypeInfo actualParameterType = actualParameter.getType();
+            //仮引数がクラス参照型の場合
+            if (dummyType instanceof ClassTypeInfo) {
 
-            // 型パラメータの場合はその継承型を求める
-            if (actualParameterType instanceof TypeParameterInfo) {
-                final TypeInfo extendsType = ((TypeParameterInfo) actualParameterType)
-                        .getExtendsType();
-                if (null != extendsType) {
-                    actualParameterType = extendsType;
-                } else {
-                    assert false : "Here should not be reached";
-                }
-            }
-
-            // 実引数が参照型の場合
-            if (actualParameterType instanceof ClassTypeInfo) {
-
-                // 実引数の型のクラスを取得
-                final ClassInfo actualParameterClass = ((ClassTypeInfo) actualParameterType)
-                        .getReferencedClass();
-
-                // 仮引数が参照型でない場合は該当しない
-                if (!(dummyParameter.getType() instanceof ClassTypeInfo)) {
+                // 引数の数が合わないので呼び出し不可
+                if (!(index < actualParameterArray.length)) {
                     return false;
                 }
 
-                // 仮引数の型のクラスを取得
-                final ClassInfo dummyParameterClass = ((ClassTypeInfo) dummyParameter.getType())
-                        .getReferencedClass();
+                final ClassInfo dummyClass = ((ClassTypeInfo) dummyType).getReferencedClass();
+                final ExpressionInfo actualParameter = actualParameterArray[index];
+                final TypeInfo actualType = actualParameter.getType();
 
-                // 仮引数の型がObjectの場合は，呼び出し可能である
-                final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
-                        .getClassInfo(new String[] { "java", "lang", "Object" });
-                if (dummyParameterClass.equals(objectClass)) {
-                    continue NEXT_PARAMETER;
+                // 実引数の型がUnknownTypeInfoのときはどうしようもないのでOKにする
+                if (actualType instanceof UnknownTypeInfo) {
+                    continue;
                 }
 
-                // 仮引数，実引数共に対象クラスである場合は，その継承関係を考慮する．つまり，実引数が仮引数のサブクラスでない場合は，呼び出し可能ではない
-                if ((actualParameterClass instanceof TargetClassInfo)
-                        && (dummyParameterClass instanceof TargetClassInfo)) {
+                //　実引数が null であればOK
+                if (actualParameter instanceof NullUsageInfo) {
+                    continue;
+                }
 
-                    // 実引数が仮引数と同じ参照型（クラス）でもなく，仮引数のサブクラスでもない場合は該当しない
-                    if (actualParameterClass.equals(dummyParameterClass)) {
-                        continue NEXT_PARAMETER;
+                // 仮引数がObject型のときは，クラス参照型，配列型，型パラメータ型がOK
+                final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
+                        .getClassInfo(new String[] { "java", "lang", "Object" });
+                if (((ClassTypeInfo) dummyType).getReferencedClass().equals(objectClass)) {
 
-                    } else if (actualParameterClass.isSubClass(dummyParameterClass)) {
-                        continue NEXT_PARAMETER;
+                    if (actualType instanceof ReferenceTypeInfo) {
+                        continue;
+                    }
+                }
 
-                    } else {
+                // 仮引数がObject型でないときは，実引数がクラス型の場合について詳しく調べる
+                else {
+
+                    if (!(actualType instanceof ClassTypeInfo)) {
                         return false;
                     }
 
-                    // 仮引数，実引数共に外部クラスである場合は，等しい場合のみ呼び出し可能とする
-                } else if ((actualParameterClass instanceof ExternalClassInfo)
-                        && (dummyParameterClass instanceof ExternalClassInfo)) {
+                    final ClassInfo actualClass = ((ClassTypeInfo) actualType).getReferencedClass();
 
-                    if (actualParameterClass.equals(dummyParameterClass)) {
-                        continue NEXT_PARAMETER;
+                    // 仮引数，実引数共に対象クラスである場合は，その継承関係を考慮する．
+                    // つまり，実引数が仮引数のサブクラスでない場合は，呼び出し可能ではない
+                    if ((actualClass instanceof TargetClassInfo)
+                            && (dummyClass instanceof TargetClassInfo)) {
+
+                        // 実引数が仮引数と同じ参照型（クラス）でもなく，仮引数のサブクラスでもない場合は該当しない
+                        if (actualClass.equals(dummyClass)) {
+                            continue;
+
+                        } else if (actualClass.isSubClass(dummyClass)) {
+                            continue;
+
+                        } else {
+                            return false;
+                        }
                     }
 
-                    return false;
-
-                    // 仮引数が外部クラス，実引数が対象クラスの場合は，実引数が仮引数のサブクラスである場合，呼び出し可能とする
-                } else if ((actualParameterClass instanceof TargetClassInfo)
-                        && (dummyParameterClass instanceof ExternalClassInfo)) {
-
-                    if (actualParameterClass.isSubClass(dummyParameterClass)) {
-                        continue NEXT_PARAMETER;
+                    // 仮引数，実引数ともに外部クラスである場合は，条件なしで呼び出し可能とする．
+                    // 等しくないとダメという条件は厳しすぎて正しく判定できない場合がある．
+                    // 仮引数，実引数共に外部クラスである場合は，/*等しい場合のみ呼び出し*/可能とする
+                    else if ((actualClass instanceof ExternalClassInfo)
+                            && (dummyClass instanceof ExternalClassInfo)) {
+                        continue;
                     }
 
-                    return false;
+                    // 仮引数が外部クラス，実引数が対象クラスの場合は，呼び出し可能とする
+                    // 等しくないとダメという条件は厳しすぎて正しく判定できない場合がある．
+                    else if ((actualClass instanceof TargetClassInfo)
+                            && (dummyClass instanceof ExternalClassInfo)) {
+                        continue;
+                    }
 
                     // 仮引数が対象クラス，実引数が外部クラスの場合は，呼び出し不可能とする
-                } else {
+                    else {
+                        return false;
+                    }
+                }
+
+            }
+            // 仮引数がプリミティブ型の場合
+            else if (dummyType instanceof PrimitiveTypeInfo) {
+
+                // 引数の数が合わないので呼び出し不可
+                if (!(index < actualParameterArray.length)) {
                     return false;
                 }
 
-                // 実引数がプリミティブ型の場合
-            } else if (actualParameterType instanceof PrimitiveTypeInfo) {
-
-                // PrimitiveTypeInfo#equals を使って等価性の判定．
-                // 等しくない場合は該当しない
-                // プリミティブタイプStringでdummmyTypeの型名もStringなら等価
-                // TODO クラス名がStringであるがjava.lang.Stringではない場合，判定ミスがおこる．
-                if (actualParameterType.equals(dummyParameter.getType())) {
-                    continue NEXT_PARAMETER;
+                // 実引数の型がUnknownTypeInfoのときはどうしようもないのでOKにする
+                final TypeInfo actualType = actualParameterArray[index].getType();
+                if (actualType instanceof UnknownTypeInfo) {
+                    continue;
                 }
 
-                return false;
-
-                // 実引数が配列型の場合
-            } else if (actualParameterType instanceof ArrayTypeInfo) {
-
-                if (!(dummyParameter.getType() instanceof ArrayTypeInfo)) {
+                // 実引数がプリミティブ型でない場合は呼び出し不可
+                if (!(actualType instanceof PrimitiveTypeInfo)) {
                     return false;
                 }
 
-                // dummyParameterの型がObjectの時はactualが何であろうと呼び出し可能
-                final TypeInfo dummyParameterElementType = ((ArrayTypeInfo) dummyParameter
-                        .getType()).getElementType();
+                // 実引数がString型の場合は呼び出し不可
+                else if (actualType.equals(PrimitiveTypeInfo.STRING_STRING)) {
+                    return false;
+                }
+
+                continue;
+            }
+
+            // 仮引数が配列型の場合
+            else if ((dummyType instanceof ArrayTypeInfo)
+                    && !(dummyType instanceof VariableLengthTypeInfo)) {
+
+                // 引数の数が合わないので呼び出し不可
+                if (!(index < actualParameterArray.length)) {
+                    return false;
+                }
+
+                // 実引数の型がUnknownTypeInfoのときはどうしようもないのでOKにする
+                final TypeInfo actualType = actualParameterArray[index].getType();
+                if (actualType instanceof UnknownTypeInfo) {
+                    continue;
+                }
+
+                // 実引数が配列型でない場合は呼び出し不可
+                if (!(actualType instanceof ArrayTypeInfo)) {
+                    return false;
+                }
+
                 final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
                         .getClassInfo(new String[] { "java", "lang", "Object" });
-                if ((dummyParameterElementType instanceof ClassTypeInfo)
-                        && ((ClassTypeInfo) dummyParameterElementType).getReferencedClass().equals(
-                                objectClass)) {
-                    continue NEXT_PARAMETER;
+
+                // 仮引数の要素型がjava.lang.Objectの場合は，実引数の要素型はなんでもいい
+                final TypeInfo dummyElementType = ((ArrayTypeInfo) dummyType).getElementType();
+                if ((dummyElementType instanceof ClassTypeInfo)
+                        && (((ClassTypeInfo) dummyElementType).getReferencedClass()
+                                .equals(objectClass))) {
+                    continue;
                 }
 
-                if (!actualParameter.getType().equals(dummyParameter.getType())) {
+                // 仮引数の要素型がjava.lang.Objectでない場合は，実引数の要素型と同じであり，
+                // 次元が等しい場合のみ
+                else {
+
+                    final TypeInfo actualElementType = ((ArrayTypeInfo) actualType)
+                            .getElementType();
+                    final int actualDimenstion = ((ArrayTypeInfo) actualType).getDimension();
+                    final int dummyDimenstion = ((ArrayTypeInfo) dummyType).getDimension();
+
+                    if (actualElementType.equals(dummyElementType)
+                            && (actualDimenstion == dummyDimenstion)) {
+                        continue;
+                    }
+
+                    return false;
+                }
+            }
+
+            // 仮引数が型パラメータ型の場合
+            else if (dummyType instanceof TypeParameterTypeInfo) {
+
+                // 引数の数が合わないので呼び出し不可
+                if (!(index < actualParameterArray.length)) {
                     return false;
                 }
 
-                continue NEXT_PARAMETER;
-                // TODO Java言語の場合は，仮引数が java.lang.object でもOKな処理が必要
+                // TODO 今のところ，条件なしでOKにしている．実装の必要あり
+                continue;
+            }
 
-                // 実引数が null の場合
-            } else if (actualParameter instanceof NullUsageInfo) {
+            // 仮引数が可変長配列の場合
+            else if (dummyType instanceof VariableLengthTypeInfo) {
 
-                // 仮引数が参照型でない場合は該当しない
-                if (!(dummyParameter.getType() instanceof ReferenceTypeInfo)) {
-                    return false;
-                }
-
-                continue NEXT_PARAMETER;
-                // TODO Java言語の場合は，仮引数が配列型の場合でもOKな処理が必要
-
-                // 実引数の型が解決できなかった場合
-            } else if (actualParameterType instanceof UnknownTypeInfo) {
-
-                // 実引数の型が不明な場合は，仮引数の型が何であろうともOKにしている
-                continue NEXT_PARAMETER;
-
-            } else {
-                assert false : "Here shouldn't be reached!";
+                // TODO 今のところ，条件なしでOKにしている．実装の必要あり
+                continue;
             }
         }
 
@@ -381,6 +415,12 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     @Override
     public final List<TypeParameterInfo> getTypeParameters() {
         return Collections.unmodifiableList(this.typeParameters);
+    }
+
+    @Override
+    public TypeParameterizable getOuterTypeParameterizableUnit() {
+        final ClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass;
     }
 
     /**

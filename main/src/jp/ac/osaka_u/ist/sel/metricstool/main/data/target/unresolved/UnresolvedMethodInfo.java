@@ -149,8 +149,9 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         // スローされる例外を解決し，解決済みコンストラクタ情報に追加する
         for (final UnresolvedClassTypeInfo unresolvedThrownException : this.getThrownExceptions()) {
 
-            final ClassTypeInfo thrownException = unresolvedThrownException.resolve(usingClass,
-                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
+            final ClassTypeInfo thrownException = (ClassTypeInfo) unresolvedThrownException
+                    .resolve(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
+                            methodInfoManager);
             this.resolvedInfo.addThrownException(thrownException);
         }
 

@@ -115,16 +115,16 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     /**
      * 未解決型パラメータを追加する
      * 
-     * @param typeParameter 追加する未解決型パラメータ名
+     * @param type 追加する未解決型パラメータ
      */
-    public void addTypeParameter(final UnresolvedTypeParameterInfo typeParameter) {
+    public void addTypeParameter(final UnresolvedTypeParameterInfo type) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == typeParameter) {
+        if (null == type) {
             throw new NullPointerException();
         }
 
-        this.typeParameters.add(typeParameter);
+        this.typeParameters.add(type);
     }
 
     /**
@@ -743,8 +743,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         classReference.setToLine(toLine);
         classReference.setToColumn(toColumn);
 
-        for (UnresolvedTypeParameterInfo typeParameter : this.typeParameters) {
-            classReference.addTypeArgument(typeParameter);
+        for (final UnresolvedTypeParameterInfo typeParameter : this.typeParameters) {
+            classReference.addTypeArgument(new UnresolvedClassTypeInfo(new String[] { "java",
+                    "lang", "Object" }));
         }
         return classReference;
     }

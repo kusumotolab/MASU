@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterTypeInfo;
 
 
 /**
@@ -184,16 +184,16 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
 
             assert (0 != identifier.length) : "Illegal state: identifier was not built.";
 
-            UnresolvedTypeParameterInfo typeParameter = null;
+            UnresolvedTypeParameterTypeInfo typeParameterType = null;
 
             //‚±‚Ì–¼‘O‚ÅŒ^ƒpƒ‰ƒ[ƒ^‚ð’T‚µ‚Ä‚Ý‚é
             if (identifier.length == 1) {
-                typeParameter = this.buildDataManager.getTypeParameter(identifier[0]);
+                typeParameterType = this.buildDataManager.getTypeParameterType(identifier[0]);
             }
 
-            if (null != typeParameter) {
+            if (null != typeParameterType) {
                 //Œ©‚Â‚©‚Á‚½‚Ì‚ÅŒ^ƒpƒ‰ƒ[ƒ^
-                resultType = typeParameter;
+                resultType = typeParameterType;
 
                 //TODO Œ^ƒpƒ‰ƒ[ƒ^‚ÉŒ^ˆø”‚ª•t‚­Œ¾Œê‚ª‚ ‚Á‚½‚ç‚»‚ê‚ð“o˜^‚·‚éŽd‘g‚Ý‚ðì‚é•K—v‚ª‚ ‚é‚©‚à
 

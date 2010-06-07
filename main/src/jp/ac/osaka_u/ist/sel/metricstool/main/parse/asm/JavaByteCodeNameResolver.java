@@ -14,8 +14,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SuperTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterizable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VoidTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.NameResolver;
 
 
 /**
@@ -45,14 +47,16 @@ public class JavaByteCodeNameResolver {
      * 第二，第三引数は，TypeParameterを解決する場合のみ指定すればよい.
      * しかし，解決する型が内部にジェネリクスを含んでいる場合があるので，
      * 第三引数はきちんと指定することが重要
+     * ## 第二引数は削除されました.
      * 
      * @param unresolvedType
-     * @param index
+     * @param thisTypeParameter 型パラメータのextendsTypeを解決するときのみ必須
      * @param ownerUnit
+     * 
      * @return
      */
-    public static TypeInfo resolveType(final String unresolvedType, final int index,
-            final TypeParameterizable ownerUnit) {
+    public static TypeInfo resolveType(final String unresolvedType,
+            final TypeParameterInfo thisTypeParameter, final TypeParameterizable ownerUnit) {
 
         if (null == unresolvedType) {
             throw new IllegalArgumentException();
@@ -65,7 +69,8 @@ public class JavaByteCodeNameResolver {
 
         // '['で始まっているときは配列
         else if ('[' == unresolvedType.charAt(0)) {
-            final TypeInfo subType = resolveType(unresolvedType.substring(1), index, ownerUnit);
+            final TypeInfo subType = resolveType(unresolvedType.substring(1), thisTypeParameter,
+                    ownerUnit);
 
             // もともと配列ならば事件を1つ増やす
             if (subType instanceof ArrayTypeInfo) {
@@ -109,8 +114,8 @@ public class JavaByteCodeNameResolver {
             else if ((0 <= unresolvedReferenceType.indexOf('<'))
                     && (0 <= unresolvedReferenceType.lastIndexOf('>'))) {
 
-                final String[] referenceTypeName = resolveName(unresolvedReferenceType.substring(
-                        0, unresolvedReferenceType.indexOf('<')));
+                final String[] referenceTypeName = resolveName(unresolvedReferenceType.substring(0,
+                        unresolvedReferenceType.indexOf('<')));
 
                 // クラス名の部分を解決
                 ExternalClassInfo referenceClass = (ExternalClassInfo) classInfoManager
@@ -124,8 +129,9 @@ public class JavaByteCodeNameResolver {
                 //ジェネリクス部分を解決し，順次クラス参照にその情報を追加                
                 final String[] typeArguments = getTypeArguments(unresolvedReferenceType);
                 for (int i = 0; i < typeArguments.length; i++) {
-                    final TypeInfo typeParameter = resolveType(typeArguments[i], i, ownerUnit);
-                    referenceType.addTypeArgument(typeParameter);
+                    final TypeInfo type = resolveType(typeArguments[i], thisTypeParameter,
+                            ownerUnit);
+                    referenceType.addTypeArgument(type);
                 }
 
                 return referenceType;
@@ -140,6 +146,44 @@ public class JavaByteCodeNameResolver {
                 && ';' == unresolvedType.charAt(unresolvedType.length() - 1)) {
 
             final String identifier = unresolvedType.substring(1, unresolvedType.length() - 1);
+            if ((null != thisTypeParameter) && identifier.equals(thisTypeParameter.getName())) {
+                return new TypeParameterTypeInfo(thisTypeParameter);
+            }
+            final List<TypeParameterInfo> availableTypeParameters = NameResolver
+                    .getAvailableTypeParameters(ownerUnit);
+            for (final TypeParameterInfo typeParameter : availableTypeParameters) {
+                if (identifier.equals(typeParameter.getName())) {
+                    return new TypeParameterTypeInfo(typeParameter);
+                }
+            }
+        }
+
+        throw new IllegalArgumentException();
+    }
+
+    /**
+     * 未解決型パラメータ情報を名前解決するクラス.
+     * 第二，第三引数は，TypeParameterを解決する場合のみ指定すればよい.
+     * しかし，解決する型が内部にジェネリクスを含んでいる場合があるので，
+     * 第三引数はきちんと指定することが重要
+     * 
+     * @param unresolvedType
+     * @param index
+     * @param ownerUnit
+     * @return
+     */
+    public static TypeParameterInfo resolveTypeParameter(final String unresolvedType,
+            final int index, final TypeParameterizable ownerUnit) {
+
+        if (null == unresolvedType) {
+            throw new IllegalArgumentException();
+        }
+
+        // ジェネリクス(TE(別にEじゃなくてもいいけど);)の場合
+        if ('T' == unresolvedType.charAt(0) && (-1 == unresolvedType.indexOf(':'))
+                && ';' == unresolvedType.charAt(unresolvedType.length() - 1)) {
+
+            final String identifier = unresolvedType.substring(1, unresolvedType.length() - 1);
             return new TypeParameterInfo(ownerUnit, identifier, index, null);
         }
 
@@ -147,7 +191,7 @@ public class JavaByteCodeNameResolver {
         else if ('+' == unresolvedType.charAt(0)) {
 
             final String unresolvedExtendsType = unresolvedType.substring(1);
-            final TypeInfo extendsType = resolveType(unresolvedExtendsType, 0, ownerUnit);
+            final TypeInfo extendsType = resolveType(unresolvedExtendsType, null, ownerUnit);
             return new TypeParameterInfo(ownerUnit, "?", index, extendsType);
         }
 
@@ -155,7 +199,7 @@ public class JavaByteCodeNameResolver {
         else if ('-' == unresolvedType.charAt(0)) {
 
             final String unresolvedSuperType = unresolvedType.substring(1);
-            final TypeInfo superType = resolveType(unresolvedSuperType, 0, ownerUnit);
+            final TypeInfo superType = resolveType(unresolvedSuperType, null, ownerUnit);
             return new SuperTypeParameterInfo(ownerUnit, "?", index, null, superType);
         }
 
@@ -164,11 +208,13 @@ public class JavaByteCodeNameResolver {
                 && (';' == unresolvedType.charAt(unresolvedType.length() - 1))) {
 
             final String identifier = unresolvedType.substring(0, unresolvedType.indexOf(':'));
+            final TypeParameterInfo typeParameter = new TypeParameterInfo(ownerUnit, identifier,
+                    index);
             final String unresolvedExtendsType = unresolvedType.substring(unresolvedType
                     .lastIndexOf(':') + 1);
-            final TypeInfo extendsType = resolveType(unresolvedExtendsType, 0, ownerUnit);
-            final TypeParameterInfo typeParameter = new TypeParameterInfo(ownerUnit, identifier,
-                    index, extendsType);
+            final TypeInfo extendsType = resolveType(unresolvedExtendsType, typeParameter,
+                    ownerUnit);
+            typeParameter.setExtendsType(extendsType);
             return typeParameter;
         }
 

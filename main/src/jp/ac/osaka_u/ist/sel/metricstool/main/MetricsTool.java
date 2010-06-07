@@ -536,8 +536,8 @@ public class MetricsTool {
                         .getTypeParameters();
                 for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
                     final String unresolvedTypeParameter = unresolvedTypeParameters.get(index);
-                    TypeParameterInfo typeParameter = (TypeParameterInfo) JavaByteCodeNameResolver
-                            .resolveType(unresolvedTypeParameter, index, classInfo);
+                    TypeParameterInfo typeParameter = JavaByteCodeNameResolver
+                            .resolveTypeParameter(unresolvedTypeParameter, index, classInfo);
                     classInfo.addTypeParameter(typeParameter);
                 }
             }
@@ -579,8 +579,8 @@ public class MetricsTool {
 
                 final String fieldName = unresolvedField.getName();
                 final String unresolvedType = unresolvedField.getType();
-                final TypeInfo fieldType = JavaByteCodeNameResolver.resolveType(unresolvedType, 0,
-                        null);
+                final TypeInfo fieldType = JavaByteCodeNameResolver.resolveType(unresolvedType,
+                        null, null);
                 final Set<String> unresolvedModifiers = unresolvedField.getModifiers();
                 final boolean isPublicVisible = unresolvedModifiers
                         .contains(JavaPredefinedModifierInfo.PUBLIC_STRING);
@@ -631,23 +631,23 @@ public class MetricsTool {
                             modifiers, classInfo, isPrivateVisible, isNamespaceVisible,
                             isInheritanceVisible, isPublicVisible);
 
-                    final List<String> unresolvedParameters = unresolvedMethod.getArgumentTypes();
-                    for (final String unresolvedParameter : unresolvedParameters) {
-                        final TypeInfo parameterType = JavaByteCodeNameResolver.resolveType(
-                                unresolvedParameter, 0, null);
-                        final ExternalParameterInfo parameter = new ExternalParameterInfo(
-                                parameterType, constructor);
-                        constructor.addParameter(parameter);
-                    }
-
                     // 型パラメータの解決
                     final List<String> unresolvedTypeParameters = unresolvedMethod
                             .getTypeParameters();
                     for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
                         final String unresolvedTypeParameter = unresolvedTypeParameters.get(index);
                         TypeParameterInfo typeParameter = (TypeParameterInfo) JavaByteCodeNameResolver
-                                .resolveType(unresolvedTypeParameter, index, constructor);
+                                .resolveTypeParameter(unresolvedTypeParameter, index, constructor);
                         constructor.addTypeParameter(typeParameter);
+                    }
+
+                    final List<String> unresolvedParameters = unresolvedMethod.getArgumentTypes();
+                    for (final String unresolvedParameter : unresolvedParameters) {
+                        final TypeInfo parameterType = JavaByteCodeNameResolver.resolveType(
+                                unresolvedParameter, null, null);
+                        final ExternalParameterInfo parameter = new ExternalParameterInfo(
+                                parameterType, constructor);
+                        constructor.addParameter(parameter);
                     }
 
                     classInfo.addDefinedConstructor(constructor);
@@ -655,32 +655,33 @@ public class MetricsTool {
 
                 // メソッドのとき
                 else {
+
                     final ExternalMethodInfo method = new ExternalMethodInfo(modifiers, name,
                             classInfo, isPrivateVisible, isNamespaceVisible, isInheritanceVisible,
                             isPublicVisible, !isStatic);
-
-                    final String unresolvedReturnType = unresolvedMethod.getReturnType();
-                    final TypeInfo returnType = JavaByteCodeNameResolver.resolveType(
-                            unresolvedReturnType, 0, null);
-                    method.setReturnType(returnType);
-
-                    final List<String> unresolvedParameters = unresolvedMethod.getArgumentTypes();
-                    for (final String unresolvedParameter : unresolvedParameters) {
-                        final TypeInfo parameterType = JavaByteCodeNameResolver.resolveType(
-                                unresolvedParameter, 0, null);
-                        final ExternalParameterInfo parameter = new ExternalParameterInfo(
-                                parameterType, method);
-                        method.addParameter(parameter);
-                    }
 
                     // 型パラメータの解決
                     final List<String> unresolvedTypeParameters = unresolvedMethod
                             .getTypeParameters();
                     for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
                         final String unresolvedTypeParameter = unresolvedTypeParameters.get(index);
-                        TypeParameterInfo typeParameter = (TypeParameterInfo) JavaByteCodeNameResolver
-                                .resolveType(unresolvedTypeParameter, index, method);
+                        TypeParameterInfo typeParameter = JavaByteCodeNameResolver
+                                .resolveTypeParameter(unresolvedTypeParameter, index, method);
                         method.addTypeParameter(typeParameter);
+                    }
+
+                    final String unresolvedReturnType = unresolvedMethod.getReturnType();
+                    final TypeInfo returnType = JavaByteCodeNameResolver.resolveType(
+                            unresolvedReturnType, null, null);
+                    method.setReturnType(returnType);
+
+                    final List<String> unresolvedParameters = unresolvedMethod.getArgumentTypes();
+                    for (final String unresolvedParameter : unresolvedParameters) {
+                        final TypeInfo parameterType = JavaByteCodeNameResolver.resolveType(
+                                unresolvedParameter, null, null);
+                        final ExternalParameterInfo parameter = new ExternalParameterInfo(
+                                parameterType, method);
+                        method.addParameter(parameter);
                     }
 
                     classInfo.addDefinedMethod(method);
@@ -1202,9 +1203,9 @@ public class MetricsTool {
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : unresolvedClassInfo
                 .getTypeParameters()) {
 
-            final TypeInfo typeParameter = unresolvedTypeParameter.resolve(classInfo, null,
-                    classInfoManager, null, null);
-            classInfo.addTypeParameter((TypeParameterInfo) typeParameter);
+            final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(classInfo,
+                    null, classInfoManager, null, null);
+            classInfo.addTypeParameter(typeParameter);
         }
 
         // 各未解決インナークラスに対して

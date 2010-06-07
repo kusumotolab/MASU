@@ -121,7 +121,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo<?>> extends Unresolv
                             .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedParameter);
                     classInfoManager.add(externalClassInfo);
                     final ClassTypeInfo referenceType = new ClassTypeInfo(externalClassInfo);
-                    for (final UnresolvedReferenceTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedParameter)
+                    for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedParameter)
                             .getTypeArguments()) {
                         final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
                                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);

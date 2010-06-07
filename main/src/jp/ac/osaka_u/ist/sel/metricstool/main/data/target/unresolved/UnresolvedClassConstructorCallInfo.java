@@ -68,8 +68,8 @@ public class UnresolvedClassConstructorCallInfo extends
 
         //　コンストラクタの型を解決
         final UnresolvedClassTypeInfo unresolvedReferenceType = this.getReferenceType();
-        final ClassTypeInfo classType = unresolvedReferenceType.resolve(usingClass, usingMethod,
-                classInfoManager, fieldInfoManager, methodInfoManager);
+        final ClassTypeInfo classType = (ClassTypeInfo) unresolvedReferenceType.resolve(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         final List<ConstructorInfo> constructors = NameResolver.getAvailableConstructors(classType);
 

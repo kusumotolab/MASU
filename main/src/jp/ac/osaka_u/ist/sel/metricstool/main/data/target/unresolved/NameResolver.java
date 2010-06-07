@@ -17,6 +17,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterizable;
 
 
 /**
@@ -253,14 +255,13 @@ public final class NameResolver {
             // 内部クラスで定義されたフィールドを追加
             for (final InnerClassInfo innerClass : currentClass.getInnerClasses()) {
                 final List<FieldInfo> availableFieldsDefinedInInnerClasses = NameResolver
-                        .getAvailableFieldsDefinedInInnerClasses(
-                                (ClassInfo) innerClass, checkedClasses);
+                        .getAvailableFieldsDefinedInInnerClasses((ClassInfo) innerClass,
+                                checkedClasses);
                 availableFields.addAll(availableFieldsDefinedInInnerClasses);
             }
 
             // 親クラスで定義されたフィールドを追加
-            for (final ClassInfo superClass : ClassTypeInfo.convert(currentClass
-                    .getSuperClasses())) {
+            for (final ClassInfo superClass : ClassTypeInfo.convert(currentClass.getSuperClasses())) {
                 final List<FieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
                         .getAvailableFieldsDefinedInSuperClasses(currentClass, superClass,
                                 checkedClasses);
@@ -278,14 +279,12 @@ public final class NameResolver {
         // 内部クラスで定義されたフィールドを追加
         for (final InnerClassInfo innerClass : outestClass.getInnerClasses()) {
             final List<FieldInfo> availableFieldsDefinedInInnerClasses = NameResolver
-                    .getAvailableFieldsDefinedInInnerClasses((ClassInfo) innerClass,
-                            checkedClasses);
+                    .getAvailableFieldsDefinedInInnerClasses((ClassInfo) innerClass, checkedClasses);
             availableFields.addAll(availableFieldsDefinedInInnerClasses);
         }
 
         // 親クラスで定義されたフィールドを追加
-        for (final ClassInfo superClass : ClassTypeInfo.convert(outestClass
-                .getSuperClasses())) {
+        for (final ClassInfo superClass : ClassTypeInfo.convert(outestClass.getSuperClasses())) {
             final List<FieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
                     .getAvailableFieldsDefinedInSuperClasses(outestClass, superClass,
                             checkedClasses);
@@ -333,14 +332,12 @@ public final class NameResolver {
         // 内部クラスで定義されたフィールドを追加
         for (final InnerClassInfo innerClass : classInfo.getInnerClasses()) {
             final List<FieldInfo> availableFieldsDefinedInInnerClasses = NameResolver
-                    .getAvailableFieldsDefinedInInnerClasses((ClassInfo) innerClass,
-                            checkedClasses);
+                    .getAvailableFieldsDefinedInInnerClasses((ClassInfo) innerClass, checkedClasses);
             availableFields.addAll(availableFieldsDefinedInInnerClasses);
         }
 
         // 親クラスで定義されたフィールドを追加
-        for (final ClassInfo superClass : ClassTypeInfo.convert(classInfo
-                .getSuperClasses())) {
+        for (final ClassInfo superClass : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
             final List<FieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
                     .getAvailableFieldsDefinedInSuperClasses(classInfo, superClass, checkedClasses);
             availableFields.addAll(availableFieldsDefinedInSuperClasses);
@@ -393,8 +390,7 @@ public final class NameResolver {
         // 内部クラスで定義されたフィールドを追加
         for (final InnerClassInfo innerClass : superClass.getInnerClasses()) {
             final List<FieldInfo> availableFieldsDefinedInInnerClasses = NameResolver
-                    .getAvailableFieldsDefinedInInnerClasses((ClassInfo) innerClass,
-                            checkedClasses);
+                    .getAvailableFieldsDefinedInInnerClasses((ClassInfo) innerClass, checkedClasses);
             for (final FieldInfo field : availableFieldsDefinedInInnerClasses) {
 
                 // 子クラスと親クラスの名前空間が同じ場合は，名前空間可視もしくは継承可視があればよい
@@ -415,8 +411,7 @@ public final class NameResolver {
         }
 
         // 親クラスで定義されたフィールドを追加
-        for (final ClassInfo superSuperClass : ClassTypeInfo.convert(superClass
-                .getSuperClasses())) {
+        for (final ClassInfo superSuperClass : ClassTypeInfo.convert(superClass.getSuperClasses())) {
             final List<FieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
                     .getAvailableFieldsDefinedInSuperClasses(subClass, superSuperClass,
                             checkedClasses);
@@ -458,14 +453,13 @@ public final class NameResolver {
             // 内部クラスで定義されたメソッドを追加
             for (final InnerClassInfo innerClass : currentClass.getInnerClasses()) {
                 final List<MethodInfo> availableMethodsDefinedInInnerClasses = NameResolver
-                        .getAvailableMethodsDefinedInInnerClasses(
-                                (ClassInfo) innerClass, checkedClasses);
+                        .getAvailableMethodsDefinedInInnerClasses((ClassInfo) innerClass,
+                                checkedClasses);
                 availableMethods.addAll(availableMethodsDefinedInInnerClasses);
             }
 
             // 親クラスで定義されたメソッドを追加
-            for (final ClassInfo superClass : ClassTypeInfo.convert(currentClass
-                    .getSuperClasses())) {
+            for (final ClassInfo superClass : ClassTypeInfo.convert(currentClass.getSuperClasses())) {
                 final List<MethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
                         .getAvailableMethodsDefinedInSuperClasses(outestClass, superClass,
                                 checkedClasses);
@@ -489,8 +483,7 @@ public final class NameResolver {
         }
 
         // 親クラスで定義されたメソッドを追加
-        for (final ClassInfo superClass : ClassTypeInfo.convert(outestClass
-                .getSuperClasses())) {
+        for (final ClassInfo superClass : ClassTypeInfo.convert(outestClass.getSuperClasses())) {
             final List<MethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
                     .getAvailableMethodsDefinedInSuperClasses(outestClass, superClass,
                             checkedClasses);
@@ -508,8 +501,7 @@ public final class NameResolver {
      * @return 外側のクラスで利用可能なメソッドの List
      */
     private static List<MethodInfo> getAvailableMethodsDefinedInInnerClasses(
-            final ClassInfo innerClassInfo,
-            final Set<ClassInfo> checkedClasses) {
+            final ClassInfo innerClassInfo, final Set<ClassInfo> checkedClasses) {
 
         if ((null == innerClassInfo) || (null == checkedClasses)) {
             throw new IllegalArgumentException();
@@ -541,8 +533,7 @@ public final class NameResolver {
         }
 
         // 親クラスで定義されたメソッドを追加
-        for (final ClassInfo superClass : ClassTypeInfo.convert(classInfo
-                .getSuperClasses())) {
+        for (final ClassInfo superClass : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
             final List<MethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
                     .getAvailableMethodsDefinedInSuperClasses(classInfo, superClass, checkedClasses);
             availableMethods.addAll(availableMethodsDefinedInSuperClasses);
@@ -618,8 +609,7 @@ public final class NameResolver {
         }
 
         // 親クラスで定義されたメソッドを追加
-        for (final ClassInfo superSuperClass : ClassTypeInfo.convert(superClass
-                .getSuperClasses())) {
+        for (final ClassInfo superSuperClass : ClassTypeInfo.convert(superClass.getSuperClasses())) {
             final List<MethodInfo> availableMethodsDefinedInSuperClasses = NameResolver
                     .getAvailableMethodsDefinedInSuperClasses(subClass, superSuperClass,
                             checkedClasses);
@@ -808,8 +798,7 @@ public final class NameResolver {
         availableDirectInnerClasses.addAll(classInfo.getInnerClasses());
 
         // 親クラスに対して再帰的に処理
-        for (final ClassInfo superClassInfo : ClassTypeInfo.convert(classInfo
-                .getSuperClasses())) {
+        for (final ClassInfo superClassInfo : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
 
             final SortedSet<InnerClassInfo> availableDirectInnerClassesInSuperClass = NameResolver
                     .getAvailableDirectInnerClasses((ClassInfo) superClassInfo);
@@ -819,4 +808,21 @@ public final class NameResolver {
         return Collections.unmodifiableSortedSet(availableDirectInnerClasses);
     }
 
+    public static final List<TypeParameterInfo> getAvailableTypeParameters(
+            final TypeParameterizable unit) {
+
+        if (null == unit) {
+            throw new IllegalArgumentException();
+        }
+
+        final List<TypeParameterInfo> typeParameters = new LinkedList<TypeParameterInfo>();
+
+        typeParameters.addAll(unit.getTypeParameters());
+        final TypeParameterizable outerUnit = unit.getOuterTypeParameterizableUnit();
+        if (null != outerUnit) {
+            typeParameters.addAll(getAvailableTypeParameters(outerUnit));
+        }
+
+        return Collections.unmodifiableList(typeParameters);
+    }
 }

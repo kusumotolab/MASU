@@ -108,6 +108,17 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
         return null;
     }
 
+    @Override
+    public TypeParameterizable getOuterTypeParameterizableUnit() {
+        final UnitInfo unit = this.getOuterUnit();
+        if (unit instanceof TypeParameterizable) {
+            return (TypeParameterizable) unit;
+        }
+
+        assert false : "outerUnit must be TypeParameterizable!";
+        return null;
+    }
+
     /**
      * 外側のユニットのオブジェクトを保存する変数
      * TargetClassInfo　もしくは TargetMethodInfo でなければならない
