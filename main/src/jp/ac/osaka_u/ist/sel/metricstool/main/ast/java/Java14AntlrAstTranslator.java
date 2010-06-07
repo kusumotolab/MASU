@@ -19,6 +19,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.SyntaxToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.VisitControlToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java14TokenTypes;
@@ -357,7 +360,9 @@ public class Java14AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java14TokenTypes.CHAR_LITERAL:
             return new ConstantToken(node.getText(), PrimitiveTypeInfo.CHAR);
         case Java14TokenTypes.STRING_LITERAL:
-            return new ConstantToken(node.getText(), PrimitiveTypeInfo.STRING);
+            final ClassInfo stringClass = DataManager.getInstance().getClassInfoManager()
+            .getClassInfo(new String[] { "java", "lang", "String" });
+            return new ConstantToken(node.getText(), new ClassTypeInfo(stringClass));
         case Java14TokenTypes.NUM_FLOAT:
             return new ConstantToken(node.getText(), PrimitiveTypeInfo.FLOAT);
         case Java14TokenTypes.NUM_LONG:

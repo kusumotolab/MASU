@@ -103,17 +103,6 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
             public String getName() {
                 return "double";
             }
-        },
-
-        /**
-         * STRING型を表す
-         */
-        STRING {
-            @Override
-            public String getName() {
-                return "string";
-            }
-
         };
 
         /**
@@ -165,11 +154,6 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
     public static final String DOUBLE_STRING = TYPE.DOUBLE.getName();
 
     /**
-     * string を表す定数
-     */
-    public static final String STRING_STRING = TYPE.STRING.getName();
-
-    /**
      * boolean 型を表すための定数．
      */
     public static final PrimitiveTypeInfo BOOLEAN = new PrimitiveTypeInfo(TYPE.BOOLEAN);
@@ -210,29 +194,6 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
     public static final PrimitiveTypeInfo DOUBLE = new PrimitiveTypeInfo(TYPE.DOUBLE);
 
     /**
-     * string 型を表すための定数
-     */
-    public static final PrimitiveTypeInfo STRING = new PrimitiveTypeInfo(TYPE.STRING) {
-        @Override
-        public boolean equals(TypeInfo typeInfo) {
-
-            if (!super.equals(typeInfo)) {
-                final LANGUAGE language = Settings.getInstance().getLanguage();
-                if (language == LANGUAGE.JAVA13 || language == LANGUAGE.JAVA14
-                        || language == LANGUAGE.JAVA15) {
-                    if (typeInfo.getTypeName().equals("java.lang.String")) {
-                        return true;
-                    }
-                }
-
-                return true;
-            }
-
-            return true;
-        }
-    };
-
-    /**
      * {@link PrimitiveTypeInfo}のファクトリメソッド．
      * 
      * @param type 作成する型の列挙型
@@ -261,8 +222,6 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
             return LONG;
         case SHORT:
             return SHORT;
-        case STRING:
-            return STRING;
         default:
             throw new IllegalArgumentException();
         }

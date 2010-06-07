@@ -95,10 +95,7 @@ public final class BinominalOperationInfo extends ExpressionInfo {
             switch (this.getOperator().getOperatorType()) {
             case ARITHMETIC:
 
-                if (firstOperandType.equals(STRING)
-                        || firstOperandType.equals(PrimitiveTypeInfo.STRING)
-                        || secondOperandType.equals(STRING)
-                        || secondOperandType.equals(PrimitiveTypeInfo.STRING)) {
+                if (firstOperandType.equals(STRING) || secondOperandType.equals(STRING)) {
                     return STRING;
 
                 } else if (firstOperandType.equals(DOUBLE)

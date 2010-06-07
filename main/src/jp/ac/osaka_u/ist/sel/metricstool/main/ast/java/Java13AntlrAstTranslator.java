@@ -19,6 +19,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.SyntaxToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.VisitControlToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java13Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java13TokenTypes;
@@ -358,7 +361,9 @@ public class Java13AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java13TokenTypes.CHAR_LITERAL:
             return new ConstantToken(node.getText(), PrimitiveTypeInfo.CHAR);
         case Java13TokenTypes.STRING_LITERAL:
-            return new ConstantToken(node.getText(), PrimitiveTypeInfo.STRING);
+            final ClassInfo stringClass = DataManager.getInstance().getClassInfoManager()
+                    .getClassInfo(new String[] { "java", "lang", "String" });
+            return new ConstantToken(node.getText(), new ClassTypeInfo(stringClass));
         case Java13TokenTypes.NUM_FLOAT:
             return new ConstantToken(node.getText(), PrimitiveTypeInfo.FLOAT);
         case Java13TokenTypes.NUM_LONG:
@@ -371,7 +376,7 @@ public class Java13AntlrAstTranslator implements AstTokenTranslator<AST> {
 
         case Java13TokenTypes.INSTANCE_INIT:
             result = VisitControlToken.SKIP;
-            break;          
+            break;
         case Java13TokenTypes.ANNOTATION:
         case Java13TokenTypes.LITERAL_throws:
             result = VisitControlToken.SKIP;
@@ -436,7 +441,7 @@ public class Java13AntlrAstTranslator implements AstTokenTranslator<AST> {
             break;
         case Java13TokenTypes.FOR_ITERATOR:
             result = DescriptionToken.FOR_ITERATOR;
-            break;            
+            break;
         default:
             //変換できなかったノードは取りあえずその子供に進む
             result = VisitControlToken.ENTER;

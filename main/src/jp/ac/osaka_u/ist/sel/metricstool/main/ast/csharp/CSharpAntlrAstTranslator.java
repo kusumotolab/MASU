@@ -3,10 +3,10 @@
  */
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.csharp;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
-import antlr.collections.AST;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.java.JavaAstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AccessModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
@@ -23,9 +23,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.SyntaxToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.VisitControlToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.CSharpTokenTypes;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
+import antlr.collections.AST;
+
 
 /**
  * {@link Java15Parser}から生成されるASTノードを {@link AstToken}に変換するクラス.
@@ -352,7 +357,9 @@ public class CSharpAntlrAstTranslator implements AstTokenTranslator<AST> {
         case CSharpTokenTypes.CHAR_LITERAL:
             return new ConstantToken(node.getText(), PrimitiveTypeInfo.CHAR);
         case CSharpTokenTypes.STRING_LITERAL:
-            return new ConstantToken(node.getText(), PrimitiveTypeInfo.STRING);
+            final ClassInfo stringClass = DataManager.getInstance().getClassInfoManager()
+                    .getClassInfo(new String[] { "java", "lang", "String" });
+            return new ConstantToken(node.getText(), new ClassTypeInfo(stringClass));
         case CSharpTokenTypes.NUM_FLOAT:
             return new ConstantToken(node.getText(), PrimitiveTypeInfo.FLOAT);
         case CSharpTokenTypes.NUM_LONG:
@@ -364,7 +371,7 @@ public class CSharpAntlrAstTranslator implements AstTokenTranslator<AST> {
             //break;
 
         case CSharpTokenTypes.INSTANCE_INIT:
-        //case CSharpTokenTypes.ANNOTATION:
+            //case CSharpTokenTypes.ANNOTATION:
         case CSharpTokenTypes.LITERAL_throws:
             result = VisitControlToken.SKIP;
             break;
@@ -453,4 +460,3 @@ public class CSharpAntlrAstTranslator implements AstTokenTranslator<AST> {
      */
     private final Map<String, AstToken> identifierTokenMap = new HashMap<String, AstToken>();
 }
-

@@ -255,11 +255,6 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                     return false;
                 }
 
-                // Àˆø”‚ªStringŒ^‚Ìê‡‚ÍŒÄ‚Ño‚µ•s‰Â
-                else if (actualType.equals(PrimitiveTypeInfo.STRING_STRING)) {
-                    return false;
-                }
-
                 continue;
             }
 

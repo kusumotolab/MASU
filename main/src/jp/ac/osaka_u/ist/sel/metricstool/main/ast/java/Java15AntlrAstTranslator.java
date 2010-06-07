@@ -19,6 +19,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ModifierToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.SyntaxToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.VisitControlToken;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15Parser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.Java15TokenTypes;
@@ -59,13 +62,13 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         }
 
         //キャッシュがないので総当り
-       switch (type) {
+        switch (type) {
         case Java15TokenTypes.PACKAGE_DEF:
-           result = DefinitionToken.NAMESPACE_DEFINITION;
+            result = DefinitionToken.NAMESPACE_DEFINITION;
             break;
         case Java15TokenTypes.ANNOTATIONS:
-//            result = JavaAstToken.ANNOTATIONS;
-//           break;
+            //            result = JavaAstToken.ANNOTATIONS;
+            //           break;
         case Java15TokenTypes.ANNOTATION_DEF:
             result = VisitControlToken.SKIP;
             //アノテーション定義は無視 
@@ -373,7 +376,9 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.CHAR_LITERAL:
             return new ConstantToken(node.getText(), PrimitiveTypeInfo.CHAR);
         case Java15TokenTypes.STRING_LITERAL:
-            return new ConstantToken(node.getText(), PrimitiveTypeInfo.STRING);
+            final ClassInfo stringClass = DataManager.getInstance().getClassInfoManager()
+                    .getClassInfo(new String[] { "java", "lang", "String" });
+            return new ConstantToken(node.getText(), new ClassTypeInfo(stringClass));
         case Java15TokenTypes.NUM_FLOAT:
             return new ConstantToken(node.getText(), PrimitiveTypeInfo.FLOAT);
         case Java15TokenTypes.NUM_LONG:

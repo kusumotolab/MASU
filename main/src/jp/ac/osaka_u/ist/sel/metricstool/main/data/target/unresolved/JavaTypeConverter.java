@@ -64,14 +64,8 @@ final public class JavaTypeConverter extends TypeConverter {
             final ClassInfo shortClass = classInfoManager.getClassInfo(new String[] { "java",
                     "lang", "Short" });
             return shortClass;
-        case STRING:
-            final ClassInfo stringClass = classInfoManager.getClassInfo(new String[] { "java",
-                    "lang", "String" });
-            return stringClass;
         default:
             throw new IllegalArgumentException();
         }
-
     }
-
 }
