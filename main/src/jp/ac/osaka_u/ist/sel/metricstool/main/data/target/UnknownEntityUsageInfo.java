@@ -23,15 +23,23 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
     /**
      * 位置情報を与えて，オブジェクトを初期化
      * 
+     * @param referencedName 参照されている名前
      * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public UnknownEntityUsageInfo(final CallableUnitInfo ownerMethod, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    public UnknownEntityUsageInfo(final String[] referencedName,
+            final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
         super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
+
+        if (null == referencedName) {
+            throw new IllegalArgumentException();
+        }
+
+        this.referencedName = referencedName;
     }
 
     @Override
@@ -50,13 +58,19 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
     }
 
     /**
-     * この未解決エンティティ使用のテキスト表現（型）を返す
+     * この未解決エンティティ使用のテキスト表現を返す
      * 
-     * @return この未解決エンティティ使用のテキスト表現（型）
+     * @return この未解決エンティティ使用のテキスト表現
      */
     @Override
     public String getText() {
-        return UNKNOWNSTRING;
+        final StringBuilder text = new StringBuilder();
+        for (final String name : this.getReferencedName()) {
+            text.append(name);
+            text.append(".");
+        }
+        text.deleteCharAt(text.length() - 1);
+        return text.toString();
     }
 
     /**
@@ -69,5 +83,14 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
         return Collections.unmodifiableSet(new HashSet<ClassTypeInfo>());
     }
 
-    private static final String UNKNOWNSTRING = "UNKNOWN";
+    /**
+     * 参照されている文字列を返す
+     * 
+     * @return 参照されている文字列
+     */
+    public String[] getReferencedName() {
+        return this.referencedName;
+    }
+
+    private final String[] referencedName;
 }

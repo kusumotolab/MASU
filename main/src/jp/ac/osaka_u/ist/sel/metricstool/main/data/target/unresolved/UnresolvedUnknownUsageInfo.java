@@ -130,8 +130,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                         // 親が UnknownTypeInfo だったら，どうしようもない
                         if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
-                            this.resolvedInfo = new UnknownEntityUsageInfo(usingMethod, fromLine,
-                                    fromColumn, toLine, toColumn);
+                            this.resolvedInfo = new UnknownEntityUsageInfo(name, usingMethod,
+                                    fromLine, fromColumn, toLine, toColumn);
                             /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                             return this.resolvedInfo;
 
@@ -252,8 +252,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                         // 親が UnknownTypeInfo だったら，どうしようもない
                         if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
-                            this.resolvedInfo = new UnknownEntityUsageInfo(usingMethod, fromLine,
-                                    fromColumn, toLine, toColumn);
+                            this.resolvedInfo = new UnknownEntityUsageInfo(name, usingMethod,
+                                    fromLine, fromColumn, toLine, toColumn);
                             /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                             return this.resolvedInfo;
 
@@ -394,8 +394,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                         // 親が UnknownTypeInfo だったら，どうしようもない
                         if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
-                            this.resolvedInfo = new UnknownEntityUsageInfo(usingMethod, fromLine,
-                                    fromColumn, toLine, toColumn);
+                            this.resolvedInfo = new UnknownEntityUsageInfo(name, usingMethod,
+                                    fromLine, fromColumn, toLine, toColumn);
                             /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                             return this.resolvedInfo;
 
@@ -542,7 +542,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             // 親が UnknownTypeInfo だったら，どうしようもない
                             if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
-                                this.resolvedInfo = new UnknownEntityUsageInfo(usingMethod,
+                                this.resolvedInfo = new UnknownEntityUsageInfo(name, usingMethod,
                                         fromLine, fromColumn, toLine, toColumn);
                                 /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                                 return this.resolvedInfo;
@@ -636,7 +636,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                             // 見つからなかった処理を行う
                                             // assert false : "Can't resolve entity usage3.5 : " + this.toString();
                                             usingMethod.addUnresolvedUsage(this);
-                                            this.resolvedInfo = new UnknownEntityUsageInfo(
+                                            this.resolvedInfo = new UnknownEntityUsageInfo(name,
                                                     usingMethod, fromLine, fromColumn, toLine,
                                                     toColumn);
                                             /*this.resolvedInfo
@@ -685,8 +685,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                     // 親が UnknownTypeInfo だったら，どうしようもない
                                     if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
-                                        this.resolvedInfo = new UnknownEntityUsageInfo(usingMethod,
-                                                fromLine, fromColumn, toLine, toColumn);
+                                        this.resolvedInfo = new UnknownEntityUsageInfo(name,
+                                                usingMethod, fromLine, fromColumn, toLine, toColumn);
                                         /*this.resolvedInfo
                                                 .setOwnerExecutableElement(ownerExecutableElement);*/
                                         return this.resolvedInfo;
@@ -830,8 +830,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                                 // 親が UnknownTypeInfo だったら，どうしようもない
                                 if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
-                                    this.resolvedInfo = new UnknownEntityUsageInfo(usingMethod,
-                                            fromLine, fromColumn, toLine, toColumn);
+                                    this.resolvedInfo = new UnknownEntityUsageInfo(name,
+                                            usingMethod, fromLine, fromColumn, toLine, toColumn);
                                     /*this.resolvedInfo
                                             .setOwnerExecutableElement(ownerExecutableElement);*/
                                     return this.resolvedInfo;
@@ -1004,7 +1004,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                             // 親が UnknownTypeInfo だったら，どうしようもない
                             if (entityUsage.getType() instanceof UnknownTypeInfo) {
 
-                                this.resolvedInfo = new UnknownEntityUsageInfo(usingMethod,
+                                this.resolvedInfo = new UnknownEntityUsageInfo(name, usingMethod,
                                         fromLine, fromColumn, toLine, toColumn);
                                 /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                                 return this.resolvedInfo;
@@ -1133,11 +1133,12 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                 final ClassTypeInfo externalClassType = new ClassTypeInfo(externalClass);
                 this.resolvedInfo = new ClassReferenceInfo(externalClassType, usingMethod,
                         fromLine, fromColumn, toLine, toColumn);
-                /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                 classInfoManager.add(externalClass);
                 return this.resolvedInfo;
             }
         }
+
+        // インポート文が * で終わっているものがないときは，
 
         err.println("Remain unresolved \"" + this.toString() + "\"" + " line:" + this.getFromLine()
                 + " column:" + this.getFromColumn() + " on \""
@@ -1146,8 +1147,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
         // 見つからなかった処理を行う
         usingMethod.addUnresolvedUsage(this);
 
-        this.resolvedInfo = new UnknownEntityUsageInfo(usingMethod, fromLine, fromColumn, toLine,
-                toColumn);
+        this.resolvedInfo = new UnknownEntityUsageInfo(name, usingMethod, fromLine, fromColumn,
+                toLine, toColumn);
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
         return this.resolvedInfo;
     }
