@@ -1523,9 +1523,6 @@ public class MetricsTool {
             final UnresolvedUnitInfo<?> unresolvedOuterUnit = unresolvedClassInfo.getOuterUnit();
             final UnitInfo outerUnit = unresolvedOuterUnit.resolve(classInfo, null,
                     classInfoManager, fieldInfoManager, methodInfoManager);
-            if (innerClass.getClassName().equals("MapperType")) {
-                System.out.println();
-            }
             try {
                 final Class<?> cls = Class
                         .forName("jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo");
