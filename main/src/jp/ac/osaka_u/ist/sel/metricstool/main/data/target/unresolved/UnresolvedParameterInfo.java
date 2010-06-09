@@ -66,7 +66,7 @@ public class UnresolvedParameterInfo
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)) {
+        if (null == classInfoManager) {
             throw new NullPointerException();
         }
 
@@ -75,12 +75,19 @@ public class UnresolvedParameterInfo
             return this.getResolved();
         }
 
+        final UnresolvedCallableUnitInfo<?> unresolvedOwnerMethod = this.getDefinitionUnit();
+        final CallableUnitInfo ownerMethod = unresolvedOwnerMethod.resolve(null, null,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+        final UnresolvedClassInfo unresolvedOwnerClass = unresolvedOwnerMethod.getOwnerClass();
+        final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(null, null,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+
         // 修飾子，パラメータ名，型，位置情報を取得
         final Set<ModifierInfo> parameterModifiers = this.getModifiers();
         final String parameterName = this.getName();
         final int index = this.getIndex();
         final UnresolvedTypeInfo<?> unresolvedParameterType = this.getType();
-        TypeInfo parameterType = unresolvedParameterType.resolve(usingClass, usingMethod,
+        TypeInfo parameterType = unresolvedParameterType.resolve(ownerClass, ownerMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert parameterType != null : "resolveTypeInfo returned null!";
         if (parameterType instanceof UnknownTypeInfo) {
@@ -91,8 +98,8 @@ public class UnresolvedParameterInfo
                 parameterType = new ClassTypeInfo(externalClass);
                 for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedParameterType)
                         .getTypeArguments()) {
-                    final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
-                            usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                    final TypeInfo typeArgument = unresolvedTypeArgument.resolve(ownerClass,
+                            ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
                     ((ClassTypeInfo) parameterType).addTypeArgument(typeArgument);
                 }
                 classInfoManager.add(externalClass);
@@ -104,7 +111,7 @@ public class UnresolvedParameterInfo
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedParameterType)
                         .getDimension();
-                final TypeInfo elementType = unresolvedElementType.resolve(usingClass, usingMethod,
+                final TypeInfo elementType = unresolvedElementType.resolve(ownerClass, ownerMethod,
                         classInfoManager, fieldInfoManager, methodInfoManager);
                 parameterType = ArrayTypeInfo.getType(elementType, dimension);
             } else {

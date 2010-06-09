@@ -57,7 +57,7 @@ public class UnresolvedVariableLengthParameterInfo extends UnresolvedParameterIn
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)) {
+        if (null == classInfoManager) {
             throw new NullPointerException();
         }
 
@@ -66,8 +66,8 @@ public class UnresolvedVariableLengthParameterInfo extends UnresolvedParameterIn
             return this.getResolved();
         }
 
-        final TargetParameterInfo resolvedParameter = super.resolve(usingClass, usingMethod,
-                classInfoManager, fieldInfoManager, methodInfoManager);
+        final TargetParameterInfo resolvedParameter = super.resolve(null, null, classInfoManager,
+                fieldInfoManager, methodInfoManager);
 
         final Set<ModifierInfo> modifiers = resolvedParameter.getModifiers();
         final String name = resolvedParameter.getName();

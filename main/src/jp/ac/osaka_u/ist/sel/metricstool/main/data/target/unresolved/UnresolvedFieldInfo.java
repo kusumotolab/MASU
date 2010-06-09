@@ -71,7 +71,7 @@ public final class UnresolvedFieldInfo extends
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == classInfoManager) || (null == fieldInfoManager)) {
+        if ((null == classInfoManager) || (null == fieldInfoManager)) {
             throw new NullPointerException();
         }
 
@@ -79,11 +79,16 @@ public final class UnresolvedFieldInfo extends
             return this.getResolved();
         }
 
+        // 所有クラスを解決
+        final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
+        final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(null, null,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+
         // 修飾子，名前，型，可視性，インスタンスメンバーかどうかを取得
         final Set<ModifierInfo> modifiers = this.getModifiers();
         final String fieldName = this.getName();
         final UnresolvedTypeInfo<?> unresolvedFieldType = this.getType();
-        TypeInfo fieldType = unresolvedFieldType.resolve(usingClass, null, classInfoManager,
+        TypeInfo fieldType = unresolvedFieldType.resolve(null, null, classInfoManager,
                 fieldInfoManager, methodInfoManager);
         assert fieldType != null : "resolveTypeInfo returned null!";
         if (fieldType instanceof UnknownTypeInfo) {
@@ -94,8 +99,8 @@ public final class UnresolvedFieldInfo extends
                 fieldType = new ClassTypeInfo(classInfo);
                 for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedFieldType)
                         .getTypeArguments()) {
-                    final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
-                            usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                    final TypeInfo typeArgument = unresolvedTypeArgument.resolve(null, null,
+                            classInfoManager, fieldInfoManager, methodInfoManager);
                     ((ClassTypeInfo) fieldType).addTypeArgument(typeArgument);
                 }
                 classInfoManager.add(classInfo);
@@ -106,7 +111,7 @@ public final class UnresolvedFieldInfo extends
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedFieldType)
                         .getDimension();
-                final TypeInfo elementType = unresolvedElementType.resolve(usingClass, usingMethod,
+                final TypeInfo elementType = unresolvedElementType.resolve(null, null,
                         classInfoManager, fieldInfoManager, methodInfoManager);
                 fieldType = ArrayTypeInfo.getType(elementType, dimension);
 
@@ -125,11 +130,11 @@ public final class UnresolvedFieldInfo extends
         final int toColumn = this.getToColumn();
 
         // フィールドオブジェクトを生成
-        this.resolvedInfo = new TargetFieldInfo(modifiers, fieldName, fieldType, usingClass,
+        this.resolvedInfo = new TargetFieldInfo(modifiers, fieldName, fieldType, ownerClass,
                 privateVisible, namespaceVisible, inheritanceVisible, publicVisible, instance,
                 fromLine, fromColumn, toLine, toColumn);
         fieldInfoManager.add(this.resolvedInfo);
-        usingClass.addDefinedField(this.resolvedInfo);
+        ownerClass.addDefinedField(this.resolvedInfo);
         return this.resolvedInfo;
     }
 

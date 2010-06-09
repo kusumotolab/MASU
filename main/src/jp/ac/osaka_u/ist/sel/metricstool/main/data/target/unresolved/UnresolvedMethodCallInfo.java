@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
@@ -125,17 +126,15 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
         if (ownerType instanceof TypeParameterTypeInfo) {
             final TypeInfo extendsType = ((TypeParameterTypeInfo) ownerType)
                     .getReferncedTypeParameter().getExtendsType();
+
+            // ‚È‚É‚àŒp³‚µ‚Ä‚¢‚È‚¢ê‡‚ÍObjectŒ^‚ðŒp³‚µ‚Ä‚¢‚é‚±‚Æ‚É‚·‚é
             if (null != extendsType) {
                 ownerType = extendsType;
             } else {
-                assert false : "Here should not be reached";
-                final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
-                this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage, unknownMethod,
-                        usingMethod, fromLine, fromColumn, toLine, toColumn);
-                /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                this.resolvedInfo.addArguments(actualParameters);
-                this.resolvedInfo.addTypeArguments(typeArguments);
-                return this.resolvedInfo;
+
+                final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
+                        .getClassInfo(new String[0]);
+                ownerType = new ClassTypeInfo(objectClass);
             }
         }
 

@@ -65,7 +65,7 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == classInfoManager)) {
+        if (null == classInfoManager) {
             throw new NullPointerException();
         }
 
@@ -77,8 +77,8 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
         final UnresolvedTypeInfo<?> unresolvedElementType = this.getElementType();
         final int dimension = this.getDimension();
 
-        final TypeInfo elementType = unresolvedElementType.resolve(usingClass, usingMethod,
-                classInfoManager, fieldInfoManager, methodInfoManager);
+        final TypeInfo elementType = unresolvedElementType.resolve(null, null, classInfoManager,
+                fieldInfoManager, methodInfoManager);
         assert elementType != null : "resolveEntityUsage returned null!";
 
         // 要素の型が不明のときは UnnownTypeInfo を返す
@@ -259,8 +259,8 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
             if (null == o) {
                 throw new NullPointerException();
             }
-            
-            if(!(o instanceof Key)){
+
+            if (!(o instanceof Key)) {
                 return false;
             }
 

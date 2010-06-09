@@ -65,7 +65,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == classInfoManager) || (null == methodInfoManager)) {
+        if ((null == classInfoManager) || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
@@ -88,22 +88,26 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
+        final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
+        final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(null, null,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+
         // MethodInfo オブジェクトを生成する．
-        this.resolvedInfo = new TargetMethodInfo(methodModifiers, methodName, usingClass,
+        this.resolvedInfo = new TargetMethodInfo(methodModifiers, methodName, ownerClass,
                 privateVisible, namespaceVisible, inheritanceVisible, publicVisible, instance,
                 fromLine, fromColumn, toLine, toColumn);
 
         // 型パラメータを解決し，解決済みメソッド情報に追加する
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
-            final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(usingClass,
+            final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(null,
                     this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
 
         // 返り値をセットする
         final UnresolvedTypeInfo<?> unresolvedMethodReturnType = this.getReturnType();
-        TypeInfo methodReturnType = unresolvedMethodReturnType.resolve(usingClass, null,
+        TypeInfo methodReturnType = unresolvedMethodReturnType.resolve(null, null,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert methodReturnType != null : "resolveTypeInfo returned null!";
         if (methodReturnType instanceof UnknownTypeInfo) {
@@ -114,8 +118,9 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
                 methodReturnType = new ClassTypeInfo(classInfo);
                 for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedMethodReturnType)
                         .getTypeArguments()) {
-                    final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
-                            usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                    final TypeInfo typeArgument = unresolvedTypeArgument.resolve(null,
+                            this.resolvedInfo, classInfoManager, fieldInfoManager,
+                            methodInfoManager);
                     ((ClassTypeInfo) methodReturnType).addTypeArgument(typeArgument);
                 }
                 classInfoManager.add(classInfo);
@@ -127,7 +132,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
                         .getDimension();
-                final TypeInfo elementType = unresolvedElementType.resolve(usingClass, usingMethod,
+                final TypeInfo elementType = unresolvedElementType.resolve(null, this.resolvedInfo,
                         classInfoManager, fieldInfoManager, methodInfoManager);
                 methodReturnType = ArrayTypeInfo.getType(elementType, dimension);
 
@@ -141,7 +146,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         // 引数を追加する
         for (final UnresolvedParameterInfo unresolvedParameterInfo : this.getParameters()) {
 
-            final TargetParameterInfo parameterInfo = unresolvedParameterInfo.resolve(usingClass,
+            final TargetParameterInfo parameterInfo = unresolvedParameterInfo.resolve(null,
                     this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addParameter(parameterInfo);
         }
@@ -150,7 +155,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         for (final UnresolvedClassTypeInfo unresolvedThrownException : this.getThrownExceptions()) {
 
             final ClassTypeInfo thrownException = (ClassTypeInfo) unresolvedThrownException
-                    .resolve(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
+                    .resolve(null, this.resolvedInfo, classInfoManager, fieldInfoManager,
                             methodInfoManager);
             this.resolvedInfo.addThrownException(thrownException);
         }

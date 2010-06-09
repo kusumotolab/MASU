@@ -50,7 +50,7 @@ public final class UnresolvedConstructorInfo extends
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == classInfoManager) || (null == methodInfoManager)) {
+        if ((null == classInfoManager) || (null == methodInfoManager)) {
             throw new NullPointerException();
         }
 
@@ -71,15 +71,19 @@ public final class UnresolvedConstructorInfo extends
         final int constructorToLine = this.getToLine();
         final int constructorToColumn = this.getToColumn();
 
+        final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
+        final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(null, null,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+
         // MethodInfo オブジェクトを生成する．
-        this.resolvedInfo = new TargetConstructorInfo(methodModifiers, usingClass, privateVisible,
+        this.resolvedInfo = new TargetConstructorInfo(methodModifiers, ownerClass, privateVisible,
                 namespaceVisible, inheritanceVisible, publicVisible, constructorFromLine,
                 constructorFromColumn, constructorToLine, constructorToColumn);
 
         // 型パラメータを解決し，解決済みコンストラクタ情報に追加する
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
-            final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(usingClass,
+            final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(ownerClass,
                     this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
@@ -87,7 +91,7 @@ public final class UnresolvedConstructorInfo extends
         // 引数を解決し，解決済みコンストラクタ情報に追加する
         for (final UnresolvedParameterInfo unresolvedParameterInfo : this.getParameters()) {
 
-            final TargetParameterInfo parameterInfo = unresolvedParameterInfo.resolve(usingClass,
+            final TargetParameterInfo parameterInfo = unresolvedParameterInfo.resolve(ownerClass,
                     this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addParameter(parameterInfo);
         }
@@ -96,7 +100,7 @@ public final class UnresolvedConstructorInfo extends
         for (final UnresolvedClassTypeInfo unresolvedThrownException : this.getThrownExceptions()) {
 
             final ClassTypeInfo thrownException = (ClassTypeInfo) unresolvedThrownException
-                    .resolve(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
+                    .resolve(ownerClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
                             methodInfoManager);
             this.resolvedInfo.addThrownException(thrownException);
         }
