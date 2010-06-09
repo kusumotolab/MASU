@@ -24,7 +24,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -122,8 +122,9 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
         TypeInfo ownerType = qualifierUsage.getType();
 
         // Œ^ƒpƒ‰ƒ[ƒ^‚Ìê‡‚Í‚»‚ÌŒp³Œ^‚ð‹‚ß‚é
-        if (ownerType instanceof TypeParameterInfo) {
-            final TypeInfo extendsType = ((TypeParameterInfo) ownerType).getExtendsType();
+        if (ownerType instanceof TypeParameterTypeInfo) {
+            final TypeInfo extendsType = ((TypeParameterTypeInfo) ownerType)
+                    .getReferncedTypeParameter().getExtendsType();
             if (null != extendsType) {
                 ownerType = extendsType;
             } else {

@@ -55,11 +55,11 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
     public TypeInfo getType() {
 
         final MethodInfo callee = this.getCallee();
-        final TypeInfo definitionType = callee.getReturnType();
+        final TypeInfo returnType = callee.getReturnType();
 
         // 定義の返り値が型パラメータでなければそのまま返せる
-        if (!(definitionType instanceof TypeParameterInfo)) {
-            return definitionType;
+        if (!(returnType instanceof TypeParameterTypeInfo)) {
+            return returnType;
         }
 
         //　型パラメータの場合
@@ -68,7 +68,8 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
 
         // 型引数がある場合は，その型を返す
         if (0 < typeArguments.size()) {
-            final int typeParameterIndex = ((TypeParameterInfo) definitionType).getIndex();
+            final int typeParameterIndex = ((TypeParameterTypeInfo) returnType)
+                    .getReferncedTypeParameter().getIndex();
             final TypeInfo typeArgument = typeArguments.get(typeParameterIndex);
             return typeArgument;
 
