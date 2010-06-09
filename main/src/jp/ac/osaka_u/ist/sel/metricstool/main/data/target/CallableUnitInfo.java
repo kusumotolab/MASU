@@ -267,8 +267,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             }
 
             // 仮引数が配列型の場合
-            else if ((dummyType instanceof ArrayTypeInfo)
-                    && !(dummyType instanceof VariableLengthTypeInfo)) {
+            else if (dummyType instanceof ArrayTypeInfo) {
 
                 // 引数の数が合わないので呼び出し不可
                 if (!(index < actualParameterArray.length)) {
@@ -322,13 +321,6 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 if (!(index < actualParameterArray.length)) {
                     return false;
                 }
-
-                // TODO 今のところ，条件なしでOKにしている．実装の必要あり
-                continue;
-            }
-
-            // 仮引数が可変長配列の場合(古い実装)
-            else if (dummyType instanceof VariableLengthTypeInfo) {
 
                 // TODO 今のところ，条件なしでOKにしている．実装の必要あり
                 continue;
