@@ -165,22 +165,22 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
         TypeInfo returnType;
 
         // 定義の返り値が型パラメータでなければそのまま返せる
-        if (!(definitionType instanceof TypeParameterInfo)) {
+        if (!(definitionType instanceof TypeParameterTypeInfo)) {
             return definitionType;
         }
 
         ///// 以下の実装はJavaのメソッドがFirstClassでないことを前提としての実装となる
-        
+
         // 型パラメータから，実際に使用されている型を取得し返す
         // メソッドの型パラメータかどうか
         final CallableUnitInfo ownerMethod = this.getOwnerMethod();
         returnType = this.getTypeFromOwnerCallableUnit(definitionType, ownerMethod);
-        if (null != returnType){
+        if (null != returnType) {
             return returnType;
         }
 
         // 型パラメタの定義を探索する
-        for (UnitInfo ownerUnit = ownerMethod.getOwnerClass();true; ){
+        for (UnitInfo ownerUnit = ownerMethod.getOwnerClass(); true;) {
             // クラス、メソッド、イニシャライザのどれかがくる
             if (ownerUnit instanceof ClassInfo) {
                 // クラスの場合
@@ -194,12 +194,12 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
                     break;
                 }
                 // 内部クラスの場合、一つ上のUnitを見るよ
-                ownerUnit = ((TargetInnerClassInfo)ownerClass).getOuterUnit();
+                ownerUnit = ((TargetInnerClassInfo) ownerClass).getOuterUnit();
             } else if (ownerUnit instanceof CallableUnitInfo) {
                 //メソッドおよびイニシャライザの場合
                 CallableUnitInfo ownerCallable = (CallableUnitInfo) ownerUnit;
                 returnType = this.getTypeFromOwnerCallableUnit(definitionType, ownerCallable);
-                if (null != returnType){
+                if (null != returnType) {
                     return returnType;
                 }
                 //一つ上のUnitを見るよ
@@ -220,7 +220,8 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
         //　型パラメータがそのままか
         for (final TypeParameterInfo typeParameter : ownerClass.getTypeParameters()) {
             if (typeParameter.equals(definitionType)) {
-                return ((TypeParameterInfo) definitionType).getExtendsType();
+                return ((TypeParameterTypeInfo) definitionType).getReferncedTypeParameter()
+                        .getExtendsType();
             }
         }
 
@@ -247,10 +248,10 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     private TypeInfo getTypeFromOwnerCallableUnit(final TypeInfo definitionType,
             final CallableUnitInfo ownerCallable) {
         // イニシャライザに型パラメタは存在しない
-        if (ownerCallable instanceof InitializerInfo){
+        if (ownerCallable instanceof InitializerInfo) {
             return null;
         }
-        
+
         for (final TypeParameterInfo typeParameter : ownerCallable.getTypeParameters()) {
             if (typeParameter.equals(definitionType)) {
                 return ((TypeParameterInfo) definitionType).getExtendsType();
