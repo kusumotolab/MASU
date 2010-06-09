@@ -162,8 +162,9 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
 
         final T usedVariable = this.getUsedVariable();
         final TypeInfo definitionType = usedVariable.getType();
-        TypeInfo returnType;
+        return definitionType;
 
+        /*
         // 定義の返り値が型パラメータでなければそのまま返せる
         if (!(definitionType instanceof TypeParameterTypeInfo)) {
             return definitionType;
@@ -207,6 +208,7 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
             }
         }
         throw new IllegalStateException();
+        */
     }
 
     /** 
