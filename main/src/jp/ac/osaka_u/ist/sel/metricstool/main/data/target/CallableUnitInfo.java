@@ -152,6 +152,8 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 .toArray(new ExpressionInfo[0]);
         final ParameterInfo[] dummyParameterArray = this.getParameters().toArray(
                 new ParameterInfo[0]);
+        int checkedActualIndex = -1;
+
         for (int index = 0; index < dummyParameterArray.length; index++) {
 
             final ParameterInfo dummyParameter = dummyParameterArray[index];
@@ -161,6 +163,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             if (dummyParameter instanceof VariableLengthParameterInfo) {
 
                 // TODO 今のところ条件なしでOKにしている．実装の必要あり
+                checkedActualIndex = index;
                 continue;
             }
 
@@ -178,11 +181,13 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
                 // 実引数の型がUnknownTypeInfoのときはどうしようもないのでOKにする
                 if (actualType instanceof UnknownTypeInfo) {
+                    checkedActualIndex = index;
                     continue;
                 }
 
                 //　実引数が null であればOK
                 if (actualParameter instanceof NullUsageInfo) {
+                    checkedActualIndex = index;
                     continue;
                 }
 
@@ -192,6 +197,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 if (((ClassTypeInfo) dummyType).getReferencedClass().equals(objectClass)) {
 
                     if (actualType instanceof ReferenceTypeInfo) {
+                        checkedActualIndex = index;
                         continue;
                     }
                 }
@@ -212,9 +218,11 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
                         // 実引数が仮引数と同じ参照型（クラス）でもなく，仮引数のサブクラスでもない場合は該当しない
                         if (actualClass.equals(dummyClass)) {
+                            checkedActualIndex = index;
                             continue;
 
                         } else if (actualClass.isSubClass(dummyClass)) {
+                            checkedActualIndex = index;
                             continue;
 
                         } else {
@@ -227,6 +235,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                     // 仮引数，実引数共に外部クラスである場合は，/*等しい場合のみ呼び出し*/可能とする
                     else if ((actualClass instanceof ExternalClassInfo)
                             && (dummyClass instanceof ExternalClassInfo)) {
+                        checkedActualIndex = index;
                         continue;
                     }
 
@@ -234,6 +243,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                     // 等しくないとダメという条件は厳しすぎて正しく判定できない場合がある．
                     else if ((actualClass instanceof TargetClassInfo)
                             && (dummyClass instanceof ExternalClassInfo)) {
+                        checkedActualIndex = index;
                         continue;
                     }
 
@@ -255,6 +265,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 // 実引数の型がUnknownTypeInfoのときはどうしようもないのでOKにする
                 final TypeInfo actualType = actualParameterArray[index].getType();
                 if (actualType instanceof UnknownTypeInfo) {
+                    checkedActualIndex = index;
                     continue;
                 }
 
@@ -263,6 +274,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                     return false;
                 }
 
+                checkedActualIndex = index;
                 continue;
             }
 
@@ -277,6 +289,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 // 実引数の型がUnknownTypeInfoのときはどうしようもないのでOKにする
                 final TypeInfo actualType = actualParameterArray[index].getType();
                 if (actualType instanceof UnknownTypeInfo) {
+                    checkedActualIndex = index;
                     continue;
                 }
 
@@ -293,6 +306,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 if ((dummyElementType instanceof ClassTypeInfo)
                         && (((ClassTypeInfo) dummyElementType).getReferencedClass()
                                 .equals(objectClass))) {
+                    checkedActualIndex = index;
                     continue;
                 }
 
@@ -307,6 +321,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
                     if (actualElementType.equals(dummyElementType)
                             && (actualDimenstion == dummyDimenstion)) {
+                        checkedActualIndex = index;
                         continue;
                     }
 
@@ -323,11 +338,17 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 }
 
                 // TODO 今のところ，条件なしでOKにしている．実装の必要あり
+                checkedActualIndex = index;
                 continue;
             }
         }
 
-        return true;
+        // すべての実引数についてチェックをしているのであれば，呼び出し可能とする
+        if (actualParameterArray.length == checkedActualIndex + 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
