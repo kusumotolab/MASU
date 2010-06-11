@@ -1,7 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Arrays;
 import java.util.Set;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 
 
 /**
@@ -11,6 +14,21 @@ import java.util.Set;
  */
 @SuppressWarnings("serial")
 public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassInfo {
+
+    public static TargetClassInfo getOutestClass(final TargetInnerClassInfo innerClass) {
+
+        if (null == innerClass) {
+            throw new IllegalArgumentException();
+        }
+
+        final String[] fqName = innerClass.getFullQualifiedName();
+        final String[] outerFQName = Arrays.copyOf(fqName, fqName.length - 1);
+
+        final TargetClassInfo outerClass = (TargetClassInfo) DataManager.getInstance()
+                .getClassInfoManager().getClassInfo(outerFQName);
+        return outerClass instanceof TargetInnerClassInfo ? getOutestClass((TargetInnerClassInfo) outerClass)
+                : outerClass;
+    }
 
     /**
      * インナークラスオブジェクトを初期化する

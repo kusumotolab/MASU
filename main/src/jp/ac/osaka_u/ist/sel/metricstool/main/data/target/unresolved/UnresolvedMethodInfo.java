@@ -100,14 +100,14 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         // 型パラメータを解決し，解決済みメソッド情報に追加する
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
-            final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(null,
+            final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(ownerClass,
                     this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
 
         // 返り値をセットする
         final UnresolvedTypeInfo<?> unresolvedMethodReturnType = this.getReturnType();
-        TypeInfo methodReturnType = unresolvedMethodReturnType.resolve(null, null,
+        TypeInfo methodReturnType = unresolvedMethodReturnType.resolve(ownerClass, null,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert methodReturnType != null : "resolveTypeInfo returned null!";
         if (methodReturnType instanceof UnknownTypeInfo) {
@@ -132,8 +132,8 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
                         .getElementType();
                 final int dimension = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
                         .getDimension();
-                final TypeInfo elementType = unresolvedElementType.resolve(null, this.resolvedInfo,
-                        classInfoManager, fieldInfoManager, methodInfoManager);
+                final TypeInfo elementType = unresolvedElementType.resolve(ownerClass,
+                        this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
                 methodReturnType = ArrayTypeInfo.getType(elementType, dimension);
 
             } else {
@@ -155,7 +155,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         for (final UnresolvedClassTypeInfo unresolvedThrownException : this.getThrownExceptions()) {
 
             final ClassTypeInfo thrownException = (ClassTypeInfo) unresolvedThrownException
-                    .resolve(null, this.resolvedInfo, classInfoManager, fieldInfoManager,
+                    .resolve(ownerClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
                             methodInfoManager);
             this.resolvedInfo.addThrownException(thrownException);
         }

@@ -60,7 +60,7 @@ public class ExternalClassInfo extends ClassInfo {
     public ExternalClassInfo(final String className) {
 
         super(new HashSet<ModifierInfo>(), NamespaceInfo.UNKNOWN, className, false, true, true,
-                true, true, false, 0, 0, 0, 0);
+                true, true, false, 0, 0, 0, 0);        
     }
 
     /**

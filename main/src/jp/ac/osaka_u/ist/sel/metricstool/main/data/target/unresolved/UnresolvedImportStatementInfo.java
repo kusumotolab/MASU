@@ -86,9 +86,9 @@ public abstract class UnresolvedImportStatementInfo<T extends ImportStatementInf
     }
 
     /**
-     * 名前空間名を返す．
+     * 完全限定名を返す．
      * 
-     * @return 名前空間名
+     * @return 完全限定名
      */
     public final String[] getFullQualifiedName() {
 
@@ -97,8 +97,8 @@ public abstract class UnresolvedImportStatementInfo<T extends ImportStatementInf
             return importName;
         }
 
-        final String[] namespace = new String[importName.length - 1];
-        System.arraycopy(importName, 0, namespace, 0, importName.length - 1);
+        final String[] namespace = new String[importName.length];
+        System.arraycopy(importName, 0, namespace, 0, importName.length);
         return namespace;
     }
 

@@ -69,7 +69,7 @@ public final class NameResolver {
         if (null == innerClass) {
             throw new IllegalArgumentException();
         }
-
+        
         final ClassInfo outerClass = innerClass.getOuterClass();
         return outerClass instanceof InnerClassInfo ? NameResolver
                 .getOuterstClass((InnerClassInfo) outerClass) : outerClass;

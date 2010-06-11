@@ -1530,6 +1530,7 @@ public class MetricsTool {
 
                 filed.setAccessible(true);
                 filed.set(innerClass, outerUnit);
+                
             } catch (ClassNotFoundException e) {
                 assert false : "Illegal state: TargetInnerClassInfo was not found";
             } catch (NoSuchFieldException e) {
