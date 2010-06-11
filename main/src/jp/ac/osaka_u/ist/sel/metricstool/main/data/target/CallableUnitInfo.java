@@ -247,9 +247,11 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                         continue;
                     }
 
-                    // 仮引数が対象クラス，実引数が外部クラスの場合は，呼び出し不可能とする
+                    // 仮引数が対象クラス，実引数が外部クラスの場合は，呼び出し可能とする
+                    // 等しくないとダメという条件は厳しすぎて正しく判定できない場合がある．
                     else {
-                        return false;
+                        checkedActualIndex = index;
+                        continue;
                     }
                 }
 
