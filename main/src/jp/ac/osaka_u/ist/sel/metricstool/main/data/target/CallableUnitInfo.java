@@ -346,7 +346,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
         }
 
         // すべての実引数についてチェックをしているのであれば，呼び出し可能とする
-        if (actualParameterArray.length == checkedActualIndex + 1) {
+        if (actualParameterArray.length <= checkedActualIndex + 1) {
             return true;
         } else {
             return false;
