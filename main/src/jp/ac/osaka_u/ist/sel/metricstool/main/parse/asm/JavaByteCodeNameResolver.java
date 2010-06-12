@@ -142,10 +142,48 @@ public class JavaByteCodeNameResolver {
         }
 
         // ジェネリクス(TE(別にEじゃなくてもいいけど);)の場合
-        else if ('T' == unresolvedType.charAt(0) && (-1 == unresolvedType.indexOf(':'))
+        else if (('T' == unresolvedType.charAt(0)) && (-1 == unresolvedType.indexOf(':'))
                 && ';' == unresolvedType.charAt(unresolvedType.length() - 1)) {
 
             final String identifier = unresolvedType.substring(1, unresolvedType.length() - 1);
+            if ((null != thisTypeParameter) && identifier.equals(thisTypeParameter.getName())) {
+                return new TypeParameterTypeInfo(thisTypeParameter);
+            }
+            final List<TypeParameterInfo> availableTypeParameters = NameResolver
+                    .getAvailableTypeParameters(ownerUnit);
+            for (final TypeParameterInfo typeParameter : availableTypeParameters) {
+                if (identifier.equals(typeParameter.getName())) {
+                    return new TypeParameterTypeInfo(typeParameter);
+                }
+            }
+        }
+
+        // ジェネリクス(-TE;)の場合
+        else if (('-' == unresolvedType.charAt(0)) && ('T' == unresolvedType.charAt(1))
+                && (-1 == unresolvedType.indexOf(':'))
+                && (';' == unresolvedType.charAt(unresolvedType.length() - 1))) {
+
+            // TODO super の前の情報を無視している．追加実装の必要あり
+            final String identifier = unresolvedType.substring(2, unresolvedType.length() - 1);
+            if ((null != thisTypeParameter) && identifier.equals(thisTypeParameter.getName())) {
+                return new TypeParameterTypeInfo(thisTypeParameter);
+            }
+            final List<TypeParameterInfo> availableTypeParameters = NameResolver
+                    .getAvailableTypeParameters(ownerUnit);
+            for (final TypeParameterInfo typeParameter : availableTypeParameters) {
+                if (identifier.equals(typeParameter.getName())) {
+                    return new TypeParameterTypeInfo(typeParameter);
+                }
+            }
+        }
+
+        // ジェネリクス(+TE;)の場合
+        else if (('+' == unresolvedType.charAt(0)) && ('T' == unresolvedType.charAt(1))
+                && (-1 == unresolvedType.indexOf(':'))
+                && (';' == unresolvedType.charAt(unresolvedType.length() - 1))) {
+
+            // TODO extends の前の情報を無視している．追加実装の必要あり
+            final String identifier = unresolvedType.substring(2, unresolvedType.length() - 1);
             if ((null != thisTypeParameter) && identifier.equals(thisTypeParameter.getName())) {
                 return new TypeParameterTypeInfo(thisTypeParameter);
             }
