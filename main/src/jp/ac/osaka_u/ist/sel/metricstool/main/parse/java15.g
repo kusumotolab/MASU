@@ -619,7 +619,7 @@ modifier
 	|	"strictfp"
 	;
 
-//**** change annotationArguments to annotationString, for eisily analyzing annotation arguments.
+//**** change annotationArguments to annotationString, for analyzing annotation arguments eisily .
 annotation!
 	:	AT! i:identifier ( LPAREN! ( args:annotationString/*annotationArguments*/ )? RPAREN! )?
 		{#annotation = #(#[ANNOTATION,"ANNOTATION"], i, args);}
@@ -683,9 +683,16 @@ annotationMemberArrayValueInitializer
 
 annotationString
 	:
-	(CHAR_LITERAL | STRING_LITERAL  |  ~RPAREN )*
-	{#annotationString = #([ANNOTATION_STRING, "ANNOTATION_STRING"], #annotationString);}
-	
+	(CHAR_LITERAL | STRING_LITERAL  | innerAnnotation annotationString | annotationCast | ~RPAREN )*
+	{#annotationString = #([ANNOTATION_STRING, "ANNOTATION_STRING"], #annotationString);}	
+	;
+
+annotationCast:
+	LPAREN builtInType RPAREN
+	;
+
+innerAnnotation:
+	AT identifier LPAREN annotationString RPAREN 
 	;
 
 
