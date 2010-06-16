@@ -56,8 +56,16 @@ public class CFGUtility {
 					final VariableInfo<?> usedVariable = ((VariableUsageInfo<?>) qualifier)
 							.getUsedVariable();
 					if (fields.contains(usedVariable)) {
-						if (stateChange(methodCall.getCallee(), checkedMethods)) {
+						final MethodInfo callee = methodCall.getCallee();
+						if (stateChange(callee, checkedMethods)) {
 							return true;
+						}
+
+						for (final MethodInfo overrider : callee
+								.getOverriders()) {
+							if (stateChange(overrider, checkedMethods)) {
+								return true;
+							}
 						}
 					}
 				}
@@ -108,8 +116,16 @@ public class CFGUtility {
 					final VariableInfo<?> usedVariable = ((VariableUsageInfo<?>) qualifier)
 							.getUsedVariable();
 					if (parameter.equals(usedVariable)) {
-						if (stateChange(methodCall.getCallee(), checkedMethods)) {
+						final MethodInfo callee = methodCall.getCallee();
+						if (stateChange(callee, checkedMethods)) {
 							return true;
+						}
+
+						for (final MethodInfo overrider : callee
+								.getOverriders()) {
+							if (stateChange(overrider, checkedMethods)) {
+								return true;
+							}
 						}
 					}
 				}
@@ -124,8 +140,19 @@ public class CFGUtility {
 						final VariableInfo<?> usedVariable = ((VariableUsageInfo<?>) arguments
 								.get(i)).getUsedVariable();
 						if (parameter.equals(usedVariable)) {
-							if (stateChange(call.getCallee(), i, checkedMethods)) {
+							final CallableUnitInfo callee = call.getCallee();
+							if (stateChange(callee, i, checkedMethods)) {
 								return true;
+							}
+
+							if (callee instanceof MethodInfo) {
+								for (final MethodInfo overrider : ((MethodInfo) callee)
+										.getOverriders()) {
+									if (stateChange(overrider, i,
+											checkedMethods)) {
+										return true;
+									}
+								}
 							}
 						}
 					}
@@ -168,8 +195,16 @@ public class CFGUtility {
 					final VariableInfo<?> usedVariable = ((VariableUsageInfo<?>) qualifier)
 							.getUsedVariable();
 					if (fields.contains(usedVariable)) {
-						if (stateChange(methodCall.getCallee(), checkedMethods)) {
+						final MethodInfo callee = methodCall.getCallee();
+						if (stateChange(callee, checkedMethods)) {
 							return true;
+						}
+
+						for (final MethodInfo overrider : callee
+								.getOverriders()) {
+							if (stateChange(overrider, checkedMethods)) {
+								return true;
+							}
 						}
 					}
 				}
@@ -233,8 +268,19 @@ public class CFGUtility {
 						final VariableInfo<?> usedVariable = ((VariableUsageInfo<?>) arguments
 								.get(i)).getUsedVariable();
 						if (parameter.equals(usedVariable)) {
-							if (stateChange(call.getCallee(), i, checkedMethods)) {
+							final CallableUnitInfo callee = call.getCallee();
+							if (stateChange(callee, i, checkedMethods)) {
 								return true;
+							}
+
+							if (callee instanceof MethodInfo) {
+								for (final MethodInfo overrider : ((MethodInfo) callee)
+										.getOverriders()) {
+									if (stateChange(overrider, i,
+											checkedMethods)) {
+										return true;
+									}
+								}
 							}
 						}
 					}
