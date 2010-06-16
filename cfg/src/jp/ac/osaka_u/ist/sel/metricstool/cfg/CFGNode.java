@@ -9,11 +9,13 @@ import java.util.Set;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
@@ -226,17 +228,31 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 
 		// オブジェクトの状態変更が，変数の変更とされる場合
 		if (countObjectStateChange) {
-			for (final CallInfo<?> call : this.getCore().getCalls()) {
+			for (final CallInfo<? extends CallableUnitInfo> call : this
+					.getCore().getCalls()) {
 				if (call instanceof MethodCallInfo) {
 					final MethodCallInfo methodCall = (MethodCallInfo) call;
+					final MethodInfo callee = methodCall.getCallee();
 
 					// methodCallのquantifierを調査
-					if (CFGUtility.stateChange(methodCall.getCallee())) {
+					if (CFGUtility.stateChange(callee)) {
 						final ExpressionInfo qualifier = methodCall
 								.getQualifierExpression();
 						if (qualifier instanceof VariableUsageInfo<?>) {
 							assignments.add(((VariableUsageInfo<?>) qualifier)
 									.getUsedVariable());
+						}
+					}
+
+					for (final MethodInfo overrider : callee.getOverriders()) {
+						if (CFGUtility.stateChange(overrider)) {
+							final ExpressionInfo qualifier = methodCall
+									.getQualifierExpression();
+							if (qualifier instanceof VariableUsageInfo<?>) {
+								assignments
+										.add(((VariableUsageInfo<?>) qualifier)
+												.getUsedVariable());
+							}
 						}
 					}
 				}
@@ -247,7 +263,8 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 					final List<ExpressionInfo> arguments = call.getArguments();
 					for (int index = 0; index < arguments.size(); index++) {
 
-						if (CFGUtility.stateChange(call.getCallee(), index)) {
+						final CallableUnitInfo callee = call.getCallee();
+						if (CFGUtility.stateChange(callee, index)) {
 							final ExpressionInfo argument = call.getArguments()
 									.get(index);
 							if (argument instanceof VariableUsageInfo<?>) {
@@ -256,6 +273,22 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 												.getUsedVariable());
 							}
 						}
+
+						if (callee instanceof MethodInfo) {
+							for (final MethodInfo overrider : ((MethodInfo) callee)
+									.getOverriders()) {
+								if (CFGUtility.stateChange(overrider, index)) {
+									final ExpressionInfo argument = call
+											.getArguments().get(index);
+									if (argument instanceof VariableUsageInfo<?>) {
+										assignments
+												.add(((VariableUsageInfo<?>) argument)
+														.getUsedVariable());
+									}
+								}
+							}
+						}
+
 					}
 				}
 			}
