@@ -45,12 +45,18 @@ public class ProgramSlicing {
 		final SortedSet<PDGControlDependenceEdge> backwardControlEdgesB = PDGControlDependenceEdge
 				.getControlDependenceEdge(backwardEdgesB);
 
-		final SortedSet<PDGNode<?>> backwardExecutionNodesA = getFromNodes(backwardExecutionEdgesA);
-		final SortedSet<PDGNode<?>> backwardDataNodesA = getFromNodes(backwardDataEdgesA);
-		final SortedSet<PDGNode<?>> backwardControlNodesA = getFromNodes(backwardControlEdgesA);
-		final SortedSet<PDGNode<?>> backwardExecutionNodesB = getFromNodes(backwardExecutionEdgesB);
-		final SortedSet<PDGNode<?>> backwardDataNodesB = getFromNodes(backwardDataEdgesB);
-		final SortedSet<PDGNode<?>> backwardControlNodesB = getFromNodes(backwardControlEdgesB);
+		final SortedSet<PDGNode<?>> backwardExecutionNodesA = this
+				.getFromNodes(backwardExecutionEdgesA);
+		final SortedSet<PDGNode<?>> backwardDataNodesA = this
+				.getFromNodes(backwardDataEdgesA);
+		final SortedSet<PDGNode<?>> backwardControlNodesA = this
+				.getFromNodes(backwardControlEdgesA);
+		final SortedSet<PDGNode<?>> backwardExecutionNodesB = this
+				.getFromNodes(backwardExecutionEdgesB);
+		final SortedSet<PDGNode<?>> backwardDataNodesB = this
+				.getFromNodes(backwardDataEdgesB);
+		final SortedSet<PDGNode<?>> backwardControlNodesB = this
+				.getFromNodes(backwardControlEdgesB);
 
 		final SortedSet<PDGExecutionDependenceEdge> forwardExecutionEdgesA = PDGExecutionDependenceEdge
 				.getExecutionDependenceEdge(forwardEdgesA);
@@ -65,12 +71,18 @@ public class ProgramSlicing {
 		final SortedSet<PDGControlDependenceEdge> forwardControlEdgesB = PDGControlDependenceEdge
 				.getControlDependenceEdge(forwardEdgesB);
 
-		final SortedSet<PDGNode<?>> forwardExecutionNodesA = getToNodes(forwardExecutionEdgesA);
-		final SortedSet<PDGNode<?>> forwardDataNodesA = getToNodes(forwardDataEdgesA);
-		final SortedSet<PDGNode<?>> forwardControlNodesA = getToNodes(forwardControlEdgesA);
-		final SortedSet<PDGNode<?>> forwardExecutionNodesB = getToNodes(forwardExecutionEdgesB);
-		final SortedSet<PDGNode<?>> forwardDataNodesB = getToNodes(forwardDataEdgesB);
-		final SortedSet<PDGNode<?>> forwardControlNodesB = getToNodes(forwardControlEdgesB);
+		final SortedSet<PDGNode<?>> forwardExecutionNodesA = this
+				.getToNodes(forwardExecutionEdgesA);
+		final SortedSet<PDGNode<?>> forwardDataNodesA = this
+				.getToNodes(forwardDataEdgesA);
+		final SortedSet<PDGNode<?>> forwardControlNodesA = this
+				.getToNodes(forwardControlEdgesA);
+		final SortedSet<PDGNode<?>> forwardExecutionNodesB = this
+				.getToNodes(forwardExecutionEdgesB);
+		final SortedSet<PDGNode<?>> forwardDataNodesB = this
+				.getToNodes(forwardDataEdgesB);
+		final SortedSet<PDGNode<?>> forwardControlNodesB = this
+				.getToNodes(forwardControlEdgesB);
 
 		final ClonePairInfo clonepair = new ClonePairInfo();
 
