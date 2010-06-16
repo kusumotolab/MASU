@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sdl.scdetector.io;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -46,6 +47,17 @@ public class BellonWriter {
 							.getOwnerMethod().getOwnerClass()).getOwnerFile()
 							.getName();
 					for (int j = i + 1; j < codeclones.length; j++) {
+
+						{ // 共通要素を持っている場合はクローンペアにしない
+							final Set<ExecutableElementInfo> commonElements = new HashSet<ExecutableElementInfo>();
+							commonElements.addAll(codeclones[i].getElements());
+							commonElements.retainAll(codeclones[j]
+									.getElements());
+							if (!commonElements.isEmpty()) {
+								continue;
+							}
+						}
+
 						final ExecutableElementInfo firstJ = codeclones[j]
 								.getElements().first();
 						final ExecutableElementInfo lastJ = codeclones[j]
@@ -54,27 +66,21 @@ public class BellonWriter {
 								.getOwnerMethod().getOwnerClass())
 								.getOwnerFile().getName();
 
-						if ((!filenameI.equals(filenameJ))
-								|| (firstI.getFromLine() != firstJ
-										.getFromLine())
-								|| (lastI.getToLine() != lastJ.getToLine())) {
+						final StringBuilder line = new StringBuilder();
 
-							final StringBuilder line = new StringBuilder();
+						line.append(filenameI);
+						line.append("\t");
+						line.append(Integer.toString(firstI.getFromLine()));
+						line.append("\t");
+						line.append(Integer.toString(lastI.getToLine()));
+						line.append("\t");
+						line.append(filenameJ);
+						line.append("\t");
+						line.append(Integer.toString(firstJ.getFromLine()));
+						line.append("\t");
+						line.append(Integer.toString(lastJ.getToLine()));
 
-							line.append(filenameI);
-							line.append("\t");
-							line.append(Integer.toString(firstI.getFromLine()));
-							line.append("\t");
-							line.append(Integer.toString(lastI.getToLine()));
-							line.append("\t");
-							line.append(filenameJ);
-							line.append("\t");
-							line.append(Integer.toString(firstJ.getFromLine()));
-							line.append("\t");
-							line.append(Integer.toString(lastJ.getToLine()));
-
-							lines.add(line.toString());
-						}
+						lines.add(line.toString());
 					}
 				}
 			}
