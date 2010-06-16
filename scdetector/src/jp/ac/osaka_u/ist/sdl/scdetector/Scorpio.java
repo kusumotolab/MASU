@@ -750,7 +750,7 @@ public class Scorpio extends MetricsTool {
 			final StringBuilder text = new StringBuilder();
 			text.append("the number of dependency is ");
 			text.append(edges.size());
-			text.append("(");
+			text.append(" (");
 			text.append(PDGDataDependenceEdge.getDataDependenceEdge(edges)
 					.size());
 			text.append(", ");
@@ -759,7 +759,8 @@ public class Scorpio extends MetricsTool {
 			text.append(", ");
 			text.append(PDGExecutionDependenceEdge.getExecutionDependenceEdge(
 					edges).size());
-			text.append(")");
+			text.append(").");
+			out.println(text.toString());
 		}
 
 		// ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
