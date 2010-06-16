@@ -625,7 +625,6 @@ public class Scorpio extends MetricsTool {
 		switch (Configuration.INSTANCE.getP()) {
 
 		case INTRA: // 各メソッドのPDGを構築
-			final List<Thread> threads = new LinkedList<Thread>();
 			for (final TargetMethodInfo method : DataManager.getInstance()
 					.getMethodInfoManager().getTargetMethodInfos()) {
 
@@ -634,16 +633,6 @@ public class Scorpio extends MetricsTool {
 						control, execution, true, dataDistance,
 						controlDistance, executionDistance);
 				PDGController.getInstance(Scorpio.ID).put(method, pdg);
-
-				/*
-				 * final Thread thread = new Thread(new
-				 * PDGBuildingThread(method, pdgNodeFactory, cfgNodeFactory,
-				 * data, control, execution, distance)); threads.add(thread);
-				 * thread.start();
-				 * 
-				 * while (Configuration.INSTANCE.getW() < Thread.activeCount())
-				 * ;
-				 */
 			}
 
 			// コンストラクタのPDGを構築
@@ -656,25 +645,6 @@ public class Scorpio extends MetricsTool {
 						new DefaultCFGNodeFactory(), data, control, execution,
 						true, dataDistance, controlDistance, executionDistance);
 				PDGController.getInstance(Scorpio.ID).put(constructor, pdg);
-
-				/*
-				 * final Thread thread = new Thread(new
-				 * PDGBuildingThread(constructor, pdgNodeFactory,
-				 * cfgNodeFactory, data, control, execution, distance));
-				 * threads.add(thread); thread.start();
-				 * 
-				 * while (Configuration.INSTANCE.getW() < Thread.activeCount())
-				 * ;
-				 */
-			}
-
-			// 全てのスレッドが終わるのを待つ
-			for (final Thread thread : threads) {
-				try {
-					thread.join();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 			}
 
 			break;
@@ -762,26 +732,38 @@ public class Scorpio extends MetricsTool {
 			pdgNodeList.add(pdgNode);
 		}
 
-		// ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
-		out
-				.println("detecting code clones from PDGs ... (the number of PDG nodes is "
-						+ pdgNodeFactory.getAllNodes().size() + ")");
-		final Set<PDGEdge> edges = new HashSet<PDGEdge>();
-		for (final Entry<CallableUnitInfo, IntraProceduralPDG> entry : PDGController
-				.getInstance(Scorpio.ID).entrySet()) {
-			edges.addAll(entry.getValue().getAllEdges());
+		{ // PDGノードの数を表示
+			final StringBuilder text = new StringBuilder();
+			text.append("the number of PDG nodes is ");
+			text.append(pdgNodeFactory.getAllNodes().size());
+			text.append(".");
+			out.println(text.toString());
 		}
-		out.println("the number of dependency is "
-				+ edges.size()
-				+ " ( "
-				+ PDGDataDependenceEdge.getDataDependenceEdge(edges).size()
-				+ " , "
-				+ PDGControlDependenceEdge.getControlDependenceEdge(edges)
-						.size()
-				+ " , "
-				+ PDGExecutionDependenceEdge.getExecutionDependenceEdge(edges)
-						.size());
 
+		{ // PDGエッジの数を表示
+			final Set<PDGEdge> edges = new HashSet<PDGEdge>();
+			for (final Entry<CallableUnitInfo, IntraProceduralPDG> entry : PDGController
+					.getInstance(Scorpio.ID).entrySet()) {
+				edges.addAll(entry.getValue().getAllEdges());
+			}
+
+			final StringBuilder text = new StringBuilder();
+			text.append("the number of dependency is ");
+			text.append(edges.size());
+			text.append("(");
+			text.append(PDGDataDependenceEdge.getDataDependenceEdge(edges)
+					.size());
+			text.append(", ");
+			text.append(PDGControlDependenceEdge
+					.getControlDependenceEdge(edges).size());
+			text.append(", ");
+			text.append(PDGExecutionDependenceEdge.getExecutionDependenceEdge(
+					edges).size());
+			text.append(")");
+		}
+
+		// ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
+		out.println("detecting code clones from PDGs ... ");
 		final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs = new HashMap<TwoClassHash, SortedSet<ClonePairInfo>>();
 		final List<Thread> threads = new LinkedList<Thread>();
 		final NodePairListInfo nodePairList = new NodePairListInfo(pdgNodeMap
