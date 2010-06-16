@@ -4,14 +4,17 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.Map.Entry;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
@@ -37,6 +40,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
@@ -53,6 +58,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.InterProceduralPDG;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.InterproceduralEdgeBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDG;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGControlDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 import org.apache.commons.cli.CommandLine;
@@ -714,6 +723,14 @@ public class Scorpio extends MetricsTool {
 
 		ALLNODE: for (final PDGNode<?> pdgNode : pdgNodeFactory.getAllNodes()) {
 
+			// case ÉGÉìÉgÉäÇÕìoò^ÇµÇ»Ç¢
+			{
+				final ExecutableElementInfo core = pdgNode.getCore();
+				if (core instanceof CaseEntryInfo) {
+					continue ALLNODE;
+				}
+			}
+
 			// è¨Ç≥Ç¢ÉÅÉ\ÉbÉhÇÕìoò^ÇµÇ»Ç¢
 			switch (Configuration.INSTANCE.getM()) {
 			case UNHASHED:
@@ -749,6 +766,22 @@ public class Scorpio extends MetricsTool {
 		out
 				.println("detecting code clones from PDGs ... (the number of PDG nodes is "
 						+ pdgNodeFactory.getAllNodes().size() + ")");
+		final Set<PDGEdge> edges = new HashSet<PDGEdge>();
+		for (final Entry<CallableUnitInfo, IntraProceduralPDG> entry : PDGController
+				.getInstance(Scorpio.ID).entrySet()) {
+			edges.addAll(entry.getValue().getAllEdges());
+		}
+		out.println("the number of dependency is "
+				+ edges.size()
+				+ " ( "
+				+ PDGDataDependenceEdge.getDataDependenceEdge(edges).size()
+				+ " , "
+				+ PDGControlDependenceEdge.getControlDependenceEdge(edges)
+						.size()
+				+ " , "
+				+ PDGExecutionDependenceEdge.getExecutionDependenceEdge(edges)
+						.size());
+
 		final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs = new HashMap<TwoClassHash, SortedSet<ClonePairInfo>>();
 		final List<Thread> threads = new LinkedList<Thread>();
 		final NodePairListInfo nodePairList = new NodePairListInfo(pdgNodeMap
@@ -756,7 +789,7 @@ public class Scorpio extends MetricsTool {
 
 		for (int threadsNumber = 1; threadsNumber <= Configuration.INSTANCE
 				.getW(); threadsNumber++) {
-			final Thread thread = new Thread(new DetectionThread(threadsNumber,
+			final Thread thread = new Thread(new SlicingThread(threadsNumber,
 					nodePairList, clonePairs));
 			threads.add(thread);
 			thread.start();
@@ -876,8 +909,8 @@ public class Scorpio extends MetricsTool {
 		writer.write();
 		writer.close();
 
-		out.println(DetectionThread.numberOfPairs + " : "
-				+ DetectionThread.numberOfComparion);
+		out.println(SlicingThread.numberOfPairs + " : "
+				+ SlicingThread.numberOfComparion);
 
 		out.println("successifully finished.");
 
