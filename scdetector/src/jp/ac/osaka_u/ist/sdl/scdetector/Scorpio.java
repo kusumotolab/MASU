@@ -43,7 +43,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
@@ -81,6 +80,57 @@ public class Scorpio extends MetricsTool {
 	public static final String ID = "SCORPIO";
 
 	public static void main(String[] args) {
+
+		// 引数の処理
+		processArgs(args);
+
+		// 解析の設定を行う
+		doSettings();
+
+		final long start = System.nanoTime();
+
+		// 対象ディレクトリ以下のJavaファイルを登録し，解析
+		final Scorpio scorpio = new Scorpio();
+		scorpio.analyzeLibraries();
+		scorpio.readTargetFiles();
+		scorpio.analyzeTargetFiles();
+
+		// PDGを構築
+		out.println("buildeing PDGs ...");
+		final IPDGNodeFactory pdgNodeFactory = buildPDGs();
+
+		// PDGノードのハッシュデータを構築する
+		out.println("constructing PDG nodes hashtable ...");
+		final SortedMap<Integer, List<PDGNode<?>>> equivalenceGroups = buildEquivalenceGroups(pdgNodeFactory);
+
+		// PDGの規模を表示
+		printPDGsize(pdgNodeFactory);
+
+		// ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
+		out.println("detecting code clones from PDGs ... ");
+		final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonepairGroups = detectClonePairs(equivalenceGroups);
+
+		// 他のクローンに完全に含まれているクローンを取り除く
+		out.println("filtering out unnecessary clone pairs ...");
+		final SortedSet<ClonePairInfo> refinedClonePairs = refineClonePairs(clonepairGroups);
+
+		// クローンペアからクローンセットに変換
+		out.println("converting clone pairs to clone sets ...");
+		final SortedSet<CloneSetInfo> clonesets = convert(refinedClonePairs);
+
+		// クローンセットを出力
+		write(clonesets, pdgNodeFactory);
+
+		// 計算コストを表示
+		printComputationalCost();
+
+		final long time = System.nanoTime() - start;
+		out.println("elapsed time: " + time / (float) 1000000000);
+
+		out.println("successifully finished.");
+	}
+
+	private static void processArgs(final String[] args) {
 
 		try {
 
@@ -543,6 +593,9 @@ public class Scorpio extends MetricsTool {
 			System.out.println(e.getMessage());
 			System.exit(0);
 		}
+	}
+
+	private static void doSettings() {
 
 		try {
 
@@ -595,23 +648,10 @@ public class Scorpio extends MetricsTool {
 		} catch (IllegalAccessException e) {
 			System.out.println(e.getMessage());
 		}
+	}
 
-		final long start = System.nanoTime();
+	private static final IPDGNodeFactory buildPDGs() {
 
-		// 対象ディレクトリ以下のJavaファイルを登録し，解析
-		final Scorpio scorpio = new Scorpio();
-		scorpio.analyzeLibraries();
-		scorpio.readTargetFiles();
-		scorpio.analyzeTargetFiles();
-
-		int totalline = 0;
-		for (final FileInfo file : DataManager.getInstance()
-				.getFileInfoManager().getFileInfos()) {
-			totalline += file.getLOC();
-		}
-
-		// PDGのノード集合を定義
-		out.println("buildeing PDGs ...");
 		final IPDGNodeFactory pdgNodeFactory = new DefaultPDGNodeFactory();
 		final boolean data = Configuration.INSTANCE.getQ().contains(
 				DEPENDENCY_TYPE.DATA);
@@ -687,9 +727,13 @@ public class Scorpio extends MetricsTool {
 			}
 		}
 
-		// PDGノードのハッシュデータを構築する
-		out.println("constructing PDG nodes hashtable ...");
-		final SortedMap<Integer, List<PDGNode<?>>> pdgNodeMap = new TreeMap<Integer, List<PDGNode<?>>>();
+		return pdgNodeFactory;
+	}
+
+	private static SortedMap<Integer, List<PDGNode<?>>> buildEquivalenceGroups(
+			final IPDGNodeFactory pdgNodeFactory) {
+
+		final SortedMap<Integer, List<PDGNode<?>>> equivalenceGroups = new TreeMap<Integer, List<PDGNode<?>>>();
 
 		ALLNODE: for (final PDGNode<?> pdgNode : pdgNodeFactory.getAllNodes()) {
 
@@ -724,13 +768,18 @@ public class Scorpio extends MetricsTool {
 
 			final ExecutableElementInfo element = pdgNode.getCore();
 			final int hash = Conversion.getNormalizedString(element).hashCode();
-			List<PDGNode<?>> pdgNodeList = pdgNodeMap.get(hash);
-			if (null == pdgNodeList) {
-				pdgNodeList = new ArrayList<PDGNode<?>>();
-				pdgNodeMap.put(hash, pdgNodeList);
+			List<PDGNode<?>> group = equivalenceGroups.get(hash);
+			if (null == group) {
+				group = new ArrayList<PDGNode<?>>();
+				equivalenceGroups.put(hash, group);
 			}
-			pdgNodeList.add(pdgNode);
+			group.add(pdgNode);
 		}
+
+		return equivalenceGroups;
+	}
+
+	private static void printPDGsize(final IPDGNodeFactory pdgNodeFactory) {
 
 		{ // PDGノードの数を表示
 			final StringBuilder text = new StringBuilder();
@@ -750,25 +799,27 @@ public class Scorpio extends MetricsTool {
 			final StringBuilder text = new StringBuilder();
 			text.append("the number of dependency is ");
 			text.append(edges.size());
-			text.append(" (");
+			text.append(" (data:");
 			text.append(PDGDataDependenceEdge.getDataDependenceEdge(edges)
 					.size());
-			text.append(", ");
+			text.append(", control:");
 			text.append(PDGControlDependenceEdge
 					.getControlDependenceEdge(edges).size());
-			text.append(", ");
+			text.append(", execution:");
 			text.append(PDGExecutionDependenceEdge.getExecutionDependenceEdge(
 					edges).size());
 			text.append(").");
 			out.println(text.toString());
 		}
+	}
 
-		// ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
-		out.println("detecting code clones from PDGs ... ");
+	private static Map<TwoClassHash, SortedSet<ClonePairInfo>> detectClonePairs(
+			final SortedMap<Integer, List<PDGNode<?>>> equivalenceGroups) {
+
 		final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs = new HashMap<TwoClassHash, SortedSet<ClonePairInfo>>();
 		final List<Thread> threads = new LinkedList<Thread>();
-		final NodePairListInfo nodePairList = new NodePairListInfo(pdgNodeMap
-				.values());
+		final NodePairListInfo nodePairList = new NodePairListInfo(
+				equivalenceGroups.values());
 
 		for (int threadsNumber = 1; threadsNumber <= Configuration.INSTANCE
 				.getW(); threadsNumber++) {
@@ -786,16 +837,20 @@ public class Scorpio extends MetricsTool {
 				e.printStackTrace();
 			}
 		}
-		threads.clear();
 
-		out.println("filtering out uninterested clone pairs ...");
+		return clonePairs;
+	}
 
-		final SortedSet<ClonePairInfo> refinedClonePairs = Collections
+	private static SortedSet<ClonePairInfo> refineClonePairs(
+			final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonepairGroups) {
+
+		final SortedSet<ClonePairInfo> clonepairs = Collections
 				.synchronizedSortedSet(new TreeSet<ClonePairInfo>());
-		for (final SortedSet<ClonePairInfo> pairs : clonePairs.values()) {
+		final List<Thread> threads = new LinkedList<Thread>();
+		for (final SortedSet<ClonePairInfo> pairs : clonepairGroups.values()) {
 
 			final Thread thread = new Thread(new CloneFilteringThread(pairs,
-					refinedClonePairs));
+					clonepairs));
 			threads.add(thread);
 			thread.start();
 
@@ -810,78 +865,85 @@ public class Scorpio extends MetricsTool {
 				e.printStackTrace();
 			}
 		}
-		threads.clear();
 
-		out.println("converting clone pairs to clone sets ...");
-		final SortedSet<CloneSetInfo> cloneSets = new TreeSet<CloneSetInfo>();
-		{
+		return clonepairs;
+	}
 
-			final Map<CodeCloneInfo, CloneSetInfo> cloneSetBag = new HashMap<CodeCloneInfo, CloneSetInfo>();
+	private static SortedSet<CloneSetInfo> convert(
+			final SortedSet<ClonePairInfo> clonepairs) {
 
-			for (final ClonePairInfo clonePair : refinedClonePairs) {
+		final Map<CodeCloneInfo, CloneSetInfo> cloneSetBag = new HashMap<CodeCloneInfo, CloneSetInfo>();
 
-				final CodeCloneInfo cloneA = clonePair.codecloneA;
-				final CodeCloneInfo cloneB = clonePair.codecloneB;
+		for (final ClonePairInfo clonePair : clonepairs) {
 
-				final CloneSetInfo cloneSetA = cloneSetBag.get(cloneA);
-				final CloneSetInfo cloneSetB = cloneSetBag.get(cloneB);
+			final CodeCloneInfo cloneA = clonePair.codecloneA;
+			final CodeCloneInfo cloneB = clonePair.codecloneB;
 
-				// コード片A，Bともすでに登録されている場合
-				if ((null != cloneSetA) && (null != cloneSetB)) {
+			final CloneSetInfo cloneSetA = cloneSetBag.get(cloneA);
+			final CloneSetInfo cloneSetB = cloneSetBag.get(cloneB);
 
-					// A と Bの所属するクローンセットが違う場合は，統合する
-					if (cloneSetA != cloneSetB) {
-						final CloneSetInfo cloneSetC = new CloneSetInfo();
-						cloneSetC.addAll(cloneSetA.getCodeClones());
-						cloneSetC.addAll(cloneSetB.getCodeClones());
+			// コード片A，Bともすでに登録されている場合
+			if ((null != cloneSetA) && (null != cloneSetB)) {
 
-						for (final CodeCloneInfo codeFragment : cloneSetA
-								.getCodeClones()) {
-							cloneSetBag.remove(codeFragment);
-						}
-						for (final CodeCloneInfo codeFragment : cloneSetB
-								.getCodeClones()) {
-							cloneSetBag.remove(codeFragment);
-						}
+				// A と Bの所属するクローンセットが違う場合は，統合する
+				if (cloneSetA != cloneSetB) {
+					final CloneSetInfo cloneSetC = new CloneSetInfo();
+					cloneSetC.addAll(cloneSetA.getCodeClones());
+					cloneSetC.addAll(cloneSetB.getCodeClones());
 
-						for (final CodeCloneInfo codeFragment : cloneSetC
-								.getCodeClones()) {
-							cloneSetBag.put(codeFragment, cloneSetC);
-						}
+					for (final CodeCloneInfo codeFragment : cloneSetA
+							.getCodeClones()) {
+						cloneSetBag.remove(codeFragment);
+					}
+					for (final CodeCloneInfo codeFragment : cloneSetB
+							.getCodeClones()) {
+						cloneSetBag.remove(codeFragment);
 					}
 
-				} else if ((null != cloneSetA) && (null == cloneSetB)) {
-
-					cloneSetA.add(cloneB);
-					cloneSetBag.put(cloneB, cloneSetA);
-
-				} else if ((null == cloneSetA) && (null != cloneSetB)) {
-
-					cloneSetB.add(cloneA);
-					cloneSetBag.put(cloneA, cloneSetB);
-
-				} else {
-
-					final CloneSetInfo cloneSet = new CloneSetInfo();
-					cloneSet.add(cloneA);
-					cloneSet.add(cloneB);
-
-					cloneSetBag.put(cloneA, cloneSet);
-					cloneSetBag.put(cloneB, cloneSet);
-
+					for (final CodeCloneInfo codeFragment : cloneSetC
+							.getCodeClones()) {
+						cloneSetBag.put(codeFragment, cloneSetC);
+					}
 				}
-			}
 
-			for (final CloneSetInfo cloneSet : cloneSetBag.values()) {
-				if (1 < cloneSet.getNumberOfCodeclones()) {
-					cloneSets.add(cloneSet);
-				}
+			} else if ((null != cloneSetA) && (null == cloneSetB)) {
+
+				cloneSetA.add(cloneB);
+				cloneSetBag.put(cloneB, cloneSetA);
+
+			} else if ((null == cloneSetA) && (null != cloneSetB)) {
+
+				cloneSetB.add(cloneA);
+				cloneSetBag.put(cloneA, cloneSetB);
+
+			} else {
+
+				final CloneSetInfo cloneSet = new CloneSetInfo();
+				cloneSet.add(cloneA);
+				cloneSet.add(cloneB);
+
+				cloneSetBag.put(cloneA, cloneSet);
+				cloneSetBag.put(cloneB, cloneSet);
+
 			}
 		}
 
+		final SortedSet<CloneSetInfo> cloneSets = new TreeSet<CloneSetInfo>();
+		for (final CloneSetInfo cloneSet : cloneSetBag.values()) {
+			if (1 < cloneSet.getNumberOfCodeclones()) {
+				cloneSets.add(cloneSet);
+			}
+		}
+
+		return cloneSets;
+	}
+
+	private static void write(final SortedSet<CloneSetInfo> clonesets,
+			final IPDGNodeFactory pdgNodeFactory) {
+
 		final XMLWriter writer = new XMLWriter(Configuration.INSTANCE.getO(),
 				DataManager.getInstance().getFileInfoManager().getFileInfos(),
-				cloneSets, pdgNodeFactory);
+				clonesets, pdgNodeFactory);
 
 		/*
 		 * final BellonWriter writer = new BellonWriter(Configuration.INSTANCE
@@ -891,13 +953,22 @@ public class Scorpio extends MetricsTool {
 
 		writer.write();
 		writer.close();
+	}
 
-		out.println(SlicingThread.numberOfPairs + " : "
-				+ SlicingThread.numberOfComparion);
+	private static void printComputationalCost() {
 
-		out.println("successifully finished.");
+		{
+			final StringBuilder text = new StringBuilder();
+			text.append("the number of base points for pairwise slicing is ");
+			text.append(SlicingThread.numberOfPairs);
+			out.println(text.toString());
+		}
 
-		final long time = System.nanoTime() - start;
-		out.println("elapsed time: " + time / (float) 1000000000);
+		{
+			final StringBuilder text = new StringBuilder();
+			text.append("the number of comparison is ");
+			text.append(SlicingThread.numberOfComparion);
+			out.println(text.toString());
+		}
 	}
 }

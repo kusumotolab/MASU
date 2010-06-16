@@ -29,18 +29,10 @@ class TwoClassHash {
 		}
 
 		final TwoClassHash target = (TwoClassHash) o;
-		return this.getClass1().equals(target.getClass1())
-				&& this.getClass2().equals(target.getClass2())
-				|| this.getClass1().equals(target.getClass2())
-				&& this.getClass2().equals(target.getClass1());
-	}
-
-	public ClassInfo getClass1() {
-		return this.class1;
-	}
-
-	public ClassInfo getClass2() {
-		return this.class2;
+		return this.class1.equals(target.class1)
+				&& this.class2.equals(target.class2)
+				|| this.class1.equals(target.class2)
+				&& this.class2.equals(target.class1);
 	}
 
 	final ClassInfo class1;
