@@ -48,6 +48,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -65,6 +66,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresol
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
@@ -74,6 +76,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedF
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedInstanceInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedStaticInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
@@ -800,37 +803,35 @@ public class MetricsTool {
         }
         registClassInfos();
         if (Settings.getInstance().isVerbose()) {
-            out.println("STEP2 : resolve type parameters of classes.");
-        }
-        resolveTypeParameterOfClassInfos();
-        if (Settings.getInstance().isVerbose()) {
-            out.println("STEP3 : resolve class inheritances.");
+            out.println("STEP2 : resolve class inheritances.");
         }
         addInheritanceInformationToClassInfos();
         if (Settings.getInstance().isVerbose()) {
-            out.println("STEP4 : resolve field definitions.");
+            out.println("STEP3 : resolve field definitions.");
         }
         registFieldInfos();
         if (Settings.getInstance().isVerbose()) {
-            out.println("STEP5 : resolve method definitions.");
+            out.println("STEP4 : resolve method definitions.");
         }
         registMethodInfos();
         if (Settings.getInstance().isVerbose()) {
-            out.println("STEP6 : resolve outer unit for inner classes.");
+            out.println("STEP5 : resolve outer unit for inner classes.");
         }
         addOuterUnitInfos();
         if (Settings.getInstance().isVerbose()) {
-            out.println("STEP7 : resolve type parameter usages.");
+            out.println("STEP6 : resolve type parameter usages.");
         }
-        addClassTypeParameterInfos();
-        addMethodTypeParameterInfos();
+        resolveTypeParameterOfClassInfos();
+        resolveTypeParameterOfMethodInfos();
+        //addClassTypeParameterInfos();
+        //addMethodTypeParameterInfos();
         if (Settings.getInstance().isVerbose()) {
-            out.println("STEP8 : resolve method overrides.");
+            out.println("STEP7 : resolve method overrides.");
         }
         addOverrideRelation();
         if (Settings.getInstance().isStatement()) {
             if (Settings.getInstance().isVerbose()) {
-                out.println("STEP9 : resolve field and method usages.");
+                out.println("STEP8 : resolve field and method usages.");
             }
             addMethodInsideInfomation();
         }
@@ -1203,9 +1204,14 @@ public class MetricsTool {
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : unresolvedClassInfo
                 .getTypeParameters()) {
 
-            final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(classInfo,
-                    null, classInfoManager, null, null);
-            classInfo.addTypeParameter(typeParameter);
+            final TypeParameterInfo typeParameter = unresolvedTypeParameter.getResolved();
+            if (unresolvedTypeParameter.hasExtendsType()) {
+                final UnresolvedReferenceTypeInfo<?> unresolvedExtendsType = unresolvedTypeParameter
+                        .getExtendsType();
+                final ReferenceTypeInfo extendsType = unresolvedExtendsType.resolve(classInfo,
+                        null, classInfoManager, null, null);
+                typeParameter.setExtendsType(extendsType);
+            }
         }
 
         // 各未解決インナークラスに対して
@@ -1493,6 +1499,64 @@ public class MetricsTool {
         }
     }
 
+    /**
+     * メソッドの型パラメータを名前解決する．registMethodInfoの後でなければならない
+     * 
+     */
+    private void resolveTypeParameterOfMethodInfos() {
+
+        // 未解決クラス情報マネージャ， 解決済みクラスマネージャを取得
+        final UnresolvedClassInfoManager unresolvedClassInfoManager = DataManager.getInstance()
+                .getUnresolvedClassInfoManager();
+        final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
+
+        // 各未解決クラスに対して
+        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+                .getClassInfos()) {
+            for (final UnresolvedMethodInfo unresolvedMethod : unresolvedClassInfo
+                    .getDefinedMethods()) {
+
+            }
+
+            for (final UnresolvedConstructorInfo unresolvedConstructor : unresolvedClassInfo
+                    .getDefinedConstructors()) {
+
+            }
+        }
+    }
+
+    /**
+     * メンバの型パラメータを名前解決する． resolveTypeParameterOfMethodInfo() 中からのみ呼び出されるべき
+     * 
+     * @param unresolvedClassInfo 名前解決する型パラメータを持つクラス
+     * @param classInfoManager 名前解決に用いるクラスマネージャ
+     */
+    private void resolveTypeParameterOfMethodInfos(
+            final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> unresolvedMethod,
+            final ClassInfoManager classInfoManager) {
+
+        // 解決済みメソッド情報を取得
+        final CallableUnitInfo method = unresolvedMethod.getResolved();
+        assert null != method : "method shouldn't be null!";
+
+        // 所有クラスを取得
+        final TargetClassInfo ownerClass = (TargetClassInfo) method.getOwnerClass();
+
+        // 未解決クラス情報から未解決型パラメータを取得し，型解決を行った後，解決済みクラス情報に付与する
+        for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : unresolvedMethod
+                .getTypeParameters()) {
+
+            final TypeParameterInfo typeParameter = unresolvedTypeParameter.getResolved();
+            if (unresolvedTypeParameter.hasExtendsType()) {
+                final UnresolvedReferenceTypeInfo<?> unresolvedExtendsType = unresolvedTypeParameter
+                        .getExtendsType();
+                final ReferenceTypeInfo extendsType = unresolvedExtendsType.resolve(ownerClass,
+                        method, classInfoManager, null, null);
+                typeParameter.setExtendsType(extendsType);
+            }
+        }
+    }
+
     private void addOuterUnitInfos() {
 
         // Unresolved クラス情報マネージャ， クラス情報マネージャ，メソッド情報マネージャを取得
@@ -1530,7 +1594,7 @@ public class MetricsTool {
 
                 filed.setAccessible(true);
                 filed.set(innerClass, outerUnit);
-                
+
             } catch (ClassNotFoundException e) {
                 assert false : "Illegal state: TargetInnerClassInfo was not found";
             } catch (NoSuchFieldException e) {

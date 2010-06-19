@@ -107,8 +107,8 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
 
         // 返り値をセットする
         final UnresolvedTypeInfo<?> unresolvedMethodReturnType = this.getReturnType();
-        TypeInfo methodReturnType = unresolvedMethodReturnType.resolve(ownerClass, null,
-                classInfoManager, fieldInfoManager, methodInfoManager);
+        TypeInfo methodReturnType = unresolvedMethodReturnType.resolve(ownerClass,
+                this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
         assert methodReturnType != null : "resolveTypeInfo returned null!";
         if (methodReturnType instanceof UnknownTypeInfo) {
             if (unresolvedMethodReturnType instanceof UnresolvedClassReferenceInfo) {
@@ -159,10 +159,6 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
                             methodInfoManager);
             this.resolvedInfo.addThrownException(thrownException);
         }
-
-        // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
-        //this.resolveInnerBlock(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
-        //        methodInfoManager);
 
         return this.resolvedInfo;
     }

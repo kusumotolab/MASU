@@ -146,7 +146,6 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
 
         // インポートされているクラスから検索（単項参照の場合）
         if (this.isMoniminalReference()) {
-
             for (final UnresolvedClassImportStatementInfo unresolvedClassImportStatement : this
                     .getAvailableNamespaces()) {
 
@@ -242,6 +241,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
         //ここにくるのは，クラスが見つからなかったとき
         if (this.isMoniminalReference()) {
 
+            System.out.println(referenceName[0]);
             final ExternalClassInfo externalClassInfo = new ExternalClassInfo(referenceName[0]);
             final ClassTypeInfo classType = new ClassTypeInfo(externalClassInfo);
             for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this

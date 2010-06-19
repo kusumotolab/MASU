@@ -18,6 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetAnonymousClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -704,6 +705,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
                     privateVisible, namespaceVisible, inheritanceVisible, publicVisible, instance,
                     this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+        }
+
+        // タイプパラメータがある場合は解決する．ただしここでは，exntends までは解決しない
+        for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
+            final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addTypeParameter(typeParameter);
         }
 
         return this.resolvedInfo;

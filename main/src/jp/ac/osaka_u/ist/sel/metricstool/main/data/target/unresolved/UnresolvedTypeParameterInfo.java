@@ -7,7 +7,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterizable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -103,20 +102,7 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
         final String name = this.getName();
         final int index = this.getIndex();
 
-        if (this.hasExtendsType()) {
-
-            final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> unresolvedExtendsType = this
-                    .getExtendsType();
-            final TypeInfo extendsType = unresolvedExtendsType.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
-
-            this.resolvedInfo = new TypeParameterInfo(ownerUnit, name, index, extendsType);
-
-        } else {
-
-            this.resolvedInfo = new TypeParameterInfo(ownerUnit, name, index, null);
-        }
-
+        this.resolvedInfo = new TypeParameterInfo(ownerUnit, name, index);
         return this.resolvedInfo;
     }
 
