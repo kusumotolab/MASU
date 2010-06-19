@@ -4,6 +4,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 
 
 /**
@@ -78,4 +82,13 @@ public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<? 
     private boolean reference;
 
     private boolean assignment;
+
+    /**
+     * エラーメッセージ出力用のプリンタ
+     */
+    protected static final MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
+        public String getMessageSourceName() {
+            return "UnresolvedVariableUsage";
+        }
+    }, MESSAGE_TYPE.ERROR);
 }

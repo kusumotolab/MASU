@@ -28,7 +28,7 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
      * 
      */
     public UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock,
-            final UnresolvedExpressionInfo<?> label) {
+            final UnresolvedCaseLabelInfo label) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -89,7 +89,7 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         // この case エントリのラベルを取得
-        final UnresolvedExpressionInfo<?> unresolvedLabel = this.getLabel();
+        final UnresolvedCaseLabelInfo unresolvedLabel = this.getLabel();
         final ExpressionInfo label = unresolvedLabel.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
@@ -119,7 +119,7 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
      * 
      * @return この case エントリのラベル
      */
-    public final UnresolvedExpressionInfo<?> getLabel() {
+    public final UnresolvedCaseLabelInfo getLabel() {
         return this.label;
     }
 
@@ -131,5 +131,5 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
     /**
      * この case エントリのラベルを保存する変数
      */
-    private final UnresolvedExpressionInfo<?> label;
+    private final UnresolvedCaseLabelInfo label;
 }

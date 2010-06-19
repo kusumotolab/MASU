@@ -89,9 +89,10 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         final StringBuilder sb = new StringBuilder();
 
         final ExpressionInfo quantifierExpression = this.getQualifierExpression();
-        sb.append(quantifierExpression.getText());
-
-        sb.append(".");
+        if (null != quantifierExpression) {
+            sb.append(quantifierExpression.getText());
+            sb.append(".");
+        }
 
         final FieldInfo field = this.getUsedVariable();
         sb.append(field.getName());

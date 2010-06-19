@@ -10,12 +10,9 @@ import java.util.List;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassImportStatementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetAnonymousClassInfo;
@@ -707,19 +704,6 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
                     privateVisible, namespaceVisible, inheritanceVisible, publicVisible, instance,
                     this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
-        }
-
-        // 利用可能なクラスを名前解決し，解決済みクラスに登録
-        final List<UnresolvedImportStatementInfo<?>> unresolvedImportStatements = this
-                .getImportStatements();
-        for (final UnresolvedImportStatementInfo<?> unresolvedImportStatement : unresolvedImportStatements) {
-            final ImportStatementInfo<?> importStatement = unresolvedImportStatement.resolve(
-                    usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-            if (importStatement instanceof ClassImportStatementInfo) {
-                final Set<ClassInfo> importedClasses = ((ClassImportStatementInfo) importStatement)
-                        .getImportedClasses();
-                this.resolvedInfo.addaccessibleClasses(importedClasses);
-            }
         }
 
         return this.resolvedInfo;

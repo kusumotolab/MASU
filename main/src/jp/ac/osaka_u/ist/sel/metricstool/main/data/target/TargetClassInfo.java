@@ -57,6 +57,7 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
     /**
      * 指定したクラスにおいてアクセス可能なインナークラス一覧を返す．
      * アクセス可能なクラスとは，指定されたクラス，もしくはその親クラス内に定義されたクラスある．
+     * 一度最外部クラスまでたどって，その内部クラス，親クラスをチェックする.
      * 
      * @param classInfo 指定されたクラス
      * @return 指定したクラスにおいてアクセス可能なインナークラス一覧を返す．
@@ -69,7 +70,16 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
 
         final SortedSet<ClassInfo> classCache = new TreeSet<ClassInfo>();
 
-        return Collections.unmodifiableSortedSet(getAccessibleInnerClasses(classInfo, classCache));
+        if (classInfo instanceof InnerClassInfo) {
+
+            final ClassInfo outestClass = TargetInnerClassInfo
+                    .getOutestClass((InnerClassInfo) classInfo);
+            return Collections.unmodifiableSortedSet(getAccessibleInnerClasses(outestClass,
+                    classCache));
+        } else {
+            return Collections.unmodifiableSortedSet(getAccessibleInnerClasses(classInfo,
+                    classCache));
+        }
     }
 
     static private SortedSet<ClassInfo> getAccessibleInnerClasses(final ClassInfo classInfo,
@@ -141,7 +151,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
         this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new TreeSet<StaticInitializerInfo>();
         this.staticInitializers.add(this.implicitStaticInitializer);
-        this.accessibleClasses = new TreeSet<ClassInfo>();
 
         this.ownerFile = fileInfo;
     }
@@ -182,7 +191,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
         this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new TreeSet<StaticInitializerInfo>();
         this.staticInitializers.add(this.implicitStaticInitializer);
-        this.accessibleClasses = new TreeSet<ClassInfo>();
 
         this.ownerFile = fileInfo;
     }
@@ -216,36 +224,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
     }
 
     /**
-     * このクラスにおいてアクセス可能なクラスを追加する．プラグインから呼ぶとランタイムエラー.
-     * 
-     * @param accessibleClass アクセス可能なクラス
-     */
-    public final void addAccessibleClass(final ClassInfo accessibleClass) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == accessibleClass) {
-            throw new IllegalArgumentException();
-        }
-
-        this.accessibleClasses.add(accessibleClass);
-    }
-
-    /**
-     * このクラスにおいてアクセス可能なクラス群を追加する．プラグインから呼ぶとランタイムエラー
-     * 
-     * @param accessibleClasses アクセス可能なクラス群
-     */
-    public final void addaccessibleClasses(final Set<ClassInfo> accessibleClasses) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == accessibleClasses) {
-            throw new IllegalArgumentException();
-        }
-
-        this.accessibleClasses.addAll(accessibleClasses);
-    }
-
-    /**
      * このクラスの暗黙のインスタンスイニシャライザを返す
      * @return 暗黙のインスタンスイニシャライザ
      */
@@ -275,15 +253,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
      */
     public SortedSet<StaticInitializerInfo> getStaticInitializers() {
         return this.staticInitializers;
-    }
-
-    /**
-     * このクラスにおいてアクセス可能なクラスのSortedSetを返す．
-     * 
-     * @return このクラスにおいてアクセス可能なクラスのSortedSet
-     */
-    public final Set<ClassInfo> getAccessibleClasses() {
-        return Collections.unmodifiableSet(this.accessibleClasses);
     }
 
     /**
@@ -401,11 +370,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
      * このクラスの暗黙のスタティックイニシャライザを保存するための変数
      */
     private final StaticInitializerInfo implicitStaticInitializer;
-
-    /**
-     * このクラス内からアクセス可能なクラス
-     */
-    private final Set<ClassInfo> accessibleClasses;
 
     /**
      * このクラスを宣言しているファイル情報を保存するための変数

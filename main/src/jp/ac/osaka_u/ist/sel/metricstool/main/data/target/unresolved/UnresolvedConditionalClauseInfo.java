@@ -71,6 +71,10 @@ public class UnresolvedConditionalClauseInfo extends UnresolvedUnitInfo<Conditio
         return this.resolvedInfo;
     }
 
+    public UnresolvedConditionInfo<? extends ConditionInfo> getCondition() {
+        return this.condition;
+    }
+
     /**
      * ğŒ•¶‚ÌğŒß‚Ì–¢‰ğŒˆî•ñ‚ğ•\‚·•Ï”
      */

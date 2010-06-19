@@ -15,18 +15,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 @SuppressWarnings("serial")
 public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassInfo {
 
-    public static TargetClassInfo getOutestClass(final TargetInnerClassInfo innerClass) {
+    public static ClassInfo getOutestClass(final InnerClassInfo innerClass) {
 
         if (null == innerClass) {
             throw new IllegalArgumentException();
         }
 
-        final String[] fqName = innerClass.getFullQualifiedName();
+        final String[] fqName = ((ClassInfo) innerClass).getFullQualifiedName();
         final String[] outerFQName = Arrays.copyOf(fqName, fqName.length - 1);
 
-        final TargetClassInfo outerClass = (TargetClassInfo) DataManager.getInstance()
-                .getClassInfoManager().getClassInfo(outerFQName);
-        return outerClass instanceof TargetInnerClassInfo ? getOutestClass((TargetInnerClassInfo) outerClass)
+        final ClassInfo outerClass = DataManager.getInstance().getClassInfoManager().getClassInfo(
+                outerFQName);
+        return outerClass instanceof InnerClassInfo ? getOutestClass((InnerClassInfo) outerClass)
                 : outerClass;
     }
 

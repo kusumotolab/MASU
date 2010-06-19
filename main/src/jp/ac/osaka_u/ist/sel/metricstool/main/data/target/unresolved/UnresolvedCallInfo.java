@@ -190,7 +190,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo<?>> extends Unresolv
      */
     protected static final MessagePrinter err = new DefaultMessagePrinter(new MessageSource() {
         public String getMessageSourceName() {
-            return "UnresolvedMethodCall";
+            return "UnresolvedCall";
         }
     }, MESSAGE_TYPE.ERROR);
 }

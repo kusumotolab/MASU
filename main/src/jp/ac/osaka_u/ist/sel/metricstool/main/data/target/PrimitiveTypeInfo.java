@@ -1,9 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
@@ -15,6 +14,39 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
  */
 @SuppressWarnings("serial")
 public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<PrimitiveTypeInfo> {
+
+    public static boolean isJavaWrapperType(final TypeInfo type) {
+
+        // クラス参照型でない場合はfalse
+        if (!(type instanceof ClassTypeInfo)) {
+            return false;
+        }
+
+        final ClassTypeInfo classType = (ClassTypeInfo) type;
+        final ClassInfo referencedClass = classType.getReferencedClass();
+
+        final ClassInfo booleanClass = DataManager.getInstance().getClassInfoManager()
+                .getClassInfo(new String[] { "java", "lang", "Boolean" });
+        final ClassInfo byteClass = DataManager.getInstance().getClassInfoManager().getClassInfo(
+                new String[] { "java", "lang", "Byte" });
+        final ClassInfo characterClass = DataManager.getInstance().getClassInfoManager()
+                .getClassInfo(new String[] { "java", "lang", "Character" });
+        final ClassInfo doubleClass = DataManager.getInstance().getClassInfoManager().getClassInfo(
+                new String[] { "java", "lang", "Double" });
+        final ClassInfo floatClass = DataManager.getInstance().getClassInfoManager().getClassInfo(
+                new String[] { "java", "lang", "Float" });
+        final ClassInfo integerClass = DataManager.getInstance().getClassInfoManager()
+                .getClassInfo(new String[] { "java", "lang", "Integer" });
+        final ClassInfo longClass = DataManager.getInstance().getClassInfoManager().getClassInfo(
+                new String[] { "java", "lang", "Long" });
+        final ClassInfo shortClass = DataManager.getInstance().getClassInfoManager().getClassInfo(
+                new String[] { "java", "lang", "Short" });
+
+        return referencedClass.equals(booleanClass) || referencedClass.equals(byteClass)
+                || referencedClass.equals(characterClass) || referencedClass.equals(doubleClass)
+                || referencedClass.equals(floatClass) || referencedClass.equals(integerClass)
+                || referencedClass.equals(longClass) || referencedClass.equals(shortClass);
+    }
 
     /**
      * プリミティブ型の各要素を表すための列挙型

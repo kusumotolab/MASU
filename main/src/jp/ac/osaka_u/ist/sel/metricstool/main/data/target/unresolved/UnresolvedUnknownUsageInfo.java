@@ -1138,8 +1138,6 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
             }
         }
 
-        // インポート文が * で終わっているものがないときは，
-
         err.println("Remain unresolved \"" + this.toString() + "\"" + " line:" + this.getFromLine()
                 + " column:" + this.getFromColumn() + " on \""
                 + usingClass.getOwnerFile().getName());

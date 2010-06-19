@@ -209,12 +209,14 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                         return this.resolvedInfo;
                     }
 
-                    assert false : "Here shouldn't be reached!";
+                    //assert false : "Here shouldn't be reached!";
                 }
 
                 // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ˆ—‚ðs‚¤
                 {
-                    err.println("Can't resolve method Call : " + this.getName());
+                    err.println("Remain unresolved \"" + this.getName() + "\"" + " line:"
+                            + this.getFromLine() + " column:" + this.getFromColumn() + " on \""
+                            + usingClass.getOwnerFile().getName());
 
                     final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
                     this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage,

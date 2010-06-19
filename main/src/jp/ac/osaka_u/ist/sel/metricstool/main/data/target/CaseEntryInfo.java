@@ -111,8 +111,8 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
 
         sb.append("case ");
 
-        final ExpressionInfo expression = this.getLabel();
-        sb.append(expression.getText());
+        final ExpressionInfo label = this.getLabel();
+        sb.append(label.getText());
 
         sb.append(":");
 
