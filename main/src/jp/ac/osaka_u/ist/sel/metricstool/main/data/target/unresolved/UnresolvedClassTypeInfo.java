@@ -18,6 +18,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterizable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -27,7 +30,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @author higo
  * 
  */
-public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<ClassTypeInfo> {
+public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<ReferenceTypeInfo> {
 
     /**
      * 利用可能な名前空間名，参照名を与えて初期化
@@ -63,7 +66,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
      * この未解決クラス型の解決済みの型を返す
      */
     @Override
-    public ClassTypeInfo getResolved() {
+    public ReferenceTypeInfo getResolved() {
 
         if (!this.alreadyResolved()) {
             throw new NotResolvedException();
@@ -73,7 +76,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
     }
 
     @Override
-    public ClassTypeInfo resolve(final TargetClassInfo usingClass,
+    public ReferenceTypeInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -217,6 +220,23 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
                     }
                 }
             }
+        }
+
+        // 単項参照の場合は型パラメータかどうかを調べる
+        if (this.isMoniminalReference()) {
+
+            TypeParameterizable typeParameterizableUnit = null != usingMethod ? usingMethod
+                    : usingClass;
+            do {
+                for (final TypeParameterInfo typeParameter : typeParameterizableUnit
+                        .getTypeParameters()) {
+                    if (typeParameter.getName().equals(referenceName[0])) {
+                        this.resolvedInfo = new TypeParameterTypeInfo(typeParameter);
+                        return this.resolvedInfo;
+                    }
+                }
+                typeParameterizableUnit = typeParameterizableUnit.getOuterTypeParameterizableUnit();
+            } while (null != typeParameterizableUnit);
         }
 
         //ここにくるのは，クラスが見つからなかったとき
@@ -423,6 +443,6 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Clas
      */
     private final List<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>> typeArguments;
 
-    private ClassTypeInfo resolvedInfo;
+    private ReferenceTypeInfo resolvedInfo;
 
 }

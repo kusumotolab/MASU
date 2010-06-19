@@ -128,13 +128,14 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
 
     @Override
     public TypeParameterizable getOuterTypeParameterizableUnit() {
+
         final UnitInfo unit = this.getOuterUnit();
-        if (unit instanceof TypeParameterizable) {
-            return (TypeParameterizable) unit;
+        if (null == unit) {
+            return null;
         }
 
-        assert false : "outerUnit must be TypeParameterizable!";
-        return null;
+        assert unit instanceof TypeParameterizable : "outerUnit must be TypeParameterizable!";
+        return (TypeParameterizable) unit;
     }
 
     /**
