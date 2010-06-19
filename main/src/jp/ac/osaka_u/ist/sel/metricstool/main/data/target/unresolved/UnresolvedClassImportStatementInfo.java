@@ -87,8 +87,8 @@ public final class UnresolvedClassImportStatementInfo extends
             if (null == specifiedClass) {
                 specifiedClass = new ExternalClassInfo(importName);
                 classInfoManager.add(specifiedClass);
-                accessibleClasses.add(specifiedClass);
             }
+            accessibleClasses.add(specifiedClass);
         }
 
         this.resolvedInfo = new ClassImportStatementInfo(accessibleClasses, fromLine, fromColumn,
