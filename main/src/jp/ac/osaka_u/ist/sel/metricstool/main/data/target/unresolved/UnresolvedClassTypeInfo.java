@@ -241,7 +241,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
         //‚±‚±‚É‚­‚é‚Ì‚ÍCƒNƒ‰ƒX‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½‚Æ‚«
         if (this.isMoniminalReference()) {
 
-            System.out.println(referenceName[0]);
+            //System.out.println(referenceName[0]);
             final ExternalClassInfo externalClassInfo = new ExternalClassInfo(referenceName[0]);
             final ClassTypeInfo classType = new ClassTypeInfo(externalClassInfo);
             for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
