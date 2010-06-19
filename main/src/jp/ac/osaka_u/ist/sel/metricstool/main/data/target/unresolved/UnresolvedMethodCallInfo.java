@@ -133,7 +133,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             } else {
 
                 final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
-                        .getClassInfo(new String[0]);
+                        .getClassInfo(new String[] { "java", "lang", "Object" });
                 ownerType = new ClassTypeInfo(objectClass);
             }
         }
