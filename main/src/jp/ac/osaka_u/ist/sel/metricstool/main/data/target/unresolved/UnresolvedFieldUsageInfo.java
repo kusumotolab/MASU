@@ -201,9 +201,9 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
 
                 // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ˆ—‚ðs‚¤
                 {
-                    err.println("Remain unresolved \"" + this.getFieldName() + "\"" + " line:"
-                            + this.getFromLine() + " column:" + this.getFromColumn() + " on \""
-                            + usingClass.getOwnerFile().getName());
+                    err.println("Resolved as an external element, \"" + this.getFieldName() + "\""
+                            + " line:" + this.getFromLine() + " column:" + this.getFromColumn()
+                            + " on \"" + usingClass.getOwnerFile().getName());
 
                     final ExternalFieldInfo unknownField = new ExternalFieldInfo(fieldName);
                     this.resolvedInfo = FieldUsageInfo.getInstance(qualifierUsage, UnknownTypeInfo

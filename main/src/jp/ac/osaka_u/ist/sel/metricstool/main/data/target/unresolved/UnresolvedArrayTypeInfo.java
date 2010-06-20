@@ -77,7 +77,7 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
         final UnresolvedTypeInfo<?> unresolvedElementType = this.getElementType();
         final int dimension = this.getDimension();
 
-        final TypeInfo elementType = unresolvedElementType.resolve(usingClass, null,
+        final TypeInfo elementType = unresolvedElementType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert elementType != null : "resolveEntityUsage returned null!";
 

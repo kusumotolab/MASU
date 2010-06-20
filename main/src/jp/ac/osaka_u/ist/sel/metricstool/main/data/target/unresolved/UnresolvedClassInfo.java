@@ -689,9 +689,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
         // 無名クラスの場合
         if (this.isAnonymous()) {
+            final UnresolvedClassInfo unresolvedOuterClass = this.getOuterClass();
+            final TargetClassInfo outerClass = unresolvedOuterClass.resolve(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+
             // outerUnitは後で解決する．ここでは登録しない
-            this.resolvedInfo = new TargetAnonymousClassInfo(fullQualifiedName, this.fileInfo,
-                    fromLine, fromColumn, toLine, toColumn);
+            this.resolvedInfo = new TargetAnonymousClassInfo(fullQualifiedName, outerClass,
+                    this.fileInfo, fromLine, fromColumn, toLine, toColumn);
 
             // 一番外側のクラスの場合
         } else if (null == this.outerUnit) {
@@ -701,8 +705,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
             // インナークラスの場合
         } else {
+
+            final UnresolvedClassInfo unresolvedOuterClass = this.getOuterClass();
+            final TargetClassInfo outerClass = unresolvedOuterClass.resolve(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+
             // outerUnitは後で解決する．ここでは登録しない
-            this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
+            this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName, outerClass,
                     privateVisible, namespaceVisible, inheritanceVisible, publicVisible, instance,
                     this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
         }
@@ -757,6 +766,25 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     @Override
     public String toString() {
         return "class \"" + this.className + "\" in file \"" + this.fileInfo.getName() + "\"";
+    }
+
+    private UnresolvedClassInfo getOuterClass() {
+
+        UnresolvedUnitInfo<?> outerUnit = this.getOuterUnit();
+        if (null == outerUnit) {
+            return null;
+        }
+
+        if (outerUnit instanceof UnresolvedClassInfo) {
+            return (UnresolvedClassInfo) outerUnit;
+        }
+
+        if (outerUnit instanceof UnresolvedCallableUnitInfo) {
+            return ((UnresolvedCallableUnitInfo) outerUnit).getOwnerClass();
+        }
+
+        assert false : "Here shouldn't be reached!";
+        return null;
     }
 
     /**

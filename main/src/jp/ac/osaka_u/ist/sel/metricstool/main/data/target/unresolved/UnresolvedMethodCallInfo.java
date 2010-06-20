@@ -214,7 +214,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                 // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ˆ—‚ðs‚¤
                 {
-                    err.println("Remain unresolved \"" + this.getName() + "\"" + " line:"
+                    err.println("Resolved as an external element, \"" + this.getName() + "\"" + " line:"
                             + this.getFromLine() + " column:" + this.getFromColumn() + " on \""
                             + usingClass.getOwnerFile().getName());
 

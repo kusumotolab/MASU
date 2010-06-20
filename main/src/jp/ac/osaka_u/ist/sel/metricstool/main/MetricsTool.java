@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.jar.JarEntry;
@@ -51,6 +50,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticInitializerInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetAnonymousClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
@@ -802,6 +802,7 @@ public class MetricsTool {
             out.println("STEP1 : resolve class definitions.");
         }
         registClassInfos();
+        resolveTypeParameterOfClassInfos();
         if (Settings.getInstance().isVerbose()) {
             out.println("STEP2 : resolve class inheritances.");
         }
@@ -814,17 +815,14 @@ public class MetricsTool {
             out.println("STEP4 : resolve method definitions.");
         }
         registMethodInfos();
+        resolveTypeParameterOfMethodInfos();
         if (Settings.getInstance().isVerbose()) {
-            out.println("STEP5 : resolve outer unit for inner classes.");
+            out.println("STEP5 : resolve outer unit for anonymous classes.");
         }
-        addOuterUnitInfos();
+        addOuterUnitToAnonymousClasses();
         if (Settings.getInstance().isVerbose()) {
             out.println("STEP6 : resolve type parameter usages.");
         }
-        resolveTypeParameterOfClassInfos();
-        resolveTypeParameterOfMethodInfos();
-        //addClassTypeParameterInfos();
-        //addMethodTypeParameterInfos();
         if (Settings.getInstance().isVerbose()) {
             out.println("STEP7 : resolve method overrides.");
         }
@@ -1515,12 +1513,12 @@ public class MetricsTool {
                 .getClassInfos()) {
             for (final UnresolvedMethodInfo unresolvedMethod : unresolvedClassInfo
                     .getDefinedMethods()) {
-
+                resolveTypeParameterOfMethodInfos(unresolvedMethod, classInfoManager);
             }
 
             for (final UnresolvedConstructorInfo unresolvedConstructor : unresolvedClassInfo
                     .getDefinedConstructors()) {
-
+                resolveTypeParameterOfMethodInfos(unresolvedConstructor, classInfoManager);
             }
         }
     }
@@ -1552,12 +1550,12 @@ public class MetricsTool {
                         .getExtendsType();
                 final ReferenceTypeInfo extendsType = unresolvedExtendsType.resolve(ownerClass,
                         method, classInfoManager, null, null);
-                typeParameter.setExtendsType(extendsType);
+                // TODO typeParameter.setExtendsType(extendsType);
             }
         }
     }
 
-    private void addOuterUnitInfos() {
+    private void addOuterUnitToAnonymousClasses() {
 
         // Unresolved クラス情報マネージャ， クラス情報マネージャ，メソッド情報マネージャを取得
         final UnresolvedClassInfoManager unresolvedClassInfoManager = DataManager.getInstance()
@@ -1570,105 +1568,31 @@ public class MetricsTool {
         // 各 Unresolvedクラスに対して
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
-            addOuterUnitInfos(unresolvedClassInfo, classInfoManager, fieldInfoManager,
+            addOuterUnitToAnonymousClass(unresolvedClassInfo, classInfoManager, fieldInfoManager,
                     methodInfoManager);
         }
     }
 
-    private void addOuterUnitInfos(final UnresolvedClassInfo unresolvedClassInfo,
+    private void addOuterUnitToAnonymousClass(final UnresolvedClassInfo unresolvedClassInfo,
             final ClassInfoManager classInfoManager, final FieldInfoManager fieldInfoManager,
             final MethodInfoManager methodInfoManager) {
 
         // ClassInfo を取得
         final TargetClassInfo classInfo = unresolvedClassInfo.getResolved();
-        if (classInfo instanceof InnerClassInfo) {
+        if (classInfo instanceof TargetAnonymousClassInfo) {
 
-            final TargetInnerClassInfo innerClass = (TargetInnerClassInfo) classInfo;
+            final TargetAnonymousClassInfo anonymousClass = (TargetAnonymousClassInfo) classInfo;
             final UnresolvedUnitInfo<?> unresolvedOuterUnit = unresolvedClassInfo.getOuterUnit();
             final UnitInfo outerUnit = unresolvedOuterUnit.resolve(classInfo, null,
                     classInfoManager, fieldInfoManager, methodInfoManager);
-            try {
-                final Class<?> cls = Class
-                        .forName("jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo");
-                final Field filed = cls.getDeclaredField("outerUnit");
-
-                filed.setAccessible(true);
-                filed.set(innerClass, outerUnit);
-
-            } catch (ClassNotFoundException e) {
-                assert false : "Illegal state: TargetInnerClassInfo was not found";
-            } catch (NoSuchFieldException e) {
-                assert false : "Illegal state: outerUnit wad not found";
-            } catch (IllegalAccessException e) {
-                assert false;
-            }
+            // TODO anonymousClass.setOuterCallableUnit((CallableUnitInfo) outerUnit);
         }
 
         // インナークラスに対して実行
         for (final UnresolvedClassInfo innerClass : unresolvedClassInfo.getInnerClasses()) {
-            addOuterUnitInfos(innerClass, classInfoManager, fieldInfoManager, methodInfoManager);
+            addOuterUnitToAnonymousClass(innerClass, classInfoManager, fieldInfoManager,
+                    methodInfoManager);
         }
-    }
-
-    private void addClassTypeParameterInfos() {
-
-        for (final ClassInfo classInfo : DataManager.getInstance().getClassInfoManager()
-                .getTargetClassInfos()) {
-            addClassTypeParameterInfos(classInfo);
-        }
-    }
-
-    private void addClassTypeParameterInfos(final ClassInfo classInfo) {
-
-        final List<ClassTypeInfo> superClassTypes = classInfo.getSuperClasses();
-        for (final ClassTypeInfo superClassType : superClassTypes) {
-
-            final ClassInfo superClassInfo = superClassType.getReferencedClass();
-            if (superClassInfo instanceof TargetClassInfo) {
-                addClassTypeParameterInfos((ClassInfo) superClassInfo);
-
-                // 親クラス以上における型パラメータの使用を取得
-                final Map<TypeParameterInfo, TypeInfo> typeParameterUsages = ((TargetClassInfo) superClassInfo)
-                        .getTypeParameterUsages();
-                for (final TypeParameterInfo typeParameterInfo : typeParameterUsages.keySet()) {
-                    final TypeInfo usedType = typeParameterUsages.get(typeParameterInfo);
-                    classInfo.addTypeParameterUsage(typeParameterInfo, usedType);
-                }
-
-                // このクラスにおける型パラメータの使用を取得
-                final List<TypeInfo> typeArguments = superClassType.getTypeArguments();
-                for (int index = 0; index < typeArguments.size(); index++) {
-                    final TypeInfo usedType = typeArguments.get(index);
-                    final TypeParameterInfo typeParameterInfo = ((TargetClassInfo) superClassInfo)
-                            .getTypeParameter(index);
-                    classInfo.addTypeParameterUsage(typeParameterInfo, usedType);
-                }
-            }
-        }
-    }
-
-    private void addMethodTypeParameterInfos() {
-
-        for (final TargetMethodInfo methodInfo : DataManager.getInstance().getMethodInfoManager()
-                .getTargetMethodInfos()) {
-            addMethodTypeParameterInfos(methodInfo);
-        }
-    }
-
-    private void addMethodTypeParameterInfos(final TargetMethodInfo methodInfo) {
-
-        //　まず，オーナークラスにおける型パラメータ使用の情報を追加する
-        {
-            final TargetClassInfo ownerClassInfo = (TargetClassInfo) methodInfo.getOwnerClass();
-            final Map<TypeParameterInfo, TypeInfo> typeParameterUsages = ownerClassInfo
-                    .getTypeParameterUsages();
-            for (final TypeParameterInfo typeParameterInfo : typeParameterUsages.keySet()) {
-                final TypeInfo usedType = typeParameterUsages.get(typeParameterInfo);
-                methodInfo.addTypeParameterUsage(typeParameterInfo, usedType);
-            }
-        }
-
-        // TODO メソッド内における型パラメータ使用を追加すべき？
     }
 
     /**
