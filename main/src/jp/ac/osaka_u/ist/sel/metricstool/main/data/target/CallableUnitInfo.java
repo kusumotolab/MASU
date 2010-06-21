@@ -163,7 +163,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             if (dummyParameter instanceof VariableLengthParameterInfo) {
 
                 // TODO 現在のところ条件なしでOKにしている
-                continue;
+                return true;
             }
 
             // 可変長引数以外の場合
@@ -185,12 +185,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             }
         }
 
-        // すべての実引数についてチェックをしているのであれば，呼び出し可能とする
-        if (actualParameterArray.length <= checkedActualIndex + 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return (actualParameterArray.length - 1) == checkedActualIndex;
     }
 
     private static boolean canCallWith(final TypeInfo dummyType, final TypeInfo actualType) {
