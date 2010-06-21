@@ -14,9 +14,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterTypeInfo;
@@ -129,7 +131,10 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
         // 単項参照の場合は現在のクラスの最外部クラスの内部クラスから検索
         if (this.isMoniminalReference()) {
 
-            for (final ClassInfo innerClass : TargetClassInfo.getAccessibleInnerClasses(usingClass)) {
+            final ClassInfo outestClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
+                    .getOutestClass((InnerClassInfo) usingClass)
+                    : usingClass;
+            for (final ClassInfo innerClass : TargetClassInfo.getAllInnerClasses(outestClass)) {
                 if (candidateClasses.contains(innerClass)) {
                     final ClassTypeInfo classType = new ClassTypeInfo(innerClass);
                     for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
