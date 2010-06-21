@@ -124,7 +124,7 @@ public class UnresolvedCaseLabelInfo extends UnresolvedExpressionInfo<Expression
             //        this.resolvedInfo = new CaseLabelInfo(new ClassReferenceInfo(new ClassTypeInfo(
             //                subClass), ownerMethod, fromLine, fromColumn, toLine, toColumn),
             //                fromLine, fromColumn, toLine, toColumn);
-            //        return this.resolvedInfo;
+            //        return this.resolvedInfo; 
             //    }
             //}
             for (final FieldInfo field : referencedClass.getDefinedFields()) {
@@ -134,7 +134,7 @@ public class UnresolvedCaseLabelInfo extends UnresolvedExpressionInfo<Expression
                     final String[] fqName = new String[referencedClassFQName.length + 1];
                     System.arraycopy(referencedClassFQName, 0, fqName, 0,
                             referencedClassFQName.length);
-                    referencedClassFQName[referencedClassFQName.length - 1] = name;
+                    fqName[fqName.length - 1] = name;
                     ClassInfo innerClass = classInfoManager.getClassInfo(fqName);
                     if (null == innerClass) {
                         innerClass = new ExternalInnerClassInfo(fqName, referencedClass);
