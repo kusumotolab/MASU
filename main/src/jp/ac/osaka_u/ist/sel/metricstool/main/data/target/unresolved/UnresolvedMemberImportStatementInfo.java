@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.JavaPredefinedModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Member;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MemberImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
@@ -81,46 +83,48 @@ public class UnresolvedMemberImportStatementInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final String[] fullQualifiedName = this.getFullQualifiedName();
-        ClassInfo classInfo = classInfoManager.getClassInfo(fullQualifiedName);
-        final Set<Member> accessibleMembers = new TreeSet<Member>();
-        if (null == classInfo) {
-            classInfo = new ExternalClassInfo(fullQualifiedName);
-            classInfoManager.add(classInfo);
+        final String[] importName = this.getImportName();
+        final String[] fullQualifiedName = Arrays.copyOf(importName,
+                this.isAll() ? importName.length : importName.length - 1);
+        ClassInfo ownerClass = classInfoManager.getClassInfo(fullQualifiedName);
+        if (null == ownerClass) {
+            ownerClass = new ExternalClassInfo(fullQualifiedName);
+            classInfoManager.add(ownerClass);
         }
 
+        final Set<Member> importedMembers = new TreeSet<Member>();
         if (this.isAll()) {
 
-            final SortedSet<FieldInfo> fields = classInfo.getDefinedFields();
+            final SortedSet<FieldInfo> fields = ownerClass.getDefinedFields();
             final SortedSet<FieldInfo> staticFields = StaticOrInstanceProcessing
                     .getStaticMembers(fields);
-            accessibleMembers.addAll(staticFields);
-            final SortedSet<MethodInfo> methods = classInfo.getDefinedMethods();
+            importedMembers.addAll(staticFields);
+            final SortedSet<MethodInfo> methods = ownerClass.getDefinedMethods();
             final SortedSet<MethodInfo> staticMethods = StaticOrInstanceProcessing
                     .getStaticMembers(methods);
-            accessibleMembers.addAll(staticMethods);
+            importedMembers.addAll(staticMethods);
         }
 
         else {
 
-            final String[] importName = this.getImportName();
             final String memberName = importName[importName.length - 1];
-
-            final SortedSet<FieldInfo> fields = classInfo.getDefinedFields();
+            final SortedSet<FieldInfo> fields = ownerClass.getDefinedFields();
             for (final FieldInfo field : fields) {
-                if (memberName.equals(field.getName())) {
-                    accessibleMembers.add(field);
+                if (memberName.equals(field.getName())
+                        && field.getModifiers().contains(JavaPredefinedModifierInfo.STATIC)) {
+                    importedMembers.add(field);
                 }
             }
-            final SortedSet<MethodInfo> methods = classInfo.getDefinedMethods();
+            final SortedSet<MethodInfo> methods = ownerClass.getDefinedMethods();
             for (final MethodInfo method : methods) {
-                if (memberName.equals(method.getMethodName())) {
-                    accessibleMembers.add(method);
+                if (memberName.equals(method.getMethodName())
+                        && method.getModifiers().contains(JavaPredefinedModifierInfo.STATIC)) {
+                    importedMembers.add(method);
                 }
             }
         }
 
-        this.resolvedInfo = new MemberImportStatementInfo(accessibleMembers, fromLine, fromColumn,
+        this.resolvedInfo = new MemberImportStatementInfo(importedMembers, fromLine, fromColumn,
                 toLine, toColumn);
         return this.resolvedInfo;
     }

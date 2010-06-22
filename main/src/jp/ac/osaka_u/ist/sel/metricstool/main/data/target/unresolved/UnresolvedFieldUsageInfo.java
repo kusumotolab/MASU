@@ -9,6 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
@@ -17,6 +18,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InnerClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Member;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MemberImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
@@ -38,7 +41,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
     /**
      * フィールド使用が実行される変数の型名と変数名，利用可能な名前空間を与えてオブジェクトを初期化
      * 
-     * @param availableNamespaces 利用可能な名前空間
+     * @param memberImportStatements 利用可能な名前空間
      * @param qualifierUsage フィールド使用が実行される親エンティティ
      * @param fieldName 変数名
      * @param reference フィールド使用が参照か
@@ -49,18 +52,18 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
      * @param toColumn 終了列
      */
     public UnresolvedFieldUsageInfo(
-            final List<UnresolvedClassImportStatementInfo> availableNamespaces,
+            final List<UnresolvedMemberImportStatementInfo> memberImportStatements,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> qualifierUsage,
             final String fieldName, final boolean reference, final boolean assignment,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         super(fieldName, reference, assignment, fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == availableNamespaces) || (null == qualifierUsage) || (null == fieldName)) {
+        if ((null == memberImportStatements) || (null == qualifierUsage) || (null == fieldName)) {
             throw new NullPointerException();
         }
 
-        this.availableNamespaces = availableNamespaces;
+        this.memberImportStatements = memberImportStatements;
         this.qualifierUsage = qualifierUsage;
         this.fieldName = fieldName;
     }
@@ -97,6 +100,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
         final boolean reference = this.isReference();
         final boolean assingment = this.isAssignment();
 
+         
         // 使用位置を取得
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
@@ -167,6 +171,33 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                                             fromLine, fromColumn, toLine, toColumn);
                             /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                             return this.resolvedInfo;
+                        }
+                    }
+                }
+
+                // スタティックインポートされているフィールドを探す
+                {
+                    for (final UnresolvedMemberImportStatementInfo unresolvedMemberImportStatement : this
+                            .getAvailableNamespaces()) {
+                        final MemberImportStatementInfo memberImportStatement = unresolvedMemberImportStatement
+                                .resolve(usingClass, usingMethod, classInfoManager,
+                                        fieldInfoManager, methodInfoManager);
+                        for (final Member importedMember : memberImportStatement
+                                .getImportedMembers()) {
+                            if (importedMember instanceof FieldInfo) {
+                                final FieldInfo importedField = (FieldInfo) importedMember;
+                                if (fieldName.equals(importedField.getName())) {
+                                    final ClassInfo classInfo = importedField.getOwnerClass();
+                                    final ClassTypeInfo classType = new ClassTypeInfo(classInfo);
+                                    final ClassReferenceInfo classReference = new ClassReferenceInfo(
+                                            classType, usingMethod, fromLine, fromColumn, fromLine,
+                                            fromColumn);
+                                    this.resolvedInfo = FieldUsageInfo.getInstance(classReference,
+                                            classType, importedField, reference, assingment,
+                                            usingMethod, fromLine, fromColumn, toLine, toColumn);
+                                    return this.resolvedInfo;
+                                }
+                            }
                         }
                     }
                 }
@@ -263,8 +294,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
      * 
      * @return 使用可能な名前空間を返す
      */
-    public List<UnresolvedClassImportStatementInfo> getAvailableNamespaces() {
-        return this.availableNamespaces;
+    public List<UnresolvedMemberImportStatementInfo> getAvailableNamespaces() {
+        return this.memberImportStatements;
     }
 
     /**
@@ -288,7 +319,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
     /**
      * 使用可能な名前空間を保存するための変数
      */
-    private final List<UnresolvedClassImportStatementInfo> availableNamespaces;
+    private final List<UnresolvedMemberImportStatementInfo> memberImportStatements;
 
     /**
      * フィールド名を保存するための変数

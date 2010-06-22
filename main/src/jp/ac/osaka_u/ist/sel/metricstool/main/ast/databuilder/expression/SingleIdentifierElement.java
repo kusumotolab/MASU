@@ -7,12 +7,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMemberImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
@@ -45,10 +45,10 @@ public class SingleIdentifierElement extends IdentifierElement {
         final UnresolvedVariableUsageInfo<?> localVariableUsage;
         if (null == usedVariable || usedVariable instanceof UnresolvedFieldInfo) {
             //変数がみつからないので多分どこかのフィールド or 見つかった変数がフィールドだった
-            localVariableUsage = new UnresolvedFieldUsageInfo(UnresolvedClassImportStatementInfo
-                    .getClassImportStatements(buildDataManager.getAllAvaliableNames()), ownerUsage,
-                    name, reference, assignment, this.fromLine, this.fromColumn, this.toLine,
-                    this.toColumn);
+            localVariableUsage = new UnresolvedFieldUsageInfo(UnresolvedMemberImportStatementInfo
+                    .getMemberImportStatements(buildDataManager.getAllAvaliableNames()),
+                    ownerUsage, name, reference, assignment, this.fromLine, this.fromColumn,
+                    this.toLine, this.toColumn);
         } else if (usedVariable instanceof UnresolvedParameterInfo) {
             UnresolvedParameterInfo parameter = (UnresolvedParameterInfo) usedVariable;
             localVariableUsage = new UnresolvedParameterUsageInfo(parameter, reference, assignment,

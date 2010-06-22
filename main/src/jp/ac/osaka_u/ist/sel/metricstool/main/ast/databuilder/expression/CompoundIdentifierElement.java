@@ -10,6 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMemberImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnknownUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
@@ -59,7 +60,7 @@ public class CompoundIdentifierElement extends IdentifierElement {
             final boolean assignment) {
         this.ownerUsage = this.resolveOwner(buildDataManager);
         final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(
-                UnresolvedClassImportStatementInfo.getClassImportStatements(buildDataManager
+                UnresolvedMemberImportStatementInfo.getMemberImportStatements(buildDataManager
                         .getAllAvaliableNames()), this.ownerUsage, this.name, reference,
                 assignment, this.fromLine, this.fromColumn, this.toLine, this.toColumn);
         buildDataManager.addVariableUsage(fieldUsage);
@@ -76,7 +77,7 @@ public class CompoundIdentifierElement extends IdentifierElement {
 
         if (this.ownerUsage != null) {
             final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(
-                    UnresolvedClassImportStatementInfo.getClassImportStatements(buildDataManager
+                    UnresolvedMemberImportStatementInfo.getMemberImportStatements(buildDataManager
                             .getAllAvaliableNames()), this.ownerUsage, this.name, true, false,
                     this.fromLine, this.fromColumn, this.toLine, this.toColumn);
             buildDataManager.addVariableUsage(fieldUsage);
