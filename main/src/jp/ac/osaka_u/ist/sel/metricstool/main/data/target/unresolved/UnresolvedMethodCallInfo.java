@@ -17,6 +17,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Member;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MemberImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -43,16 +45,19 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
     /**
      * メソッド呼び出しが実行される変数の型，メソッド名を与えてオブジェクトを初期化
      * 
+     * @param memberImportStatements このメソッド呼び出しが方解決のために利用できるインポート文
      * @param qualifierUsage メソッド呼び出しが実行される変数の型
      * @param methodName メソッド名
      */
-    public UnresolvedMethodCallInfo(final UnresolvedExpressionInfo<?> qualifierUsage,
-            final String methodName) {
+    public UnresolvedMethodCallInfo(
+            final List<UnresolvedMemberImportStatementInfo> memberImportStatements,
+            final UnresolvedExpressionInfo<?> qualifierUsage, final String methodName) {
 
-        if ((null == qualifierUsage) || (null == methodName)) {
+        if ((null == memberImportStatements) && (null == qualifierUsage) || (null == methodName)) {
             throw new NullPointerException();
         }
 
+        this.memberImportStatements = memberImportStatements;
         this.qualifierUsage = qualifierUsage;
         this.methodName = methodName;
     }
@@ -186,6 +191,37 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                     }
                 }
 
+                // スタティックインポートされているメソッドを探す
+                {
+                    for (final UnresolvedMemberImportStatementInfo unresolvedMemberImportStatement : this
+                            .getImportStatements()) {
+                        final MemberImportStatementInfo memberImportStatement = unresolvedMemberImportStatement
+                                .resolve(usingClass, usingMethod, classInfoManager,
+                                        fieldInfoManager, methodInfoManager);
+                        for (final Member importedMember : memberImportStatement
+                                .getImportedMembers()) {
+                            if (importedMember instanceof MethodInfo) {
+                                final MethodInfo importedMethod = (MethodInfo) importedMember;
+
+                                // 呼び出し可能なメソッドが見つかった場合
+                                if (importedMethod.canCalledWith(name, actualParameters)) {
+                                    final ClassInfo classInfo = importedMethod.getOwnerClass();
+                                    final ClassTypeInfo classType = new ClassTypeInfo(classInfo);
+                                    final ClassReferenceInfo classReference = new ClassReferenceInfo(
+                                            classType, usingMethod, fromLine, fromColumn, fromLine,
+                                            fromColumn);
+                                    this.resolvedInfo = new MethodCallInfo(classType,
+                                            classReference, importedMethod, usingMethod, fromLine,
+                                            fromColumn, toLine, toColumn);
+                                    this.resolvedInfo.addArguments(actualParameters);
+                                    this.resolvedInfo.addTypeArguments(typeArguments);
+                                    return this.resolvedInfo;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // 利用可能なメソッドが見つからなかった場合は，外部クラスである親クラスがあるはず．
                 // そのクラスのメソッドを使用しているとみなす
                 {
@@ -214,9 +250,9 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                 // 見つからなかった処理を行う
                 {
-                    err.println("Resolved as an external element, \"" + this.getName() + "\"" + " line:"
-                            + this.getFromLine() + " column:" + this.getFromColumn() + " on \""
-                            + usingClass.getOwnerFile().getName());
+                    err.println("Resolved as an external element, \"" + this.getName() + "\""
+                            + " line:" + this.getFromLine() + " column:" + this.getFromColumn()
+                            + " on \"" + usingClass.getOwnerFile().getName());
 
                     final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
                     this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage,
@@ -328,9 +364,14 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
      */
     protected String methodName;
 
+    public List<UnresolvedMemberImportStatementInfo> getImportStatements() {
+        return this.memberImportStatements;
+    }
+
     /**
      * メソッド呼び出しが実行される変数の参照を保存するための変数
      */
     private final UnresolvedExpressionInfo<?> qualifierUsage;
 
+    private final List<UnresolvedMemberImportStatementInfo> memberImportStatements;
 }
