@@ -56,6 +56,15 @@ public final class TargetFileManager implements Iterable<TargetFile> {
     }
 
     /**
+     * 登録されている対象ファイルのSortedSetを返す
+     * 
+     * @return 登録されている対象ファイルのSortedSet
+     */
+    public SortedSet<TargetFile> getFiles() {
+        return Collections.unmodifiableSortedSet(this.targetFiles);
+    }
+
+    /**
      * 
      * コンストラクタ． 
      * 以前は HashSet を用いていたが，同じディレクトリのファイルはまとめて返すほうがよいので，TreeSet に変更した．

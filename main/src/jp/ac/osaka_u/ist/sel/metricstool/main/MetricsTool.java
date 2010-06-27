@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -765,26 +766,14 @@ public class MetricsTool {
         // 対象ファイルのASTから未解決クラス，フィールド，メソッド情報を取得
         {
             out.println("parsing all target files.");
-            final int totalFileNumber = DataManager.getInstance().getTargetFileManager().size();
-            int currentFileNumber = 1;
-            final List<Thread> threads = new LinkedList<Thread>();
-
-            for (final TargetFile targetFile : DataManager.getInstance().getTargetFileManager()) {
-
-                final Thread thread = new Thread(new TargetFileParser(targetFile,
-                        currentFileNumber++, totalFileNumber, out, err));
-
-                MetricsToolSecurityManager.getInstance().addPrivilegeThread(thread);
-                threads.add(thread);
-                thread.start();
-
-                while (Settings.getInstance().getThreadNumber() < Thread.activeCount()) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+            final Thread[] threads = new Thread[Settings.getInstance().getThreadNumber()];
+            final TargetFile[] files = DataManager.getInstance().getTargetFileManager().getFiles()
+                    .toArray(new TargetFile[0]);
+            final AtomicInteger index = new AtomicInteger();
+            for (int i = 0; i < threads.length; i++) {
+                threads[i] = new Thread(new TargetFileParser(files, index, out, err));
+                MetricsToolSecurityManager.getInstance().addPrivilegeThread(threads[i]);
+                threads[i].start();
             }
 
             // 全てのスレッドが終わるのを待つ
