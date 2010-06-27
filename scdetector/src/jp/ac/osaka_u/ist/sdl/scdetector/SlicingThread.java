@@ -1,29 +1,32 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.NodePairInfo;
-import jp.ac.osaka_u.ist.sdl.scdetector.data.NodePairListInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 class SlicingThread implements Runnable {
 
-	private final NodePairListInfo nodePairList;
+	private final List<NodePairInfo> nodepairs;
 
-	private final int id;
+	private final AtomicInteger index;
 
 	private final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs;
 
-	SlicingThread(final int id, final NodePairListInfo nodePairList,
+	SlicingThread(final List<NodePairInfo> nodepairs,
+			final AtomicInteger index,
 			final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs) {
-		this.id = id;
-		this.nodePairList = nodePairList;
+
+		this.nodepairs = nodepairs;
+		this.index = index;
 		this.clonePairs = clonePairs;
 	}
 
@@ -31,11 +34,18 @@ class SlicingThread implements Runnable {
 	public void run() {
 
 		final Set<ClonePairInfo> pairs = new HashSet<ClonePairInfo>();
-		while (nodePairList.hasNext()) {
-			final NodePairInfo nodePair = this.nodePairList.next();
 
-			final PDGNode<?> nodeA = nodePair.getNodeA();
-			final PDGNode<?> nodeB = nodePair.getNodeB();
+		while (true) {
+
+			int i = this.index.getAndIncrement();
+			if (!(i < this.nodepairs.size())) {
+				break;
+			}
+
+			final NodePairInfo nodepair = this.nodepairs.get(i);
+
+			final PDGNode<?> nodeA = nodepair.nodeA;
+			final PDGNode<?> nodeB = nodepair.nodeB;
 			final HashSet<PDGNode<?>> checkedNodesA = new HashSet<PDGNode<?>>();
 			final HashSet<PDGNode<?>> checkedNodesB = new HashSet<PDGNode<?>>();
 

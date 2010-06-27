@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sdl.scdetector;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,11 +16,12 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeCloneInfo;
-import jp.ac.osaka_u.ist.sdl.scdetector.data.NodePairListInfo;
+import jp.ac.osaka_u.ist.sdl.scdetector.data.NodePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.PDGController;
 import jp.ac.osaka_u.ist.sdl.scdetector.io.XMLWriter;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.CALL_NORMALIZATION;
@@ -61,6 +63,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGControlDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGControlNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGMethodEnterNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 import org.apache.commons.cli.CommandLine;
@@ -816,17 +820,16 @@ public class Scorpio extends MetricsTool {
 	private static Map<TwoClassHash, SortedSet<ClonePairInfo>> detectClonePairs(
 			final SortedMap<Integer, List<PDGNode<?>>> equivalenceGroups) {
 
-		final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs = new HashMap<TwoClassHash, SortedSet<ClonePairInfo>>();
-		final List<Thread> threads = new LinkedList<Thread>();
-		final NodePairListInfo nodePairList = new NodePairListInfo(
-				equivalenceGroups.values());
+		final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonepairs = new HashMap<TwoClassHash, SortedSet<ClonePairInfo>>();
+		final Thread[] threads = new Thread[Configuration.INSTANCE.getW()];
+		final List<NodePairInfo> nodepairs = makeNodePairs(equivalenceGroups
+				.values());
+		final AtomicInteger index = new AtomicInteger(0);
 
-		for (int threadsNumber = 1; threadsNumber <= Configuration.INSTANCE
-				.getW(); threadsNumber++) {
-			final Thread thread = new Thread(new SlicingThread(threadsNumber,
-					nodePairList, clonePairs));
-			threads.add(thread);
-			thread.start();
+		for (int i = 0; i < threads.length; i++) {
+			threads[i] = new Thread(new SlicingThread(nodepairs, index,
+					clonepairs));
+			threads[i].start();
 		}
 
 		// 全てのスレッドが終わるのを待つ
@@ -838,7 +841,7 @@ public class Scorpio extends MetricsTool {
 			}
 		}
 
-		return clonePairs;
+		return clonepairs;
 	}
 
 	private static SortedSet<ClonePairInfo> refineClonePairs(
@@ -970,5 +973,39 @@ public class Scorpio extends MetricsTool {
 			text.append(SlicingThread.numberOfComparion);
 			out.println(text.toString());
 		}
+	}
+
+	private static List<NodePairInfo> makeNodePairs(
+			final Collection<List<PDGNode<?>>> nodeListSet) {
+
+		final List<NodePairInfo> nodepairs = new ArrayList<NodePairInfo>();
+
+		for (final List<PDGNode<?>> nodeList : nodeListSet) {
+
+			// メソッド入口ノードの場合は読み飛ばす
+			if (nodeList.get(0) instanceof PDGMethodEnterNode) {
+				continue;
+			}
+
+			// 閾値以上一致するノードがある場合は読み飛ばす
+			if (Configuration.INSTANCE.getC() <= nodeList.size()) {
+				continue;
+			}
+
+			// コントロールノードでない場合は飛ばす
+			if (Configuration.INSTANCE.getU().useControlFilter()
+					&& !(nodeList.get(0) instanceof PDGControlNode)) {
+				continue;
+			}
+
+			for (int i = 0; i < nodeList.size(); i++) {
+				for (int j = i + 1; j < nodeList.size(); j++) {
+					nodepairs.add(new NodePairInfo(nodeList.get(i), nodeList
+							.get(j)));
+				}
+			}
+		}
+
+		return nodepairs;
 	}
 }
