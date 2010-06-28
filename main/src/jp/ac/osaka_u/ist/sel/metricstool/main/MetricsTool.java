@@ -766,24 +766,39 @@ public class MetricsTool {
         // 対象ファイルのASTから未解決クラス，フィールド，メソッド情報を取得
         {
             out.println("parsing all target files.");
+            final TargetFileParser[] parsers = new TargetFileParser[Settings.getInstance()
+                    .getThreadNumber()];
             final Thread[] threads = new Thread[Settings.getInstance().getThreadNumber()];
             final TargetFile[] files = DataManager.getInstance().getTargetFileManager().getFiles()
                     .toArray(new TargetFile[0]);
             final AtomicInteger index = new AtomicInteger();
             for (int i = 0; i < threads.length; i++) {
-                threads[i] = new Thread(new TargetFileParser(files, index, out, err));
+                parsers[i] = new TargetFileParser(files, index, out, err);
+                threads[i] = new Thread(parsers[i]);
                 MetricsToolSecurityManager.getInstance().addPrivilegeThread(threads[i]);
                 threads[i].start();
             }
 
             // 全てのスレッドが終わるのを待つ
-            for (final Thread thread : threads) {
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            for (final TargetFileParser parser : parsers) {
+                                
+                while (!parser.isFinished()) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+
+            // 全てのスレッドが終わるのを待つ
+            //for (final Thread thread : threads) {
+            //    try {
+            //        thread.join();
+            //    } catch (InterruptedException e) {
+            //        e.printStackTrace();
+            //    }
+            //}
         }
 
         out.println("resolving definitions and usages.");
