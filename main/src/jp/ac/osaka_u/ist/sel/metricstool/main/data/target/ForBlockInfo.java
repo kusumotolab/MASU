@@ -230,8 +230,8 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
      * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
      */
     @Override
-    public Set<ClassTypeInfo> getThrownExceptions() {
-        final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
+    public Set<ReferenceTypeInfo> getThrownExceptions() {
+        final Set<ReferenceTypeInfo> thrownExpressions = new HashSet<ReferenceTypeInfo>();
         thrownExpressions.addAll(super.getThrownExceptions());
         for (final ConditionInfo initializerExpression : this.getInitializerExpressions()) {
             thrownExpressions.addAll(initializerExpression.getThrownExceptions());

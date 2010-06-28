@@ -98,8 +98,8 @@ public final class TypeParameterUsageInfo extends ExpressionInfo {
      * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
      */
     @Override
-    public Set<ClassTypeInfo> getThrownExceptions() {
-        return Collections.unmodifiableSet(new HashSet<ClassTypeInfo>());
+    public Set<ReferenceTypeInfo> getThrownExceptions() {
+        return Collections.unmodifiableSet(new HashSet<ReferenceTypeInfo>());
     }
 
     private final ExpressionInfo expression;

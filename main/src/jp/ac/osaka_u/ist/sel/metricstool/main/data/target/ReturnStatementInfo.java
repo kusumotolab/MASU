@@ -114,7 +114,7 @@ public class ReturnStatementInfo extends SingleStatementInfo {
      * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
      */
     @Override
-    public Set<ClassTypeInfo> getThrownExceptions() {
+    public Set<ReferenceTypeInfo> getThrownExceptions() {
         return Collections.unmodifiableSet(this.getReturnedExpression().getThrownExceptions());
     }
 

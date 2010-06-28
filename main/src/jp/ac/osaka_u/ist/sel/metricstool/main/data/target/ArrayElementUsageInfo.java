@@ -152,10 +152,10 @@ public final class ArrayElementUsageInfo extends ExpressionInfo {
      * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
      */
     @Override
-    public Set<ClassTypeInfo> getThrownExceptions() {
+    public Set<ReferenceTypeInfo> getThrownExceptions() {
         return Collections.unmodifiableSet(this.getIndexExpression().getThrownExceptions());
     }
-    
+
     private final ExpressionInfo qualifierExpression;
 
     private final ExpressionInfo indexExpression;

@@ -109,8 +109,8 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
      * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
      */
     @Override
-    public Set<ClassTypeInfo> getThrownExceptions() {
-        final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
+    public Set<ReferenceTypeInfo> getThrownExceptions() {
+        final Set<ReferenceTypeInfo> thrownExpressions = new HashSet<ReferenceTypeInfo>();
         for (final StatementInfo innerStatement : this.getStatements()) {
             thrownExpressions.addAll(innerStatement.getThrownExceptions());
         }

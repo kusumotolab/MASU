@@ -53,7 +53,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
         this.typeParameters = new LinkedList<TypeParameterInfo>();
         this.typeParameterUsages = new HashMap<TypeParameterInfo, TypeInfo>();
-        this.thrownExceptions = new LinkedList<ClassTypeInfo>();
+        this.thrownExceptions = new LinkedList<ReferenceTypeInfo>();
 
         this.unresolvedUsage = new HashSet<UnresolvedExpressionInfo<?>>();
 
@@ -399,7 +399,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @param thrownException 追加する例外
      */
-    public final void addThrownException(final ClassTypeInfo thrownException) {
+    public final void addThrownException(final ReferenceTypeInfo thrownException) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == thrownException) {
@@ -414,7 +414,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * 
      * @return スローされる例外の List
      */
-    public final List<ClassTypeInfo> getThrownExceptions() {
+    public final List<ReferenceTypeInfo> getThrownExceptions() {
         return Collections.unmodifiableList(this.thrownExceptions);
     }
 
@@ -563,7 +563,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     /**
      * スローされる例外を保存する変数
      */
-    private final List<ClassTypeInfo> thrownExceptions;
+    private final List<ReferenceTypeInfo> thrownExceptions;
 
     /**
      * このクラスで使用されている型パラメータと実際に型パラメータに代入されている型のペア.

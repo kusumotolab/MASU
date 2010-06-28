@@ -112,8 +112,8 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
      * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
      */
     @Override
-    public Set<ClassTypeInfo> getThrownExceptions() {
-        return Collections.unmodifiableSet(new HashSet<ClassTypeInfo>());
+    public Set<ReferenceTypeInfo> getThrownExceptions() {
+        return Collections.unmodifiableSet(new HashSet<ReferenceTypeInfo>());
     }
 
     /**

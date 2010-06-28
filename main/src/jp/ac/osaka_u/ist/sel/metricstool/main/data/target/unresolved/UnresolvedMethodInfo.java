@@ -11,6 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
@@ -154,9 +155,8 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         // スローされる例外を解決し，解決済みコンストラクタ情報に追加する
         for (final UnresolvedClassTypeInfo unresolvedThrownException : this.getThrownExceptions()) {
 
-            final ClassTypeInfo thrownException = (ClassTypeInfo) unresolvedThrownException
-                    .resolve(ownerClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
-                            methodInfoManager);
+            final ReferenceTypeInfo thrownException = unresolvedThrownException.resolve(ownerClass,
+                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addThrownException(thrownException);
         }
 

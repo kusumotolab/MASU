@@ -61,7 +61,7 @@ public final class ForeachConditionInfo extends ExpressionInfo {
     }
 
     @Override
-    public Set<ClassTypeInfo> getThrownExceptions() {
+    public Set<ReferenceTypeInfo> getThrownExceptions() {
         return this.getIteratorExpression().getThrownExceptions();
     }
 

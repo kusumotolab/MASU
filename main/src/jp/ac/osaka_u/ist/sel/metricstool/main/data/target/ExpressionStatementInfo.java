@@ -99,7 +99,7 @@ public class ExpressionStatementInfo extends SingleStatementInfo {
      * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
      */
     @Override
-    public Set<ClassTypeInfo> getThrownExceptions() {
+    public Set<ReferenceTypeInfo> getThrownExceptions() {
         return Collections.unmodifiableSet(this.getExpression().getThrownExceptions());
     }
 

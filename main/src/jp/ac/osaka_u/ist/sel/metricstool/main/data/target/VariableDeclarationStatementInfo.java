@@ -185,8 +185,8 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
      * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
      */
     @Override
-    public Set<ClassTypeInfo> getThrownExceptions() {
-        final Set<ClassTypeInfo> thrownExpressions = new HashSet<ClassTypeInfo>();
+    public Set<ReferenceTypeInfo> getThrownExceptions() {
+        final Set<ReferenceTypeInfo> thrownExpressions = new HashSet<ReferenceTypeInfo>();
         if (this.isInitialized()) {
             thrownExpressions.addAll(this.getInitializationExpression().getThrownExceptions());
         }

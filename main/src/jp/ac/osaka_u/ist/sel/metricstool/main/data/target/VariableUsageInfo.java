@@ -268,8 +268,8 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
      * @return@‚±‚ÌŽ®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
      */
     @Override
-    public final Set<ClassTypeInfo> getThrownExceptions() {
-        return Collections.unmodifiableSet(new HashSet<ClassTypeInfo>());
+    public final Set<ReferenceTypeInfo> getThrownExceptions() {
+        return Collections.unmodifiableSet(new HashSet<ReferenceTypeInfo>());
     }
 
     private final T usedVariable;

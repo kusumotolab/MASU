@@ -123,13 +123,13 @@ public final class AssertStatementInfo extends SingleStatementInfo {
      * @return@‚±‚Ì®‚Å“Š‚°‚ç‚ê‚é‰Â”\«‚ª‚ ‚é—áŠO‚ÌSet
      */
     @Override
-    public Set<ClassTypeInfo> getThrownExceptions() {
-        final Set<ClassTypeInfo> thrownExceptions = new HashSet<ClassTypeInfo>();
+    public Set<ReferenceTypeInfo> getThrownExceptions() {
+        final Set<ReferenceTypeInfo> thrownExceptions = new HashSet<ReferenceTypeInfo>();
         thrownExceptions.addAll(this.getAssertedExpression().getThrownExceptions());
         thrownExceptions.addAll(this.getMessageExpression().getThrownExceptions());
         return Collections.unmodifiableSet(thrownExceptions);
     }
-    
+
     private final ExpressionInfo assertedExpression;
 
     private final ExpressionInfo messageExpression;

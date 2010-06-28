@@ -14,7 +14,7 @@ import java.util.Set;
  */
 @SuppressWarnings("serial")
 public class ClassConstructorCallInfo extends ConstructorCallInfo<ClassTypeInfo> {
-    
+
     /**
      * 型を与えてコンストラクタ呼び出しを初期化
      * 
@@ -69,8 +69,8 @@ public class ClassConstructorCallInfo extends ConstructorCallInfo<ClassTypeInfo>
      * @return　この式で投げられる可能性がある例外のSet
      */
     @Override
-    public Set<ClassTypeInfo> getThrownExceptions() {
-        final Set<ClassTypeInfo> thrownExceptions = new HashSet<ClassTypeInfo>();
+    public Set<ReferenceTypeInfo> getThrownExceptions() {
+        final Set<ReferenceTypeInfo> thrownExceptions = new HashSet<ReferenceTypeInfo>();
         thrownExceptions.addAll(this.getCallee().getThrownExceptions());
         return Collections.unmodifiableSet(thrownExceptions);
     }
