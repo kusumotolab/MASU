@@ -1,8 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BuiltinTypeToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
@@ -74,7 +74,7 @@ public class TypeElement extends ExpressionElement {
         }
     }
 
-    private static final Map<BuiltinTypeToken, TypeElement> BUILTIN_TYPE_CACHE = new HashMap<BuiltinTypeToken, TypeElement>();
+    private static final ConcurrentMap<BuiltinTypeToken, TypeElement> BUILTIN_TYPE_CACHE = new ConcurrentHashMap<BuiltinTypeToken, TypeElement>();
 
     private final UnresolvedTypeInfo<? extends TypeInfo> type;
 
