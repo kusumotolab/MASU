@@ -26,7 +26,7 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
      * @return
      */
     public static CatchBlockInfo getCorrespondingCatchBlock(final ExecutableElementInfo element,
-            final ClassTypeInfo exception) {
+            final ReferenceTypeInfo exception) {
 
         for (LocalSpaceInfo ownerSpace = element.getOwnerSpace(); ownerSpace instanceof BlockInfo; ownerSpace = ((BlockInfo) ownerSpace)
                 .getOwnerSpace()) {
