@@ -93,8 +93,14 @@ public class CFGUtility {
 			}
 		}
 
-		// 指定された引数を取得
-		final ParameterInfo parameter = method.getParameters().get(index);
+		// 指定された引数を取得（可変長引数への対応を含む）
+		final ParameterInfo parameter;
+		if (index < method.getParameters().size()) {
+			parameter = method.getParameters().get(index);
+		} else {
+			parameter = method.getParameters().get(
+					method.getParameters().size() - 1);
+		}
 
 		// 参照型でない場合は「状態を変更」というのはありえない
 		if (!(parameter.getType() instanceof ClassTypeInfo)) {
@@ -231,8 +237,14 @@ public class CFGUtility {
 			}
 		}
 
-		// 指定された引数を取得
-		final ParameterInfo parameter = method.getParameters().get(index);
+		// 指定された引数を取得（可変長引数への対応を含む）
+		final ParameterInfo parameter;
+		if (index < method.getParameters().size()) {
+			parameter = method.getParameters().get(index);
+		} else {
+			parameter = method.getParameters().get(
+					method.getParameters().size() - 1);
+		}
 
 		// 参照型でない場合は「状態を変更」というのはありえない
 		if (!(parameter.getType() instanceof ClassTypeInfo)) {

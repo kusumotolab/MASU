@@ -1,13 +1,13 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
@@ -1224,7 +1224,7 @@ public class IntraProceduralCFG extends CFG {
 		}
 	}
 
-	private static final Map<StatementInfo, CFG> statementCFG = new HashMap<StatementInfo, CFG>();
+	private static final ConcurrentMap<StatementInfo, CFG> statementCFG = new ConcurrentHashMap<StatementInfo, CFG>();
 
 	static CFG getCFG(final StatementInfo statement,
 			final ICFGNodeFactory nodeFactory) {
