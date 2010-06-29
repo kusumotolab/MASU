@@ -1,8 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
@@ -186,7 +186,7 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
     /**
      * UnresolvedArrayTypeInfo オブジェクトを一元管理するための Map．オブジェクトはファクトリメソッドで生成される．
      */
-    private static final Map<Key, UnresolvedArrayTypeInfo> ARRAY_TYPE_MAP = new HashMap<Key, UnresolvedArrayTypeInfo>();
+    private static final ConcurrentMap<Key, UnresolvedArrayTypeInfo> ARRAY_TYPE_MAP = new ConcurrentHashMap<Key, UnresolvedArrayTypeInfo>();
 
     /**
      * 変数の型と次元を用いてキーとなるクラス．
