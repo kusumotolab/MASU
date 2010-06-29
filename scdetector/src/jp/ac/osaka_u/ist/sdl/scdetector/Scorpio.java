@@ -38,7 +38,6 @@ import jp.ac.osaka_u.ist.sdl.scdetector.settings.SLICE_TYPE;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.SMALL_METHOD;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.VARIABLE_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.VERBOSE;
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
@@ -53,6 +52,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageListener;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.DefaultPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.InterProceduralPDG;
@@ -666,54 +666,31 @@ public class Scorpio extends MetricsTool {
 		final int dataDistance = Configuration.INSTANCE.getX();
 		final int controlDistance = Configuration.INSTANCE.getY();
 		final int executionDistance = Configuration.INSTANCE.getZ();
+
+		// 各メソッドのPDGを構築
+		final TargetMethodInfo[] methods = DataManager.getInstance()
+				.getMethodInfoManager().getTargetMethodInfos().toArray(
+						new TargetMethodInfo[0]);
+		buildPDGs(methods, pdgNodeFactory, data, control, execution,
+				dataDistance, controlDistance, executionDistance);
+
+		// 各コンストラクタのPDGを構築
+		final TargetConstructorInfo[] constructors = DataManager.getInstance()
+				.getMethodInfoManager().getTargetConstructorInfos().toArray(
+						new TargetConstructorInfo[0]);
+		buildPDGs(constructors, pdgNodeFactory, data, control, execution,
+				dataDistance, controlDistance, executionDistance);
+
 		switch (Configuration.INSTANCE.getP()) {
 
-		case INTRA: // 各メソッドのPDGを構築
-			for (final TargetMethodInfo method : DataManager.getInstance()
-					.getMethodInfoManager().getTargetMethodInfos()) {
-
-				final IntraProceduralPDG pdg = new IntraProceduralPDG(method,
-						pdgNodeFactory, new DefaultCFGNodeFactory(), data,
-						control, execution, true, dataDistance,
-						controlDistance, executionDistance);
-				PDGController.getInstance(Scorpio.ID).put(method, pdg);
-			}
-
-			// コンストラクタのPDGを構築
-			for (final TargetConstructorInfo constructor : DataManager
-					.getInstance().getMethodInfoManager()
-					.getTargetConstructorInfos()) {
-
-				final IntraProceduralPDG pdg = new IntraProceduralPDG(
-						constructor, pdgNodeFactory,
-						new DefaultCFGNodeFactory(), data, control, execution,
-						true, dataDistance, controlDistance, executionDistance);
-				PDGController.getInstance(Scorpio.ID).put(constructor, pdg);
-			}
+		case INTRA:
+			// INTRAのときは何もしない
 
 			break;
 		case INTER:
-			// 各メソッドのPDGを構築
-			for (final TargetMethodInfo method : DataManager.getInstance()
-					.getMethodInfoManager().getTargetMethodInfos()) {
-				final InterProceduralPDG pdg = new InterProceduralPDG(method,
-						pdgNodeFactory, new DefaultCFGNodeFactory(), data,
-						control, execution);
-				PDGController.getInstance(Scorpio.ID).put(method, pdg);
-			}
-			// コンストラクタのPDGを構築
-			for (final TargetConstructorInfo constructor : DataManager
-					.getInstance().getMethodInfoManager()
-					.getTargetConstructorInfos()) {
-				final InterProceduralPDG pdg = new InterProceduralPDG(
-						constructor, pdgNodeFactory,
-						new DefaultCFGNodeFactory(), data, control, execution);
 
-				PDGController.getInstance(Scorpio.ID).put(constructor, pdg);
-			}
 			// メソッド呼び出し依存関係を構築
-			for (final PDG pdg : PDGController.getInstance(Scorpio.ID)
-					.getPDGs()) {
+			for (final PDG pdg : PDGController.SINGLETON.getPDGs()) {
 				InterProceduralPDG interPDG = (InterProceduralPDG) pdg;
 				(new InterproceduralEdgeBuilder(interPDG)).addEdges();
 			}
@@ -725,13 +702,40 @@ public class Scorpio extends MetricsTool {
 		// 頂点集約が指定されている場合は，PDGを変換する
 		if (Configuration.INSTANCE.getE().equals(MERGE.TRUE)) {
 			out.println("optimizing PDGs ... ");
-			for (final IntraProceduralPDG pdg : PDGController.getInstance(
-					Scorpio.ID).getPDGs()) {
+			for (final IntraProceduralPDG pdg : PDGController.SINGLETON
+					.getPDGs()) {
 				PDGMergedNode.merge((IntraProceduralPDG) pdg, pdgNodeFactory);
 			}
 		}
 
 		return pdgNodeFactory;
+	}
+
+	private static <T extends CallableUnitInfo> void buildPDGs(
+			final T[] methods, final IPDGNodeFactory pdgNodeFactory,
+			final boolean data, final boolean control, final boolean execution,
+			final int dataDistance, final int controlDistance,
+			final int executionDistance) {
+
+		final AtomicInteger index = new AtomicInteger(0);
+		final Thread[] threads = new Thread[Configuration.INSTANCE.getW()];
+		for (int i = 0; i < threads.length; i++) {
+
+			threads[i] = new Thread(new PDGBuildingThread<T>(methods, index,
+					pdgNodeFactory, data, control, execution, true,
+					dataDistance, controlDistance, executionDistance));
+			MetricsToolSecurityManager.getInstance().addPrivilegeThread(
+					threads[i]);
+			threads[i].start();
+		}
+
+		for (final Thread thread : threads) {
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private static SortedMap<Integer, List<PDGNode<?>>> buildEquivalenceGroups(
@@ -760,8 +764,7 @@ public class Scorpio extends MetricsTool {
 
 				// 集約ノード以外の時は普通に処理
 				else {
-					final PDG pdg = PDGController.getInstance(Scorpio.ID)
-							.getPDG(pdgNode);
+					final PDG pdg = PDGController.SINGLETON.getPDG(pdgNode);
 					if (pdg.getNumberOfNodes() < Configuration.INSTANCE.getS()) {
 						continue ALLNODE;
 					}
@@ -795,8 +798,8 @@ public class Scorpio extends MetricsTool {
 
 		{ // PDGエッジの数を表示
 			final Set<PDGEdge> edges = new HashSet<PDGEdge>();
-			for (final Entry<CallableUnitInfo, IntraProceduralPDG> entry : PDGController
-					.getInstance(Scorpio.ID).entrySet()) {
+			for (final Entry<CallableUnitInfo, IntraProceduralPDG> entry : PDGController.SINGLETON
+					.entrySet()) {
 				edges.addAll(entry.getValue().getAllEdges());
 			}
 

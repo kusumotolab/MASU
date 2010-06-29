@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
-import jp.ac.osaka_u.ist.sdl.scdetector.Scorpio;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.PDGController;
@@ -270,8 +269,8 @@ public class XMLWriter {
 
 	private int getNumberOfNodes(final FileInfo file) {
 
-		final Set<IntraProceduralPDG> pdgs = PDGController.getInstance(
-				Scorpio.ID).getPDGs(file.getName());
+		final Set<IntraProceduralPDG> pdgs = PDGController.SINGLETON
+				.getPDGs(file.getName());
 		int number = 0;
 		for (final IntraProceduralPDG pdg : pdgs) {
 			number += pdg.getNumberOfNodes();

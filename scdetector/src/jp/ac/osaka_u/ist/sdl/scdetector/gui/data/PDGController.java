@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sdl.scdetector.gui.data;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -77,22 +76,5 @@ public class PDGController {
 
 	private final ConcurrentMap<PDGNode<?>, IntraProceduralPDG> nodeToPDG;
 
-	/**
-	 * Žw’è‚³‚ê‚½PDGController‚ð•Ô‚·
-	 * 
-	 * @param id
-	 * @return
-	 */
-	public static PDGController getInstance(final String id) {
-
-		PDGController controller = map.get(id);
-		if (null == controller) {
-			controller = new PDGController();
-			map.put(id, controller);
-		}
-
-		return controller;
-	}
-
-	private static final Map<String, PDGController> map = new HashMap<String, PDGController>();
+	public static PDGController SINGLETON = new PDGController();
 }

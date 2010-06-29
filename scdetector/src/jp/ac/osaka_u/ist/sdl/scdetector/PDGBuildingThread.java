@@ -1,27 +1,28 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.PDGController;
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.ICFGNodeFactory;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
 
-public class PDGBuildingThread implements Runnable {
+public class PDGBuildingThread<T extends CallableUnitInfo> implements Runnable {
 
-	public PDGBuildingThread(final CallableUnitInfo method,
-			final IPDGNodeFactory pdgNodeFactory,
-			final ICFGNodeFactory cfgNodeFactory, final boolean data,
+	public PDGBuildingThread(final T[] methods, final AtomicInteger index,
+			final IPDGNodeFactory pdgNodeFactory, final boolean data,
 			final boolean control, final boolean execution,
 			final boolean countObjectStateChange, final int dataDistance,
 			final int controlDistance, final int executionDistance) {
 
-		if (null == method || null == pdgNodeFactory || null == cfgNodeFactory) {
+		if (null == methods || null == index || null == pdgNodeFactory) {
 			throw new IllegalArgumentException();
 		}
 
 		this.pdgNodeFactory = pdgNodeFactory;
-		this.cfgNodeFactory = cfgNodeFactory;
-		this.method = method;
+		this.methods = methods;
+		this.index = index;
 		this.data = data;
 		this.control = control;
 		this.execution = execution;
@@ -33,18 +34,29 @@ public class PDGBuildingThread implements Runnable {
 
 	@Override
 	public void run() {
-		final IntraProceduralPDG pdg = new IntraProceduralPDG(this.method,
-				this.pdgNodeFactory, this.cfgNodeFactory, this.data,
-				this.control, this.execution, this.countObjectStateChange,
-				this.dataDistance, this.controlDistance, this.executionDistance);
-		PDGController.getInstance(Scorpio.ID).put(this.method, pdg);
+
+		while (true) {
+
+			final int index = this.index.getAndIncrement();
+			if (!(index < this.methods.length)) {
+				break;
+			}
+
+			final IntraProceduralPDG pdg = new IntraProceduralPDG(
+					this.methods[index], this.pdgNodeFactory,
+					new DefaultCFGNodeFactory(), this.data, this.control,
+					this.execution, this.countObjectStateChange,
+					this.dataDistance, this.controlDistance,
+					this.executionDistance);
+			PDGController.SINGLETON.put(this.methods[index], pdg);
+		}
 	}
 
+	private final T[] methods;
+
+	private final AtomicInteger index;
+
 	private final IPDGNodeFactory pdgNodeFactory;
-
-	private final ICFGNodeFactory cfgNodeFactory;
-
-	private final CallableUnitInfo method;
 
 	private final boolean data;
 
