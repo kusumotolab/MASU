@@ -1,9 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg.node;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
@@ -26,7 +26,7 @@ public class PDGMethodEnterNode extends PDGControlNode {
 		return enterNode;
 	}
 
-	private static final Map<CallableUnitInfo, PDGMethodEnterNode> NODE_MAP = new HashMap<CallableUnitInfo, PDGMethodEnterNode>();
+	private static final ConcurrentMap<CallableUnitInfo, PDGMethodEnterNode> NODE_MAP = new ConcurrentHashMap<CallableUnitInfo, PDGMethodEnterNode>();
 
 	private PDGMethodEnterNode(final PseudoConditionInfo condition) {
 		super(condition);

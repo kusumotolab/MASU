@@ -257,15 +257,19 @@ public class IntraProceduralPDG extends PDG {
 
 		{
 			// メソッドのエンターノードから直接の内部文に対して制御依存辺を引く
-			final PDGMethodEnterNode enterNode = this.getMethodEnterNode();
-			this.nodes.add(enterNode);
-			final CallableUnitInfo unit = this.getMethodInfo();
-			this.buildControlDependence(enterNode, unit);
+			if (this.isBuiltControlDependency()) {
+				final PDGMethodEnterNode enterNode = this.getMethodEnterNode();
+				this.nodes.add(enterNode);
+				final CallableUnitInfo unit = this.getMethodInfo();
+				this.buildControlDependence(enterNode, unit);
+			}
 
 			// メソッドのエンターノードからメソッド内で最初に実行される文に実行依存辺を引く
-			if (null != cfgEnterNode) {
-				final PDGNode<?> toPDGNode = this.makeNode(cfgEnterNode);
-				enterNode.addExecutionDependingNode(toPDGNode);
+			if (this.isBuiltExecutionDependency()) {
+				if (null != cfgEnterNode) {
+					final PDGNode<?> toPDGNode = this.makeNode(cfgEnterNode);
+					enterNode.addExecutionDependingNode(toPDGNode);
+				}
 			}
 		}
 

@@ -36,10 +36,10 @@ public abstract class PDGEdge implements Comparable<PDGEdge> {
 
 	@Override
 	public boolean equals(Object arg) {
-		if (this.getClass().equals(arg.getClass())) {
+		if (this.getClass() == arg.getClass()) {
 			PDGEdge edge = (PDGEdge) arg;
 			return this.fromNode.equals(edge.getFromNode())
-					&& this.toNode.equals(getToNode());
+					&& this.toNode.equals(edge.getToNode());
 		} else {
 			return false;
 		}
