@@ -52,12 +52,4 @@ public final class ExternalFieldInfo extends FieldInfo {
                 ExternalClassInfo.UNKNOWN, true, true, true, true, true, new Random().nextInt(),
                 new Random().nextInt(), new Random().nextInt(), new Random().nextInt());
     }
-
-    /**
-     * ExternalFieldInfo ‚Å‚Í—˜—p‚Å‚«‚È‚¢
-     */
-    @Override
-    public Set<ModifierInfo> getModifiers() {
-        throw new CannotUseException();
-    }
 }
