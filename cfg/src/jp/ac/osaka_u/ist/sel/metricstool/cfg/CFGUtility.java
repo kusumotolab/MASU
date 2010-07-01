@@ -38,7 +38,7 @@ public class CFGUtility {
 		for (final VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>> variableUsage : method
 				.getVariableUsages()) {
 			final VariableInfo<?> variable = variableUsage.getUsedVariable();
-			if (fields.contains(variable)) {
+			if (variableUsage.isAssignment() && fields.contains(variable)) {
 				return true;
 			}
 		}
@@ -185,7 +185,7 @@ public class CFGUtility {
 		for (final VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>> variableUsage : method
 				.getVariableUsages()) {
 			final VariableInfo<?> variable = variableUsage.getUsedVariable();
-			if (fields.contains(variable)) {
+			if (variableUsage.isAssignment() && fields.contains(variable)) {
 				return true;
 			}
 		}
