@@ -98,13 +98,6 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert qualifierUsage != null : "resolveEntityUsage returned null!";
 
-        /*// 要素使用のオーナー要素を返す
-        final UnresolvedExecutableElementInfo<?> unresolvedOwnerExecutableElement = this
-                .getOwnerExecutableElement();
-        final ExecutableElementInfo ownerExecutableElement = unresolvedOwnerExecutableElement
-                .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                        methodInfoManager);*/
-
         if (qualifierUsage instanceof UnknownEntityUsageInfo) {
             if (unresolvedQualifierUsage instanceof UnresolvedClassReferenceInfo) {
 
@@ -120,50 +113,69 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 }
                 qualifierUsage = new ClassReferenceInfo(referenceType, usingMethod, fromLine,
                         fromColumn, toLine, toColumn);
-                /*qualifierUsage.setOwnerExecutableElement(ownerExecutableElement);*/
             }
         }
 
-        // -----ここから親の型に応じて処理を分岐
-        TypeInfo ownerType = qualifierUsage.getType();
+        final TypeInfo qualifierType = qualifierUsage.getType();
+        this.resolvedInfo = this.resolve(usingClass, usingMethod, qualifierUsage, qualifierType,
+                name, actualParameters, typeArguments, fromLine, fromColumn, toLine, toColumn,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+        return this.resolvedInfo;
+    }
+
+    private MethodCallInfo resolve(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ExpressionInfo qualifierUsage,
+            final TypeInfo qualifierType, final String methodName,
+            final List<ExpressionInfo> actualParameters,
+            final List<ReferenceTypeInfo> typeArguments, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 型パラメータの場合はその継承型を求める
-        if (ownerType instanceof TypeParameterTypeInfo) {
-            final TypeInfo extendsType = ((TypeParameterTypeInfo) ownerType)
+        if (qualifierType instanceof TypeParameterTypeInfo) {
+            final TypeInfo extendsType = ((TypeParameterTypeInfo) qualifierType)
                     .getReferncedTypeParameter().getExtendsType();
 
             // なにも継承していない場合はObject型を継承していることにする
             if (null != extendsType) {
-                ownerType = extendsType;
+                final MethodCallInfo resolve = this.resolve(usingClass, usingMethod,
+                        qualifierUsage, extendsType, methodName, actualParameters, typeArguments,
+                        fromLine, fromColumn, toLine, toColumn, classInfoManager, fieldInfoManager,
+                        methodInfoManager);
+                return resolve;
             } else {
 
                 final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
                         .getClassInfo(new String[] { "java", "lang", "Object" });
-                ownerType = new ClassTypeInfo(objectClass);
+                final MethodCallInfo resolve = this.resolve(usingClass, usingMethod,
+                        qualifierUsage, new ClassTypeInfo(objectClass), methodName,
+                        actualParameters, typeArguments, fromLine, fromColumn, toLine, toColumn,
+                        classInfoManager, fieldInfoManager, methodInfoManager);
+                return resolve;
             }
         }
 
         // 親が解決できなかった場合はどうしようもない
-        if (ownerType instanceof UnknownTypeInfo) {
+        else if (qualifierType instanceof UnknownTypeInfo) {
 
-            final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
-            this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage, unknownMethod,
-                    usingMethod, fromLine, fromColumn, toLine, toColumn);
-            /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-            this.resolvedInfo.addArguments(actualParameters);
-            this.resolvedInfo.addTypeArguments(typeArguments);
-            return this.resolvedInfo;
+            final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(methodName);
+            final MethodCallInfo resolved = new MethodCallInfo(qualifierType, qualifierUsage,
+                    unknownMethod, usingMethod, fromLine, fromColumn, toLine, toColumn);
+            resolved.addArguments(actualParameters);
+            resolved.addTypeArguments(typeArguments);
+            return resolved;
 
             // 親がクラス型だった場合
-        } else if (ownerType instanceof ClassTypeInfo || ownerType instanceof PrimitiveTypeInfo) {
+        } else if (qualifierType instanceof ClassTypeInfo
+                || qualifierType instanceof PrimitiveTypeInfo) {
 
             final ClassInfo ownerClass;
-            if (ownerType instanceof PrimitiveTypeInfo) {
+            if (qualifierType instanceof PrimitiveTypeInfo) {
                 final Settings settings = Settings.getInstance();
                 ownerClass = TypeConverter.getTypeConverter(settings.getLanguage())
-                        .getWrapperClass((PrimitiveTypeInfo) ownerType);
+                        .getWrapperClass((PrimitiveTypeInfo) qualifierType);
             } else {
-                ownerClass = ((ClassTypeInfo) ownerType).getReferencedClass();
+                ownerClass = ((ClassTypeInfo) qualifierType).getReferencedClass();
             }
 
             if (ownerClass instanceof TargetClassInfo) {
@@ -179,14 +191,13 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                     for (final MethodInfo availableMethod : availableMethods) {
 
                         // 呼び出し可能なメソッドが見つかった場合
-                        if (availableMethod.canCalledWith(name, actualParameters)) {
-                            this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage,
-                                    availableMethod, usingMethod, fromLine, fromColumn, toLine,
-                                    toColumn);
-                            /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                            this.resolvedInfo.addArguments(actualParameters);
-                            this.resolvedInfo.addTypeArguments(typeArguments);
-                            return this.resolvedInfo;
+                        if (availableMethod.canCalledWith(methodName, actualParameters)) {
+                            final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
+                                    qualifierUsage, availableMethod, usingMethod, fromLine,
+                                    fromColumn, toLine, toColumn);
+                            resolved.addArguments(actualParameters);
+                            resolved.addTypeArguments(typeArguments);
+                            return resolved;
                         }
                     }
                 }
@@ -204,18 +215,18 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                                 final MethodInfo importedMethod = (MethodInfo) importedMember;
 
                                 // 呼び出し可能なメソッドが見つかった場合
-                                if (importedMethod.canCalledWith(name, actualParameters)) {
+                                if (importedMethod.canCalledWith(methodName, actualParameters)) {
                                     final ClassInfo classInfo = importedMethod.getOwnerClass();
                                     final ClassTypeInfo classType = new ClassTypeInfo(classInfo);
                                     final ClassReferenceInfo classReference = new ClassReferenceInfo(
                                             classType, usingMethod, fromLine, fromColumn, fromLine,
                                             fromColumn);
-                                    this.resolvedInfo = new MethodCallInfo(classType,
+                                    final MethodCallInfo resolved = new MethodCallInfo(classType,
                                             classReference, importedMethod, usingMethod, fromLine,
                                             fromColumn, toLine, toColumn);
-                                    this.resolvedInfo.addArguments(actualParameters);
-                                    this.resolvedInfo.addTypeArguments(typeArguments);
-                                    return this.resolvedInfo;
+                                    resolved.addArguments(actualParameters);
+                                    resolved.addTypeArguments(typeArguments);
+                                    return resolved;
                                 }
                             }
                         }
@@ -237,15 +248,13 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                         methodInfoManager.add(methodInfo);
 
                         // 外部クラスに新規で外部メソッド変数（ExternalMethodInfo）を追加したので型は不明
-                        this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage,
-                                methodInfo, usingMethod, fromLine, fromColumn, toLine, toColumn);
-                        /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                        this.resolvedInfo.addArguments(actualParameters);
-                        this.resolvedInfo.addTypeArguments(typeArguments);
-                        return this.resolvedInfo;
+                        final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
+                                qualifierUsage, methodInfo, usingMethod, fromLine, fromColumn,
+                                toLine, toColumn);
+                        resolved.addArguments(actualParameters);
+                        resolved.addTypeArguments(typeArguments);
+                        return resolved;
                     }
-
-                    //assert false : "Here shouldn't be reached!";
                 }
 
                 // 見つからなかった処理を行う
@@ -254,11 +263,13 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                             + " line:" + this.getFromLine() + " column:" + this.getFromColumn()
                             + " on \"" + usingClass.getOwnerFile().getName());
 
-                    final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
-                    this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage,
-                            unknownMethod, usingMethod, fromLine, fromColumn, toLine, toColumn);
-                    /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                    return this.resolvedInfo;
+                    final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(methodName);
+                    final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
+                            qualifierUsage, unknownMethod, usingMethod, fromLine, fromColumn,
+                            toLine, toColumn);
+                    resolved.addArguments(actualParameters);
+                    resolved.addTypeArguments(typeArguments);
+                    return resolved;
                 }
 
                 // 親が外部クラス（ExternalClassInfo）だった場合
@@ -272,16 +283,15 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 methodInfoManager.add(methodInfo);
 
                 // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
-                this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage, methodInfo,
-                        usingMethod, fromLine, fromColumn, toLine, toColumn);
-                /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                this.resolvedInfo.addArguments(actualParameters);
-                this.resolvedInfo.addTypeArguments(typeArguments);
-                return this.resolvedInfo;
+                final MethodCallInfo resolved = new MethodCallInfo(qualifierType, qualifierUsage,
+                        methodInfo, usingMethod, fromLine, fromColumn, toLine, toColumn);
+                resolved.addArguments(actualParameters);
+                resolved.addTypeArguments(typeArguments);
+                return resolved;
             }
 
             // 親が配列だった場合
-        } else if (ownerType instanceof ArrayTypeInfo) {
+        } else if (qualifierType instanceof ArrayTypeInfo) {
 
             // XXX Java言語であれば， java.lang.Object に対する呼び出し
             final Settings settings = Settings.getInstance();
@@ -300,12 +310,12 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                     methodInfoManager.add(methodInfo);
 
                     // 外部クラスに新規で外部メソッドを追加したので型は不明
-                    this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage, methodInfo,
-                            usingMethod, fromLine, fromColumn, toLine, toColumn);
-                    /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                    this.resolvedInfo.addArguments(actualParameters);
-                    this.resolvedInfo.addTypeArguments(typeArguments);
-                    return this.resolvedInfo;
+                    final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
+                            qualifierUsage, methodInfo, usingMethod, fromLine, fromColumn, toLine,
+                            toColumn);
+                    resolved.addArguments(actualParameters);
+                    resolved.addTypeArguments(typeArguments);
+                    return resolved;
                 }
 
                 else if (ownerClass instanceof TargetClassInfo) {
@@ -320,13 +330,13 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                     for (final MethodInfo availableMethod : availableMethods) {
 
                         // 呼び出し可能なメソッドが見つかった場合
-                        if (availableMethod.canCalledWith(name, actualParameters)) {
-                            this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage,
-                                    availableMethod, usingMethod, fromLine, fromColumn, toLine,
-                                    toColumn);
-                            this.resolvedInfo.addArguments(actualParameters);
-                            this.resolvedInfo.addTypeArguments(typeArguments);
-                            return this.resolvedInfo;
+                        if (availableMethod.canCalledWith(methodName, actualParameters)) {
+                            final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
+                                    qualifierUsage, availableMethod, usingMethod, fromLine,
+                                    fromColumn, toLine, toColumn);
+                            resolved.addArguments(actualParameters);
+                            resolved.addTypeArguments(typeArguments);
+                            return resolved;
                         }
                     }
                 }
@@ -334,11 +344,12 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
         }
 
         assert false : "Here shouldn't be reached!";
-        final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(name);
-        this.resolvedInfo = new MethodCallInfo(ownerType, qualifierUsage, unknownMethod,
-                usingMethod, fromLine, fromColumn, toLine, toColumn);
-        /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-        return this.resolvedInfo;
+        final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(methodName);
+        final MethodCallInfo resolved = new MethodCallInfo(qualifierType, qualifierUsage,
+                unknownMethod, usingMethod, fromLine, fromColumn, toLine, toColumn);
+        resolved.addArguments(actualParameters);
+        resolved.addTypeArguments(typeArguments);
+        return resolved;
     }
 
     /**
