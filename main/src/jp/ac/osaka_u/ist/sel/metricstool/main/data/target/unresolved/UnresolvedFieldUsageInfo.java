@@ -98,9 +98,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
         // フィールド名，参照・代入を取得
         final String fieldName = this.getFieldName();
         final boolean reference = this.isReference();
-        final boolean assingment = this.isAssignment();
+        final boolean assignment = this.isAssignment();
 
-         
         // 使用位置を取得
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
@@ -113,43 +112,55 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         assert qualifierUsage != null : "resolveEntityUsage returned null!";
 
-        // -----ここから親の型に応じて処理を分岐
-        TypeInfo ownerType = qualifierUsage.getType();
+        final TypeInfo qualifierType = qualifierUsage.getType();
+        this.resolvedInfo = this.resolve(usingClass, usingMethod, qualifierUsage, qualifierType,
+                fieldName, reference, assignment, fromLine, fromColumn, toLine, toColumn,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+        return this.resolvedInfo;
+    }
+
+    private FieldUsageInfo resolve(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ExpressionInfo qualifierUsage,
+            final TypeInfo qualifierType, final String fieldName, final boolean reference,
+            final boolean assignment, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // 型パラメータの場合はその継承型を求める
-        if (ownerType instanceof TypeParameterInfo) {
-            final TypeInfo extendsType = ((TypeParameterInfo) ownerType).getExtendsType();
+        if (qualifierType instanceof TypeParameterInfo) {
+
+            final TypeInfo extendsType = ((TypeParameterInfo) qualifierType).getExtendsType();
             if (null != extendsType) {
-                ownerType = extendsType;
+                final FieldUsageInfo resolved = this.resolve(usingClass, usingMethod,
+                        qualifierUsage, extendsType, fieldName, reference, assignment, fromLine,
+                        fromColumn, toLine, toColumn, classInfoManager, fieldInfoManager,
+                        methodInfoManager);
+                return resolved;
             } else {
                 assert false : "Here should not be reached";
 
                 final ExternalFieldInfo unknownField = new ExternalFieldInfo(fieldName);
-                this.resolvedInfo = FieldUsageInfo.getInstance(qualifierUsage, UnknownTypeInfo
-                        .getInstance(), unknownField, reference, assingment, usingMethod, fromLine,
-                        fromColumn, toLine, toColumn);
-                /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                return this.resolvedInfo;
+                final FieldUsageInfo resolved = FieldUsageInfo.getInstance(qualifierUsage,
+                        UnknownTypeInfo.getInstance(), unknownField, reference, assignment,
+                        usingMethod, fromLine, fromColumn, toLine, toColumn);
+                return resolved;
             }
         }
 
-        // -----ここから親の型 に応じて処理を分岐
         // 親が解決できなかった場合はどうしようもない
-        if (ownerType instanceof UnknownTypeInfo) {
+        else if (qualifierType instanceof UnknownTypeInfo) {
 
             final ExternalFieldInfo unknownField = new ExternalFieldInfo(fieldName);
 
-            this.resolvedInfo = FieldUsageInfo.getInstance(qualifierUsage, UnknownTypeInfo
-                    .getInstance(), unknownField, reference, assingment, usingMethod, fromLine,
-                    fromColumn, toLine, toColumn);
-            /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-            return this.resolvedInfo;
+            final FieldUsageInfo resolved = FieldUsageInfo.getInstance(qualifierUsage,
+                    UnknownTypeInfo.getInstance(), unknownField, reference, assignment,
+                    usingMethod, fromLine, fromColumn, toLine, toColumn);
+            return resolved;
 
             //親がクラス型の場合
-        } else if (ownerType instanceof ClassTypeInfo) {
+        } else if (qualifierType instanceof ClassTypeInfo) {
 
-            final ClassInfo ownerClass = ((ClassTypeInfo) qualifierUsage.getType())
-                    .getReferencedClass();
+            final ClassInfo ownerClass = ((ClassTypeInfo) qualifierType).getReferencedClass();
             // 親が対象クラス(TargetClassInfo)だった場合
             if (ownerClass instanceof TargetClassInfo) {
 
@@ -165,12 +176,11 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                         // 一致するフィールド名が見つかった場合
                         if (fieldName.equals(availableField.getName())) {
 
-                            this.resolvedInfo = FieldUsageInfo
-                                    .getInstance(qualifierUsage, qualifierUsage.getType(),
-                                            availableField, reference, assingment, usingMethod,
-                                            fromLine, fromColumn, toLine, toColumn);
-                            /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                            return this.resolvedInfo;
+                            final FieldUsageInfo resolved = FieldUsageInfo.getInstance(
+                                    qualifierUsage, qualifierUsage.getType(), availableField,
+                                    reference, assignment, usingMethod, fromLine, fromColumn,
+                                    toLine, toColumn);
+                            return resolved;
                         }
                     }
                 }
@@ -192,10 +202,11 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                                     final ClassReferenceInfo classReference = new ClassReferenceInfo(
                                             classType, usingMethod, fromLine, fromColumn, fromLine,
                                             fromColumn);
-                                    this.resolvedInfo = FieldUsageInfo.getInstance(classReference,
-                                            classType, importedField, reference, assingment,
-                                            usingMethod, fromLine, fromColumn, toLine, toColumn);
-                                    return this.resolvedInfo;
+                                    final FieldUsageInfo resolved = FieldUsageInfo.getInstance(
+                                            classReference, classType, importedField, reference,
+                                            assignment, usingMethod, fromLine, fromColumn, toLine,
+                                            toColumn);
+                                    return resolved;
                                 }
                             }
                         }
@@ -217,11 +228,11 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                             fieldInfoManager.add(fieldInfo);
 
                             // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
-                            this.resolvedInfo = FieldUsageInfo.getInstance(qualifierUsage,
-                                    qualifierUsage.getType(), fieldInfo, reference, assingment,
-                                    usingMethod, fromLine, fromColumn, toLine, toColumn);
-                            /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                            return this.resolvedInfo;
+                            final FieldUsageInfo resolved = FieldUsageInfo
+                                    .getInstance(qualifierUsage, qualifierUsage.getType(),
+                                            fieldInfo, reference, assignment, usingMethod,
+                                            fromLine, fromColumn, toLine, toColumn);
+                            return resolved;
                         }
 
                         if (!(classInfo instanceof TargetInnerClassInfo)) {
@@ -237,11 +248,10 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                             + " on \"" + usingClass.getOwnerFile().getName());
 
                     final ExternalFieldInfo unknownField = new ExternalFieldInfo(fieldName);
-                    this.resolvedInfo = FieldUsageInfo.getInstance(qualifierUsage, UnknownTypeInfo
-                            .getInstance(), unknownField, reference, assingment, usingMethod,
-                            fromLine, fromColumn, toLine, toColumn);
-                    /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                    return this.resolvedInfo;
+                    final FieldUsageInfo resolved = FieldUsageInfo.getInstance(qualifierUsage,
+                            UnknownTypeInfo.getInstance(), unknownField, reference, assignment,
+                            usingMethod, fromLine, fromColumn, toLine, toColumn);
+                    return resolved;
                 }
 
                 // 親が外部クラス（ExternalClassInfo）だった場合
@@ -252,14 +262,13 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                 fieldInfoManager.add(fieldInfo);
 
                 // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
-                this.resolvedInfo = FieldUsageInfo.getInstance(qualifierUsage, qualifierUsage
-                        .getType(), fieldInfo, reference, assingment, usingMethod, fromLine,
-                        fromColumn, toLine, toColumn);
-                /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                return this.resolvedInfo;
+                final FieldUsageInfo resolved = FieldUsageInfo.getInstance(qualifierUsage,
+                        qualifierUsage.getType(), fieldInfo, reference, assignment, usingMethod,
+                        fromLine, fromColumn, toLine, toColumn);
+                return resolved;
             }
 
-        } else if (ownerType instanceof ArrayTypeInfo) {
+        } else if (qualifierType instanceof ArrayTypeInfo) {
 
             // TODO ここは言語依存にするしかないのか？ 配列.length など
 
@@ -271,22 +280,19 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                     .equals(LANGUAGE.JAVA13))
                     && fieldName.equals("length")) {
 
-                this.resolvedInfo = new ArrayLengthUsageInfo(qualifierUsage,
-                        (ArrayTypeInfo) ownerType, usingMethod, fromLine, fromColumn, toLine,
+                final FieldUsageInfo resolved = new ArrayLengthUsageInfo(qualifierUsage,
+                        (ArrayTypeInfo) qualifierType, usingMethod, fromLine, fromColumn, toLine,
                         toColumn);
-                /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-                return this.resolvedInfo;
+                return resolved;
             }
         }
 
         assert false : "Here shouldn't be reached!";
         final ExternalFieldInfo unknownField = new ExternalFieldInfo(fieldName);
-
-        this.resolvedInfo = FieldUsageInfo.getInstance(qualifierUsage, UnknownTypeInfo
-                .getInstance(), unknownField, reference, assingment, usingMethod, fromLine,
+        final FieldUsageInfo resolved = FieldUsageInfo.getInstance(qualifierUsage, UnknownTypeInfo
+                .getInstance(), unknownField, reference, assignment, usingMethod, fromLine,
                 fromColumn, toLine, toColumn);
-        /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
-        return this.resolvedInfo;
+        return resolved;
     }
 
     /**
