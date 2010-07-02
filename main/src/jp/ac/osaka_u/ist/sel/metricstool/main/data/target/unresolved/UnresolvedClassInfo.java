@@ -744,6 +744,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         classReference.setToLine(toLine);
         classReference.setToColumn(toColumn);
 
+        // Œ^ƒpƒ‰ƒ[ƒ^‚Ì”‚¾‚¯CŒ^ˆø”‚ð’Ç‰Á
         for (final UnresolvedTypeParameterInfo typeParameter : this.typeParameters) {
             classReference.addTypeArgument(new UnresolvedClassTypeInfo(new String[] { "java",
                     "lang", "Object" }));
@@ -779,8 +780,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             return (UnresolvedClassInfo) outerUnit;
         }
 
-        if (outerUnit instanceof UnresolvedCallableUnitInfo) {
-            return ((UnresolvedCallableUnitInfo) outerUnit).getOwnerClass();
+        if (outerUnit instanceof UnresolvedCallableUnitInfo<?>) {
+            return ((UnresolvedCallableUnitInfo<?>) outerUnit).getOwnerClass();
         }
 
         assert false : "Here shouldn't be reached!";
