@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -26,13 +25,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FieldMetricsInfoManage
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.FileMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MethodMetricsInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.metric.MetricNotRegisteredException;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalConstructorInfo;
@@ -44,12 +40,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InstanceInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.JavaPredefinedModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetAnonymousClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -66,19 +60,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalMethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedInstanceInitializerInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedStaticInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
@@ -781,7 +771,7 @@ public class MetricsTool {
 
             // 全てのスレッドが終わるのを待つ
             for (final TargetFileParser parser : parsers) {
-                                
+
                 while (!parser.isFinished()) {
                     try {
                         Thread.sleep(500);
@@ -1768,88 +1758,5 @@ public class MetricsTool {
             addMethodInsideInformation(unresolvedInnerClassInfo, classInfoManager,
                     fieldInfoManager, methodInfoManager);
         }
-    }
-
-    /**
-     * エンティティ（フィールドやクラス）の代入・参照，メソッドの呼び出し関係を追加する．
-     * 
-     * @param unresolvedLocalSpace 解析対象未解決ローカル領域
-     * @param unresolvedClassInfo 解決対象クラス
-     * @param classInfoManager 用いるクラスマネージャ
-     * @param fieldInfoManager 用いるフィールドマネージャ
-     * @param methodInfoManager 用いるメソッドマネージャ
-     */
-    private void addReferenceAssignmentCallRelation(
-            final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace,
-            final UnresolvedClassInfo unresolvedClassInfo, final ClassInfoManager classInfoManager,
-            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
-
-        // 未解決メソッド情報から，解決済みメソッド情報を取得
-        final LocalSpaceInfo localSpace = unresolvedLocalSpace.getResolved();
-        assert null != localSpace : "UnresolvedLocalSpaceInfo#getResolvedInfo is null!";
-
-        // 所有クラスを取得
-        final TargetClassInfo ownerClass = (TargetClassInfo) localSpace.getOwnerClass();
-        final CallableUnitInfo ownerMethod;
-        if (localSpace instanceof CallableUnitInfo) {
-            ownerMethod = (CallableUnitInfo) localSpace;
-        } else if (localSpace instanceof BlockInfo) {
-            ownerMethod = ((BlockInfo) localSpace).getOwnerMethod();
-        } else {
-            ownerMethod = null;
-            assert false : "Here shouldn't be reached!";
-        }
-
-        // 条件文の場合，未解決条件式の名前解決処理
-        if (localSpace instanceof ConditionalBlockInfo) {
-            final UnresolvedConditionalBlockInfo<?> unresolvedConditionalBlock = (UnresolvedConditionalBlockInfo<?>) unresolvedLocalSpace;
-
-            if (null != unresolvedConditionalBlock.getConditionalClause()) {
-                final ConditionalClauseInfo conditionalClause = unresolvedConditionalBlock
-                        .getConditionalClause().resolve(ownerClass, ownerMethod, classInfoManager,
-                                fieldInfoManager, methodInfoManager);
-
-                try {
-                    final Class<?> cls = Class
-                            .forName("jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo");
-                    final Field filed = cls.getDeclaredField("conditionalClause");
-
-                    filed.setAccessible(true);
-                    filed.set(localSpace, conditionalClause);
-                } catch (ClassNotFoundException e) {
-                    assert false : "Illegal state: ConditionalBlockInfo is not found";
-                } catch (NoSuchFieldException e) {
-                    assert false : "Illegal state: conditionalClause is not found";
-                } catch (IllegalAccessException e) {
-                    assert false;
-                }
-            } else {
-                assert false;
-            }
-        }
-
-        // 各未解決文情報の名前解決処理
-        for (final UnresolvedStatementInfo<? extends StatementInfo> unresolvedStatement : unresolvedLocalSpace
-                .getStatements()) {
-            if (!(unresolvedStatement instanceof UnresolvedBlockInfo<?>)) {
-                final StatementInfo statement = unresolvedStatement.resolve(ownerClass,
-                        ownerMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-                localSpace.addStatement(statement);
-            }
-        }
-
-        //　各インナーブロックについて
-        for (final UnresolvedStatementInfo<?> unresolvedStatement : unresolvedLocalSpace
-                .getStatements()) {
-
-            // 未解決メソッド情報内の利用関係を解決
-            if (unresolvedStatement instanceof UnresolvedBlockInfo<?>) {
-
-                this.addReferenceAssignmentCallRelation(
-                        (UnresolvedBlockInfo<?>) unresolvedStatement, unresolvedClassInfo,
-                        classInfoManager, fieldInfoManager, methodInfoManager);
-            }
-        }
-
     }
 }
