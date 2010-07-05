@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -24,12 +25,13 @@ public class JavaUnresolvedExternalClassInfo {
     public JavaUnresolvedExternalClassInfo() {
         MetricsToolSecurityManager.getInstance().checkAccess();
         this.name = null;
-        this.superName = null;
-        this.interfaces = new HashSet<String>();
+        this.superTypes = new ArrayList<String>();
         this.methods = new HashSet<JavaUnresolvedExternalMethodInfo>();
         this.fields = new HashSet<JavaUnresolvedExternalFieldInfo>();
         this.modifiers = new HashSet<String>();
         this.typeParameters = new LinkedList<String>();
+        this.inner = false;
+        this.anonymous = false;
     }
 
     public void setName(final String name) {
@@ -42,28 +44,18 @@ public class JavaUnresolvedExternalClassInfo {
         this.name = name;
     }
 
-    public void setSuperName(final String superName) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == superName) {
-            throw new IllegalArgumentException();
-        }
-
-        this.superName = superName;
-    }
-
     public void isInterface(final boolean isInterface) {
         this.isInterface = isInterface;
     }
 
-    public void addInterface(final String interfaceName) {
+    public void addSuperType(final String superType) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == interfaceName) {
+        if (null == superType) {
             throw new IllegalArgumentException();
         }
 
-        this.interfaces.add(interfaceName);
+        this.superTypes.add(superType);
     }
 
     public void addMethod(final JavaUnresolvedExternalMethodInfo method) {
@@ -106,16 +98,24 @@ public class JavaUnresolvedExternalClassInfo {
         this.typeParameters.add(typeParameter);
     }
 
+    public void setInner(final boolean inner) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.inner = inner;
+    }
+
+    public void setAnonymous(final boolean anonymous) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.anonymous = anonymous;
+    }
+
     public String getName() {
         return this.name;
     }
 
-    public String getSuperName() {
-        return this.superName;
-    }
-
-    public Set<String> getInterfaces() {
-        return Collections.unmodifiableSet(this.interfaces);
+    public List<String> getSuperTypes() {
+        return Collections.unmodifiableList(this.superTypes);
     }
 
     public Set<JavaUnresolvedExternalMethodInfo> getMethods() {
@@ -153,13 +153,19 @@ public class JavaUnresolvedExternalClassInfo {
         return this.isInterface;
     }
 
-    private String name;
+    public boolean isInner() {
+        return this.inner;
+    }
 
-    private String superName;
+    public boolean isAnonymous() {
+        return this.anonymous;
+    }
+
+    private String name;
 
     private boolean isInterface;
 
-    private final Set<String> interfaces;
+    private final List<String> superTypes;
 
     private final Set<JavaUnresolvedExternalMethodInfo> methods;
 
@@ -168,4 +174,8 @@ public class JavaUnresolvedExternalClassInfo {
     private final Set<String> modifiers;
 
     private final List<String> typeParameters;
+
+    private boolean inner;
+
+    private boolean anonymous;
 }

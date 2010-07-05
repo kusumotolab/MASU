@@ -27,6 +27,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
@@ -120,6 +121,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
         this.resolvedInfo = this.resolve(usingClass, usingMethod, qualifierUsage, qualifierType,
                 name, actualParameters, typeArguments, fromLine, fromColumn, toLine, toColumn,
                 classInfoManager, fieldInfoManager, methodInfoManager);
+        assert null != this.resolvedInfo : "resolvedInfo must not be null!";
         return this.resolvedInfo;
     }
 
@@ -133,18 +135,25 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
         // Œ^ƒpƒ‰ƒ[ƒ^‚Ìê‡‚Í‚»‚ÌŒp³Œ^‚ð‹‚ß‚é
         if (qualifierType instanceof TypeParameterTypeInfo) {
-            final TypeInfo extendsType = ((TypeParameterTypeInfo) qualifierType)
-                    .getReferncedTypeParameter().getExtendsType();
 
-            // ‚È‚É‚àŒp³‚µ‚Ä‚¢‚È‚¢ê‡‚ÍObjectŒ^‚ðŒp³‚µ‚Ä‚¢‚é‚±‚Æ‚É‚·‚é
-            if (null != extendsType) {
-                final MethodCallInfo resolve = this.resolve(usingClass, usingMethod,
-                        qualifierUsage, extendsType, methodName, actualParameters, typeArguments,
-                        fromLine, fromColumn, toLine, toColumn, classInfoManager, fieldInfoManager,
-                        methodInfoManager);
-                return resolve;
-            } else {
+            final TypeParameterInfo qualifierParameterType = ((TypeParameterTypeInfo) qualifierType)
+                    .getReferncedTypeParameter();
 
+            // extends ‚ª‚ ‚éê‡
+            if (qualifierParameterType.hasExtendsType()) {
+                for (final TypeInfo extendsType : qualifierParameterType.getExtendsTypes()) {
+                    final MethodCallInfo resolve = this.resolve(usingClass, usingMethod,
+                            qualifierUsage, extendsType, methodName, actualParameters,
+                            typeArguments, fromLine, fromColumn, toLine, toColumn,
+                            classInfoManager, fieldInfoManager, methodInfoManager);
+                    if (null != resolve) {
+                        return resolve;
+                    }
+                }
+            }
+
+            // extends ‚ª‚È‚¢ê‡
+            else {
                 final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
                         .getClassInfo(new String[] { "java", "lang", "Object" });
                 final MethodCallInfo resolve = this.resolve(usingClass, usingMethod,
@@ -343,13 +352,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             }
         }
 
-        assert false : "Here shouldn't be reached!";
-        final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(methodName);
-        final MethodCallInfo resolved = new MethodCallInfo(qualifierType, qualifierUsage,
-                unknownMethod, usingMethod, fromLine, fromColumn, toLine, toColumn);
-        resolved.addArguments(actualParameters);
-        resolved.addTypeArguments(typeArguments);
-        return resolved;
+        return null;
     }
 
     /**

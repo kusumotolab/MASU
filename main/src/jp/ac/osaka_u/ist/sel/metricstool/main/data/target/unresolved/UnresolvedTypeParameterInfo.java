@@ -1,6 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
@@ -26,11 +30,9 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
      * @param ownerUnit この型パラメータを定義しているユニット(クラス or メソッド)
      * @param name 型パラメータ名
      * @param index 何番目の型パラメータであるかを表す
-     * @param extendsType 未解決基底クラス型
      */
     public UnresolvedTypeParameterInfo(final UnresolvedUnitInfo<?> ownerUnit, final String name,
-            final int index,
-            final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> extendsType) {
+            final int index) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == ownerUnit) || (null == name)) {
@@ -46,7 +48,22 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
         this.ownerUnit = ownerUnit;
         this.name = name;
         this.index = index;
-        this.extendsType = extendsType;
+        this.extendsTypes = new ArrayList<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>>();
+    }
+
+    /**
+     * 型パラメータ名を与えてオブジェクトを初期化する
+     * 
+     * @param ownerUnit この型パラメータを定義しているユニット(クラス or メソッド)
+     * @param name 型パラメータ名
+     * @param index 何番目の型パラメータであるかを表す
+     * @param extendsType 未解決基底クラス型
+     */
+    public UnresolvedTypeParameterInfo(final UnresolvedUnitInfo<?> ownerUnit, final String name,
+            final int index,
+            final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> extendsType) {
+        this(ownerUnit, name, index);
+        this.addExtendsType(extendsType);
     }
 
     /**
@@ -134,12 +151,32 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
     }
 
     /**
+     * 基底クラス型を追加する
+     * 
+     * @param extendsType
+     */
+    public final void addExtendsType(
+            final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> extendsType) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == extendsType) {
+            throw new IllegalArgumentException();
+        }
+
+        this.extendsTypes.add(extendsType);
+    }
+
+    /**
      * 基底クラスの未解決型情報を返す
      * 
      * @return 基底クラスの未解決型情報
      */
     public final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> getExtendsType() {
-        return this.extendsType;
+        return this.extendsTypes.get(0);
+    }
+
+    public final List<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>> getExtendsTypes() {
+        return Collections.unmodifiableList(this.extendsTypes);
     }
 
     /**
@@ -148,7 +185,7 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
      * @return 基底クラスを持つ場合は true, 持たない場合は false
      */
     public final boolean hasExtendsType() {
-        return null != this.extendsType;
+        return 0 < this.extendsTypes.size();
     }
 
     /**
@@ -164,7 +201,7 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
     /**
      * 基底クラスを保存するための変数
      */
-    private final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> extendsType;
+    private final List<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>> extendsTypes;
 
     /**
      * 型パラメータのインデックスを保存するための変数

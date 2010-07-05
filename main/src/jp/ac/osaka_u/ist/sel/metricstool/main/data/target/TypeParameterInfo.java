@@ -1,6 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -18,10 +22,8 @@ public class TypeParameterInfo {
      * @param ownerUnit 型パラメータを宣言しているユニット(クラス or メソッド)
      * @param name 型パラメータ名
      * @param index 何番目の型パラメータかを表す
-     * @param extendsType 継承している型
      */
-    public TypeParameterInfo(final TypeParameterizable ownerUnit, final String name,
-            final int index, final TypeInfo extendsType) {
+    public TypeParameterInfo(final TypeParameterizable ownerUnit, final String name, final int index) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == ownerUnit) || (null == name)) {
@@ -31,11 +33,7 @@ public class TypeParameterInfo {
         this.ownerUnit = ownerUnit;
         this.name = name;
         this.index = index;
-        this.extendsType = extendsType;
-    }
-
-    public TypeParameterInfo(final TypeParameterizable ownerUnit, final String name, final int index) {
-        this(ownerUnit, name, index, null);
+        this.extendsTypes = new ArrayList<TypeInfo>();
     }
 
     /**
@@ -85,7 +83,13 @@ public class TypeParameterInfo {
         StringBuilder sb = new StringBuilder(this.name);
         if (this.hasExtendsType()) {
             sb.append(" extends ");
-            sb.append(this.getExtendsType().getTypeName());
+
+            for (final TypeInfo extendsType : this.getExtendsTypes()) {
+                sb.append(extendsType.getTypeName());
+                sb.append(" & ");
+            }
+
+            sb.delete(sb.length() - 3, sb.length());
         }
 
         return sb.toString();
@@ -101,25 +105,21 @@ public class TypeParameterInfo {
     }
 
     /**
-     * 基底クラス型を返す
+     * 基底クラス型のListを返す
      * 
-     * @return 基底クラス型
+     * @return 基底クラス型のList
      */
-    public final TypeInfo getExtendsType() {
-        return this.extendsType;
+    public final List<TypeInfo> getExtendsTypes() {
+        return Collections.unmodifiableList(this.extendsTypes);
     }
 
-    public void setExtendsType(final TypeInfo extendsType) {
+    public void addExtendsType(final TypeInfo extendsType) {
 
         if (null == extendsType) {
             throw new IllegalArgumentException();
         }
 
-        if (null != this.extendsType) {
-            throw new IllegalStateException();
-        }
-
-        this.extendsType = extendsType;
+        this.extendsTypes.add(extendsType);
     }
 
     /**
@@ -128,7 +128,7 @@ public class TypeParameterInfo {
      * @return 基底クラスを持つ場合は true,持たない場合は false
      */
     public final boolean hasExtendsType() {
-        return null != this.extendsType;
+        return 0 != this.extendsTypes.size();
     }
 
     /**
@@ -147,7 +147,7 @@ public class TypeParameterInfo {
     private final int index;
 
     /**
-     * 未解決基底クラス型を保存するための変数
+     * 基底クラス型のListを保存するための変数
      */
-    private TypeInfo extendsType;
+    private List<TypeInfo> extendsTypes;
 }

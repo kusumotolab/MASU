@@ -25,7 +25,7 @@ public final class SuperTypeParameterInfo extends TypeParameterInfo {
     public SuperTypeParameterInfo(final TypeParameterizable ownerUnit, final String name,
             final int index, final TypeInfo extendsType, final TypeInfo superType) {
 
-        super(ownerUnit, name, index, extendsType);
+        super(ownerUnit, name, index);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == superType) {

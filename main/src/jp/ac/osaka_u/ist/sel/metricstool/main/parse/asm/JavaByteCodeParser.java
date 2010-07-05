@@ -1,11 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm;
 
 
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.JavaPredefinedModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalClassInfo;
@@ -19,7 +17,6 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
 
 
 public class JavaByteCodeParser implements ClassVisitor {
@@ -38,28 +35,54 @@ public class JavaByteCodeParser implements ClassVisitor {
             throw new IllegalArgumentException();
         } else {
             this.classInfo.setName(name);
-        }
-
-        if (null != superName) {
-            this.classInfo.setSuperName(superName);
-        }
-
-        for (final String interfaceName : interfaces) {
-            this.classInfo.addInterface(interfaceName);
+            final int index = name.lastIndexOf('$');
+            if (0 <= index) {
+                this.classInfo.setInner(true);
+                this.classInfo.setAnonymous(Character.isDigit(name.charAt(index + 1)));
+            } else {
+                this.classInfo.setInner(false);
+                this.classInfo.setAnonymous(false);
+            }
         }
 
         this.classInfo.isInterface(0 != (access & Opcodes.ACC_INTERFACE));
 
-        for (final String modifier : this.getModifiers(access)) {
+        final String[] modifiers = this.getModifiers(access);
+        for (final String modifier : modifiers) {
             this.classInfo.addModifier(modifier);
         }
 
-        // 型パラメータがある場合はその文字列を取得
-        if ((null != signature) && (signature.startsWith("<"))) {
-
-            final List<String> typeParameters = this.getTypeParameters(signature);
+        // signature がnullでないとき
+        // つまり，型パラメータの使用があるとき
+        if (null != signature) {
+            final String[] typeParameters = this.getTypeParameters(signature);
             for (final String typeParameter : typeParameters) {
                 this.classInfo.addTypeParameter(typeParameter);
+            }
+
+            final String[] superTypes = this.getSuperTypes(signature);
+            for (final String superType : superTypes) {
+                this.classInfo.addSuperType(superType);
+            }
+        }
+
+        // signature がnullのとき
+        // つまり，型パラメータの使用がないとき
+        else {
+            {
+                final StringBuilder superType = new StringBuilder();
+                superType.append("L");
+                superType.append(superName);
+                superType.append(";");
+                this.classInfo.addSuperType(superType.toString());
+            }
+
+            for (final String interfaceName : interfaces) {
+                final StringBuilder superType = new StringBuilder();
+                superType.append("L");
+                superType.append(interfaceName);
+                superType.append(";");
+                this.classInfo.addSuperType(superType.toString());
             }
         }
     }
@@ -93,6 +116,11 @@ public class JavaByteCodeParser implements ClassVisitor {
             field.setName(name);
         }
 
+        final String[] modifiers = this.getModifiers(access);
+        for (final String modifier : modifiers) {
+            field.addModifier(modifier);
+        }
+
         if (null == desc) {
             throw new IllegalArgumentException();
         } else {
@@ -121,23 +149,48 @@ public class JavaByteCodeParser implements ClassVisitor {
             method.setName(name);
         }
 
-        if (null == desc) {
-            throw new IllegalArgumentException();
-        } else {
-            for (final Type type : Type.getArgumentTypes(desc)) {
-                final String typeName = type.toString();
-                method.addArgumentType(typeName);
-            }
-            final String typeName = Type.getReturnType(desc).toString();
-            method.setReturnType(typeName);
+        final String[] modifiers = this.getModifiers(access);
+        for (final String modifier : modifiers) {
+            method.addModifier(modifier);
         }
 
-        // 型パラメータある場合はその文字列を取得
-        if ((null != signature) && (signature.startsWith("<"))) {
+        if (null != signature) {
 
-            final List<String> typeParameters = this.getTypeParameters(signature);
+            final String[] typeParameters = this.getTypeParameters(signature);
             for (final String typeParameter : typeParameters) {
                 method.addTypeParameter(typeParameter);
+            }
+
+            final String[] parameters = this.getParameters(signature);
+            for (final String parameter : parameters) {
+                method.addArgumentType(parameter);
+            }
+
+            final String returnType = this.getReturnType(signature);
+            method.setReturnType(returnType);
+
+            final String[] thrownExceptions = this.getThrownExceptions(signature);
+            for (final String thrownException : thrownExceptions) {
+                method.addThrownException(thrownException);
+            }
+
+        } else {
+
+            if (null == desc) {
+                throw new IllegalArgumentException();
+            }
+
+            final String[] parameters = this.getParameters(desc);
+            for (final String parameter : parameters) {
+                method.addArgumentType(parameter);
+            }
+
+            final String returnType = this.getReturnType(desc);
+            method.setReturnType(returnType);
+
+            final String[] thrownExceptions = this.getThrownExceptions(desc);
+            for (final String thrownException : thrownExceptions) {
+                method.addThrownException(thrownException);
             }
         }
 
@@ -147,8 +200,6 @@ public class JavaByteCodeParser implements ClassVisitor {
 
     @Override
     public void visitOuterClass(final String owner, final String name, final String desc) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -166,9 +217,15 @@ public class JavaByteCodeParser implements ClassVisitor {
         return this.classInfo;
     }
 
-    private Set<String> getModifiers(final int access) {
+    /**
+     * 引数で与えられた修飾子の一覧に含まれる修飾子を返す
+     * 
+     * @param access
+     * @return
+     */
+    private String[] getModifiers(final int access) {
 
-        final Set<String> modifiers = new HashSet<String>();
+        final List<String> modifiers = new LinkedList<String>();
 
         // ここから修飾子
         if (0 != (access & Opcodes.ACC_PUBLIC)) {
@@ -199,68 +256,160 @@ public class JavaByteCodeParser implements ClassVisitor {
             modifiers.add(JavaPredefinedModifierInfo.SYNCHRONIZED_STRING);
         }
 
-        return Collections.unmodifiableSet(modifiers);
+        return modifiers.toArray(new String[0]);
     }
 
-    private List<String> getTypeParameters(final String signature) {
+    /**
+     * 与えられたメソッドのsignatureに含まれる型パラメータを返す
+     * 
+     * @param signature
+     * @return
+     */
+    private String[] getTypeParameters(final String signature) {
 
         if (null == signature) {
             throw new IllegalArgumentException();
         }
 
         if (!signature.startsWith("<")) {
-            throw new IllegalArgumentException();
+            return new String[0];
         }
 
         if (-1 == signature.indexOf('>')) {
             throw new IllegalArgumentException();
         }
 
-        // ジェネリクス情報がおわる位置を取得し，その部分を切り出す        
-        int toIndex = 0;
-        for (int nestLevel = 0; true; toIndex++) {
+        // ジェネリクス情報を1つ１つ分解し，Setに入れる
+        final List<String> typeParameters = new LinkedList<String>();
+        int startIndex = 1;
+        int endIndex = 0;
+        for (int nestLevel = 0; endIndex < signature.length(); endIndex++) {
 
-            if ('<' == signature.charAt(toIndex)) {
+            if ('<' == signature.charAt(endIndex)) {
                 nestLevel++;
             }
 
-            else if ('>' == signature.charAt(toIndex)) {
+            else if ('>' == signature.charAt(endIndex)) {
                 nestLevel--;
-                if (0 == nestLevel) {
+                if (0 == nestLevel) { // ジェネリクス部分が終わったのでループ処理を終了する
                     break;
                 }
             }
+
+            else if ((';' == signature.charAt(endIndex)) && (':' != signature.charAt(endIndex + 1))
+                    && (1 == nestLevel)) {
+
+                final String typeParameter = signature.substring(startIndex, endIndex + 1);
+                typeParameters.add(typeParameter);
+                startIndex = endIndex + 1;
+            }
         }
-        final String typeParameterString = signature.substring(1, toIndex);
 
-        // ジェネリクス情報を1つ１つ分解し，Setに入れる
-        final List<String> typeParameters = new LinkedList<String>();
+        return typeParameters.toArray(new String[0]);
+    }
+
+    /**
+     * 与えられたメソッドのsignatureに含まれる引数を返す
+     * 
+     * @param signature
+     * @return
+     */
+    private String[] getParameters(final String signature) {
+
+        if (null == signature) {
+            throw new IllegalArgumentException();
+        }
+
+        final int openParenIndex = signature.indexOf('(');
+        final int closeParenIndex = signature.indexOf(')');
+
+        return JavaByteCodeUtility.separateTypes(signature.substring(openParenIndex + 1,
+                closeParenIndex));
+    }
+
+    /**
+     * 与えられたメソッドのsignatureに含まれる返り値を返す
+     * 
+     * @param signature
+     * @return
+     */
+    private String getReturnType(final String signature) {
+
+        if (null == signature) {
+            throw new IllegalArgumentException();
+        }
+
+        final int closeParenIndex = signature.indexOf(')');
+        final int exceptionIndex = signature.indexOf('^');
+        return (-1 == exceptionIndex) ? signature.substring(closeParenIndex + 1) : signature
+                .substring(closeParenIndex + 1, exceptionIndex);
+    }
+
+    /**
+     * 与えられたメソッドのsignatureに含まれるスローされる例外を返す
+     * 
+     * @param signature
+     * @return
+     */
+    private String[] getThrownExceptions(final String signature) {
+
+        if (null == signature) {
+            throw new IllegalArgumentException();
+        }
+
+        final int exceptionIndex = signature.indexOf('^');
+        if (-1 == exceptionIndex) {
+            return new String[0];
+        }
+
+        return JavaByteCodeUtility.separateTypes(signature.substring(exceptionIndex));
+    }
+
+    /**
+     * 与えられたメソッドのsignatureに含まれるスーパータイプを返す
+     * 
+     * @param signature
+     * @return
+     */
+    private String[] getSuperTypes(final String signature) {
+
         int startIndex = 0;
-        int endIndex = 0;
-        for (int nestLevel = 0; endIndex < typeParameterString.length(); endIndex++) {
+        if (signature.startsWith("<")) { // 型パラメータがある場合は読み飛ばす処理が必要
+            for (int index = 0, nestLevel = 0; index < signature.length(); index++) {
 
-            if ('<' == typeParameterString.charAt(endIndex)) {
-                nestLevel++;
-            }
+                if ('<' == signature.charAt(index)) {
+                    nestLevel++;
+                }
 
-            else if ('>' == typeParameterString.charAt(endIndex)) {
-                nestLevel--;
-            }
-
-            else if (';' == typeParameterString.charAt(endIndex) && (0 == nestLevel)) {
-                if (endIndex < typeParameterString.length()) {
-                    final String typeParameter = typeParameterString.substring(startIndex,
-                            endIndex + 1);
-                    typeParameters.add(typeParameter);
-                } else {
-                    final String typeParameter = typeParameterString.substring(startIndex);
-                    typeParameters.add(typeParameter);
+                else if ('>' == signature.charAt(index)) {
+                    nestLevel--;
+                    if (0 == nestLevel) {
+                        startIndex = index + 1;
+                        break;
+                    }
                 }
             }
         }
 
-        return Collections.unmodifiableList(typeParameters);
+        final List<String> superTypes = new ArrayList<String>();
+        for (int index = startIndex, nestLevel = 0; index < signature.length(); index++) {
 
+            if ('<' == signature.charAt(index)) {
+                nestLevel++;
+            }
+
+            else if ('>' == signature.charAt(index)) {
+                nestLevel--;
+            }
+
+            else if ((';' == signature.charAt(index)) && (0 == nestLevel)) {
+                final String superType = signature.substring(startIndex, index + 1);
+                superTypes.add(superType);
+                startIndex = index + 1;
+            }
+        }
+
+        return superTypes.toArray(new String[0]);
     }
 
     private final JavaUnresolvedExternalClassInfo classInfo;

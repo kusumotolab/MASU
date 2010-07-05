@@ -19,6 +19,7 @@ public class JavaUnresolvedExternalMethodInfo {
         this.argumentTypes = new LinkedList<String>();
         this.modifiers = new HashSet<String>();
         this.typeParameters = new LinkedList<String>();
+        this.thrownExceptions = new LinkedList<String>();
     }
 
     public void setName(final String name) {
@@ -70,7 +71,17 @@ public class JavaUnresolvedExternalMethodInfo {
 
         this.typeParameters.add(typeParameter);
     }
-    
+
+    public void addThrownException(final String thrownException) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == thrownException) {
+            throw new IllegalArgumentException();
+        }
+
+        this.thrownExceptions.add(thrownException);
+    }
+
     public String getName() {
         return this.name;
     }
@@ -90,7 +101,11 @@ public class JavaUnresolvedExternalMethodInfo {
     public List<String> getTypeParameters() {
         return Collections.unmodifiableList(this.typeParameters);
     }
-    
+
+    public List<String> getThrownExceptions() {
+        return Collections.unmodifiableList(this.thrownExceptions);
+    }
+
     private String name;
 
     private String returnType;
@@ -98,6 +113,8 @@ public class JavaUnresolvedExternalMethodInfo {
     private final List<String> argumentTypes;
 
     private final Set<String> modifiers;
-    
+
     private final List<String> typeParameters;
+
+    private final List<String> thrownExceptions;
 }

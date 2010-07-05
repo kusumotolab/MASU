@@ -4,7 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -163,103 +162,6 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
         final T usedVariable = this.getUsedVariable();
         final TypeInfo definitionType = usedVariable.getType();
         return definitionType;
-
-        /*
-        // 定義の返り値が型パラメータでなければそのまま返せる
-        if (!(definitionType instanceof TypeParameterTypeInfo)) {
-            return definitionType;
-        }
-
-        ///// 以下の実装はJavaのメソッドがFirstClassでないことを前提としての実装となる
-
-        // 型パラメータから，実際に使用されている型を取得し返す
-        // メソッドの型パラメータかどうか
-        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
-        returnType = this.getTypeFromOwnerCallableUnit(definitionType, ownerMethod);
-        if (null != returnType) {
-            return returnType;
-        }
-
-        // 型パラメタの定義を探索する
-        for (UnitInfo ownerUnit = ownerMethod.getOwnerClass(); true;) {
-            // クラス、メソッド、イニシャライザのどれかがくる
-            if (ownerUnit instanceof ClassInfo) {
-                // クラスの場合
-                ClassInfo ownerClass = (ClassInfo) ownerUnit;
-                returnType = this.getTypeFromOwnerClass(definitionType, ownerClass);
-                if (null != returnType) {
-                    return returnType;
-                } else if (!(ownerClass instanceof TargetInnerClassInfo)) {
-                    // 探索の終わり、TargetClassに到達したにも関わらず
-                    // returnTypeがnull。型パラメタの定義が欠落していることを意味する
-                    break;
-                }
-                // 内部クラスの場合、一つ上のUnitを見るよ
-                ownerUnit = ((TargetInnerClassInfo) ownerClass).getOuterUnit();
-            } else if (ownerUnit instanceof CallableUnitInfo) {
-                //メソッドおよびイニシャライザの場合
-                CallableUnitInfo ownerCallable = (CallableUnitInfo) ownerUnit;
-                returnType = this.getTypeFromOwnerCallableUnit(definitionType, ownerCallable);
-                if (null != returnType) {
-                    return returnType;
-                }
-                //一つ上のUnitを見るよ
-                ownerUnit = ownerCallable.getOwnerClass();
-            }
-        }
-        throw new IllegalStateException();
-        */
-    }
-
-    /** 
-     * 変数の型と親クラスを渡して、型パラメタを返す<br />
-     * rev.1258の{@link #getType()}の一部分を抽出したもの 
-     * @param definitionType 変数が定義された型
-     * @param ownerClass 親クラス
-     * @return 親クラスで定義された場合、その型パラメタを、なければnullを返す
-     */
-    private TypeInfo getTypeFromOwnerClass(final TypeInfo definitionType, final ClassInfo ownerClass) {
-        //　型パラメータがそのままか
-        for (final TypeParameterInfo typeParameter : ownerClass.getTypeParameters()) {
-            if (typeParameter.equals(definitionType)) {
-                return ((TypeParameterTypeInfo) definitionType).getReferncedTypeParameter()
-                        .getExtendsType();
-            }
-        }
-
-        //　親クラスで定義された型パラメータか
-        final Map<TypeParameterInfo, TypeInfo> typeParameterUsages = ownerClass
-                .getTypeParameterUsages();
-        for (final Map.Entry<TypeParameterInfo, TypeInfo> entry : typeParameterUsages.entrySet()) {
-            final TypeParameterInfo typeParameter = entry.getKey();
-            if (typeParameter.equals(definitionType)) {
-                return entry.getValue();
-            }
-        }
-
-        return null;
-    }
-
-    /** 
-     * 変数の型と、その変数が出現しているCallableUnitを渡して、型パラメタを返す<br />
-     * rev.1258の{@link #getType()}の一部分を抽出したもの 
-     * @param definitionType 変数が定義された型
-     * @param ownerClass 親クラス
-     * @return 親クラスで定義された場合、その型パラメタを、なければnullを返す
-     */
-    private TypeInfo getTypeFromOwnerCallableUnit(final TypeInfo definitionType,
-            final CallableUnitInfo ownerCallable) {
-        // イニシャライザに型パラメタは存在しない
-        if (ownerCallable instanceof InitializerInfo) {
-            return null;
-        }
-
-        for (final TypeParameterInfo typeParameter : ownerCallable.getTypeParameters()) {
-            if (typeParameter.equals(definitionType)) {
-                return ((TypeParameterInfo) definitionType).getExtendsType();
-            }
-        }
-        return null;
     }
 
     /**

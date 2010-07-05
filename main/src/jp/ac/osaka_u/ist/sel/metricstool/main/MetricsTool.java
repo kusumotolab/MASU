@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -33,6 +34,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalFieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
@@ -84,6 +86,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeNameResolver;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeParser;
+import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeUtility;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.DefaultPluginLauncher;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginLauncher;
@@ -491,6 +494,11 @@ public class MetricsTool {
         final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
         for (final JavaUnresolvedExternalClassInfo unresolvedClassInfo : unresolvedExternalClasses) {
 
+            // 無名クラスは名前解決しない
+            if (unresolvedClassInfo.isAnonymous()) {
+                continue;
+            }
+
             final String unresolvedName = unresolvedClassInfo.getName();
             final String[] name = JavaByteCodeNameResolver.resolveName(unresolvedName);
             final Set<String> unresolvedModifiers = unresolvedClassInfo.getModifiers();
@@ -509,14 +517,43 @@ public class MetricsTool {
             for (final String unresolvedModifier : unresolvedModifiers) {
                 modifiers.add(JavaPredefinedModifierInfo.getModifierInfo(unresolvedModifier));
             }
-            final ExternalClassInfo classInfo = new ExternalClassInfo(modifiers, name,
-                    isPrivateVisible, isNamespaceVisible, isInheritanceVisible, isPublicVisible,
-                    !isStatic, isInterface);
+            final ExternalClassInfo classInfo = unresolvedClassInfo.isInner() ? new ExternalInnerClassInfo(
+                    modifiers, name, isPrivateVisible, isNamespaceVisible, isInheritanceVisible,
+                    isPublicVisible, !isStatic, isInterface)
+                    : new ExternalClassInfo(modifiers, name, isPrivateVisible, isNamespaceVisible,
+                            isInheritanceVisible, isPublicVisible, !isStatic, isInterface);
             classInfoManager.add(classInfo);
         }
 
-        //　各クラスで表われている型を解決していく
+        // 外側のクラス情報を追加
         for (final JavaUnresolvedExternalClassInfo unresolvedClassInfo : unresolvedExternalClasses) {
+
+            // 無名クラスは無視
+            if (unresolvedClassInfo.isAnonymous()) {
+                continue;
+            }
+
+            // インナークラスでない場合は無視
+            if (!unresolvedClassInfo.isInner()) {
+                continue;
+            }
+
+            final String[] fqName = JavaByteCodeUtility.separateName(unresolvedClassInfo.getName());
+            final String[] outerFQName = Arrays.copyOf(fqName, fqName.length - 1);
+            final ClassInfo outerClass = classInfoManager.getClassInfo(outerFQName);
+            if (null != outerClass) { // outerClassが登録されていないかもしれないので
+                final ClassInfo classInfo = classInfoManager.getClassInfo(fqName);
+                ((ExternalInnerClassInfo) classInfo).setOuterUnit(outerClass);
+            }
+        }
+
+        //　型パラメータを解決
+        for (final JavaUnresolvedExternalClassInfo unresolvedClassInfo : unresolvedExternalClasses) {
+
+            // 無名クラスは無視
+            if (unresolvedClassInfo.isAnonymous()) {
+                continue;
+            }
 
             // まずは，解決済みオブジェクトを取得            
             final String unresolvedClassName = unresolvedClassInfo.getName();
@@ -524,47 +561,35 @@ public class MetricsTool {
             final ExternalClassInfo classInfo = (ExternalClassInfo) classInfoManager
                     .getClassInfo(className);
 
-            // 型パラメータがあれば解決
-            {
-                final List<String> unresolvedTypeParameters = unresolvedClassInfo
-                        .getTypeParameters();
-                for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
-                    final String unresolvedTypeParameter = unresolvedTypeParameters.get(index);
-                    TypeParameterInfo typeParameter = JavaByteCodeNameResolver
-                            .resolveTypeParameter(unresolvedTypeParameter, index, classInfo);
-                    classInfo.addTypeParameter(typeParameter);
-                }
+            // 型パラメータを解決
+            final List<String> unresolvedTypeParameters = unresolvedClassInfo.getTypeParameters();
+            for (int index = 0; index < unresolvedTypeParameters.size(); index++) {
+                final String unresolvedTypeParameter = unresolvedTypeParameters.get(index);
+                TypeParameterInfo typeParameter = JavaByteCodeNameResolver.resolveTypeParameter(
+                        unresolvedTypeParameter, index, classInfo);
+                classInfo.addTypeParameter(typeParameter);
+            }
+        }
+
+        //　各クラスで表われている型を解決していく
+        for (final JavaUnresolvedExternalClassInfo unresolvedClassInfo : unresolvedExternalClasses) {
+
+            // 無名クラスは名前解決しない
+            if (unresolvedClassInfo.isAnonymous()) {
+                continue;
             }
 
-            // 親クラスがあれば解決
-            {
-                final String unresolvedSuperName = unresolvedClassInfo.getSuperName();
-                if (null != unresolvedSuperName) {
-                    final String[] superName = JavaByteCodeNameResolver
-                            .resolveName(unresolvedSuperName);
-                    ExternalClassInfo superClassInfo = (ExternalClassInfo) classInfoManager
-                            .getClassInfo(superName);
-                    if (null == superClassInfo) {
-                        superClassInfo = new ExternalClassInfo(superName);
-                        classInfoManager.add(superClassInfo);
-                    }
-                    final ClassTypeInfo superClassType = new ClassTypeInfo(superClassInfo);
-                    classInfo.addSuperClass(superClassType);
-                }
-            }
+            // まずは，解決済みオブジェクトを取得            
+            final String unresolvedClassName = unresolvedClassInfo.getName();
+            final String[] className = JavaByteCodeNameResolver.resolveName(unresolvedClassName);
+            final ExternalClassInfo classInfo = (ExternalClassInfo) classInfoManager
+                    .getClassInfo(className);
 
-            // インターフェースがあれば解決
-            for (final String unresolvedInterfaceName : unresolvedClassInfo.getInterfaces()) {
-                final String[] interfaceName = JavaByteCodeNameResolver
-                        .resolveName(unresolvedInterfaceName);
-                ExternalClassInfo interfaceInfo = (ExternalClassInfo) classInfoManager
-                        .getClassInfo(interfaceName);
-                if (null == interfaceInfo) {
-                    interfaceInfo = new ExternalClassInfo(interfaceName);
-                    classInfoManager.add(interfaceInfo);
-                }
-                final ClassTypeInfo superClassType = new ClassTypeInfo(interfaceInfo);
-                classInfo.addSuperClass(superClassType);
+            // 親クラス,インターフェースを解決
+            for (final String unresolvedSuperType : unresolvedClassInfo.getSuperTypes()) {
+                final TypeInfo superType = JavaByteCodeNameResolver.resolveType(
+                        unresolvedSuperType, null, classInfo);
+                classInfo.addSuperClass((ClassTypeInfo) superType);
             }
 
             // フィールドの解決            
@@ -601,7 +626,6 @@ public class MetricsTool {
                     .getMethods()) {
 
                 final String name = unresolvedMethod.getName();
-
                 final Set<String> unresolvedModifiers = unresolvedMethod.getModifiers();
                 final boolean isPublicVisible = unresolvedModifiers
                         .contains(JavaPredefinedModifierInfo.PUBLIC_STRING);
@@ -635,13 +659,23 @@ public class MetricsTool {
                         constructor.addTypeParameter(typeParameter);
                     }
 
+                    // 引数の解決
                     final List<String> unresolvedParameters = unresolvedMethod.getArgumentTypes();
                     for (final String unresolvedParameter : unresolvedParameters) {
                         final TypeInfo parameterType = JavaByteCodeNameResolver.resolveType(
-                                unresolvedParameter, null, null);
+                                unresolvedParameter, null, constructor);
                         final ExternalParameterInfo parameter = new ExternalParameterInfo(
                                 parameterType, constructor);
                         constructor.addParameter(parameter);
+                    }
+
+                    // スローされる例外の解決
+                    final List<String> unresolvedThrownExceptions = unresolvedMethod
+                            .getThrownExceptions();
+                    for (final String unresolvedThrownException : unresolvedThrownExceptions) {
+                        final TypeInfo exceptionType = JavaByteCodeNameResolver.resolveType(
+                                unresolvedThrownException, null, constructor);
+                        constructor.addThrownException((ReferenceTypeInfo) exceptionType);
                     }
 
                     classInfo.addDefinedConstructor(constructor);
@@ -664,18 +698,29 @@ public class MetricsTool {
                         method.addTypeParameter(typeParameter);
                     }
 
+                    // 返り値の解決
                     final String unresolvedReturnType = unresolvedMethod.getReturnType();
                     final TypeInfo returnType = JavaByteCodeNameResolver.resolveType(
-                            unresolvedReturnType, null, null);
+                            unresolvedReturnType, null, method);
                     method.setReturnType(returnType);
 
+                    // 引数の解決
                     final List<String> unresolvedParameters = unresolvedMethod.getArgumentTypes();
                     for (final String unresolvedParameter : unresolvedParameters) {
                         final TypeInfo parameterType = JavaByteCodeNameResolver.resolveType(
-                                unresolvedParameter, null, null);
+                                unresolvedParameter, null, method);
                         final ExternalParameterInfo parameter = new ExternalParameterInfo(
                                 parameterType, method);
                         method.addParameter(parameter);
+                    }
+
+                    // スローされる例外の解決
+                    final List<String> unresolvedThrownExceptions = unresolvedMethod
+                            .getThrownExceptions();
+                    for (final String unresolvedThrownException : unresolvedThrownExceptions) {
+                        final TypeInfo exceptionType = JavaByteCodeNameResolver.resolveType(
+                                unresolvedThrownException, null, method);
+                        method.addThrownException((ReferenceTypeInfo) exceptionType);
                     }
 
                     classInfo.addDefinedMethod(method);
@@ -1197,12 +1242,11 @@ public class MetricsTool {
                 .getTypeParameters()) {
 
             final TypeParameterInfo typeParameter = unresolvedTypeParameter.getResolved();
-            if (unresolvedTypeParameter.hasExtendsType()) {
-                final UnresolvedReferenceTypeInfo<?> unresolvedExtendsType = unresolvedTypeParameter
-                        .getExtendsType();
+            for (final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> unresolvedExtendsType : unresolvedTypeParameter
+                    .getExtendsTypes()) {
                 final ReferenceTypeInfo extendsType = unresolvedExtendsType.resolve(classInfo,
                         null, classInfoManager, null, null);
-                typeParameter.setExtendsType(extendsType);
+                typeParameter.addExtendsType(extendsType);
             }
         }
 
@@ -1539,12 +1583,11 @@ public class MetricsTool {
                 .getTypeParameters()) {
 
             final TypeParameterInfo typeParameter = unresolvedTypeParameter.getResolved();
-            if (unresolvedTypeParameter.hasExtendsType()) {
-                final UnresolvedReferenceTypeInfo<?> unresolvedExtendsType = unresolvedTypeParameter
-                        .getExtendsType();
+            for (final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> unresolvedExtendsType : unresolvedTypeParameter
+                    .getExtendsTypes()) {
                 final ReferenceTypeInfo extendsType = unresolvedExtendsType.resolve(ownerClass,
                         method, classInfoManager, null, null);
-                // TODO typeParameter.setExtendsType(extendsType);
+                typeParameter.addExtendsType(extendsType);
             }
         }
     }

@@ -160,11 +160,10 @@ public final class ClassInfoManager {
         }
 
         final int namespaceLength = fullQualifiedName.length - 1;
-        final String[] namespace = Arrays.<String> copyOf(fullQualifiedName,
-                fullQualifiedName.length - 1);
+        final String[] namespace = Arrays.<String> copyOf(fullQualifiedName, namespaceLength);
         final String className = fullQualifiedName[namespaceLength];
 
-        // 同じクラス名を持つクラス一覧を取得
+        // 同じクラス名を持つクラス一覧を取得        
         final SortedSet<ClassInfo> classInfos = this.classNameMap.get(className);
         if (null != classInfos) {
             // 名前空間が等しいクラスを返す
@@ -190,8 +189,7 @@ public final class ClassInfoManager {
         }
 
         final int namespaceLength = fullQualifiedName.length - 1;
-        final String[] namespace = Arrays.<String> copyOf(fullQualifiedName,
-                fullQualifiedName.length - 1);
+        final String[] namespace = Arrays.<String> copyOf(fullQualifiedName, namespaceLength);
         final String className = fullQualifiedName[namespaceLength];
 
         //同じクラス名を持つクラス一覧を取得

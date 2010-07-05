@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayLengthUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
@@ -25,6 +26,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
@@ -116,6 +118,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
         this.resolvedInfo = this.resolve(usingClass, usingMethod, qualifierUsage, qualifierType,
                 fieldName, reference, assignment, fromLine, fromColumn, toLine, toColumn,
                 classInfoManager, fieldInfoManager, methodInfoManager);
+        assert null != this.resolvedInfo : "resolvedInfo must not be null!";
         return this.resolvedInfo;
     }
 
@@ -127,23 +130,31 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
         // Œ^ƒpƒ‰ƒ[ƒ^‚Ìê‡‚Í‚»‚ÌŒp³Œ^‚ð‹‚ß‚é
-        if (qualifierType instanceof TypeParameterInfo) {
+        if (qualifierType instanceof TypeParameterTypeInfo) {
 
-            final TypeInfo extendsType = ((TypeParameterInfo) qualifierType).getExtendsType();
-            if (null != extendsType) {
+            final TypeParameterInfo qualifierParameterType = ((TypeParameterTypeInfo) qualifierType)
+                    .getReferncedTypeParameter();
+            if (qualifierParameterType.hasExtendsType()) {
+                for (final TypeInfo extendsType : qualifierParameterType.getExtendsTypes()) {
+                    final FieldUsageInfo resolved = this.resolve(usingClass, usingMethod,
+                            qualifierUsage, extendsType, fieldName, reference, assignment,
+                            fromLine, fromColumn, toLine, toColumn, classInfoManager,
+                            fieldInfoManager, methodInfoManager);
+                    if (null != resolved) {
+                        return resolved;
+                    }
+                }
+            }
+
+            else {
+                final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
+                        .getClassInfo(new String[] { "java", "lang", "Object" });
                 final FieldUsageInfo resolved = this.resolve(usingClass, usingMethod,
-                        qualifierUsage, extendsType, fieldName, reference, assignment, fromLine,
-                        fromColumn, toLine, toColumn, classInfoManager, fieldInfoManager,
-                        methodInfoManager);
+                        qualifierUsage, new ClassTypeInfo(objectClass), fieldName, reference,
+                        assignment, fromLine, fromColumn, toLine, toColumn, classInfoManager,
+                        fieldInfoManager, methodInfoManager);
                 return resolved;
-            } else {
-                assert false : "Here should not be reached";
 
-                final ExternalFieldInfo unknownField = new ExternalFieldInfo(fieldName);
-                final FieldUsageInfo resolved = FieldUsageInfo.getInstance(qualifierUsage,
-                        UnknownTypeInfo.getInstance(), unknownField, reference, assignment,
-                        usingMethod, fromLine, fromColumn, toLine, toColumn);
-                return resolved;
             }
         }
 
@@ -287,12 +298,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
             }
         }
 
-        assert false : "Here shouldn't be reached!";
-        final ExternalFieldInfo unknownField = new ExternalFieldInfo(fieldName);
-        final FieldUsageInfo resolved = FieldUsageInfo.getInstance(qualifierUsage, UnknownTypeInfo
-                .getInstance(), unknownField, reference, assignment, usingMethod, fromLine,
-                fromColumn, toLine, toColumn);
-        return resolved;
+        return null;
     }
 
     /**

@@ -1,16 +1,26 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.Set;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
+
 @SuppressWarnings("serial")
 public class ExternalInnerClassInfo extends ExternalClassInfo implements InnerClassInfo {
 
     public ExternalInnerClassInfo(final String[] fullQualifiedName, final UnitInfo outerUnit) {
         super(fullQualifiedName);
-
-        if (null == outerUnit) {
-            throw new IllegalArgumentException();
-        }
         this.outerUnit = outerUnit;
+    }
+
+    public ExternalInnerClassInfo(final Set<ModifierInfo> modifiers,
+            final String[] fullQualifiedName, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final boolean instance, final boolean isInterface) {
+
+        super(modifiers, fullQualifiedName, privateVisible, namespaceVisible, inheritanceVisible,
+                publicVisible, instance, isInterface);
     }
 
     /**
@@ -21,6 +31,21 @@ public class ExternalInnerClassInfo extends ExternalClassInfo implements InnerCl
     @Override
     public final UnitInfo getOuterUnit() {
         return this.outerUnit;
+    }
+
+    /**
+     * 外側のユニットを設定する
+     * 
+     * @param outerUnit 外側のユニット
+     */
+    public void setOuterUnit(final UnitInfo outerUnit) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == outerUnit) {
+            throw new IllegalArgumentException();
+        }
+
+        this.outerUnit = outerUnit;
     }
 
     /**
@@ -50,9 +75,14 @@ public class ExternalInnerClassInfo extends ExternalClassInfo implements InnerCl
         return null;
     }
 
+    @Override
+    public TypeParameterizable getOuterTypeParameterizableUnit() {
+        return (TypeParameterizable) this.getOuterUnit();
+    }
+
     /**
      * 外側のユニットのオブジェクトを保存する変数
      */
-    private final UnitInfo outerUnit;
+    private UnitInfo outerUnit;
 
 }
