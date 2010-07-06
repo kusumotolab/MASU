@@ -116,6 +116,10 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
 
+    public boolean isImplementsDescription() {
+        return false;
+    }
+
     public boolean isFieldDefinition() {
         return false;
     }
@@ -353,12 +357,12 @@ public class AstTokenAdapter implements AstToken {
     }
 
     @Override
-    public boolean isAnnotations(){
+    public boolean isAnnotations() {
         return false;
     }
-    
+
     @Override
-    public boolean isAnnotation(){
+    public boolean isAnnotation() {
         return false;
     }
 
@@ -371,7 +375,6 @@ public class AstTokenAdapter implements AstToken {
     public boolean isAnnotationMemberValuePair() {
         return false;
     }
-    
 
     @Override
     public boolean isAnnotationMember() {
@@ -383,25 +386,14 @@ public class AstTokenAdapter implements AstToken {
         return false;
     }
 
-    
     @Override
     public String toString() {
         return this.text;
-    }    
+    }
 
-
-    
     /**
      * Ç±ÇÃÉgÅ[ÉNÉìÇÃï∂éöóÒ
      */
     private final String text;
-
-
-
-
-
-
-
-
 
 }

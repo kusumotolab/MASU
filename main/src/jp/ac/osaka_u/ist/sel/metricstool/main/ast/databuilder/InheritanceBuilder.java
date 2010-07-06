@@ -1,12 +1,16 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 
+import java.util.LinkedList;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.InheritanceDefinitionStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.TypeDescriptionStateManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.InheritanceDefinitionStateManager.INHERITANCE_STATE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
@@ -47,6 +51,24 @@ public class InheritanceBuilder extends CompoundDataBuilder<UnresolvedClassTypeI
                     buildInheritance();
                 }
             }
+        } else if (isActive()
+                && type
+                        .equals(InheritanceDefinitionStateManager.INHERITANCE_STATE.EXIT_INHERITANCE_DEF)) {
+
+            //Superクラスが空(extendsしてるクラスが存在しない)ならObjectクラスを親クラスとして追加
+            UnresolvedClassInfo classInfo = buildDataManager.getCurrentClass();
+            if (!classInfo.isInterface() && classInfo.getSuperClasses().isEmpty()) {
+                final String[] fqname = classInfo.getFullQualifiedName();
+                //Objectクラスそのものには追加しない
+                if (3 == fqname.length) {
+                    if (fqname[0].equals("java") && fqname[1].equals("lang")
+                            && fqname[2].equals("Object")) {
+                        return;
+                    }
+                }
+                classInfo.addSuperClass(OBJECT);
+            }
+
         }
     }
 
@@ -73,5 +95,9 @@ public class InheritanceBuilder extends CompoundDataBuilder<UnresolvedClassTypeI
     private final TypeDescriptionStateManager typeStateManager = new TypeDescriptionStateManager();
 
     private final BuildDataManager buildDataManager;
+
+    private static final UnresolvedClassTypeInfo OBJECT = new UnresolvedClassTypeInfo(
+            new LinkedList<UnresolvedClassImportStatementInfo>(), new String[] { "java", "lang",
+                    "Object" });
 
 }

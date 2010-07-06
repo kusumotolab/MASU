@@ -155,7 +155,7 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             result = DescriptionToken.INHERITANCE;
             break;
         case Java15TokenTypes.IMPLEMENTS_CLAUSE:
-            result = DescriptionToken.INHERITANCE;
+            result = DescriptionToken.IMPLEMENTS;
             break;
 
         //        case Java15TokenTypes.TYPE_PARAMETERS:

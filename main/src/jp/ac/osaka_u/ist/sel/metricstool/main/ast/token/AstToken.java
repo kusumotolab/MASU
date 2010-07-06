@@ -101,6 +101,14 @@ public interface AstToken {
      */
     public boolean isInheritanceDescription();
 
+    /**
+     * トークンがインターフェース実装記述部を表すかどうかを返す.
+     * @return インターフェース実装記述部を表すトークンならtrue
+     */
+    public boolean isImplementsDescription();
+
+    
+    
     public boolean isEnumConstant();
     
     /**

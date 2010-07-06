@@ -81,10 +81,12 @@ public class JavaBuildManager extends DefaultBuildDataManager {
         return method;
     }
 
+    /*
     @Override
     public void enterClassBlock() {
         super.enterClassBlock();
 
+        /*
         UnresolvedClassInfo classInfo = getCurrentClass();
         if (classInfo.getSuperClasses().isEmpty()) {
             final String[] fqname = classInfo.getFullQualifiedName();
@@ -96,7 +98,8 @@ public class JavaBuildManager extends DefaultBuildDataManager {
             }
             classInfo.addSuperClass(OBJECT);
         }
-    }
+        */
+    //}
 
     @Override
     public void startClassDefinition(UnresolvedClassInfo classInfo) {
@@ -127,10 +130,6 @@ public class JavaBuildManager extends DefaultBuildDataManager {
 
     private static final UnresolvedClassImportStatementInfo JAVA_LANG = new UnresolvedClassImportStatementInfo(
             new String[] { "java", "lang" }, true);
-
-    private static final UnresolvedClassTypeInfo OBJECT = new UnresolvedClassTypeInfo(
-            new LinkedList<UnresolvedClassImportStatementInfo>(), new String[] { "java", "lang",
-                    "Object" });
 
     private static enum CLASS_OR_INTERFACE {
         CLASS, INTERFACE

@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -77,7 +78,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
-        this.superClasses = new LinkedHashSet<UnresolvedClassTypeInfo>();
+        this.superClasses = new ArrayList<UnresolvedClassTypeInfo>();
         this.innerClasses = new HashSet<UnresolvedClassInfo>();
         this.definedMethods = new HashSet<UnresolvedMethodInfo>();
         this.definedConstructors = new HashSet<UnresolvedConstructorInfo>();
@@ -422,8 +423,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 
      * @return 親クラス名のセット
      */
-    public Set<UnresolvedClassTypeInfo> getSuperClasses() {
-        return Collections.unmodifiableSet(this.superClasses);
+    public List<UnresolvedClassTypeInfo> getSuperClasses() {
+        return Collections.unmodifiableList(this.superClasses);
     }
 
     /**
@@ -958,9 +959,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     private final List<UnresolvedTypeParameterInfo> typeParameters;
 
     /**
-     * 親クラスを保存するためのセット
+     * 親クラスを保存するためのリスト
      */
-    private final Set<UnresolvedClassTypeInfo> superClasses;
+    private final List<UnresolvedClassTypeInfo> superClasses;
 
     /**
      * インナークラスを保存するためのセット
