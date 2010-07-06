@@ -5,13 +5,11 @@ import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -50,9 +48,6 @@ public final class UnresolvedConstructorInfo extends
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == classInfoManager) || (null == methodInfoManager)) {
-            throw new NullPointerException();
-        }
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
@@ -75,34 +70,17 @@ public final class UnresolvedConstructorInfo extends
         final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(null, null,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // MethodInfo オブジェクトを生成する．
         this.resolvedInfo = new TargetConstructorInfo(methodModifiers, ownerClass, privateVisible,
                 namespaceVisible, inheritanceVisible, publicVisible, constructorFromLine,
                 constructorFromColumn, constructorToLine, constructorToColumn);
 
         // 型パラメータを解決し，解決済みコンストラクタ情報に追加する
+        // ここではextends節は解決しない
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
             final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(ownerClass,
                     this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addTypeParameter(typeParameter);
-        }
-
-        // 引数を解決し，解決済みコンストラクタ情報に追加する
-        for (final UnresolvedParameterInfo unresolvedParameterInfo : this.getParameters()) {
-
-            final TargetParameterInfo parameterInfo = unresolvedParameterInfo.resolve(ownerClass,
-                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addParameter(parameterInfo);
-        }
-
-        // スローされる例外を解決し，解決済みコンストラクタ情報に追加する
-        for (final UnresolvedClassTypeInfo unresolvedThrownException : this.getThrownExceptions()) {
-
-            final ClassTypeInfo thrownException = (ClassTypeInfo) unresolvedThrownException
-                    .resolve(ownerClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
-                            methodInfoManager);
-            this.resolvedInfo.addThrownException(thrownException);
         }
 
         return this.resolvedInfo;

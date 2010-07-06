@@ -41,36 +41,6 @@ public abstract class ConstructorInfo extends CallableUnitInfo {
     }
 
     /**
-     * このコンストラクタの引数を追加する． public 宣言してあるが， プラグインからの呼び出しははじく．
-     * 
-     * @param parameter 追加する引数
-     */
-    public void addParameter(final ParameterInfo parameter) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == parameter) {
-            throw new NullPointerException();
-        }
-
-        this.parameters.add(parameter);
-    }
-
-    /**
-     * このコンストラクタの引数を追加する． public 宣言してあるが， プラグインからの呼び出しははじく．
-     * 
-     * @param parameters 追加する引数群
-     */
-    public void addParameters(final List<ParameterInfo> parameters) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == parameters) {
-            throw new NullPointerException();
-        }
-
-        this.parameters.addAll(parameters);
-    }
-
-    /**
      * このコンストラクタが，引数で与えられた情報を使って呼び出すことができるかどうかを判定する
      * 
      * @param actualParameters 引数の型のリスト

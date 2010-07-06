@@ -27,11 +27,17 @@ public final class TargetAnonymousClassInfo extends TargetInnerClassInfo impleme
      * @param toColumn èIóπóÒ
      */
     public TargetAnonymousClassInfo(final NamespaceInfo namespace, final String className,
-            final TargetClassInfo outerClass, final FileInfo fileInfo, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final TargetClassInfo outerClass, final CallableUnitInfo outerCallableUnit,
+            final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
         super(new HashSet<ModifierInfo>(), namespace, className, outerClass, false, false, false,
                 false, true, false, fileInfo, fromLine, fromColumn, toLine, toColumn);
+
+        if (null == outerCallableUnit) {
+            throw new IllegalArgumentException();
+        }
+        this.outerCallableUnit = outerCallableUnit;
     }
 
     /**
@@ -46,17 +52,16 @@ public final class TargetAnonymousClassInfo extends TargetInnerClassInfo impleme
      * @param toColumn èIóπóÒ
      */
     public TargetAnonymousClassInfo(final String[] fullQualifiedName,
-            final TargetClassInfo outerClass, final FileInfo fileInfo, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final TargetClassInfo outerClass, final CallableUnitInfo outerCallableUnit,
+            final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
         super(new HashSet<ModifierInfo>(), fullQualifiedName, outerClass, false, false, false,
                 false, true, false, fileInfo, fromLine, fromColumn, toLine, toColumn);
-    }
 
-    public void setOuterCallableUnit(final CallableUnitInfo outerCallableUnit) {
-        if (null == outerCallableUnit) {
-            throw new IllegalArgumentException();
-        }
+        //if (null == outerCallableUnit) {
+        //    throw new IllegalArgumentException();
+        //}
         this.outerCallableUnit = outerCallableUnit;
     }
 
@@ -74,5 +79,5 @@ public final class TargetAnonymousClassInfo extends TargetInnerClassInfo impleme
         return this.getOuterCallableUnit();
     }
 
-    private CallableUnitInfo outerCallableUnit;
+    final private CallableUnitInfo outerCallableUnit;
 }

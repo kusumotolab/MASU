@@ -307,6 +307,38 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
+     * 引数を追加する
+     * 
+     * @param parameter 追加する引数
+     */
+    public final void addParameter(final ParameterInfo parameter) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == parameter) {
+            throw new IllegalArgumentException();
+        }
+
+        this.parameters.add(parameter);
+    }
+
+    /**
+     * 引数を追加する
+     * 
+     * @param parameters 追加する引数
+     */
+    public final void addParameters(final List<ParameterInfo> parameters) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == parameters) {
+            throw new IllegalArgumentException();
+        }
+
+        this.parameters.addAll(parameters);
+    }
+
+    /**
      * このメソッドの引数の List を返す．
      * 
      * @return このメソッドの引数の List
@@ -574,7 +606,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     /**
      * 引数のリストの保存するための変数
      */
-    protected final List<ParameterInfo> parameters;
+    private final List<ParameterInfo> parameters;
 
     /**
      * このメソッドを呼び出しているメソッド一覧を保存するための変数

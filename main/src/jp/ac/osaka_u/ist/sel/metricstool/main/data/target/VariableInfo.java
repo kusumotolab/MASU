@@ -46,7 +46,23 @@ public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo impl
      * @return •Ï”‚ÌŒ^
      */
     public final TypeInfo getType() {
+        assert null != this.type : "variable type is not set.";
         return this.type;
+    }
+
+    /**
+     * •Ï”‚ÌŒ^‚ğİ’è‚·‚é
+     * 
+     * @param type •Ï”‚ÌŒ^
+     */
+    public final void setType(final TypeInfo type) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == type) {
+            throw new IllegalArgumentException();
+        }
+
+        this.type = type;
     }
 
     /**
@@ -118,7 +134,7 @@ public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo impl
         super(fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == modifiers) || (null == name) || (null == type) || (null == definitionUnit)) {
+        if ((null == modifiers) || (null == name) || (null == definitionUnit)) {
             throw new NullPointerException();
         }
 
@@ -142,7 +158,7 @@ public abstract class VariableInfo<TUnit extends UnitInfo> extends UnitInfo impl
     /**
      * •Ï”‚ÌŒ^‚ğ•\‚·•Ï”
      */
-    private final TypeInfo type;
+    private TypeInfo type;
 
     /**
      * ‚±‚Ì•Ï”‚ğéŒ¾‚µ‚Ä‚¢‚éƒ†ƒjƒbƒg‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”

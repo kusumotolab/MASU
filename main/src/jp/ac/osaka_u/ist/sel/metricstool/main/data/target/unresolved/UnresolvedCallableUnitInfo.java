@@ -8,7 +8,12 @@ import java.util.List;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -19,7 +24,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @param <T> 解決済みの型
  */
 public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> extends
-        UnresolvedLocalSpaceInfo<T> implements VisualizableSetting, StaticOrInstanceSetting, ModifierSetting {
+        UnresolvedLocalSpaceInfo<T> implements VisualizableSetting, StaticOrInstanceSetting,
+        ModifierSetting {
 
     protected UnresolvedCallableUnitInfo(final UnresolvedClassInfo ownerClass) {
         // 不正な呼び出しでないかをチェック
@@ -229,6 +235,92 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
      */
     public final boolean isPublicVisible() {
         return this.publicVisible;
+    }
+
+    /**
+     * 未解決型パラメータを解決する
+     * すでにresolveメソッドが呼び出された状態で用いなければならない
+     * 
+     * @param classInfoManager
+     * @return
+     */
+    public final T resolveTypeParameter(final ClassInfoManager classInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == classInfoManager) {
+            throw new IllegalArgumentException();
+        }
+
+        final T resolved = this.getResolved();
+        final TargetClassInfo ownerClass = this.getOwnerClass().getResolved();
+
+        for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
+
+            final TypeParameterInfo typeParameter = unresolvedTypeParameter.getResolved();
+            for (final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> unresolvedExtendsType : unresolvedTypeParameter
+                    .getExtendsTypes()) {
+                final ReferenceTypeInfo extendsType = unresolvedExtendsType.resolve(ownerClass,
+                        resolved, classInfoManager, null, null);
+                typeParameter.addExtendsType(extendsType);
+            }
+        }
+
+        return resolved;
+    }
+
+    /**
+     * 未解決型パラメータを解決する
+     * すでにresolveメソッドが呼び出された状態で用いなければならない
+     * 
+     * @param classInfoManager
+     * @return
+     */
+    public final T resolveParameter(final ClassInfoManager classInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == classInfoManager) {
+            throw new IllegalArgumentException();
+        }
+
+        final T resolved = this.getResolved();
+        final TargetClassInfo ownerClass = this.getOwnerClass().getResolved();
+
+        for (final UnresolvedParameterInfo unresolvedParameter : this.getParameters()) {
+            final TargetParameterInfo parameter = unresolvedParameter.resolve(ownerClass, resolved,
+                    classInfoManager, null, null);
+            resolved.addParameter(parameter);
+        }
+
+        return resolved;
+    }
+
+    /**
+     * 未解決のスローされる例外情報を解決する
+     * すでにresolveメソッドが呼び出された状態で用いなければならない
+     * 
+     * @param classInfoManager
+     * @return
+     */
+    public final T resolveThrownException(final ClassInfoManager classInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == classInfoManager) {
+            throw new IllegalArgumentException();
+        }
+
+        final T resolved = this.getResolved();
+        final TargetClassInfo ownerClass = this.getOwnerClass().getResolved();
+
+        for (final UnresolvedClassTypeInfo unresolvedThrownException : this.getThrownExceptions()) {
+            final ReferenceTypeInfo thrownException = unresolvedThrownException.resolve(ownerClass,
+                    resolved, classInfoManager, null, null);
+            this.resolvedInfo.addThrownException(thrownException);
+        }
+
+        return resolved;
     }
 
     /**

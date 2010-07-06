@@ -51,25 +51,18 @@ public abstract class UnresolvedInitializerInfo<T extends InitializerInfo> exten
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == classInfoManager) || (null == methodInfoManager)) {
-            throw new NullPointerException();
-        }
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // 所有クラスを取得
-        //final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
-        //final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(usingClass, usingMethod,
-        //                classInfoManager, fieldInfoManager, methodInfoManager);
-
-        this.resolvedInfo = this.buildResolvedInfo(usingClass, this.getFromLine(), this
+        final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
+        final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(null, null,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+        this.resolvedInfo = this.buildResolvedInfo(ownerClass, this.getFromLine(), this
                 .getFromColumn(), this.getToLine(), this.getToColumn());
 
-        //this.resolveInnerBlock(usingClass, this.resolvedInfo, classInfoManager, fieldInfoManager,
-        //methodInfoManager);
         return this.resolvedInfo;
     }
 

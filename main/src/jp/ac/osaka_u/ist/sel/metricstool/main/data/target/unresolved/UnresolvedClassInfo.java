@@ -10,14 +10,23 @@ import java.util.List;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InnerClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InstanceInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetAnonymousClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -492,7 +501,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 
      * @return インスランスイニシャライザ
      */
-    public UnresolvedInstanceInitializerInfo getInstanceInitializer() {
+    public UnresolvedInstanceInitializerInfo getImplicitInstanceInitializer() {
         return this.implicitInstanceInitializer;
     }
 
@@ -501,7 +510,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 
      * @return スタティックイニシャライザ
      */
-    public UnresolvedStaticInitializerInfo getStaticInitializer() {
+    public UnresolvedStaticInitializerInfo getImplicitStaticInitializer() {
         return this.implicitStaticInitializer;
     }
 
@@ -664,13 +673,15 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == classInfoManager) {
-            throw new NullPointerException();
-        }
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
             return this.getResolved();
+        }
+
+        // 必要な引数がnullでないかをチェック
+        if ((null == classInfoManager) || (null == fieldInfoManager) || (null == methodInfoManager)) {
+            throw new IllegalArgumentException();
         }
 
         // 修飾子，完全限定名，行数，可視性，インスタンスメンバーかどうかを取得
@@ -693,9 +704,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             final TargetClassInfo outerClass = unresolvedOuterClass.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-            // outerUnitは後で解決する．ここでは登録しない
-            this.resolvedInfo = new TargetAnonymousClassInfo(fullQualifiedName, outerClass,
+            final UnresolvedUnitInfo<? extends UnitInfo> unresolvedOuterUnit = this.getOuterUnit();
+            final UnitInfo outerUnit = unresolvedOuterUnit.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+
+            this.resolvedInfo = new TargetAnonymousClassInfo(fullQualifiedName, outerClass, null,
                     this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+            // TODO outerUnitを登録する
 
             // 一番外側のクラスの場合
         } else if (null == this.outerUnit) {
@@ -718,12 +733,141 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
         // タイプパラメータがある場合は解決する．ただしここでは，exntends までは解決しない
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
-            final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(
+                    this.resolvedInfo, usingMethod, classInfoManager, fieldInfoManager,
+                    methodInfoManager);
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
 
+        //　このクラスで定義しているメソッドを解決
+        for (final UnresolvedMethodInfo unresolvedMethod : this.getDefinedMethods()) {
+            final TargetMethodInfo method = unresolvedMethod.resolve(this.resolvedInfo, null,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addDefinedMethod(method);
+            methodInfoManager.add(method);
+        }
+
+        //　このクラスで定義しているコンストラクタを解決
+        for (final UnresolvedConstructorInfo unresolvedConstructor : this.getDefinedConstructors()) {
+            final TargetConstructorInfo constructor = unresolvedConstructor.resolve(
+                    this.resolvedInfo, null, classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addDefinedConstructor(constructor);
+            methodInfoManager.add(constructor);
+        }
+
+        //　このクラスで定義しているフィールドを解決
+        for (final UnresolvedFieldInfo unresolvedConstructor : this.getDefinedFields()) {
+            final TargetFieldInfo field = unresolvedConstructor.resolve(this.resolvedInfo, null,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addDefinedField(field);
+            fieldInfoManager.add(field);
+        }
+
+        // このクラスで定義されているインスタンスイニシャライザを解決
+        for (final UnresolvedInstanceInitializerInfo unresolvedInitializer : this
+                .getInstanceInitializers()) {
+            final InstanceInitializerInfo initializer = unresolvedInitializer.resolve(
+                    this.resolvedInfo, null, classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addInstanceInitializer(initializer);
+        }
+
+        // このクラスで定義されているスタティックイニシャライザを解決
+        for (final UnresolvedStaticInitializerInfo unresolvedInitializer : this
+                .getStaticInitializers()) {
+            final StaticInitializerInfo initializer = unresolvedInitializer.resolve(
+                    this.resolvedInfo, null, classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addStaticInitializer(initializer);
+        }
+
         return this.resolvedInfo;
+    }
+
+    /**
+     * 未解決スーパークラス情報を解決する．
+     * すでにresolveメソッドが呼び出された状態で用いなければならない
+     * 
+     * @param classInfoManager
+     * @return
+     */
+    public TargetClassInfo resolveSuperClass(final ClassInfoManager classInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == classInfoManager) {
+            throw new IllegalArgumentException();
+        }
+
+        final TargetClassInfo resolved = this.getResolved();
+
+        for (final UnresolvedClassTypeInfo unresolvedSuperType : this.getSuperClasses()) {
+
+            // スーパークラスを設定
+            final ReferenceTypeInfo superType = unresolvedSuperType.resolve(resolved, null,
+                    classInfoManager, null, null);
+            resolved.addSuperClass((ClassTypeInfo) superType);
+
+            // サブクラスを設定
+            final ClassInfo superClass = ((ClassTypeInfo) superType).getReferencedClass();
+            superClass.addSubClass(resolved);
+        }
+
+        return resolved;
+    }
+
+    /**
+     * 未解決型パラメータ情報を解決する．
+     * すでにresolveメソッドが呼び出された状態で用いなければならない
+     * 
+     * @param classInfoManager
+     * @return
+     */
+    public TargetClassInfo resolveTypeParameter(final ClassInfoManager classInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == classInfoManager) {
+            throw new IllegalArgumentException();
+        }
+
+        final TargetClassInfo resolved = this.getResolved();
+
+        for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
+
+            final TypeParameterInfo typeParameter = unresolvedTypeParameter.getResolved();
+            for (final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> unresolvedExtendsType : unresolvedTypeParameter
+                    .getExtendsTypes()) {
+                final ReferenceTypeInfo extendsType = unresolvedExtendsType.resolve(resolved, null,
+                        classInfoManager, null, null);
+                typeParameter.addExtendsType(extendsType);
+            }
+        }
+
+        return resolved;
+    }
+
+    /**
+     * 未解決内部クラス情報を解決する．
+     * すでにresolveメソッドが呼び出された状態で用いなければならない
+     * 
+     * @param classInfoManager
+     * @return
+     */
+    public TargetClassInfo resolveInnerClass(final ClassInfoManager classInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == classInfoManager) {
+            throw new IllegalArgumentException();
+        }
+
+        final TargetClassInfo resolved = this.getResolved();
+
+        for (final UnresolvedClassInfo unresolvedInnerClass : this.getInnerClasses()) {
+            final TargetClassInfo innerClass = unresolvedInnerClass.getResolved();
+            resolved.addInnerClass((InnerClassInfo) innerClass);
+        }
+
+        return resolved;
     }
 
     /**

@@ -3,21 +3,15 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -66,16 +60,13 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == classInfoManager) || (null == methodInfoManager)) {
-            throw new NullPointerException();
-        }
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
             return this.getResolved();
         }
 
-        // 修飾子，名前，返り値，行数，コンストラクタかどうか，可視性，インスタンスメンバーかどうかを取得
+        // 修飾子，名前，行数，可視性，インスタンスメンバーかどうかを取得
         final Set<ModifierInfo> methodModifiers = this.getModifiers();
         final String methodName = this.getMethodName();
 
@@ -99,6 +90,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
                 fromLine, fromColumn, toLine, toColumn);
 
         // 型パラメータを解決し，解決済みメソッド情報に追加する
+        // 型パラメータのextends節はここでは解決しない
         for (final UnresolvedTypeParameterInfo unresolvedTypeParameter : this.getTypeParameters()) {
 
             final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(ownerClass,
@@ -106,61 +98,34 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
             this.resolvedInfo.addTypeParameter(typeParameter);
         }
 
-        // 返り値をセットする
-        final UnresolvedTypeInfo<?> unresolvedMethodReturnType = this.getReturnType();
-        TypeInfo methodReturnType = unresolvedMethodReturnType.resolve(ownerClass,
-                this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
-        assert methodReturnType != null : "resolveTypeInfo returned null!";
-        if (methodReturnType instanceof UnknownTypeInfo) {
-            if (unresolvedMethodReturnType instanceof UnresolvedClassReferenceInfo) {
-
-                final ExternalClassInfo classInfo = UnresolvedClassReferenceInfo
-                        .createExternalClassInfo((UnresolvedClassReferenceInfo) unresolvedMethodReturnType);
-                methodReturnType = new ClassTypeInfo(classInfo);
-                for (final UnresolvedTypeInfo<?> unresolvedTypeArgument : ((UnresolvedClassReferenceInfo) unresolvedMethodReturnType)
-                        .getTypeArguments()) {
-                    final TypeInfo typeArgument = unresolvedTypeArgument.resolve(null,
-                            this.resolvedInfo, classInfoManager, fieldInfoManager,
-                            methodInfoManager);
-                    ((ClassTypeInfo) methodReturnType).addTypeArgument(typeArgument);
-                }
-                classInfoManager.add(classInfo);
-
-            } else if (unresolvedMethodReturnType instanceof UnresolvedArrayTypeInfo) {
-
-                // TODO 型パラメータの情報を格納する
-                final UnresolvedTypeInfo<?> unresolvedElementType = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
-                        .getElementType();
-                final int dimension = ((UnresolvedArrayTypeInfo) unresolvedMethodReturnType)
-                        .getDimension();
-                final TypeInfo elementType = unresolvedElementType.resolve(ownerClass,
-                        this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
-                methodReturnType = ArrayTypeInfo.getType(elementType, dimension);
-
-            } else {
-                assert false : "Can't resolve method return type : "
-                        + unresolvedMethodReturnType.toString();
-            }
-        }
-        this.resolvedInfo.setReturnType(methodReturnType);
-
-        // 引数を追加する
-        for (final UnresolvedParameterInfo unresolvedParameterInfo : this.getParameters()) {
-
-            final TargetParameterInfo parameterInfo = unresolvedParameterInfo.resolve(null,
-                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addParameter(parameterInfo);
-        }
-
-        // スローされる例外を解決し，解決済みコンストラクタ情報に追加する
-        for (final UnresolvedClassTypeInfo unresolvedThrownException : this.getThrownExceptions()) {
-
-            final ReferenceTypeInfo thrownException = unresolvedThrownException.resolve(ownerClass,
-                    this.resolvedInfo, classInfoManager, fieldInfoManager, methodInfoManager);
-            this.resolvedInfo.addThrownException(thrownException);
-        }
-
         return this.resolvedInfo;
+    }
+
+    /**
+     * 未解決返り値情報を解決する
+     * すでにresolveメソッドが呼び出された状態で用いなければならない
+     * 
+     * @param classInfoManager
+     * @return
+     */
+    public final TargetMethodInfo resolveReturnType(final ClassInfoManager classInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == classInfoManager) {
+            throw new IllegalArgumentException();
+        }
+
+        final TargetMethodInfo resolved = this.getResolved();
+        final TargetClassInfo owernClass = this.getOwnerClass().getResolved();
+
+        final UnresolvedTypeInfo<? extends TypeInfo> unresolvedType = this.getReturnType();
+        final TypeInfo type = unresolvedType.resolve(owernClass, resolved, classInfoManager, null,
+                null);
+        resolved.setReturnType(type);
+
+        return resolved;
+
     }
 
     /**

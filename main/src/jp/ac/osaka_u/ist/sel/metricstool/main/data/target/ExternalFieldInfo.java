@@ -18,14 +18,13 @@ public final class ExternalFieldInfo extends FieldInfo {
      * 名前，型，定義しているクラス情報を与えて初期化． 
      * 
      * @param name フィールド名
-     * @param type 型
      * @param definitionClass フィールドを定義しているクラス
      */
     public ExternalFieldInfo(final Set<ModifierInfo> modifiers, final String name,
-            final TypeInfo type, final ExternalClassInfo definitionClass,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
-        super(modifiers, name, type, definitionClass, privateVisible, namespaceVisible,
+            final ExternalClassInfo definitionClass, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final boolean instance) {
+        super(modifiers, name, definitionClass, privateVisible, namespaceVisible,
                 inheritanceVisible, publicVisible, instance, new Random().nextInt(), new Random()
                         .nextInt(), new Random().nextInt(), new Random().nextInt());
     }
@@ -37,9 +36,10 @@ public final class ExternalFieldInfo extends FieldInfo {
      * @param definitionClass フィールドを定義しているクラス
      */
     public ExternalFieldInfo(final String name, final ExternalClassInfo definitionClass) {
-        super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(), definitionClass,
-                true, true, true, true, true, new Random().nextInt(), new Random().nextInt(),
-                new Random().nextInt(), new Random().nextInt());
+        super(new HashSet<ModifierInfo>(), name, definitionClass, true, true, true, true, true,
+                new Random().nextInt(), new Random().nextInt(), new Random().nextInt(),
+                new Random().nextInt());
+        this.setType(UnknownTypeInfo.getInstance());
     }
 
     /**
@@ -48,8 +48,9 @@ public final class ExternalFieldInfo extends FieldInfo {
      * @param name フィールド名
      */
     public ExternalFieldInfo(final String name) {
-        super(new HashSet<ModifierInfo>(), name, UnknownTypeInfo.getInstance(),
-                ExternalClassInfo.UNKNOWN, true, true, true, true, true, new Random().nextInt(),
-                new Random().nextInt(), new Random().nextInt(), new Random().nextInt());
+        super(new HashSet<ModifierInfo>(), name, ExternalClassInfo.UNKNOWN, true, true, true, true,
+                true, new Random().nextInt(), new Random().nextInt(), new Random().nextInt(),
+                new Random().nextInt());
+        this.setType(UnknownTypeInfo.getInstance());
     }
 }

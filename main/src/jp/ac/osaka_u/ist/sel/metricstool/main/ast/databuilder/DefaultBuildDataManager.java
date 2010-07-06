@@ -232,10 +232,10 @@ public class DefaultBuildDataManager implements BuildDataManager {
         } else {
             final UnresolvedClassInfo classInfo = this.classStack.pop();
 
-            //外側のクラスがない場合にだけ登録を行う
-            if (this.classStack.isEmpty()) {
+            //外側のクラスがない場合にだけ登録を行う（現在はすべてのクラスを登録する）
+            //if (this.classStack.isEmpty()) {
                 DataManager.getInstance().getUnresolvedClassInfoManager().addClass(classInfo);
-            }
+            //}
 
             if (!this.callableUnitStack.isEmpty()) {
                 //TODO methodStack.peek().addInnerClass(classInfo);

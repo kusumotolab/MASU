@@ -35,20 +35,19 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
      * 
      * @param modifiers 修飾子のセット
      * @param name フィールド名
-     * @param type フィールドの型
      * @param definitionClass フィールドを定義しているクラス
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    FieldInfo(final Set<ModifierInfo> modifiers, final String name, final TypeInfo type,
+    FieldInfo(final Set<ModifierInfo> modifiers, final String name,
             final ClassInfo definitionClass, final boolean privateVisible,
             final boolean namespaceVisible, final boolean inheritanceVisible,
             final boolean publicVisible, final boolean instance, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
-        super(modifiers, name, type, definitionClass, fromLine, fromColumn, toLine, toColumn);
+        super(modifiers, name, null, definitionClass, fromLine, fromColumn, toLine, toColumn);
 
         if (null == definitionClass) {
             throw new NullPointerException();

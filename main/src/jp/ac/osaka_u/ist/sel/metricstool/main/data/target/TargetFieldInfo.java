@@ -19,7 +19,6 @@ public final class TargetFieldInfo extends FieldInfo {
      * 
      * @param modifiers 修飾子の Set
      * @param name 名前
-     * @param type 型
      * @param definitionClass このフィールドを定義しているクラス
      * @param privateVisible クラス内からのみ参照可能
      * @param namespaceVisible 同じ名前空間から参照可能
@@ -32,12 +31,12 @@ public final class TargetFieldInfo extends FieldInfo {
      * @param toColumn 終了列
      */
     public TargetFieldInfo(final Set<ModifierInfo> modifiers, final String name,
-            final TypeInfo type, final TargetClassInfo definitionClass,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final TargetClassInfo definitionClass, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final boolean instance, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super(modifiers, name, type, definitionClass, privateVisible, namespaceVisible,
+        super(modifiers, name, definitionClass, privateVisible, namespaceVisible,
                 inheritanceVisible, publicVisible, instance, fromLine, fromColumn, toLine, toColumn);
 
         this.initializer = null;

@@ -56,7 +56,6 @@ class TargetFileParser implements Runnable {
         this.index = index;
         this.out = out;
         this.err = err;
-        this.finished = false;
     }
 
     @Override
@@ -66,7 +65,6 @@ class TargetFileParser implements Runnable {
 
             final int i = this.index.getAndIncrement();
             if (!(i < this.files.length)) {
-                this.finished = true;
                 break;
             }
 
@@ -204,10 +202,6 @@ class TargetFileParser implements Runnable {
 
     }
 
-    public boolean isFinished() {
-        return this.finished;
-    }
-
     private final TargetFile[] files;
 
     private final AtomicInteger index;
@@ -215,6 +209,4 @@ class TargetFileParser implements Runnable {
     private final MessagePrinter out;
 
     private final MessagePrinter err;
-
-    private boolean finished;
 }

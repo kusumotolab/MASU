@@ -184,36 +184,6 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
     }
 
     /**
-     * このメソッドの引数を追加する． public 宣言してあるが， プラグインからの呼び出しははじく．
-     * 
-     * @param parameter 追加する引数
-     */
-    public void addParameter(final ParameterInfo parameter) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == parameter) {
-            throw new NullPointerException();
-        }
-
-        this.parameters.add(parameter);
-    }
-
-    /**
-     * このメソッドの引数を追加する． public 宣言してあるが， プラグインからの呼び出しははじく．
-     * 
-     * @param parameters 追加する引数群
-     */
-    public void addParameters(final List<ParameterInfo> parameters) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == parameters) {
-            throw new NullPointerException();
-        }
-
-        this.parameters.addAll(parameters);
-    }
-
-    /**
      * このメソッドの返り値をセットする．
      * 
      * @param returnType このメソッドの返り値
