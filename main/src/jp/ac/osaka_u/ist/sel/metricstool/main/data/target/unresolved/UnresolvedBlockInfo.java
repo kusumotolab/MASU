@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 
 
 /**
@@ -21,17 +22,10 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends Unresolve
      * 
      */
     public UnresolvedBlockInfo(final UnresolvedLocalSpaceInfo<?> outerSpace) {
-        super();
-
-        if (null == outerSpace) {
-            throw new IllegalArgumentException("outerSpace is null");
-        }
-
-        this.outerSpace = outerSpace;
+        super(outerSpace);
     }
 
     public void initBody() {
-
         this.statements.clear();
     }
 
@@ -39,13 +33,7 @@ public abstract class UnresolvedBlockInfo<T extends BlockInfo> extends Unresolve
      * このブロックが属する空間を返す
      * @return このブロックが属する空間
      */
-    public UnresolvedLocalSpaceInfo<?> getOuterSpace() {
-        return this.outerSpace;
+    public UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> getOuterSpace() {
+        return (UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo>) this.getOuterUnit();
     }
-
-    /**
-     * このブロックが属する空間を保存するための変数
-     */
-    private final UnresolvedLocalSpaceInfo<?> outerSpace;
-
 }

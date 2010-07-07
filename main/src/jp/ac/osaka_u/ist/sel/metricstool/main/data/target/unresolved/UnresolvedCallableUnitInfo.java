@@ -28,13 +28,11 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
         ModifierSetting {
 
     protected UnresolvedCallableUnitInfo(final UnresolvedClassInfo ownerClass) {
+
+        super(ownerClass);
+
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == ownerClass) {
-            throw new NullPointerException();
-        }
-
-        this.ownerClass = ownerClass;
 
         this.modifiers = new HashSet<ModifierInfo>();
         this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
@@ -162,7 +160,7 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
      * @return このメソッドを定義しているクラス
      */
     public final UnresolvedClassInfo getOwnerClass() {
-        return this.ownerClass;
+        return this.getOuterClass();
     }
 
     /**
@@ -322,11 +320,6 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
 
         return resolved;
     }
-
-    /**
-     * このメソッドを定義しているクラスを保存するための変数
-     */
-    private final UnresolvedClassInfo ownerClass;
 
     /**
      * クラス内からのみ参照可能かどうか保存するための変数

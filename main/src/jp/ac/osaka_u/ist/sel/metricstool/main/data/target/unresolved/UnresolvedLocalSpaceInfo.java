@@ -10,6 +10,7 @@ import java.util.TreeSet;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.HavingOuterUnit;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
@@ -28,12 +29,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @param <T>
  */
 public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
-        UnresolvedUnitInfo<T> {
+        UnresolvedUnitInfo<T> implements UnresolvedHavingOuterUnit {
 
     /**
      * 位置情報を与えて初期化
      */
-    public UnresolvedLocalSpaceInfo() {
+    public UnresolvedLocalSpaceInfo(final UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
@@ -41,6 +42,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
         this.variableUsages = new HashSet<UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>>();
         this.localVariables = new HashSet<UnresolvedLocalVariableInfo>();
         this.statements = new TreeSet<UnresolvedStatementInfo<?>>();
+        this.outerUnit = outerUnit;
     }
 
     /**
@@ -235,6 +237,77 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
         }
     }
 
+    @Override
+    public final UnresolvedUnitInfo<? extends UnitInfo> getOuterUnit() {
+        assert null != this.outerUnit : "outerUnit is null!";
+        return this.outerUnit;
+    }
+
+    @Override
+    public final void setOuterUnit(UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == outerUnit) {
+            throw new IllegalArgumentException();
+        }
+
+        this.outerUnit = outerUnit;
+    }
+
+    /**
+     * 外側のクラスを返す.
+     * 
+     * @return　外側のクラス
+     */
+    @Override
+    public final UnresolvedClassInfo getOuterClass() {
+
+        UnresolvedUnitInfo<? extends UnitInfo> outer = this.getOuterUnit();
+
+        while (true) {
+
+            // インナークラスなのでかならず外側のクラスがある
+            if (null == outer) {
+                throw new IllegalStateException();
+            }
+
+            if (outer instanceof UnresolvedClassInfo) {
+                return (UnresolvedClassInfo) outer;
+            }
+
+            outer = ((UnresolvedHavingOuterUnit) outer).getOuterUnit();
+        }
+    }
+
+    /**
+     * 外側のメソッドを返す.
+     * 
+     * @return　外側のメソッド
+     */
+    @Override
+    public final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> getOuterCallableUnit() {
+
+        UnresolvedUnitInfo<? extends UnitInfo> outer = this.getOuterUnit();
+
+        while (true) {
+
+            if (null == outer) {
+                return null;
+            }
+
+            if (outer instanceof UnresolvedCallableUnitInfo<?>) {
+                return (UnresolvedCallableUnitInfo<? extends CallableUnitInfo>) outer;
+            }
+
+            if (!(outer instanceof HavingOuterUnit)) {
+                return null;
+            }
+
+            outer = ((UnresolvedHavingOuterUnit) outer).getOuterUnit();
+        }
+    }
+
     /**
      * メソッドまたはコンストラクタ呼び出しを保存する変数
      */
@@ -246,13 +319,14 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
     protected final Set<UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>> variableUsages;
 
     /**
-     * このメソッド内で定義されているローカル変数を保存する変数
+     * このローカル領域内で定義されているローカル変数を保存する変数
      */
     protected final Set<UnresolvedLocalVariableInfo> localVariables;
 
     /**
-     * このブロックの内側で定義された未解決文を保存する変数
+     * このローカル領域内で定義された未解決文を保存する変数
      */
     protected final SortedSet<UnresolvedStatementInfo<?>> statements;
 
+    private UnresolvedUnitInfo<? extends UnitInfo> outerUnit;
 }

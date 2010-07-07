@@ -15,6 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.HavingOuterUnit;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InstanceInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -52,7 +53,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInfo> implements
-        VisualizableSetting, StaticOrInstanceSetting, ModifierSetting {
+        VisualizableSetting, StaticOrInstanceSetting, ModifierSetting, UnresolvedHavingOuterUnit {
 
     /**
      * このクラスが記述されているファイル情報を与えて初期化
@@ -440,8 +441,62 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 
      * @return 外側の所有者. ない場合はnull
      */
+    @Override
     public UnresolvedUnitInfo<? extends UnitInfo> getOuterUnit() {
         return this.outerUnit;
+    }
+
+    /**
+     * 外側のクラスを返す.
+     * 
+     * @return　外側のクラス
+     */
+    @Override
+    public final UnresolvedClassInfo getOuterClass() {
+
+        UnresolvedUnitInfo<? extends UnitInfo> outer = this.getOuterUnit();
+
+        while (true) {
+
+            // インナークラスなのでかならず外側のクラスがある
+            if (null == outer) {
+                throw new IllegalStateException();
+            }
+
+            if (outer instanceof UnresolvedClassInfo) {
+                return (UnresolvedClassInfo) outer;
+            }
+
+            outer = ((UnresolvedHavingOuterUnit) outer).getOuterUnit();
+        }
+    }
+
+    /**
+     * 外側のメソッドを返す.
+     * 
+     * @return　外側のメソッド
+     */
+    @Override
+    public final UnresolvedCallableUnitInfo<? extends CallableUnitInfo> getOuterCallableUnit() {
+
+        UnresolvedUnitInfo<? extends UnitInfo> outer = this.getOuterUnit();
+
+        while (true) {
+
+            if (null == outer) {
+                return null;
+            }
+
+            if (outer instanceof UnresolvedCallableUnitInfo<?>) {
+                return (UnresolvedCallableUnitInfo<? extends CallableUnitInfo>) outer;
+            }
+
+            if (!(outer instanceof HavingOuterUnit)) {
+                return null;
+            }
+
+            outer = ((UnresolvedHavingOuterUnit) outer).getOuterUnit();
+        }
     }
 
     /**
@@ -546,6 +601,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 
      * @param privateVisible クラス内からのみ参照可能な場合は true，そうでない場合は false
      */
+    @Override
     public void setPrivateVibible(final boolean privateVisible) {
         this.privateVisible = privateVisible;
     }
