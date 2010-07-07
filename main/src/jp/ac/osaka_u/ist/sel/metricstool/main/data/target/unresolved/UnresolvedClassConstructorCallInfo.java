@@ -10,6 +10,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
@@ -95,7 +96,11 @@ public class UnresolvedClassConstructorCallInfo extends
                 classInfo = NameResolver.getExternalSuperClass(classInfo);
             }
             final ExternalConstructorInfo constructor = new ExternalConstructorInfo();
-            constructor.setOuterUnit(classInfo);
+            if (null != classInfo) {
+                constructor.setOuterUnit(classInfo);
+            } else {
+                constructor.setOuterUnit(ExternalClassInfo.UNKNOWN);
+            }
             final List<ParameterInfo> externalParameters = ExternalParameterInfo.createParameters(
                     actualParameters, constructor);
             constructor.addParameters(externalParameters);
