@@ -51,10 +51,6 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
-                || (null == methodInfoManager)) {
-            throw new NullPointerException();
-        }
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
@@ -67,7 +63,7 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new TryBlockInfo(usingClass, fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo = new TryBlockInfo(fromLine, fromColumn, toLine, toColumn);
 
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,

@@ -54,10 +54,6 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
-                || (null == methodInfoManager)) {
-            throw new NullPointerException();
-        }
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
@@ -76,7 +72,7 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
         final int toColumn = this.getToColumn();
 
         //　解決済み catchブロックオブジェクトを作成
-        this.resolvedInfo = new CatchBlockInfo(usingClass, fromLine, fromColumn, toLine, toColumn,
+        this.resolvedInfo = new CatchBlockInfo(fromLine, fromColumn, toLine, toColumn,
                 ownerTryBlock);
 
         // 外側のユニットを解決

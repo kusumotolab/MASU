@@ -21,16 +21,14 @@ public final class ExternalMethodInfo extends MethodInfo {
      * アクセス制御子まで分かっている場合
      *  
      * @param methodName メソッド名
-     * @param ownerClass このメソッドを定義しているクラス
      */
     public ExternalMethodInfo(final Set<ModifierInfo> modifiers, final String methodName,
-            final ExternalClassInfo ownerClass, final boolean privateVisible,
-            final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final boolean instance) {
+            final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
 
-        super(modifiers, methodName, ownerClass, privateVisible, namespaceVisible,
-                inheritanceVisible, publicVisible, instance, getDummyPosition(),
-                getDummyPosition(), getDummyPosition(), getDummyPosition());
+        super(modifiers, methodName, privateVisible, namespaceVisible, inheritanceVisible,
+                publicVisible, instance, getDummyPosition(), getDummyPosition(),
+                getDummyPosition(), getDummyPosition());
 
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
@@ -39,27 +37,12 @@ public final class ExternalMethodInfo extends MethodInfo {
      * 外部クラスに定義されているメソッドオブジェクトを初期化する
      * 
      * @param methodName メソッド名
-     * @param ownerClass このメソッドを定義しているクラス
-     */
-    public ExternalMethodInfo(final String methodName, final ExternalClassInfo ownerClass) {
-
-        super(new HashSet<ModifierInfo>(), methodName, ownerClass, false, true, true, true, true,
-                getDummyPosition(), getDummyPosition(), getDummyPosition(), getDummyPosition());
-
-        this.setReturnType(UnknownTypeInfo.getInstance());
-    }
-
-    /**
-     * 外部クラスに定義されているメソッドオブジェクトを初期化する．
-     * 定義しているクラスが不明な場合に用いるコンストラクタ
-     * 
-     * @param methodName メソッド名
      */
     public ExternalMethodInfo(final String methodName) {
 
-        super(new HashSet<ModifierInfo>(), methodName, ExternalClassInfo.UNKNOWN, false, true,
-                true, true, true, getDummyPosition(), getDummyPosition(), getDummyPosition(),
-                getDummyPosition());
+        super(new HashSet<ModifierInfo>(), methodName, false, true, true, true, true,
+                getDummyPosition(), getDummyPosition(), getDummyPosition(), getDummyPosition());
+
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
 

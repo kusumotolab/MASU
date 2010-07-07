@@ -17,16 +17,14 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
     /**
      * 位置情報を与えて初期化
      * 
-     * @param ownerClass このブロックを所有するクラス
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    BlockInfo(final TargetClassInfo ownerClass, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+    BlockInfo(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerClass, fromLine, fromColumn, toLine, toColumn);
+        super(fromLine, fromColumn, toLine, toColumn);
     }
 
     /**

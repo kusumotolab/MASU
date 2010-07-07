@@ -37,12 +37,12 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * @param toLine èIóπçs
      * @param toColumn èIóπóÒ
      */
-    CallableUnitInfo(final Set<ModifierInfo> modifiers, final ClassInfo ownerClass,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    CallableUnitInfo(final Set<ModifierInfo> modifiers, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
-        super(ownerClass, fromLine, fromColumn, toLine, toColumn);
+        super(fromLine, fromColumn, toLine, toColumn);
 
         this.privateVisible = privateVisible;
         this.namespaceVisible = namespaceVisible;

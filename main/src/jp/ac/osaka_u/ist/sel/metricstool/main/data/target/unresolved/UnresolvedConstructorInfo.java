@@ -66,13 +66,13 @@ public final class UnresolvedConstructorInfo extends
         final int constructorToLine = this.getToLine();
         final int constructorToColumn = this.getToColumn();
 
+        this.resolvedInfo = new TargetConstructorInfo(methodModifiers, privateVisible,
+                namespaceVisible, inheritanceVisible, publicVisible, constructorFromLine,
+                constructorFromColumn, constructorToLine, constructorToColumn);
+
         final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
         final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(null, null,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-
-        this.resolvedInfo = new TargetConstructorInfo(methodModifiers, ownerClass, privateVisible,
-                namespaceVisible, inheritanceVisible, publicVisible, constructorFromLine,
-                constructorFromColumn, constructorToLine, constructorToColumn);
         this.resolvedInfo.setOuterUnit(ownerClass);
 
         // 型パラメータを解決し，解決済みコンストラクタ情報に追加する

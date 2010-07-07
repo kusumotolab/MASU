@@ -43,10 +43,6 @@ public final class UnresolvedDoBlockInfo extends UnresolvedConditionalBlockInfo<
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
-                || (null == methodInfoManager)) {
-            throw new NullPointerException();
-        }
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
@@ -60,7 +56,7 @@ public final class UnresolvedDoBlockInfo extends UnresolvedConditionalBlockInfo<
         final int toColumn = this.getToColumn();
 
         // do ブロックオブジェクトを作成
-        this.resolvedInfo = new DoBlockInfo(usingClass, fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo = new DoBlockInfo(fromLine, fromColumn, toLine, toColumn);
 
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,

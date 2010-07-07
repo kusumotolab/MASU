@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticInitializerInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 
 
 /**
@@ -43,8 +42,8 @@ public class UnresolvedStaticInitializerInfo extends
     }
 
     @Override
-    protected StaticInitializerInfo buildResolvedInfo(TargetClassInfo ownerClass, int fromLine,
-            int fromColumn, int toLine, int toColumn) {
-        return new StaticInitializerInfo(ownerClass, fromLine, fromColumn, toLine, toColumn);
+    protected StaticInitializerInfo buildResolvedInfo(int fromLine, int fromColumn, int toLine,
+            int toColumn) {
+        return new StaticInitializerInfo(fromLine, fromColumn, toLine, toColumn);
     }
 }

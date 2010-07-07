@@ -45,10 +45,6 @@ public final class UnresolvedSynchronizedBlockInfo extends
 
         // 不正な呼び出しでないかをチェックf
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
-                || (null == methodInfoManager)) {
-            throw new NullPointerException();
-        }
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
@@ -61,8 +57,7 @@ public final class UnresolvedSynchronizedBlockInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new SynchronizedBlockInfo(usingClass, fromLine, fromColumn, toLine,
-                toColumn);
+        this.resolvedInfo = new SynchronizedBlockInfo(fromLine, fromColumn, toLine, toColumn);
 
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,

@@ -80,14 +80,14 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
+        // MethodInfo オブジェクトを生成する．
+        this.resolvedInfo = new TargetMethodInfo(methodModifiers, methodName, privateVisible,
+                namespaceVisible, inheritanceVisible, publicVisible, instance, fromLine,
+                fromColumn, toLine, toColumn);
+
         final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
         final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(null, null,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-
-        // MethodInfo オブジェクトを生成する．
-        this.resolvedInfo = new TargetMethodInfo(methodModifiers, methodName, ownerClass,
-                privateVisible, namespaceVisible, inheritanceVisible, publicVisible, instance,
-                fromLine, fromColumn, toLine, toColumn);
         this.resolvedInfo.setOuterUnit(ownerClass);
 
         // 型パラメータを解決し，解決済みメソッド情報に追加する

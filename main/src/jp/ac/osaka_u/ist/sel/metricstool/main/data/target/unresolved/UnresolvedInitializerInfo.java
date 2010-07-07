@@ -60,15 +60,15 @@ public abstract class UnresolvedInitializerInfo<T extends InitializerInfo> exten
         final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
         final TargetClassInfo ownerClass = unresolvedOwnerClass.resolve(null, null,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-        this.resolvedInfo = this.buildResolvedInfo(ownerClass, this.getFromLine(), this
-                .getFromColumn(), this.getToLine(), this.getToColumn());
+        this.resolvedInfo = this.buildResolvedInfo(this.getFromLine(), this.getFromColumn(), this
+                .getToLine(), this.getToColumn());
         this.resolvedInfo.setOuterUnit(ownerClass);
 
         return this.resolvedInfo;
     }
 
-    protected abstract T buildResolvedInfo(final TargetClassInfo usingClass, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn);
+    protected abstract T buildResolvedInfo(final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn);
 
     /**
      * ‚È‚É‚à‚µ‚È‚¢

@@ -44,10 +44,6 @@ public final class UnresolvedWhileBlockInfo extends UnresolvedConditionalBlockIn
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
-                || (null == methodInfoManager)) {
-            throw new NullPointerException();
-        }
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
@@ -60,7 +56,7 @@ public final class UnresolvedWhileBlockInfo extends UnresolvedConditionalBlockIn
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new WhileBlockInfo(usingClass, fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo = new WhileBlockInfo(fromLine, fromColumn, toLine, toColumn);
 
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,

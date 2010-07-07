@@ -22,4 +22,18 @@ public interface HavingOuterUnit {
      * @param outerUnit 外側のユニット
      */
     void setOuterUnit(UnitInfo outerUnit);
+    
+    /**
+     * 外側のクラスを返す.
+     * 
+     * @return　外側のクラス
+     */
+    ClassInfo getOuterClass();
+
+    /**
+     * 外側の呼び出し可能なユニット（メソッド，コンストラクタ等）を返す
+     * 
+     * @return 外側の呼び出し可能なユニット（メソッド，コンストラクタ等）
+     */
+    CallableUnitInfo getOuterCallableUnit();
 }

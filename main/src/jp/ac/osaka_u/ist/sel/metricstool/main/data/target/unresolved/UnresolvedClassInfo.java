@@ -679,11 +679,6 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             return this.getResolved();
         }
 
-        // 必要な引数がnullでないかをチェック
-        if ((null == classInfoManager) || (null == fieldInfoManager) || (null == methodInfoManager)) {
-            throw new IllegalArgumentException();
-        }
-
         // 修飾子，完全限定名，行数，可視性，インスタンスメンバーかどうかを取得
         final Set<ModifierInfo> modifiers = this.getModifiers();
         final String[] fullQualifiedName = this.getFullQualifiedName();
@@ -754,8 +749,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         // コンストラクタが全く定義されていない場合はデフォルトコンストラクタを1つ用意
         if (0 == this.getDefinedConstructors().size()) {
             final TargetConstructorInfo constructor = new TargetConstructorInfo(Collections
-                    .<ModifierInfo> emptySet(), this.resolvedInfo, false, true, false, false, 0, 0,
-                    0, 0);
+                    .<ModifierInfo> emptySet(), false, true, false, false, 0, 0, 0, 0);
+            constructor.setOuterUnit(this.resolvedInfo);
             this.resolvedInfo.addDefinedConstructor(constructor);
         }
 

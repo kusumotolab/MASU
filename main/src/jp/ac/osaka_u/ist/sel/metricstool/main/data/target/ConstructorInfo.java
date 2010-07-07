@@ -4,8 +4,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import java.util.List;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
-
 
 /**
  * コンストラクタを表すクラス
@@ -20,7 +18,6 @@ public abstract class ConstructorInfo extends CallableUnitInfo {
      * 必要な情報を与えて初期化
      * 
      * @param modifiers このコンストラクタの修飾子
-     * @param ownerClass このコンストラクタを定義しているクラス
      * @param privateVisible privateかどういか
      * @param namespaceVisible 同じ名前空間から可視かどうか
      * @param inheritanceVisible 子クラスから可視かどうか
@@ -30,13 +27,13 @@ public abstract class ConstructorInfo extends CallableUnitInfo {
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    ConstructorInfo(final Set<ModifierInfo> modifiers, final ClassInfo ownerClass,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    ConstructorInfo(final Set<ModifierInfo> modifiers, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
-        super(modifiers, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible, fromLine, fromColumn, toLine, toColumn);
+        super(modifiers, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
+                fromLine, fromColumn, toLine, toColumn);
 
     }
 

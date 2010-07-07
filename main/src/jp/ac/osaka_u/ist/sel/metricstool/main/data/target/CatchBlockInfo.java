@@ -49,19 +49,16 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
     /**
      * 対応する try ブロック情報を与えて catch ブロックを初期化
      * 
-     * @param ownerClass 所有クラス
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      * @param ownerTryBlock このcatch節が属するtryブロック
-     * @param caughtException このcatch節がキャッチする例外
      */
-    public CatchBlockInfo(final TargetClassInfo ownerClass, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn,
-            final TryBlockInfo ownerTryBlock) {
+    public CatchBlockInfo(final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn, final TryBlockInfo ownerTryBlock) {
 
-        super(ownerClass, fromLine, fromColumn, toLine, toColumn);
+        super(fromLine, fromColumn, toLine, toColumn);
 
         if (null == ownerTryBlock) {
             throw new NullPointerException();

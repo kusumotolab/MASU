@@ -145,8 +145,10 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
             throw new NullPointerException();
         }
 
-        this.implicitInstanceInitializer = new InstanceInitializerInfo(this, 0, 0, 0, 0);
-        this.implicitStaticInitializer = new StaticInitializerInfo(this, 0, 0, 0, 0);
+        this.implicitInstanceInitializer = new InstanceInitializerInfo(0, 0, 0, 0);
+        this.implicitInstanceInitializer.setOuterUnit(this);
+        this.implicitStaticInitializer = new StaticInitializerInfo(0, 0, 0, 0);
+        this.implicitStaticInitializer.setOuterUnit(this);
         this.instanceInitializers = new TreeSet<InstanceInitializerInfo>();
         this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new TreeSet<StaticInitializerInfo>();
@@ -185,8 +187,10 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
             throw new NullPointerException();
         }
 
-        this.implicitInstanceInitializer = new InstanceInitializerInfo(this, 0, 0, 0, 0);
-        this.implicitStaticInitializer = new StaticInitializerInfo(this, 0, 0, 0, 0);
+        this.implicitInstanceInitializer = new InstanceInitializerInfo(0, 0, 0, 0);
+        this.implicitInstanceInitializer.setOuterUnit(this);
+        this.implicitStaticInitializer = new StaticInitializerInfo(0, 0, 0, 0);
+        this.implicitStaticInitializer.setOuterUnit(this);
         this.instanceInitializers = new TreeSet<InstanceInitializerInfo>();
         this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new TreeSet<StaticInitializerInfo>();

@@ -10,7 +10,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
@@ -45,9 +44,6 @@ public class UnresolvedClassConstructorCallInfo extends
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == classInfoManager) || (null == methodInfoManager)) {
-            throw new NullPointerException();
-        }
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
@@ -98,8 +94,8 @@ public class UnresolvedClassConstructorCallInfo extends
             if (classInfo instanceof TargetClassInfo) {
                 classInfo = NameResolver.getExternalSuperClass(classInfo);
             }
-            final ExternalConstructorInfo constructor = new ExternalConstructorInfo(
-                    (ExternalClassInfo) classInfo);
+            final ExternalConstructorInfo constructor = new ExternalConstructorInfo();
+            constructor.setOuterUnit(classInfo);
             final List<ParameterInfo> externalParameters = ExternalParameterInfo.createParameters(
                     actualParameters, constructor);
             constructor.addParameters(externalParameters);

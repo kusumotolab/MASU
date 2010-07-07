@@ -40,10 +40,6 @@ public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<F
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
-                || (null == methodInfoManager)) {
-            throw new NullPointerException();
-        }
 
         // 既に解決済みである場合は，キャッシュを返す
         if (this.alreadyResolved()) {
@@ -56,7 +52,7 @@ public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<F
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new ForeachBlockInfo(usingClass, fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo = new ForeachBlockInfo(fromLine, fromColumn, toLine, toColumn);
 
         // 外側の空間を取得
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();

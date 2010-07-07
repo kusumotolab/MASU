@@ -70,9 +70,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)
-                || (null == methodInfoManager)) {
-            throw new NullPointerException();
+        if (null == classInfoManager) {
+            throw new IllegalArgumentException();
         }
 
         // 既に解決済みである場合は，キャッシュを返す
@@ -253,8 +252,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                             .getExternalSuperClass(ownerClass);
                     if (null != externalSuperClass) {
 
-                        final ExternalMethodInfo methodInfo = new ExternalMethodInfo(
-                                this.getName(), externalSuperClass);
+                        final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName());
+                        methodInfo.setOuterUnit(externalSuperClass);
                         final List<ParameterInfo> dummyParameters = ExternalParameterInfo
                                 .createParameters(actualParameters, methodInfo);
                         methodInfo.addParameters(dummyParameters);
@@ -288,8 +287,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 // 親が外部クラス（ExternalClassInfo）だった場合
             } else if (ownerClass instanceof ExternalClassInfo) {
 
-                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
-                        (ExternalClassInfo) ownerClass);
+                final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName());
+                methodInfo.setOuterUnit(ownerClass);
                 final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(
                         actualParameters, methodInfo);
                 methodInfo.addParameters(parameters);
@@ -315,8 +314,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                         "lang", "Object" });
 
                 if (ownerClass instanceof ExternalClassInfo) {
-                    final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName(),
-                            (ExternalClassInfo) ownerClass);
+                    final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName());
+                    methodInfo.setOuterUnit(ownerClass);
                     final List<ParameterInfo> parameters = ExternalParameterInfo.createParameters(
                             actualParameters, methodInfo);
                     methodInfo.addParameters(parameters);

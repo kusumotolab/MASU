@@ -19,25 +19,19 @@ public final class ExternalConstructorInfo extends ConstructorInfo {
 
     /**
      * 外部クラスに定義されているコンストラクタオブジェクトを初期化する
-     * 
-     * @param ownerClass このメソッドを定義しているクラス
      */
-    public ExternalConstructorInfo(final Set<ModifierInfo> modifiers,
-            final ExternalClassInfo ownerClass, final boolean privateVisible,
+    public ExternalConstructorInfo(final Set<ModifierInfo> modifiers, final boolean privateVisible,
             final boolean namespaceVisible, final boolean inheritanceVisible,
             final boolean publicVisible) {
-        super(modifiers, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible, getDummyPosition(), getDummyPosition(), getDummyPosition(),
-                getDummyPosition());
+        super(modifiers, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
+                getDummyPosition(), getDummyPosition(), getDummyPosition(), getDummyPosition());
     }
 
     /**
      * 外部クラスに定義されているコンストラクタオブジェクトを初期化する
-     * 
-     * @param ownerClass このメソッドを定義しているクラス
      */
-    public ExternalConstructorInfo(final ExternalClassInfo ownerClass) {
-        super(new HashSet<ModifierInfo>(), ownerClass, false, true, true, true, getDummyPosition(),
+    public ExternalConstructorInfo() {
+        super(new HashSet<ModifierInfo>(), false, true, true, true, getDummyPosition(),
                 getDummyPosition(), getDummyPosition(), getDummyPosition());
     }
 

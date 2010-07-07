@@ -34,7 +34,6 @@ public final class TargetMethodInfo extends MethodInfo implements StaticOrInstan
      * 
      * @param modifiers 修飾子
      * @param name メソッド名
-     * @param ownerClass 所有しているクラス
      * @param privateVisible クラス内からのみ参照可能
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
@@ -46,12 +45,11 @@ public final class TargetMethodInfo extends MethodInfo implements StaticOrInstan
      * @param toColumn 終了列
      */
     public TargetMethodInfo(final Set<ModifierInfo> modifiers, final String name,
-            final TargetClassInfo ownerClass, final boolean privateVisible,
-            final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final boolean instance, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(modifiers, name, ownerClass, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible, instance, fromLine, fromColumn, toLine, toColumn);
+        super(modifiers, name, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
+                instance, fromLine, fromColumn, toLine, toColumn);
     }
 }

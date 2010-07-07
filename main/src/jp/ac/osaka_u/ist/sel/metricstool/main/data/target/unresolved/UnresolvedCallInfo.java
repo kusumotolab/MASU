@@ -102,6 +102,12 @@ public abstract class UnresolvedCallInfo<T extends CallInfo<?>> extends Unresolv
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == classInfoManager) {
+            throw new IllegalArgumentException();
+        }
+
         //　解決済み実引数を格納するための変数
         final List<ExpressionInfo> parameters = new LinkedList<ExpressionInfo>();
 

@@ -635,8 +635,9 @@ public class MetricsTool {
                 if (name.equals("<init>")) {
 
                     final ExternalConstructorInfo constructor = new ExternalConstructorInfo(
-                            modifiers, classInfo, isPrivateVisible, isNamespaceVisible,
-                            isInheritanceVisible, isPublicVisible);
+                            modifiers, isPrivateVisible, isNamespaceVisible, isInheritanceVisible,
+                            isPublicVisible);
+                    constructor.setOuterUnit(classInfo);
 
                     // 型パラメータの解決
                     final List<String> unresolvedTypeParameters = unresolvedMethod
@@ -674,8 +675,9 @@ public class MetricsTool {
                 else {
 
                     final ExternalMethodInfo method = new ExternalMethodInfo(modifiers, name,
-                            classInfo, isPrivateVisible, isNamespaceVisible, isInheritanceVisible,
+                            isPrivateVisible, isNamespaceVisible, isInheritanceVisible,
                             isPublicVisible, !isStatic);
+                    method.setOuterUnit(classInfo);
 
                     // 型パラメータの解決
                     final List<String> unresolvedTypeParameters = unresolvedMethod
