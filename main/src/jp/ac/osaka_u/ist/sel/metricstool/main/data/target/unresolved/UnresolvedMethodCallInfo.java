@@ -88,6 +88,10 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
         // メソッドのシグネチャを取得
         final String name = this.getName();
+        if (fromLine == 1076 && name.equals("equals")) {
+            System.out.println();
+        }
+
         final List<ExpressionInfo> actualParameters = super.resolveArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final List<ReferenceTypeInfo> typeArguments = super.resolveTypeArguments(usingClass,

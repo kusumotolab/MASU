@@ -17,7 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  *
  */
 @SuppressWarnings("serial")
-public abstract class LocalSpaceInfo extends UnitInfo {
+public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit {
 
     /**
      * 必要な情報を与えてオブジェクトを居幾何
@@ -33,7 +33,11 @@ public abstract class LocalSpaceInfo extends UnitInfo {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
+        if (null == ownerClass) {
+            throw new IllegalArgumentException();
+        }
         this.ownerClass = ownerClass;
+        this.outerUnit = null;
         this.statements = new TreeSet<StatementInfo>();
     }
 
@@ -187,6 +191,31 @@ public abstract class LocalSpaceInfo extends UnitInfo {
     }
 
     /**
+     * 外側のユニットを返す
+     */
+    @Override
+    public UnitInfo getOuterUnit() {
+        assert null != this.outerUnit : "outerUnit is null!";
+        return this.outerUnit;
+    }
+
+    /**
+     * 外側のユニットを設定する
+     * 
+     * @param 外側のユニット
+     */
+    @Override
+    public void setOuterUnit(final UnitInfo outerUnit) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == outerUnit) {
+            throw new IllegalArgumentException();
+        }
+
+        this.outerUnit = outerUnit;
+    }
+
+    /**
      * このローカルスコープの直内の文情報一覧を保存するための変数
      */
     private final SortedSet<StatementInfo> statements;
@@ -195,4 +224,9 @@ public abstract class LocalSpaceInfo extends UnitInfo {
      * 所属しているクラスを保存するための変数
      */
     private final ClassInfo ownerClass;
+
+    /**
+     * 外側のユニットを保存するための変数
+     */
+    private UnitInfo outerUnit;
 }

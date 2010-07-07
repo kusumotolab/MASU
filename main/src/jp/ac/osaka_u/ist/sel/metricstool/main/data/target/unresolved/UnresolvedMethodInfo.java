@@ -88,6 +88,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         this.resolvedInfo = new TargetMethodInfo(methodModifiers, methodName, ownerClass,
                 privateVisible, namespaceVisible, inheritanceVisible, publicVisible, instance,
                 fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo.setOuterUnit(ownerClass);
 
         // 型パラメータを解決し，解決済みメソッド情報に追加する
         // 型パラメータのextends節はここでは解決しない

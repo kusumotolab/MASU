@@ -74,16 +74,13 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
+        this.resolvedInfo = new ElseBlockInfo(usingClass, fromLine, fromColumn, toLine, toColumn,
+                ownerIfBlock);
+
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-
-        this.resolvedInfo = new ElseBlockInfo(usingClass, outerSpace, fromLine, fromColumn, toLine,
-                toColumn, ownerIfBlock);
-
-        // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
-        this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);
+        this.resolvedInfo.setOuterUnit(outerSpace);
 
         return this.resolvedInfo;
     }

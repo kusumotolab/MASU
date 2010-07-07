@@ -1,7 +1,13 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -36,15 +42,38 @@ public abstract class UnresolvedConditionalBlockInfo<T extends ConditionalBlockI
      * 未解決条件式を設定する
      * @param conditionalClause 未解決条件式
      */
-    public final void setConditionalClause(
-            final UnresolvedConditionalClauseInfo conditionalClause) {
+    public final void setConditionalClause(final UnresolvedConditionalClauseInfo conditionalClause) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if(null == conditionalClause) {
+        if (null == conditionalClause) {
             throw new IllegalArgumentException("conditionalClause is null");
         }
-        
+
         this.conditionalClause = conditionalClause;
+    }
+
+    /**
+     * このローカル領域のインナー領域を名前解決する
+     * 
+     * @param usingClass この領域が存在しているクラス
+     * @param usingMethod この領域が存在しているメソッド
+     * @param classInfoManager クラスマネージャ
+     * @param fieldInfoManager フィールドマネージャ
+     * @param methodInfoManager メソッドマネージャ
+     */
+    @Override
+    public void resolveInnerBlock(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        super.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);
+
+        final UnresolvedConditionalClauseInfo unresolvedConditionalClause = this
+                .getConditionalClause();
+        final ConditionalClauseInfo conditionalClause = unresolvedConditionalClause.resolve(
+                usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        this.resolvedInfo.setConditionalClause(conditionalClause);
     }
 
     /**

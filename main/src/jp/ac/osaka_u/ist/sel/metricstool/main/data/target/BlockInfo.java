@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
-
 
 /**
  * if ブロックや for ブロックなど メソッド内の構造的なまとまりの単位を表す抽象クラス
@@ -20,23 +18,15 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
      * 位置情報を与えて初期化
      * 
      * @param ownerClass このブロックを所有するクラス
-     * @param ownerSpace このブロックを所有するブロック
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    BlockInfo(final TargetClassInfo ownerClass, final LocalSpaceInfo outerSpace,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+    BlockInfo(final TargetClassInfo ownerClass, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
         super(ownerClass, fromLine, fromColumn, toLine, toColumn);
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == ownerClass) || (null == outerSpace)) {
-            throw new IllegalArgumentException();
-        }
-
-        this.outerSpace = outerSpace;
     }
 
     /**
@@ -100,7 +90,7 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
      */
     @Override
     public final LocalSpaceInfo getOwnerSpace() {
-        return this.outerSpace;
+        return (LocalSpaceInfo) super.getOuterUnit();
     }
 
     /**
@@ -116,9 +106,4 @@ public abstract class BlockInfo extends LocalSpaceInfo implements StatementInfo 
         }
         return Collections.unmodifiableSet(thrownExpressions);
     }
-
-    /**
-     * このブロックを直接所有するローカル空間を保存するための変数
-     */
-    private final LocalSpaceInfo outerSpace;
 }

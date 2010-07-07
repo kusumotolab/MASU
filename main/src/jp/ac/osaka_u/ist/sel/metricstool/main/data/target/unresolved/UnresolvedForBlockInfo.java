@@ -67,15 +67,31 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
+        this.resolvedInfo = new ForBlockInfo(usingClass, fromLine, fromColumn, toLine, toColumn);
+
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
+        this.resolvedInfo.setOuterUnit(outerSpace);
 
-        this.resolvedInfo = new ForBlockInfo(usingClass, outerSpace, fromLine, fromColumn, toLine,
-                toColumn);
+        return this.resolvedInfo;
+    }
 
-        // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
-        this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+    /**
+     * このローカル領域のインナー領域を名前解決する
+     * 
+     * @param usingClass この領域が存在しているクラス
+     * @param usingMethod この領域が存在しているメソッド
+     * @param classInfoManager クラスマネージャ
+     * @param fieldInfoManager フィールドマネージャ
+     * @param methodInfoManager メソッドマネージャ
+     */
+    @Override
+    public final void resolveInnerBlock(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        super.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 
         // 未解決初期化式情報を解決し，解決済みオブジェクトに追加
@@ -89,8 +105,6 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
             this.resolvedInfo.addIteratorExpressions(updateExpression.resolve(usingClass,
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager));
         }
-
-        return this.resolvedInfo;
     }
 
     /**

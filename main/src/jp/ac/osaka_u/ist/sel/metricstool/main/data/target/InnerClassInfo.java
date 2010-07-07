@@ -1,21 +1,19 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-public interface InnerClassInfo {
-
-    /**
-     * 外側のユニットを返す
-     * 
-     * @return 外側のユニット
-     */
-    UnitInfo getOuterUnit();
+public interface InnerClassInfo extends HavingOuterUnit {
 
     /**
      * 外側のクラスを返す.
-     * つまり，getOuterUnit の返り値がClassInfoである場合は，そのオブジェクトを返し，
-     * 返り値が，MethodInfoである場合は，そのオブジェクトの ownerClass を返す．
      * 
      * @return　外側のクラス
      */
     ClassInfo getOuterClass();
+
+    /**
+     * 外側の呼び出し可能なユニット（メソッド，コンストラクタ等）を返す
+     * 
+     * @return 外側の呼び出し可能なユニット（メソッド，コンストラクタ等）
+     */
+    CallableUnitInfo getOuterCallableUnit();
 }

@@ -63,12 +63,12 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
+        this.resolvedInfo = new IfBlockInfo(usingClass, fromLine, fromColumn, toLine, toColumn);
+
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-
-        this.resolvedInfo = new IfBlockInfo(usingClass, outerSpace, fromLine, fromColumn, toLine,
-                toColumn);
+        this.resolvedInfo.setOuterUnit(outerSpace);
 
         // もしelseブロックがある場合は解決する
         if (this.hasElseBlock()) {
@@ -77,10 +77,6 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
                     usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.setSequentElseBlock(sequentBlockInfo);
         }
-
-        // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
-        this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);
 
         return this.resolvedInfo;
     }

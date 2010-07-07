@@ -75,23 +75,41 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
+        //　解決済み catchブロックオブジェクトを作成
+        this.resolvedInfo = new CatchBlockInfo(usingClass, fromLine, fromColumn, toLine, toColumn,
+                ownerTryBlock);
+
+        // 外側のユニットを解決
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
+        this.resolvedInfo.setOuterUnit(outerSpace);
 
-        //　解決済み catchブロックオブジェクトを作成
-        this.resolvedInfo = new CatchBlockInfo(usingClass, outerSpace, fromLine, fromColumn,
-                toLine, toColumn, ownerTryBlock);
+        return this.resolvedInfo;
+    }
 
+    /**
+     * このローカル領域のインナー領域を名前解決する
+     * 
+     * @param usingClass この領域が存在しているクラス
+     * @param usingMethod この領域が存在しているメソッド
+     * @param classInfoManager クラスマネージャ
+     * @param fieldInfoManager フィールドマネージャ
+     * @param methodInfoManager メソッドマネージャ
+     */
+    @Override
+    public final void resolveInnerBlock(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        super.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);
+
+        // キャッチする例外を解決
         final LocalVariableInfo caughtException = this.caughtException.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         this.resolvedInfo.setCaughtException(caughtException);
 
-        // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
-        this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);
-
-        return this.resolvedInfo;
     }
 
     /**

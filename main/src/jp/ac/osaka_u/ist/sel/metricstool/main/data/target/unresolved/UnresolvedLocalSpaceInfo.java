@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,8 +9,6 @@ import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -206,7 +203,7 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
      * @param fieldInfoManager フィールドマネージャ
      * @param methodInfoManager メソッドマネージャ
      */
-    public final void resolveInnerBlock(final TargetClassInfo usingClass,
+    public void resolveInnerBlock(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
             final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
 
@@ -224,34 +221,6 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
                 final StatementInfo block = unresolvedStatement.resolve(usingClass, usingMethod,
                         classInfoManager, fieldInfoManager, methodInfoManager);
                 this.resolvedInfo.addStatement(block);
-
-                // 条件付きブロックの時は条件も追加しなければならない
-                if (block instanceof ConditionalBlockInfo) {
-                    final UnresolvedConditionalBlockInfo<?> unresolvedConditionalBlock = (UnresolvedConditionalBlockInfo<?>) unresolvedStatement;
-
-                    if (null != unresolvedConditionalBlock.getConditionalClause()) {
-                        final ConditionalClauseInfo conditionalClause = unresolvedConditionalBlock
-                                .getConditionalClause().resolve(usingClass, usingMethod,
-                                        classInfoManager, fieldInfoManager, methodInfoManager);
-
-                        try {
-                            final Class<?> cls = Class
-                                    .forName("jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo");
-                            final Field filed = cls.getDeclaredField("conditionalClause");
-
-                            filed.setAccessible(true);
-                            filed.set(block, conditionalClause);
-                        } catch (ClassNotFoundException e) {
-                            assert false : "Illegal state: ConditionalBlockInfo is not found";
-                        } catch (NoSuchFieldException e) {
-                            assert false : "Illegal state: conditionalClause is not found";
-                        } catch (IllegalAccessException e) {
-                            assert false;
-                        }
-                    } else {
-                        assert false;
-                    }
-                }
 
                 unresolvedBlock.resolveInnerBlock(usingClass, usingMethod, classInfoManager,
                         fieldInfoManager, methodInfoManager);

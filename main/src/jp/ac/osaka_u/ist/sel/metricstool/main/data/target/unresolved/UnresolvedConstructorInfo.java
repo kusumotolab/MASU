@@ -73,6 +73,7 @@ public final class UnresolvedConstructorInfo extends
         this.resolvedInfo = new TargetConstructorInfo(methodModifiers, ownerClass, privateVisible,
                 namespaceVisible, inheritanceVisible, publicVisible, constructorFromLine,
                 constructorFromColumn, constructorToLine, constructorToColumn);
+        this.resolvedInfo.setOuterUnit(ownerClass);
 
         // 型パラメータを解決し，解決済みコンストラクタ情報に追加する
         // ここではextends節は解決しない

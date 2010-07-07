@@ -30,6 +30,7 @@ public class UnresolvedImplicitInstanceInitializerInfo extends UnresolvedInstanc
     public InstanceInitializerInfo resolve(TargetClassInfo usingClass,
             CallableUnitInfo usingMethod, ClassInfoManager classInfoManager,
             FieldInfoManager fieldInfoManager, MethodInfoManager methodInfoManager) {
+
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == usingClass) {

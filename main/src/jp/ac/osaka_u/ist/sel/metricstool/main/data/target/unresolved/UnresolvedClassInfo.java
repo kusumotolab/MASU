@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -437,11 +436,11 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * 外側のユニットを返す
+     * 外側の所有者を返す
      * 
-     * @return 外側のユニット. 外側のユニットがない場合はnull
+     * @return 外側の所有者. ない場合はnull
      */
-    public UnresolvedUnitInfo<?> getOuterUnit() {
+    public UnresolvedUnitInfo<? extends UnitInfo> getOuterUnit() {
         return this.outerUnit;
     }
 
@@ -538,7 +537,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 
      * @param outerUnit 外側のユニット
      */
-    public void setOuterUnit(final UnresolvedUnitInfo<?> outerUnit) {
+    public void setOuterUnit(final UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
         this.outerUnit = outerUnit;
     }
 
@@ -699,36 +698,32 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         final int toColumn = this.getToColumn();
 
         // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
-        // 無名クラスの場合
-        if (this.isAnonymous()) {
-            final UnresolvedClassInfo unresolvedOuterClass = this.getOuterClass();
-            final TargetClassInfo outerClass = unresolvedOuterClass.resolve(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-            final UnresolvedUnitInfo<? extends UnitInfo> unresolvedOuterUnit = this.getOuterUnit();
-            final UnitInfo outerUnit = unresolvedOuterUnit.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager);
+        final UnresolvedUnitInfo<? extends UnitInfo> unresolvedOuterUnit = this.getOuterUnit();
 
-            this.resolvedInfo = new TargetAnonymousClassInfo(fullQualifiedName, outerClass, null,
-                    this.fileInfo, fromLine, fromColumn, toLine, toColumn);
-            // TODO outerUnitを登録する
+        // 所有者がある場合は インナークラスか無名クラス
+        if (null != unresolvedOuterUnit) {
 
-            // 一番外側のクラスの場合
-        } else if (null == this.outerUnit) {
+            // 無名クラスのとき
+            if (this.isAnonymous()) {
+                this.resolvedInfo = new TargetAnonymousClassInfo(fullQualifiedName, this.fileInfo,
+                        fromLine, fromColumn, toLine, toColumn);
+            }
+
+            //　インナークラスのとき
+            else {
+                this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
+                        privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
+                        instance, this.isInterface, this.fileInfo, fromLine, fromColumn, toLine,
+                        toColumn);
+            }
+        }
+
+        // 所有者がない場合はもっとも外側のクラス
+        else {
+
             this.resolvedInfo = new TargetClassInfo(modifiers, fullQualifiedName, privateVisible,
                     namespaceVisible, inheritanceVisible, publicVisible, instance,
-                    this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
-
-            // インナークラスの場合
-        } else {
-
-            final UnresolvedClassInfo unresolvedOuterClass = this.getOuterClass();
-            final TargetClassInfo outerClass = unresolvedOuterClass.resolve(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-
-            // outerUnitは後で解決する．ここでは登録しない
-            this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName, outerClass,
-                    privateVisible, namespaceVisible, inheritanceVisible, publicVisible, instance,
                     this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
         }
 
@@ -756,6 +751,14 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             methodInfoManager.add(constructor);
         }
 
+        // コンストラクタが全く定義されていない場合はデフォルトコンストラクタを1つ用意
+        if (0 == this.getDefinedConstructors().size()) {
+            final TargetConstructorInfo constructor = new TargetConstructorInfo(Collections
+                    .<ModifierInfo> emptySet(), this.resolvedInfo, false, true, false, false, 0, 0,
+                    0, 0);
+            this.resolvedInfo.addDefinedConstructor(constructor);
+        }
+
         //　このクラスで定義しているフィールドを解決
         for (final UnresolvedFieldInfo unresolvedConstructor : this.getDefinedFields()) {
             final TargetFieldInfo field = unresolvedConstructor.resolve(this.resolvedInfo, null,
@@ -781,6 +784,32 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         }
 
         return this.resolvedInfo;
+    }
+
+    /**
+     * 外側のユニットを解決する
+     * 
+     * @param classInfoManager
+     * @return
+     */
+    public TargetClassInfo resolveOuterUnit(final ClassInfoManager classInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == classInfoManager) {
+            throw new IllegalArgumentException();
+        }
+
+        final TargetClassInfo resolved = this.getResolved();
+
+        final UnresolvedUnitInfo<? extends UnitInfo> unresolvedOuterUnit = this.getOuterUnit();
+        if (null != unresolvedOuterUnit) {
+            final UnitInfo outerUnit = unresolvedOuterUnit.resolve(null, null, classInfoManager,
+                    null, null);
+            ((TargetInnerClassInfo) resolved).setOuterUnit(outerUnit);
+        }
+
+        return resolved;
     }
 
     /**
@@ -914,25 +943,6 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         return "class \"" + this.className + "\" in file \"" + this.fileInfo.getName() + "\"";
     }
 
-    private UnresolvedClassInfo getOuterClass() {
-
-        UnresolvedUnitInfo<?> outerUnit = this.getOuterUnit();
-        if (null == outerUnit) {
-            return null;
-        }
-
-        if (outerUnit instanceof UnresolvedClassInfo) {
-            return (UnresolvedClassInfo) outerUnit;
-        }
-
-        if (outerUnit instanceof UnresolvedCallableUnitInfo<?>) {
-            return ((UnresolvedCallableUnitInfo<?>) outerUnit).getOwnerClass();
-        }
-
-        assert false : "Here shouldn't be reached!";
-        return null;
-    }
-
     /**
      * クラスが記述されているファイル情報を保存するための変数
      */
@@ -971,7 +981,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     /**
      * 外側のユニットを保持する変数
      */
-    private UnresolvedUnitInfo<?> outerUnit;
+    private UnresolvedUnitInfo<? extends UnitInfo> outerUnit;
 
     /**
      * 定義しているメソッドを保存するためのセット

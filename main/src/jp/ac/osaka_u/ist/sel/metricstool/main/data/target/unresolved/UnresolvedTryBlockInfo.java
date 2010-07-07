@@ -67,12 +67,12 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
+        this.resolvedInfo = new TryBlockInfo(usingClass, fromLine, fromColumn, toLine, toColumn);
+
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-
-        this.resolvedInfo = new TryBlockInfo(usingClass, outerSpace, fromLine, fromColumn, toLine,
-                toColumn);
+        this.resolvedInfo.setOuterUnit(outerSpace);
 
         // 対応するfinally節を解決
         if (this.hasFinallyBlock()) {
@@ -88,10 +88,6 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
                     classInfoManager, fieldInfoManager, methodInfoManager);
             this.resolvedInfo.addSequentCatchBlock(catchBlock);
         }
-
-        // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
-        this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);
 
         return this.resolvedInfo;
     }

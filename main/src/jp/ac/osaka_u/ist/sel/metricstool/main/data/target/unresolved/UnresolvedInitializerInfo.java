@@ -62,6 +62,7 @@ public abstract class UnresolvedInitializerInfo<T extends InitializerInfo> exten
                 classInfoManager, fieldInfoManager, methodInfoManager);
         this.resolvedInfo = this.buildResolvedInfo(ownerClass, this.getFromLine(), this
                 .getFromColumn(), this.getToLine(), this.getToColumn());
+        this.resolvedInfo.setOuterUnit(ownerClass);
 
         return this.resolvedInfo;
     }

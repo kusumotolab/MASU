@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * if　や while など，条件節を持ったブロック文を表すクラス
@@ -19,16 +21,15 @@ public abstract class ConditionalBlockInfo extends BlockInfo {
      * 位置情報を与えて初期化
      * 
      * @param ownerClass このブロックを所有するクラス
-     * @param ownerSpace このブロックを所有するブロック
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    ConditionalBlockInfo(final TargetClassInfo ownerClass, final LocalSpaceInfo outerSpace,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+    ConditionalBlockInfo(final TargetClassInfo ownerClass, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super(ownerClass, outerSpace, fromLine, fromColumn, toLine, toColumn);
+        super(ownerClass, fromLine, fromColumn, toLine, toColumn);
 
     }
 
@@ -72,6 +73,21 @@ public abstract class ConditionalBlockInfo extends BlockInfo {
         calls.addAll(condition.getCalls());
 
         return Collections.unmodifiableSet(calls);
+    }
+
+    /**
+     * 条件節を設定する
+     * 
+     * @param conditionalClause 条件節
+     */
+    public final void setConditionalClause(final ConditionalClauseInfo conditionalClause) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == conditionalClause) {
+            throw new IllegalArgumentException();
+        }
+
+        this.conditionalClause = conditionalClause;
     }
 
     /**

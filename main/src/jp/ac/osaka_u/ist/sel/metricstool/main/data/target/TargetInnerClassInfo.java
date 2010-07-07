@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
 /**
@@ -36,7 +37,6 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
      * @param modifiers 修飾子名の Set
      * @param namespace 名前空間
      * @param className クラス名
-     * @param outerClass 外側のクラス
      * @param privateVisible クラス内からのみ参照可能
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
@@ -50,21 +50,16 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
      * @param toColumn 終了列
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
-            final String className, final TargetClassInfo outerClass, final boolean privateVisible,
-            final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final boolean instance, final boolean isInterface,
-            final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+            final String className, final boolean privateVisible, final boolean namespaceVisible,
+            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
+            final boolean isInterface, final FileInfo fileInfo, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(modifiers, namespace, className, privateVisible, namespaceVisible,
                 inheritanceVisible, publicVisible, instance, isInterface, fileInfo, fromLine,
                 fromColumn, toLine, toColumn);
 
-        if (null == outerClass) {
-            throw new IllegalArgumentException();
-        }
-
-        this.outerClass = outerClass;
+        this.outerUnit = null;
     }
 
     /**
@@ -72,7 +67,6 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
      * 
      * @param modifiers 修飾子名の Set
      * @param fullQualifiedName 完全限定名
-     * @param outerClass 外側のクラス
      * @param privateVisible クラス内からのみ参照可能
      * @param namespaceVisible 同じ名前空間から参照可能
      * @param inheritanceVisible 子クラスから参照可能
@@ -86,21 +80,17 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
      * @param toColumn 終了列
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers,
-            final String[] fullQualifiedName, final TargetClassInfo outerClass,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
-            final boolean isInterface, final FileInfo fileInfo, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final String[] fullQualifiedName, final boolean privateVisible,
+            final boolean namespaceVisible, final boolean inheritanceVisible,
+            final boolean publicVisible, final boolean instance, final boolean isInterface,
+            final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
         super(modifiers, fullQualifiedName, privateVisible, namespaceVisible, inheritanceVisible,
                 publicVisible, instance, isInterface, fileInfo, fromLine, fromColumn, toLine,
                 toColumn);
 
-        if (null == outerClass) {
-            throw new IllegalArgumentException();
-        }
-
-        this.outerClass = outerClass;
+        this.outerUnit = null;
     }
 
     /**
@@ -110,19 +100,77 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
      */
     @Override
     public UnitInfo getOuterUnit() {
-        return this.getOuterClass();
+        assert null != this.outerUnit : "outerUnit is null!";
+        return this.outerUnit;
+    }
+
+    /**
+     * 外側のユニットを設定する
+     * 
+     * @param 外側のユニット
+     */
+    @Override
+    public void setOuterUnit(final UnitInfo outerUnit) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == outerUnit) {
+            throw new IllegalArgumentException();
+        }
+
+        this.outerUnit = outerUnit;
     }
 
     /**
      * 外側のクラスを返す.
-     * つまり，getOuterUnit の返り値がTargetClassInfoである場合は，そのオブジェクトを返し，
-     * 返り値が，TargetMethodInfoである場合は，そのオブジェクトの ownerClass を返す．
      * 
      * @return　外側のクラス
      */
     @Override
     public final ClassInfo getOuterClass() {
-        return this.outerClass;
+
+        UnitInfo outer = this.getOuterUnit();
+
+        while (true) {
+
+            // インナークラスなのでかならず外側のクラスがある
+            if (null == outer) {
+                throw new IllegalStateException();
+            }
+
+            if (outer instanceof ClassInfo) {
+                return (ClassInfo) outer;
+            }
+
+            outer = ((HavingOuterUnit) outer).getOuterUnit();
+        }
+    }
+
+    /**
+     * 外側のメソッドを返す.
+     * 
+     * @return　外側のメソッド
+     */
+    @Override
+    public final CallableUnitInfo getOuterCallableUnit() {
+
+        UnitInfo outer = this.getOuterUnit();
+
+        while (true) {
+
+            if (null == outer) {
+                return null;
+            }
+
+            if (outer instanceof CallableUnitInfo) {
+                return (CallableUnitInfo) outer;
+            }
+
+            if (!(outer instanceof HavingOuterUnit)) {
+                return null;
+            }
+
+            outer = ((HavingOuterUnit) outer).getOuterUnit();
+        }
     }
 
     @Override
@@ -131,7 +179,7 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
     }
 
     /**
-     * 外側のクラスを保存する変数
+     * 外側のユニットを保存する変数
      */
-    private final TargetClassInfo outerClass;
+    private UnitInfo outerUnit;
 }

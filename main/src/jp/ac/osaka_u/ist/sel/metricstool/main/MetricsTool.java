@@ -1096,15 +1096,14 @@ public class MetricsTool {
     private void resolveDefinitions() {
 
         // 未解決クラス情報マネージャ， クラス情報マネージャを取得
-        final UnresolvedClassInfoManager unresolvedClassInfoManager = DataManager.getInstance()
+        final UnresolvedClassInfoManager unresolvedClassManager = DataManager.getInstance()
                 .getUnresolvedClassInfoManager();
         final ClassInfoManager classManager = DataManager.getInstance().getClassInfoManager();
         final FieldInfoManager fieldManager = DataManager.getInstance().getFieldInfoManager();
         final MethodInfoManager methodManager = DataManager.getInstance().getMethodInfoManager();
 
         // 各未解決クラスに対して
-        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
-                .getClassInfos()) {
+        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassManager.getClassInfos()) {
 
             final FileInfo fileInfo = unresolvedClassInfo.getFileInfo();
 
@@ -1116,6 +1115,11 @@ public class MetricsTool {
 
             // 解決されたクラス情報を登録
             classManager.add(classInfo);
+        }
+
+        // 各未解決クラスの外側のユニットを解決
+        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassManager.getClassInfos()) {
+            unresolvedClassInfo.resolveOuterUnit(classManager);
         }
     }
 

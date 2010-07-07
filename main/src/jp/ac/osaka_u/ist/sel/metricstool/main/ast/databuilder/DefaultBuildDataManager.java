@@ -234,7 +234,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
             //外側のクラスがない場合にだけ登録を行う（現在はすべてのクラスを登録する）
             //if (this.classStack.isEmpty()) {
-                DataManager.getInstance().getUnresolvedClassInfoManager().addClass(classInfo);
+            DataManager.getInstance().getUnresolvedClassInfoManager().addClass(classInfo);
             //}
 
             if (!this.callableUnitStack.isEmpty()) {

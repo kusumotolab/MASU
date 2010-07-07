@@ -24,19 +24,9 @@ public class ExternalInnerClassInfo extends ExternalClassInfo implements InnerCl
     }
 
     /**
-     * 外側のユニットを返す
+     * 外側の所有者を返す
      * 
-     * @return 外側のユニット
-     */
-    @Override
-    public final UnitInfo getOuterUnit() {
-        return this.outerUnit;
-    }
-
-    /**
-     * 外側のユニットを設定する
-     * 
-     * @param outerUnit 外側のユニット
+     * @param outerOwner 外側の所有者
      */
     public void setOuterUnit(final UnitInfo outerUnit) {
 
@@ -49,30 +39,66 @@ public class ExternalInnerClassInfo extends ExternalClassInfo implements InnerCl
     }
 
     /**
+     * 外側のユニットを返す
+     * 
+     * @return 外側のユニット
+     */
+    @Override
+    public UnitInfo getOuterUnit() {
+        return this.outerUnit;
+    }
+
+    /**
      * 外側のクラスを返す.
-     * つまり，getOuterUnit の返り値がTargetClassInfoである場合は，そのオブジェクトを返し，
-     * 返り値が，TargetMethodInfoである場合は，そのオブジェクトの ownerClass を返す．
      * 
      * @return　外側のクラス
      */
     @Override
     public final ClassInfo getOuterClass() {
 
-        final UnitInfo unitInfo = this.getOuterUnit();
+        UnitInfo outer = this.getOuterUnit();
 
-        // 外側のユニットがクラスであればそのまま返す
-        if (unitInfo instanceof ExternalClassInfo) {
-            return (ExternalClassInfo) unitInfo;
+        while (true) {
 
-            // 外側のユニットがメソッドであれば，その所有クラスを返す
-        } else if (unitInfo instanceof ExternalMethodInfo) {
+            // インナークラスなのでかならず外側のクラスがある
+            if (null == outer) {
+                throw new IllegalStateException();
+            }
 
-            final ClassInfo ownerClass = ((ExternalMethodInfo) unitInfo).getOwnerClass();
-            return (ExternalClassInfo) ownerClass;
+            if (outer instanceof ClassInfo) {
+                return (ClassInfo) outer;
+            }
+
+            outer = ((HavingOuterUnit) outer).getOuterUnit();
         }
+    }
 
-        assert false : "here shouldn't be reached!";
-        return null;
+    /**
+     * 外側のメソッドを返す.
+     * 
+     * @return　外側のメソッド
+     */
+    @Override
+    public final CallableUnitInfo getOuterCallableUnit() {
+
+        UnitInfo outer = this.getOuterUnit();
+
+        while (true) {
+
+            if (null == outer) {
+                return null;
+            }
+
+            if (outer instanceof CallableUnitInfo) {
+                return (CallableUnitInfo) outer;
+            }
+
+            if (!(outer instanceof HavingOuterUnit)) {
+                return null;
+            }
+
+            outer = ((HavingOuterUnit) outer).getOuterUnit();
+        }
     }
 
     @Override

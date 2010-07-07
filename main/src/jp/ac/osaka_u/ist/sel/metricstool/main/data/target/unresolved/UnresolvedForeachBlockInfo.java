@@ -56,17 +56,13 @@ public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<F
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
+        this.resolvedInfo = new ForeachBlockInfo(usingClass, fromLine, fromColumn, toLine, toColumn);
+
         // 外側の空間を取得
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-
-        this.resolvedInfo = new ForeachBlockInfo(usingClass, outerSpace, fromLine, fromColumn,
-                toLine, toColumn);
-
-        // 未解決ブロック文情報を解決し，解決済みオブジェクトに追加
-        this.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
-                methodInfoManager);
+        this.resolvedInfo.setOuterUnit(outerSpace);
 
         return this.resolvedInfo;
     }
