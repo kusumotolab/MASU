@@ -38,7 +38,7 @@ public class JavaByteCodeParser implements ClassVisitor {
             final int index = name.lastIndexOf('$');
             if (0 <= index) {
                 this.classInfo.setInner(true);
-                this.classInfo.setAnonymous(Character.isDigit(name.charAt(index + 1)));
+                this.classInfo.setAnonymous(isNumber(name.substring(index + 1)));
             } else {
                 this.classInfo.setInner(false);
                 this.classInfo.setAnonymous(false);
@@ -410,6 +410,15 @@ public class JavaByteCodeParser implements ClassVisitor {
         }
 
         return superTypes.toArray(new String[0]);
+    }
+
+    private boolean isNumber(final String text) {
+        for (int index = 0; index < text.length(); index++) {
+            if (!Character.isDigit(text.charAt(index))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private final JavaUnresolvedExternalClassInfo classInfo;
