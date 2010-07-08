@@ -24,7 +24,7 @@ public class JavaIntefaceMarker extends StateDrivenDataBuilder<Object> {
     public void stateChanged(StateChangeEvent<AstVisitEvent> event) {
         StateChangeEventType type = event.getType();
         if (type
-                .equals(INTERFACE_STATE_CHANGE.ENTER_INTERFACE_DEFINITION /*ENTER_INTERFACE_BLOCK*/)) {
+                .equals(INTERFACE_STATE_CHANGE.ENTER_INTERFACE_BLOCK)) {
             javaBuildManager.toInterface();
         }
     }
