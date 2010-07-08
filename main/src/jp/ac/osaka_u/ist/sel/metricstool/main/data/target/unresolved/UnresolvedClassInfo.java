@@ -256,6 +256,17 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         return fullQualifiedName;
     }
 
+    public String getFullQualifiedName(final String delimiter) {
+
+        final StringBuilder text = new StringBuilder();
+        for (final String name : this.getFullQualifiedName()) {
+            text.append(name);
+            text.append(delimiter);
+        }
+        text.delete(text.length() - delimiter.length(), text.length());
+        return text.toString();
+    }
+
     /**
      * CüŽq‚Ì Set ‚ð•Ô‚·
      * 

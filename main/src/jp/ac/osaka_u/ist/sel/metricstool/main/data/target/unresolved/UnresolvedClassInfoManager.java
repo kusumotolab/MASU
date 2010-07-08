@@ -22,16 +22,24 @@ public class UnresolvedClassInfoManager {
      * 
      * @param classInfo クラス情報
      */
-    public void addClass(final UnresolvedClassInfo classInfo) {
+    public synchronized void addClass(final UnresolvedClassInfo classInfo) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == classInfo) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
 
-        ClassKey classKey = new ClassKey(classInfo.getFullQualifiedName());
-        this.classInfos.put(classKey, classInfo);
+        final String fqName = classInfo.getFullQualifiedName(".");
+
+        if (this.classInfos.containsKey(fqName)) {
+            final StringBuilder text = new StringBuilder();
+            text.append(fqName);
+            text.append(" : duplicate class registration!");
+            throw new IllegalStateException(text.toString());
+        }
+
+        this.classInfos.put(fqName, classInfo);
     }
 
     /**
@@ -44,130 +52,15 @@ public class UnresolvedClassInfoManager {
     }
 
     /**
-     * クラス情報を Map に保存するためのキー
-     * 
-     * @author higo
-     * 
-     */
-    static class ClassKey implements Comparable<ClassKey> {
-
-        /**
-         * コンストラクタ．クラスの完全修飾名を与える
-         * 
-         * @param fullQualifiedName クラスの完全修飾名
-         */
-        ClassKey(final String[] fullQualifiedName) {
-
-            // 不正な呼び出しでないかをチェック
-            MetricsToolSecurityManager.getInstance().checkAccess();
-            if (null == fullQualifiedName) {
-                throw new NullPointerException();
-            }
-
-            this.fullQualifiedName = fullQualifiedName;
-        }
-
-        /**
-         * キーを返す
-         * 
-         * @return キー． クラスの完全修飾名
-         */
-        public String[] getFullQualifiedName() {
-            return this.fullQualifiedName;
-        }
-
-        /**
-         * キーの順序を定義する
-         */
-        @Override
-        public int compareTo(final ClassKey classKey) {
-
-            if (null == classKey) {
-                throw new NullPointerException();
-            }
-
-            String[] fullQualifiedName = this.getFullQualifiedName();
-            String[] correspondFullQualifiedName = classKey.getFullQualifiedName();
-
-            if (fullQualifiedName.length > correspondFullQualifiedName.length) {
-                return 1;
-            } else if (fullQualifiedName.length < correspondFullQualifiedName.length) {
-                return -1;
-            } else {
-                for (int i = 0; i < fullQualifiedName.length; i++) {
-                    int order = fullQualifiedName[i].compareTo(correspondFullQualifiedName[i]);
-                    if (order != 0) {
-                        return order;
-                    }
-                }
-
-                return 0;
-            }
-        }
-
-        /**
-         * このクラスと対象クラスが等しいかどうかを判定する
-         * 
-         * @param o 比較対象オブジェクト
-         * @return 等しい場合は true，等しくない場合は false
-         */
-        @Override
-        public boolean equals(Object o) {
-
-            if (null == o) {
-                throw new NullPointerException();
-            }
-
-            if (!(o instanceof ClassKey)) {
-                return false;
-            }
-
-            final String[] fullQualifiedName = this.getFullQualifiedName();
-            final String[] correspondFullQualifiedName = ((ClassKey) o).getFullQualifiedName();
-
-            if (fullQualifiedName.length != correspondFullQualifiedName.length) {
-                return false;
-            }
-
-            for (int i = 0; i < fullQualifiedName.length; i++) {
-                if (!fullQualifiedName[i].equals(correspondFullQualifiedName[i])) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        /**
-         * このクラスのハッシュコードを返す
-         * 
-         * @return このクラスのハッシュコード
-         */
-        @Override
-        public int hashCode() {
-
-            StringBuffer buffer = new StringBuffer();
-            String[] fullQualifiedName = this.getFullQualifiedName();
-            for (int i = 0; i < fullQualifiedName.length; i++) {
-                buffer.append(fullQualifiedName[i]);
-            }
-
-            return buffer.toString().hashCode();
-        }
-
-        private final String[] fullQualifiedName;
-    }
-
-    /**
      * 引数なしコンストラクタ
      * 
      */
     public UnresolvedClassInfoManager() {
-        this.classInfos = new ConcurrentHashMap<ClassKey, UnresolvedClassInfo>();
+        this.classInfos = new ConcurrentHashMap<String, UnresolvedClassInfo>();
     }
 
     /**
      * UnresolvedClassInfo を保存するためのセット
      */
-    private final ConcurrentMap<ClassKey, UnresolvedClassInfo> classInfos;
+    private final ConcurrentMap<String, UnresolvedClassInfo> classInfos;
 }

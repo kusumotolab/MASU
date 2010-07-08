@@ -63,6 +63,12 @@ public final class ClassInfoManager {
                 }
             }
 
+            if (this.targetClassInfos.contains((TargetClassInfo) classInfo)) {
+                final StringBuilder text = new StringBuilder();
+                text.append(classInfo.getFullQualifiedName("."));
+                text.append(" : duplicate class registration!");
+                throw new IllegalStateException(text.toString());
+            }
             this.targetClassInfos.add((TargetClassInfo) classInfo);
         }
 
