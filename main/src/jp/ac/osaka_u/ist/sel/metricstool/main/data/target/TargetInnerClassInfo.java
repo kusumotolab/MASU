@@ -1,10 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.Arrays;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -22,13 +20,12 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
             throw new IllegalArgumentException();
         }
 
-        final String[] fqName = ((ClassInfo) innerClass).getFullQualifiedName();
-        final String[] outerFQName = Arrays.copyOf(fqName, fqName.length - 1);
+        ClassInfo outerClass = innerClass.getOuterClass();
+        while (outerClass instanceof InnerClassInfo) {
+            outerClass = ((InnerClassInfo) outerClass).getOuterClass();
+        }
 
-        final ClassInfo outerClass = DataManager.getInstance().getClassInfoManager().getClassInfo(
-                outerFQName);
-        return outerClass instanceof InnerClassInfo ? getOutestClass((InnerClassInfo) outerClass)
-                : outerClass;
+        return outerClass;
     }
 
     /**
@@ -37,11 +34,6 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
      * @param modifiers 修飾子名の Set
      * @param namespace 名前空間
      * @param className クラス名
-     * @param privateVisible クラス内からのみ参照可能
-     * @param namespaceVisible 同じ名前空間から参照可能
-     * @param inheritanceVisible 子クラスから参照可能
-     * @param publicVisible どこからでも参照可能
-     * @param instance インスタンスメンバーかどうか
      * @param isInterface インタフェースかどうか
      * @param fileInfo このクラスを宣言しているファイル情報
      * @param fromLine 開始行
@@ -50,14 +42,11 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
      * @param toColumn 終了列
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
-            final String className, final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
-            final boolean isInterface, final FileInfo fileInfo, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final String className, final boolean isInterface, final FileInfo fileInfo,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(modifiers, namespace, className, privateVisible, namespaceVisible,
-                inheritanceVisible, publicVisible, instance, isInterface, fileInfo, fromLine,
-                fromColumn, toLine, toColumn);
+        super(modifiers, namespace, className, isInterface, fileInfo, fromLine, fromColumn, toLine,
+                toColumn);
 
         this.outerUnit = null;
     }
@@ -67,11 +56,6 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
      * 
      * @param modifiers 修飾子名の Set
      * @param fullQualifiedName 完全限定名
-     * @param privateVisible クラス内からのみ参照可能
-     * @param namespaceVisible 同じ名前空間から参照可能
-     * @param inheritanceVisible 子クラスから参照可能
-     * @param publicVisible どこからでも参照可能
-     * @param instance インスタンスメンバーかどうか
      * @param isInterface インタフェースかどうか
      * @param fileInfo このクラスを宣言しているファイル情報
      * @param fromLine 開始行
@@ -80,14 +64,10 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
      * @param toColumn 終了列
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers,
-            final String[] fullQualifiedName, final boolean privateVisible,
-            final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final boolean instance, final boolean isInterface,
-            final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+            final String[] fullQualifiedName, final boolean isInterface, final FileInfo fileInfo,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(modifiers, fullQualifiedName, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible, instance, isInterface, fileInfo, fromLine, fromColumn, toLine,
+        super(modifiers, fullQualifiedName, isInterface, fileInfo, fromLine, fromColumn, toLine,
                 toColumn);
 
         this.outerUnit = null;

@@ -22,6 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticInitializerInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticOrInstance;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetAnonymousClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
@@ -30,6 +31,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Visualizable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -53,7 +55,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInfo> implements
-        VisualizableSetting, StaticOrInstanceSetting, ModifierSetting, UnresolvedHavingOuterUnit {
+        Visualizable, StaticOrInstance, ModifierSetting, UnresolvedHavingOuterUnit {
 
     /**
      * このクラスが記述されているファイル情報を与えて初期化
@@ -90,14 +92,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         this.staticInitializers = new HashSet<UnresolvedStaticInitializerInfo>();
         this.staticInitializers.add(this.implicitStaticInitializer);
         this.importStatements = new LinkedList<UnresolvedImportStatementInfo<?>>();
-
-        this.privateVisible = false;
-        this.inheritanceVisible = false;
-        this.namespaceVisible = false;
-        this.publicVisible = false;
         this.isInterface = false;
-
-        this.instance = true;
 
         this.anonymous = false;
 
@@ -458,6 +453,16 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
+     * 外側のユニットをセットする
+     * 
+     * @param outerUnit 外側のユニット
+     */
+    @Override
+    public void setOuterUnit(final UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
+        this.outerUnit = outerUnit;
+    }
+
+    /**
      * 外側のクラスを返す.
      * 
      * @return　外側のクラス
@@ -581,58 +586,13 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     }
 
     /**
-     * 子クラスから参照可能かどうかを設定する
-     * 
-     * @param inheritanceVisible 子クラスから参照可能な場合は true，そうでない場合は false
-     */
-    public void setInheritanceVisible(final boolean inheritanceVisible) {
-        this.inheritanceVisible = inheritanceVisible;
-    }
-
-    /**
-     * 同じ名前空間内から参照可能かどうかを設定する
-     * 
-     * @param namespaceVisible 同じ名前空間から参照可能な場合は true，そうでない場合は false
-     */
-    public void setNamespaceVisible(final boolean namespaceVisible) {
-        this.namespaceVisible = namespaceVisible;
-    }
-
-    /**
-     * 外側のユニットをセットする
-     * 
-     * @param outerUnit 外側のユニット
-     */
-    public void setOuterUnit(final UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
-        this.outerUnit = outerUnit;
-    }
-
-    /**
-     * クラス内からのみ参照可能かどうかを設定する
-     * 
-     * @param privateVisible クラス内からのみ参照可能な場合は true，そうでない場合は false
-     */
-    @Override
-    public void setPrivateVibible(final boolean privateVisible) {
-        this.privateVisible = privateVisible;
-    }
-
-    /**
-     * どこからでも参照可能かどうかを設定する
-     * 
-     * @param publicVisible どこからでも参照可能な場合は true，そうでない場合は false
-     */
-    public void setPublicVisible(final boolean publicVisible) {
-        this.publicVisible = publicVisible;
-    }
-
-    /**
      * 子クラスから参照可能かどうかを返す
      * 
      * @return 子クラスから参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public boolean isInheritanceVisible() {
-        return this.inheritanceVisible;
+        return ModifierInfo.isInheritanceVisible(this.modifiers);
     }
 
     /**
@@ -640,17 +600,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 
      * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public boolean isNamespaceVisible() {
-        return this.namespaceVisible;
-    }
-
-    /**
-     * クラス内からのみ参照可能かどうかを返す
-     * 
-     * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
-     */
-    public boolean isPrivateVisible() {
-        return this.privateVisible;
+        return ModifierInfo.isNamespaceVisible(this.modifiers);
     }
 
     /**
@@ -659,7 +611,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * @return どこからでも参照可能な場合は true, そうでない場合は false
      */
     public boolean isPublicVisible() {
-        return this.publicVisible;
+        return ModifierInfo.isPublicVisible(this.modifiers);
     }
 
     /**
@@ -667,8 +619,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 
      * @return インスタンスメンバーの場合 true，そうでない場合 false
      */
+    @Override
     public boolean isInstanceMember() {
-        return this.instance;
+        return ModifierInfo.isInstanceMember(this.getModifiers());
     }
 
     /**
@@ -676,8 +629,9 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 
      * @return スタティックメンバーの場合 true，そうでない場合 false
      */
+    @Override
     public boolean isStaticMember() {
-        return !this.instance;
+        return ModifierInfo.isStaticMember(this.getModifiers());
     }
 
     /**
@@ -687,15 +641,6 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      */
     public final boolean isInterface() {
         return this.isInterface;
-    }
-
-    /**
-     * インスタンスメンバーかどうかをセットする
-     * 
-     * @param instance インスタンスメンバーの場合は true， スタティックメンバーの場合は false
-     */
-    public void setInstanceMember(final boolean instance) {
-        this.instance = instance;
     }
 
     /**
@@ -749,11 +694,6 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         // 修飾子，完全限定名，行数，可視性，インスタンスメンバーかどうかを取得
         final Set<ModifierInfo> modifiers = this.getModifiers();
         final String[] fullQualifiedName = this.getFullQualifiedName();
-        final boolean privateVisible = this.isPrivateVisible();
-        final boolean namespaceVisible = this.isNamespaceVisible();
-        final boolean inheritanceVisible = this.isInheritanceVisible();
-        final boolean publicVisible = this.isPublicVisible();
-        final boolean instance = this.isInstanceMember();
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
@@ -775,18 +715,15 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             //　インナークラスのとき
             else {
                 this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
-                        privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
-                        instance, this.isInterface, this.fileInfo, fromLine, fromColumn, toLine,
-                        toColumn);
+                        this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
             }
         }
 
         // 所有者がない場合はもっとも外側のクラス
         else {
 
-            this.resolvedInfo = new TargetClassInfo(modifiers, fullQualifiedName, privateVisible,
-                    namespaceVisible, inheritanceVisible, publicVisible, instance,
-                    this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+            this.resolvedInfo = new TargetClassInfo(modifiers, fullQualifiedName, this.isInterface,
+                    this.fileInfo, fromLine, fromColumn, toLine, toColumn);
         }
 
         // タイプパラメータがある場合は解決する．ただしここでは，exntends までは解決しない
@@ -816,7 +753,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         // コンストラクタが全く定義されていない場合はデフォルトコンストラクタを1つ用意
         if (0 == this.getDefinedConstructors().size()) {
             final TargetConstructorInfo constructor = new TargetConstructorInfo(Collections
-                    .<ModifierInfo> emptySet(), false, true, false, false, 0, 0, 0, 0);
+                    .<ModifierInfo> emptySet(), 0, 0, 0, 0);
             constructor.setOuterUnit(this.resolvedInfo);
             this.resolvedInfo.addDefinedConstructor(constructor);
         }
@@ -1084,31 +1021,6 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * 利用可能な名前空間を保存するためのセット
      */
     private final List<UnresolvedImportStatementInfo<?>> importStatements;
-
-    /**
-     * クラス内からのみ参照可能かどうか保存するための変数
-     */
-    private boolean privateVisible;
-
-    /**
-     * 同じ名前空間から参照可能かどうか保存するための変数
-     */
-    private boolean namespaceVisible;
-
-    /**
-     * 子クラスから参照可能かどうか保存するための変数
-     */
-    private boolean inheritanceVisible;
-
-    /**
-     * どこからでも参照可能かどうか保存するための変数
-     */
-    private boolean publicVisible;
-
-    /**
-     * インスタンスメンバーかどうかを保存するための変数
-     */
-    private boolean instance;
 
     /**
      * インターフェースであるかどうかを保存するための変数

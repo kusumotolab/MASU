@@ -37,17 +37,10 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    CallableUnitInfo(final Set<ModifierInfo> modifiers, final boolean privateVisible,
-            final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final int fromLine, final int fromColumn,
+    CallableUnitInfo(final Set<ModifierInfo> modifiers, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
-
-        this.privateVisible = privateVisible;
-        this.namespaceVisible = namespaceVisible;
-        this.inheritanceVisible = inheritanceVisible;
-        this.publicVisible = publicVisible;
 
         this.parameters = new LinkedList<ParameterInfo>();
 
@@ -491,7 +484,8 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      */
     @Override
     public final boolean isInheritanceVisible() {
-        return this.inheritanceVisible;
+        final ClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? true : ModifierInfo.isInheritanceVisible(this.modifiers);
     }
 
     /**
@@ -501,17 +495,8 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      */
     @Override
     public final boolean isNamespaceVisible() {
-        return this.namespaceVisible;
-    }
-
-    /**
-     * クラス内からのみ参照可能かどうかを返す
-     * 
-     * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
-     */
-    @Override
-    public final boolean isPrivateVisible() {
-        return this.privateVisible;
+        final ClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? true : ModifierInfo.isNamespaceVisible(this.modifiers);
     }
 
     /**
@@ -521,7 +506,8 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      */
     @Override
     public final boolean isPublicVisible() {
-        return this.publicVisible;
+        final ClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? true : ModifierInfo.isPublicVisible(this.modifiers);
     }
 
     /**
@@ -561,26 +547,6 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * @return このCallableUnitInfoのシグネチャのテキスト表現
      */
     public abstract String getSignatureText();
-
-    /**
-     * クラス内からのみ参照可能かどうか保存するための変数
-     */
-    private final boolean privateVisible;
-
-    /**
-     * 同じ名前空間から参照可能かどうか保存するための変数
-     */
-    private final boolean namespaceVisible;
-
-    /**
-     * 子クラスから参照可能かどうか保存するための変数
-     */
-    private final boolean inheritanceVisible;
-
-    /**
-     * どこからでも参照可能かどうか保存するための変数
-     */
-    private final boolean publicVisible;
 
     /**
      * 修飾子を保存するための変数

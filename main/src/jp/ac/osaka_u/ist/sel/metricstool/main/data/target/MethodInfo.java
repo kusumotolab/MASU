@@ -27,23 +27,16 @@ public abstract class MethodInfo extends CallableUnitInfo implements MetricMeasu
      * 
      * @param modifiers 修飾子のSet
      * @param methodName メソッド名
-     * @param privateVisible private可視か
-     * @param namespaceVisible 名前空間可視か
-     * @param inheritanceVisible 子クラスから可視か
-     * @param publicVisible public可視か
      * @param instance インスタンスかスタティックか
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    MethodInfo(final Set<ModifierInfo> modifiers, final String methodName,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
+    MethodInfo(final Set<ModifierInfo> modifiers, final String methodName, final boolean instance,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(modifiers, privateVisible, namespaceVisible, inheritanceVisible, publicVisible,
-                fromLine, fromColumn, toLine, toColumn);
+        super(modifiers, fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == methodName) {

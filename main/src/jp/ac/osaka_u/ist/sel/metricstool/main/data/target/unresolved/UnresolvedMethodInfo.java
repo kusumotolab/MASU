@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticOrInstance;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
@@ -23,7 +24,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<TargetMethodInfo>
-        implements StaticOrInstanceSetting {
+        implements StaticOrInstance {
 
     /**
      * 未解決メソッド定義情報オブジェクトを初期化
@@ -39,7 +40,6 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
 
         this.methodName = null;
         this.returnType = null;
-        this.instance = true;
         this.resolvedInfo = null;
     }
 
@@ -70,10 +70,6 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         final Set<ModifierInfo> methodModifiers = this.getModifiers();
         final String methodName = this.getMethodName();
 
-        final boolean privateVisible = this.isPrivateVisible();
-        final boolean namespaceVisible = this.isNamespaceVisible();
-        final boolean inheritanceVisible = this.isInheritanceVisible();
-        final boolean publicVisible = this.isPublicVisible();
         final boolean instance = this.isInstanceMember();
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
@@ -81,8 +77,7 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
         final int toColumn = this.getToColumn();
 
         // MethodInfo オブジェクトを生成する．
-        this.resolvedInfo = new TargetMethodInfo(methodModifiers, methodName, privateVisible,
-                namespaceVisible, inheritanceVisible, publicVisible, instance, fromLine,
+        this.resolvedInfo = new TargetMethodInfo(methodModifiers, methodName, instance, fromLine,
                 fromColumn, toLine, toColumn);
 
         final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
@@ -180,33 +175,6 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
     }
 
     /**
-     * インスタンスメンバーかどうかを返す
-     * 
-     * @return インスタンスメンバーの場合 true，そうでない場合 false
-     */
-    public boolean isInstanceMember() {
-        return this.instance;
-    }
-
-    /**
-     * スタティックメンバーかどうかを返す
-     * 
-     * @return スタティックメンバーの場合 true，そうでない場合 false
-     */
-    public boolean isStaticMember() {
-        return !this.instance;
-    }
-
-    /**
-     * インスタンスメンバーかどうかをセットする
-     * 
-     * @param instance インスタンスメンバーの場合は true， スタティックメンバーの場合は false
-     */
-    public void setInstanceMember(final boolean instance) {
-        this.instance = instance;
-    }
-
-    /**
      * メソッド名を保存するための変数
      */
     private String methodName;
@@ -215,10 +183,4 @@ public final class UnresolvedMethodInfo extends UnresolvedCallableUnitInfo<Targe
      * メソッドの返り値を保存するための変数
      */
     private UnresolvedTypeInfo<?> returnType;
-
-    /**
-     * インスタンスメンバーかどうかを保存するための変数
-     */
-    private boolean instance;
-
 }

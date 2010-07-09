@@ -16,8 +16,7 @@ public abstract class InitializerInfo extends CallableUnitInfo {
 
     public InitializerInfo(final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
-        super(Collections.<ModifierInfo> emptySet(), true, false, false, false, fromLine,
-                fromColumn, toLine, toColumn);
+        super(Collections.<ModifierInfo> emptySet(), fromLine, fromColumn, toLine, toColumn);
     }
 
     @Override

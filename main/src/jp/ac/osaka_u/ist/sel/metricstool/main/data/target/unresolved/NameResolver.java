@@ -620,7 +620,7 @@ public final class NameResolver {
         // usingがusedと同じパッケージであれば，private 以外のメソッドが使用可能
         if (usingClass.getNamespace().equals(usedClass.getNamespace())) {
             for (final MethodInfo method : usedClass.getDefinedMethods()) {
-                if (!method.isPrivateVisible()) {
+                if (method.isNamespaceVisible()) {
                     availableMethods.add(method);
                 }
             }
@@ -632,7 +632,20 @@ public final class NameResolver {
                     .getOutestClass((InnerClassInfo) usingClass);
             if (outestClass.getNamespace().equals(usedClass.getNamespace())) {
                 for (final MethodInfo method : usedClass.getDefinedMethods()) {
-                    if (!method.isPrivateVisible()) {
+                    if (method.isNamespaceVisible()) {
+                        availableMethods.add(method);
+                    }
+                }
+            }
+        }
+
+        // usedがインナークラスであれば，その最外クラスと，usingくらすが同じパッケージであれば使用可能
+        if (usedClass instanceof InnerClassInfo) {
+            final ClassInfo outestClass = TargetInnerClassInfo
+                    .getOutestClass((InnerClassInfo) usedClass);
+            if (usingClass.getNamespace().equals(outestClass.getNamespace())) {
+                for(final MethodInfo method : usedClass.getDefinedMethods()){
+                    if(method.isNamespaceVisible()){
                         availableMethods.add(method);
                     }
                 }

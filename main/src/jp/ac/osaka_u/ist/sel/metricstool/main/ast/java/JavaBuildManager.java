@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -10,7 +9,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedImportStatementInfo;
 
@@ -24,11 +22,11 @@ public class JavaBuildManager extends DefaultBuildDataManager {
     @Override
     public void addField(UnresolvedFieldInfo field) {
         if (isInInterface()) {
-            field.setPublicVisible(true);
-            field.setInheritanceVisible(true);
-            field.setNamespaceVisible(true);
-            field.setPrivateVibible(false);
-            field.setInstanceMember(false);
+            //field.setPublicVisible(true);
+            //field.setInheritanceVisible(true);
+            //field.setNamespaceVisible(true);
+            //field.setPrivateVibible(false);
+            //field.setInstanceMember(false);
         }
 
         super.addField(field);
@@ -73,10 +71,10 @@ public class JavaBuildManager extends DefaultBuildDataManager {
         UnresolvedCallableUnitInfo<? extends CallableUnitInfo> method = super
                 .endCallableUnitDefinition();
         if (isInInterface()) {
-            method.setPublicVisible(true);
-            method.setInheritanceVisible(true);
-            method.setNamespaceVisible(true);
-            method.setPrivateVibible(false);
+            //method.setPublicVisible(true);
+            //method.setInheritanceVisible(true);
+            //method.setNamespaceVisible(true);
+            //method.setPrivateVibible(false);
         }
         return method;
     }

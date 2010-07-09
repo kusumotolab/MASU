@@ -22,8 +22,8 @@ public final class ArrayLengthInfo extends FieldInfo {
      */
     private ArrayLengthInfo(final ArrayTypeInfo ownerArray) {
 
-        super(new HashSet<ModifierInfo>(), "length", new ArrayTypeClassInfo(ownerArray), true,
-                true, true, true, true, 0, 0, 0, 0);
+        super(new HashSet<ModifierInfo>(), "length", new ArrayTypeClassInfo(ownerArray), true, 0,
+                0, 0, 0);
         this.setType(PrimitiveTypeInfo.INT);
     }
 

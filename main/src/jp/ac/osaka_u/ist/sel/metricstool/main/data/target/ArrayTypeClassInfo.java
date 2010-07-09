@@ -22,8 +22,7 @@ public final class ArrayTypeClassInfo extends ClassInfo {
      */
     public ArrayTypeClassInfo(final ArrayTypeInfo arrayType) {
 
-        super(new HashSet<ModifierInfo>(), NamespaceInfo.UNKNOWN, NONAME, false, true, true, true,
-                true, false, 0, 0, 0, 0);
+        super(new HashSet<ModifierInfo>(), NamespaceInfo.UNKNOWN, NONAME, false, 0, 0, 0, 0);
 
         if (null == arrayType) {
             throw new IllegalArgumentException();

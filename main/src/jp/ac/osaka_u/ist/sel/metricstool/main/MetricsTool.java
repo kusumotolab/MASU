@@ -490,26 +490,14 @@ public class MetricsTool {
             final String unresolvedName = unresolvedClassInfo.getName();
             final String[] name = JavaByteCodeNameResolver.resolveName(unresolvedName);
             final Set<String> unresolvedModifiers = unresolvedClassInfo.getModifiers();
-            final boolean isPublicVisible = unresolvedModifiers
-                    .contains(JavaPredefinedModifierInfo.PUBLIC_STRING);
-            final boolean isNamespaceVisible = !unresolvedModifiers
-                    .contains(JavaPredefinedModifierInfo.PRIVATE_STRING);
-            final boolean isInheritanceVisible = !unresolvedModifiers
-                    .contains(JavaPredefinedModifierInfo.PROTECTED_STRING);
-            final boolean isPrivateVisible = unresolvedModifiers
-                    .contains(JavaPredefinedModifierInfo.PRIVATE_STRING);
-            final boolean isStatic = unresolvedModifiers
-                    .contains(JavaPredefinedModifierInfo.STATIC_STRING);
             final boolean isInterface = unresolvedClassInfo.isInterface();
             final Set<ModifierInfo> modifiers = new HashSet<ModifierInfo>();
             for (final String unresolvedModifier : unresolvedModifiers) {
                 modifiers.add(JavaPredefinedModifierInfo.getModifierInfo(unresolvedModifier));
             }
             final ExternalClassInfo classInfo = unresolvedClassInfo.isInner() ? new ExternalInnerClassInfo(
-                    modifiers, name, isPrivateVisible, isNamespaceVisible, isInheritanceVisible,
-                    isPublicVisible, !isStatic, isInterface)
-                    : new ExternalClassInfo(modifiers, name, isPrivateVisible, isNamespaceVisible,
-                            isInheritanceVisible, isPublicVisible, !isStatic, isInterface);
+                    modifiers, name, isInterface)
+                    : new ExternalClassInfo(modifiers, name, isInterface);
             classInfoManager.add(classInfo);
         }
 
@@ -589,14 +577,6 @@ public class MetricsTool {
                 final TypeInfo fieldType = JavaByteCodeNameResolver.resolveType(unresolvedType,
                         null, null);
                 final Set<String> unresolvedModifiers = unresolvedField.getModifiers();
-                final boolean isPublicVisible = unresolvedModifiers
-                        .contains(JavaPredefinedModifierInfo.PUBLIC_STRING);
-                final boolean isNamespaceVisible = !unresolvedModifiers
-                        .contains(JavaPredefinedModifierInfo.PRIVATE_STRING);
-                final boolean isInheritanceVisible = !unresolvedModifiers
-                        .contains(JavaPredefinedModifierInfo.PROTECTED_STRING);
-                final boolean isPrivateVisible = unresolvedModifiers
-                        .contains(JavaPredefinedModifierInfo.PRIVATE_STRING);
                 final boolean isStatic = unresolvedModifiers
                         .contains(JavaPredefinedModifierInfo.STATIC_STRING);
                 final Set<ModifierInfo> modifiers = new HashSet<ModifierInfo>();
@@ -604,8 +584,7 @@ public class MetricsTool {
                     modifiers.add(JavaPredefinedModifierInfo.getModifierInfo(unresolvedModifier));
                 }
                 final ExternalFieldInfo field = new ExternalFieldInfo(modifiers, fieldName,
-                        classInfo, isPrivateVisible, isNamespaceVisible, isInheritanceVisible,
-                        isPublicVisible, isStatic);
+                        classInfo, isStatic);
                 field.setType(fieldType);
                 classInfo.addDefinedField(field);
             }
@@ -616,14 +595,6 @@ public class MetricsTool {
 
                 final String name = unresolvedMethod.getName();
                 final Set<String> unresolvedModifiers = unresolvedMethod.getModifiers();
-                final boolean isPublicVisible = unresolvedModifiers
-                        .contains(JavaPredefinedModifierInfo.PUBLIC_STRING);
-                final boolean isNamespaceVisible = !unresolvedModifiers
-                        .contains(JavaPredefinedModifierInfo.PRIVATE_STRING);
-                final boolean isInheritanceVisible = !unresolvedModifiers
-                        .contains(JavaPredefinedModifierInfo.PROTECTED_STRING);
-                final boolean isPrivateVisible = unresolvedModifiers
-                        .contains(JavaPredefinedModifierInfo.PRIVATE_STRING);
                 final boolean isStatic = unresolvedModifiers
                         .contains(JavaPredefinedModifierInfo.STATIC_STRING);
                 final Set<ModifierInfo> modifiers = new HashSet<ModifierInfo>();
@@ -635,8 +606,7 @@ public class MetricsTool {
                 if (name.equals("<init>")) {
 
                     final ExternalConstructorInfo constructor = new ExternalConstructorInfo(
-                            modifiers, isPrivateVisible, isNamespaceVisible, isInheritanceVisible,
-                            isPublicVisible);
+                            modifiers);
                     constructor.setOuterUnit(classInfo);
 
                     // 型パラメータの解決
@@ -675,8 +645,7 @@ public class MetricsTool {
                 else {
 
                     final ExternalMethodInfo method = new ExternalMethodInfo(modifiers, name,
-                            isPrivateVisible, isNamespaceVisible, isInheritanceVisible,
-                            isPublicVisible, !isStatic);
+                            !isStatic);
                     method.setOuterUnit(classInfo);
 
                     // 型パラメータの解決

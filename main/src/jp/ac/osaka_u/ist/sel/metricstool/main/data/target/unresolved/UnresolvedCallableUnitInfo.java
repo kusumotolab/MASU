@@ -11,9 +11,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticOrInstance;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Visualizable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -24,8 +26,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * @param <T> 解決済みの型
  */
 public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> extends
-        UnresolvedLocalSpaceInfo<T> implements VisualizableSetting, StaticOrInstanceSetting,
-        ModifierSetting {
+        UnresolvedLocalSpaceInfo<T> implements Visualizable, StaticOrInstance, ModifierSetting {
 
     protected UnresolvedCallableUnitInfo(final UnresolvedClassInfo ownerClass) {
 
@@ -38,11 +39,6 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
         this.typeParameters = new LinkedList<UnresolvedTypeParameterInfo>();
         this.parameters = new LinkedList<UnresolvedParameterInfo>();
         this.thrownExceptions = new LinkedList<UnresolvedClassTypeInfo>();
-
-        this.privateVisible = false;
-        this.inheritanceVisible = false;
-        this.namespaceVisible = false;
-        this.publicVisible = false;
     }
 
     protected UnresolvedCallableUnitInfo(final UnresolvedClassInfo ownerClass, final int fromLine,
@@ -164,48 +160,15 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
     }
 
     /**
-     * 子クラスから参照可能かどうかを設定する
-     * 
-     * @param inheritanceVisible 子クラスから参照可能な場合は true，そうでない場合は false
-     */
-    public final void setInheritanceVisible(final boolean inheritanceVisible) {
-        this.inheritanceVisible = inheritanceVisible;
-    }
-
-    /**
-     * 同じ名前空間内から参照可能かどうかを設定する
-     * 
-     * @param namespaceVisible 同じ名前空間から参照可能な場合は true，そうでない場合は false
-     */
-    public final void setNamespaceVisible(final boolean namespaceVisible) {
-        this.namespaceVisible = namespaceVisible;
-    }
-
-    /**
-     * クラス内からのみ参照可能かどうかを設定する
-     * 
-     * @param privateVisible クラス内からのみ参照可能な場合は true，そうでない場合は false
-     */
-    public final void setPrivateVibible(final boolean privateVisible) {
-        this.privateVisible = privateVisible;
-    }
-
-    /**
-     * どこからでも参照可能かどうかを設定する
-     * 
-     * @param publicVisible どこからでも参照可能な場合は true，そうでない場合は false
-     */
-    public final void setPublicVisible(final boolean publicVisible) {
-        this.publicVisible = publicVisible;
-    }
-
-    /**
      * 子クラスから参照可能かどうかを返す
      * 
      * @return 子クラスから参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public final boolean isInheritanceVisible() {
-        return this.inheritanceVisible;
+        final UnresolvedClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? true : ModifierInfo.isInheritanceVisible(this
+                .getModifiers());
     }
 
     /**
@@ -213,17 +176,11 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
      * 
      * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public final boolean isNamespaceVisible() {
-        return this.namespaceVisible;
-    }
-
-    /**
-     * クラス内からのみ参照可能かどうかを返す
-     * 
-     * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
-     */
-    public final boolean isPrivateVisible() {
-        return this.privateVisible;
+        final UnresolvedClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? true : ModifierInfo.isNamespaceVisible(this
+                .getModifiers());
     }
 
     /**
@@ -231,8 +188,32 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
      * 
      * @return どこからでも参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public final boolean isPublicVisible() {
-        return this.publicVisible;
+        final UnresolvedClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? true : ModifierInfo.isPublicVisible(this.getModifiers());
+    }
+
+    /**
+     * インスタンスメンバーかどうかを返す
+     * 
+     * @return インスタンスメンバーなので true を返す
+     */
+    @Override
+    public boolean isInstanceMember() {
+        final UnresolvedClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? true : ModifierInfo.isInstanceMember(this.getModifiers());
+    }
+
+    /**
+     * スタティックメンバーかどうかを返す
+     * 
+     * @return スタティックメンバーではないので false を返す
+     */
+    @Override
+    public boolean isStaticMember() {
+        final UnresolvedClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? false : ModifierInfo.isStaticMember(this.getModifiers());
     }
 
     /**
@@ -320,26 +301,6 @@ public abstract class UnresolvedCallableUnitInfo<T extends CallableUnitInfo> ext
 
         return resolved;
     }
-
-    /**
-     * クラス内からのみ参照可能かどうか保存するための変数
-     */
-    private boolean privateVisible;
-
-    /**
-     * 同じ名前空間から参照可能かどうか保存するための変数
-     */
-    private boolean namespaceVisible;
-
-    /**
-     * 子クラスから参照可能かどうか保存するための変数
-     */
-    private boolean inheritanceVisible;
-
-    /**
-     * どこからでも参照可能かどうか保存するための変数
-     */
-    private boolean publicVisible;
 
     /**
      * 未解決型パラメータ名を保存するための変数

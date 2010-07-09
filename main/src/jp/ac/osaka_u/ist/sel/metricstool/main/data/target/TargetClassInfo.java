@@ -30,7 +30,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 @SuppressWarnings("serial")
-public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOrInstance {
+public class TargetClassInfo extends ClassInfo {
 
     /**
      * 指定されたクラスに含まれる全てのインナークラスを返す
@@ -119,11 +119,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
      * @param modifiers 修飾子の Set
      * @param namespace 名前空間名
      * @param className クラス名
-     * @param privateVisible クラス内からのみ参照可能
-     * @param namespaceVisible 同じ名前空間から参照可能
-     * @param inheritanceVisible 子クラスから参照可能
-     * @param publicVisible どこからでも参照可能
-     * @param instance インスタンスメンバーかどうか
      * @param isInterface インターフェースかどうか
      * @param fileInfo このクラスを宣言しているファイル情報
      * @param fromLine 開始行
@@ -132,14 +127,10 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
      * @param toColumn 終了列
      */
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
-            final String className, final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
-            final boolean isInterface, final FileInfo fileInfo, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final String className, final boolean isInterface, final FileInfo fileInfo,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(modifiers, namespace, className, privateVisible, namespaceVisible,
-                inheritanceVisible, publicVisible, instance, isInterface, fromLine, fromColumn,
-                toLine, toColumn);
+        super(modifiers, namespace, className, isInterface, fromLine, fromColumn, toLine, toColumn);
 
         if (null == modifiers) {
             throw new NullPointerException();
@@ -162,11 +153,6 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
      * 
      * @param modifiers 修飾子の Set
      * @param fullQualifiedName 完全限定名
-     * @param privateVisible クラス内からのみ参照可能
-     * @param namespaceVisible 同じ名前空間から参照可能
-     * @param inheritanceVisible 子クラスから参照可能
-     * @param publicVisible どこからでも参照可能
-     * @param instance インスタンスメンバーかどうか
      * @param isInterface インタフェースであるかどうか
      * @param fileInfo このクラスを宣言しているファイル情報
      * @param fromLine 開始行
@@ -175,13 +161,10 @@ public class TargetClassInfo extends ClassInfo implements Visualizable, StaticOr
      * @param toColumn 終了列
      */
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
             final boolean isInterface, final FileInfo fileInfo, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
-        super(modifiers, fullQualifiedName, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible, instance, isInterface, fromLine, fromColumn, toLine, toColumn);
+        super(modifiers, fullQualifiedName, isInterface, fromLine, fromColumn, toLine, toColumn);
 
         if (null == modifiers || null == fileInfo) {
             throw new NullPointerException();

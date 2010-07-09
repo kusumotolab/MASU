@@ -54,20 +54,14 @@ public final class UnresolvedConstructorInfo extends
             return this.getResolved();
         }
 
-        // 修飾子，名前，返り値，行数，可視性を取得
+        // 修飾子，名前，返り値，行数を取得
         final Set<ModifierInfo> methodModifiers = this.getModifiers();
-        final boolean privateVisible = this.isPrivateVisible();
-        final boolean namespaceVisible = this.isNamespaceVisible();
-        final boolean inheritanceVisible = this.isInheritanceVisible();
-        final boolean publicVisible = this.isPublicVisible();
-
         final int constructorFromLine = this.getFromLine();
         final int constructorFromColumn = this.getFromColumn();
         final int constructorToLine = this.getToLine();
         final int constructorToColumn = this.getToColumn();
 
-        this.resolvedInfo = new TargetConstructorInfo(methodModifiers, privateVisible,
-                namespaceVisible, inheritanceVisible, publicVisible, constructorFromLine,
+        this.resolvedInfo = new TargetConstructorInfo(methodModifiers, constructorFromLine,
                 constructorFromColumn, constructorToLine, constructorToColumn);
 
         final UnresolvedClassInfo unresolvedOwnerClass = this.getOwnerClass();
@@ -93,7 +87,7 @@ public final class UnresolvedConstructorInfo extends
      * @return インスタンスメンバーなので true を返す
      */
     @Override
-    public boolean isInstanceMember() {
+    public final boolean isInstanceMember() {
         return true;
     }
 
@@ -103,15 +97,7 @@ public final class UnresolvedConstructorInfo extends
      * @return スタティックメンバーではないので false を返す
      */
     @Override
-    public boolean isStaticMember() {
+    public final boolean isStaticMember() {
         return false;
     }
-
-    /**
-     * なにもしない
-     */
-    @Override
-    public void setInstanceMember(boolean instance) {
-    }
-
 }

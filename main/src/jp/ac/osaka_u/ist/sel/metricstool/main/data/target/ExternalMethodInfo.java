@@ -23,11 +23,9 @@ public final class ExternalMethodInfo extends MethodInfo {
      * @param methodName ÉÅÉ\ÉbÉhñº
      */
     public ExternalMethodInfo(final Set<ModifierInfo> modifiers, final String methodName,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance) {
+            final boolean instance) {
 
-        super(modifiers, methodName, privateVisible, namespaceVisible, inheritanceVisible,
-                publicVisible, instance, getDummyPosition(), getDummyPosition(),
+        super(modifiers, methodName, instance, getDummyPosition(), getDummyPosition(),
                 getDummyPosition(), getDummyPosition());
 
         this.setReturnType(UnknownTypeInfo.getInstance());
@@ -40,8 +38,8 @@ public final class ExternalMethodInfo extends MethodInfo {
      */
     public ExternalMethodInfo(final String methodName) {
 
-        super(new HashSet<ModifierInfo>(), methodName, false, true, true, true, true,
-                getDummyPosition(), getDummyPosition(), getDummyPosition(), getDummyPosition());
+        super(new HashSet<ModifierInfo>(), methodName, true, getDummyPosition(),
+                getDummyPosition(), getDummyPosition(), getDummyPosition());
 
         this.setReturnType(UnknownTypeInfo.getInstance());
     }

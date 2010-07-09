@@ -42,9 +42,7 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
      * @param toColumn 終了列
      */
     FieldInfo(final Set<ModifierInfo> modifiers, final String name,
-            final ClassInfo definitionClass, final boolean privateVisible,
-            final boolean namespaceVisible, final boolean inheritanceVisible,
-            final boolean publicVisible, final boolean instance, final int fromLine,
+            final ClassInfo definitionClass, final boolean instance, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
 
         super(modifiers, name, null, definitionClass, fromLine, fromColumn, toLine, toColumn);
@@ -53,10 +51,6 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
             throw new NullPointerException();
         }
 
-        this.privateVisible = privateVisible;
-        this.namespaceVisible = namespaceVisible;
-        this.inheritanceVisible = inheritanceVisible;
-        this.publicVisible = publicVisible;
         this.instance = instance;
 
         this.ownerClass = definitionClass;
@@ -172,8 +166,11 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
      * 
      * @return 子クラスから参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public final boolean isInheritanceVisible() {
-        return this.inheritanceVisible;
+        final ClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? true : ModifierInfo.isInheritanceVisible(this
+                .getModifiers());
     }
 
     /**
@@ -181,17 +178,11 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
      * 
      * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public final boolean isNamespaceVisible() {
-        return this.namespaceVisible;
-    }
-
-    /**
-     * クラス内からのみ参照可能かどうかを返す
-     * 
-     * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
-     */
-    public final boolean isPrivateVisible() {
-        return this.privateVisible;
+        final ClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? true : ModifierInfo.isNamespaceVisible(this
+                .getModifiers());
     }
 
     /**
@@ -199,8 +190,10 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
      * 
      * @return どこからでも参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public final boolean isPublicVisible() {
-        return this.publicVisible;
+        final ClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? true : ModifierInfo.isPublicVisible(this.getModifiers());
     }
 
     /**
@@ -208,6 +201,7 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
      * 
      * @return インスタンスメンバーの場合 true，そうでない場合 false
      */
+    @Override
     public final boolean isInstanceMember() {
         return this.instance;
     }
@@ -235,26 +229,6 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
      * このフィールドに対して代入を行っているメソッド群を保存するための変数
      */
     protected final SortedSet<CallableUnitInfo> assignmenters;
-
-    /**
-     * クラス内からのみ参照可能かどうか保存するための変数
-     */
-    private final boolean privateVisible;
-
-    /**
-     * 同じ名前空間から参照可能かどうか保存するための変数
-     */
-    private final boolean namespaceVisible;
-
-    /**
-     * 子クラスから参照可能かどうか保存するための変数
-     */
-    private final boolean inheritanceVisible;
-
-    /**
-     * どこからでも参照可能かどうか保存するための変数
-     */
-    private final boolean publicVisible;
 
     /**
      * インスタンスメンバーかどうかを保存するための変数

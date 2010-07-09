@@ -4,24 +4,24 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersInterpriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.JavaPredefinedModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.StaticOrInstanceSetting;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.VisualizableSetting;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticOrInstance;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Visualizable;
 
 
 public class JavaModifiersInterpriter implements ModifiersInterpriter {
-    public void interprit(ModifierInfo[] modifiers, VisualizableSetting visualizable,
-            StaticOrInstanceSetting member) {
+    public void interprit(ModifierInfo[] modifiers, Visualizable visualizable,
+            StaticOrInstance member) {
         analyze(modifiers);
 
         if (null != visualizable) {
-            visualizable.setPublicVisible(isPublicAccessible());
-            visualizable.setInheritanceVisible(isInheritanceAccessible());
-            visualizable.setNamespaceVisible(isNameSpaceAccessible());
-            visualizable.setPrivateVibible(isOnlyClassInsideAccessible());
+            //visualizable.setPublicVisible(isPublicAccessible());
+            //visualizable.setInheritanceVisible(isInheritanceAccessible());
+            //visualizable.setNamespaceVisible(isNameSpaceAccessible());
+            //visualizable.setPrivateVibible(isOnlyClassInsideAccessible());
         }
 
         if (null != member) {
-            member.setInstanceMember(!isStaticMember());
+            //member.setInstanceMember(!isStaticMember());
         }
     }
 

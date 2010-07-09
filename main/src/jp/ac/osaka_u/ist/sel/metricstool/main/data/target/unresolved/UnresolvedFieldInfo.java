@@ -9,9 +9,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticOrInstance;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Visualizable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -23,8 +25,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  * 
  */
 public final class UnresolvedFieldInfo extends
-        UnresolvedVariableInfo<TargetFieldInfo, UnresolvedClassInfo> implements
-        VisualizableSetting, StaticOrInstanceSetting {
+        UnresolvedVariableInfo<TargetFieldInfo, UnresolvedClassInfo> implements Visualizable,
+        StaticOrInstance {
 
     /**
      * Unresolvedフィールドオブジェクトを初期化する． フィールド名と型，定義しているクラスが与えられなければならない．
@@ -51,13 +53,6 @@ public final class UnresolvedFieldInfo extends
 
         this.ownerClass = definitionClass;
         this.initializer = initializer;
-
-        this.privateVisible = false;
-        this.inheritanceVisible = false;
-        this.namespaceVisible = false;
-        this.publicVisible = false;
-
-        this.instance = true;
     }
 
     @Override
@@ -82,19 +77,14 @@ public final class UnresolvedFieldInfo extends
         // 型のみここでは解決しない
         final Set<ModifierInfo> modifiers = this.getModifiers();
         final String fieldName = this.getName();
-        final boolean privateVisible = this.isPrivateVisible();
-        final boolean namespaceVisible = this.isNamespaceVisible();
-        final boolean inheritanceVisible = this.isInheritanceVisible();
-        final boolean publicVisible = this.isPublicVisible();
         final boolean instance = this.isInstanceMember();
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new TargetFieldInfo(modifiers, fieldName, ownerClass, privateVisible,
-                namespaceVisible, inheritanceVisible, publicVisible, instance, fromLine,
-                fromColumn, toLine, toColumn);
+        this.resolvedInfo = new TargetFieldInfo(modifiers, fieldName, ownerClass, instance,
+                fromLine, fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 
@@ -141,48 +131,15 @@ public final class UnresolvedFieldInfo extends
     }
 
     /**
-     * 子クラスから参照可能かどうかを設定する
-     * 
-     * @param inheritanceVisible 子クラスから参照可能な場合は true，そうでない場合は false
-     */
-    public void setInheritanceVisible(final boolean inheritanceVisible) {
-        this.inheritanceVisible = inheritanceVisible;
-    }
-
-    /**
-     * 同じ名前空間内から参照可能かどうかを設定する
-     * 
-     * @param namespaceVisible 同じ名前空間から参照可能な場合は true，そうでない場合は false
-     */
-    public void setNamespaceVisible(final boolean namespaceVisible) {
-        this.namespaceVisible = namespaceVisible;
-    }
-
-    /**
-     * クラス内からのみ参照可能かどうかを設定する
-     * 
-     * @param privateVisible クラス内からのみ参照可能な場合は true，そうでない場合は false
-     */
-    public void setPrivateVibible(final boolean privateVisible) {
-        this.privateVisible = privateVisible;
-    }
-
-    /**
-     * どこからでも参照可能かどうかを設定する
-     * 
-     * @param publicVisible どこからでも参照可能な場合は true，そうでない場合は false
-     */
-    public void setPublicVisible(final boolean publicVisible) {
-        this.publicVisible = publicVisible;
-    }
-
-    /**
      * 子クラスから参照可能かどうかを返す
      * 
      * @return 子クラスから参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public boolean isInheritanceVisible() {
-        return this.inheritanceVisible;
+        final UnresolvedClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? true : ModifierInfo.isInheritanceVisible(this
+                .getModifiers());
     }
 
     /**
@@ -190,17 +147,11 @@ public final class UnresolvedFieldInfo extends
      * 
      * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public boolean isNamespaceVisible() {
-        return this.namespaceVisible;
-    }
-
-    /**
-     * クラス内からのみ参照可能かどうかを返す
-     * 
-     * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
-     */
-    public boolean isPrivateVisible() {
-        return this.privateVisible;
+        final UnresolvedClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? true : ModifierInfo.isNamespaceVisible(this
+                .getModifiers());
     }
 
     /**
@@ -208,8 +159,10 @@ public final class UnresolvedFieldInfo extends
      * 
      * @return どこからでも参照可能な場合は true, そうでない場合は false
      */
+    @Override
     public boolean isPublicVisible() {
-        return this.publicVisible;
+        final UnresolvedClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? true : ModifierInfo.isPublicVisible(getModifiers());
     }
 
     /**
@@ -217,8 +170,11 @@ public final class UnresolvedFieldInfo extends
      * 
      * @return インスタンスメンバーの場合 true，そうでない場合 false
      */
+    @Override
     public boolean isInstanceMember() {
-        return this.instance;
+        final UnresolvedClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? false : ModifierInfo
+                .isInstanceMember(this.getModifiers());
     }
 
     /**
@@ -226,17 +182,10 @@ public final class UnresolvedFieldInfo extends
      * 
      * @return スタティックメンバーの場合 true，そうでない場合 false
      */
+    @Override
     public boolean isStaticMember() {
-        return !this.instance;
-    }
-
-    /**
-     * インスタンスメンバーかどうかをセットする
-     * 
-     * @param instance インスタンスメンバーの場合は true， スタティックメンバーの場合は false
-     */
-    public void setInstanceMember(final boolean instance) {
-        this.instance = instance;
+        final UnresolvedClassInfo ownerClass = this.getOwnerClass();
+        return ownerClass.isInterface() ? true : ModifierInfo.isStaticMember(this.getModifiers());
     }
 
     /**
@@ -252,31 +201,6 @@ public final class UnresolvedFieldInfo extends
      * このフィールドを定義しているクラスを保存するための変数
      */
     private UnresolvedClassInfo ownerClass;
-
-    /**
-     * クラス内からのみ参照可能かどうか保存するための変数
-     */
-    private boolean privateVisible;
-
-    /**
-     * 同じ名前空間から参照可能かどうか保存するための変数
-     */
-    private boolean namespaceVisible;
-
-    /**
-     * 子クラスから参照可能かどうか保存するための変数
-     */
-    private boolean inheritanceVisible;
-
-    /**
-     * どこからでも参照可能かどうか保存するための変数
-     */
-    private boolean publicVisible;
-
-    /**
-     * インスタンスメンバーかどうかを保存するための変数
-     */
-    private boolean instance;
 
     /**
      * 変数の初期化式を表す変数

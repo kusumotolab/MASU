@@ -24,7 +24,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
  */
 @SuppressWarnings("serial")
 public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Modifier,
-        TypeParameterizable {
+        Visualizable, StaticOrInstance, TypeParameterizable {
 
     /**
      * InnerClassInfo<?>のSortedSetをClassInfo<?,?,?,?>のSortedSetに変換する
@@ -58,10 +58,8 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * @param toColumn 終了列
      */
     ClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
-            final String className, final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
-            final boolean isInterface, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+            final String className, final boolean isInterface, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
@@ -87,13 +85,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
 
-        this.privateVisible = privateVisible;
-        this.namespaceVisible = namespaceVisible;
-        this.inheritanceVisible = inheritanceVisible;
-        this.publicVisible = publicVisible;
         this.isInterface = isInterface;
-
-        this.instance = instance;
     }
 
     /**
@@ -107,8 +99,6 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * @param toColumn 終了列
      */
     public ClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
-            final boolean privateVisible, final boolean namespaceVisible,
-            final boolean inheritanceVisible, final boolean publicVisible, final boolean instance,
             final boolean isInterface, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
 
@@ -141,13 +131,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
         this.modifiers = new HashSet<ModifierInfo>();
         this.modifiers.addAll(modifiers);
 
-        this.privateVisible = privateVisible;
-        this.namespaceVisible = namespaceVisible;
-        this.inheritanceVisible = inheritanceVisible;
-        this.publicVisible = publicVisible;
         this.isInterface = isInterface;
-
-        this.instance = instance;
     }
 
     /**
@@ -590,7 +574,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * @return 子クラスから参照可能な場合は true, そうでない場合は false
      */
     public final boolean isInheritanceVisible() {
-        return this.inheritanceVisible;
+        return ModifierInfo.isInheritanceVisible(this.modifiers);
     }
 
     /**
@@ -599,16 +583,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * @return 同じ名前空間から参照可能な場合は true, そうでない場合は false
      */
     public final boolean isNamespaceVisible() {
-        return this.namespaceVisible;
-    }
-
-    /**
-     * クラス内からのみ参照可能かどうかを返す
-     * 
-     * @return クラス内からのみ参照可能な場合は true, そうでない場合は false
-     */
-    public final boolean isPrivateVisible() {
-        return this.privateVisible;
+        return ModifierInfo.isNamespaceVisible(this.modifiers);
     }
 
     /**
@@ -617,7 +592,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * @return どこからでも参照可能な場合は true, そうでない場合は false
      */
     public final boolean isPublicVisible() {
-        return this.publicVisible;
+        return ModifierInfo.isPublicVisible(this.modifiers);
     }
 
     /**
@@ -626,7 +601,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * @return インスタンスメンバーの場合 true，そうでない場合 false
      */
     public final boolean isInstanceMember() {
-        return this.instance;
+        return ModifierInfo.isInstanceMember(this.modifiers);
     }
 
     /**
@@ -635,7 +610,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * @return スタティックメンバーの場合 true，そうでない場合 false
      */
     public final boolean isStaticMember() {
-        return !this.instance;
+        return ModifierInfo.isStaticMember(this.modifiers);
     }
 
     /**
@@ -713,31 +688,6 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * このクラスの内部クラス一覧を保存するための変数．直接の内部クラスのみを保有する．
      */
     private final SortedSet<InnerClassInfo> innerClasses;
-
-    /**
-     * クラス内からのみ参照可能かどうか保存するための変数
-     */
-    private final boolean privateVisible;
-
-    /**
-     * 同じ名前空間から参照可能かどうか保存するための変数
-     */
-    private final boolean namespaceVisible;
-
-    /**
-     * 子クラスから参照可能かどうか保存するための変数
-     */
-    private final boolean inheritanceVisible;
-
-    /**
-     * どこからでも参照可能かどうか保存するための変数
-     */
-    private final boolean publicVisible;
-
-    /**
-     * インスタンスメンバーかどうかを保存するための変数
-     */
-    private final boolean instance;
 
     /**
      * インターフェースであるかどうかを保存するための変数
