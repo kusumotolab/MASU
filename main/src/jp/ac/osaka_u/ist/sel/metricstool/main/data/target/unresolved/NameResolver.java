@@ -218,281 +218,6 @@ public final class NameResolver {
     }
 
     /**
-     * 「現在のクラス」で利用可能なフィールド一覧を返す．
-     * ここで，「利用可能なフィールド」とは，「現在のクラス」で定義されているフィールド，「現在のクラス」のインナークラスで定義されているフィールド，
-     * 及びその親クラスで定義されているフィールドのうち子クラスからアクセスが可能なフィールドである． 利用可能なフィールドは List に格納されている．
-     * リストの先頭から優先順位の高いフィールド（つまり， クラス階層において下位のクラスに定義されているフィールド）が格納されている．
-     * 
-     * TODO スタティックインポートからを追加しないといけない
-     * 
-     * @param currentClass 現在のクラス
-     * @return 利用可能なフィールド一覧
-     */
-    public static List<FieldInfo> getAvailableFields(final ClassInfo currentClass) {
-
-        if (null == currentClass) {
-            throw new IllegalArgumentException();
-        }
-
-        // チェックしたクラスを入れるためのキャッシュ，キャッシュにあるクラスは二度目はフィールド取得しない（ループ構造対策）
-        final Set<ClassInfo> checkedClasses = new HashSet<ClassInfo>();
-
-        // 利用可能な変数を代入するためのリスト
-        final List<FieldInfo> availableFields = new LinkedList<FieldInfo>();
-
-        // 最も外側のクラスを取得
-        final ClassInfo outestClass;
-        if (currentClass instanceof InnerClassInfo) {
-
-            outestClass = NameResolver.getOuterstClass((InnerClassInfo) currentClass);
-
-            for (ClassInfo outerClass = currentClass; !outerClass.equals(outestClass); outerClass = ((InnerClassInfo) outerClass)
-                    .getOuterClass()) {
-
-                // 自クラスおよび，外部クラスで定義されたメソッドを追加
-                availableFields.addAll(outerClass.getDefinedFields());
-                checkedClasses.add(outerClass);
-            }
-
-            // 内部クラスで定義されたフィールドを追加
-            for (final InnerClassInfo innerClass : currentClass.getInnerClasses()) {
-                final List<FieldInfo> availableFieldsDefinedInInnerClasses = NameResolver
-                        .getAvailableFieldsDefinedInInnerClasses((ClassInfo) innerClass,
-                                checkedClasses);
-                availableFields.addAll(availableFieldsDefinedInInnerClasses);
-            }
-
-            // 親クラスで定義されたフィールドを追加
-            for (final ClassInfo superClass : ClassTypeInfo.convert(currentClass.getSuperClasses())) {
-                final List<FieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
-                        .getAvailableFieldsDefinedInSuperClasses(currentClass, superClass,
-                                checkedClasses);
-                availableFields.addAll(availableFieldsDefinedInSuperClasses);
-            }
-
-        } else {
-            outestClass = currentClass;
-        }
-
-        // 最も外側のクラスで定義されたフィールドを追加
-        availableFields.addAll(outestClass.getDefinedFields());
-        checkedClasses.add(outestClass);
-
-        // 内部クラスで定義されたフィールドを追加
-        for (final InnerClassInfo innerClass : outestClass.getInnerClasses()) {
-            final List<FieldInfo> availableFieldsDefinedInInnerClasses = NameResolver
-                    .getAvailableFieldsDefinedInInnerClasses((ClassInfo) innerClass, checkedClasses);
-            availableFields.addAll(availableFieldsDefinedInInnerClasses);
-        }
-
-        // 親クラスで定義されたフィールドを追加
-        for (final ClassInfo superClass : ClassTypeInfo.convert(outestClass.getSuperClasses())) {
-            final List<FieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
-                    .getAvailableFieldsDefinedInSuperClasses(outestClass, superClass,
-                            checkedClasses);
-            availableFields.addAll(availableFieldsDefinedInSuperClasses);
-        }
-
-        return Collections.unmodifiableList(availableFields);
-    }
-
-    /**
-     * 引数で与えられたクラスとその内部クラスで定義されたフィールドのうち，外側のクラスで利用可能なフィールドの List を返す
-     * 
-     * @param classInfo クラス
-     * @param checkedClasses 既にチェックしたクラスのキャッシュ
-     * @return 外側のクラスで利用可能なフィールドの List
-     */
-    public static List<FieldInfo> getAvailableFieldsDefinedInInnerClasses(
-            final ClassInfo classInfo, final Set<ClassInfo> checkedClasses) {
-
-        if ((null == classInfo) || (null == checkedClasses)) {
-            throw new NullPointerException();
-        }
-
-        // 既にチェックしたクラスである場合は何もせずに終了する
-        if (checkedClasses.contains(classInfo)) {
-            return new LinkedList<FieldInfo>();
-        }
-
-        // 無名クラスであれば何もせずに終了する
-        if (classInfo instanceof AnonymousClassInfo) {
-            return new LinkedList<FieldInfo>();
-        }
-
-        final List<FieldInfo> availableFields = new LinkedList<FieldInfo>();
-
-        // 自クラスで定義されており，名前空間可視性を持つフィールドを追加
-        // for (final TargetFieldInfo definedField : classInfo.getDefinedFields()) {
-        // if (definedField.isNamespaceVisible()) {
-        // availableFields.add(definedField);
-        // }
-        // }
-        availableFields.addAll(classInfo.getDefinedFields());
-        checkedClasses.add(classInfo);
-
-        // 内部クラスで定義されたフィールドを追加
-        for (final InnerClassInfo innerClass : classInfo.getInnerClasses()) {
-            final List<FieldInfo> availableFieldsDefinedInInnerClasses = NameResolver
-                    .getAvailableFieldsDefinedInInnerClasses((ClassInfo) innerClass, checkedClasses);
-            availableFields.addAll(availableFieldsDefinedInInnerClasses);
-        }
-
-        // 親クラスで定義されたフィールドを追加
-        for (final ClassInfo superClass : ClassTypeInfo.convert(classInfo.getSuperClasses())) {
-            final List<FieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
-                    .getAvailableFieldsDefinedInSuperClasses(classInfo, superClass, checkedClasses);
-            availableFields.addAll(availableFieldsDefinedInSuperClasses);
-        }
-
-        return Collections.unmodifiableList(availableFields);
-    }
-
-    /**
-     * 引数で与えられたクラスとその親クラスで定義されたフィールドのうち，子クラスで利用可能なフィールドの List を返す
-     * 
-     * @param classInfo クラス
-     * @param checkedClasses 既にチェックしたクラスのキャッシュ
-     * @return 子クラスで利用可能なフィールドの List
-     */
-    private static List<FieldInfo> getAvailableFieldsDefinedInSuperClasses(
-            final ClassInfo subClass, final ClassInfo superClass,
-            final Set<ClassInfo> checkedClasses) {
-
-        if ((null == subClass) || (null == superClass) || (null == checkedClasses)) {
-            throw new NullPointerException();
-        }
-
-        // 既にチェックしたクラスである場合は何もせずに終了する
-        if (checkedClasses.contains(superClass)) {
-            return new LinkedList<FieldInfo>();
-        }
-
-        final List<FieldInfo> availableFields = new LinkedList<FieldInfo>();
-
-        // 自クラスで定義されており，クラス階層可視性を持つフィールドを追加
-        for (final FieldInfo definedField : superClass.getDefinedFields()) {
-
-            // 子クラスと親クラスの名前空間が同じ場合は，名前空間可視もしくは継承可視があればよい
-            if (subClass.getNamespace().equals(superClass.getNamespace())) {
-
-                if (definedField.isInheritanceVisible() || definedField.isNamespaceVisible()) {
-                    availableFields.add(definedField);
-                }
-
-                //子クラスと親クラスの名前空間が違う場合は，継承可視があればよい
-            } else {
-                if (definedField.isInheritanceVisible()) {
-                    availableFields.add(definedField);
-                }
-            }
-        }
-        checkedClasses.add(superClass);
-
-        // 内部クラスで定義されたフィールドを追加
-        for (final InnerClassInfo innerClass : superClass.getInnerClasses()) {
-            final List<FieldInfo> availableFieldsDefinedInInnerClasses = NameResolver
-                    .getAvailableFieldsDefinedInInnerClasses((ClassInfo) innerClass, checkedClasses);
-            for (final FieldInfo field : availableFieldsDefinedInInnerClasses) {
-
-                // 子クラスと親クラスの名前空間が同じ場合は，名前空間可視もしくは継承可視があればよい
-                if (subClass.getNamespace().equals(superClass.getNamespace())) {
-
-                    if (field.isInheritanceVisible() || field.isNamespaceVisible()) {
-                        availableFields.add(field);
-                    }
-
-                } else {
-
-                    //子クラスと親クラスの名前空間が違う場合は，継承可視があればよい
-                    if (field.isInheritanceVisible()) {
-                        availableFields.add(field);
-                    }
-                }
-            }
-        }
-
-        // 親クラスで定義されたフィールドを追加
-        for (final ClassInfo superSuperClass : ClassTypeInfo.convert(superClass.getSuperClasses())) {
-            final List<FieldInfo> availableFieldsDefinedInSuperClasses = NameResolver
-                    .getAvailableFieldsDefinedInSuperClasses(subClass, superSuperClass,
-                            checkedClasses);
-            availableFields.addAll(availableFieldsDefinedInSuperClasses);
-        }
-
-        return Collections.unmodifiableList(availableFields);
-    }
-
-    /**
-     * 「使用されるクラス」が「使用するクラス」において使用される場合に，利用可能なフィールド一覧を返す．
-     * ここで，「利用可能なフィールド」とは，「使用されるクラス」で定義されているフィールド，及びその親クラスで定義されているフィールドのうち子クラスからアクセスが可能なフィールドである．
-     * また，「使用されるクラス」と「使用するクラス」の名前空間を比較し，より正確に利用可能なフィールドを取得する． 子クラスで利用可能なフィールド一覧は List に格納されている．
-     * リストの先頭から優先順位の高いフィールド（つまり，クラス階層において下位のクラスに定義されているフィールド）が格納されている．
-     * 
-     * @param usedClass 使用されるクラス
-     * @param usingClass 使用するクラス
-     * @return 利用可能なフィールド一覧
-     */
-    public static List<FieldInfo> getAvailableFields(final ClassInfo usedClass,
-            final ClassInfo usingClass) {
-
-        if ((null == usedClass) || (null == usingClass)) {
-            throw new NullPointerException();
-        }
-
-        // 使用されるクラスの最も外側のクラスを取得
-        final ClassInfo usedOutestClass;
-        if (usedClass instanceof InnerClassInfo) {
-            usedOutestClass = NameResolver.getOuterstClass((InnerClassInfo) usedClass);
-        } else {
-            usedOutestClass = usedClass;
-        }
-
-        // 使用するクラスの最も外側のクラスを取得
-        final ClassInfo usingOutestClass;
-        if (usingClass instanceof InnerClassInfo) {
-            usingOutestClass = NameResolver.getOuterstClass((InnerClassInfo) usingClass);
-        } else {
-            usingOutestClass = usingClass;
-        }
-
-        // このクラスで定義されているフィールドのうち，使用するクラスで利用可能なフィールドを取得する
-        // 2つのクラスが同じ場合，全てのフィールドが利用可能
-        if (usedOutestClass.equals(usingOutestClass)) {
-
-            return NameResolver.getAvailableFields(usedClass);
-
-            // 2つのクラスが同じ名前空間を持っている場合
-        } else if (usedOutestClass.getNamespace().equals(usingOutestClass.getNamespace())) {
-
-            final List<FieldInfo> availableFields = new LinkedList<FieldInfo>();
-
-            // 名前空間可視性を持ったフィールドのみが利用可能
-            for (final FieldInfo field : NameResolver.getAvailableFields(usedClass)) {
-                if (field.isNamespaceVisible()) {
-                    availableFields.add(field);
-                }
-            }
-
-            return Collections.unmodifiableList(availableFields);
-
-            // 違う名前空間を持っている場合
-        } else {
-
-            final List<FieldInfo> availableFields = new LinkedList<FieldInfo>();
-
-            // 全可視性を持つフィールドのみが利用可能
-            for (final FieldInfo field : NameResolver.getAvailableFields(usedClass)) {
-                if (field.isPublicVisible()) {
-                    availableFields.add(field);
-                }
-            }
-
-            return Collections.unmodifiableList(availableFields);
-        }
-    }
-
-    /**
      * 引数で与えられたクラス型で呼び出し可能なコンストラクタのListを返す
      * 
      * @param classType
@@ -567,6 +292,12 @@ public final class NameResolver {
                 new HashSet<ClassInfo>()));
     }
 
+    public static List<FieldInfo> getAvailableFields(final ClassInfo usedClass,
+            final ClassInfo usingClass) {
+        return Collections.unmodifiableList(getAvailableFields(usedClass, usingClass,
+                new HashSet<ClassInfo>()));
+    }
+
     private static List<MethodInfo> getAvailableMethods(final ClassInfo usedClass,
             final ClassInfo usingClass, final Set<ClassInfo> checkedClasses) {
 
@@ -597,55 +328,65 @@ public final class NameResolver {
         return availableMethods;
     }
 
+    private static List<FieldInfo> getAvailableFields(final ClassInfo usedClass,
+            final ClassInfo usingClass, final Set<ClassInfo> checkedClasses) {
+
+        // すでにチェックしているクラスであれば何もせずに抜ける
+        if (checkedClasses.contains(usedClass)) {
+            return Collections.<FieldInfo> emptyList();
+        }
+
+        // チェック済みクラスに追加
+        checkedClasses.add(usedClass);
+
+        // usedに定義されているメソッドのうち，利用可能なものを追加
+        final List<FieldInfo> availableFields = new ArrayList<FieldInfo>();
+        availableFields.addAll(extractAvailableFields(usedClass, usingClass));
+
+        // usedの外クラスをチェック
+        if (usedClass instanceof InnerClassInfo) {
+            final ClassInfo outerClass = ((InnerClassInfo) usedClass).getOuterClass();
+            availableFields.addAll(getAvailableFields(outerClass, usingClass, checkedClasses));
+        }
+
+        // 親クラスをチェック
+        for (final ClassTypeInfo superClassType : usedClass.getSuperClasses()) {
+            final ClassInfo superClass = superClassType.getReferencedClass();
+            availableFields.addAll(getAvailableFields(superClass, usingClass, checkedClasses));
+        }
+
+        return availableFields;
+    }
+
     private static List<MethodInfo> extractAvailableMethods(final ClassInfo usedClass,
             final ClassInfo usingClass) {
 
         final List<MethodInfo> availableMethods = new ArrayList<MethodInfo>();
 
         // usingとusedが等しい場合は，すべてのメソッドを使用可能
-        if (usingClass.equals(usedClass)) {
-            availableMethods.addAll(usedClass.getDefinedMethods());
-        }
-
-        // usingがusedのインナークラスであればすべてのメソッドを使用可能
-        if (usingClass.isInnerClass(usedClass)) {
-            availableMethods.addAll(usedClass.getDefinedMethods());
-        }
-
-        // usedがusingのインナークラスの場合は，すべてのメソッドを利用可能
-        if (usedClass.isInnerClass(usingClass)) {
-            availableMethods.addAll(usedClass.getDefinedMethods());
+        {
+            final ClassInfo tmpUsingClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
+                    .getOutestClass((InnerClassInfo) usingClass)
+                    : usingClass;
+            final ClassInfo tmpUsedClass = usedClass instanceof InnerClassInfo ? TargetInnerClassInfo
+                    .getOutestClass((InnerClassInfo) usedClass)
+                    : usedClass;
+            if (tmpUsingClass.getNamespace().equals(tmpUsedClass.getNamespace())) {
+                availableMethods.addAll(usedClass.getDefinedMethods());
+            }
         }
 
         // usingがusedと同じパッケージであれば，private 以外のメソッドが使用可能
-        if (usingClass.getNamespace().equals(usedClass.getNamespace())) {
-            for (final MethodInfo method : usedClass.getDefinedMethods()) {
-                if (method.isNamespaceVisible()) {
-                    availableMethods.add(method);
-                }
-            }
-        }
-
-        // usingがインナークラスであれば，その最外クラスと，usedクラスが同じパッケージであれば使用可能
-        if (usingClass instanceof InnerClassInfo) {
-            final ClassInfo outestClass = TargetInnerClassInfo
-                    .getOutestClass((InnerClassInfo) usingClass);
-            if (outestClass.getNamespace().equals(usedClass.getNamespace())) {
+        {
+            final ClassInfo tmpUsingClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
+                    .getOutestClass((InnerClassInfo) usingClass)
+                    : usingClass;
+            final ClassInfo tmpUsedClass = usedClass instanceof InnerClassInfo ? TargetInnerClassInfo
+                    .getOutestClass((InnerClassInfo) usedClass)
+                    : usedClass;
+            if (tmpUsingClass.getNamespace().equals(tmpUsedClass.getNamespace())) {
                 for (final MethodInfo method : usedClass.getDefinedMethods()) {
                     if (method.isNamespaceVisible()) {
-                        availableMethods.add(method);
-                    }
-                }
-            }
-        }
-
-        // usedがインナークラスであれば，その最外クラスと，usingくらすが同じパッケージであれば使用可能
-        if (usedClass instanceof InnerClassInfo) {
-            final ClassInfo outestClass = TargetInnerClassInfo
-                    .getOutestClass((InnerClassInfo) usedClass);
-            if (usingClass.getNamespace().equals(outestClass.getNamespace())) {
-                for(final MethodInfo method : usedClass.getDefinedMethods()){
-                    if(method.isNamespaceVisible()){
                         availableMethods.add(method);
                     }
                 }
@@ -669,5 +410,59 @@ public final class NameResolver {
         }
 
         return availableMethods;
+    }
+
+    private static List<FieldInfo> extractAvailableFields(final ClassInfo usedClass,
+            final ClassInfo usingClass) {
+
+        final List<FieldInfo> availableFields = new ArrayList<FieldInfo>();
+
+        // usingとusedが等しい場合は，すべてのフィールドを使用可能
+        {
+            final ClassInfo tmpUsingClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
+                    .getOutestClass((InnerClassInfo) usingClass)
+                    : usingClass;
+            final ClassInfo tmpUsedClass = usedClass instanceof InnerClassInfo ? TargetInnerClassInfo
+                    .getOutestClass((InnerClassInfo) usedClass)
+                    : usedClass;
+            if (tmpUsingClass.getNamespace().equals(tmpUsedClass.getNamespace())) {
+                availableFields.addAll(usedClass.getDefinedFields());
+            }
+        }
+
+        // usingがusedと同じパッケージであれば，private 以外のフィールドが使用可能
+        {
+            final ClassInfo tmpUsingClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
+                    .getOutestClass((InnerClassInfo) usingClass)
+                    : usingClass;
+            final ClassInfo tmpUsedClass = usedClass instanceof InnerClassInfo ? TargetInnerClassInfo
+                    .getOutestClass((InnerClassInfo) usedClass)
+                    : usedClass;
+            if (tmpUsingClass.getNamespace().equals(tmpUsedClass.getNamespace())) {
+                for (final FieldInfo field : usedClass.getDefinedFields()) {
+                    if (field.isNamespaceVisible()) {
+                        availableFields.add(field);
+                    }
+                }
+            }
+        }
+
+        // usingがusedのサブクラスであれば,protected以外のフィールドが使用可能
+        if (usingClass.isSubClass(usedClass)) {
+            for (final FieldInfo field : usedClass.getDefinedFields()) {
+                if (field.isInheritanceVisible()) {
+                    availableFields.add(field);
+                }
+            }
+        }
+
+        // usingがusedと関係のないクラスであれば，publicのフィールドが利用可能
+        for (final FieldInfo field : usedClass.getDefinedFields()) {
+            if (field.isPublicVisible()) {
+                availableFields.add(field);
+            }
+        }
+
+        return availableFields;
     }
 }
