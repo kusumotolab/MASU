@@ -53,7 +53,6 @@ public class ExternalClassInfo extends ClassInfo {
      * @param className ƒNƒ‰ƒX–¼
      */
     public ExternalClassInfo(final String className) {
-
         super(new HashSet<ModifierInfo>(), NamespaceInfo.UNKNOWN, className, false, 0, 0, 0, 0);
     }
 

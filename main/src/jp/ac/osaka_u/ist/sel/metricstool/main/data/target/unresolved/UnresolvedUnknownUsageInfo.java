@@ -102,7 +102,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
         {
             // このクラスで利用可能なインスタンスフィールド一覧を取得
             final List<FieldInfo> availableFieldsOfThisClass = StaticOrInstanceProcessing
-                    .<FieldInfo> getInstanceMembers(NameResolver.getAvailableFields(usingClass));
+                    .<FieldInfo> getInstanceMembers(NameResolver.getAvailableFields(usingClass,
+                            usingClass));
 
             for (final FieldInfo availableFieldOfThisClass : availableFieldsOfThisClass) {
 
@@ -224,7 +225,8 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
         {
             // このクラスで利用可能なスタティックフィールド一覧を取得
             final List<FieldInfo> availableFieldsOfThisClass = StaticOrInstanceProcessing
-                    .<FieldInfo> getStaticMembers(NameResolver.getAvailableFields(usingClass));
+                    .<FieldInfo> getStaticMembers(NameResolver.getAvailableFields(usingClass,
+                            usingClass));
 
             for (final FieldInfo availableFieldOfThisClass : availableFieldsOfThisClass) {
 

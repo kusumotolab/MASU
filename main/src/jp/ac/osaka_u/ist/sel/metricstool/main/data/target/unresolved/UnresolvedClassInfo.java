@@ -719,11 +719,18 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             }
         }
 
-        // 所有者がない場合はもっとも外側のクラス
+        // 所有者がない場合は最も外側のクラス
         else {
 
             this.resolvedInfo = new TargetClassInfo(modifiers, fullQualifiedName, this.isInterface,
                     this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+        }
+
+        // 内部クラスを解決
+        for (final UnresolvedClassInfo unresolvedInnerClass : this.getInnerClasses()) {
+            final TargetClassInfo innerClass = unresolvedInnerClass.resolve(this.resolvedInfo,
+                    null, classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addInnerClass((InnerClassInfo) innerClass);
         }
 
         // タイプパラメータがある場合は解決する．ただしここでは，exntends までは解決しない
@@ -869,31 +876,6 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
                         classInfoManager, null, null);
                 typeParameter.addExtendsType(extendsType);
             }
-        }
-
-        return resolved;
-    }
-
-    /**
-     * 未解決内部クラス情報を解決する．
-     * すでにresolveメソッドが呼び出された状態で用いなければならない
-     * 
-     * @param classInfoManager
-     * @return
-     */
-    public TargetClassInfo resolveInnerClass(final ClassInfoManager classInfoManager) {
-
-        // 不正な呼び出しでないかをチェック
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == classInfoManager) {
-            throw new IllegalArgumentException();
-        }
-
-        final TargetClassInfo resolved = this.getResolved();
-
-        for (final UnresolvedClassInfo unresolvedInnerClass : this.getInnerClasses()) {
-            final TargetClassInfo innerClass = unresolvedInnerClass.getResolved();
-            resolved.addInnerClass((InnerClassInfo) innerClass);
         }
 
         return resolved;

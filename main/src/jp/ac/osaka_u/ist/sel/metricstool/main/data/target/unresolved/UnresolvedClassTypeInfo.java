@@ -111,7 +111,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
         final String[] referenceName = this.getReferenceName();
         final Collection<ClassInfo> candidateClasses = classInfoManager
                 .getClassInfos(referenceName[referenceName.length - 1]);
-
+        
         //複数項参照の場合は完全限定名かどうかを調べる，単項参照の場合はデフォルトパッケージから調べる
         {
             final ClassInfo matchedClass = classInfoManager.getClassInfo(referenceName);
