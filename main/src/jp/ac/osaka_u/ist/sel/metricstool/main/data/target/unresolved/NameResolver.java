@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.AnonymousClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
@@ -286,16 +288,46 @@ public final class NameResolver {
         return Collections.unmodifiableList(typeParameters);
     }
 
-    public static List<MethodInfo> getAvailableMethods(final ClassInfo usedClass,
+    /**
+     * 使用するクラスと使用されるクラスを与えることにより，利用可能なメソッドのListを返す
+     * 
+     * @param usedClass 使用されるクラス
+     * @param usingClass 使用するクラス
+     * @return
+     */
+    public static synchronized List<MethodInfo> getAvailableMethods(final ClassInfo usedClass,
             final ClassInfo usingClass) {
-        return Collections.unmodifiableList(getAvailableMethods(usedClass, usingClass,
-                new HashSet<ClassInfo>()));
+
+        final boolean hasCache = METHOD_CACHE.hasCash(usedClass, usingClass);
+        if (hasCache) {
+            return METHOD_CACHE.getCache(usedClass, usingClass);
+        } else {
+            final List<MethodInfo> methods = getAvailableMethods(usedClass, usingClass,
+                    new HashSet<ClassInfo>());
+            METHOD_CACHE.putCache(usedClass, usingClass, methods);
+            return methods;
+        }
     }
 
-    public static List<FieldInfo> getAvailableFields(final ClassInfo usedClass,
+    /**
+     * 使用するクラスと使用されるクラスを与えることにより，利用可能なフィールドのListを返す
+     * 
+     * @param usedClass 使用されるクラス
+     * @param usingClass 使用するクラス
+     * @return
+     */
+    public static synchronized List<FieldInfo> getAvailableFields(final ClassInfo usedClass,
             final ClassInfo usingClass) {
-        return Collections.unmodifiableList(getAvailableFields(usedClass, usingClass,
-                new HashSet<ClassInfo>()));
+
+        final boolean hasCache = FIELD_CACHE.hasCash(usedClass, usingClass);
+        if (hasCache) {
+            return FIELD_CACHE.getCache(usedClass, usingClass);
+        } else {
+            final List<FieldInfo> fields = getAvailableFields(usedClass, usingClass,
+                    new HashSet<ClassInfo>());
+            FIELD_CACHE.putCache(usedClass, usingClass, fields);
+            return fields;
+        }
     }
 
     private static List<MethodInfo> getAvailableMethods(final ClassInfo usedClass,
@@ -464,5 +496,58 @@ public final class NameResolver {
         }
 
         return availableFields;
+    }
+
+    private static final Cache<MethodInfo> METHOD_CACHE = new Cache<MethodInfo>();
+
+    private static final Cache<FieldInfo> FIELD_CACHE = new Cache<FieldInfo>();
+
+    /**
+     * 使用するクラスと使用されるクラスの関係から利用可能なメンバーのキャッシュを蓄えておくためのクラス
+     * 
+     * @author higo
+     *
+     * @param <T>
+     */
+    static class Cache<T> {
+
+        private final ConcurrentMap<ClassInfo, ConcurrentMap<ClassInfo, List<T>>> firstCache;
+
+        Cache() {
+            this.firstCache = new ConcurrentHashMap<ClassInfo, ConcurrentMap<ClassInfo, List<T>>>();
+        }
+
+        boolean hasCash(final ClassInfo usedClass, final ClassInfo usingClass) {
+
+            final boolean hasSecondCache = this.firstCache.containsKey(usedClass);
+            if (!hasSecondCache) {
+                return false;
+            }
+
+            final ConcurrentMap<ClassInfo, List<T>> secondCache = this.firstCache.get(usedClass);
+            final boolean hasThirdCache = secondCache.containsKey(usingClass);
+            return hasThirdCache;
+        }
+
+        List<T> getCache(final ClassInfo usedClass, final ClassInfo usingClass) {
+
+            final ConcurrentMap<ClassInfo, List<T>> secondCache = this.firstCache.get(usedClass);
+            if (null == secondCache) {
+                return null;
+            }
+
+            return secondCache.get(usingClass);
+        }
+
+        void putCache(final ClassInfo usedClass, final ClassInfo usingClass, final List<T> cache) {
+
+            ConcurrentMap<ClassInfo, List<T>> secondCache = this.firstCache.get(usedClass);
+            if (null == secondCache) {
+                secondCache = new ConcurrentHashMap<ClassInfo, List<T>>();
+                this.firstCache.put(usedClass, secondCache);
+            }
+
+            secondCache.put(usingClass, cache);
+        }
     }
 }
