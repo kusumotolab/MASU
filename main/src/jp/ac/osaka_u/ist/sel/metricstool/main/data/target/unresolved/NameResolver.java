@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.AnonymousClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
@@ -101,55 +102,6 @@ public final class NameResolver {
         }
 
         return Collections.unmodifiableSortedSet(innerClasses);
-    }
-
-    /**
-     * 引数で与えられたクラスで利用可能なクラスの　List　を返す
-     * 
-     * @param classInfo クラス
-     * @return　引数で与えられたクラスで利用可能なクラスの　List
-     */
-    public static List<ClassInfo> getAvailableClasses(final ClassInfo classInfo) {
-
-        if (null == classInfo) {
-            throw new IllegalArgumentException();
-        }
-
-        // 利用可能な変数を代入するためのリスト
-        final List<ClassInfo> availableClasses = new LinkedList<ClassInfo>();
-
-        // 最も外側のクラスを取得
-        final ClassInfo outestClass;
-        if (classInfo instanceof InnerClassInfo) {
-
-            outestClass = NameResolver.getOuterstClass((InnerClassInfo) classInfo);
-
-            // 外部および外部クラスの親クラスを追加
-            for (ClassInfo outerClass = classInfo; !outerClass.equals(outestClass); outerClass = ((InnerClassInfo) outerClass)
-                    .getOuterClass()) {
-
-                availableClasses.add(outerClass);
-                NameResolver.getAvailableSuperClasses(classInfo, outerClass, availableClasses);
-            }
-
-        } else {
-            outestClass = classInfo;
-        }
-
-        //　最も外側およびもっとも外側のクラスの親クラスを追加
-        availableClasses.add(outestClass);
-        for (final ClassInfo superClass : ClassTypeInfo.convert(outestClass.getSuperClasses())) {
-            NameResolver.getAvailableSuperClasses(outestClass, superClass, availableClasses);
-            availableClasses.add(superClass);
-        }
-        NameResolver.getAvailableSuperClasses(classInfo, outestClass, availableClasses);
-
-        // 内部クラスを追加
-        for (final InnerClassInfo innerClass : classInfo.getInnerClasses()) {
-            NameResolver.getAvailableInnerClasses((ClassInfo) innerClass, availableClasses);
-        }
-
-        return Collections.unmodifiableList(availableClasses);
     }
 
     public static void getAvailableSuperClasses(final ClassInfo subClass,
@@ -286,6 +238,154 @@ public final class NameResolver {
         }
 
         return Collections.unmodifiableList(typeParameters);
+    }
+
+    public static List<ClassInfo> getAvailableClasses(final ClassInfo usingClass) {
+
+         final List<ClassInfo> availableClasses = getAvailableClasses(usingClass, usingClass,
+                new HashSet<ClassInfo>());
+        final ClassInfo outestClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
+                .getOutestClass((InnerClassInfo) usingClass) : usingClass;
+        availableClasses.addAll(DataManager.getInstance().getClassInfoManager().getClassInfos(
+                outestClass.getNamespace()));
+        return availableClasses;
+    }
+
+    private static List<ClassInfo> getAvailableClasses(final ClassInfo usedClass,
+            final ClassInfo usingClass, Set<ClassInfo> checkedClasses) {
+
+        if (checkedClasses.contains(usedClass)) {
+            return Collections.<ClassInfo> emptyList();
+        }
+
+        checkedClasses.add(usedClass);
+
+        final List<ClassInfo> availableClasses = new ArrayList<ClassInfo>();
+        if (isAccessible(usedClass, usingClass)) {
+            availableClasses.add(usedClass);
+        }
+
+        for (final InnerClassInfo innerClass : usedClass.getInnerClasses()) {
+            checkedClasses.addAll(getAvailableClasses((ClassInfo) innerClass, usingClass,
+                    checkedClasses));
+        }
+
+        if (usedClass instanceof InnerClassInfo) {
+            final ClassInfo outerUsedClass = ((InnerClassInfo) usedClass).getOuterClass();
+            checkedClasses.addAll(getAvailableClasses(outerUsedClass, usingClass, checkedClasses));
+        }
+
+        for (final ClassTypeInfo superUsedType : usedClass.getSuperClasses()) {
+            final ClassInfo superUsedClass = superUsedType.getReferencedClass();
+            checkedClasses.addAll(getAvailableClasses(superUsedClass, usingClass, checkedClasses));
+        }
+
+        return availableClasses;
+    }
+
+    /**
+     * usedClassがusingClassにおいてアクセス可能かを返す．
+     * なお，usedClassがpublicである場合は考慮していない．
+     * publicでアクセス可能かどうかは，インポート文も調べなければわからない
+     * 
+     * @param usedClass
+     * @param usingClass
+     * @return
+     */
+    public static boolean isAccessible(final ClassInfo usedClass, final ClassInfo usingClass) {
+
+        // usedがインナークラスのとき
+        if (usedClass instanceof InnerClassInfo) {
+
+            //直のouterクラスからはアクセス可
+            {
+                final ClassInfo outerClass = ((InnerClassInfo) usedClass).getOuterClass();
+                if (outerClass.equals(usingClass)) {
+                    return true;
+                }
+            }
+
+            // 直のouterクラスが同じクラスからはアクセス可
+            if (usedClass.getNamespace().equals(usingClass.getNamespace())) {
+                return true;
+            }
+
+            // 直のouterクラスがインナークラスでない場合
+            if (!(((InnerClassInfo) usedClass).getOuterClass() instanceof InnerClassInfo)) {
+                final ClassInfo outerUsedClass = ((InnerClassInfo) usedClass).getOuterClass();
+                final ClassInfo outestUsingClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
+                        .getOutestClass((InnerClassInfo) usingClass)
+                        : usingClass;
+
+                // 名前空間が同じ時
+                if (outerUsedClass.getNamespace().equals(outestUsingClass.getNamespace())) {
+
+                    ClassInfo outerUsingClass = usingClass;
+                    while (true) {
+                        if (outerUsingClass.isSubClass(outerUsedClass)) {
+                            return true;
+                        }
+
+                        if (!(outerUsingClass instanceof InnerClassInfo)) {
+                            break;
+                        }
+
+                        outerUsingClass = ((InnerClassInfo) outerUsingClass).getOuterClass();
+                    }
+                }
+
+                // 名前空間が違う時
+                else {
+                    if (usedClass.isInheritanceVisible()) {
+
+                        ClassInfo outerUsingClass = usingClass;
+                        while (true) {
+                            if (outerUsingClass.isSubClass(outerUsedClass)) {
+                                return true;
+                            }
+
+                            if (!(outerUsingClass instanceof InnerClassInfo)) {
+                                break;
+                            }
+
+                            outerUsingClass = ((InnerClassInfo) outerUsingClass).getOuterClass();
+                        }
+                    }
+                }
+            }
+        }
+
+        // usedがインナークラスでないとき
+        else {
+
+            //名前空間が同じであれば参照可
+            {
+                final ClassInfo tmpUsingClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
+                        .getOutestClass((InnerClassInfo) usingClass)
+                        : usingClass;
+                if (tmpUsingClass.getNamespace().equals(usedClass.getNamespace())) {
+                    return true;
+                }
+            }
+
+            //usedが子クラスから参照可能であれば
+            if (usedClass.isInheritanceVisible()) {
+                ClassInfo outerClass = usingClass;
+                while (true) {
+                    if (outerClass.isSubClass(usedClass)) {
+                        return true;
+                    }
+
+                    if (!(outerClass instanceof InnerClassInfo)) {
+                        break;
+                    }
+
+                    outerClass = ((InnerClassInfo) outerClass).getOuterClass();
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -838,8 +838,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         for (final UnresolvedClassTypeInfo unresolvedSuperType : this.getSuperClasses()) {
 
             // スーパークラスを設定
-            final ReferenceTypeInfo superType = unresolvedSuperType.resolve(resolved, null,
-                    classInfoManager, null, null);
+            final ReferenceTypeInfo superType = unresolvedSuperType.resolveAsSuperType(resolved,
+                    null, classInfoManager, null, null);
             resolved.addSuperClass((ClassTypeInfo) superType);
 
             // サブクラスを設定

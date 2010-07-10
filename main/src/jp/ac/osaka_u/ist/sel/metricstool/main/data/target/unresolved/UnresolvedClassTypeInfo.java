@@ -14,11 +14,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterTypeInfo;
@@ -111,7 +109,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
         final String[] referenceName = this.getReferenceName();
         final Collection<ClassInfo> candidateClasses = classInfoManager
                 .getClassInfos(referenceName[referenceName.length - 1]);
-        
+
         //複数項参照の場合は完全限定名かどうかを調べる，単項参照の場合はデフォルトパッケージから調べる
         {
             final ClassInfo matchedClass = classInfoManager.getClassInfo(referenceName);
@@ -131,12 +129,9 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
         // 単項参照の場合は現在のクラスの最外部クラスの内部クラスから検索
         if (this.isMoniminalReference()) {
 
-            final ClassInfo outestClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
-                    .getOutestClass((InnerClassInfo) usingClass)
-                    : usingClass;
-            for (final ClassInfo innerClass : TargetClassInfo.getAllInnerClasses(outestClass)) {
-                if (candidateClasses.contains(innerClass)) {
-                    final ClassTypeInfo classType = new ClassTypeInfo(innerClass);
+            for (final ClassInfo availableClass : NameResolver.getAvailableClasses(usingClass)) {
+                if (candidateClasses.contains(availableClass)) {
+                    final ClassTypeInfo classType = new ClassTypeInfo(availableClass);
                     for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
                             .getTypeArguments()) {
                         final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
@@ -305,6 +300,84 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
         }
 
         return this.resolvedInfo;
+    }
+
+    public ReferenceTypeInfo resolveAsSuperType(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if ((null == usingClass) || (null == classInfoManager)) {
+            throw new IllegalArgumentException();
+        }
+
+        // 既に解決済みである場合は，キャッシュを返す
+        if (this.alreadyResolved()) {
+            return this.getResolved();
+        }
+
+        final String[] referenceName = this.getReferenceName();
+        final Collection<ClassInfo> candidates = classInfoManager
+                .getClassInfosWithSuffix(referenceName);
+
+        if (candidates.isEmpty()) {
+
+            final ExternalClassInfo superClass = 1 == referenceName.length ? new ExternalClassInfo(
+                    referenceName[0]) : new ExternalClassInfo(referenceName);
+            classInfoManager.add(superClass);
+            final ClassTypeInfo superClassType = new ClassTypeInfo(superClass);
+            for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                    .getTypeArguments()) {
+                final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
+                        usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                superClassType.addTypeArgument(typeArgument);
+            }
+            this.resolvedInfo = superClassType;
+            return this.resolvedInfo;
+        }
+
+        else {
+            int longestMatchedLength = -1;
+            ClassInfo bestCandidate = null;
+            for (final ClassInfo candidate : candidates) {
+
+                final int matchedLength = this.getMatchedLength(usingClass.getFullQualifiedName(),
+                        candidate.getFullQualifiedName());
+                if (longestMatchedLength < matchedLength) {
+                    longestMatchedLength = matchedLength;
+                    bestCandidate = candidate;
+                }
+            }
+
+            final ClassTypeInfo superClassType = new ClassTypeInfo(bestCandidate);
+            for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
+                    .getTypeArguments()) {
+                final TypeInfo typeArgument = unresolvedTypeArgument.resolve(usingClass,
+                        usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+                superClassType.addTypeArgument(typeArgument);
+            }
+            this.resolvedInfo = superClassType;
+            return this.resolvedInfo;
+        }
+    }
+
+    private int getMatchedLength(final String[] array1, final String[] array2) {
+
+        for (int index = 0; true; index++) {
+
+            if (array1.length <= index) {
+                return index;
+            }
+
+            if (array2.length <= index) {
+                return index;
+            }
+
+            if (!array1[index].equals(array2[index])) {
+                return index;
+            }
+        }
     }
 
     /**

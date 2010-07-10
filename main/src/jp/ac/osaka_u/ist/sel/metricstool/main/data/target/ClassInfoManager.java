@@ -245,6 +245,70 @@ public final class ClassInfoManager {
                 .unmodifiableSortedSet(new TreeSet<ClassInfo>());
     }
 
+    public Collection<ClassInfo> getClassInfosWithPrefix(final String[] prefix) {
+
+        final SortedSet<ClassInfo> matchedClasses = new TreeSet<ClassInfo>();
+        for (final ClassInfo classInfo : this.getTargetClassInfos()) {
+            final String[] fqName = classInfo.getFullQualifiedName();
+            if (isMatch(fqName, prefix)) {
+                matchedClasses.add(classInfo);
+            }
+        }
+
+        for (final ClassInfo classInfo : this.getExternalClassInfos()) {
+            final String[] fqName = classInfo.getFullQualifiedName();
+            if (isMatch(fqName, prefix)) {
+                matchedClasses.add(classInfo);
+            }
+        }
+
+        return matchedClasses;
+    }
+
+    public Collection<ClassInfo> getClassInfosWithSuffix(final String[] suffix) {
+
+        final SortedSet<ClassInfo> matchedClasses = new TreeSet<ClassInfo>();
+        for (final ClassInfo classInfo : this.getTargetClassInfos()) {
+            final String[] fqName = classInfo.getFullQualifiedName();
+            if (isMatch(this.reverse(fqName), this.reverse(suffix))) {
+                matchedClasses.add(classInfo);
+            }
+        }
+
+        for (final ClassInfo classInfo : this.getExternalClassInfos()) {
+            final String[] fqName = classInfo.getFullQualifiedName();
+            if (isMatch(this.reverse(fqName), this.reverse(suffix))) {
+                matchedClasses.add(classInfo);
+            }
+        }
+
+        return matchedClasses;
+    }
+
+    private boolean isMatch(final String[] fqName, final String[] prefix) {
+
+        for (int index = 0; index < prefix.length; index++) {
+
+            if (fqName.length <= index) {
+                return false;
+            }
+
+            if (!fqName[index].equals(prefix[index])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private String[] reverse(final String[] array) {
+        final String[] reverseArray = new String[array.length];
+        for (int index = 0; index < array.length; index++) {
+            reverseArray[array.length - index - 1] = array[index];
+        }
+        return reverseArray;
+    }
+
     /**
      * 引数で指定したクラス名を持つクラス情報の Collection を返す
      * 

@@ -6,11 +6,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SuperTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterizable;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -69,6 +66,7 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
 
         final int index = this.getIndex();
         final String name = this.getName();
+        /*
         final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> unresolvedSuperType = this
                 .getSuperType();
         final TypeInfo superType = unresolvedSuperType.resolve(usingClass, usingMethod,
@@ -93,9 +91,10 @@ public final class UnresolvedSuperTypeParameterInfo extends UnresolvedTypeParame
         } else {
 
             this.resolvedInfo = new SuperTypeParameterInfo(ownerUnit, name, index, null, superType);
-        }
+        }*/
 
-        return this.resolvedInfo;
+        return super.resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);
     }
 
     /**
