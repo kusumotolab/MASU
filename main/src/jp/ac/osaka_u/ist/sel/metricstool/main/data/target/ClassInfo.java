@@ -403,6 +403,40 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
         return false;
     }
 
+    public final boolean isPrefixMatch(final String[] prefix) {
+
+        final String[] fqName = this.getFullQualifiedName();
+        for (int index = 0; index < prefix.length; index++) {
+
+            if (fqName.length <= index) {
+                return false;
+            }
+
+            if (!fqName[index].equals(prefix[index])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public final boolean isSuffixMatch(final String[] suffix) {
+
+        final String[] fqName = this.getFullQualifiedName();
+        for (int index = 0; index < suffix.length; index++) {
+
+            if (fqName.length <= index) {
+                return false;
+            }
+
+            if (!fqName[fqName.length - index - 1].equals(suffix[suffix.length - index - 1])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /**
      * 引数で指定された型パラメータを追加する
      * 

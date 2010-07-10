@@ -40,7 +40,8 @@ public class ModifierInfo implements Serializable {
         case JAVA14:
         case JAVA15:
             final ModifierInfo protectedModifier = JavaPredefinedModifierInfo.PROTECTED;
-            return modifiers.contains(protectedModifier);
+            final ModifierInfo publicModifier = JavaPredefinedModifierInfo.PUBLIC;
+            return modifiers.contains(protectedModifier) || modifiers.contains(publicModifier);
         default:
             throw new IllegalStateException();
         }

@@ -518,6 +518,15 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
         // 利用可能なクラス名からエンティティ名を検索
         {
 
+            // import文を用いない範囲で利用可能なクラスから検索
+            for (final ClassInfo availableClass : NameResolver.getAvailableClasses(usingClass)) {
+                if (availableClass.isSuffixMatch(name)) {
+                    this.resolvedInfo = new ClassReferenceInfo(new ClassTypeInfo(availableClass),
+                            usingMethod, fromLine, fromColumn, toLine, toColumn);
+                    return this.resolvedInfo;
+                }
+            }
+
             // 内部クラス名から検索
             {
                 final ClassInfo outestClass;
@@ -1142,7 +1151,7 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
 
         err.println("Remain unresolved \"" + this.toString() + "\"" + " line:" + this.getFromLine()
                 + " column:" + this.getFromColumn() + " on \""
-                + usingClass.getOwnerFile().getName());
+                + usingClass.getOwnerFile().getName() + "\"");
 
         // 見つからなかった処理を行う
         usingMethod.addUnresolvedUsage(this);

@@ -126,7 +126,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
             }
         }
 
-        // 単項参照の場合は現在のクラスの最外部クラスの内部クラスから検索
+        // 単項参照の場合はインポート文を用いないでも利用可能なクラスから検索
         if (this.isMoniminalReference()) {
 
             for (final ClassInfo availableClass : NameResolver.getAvailableClasses(usingClass)) {
