@@ -326,6 +326,12 @@ public final class NameResolver {
             final List<ClassInfo> _SAME_CLASS, final List<ClassInfo> _INHERITANCE,
             final List<ClassInfo> _SAME_NAMESPACE) {
 
+        // usingとusedが同じであれば，利用可能
+        if (usingClass.equals(usedClass)) {
+            _SAME_CLASS.add(usedClass);
+            return true;
+        }
+
         // usedがインナークラスのとき
         if (usedClass instanceof InnerClassInfo) {
 

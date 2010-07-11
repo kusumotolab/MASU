@@ -288,7 +288,9 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
 
             }
 
-            final ExternalClassInfo externalClassInfo = new ExternalClassInfo(referenceName);
+            final ExternalClassInfo externalClassInfo = referenceName.length > 2 ? new ExternalClassInfo(
+                    referenceName)
+                    : new ExternalClassInfo(referenceName[0]);
             final ClassTypeInfo classType = new ClassTypeInfo(externalClassInfo);
             for (final UnresolvedTypeInfo<? extends ReferenceTypeInfo> unresolvedTypeArgument : this
                     .getTypeArguments()) {

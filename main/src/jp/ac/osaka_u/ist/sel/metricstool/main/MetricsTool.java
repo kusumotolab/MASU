@@ -1105,10 +1105,16 @@ public class MetricsTool {
                 .getUnresolvedClassInfoManager();
         final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
 
+        // æ‚É superTyp‚¾‚¯‰ğŒˆ
+        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+                .getClassInfos()) {
+            unresolvedClassInfo.resolveSuperClass(classInfoManager);
+        }
+
+        // c‚è‚ÌType‚ğ‰ğŒˆ
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
 
-            unresolvedClassInfo.resolveSuperClass(classInfoManager);
             unresolvedClassInfo.resolveTypeParameter(classInfoManager);
 
             for (final UnresolvedMethodInfo unresolvedMethod : unresolvedClassInfo
