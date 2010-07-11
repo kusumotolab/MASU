@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -243,19 +243,25 @@ public final class NameResolver {
         return Collections.unmodifiableList(typeParameters);
     }
 
+    /**
+     * 引数で指定されたクラスで利用可能な，クラスのListを返す
+     * 
+     * @param usingClass
+     * @return
+     */
     public static synchronized List<ClassInfo> getAvailableClasses(final ClassInfo usingClass) {
 
         if (CLASS_CACHE.containsKey(usingClass)) {
             return CLASS_CACHE.get(usingClass);
         } else {
-            final List<ClassInfo> _SAME_CLASS = new ArrayList<ClassInfo>();
-            final List<ClassInfo> _INHERITANCE = new ArrayList<ClassInfo>();
-            final List<ClassInfo> _SAME_NAMESPACE = new ArrayList<ClassInfo>();
+            final List<ClassInfo> _SAME_CLASS = new NonDuplicationLinkedList<ClassInfo>();
+            final List<ClassInfo> _INHERITANCE = new NonDuplicationLinkedList<ClassInfo>();
+            final List<ClassInfo> _SAME_NAMESPACE = new NonDuplicationLinkedList<ClassInfo>();
 
             getAvailableClasses(usingClass, usingClass, new HashSet<ClassInfo>(), _SAME_CLASS,
                     _INHERITANCE, _SAME_NAMESPACE);
 
-            final List<ClassInfo> availableClasses = new ArrayList<ClassInfo>();
+            final List<ClassInfo> availableClasses = new NonDuplicationLinkedList<ClassInfo>();
             availableClasses.addAll(_SAME_CLASS);
             availableClasses.addAll(_INHERITANCE);
             availableClasses.addAll(_SAME_NAMESPACE);
@@ -465,7 +471,7 @@ public final class NameResolver {
         checkedClasses.add(usedClass);
 
         // usedに定義されているメソッドのうち，利用可能なものを追加
-        final List<MethodInfo> availableMethods = new ArrayList<MethodInfo>();
+        final List<MethodInfo> availableMethods = new NonDuplicationLinkedList<MethodInfo>();
         availableMethods.addAll(extractAvailableMethods(usedClass, usingClass));
 
         // usedの外クラスをチェック
@@ -495,7 +501,7 @@ public final class NameResolver {
         checkedClasses.add(usedClass);
 
         // usedに定義されているメソッドのうち，利用可能なものを追加
-        final List<FieldInfo> availableFields = new ArrayList<FieldInfo>();
+        final List<FieldInfo> availableFields = new NonDuplicationLinkedList<FieldInfo>();
         availableFields.addAll(extractAvailableFields(usedClass, usingClass));
 
         // usedの外クラスをチェック
@@ -516,7 +522,7 @@ public final class NameResolver {
     private static List<MethodInfo> extractAvailableMethods(final ClassInfo usedClass,
             final ClassInfo usingClass) {
 
-        final List<MethodInfo> availableMethods = new ArrayList<MethodInfo>();
+        final List<MethodInfo> availableMethods = new NonDuplicationLinkedList<MethodInfo>();
 
         // usingとusedが等しい場合は，すべてのメソッドを使用可能
         {
@@ -570,7 +576,7 @@ public final class NameResolver {
     private static List<FieldInfo> extractAvailableFields(final ClassInfo usedClass,
             final ClassInfo usingClass) {
 
-        final List<FieldInfo> availableFields = new ArrayList<FieldInfo>();
+        final List<FieldInfo> availableFields = new NonDuplicationLinkedList<FieldInfo>();
 
         // usingとusedが等しい場合は，すべてのフィールドを使用可能
         {
@@ -673,6 +679,32 @@ public final class NameResolver {
             }
 
             secondCache.put(usingClass, cache);
+        }
+    }
+
+    @SuppressWarnings("serial")
+    private static class NonDuplicationLinkedList<T> extends LinkedList<T> {
+
+        @Override
+        public boolean add(final T element) {
+            if (super.contains(element)) {
+                return false;
+            } else {
+                return super.add(element);
+            }
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends T> elements) {
+
+            boolean added = false;
+            for (final T element : elements) {
+                if (this.add(element)) {
+                    added = true;
+                }
+            }
+
+            return added;
         }
     }
 }
