@@ -338,14 +338,21 @@ public final class NameResolver {
             final ClassInfo outerUsedClass = ((InnerClassInfo) usedClass).getOuterClass();
 
             //直のouterクラスからはアクセス可
-            {
-                if (outerUsedClass.equals(usingClass)) {
+            if (outerUsedClass.equals(usingClass)) {
+                _SAME_CLASS.add(usedClass);
+                return true;
+            }
+
+            // usingもインナークラスの場合は，usedと同じクラスのインナークラスかどうかを調べる
+            if (usingClass instanceof InnerClassInfo) {
+                final ClassInfo outerUsingClass = ((InnerClassInfo) usingClass).getOuterClass();
+                if (outerUsedClass.equals(outerUsingClass)) {
                     _SAME_CLASS.add(usedClass);
                     return true;
                 }
             }
 
-            // 直のouterクラスが同じクラスからはアクセス可
+            // 直のouterクラスとusingの名前空間が同じ場合
             if (outerUsedClass.getNamespace().equals(usingClass.getNamespace())) {
                 if (outerUsedClass instanceof InnerClassInfo) {
                     _SAME_CLASS.add(usedClass);
