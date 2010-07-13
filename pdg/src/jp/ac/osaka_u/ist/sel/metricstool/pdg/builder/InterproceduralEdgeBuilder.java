@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sel.metricstool.pdg;
+package jp.ac.osaka_u.ist.sel.metricstool.pdg.builder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +27,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.WhileBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.InterProceduralPDG;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 public class InterproceduralEdgeBuilder {
@@ -194,7 +195,7 @@ public class InterproceduralEdgeBuilder {
 
 					// Call DependenceÅ@Çí«â¡
 					{
-						final PDGNode<?> fromNode = this.pdg.nodeFactory
+						final PDGNode<?> fromNode = this.pdg.getNodeFactory()
 								.getNode(statement);
 						final PDGNode<?> toNode = pdg.getMethodEnterNode();
 						fromNode.addCallDependingNode(toNode, call);
@@ -202,7 +203,7 @@ public class InterproceduralEdgeBuilder {
 
 					// Return Dependence Çí«â¡
 					{
-						final PDGNode<?> toNode = this.pdg.nodeFactory
+						final PDGNode<?> toNode = this.pdg.getNodeFactory()
 								.getNode(statement);
 						for (final PDGNode<?> fromNode : pdg.getExitNodes()) {
 							fromNode.addReturnDependingNode(toNode);
@@ -234,7 +235,7 @@ public class InterproceduralEdgeBuilder {
 
 					// Call DependenceÅ@Çí«â¡
 					{
-						final PDGNode<?> fromNode = this.pdg.nodeFactory
+						final PDGNode<?> fromNode = this.pdg.getNodeFactory()
 								.getNode(condition);
 						final PDGNode<?> toNode = pdg.getMethodEnterNode();
 						fromNode.addCallDependingNode(toNode, call);
@@ -242,7 +243,7 @@ public class InterproceduralEdgeBuilder {
 
 					// Return Dependence Çí«â¡
 					{
-						final PDGNode<?> toNode = this.pdg.nodeFactory
+						final PDGNode<?> toNode = this.pdg.getNodeFactory()
 								.getNode(condition);
 						for (final PDGNode<?> fromNode : pdg.getExitNodes()) {
 							fromNode.addReturnDependingNode(toNode);
