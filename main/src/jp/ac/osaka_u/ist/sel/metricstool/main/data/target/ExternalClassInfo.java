@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -54,22 +53,6 @@ public class ExternalClassInfo extends ClassInfo {
      */
     public ExternalClassInfo(final String className) {
         super(new HashSet<ModifierInfo>(), NamespaceInfo.UNKNOWN, className, false, 0, 0, 0, 0);
-    }
-
-    /**
-     * ExternalClassInfo ‚Å‚Í—˜—p‚Å‚«‚È‚¢
-     */
-    @Override
-    public void addTypeParameterUsage(TypeParameterInfo typeParameterInfo, TypeInfo usedType) {
-        throw new CannotUseException();
-    }
-
-    /**
-     * ExternalClassInfo ‚Å‚Í—˜—p‚Å‚«‚È‚¢
-     */
-    @Override
-    public Map<TypeParameterInfo, TypeInfo> getTypeParameterUsages() {
-        throw new CannotUseException();
     }
 
     /**

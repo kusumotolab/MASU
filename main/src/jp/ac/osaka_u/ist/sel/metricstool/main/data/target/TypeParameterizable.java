@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -31,21 +30,6 @@ public interface TypeParameterizable {
      * @return 型パラメータのリスト
      */
     List<TypeParameterInfo> getTypeParameters();
-
-    /**
-     * 型パラメータと実際に使用されている型のペアを追加する
-     * 
-     * @param typeParameterInfo 型パラメータ
-     * @param usedType 実際に使用されている型
-     */
-    void addTypeParameterUsage(TypeParameterInfo typeParameterInfo, TypeInfo usedType);
-
-    /**
-     * 型パラメータと実際に使用されている型のマップを返す
-     * 
-     * @return 型パラメータと実際に使用されている型のマップ
-     */
-    Map<TypeParameterInfo, TypeInfo> getTypeParameterUsages();
     
     /**
      * 外側にある，型パラメータを定義可能なユニットを返す．

@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -45,7 +44,6 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
         this.parameters = new LinkedList<ParameterInfo>();
 
         this.typeParameters = new LinkedList<TypeParameterInfo>();
-        this.typeParameterUsages = new HashMap<TypeParameterInfo, TypeInfo>();
         this.thrownExceptions = new LinkedList<ReferenceTypeInfo>();
 
         this.unresolvedUsage = new HashSet<UnresolvedExpressionInfo<?>>();
@@ -350,33 +348,6 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     }
 
     /**
-     * 型パラメータの使用を追加する
-     * 
-     * @param typeParameterInfo 型パラメータ 
-     * @param usedType 型パラメータに代入されている型
-     */
-    @Override
-    public void addTypeParameterUsage(final TypeParameterInfo typeParameterInfo,
-            final TypeInfo usedType) {
-
-        if ((null == typeParameterInfo) || (null == usedType)) {
-            throw new IllegalArgumentException();
-        }
-
-        this.typeParameterUsages.put(typeParameterInfo, usedType);
-    }
-
-    /**
-     * 型パラメータ使用のマップを返す
-     * 
-     * @return 型パラメータ使用のマップ
-     */
-    @Override
-    public Map<TypeParameterInfo, TypeInfo> getTypeParameterUsages() {
-        return Collections.unmodifiableMap(this.typeParameterUsages);
-    }
-
-    /**
      * 引数で指定された型パラメータを追加する
      * 
      * @param typeParameter 追加する型パラメータ
@@ -562,12 +533,6 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
      * スローされる例外を保存する変数
      */
     private final List<ReferenceTypeInfo> thrownExceptions;
-
-    /**
-     * このクラスで使用されている型パラメータと実際に型パラメータに代入されている型のペア.
-     * このクラスで定義されている型パラメータではない．
-     */
-    private final Map<TypeParameterInfo, TypeInfo> typeParameterUsages;
 
     /**
      * 引数のリストの保存するための変数
