@@ -1,4 +1,6 @@
-package jp.ac.osaka_u.ist.sel.metricstool.cfg;
+package jp.ac.osaka_u.ist.sel.metricstool.cfg.edge;
+
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGNode;
 
 
 public abstract class CFGEdge implements Comparable<CFGEdge> {

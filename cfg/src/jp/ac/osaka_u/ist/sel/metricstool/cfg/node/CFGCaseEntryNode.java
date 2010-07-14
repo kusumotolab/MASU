@@ -1,24 +1,27 @@
-package jp.ac.osaka_u.ist.sel.metricstool.cfg;
+package jp.ac.osaka_u.ist.sel.metricstool.cfg.node;
 
 
 import java.util.HashSet;
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.JumpStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.edge.CFGControlEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.edge.CFGEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 
 
-abstract public class CFGJumpStatementNode extends CFGStatementNode {
+public class CFGCaseEntryNode extends CFGNormalNode<CaseEntryInfo> {
 
-    CFGJumpStatementNode(final JumpStatementInfo jumpStatement) {
-        super(jumpStatement);
+    CFGCaseEntryNode(final CaseEntryInfo caseEntry) {
+        super(caseEntry);
     }
 
     @Override
-    protected final void optimize() {
+    public void optimize() {
 
         //このノードのバックワードノード群を取得
         final Set<CFGNode<?>> backwardNodes = new HashSet<CFGNode<?>>();
         for (final CFGEdge backwardEdge : this.getBackwardEdges()) {
+
             backwardNodes.add(backwardEdge.getFromNode());
         }
 
@@ -41,7 +44,7 @@ abstract public class CFGJumpStatementNode extends CFGStatementNode {
         // バックワードノード群とフォワードノード群をつなぐ
         for (final CFGNode<?> backwardNode : backwardNodes) {
             for (final CFGNode<?> forwardNode : forwardNodes) {
-                final CFGJumpEdge edge = new CFGJumpEdge(backwardNode, forwardNode);
+                final CFGControlEdge edge = new CFGControlEdge(backwardNode, forwardNode, true);
                 backwardNode.addForwardEdge(edge);
             }
         }

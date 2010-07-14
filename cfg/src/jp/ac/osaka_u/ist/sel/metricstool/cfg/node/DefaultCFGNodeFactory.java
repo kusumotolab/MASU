@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sel.metricstool.cfg;
+package jp.ac.osaka_u.ist.sel.metricstool.cfg.node;
 
 
 import java.util.Collection;

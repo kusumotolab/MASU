@@ -17,6 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
+@SuppressWarnings("serial")
 public class CaughtExceptionDeclarationStatementInfo implements
 		ExecutableElementInfo {
 

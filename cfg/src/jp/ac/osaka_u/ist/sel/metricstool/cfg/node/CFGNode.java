@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sel.metricstool.cfg;
+package jp.ac.osaka_u.ist.sel.metricstool.cfg.node;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGUtility;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.edge.CFGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
@@ -60,7 +62,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 		this.text = core.getText() + " <" + core.getFromLine() + ">";
 	}
 
-	void addForwardEdge(final CFGEdge forwardEdge) {
+	public void addForwardEdge(final CFGEdge forwardEdge) {
 
 		if (null == forwardEdge) {
 			throw new IllegalArgumentException();
@@ -75,7 +77,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 		}
 	}
 
-	void addBackwardEdge(final CFGEdge backwardEdge) {
+	public void addBackwardEdge(final CFGEdge backwardEdge) {
 
 		if (null == backwardEdge) {
 			throw new IllegalArgumentException();
@@ -180,7 +182,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 	/**
 	 * 必要のないノードの場合は，このメソッドをオーバーライドすることによって，削除される
 	 */
-	protected void optimize() {
+	public void optimize() {
 	}
 
 	/**
