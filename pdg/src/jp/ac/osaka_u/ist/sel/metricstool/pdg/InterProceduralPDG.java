@@ -3,7 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 import java.util.HashMap;
 import java.util.Map;
 
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.ICFGNodeFactory;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;

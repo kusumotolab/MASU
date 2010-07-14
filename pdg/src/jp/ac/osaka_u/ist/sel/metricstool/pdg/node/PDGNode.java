@@ -4,10 +4,10 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGControlNode;
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGNode;
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGNormalNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGUtility;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGControlNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGNormalNode;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
