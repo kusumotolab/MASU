@@ -31,9 +31,8 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
      * @param targetDataManager　ビルダーが利用する構築データ管理者
      * @param interpriter　ビルダーが利用する修飾子の意味解析者
      */
-    public ClassBuilder(final BuildDataManager targetDataManager,
-            final ModifiersInterpriter interpriter) {
-        this(targetDataManager, new ModifiersBuilder(), new NameBuilder(), interpriter);
+    public ClassBuilder(final BuildDataManager targetDataManager) {
+        this(targetDataManager, new ModifiersBuilder(), new NameBuilder());
     }
 
     /**
@@ -44,8 +43,7 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
      * @param interpriter　ビルダーが利用する修飾子の意味解析者
      */
     public ClassBuilder(final BuildDataManager targetDataManager,
-            final ModifiersBuilder modifiersBuilder, final NameBuilder nameBuilder,
-            final ModifiersInterpriter interpriter) {
+            final ModifiersBuilder modifiersBuilder, final NameBuilder nameBuilder) {
 
         //データ管理者はnullだと困る．
         if (null == targetDataManager) {
@@ -65,7 +63,7 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
         this.buildManager = targetDataManager;
         this.modifiersBuilder = modifiersBuilder;
         this.nameBuilder = nameBuilder;
-        this.interpriter = interpriter;
+//        this.interpriter = interpriter;
 
         //内部で使うビルダーを登録して，こいつらがアクティブになった時に自動的にビジターからのイベントが届くようにする．
         //デフォルトで非アクティブ状態にセットされる
@@ -239,9 +237,6 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
                 buildingclass.addModifier(modifier);
             }
 
-            if (null != this.interpriter) {
-                this.interpriter.interprit(modifiers, buildingclass, null);
-            }
         }
     }
 
@@ -264,11 +259,6 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
      * 名前情報を構築するビルダ
      */
     private final NameBuilder nameBuilder;
-
-    /**
-     * 修飾子の意味解析を行う変数．
-     */
-    private final ModifiersInterpriter interpriter;
 
     /**
      * 構築中のクラスデータスタック

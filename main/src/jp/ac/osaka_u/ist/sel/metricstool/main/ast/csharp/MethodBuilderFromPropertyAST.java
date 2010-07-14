@@ -6,7 +6,6 @@ import java.util.Stack;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.CompoundDataBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ModifiersInterpriter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.TypeBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.CallableUnitStateManager;
@@ -34,18 +33,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedT
 public class MethodBuilderFromPropertyAST extends CompoundDataBuilder<UnresolvedMethodInfo> {
 
     public MethodBuilderFromPropertyAST(final BuildDataManager targetDataManager,
-            final ModifiersInterpriter interpriter,
             final ModifiersBuilder modifiersBuilder, final TypeBuilder typeBuilder,
             final NameBuilder nameBuilder) {
 
-        if (null == targetDataManager || null == interpriter
-                || null == modifiersBuilder || null == typeBuilder || null == nameBuilder) {
+        if (null == targetDataManager || null == modifiersBuilder || null == typeBuilder
+                || null == nameBuilder) {
             throw new IllegalArgumentException();
         }
 
         this.buildManager = targetDataManager;
         this.stateManager = new PropertyStateManager();
-        this.modifiersInterpriter = interpriter;
         this.modifierBuilder = modifiersBuilder;
         this.typeBuilder = typeBuilder;
         this.nameBuilder = nameBuilder;
@@ -186,8 +183,6 @@ public class MethodBuilderFromPropertyAST extends CompoundDataBuilder<Unresolved
         for (ModifierInfo modifier : modifiers) {
             method.addModifier(modifier);
         }
-        modifiersInterpriter.interprit(modifiers, method, method);
-
         method.setReturnType(type);
 
         method.setMethodName(name);
@@ -205,7 +200,7 @@ public class MethodBuilderFromPropertyAST extends CompoundDataBuilder<Unresolved
 
         return propetyBody;
     }
-    
+
     private void endPropertyDefinition() {
         this.propertyModifierStack.pop();
         this.propertyTypeStack.pop();
@@ -219,8 +214,6 @@ public class MethodBuilderFromPropertyAST extends CompoundDataBuilder<Unresolved
     protected final Stack<String> propertyNameStack = new Stack<String>();
 
     protected final Stack<UnresolvedMethodInfo> buildingUnitStack = new Stack<UnresolvedMethodInfo>();
-
-    protected final ModifiersInterpriter modifiersInterpriter;
 
     protected final BuildDataManager buildManager;
 

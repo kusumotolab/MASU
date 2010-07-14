@@ -102,7 +102,7 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
             UnresolvedFieldInfo element = new UnresolvedFieldInfo(elementName,
                     UnresolvedClassTypeInfo.getInstance(enumClass), enumClass, null, startLine,
                     startColumn, endLine, endColumn);
-            modifierInterpriter.interprit(defaultModifiers, element, element);
+    //        modifierInterpriter.interprit(defaultModifiers, element, element);
 
             buildManager.addField(element);
             enumClass.addDefinedField(element);
@@ -121,7 +121,7 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
 
     private final Stack<UnresolvedClassInfo> enumClassStack = new Stack<UnresolvedClassInfo>();
 
-    private final JavaModifiersInterpriter modifierInterpriter = new JavaModifiersInterpriter();
+    //private final JavaModifiersInterpriter modifierInterpriter = new JavaModifiersInterpriter();
 
     private static final ModifierInfo[] defaultModifiers = new ModifierInfo[] {
             JavaPredefinedModifierInfo.getModifierInfo("public"),

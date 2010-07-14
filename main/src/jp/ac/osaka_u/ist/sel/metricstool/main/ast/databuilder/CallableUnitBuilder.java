@@ -31,26 +31,23 @@ public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?
         extends CompoundDataBuilder<T> {
 
     protected CallableUnitBuilder(BuildDataManager buildDataManager,
-            CallableUnitStateManager stateManager, ModifiersInterpriter interpriter) {
-        this(buildDataManager, stateManager, interpriter, new ModifiersBuilder(), new TypeBuilder(
-                buildDataManager), new NameBuilder(), new MethodParameterBuilder(buildDataManager,
-                interpriter));
+            CallableUnitStateManager stateManager) {
+        this(buildDataManager, stateManager, new ModifiersBuilder(), new TypeBuilder(
+                buildDataManager), new NameBuilder(), new MethodParameterBuilder(buildDataManager));
     }
 
     protected CallableUnitBuilder(BuildDataManager targetDataManager,
-            CallableUnitStateManager stateManager, ModifiersInterpriter interpriter,
-            ModifiersBuilder modifiersBuilder, TypeBuilder typeBuilder, NameBuilder nameBuilder,
+            CallableUnitStateManager stateManager, ModifiersBuilder modifiersBuilder,
+            TypeBuilder typeBuilder, NameBuilder nameBuilder,
             MethodParameterBuilder parameterbuilder) {
 
-        if (null == targetDataManager || null == stateManager || null == interpriter
-                || null == modifiersBuilder || null == typeBuilder || null == nameBuilder
-                || null == parameterbuilder) {
+        if (null == targetDataManager || null == stateManager || null == modifiersBuilder
+                || null == typeBuilder || null == nameBuilder || null == parameterbuilder) {
             throw new IllegalArgumentException();
         }
 
         this.buildManager = targetDataManager;
         this.stateManager = stateManager;
-        this.modifiersInterpriter = interpriter;
         this.modifierBuilder = modifiersBuilder;
         this.typeBuilder = typeBuilder;
         this.nameBuilder = nameBuilder;
@@ -157,7 +154,6 @@ public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?
                 buildingMethod.addModifier(modifier);
             }
 
-            modifiersInterpriter.interprit(modifiers, buildingMethod, buildingMethod);
         }
     }
 
@@ -180,8 +176,6 @@ public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?
             final int toLine, final int toColumn);
 
     protected Stack<T> buildingUnitStack = new Stack<T>();
-
-    protected final ModifiersInterpriter modifiersInterpriter;
 
     protected final BuildDataManager buildManager;
 

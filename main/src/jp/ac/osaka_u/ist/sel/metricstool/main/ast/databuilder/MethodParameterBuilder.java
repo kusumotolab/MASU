@@ -23,19 +23,15 @@ public class MethodParameterBuilder
         extends
         VariableBuilder<UnresolvedParameterInfo, UnresolvedCallableUnitInfo<? extends CallableUnitInfo>> {
 
-    public MethodParameterBuilder(BuildDataManager buildDataManager,
-            ModifiersInterpriter interpriter) {
+    public MethodParameterBuilder(BuildDataManager buildDataManager) {
         this(buildDataManager, new ModifiersBuilder(), new TypeBuilder(buildDataManager),
-                new NameBuilder(), interpriter);
+                new NameBuilder());
     }
 
     public MethodParameterBuilder(BuildDataManager buildDataManager,
-            ModifiersBuilder modifiersBuilder, TypeBuilder typeBuilder, NameBuilder nameBuilder,
-            ModifiersInterpriter interpriter) {
+            ModifiersBuilder modifiersBuilder, TypeBuilder typeBuilder, NameBuilder nameBuilder) {
         super(buildDataManager, new MethodParameterStateManager(), modifiersBuilder, typeBuilder,
                 nameBuilder);
-
-        this.interpriter = interpriter;
         this.isVariableParameterStack = new Stack<Boolean>();
     }
 
@@ -54,7 +50,6 @@ public class MethodParameterBuilder
 
         super.stateChanged(event);
     }
-
 
     @Override
     protected UnresolvedParameterInfo buildVariable(String[] name,
@@ -80,10 +75,6 @@ public class MethodParameterBuilder
             parameter.addModifier(modifier);
         }
 
-        if (null != interpriter) {
-            // TODO           interpriter.interpirt(modifiers, parameter);
-        }
-
         if (null != buildDataManager) {
             buildDataManager.addMethodParameter(parameter);
         }
@@ -104,8 +95,6 @@ public class MethodParameterBuilder
     private final boolean isAnalyzingVariableParameter() {
         return this.isVariableParameterStack.pop();
     }
-
-    private final ModifiersInterpriter interpriter;
 
     private final Stack<Boolean> isVariableParameterStack;
 }

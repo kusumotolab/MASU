@@ -17,31 +17,28 @@ public class FieldBuilder extends
 
     public FieldBuilder(BuildDataManager buildDataManager,
             final ExpressionElementManager expressionManager, ModifiersBuilder modifiersBuilder,
-            TypeBuilder typeBuilder, NameBuilder nameBuilder, ModifiersInterpriter interpriter) {
+            TypeBuilder typeBuilder, NameBuilder nameBuilder) {
         super(buildDataManager, expressionManager, new FieldStateManager(), modifiersBuilder,
                 typeBuilder, nameBuilder);
 
-        this.interpriter = interpriter;
     }
 
     @Override
-    protected UnresolvedFieldInfo buildVariable(final String[] name, final UnresolvedTypeInfo<? extends TypeInfo> type,
-            final ModifierInfo[] modifiers, final UnresolvedClassInfo definitionClass,
-            final int startLine, final int startColumn, final int endLine, final int endColumn) {
+    protected UnresolvedFieldInfo buildVariable(final String[] name,
+            final UnresolvedTypeInfo<? extends TypeInfo> type, final ModifierInfo[] modifiers,
+            final UnresolvedClassInfo definitionClass, final int startLine, final int startColumn,
+            final int endLine, final int endColumn) {
         String varName = "";
         if (name.length > 0) {
             varName = name[0];
         }
 
         if (null != definitionClass) {
-            final UnresolvedFieldInfo field = new UnresolvedFieldInfo(varName, type, definitionClass,
-                    this.builtInitializerStack.pop(), startLine, startColumn, endLine, endColumn);
+            final UnresolvedFieldInfo field = new UnresolvedFieldInfo(varName, type,
+                    definitionClass, this.builtInitializerStack.pop(), startLine, startColumn,
+                    endLine, endColumn);
             for (ModifierInfo modifier : modifiers) {
                 field.addModifier(modifier);
-            }
-
-            if (null != interpriter) {
-                interpriter.interprit(modifiers, field, field);
             }
 
             buildDataManager.addField(field);
@@ -58,5 +55,4 @@ public class FieldBuilder extends
                 : null;
     }
 
-    private final ModifiersInterpriter interpriter;
 }

@@ -29,19 +29,17 @@ public class LocalVariableBuilder
 
     public LocalVariableBuilder(BuildDataManager buildDataManager,
             final ExpressionElementManager expressionManager, ModifiersBuilder modifiersBuilder,
-            TypeBuilder typeBuilder, NameBuilder nameBuilder, ModifiersInterpriter interpriter) {
+            TypeBuilder typeBuilder, NameBuilder nameBuilder) {
         super(buildDataManager, expressionManager, new LocalVariableStateManager(),
                 modifiersBuilder, typeBuilder, nameBuilder);
-        this.interpriter = interpriter;
         this.declarationUsageTriggerStack = new Stack<AstVisitEvent>();
         this.declarationUsageStack = new Stack<UnresolvedLocalVariableUsageInfo>();
     }
-    
+
     public LocalVariableBuilder(final BuildDataManager buildDataManager,
-            final ExpressionElementManager expressionManager, final ModifiersInterpriter interpriter) {
+            final ExpressionElementManager expressionManager) {
         super(buildDataManager, expressionManager, new LocalVariableStateManager());
 
-        this.interpriter = interpriter;
         this.declarationUsageTriggerStack = new Stack<AstVisitEvent>();
         this.declarationUsageStack = new Stack<UnresolvedLocalVariableUsageInfo>();
     }
@@ -93,10 +91,6 @@ public class LocalVariableBuilder
             var.addModifier(modifier);
         }
 
-        if (null != interpriter) {
-            // TODO            interpriter.interpirt(modifiers, var);
-        }
-
         this.buildDataManager.addLocalVariable(var);
 
         return var;
@@ -136,5 +130,4 @@ public class LocalVariableBuilder
 
     private final Stack<UnresolvedLocalVariableUsageInfo> declarationUsageStack;
 
-    private final ModifiersInterpriter interpriter;
 }

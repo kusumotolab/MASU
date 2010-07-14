@@ -16,8 +16,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedI
 public abstract class InitializerBuilder<T extends UnresolvedInitializerInfo<? extends InitializerInfo>>
         extends CallableUnitBuilder<T> {
     protected InitializerBuilder(final BuildDataManager buildDataManager,
-            final CallableUnitStateManager stateManager, final ModifiersInterpriter interpriter) {
-        super(buildDataManager, stateManager, interpriter);
+            final CallableUnitStateManager stateManager) {
+        super(buildDataManager, stateManager);
     }
 
     @Override
@@ -28,7 +28,7 @@ public abstract class InitializerBuilder<T extends UnresolvedInitializerInfo<? e
         return initializer;
 
     }
-    
+
     /**
      * Ž©•ª‚ÌeƒNƒ‰ƒX‚ÉŽ©g‚ð“o˜^‚·‚é
      * 

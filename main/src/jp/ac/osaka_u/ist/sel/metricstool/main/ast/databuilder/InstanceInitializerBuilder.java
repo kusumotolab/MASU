@@ -8,9 +8,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedI
 public class InstanceInitializerBuilder extends
         InitializerBuilder<UnresolvedInstanceInitializerInfo> {
 
-    public InstanceInitializerBuilder(BuildDataManager buildDataManager,
-            ModifiersInterpriter interpriter) {
-        super(buildDataManager, new InstanceInitializerStateManager(), interpriter);
+    public InstanceInitializerBuilder(BuildDataManager buildDataManager) {
+        super(buildDataManager, new InstanceInitializerStateManager());
     }
 
     @Override

@@ -7,12 +7,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 
 public class ConstructorBuilder extends CallableUnitBuilder<UnresolvedConstructorInfo> {
 
-    public ConstructorBuilder(BuildDataManager targetDataManager, ModifiersInterpriter interpriter,
+    public ConstructorBuilder(BuildDataManager targetDataManager,
             ModifiersBuilder modifiersBuilder, TypeBuilder typeBuilder, NameBuilder nameBuilder,
             MethodParameterBuilder parameterbuilder) {
 
-        super(targetDataManager, new ConstructorStateManager(), interpriter, modifiersBuilder,
-                typeBuilder, nameBuilder, parameterbuilder);
+        super(targetDataManager, new ConstructorStateManager(), modifiersBuilder, typeBuilder,
+                nameBuilder, parameterbuilder);
 
     }
 
@@ -38,7 +38,8 @@ public class ConstructorBuilder extends CallableUnitBuilder<UnresolvedConstructo
     @Override
     protected UnresolvedConstructorInfo createUnresolvedCallableUnitInfo(final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
-        return new UnresolvedConstructorInfo(buildManager.getCurrentClass(), fromLine, fromColumn, toLine, toColumn);
+        return new UnresolvedConstructorInfo(buildManager.getCurrentClass(), fromLine, fromColumn,
+                toLine, toColumn);
     }
 
 }
