@@ -25,22 +25,20 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedC
 public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
 
     /**
-     * 引数で与えられた構築データ管理を行うBuildDataManager，修飾子の解釈を行うModifiersInterpriterと
+     * 引数で与えられた構築データ管理を行うBuildDataManagerと
      * デフォルトの修飾子ビルダー，名前ビルダーを用いて初期化する．
      * 
      * @param targetDataManager　ビルダーが利用する構築データ管理者
-     * @param interpriter　ビルダーが利用する修飾子の意味解析者
      */
     public ClassBuilder(final BuildDataManager targetDataManager) {
         this(targetDataManager, new ModifiersBuilder(), new NameBuilder());
     }
 
     /**
-     * 引数で与えられた構築データ管理を行うBuildDataManager，修飾子の解釈を行うModifiersInterpriter，
+     * 引数で与えられた構築データ管理を行うBuildDataManager
      * 修飾子ビルダー，名前ビルダーを用いて初期化する．
      * 
      * @param targetDataManager　ビルダーが利用する構築データ管理者
-     * @param interpriter　ビルダーが利用する修飾子の意味解析者
      */
     public ClassBuilder(final BuildDataManager targetDataManager,
             final ModifiersBuilder modifiersBuilder, final NameBuilder nameBuilder) {
@@ -63,7 +61,6 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
         this.buildManager = targetDataManager;
         this.modifiersBuilder = modifiersBuilder;
         this.nameBuilder = nameBuilder;
-//        this.interpriter = interpriter;
 
         //内部で使うビルダーを登録して，こいつらがアクティブになった時に自動的にビジターからのイベントが届くようにする．
         //デフォルトで非アクティブ状態にセットされる
@@ -223,8 +220,7 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
     }
 
     /**
-     * クラスの修飾子情報が構築された時に呼び出され，コンストラクタで登録されたModifierInterpriterがあれば，
-     * 現在構築中のクラス情報に対して，修飾子情報を解釈した結果を登録する．
+     * クラスの修飾子情報が構築された時に呼び出され，修飾子情報を登録する．
      * 
      * このメソッドをオーバーライドすることで，修飾子から判断される情報の登録処理を任意に変更することができる．
      * 
