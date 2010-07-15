@@ -19,6 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
  * @author higo
  * 
  */
+@SuppressWarnings("serial")
 public class ParameterDeclarationStatementInfo extends SingleStatementInfo {
 
 	/**
