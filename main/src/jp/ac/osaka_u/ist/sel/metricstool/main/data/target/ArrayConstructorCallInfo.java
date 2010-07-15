@@ -85,6 +85,16 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
             text.append("]");
         }
 
+        final List<ExpressionInfo> arguments = this.getArguments();
+        if (0 < arguments.size()) {
+            text.append("{");
+            for (final ExpressionInfo argument : arguments) {
+                text.append(argument.getText());
+                text.append(",");
+            }
+            text.deleteCharAt(text.length() - 1);
+            text.append("}");
+        }
         return text.toString();
     }
 
