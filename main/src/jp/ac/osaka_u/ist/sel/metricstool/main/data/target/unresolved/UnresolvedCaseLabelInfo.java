@@ -105,7 +105,7 @@ public class UnresolvedCaseLabelInfo extends UnresolvedExpressionInfo<Expression
         //@‚»‚êˆÈŠO‚Ì‚Æ‚«
         else {
 
-            if (!(unresolvedLabel instanceof UnresolvedFieldUsageInfo)) {
+            if (!(unresolvedLabel instanceof UnresolvedVariableUsageInfo<?>)) {
                 throw new IllegalStateException();
             }
 
@@ -113,7 +113,7 @@ public class UnresolvedCaseLabelInfo extends UnresolvedExpressionInfo<Expression
                 throw new IllegalStateException();
             }
 
-            final String name = ((UnresolvedFieldUsageInfo) unresolvedLabel).getUsedVariableName();
+            final String name = ((UnresolvedVariableUsageInfo<?>) unresolvedLabel).getUsedVariableName();
 
             final CallableUnitInfo ownerMethod = expression.getOwnerMethod();
 
