@@ -112,6 +112,11 @@ public final class AssertStatementInfo extends SingleStatementInfo {
         final ExpressionInfo expression = this.getAssertedExpression();
         sb.append(expression.getText());
 
+        sb.append(" : ");
+
+        final ExpressionInfo message = this.getMessageExpression();
+        sb.append(message.getText());
+
         sb.append(";");
 
         return sb.toString();
