@@ -29,7 +29,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TernaryOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ThrowStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
@@ -352,7 +351,7 @@ public class Conversion {
 
 			text.append("");
 
-		} else if (expression instanceof ConstructorCallInfo) {
+		} else if (expression instanceof ConstructorCallInfo<?>) {
 
 			final ConstructorCallInfo<?> constructorCall = ((ConstructorCallInfo<?>) expression);
 
@@ -524,23 +523,11 @@ public class Conversion {
 				break;
 			}
 
-		} else if (expression instanceof TypeParameterUsageInfo) {
-
-			text.append("<");
-
-			final ExpressionInfo typeParameterExpression = ((TypeParameterUsageInfo) expression)
-					.getExpression();
-			final String typeParameterExpressionString = Conversion
-					.getNormalizedString(typeParameterExpression);
-			text.append(typeParameterExpressionString);
-
-			text.append(">");
-
 		} else if (expression instanceof UnknownEntityUsageInfo) {
 
 			text.append("UNKNOWN");
 
-		} else if (expression instanceof VariableUsageInfo) {
+		} else if (expression instanceof VariableUsageInfo<?>) {
 
 			final VariableInfo<?> usedVariable = ((VariableUsageInfo<?>) expression)
 					.getUsedVariable();

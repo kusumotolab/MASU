@@ -56,9 +56,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.DefaultPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.InterProceduralPDG;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.InterproceduralEdgeBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDG;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.builder.InterproceduralEdgeBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGControlDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;

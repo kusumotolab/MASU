@@ -3,7 +3,7 @@ package jp.ac.osaka_u.ist.sdl.scdetector;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.PDGController;
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.DefaultCFGNodeFactory;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.DefaultCFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
