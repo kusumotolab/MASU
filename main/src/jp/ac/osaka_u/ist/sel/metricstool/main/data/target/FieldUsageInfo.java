@@ -176,7 +176,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         if (USAGE_MAP.containsKey(usedField)) {
             USAGE_MAP.get(usedField).add(fieldUsage);
         } else {
-            final TreeSet<FieldUsageInfo> usages = new TreeSet<FieldUsageInfo>();
+            final Set<FieldUsageInfo> usages = new HashSet<FieldUsageInfo>();
             usages.add(fieldUsage);
             USAGE_MAP.put(usedField, usages);
         }
@@ -212,5 +212,5 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         return Collections.unmodifiableSet(fieldUsages);
     }
 
-    private static final Map<FieldInfo, TreeSet<FieldUsageInfo>> USAGE_MAP = new HashMap<FieldInfo, TreeSet<FieldUsageInfo>>();
+    private static final Map<FieldInfo, Set<FieldUsageInfo>> USAGE_MAP = new HashMap<FieldInfo, Set<FieldUsageInfo>>();
 }

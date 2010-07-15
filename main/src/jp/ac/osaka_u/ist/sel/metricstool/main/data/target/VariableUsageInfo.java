@@ -183,6 +183,6 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     /**
      * ‹ó‚Ì•Ï”—˜—p‚ÌSet‚ð•\‚·
      */
-    public static final SortedSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> EmptySet = Collections
-            .unmodifiableSortedSet(new TreeSet<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>>());
+    public static final Set<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> EmptySet = Collections
+            .<VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> emptySet();
 }

@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -79,7 +78,7 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
         if (USAGE_MAP.containsKey(usedParameter)) {
             USAGE_MAP.get(usedParameter).add(parameterUsage);
         } else {
-            final TreeSet<ParameterUsageInfo> usages = new TreeSet<ParameterUsageInfo>();
+            final Set<ParameterUsageInfo> usages = new HashSet<ParameterUsageInfo>();
             usages.add(parameterUsage);
             USAGE_MAP.put(usedParameter, usages);
         }
@@ -115,5 +114,5 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
         return Collections.unmodifiableSet(parameterUsages);
     }
 
-    private static final Map<ParameterInfo, TreeSet<ParameterUsageInfo>> USAGE_MAP = new HashMap<ParameterInfo, TreeSet<ParameterUsageInfo>>();
+    private static final Map<ParameterInfo, Set<ParameterUsageInfo>> USAGE_MAP = new HashMap<ParameterInfo, Set<ParameterUsageInfo>>();
 }

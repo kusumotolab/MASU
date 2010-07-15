@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -79,7 +78,7 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
         if (USAGE_MAP.containsKey(usedLocalVariable)) {
             USAGE_MAP.get(usedLocalVariable).add(localVariableUsage);
         } else {
-            final TreeSet<LocalVariableUsageInfo> usages = new TreeSet<LocalVariableUsageInfo>();
+            final Set<LocalVariableUsageInfo> usages = new HashSet<LocalVariableUsageInfo>();
             usages.add(localVariableUsage);
             USAGE_MAP.put(usedLocalVariable, usages);
         }
@@ -115,5 +114,5 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
         return Collections.unmodifiableSet(localVariableUsages);
     }
 
-    private static final Map<LocalVariableInfo, TreeSet<LocalVariableUsageInfo>> USAGE_MAP = new HashMap<LocalVariableInfo, TreeSet<LocalVariableUsageInfo>>();
+    private static final Map<LocalVariableInfo, Set<LocalVariableUsageInfo>> USAGE_MAP = new HashMap<LocalVariableInfo, Set<LocalVariableUsageInfo>>();
 }
