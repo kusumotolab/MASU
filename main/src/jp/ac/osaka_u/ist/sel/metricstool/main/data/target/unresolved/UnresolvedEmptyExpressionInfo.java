@@ -7,14 +7,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
 public class UnresolvedEmptyExpressionInfo extends UnresolvedExpressionInfo<EmptyExpressionInfo> {
 
-    public UnresolvedEmptyExpressionInfo(final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
-        super(fromLine, fromColumn, toLine, toColumn);
+    public UnresolvedEmptyExpressionInfo(final UnresolvedUnitInfo<? extends UnitInfo> outerUnit,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        super(outerUnit, fromLine, fromColumn, toLine, toColumn);
     }
 
     @Override

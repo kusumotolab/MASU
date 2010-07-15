@@ -9,6 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SwitchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -123,6 +124,33 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
         return this.label;
     }
 
+    @Override
+    public UnresolvedCallableUnitInfo<? extends CallableUnitInfo> getOuterCallableUnit() {
+        final UnresolvedLocalSpaceInfo<?> outerUnit = (UnresolvedLocalSpaceInfo<?>) this
+                .getOuterUnit();
+        return outerUnit instanceof UnresolvedCallableUnitInfo<?> ? (UnresolvedCallableUnitInfo<? extends CallableUnitInfo>) outerUnit
+                : outerUnit.getOuterCallableUnit();
+    }
+
+    @Override
+    public UnresolvedClassInfo getOuterClass() {
+        return this.getOuterCallableUnit().getOuterClass();
+    }
+
+    @Override
+    public UnresolvedUnitInfo<? extends UnitInfo> getOuterUnit() {
+        return this.outerUnit;
+    }
+
+    @Override
+    public void setOuterUnit(UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == outerUnit) {
+            throw new IllegalArgumentException();
+        }
+        this.outerUnit = outerUnit;
+    }
+
     /**
      * この case エントリが属する switch ブロックを保存するための変数
      */
@@ -132,4 +160,6 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
      * この case エントリのラベルを保存する変数
      */
     private final UnresolvedCaseLabelInfo label;
+
+    private UnresolvedUnitInfo<? extends UnitInfo> outerUnit;
 }

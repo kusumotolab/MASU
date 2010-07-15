@@ -1,8 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
 /**
@@ -15,11 +18,12 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
         UnresolvedConditionInfo<T> {
 
     protected UnresolvedExpressionInfo() {
-        this(0, 0, 0, 0);
+        this(null, 0, 0, 0, 0);
     }
 
-    protected UnresolvedExpressionInfo(final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+    protected UnresolvedExpressionInfo(final UnresolvedUnitInfo<? extends UnitInfo> outerUnit,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        this.outerUnit = outerUnit;
         this.fromLine = fromLine;
         this.fromColumn = fromColumn;
         this.toLine = toLine;
@@ -169,6 +173,34 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
         return this.toColumn;
     }
 
+    @Override
+    public UnresolvedCallableUnitInfo<? extends CallableUnitInfo> getOuterCallableUnit() {
+        final UnresolvedLocalSpaceInfo<?> outerUnit = (UnresolvedLocalSpaceInfo<?>) this
+                .getOuterUnit();
+        return outerUnit instanceof UnresolvedCallableUnitInfo<?> ? (UnresolvedCallableUnitInfo<? extends CallableUnitInfo>) outerUnit
+                : outerUnit.getOuterCallableUnit();
+    }
+
+    @Override
+    public UnresolvedClassInfo getOuterClass() {
+        return this.getOuterCallableUnit().getOuterClass();
+    }
+
+    @Override
+    public UnresolvedUnitInfo<? extends UnitInfo> getOuterUnit() {
+        assert null != this.outerUnit : "outerUnit is null";
+        return this.outerUnit;
+    }
+
+    @Override
+    public void setOuterUnit(UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == outerUnit) {
+            throw new IllegalArgumentException();
+        }
+        this.outerUnit = outerUnit;
+    }
+
     /**
      * âåàçœÇ›èÓïÒÇï€ë∂Ç∑ÇÈÇΩÇﬂÇÃïœêî
      */
@@ -194,4 +226,5 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
      */
     private int toColumn;
 
+    private UnresolvedUnitInfo<? extends UnitInfo> outerUnit;
 }

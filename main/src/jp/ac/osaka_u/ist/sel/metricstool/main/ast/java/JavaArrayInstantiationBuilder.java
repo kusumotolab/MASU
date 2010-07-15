@@ -39,9 +39,9 @@ public class JavaArrayInstantiationBuilder extends ExpressionBuilder {
             assert 1 >= indexExpressions.size();
 
             final UnresolvedExpressionInfo<? extends ExpressionInfo> indexExpression = indexExpressions
-                    .size() != 0 ? indexExpressions.get(0).getUsage() : new UnresolvedEmptyExpressionInfo(
-                    event.getStartLine(), event.getStartColumn() + 1, event.getStartLine(), event
-                            .getStartColumn() + 1);
+                    .size() != 0 ? indexExpressions.get(0).getUsage()
+                    : new UnresolvedEmptyExpressionInfo(null, event.getStartLine(), event
+                            .getStartColumn() + 1, event.getStartLine(), event.getStartColumn() + 1);
             JavaArrayInstantiationElement array = new JavaArrayInstantiationElement(indexExpression);
 
             pushElement(array);

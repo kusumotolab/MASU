@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -109,6 +110,33 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
         return null != this.initializationExpression;
     }
 
+    @Override
+    public UnresolvedCallableUnitInfo<? extends CallableUnitInfo> getOuterCallableUnit() {
+        final UnresolvedLocalSpaceInfo<?> outerUnit = (UnresolvedLocalSpaceInfo<?>) this
+                .getOuterUnit();
+        return outerUnit instanceof UnresolvedCallableUnitInfo<?> ? (UnresolvedCallableUnitInfo<? extends CallableUnitInfo>) outerUnit
+                : outerUnit.getOuterCallableUnit();
+    }
+
+    @Override
+    public UnresolvedClassInfo getOuterClass() {
+        return this.getOuterCallableUnit().getOuterClass();
+    }
+
+    @Override
+    public UnresolvedUnitInfo<? extends UnitInfo> getOuterUnit() {
+        return this.outerUnit;
+    }
+
+    @Override
+    public void setOuterUnit(UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == outerUnit) {
+            throw new IllegalArgumentException();
+        }
+        this.outerUnit = outerUnit;
+    }
+
     /**
      * 宣言されている変数を表すフィールド
      */
@@ -119,4 +147,5 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> initializationExpression;
 
+    private UnresolvedUnitInfo<? extends UnitInfo> outerUnit;
 }

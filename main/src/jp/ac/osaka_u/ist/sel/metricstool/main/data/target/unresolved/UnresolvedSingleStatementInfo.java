@@ -1,9 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -27,15 +29,15 @@ public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInf
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        this.ownerSpace = ownerSpace;
+        this.outerUnit = ownerSpace;
         this.setFromLine(fromLine);
         this.setFromColumn(fromColumn);
         this.setToLine(toLine);
         this.setToColumn(toColumn);
     }
 
-    protected UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> getOwnerSpace() {
-        return this.ownerSpace;
+    protected UnresolvedLocalSpaceInfo<?> getOwnerSpace() {
+        return (UnresolvedLocalSpaceInfo<?>) this.getOuterUnit();
     }
 
     @Override
@@ -132,7 +134,34 @@ public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInf
         return this.toLine;
     }
 
-    private UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace;
+    @Override
+    public UnresolvedCallableUnitInfo<? extends CallableUnitInfo> getOuterCallableUnit() {
+        final UnresolvedLocalSpaceInfo<?> outerUnit = (UnresolvedLocalSpaceInfo<?>) this
+                .getOuterUnit();
+        return outerUnit instanceof UnresolvedCallableUnitInfo<?> ? (UnresolvedCallableUnitInfo<? extends CallableUnitInfo>) outerUnit
+                : outerUnit.getOuterCallableUnit();
+    }
+
+    @Override
+    public UnresolvedClassInfo getOuterClass() {
+        return this.getOuterCallableUnit().getOuterClass();
+    }
+
+    @Override
+    public UnresolvedUnitInfo<? extends UnitInfo> getOuterUnit() {
+        return this.outerUnit;
+    }
+
+    @Override
+    public void setOuterUnit(UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == outerUnit) {
+            throw new IllegalArgumentException();
+        }
+        this.outerUnit = outerUnit;
+    }
+
+    private UnresolvedUnitInfo<? extends UnitInfo> outerUnit;
 
     /**
      * 開始行を表す変数

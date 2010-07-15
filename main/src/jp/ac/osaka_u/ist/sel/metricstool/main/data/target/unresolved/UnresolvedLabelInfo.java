@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LabelInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -88,7 +89,7 @@ public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> imp
     public void setName(String name) {
         this.name = name;
     }
-    
+
     /**
      * このラベルが付いた文をセットする
      * 
@@ -107,7 +108,36 @@ public final class UnresolvedLabelInfo extends UnresolvedUnitInfo<LabelInfo> imp
         return this.labeledStatement;
     }
 
+    @Override
+    public UnresolvedCallableUnitInfo<? extends CallableUnitInfo> getOuterCallableUnit() {
+        final UnresolvedLocalSpaceInfo<?> outerUnit = (UnresolvedLocalSpaceInfo<?>) this
+                .getOuterUnit();
+        return outerUnit instanceof UnresolvedCallableUnitInfo<?> ? (UnresolvedCallableUnitInfo<? extends CallableUnitInfo>) outerUnit
+                : outerUnit.getOuterCallableUnit();
+    }
+
+    @Override
+    public UnresolvedClassInfo getOuterClass() {
+        return this.getOuterCallableUnit().getOuterClass();
+    }
+
+    @Override
+    public UnresolvedUnitInfo<? extends UnitInfo> getOuterUnit() {
+        return this.outerUnit;
+    }
+
+    @Override
+    public void setOuterUnit(UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == outerUnit) {
+            throw new IllegalArgumentException();
+        }
+        this.outerUnit = outerUnit;
+    }
+
     private String name;
 
     private UnresolvedStatementInfo<?> labeledStatement;
+
+    private UnresolvedUnitInfo<? extends UnitInfo> outerUnit;
 }

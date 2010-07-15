@@ -83,9 +83,8 @@ public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<F
             final int fromColumn = this.iteratorVariable.getFromColumn();
             final int toLine = this.iteratorExpression.getToLine();
             final int toColumn = this.iteratorExpression.getToColumn();
-
             final UnresolvedForeachConditionInfo condition = new UnresolvedForeachConditionInfo(
-                    fromLine, fromColumn, toLine, toColumn);
+                    this, fromLine, fromColumn, toLine, toColumn);
             condition.setIteratorVariable(this.iteratorVariable);
             condition.setIteratorExpression(this.iteratorExpression);
 
@@ -113,9 +112,8 @@ public class UnresolvedForeachBlockInfo extends UnresolvedConditionalBlockInfo<F
             final int fromColumn = this.iteratorVariable.getFromColumn();
             final int toLine = this.iteratorExpression.getToLine();
             final int toColumn = this.iteratorExpression.getToColumn();
-
             final UnresolvedForeachConditionInfo condition = new UnresolvedForeachConditionInfo(
-                    fromLine, fromColumn, toLine, toColumn);
+                    this, fromLine, fromColumn, toLine, toColumn);
             condition.setIteratorVariable(this.iteratorVariable);
             condition.setIteratorExpression(this.iteratorExpression);
 
