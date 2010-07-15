@@ -1,10 +1,12 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg.node;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGUtility;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.edge.CFGEdge;
@@ -33,6 +35,47 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
  */
 public abstract class CFGNode<T extends ExecutableElementInfo> implements
 		Comparable<CFGNode<? extends ExecutableElementInfo>> {
+
+	public static CFGNode<? extends ExecutableElementInfo> getHeadmostNode(
+			final CFGNode<? extends ExecutableElementInfo> node) {
+
+		final Set<CFGEdge> edges = node.getBackwardEdges();
+		// バックワードエッジがないのであれば，そのノードが最も上にある
+		if (0 == edges.size()) {
+			return node;
+		}
+
+		else {
+			final List<CFGNode<? extends ExecutableElementInfo>> headmostNodes = new ArrayList<CFGNode<? extends ExecutableElementInfo>>();
+			for (final CFGEdge edge : edges) {
+				final CFGNode<? extends ExecutableElementInfo> fromNode = edge
+						.getFromNode();
+				final CFGNode<? extends ExecutableElementInfo> headmostNode = getHeadmostNode(fromNode);
+				headmostNodes.add(headmostNode);
+			}
+
+			// 全てのheadmostNodeが等しいかをチェックする
+			for (int i = 0; i < headmostNodes.size(); i++) {
+				for (int j = i + 1; j < headmostNodes.size(); j++) {
+					if (headmostNodes.get(i) != headmostNodes.get(j)) {
+						throw new IllegalStateException();
+					}
+				}
+			}
+
+			return headmostNodes.get(0);
+		}
+	}
+
+	private static final AtomicLong DUMMY_VARIABLE_NUMBER = new AtomicLong();
+
+	protected static final String getDummyVariableName() {
+		final StringBuilder text = new StringBuilder();
+		text.append("$");
+		text.append(Long.toString(DUMMY_VARIABLE_NUMBER.getAndIncrement()));
+		return text.toString();
+
+	}
 
 	/**
 	 * このノードのフォワードノードのセット
@@ -92,6 +135,15 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 		}
 	}
 
+	void removeForwardEdge(final CFGEdge forwardEdge) {
+
+		if (null == forwardEdge) {
+			throw new IllegalArgumentException();
+		}
+
+		this.forwardEdges.remove(forwardEdge);
+	}
+
 	void removeForwardEdges(final Collection<CFGEdge> forwardEdges) {
 
 		if (null == forwardEdges) {
@@ -101,6 +153,15 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 		this.forwardEdges.removeAll(forwardEdges);
 	}
 
+	void removeBackwardEdge(final CFGEdge backwardEdge) {
+
+		if (null == backwardEdge) {
+			throw new IllegalArgumentException();
+		}
+
+		this.backwardEdges.remove(backwardEdge);
+	}
+
 	void removeBackwardEdges(final Collection<CFGEdge> backwardEdges) {
 
 		if (null == backwardEdges) {
@@ -108,6 +169,42 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 		}
 
 		this.backwardEdges.removeAll(backwardEdges);
+	}
+
+	/**
+	 * このノードを前ノードと後ろノードから辿れないようにする
+	 */
+	void remove() {
+		for (final CFGEdge edge : this.getBackwardEdges()) {
+			final CFGNode<?> backwardNode = edge.getFromNode();
+			backwardNode.removeForwardEdge(edge);
+		}
+		for (final CFGEdge edge : this.getForwardEdges()) {
+			final CFGNode<?> forwardNode = edge.getToNode();
+			forwardNode.removeBackwardEdge(edge);
+		}
+	}
+
+	/**
+	 * このノードが存在する位置に，引数で与えられたノードを追加し，このノードを削除
+	 * 
+	 * @param node
+	 */
+	void add(final CFGNode<?> node) {
+		if (null == node) {
+			throw new IllegalArgumentException();
+		}
+		this.remove();
+		for (final CFGEdge edge : this.getBackwardEdges()) {
+			final CFGNode<?> backwardNode = edge.getFromNode();
+			final CFGEdge newEdge = edge.replaceToNode(node);
+			backwardNode.addForwardEdge(newEdge);
+		}
+		for (final CFGEdge edge : this.getForwardEdges()) {
+			final CFGNode<?> forwardNode = edge.getToNode();
+			final CFGEdge newEdge = edge.replaceFromNode(node);
+			forwardNode.addBackwardEdge(newEdge);
+		}
 	}
 
 	/**
@@ -183,6 +280,17 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 	 * 必要のないノードの場合は，このメソッドをオーバーライドすることによって，削除される
 	 */
 	public void optimize() {
+	}
+
+	/**
+	 * このノードを分解するメソッド． 分解された場合は，分解後のノードを返す． 分解が行われなかった場合はnullを返す．
+	 * 
+	 * @param nodeFactory
+	 * @return
+	 */
+	public CFGNode<? extends ExecutableElementInfo> dissolve(
+			final ICFGNodeFactory nodeFactory) {
+		return null;
 	}
 
 	/**

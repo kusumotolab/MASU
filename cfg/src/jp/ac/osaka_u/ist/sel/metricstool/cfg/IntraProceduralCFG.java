@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -79,6 +80,21 @@ public class IntraProceduralCFG extends CFG {
 	 */
 	public IntraProceduralCFG(final CallableUnitInfo unit,
 			final ICFGNodeFactory nodeFactory) {
+		this(unit, nodeFactory, true, false);
+	}
+
+	/**
+	 * 
+	 * @param unit
+	 * @param nodeFactory
+	 * @param optimize
+	 *            caseラベルや，break, continueを取り除くかどうか
+	 * @param dissolve
+	 *            複雑な文を分解して複数の簡単な文にするかどうか
+	 */
+	public IntraProceduralCFG(final CallableUnitInfo unit,
+			final ICFGNodeFactory nodeFactory, final boolean optimize,
+			final boolean dissolve) {
 
 		super(nodeFactory);
 
@@ -99,8 +115,13 @@ public class IntraProceduralCFG extends CFG {
 		this.enterNode = statementsCFG.getEnterNode();
 		this.exitNodes.addAll(statementsCFG.getExitNodes());
 
-		// 必要のないノードを削除
-		this.optimizeCFG();
+		if (optimize) {
+			this.optimizeCFG();
+		}
+
+		if (dissolve) {
+			this.dissolveCFG();
+		}
 	}
 
 	/**
@@ -119,7 +140,7 @@ public class IntraProceduralCFG extends CFG {
 	 * @param statement
 	 * @param nodeFactory
 	 */
-	IntraProceduralCFG(final StatementInfo statement,
+	private IntraProceduralCFG(final StatementInfo statement,
 			final ICFGNodeFactory nodeFactory) {
 
 		super(nodeFactory);
@@ -1078,6 +1099,35 @@ public class IntraProceduralCFG extends CFG {
 			}
 			for (final ExecutableElementInfo removeElement : removeElements) {
 				this.nodeFactory.removeNode(removeElement);
+			}
+		}
+	}
+
+	private void dissolveCFG() {
+
+		// 分解前の全てのノードを取得
+		final Collection<CFGNode<? extends ExecutableElementInfo>> preAllNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
+		preAllNodes.addAll(this.getAllNodes());
+
+		// 分解前の全てのノードに対して，分解を実行
+		for (final CFGNode<?> node : preAllNodes) {
+
+			final CFGNode<? extends ExecutableElementInfo> dissolvedNode = node
+					.dissolve(this.nodeFactory);
+
+			// 分解が行われた場合
+			if (null != dissolvedNode) {
+
+				// exitNodeのとき
+				if (this.exitNodes.contains(node)) {
+					this.exitNodes.remove(node);
+					this.exitNodes.add(dissolvedNode);
+				}
+
+				// enterNodeのとき
+				if (this.enterNode == node) {
+					this.enterNode = CFGNode.getHeadmostNode(dissolvedNode);
+				}
 			}
 		}
 	}

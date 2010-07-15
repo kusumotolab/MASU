@@ -9,15 +9,20 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LiteralUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 
@@ -301,5 +306,29 @@ public class CFGUtility {
 		}
 
 		return false;
+	}
+
+	/**
+	 * à¯êîÇ≈ó^Ç¶ÇÁÇÍÇΩexpressionÇ™ï™âÇ≥ÇÍÇÈÇ◊Ç´Ç‡ÇÃÇ≈Ç†ÇÍÇŒtrue, ÇªÇ§Ç≈Ç»Ç¢èÍçáÇÕfalseÇï‘Ç∑
+	 * 
+	 * @param expression
+	 * @return
+	 */
+	public static boolean isDissolved(final ExpressionInfo expression) {
+		if (expression instanceof VariableUsageInfo<?>) {
+			return false;
+		} else if (expression instanceof ClassReferenceInfo) {
+			return false;
+		} else if (expression instanceof EmptyExpressionInfo) {
+			return false;
+		} else if (expression instanceof LiteralUsageInfo) {
+			return false;
+		} else if (expression instanceof NullUsageInfo) {
+			return false;
+		} else if (expression instanceof UnknownEntityUsageInfo) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

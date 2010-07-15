@@ -8,7 +8,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
  * @author t-miyake
  * 
  */
-public class CFGStatementNode extends CFGNormalNode<SingleStatementInfo> {
+public abstract class CFGStatementNode<T extends SingleStatementInfo> extends
+		CFGNormalNode<T> {
 
 	/**
 	 * ¶¬‚·‚éƒm[ƒh‚É‘Î‰‚·‚é•¶‚ğ—^‚¦‚Ä‰Šú‰»
@@ -16,7 +17,7 @@ public class CFGStatementNode extends CFGNormalNode<SingleStatementInfo> {
 	 * @param statement
 	 *            ¶¬‚·‚éƒm[ƒh‚É‘Î‰‚·‚é•¶
 	 */
-	CFGStatementNode(final SingleStatementInfo statement) {
+	CFGStatementNode(final T statement) {
 		super(statement);
 	}
 }

@@ -7,7 +7,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.cfg.edge.CFGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.edge.CFGJumpEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.JumpStatementInfo;
 
-abstract public class CFGJumpStatementNode extends CFGStatementNode {
+abstract public class CFGJumpStatementNode extends
+		CFGStatementNode<JumpStatementInfo> {
 
 	CFGJumpStatementNode(final JumpStatementInfo jumpStatement) {
 		super(jumpStatement);
