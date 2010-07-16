@@ -41,6 +41,7 @@ public final class ExternalMethodInfo extends MethodInfo {
         super(new HashSet<ModifierInfo>(), methodName, true, getDummyPosition(),
                 getDummyPosition(), getDummyPosition(), getDummyPosition());
 
+        this.setOuterUnit(ExternalClassInfo.UNKNOWN);
         this.setReturnType(UnknownTypeInfo.getInstance());
     }
 
