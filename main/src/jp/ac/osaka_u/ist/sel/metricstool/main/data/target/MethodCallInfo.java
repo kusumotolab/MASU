@@ -176,7 +176,8 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
         final Set<ReferenceTypeInfo> thrownExceptions = new HashSet<ReferenceTypeInfo>();
-        thrownExceptions.addAll(this.getCallee().getThrownExceptions());
+        thrownExceptions.addAll(super.getThrownExceptions());
+        thrownExceptions.addAll(this.getQualifierExpression().getThrownExceptions());
         return Collections.unmodifiableSet(thrownExceptions);
     }
 

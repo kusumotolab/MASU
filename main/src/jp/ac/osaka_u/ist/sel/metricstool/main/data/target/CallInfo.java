@@ -150,6 +150,20 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
         }
         return Collections.unmodifiableSortedSet(variableUsages);
     }
+    
+    /**
+     * この呼び出しで投げられる可能性がある例外のSetを返す
+     * 
+     * @return　この式で投げられる可能性がある例外のSet
+     */
+    @Override
+    public Set<ReferenceTypeInfo> getThrownExceptions() {
+        final Set<ReferenceTypeInfo> thrownExceptions = new HashSet<ReferenceTypeInfo>();
+        for(final ExpressionInfo parameter : this.getArguments()){
+            thrownExceptions.addAll(parameter.getThrownExceptions());
+        }
+        return Collections.unmodifiableSet(thrownExceptions);
+    }
 
     /**
      * この呼び出しで呼び出されているものを返す

@@ -2,12 +2,16 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
@@ -34,7 +38,7 @@ public class UnresolvedArrayConstructorCallInfo extends
 
         super(unresolvedArrayType);
 
-        this.indexExpressions = new ArrayList<UnresolvedExpressionInfo<? extends ExpressionInfo>>();
+        this.indexExpressions = new TreeMap<Integer, UnresolvedExpressionInfo<? extends ExpressionInfo>>();
     }
 
     /**
@@ -91,36 +95,45 @@ public class UnresolvedArrayConstructorCallInfo extends
         final ArrayTypeInfo arrayType = unresolvedArrayType.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
-        // インデックスの式を解決
-        final List<UnresolvedExpressionInfo<? extends ExpressionInfo>> unresolvedIndexExpressions = this
-                .getIndexExpressions();
-        final List<ExpressionInfo> indexExpressions = new ArrayList<ExpressionInfo>();
-        for (final UnresolvedExpressionInfo<? extends ExpressionInfo> unresolvedIndexExpression : unresolvedIndexExpressions) {
-            indexExpressions.add(unresolvedIndexExpression.resolve(usingClass, usingMethod,
-                    classInfoManager, fieldInfoManager, methodInfoManager));
-        }
-
         this.resolvedInfo = new ArrayConstructorCallInfo(arrayType, usingMethod, fromLine,
                 fromColumn, toLine, toColumn);
         this.resolvedInfo.addArguments(actualParameters);
         this.resolvedInfo.addTypeArguments(typeArguments);
+
+        // インデックスの式を解決
+        for (int dimension = 1; dimension <= arrayType.getDimension(); dimension++) {
+
+            final UnresolvedExpressionInfo<? extends ExpressionInfo> unresolvedIndexExpression = this
+                    .getIndexExpression(dimension);
+            final ExpressionInfo indexExpression;
+            if (null != unresolvedIndexExpression) {
+                indexExpression = unresolvedIndexExpression.resolve(usingClass, usingMethod,
+                        classInfoManager, fieldInfoManager, methodInfoManager);
+            } else {
+                indexExpression = new EmptyExpressionInfo(usingMethod, fromLine, fromColumn,
+                        toLine, toColumn);
+            }
+            this.resolvedInfo.addIndexExpression(dimension, indexExpression);
+        }
+
         return this.resolvedInfo;
     }
 
     /**
      * インデックスの式をセット
      * 
-     * @param dimention 配列の次元を表す
+     * @param dimension 配列の次元を表す
      * @param indexExpression 配列の要素指定部分の式を表す
      */
-    public void addIndexExpression(final int dimention,
+    public void addIndexExpression(final int dimension,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> indexExpression) {
+
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == indexExpression) {
             throw new IllegalArgumentException("indexExpression is null");
         }
 
-        this.indexExpressions.add(dimention - 1, indexExpression);
+        this.indexExpressions.put(dimension, indexExpression);
     }
 
     /**
@@ -129,11 +142,21 @@ public class UnresolvedArrayConstructorCallInfo extends
      * @return インデックスの式
      */
     public List<UnresolvedExpressionInfo<? extends ExpressionInfo>> getIndexExpressions() {
-        return this.indexExpressions;
+
+        final List<UnresolvedExpressionInfo<? extends ExpressionInfo>> indexExpressions = new ArrayList<UnresolvedExpressionInfo<? extends ExpressionInfo>>();
+        for (final UnresolvedExpressionInfo<? extends ExpressionInfo> indexExpression : this.indexExpressions
+                .values()) {
+            indexExpressions.add(indexExpression);
+        }
+        return Collections.unmodifiableList(indexExpressions);
+    }
+
+    public UnresolvedExpressionInfo<? extends ExpressionInfo> getIndexExpression(final int dimension) {
+        return this.indexExpressions.get(dimension);
     }
 
     /**
      * インデックスの式を保存するための変数
      */
-    private List<UnresolvedExpressionInfo<? extends ExpressionInfo>> indexExpressions;
+    private SortedMap<Integer, UnresolvedExpressionInfo<? extends ExpressionInfo>> indexExpressions;
 }

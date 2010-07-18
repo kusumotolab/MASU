@@ -1,11 +1,14 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -35,31 +38,18 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
 
         super(arrayType, null, ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
-        this.indexExpressions = new ArrayList<ExpressionInfo>();
-
-        for (final ExpressionInfo element : this.indexExpressions) {
-            element.setOwnerExecutableElement(this);
-        }
+        this.indexExpressions = new TreeMap<Integer, ExpressionInfo>();
     }
 
-    public void addIndexExpression(final ExpressionInfo indexExpression) {
+    public void addIndexExpression(final int dimension, final ExpressionInfo indexExpression) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == indexExpression) {
             throw new IllegalArgumentException();
         }
 
-        this.indexExpressions.add(indexExpression);
-    }
-
-    public void addIndexExpressions(final List<ExpressionInfo> indexExpressions) {
-
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == indexExpressions) {
-            throw new IllegalArgumentException();
-        }
-
-        this.indexExpressions.addAll(indexExpressions);
+        this.indexExpressions.put(dimension, indexExpression);
+        indexExpression.setOwnerExecutableElement(this);
     }
 
     /**
@@ -68,7 +58,7 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
      * @return 指定した次元のインデックスの式
      */
     public ExpressionInfo getIndexExpression(final int dimention) {
-        return this.indexExpressions.get(dimention - 1);
+        return this.indexExpressions.get(dimention);
     }
 
     /**
@@ -76,8 +66,8 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
      * 
      * @return インデックスの式のリスト 
      */
-    public List<ExpressionInfo> getIndexExpressions() {
-        return this.indexExpressions;
+    public SortedMap<Integer, ExpressionInfo> getIndexExpressions() {
+        return Collections.unmodifiableSortedMap(this.indexExpressions);
     }
 
     /**
@@ -96,9 +86,7 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
         final TypeInfo elementType = arrayType.getElementType();
         text.append(elementType.getTypeName());
 
-        final int dimension = arrayType.getDimension();
-        for (int i = 1; i <= dimension; i++) {
-            final ExpressionInfo indexExpression = this.getIndexExpression(i);
+        for (final ExpressionInfo indexExpression : this.getIndexExpressions().values()) {
             text.append("[");
             text.append(indexExpression.getText());
             text.append("]");
@@ -125,11 +113,27 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
         final Set<ReferenceTypeInfo> thrownExceptions = new HashSet<ReferenceTypeInfo>();
-        for (final ExpressionInfo indexExpression : this.getIndexExpressions()) {
+        thrownExceptions.addAll(super.getThrownExceptions());
+        for (final ExpressionInfo indexExpression : this.getIndexExpressions().values()) {
             thrownExceptions.addAll(indexExpression.getThrownExceptions());
         }
         return Collections.unmodifiableSet(thrownExceptions);
     }
 
-    private final List<ExpressionInfo> indexExpressions;
+    /**
+     * この呼び出しにおける変数使用群を返す
+     * 
+     * @return この呼び出しにおける変数使用群
+     */
+    @Override
+    public Set<VariableUsageInfo<?>> getVariableUsages() {
+        final SortedSet<VariableUsageInfo<?>> variableUsages = new TreeSet<VariableUsageInfo<?>>();
+        variableUsages.addAll(super.getVariableUsages());
+        for (final ExpressionInfo indexExpression : this.getIndexExpressions().values()) {
+            variableUsages.addAll(indexExpression.getVariableUsages());
+        }
+        return Collections.unmodifiableSortedSet(variableUsages);
+    }
+
+    private final SortedMap<Integer, ExpressionInfo> indexExpressions;
 }

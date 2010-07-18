@@ -1,11 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
-
 /**
  * クラスのコンストラクタ呼び出しを表すクラス
  * 
@@ -61,17 +56,5 @@ public class ClassConstructorCallInfo extends ConstructorCallInfo<ClassTypeInfo>
         sb.append(")");
 
         return sb.toString();
-    }
-
-    /**
-     * この式で投げられる可能性がある例外のSetを返す
-     * 
-     * @return　この式で投げられる可能性がある例外のSet
-     */
-    @Override
-    public Set<ReferenceTypeInfo> getThrownExceptions() {
-        final Set<ReferenceTypeInfo> thrownExceptions = new HashSet<ReferenceTypeInfo>();
-        thrownExceptions.addAll(this.getCallee().getThrownExceptions());
-        return Collections.unmodifiableSet(thrownExceptions);
     }
 }
