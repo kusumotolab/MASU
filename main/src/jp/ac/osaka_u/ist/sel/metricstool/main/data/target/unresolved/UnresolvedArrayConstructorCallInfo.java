@@ -100,8 +100,8 @@ public class UnresolvedArrayConstructorCallInfo extends
                     classInfoManager, fieldInfoManager, methodInfoManager));
         }
 
-        this.resolvedInfo = new ArrayConstructorCallInfo(arrayType, indexExpressions, usingMethod,
-                fromLine, fromColumn, toLine, toColumn);
+        this.resolvedInfo = new ArrayConstructorCallInfo(arrayType, usingMethod, fromLine,
+                fromColumn, toLine, toColumn);
         this.resolvedInfo.addArguments(actualParameters);
         this.resolvedInfo.addTypeArguments(typeArguments);
         return this.resolvedInfo;

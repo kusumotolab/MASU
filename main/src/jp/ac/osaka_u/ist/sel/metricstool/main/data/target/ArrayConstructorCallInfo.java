@@ -1,10 +1,13 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
 /**
@@ -20,7 +23,6 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
      * 型を与えて配列コンストラクタ呼び出しを初期化
      * 
      * @param arrayType 呼び出しの型
-     * @param indexExpressions インデックスの式
      * @param ownerMethod オーナーメソッド 
      * @param fromLine 開始行
      * @param fromColumn 開始列
@@ -28,19 +30,36 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
      * @param toColumn 終了列 
      */
     public ArrayConstructorCallInfo(final ArrayTypeInfo arrayType,
-            final List<ExpressionInfo> indexExpressions, final CallableUnitInfo ownerMethod,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
         super(arrayType, null, ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
-        if (null == indexExpressions) {
-            throw new IllegalArgumentException();
-        }
-        this.indexExpressions = Collections.unmodifiableList(indexExpressions);
+        this.indexExpressions = new ArrayList<ExpressionInfo>();
 
         for (final ExpressionInfo element : this.indexExpressions) {
             element.setOwnerExecutableElement(this);
         }
+    }
+
+    public void addIndexExpression(final ExpressionInfo indexExpression) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == indexExpression) {
+            throw new IllegalArgumentException();
+        }
+
+        this.indexExpressions.add(indexExpression);
+    }
+
+    public void addIndexExpressions(final List<ExpressionInfo> indexExpressions) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == indexExpressions) {
+            throw new IllegalArgumentException();
+        }
+
+        this.indexExpressions.addAll(indexExpressions);
     }
 
     /**
