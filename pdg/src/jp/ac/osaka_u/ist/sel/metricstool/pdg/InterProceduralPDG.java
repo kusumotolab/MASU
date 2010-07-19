@@ -23,6 +23,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SynchronizedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.WhileBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGCallDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 public class InterProceduralPDG extends IntraProceduralPDG {
@@ -264,7 +265,7 @@ public class InterProceduralPDG extends IntraProceduralPDG {
 			final IntraProceduralPDG calleePDG = PDG_MAP.get(callee);
 			assert null != calleePDG : "Illegal State!";
 
-			final PDGNode<?> fromNode = this.nodeFactory.getNode(statement);
+			final PDGNode<?> fromNode = this.pdgNodeFactory.getNode(statement);
 			final PDGNode<?> toNode = calleePDG.getMethodEnterNode();
 			final PDGCallDependenceEdge edge = new PDGCallDependenceEdge(
 					fromNode, toNode, call);
@@ -277,7 +278,7 @@ public class InterProceduralPDG extends IntraProceduralPDG {
 			final IntraProceduralPDG calleePDG = PDG_MAP.get(callee);
 			assert null != calleePDG : "Illegal State!";
 
-			final PDGNode<?> fromNode = this.nodeFactory.getNode(condition);
+			final PDGNode<?> fromNode = this.pdgNodeFactory.getNode(condition);
 			final PDGNode<?> toNode = calleePDG.getMethodEnterNode();
 			final PDGCallDependenceEdge edge = new PDGCallDependenceEdge(
 					fromNode, toNode, call);

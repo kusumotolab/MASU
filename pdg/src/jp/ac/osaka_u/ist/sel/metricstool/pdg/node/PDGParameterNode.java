@@ -1,13 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg.node;
 
 
-import java.util.SortedSet;
-import java.util.TreeSet;
-
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGParameterNode;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.ParameterDeclarationStatementInfo;
 
 
 /**
@@ -16,36 +11,31 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.ParameterDeclarationStatementInfo;
  * @author higo
  *
  */
-public class PDGParameterNode extends PDGNormalNode<ParameterDeclarationStatementInfo> {
+public class PDGParameterNode extends PDGNormalNode<CFGParameterNode> {
 
     /**
-     * 引数のオブジェクトを与えて初期化
+     * 引数で与えられたparameterからPDGParameterNodeを作成して返す
      * 
      * @param parameter
+     * @return
      */
-    public PDGParameterNode(final ParameterInfo parameter) {
+    public static PDGParameterNode getInstance(final ParameterInfo parameter) {
 
         if (null == parameter) {
             throw new IllegalArgumentException();
         }
 
-        this.core = new ParameterDeclarationStatementInfo(parameter, parameter.getFromLine(),
-                parameter.getFromColumn(), parameter.getToLine(), parameter.getToColumn());
-
-        this.text = parameter.getType().getTypeName() + " " + parameter.getName() + " <"
-                + parameter.getFromLine() + ">";
-        ;
+        final CFGParameterNode cfgNode = CFGParameterNode.getInstance(parameter);
+        return new PDGParameterNode(cfgNode);
     }
 
-    @Override
-    public final SortedSet<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
-        final SortedSet<VariableInfo<? extends UnitInfo>> definedVariables = new TreeSet<VariableInfo<? extends UnitInfo>>();
-        definedVariables.add(this.getCore().getParameter());
-        return definedVariables;
-    }
-
-    @Override
-    public SortedSet<VariableInfo<?>> getReferencedVariables() {
-        return new TreeSet<VariableInfo<? extends UnitInfo>>();
+    /**
+     * cfgノードを与えて初期化．
+     * このクラス内の getInstanceメソッドからのみ呼び出される
+     * 
+     * @param parameter
+     */
+    private PDGParameterNode(final CFGParameterNode node) {
+        super(node);
     }
 }

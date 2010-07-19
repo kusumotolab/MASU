@@ -1,18 +1,24 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg.node;
 
+
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGUtility;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGCaseEntryNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGCaughtExceptionNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGControlNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGEmptyNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGExpressionNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGForeachControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGNormalNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGReturnStatementNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGStatementNode;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGCallDependenceEdge;
@@ -20,6 +26,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGReturnDependenceEdge;
+
 
 /**
  * PDGを構成するノードを表すクラス
@@ -29,265 +36,304 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGReturnDependenceEdge;
  * @param <T>
  *            ノードの核となる情報の型
  */
-public abstract class PDGNode<T extends ExecutableElementInfo> implements
-		Comparable<PDGNode<? extends ExecutableElementInfo>> {
+public abstract class PDGNode<T extends CFGNode<? extends ExecutableElementInfo>> implements
+        Comparable<PDGNode<?>> {
 
-	/**
-	 * CFGノードからPDGノードを生成するメソッド
-	 * 
-	 * @param cfgNode
-	 * @return
-	 */
-	public static PDGNode<?> generate(final CFGNode<?> cfgNode) {
+    /**
+     * CFGノードからPDGノードを生成するメソッド
+     * 
+     * @param cfgNode
+     * @return
+     */
+    public static PDGNode<?> generate(final CFGNode<?> cfgNode) {
 
-		final ExecutableElementInfo element = cfgNode.getCore();
-		if (cfgNode instanceof CFGControlNode) {
-			return new PDGControlNode((ConditionInfo) element);
+        if (cfgNode instanceof CFGControlNode) {
 
-		} else if (cfgNode instanceof CFGNormalNode<?>) {
+            if (cfgNode instanceof CFGForeachControlNode) {
+                return new PDGForeachControlNode((CFGForeachControlNode) cfgNode);
+            }
 
-			if (element instanceof SingleStatementInfo) {
-				return new PDGStatementNode((SingleStatementInfo) element);
-			} else if (element instanceof ConditionInfo) {
-				return new PDGExpressionNode((ConditionInfo) element);
-			} else {
-				throw new IllegalStateException();
-			}
+            else {
+                return new PDGControlNode((CFGControlNode) cfgNode);
+            }
 
-		} else {
-			throw new IllegalStateException();
-		}
-	}
+        }
 
-	/**
-	 * フォワードエッジ（このノードからの依存辺）
-	 */
-	private final SortedSet<PDGEdge> forwardEdges;
+        else if (cfgNode instanceof CFGNormalNode<?>) {
 
-	/**
-	 * バックワードエッジ（このノードへの依存辺）
-	 */
-	private final SortedSet<PDGEdge> backwardEdges;
+            if (cfgNode instanceof CFGCaseEntryNode) {
+                return new PDGCaseEntryNode((CFGCaseEntryNode) cfgNode);
+            }
 
-	/**
-	 * ノードの核となる情報
-	 */
-	protected T core;
+            else if (cfgNode instanceof CFGCaughtExceptionNode) {
+                return new PDGCaughtExceptionNode((CFGCaughtExceptionNode) cfgNode);
+            }
 
-	protected String text;
+            else if (cfgNode instanceof CFGEmptyNode) {
+                return new PDGEmptyNode((CFGEmptyNode) cfgNode);
+            }
 
-	/**
-	 * ノードの核となる情報を与えて初期化
-	 * 
-	 * @param core
-	 *            ノードの核となる情報
-	 */
-	protected PDGNode() {
-		this.forwardEdges = new TreeSet<PDGEdge>();
-		this.backwardEdges = new TreeSet<PDGEdge>();
-	}
+            else if (cfgNode instanceof CFGExpressionNode) {
+                return new PDGExpressionNode((CFGExpressionNode) cfgNode);
+            }
 
-	/**
-	 * このノードにて，変更または定義される変数のSet
-	 * 
-	 * @return
-	 */
-	public abstract SortedSet<VariableInfo<? extends UnitInfo>> getDefinedVariables();
+            else if (cfgNode instanceof CFGStatementNode<?>) {
 
-	/**
-	 * このノードにて，参照されている変数のSet
-	 * 
-	 * @return
-	 */
-	public abstract SortedSet<VariableInfo<? extends UnitInfo>> getReferencedVariables();
+                if (cfgNode instanceof CFGReturnStatementNode) {
+                    return new PDGReturnStatementNode((CFGReturnStatementNode) cfgNode);
+                }
 
-	/**
-	 * 引数で与えられた変数がこのノードで定義されているかどうかを返す
-	 * 
-	 * @param variable
-	 * @return
-	 */
-	public final boolean isDefine(
-			final VariableInfo<? extends UnitInfo> variable) {
-		return this.getDefinedVariables().contains(variable);
-	}
+                else {
+                    return new PDGStatementNode<CFGStatementNode<?>>((CFGStatementNode<?>) cfgNode);
+                }
+            }
 
-	/**
-	 * 引数で与えられた変数がこのノードで参照されているかを返す
-	 * 
-	 * @param variable
-	 * @return
-	 */
-	public final boolean isReferenace(
-			final VariableInfo<? extends UnitInfo> variable) {
-		return this.getReferencedVariables().contains(variable);
-	}
+            else {
+                throw new IllegalStateException();
+            }
 
-	/**
-	 * このノードのフォワードエッジを追加
-	 * 
-	 * @param forwardEdge
-	 *            このノードのフォワードエッジ
-	 */
-	public final boolean addForwardEdge(final PDGEdge forwardEdge) {
-		if (null == forwardEdge) {
-			throw new IllegalArgumentException("forwardNode is null.");
-		}
+        } else {
+            throw new IllegalStateException();
+        }
+    }
 
-		if (!forwardEdge.getFromNode().equals(this)) {
-			throw new IllegalArgumentException();
-		}
+    /**
+     * フォワードエッジ（このノードからの依存辺）
+     */
+    private final SortedSet<PDGEdge> forwardEdges;
 
-		return this.forwardEdges.add(forwardEdge);
-	}
+    /**
+     * バックワードエッジ（このノードへの依存辺）
+     */
+    private final SortedSet<PDGEdge> backwardEdges;
 
-	/**
-	 * このノードのバックワードエッジを追加
-	 * 
-	 * @param backwardEdge
-	 */
-	public final boolean addBackwardEdge(final PDGEdge backwardEdge) {
-		if (null == backwardEdge) {
-			throw new IllegalArgumentException("backwardEdge is null.");
-		}
+    /**
+     * ノードの核となる情報
+     */
+    protected final T cfgNode;
 
-		if (!(backwardEdge.getToNode().equals(this))) {
-			throw new IllegalArgumentException();
-		}
+    protected final String text;
 
-		return this.backwardEdges.add(backwardEdge);
-	}
+    /**
+     * ノードの核となる情報を与えて初期化
+     * 
+     * @param core
+     *            ノードの核となる情報
+     */
+    protected PDGNode(final T node) {
 
-	final public void removeBackwardEdge(final PDGEdge backwardEdge) {
-		this.backwardEdges.remove(backwardEdge);
-	}
+        if (null == node) {
+            throw new IllegalArgumentException();
+        }
 
-	final public void removeForwardEdge(final PDGEdge forwardEdge) {
-		this.forwardEdges.remove(forwardEdge);
-	}
+        this.cfgNode = node;
+        this.text = node.getCore().getText() + " <" + node.getCore().getFromLine() + ">";
+        this.forwardEdges = new TreeSet<PDGEdge>();
+        this.backwardEdges = new TreeSet<PDGEdge>();
+    }
 
-	/**
-	 * このノードからのデータ依存辺を追加
-	 * 
-	 * @param dependingNode
-	 */
-	public boolean addDataDependingNode(final PDGNode<?> dependingNode,
-			final VariableInfo<?> data) {
+    /**
+     * このノードにて，変更または定義される変数のSet
+     * 
+     * @return
+     */
+    public abstract SortedSet<VariableInfo<? extends UnitInfo>> getDefinedVariables();
 
-		if (null == dependingNode) {
-			throw new IllegalArgumentException();
-		}
+    /**
+     * このノードにて，参照されている変数のSet
+     * 
+     * @return
+     */
+    public abstract SortedSet<VariableInfo<? extends UnitInfo>> getReferencedVariables();
 
-		final PDGDataDependenceEdge dataEdge = new PDGDataDependenceEdge(this,
-				dependingNode, data);
-		boolean added = this.addForwardEdge(dataEdge);
-		added &= dependingNode.addBackwardEdge(dataEdge);
-		return added;
-	}
+    /**
+     * 引数で与えられた変数がこのノードで定義されているかどうかを返す
+     * 
+     * @param variable
+     * @return
+     */
+    public final boolean isDefine(final VariableInfo<? extends UnitInfo> variable) {
+        return this.getDefinedVariables().contains(variable);
+    }
 
-	public boolean addExecutionDependingNode(final PDGNode<?> dependingNode) {
+    /**
+     * 引数で与えられた変数がこのノードで参照されているかを返す
+     * 
+     * @param variable
+     * @return
+     */
+    public final boolean isReferenace(final VariableInfo<? extends UnitInfo> variable) {
+        return this.getReferencedVariables().contains(variable);
+    }
 
-		if (null == dependingNode) {
-			throw new IllegalArgumentException();
-		}
+    /**
+     * このノードのフォワードエッジを追加
+     * 
+     * @param forwardEdge
+     *            このノードのフォワードエッジ
+     */
+    public final boolean addForwardEdge(final PDGEdge forwardEdge) {
+        if (null == forwardEdge) {
+            throw new IllegalArgumentException("forwardNode is null.");
+        }
 
-		final PDGExecutionDependenceEdge executionEdge = new PDGExecutionDependenceEdge(
-				this, dependingNode);
-		boolean added = this.addForwardEdge(executionEdge);
-		added &= dependingNode.addBackwardEdge(executionEdge);
-		return added;
-	}
+        if (!forwardEdge.getFromNode().equals(this)) {
+            throw new IllegalArgumentException();
+        }
 
-	public boolean addCallDependingNode(final PDGNode<?> dependingNode,
-			final CallInfo<?> call) {
+        return this.forwardEdges.add(forwardEdge);
+    }
 
-		if (null == dependingNode) {
-			throw new IllegalArgumentException();
-		}
+    /**
+     * このノードのバックワードエッジを追加
+     * 
+     * @param backwardEdge
+     */
+    public final boolean addBackwardEdge(final PDGEdge backwardEdge) {
+        if (null == backwardEdge) {
+            throw new IllegalArgumentException("backwardEdge is null.");
+        }
 
-		final PDGCallDependenceEdge callEdge = new PDGCallDependenceEdge(this,
-				dependingNode, call);
-		boolean added = this.addForwardEdge(callEdge);
-		added &= dependingNode.addBackwardEdge(callEdge);
-		return added;
-	}
+        if (!(backwardEdge.getToNode().equals(this))) {
+            throw new IllegalArgumentException();
+        }
 
-	public boolean addReturnDependingNode(final PDGNode<?> dependingNode) {
+        return this.backwardEdges.add(backwardEdge);
+    }
 
-		if (null == dependingNode) {
-			throw new IllegalArgumentException();
-		}
+    final public void removeBackwardEdge(final PDGEdge backwardEdge) {
+        this.backwardEdges.remove(backwardEdge);
+    }
 
-		final PDGReturnDependenceEdge returnEdge = new PDGReturnDependenceEdge(
-				this, dependingNode);
-		boolean added = this.addForwardEdge(returnEdge);
-		added &= dependingNode.addBackwardEdge(returnEdge);
-		return added;
-	}
+    final public void removeForwardEdge(final PDGEdge forwardEdge) {
+        this.forwardEdges.remove(forwardEdge);
+    }
 
-	/**
-	 * このノードのバックワードエッジを取得
-	 * 
-	 * @return このノードのバックワードエッジ
-	 */
-	public final SortedSet<PDGEdge> getBackwardEdges() {
-		return Collections.unmodifiableSortedSet(this.backwardEdges);
-	}
+    /**
+     * このノードからのデータ依存辺を追加
+     * 
+     * @param dependingNode
+     */
+    public boolean addDataDependingNode(final PDGNode<?> dependingNode, final VariableInfo<?> data) {
 
-	/**
-	 * このノードのフォワードエッジを取得
-	 * 
-	 * @return このノードのフォワードエッジ
-	 */
-	public final SortedSet<PDGEdge> getForwardEdges() {
-		return Collections.unmodifiableSortedSet(this.forwardEdges);
-	}
+        if (null == dependingNode) {
+            throw new IllegalArgumentException();
+        }
 
-	/**
-	 * このノード内において呼び出されているメソッドがオブジェクトの内容を変えているかどうかを返す
-	 * 
-	 * @return
-	 */
-	public final boolean isStateChanged() {
+        final PDGDataDependenceEdge dataEdge = new PDGDataDependenceEdge(this, dependingNode, data);
+        boolean added = this.addForwardEdge(dataEdge);
+        added &= dependingNode.addBackwardEdge(dataEdge);
+        return added;
+    }
 
-		for (final CallInfo<?> call : this.getCore().getCalls()) {
-			if (call instanceof MethodCallInfo) {
-				final MethodCallInfo methodCall = (MethodCallInfo) call;
-				if (CFGUtility.stateChange(methodCall.getCallee())) {
-					return true;
-				}
-			}
-		}
+    public boolean addExecutionDependingNode(final PDGNode<?> dependingNode) {
 
-		return false;
-	}
+        if (null == dependingNode) {
+            throw new IllegalArgumentException();
+        }
 
-	@Override
-	public int compareTo(final PDGNode<? extends ExecutableElementInfo> node) {
+        final PDGExecutionDependenceEdge executionEdge = new PDGExecutionDependenceEdge(this,
+                dependingNode);
+        boolean added = this.addForwardEdge(executionEdge);
+        added &= dependingNode.addBackwardEdge(executionEdge);
+        return added;
+    }
 
-		if (null == node) {
-			throw new IllegalArgumentException();
-		}
+    public boolean addCallDependingNode(final PDGNode<?> dependingNode, final CallInfo<?> call) {
 
-		final int methodOrder = this.getCore().getOwnerMethod().compareTo(
-				node.getCore().getOwnerMethod());
-		if (0 != methodOrder) {
-			return methodOrder;
-		}
+        if (null == dependingNode) {
+            throw new IllegalArgumentException();
+        }
 
-		return this.getCore().compareTo(node.getCore());
-	}
+        final PDGCallDependenceEdge callEdge = new PDGCallDependenceEdge(this, dependingNode, call);
+        boolean added = this.addForwardEdge(callEdge);
+        added &= dependingNode.addBackwardEdge(callEdge);
+        return added;
+    }
 
-	/**
-	 * このノードの核となる情報取得
-	 * 
-	 * @return このノードの核となる情報
-	 */
-	public final T getCore() {
-		return this.core;
-	}
+    public boolean addReturnDependingNode(final PDGNode<?> dependingNode) {
 
-	public final String getText() {
-		return this.text;
-	}
+        if (null == dependingNode) {
+            throw new IllegalArgumentException();
+        }
+
+        final PDGReturnDependenceEdge returnEdge = new PDGReturnDependenceEdge(this, dependingNode);
+        boolean added = this.addForwardEdge(returnEdge);
+        added &= dependingNode.addBackwardEdge(returnEdge);
+        return added;
+    }
+
+    /**
+     * このノードのバックワードエッジを取得
+     * 
+     * @return このノードのバックワードエッジ
+     */
+    public final SortedSet<PDGEdge> getBackwardEdges() {
+        return Collections.unmodifiableSortedSet(this.backwardEdges);
+    }
+
+    /**
+     * このノードのフォワードエッジを取得
+     * 
+     * @return このノードのフォワードエッジ
+     */
+    public final SortedSet<PDGEdge> getForwardEdges() {
+        return Collections.unmodifiableSortedSet(this.forwardEdges);
+    }
+
+    /**
+     * このノード内において呼び出されているメソッドがオブジェクトの内容を変えているかどうかを返す
+     * 
+     * @return
+     */
+    public final boolean isStateChanged() {
+
+        for (final CallInfo<?> call : this.getCore().getCalls()) {
+            if (call instanceof MethodCallInfo) {
+                final MethodCallInfo methodCall = (MethodCallInfo) call;
+                if (CFGUtility.stateChange(methodCall.getCallee())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int compareTo(final PDGNode<?> node) {
+
+        if (null == node) {
+            throw new IllegalArgumentException();
+        }
+
+        final int methodOrder = this.getCore().getOwnerMethod().compareTo(
+                node.getCore().getOwnerMethod());
+        if (0 != methodOrder) {
+            return methodOrder;
+        }
+
+        return this.getCore().compareTo(node.getCore());
+    }
+
+    /**
+     * このノードの元になったプログラム要素
+     * 
+     * @return このノードの元になったプログラム要素
+     */
+    public final ExecutableElementInfo getCore() {
+        return this.getCFGNode().getCore();
+    }
+
+    /**
+     * このPDGノードの元となったCFGノード
+     * @return
+     */
+    public final T getCFGNode() {
+        return this.cfgNode;
+    }
+
+    public final String getText() {
+        return this.text;
+    }
 }

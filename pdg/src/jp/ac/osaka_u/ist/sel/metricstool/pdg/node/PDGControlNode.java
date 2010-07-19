@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
@@ -19,7 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGControlDependenceEdge;
  * @author t-miyake
  *
  */
-public class PDGControlNode extends PDGNode<ConditionInfo> {
+public class PDGControlNode extends PDGNode<CFGControlNode> {
 
     /**
      * ノードの集合から，制御ノードのみを抽出し，そのSortedSetを返す
@@ -37,14 +37,13 @@ public class PDGControlNode extends PDGNode<ConditionInfo> {
         return Collections.unmodifiableSortedSet(controlNodes);
     }
 
-    public PDGControlNode(final ConditionInfo condition) {
-
-        if (null == condition) {
-            throw new IllegalArgumentException();
-        }
-
-        this.core = condition;
-        this.text = condition.getText() + " <" + condition.getFromLine() + ">";
+    /**
+     * CFGControlNodeを与えて，初期化
+     * 
+     * @param controlNode
+     */
+    protected PDGControlNode(final CFGControlNode controlNode) {
+        super(controlNode);
     }
 
     @Override

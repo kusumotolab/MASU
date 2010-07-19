@@ -20,7 +20,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ContinueStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ElseBlockInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
@@ -30,10 +29,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.DefaultPDGNodeFactory;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGMethodEnterNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNormalNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGParameterNode;
 
 
 /**
@@ -111,7 +113,8 @@ public class IntraProceduralPDG extends PDG {
             final int dataDependencyDistance, final int controlDependencyDistance,
             final int executionDependencyDistance) {
 
-        super(pdgNodeFactory);
+        super(pdgNodeFactory, cfgNodeFactory);
+
         if (null == unit) {
             throw new IllegalArgumentException("method is null.");
         }
@@ -260,7 +263,7 @@ public class IntraProceduralPDG extends PDG {
             if (this.isBuiltExecutionDependency()) {
                 if (null != cfgEnterNode) {
                     final PDGNode<?> toPDGNode = this.makeNode(cfgEnterNode);
-                    enterNode.addExecutionDependingNode(toPDGNode);
+                    this.enterNode.addExecutionDependingNode(toPDGNode);
                 }
             }
         }
@@ -268,10 +271,12 @@ public class IntraProceduralPDG extends PDG {
         // unitの引数を処理
         for (final ParameterInfo parameter : this.unit.getParameters()) {
 
-            final PDGNode<?> pdgNode = this.makeNormalNode(parameter);
-            // this.enterNodes.add(pdgNode);
+            final PDGParameterNode pdgParameterNode = PDGParameterNode.getInstance(parameter);
+            this.pdgNodeFactory.addNode(pdgParameterNode);
+            this.nodes.add(pdgParameterNode);
+
             if (null != cfgEnterNode) {
-                this.buildDataDependence(cfgEnterNode, pdgNode, parameter,
+                this.buildDataDependence(cfgEnterNode, pdgParameterNode, parameter,
                         new HashSet<CFGNode<?>>());
             }
         }
@@ -378,8 +383,8 @@ public class IntraProceduralPDG extends PDG {
      * @param variable
      */
     private void buildDataDependence(final CFGNode<?> cfgNode,
-            final PDGNode<? extends ExecutableElementInfo> fromPDGNode,
-            final VariableInfo<?> variable, final Set<CFGNode<?>> checkedCFGNodes) {
+            final PDGNode<? extends CFGNode<?>> fromPDGNode, final VariableInfo<?> variable,
+            final Set<CFGNode<?>> checkedCFGNodes) {
 
         if (null == cfgNode || null == fromPDGNode || null == variable || null == checkedCFGNodes) {
             throw new IllegalArgumentException();
@@ -397,9 +402,9 @@ public class IntraProceduralPDG extends PDG {
 
         // cfgNodeがvariableを参照している場合は，
         // cfgNodeからPDGNodeを作成し，fromPDGNodeからデータ依存辺を引く
-        if (cfgNode.getUsedVariables().contains(variable)) {
+        if (cfgNode.getReferencedVariables().contains(variable)) {
 
-            final PDGNode<? extends ExecutableElementInfo> toPDGNode = this.makeNode(cfgNode);
+            final PDGNode<? extends CFGNode<?>> toPDGNode = this.makeNode(cfgNode);
 
             // fromノードとtoノードの距離が閾値以内であればエッジを引く
             final int distance = Math.abs(toPDGNode.getCore().getFromLine()
@@ -440,14 +445,34 @@ public class IntraProceduralPDG extends PDG {
             if (innerStatement instanceof SingleStatementInfo
                     && !(innerStatement instanceof BreakStatementInfo)
                     && !(innerStatement instanceof ContinueStatementInfo)) {
-                final PDGNode<?> toPDGNode = this.makeNormalNode(innerStatement);
+
+                final Set<PDGNode<?>> toPDGNodes = new HashSet<PDGNode<?>>();
+                final Set<CFGNode<?>> dissolvedCFGNodes = this.cfgNodeFactory
+                        .getDissolvedNodes(innerStatement);
+
+                // innerStatementが複数のCFGノードに分割されていた場合
+                if (null != dissolvedCFGNodes) {
+                    for (final CFGNode<?> dissolvedCFGNode : dissolvedCFGNodes) {
+                        final PDGNode<?> toPDGNode = this.makeNode(dissolvedCFGNode);
+                        toPDGNodes.add(toPDGNode);
+                    }
+                }
+
+                // 分割されていない場合
+                else {
+                    final CFGNode<?> cfgNode = this.cfgNodeFactory.getNode(innerStatement);
+                    final PDGNode<?> toPDGNode = this.makeNode(cfgNode);
+                    toPDGNodes.add(toPDGNode);
+                }
 
                 // fromノードとtoノードの距離が閾値以内であればエッジを引く
-                final int distance = Math.abs(toPDGNode.getCore().getFromLine()
-                        - fromPDGNode.getCore().getToLine()) + 1;
-                if (distance <= this.controlDependencyDistance) {
-                    fromPDGNode.addControlDependingNode(toPDGNode,
-                            !(block instanceof ElseBlockInfo));
+                for (final PDGNode<?> toPDGNode : toPDGNodes) {
+                    final int distance = Math.abs(toPDGNode.getCore().getFromLine()
+                            - fromPDGNode.getCore().getToLine()) + 1;
+                    if (distance <= this.controlDependencyDistance) {
+                        fromPDGNode.addControlDependingNode(toPDGNode,
+                                !(block instanceof ElseBlockInfo));
+                    }
                 }
             }
 
@@ -460,28 +485,68 @@ public class IntraProceduralPDG extends PDG {
                     {
                         final ConditionInfo condition = ((ConditionalBlockInfo) innerStatement)
                                 .getConditionalClause().getCondition();
-                        final PDGNode<?> toPDGNode = this.makeControlNode(condition);
+
+                        final Set<PDGNode<?>> toPDGNodes = new HashSet<PDGNode<?>>();
+                        final Set<CFGNode<?>> dissolvedCFGNodes = this.cfgNodeFactory
+                                .getDissolvedNodes(condition);
+
+                        // innerStatementが複数のCFGノードに分割されていた場合
+                        if (null != dissolvedCFGNodes) {
+                            for (final CFGNode<?> dissolvedCFGNode : dissolvedCFGNodes) {
+                                final PDGNode<?> toPDGNode = this.makeNode(dissolvedCFGNode);
+                                toPDGNodes.add(toPDGNode);
+                            }
+                        }
+
+                        // 分割されていない場合
+                        else {
+                            final CFGNode<?> cfgNode = this.cfgNodeFactory.getNode(condition);
+                            final PDGNode<?> toPDGNode = this.makeNode(cfgNode);
+                            toPDGNodes.add(toPDGNode);
+                        }
 
                         // fromノードとtoノードの距離が閾値以内であればエッジを引く
-                        final int distance = Math.abs(toPDGNode.getCore().getFromLine()
-                                - fromPDGNode.getCore().getToLine()) + 1;
-                        if (distance <= this.controlDependencyDistance) {
-                            fromPDGNode.addControlDependingNode(toPDGNode,
-                                    !(block instanceof ElseBlockInfo));
+                        for (final PDGNode<?> toPDGNode : toPDGNodes) {
+                            final int distance = Math.abs(toPDGNode.getCore().getFromLine()
+                                    - fromPDGNode.getCore().getToLine()) + 1;
+                            if (distance <= this.controlDependencyDistance) {
+                                fromPDGNode.addControlDependingNode(toPDGNode,
+                                        !(block instanceof ElseBlockInfo));
+                            }
                         }
                     }
 
                     if (innerStatement instanceof ForBlockInfo) {
                         final ForBlockInfo forBlock = (ForBlockInfo) innerStatement;
                         for (final ConditionInfo expression : forBlock.getInitializerExpressions()) {
-                            final PDGNode<?> toPDGNode = this.makeNormalNode(expression);
+
+                            final Set<PDGNode<?>> toPDGNodes = new HashSet<PDGNode<?>>();
+                            final Set<CFGNode<?>> dissolvedCFGNodes = this.cfgNodeFactory
+                                    .getDissolvedNodes(expression);
+
+                            // innerStatementが複数のCFGノードに分割されていた場合
+                            if (null != dissolvedCFGNodes) {
+                                for (final CFGNode<?> dissolvedCFGNode : dissolvedCFGNodes) {
+                                    final PDGNode<?> toPDGNode = this.makeNode(dissolvedCFGNode);
+                                    toPDGNodes.add(toPDGNode);
+                                }
+                            }
+
+                            // 分割されていない場合
+                            else {
+                                final CFGNode<?> cfgNode = this.cfgNodeFactory.getNode(expression);
+                                final PDGNode<?> toPDGNode = this.makeNode(cfgNode);
+                                toPDGNodes.add(toPDGNode);
+                            }
 
                             // fromノードとtoノードの距離が閾値以内であればエッジを引く
-                            final int distance = Math.abs(toPDGNode.getCore().getFromLine()
-                                    - fromPDGNode.getCore().getToLine()) + 1;
-                            if (distance <= this.controlDependencyDistance) {
-                                fromPDGNode.addControlDependingNode(toPDGNode,
-                                        !(block instanceof ElseBlockInfo));
+                            for (final PDGNode<?> toPDGNode : toPDGNodes) {
+                                final int distance = Math.abs(toPDGNode.getCore().getFromLine()
+                                        - fromPDGNode.getCore().getToLine()) + 1;
+                                if (distance <= this.controlDependencyDistance) {
+                                    fromPDGNode.addControlDependingNode(toPDGNode,
+                                            !(block instanceof ElseBlockInfo));
+                                }
                             }
                         }
                     }
@@ -510,39 +575,61 @@ public class IntraProceduralPDG extends PDG {
         if (block instanceof ForBlockInfo) {
 
             final ForBlockInfo forBlock = (ForBlockInfo) block;
-            final ConditionInfo condition = forBlock.getConditionalClause().getCondition();
-            final PDGControlNode extraFromPDGNode = this.makeControlNode(condition);
-
             for (final ExpressionInfo expression : forBlock.getIteratorExpressions()) {
-                final PDGNode<?> extraToPDGNode = this.makeNormalNode(expression);
-                extraFromPDGNode.addControlDependingNode(extraToPDGNode, true);
+
+                final Set<PDGNode<?>> toPDGNodes = new HashSet<PDGNode<?>>();
+                final Set<CFGNode<?>> dissolvedCFGNodes = this.cfgNodeFactory
+                        .getDissolvedNodes(expression);
+
+                // innerStatementが複数のCFGノードに分割されていた場合
+                if (null != dissolvedCFGNodes) {
+                    for (final CFGNode<?> dissolvedCFGNode : dissolvedCFGNodes) {
+                        final PDGNode<?> toPDGNode = this.makeNode(dissolvedCFGNode);
+                        toPDGNodes.add(toPDGNode);
+                    }
+                }
+
+                // 分割されていない場合
+                else {
+                    final CFGNode<?> cfgNode = this.cfgNodeFactory.getNode(expression);
+                    final PDGNode<?> toPDGNode = this.makeNode(cfgNode);
+                    toPDGNodes.add(toPDGNode);
+                }
+
+                // fromノードとtoノードの距離が閾値以内であればエッジを引く
+                for (final PDGNode<?> toPDGNode : toPDGNodes) {
+                    final int distance = Math.abs(toPDGNode.getCore().getFromLine()
+                            - fromPDGNode.getCore().getToLine()) + 1;
+                    if (distance <= this.controlDependencyDistance) {
+                        fromPDGNode.addControlDependingNode(toPDGNode,
+                                !(block instanceof ElseBlockInfo));
+                    }
+                }
             }
         }
     }
 
     private PDGNode<?> makeNode(final CFGNode<?> cfgNode) {
 
-        final ExecutableElementInfo element = cfgNode.getCore();
         if (cfgNode instanceof CFGControlNode) {
-            return this.makeControlNode((ConditionInfo) element);
+            return this.makeControlNode((CFGControlNode) cfgNode);
         } else if (cfgNode instanceof CFGNormalNode<?>) {
-            return this.makeNormalNode(element);
+            return this.makeNormalNode((CFGNormalNode<?>) cfgNode);
         } else {
             throw new IllegalStateException();
         }
     }
 
     /**
-     * 引数で与えられた条件を表すPDG制御ノードを作成する
+     * 引数で与えられたCFGノードからPDGノードを作成する
      * 
-     * @param element
-     *            ノードを作成したい要素
+     * @param cfgNode 
      * @return
      */
-    private PDGControlNode makeControlNode(final ConditionInfo condition) {
+    private PDGControlNode makeControlNode(final CFGControlNode cfgNode) {
 
         final IPDGNodeFactory factory = this.getNodeFactory();
-        final PDGControlNode node = factory.makeControlNode(condition);
+        final PDGControlNode node = factory.makeControlNode(cfgNode);
         if (null == node) {
             return null;
         }
@@ -552,16 +639,15 @@ public class IntraProceduralPDG extends PDG {
     }
 
     /**
-     * 引数で与えられた条件を表すPDG普通ノード(制御ノード以外)を作成する
+     * 引数で与えられたCFGノードからPDGノードを作成する
      * 
-     * @param element
-     *            ノードを作成したい要素
+     * @param cfgNode
      * @return
      */
-    private PDGNormalNode<?> makeNormalNode(final Object element) {
+    private PDGNormalNode<?> makeNormalNode(final CFGNormalNode<?> cfgNode) {
 
         final IPDGNodeFactory factory = this.getNodeFactory();
-        final PDGNormalNode<?> node = factory.makeNormalNode(element);
+        final PDGNormalNode<?> node = factory.makeNormalNode(cfgNode);
         if (null == node) {
             return null;
         }

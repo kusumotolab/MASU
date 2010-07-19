@@ -1,7 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg.node;
 
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGVariableDeclarationStatementNode;
 
 
 /**
@@ -10,10 +10,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationSta
  * @author higo
  *
  */
-public class PDGVariableDeclarationStatementNode extends PDGStatementNode {
+public class PDGVariableDeclarationStatementNode extends
+        PDGStatementNode<CFGVariableDeclarationStatementNode> {
 
-    public PDGVariableDeclarationStatementNode(
-            final VariableDeclarationStatementInfo declarationStatement) {
-        super(declarationStatement);
+    PDGVariableDeclarationStatementNode(final CFGVariableDeclarationStatementNode node) {
+        super(node);
     }
 }
