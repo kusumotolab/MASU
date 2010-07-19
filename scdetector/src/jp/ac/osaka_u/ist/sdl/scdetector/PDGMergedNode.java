@@ -1,268 +1,258 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGNormalNode;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGControlDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNormalNode;
 
-public class PDGMergedNode extends PDGNormalNode<ExecutableElementInfo> {
 
-	/**
-	 * 引数で与えられたPDGの頂点圧縮を行う
-	 * 
-	 * @param pdg
-	 */
-	public static void merge(final IntraProceduralPDG pdg,
-			final IPDGNodeFactory pdgNodeFactory) {
+public class PDGMergedNode extends PDGNormalNode<CFGNormalNode<?>> {
 
-		for (final PDGNode<?> node : PDGControlNode.getControlNodes(pdg
-				.getAllNodes())) {
+    /**
+     * 引数で与えられたPDGの頂点圧縮を行う
+     * 
+     * @param pdg
+     */
+    public static void merge(final IntraProceduralPDG pdg, final IPDGNodeFactory pdgNodeFactory) {
 
-			// 制御ノードの次がノーマルノードであれば圧縮可能かどうかを調べる
-			if (node instanceof PDGControlNode) {
-				for (final PDGEdge edge : PDGExecutionDependenceEdge
-						.getExecutionDependenceEdge(node.getForwardEdges())) {
-					final PDGNode<?> toNode = edge.getToNode();
-					if (toNode instanceof PDGNormalNode<?>) {
-						findMergedNodes(pdg, (PDGNormalNode<?>) toNode,
-								pdgNodeFactory);
-					}
-				}
-			}
-		}
-	}
+        for (final PDGNode<?> node : PDGControlNode.getControlNodes(pdg.getAllNodes())) {
 
-	/**
-	 * 引数で与えられた頂点から，実行依存でたどっていき，PDGNormalNodeであるかぎり，圧縮を試みる
-	 * 
-	 * @param node
-	 */
-	private static void findMergedNodes(final IntraProceduralPDG pdg,
-			final PDGNormalNode<?> node, final IPDGNodeFactory pdgNodeFactory) {
+            // 制御ノードの次がノーマルノードであれば圧縮可能かどうかを調べる
+            if (node instanceof PDGControlNode) {
+                for (final PDGEdge edge : PDGExecutionDependenceEdge
+                        .getExecutionDependenceEdge(node.getForwardEdges())) {
+                    final PDGNode<?> toNode = edge.getToNode();
+                    if (toNode instanceof PDGNormalNode<?>) {
+                        findMergedNodes(pdg, (PDGNormalNode<?>) toNode, pdgNodeFactory);
+                    }
+                }
+            }
+        }
+    }
 
-		final int hash = Conversion.getNormalizedString(node.getCore())
-				.hashCode();
-		final PDGMergedNode mergedNode = new PDGMergedNode(node);
+    /**
+     * 引数で与えられた頂点から，実行依存でたどっていき，PDGNormalNodeであるかぎり，圧縮を試みる
+     * 
+     * @param node
+     */
+    private static void findMergedNodes(final IntraProceduralPDG pdg, final PDGNormalNode<?> node,
+            final IPDGNodeFactory pdgNodeFactory) {
 
-		final SortedSet<PDGExecutionDependenceEdge> toEdges = PDGExecutionDependenceEdge
-				.getExecutionDependenceEdge(node.getForwardEdges());
-		if (toEdges.isEmpty()) {
-			return;
-		}
+        final int hash = Conversion.getNormalizedString(node.getCore()).hashCode();
+        final PDGMergedNode mergedNode = new PDGMergedNode(node);
 
-		PDGNode<?> toNode = toEdges.first().getToNode();
-		if (!(toNode instanceof PDGNormalNode<?>)) { // このtoNodeがノーマルでない場合は何もしなくていい
-			return;
-		}
-		int toHash = Conversion.getNormalizedString(toNode.getCore())
-				.hashCode();
+        final SortedSet<PDGExecutionDependenceEdge> toEdges = PDGExecutionDependenceEdge
+                .getExecutionDependenceEdge(node.getForwardEdges());
+        if (toEdges.isEmpty()) {
+            return;
+        }
 
-		while (hash == toHash) {
-			mergedNode.addNode((PDGNormalNode<?>) toNode);
-			final SortedSet<PDGExecutionDependenceEdge> forwardEdges = PDGExecutionDependenceEdge
-					.getExecutionDependenceEdge(toNode.getForwardEdges());
-			if (forwardEdges.isEmpty()) {
-				insertMergedNode(pdg, mergedNode, pdgNodeFactory);
-				return;
-			}
-			toNode = forwardEdges.first().getToNode();
-			if (!(toNode instanceof PDGNormalNode<?>)) {
-				insertMergedNode(pdg, mergedNode, pdgNodeFactory);
-				return;
-			}
-			toHash = Conversion.getNormalizedString(toNode.getCore())
-					.hashCode();
-		}
-		insertMergedNode(pdg, mergedNode, pdgNodeFactory);
-		findMergedNodes(pdg, (PDGNormalNode<?>) toNode, pdgNodeFactory);
-	}
+        PDGNode<?> toNode = toEdges.first().getToNode();
+        if (!(toNode instanceof PDGNormalNode<?>)) { // このtoNodeがノーマルでない場合は何もしなくていい
+            return;
+        }
+        int toHash = Conversion.getNormalizedString(toNode.getCore()).hashCode();
 
-	private static void insertMergedNode(final IntraProceduralPDG pdg,
-			final PDGMergedNode mergedNode, final IPDGNodeFactory pdgNodeFactory) {
+        while (hash == toHash) {
+            mergedNode.addNode((PDGNormalNode<?>) toNode);
+            final SortedSet<PDGExecutionDependenceEdge> forwardEdges = PDGExecutionDependenceEdge
+                    .getExecutionDependenceEdge(toNode.getForwardEdges());
+            if (forwardEdges.isEmpty()) {
+                insertMergedNode(pdg, mergedNode, pdgNodeFactory);
+                return;
+            }
+            toNode = forwardEdges.first().getToNode();
+            if (!(toNode instanceof PDGNormalNode<?>)) {
+                insertMergedNode(pdg, mergedNode, pdgNodeFactory);
+                return;
+            }
+            toHash = Conversion.getNormalizedString(toNode.getCore()).hashCode();
+        }
+        insertMergedNode(pdg, mergedNode, pdgNodeFactory);
+        findMergedNodes(pdg, (PDGNormalNode<?>) toNode, pdgNodeFactory);
+    }
 
-		final List<PDGNormalNode<?>> originalNodes = mergedNode
-				.getOriginalNodes();
+    private static void insertMergedNode(final IntraProceduralPDG pdg,
+            final PDGMergedNode mergedNode, final IPDGNodeFactory pdgNodeFactory) {
 
-		// 集約ノードの集約数が1の場合はなにもしなくていい
-		if (1 == originalNodes.size()) {
-			return;
-		}
+        final List<PDGNormalNode<?>> originalNodes = mergedNode.getOriginalNodes();
 
-		// 元の先頭ノードを処理
-		{
-			final PDGNormalNode<?> startNode = originalNodes.get(0);
-			for (final PDGEdge edge : startNode.getBackwardEdges()) {
+        // 集約ノードの集約数が1の場合はなにもしなくていい
+        if (1 == originalNodes.size()) {
+            return;
+        }
 
-				// 実行依存辺以外は対象外
-				if (!(edge instanceof PDGExecutionDependenceEdge)) {
-					continue;
-				}
+        // 元の先頭ノードを処理
+        {
+            final PDGNormalNode<?> startNode = originalNodes.get(0);
+            for (final PDGEdge edge : startNode.getBackwardEdges()) {
 
-				final PDGNode<?> previousNode = edge.getFromNode();
+                // 実行依存辺以外は対象外
+                if (!(edge instanceof PDGExecutionDependenceEdge)) {
+                    continue;
+                }
 
-				// オリジナルノードを削除
-				for (final PDGEdge previousEdge : PDGExecutionDependenceEdge
-						.getExecutionDependenceEdge(previousNode
-								.getForwardEdges())) {
-					if (previousEdge.getToNode().equals(startNode)) {
-						previousNode.removeForwardEdge(previousEdge);
-					}
-				}
+                final PDGNode<?> previousNode = edge.getFromNode();
 
-				// 集約ノードを追加
-				final PDGEdge mergedEdge = new PDGExecutionDependenceEdge(
-						previousNode, mergedNode);
-				previousNode.addForwardEdge(mergedEdge);
-				mergedNode.addBackwardEdge(mergedEdge);
-			}
-		}
+                // オリジナルノードを削除
+                for (final PDGEdge previousEdge : PDGExecutionDependenceEdge
+                        .getExecutionDependenceEdge(previousNode.getForwardEdges())) {
+                    if (previousEdge.getToNode().equals(startNode)) {
+                        previousNode.removeForwardEdge(previousEdge);
+                    }
+                }
 
-		// 元の最後ノードを処理
-		{
-			final PDGNormalNode<?> endNode = originalNodes.get(originalNodes
-					.size() - 1);
-			for (final PDGEdge edge : endNode.getForwardEdges()) {
+                // 集約ノードを追加
+                final PDGEdge mergedEdge = new PDGExecutionDependenceEdge(previousNode, mergedNode);
+                previousNode.addForwardEdge(mergedEdge);
+                mergedNode.addBackwardEdge(mergedEdge);
+            }
+        }
 
-				// 実行依存辺以外は対象外
-				if (!(edge instanceof PDGExecutionDependenceEdge)) {
-					continue;
-				}
+        // 元の最後ノードを処理
+        {
+            final PDGNormalNode<?> endNode = originalNodes.get(originalNodes.size() - 1);
+            for (final PDGEdge edge : endNode.getForwardEdges()) {
 
-				final PDGNode<?> postiousNode = edge.getToNode();
+                // 実行依存辺以外は対象外
+                if (!(edge instanceof PDGExecutionDependenceEdge)) {
+                    continue;
+                }
 
-				// オリジナルノードを削除
-				for (final PDGEdge postiousEdge : PDGExecutionDependenceEdge
-						.getExecutionDependenceEdge(postiousNode
-								.getBackwardEdges())) {
-					if (postiousEdge.getFromNode().equals(endNode)) {
-						postiousNode.removeBackwardEdge(postiousEdge);
-					}
-				}
+                final PDGNode<?> postiousNode = edge.getToNode();
 
-				// 集約ノードを追加
-				final PDGEdge mergedEdge = new PDGExecutionDependenceEdge(
-						mergedNode, postiousNode);
-				mergedNode.addForwardEdge(mergedEdge);
-				postiousNode.addBackwardEdge(mergedEdge);
-			}
-		}
+                // オリジナルノードを削除
+                for (final PDGEdge postiousEdge : PDGExecutionDependenceEdge
+                        .getExecutionDependenceEdge(postiousNode.getBackwardEdges())) {
+                    if (postiousEdge.getFromNode().equals(endNode)) {
+                        postiousNode.removeBackwardEdge(postiousEdge);
+                    }
+                }
 
-		// ノードファクトリへの登録と削除
-		for (final PDGNode<?> node : originalNodes) {
-			final Object element = node.getCore();
-			pdgNodeFactory.removeNode(element);
-		}
-		pdgNodeFactory.addNode(mergedNode);
+                // 集約ノードを追加
+                final PDGEdge mergedEdge = new PDGExecutionDependenceEdge(mergedNode, postiousNode);
+                mergedNode.addForwardEdge(mergedEdge);
+                postiousNode.addBackwardEdge(mergedEdge);
+            }
+        }
 
-		// PDGへの登録と削除
-		for (final PDGNode<?> node : originalNodes) {
-			pdg.removeNode(node);
-		}
-		pdg.addNode(mergedNode);
+        // ノードファクトリへの登録と削除
+        for (final PDGNode<?> node : originalNodes) {
+            final ExecutableElementInfo element = node.getCore();
+            pdgNodeFactory.removeNode(element);
+        }
+        pdgNodeFactory.addNode(mergedNode);
 
-		// 集約ノードに対するデータ依存辺，制御依存辺の構築
-		for (final PDGNode<?> originalNode : originalNodes) {
+        // PDGへの登録と削除
+        for (final PDGNode<?> node : originalNodes) {
+            pdg.removeNode(node);
+        }
+        pdg.addNode(mergedNode);
 
-			for (final PDGDataDependenceEdge edge : PDGDataDependenceEdge
-					.getDataDependenceEdge(originalNode.getBackwardEdges())) {
+        // 集約ノードに対するデータ依存辺，制御依存辺の構築
+        for (final PDGNode<?> originalNode : originalNodes) {
 
-				final PDGNode<?> fromNode = edge.getFromNode();
-				if (!originalNodes.contains(fromNode)) {
-					final VariableInfo<?> variable = edge.getVariable();
-					final PDGDataDependenceEdge newEdge = new PDGDataDependenceEdge(
-							fromNode, mergedNode, variable);
-					fromNode.addForwardEdge(newEdge);
-					mergedNode.addBackwardEdge(newEdge);
-					fromNode.removeForwardEdge(edge);
-				}
-			}
+            for (final PDGDataDependenceEdge edge : PDGDataDependenceEdge
+                    .getDataDependenceEdge(originalNode.getBackwardEdges())) {
 
-			for (final PDGDataDependenceEdge edge : PDGDataDependenceEdge
-					.getDataDependenceEdge(originalNode.getForwardEdges())) {
+                final PDGNode<?> fromNode = edge.getFromNode();
+                if (!originalNodes.contains(fromNode)) {
+                    final VariableInfo<?> variable = edge.getVariable();
+                    final PDGDataDependenceEdge newEdge = new PDGDataDependenceEdge(fromNode,
+                            mergedNode, variable);
+                    fromNode.addForwardEdge(newEdge);
+                    mergedNode.addBackwardEdge(newEdge);
+                    fromNode.removeForwardEdge(edge);
+                }
+            }
 
-				final PDGNode<?> toNode = edge.getToNode();
-				if (!originalNodes.contains(toNode)) {
-					final VariableInfo<?> variable = edge.getVariable();
-					final PDGDataDependenceEdge newEdge = new PDGDataDependenceEdge(
-							mergedNode, toNode, variable);
-					mergedNode.addForwardEdge(newEdge);
-					toNode.addBackwardEdge(newEdge);
-					toNode.removeBackwardEdge(edge);
-				}
-			}
+            for (final PDGDataDependenceEdge edge : PDGDataDependenceEdge
+                    .getDataDependenceEdge(originalNode.getForwardEdges())) {
 
-			for (final PDGControlDependenceEdge edge : PDGControlDependenceEdge
-					.getControlDependenceEdge(originalNode.getBackwardEdges())) {
+                final PDGNode<?> toNode = edge.getToNode();
+                if (!originalNodes.contains(toNode)) {
+                    final VariableInfo<?> variable = edge.getVariable();
+                    final PDGDataDependenceEdge newEdge = new PDGDataDependenceEdge(mergedNode,
+                            toNode, variable);
+                    mergedNode.addForwardEdge(newEdge);
+                    toNode.addBackwardEdge(newEdge);
+                    toNode.removeBackwardEdge(edge);
+                }
+            }
 
-				final PDGControlNode fromNode = (PDGControlNode) edge
-						.getFromNode();
-				if (!originalNodes.contains(fromNode)) {
-					final boolean flag = edge.isTrueDependence();
-					final PDGControlDependenceEdge newEdge = new PDGControlDependenceEdge(
-							fromNode, mergedNode, flag);
-					fromNode.addForwardEdge(newEdge);
-					mergedNode.addBackwardEdge(newEdge);
-					fromNode.removeForwardEdge(edge);
-				}
-			}
-		}
-	}
+            for (final PDGControlDependenceEdge edge : PDGControlDependenceEdge
+                    .getControlDependenceEdge(originalNode.getBackwardEdges())) {
 
-	public PDGMergedNode(final PDGNormalNode<?> node) {
-		this.originalNodes = new LinkedList<PDGNormalNode<?>>();
-		this.originalNodes.add(node);
-		this.core = node.getCore();
-	}
+                final PDGControlNode fromNode = (PDGControlNode) edge.getFromNode();
+                if (!originalNodes.contains(fromNode)) {
+                    final boolean flag = edge.isTrueDependence();
+                    final PDGControlDependenceEdge newEdge = new PDGControlDependenceEdge(fromNode,
+                            mergedNode, flag);
+                    fromNode.addForwardEdge(newEdge);
+                    mergedNode.addBackwardEdge(newEdge);
+                    fromNode.removeForwardEdge(edge);
+                }
+            }
+        }
+    }
 
-	@Override
-	public SortedSet<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
-		final SortedSet<VariableInfo<? extends UnitInfo>> variables = new TreeSet<VariableInfo<? extends UnitInfo>>();
-		for (final PDGNode<?> originalNode : this.getOriginalNodes()) {
-			variables.addAll(originalNode.getDefinedVariables());
-		}
+    public PDGMergedNode(final PDGNormalNode<?> node) {
+        super(node.getCFGNode());
+        this.originalNodes = new LinkedList<PDGNormalNode<?>>();
+        this.originalNodes.add(node);
+    }
 
-		return Collections.unmodifiableSortedSet(variables);
-	}
+    @Override
+    public SortedSet<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        final SortedSet<VariableInfo<? extends UnitInfo>> variables = new TreeSet<VariableInfo<? extends UnitInfo>>();
+        for (final PDGNode<?> originalNode : this.getOriginalNodes()) {
+            variables.addAll(originalNode.getDefinedVariables());
+        }
 
-	@Override
-	public SortedSet<VariableInfo<? extends UnitInfo>> getReferencedVariables() {
-		final SortedSet<VariableInfo<? extends UnitInfo>> variables = new TreeSet<VariableInfo<? extends UnitInfo>>();
-		for (final PDGNode<?> originalNode : this.getOriginalNodes()) {
-			variables.addAll(originalNode.getReferencedVariables());
-		}
+        return Collections.unmodifiableSortedSet(variables);
+    }
 
-		return Collections.unmodifiableSortedSet(variables);
-	}
+    @Override
+    public SortedSet<VariableInfo<? extends UnitInfo>> getReferencedVariables() {
+        final SortedSet<VariableInfo<? extends UnitInfo>> variables = new TreeSet<VariableInfo<? extends UnitInfo>>();
+        for (final PDGNode<?> originalNode : this.getOriginalNodes()) {
+            variables.addAll(originalNode.getReferencedVariables());
+        }
 
-	public void addNode(final PDGNormalNode<?> node) {
-		this.originalNodes.add(node);
-	}
+        return Collections.unmodifiableSortedSet(variables);
+    }
 
-	public List<PDGNormalNode<?>> getOriginalNodes() {
-		return Collections.unmodifiableList(this.originalNodes);
-	}
+    public void addNode(final PDGNormalNode<?> node) {
+        this.originalNodes.add(node);
+    }
 
-	public SortedSet<ExecutableElementInfo> getCores() {
-		final SortedSet<ExecutableElementInfo> cores = new TreeSet<ExecutableElementInfo>();
-		for (final PDGNode<?> originalNode : this.getOriginalNodes()) {
-			cores.add(originalNode.getCore());
-		}
-		return Collections.unmodifiableSortedSet(cores);
-	}
+    public List<PDGNormalNode<?>> getOriginalNodes() {
+        return Collections.unmodifiableList(this.originalNodes);
+    }
 
-	private final List<PDGNormalNode<?>> originalNodes;
+    public SortedSet<ExecutableElementInfo> getCores() {
+        final SortedSet<ExecutableElementInfo> cores = new TreeSet<ExecutableElementInfo>();
+        for (final PDGNode<?> originalNode : this.getOriginalNodes()) {
+            cores.add(originalNode.getCore());
+        }
+        return Collections.unmodifiableSortedSet(cores);
+    }
+
+    private final List<PDGNormalNode<?>> originalNodes;
 }
