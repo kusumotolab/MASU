@@ -14,6 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ContinueStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
@@ -102,6 +103,10 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
 
         else if (element instanceof CaseEntryInfo) {
             node = new CFGCaseEntryNode((CaseEntryInfo) element);
+        }
+
+        else if (element instanceof ExpressionInfo) {
+            node = new CFGExpressionNode((ExpressionInfo) element);
         }
 
         else if (element instanceof ParameterInfo) {
