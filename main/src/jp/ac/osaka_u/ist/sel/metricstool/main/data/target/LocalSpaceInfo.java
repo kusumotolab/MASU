@@ -58,10 +58,25 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == statement) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
 
         this.statements.add(statement);
+    }
+
+    /**
+     * ‚±‚Ìƒ[ƒJƒ‹—Ìˆæ‚©‚ç•¶‚ğíœ‚·‚éD
+     * 
+     * @param statement íœ‚·‚é•¶
+     */
+    public void removeStatement(final StatementInfo statement) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == statement) {
+            throw new IllegalArgumentException();
+        }
+
+        this.statements.remove(statement);
     }
 
     /**
