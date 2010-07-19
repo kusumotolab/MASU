@@ -5,6 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -67,18 +68,17 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
+        final UnresolvedUnitInfo<? extends UnitInfo> unresolvedOuterUnit = this.getOuterUnit();
+        final LocalSpaceInfo ownerSpace = (LocalSpaceInfo) unresolvedOuterUnit.resolve(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final LocalVariableUsageInfo variableDeclaration = this.variableDeclaration.resolve(
                 usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-        if (null != this.initializationExpression) {
-            final ExpressionInfo initializationExpression = this.initializationExpression.resolve(
-                    usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-
-            this.resolvedInfo = new VariableDeclarationStatementInfo(variableDeclaration,
-                    initializationExpression, fromLine, fromColumn, toLine, toColumn);
-        } else {
-            this.resolvedInfo = new VariableDeclarationStatementInfo(variableDeclaration, null,
-                    fromLine, fromColumn, toLine, toColumn);
-        }
+        final ExpressionInfo initializationExpression = null != this.initializationExpression ? this.initializationExpression
+                .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                        methodInfoManager)
+                : null;
+        this.resolvedInfo = new VariableDeclarationStatementInfo(ownerSpace, variableDeclaration,
+                initializationExpression, fromLine, fromColumn, toLine, toColumn);
 
         return this.resolvedInfo;
     }
@@ -123,20 +123,6 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
         return this.getOuterCallableUnit().getOuterClass();
     }
 
-    @Override
-    public UnresolvedUnitInfo<? extends UnitInfo> getOuterUnit() {
-        return this.outerUnit;
-    }
-
-    @Override
-    public void setOuterUnit(UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
-        MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == outerUnit) {
-            throw new IllegalArgumentException();
-        }
-        this.outerUnit = outerUnit;
-    }
-
     /**
      * 宣言されている変数を表すフィールド
      */
@@ -146,6 +132,4 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
      * 宣言されている変数の初期化式を表すフィールド
      */
     private final UnresolvedExpressionInfo<? extends ExpressionInfo> initializationExpression;
-
-    private UnresolvedUnitInfo<? extends UnitInfo> outerUnit;
 }
