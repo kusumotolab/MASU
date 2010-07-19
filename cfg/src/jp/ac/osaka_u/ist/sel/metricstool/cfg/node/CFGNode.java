@@ -287,16 +287,6 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
     }
 
     /**
-     * このノードを分解するメソッド． 分解された場合は，分解後のノード群からなるCFGを返す． 分解が行われなかった場合はnullを返す．
-     * 
-     * @param nodeFactory
-     * @return
-     */
-    public CFG dissolve(final ICFGNodeFactory nodeFactory) {
-        return null;
-    }
-
-    /**
      * このノードが引数で与えられたローカル空間の出口のノードであるか否か返す．
      * 
      * @param localSpace
@@ -407,5 +397,15 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
     public final Set<VariableInfo<? extends UnitInfo>> getReferencedVariables() {
         return VariableUsageInfo.getUsedVariables(VariableUsageInfo.getReferencees(this.getCore()
                 .getVariableUsages()));
+    }
+
+    /**
+     * このノードを分解するメソッド． 分解された場合は，分解後のノード群からなるCFGを返す． 分解が行われなかった場合はnullを返す．
+     * 
+     * @param nodeFactory
+     * @return
+     */
+    public CFG dissolve(final ICFGNodeFactory nodeFactory) {
+        return null;
     }
 }

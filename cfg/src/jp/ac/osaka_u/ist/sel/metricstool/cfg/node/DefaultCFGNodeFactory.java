@@ -14,7 +14,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ContinueStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
@@ -92,10 +91,7 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
             } else if (element instanceof AssertStatementInfo) {
                 node = new CFGAssertStatementNode((AssertStatementInfo) element);
             } else if (element instanceof ExpressionStatementInfo) {
-                // ExpressionStatementInfo‚ÍExpressionInfo‚Æ“¯‚¶‚æ‚¤‚Éˆµ‚¦‚Î‚æ‚¢
-                final ExpressionInfo expression = ((ExpressionStatementInfo) element)
-                        .getExpression();
-                node = new CFGExpressionNode(expression);
+                node = new CFGExpressionStatementNode((ExpressionStatementInfo) element);
             } else if (element instanceof VariableDeclarationStatementInfo) {
                 node = new CFGVariableDeclarationStatementNode(
                         (VariableDeclarationStatementInfo) element);
@@ -106,10 +102,6 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
 
         else if (element instanceof CaseEntryInfo) {
             node = new CFGCaseEntryNode((CaseEntryInfo) element);
-        }
-
-        else if (element instanceof ConditionInfo) {
-            node = new CFGExpressionNode((ConditionInfo) element);
         }
 
         else if (element instanceof ParameterInfo) {

@@ -61,6 +61,7 @@ public class CFGVariableDeclarationStatementNode extends
 
         final VariableDeclarationStatementInfo statement = this.getCore();
         final ExpressionInfo expression = statement.getInitializationExpression();
+        
         // ‰Šú‰»®‚ª‚È‚¢ê‡‚Í‰½‚à‚µ‚È‚¢‚Å”²‚¯‚é
         if (null == expression) {
             return null;
