@@ -132,6 +132,7 @@ public abstract class ExpressionInfo implements ConditionInfo {
      * 
      * @return ŠO‘¤‚ÌExecutableElement
      */
+    @Override
     public final ExecutableElementInfo getOwnerExecutableElement() {
 
         if (null == this.ownerExecutableElement) {

@@ -193,6 +193,13 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
         return Collections.unmodifiableSet(thrownExpressions);
     }
 
+    @Override
+    public ExecutableElementInfo getOwnerExecutableElement() {
+        final LocalSpaceInfo outerUnit = this.getOwnerSpace();
+        return outerUnit instanceof ExecutableElementInfo ? (ExecutableElementInfo) outerUnit
+                : null;
+    }
+
     /**
      * 宣言されている変数を表すフィールド
      */
