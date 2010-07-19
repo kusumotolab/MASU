@@ -1,51 +1,35 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg.node;
 
-import java.util.HashSet;
+
 import java.util.Set;
 
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.edge.CFGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.edge.CFGJumpEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.JumpStatementInfo;
 
-abstract public class CFGJumpStatementNode extends
-		CFGStatementNode<JumpStatementInfo> {
 
-	CFGJumpStatementNode(final JumpStatementInfo jumpStatement) {
-		super(jumpStatement);
-	}
+abstract public class CFGJumpStatementNode extends CFGStatementNode<JumpStatementInfo> {
 
-	@Override
-	public final void optimize() {
+    CFGJumpStatementNode(final JumpStatementInfo jumpStatement) {
+        super(jumpStatement);
+    }
 
-		// このノードのバックワードノード群を取得
-		final Set<CFGNode<?>> backwardNodes = new HashSet<CFGNode<?>>();
-		for (final CFGEdge backwardEdge : this.getBackwardEdges()) {
-			backwardNodes.add(backwardEdge.getFromNode());
-		}
+    @Override
+    public final boolean optimize() {
 
-		// このノードのフォワードノード群を取得
-		final Set<CFGNode<?>> forwardNodes = new HashSet<CFGNode<?>>();
-		for (final CFGEdge forwardEdge : this.getForwardEdges()) {
-			forwardNodes.add(forwardEdge.getToNode());
-		}
+        final Set<CFGNode<?>> backwardNodes = this.getBackwardNodes();
+        final Set<CFGNode<?>> forwardNodes = this.getForwardNodes();
 
-		// バックワードノードから，このノードをフォワードノードとするエッジを削除
-		for (final CFGNode<?> backwardNode : this.getBackwardNodes()) {
-			backwardNode.removeForwardEdges(this.getBackwardEdges());
-		}
+        this.remove();
 
-		// フォワードノードから，このノードをバックワードノードとするエッジを削除
-		for (final CFGNode<?> forwardNode : this.getForwardNodes()) {
-			forwardNode.removeBackwardEdges(this.getForwardEdges());
-		}
+        // バックワードノード群とフォワードノード群をつなぐ
+        for (final CFGNode<?> backwardNode : backwardNodes) {
+            for (final CFGNode<?> forwardNode : forwardNodes) {
+                final CFGJumpEdge edge = new CFGJumpEdge(backwardNode, forwardNode);
+                backwardNode.addForwardEdge(edge);
+                forwardNode.addBackwardEdge(edge);
+            }
+        }
 
-		// バックワードノード群とフォワードノード群をつなぐ
-		for (final CFGNode<?> backwardNode : backwardNodes) {
-			for (final CFGNode<?> forwardNode : forwardNodes) {
-				final CFGJumpEdge edge = new CFGJumpEdge(backwardNode,
-						forwardNode);
-				backwardNode.addForwardEdge(edge);
-			}
-		}
-	}
+        return true;
+    }
 }

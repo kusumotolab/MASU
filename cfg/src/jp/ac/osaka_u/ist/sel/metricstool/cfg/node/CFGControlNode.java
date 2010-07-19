@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg.node;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
+
 
 /**
  * CFGの制御ノードを表すクラス
@@ -10,11 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
  */
 public class CFGControlNode extends CFGNode<ConditionInfo> {
 
-	CFGControlNode(final ConditionInfo condition) {
-		super(condition);
-	}
-
-	@Override
-	public void optimize() {
-	}
+    CFGControlNode(final ConditionInfo condition) {
+        super(condition);
+    }
 }
