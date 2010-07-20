@@ -11,6 +11,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGCaughtExceptionNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGEmptyNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGExpressionNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGExpressionStatementNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGForeachControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGNormalNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGReturnStatementNode;
@@ -70,6 +71,10 @@ public class DefaultPDGNodeFactory implements IPDGNodeFactory {
             node = new PDGCaseEntryNode((CFGCaseEntryNode) cfgNode);
         }
 
+        else if (cfgNode instanceof CFGExpressionNode) {
+            node = new PDGExpressionNode((CFGExpressionNode) cfgNode);
+        }
+
         else if (cfgNode instanceof CFGCaughtExceptionNode) {
             node = new PDGCaughtExceptionNode((CFGCaughtExceptionNode) cfgNode);
         }
@@ -78,8 +83,8 @@ public class DefaultPDGNodeFactory implements IPDGNodeFactory {
             node = new PDGEmptyNode((CFGEmptyNode) cfgNode);
         }
 
-        else if (cfgNode instanceof CFGExpressionNode) {
-            node = new PDGExpressionNode((CFGExpressionNode) cfgNode);
+        else if (cfgNode instanceof CFGExpressionStatementNode) {
+            node = new PDGExpressionStatementNode((CFGExpressionStatementNode) cfgNode);
         }
 
         else if (cfgNode instanceof CFGStatementNode<?>) {

@@ -6,16 +6,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGUtility;
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGCaseEntryNode;
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGCaughtExceptionNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGControlNode;
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGEmptyNode;
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGExpressionNode;
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGForeachControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGNormalNode;
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGReturnStatementNode;
-import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGStatementNode;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
@@ -47,53 +40,14 @@ public abstract class PDGNode<T extends CFGNode<? extends ExecutableElementInfo>
      */
     public static PDGNode<?> generate(final CFGNode<?> cfgNode) {
 
+        final IPDGNodeFactory pdgNodeFactory = new DefaultPDGNodeFactory();
         if (cfgNode instanceof CFGControlNode) {
-
-            if (cfgNode instanceof CFGForeachControlNode) {
-                return new PDGForeachControlNode((CFGForeachControlNode) cfgNode);
-            }
-
-            else {
-                return new PDGControlNode((CFGControlNode) cfgNode);
-            }
-
-        }
-
-        else if (cfgNode instanceof CFGNormalNode<?>) {
-
-            if (cfgNode instanceof CFGCaseEntryNode) {
-                return new PDGCaseEntryNode((CFGCaseEntryNode) cfgNode);
-            }
-
-            else if (cfgNode instanceof CFGCaughtExceptionNode) {
-                return new PDGCaughtExceptionNode((CFGCaughtExceptionNode) cfgNode);
-            }
-
-            else if (cfgNode instanceof CFGEmptyNode) {
-                return new PDGEmptyNode((CFGEmptyNode) cfgNode);
-            }
-
-            else if (cfgNode instanceof CFGExpressionNode) {
-                return new PDGExpressionNode((CFGExpressionNode) cfgNode);
-            }
-
-            else if (cfgNode instanceof CFGStatementNode<?>) {
-
-                if (cfgNode instanceof CFGReturnStatementNode) {
-                    return new PDGReturnStatementNode((CFGReturnStatementNode) cfgNode);
-                }
-
-                else {
-                    return new PDGStatementNode<CFGStatementNode<?>>((CFGStatementNode<?>) cfgNode);
-                }
-            }
-
-            else {
-                throw new IllegalStateException();
-            }
-
+            return pdgNodeFactory.makeControlNode((CFGControlNode) cfgNode);
+        } else if (cfgNode instanceof CFGNormalNode<?>) {
+            return pdgNodeFactory.makeNormalNode((CFGNormalNode<?>) cfgNode);
         } else {
-            throw new IllegalStateException();
+            assert false : "cfgNode is incorrect type.";
+            return null;
         }
     }
 
