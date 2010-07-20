@@ -18,16 +18,16 @@ public final class ArrayElementUsageInfo extends ExpressionInfo {
     /**
      * 要素の親，つまり配列型の式とインデックスを与えて，オブジェクトを初期化
      * 
-     * @param qualifierExpression 配列型の式
      * @param indexExpression インデックス
+     * @param qualifierExpression 配列型の式
      * @param ownerMethod オーナーメソッド
      * @param fromLine 開始行
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
      */
-    public ArrayElementUsageInfo(final ExpressionInfo qualifierExpression,
-            final ExpressionInfo indexExpression, final CallableUnitInfo ownerMethod,
+    public ArrayElementUsageInfo(final ExpressionInfo indexExpression,
+            final ExpressionInfo qualifierExpression, final CallableUnitInfo ownerMethod,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
