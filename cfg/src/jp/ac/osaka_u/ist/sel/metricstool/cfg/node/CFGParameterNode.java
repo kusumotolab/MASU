@@ -1,13 +1,18 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg.node;
 
 
+import java.util.List;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterUsageInfo;
 
 
 /**
- * パラメータを表すCFGノード．
+ * 引数を表すCFGノード．
  * CFGのみを利用するときはなくてもいいが，PDGを利用するときに用いる．
  * 
  * @author higo
@@ -35,5 +40,20 @@ public class CFGParameterNode extends CFGNormalNode<ParameterUsageInfo> {
 
     private CFGParameterNode(final ParameterUsageInfo parameterUsage) {
         super(parameterUsage);
+    }
+
+    @Override
+    final ExpressionInfo getDissolvingTarget() {
+        return null;
+    }
+
+    @Override
+    ParameterUsageInfo makeNewElement(final LocalSpaceInfo ownerSpace,
+            final ExpressionInfo... requiredExpressions) {
+        return null;
+    }
+
+    @Override
+    void replace(List<CFGNode<? extends ExecutableElementInfo>> dissolvedNodeList) {
     }
 }

@@ -1,10 +1,14 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg.node;
 
 
+import java.util.List;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.edge.CFGControlEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 
 
 /**
@@ -37,5 +41,20 @@ public class CFGCaseEntryNode extends CFGNormalNode<CaseEntryInfo> {
         }
 
         return true;
+    }
+
+    @Override
+    final ExpressionInfo getDissolvingTarget() {
+        return null;
+    }
+
+    @Override
+    CaseEntryInfo makeNewElement(final LocalSpaceInfo ownerSpace,
+            final ExpressionInfo... requiredExpressions) {
+        return null;
+    }
+
+    @Override
+    void replace(List<CFGNode<? extends ExecutableElementInfo>> dissolvedNodeList) {
     }
 }

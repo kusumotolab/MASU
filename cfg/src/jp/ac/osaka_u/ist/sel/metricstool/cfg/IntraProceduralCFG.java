@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.cfg;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -792,8 +791,8 @@ public class IntraProceduralCFG extends CFG {
                 final LocalVariableUsageInfo exceptionUsage = LocalVariableUsageInfo.getInstance(
                         exception, false, true, catchBlock.getOwnerMethod(), fromLine, fromColumn,
                         toLine, toColumn);
-                declarationStatement = new VariableDeclarationStatementInfo(exceptionUsage, null,
-                        fromLine, fromColumn, toLine, toColumn);
+                declarationStatement = new VariableDeclarationStatementInfo(catchBlock,
+                        exceptionUsage, null, fromLine, fromColumn, toLine, toColumn);
             } else {
                 declarationStatement = exception.getDeclarationStatement();
             }
@@ -1046,7 +1045,7 @@ public class IntraProceduralCFG extends CFG {
     private void dissolveCFG() {
 
         // 分解前の全てのノードを取得
-        final Collection<CFGNode<? extends ExecutableElementInfo>> preAllNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
+        final Set<CFGNode<? extends ExecutableElementInfo>> preAllNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
         preAllNodes.addAll(this.getAllNodes());
 
         // 分解前の全てのノードに対して，分解を実行
