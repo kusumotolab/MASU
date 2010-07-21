@@ -346,7 +346,8 @@ public class GraphViewer extends MetricsTool {
             writer.write(".");
             writer.write(Integer.toString(entry.getValue()));
             writer.write(" [style = filled, label = \"");
-            writer.write(entry.getKey().getText().replace("\"", "\\\""));
+            writer.write(entry.getKey().getText().replace("\"", "\\\"").replace("\\\\\"",
+                    "\\\\\\\""));
             writer.write("\"");
 
             // ノードの色
@@ -427,7 +428,8 @@ public class GraphViewer extends MetricsTool {
             writer.write(".");
             writer.write(Integer.toString(entry.getValue()));
             writer.write(" [style = filled, label = \"");
-            writer.write(entry.getKey().getText().replace("\"", "\\\""));
+            writer.write(entry.getKey().getText().replace("\"", "\\\"").replace("\\\\\"",
+                    "\\\\\\\""));
             writer.write("\"");
 
             // ノードの色
@@ -504,7 +506,7 @@ public class GraphViewer extends MetricsTool {
                 final Integer id = NODE_ID_MAP.get(node);
                 writer.write(id.toString());
                 writer.write(" [style = filled, label = \"");
-                writer.write(node.getText().replace("\"", "\\\""));
+                writer.write(node.getText().replace("\"", "\\\"").replace("\\\\\"", "\\\\\\\""));
                 writer.write("\"");
 
                 // ノードの色
