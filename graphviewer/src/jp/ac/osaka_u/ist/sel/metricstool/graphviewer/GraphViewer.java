@@ -150,14 +150,14 @@ public class GraphViewer extends MetricsTool {
                 out.setAccessible(true);
                 out.set(null, new DefaultMessagePrinter(new MessageSource() {
                     public String getMessageSourceName() {
-                        return "scdetector";
+                        return "graphviewer";
                     }
                 }, MESSAGE_TYPE.OUT));
                 final Field err = metricstool.getDeclaredField("err");
                 err.setAccessible(true);
                 err.set(null, new DefaultMessagePrinter(new MessageSource() {
                     public String getMessageSourceName() {
-                        return "main";
+                        return "graphviewer";
                     }
                 }, MESSAGE_TYPE.ERROR));
                 MessagePool.getInstance(MESSAGE_TYPE.OUT).addMessageListener(new MessageListener() {
