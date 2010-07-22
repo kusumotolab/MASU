@@ -37,13 +37,19 @@ public class CFGForeachControlNode extends CFGControlNode {
 		}
 
 		// 分解前の文から必要な情報を取得
+		final int conditionFromLine = condition.getFromLine();
+		final int conditionFromColumn = condition.getFromColumn();
+		final int conditionToLine = condition.getToLine();
+		final int conditionToColumn = condition.getToColumn();
 		final ConditionalBlockInfo ownerBlock = (ConditionalBlockInfo) condition
 				.getOwnerExecutableElement();
 		final LocalSpaceInfo outerUnit = ownerBlock.getOwnerSpace();
 		final CallableUnitInfo outerMethod = outerUnit instanceof CallableUnitInfo ? (CallableUnitInfo) outerUnit
 				: outerUnit.getOuterCallableUnit();
-		final int fromLine = iteratorExpression.getFromLine();
-		final int toLine = iteratorExpression.getToLine();
+		final int expressionFromLine = iteratorExpression.getFromLine();
+		final int expressionFromColumn = iteratorExpression.getFromColumn();
+		final int expressionToLine = iteratorExpression.getToLine();
+		final int expressionToColumn = iteratorExpression.getToColumn();
 		final VariableDeclarationStatementInfo iteratorVariable = condition
 				.getIteratorVariable();
 
@@ -55,12 +61,12 @@ public class CFGForeachControlNode extends CFGControlNode {
 				.makeVariableDeclarationStatement(outerUnit, iteratorExpression);
 		final ExpressionInfo newIteratorExpression = LocalVariableUsageInfo
 				.getInstance(newStatement.getDeclaredLocalVariable(), true,
-						false, ownerBlock.getOuterCallableUnit(), fromLine,
-						CFGUtility.getRandomNaturalValue(), toLine, CFGUtility
-								.getRandomNaturalValue());
+						false, ownerBlock.getOuterCallableUnit(),
+						expressionFromLine, expressionFromColumn,
+						expressionToLine, expressionToColumn);
 		final ForeachConditionInfo newCondition = new ForeachConditionInfo(
-				outerMethod, fromLine, CFGUtility.getRandomNaturalValue(),
-				toLine, CFGUtility.getRandomNaturalValue(), iteratorVariable,
+				outerMethod, conditionFromLine, conditionFromColumn,
+				conditionToLine, conditionToColumn, iteratorVariable,
 				newIteratorExpression);
 		final LinkedList<CFGNode<?>> dissolvedNodeList = new LinkedList<CFGNode<?>>();
 		dissolvedNodeList.add(nodeFactory.makeNormalNode(newStatement));
@@ -72,9 +78,8 @@ public class CFGForeachControlNode extends CFGControlNode {
 		// ownerSpaceとの調整
 		outerUnit.addStatement(newStatement);
 		final ConditionalClauseInfo newConditionalClause = new ConditionalClauseInfo(
-				ownerBlock, newCondition, fromLine, CFGUtility
-						.getRandomNaturalValue(), toLine, CFGUtility
-						.getRandomNaturalValue());
+				ownerBlock, newCondition, conditionFromLine,
+				conditionFromColumn, conditionToLine, conditionToColumn);
 		ownerBlock.setConditionalClause(newConditionalClause);
 
 		// 分解したノード群からCFGを構築

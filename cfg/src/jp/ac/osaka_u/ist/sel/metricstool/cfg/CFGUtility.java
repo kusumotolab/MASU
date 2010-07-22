@@ -317,7 +317,7 @@ public class CFGUtility {
 
     private static final Random NATULAL_VALUE_GENERATOR = new Random();
 
-    public static int getRandomNaturalValue() {
-        return NATULAL_VALUE_GENERATOR.nextInt(Integer.MAX_VALUE);
-    }
+    //public static int getRandomNaturalValue() {
+    //    return NATULAL_VALUE_GENERATOR.nextInt(Integer.MAX_VALUE);
+    //}
 }

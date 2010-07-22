@@ -83,4 +83,14 @@ public abstract class CFGEdge implements Comparable<CFGEdge> {
 	 * @return
 	 */
 	abstract public CFGEdge replaceToNode(final CFGNode<?> newToNode);
+
+	/**
+	 * 両方のノードを引数で与えられたノードで置換したエッジを返す
+	 * 
+	 * @param newFromNode
+	 * @param newToNode
+	 * @return
+	 */
+	abstract public CFGEdge replaceBothNodes(final CFGNode<?> newFromNode,
+			final CFGNode<?> newToNode);
 }

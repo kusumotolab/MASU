@@ -29,4 +29,10 @@ public class CFGJumpEdge extends CFGEdge {
 		final CFGNode<?> fromNode = this.getFromNode();
 		return new CFGJumpEdge(fromNode, newToNode);
 	}
+
+	@Override
+	public CFGEdge replaceBothNodes(final CFGNode<?> newFromNode,
+			final CFGNode<?> newToNode) {
+		return new CFGJumpEdge(newFromNode, newToNode);
+	}
 }

@@ -38,5 +38,12 @@ public class CFGControlEdge extends CFGEdge {
 		return new CFGControlEdge(fromNode, newToNode, control);
 	}
 
+	@Override
+	public CFGEdge replaceBothNodes(final CFGNode<?> newFromNode,
+			final CFGNode<?> newToNode) {
+		final boolean control = this.getControl();
+		return new CFGControlEdge(newFromNode, newToNode, control);
+	}
+
 	private final boolean control;
 }

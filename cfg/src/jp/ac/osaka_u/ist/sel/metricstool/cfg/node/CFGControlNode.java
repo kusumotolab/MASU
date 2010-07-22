@@ -1,21 +1,17 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg.node;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFG;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGUtility;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalClauseInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
 
 /**
@@ -51,7 +47,9 @@ public class CFGControlNode extends CFGNode<ConditionInfo> {
 				.getOwnerExecutableElement();
 		final LocalSpaceInfo outerUnit = ownerBlock.getOwnerSpace();
 		final int fromLine = conditionalExpression.getFromLine();
+		final int fromColumn = conditionalExpression.getFromColumn();
 		final int toLine = conditionalExpression.getToLine();
+		final int toColumn = conditionalExpression.getToColumn();
 
 		// å√Ç¢ÉmÅ[ÉhÇçÌèú
 		nodeFactory.removeNode(condition);
@@ -62,9 +60,8 @@ public class CFGControlNode extends CFGNode<ConditionInfo> {
 						conditionalExpression);
 		final ExpressionInfo newCondition = LocalVariableUsageInfo.getInstance(
 				newStatement.getDeclaredLocalVariable(), true, false,
-				ownerBlock.getOuterCallableUnit(), fromLine, CFGUtility
-						.getRandomNaturalValue(), toLine, CFGUtility
-						.getRandomNaturalValue());
+				ownerBlock.getOuterCallableUnit(), fromLine, fromColumn,
+				toLine, toColumn);
 		final LinkedList<CFGNode<?>> dissolvedNodeList = new LinkedList<CFGNode<?>>();
 		dissolvedNodeList.add(nodeFactory.makeNormalNode(newStatement));
 		dissolvedNodeList.add(nodeFactory.makeControlNode(newCondition));
@@ -75,9 +72,8 @@ public class CFGControlNode extends CFGNode<ConditionInfo> {
 		// ownerSpaceÇ∆ÇÃí≤êÆ
 		outerUnit.addStatement(newStatement);
 		final ConditionalClauseInfo newConditionalClause = new ConditionalClauseInfo(
-				ownerBlock, newCondition, fromLine, CFGUtility
-						.getRandomNaturalValue(), toLine, CFGUtility
-						.getRandomNaturalValue());
+				ownerBlock, newCondition, fromLine, fromColumn, toLine,
+				toColumn);
 		ownerBlock.setConditionalClause(newConditionalClause);
 
 		// ï™âÇµÇΩÉmÅ[ÉhåQÇ©ÇÁCFGÇç\íz
@@ -107,15 +103,14 @@ public class CFGControlNode extends CFGNode<ConditionInfo> {
 	 */
 	@Override
 	ConditionInfo makeNewElement(final LocalSpaceInfo ownerSpace,
-			final ExpressionInfo... requiredExpression) {
+			final int fromLine, final int fromColumn, final int toLine,
+			final int toColumn, final ExpressionInfo... requiredExpressions) {
 
-		if ((null == ownerSpace) || (1 != requiredExpression.length)) {
+		if ((null == ownerSpace) || (1 != requiredExpressions.length)) {
 			throw new IllegalArgumentException();
 		}
 
 		final ConditionInfo condition = this.getCore();
-		final int fromLine = condition.getFromLine();
-		final int toLine = condition.getToLine();
 
 		if (condition instanceof VariableDeclarationStatementInfo) {
 
@@ -123,14 +118,48 @@ public class CFGControlNode extends CFGNode<ConditionInfo> {
 			final LocalVariableUsageInfo variableDeclaration = statement
 					.getDeclaration();
 			final VariableDeclarationStatementInfo newStatement = new VariableDeclarationStatementInfo(
-					ownerSpace, variableDeclaration, requiredExpression[0],
-					fromLine, CFGUtility.getRandomNaturalValue(), toLine,
-					CFGUtility.getRandomNaturalValue());
+					ownerSpace, variableDeclaration, requiredExpressions[0],
+					fromLine, fromColumn, toLine, toColumn);
 			return newStatement;
 		}
 
 		else if (condition instanceof ExpressionInfo) {
-			return requiredExpression[0];
+			return requiredExpressions[0];
+		}
+
+		else {
+			throw new IllegalStateException();
+		}
+	}
+
+	/**
+	 * ó^Ç¶ÇÁÇÍÇΩà¯êîÇÃèÓïÒÇópÇ¢ÇƒÅCÉmÅ[ÉhÇÃäjÇ∆Ç»ÇÈÉvÉçÉOÉâÉÄóvëfÇê∂ê¨Ç∑ÇÈ
+	 */
+	@Override
+	ConditionInfo makeNewElement(final LocalSpaceInfo ownerSpace,
+			final ExpressionInfo... requiredExpressions) {
+
+		if ((null == ownerSpace) || (1 != requiredExpressions.length)) {
+			throw new IllegalArgumentException();
+		}
+
+		final ConditionInfo condition = this.getCore();
+
+		if (condition instanceof VariableDeclarationStatementInfo) {
+
+			final VariableDeclarationStatementInfo statement = (VariableDeclarationStatementInfo) condition;
+
+			final int fromLine = statement.getFromLine();
+			final int fromColumn = statement.getFromLine();
+			final int toLine = statement.getToLine();
+			final int toColumn = statement.getToColumn();
+
+			return this.makeNewElement(ownerSpace, fromLine, fromColumn,
+					toLine, toColumn, requiredExpressions);
+		}
+
+		else if (condition instanceof ExpressionInfo) {
+			return requiredExpressions[0];
 		}
 
 		else {
@@ -143,27 +172,4 @@ public class CFGControlNode extends CFGNode<ConditionInfo> {
 			List<CFGNode<? extends ExecutableElementInfo>> dissolvedNodeList) {
 	}
 
-	protected final VariableDeclarationStatementInfo makeVariableDeclarationStatement(
-			final LocalSpaceInfo ownerSpace, final ExpressionInfo expression) {
-
-		final int fromLine = expression.getFromLine();
-		final int toLine = expression.getToLine();
-		final CallableUnitInfo outerCallableUnit = ownerSpace instanceof CallableUnitInfo ? (CallableUnitInfo) ownerSpace
-				: ownerSpace.getOuterCallableUnit();
-
-		final LocalVariableInfo dummyVariable = new LocalVariableInfo(
-				Collections.<ModifierInfo> emptySet(), CFGNode
-						.getDummyVariableName(), expression.getType(),
-				ownerSpace, fromLine, CFGUtility.getRandomNaturalValue(),
-				toLine, CFGUtility.getRandomNaturalValue());
-		final LocalVariableUsageInfo variableUsage = LocalVariableUsageInfo
-				.getInstance(dummyVariable, false, true, outerCallableUnit,
-						fromLine, CFGUtility.getRandomNaturalValue(), toLine,
-						CFGUtility.getRandomNaturalValue());
-		final VariableDeclarationStatementInfo statement = new VariableDeclarationStatementInfo(
-				ownerSpace, variableUsage, expression, fromLine, CFGUtility
-						.getRandomNaturalValue(), toLine, CFGUtility
-						.getRandomNaturalValue());
-		return statement;
-	}
 }

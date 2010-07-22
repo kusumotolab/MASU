@@ -39,5 +39,12 @@ public class CFGExceptionEdge extends CFGEdge {
 		return new CFGExceptionEdge(fromNode, newToNode, thrownException);
 	}
 
+	@Override
+	public CFGEdge replaceBothNodes(final CFGNode<?> newFromNode,
+			final CFGNode<?> newToNode) {
+		final TypeInfo thrownException = this.getThrownException();
+		return new CFGExceptionEdge(newFromNode, newToNode, thrownException);
+	}
+
 	private final TypeInfo thrownException;
 }
