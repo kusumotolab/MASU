@@ -175,6 +175,16 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
         }
     }
 
+    public final void removeInitializerExpressions(final ConditionInfo initializerExpression) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == initializerExpression) {
+            throw new IllegalArgumentException("updateExpression is null");
+        }
+
+        this.initilizerExpressions.remove(initializerExpression);
+    }
+
     /**
      * forï∂ÇÃçXêVéÆÇí«â¡
      * @param iteratorExpression åJÇËï‘ÇµéÆ
@@ -188,7 +198,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
 
         this.iteratorExpressions.add(iteratorExpression);
 
-        // ï÷ãXè„ÅCiteratorExpression Ç ExpressionExpressionInfoÇ≈ïÔÇﬁ
+        // ï÷ãXè„ÅCiteratorExpression Ç ExpressionStatementInfoÇ≈ïÔÇﬁ
         {
             final int fromLine = iteratorExpression.getFromLine();
             final int fromColumn = iteratorExpression.getFromColumn();
@@ -199,6 +209,16 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
                     iteratorExpression, fromLine, fromColumn, toLine, toColumn);
             iteratorExpression.setOwnerExecutableElement(ownerStatement);
         }
+    }
+
+    public final void removeIteratorExpressions(final ExpressionInfo iteratorExpression) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == iteratorExpression) {
+            throw new IllegalArgumentException("updateExpression is null");
+        }
+
+        this.iteratorExpressions.remove(iteratorExpression);
     }
 
     /**
