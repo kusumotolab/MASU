@@ -91,15 +91,17 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
                 methodInfoManager);
 
         // 未解決初期化式情報を解決し，解決済みオブジェクトに追加
-        for (final UnresolvedConditionInfo<? extends ConditionInfo> initializerExpression : this.initializerExpressions) {
-            this.resolvedInfo.addInitializerExpressions(initializerExpression.resolve(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager));
+        for (final UnresolvedConditionInfo<? extends ConditionInfo> unresolvedInitializer : this.initializerExpressions) {
+            final ConditionInfo initializer = unresolvedInitializer.resolve(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addInitializerExpressions(initializer);
         }
 
         // 未解決更新式情報を追加し，解決済みオブジェクトに追加
-        for (final UnresolvedExpressionInfo<? extends ExpressionInfo> updateExpression : this.iteratorExpressions) {
-            this.resolvedInfo.addIteratorExpressions(updateExpression.resolve(usingClass,
-                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager));
+        for (final UnresolvedExpressionInfo<? extends ExpressionInfo> unresolvedUpdater : this.iteratorExpressions) {
+            final ExpressionInfo update = unresolvedUpdater.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager);
+            this.resolvedInfo.addIteratorExpressions(update);
         }
     }
 
