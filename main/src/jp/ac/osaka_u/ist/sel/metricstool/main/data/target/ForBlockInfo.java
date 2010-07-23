@@ -169,9 +169,10 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
             final int toLine = initializerExpression.getToLine();
             final int toColumn = initializerExpression.getToColumn();
 
-            final ExpressionStatementInfo ownerStatement = new ExpressionStatementInfo(this,
-                    (ExpressionInfo) initializerExpression, fromLine, fromColumn, toLine, toColumn);
-            ((ExpressionInfo) initializerExpression).setOwnerExecutableElement(ownerStatement);
+            //final ExpressionStatementInfo ownerStatement = new ExpressionStatementInfo(this,
+            //        (ExpressionInfo) initializerExpression, fromLine, fromColumn, toLine, toColumn);
+            //((ExpressionInfo) initializerExpression).setOwnerExecutableElement(ownerStatement);
+            ((ExpressionInfo)initializerExpression).setOwnerExecutableElement(this);
         }
     }
 
@@ -205,9 +206,10 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
             final int toLine = iteratorExpression.getToLine();
             final int toColumn = iteratorExpression.getToColumn();
 
-            final ExpressionStatementInfo ownerStatement = new ExpressionStatementInfo(this,
-                    iteratorExpression, fromLine, fromColumn, toLine, toColumn);
-            iteratorExpression.setOwnerExecutableElement(ownerStatement);
+            //final ExpressionStatementInfo ownerStatement = new ExpressionStatementInfo(this,
+            //        iteratorExpression, fromLine, fromColumn, toLine, toColumn);
+            //iteratorExpression.setOwnerExecutableElement(ownerStatement);
+            iteratorExpression.setOwnerExecutableElement(this);
         }
     }
 
