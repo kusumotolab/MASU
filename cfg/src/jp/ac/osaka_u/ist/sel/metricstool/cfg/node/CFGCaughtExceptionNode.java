@@ -40,9 +40,4 @@ public class CFGCaughtExceptionNode extends
 			final ExpressionInfo... requiredExpressions) {
 		return null;
 	}
-
-	@Override
-	void replace(
-			List<CFGNode<? extends ExecutableElementInfo>> dissolvedNodeList) {
-	}
 }

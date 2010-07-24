@@ -59,9 +59,4 @@ public class CFGCaseEntryNode extends CFGNormalNode<CaseEntryInfo> {
 			final ExpressionInfo... requiredExpressions) {
 		return null;
 	}
-
-	@Override
-	void replace(
-			List<CFGNode<? extends ExecutableElementInfo>> dissolvedNodeList) {
-	}
 }
