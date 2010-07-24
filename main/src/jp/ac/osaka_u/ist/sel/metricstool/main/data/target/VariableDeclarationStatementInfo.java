@@ -197,6 +197,26 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
                 : null;
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+        final LocalSpaceInfo outerUnit = this.getOwnerSpace();
+        final LocalVariableUsageInfo variableDeclaration = (LocalVariableUsageInfo) this
+                .getDeclaration().copy();
+        final ExpressionInfo initializerExpression = null != this.getInitializationExpression() ? (ExpressionInfo) this
+                .getInitializationExpression().copy()
+                : null;
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final VariableDeclarationStatementInfo newVariableDeclaration = new VariableDeclarationStatementInfo(
+                outerUnit, variableDeclaration, initializerExpression, fromLine, fromColumn,
+                toLine, toColumn);
+
+        return newVariableDeclaration;
+    }
+
     /**
      * 宣言されている変数を表すフィールド
      */

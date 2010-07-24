@@ -20,6 +20,26 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 @SuppressWarnings("serial")
 public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
 
+    @Override
+    public ExecutableElementInfo copy() {
+        final ParameterInfo usedParameter = this.getUsedVariable();
+        final boolean reference = this.isReference();
+        final boolean assignment = this.isAssignment();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final ParameterUsageInfo newParameterUsage = new ParameterUsageInfo(usedParameter,
+                reference, assignment, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newParameterUsage.setOwnerExecutableElement(owner);
+
+        return newParameterUsage;
+    }
+
     /**
      * 使用されている引数を与えてオブジェクトを初期化
      * 

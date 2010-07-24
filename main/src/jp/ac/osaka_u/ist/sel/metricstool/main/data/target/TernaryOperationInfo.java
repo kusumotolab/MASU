@@ -140,6 +140,27 @@ public class TernaryOperationInfo extends ExpressionInfo {
         return Collections.unmodifiableSet(thrownExceptions);
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+        final ConditionInfo condition = (ConditionInfo) this.getCondition().copy();
+        final ExpressionInfo trueExpression = (ExpressionInfo) this.getTrueExpression().copy();
+        final ExpressionInfo falseExpression = (ExpressionInfo) this.getFalseExpression().copy();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final TernaryOperationInfo newTernaryOperationInfo = new TernaryOperationInfo(condition,
+                trueExpression, falseExpression, ownerMethod, fromLine, fromColumn, toLine,
+                toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newTernaryOperationInfo.setOwnerExecutableElement(owner);
+
+        return newTernaryOperationInfo;
+    }
+
     /**
      * O€‰‰Z‚ÌğŒ®(‘æˆê€)‚ğ•Û‘¶‚·‚é•Ï”
      */

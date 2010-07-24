@@ -118,6 +118,23 @@ public class ReturnStatementInfo extends SingleStatementInfo {
         return Collections.unmodifiableSet(this.getReturnedExpression().getThrownExceptions());
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final LocalSpaceInfo outerUnit = this.getOwnerSpace();
+        final ExpressionInfo returnedExpression = (ExpressionInfo) this.getReturnedExpression()
+                .copy();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final ReturnStatementInfo newStatement = new ReturnStatementInfo(outerUnit,
+                returnedExpression, fromLine, fromColumn, toLine, toColumn);
+
+        return newStatement;
+    }
+
     /**
      * returnï∂ÇÃñﬂÇËílÇï\Ç∑éÆÇï€ë∂Ç∑ÇÈÇΩÇﬂÇÃïœêî
      */

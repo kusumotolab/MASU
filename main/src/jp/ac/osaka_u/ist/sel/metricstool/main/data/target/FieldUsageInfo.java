@@ -117,6 +117,29 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         return Collections.unmodifiableSortedSet(variableUsages);
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+        final ExpressionInfo qualifierExpression = this.getQualifierExpression();
+        final TypeInfo qualifierType = this.getQualifierType();
+        final FieldInfo usedField = this.getUsedVariable();
+        final boolean reference = this.isReference();
+        final boolean assignment = this.isAssignment();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final FieldUsageInfo newFieldUsage = new FieldUsageInfo(qualifierExpression, qualifierType,
+                usedField, reference, assignment, ownerMethod, fromLine, fromColumn, toLine,
+                toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newFieldUsage.setOwnerExecutableElement(owner);
+
+        return newFieldUsage;
+    }
+
     /**
      * åƒÇ—èoÇµÇÃSetÇï‘Ç∑
      * 

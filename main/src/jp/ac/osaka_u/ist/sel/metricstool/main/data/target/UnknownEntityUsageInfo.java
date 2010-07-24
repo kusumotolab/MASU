@@ -92,5 +92,23 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
         return this.referencedName;
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+        final String[] referencedName = this.getReferencedName();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final UnknownEntityUsageInfo newEntityUsage = new UnknownEntityUsageInfo(referencedName,
+                ownerMethod, fromLine, fromColumn, toLine, toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newEntityUsage.setOwnerExecutableElement(owner);
+
+        return newEntityUsage;
+    }
+
     private final String[] referencedName;
 }

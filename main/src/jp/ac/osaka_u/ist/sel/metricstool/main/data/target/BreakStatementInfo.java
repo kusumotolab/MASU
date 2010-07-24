@@ -1,8 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-
-
 /**
  * 
  * @author t-miyake
@@ -32,44 +30,19 @@ public class BreakStatementInfo extends JumpStatementInfo {
         return "break";
     }
 
-    /*
-    public StatementInfo getFollowingStatement() {
-        if (null != this.getDestinationLabel()) {
-            return this.getFollowingStatement(this.getDestinationLabel().getLabeledStatement());
-        } else {
-            for (BlockInfo ownerBlock = (BlockInfo) this.getOwnerSpace();; ownerBlock = (BlockInfo) ownerBlock
-                    .getOwnerSpace()) {
+    @Override
+    public ExecutableElementInfo copy() {
 
-                if (ownerBlock.isLoopStatement()) {
-                    return this.getFollowingStatement(ownerBlock);
-                }
+        final LocalSpaceInfo outerUnit = this.getOwnerSpace();
+        final LabelInfo label = this.getDestinationLabel();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
 
-                if (!(ownerBlock.getOwnerSpace() instanceof BlockInfo)) {
-                    break;
-                }
-            }
+        final BreakStatementInfo newStatement = new BreakStatementInfo(outerUnit, label, fromLine,
+                fromColumn, toLine, toColumn);
 
-            assert false : "Here shouldn't be reached!";
-            return null;
-        }
+        return newStatement;
     }
-
-    private StatementInfo getFollowingStatement(final StatementInfo statement) {
-        final Iterator<StatementInfo> statements = statement.getOwnerSpace().getStatements()
-                .iterator();
-        while (statements.hasNext()) {
-            if (statements.next().equals(statement)) {
-                if (statements.hasNext()) {
-                    return statements.next();
-                } else {
-                    if (statement.getOwnerSpace() instanceof BlockInfo) {
-                        return this.getFollowingStatement((BlockInfo) statement.getOwnerSpace());
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-    */
 }

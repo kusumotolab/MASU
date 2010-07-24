@@ -181,6 +181,30 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
         return Collections.unmodifiableSet(thrownExceptions);
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final TypeInfo qualifierType = this.getQualifierType();
+        final ExpressionInfo qualifierExpression = this.getQualifierExpression();
+        final MethodInfo callee = this.getCallee();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final MethodCallInfo newCall = new MethodCallInfo(qualifierType, qualifierExpression,
+                callee, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+        for (final ExpressionInfo argument : this.getArguments()) {
+            newCall.addArgument((ExpressionInfo) argument.copy());
+        }
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newCall.setOwnerExecutableElement(owner);
+
+        return newCall;
+    }
+
     /**
      * このメソッド呼び出しの親，つまりこのメソッド呼び出しがくっついている要素を返す
      * 

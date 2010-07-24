@@ -89,5 +89,31 @@ public final class IfBlockInfo extends ConditionalBlockInfo {
         return sb.toString();
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final IfBlockInfo newIfBlock = new IfBlockInfo(fromLine, fromColumn, toLine, toColumn);
+
+        final ConditionalClauseInfo newConditionalClause = this.getConditionalClause().copy();
+        newIfBlock.setConditionalClause(newConditionalClause);
+
+        final UnitInfo outerUnit = this.getOuterUnit();
+        newIfBlock.setOuterUnit(outerUnit);
+
+        for (final StatementInfo statement : this.getStatementsWithoutSubsequencialBlocks()) {
+            newIfBlock.addStatement((StatementInfo) statement.copy());
+        }
+
+        final ElseBlockInfo sequentElseBlock = (ElseBlockInfo) this.getSequentElseBlock().copy();
+        newIfBlock.setSequentElseBlock(sequentElseBlock);
+
+        return newIfBlock;
+    }
+
     private ElseBlockInfo sequentElseBlock;
 }

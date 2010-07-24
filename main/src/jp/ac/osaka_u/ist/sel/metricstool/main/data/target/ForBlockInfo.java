@@ -172,7 +172,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
             //final ExpressionStatementInfo ownerStatement = new ExpressionStatementInfo(this,
             //        (ExpressionInfo) initializerExpression, fromLine, fromColumn, toLine, toColumn);
             //((ExpressionInfo) initializerExpression).setOwnerExecutableElement(ownerStatement);
-            ((ExpressionInfo)initializerExpression).setOwnerExecutableElement(this);
+            ((ExpressionInfo) initializerExpression).setOwnerExecutableElement(this);
         }
     }
 
@@ -260,6 +260,37 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
             thrownExpressions.addAll(iteratorExpression.getThrownExceptions());
         }
         return Collections.unmodifiableSet(thrownExpressions);
+    }
+
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final ForBlockInfo newForBlock = new ForBlockInfo(fromLine, fromColumn, toLine, toColumn);
+
+        final ConditionalClauseInfo newConditionalClause = this.getConditionalClause().copy();
+        newForBlock.setConditionalClause(newConditionalClause);
+
+        for (final ConditionInfo initializer : this.getInitializerExpressions()) {
+            newForBlock.addInitializerExpressions((ConditionInfo) initializer.copy());
+        }
+
+        for (final ExpressionInfo iterator : this.getIteratorExpressions()) {
+            newForBlock.addIteratorExpressions((ExpressionInfo) iterator.copy());
+        }
+
+        final UnitInfo outerUnit = this.getOuterUnit();
+        newForBlock.setOuterUnit(outerUnit);
+
+        for (final StatementInfo statement : this.getStatementsWithoutSubsequencialBlocks()) {
+            newForBlock.addStatement((StatementInfo) statement.copy());
+        }
+
+        return newForBlock;
     }
 
     /**

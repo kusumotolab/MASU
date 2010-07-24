@@ -111,6 +111,34 @@ public final class TryBlockInfo extends BlockInfo {
         return sb.toString();
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final TryBlockInfo newTryBlock = new TryBlockInfo(fromLine, fromColumn, toLine, toColumn);
+
+        final FinallyBlockInfo sequentFinallyBlock = (FinallyBlockInfo) this
+                .getSequentFinallyBlock().copy();
+        newTryBlock.setSequentFinallyBlock(sequentFinallyBlock);
+
+        for (final CatchBlockInfo catchBlockInfo : this.getSequentCatchBlocks()) {
+            newTryBlock.addSequentCatchBlock((CatchBlockInfo) catchBlockInfo.copy());
+        }
+
+        final UnitInfo outerUnit = this.getOuterUnit();
+        newTryBlock.setOuterUnit(outerUnit);
+
+        for (final StatementInfo statement : this.getStatementsWithoutSubsequencialBlocks()) {
+            newTryBlock.addStatement((StatementInfo) statement.copy());
+        }
+
+        return newTryBlock;
+    }
+
     /**
      * ëŒâûÇ∑ÇÈcatchÉuÉçÉbÉNÇï€ë∂Ç∑ÇÈïœêî
      */

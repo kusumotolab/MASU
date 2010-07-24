@@ -166,6 +166,22 @@ public class CaseEntryInfo extends UnitInfo implements StatementInfo {
         return Collections.unmodifiableSet(new HashSet<ReferenceTypeInfo>());
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final SwitchBlockInfo ownerBlock = this.getOwnerSwitchBlock();
+        final ExpressionInfo label = (ExpressionInfo) this.getLabel().copy();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final CaseEntryInfo newCaseEntry = new CaseEntryInfo(ownerBlock, label, fromLine,
+                fromColumn, toLine, toColumn);
+
+        return newCaseEntry;
+    }
+
     /**
      * この case エントリが属する switch ブロックを保存するための変数
      */

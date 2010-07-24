@@ -110,6 +110,21 @@ public final class ConditionalClauseInfo extends UnitInfo {
         return this.getCondition().getCalls();
     }
 
+    public ConditionalClauseInfo copy() {
+
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        final ConditionInfo condition = (ConditionInfo) this.getCondition().copy();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final ConditionalClauseInfo newConditionalClause = new ConditionalClauseInfo(
+                ownerConditionalBlock, condition, fromLine, fromColumn, toLine, toColumn);
+
+        return newConditionalClause;
+    }
+
     /**
      * 条件節を保持するブロックを表す変数
      */

@@ -57,4 +57,28 @@ public class ClassConstructorCallInfo extends ConstructorCallInfo<ClassTypeInfo>
 
         return sb.toString();
     }
+
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final ClassTypeInfo classType = this.getType();
+        final ConstructorInfo callee = this.getCallee();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final ClassConstructorCallInfo newCall = new ClassConstructorCallInfo(classType, callee,
+                ownerMethod, fromLine, fromColumn, toLine, toColumn);
+
+        for (final ExpressionInfo argument : this.getArguments()) {
+            newCall.addArgument((ExpressionInfo) argument.copy());
+        }
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newCall.setOwnerExecutableElement(owner);
+
+        return newCall;
+    }
 }

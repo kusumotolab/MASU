@@ -85,5 +85,30 @@ public final class SynchronizedBlockInfo extends BlockInfo {
         return this.synchronizedExpression;
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final SynchronizedBlockInfo newSynchronizedBlock = new SynchronizedBlockInfo(fromLine,
+                fromColumn, toLine, toColumn);
+
+        final ExpressionInfo synchronizedExpression = (ExpressionInfo) this
+                .getSynchronizedExpression().copy();
+        newSynchronizedBlock.setSynchronizedExpression(synchronizedExpression);
+
+        final UnitInfo outerUnit = this.getOuterUnit();
+        newSynchronizedBlock.setOuterUnit(outerUnit);
+
+        for (final StatementInfo statement : this.getStatementsWithoutSubsequencialBlocks()) {
+            newSynchronizedBlock.addStatement((StatementInfo) statement.copy());
+        }
+
+        return newSynchronizedBlock;
+    }
+
     private ExpressionInfo synchronizedExpression;
 }

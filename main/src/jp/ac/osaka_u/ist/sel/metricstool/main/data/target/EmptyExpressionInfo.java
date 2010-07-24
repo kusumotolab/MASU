@@ -78,4 +78,22 @@ public final class EmptyExpressionInfo extends ExpressionInfo {
     public Set<ReferenceTypeInfo> getThrownExceptions() {
         return Collections.unmodifiableSet(new HashSet<ReferenceTypeInfo>());
     }
+
+    @Override
+    public ExecutableElementInfo copy() {
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final EmptyExpressionInfo newEmptyExpression = new EmptyExpressionInfo(ownerMethod,
+                fromLine, fromColumn, toLine, toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newEmptyExpression.setOwnerExecutableElement(owner);
+
+        return newEmptyExpression;
+
+    }
 }

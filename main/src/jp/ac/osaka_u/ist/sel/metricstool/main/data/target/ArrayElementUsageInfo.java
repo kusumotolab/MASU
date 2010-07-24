@@ -156,6 +156,26 @@ public final class ArrayElementUsageInfo extends ExpressionInfo {
         return Collections.unmodifiableSet(this.getIndexExpression().getThrownExceptions());
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+        final ExpressionInfo indexExpression = (ExpressionInfo) this.getIndexExpression().copy();
+        final ExpressionInfo qualifiedExpression = this.getQualifierExpression();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final ArrayElementUsageInfo newArrayElementUsage = new ArrayElementUsageInfo(
+                indexExpression, qualifiedExpression, ownerMethod, fromLine, fromColumn, toLine,
+                toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newArrayElementUsage.setOwnerExecutableElement(owner);
+
+        return newArrayElementUsage;
+    }
+
     private final ExpressionInfo qualifierExpression;
 
     private final ExpressionInfo indexExpression;

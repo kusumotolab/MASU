@@ -9,6 +9,7 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.Map.Entry;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -133,6 +134,35 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
             variableUsages.addAll(indexExpression.getVariableUsages());
         }
         return Collections.unmodifiableSortedSet(variableUsages);
+    }
+
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final ArrayTypeInfo arrayType = this.getType();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final ArrayConstructorCallInfo newCall = new ArrayConstructorCallInfo(arrayType,
+                ownerMethod, fromLine, fromColumn, toLine, toColumn);
+
+        for (final ExpressionInfo argument : this.getArguments()) {
+            newCall.addArgument((ExpressionInfo) argument.copy());
+        }
+
+        for (final Entry<Integer, ExpressionInfo> entry : this.getIndexExpressions().entrySet()) {
+            final Integer dimension = entry.getKey();
+            final ExpressionInfo indexExpression = (ExpressionInfo) entry.getValue().copy();
+            newCall.addIndexExpression(dimension, indexExpression);
+        }
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newCall.setOwnerExecutableElement(owner);
+
+        return newCall;
     }
 
     private final SortedMap<Integer, ExpressionInfo> indexExpressions;

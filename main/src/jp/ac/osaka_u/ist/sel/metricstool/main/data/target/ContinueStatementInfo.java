@@ -14,28 +14,19 @@ public class ContinueStatementInfo extends JumpStatementInfo {
         return "continue";
     }
 
-    /*
     @Override
-    public StatementInfo getFollowingStatement() {
-        if (null != this.getDestinationLabel()) {
-            return this.getDestinationLabel().getLabeledStatement();
-        } else {
+    public ExecutableElementInfo copy() {
 
-            for (BlockInfo ownerBlock = (BlockInfo) this.getOwnerSpace();; ownerBlock = (BlockInfo) ownerBlock
-                    .getOwnerSpace()) {
+        final LocalSpaceInfo outerUnit = this.getOwnerSpace();
+        final LabelInfo label = this.getDestinationLabel();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
 
-                if (ownerBlock.isLoopStatement()) {
-                    return ownerBlock;
-                }
+        final ContinueStatementInfo newStatement = new ContinueStatementInfo(outerUnit, label,
+                fromLine, fromColumn, toLine, toColumn);
 
-                if (!(ownerBlock.getOwnerSpace() instanceof BlockInfo)) {
-                    break;
-                }
-            }
-
-            assert false : "Here shouldn't be reached!";
-            return null;
-        }
+        return newStatement;
     }
-    */
 }

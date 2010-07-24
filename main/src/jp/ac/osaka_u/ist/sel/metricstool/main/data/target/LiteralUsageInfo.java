@@ -93,6 +93,25 @@ public final class LiteralUsageInfo extends ExpressionInfo {
         return Collections.unmodifiableSet(new HashSet<ReferenceTypeInfo>());
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+        final String literal = this.getLiteral();
+        final TypeInfo type = this.getType();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final LiteralUsageInfo newLiteralUsage = new LiteralUsageInfo(literal, type, ownerMethod,
+                fromLine, fromColumn, toLine, toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newLiteralUsage.setOwnerExecutableElement(owner);
+
+        return newLiteralUsage;
+    }
+
     /**
      * ÉäÉeÉâÉãÇï€ë∂Ç∑ÇÈÇΩÇﬂÇÃïœêî
      */

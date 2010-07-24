@@ -155,6 +155,31 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
         return sb.toString();
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final TryBlockInfo ownerTryBlock = this.getOwnerBlock();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final CatchBlockInfo newCatchBlock = new CatchBlockInfo(fromLine, fromColumn, toLine,
+                toColumn, ownerTryBlock);
+
+        final LocalVariableInfo caughtException = this.getCaughtException();
+        newCatchBlock.setCaughtException(caughtException);
+
+        final UnitInfo outerUnit = this.getOuterUnit();
+        newCatchBlock.setOuterUnit(outerUnit);
+
+        for (final StatementInfo statement : this.getStatementsWithoutSubsequencialBlocks()) {
+            newCatchBlock.addStatement((StatementInfo) statement.copy());
+        }
+
+        return newCatchBlock;
+    }
+
     private final TryBlockInfo ownerTryBlock;
 
     private LocalVariableInfo caughtException;

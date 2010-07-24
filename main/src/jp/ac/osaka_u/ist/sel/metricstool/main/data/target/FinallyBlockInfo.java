@@ -80,6 +80,28 @@ public final class FinallyBlockInfo extends BlockInfo implements
         return this.ownerTryBlock;
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final TryBlockInfo ownerTryBlock = this.getOwnerBlock();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final FinallyBlockInfo newFinallyBlock = new FinallyBlockInfo(fromLine, fromColumn, toLine,
+                toColumn, ownerTryBlock);
+
+        final UnitInfo outerUnit = this.getOuterUnit();
+        newFinallyBlock.setOuterUnit(outerUnit);
+
+        for (final StatementInfo statement : this.getStatementsWithoutSubsequencialBlocks()) {
+            newFinallyBlock.addStatement((StatementInfo) statement.copy());
+        }
+
+        return newFinallyBlock;
+    }
+
     private final TryBlockInfo ownerTryBlock;
 
 }

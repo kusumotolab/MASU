@@ -135,6 +135,25 @@ public final class AssertStatementInfo extends SingleStatementInfo {
         return Collections.unmodifiableSet(thrownExceptions);
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final LocalSpaceInfo outerUnit = this.getOwnerSpace();
+        final ExpressionInfo assertedExpression = (ExpressionInfo) this.getAssertedExpression()
+                .copy();
+        final ExpressionInfo messageExpression = (ExpressionInfo) this.getMessageExpression()
+                .copy();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final AssertStatementInfo newStatement = new AssertStatementInfo(outerUnit,
+                assertedExpression, messageExpression, fromLine, fromColumn, toLine, toColumn);
+
+        return newStatement;
+    }
+
     private final ExpressionInfo assertedExpression;
 
     private final ExpressionInfo messageExpression;

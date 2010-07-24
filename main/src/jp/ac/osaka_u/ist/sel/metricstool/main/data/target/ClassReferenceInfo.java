@@ -101,6 +101,25 @@ public final class ClassReferenceInfo extends ExpressionInfo {
         return Collections.unmodifiableSet(new HashSet<ReferenceTypeInfo>());
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+        final ClassTypeInfo classType = (ClassTypeInfo) this.getType();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final ClassReferenceInfo newClassReference = new ClassReferenceInfo(classType,
+                ownerMethod, fromLine, fromColumn, toLine, toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newClassReference.setOwnerExecutableElement(owner);
+
+        return newClassReference;
+
+    }
+
     /**
      * このクラス参照の参照型を保存する変数
      */

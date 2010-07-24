@@ -79,6 +79,23 @@ public final class NullUsageInfo extends ExpressionInfo {
         return Collections.unmodifiableSet(new HashSet<ReferenceTypeInfo>());
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final NullUsageInfo newNullUsage = new NullUsageInfo(ownerMethod, fromLine, fromColumn,
+                toLine, toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newNullUsage.setOwnerExecutableElement(owner);
+
+        return newNullUsage;
+    }
+
     /**
      * nullégópÇÃå^Çï€ë∂Ç∑ÇÈÇΩÇﬂÇÃíËêî
      */

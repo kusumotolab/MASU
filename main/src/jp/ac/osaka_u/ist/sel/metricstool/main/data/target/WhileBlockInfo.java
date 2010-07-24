@@ -54,4 +54,28 @@ public final class WhileBlockInfo extends ConditionalBlockInfo {
     public boolean isLoopStatement() {
         return true;
     }
+
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final WhileBlockInfo newWhileBlock = new WhileBlockInfo(fromLine, fromColumn, toLine,
+                toColumn);
+
+        final ConditionalClauseInfo newConditionalClause = this.getConditionalClause().copy();
+        newWhileBlock.setConditionalClause(newConditionalClause);
+
+        final UnitInfo outerUnit = this.getOuterUnit();
+        newWhileBlock.setOuterUnit(outerUnit);
+
+        for (final StatementInfo statement : this.getStatementsWithoutSubsequencialBlocks()) {
+            newWhileBlock.addStatement((StatementInfo) statement.copy());
+        }
+
+        return newWhileBlock;
+    }
 }

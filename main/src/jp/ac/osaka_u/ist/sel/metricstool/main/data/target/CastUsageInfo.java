@@ -117,6 +117,26 @@ public final class CastUsageInfo extends ExpressionInfo {
         return Collections.unmodifiableSet(this.getCastedUsage().getThrownExceptions());
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final TypeInfo castType = this.getType();
+        final ExpressionInfo castedUsage = (ExpressionInfo) this.getCastedUsage().copy();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final CastUsageInfo newCastUsage = new CastUsageInfo(castType, castedUsage, ownerMethod,
+                fromLine, fromColumn, toLine, toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newCastUsage.setOwnerExecutableElement(owner);
+
+        return newCastUsage;
+    }
+
     private final TypeInfo castType;
 
     private final ExpressionInfo castedUsage;

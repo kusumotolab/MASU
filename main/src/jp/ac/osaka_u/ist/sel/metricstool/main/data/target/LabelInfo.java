@@ -124,6 +124,22 @@ public final class LabelInfo extends UnitInfo implements StatementInfo {
         return this.getName().hashCode();
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final String name = this.getName();
+        final StatementInfo statement = (StatementInfo) this.getLabeledStatement().copy();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final LabelInfo newLabel = new LabelInfo(name, statement, fromLine,
+                fromColumn, toLine, toColumn);
+
+        return newLabel;
+    }
+
     /**
      * ƒ‰ƒxƒ‹‚Ì–¼‘O‚ğ•\‚·•Ï”
      */

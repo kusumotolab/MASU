@@ -4,6 +4,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -119,6 +120,27 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
             thrownExpressions.addAll(elementInitializer.getThrownExceptions());
         }
         return Collections.unmodifiableSet(thrownExpressions);
+    }
+
+    @Override
+    public ExecutableElementInfo copy() {
+        final List<ExpressionInfo> newInitializers = new LinkedList<ExpressionInfo>();
+        for (final ExpressionInfo initialier : this.getElementInitializers()) {
+            newInitializers.add((ExpressionInfo) initialier.copy());
+        }
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final ArrayInitializerInfo newArrayInitializer = new ArrayInitializerInfo(newInitializers,
+                ownerMethod, fromLine, fromColumn, toLine, toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newArrayInitializer.setOwnerExecutableElement(owner);
+
+        return newArrayInitializer;
     }
 
     private final List<ExpressionInfo> elementInitialiers;

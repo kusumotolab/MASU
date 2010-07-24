@@ -90,5 +90,24 @@ public final class ArrayTypeReferenceInfo extends ExpressionInfo {
         return Collections.unmodifiableSet(new HashSet<ReferenceTypeInfo>());
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+        final ArrayTypeInfo arrayType = (ArrayTypeInfo) this.getType();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final ArrayTypeReferenceInfo newArrayTypeReference = new ArrayTypeReferenceInfo(arrayType,
+                ownerMethod, fromLine, fromColumn, toLine, toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newArrayTypeReference.setOwnerExecutableElement(owner);
+
+        return newArrayTypeReference;
+
+    }
+
     private final ArrayTypeInfo arrayType;
 }

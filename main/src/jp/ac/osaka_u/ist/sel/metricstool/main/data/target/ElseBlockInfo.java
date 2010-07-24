@@ -80,6 +80,28 @@ public final class ElseBlockInfo extends BlockInfo implements SubsequentialBlock
         return null;
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final IfBlockInfo ownerIfBlock = this.getOwnerBlock();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final ElseBlockInfo newElseBlock = new ElseBlockInfo(fromLine, fromColumn, toLine,
+                toColumn, ownerIfBlock);
+
+        final UnitInfo outerUnit = this.getOuterUnit();
+        newElseBlock.setOuterUnit(outerUnit);
+
+        for (final StatementInfo statement : this.getStatementsWithoutSubsequencialBlocks()) {
+            newElseBlock.addStatement((StatementInfo) statement.copy());
+        }
+
+        return newElseBlock;
+    }
+
     /**
      * この else ブロックと対応する if ブロックを保存するための変数
      */

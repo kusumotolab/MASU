@@ -49,4 +49,25 @@ public final class SimpleBlockInfo extends BlockInfo {
 
         return sb.toString();
     }
+
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final SimpleBlockInfo newSimpleBlock = new SimpleBlockInfo(fromLine, fromColumn, toLine,
+                toColumn);
+
+        final UnitInfo outerUnit = this.getOuterUnit();
+        newSimpleBlock.setOuterUnit(outerUnit);
+
+        for (final StatementInfo statement : this.getStatementsWithoutSubsequencialBlocks()) {
+            newSimpleBlock.addStatement((StatementInfo) statement.copy());
+        }
+
+        return newSimpleBlock;
+    }
 }

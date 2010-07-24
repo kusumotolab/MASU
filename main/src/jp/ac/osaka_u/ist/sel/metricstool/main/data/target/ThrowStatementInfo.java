@@ -105,6 +105,22 @@ public class ThrowStatementInfo extends SingleStatementInfo {
         return Collections.unmodifiableSet(thrownExpressions);
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final LocalSpaceInfo outerUnit = this.getOwnerSpace();
+        final ExpressionInfo thrownExpression = (ExpressionInfo) this.getThrownExpression().copy();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final ThrowStatementInfo newStatement = new ThrowStatementInfo(outerUnit, thrownExpression,
+                fromLine, fromColumn, toLine, toColumn);
+
+        return newStatement;
+    }
+
     /**
      * throw•¶‚É‚æ‚Á‚Ä“Š‚°‚ç‚ê‚é—áŠO‚ð•\‚·Ž®
      */

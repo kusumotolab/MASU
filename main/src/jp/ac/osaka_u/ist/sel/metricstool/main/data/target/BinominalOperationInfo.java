@@ -312,6 +312,26 @@ public final class BinominalOperationInfo extends ExpressionInfo {
         return Collections.unmodifiableSet(thrownExpressions);
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+        final OPERATOR operator = this.getOperator();
+        final ExpressionInfo firstOperand = (ExpressionInfo) this.getFirstOperand().copy();
+        final ExpressionInfo secondOperand = (ExpressionInfo) this.getSecondOperand().copy();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final BinominalOperationInfo newBinominalOperation = new BinominalOperationInfo(operator,
+                firstOperand, secondOperand, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newBinominalOperation.setOwnerExecutableElement(owner);
+
+        return newBinominalOperation;
+    }
+
     private final ExpressionInfo firstOperand;
 
     private final ExpressionInfo secondOperand;

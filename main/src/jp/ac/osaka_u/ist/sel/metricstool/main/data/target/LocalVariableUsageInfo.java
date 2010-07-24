@@ -20,6 +20,26 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 @SuppressWarnings("serial")
 public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariableInfo> {
 
+    @Override
+    public ExecutableElementInfo copy() {
+        final LocalVariableInfo usedVariable = this.getUsedVariable();
+        final boolean reference = this.isReference();
+        final boolean assignment = this.isAssignment();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final LocalVariableUsageInfo newVariableUsage = getInstance(usedVariable, reference,
+                assignment, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newVariableUsage.setOwnerExecutableElement(owner);
+
+        return newVariableUsage;
+    }
+
     /**
      * 使用されているローカル変数を与えてオブジェクトを初期化
      * 

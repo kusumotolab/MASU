@@ -126,6 +126,26 @@ public final class MonominalOperationInfo extends ExpressionInfo {
         return Collections.unmodifiableSet(this.getOperand().getThrownExceptions());
     }
 
+    @Override
+    public ExecutableElementInfo copy() {
+        final ExpressionInfo operand = (ExpressionInfo) this.getOperand().copy();
+        final OPERATOR operator = this.getOperator();
+        final boolean isPreposed = this.isPreposed();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final MonominalOperationInfo newMonominalOperation = new MonominalOperationInfo(operand,
+                operator, isPreposed, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newMonominalOperation.setOwnerExecutableElement(owner);
+
+        return newMonominalOperation;        
+    }
+
     /**
      * ÉIÉyÉâÉìÉhÇï€ë∂Ç∑ÇÈÇΩÇﬂÇÃïœêî
      */

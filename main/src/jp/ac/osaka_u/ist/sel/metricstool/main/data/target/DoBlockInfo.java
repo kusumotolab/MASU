@@ -60,4 +60,27 @@ public final class DoBlockInfo extends ConditionalBlockInfo {
     public boolean isLoopStatement() {
         return true;
     }
+
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final DoBlockInfo newDoBlock = new DoBlockInfo(fromLine, fromColumn, toLine, toColumn);
+
+        final ConditionalClauseInfo newConditionalClause = this.getConditionalClause().copy();
+        newDoBlock.setConditionalClause(newConditionalClause);
+
+        final UnitInfo outerUnit = this.getOuterUnit();
+        newDoBlock.setOuterUnit(outerUnit);
+
+        for (final StatementInfo statement : this.getStatementsWithoutSubsequencialBlocks()) {
+            newDoBlock.addStatement((StatementInfo) statement.copy());
+        }
+
+        return newDoBlock;
+    }
 }

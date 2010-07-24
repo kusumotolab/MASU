@@ -54,4 +54,28 @@ public final class SwitchBlockInfo extends ConditionalBlockInfo {
 
         return sb.toString();
     }
+
+    @Override
+    public ExecutableElementInfo copy() {
+
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final SwitchBlockInfo newSwitchBlock = new SwitchBlockInfo(fromLine, fromColumn, toLine,
+                toColumn);
+
+        final ConditionalClauseInfo newConditionalClause = this.getConditionalClause().copy();
+        newSwitchBlock.setConditionalClause(newConditionalClause);
+
+        final UnitInfo outerUnit = this.getOuterUnit();
+        newSwitchBlock.setOuterUnit(outerUnit);
+
+        for (final StatementInfo statement : this.getStatementsWithoutSubsequencialBlocks()) {
+            newSwitchBlock.addStatement((StatementInfo) statement.copy());
+        }
+
+        return newSwitchBlock;
+    }
 }

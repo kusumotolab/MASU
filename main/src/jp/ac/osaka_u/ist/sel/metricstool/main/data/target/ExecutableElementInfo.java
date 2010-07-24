@@ -61,4 +61,13 @@ public interface ExecutableElementInfo extends Position, Serializable {
      * @return　投げられる可能性がある例外のSet
      */
     Set<ReferenceTypeInfo> getThrownExceptions();
+
+    /**
+     * このプログラム要素のディープコピーを返す.
+     * ただし，自分よりも下位に位置するオブジェクトのみディープコピー．
+     * 自分の上位に位置するものについてはシャローコピー.
+     * 
+     * @return
+     */
+    ExecutableElementInfo copy();
 }
