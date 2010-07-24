@@ -154,6 +154,12 @@ public class PDGMethodEnterNode extends PDGControlNode {
         public boolean equals(Object o) {
             return o instanceof PseudoConditionInfo;
         }
+        
+        @Override
+        public ExecutableElementInfo copy() {
+            final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+            return new PseudoConditionInfo(ownerMethod);
+        }
 
         private final CallableUnitInfo owner;
     }
