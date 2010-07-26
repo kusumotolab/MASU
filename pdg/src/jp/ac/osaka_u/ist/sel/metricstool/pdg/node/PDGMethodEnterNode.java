@@ -12,6 +12,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Position;
@@ -97,10 +98,14 @@ public class PDGMethodEnterNode extends PDGControlNode {
         }
 
         @Override
-        public ExecutableElementInfo getOwnerExecutableElement(){
+        public ConditionalBlockInfo getOwnerConditionalBlock() {
             return null;
         }
-        
+
+        @Override
+        public void setOwnerConditionalBlock(final ConditionalBlockInfo ownerConditionalBlock) {
+        }
+
         @Override
         public int getFromColumn() {
             return 0;
@@ -154,7 +159,7 @@ public class PDGMethodEnterNode extends PDGControlNode {
         public boolean equals(Object o) {
             return o instanceof PseudoConditionInfo;
         }
-        
+
         @Override
         public ExecutableElementInfo copy() {
             final CallableUnitInfo ownerMethod = this.getOwnerMethod();
