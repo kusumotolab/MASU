@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * 変数宣言文の情報を保有するクラス
@@ -65,7 +67,7 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
         }
 
         this.initializationExpression.setOwnerExecutableElement(this);
-
+        this.ownerConditionalBlock = null;
     }
 
     /**
@@ -190,11 +192,26 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
         return Collections.unmodifiableSet(thrownExpressions);
     }
 
+    /**
+     * この式を条件として持つConditionalBlockInfo返す
+     */
     @Override
-    public ExecutableElementInfo getOwnerExecutableElement() {
-        final LocalSpaceInfo outerUnit = this.getOwnerSpace();
-        return outerUnit instanceof ExecutableElementInfo ? (ExecutableElementInfo) outerUnit
-                : null;
+    public final ConditionalBlockInfo getOwnerConditionalBlock() {
+        return this.ownerConditionalBlock;
+    }
+
+    /**
+     * この式を条件として持つConditionalBlockInfoを設定する
+     */
+    @Override
+    public void setOwnerConditionalBlock(final ConditionalBlockInfo ownerConditionalBlock) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == ownerConditionalBlock) {
+            throw new IllegalArgumentException();
+        }
+
+        this.ownerConditionalBlock = ownerConditionalBlock;
     }
 
     @Override
@@ -227,4 +244,8 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
      */
     private final ExpressionInfo initializationExpression;
 
+    /**
+     * この変数宣言文を条件として持つConditionalBlockInfoを保存するためのフィールド
+     */
+    private ConditionalBlockInfo ownerConditionalBlock;
 }

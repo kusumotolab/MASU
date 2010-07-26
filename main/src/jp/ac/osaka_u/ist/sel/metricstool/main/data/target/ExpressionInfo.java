@@ -29,6 +29,7 @@ public abstract class ExpressionInfo implements ConditionInfo {
         MetricsToolSecurityManager.getInstance().checkAccess();
 
         this.ownerExecutableElement = null;
+        this.ownerConditionalBlock = null;
         this.ownerMethod = ownerMethod;
         this.fromLine = fromLine;
         this.fromColumn = fromColumn;
@@ -132,7 +133,6 @@ public abstract class ExpressionInfo implements ConditionInfo {
      * 
      * @return 外側のExecutableElement
      */
-    @Override
     public final ExecutableElementInfo getOwnerExecutableElement() {
 
         if (null == this.ownerExecutableElement) {
@@ -165,6 +165,22 @@ public abstract class ExpressionInfo implements ConditionInfo {
     }
 
     /**
+     * この式を持つ式を返す
+     * 
+     * @return この式を持つ式
+     */
+    public final ExpressionInfo getOwnerExpression() {
+
+        final ExecutableElementInfo ownerExecutableElement = this.getOwnerExecutableElement();
+        if (ownerExecutableElement instanceof ExpressionInfo) {
+            return (ExpressionInfo) ownerExecutableElement;
+        }
+
+        // ownerExecutableElementがExpressionInfoでない場合は，nullを返す
+        return null;
+    }
+
+    /**
      * 直接のオーナーであるExecutableElementをセットする
      * 
      * @param ownerExecutableElement 直接のオーナーであるExecutableElement
@@ -177,6 +193,28 @@ public abstract class ExpressionInfo implements ConditionInfo {
         }
 
         this.ownerExecutableElement = ownerExecutableElement;
+    }
+
+    /**
+     * この式を条件として持つConditionalBlockInfo返す
+     */
+    @Override
+    public final ConditionalBlockInfo getOwnerConditionalBlock() {
+        return this.ownerConditionalBlock;
+    }
+
+    /**
+     * この式を条件として持つConditionalBlockInfoを設定する
+     */
+    @Override
+    public void setOwnerConditionalBlock(final ConditionalBlockInfo ownerConditionalBlock) {
+
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == ownerConditionalBlock) {
+            throw new IllegalArgumentException();
+        }
+
+        this.ownerConditionalBlock = ownerConditionalBlock;
     }
 
     /**
@@ -200,6 +238,11 @@ public abstract class ExpressionInfo implements ConditionInfo {
     }
 
     private ExecutableElementInfo ownerExecutableElement;
+
+    /**
+     * この式を条件として所有するConditionalBlockInfoを保存するための変数
+     */
+    private ConditionalBlockInfo ownerConditionalBlock;
 
     /**
      * オーナーメソッドを保存するための変数

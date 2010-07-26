@@ -69,11 +69,15 @@ public abstract class UnresolvedConditionalBlockInfo<T extends ConditionalBlockI
         super.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                 methodInfoManager);
 
+        // ðŒŽ®‚Ì‰ðŒˆ
         final UnresolvedConditionalClauseInfo unresolvedConditionalClause = this
                 .getConditionalClause();
         final ConditionalClauseInfo conditionalClause = unresolvedConditionalClause.resolve(
                 usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         this.resolvedInfo.setConditionalClause(conditionalClause);
+
+        // ðŒŽ®‚ÌownerConditionalBlock‚ðÝ’è
+        conditionalClause.getCondition().setOwnerConditionalBlock(this.resolvedInfo);
     }
 
     /**

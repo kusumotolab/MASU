@@ -174,6 +174,8 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
             //((ExpressionInfo) initializerExpression).setOwnerExecutableElement(ownerStatement);
             ((ExpressionInfo) initializerExpression).setOwnerExecutableElement(this);
         }
+
+        initializerExpression.setOwnerConditionalBlock(this);
     }
 
     public final void removeInitializerExpressions(final ConditionInfo initializerExpression) {
@@ -210,6 +212,7 @@ public final class ForBlockInfo extends ConditionalBlockInfo {
             //        iteratorExpression, fromLine, fromColumn, toLine, toColumn);
             //iteratorExpression.setOwnerExecutableElement(ownerStatement);
             iteratorExpression.setOwnerExecutableElement(this);
+            iteratorExpression.setOwnerConditionalBlock(this);
         }
     }
 
