@@ -41,8 +41,7 @@ public class CFGControlNode extends CFGNode<ConditionInfo> {
         }
 
         // •ª‰ğ‘O‚Ì•¶‚©‚ç•K—v‚Èî•ñ‚ğæ“¾
-        final ConditionalBlockInfo ownerBlock = (ConditionalBlockInfo) condition
-                .getOwnerExecutableElement();
+        final ConditionalBlockInfo ownerBlock = condition.getOwnerConditionalBlock();
         final LocalSpaceInfo outerUnit = ownerBlock.getOwnerSpace();
         final int fromLine = conditionalExpression.getFromLine();
         final int fromColumn = conditionalExpression.getFromColumn();
