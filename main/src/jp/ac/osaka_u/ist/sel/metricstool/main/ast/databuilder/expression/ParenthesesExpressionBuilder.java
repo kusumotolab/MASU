@@ -55,15 +55,16 @@ public class ParenthesesExpressionBuilder extends
     public void exited(AstVisitEvent e) throws ASTParseException {
         super.exited(e);
         final AstToken token = e.getToken();
-        if (this.isActive() && this.expressionStateManger.inExpression() && token.isParenthesesExpression()) {
-            this.buildParenthesesExpressionBuilder();
+        if (this.isActive() && this.expressionStateManger.inExpression()
+                && token.isParenthesesExpression()) {
+            this.buildParenthesesExpressionBuilder(e);
         }
     }
 
     /**
      * 命令されて実際にUnresolvedParenthesesExpressionInfoをつくる
      */
-    protected void buildParenthesesExpressionBuilder() {
+    protected void buildParenthesesExpressionBuilder(final AstVisitEvent e) {
         // ExpressionManagerのexpressionAnalyzeStackの頭の要素が，括弧式の直下にくるExpressionElement
         // ポップする必要があるかわからないのでスタックはいじらない
         final ExpressionElement parentheticElement = expressionManager.getPeekExpressionElement();
@@ -75,10 +76,10 @@ public class ParenthesesExpressionBuilder extends
             expressionManager.popExpressionElement();
             final UnresolvedParenthesesExpressionInfo paren = new UnresolvedParenthesesExpressionInfo(
                     parentheticExpression);
-            paren.setFromLine(parentheticElement.fromLine);
-            paren.setFromColumn(parentheticElement.fromColumn);
-            paren.setToLine(parentheticElement.toLine);
-            paren.setToColumn(parentheticElement.toColumn);
+            paren.setFromLine(e.getStartLine());
+            paren.setFromColumn(e.getStartColumn());
+            paren.setToLine(e.getEndLine());
+            paren.setToColumn(e.getEndColumn());
             expressionManager.pushExpressionElement(new UsageElement(paren));
         } else {
             // TODO (a)のような場合の括弧もとれるようにする
