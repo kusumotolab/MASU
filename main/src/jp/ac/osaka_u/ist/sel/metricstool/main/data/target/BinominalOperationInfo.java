@@ -329,6 +329,11 @@ public final class BinominalOperationInfo extends ExpressionInfo {
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newBinominalOperation.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newBinominalOperation.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newBinominalOperation;
     }
 

@@ -125,6 +125,11 @@ public final class ParenthesesExpressionInfo extends ExpressionInfo {
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newParenthesesExpression.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newParenthesesExpression.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newParenthesesExpression;
     }
 

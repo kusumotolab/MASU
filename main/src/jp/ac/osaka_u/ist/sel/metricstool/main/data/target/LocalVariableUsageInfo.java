@@ -37,6 +37,11 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newVariableUsage.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newVariableUsage.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newVariableUsage;
     }
 

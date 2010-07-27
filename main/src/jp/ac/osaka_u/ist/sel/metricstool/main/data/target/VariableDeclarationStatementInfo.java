@@ -231,6 +231,9 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
                 outerUnit, variableDeclaration, initializerExpression, fromLine, fromColumn,
                 toLine, toColumn);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        newVariableDeclaration.setOwnerConditionalBlock(ownerConditionalBlock);
+
         return newVariableDeclaration;
     }
 

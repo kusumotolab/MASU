@@ -93,6 +93,11 @@ public final class NullUsageInfo extends ExpressionInfo {
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newNullUsage.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newNullUsage.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newNullUsage;
     }
 

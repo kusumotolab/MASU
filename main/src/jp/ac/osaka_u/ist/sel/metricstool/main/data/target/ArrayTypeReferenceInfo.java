@@ -105,6 +105,11 @@ public final class ArrayTypeReferenceInfo extends ExpressionInfo {
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newArrayTypeReference.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newArrayTypeReference.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newArrayTypeReference;
 
     }

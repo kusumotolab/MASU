@@ -110,11 +110,16 @@ public final class ClassReferenceInfo extends ExpressionInfo {
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final ClassReferenceInfo newClassReference = new ClassReferenceInfo(classType,
-                ownerMethod, fromLine, fromColumn, toLine, toColumn);
+        final ClassReferenceInfo newClassReference = new ClassReferenceInfo(classType, ownerMethod,
+                fromLine, fromColumn, toLine, toColumn);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newClassReference.setOwnerExecutableElement(owner);
+
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newClassReference.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
 
         return newClassReference;
 

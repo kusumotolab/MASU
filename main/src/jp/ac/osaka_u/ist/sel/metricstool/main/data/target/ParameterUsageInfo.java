@@ -37,6 +37,11 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newParameterUsage.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newParameterUsage.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newParameterUsage;
     }
 

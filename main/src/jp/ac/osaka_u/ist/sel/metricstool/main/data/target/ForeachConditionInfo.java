@@ -75,22 +75,30 @@ public final class ForeachConditionInfo extends ExpressionInfo {
 
     @Override
     public ExecutableElementInfo copy() {
-        final VariableDeclarationStatementInfo iteratorVariable = (VariableDeclarationStatementInfo)this.getIteratorVariable().copy();
-        final ExpressionInfo iteratorExpression = (ExpressionInfo)this.getIteratorExpression().copy();
+        final VariableDeclarationStatementInfo iteratorVariable = (VariableDeclarationStatementInfo) this
+                .getIteratorVariable().copy();
+        final ExpressionInfo iteratorExpression = (ExpressionInfo) this.getIteratorExpression()
+                .copy();
         final CallableUnitInfo ownerMethod = this.getOwnerMethod();
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final ForeachConditionInfo newForeachCondition = new ForeachConditionInfo(ownerMethod, fromLine, fromColumn, toLine, toColumn, iteratorVariable, iteratorExpression);
-        
+        final ForeachConditionInfo newForeachCondition = new ForeachConditionInfo(ownerMethod,
+                fromLine, fromColumn, toLine, toColumn, iteratorVariable, iteratorExpression);
+
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newForeachCondition.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newForeachCondition.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newForeachCondition;
     }
-    
+
     private final VariableDeclarationStatementInfo iteratorVariable;
 
     private final ExpressionInfo iteratorExpression;

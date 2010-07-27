@@ -202,6 +202,11 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newCall.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newCall.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newCall;
     }
 

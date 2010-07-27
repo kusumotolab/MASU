@@ -109,6 +109,11 @@ public final class LiteralUsageInfo extends ExpressionInfo {
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newLiteralUsage.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newLiteralUsage.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newLiteralUsage;
     }
 

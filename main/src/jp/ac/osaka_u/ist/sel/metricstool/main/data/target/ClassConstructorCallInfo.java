@@ -79,6 +79,11 @@ public class ClassConstructorCallInfo extends ConstructorCallInfo<ClassTypeInfo>
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newCall.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newCall.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newCall;
     }
 }

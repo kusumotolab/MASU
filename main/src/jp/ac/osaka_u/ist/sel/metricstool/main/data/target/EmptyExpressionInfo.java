@@ -93,6 +93,11 @@ public final class EmptyExpressionInfo extends ExpressionInfo {
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newEmptyExpression.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newEmptyExpression.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newEmptyExpression;
 
     }

@@ -140,6 +140,11 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newArrayInitializer.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newArrayInitializer.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newArrayInitializer;
     }
 

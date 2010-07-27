@@ -143,7 +143,12 @@ public final class MonominalOperationInfo extends ExpressionInfo {
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newMonominalOperation.setOwnerExecutableElement(owner);
 
-        return newMonominalOperation;        
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newMonominalOperation.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
+        return newMonominalOperation;
     }
 
     /**

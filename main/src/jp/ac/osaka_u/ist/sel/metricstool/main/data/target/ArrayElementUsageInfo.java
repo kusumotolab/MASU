@@ -173,6 +173,11 @@ public final class ArrayElementUsageInfo extends ExpressionInfo {
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newArrayElementUsage.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newArrayElementUsage.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newArrayElementUsage;
     }
 

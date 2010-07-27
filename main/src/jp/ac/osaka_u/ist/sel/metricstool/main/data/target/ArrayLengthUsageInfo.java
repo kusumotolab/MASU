@@ -39,4 +39,29 @@ public final class ArrayLengthUsageInfo extends FieldUsageInfo {
     public TypeInfo getType() {
         return PrimitiveTypeInfo.INT;
     }
+
+    @Override
+    public ExecutableElementInfo copy() {
+        final ExpressionInfo qualifierExpression = this.getQualifierExpression();
+        final ArrayTypeInfo qualifierType = (ArrayTypeInfo) this.getQualifierType();
+        final CallableUnitInfo ownerMethod = this.getOwnerMethod();
+        final int fromLine = this.getFromLine();
+        final int fromColumn = this.getFromColumn();
+        final int toLine = this.getToLine();
+        final int toColumn = this.getToColumn();
+
+        final ArrayLengthUsageInfo newArrayLengthUsage = new ArrayLengthUsageInfo(
+                qualifierExpression, qualifierType, ownerMethod, fromLine, fromColumn, toLine,
+                toColumn);
+
+        final ExecutableElementInfo owner = this.getOwnerExecutableElement();
+        newArrayLengthUsage.setOwnerExecutableElement(owner);
+
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newArrayLengthUsage.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
+        return newArrayLengthUsage;
+    }
 }

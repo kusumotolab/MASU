@@ -137,6 +137,11 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newFieldUsage.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newFieldUsage.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newFieldUsage;
     }
 

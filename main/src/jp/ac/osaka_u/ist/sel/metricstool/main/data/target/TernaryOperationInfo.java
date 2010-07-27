@@ -151,14 +151,19 @@ public class TernaryOperationInfo extends ExpressionInfo {
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final TernaryOperationInfo newTernaryOperationInfo = new TernaryOperationInfo(condition,
+        final TernaryOperationInfo newTernaryOperation = new TernaryOperationInfo(condition,
                 trueExpression, falseExpression, ownerMethod, fromLine, fromColumn, toLine,
                 toColumn);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
-        newTernaryOperationInfo.setOwnerExecutableElement(owner);
+        newTernaryOperation.setOwnerExecutableElement(owner);
 
-        return newTernaryOperationInfo;
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newTernaryOperation.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
+        return newTernaryOperation;
     }
 
     /**

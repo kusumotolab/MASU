@@ -107,6 +107,11 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newEntityUsage.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newEntityUsage.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newEntityUsage;
     }
 

@@ -134,6 +134,11 @@ public final class CastUsageInfo extends ExpressionInfo {
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newCastUsage.setOwnerExecutableElement(owner);
 
+        final ConditionalBlockInfo ownerConditionalBlock = this.getOwnerConditionalBlock();
+        if (null != ownerConditionalBlock) {
+            newCastUsage.setOwnerConditionalBlock(ownerConditionalBlock);
+        }
+
         return newCastUsage;
     }
 
