@@ -209,4 +209,16 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
         }
         nodes.addAll(newNodes);
     }
+
+    public boolean isDissolvedNode(final CFGNode<? extends ExecutableElementInfo> node) {
+
+        for (final Set<CFGNode<? extends ExecutableElementInfo>> dissolvedNodes : this.elementToDissolvedNodesMap
+                .values()) {
+            if (dissolvedNodes.contains(node)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

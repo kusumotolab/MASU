@@ -1108,6 +1108,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
                 condition, conditionFromLine, conditionFromColumn, conditionToLine,
                 conditionFromColumn); // ÇÌÇ¥Ç∆ fromColumnÇ…ÇµÇƒÇ¢ÇÈ
         newIfBlock.setConditionalClause(newConditionalClause);
+        condition.setOwnerConditionalBlock(newIfBlock);
         final ElseBlockInfo newElseBlock = new ElseBlockInfo(conditionFromLine, conditionToColumn,
                 conditionToLine, conditionToColumn, newIfBlock); // ÇÌÇ¥Ç∆ toColumnÇ…ÇµÇƒÇ¢ÇÈ
         newElseBlock.setOuterUnit(ownerSpace);
@@ -1156,11 +1157,6 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
             trueNode.addForwardEdge(newTrueForwardEdge);
             falseNode.addForwardEdge(newFalseForwardEdge);
         }
-
-        // ownerSpaceÇ∆ÇÃí≤êÆ
-        ownerSpace.removeStatement((StatementInfo) core); // StatementInfoà»äOÇÕÇ±Ç»Ç¢ÇÕÇ∏
-        ownerSpace.addStatement(newIfBlock);
-        ownerSpace.addStatement(newElseBlock);
 
         // ï™âÇµÇΩÉmÅ[ÉhåQÇ©ÇÁCFGÇç\íz
         final SimpleCFG newCFG = new SimpleCFG(nodeFactory);

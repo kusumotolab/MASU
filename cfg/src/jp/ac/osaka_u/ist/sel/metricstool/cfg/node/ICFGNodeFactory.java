@@ -47,4 +47,6 @@ public interface ICFGNodeFactory {
 
     void addDissolvedNodes(final ExecutableElementInfo element,
             final Set<CFGNode<? extends ExecutableElementInfo>> nodes);
+
+    boolean isDissolvedNode(final CFGNode<? extends ExecutableElementInfo> node);
 }
