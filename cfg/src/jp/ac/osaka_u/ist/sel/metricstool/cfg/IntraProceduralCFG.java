@@ -837,7 +837,6 @@ public class IntraProceduralCFG extends CFG {
 		else if (statement instanceof CatchBlockInfo) {
 
 			final CatchBlockInfo catchBlock = (CatchBlockInfo) statement;
-
 			final LocalVariableInfo exception = catchBlock.getCaughtException();
 			exception.getDeclarationStatement();
 			final VariableDeclarationStatementInfo declarationStatement;
