@@ -1152,10 +1152,7 @@ public class IntraProceduralCFG extends CFG {
 					this.enterNode = dissolvedCFG.getEnterNode();
 				}
 
-				// disolvedNodesÇ…ìoò^
-				final ExecutableElementInfo element = node.getCore();
-				this.nodeFactory.addDissolvedNodes(element, dissolvedCFG
-						.getAllNodes());
+				// êVÇµÇ¢ÉmÅ[ÉhÇí«â¡
 				this.nodes.addAll(dissolvedCFG.getAllNodes());
 			}
 		}

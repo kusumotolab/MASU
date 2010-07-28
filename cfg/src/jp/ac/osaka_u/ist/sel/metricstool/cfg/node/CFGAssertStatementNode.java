@@ -64,6 +64,9 @@ public class CFGAssertStatementNode extends CFGStatementNode<AssertStatementInfo
         // •ª‰ð‚µ‚½ƒm[ƒhŒQ‚©‚çCFG‚ð\’z
         final CFG newCFG = this.makeCFG(nodeFactory, dissolvedNodeList);
 
+        // •ªŠ„‚µ‚½ƒm[ƒh‚ðƒm[ƒhƒtƒ@ƒNƒgƒŠ‚ÌdissolvedNode‚É“o˜^
+        nodeFactory.addDissolvedNodes(statement, newCFG.getAllNodes());
+        
         return newCFG;
     }
 
