@@ -89,6 +89,36 @@ public final class UnresolvedTryBlockInfo extends UnresolvedBlockInfo<TryBlockIn
     }
 
     /**
+     * このローカル領域のインナー領域を名前解決する
+     * 
+     * @param usingClass この領域が存在しているクラス
+     * @param usingMethod この領域が存在しているメソッド
+     * @param classInfoManager クラスマネージャ
+     * @param fieldInfoManager フィールドマネージャ
+     * @param methodInfoManager メソッドマネージャ
+     */
+    public void resolveInnerBlock(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        super.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);
+
+        // 対応するfinally節を解決
+        if (this.hasFinallyBlock()) {
+            final UnresolvedFinallyBlockInfo unresolvedFinallyBlock = this.getSequentFinallyBlock();
+            unresolvedFinallyBlock.resolveInnerBlock(usingClass, usingMethod, classInfoManager,
+                    fieldInfoManager, methodInfoManager);
+        }
+
+        // 対応するcatch節を解決し，解決済みtryブロックオブジェクトに追加
+        for (final UnresolvedCatchBlockInfo unresolvedCatchBlock : this.getSequentCatchBlocks()) {
+            unresolvedCatchBlock.resolveInnerBlock(usingClass, usingMethod, classInfoManager,
+                    fieldInfoManager, methodInfoManager);
+        }
+    }
+
+    /**
      * 対応するcatchブロックを追加する
      * @param catchBlock 対応するcatchブロック
      */

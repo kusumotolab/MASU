@@ -60,11 +60,6 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
             return this.getResolved();
         }
 
-        // この catch 節が属する try 文を取得
-        final UnresolvedTryBlockInfo unresolvedOwnerTryBlock = this.getOwnerBlock();
-        final TryBlockInfo ownerTryBlock = unresolvedOwnerTryBlock.resolve(usingClass, usingMethod,
-                classInfoManager, fieldInfoManager, methodInfoManager);
-
         // この catchブロックの位置情報を取得
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
@@ -72,8 +67,13 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
         final int toColumn = this.getToColumn();
 
         //　解決済み catchブロックオブジェクトを作成
-        this.resolvedInfo = new CatchBlockInfo(fromLine, fromColumn, toLine, toColumn,
-                ownerTryBlock);
+        this.resolvedInfo = new CatchBlockInfo(fromLine, fromColumn, toLine, toColumn);
+
+        // この catch 節が属する try 文を取得
+        final UnresolvedTryBlockInfo unresolvedOwnerTryBlock = this.getOwnerBlock();
+        final TryBlockInfo ownerTryBlock = unresolvedOwnerTryBlock.resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+        this.resolvedInfo.setOwnerBlock(ownerTryBlock);
 
         // 外側のユニットを解決
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
@@ -102,7 +102,8 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
                 methodInfoManager);
 
         // キャッチする例外を解決
-        final LocalVariableInfo caughtException = this.caughtException.resolve(usingClass,
+        final UnresolvedLocalVariableInfo unresolvedCaughtException = this.getCaughtException();
+        final LocalVariableInfo caughtException = unresolvedCaughtException.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         this.resolvedInfo.setCaughtException(caughtException);
 
@@ -128,6 +129,11 @@ public final class UnresolvedCatchBlockInfo extends UnresolvedBlockInfo<CatchBlo
     @Override
     public UnresolvedTryBlockInfo getOwnerBlock() {
         return this.ownerTryBlock;
+    }
+
+    public UnresolvedLocalVariableInfo getCaughtException() {
+        assert null != this.caughtException : "this.caughtException must not be null!";
+        return this.caughtException;
     }
 
     public void setCaughtException(UnresolvedLocalVariableInfo caughtException) {

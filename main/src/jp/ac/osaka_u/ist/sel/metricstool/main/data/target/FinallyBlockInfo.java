@@ -3,6 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.SortedSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * finally ブロック情報を表すクラス
@@ -20,18 +22,11 @@ public final class FinallyBlockInfo extends BlockInfo implements
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
-     * @param ownerTryBlock この finally 節が属する try ブロック
      */
     public FinallyBlockInfo(final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn, final TryBlockInfo ownerTryBlock) {
+            final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
-
-        if (null == ownerTryBlock) {
-            throw new NullPointerException();
-        }
-
-        this.ownerTryBlock = ownerTryBlock;
     }
 
     /**
@@ -77,20 +72,37 @@ public final class FinallyBlockInfo extends BlockInfo implements
      */
     @Override
     public TryBlockInfo getOwnerBlock() {
+        assert null != this.ownerTryBlock : "this.ownerTryBlock must not be null!";
         return this.ownerTryBlock;
+    }
+
+    @Override
+    public void setOwnerBlock(final TryBlockInfo ownerTryBlock) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == ownerTryBlock) {
+            throw new NullPointerException();
+        }
+
+        if (null != this.ownerTryBlock) {
+            throw new IllegalStateException();
+        }
+
+        this.ownerTryBlock = ownerTryBlock;
     }
 
     @Override
     public ExecutableElementInfo copy() {
 
-        final TryBlockInfo ownerTryBlock = this.getOwnerBlock();
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
         final FinallyBlockInfo newFinallyBlock = new FinallyBlockInfo(fromLine, fromColumn, toLine,
-                toColumn, ownerTryBlock);
+                toColumn);
+
+        final TryBlockInfo ownerTryBlock = this.getOwnerBlock();
+        newFinallyBlock.setOwnerBlock(ownerTryBlock);
 
         final UnitInfo outerUnit = this.getOuterUnit();
         newFinallyBlock.setOuterUnit(outerUnit);
@@ -102,6 +114,6 @@ public final class FinallyBlockInfo extends BlockInfo implements
         return newFinallyBlock;
     }
 
-    private final TryBlockInfo ownerTryBlock;
+    private TryBlockInfo ownerTryBlock;
 
 }

@@ -59,18 +59,19 @@ public final class UnresolvedElseBlockInfo extends UnresolvedBlockInfo<ElseBlock
             return this.getResolved();
         }
 
-        // この else ブロックが属する if ブロックを取得
-        final UnresolvedIfBlockInfo unresolvedOwnerIfBlock = this.getOwnerBlock();
-        final IfBlockInfo ownerIfBlock = unresolvedOwnerIfBlock.resolve(usingClass, usingMethod,
-                classInfoManager, fieldInfoManager, methodInfoManager);
-
         // この else ブロックの位置情報を取得
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new ElseBlockInfo(fromLine, fromColumn, toLine, toColumn, ownerIfBlock);
+        this.resolvedInfo = new ElseBlockInfo(fromLine, fromColumn, toLine, toColumn);
+
+        // この else ブロックが属する if ブロックを取得
+        final UnresolvedIfBlockInfo unresolvedOwnerIfBlock = this.getOwnerBlock();
+        final IfBlockInfo ownerIfBlock = unresolvedOwnerIfBlock.resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+        this.resolvedInfo.setOwnerBlock(ownerIfBlock);
 
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,

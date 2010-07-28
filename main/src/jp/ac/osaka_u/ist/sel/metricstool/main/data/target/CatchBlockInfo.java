@@ -53,18 +53,11 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
-     * @param ownerTryBlock このcatch節が属するtryブロック
      */
     public CatchBlockInfo(final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn, final TryBlockInfo ownerTryBlock) {
+            final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
-
-        if (null == ownerTryBlock) {
-            throw new NullPointerException();
-        }
-
-        this.ownerTryBlock = ownerTryBlock;
     }
 
     /**
@@ -86,7 +79,22 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
      */
     @Override
     public TryBlockInfo getOwnerBlock() {
+        assert null != this.ownerTryBlock : "this.ownerTryBlock must not be null!";
         return this.ownerTryBlock;
+    }
+
+    @Override
+    public void setOwnerBlock(final TryBlockInfo ownerTryBlock) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == ownerTryBlock) {
+            throw new NullPointerException();
+        }
+
+        if (null != this.ownerTryBlock) {
+            throw new IllegalStateException();
+        }
+
+        this.ownerTryBlock = ownerTryBlock;
     }
 
     /**
@@ -94,6 +102,7 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
      * @return catchする例外を表す変数の情報
      */
     public final LocalVariableInfo getCaughtException() {
+        assert null != this.caughtException : "this.caughtException must not be null!";
         return this.caughtException;
     }
 
@@ -158,14 +167,16 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
     @Override
     public ExecutableElementInfo copy() {
 
-        final TryBlockInfo ownerTryBlock = this.getOwnerBlock();
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
         final CatchBlockInfo newCatchBlock = new CatchBlockInfo(fromLine, fromColumn, toLine,
-                toColumn, ownerTryBlock);
+                toColumn);
+
+        final TryBlockInfo ownerTryBlock = this.getOwnerBlock();
+        newCatchBlock.setOwnerBlock(ownerTryBlock);
 
         final LocalVariableInfo caughtException = this.getCaughtException();
         newCatchBlock.setCaughtException(caughtException);
@@ -180,7 +191,7 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
         return newCatchBlock;
     }
 
-    private final TryBlockInfo ownerTryBlock;
+    private TryBlockInfo ownerTryBlock;
 
     private LocalVariableInfo caughtException;
 }

@@ -107,6 +107,13 @@ public abstract class UnresolvedLocalSpaceInfo<T extends LocalSpaceInfo> extends
             throw new NullPointerException();
         }
 
+        // Catch, Finally, Elseブロックのときは，追加しない
+        if (statement instanceof UnresolvedCatchBlockInfo
+                || statement instanceof UnresolvedFinallyBlockInfo
+                || statement instanceof UnresolvedElseBlockInfo) {
+            return;
+        }
+
         this.statements.add(statement);
     }
 

@@ -78,6 +78,30 @@ public final class UnresolvedIfBlockInfo extends UnresolvedConditionalBlockInfo<
     }
 
     /**
+     * このローカル領域のインナー領域を名前解決する
+     * 
+     * @param usingClass この領域が存在しているクラス
+     * @param usingMethod この領域が存在しているメソッド
+     * @param classInfoManager クラスマネージャ
+     * @param fieldInfoManager フィールドマネージャ
+     * @param methodInfoManager メソッドマネージャ
+     */
+    public void resolveInnerBlock(final TargetClassInfo usingClass,
+            final CallableUnitInfo usingMethod, final ClassInfoManager classInfoManager,
+            final FieldInfoManager fieldInfoManager, final MethodInfoManager methodInfoManager) {
+
+        super.resolveInnerBlock(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                methodInfoManager);
+
+        // もしelseブロックがある場合は解決する
+        if (this.hasElseBlock()) {
+            final UnresolvedElseBlockInfo unresolvedElseBlockInfo = this.getSequentElseBlock();
+            unresolvedElseBlockInfo.resolveInnerBlock(usingClass, usingMethod, classInfoManager,
+                    fieldInfoManager, methodInfoManager);
+        }
+    }
+
+    /**
      * 対応するelseブロックを返す
      * @return 対応するelseブロック．対応するelseブロックが存在しない場合はnull
      */

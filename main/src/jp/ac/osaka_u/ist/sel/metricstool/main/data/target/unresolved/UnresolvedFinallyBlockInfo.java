@@ -59,19 +59,19 @@ public final class UnresolvedFinallyBlockInfo extends UnresolvedBlockInfo<Finall
             return this.getResolved();
         }
 
-        // この finally 節が属する try ブロックを取得
-        final UnresolvedTryBlockInfo unresolvedOwnerTryBlock = this.getOwnerBlock();
-        final TryBlockInfo ownerTryBlock = unresolvedOwnerTryBlock.resolve(usingClass, usingMethod,
-                classInfoManager, fieldInfoManager, methodInfoManager);
-
         // この finally 節の位置情報を取得
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        this.resolvedInfo = new FinallyBlockInfo(fromLine, fromColumn, toLine, toColumn,
-                ownerTryBlock);
+        this.resolvedInfo = new FinallyBlockInfo(fromLine, fromColumn, toLine, toColumn);
+
+        // この finally 節が属する try ブロックを取得
+        final UnresolvedTryBlockInfo unresolvedOwnerTryBlock = this.getOwnerBlock();
+        final TryBlockInfo ownerTryBlock = unresolvedOwnerTryBlock.resolve(usingClass, usingMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
+        this.resolvedInfo.setOwnerBlock(ownerTryBlock);
 
         final UnresolvedLocalSpaceInfo<?> unresolvedLocalSpace = this.getOuterSpace();
         final LocalSpaceInfo outerSpace = unresolvedLocalSpace.resolve(usingClass, usingMethod,

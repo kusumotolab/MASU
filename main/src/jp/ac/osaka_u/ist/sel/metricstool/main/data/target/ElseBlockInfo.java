@@ -3,6 +3,8 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.SortedSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
+
 
 /**
  * else ブロックを表すクラス
@@ -19,18 +21,11 @@ public final class ElseBlockInfo extends BlockInfo implements SubsequentialBlock
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
-     * @param ownerIfBlock 対応するifブロック
      */
     public ElseBlockInfo(final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn, final IfBlockInfo ownerIfBlock) {
+            final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
-
-        if (null == ownerIfBlock) {
-            throw new NullPointerException();
-        }
-
-        this.ownerIfBlock = ownerIfBlock;
     }
 
     /**
@@ -76,21 +71,36 @@ public final class ElseBlockInfo extends BlockInfo implements SubsequentialBlock
      */
     @Override
     public IfBlockInfo getOwnerBlock() {
-        // TODO Auto-generated method stub
-        return null;
+        assert null != this.ownerIfBlock : "this.ownerIfBlock must not be null!";
+        return this.ownerIfBlock;
+    }
+
+    @Override
+    public void setOwnerBlock(final IfBlockInfo ownerIfBlock) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == ownerIfBlock) {
+            throw new NullPointerException();
+        }
+
+        if (null != this.ownerIfBlock) {
+            throw new IllegalStateException();
+        }
+
+        this.ownerIfBlock = ownerIfBlock;
     }
 
     @Override
     public ExecutableElementInfo copy() {
 
-        final IfBlockInfo ownerIfBlock = this.getOwnerBlock();
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final ElseBlockInfo newElseBlock = new ElseBlockInfo(fromLine, fromColumn, toLine,
-                toColumn, ownerIfBlock);
+        final ElseBlockInfo newElseBlock = new ElseBlockInfo(fromLine, fromColumn, toLine, toColumn);
+
+        final IfBlockInfo ownerIfBlock = this.getOwnerBlock();
+        newElseBlock.setOwnerBlock(ownerIfBlock);
 
         final UnitInfo outerUnit = this.getOuterUnit();
         newElseBlock.setOuterUnit(outerUnit);
@@ -105,6 +115,6 @@ public final class ElseBlockInfo extends BlockInfo implements SubsequentialBlock
     /**
      * この else ブロックと対応する if ブロックを保存するための変数
      */
-    private final IfBlockInfo ownerIfBlock;
+    private IfBlockInfo ownerIfBlock;
 
 }
