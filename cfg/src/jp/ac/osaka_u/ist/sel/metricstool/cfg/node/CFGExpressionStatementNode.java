@@ -38,11 +38,11 @@ public class CFGExpressionStatementNode extends CFGStatementNode<ExpressionState
             final OPERATOR operator = binominalOperation.getOperator();
 
             if (operator.equals(OPERATOR.ASSIGN)) {
-                return (ExpressionInfo) binominalOperation.getSecondOperand().copy();
+                return (ExpressionInfo) binominalOperation.getSecondOperand();
             }
         }
 
-        return (ExpressionInfo) statement.getExpression().copy();
+        return statement.getExpression();
     }
 
     @Override

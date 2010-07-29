@@ -57,6 +57,8 @@ public class CFGForeachControlNode extends CFGControlNode {
 						fromLine, fromColumn, toLine, toColumn);
 		final ForeachConditionInfo newCondition = this.makeNewElement(
 				ownerForeachBlock, newIteratorExpression);
+		newCondition.setOwnerConditionalBlock(ownerForeachBlock);
+		newCondition.setOwnerExecutableElement(ownerForeachBlock);
 		final LinkedList<CFGNode<?>> dissolvedNodeList = new LinkedList<CFGNode<?>>();
 		dissolvedNodeList.add(nodeFactory.makeNormalNode(newStatement));
 		dissolvedNodeList.add(nodeFactory.makeControlNode(newCondition));

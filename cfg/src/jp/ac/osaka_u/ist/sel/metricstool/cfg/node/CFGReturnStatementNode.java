@@ -31,10 +31,11 @@ public class CFGReturnStatementNode extends
 	public CFG dissolve(final ICFGNodeFactory nodeFactory) {
 
 		final ReturnStatementInfo statement = this.getCore();
-		final ExpressionInfo expression = this.getDissolvingTarget();
+		final ExpressionInfo target = (ExpressionInfo) this
+				.getDissolvingTarget().copy();
 
 		// assert‚Ì”»’è•”•ª‚ª•Ï”g—p‚Ì®‚Å‚È‚¢ê‡‚Í•ª‰ğ‚ğs‚¤
-		if (!CFGUtility.isDissolved(expression)) {
+		if (!CFGUtility.isDissolved(target)) {
 			return null;
 		}
 
@@ -48,7 +49,7 @@ public class CFGReturnStatementNode extends
 		final LinkedList<CFGNode<?>> dissolvedNodeList = new LinkedList<CFGNode<?>>();
 		final LinkedList<LocalVariableUsageInfo> dissolvedVariableUsageList = new LinkedList<LocalVariableUsageInfo>();
 
-		this.makeDissolvedNode(expression, nodeFactory, dissolvedNodeList,
+		this.makeDissolvedNode(target, nodeFactory, dissolvedNodeList,
 				dissolvedVariableUsageList);
 		final ReturnStatementInfo newStatement = this.makeNewElement(
 				ownerSpace, dissolvedVariableUsageList.getFirst());
@@ -70,7 +71,7 @@ public class CFGReturnStatementNode extends
 	@Override
 	ExpressionInfo getDissolvingTarget() {
 		final ReturnStatementInfo statement = this.getCore();
-		return (ExpressionInfo) statement.getReturnedExpression().copy();
+		return statement.getReturnedExpression();
 	}
 
 	@Override
