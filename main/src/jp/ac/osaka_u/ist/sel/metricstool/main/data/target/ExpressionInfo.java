@@ -134,11 +134,7 @@ public abstract class ExpressionInfo implements ConditionInfo {
      * @return ŠO‘¤‚ÌExecutableElement
      */
     public final ExecutableElementInfo getOwnerExecutableElement() {
-
-        if (null == this.ownerExecutableElement) {
-            throw new IllegalStateException();
-        }
-
+        assert null != this.ownerExecutableElement : "this.ownerExecutableElement must not be null!";
         return this.ownerExecutableElement;
     }
 
@@ -205,15 +201,12 @@ public abstract class ExpressionInfo implements ConditionInfo {
 
     /**
      * ‚±‚Ì®‚ğğŒ‚Æ‚µ‚Ä‚ÂConditionalBlockInfo‚ğİ’è‚·‚é
+     * ˆø”‚ªnull‚Å‚ ‚é‚±‚Æ‚ğ‹–—e‚·‚éD
      */
     @Override
     public void setOwnerConditionalBlock(final ConditionalBlockInfo ownerConditionalBlock) {
-
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == ownerConditionalBlock) {
-            throw new IllegalArgumentException();
-        }
-
+        assert null == this.ownerConditionalBlock : "this.ownerConditionalBlock must be null!";
         this.ownerConditionalBlock = ownerConditionalBlock;
     }
 

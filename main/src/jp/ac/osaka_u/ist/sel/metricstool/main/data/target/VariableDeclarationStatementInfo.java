@@ -202,15 +202,12 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
 
     /**
      * ‚±‚Ì®‚ğğŒ‚Æ‚µ‚Ä‚ÂConditionalBlockInfo‚ğİ’è‚·‚é
+     * ˆø”‚ªnull‚Å‚ ‚é‚±‚Æ‚ğ‹–—e‚·‚é.
      */
     @Override
     public void setOwnerConditionalBlock(final ConditionalBlockInfo ownerConditionalBlock) {
-
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == ownerConditionalBlock) {
-            throw new IllegalArgumentException();
-        }
-
+        assert null == this.ownerConditionalBlock : "this.ownerConditionalBlock must be null!";
         this.ownerConditionalBlock = ownerConditionalBlock;
     }
 
