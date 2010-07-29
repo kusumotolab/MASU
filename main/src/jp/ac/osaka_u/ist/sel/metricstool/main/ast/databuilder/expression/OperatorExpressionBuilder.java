@@ -83,7 +83,9 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 } else if (typeElement.getType() instanceof UnresolvedArrayTypeInfo) {
                     UnresolvedArrayTypeInfo arrayType = (UnresolvedArrayTypeInfo) typeElement
                             .getType();
-                    termTypes[0] = new UnresolvedArrayTypeReferenceInfo(arrayType);
+                    termTypes[0] = new UnresolvedArrayTypeReferenceInfo(arrayType,
+                            typeElement.fromLine, typeElement.fromColumn, typeElement.toLine,
+                            typeElement.toColumn);
                 } else {
 
                     termTypes[0] = elements[0].getUsage();
@@ -109,7 +111,9 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                         // ‚±‚±‚É“ž’B‚·‚é‚Ì‚Íinstanceof type[]‚Æ‚«
                         UnresolvedArrayTypeInfo arrayType = (UnresolvedArrayTypeInfo) typeElement
                                 .getType();
-                        termTypes[i] = new UnresolvedArrayTypeReferenceInfo(arrayType);
+                        termTypes[i] = new UnresolvedArrayTypeReferenceInfo(arrayType,
+                                typeElement.fromLine, typeElement.fromColumn, typeElement.toLine,
+                                typeElement.toColumn);
                     } else {
                         termTypes[i] = elements[i].getUsage();
                     }

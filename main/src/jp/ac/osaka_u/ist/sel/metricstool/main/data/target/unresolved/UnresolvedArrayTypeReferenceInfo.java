@@ -25,7 +25,8 @@ public final class UnresolvedArrayTypeReferenceInfo extends
      * 
      * @param referencedType éQè∆Ç≥ÇÍÇƒÇ¢ÇÈñ¢âåàîzóÒå^
      */
-    public UnresolvedArrayTypeReferenceInfo(final UnresolvedArrayTypeInfo referencedType) {
+    public UnresolvedArrayTypeReferenceInfo(final UnresolvedArrayTypeInfo referencedType, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == referencedType) {
@@ -34,6 +35,11 @@ public final class UnresolvedArrayTypeReferenceInfo extends
 
         this.referencedType = referencedType;
         this.resolvedInfo = null;
+        
+        this.setFromLine(fromLine);
+        this.setFromColumn(fromColumn);
+        this.setToLine(toLine);
+        this.setToColumn(toColumn);
     }
 
     @Override
