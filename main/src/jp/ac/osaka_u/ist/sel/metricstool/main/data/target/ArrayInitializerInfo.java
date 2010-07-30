@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
+
 
 /**
  * 配列の初期化を表すクラス
@@ -81,8 +83,29 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
 
     @Override
     public TypeInfo getType() {
-        // TODO Auto-generated method stub
-        return null;
+
+        final List<ExpressionInfo> elements = this.getElementInitializers();
+        if (0 == elements.size()) {
+            final ClassInfoManager classManager = DataManager.getInstance().getClassInfoManager();
+            final ClassInfo objectClass = classManager.getClassInfo(new String[] { "java", "lang",
+                    "Object" });
+            final ClassTypeInfo objectType = new ClassTypeInfo(objectClass);
+            return new ArrayTypeInfo(objectType, 1);
+        }
+
+        else {
+
+            final TypeInfo elementType = elements.get(0).getType();
+            if (elementType instanceof ArrayTypeInfo) {
+                final ArrayTypeInfo arrayElementType = (ArrayTypeInfo) elementType;
+                return new ArrayTypeInfo(arrayElementType.getElementType(), arrayElementType
+                        .getDimension() + 1);
+            }
+
+            else {
+                return new ArrayTypeInfo(elementType, 1);
+            }
+        }
     }
 
     @Override
