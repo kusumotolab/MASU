@@ -1511,12 +1511,28 @@ tryBlock
 	;
 
 finallyClause
-	:	"finally"^ compoundStatement
+	:
+	 	{pushStartLineColumn();}
+		fc:finallyStatement
+		{registLineColumn(#fc);}
+	;
+	
+finallyStatement
+	:
+		"finally"^ compoundStatement
 	;
 
 // an exception handler
 handler
-	:	"catch"^ LPAREN! localParameterDeclaration RPAREN! compoundStatement
+	:	
+	 	{pushStartLineColumn();}
+		hs:handlerStatement
+		{registLineColumn(#hs);}
+	;
+	
+handlerStatement
+	:
+		"catch"^ LPAREN! lpd:localParameterDeclaration RPAREN! compoundStatement
 	;
 
 
