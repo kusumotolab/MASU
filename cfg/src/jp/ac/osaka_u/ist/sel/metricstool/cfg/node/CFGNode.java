@@ -35,6 +35,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ElseBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LiteralUsageInfo;
@@ -121,12 +122,12 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 		text.append(core.getText());
 		text.append(" <");
 		text.append(core.getFromLine());
-		 text.append(".");
-		 text.append(core.getFromColumn());
-		 text.append(" - ");
-		 text.append(core.getToLine());
-		 text.append(".");
-		 text.append(core.getToColumn());
+		text.append(".");
+		text.append(core.getFromColumn());
+		text.append(" - ");
+		text.append(core.getToLine());
+		text.append(".");
+		text.append(core.getToColumn());
 		text.append("> ");
 		this.text = text.toString();
 	}
@@ -1235,18 +1236,33 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 		newIfBlock.setSequentElseBlock(newElseBlock);
 
 		// trueExpressionを再構築
-		final ExecutableElementInfo trueElement = this.makeNewElement(
-				newIfBlock, trueExpressionFromLine, trueExpressionFromColumn,
+		ExecutableElementInfo trueElement = this.makeNewElement(newIfBlock,
+				trueExpressionFromLine, trueExpressionFromColumn,
 				trueExpressionToLine, trueExpressionToColumn, trueExpression);
 
 		// falseExpressionを再構築
-		final ExecutableElementInfo falseElement = this.makeNewElement(
-				newElseBlock, falseExpressionFromLine,
-				falseExpressionFromColumn, falseExpressionToLine,
-				falseExpressionToColumn, falseExpression);
+		ExecutableElementInfo falseElement = this
+				.makeNewElement(newElseBlock, falseExpressionFromLine,
+						falseExpressionFromColumn, falseExpressionToLine,
+						falseExpressionToColumn, falseExpression);
 
-		newIfBlock.addStatement((StatementInfo) trueElement); // StatementInfo以外はこないはず
-		newElseBlock.addStatement((StatementInfo) falseElement); // StatementInfo以外はこないはず
+		// ExpressionInfoのときはExpressionStatementInfoに変換
+		if (trueElement instanceof ExpressionInfo) {
+			trueElement = new ExpressionStatementInfo(newIfBlock,
+					(ExpressionInfo) trueElement, trueElement.getFromLine(),
+					trueElement.getFromColumn(), trueElement.getToLine(),
+					trueElement.getFromColumn());
+		}
+
+		if (falseElement instanceof ExpressionInfo) {
+			falseElement = new ExpressionStatementInfo(newElseBlock,
+					(ExpressionInfo) falseElement, falseElement.getFromLine(),
+					falseElement.getFromColumn(), falseElement.getToLine(),
+					falseElement.getFromColumn());
+		}
+
+		newIfBlock.addStatement((StatementInfo) trueElement); // trueElementを新しいif文に追加
+		newElseBlock.addStatement((StatementInfo) falseElement); // falseElementを新しいelse文に追加
 
 		// 古いノードを削除
 		nodeFactory.removeNode(core);
