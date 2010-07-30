@@ -36,7 +36,7 @@ public class ArrayInitializerBuilder extends ExpressionBuilder {
     protected boolean isRelated(AstToken token) {
         return this.isActive() && this.isTriggerToken(token);
     }
-    
+
     @Override
     protected void afterExited(AstVisitEvent event) throws ASTParseException {
         //
@@ -51,8 +51,10 @@ public class ArrayInitializerBuilder extends ExpressionBuilder {
     public void stateChanged(final StateChangeEvent<AstVisitEvent> event) {
         final StateChangeEventType type = event.getType();
         if (type.equals(ARRAY_INITILIZER_STATE.ENTER_ARRAY_INIT)) {
-
-            final UnresolvedArrayInitializerInfo initializer = new UnresolvedArrayInitializerInfo();
+            final AstVisitEvent trigger = event.getTrigger();
+            final UnresolvedArrayInitializerInfo initializer = new UnresolvedArrayInitializerInfo(
+                    trigger.getStartLine(), trigger.getStartColumn(), trigger.getEndLine(),
+                    trigger.getEndColumn());
             this.buildingInitilizerStack.push(initializer);
 
         } else if (type.equals(ARRAY_INITILIZER_STATE.EXIT_ARRAY_INIT)) {
@@ -79,10 +81,10 @@ public class ArrayInitializerBuilder extends ExpressionBuilder {
     @Override
     public void clearBuiltData() {
         super.clearBuiltData();
-        
+
         this.buildingInitilizerStack.clear();
     }
-    
+
     private final Stack<UnresolvedArrayInitializerInfo> buildingInitilizerStack;
 
     private final ArrayInitializerStateManager stateManager;

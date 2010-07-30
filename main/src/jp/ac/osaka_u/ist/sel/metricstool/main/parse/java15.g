@@ -1146,7 +1146,15 @@ varInitializer
 
 // This is an initializer used to set up an array.
 arrayInitializer
-	:	lc:LCURLY^ {#lc.setType(ARRAY_INIT);}
+	:	
+		{pushStartLineColumn();}
+		body:arrayInitializerBody
+		{registLineColumn(#body);}
+	;
+	
+arrayInitializerBody
+	:
+		lc:LCURLY^ {#lc.setType(ARRAY_INIT);}
 			(	initializer
 				(
 					// CONFLICT: does a COMMA after an initializer start a new
