@@ -25,10 +25,7 @@ public class UnresolvedArrayInitializerInfo extends UnresolvedExpressionInfo<Arr
     public UnresolvedArrayInitializerInfo(final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
         this();
-        this.setFromLine(fromLine);
-        this.setFromColumn(fromColumn);
-        this.setToLine(toLine);
-        this.setToColumn(toColumn);
+
     }
 
     @Override
@@ -53,8 +50,8 @@ public class UnresolvedArrayInitializerInfo extends UnresolvedExpressionInfo<Arr
                     fieldInfoManager, methodInfoManager));
         }
 
-        this.resolvedInfo = new ArrayInitializerInfo(elements, usingMethod, this.getFromLine(), this
-                .getFromColumn(), this.getToLine(), this.getToColumn());
+        this.resolvedInfo = new ArrayInitializerInfo(elements, usingMethod, this.getFromLine(),
+                this.getFromColumn(), this.getToLine(), this.getToColumn());
         return this.resolvedInfo;
     }
 
@@ -66,7 +63,7 @@ public class UnresolvedArrayInitializerInfo extends UnresolvedExpressionInfo<Arr
 
         this.elements.add(element);
     }
-    
+
     public List<UnresolvedExpressionInfo<? extends ExpressionInfo>> getElements() {
         return elements;
     }

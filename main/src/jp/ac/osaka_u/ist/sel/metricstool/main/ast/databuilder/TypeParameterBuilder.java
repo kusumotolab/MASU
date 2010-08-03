@@ -10,7 +10,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSuperTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
@@ -94,6 +93,7 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
 
             } else if (this.inTypeParameterDefinition) {
                 //型パラメータ定義部ないでの出来事
+                /* (型変数)Type Variableには"Super"のトークンは文法上来ないので削除
                 if (type.equals(TypeParameterStateManager.TYPE_PARAMETER.ENTER_TYPE_LOWER_BOUNDS)) {
                     //型の下限宣言がきたので型構築部ががんばる
                     this.nameBuilder.deactivate();
@@ -102,8 +102,9 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
                         .equals(TypeParameterStateManager.TYPE_PARAMETER.EXIT_TYPE_LOWER_BOUNDS)) {
                     //型の下限情報を構築する
                     this.lowerBoundsType = this.builtTypeBounds();
-                } else if (type
-                        .equals(TypeParameterStateManager.TYPE_PARAMETER.ENTER_TYPE_UPPER_BOUNDS)) {
+                    
+                } else */
+                if (type.equals(TypeParameterStateManager.TYPE_PARAMETER.ENTER_TYPE_UPPER_BOUNDS)) {
                     //型の上限宣言が来たので構築部ががんばる
                     this.nameBuilder.deactivate();
                     this.typeBuilder.activate();
@@ -148,12 +149,13 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
                 //下限がなければ普通に作る
                 parameter = new UnresolvedTypeParameterInfo(ownerUnit, name[0], index,
                         (UnresolvedReferenceTypeInfo<?>) upperBounds);
-            } else {
-                //下限がある場合はこっちを作る
-                parameter = new UnresolvedSuperTypeParameterInfo(ownerUnit, name[0], index,
-                        (UnresolvedReferenceTypeInfo<?>) upperBounds,
-                        (UnresolvedReferenceTypeInfo<?>) lowerBounds);
             }
+            //            else {
+            //                //下限がある場合はこっちを作る
+            //                parameter = new UnresolvedSuperTypeParameterInfo(ownerUnit, name[0], index,
+            //                        (UnresolvedReferenceTypeInfo<?>) upperBounds,
+            //                        (UnresolvedReferenceTypeInfo<?>) lowerBounds);
+            //            }
         } else {
             // 少なくともJavaではここに到達してはいけない(型パラメータは参照型しか定義できない)
             // TODO C#の場合は型パラメータがプリミティブ型の場合もあるので対処が必要

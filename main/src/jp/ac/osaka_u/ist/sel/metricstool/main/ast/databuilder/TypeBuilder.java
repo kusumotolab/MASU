@@ -13,11 +13,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BuiltinTypeToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArbitraryTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExtendsTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedSuperTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterTypeInfo;
 
@@ -44,8 +48,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
 
         this.addStateManager(this.typeStateManager);
         this.addStateManager(new TypeArgumentStateManager());
-        this.addStateManager(new TypeParameterStateManager());
-
+        this.addStateManager(typePrameterStateManager);
         this.addInnerBuilder(this.identifierBuilder);
     }
 
@@ -138,30 +141,47 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
                 //ワイルドカード記述部に入ったのでインクリメント
                 this.inWildCardCount++;
             } else if (type.equals(TypeArgumentStateManager.TYPE_ARGUMENT_STATE.EXIT_TYPE_WILDCARD)) {
-                //ワイルドカード記述部から出るので，型上限情報を取得して型情報を登録
-                final UnresolvedTypeInfo<? extends TypeInfo> upperBounds = this
-                        .getCurrentUpperBounds();
-                this.currentUpperBounds = null;
-                if (null != upperBounds) {
-                    this.registBuiltData(upperBounds);
+                //ワイルドカード記述部から出るので，型上限(下限)情報を取得して型情報を登録
+                final UnresolvedTypeInfo<? extends TypeInfo> bounds = this.getCurrentBounds();
+
+                assert (bounds != null) : "Illegal state: type upper bounds was not specified.";
+
+                if (bounds instanceof UnresolvedExtendsTypeInfo
+                        || bounds instanceof UnresolvedSuperTypeInfo) {
+                    this.registBuiltData(bounds);
                 } else {
-                    assert (false) : "Illegal state: type upper bounds was not specified.";
+                    //境界がUnresolvedExtendsTypeInfoでもUnresolvedExtendsTypeInfoでもなければワイルドカード単体
+                    this.registBuiltData(UnresolvedArbitraryTypeInfo.getInstance());
                 }
+                this.currentBounds = null;
                 this.inWildCardCount--;
             } else if (this.inWildCardCount > 0
                     && type.equals(TypeParameterStateManager.TYPE_PARAMETER.EXIT_TYPE_UPPER_BOUNDS)) {
                 //ワイルドカード内で型上限情報があったので，それを登録
-                this.currentUpperBounds = this.popLastBuiltData();
+                this.currentBounds = this.popLastBuiltData();
+                //                UnresolvedExtendsTypeInfo e = new UnresolvedExtendsTypeInfo(this.currentUpperBounds);
+                if (this.currentBounds instanceof UnresolvedReferenceTypeInfo<?>) {
+                    this.currentBounds = new UnresolvedExtendsTypeInfo(
+                            (UnresolvedReferenceTypeInfo<?>) this.currentBounds);
+                }
+            } else if (this.inWildCardCount > 0
+                    && type.equals(TypeParameterStateManager.TYPE_PARAMETER.EXIT_TYPE_LOWER_BOUNDS)) {
+                //ワイルドカード内で型下限情報があったので，それを登録
+                this.currentBounds = this.popLastBuiltData();
+                if (this.currentBounds instanceof UnresolvedReferenceTypeInfo<?>) {
+                    this.currentBounds = new UnresolvedSuperTypeInfo(
+                            (UnresolvedReferenceTypeInfo<?>) this.currentBounds);
+                }
             }
         }
     }
 
     /**
-     * 型上限情報を取得する
-     * @return　型上限の情報
+     * 型上限(又は下限)情報を取得する
+     * @return　型上限(又は下限)の情報
      */
-    protected UnresolvedTypeInfo<? extends TypeInfo> getCurrentUpperBounds() {
-        return this.currentUpperBounds;
+    protected UnresolvedTypeInfo<? extends TypeInfo> getCurrentBounds() {
+        return this.currentBounds;
     }
 
     /**
@@ -210,8 +230,8 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
                     for (final UnresolvedTypeInfo<? extends TypeInfo> type : this.availableTypeArugments) {
 
                         // C#などは参照型以外も型引数に指定可能なので対処するひつようがあるかも
-                        if (type instanceof UnresolvedReferenceTypeInfo) {
-                            referenceType.addTypeArgument((UnresolvedReferenceTypeInfo<?>) type);
+                        if (type instanceof UnresolvedTypeInfo<?>) {
+                            referenceType.addTypeArgument((UnresolvedTypeInfo<?>) type);
                         }
                     }
 
@@ -288,7 +308,7 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
     /**
      * 型参照でワイルドカードが使われた時の上限情報を記憶しておく
      */
-    private UnresolvedTypeInfo<? extends TypeInfo> currentUpperBounds;
+    private UnresolvedTypeInfo<? extends TypeInfo> currentBounds;
 
     /**
      * 型引数群を記録しておくスタック
@@ -329,4 +349,6 @@ public class TypeBuilder extends CompoundDataBuilder<UnresolvedTypeInfo<? extend
      * 型引数定義部に関する状態管理をするステートマネージャ
      */
     private final TypeDescriptionStateManager typeStateManager = new TypeDescriptionStateManager();
+
+    private final TypeParameterStateManager typePrameterStateManager = new TypeParameterStateManager();
 }

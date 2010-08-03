@@ -15,7 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
  */
 public class TypeArgumentStateManager extends
         StackedAstVisitStateManager<TypeArgumentStateManager.STATE> {
-    
+
     public TypeArgumentStateManager() {
         this.setState(STATE.OUT);
     }

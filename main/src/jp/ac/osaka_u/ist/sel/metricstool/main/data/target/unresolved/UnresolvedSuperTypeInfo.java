@@ -43,7 +43,7 @@ public class UnresolvedSuperTypeInfo implements UnresolvedTypeInfo<SuperTypeInfo
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if ((null == usingClass) || (null == usingMethod) || (null == classInfoManager)) {
+        if ((null == usingClass) || (null == classInfoManager)) {
             throw new NullPointerException();
         }
 
