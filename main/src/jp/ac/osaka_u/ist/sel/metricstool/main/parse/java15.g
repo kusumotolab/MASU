@@ -1148,12 +1148,6 @@ varInitializer
 arrayInitializer
 	:	
 		{pushStartLineColumn();}
-		body:arrayInitializerBody
-		{registLineColumn(#body);}
-	;
-	
-arrayInitializerBody
-	:
 		lc:LCURLY^ {#lc.setType(ARRAY_INIT);}
 			(	initializer
 				(
@@ -1170,8 +1164,8 @@ arrayInitializerBody
 				(COMMA!)?
 			)?
 		RCURLY!
+		{registLineColumn(#arrayInitializer);}
 	;
-
 
 // The two "things" that can initialize an array element are an expression
 // and another (nested) array initializer.
@@ -1521,26 +1515,17 @@ tryBlock
 finallyClause
 	:
 	 	{pushStartLineColumn();}
-		fc:finallyStatement
-		{registLineColumn(#fc);}
-	;
-	
-finallyStatement
-	:
 		"finally"^ compoundStatement
+		{registLineColumn(#finallyClause);}
 	;
+
 
 // an exception handler
 handler
 	:	
 	 	{pushStartLineColumn();}
-		hs:handlerStatement
-		{registLineColumn(#hs);}
-	;
-	
-handlerStatement
-	:
 		"catch"^ LPAREN! lpd:localParameterDeclaration RPAREN! compoundStatement
+		{registLineColumn(#handler);}
 	;
 
 
@@ -1788,12 +1773,19 @@ primaryExpression
 	|	newExpression
 	|	"this"
 	|	"super"
-	|	lp:LPAREN^ {#lp.setType(PAREN_EXPR);} assignmentExpression RPAREN!
+	|	parenthesesExpression
 //	|	LPAREN! assignmentExpression RPAREN!
 		// look for int.class and int[].class
 	|	builtInType
 		( lbt:LBRACK^ {#lbt.setType(ARRAY_DECLARATOR);} RBRACK! )*
 		DOT^ "class"
+	;
+	
+parenthesesExpression
+	:
+		{pushStartLineColumn();}
+		lp:LPAREN^ {#lp.setType(PAREN_EXPR);} assignmentExpression RPAREN!
+		{registLineColumn(#parenthesesExpression);}
 	;
 
 /** Match a, a.b.c refs, a.b.c(...) refs, a.b.c[], a.b.c[].class,
