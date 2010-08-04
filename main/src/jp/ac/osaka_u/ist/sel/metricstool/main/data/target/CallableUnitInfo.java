@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -166,7 +165,20 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 }
 
                 final ExpressionInfo actualParameter = actualParameterArray[index];
-                final TypeInfo actualType = actualParameter.getType();
+                TypeInfo actualType = actualParameter.getType();
+
+                // <?> Ç‚ <? super A>ÇÃèÍçáÇÕjava.lang.ObjectÇ…ïœä∑Ç∑ÇÈ
+                if (actualType instanceof ArbitraryTypeInfo || actualType instanceof SuperTypeInfo) {
+                    final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
+                            .getClassInfo(new String[] { "java", "lang", "Object" });
+                    actualType = new ClassTypeInfo(objectClass);
+                }
+
+                // <? extends B>ÇÃèÍçáÇÕ BÇ…ïœä∑Ç∑ÇÈ
+                else if (actualType instanceof ExtendsTypeInfo) {
+                    actualType = ((ExtendsTypeInfo) actualType).getExtendsType();
+                }
+
                 if (!canCallWith(dummyType, actualType)) {
                     return false;
                 }

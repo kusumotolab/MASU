@@ -269,7 +269,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 {
                     err.println("Resolved as an external element, \"" + this.getName() + "\""
                             + " line:" + this.getFromLine() + " column:" + this.getFromColumn()
-                            + " on \"" + usingClass.getOwnerFile().getName());
+                            + " on \"" + usingClass.getOwnerFile().getName() + "\"");
 
                     final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(methodName);
                     final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
