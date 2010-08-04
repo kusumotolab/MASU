@@ -29,6 +29,7 @@ import jp.ac.osaka_u.ist.sdl.scdetector.settings.CAST_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.CONTROL_FILTER;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.DEPENDENCY_TYPE;
+import jp.ac.osaka_u.ist.sdl.scdetector.settings.DISSOLVE;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.LITERAL_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.MERGE;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.OPERATION_NORMALIZATION;
@@ -56,7 +57,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManage
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.InterProceduralPDG;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.PDG;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.builder.InterproceduralEdgeBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGControlDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
@@ -100,7 +100,7 @@ public class Scorpio extends MetricsTool {
 		scorpio.analyzeTargetFiles();
 
 		// PDGを構築
-		out.println("buildeing PDGs ...");
+		out.println("building PDGs ...");
 		final IPDGNodeFactory pdgNodeFactory = buildPDGs();
 
 		// PDGノードのハッシュデータを構築する
@@ -189,6 +189,14 @@ public class Scorpio extends MetricsTool {
 				e.setArgs(1);
 				e.setRequired(false);
 				options.addOption(e);
+			}
+
+			{
+				final Option f = new Option("f", "dissolve", true, "dissolve");
+				f.setArgName("dissolve");
+				f.setArgs(1);
+				f.setRequired(false);
+				options.addOption(f);
 			}
 
 			{
@@ -382,7 +390,19 @@ public class Scorpio extends MetricsTool {
 					Configuration.INSTANCE.setE(MERGE.FALSE);
 				} else {
 					err.println("Unknown option : " + merge);
-					err.println("\"-m\" option must have \"yes\" or \"no\"");
+					err.println("\"-e\" option must have \"yes\" or \"no\"");
+					System.exit(0);
+				}
+			}
+			if (cmd.hasOption("f")) {
+				final String dissolve = cmd.getOptionValue("f");
+				if (dissolve.equalsIgnoreCase("yes")) {
+					Configuration.INSTANCE.setF(DISSOLVE.TRUE);
+				} else if (dissolve.equalsIgnoreCase("no")) {
+					Configuration.INSTANCE.setF(DISSOLVE.FALSE);
+				} else {
+					err.println("Unknown option : " + dissolve);
+					err.println("\"-f\" option must have \"yes\" or \"no\"");
 					System.exit(0);
 				}
 			}
@@ -407,6 +427,7 @@ public class Scorpio extends MetricsTool {
 					Configuration.INSTANCE.setP(PDG_TYPE.INTRA);
 				} else if (pdg.equalsIgnoreCase("inter")) {
 					Configuration.INSTANCE.setP(PDG_TYPE.INTER);
+					Configuration.INSTANCE.setF(DISSOLVE.TRUE); // Interのときは強制的に細粒度PDG
 				} else {
 					err.println("Unknown option : " + pdg);
 					err
@@ -663,6 +684,7 @@ public class Scorpio extends MetricsTool {
 				DEPENDENCY_TYPE.CONTROL);
 		final boolean execution = Configuration.INSTANCE.getQ().contains(
 				DEPENDENCY_TYPE.EXECUTION);
+		final boolean dissolve = Configuration.INSTANCE.getF().isDissolve();
 		final int dataDistance = Configuration.INSTANCE.getX();
 		final int controlDistance = Configuration.INSTANCE.getY();
 		final int executionDistance = Configuration.INSTANCE.getZ();
@@ -671,7 +693,7 @@ public class Scorpio extends MetricsTool {
 		final TargetMethodInfo[] methods = DataManager.getInstance()
 				.getMethodInfoManager().getTargetMethodInfos().toArray(
 						new TargetMethodInfo[0]);
-		buildPDGs(methods, pdgNodeFactory, data, control, execution,
+		buildPDGs(methods, pdgNodeFactory, data, control, execution, dissolve,
 				dataDistance, controlDistance, executionDistance);
 
 		// 各コンストラクタのPDGを構築
@@ -679,33 +701,32 @@ public class Scorpio extends MetricsTool {
 				.getMethodInfoManager().getTargetConstructorInfos().toArray(
 						new TargetConstructorInfo[0]);
 		buildPDGs(constructors, pdgNodeFactory, data, control, execution,
-				dataDistance, controlDistance, executionDistance);
+				dissolve, dataDistance, controlDistance, executionDistance);
 
 		switch (Configuration.INSTANCE.getP()) {
 
 		case INTRA:
-			// INTRAのときは何もしない
+
+			// 頂点集約が指定されている場合は，PDGを変換する
+			// 現在のところ，頂点集約はInterではできない
+			if (Configuration.INSTANCE.getE().equals(MERGE.TRUE)) {
+				out.println("optimizing PDGs ... ");
+				for (final IntraProceduralPDG pdg : PDGController.SINGLETON
+						.getPDGs()) {
+					PDGMergedNode.merge((IntraProceduralPDG) pdg,
+							pdgNodeFactory);
+				}
+			}
 
 			break;
-		case INTER:
 
-			// メソッド呼び出し依存関係を構築
-			for (final PDG pdg : PDGController.SINGLETON.getPDGs()) {
-				InterProceduralPDG interPDG = (InterProceduralPDG) pdg;
-				(new InterproceduralEdgeBuilder(interPDG)).addEdges();
-			}
+		case INTER:
+			final InterProceduralPDG pdg = new InterProceduralPDG(
+					PDGController.SINGLETON.getPDGs(), data, control, execution);
+
 			break;
 		default:
 			assert false : "Here shouldn't be reached!";
-		}
-
-		// 頂点集約が指定されている場合は，PDGを変換する
-		if (Configuration.INSTANCE.getE().equals(MERGE.TRUE)) {
-			out.println("optimizing PDGs ... ");
-			for (final IntraProceduralPDG pdg : PDGController.SINGLETON
-					.getPDGs()) {
-				PDGMergedNode.merge((IntraProceduralPDG) pdg, pdgNodeFactory);
-			}
 		}
 
 		return pdgNodeFactory;
@@ -714,15 +735,15 @@ public class Scorpio extends MetricsTool {
 	private static <T extends CallableUnitInfo> void buildPDGs(
 			final T[] methods, final IPDGNodeFactory pdgNodeFactory,
 			final boolean data, final boolean control, final boolean execution,
-			final int dataDistance, final int controlDistance,
-			final int executionDistance) {
+			final boolean dissolve, final int dataDistance,
+			final int controlDistance, final int executionDistance) {
 
 		final AtomicInteger index = new AtomicInteger(0);
 		final Thread[] threads = new Thread[Configuration.INSTANCE.getW()];
 		for (int i = 0; i < threads.length; i++) {
 
 			threads[i] = new Thread(new PDGBuildingThread<T>(methods, index,
-					pdgNodeFactory, data, control, execution, true,
+					pdgNodeFactory, data, control, execution, true, dissolve,
 					dataDistance, controlDistance, executionDistance));
 			MetricsToolSecurityManager.getInstance().addPrivilegeThread(
 					threads[i]);
@@ -753,6 +774,13 @@ public class Scorpio extends MetricsTool {
 				}
 			}
 
+			// 細粒度の時はControlノードは登録しない
+			if (Configuration.INSTANCE.getF().isDissolve()) {
+				if (pdgNode instanceof PDGControlNode) {
+					continue ALLNODE;
+				}
+			}
+
 			// 小さいメソッドは登録しない
 			switch (Configuration.INSTANCE.getM()) {
 			case UNHASHED:
@@ -764,13 +792,31 @@ public class Scorpio extends MetricsTool {
 
 				// 集約ノード以外の時は普通に処理
 				else {
-					final PDG pdg = PDGController.SINGLETON.getPDG(pdgNode);
-					if (pdg.getNumberOfNodes() < Configuration.INSTANCE.getS()) {
-						continue ALLNODE;
+
+					switch (Configuration.INSTANCE.getP()) {
+					case INTRA:
+
+						final PDG pdg = PDGController.SINGLETON.getPDG(pdgNode);
+						if (pdg.getNumberOfNodes() < Configuration.INSTANCE
+								.getS()) {
+							continue ALLNODE;
+						}
+
+						break;
+
+					case INTER:
+
+						// Interの時は何もしない
+
+						break;
+					default:
+						assert false : "Here shouldn't be reached!";
 					}
+
 				}
 				break;
 			default:
+				break;
 			}
 
 			final ExecutableElementInfo element = pdgNode.getCore();
