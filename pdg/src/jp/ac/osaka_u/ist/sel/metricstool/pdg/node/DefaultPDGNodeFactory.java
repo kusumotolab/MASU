@@ -1,6 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg.node;
 
-
+import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,133 +19,147 @@ import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGStatementNode;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 
-
 public class DefaultPDGNodeFactory implements IPDGNodeFactory {
 
-    private final ConcurrentMap<ExecutableElementInfo, PDGNode<?>> elementToNodeMap;
+	private final ConcurrentMap<ExecutableElementInfo, PDGNode<?>> elementToNodeMap;
 
-    public DefaultPDGNodeFactory() {
-        this.elementToNodeMap = new ConcurrentHashMap<ExecutableElementInfo, PDGNode<?>>();
-    }
+	public DefaultPDGNodeFactory() {
+		this.elementToNodeMap = new ConcurrentHashMap<ExecutableElementInfo, PDGNode<?>>();
+	}
 
-    @Override
-    public PDGControlNode makeControlNode(final CFGControlNode cfgNode) {
+	@Override
+	public PDGControlNode makeControlNode(final CFGControlNode cfgNode) {
 
-        if (null == cfgNode) {
-            throw new IllegalArgumentException();
-        }
+		if (null == cfgNode) {
+			throw new IllegalArgumentException();
+		}
 
-        final ConditionInfo core = cfgNode.getCore();
-        PDGControlNode node = (PDGControlNode) this.getNode(core);
-        if (null != node) {
-            return node;
-        }
+		final ConditionInfo core = cfgNode.getCore();
+		PDGControlNode node = (PDGControlNode) this.getNode(core);
+		if (null != node) {
+			return node;
+		}
 
-        if (cfgNode instanceof CFGForeachControlNode) {
-            node = new PDGForeachControlNode((CFGForeachControlNode) cfgNode);
-        }
+		if (cfgNode instanceof CFGForeachControlNode) {
+			node = new PDGForeachControlNode((CFGForeachControlNode) cfgNode);
+		}
 
-        else {
-            node = new PDGControlNode((CFGControlNode) cfgNode);
-        }
+		else {
+			node = new PDGControlNode((CFGControlNode) cfgNode);
+		}
 
-        this.elementToNodeMap.put(core, node);
+		this.elementToNodeMap.put(core, node);
 
-        return node;
-    }
+		return node;
+	}
 
-    @Override
-    public PDGNormalNode<?> makeNormalNode(final CFGNormalNode<?> cfgNode) {
+	@Override
+	public PDGNormalNode<?> makeNormalNode(final CFGNormalNode<?> cfgNode) {
 
-        if (null == cfgNode) {
-            throw new IllegalArgumentException();
-        }
+		if (null == cfgNode) {
+			throw new IllegalArgumentException();
+		}
 
-        final ExecutableElementInfo core = cfgNode.getCore();
-        PDGNormalNode<?> node = (PDGNormalNode<?>) this.getNode(core);
-        if (null != node) {
-            return node;
-        }
+		final ExecutableElementInfo core = cfgNode.getCore();
+		PDGNormalNode<?> node = (PDGNormalNode<?>) this.getNode(core);
+		if (null != node) {
+			return node;
+		}
 
-        if (cfgNode instanceof CFGCaseEntryNode) {
-            node = new PDGCaseEntryNode((CFGCaseEntryNode) cfgNode);
-        }
+		if (cfgNode instanceof CFGCaseEntryNode) {
+			node = new PDGCaseEntryNode((CFGCaseEntryNode) cfgNode);
+		}
 
-        else if (cfgNode instanceof CFGExpressionNode) {
-            node = new PDGExpressionNode((CFGExpressionNode) cfgNode);
-        }
+		else if (cfgNode instanceof CFGExpressionNode) {
+			node = new PDGExpressionNode((CFGExpressionNode) cfgNode);
+		}
 
-        else if (cfgNode instanceof CFGCaughtExceptionNode) {
-            node = new PDGCaughtExceptionNode((CFGCaughtExceptionNode) cfgNode);
-        }
+		else if (cfgNode instanceof CFGCaughtExceptionNode) {
+			node = new PDGCaughtExceptionNode((CFGCaughtExceptionNode) cfgNode);
+		}
 
-        else if (cfgNode instanceof CFGEmptyNode) {
-            node = new PDGEmptyNode((CFGEmptyNode) cfgNode);
-        }
+		else if (cfgNode instanceof CFGEmptyNode) {
+			node = new PDGEmptyNode((CFGEmptyNode) cfgNode);
+		}
 
-        else if (cfgNode instanceof CFGExpressionStatementNode) {
-            node = new PDGExpressionStatementNode((CFGExpressionStatementNode) cfgNode);
-        }
+		else if (cfgNode instanceof CFGExpressionStatementNode) {
+			node = new PDGExpressionStatementNode(
+					(CFGExpressionStatementNode) cfgNode);
+		}
 
-        else if (cfgNode instanceof CFGStatementNode<?>) {
+		else if (cfgNode instanceof CFGStatementNode<?>) {
 
-            if (cfgNode instanceof CFGReturnStatementNode) {
-                node = new PDGReturnStatementNode((CFGReturnStatementNode) cfgNode);
-            }
+			if (cfgNode instanceof CFGReturnStatementNode) {
+				node = new PDGReturnStatementNode(
+						(CFGReturnStatementNode) cfgNode);
+			}
 
-            else {
-                node = new PDGStatementNode<CFGStatementNode<?>>((CFGStatementNode<?>) cfgNode);
-            }
-        }
+			else {
+				node = new PDGStatementNode<CFGStatementNode<?>>(
+						(CFGStatementNode<?>) cfgNode);
+			}
+		}
 
-        else {
-            throw new IllegalStateException();
-        }
+		else {
+			throw new IllegalStateException();
+		}
 
-        this.elementToNodeMap.put(core, node);
+		this.elementToNodeMap.put(core, node);
 
-        return node;
-    }
+		return node;
+	}
 
-    @Override
-    public PDGNode<?> getNode(final ExecutableElementInfo element) {
+	@Override
+	public PDGNode<?> getNode(final ExecutableElementInfo element) {
 
-        if (null == element) {
-            throw new IllegalArgumentException();
-        }
+		if (null == element) {
+			throw new IllegalArgumentException();
+		}
 
-        return this.elementToNodeMap.get(element);
-    }
+		return this.elementToNodeMap.get(element);
+	}
 
-    @Override
-    public SortedSet<PDGNode<?>> getAllNodes() {
-        final SortedSet<PDGNode<?>> nodes = new TreeSet<PDGNode<?>>();
-        nodes.addAll(this.elementToNodeMap.values());
-        return nodes;
-    }
+	@Override
+	public SortedSet<PDGNode<?>> getAllNodes() {
+		final SortedSet<PDGNode<?>> nodes = new TreeSet<PDGNode<?>>();
+		nodes.addAll(this.elementToNodeMap.values());
+		return nodes;
+	}
 
-    @Override
-    public void addNode(PDGNode<?> node) {
+	@Override
+	public void addNode(final PDGNode<?> node) {
 
-        if (null == node) {
-            throw new IllegalArgumentException();
-        }
+		if (null == node) {
+			throw new IllegalArgumentException();
+		}
 
-        final ExecutableElementInfo element = node.getCore();
-        this.elementToNodeMap.put(element, node);
-    }
+		final ExecutableElementInfo element = node.getCore();
+		this.elementToNodeMap.put(element, node);
+	}
 
-    @Override
-    public void removeNode(ExecutableElementInfo element) {
+	@Override
+	public void addNodes(final Collection<PDGNode<?>> nodes) {
 
-        if (null == element) {
-            throw new IllegalArgumentException();
-        }
+		if (null == nodes) {
+			throw new IllegalArgumentException();
+		}
 
-        this.elementToNodeMap.remove(element);
-    }
+		for (final PDGNode<?> node : nodes) {
+			this.addNode(node);
+		}
+	}
 
-    public int getNodeCount() {
-        return this.elementToNodeMap.size();
-    }
+	@Override
+	public void removeNode(ExecutableElementInfo element) {
+
+		if (null == element) {
+			throw new IllegalArgumentException();
+		}
+
+		this.elementToNodeMap.remove(element);
+	}
+
+	public int getNodeCount() {
+		return this.elementToNodeMap.size();
+	}
 }

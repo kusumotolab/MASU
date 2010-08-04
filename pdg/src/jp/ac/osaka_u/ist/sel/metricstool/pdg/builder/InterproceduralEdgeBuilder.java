@@ -31,7 +31,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.InterProceduralPDG;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 public class InterproceduralEdgeBuilder {
-
+/*
 	public InterproceduralEdgeBuilder(final InterProceduralPDG pdg) {
 		this.pdg = pdg;
 	}
@@ -254,5 +254,5 @@ public class InterproceduralEdgeBuilder {
 		}
 	}
 
-	private final InterProceduralPDG pdg;
+	private final InterProceduralPDG pdg;*/
 }

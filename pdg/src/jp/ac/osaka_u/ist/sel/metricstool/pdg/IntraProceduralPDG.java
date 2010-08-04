@@ -1,7 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -55,6 +57,11 @@ public class IntraProceduralPDG extends PDG {
 	 * PDGの出口ノード
 	 */
 	protected final SortedSet<PDGNode<?>> exitNodes;
+
+	/**
+	 * 引数ノードを管理する変数
+	 */
+	protected final Map<ParameterInfo, PDGParameterNode> parameterNodes;
 
 	final CallableUnitInfo unit;
 
@@ -124,6 +131,7 @@ public class IntraProceduralPDG extends PDG {
 
 		this.enterNode = PDGMethodEnterNode.createNode(unit);
 		this.exitNodes = new TreeSet<PDGNode<?>>();
+		this.parameterNodes = new HashMap<ParameterInfo, PDGParameterNode>();
 
 		this.unit = unit;
 
@@ -247,6 +255,10 @@ public class IntraProceduralPDG extends PDG {
 		return Collections.unmodifiableSortedSet(this.exitNodes);
 	}
 
+	public final PDGParameterNode getParameterNode(final ParameterInfo parameter) {
+		return this.parameterNodes.get(parameter);
+	}
+
 	public boolean isBuiltDataDependency() {
 		return this.buildDataDependence;
 	}
@@ -292,6 +304,7 @@ public class IntraProceduralPDG extends PDG {
 					.getInstance(parameter);
 			this.pdgNodeFactory.addNode(pdgParameterNode);
 			this.nodes.add(pdgParameterNode);
+			this.parameterNodes.put(parameter, pdgParameterNode);
 
 			if (null != cfgEnterNode) {
 				this.buildDataDependence(cfgEnterNode, pdgParameterNode,
