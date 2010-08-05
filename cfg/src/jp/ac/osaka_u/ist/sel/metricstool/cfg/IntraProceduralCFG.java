@@ -1320,7 +1320,7 @@ public class IntraProceduralCFG extends CFG {
 
 	private static final ConcurrentMap<StatementInfo, CFG> statementCFG = new ConcurrentHashMap<StatementInfo, CFG>();
 
-	static CFG getCFG(final StatementInfo statement,
+	static synchronized CFG getCFG(final StatementInfo statement,
 			final ICFGNodeFactory nodeFactory) {
 
 		CFG cfg = statementCFG.get(statement);

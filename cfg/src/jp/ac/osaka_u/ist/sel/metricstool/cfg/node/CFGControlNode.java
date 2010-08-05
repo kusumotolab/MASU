@@ -57,7 +57,7 @@ public class CFGControlNode extends CFGNode<ConditionInfo> {
 		final ExpressionInfo newCondition = LocalVariableUsageInfo.getInstance(
 				newStatement.getDeclaredLocalVariable(), true, false,
 				ownerConditionalBlock.getOuterCallableUnit(), toLine,
-				toColumn, toLine, toColumn); // ‚í‚´‚ÆtoColumn‚É‚µ‚Ä‚¢‚é
+				toColumn, toLine, toColumn); // ‚í‚´‚ÆtoLine, toColumn‚É‚µ‚Ä‚¢‚é
 		newCondition.setOwnerConditionalBlock(ownerConditionalBlock);
 		newCondition.setOwnerExecutableElement(ownerConditionalBlock);
 		final LinkedList<CFGNode<?>> dissolvedNodeList = new LinkedList<CFGNode<?>>();

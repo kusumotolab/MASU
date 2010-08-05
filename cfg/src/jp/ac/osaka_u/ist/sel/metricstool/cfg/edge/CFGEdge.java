@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg.edge;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGNode;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 
 public abstract class CFGEdge implements Comparable<CFGEdge> {
 
@@ -15,6 +16,13 @@ public abstract class CFGEdge implements Comparable<CFGEdge> {
 
 		this.fromNode = fromNode;
 		this.toNode = toNode;
+
+		if (!((ExecutableElementInfo) fromNode.getCore()).getOwnerMethod()
+				.equals(
+						((ExecutableElementInfo) toNode.getCore())
+								.getOwnerMethod())) {
+			System.out.println();
+		}
 	}
 
 	public abstract String getDependenceTypeString();
