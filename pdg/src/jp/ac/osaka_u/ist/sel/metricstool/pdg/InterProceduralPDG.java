@@ -21,12 +21,13 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VoidTypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGAcrossDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGAcrossEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGAcrossExecutionDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGParameterDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGReturnDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.DefaultPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
@@ -219,8 +220,8 @@ public class InterProceduralPDG extends PDG {
 						.getParameterNode(parameter);
 				for (final PDGEdge edge : parameterNode.getForwardEdges()) {
 					final PDGNode<?> referenceNode = edge.getToNode();
-					final PDGAcrossDataDependenceEdge acrossEdge = new PDGAcrossDataDependenceEdge(
-							definitionNode, referenceNode, variable);
+					final PDGParameterDataDependenceEdge acrossEdge = new PDGParameterDataDependenceEdge(
+							definitionNode, referenceNode, variable, call);
 					this.acrossEdges.add(acrossEdge);
 					definitionNode.addForwardEdge(acrossEdge);
 					referenceNode.addBackwardEdge(acrossEdge);
@@ -286,8 +287,8 @@ public class InterProceduralPDG extends PDG {
 				final VariableInfo<?> variable = entry.getValue();
 
 				for (final PDGNode<?> referenceNode : referenceNodes) {
-					final PDGAcrossDataDependenceEdge acrossEdge = new PDGAcrossDataDependenceEdge(
-							definitionNode, referenceNode, variable);
+					final PDGReturnDataDependenceEdge acrossEdge = new PDGReturnDataDependenceEdge(
+							definitionNode, referenceNode, variable, call);
 					definitionNode.addForwardEdge(acrossEdge);
 					referenceNode.addBackwardEdge(acrossEdge);
 					this.acrossEdges.add(acrossEdge);

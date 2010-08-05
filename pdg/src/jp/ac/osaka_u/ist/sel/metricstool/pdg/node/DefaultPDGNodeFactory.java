@@ -28,7 +28,8 @@ public class DefaultPDGNodeFactory implements IPDGNodeFactory {
 	}
 
 	@Override
-	public PDGControlNode makeControlNode(final CFGControlNode cfgNode) {
+	public synchronized PDGControlNode makeControlNode(
+			final CFGControlNode cfgNode) {
 
 		if (null == cfgNode) {
 			throw new IllegalArgumentException();
@@ -54,7 +55,8 @@ public class DefaultPDGNodeFactory implements IPDGNodeFactory {
 	}
 
 	@Override
-	public PDGNormalNode<?> makeNormalNode(final CFGNormalNode<?> cfgNode) {
+	public synchronized PDGNormalNode<?> makeNormalNode(
+			final CFGNormalNode<?> cfgNode) {
 
 		if (null == cfgNode) {
 			throw new IllegalArgumentException();
@@ -127,7 +129,7 @@ public class DefaultPDGNodeFactory implements IPDGNodeFactory {
 	}
 
 	@Override
-	public void addNode(final PDGNode<?> node) {
+	public synchronized void addNode(final PDGNode<?> node) {
 
 		if (null == node) {
 			throw new IllegalArgumentException();
@@ -138,7 +140,7 @@ public class DefaultPDGNodeFactory implements IPDGNodeFactory {
 	}
 
 	@Override
-	public void addNodes(final Collection<PDGNode<?>> nodes) {
+	public synchronized void addNodes(final Collection<PDGNode<?>> nodes) {
 
 		if (null == nodes) {
 			throw new IllegalArgumentException();
@@ -150,7 +152,7 @@ public class DefaultPDGNodeFactory implements IPDGNodeFactory {
 	}
 
 	@Override
-	public void removeNode(ExecutableElementInfo element) {
+	public synchronized void removeNode(ExecutableElementInfo element) {
 
 		if (null == element) {
 			throw new IllegalArgumentException();
