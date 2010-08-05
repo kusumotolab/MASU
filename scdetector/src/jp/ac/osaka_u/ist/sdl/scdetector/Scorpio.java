@@ -389,8 +389,9 @@ public class Scorpio extends MetricsTool {
 				} else if (merge.equalsIgnoreCase("no")) {
 					Configuration.INSTANCE.setE(MERGE.FALSE);
 				} else {
-					err.println("Unknown option : " + merge);
-					err.println("\"-e\" option must have \"yes\" or \"no\"");
+					System.err.println("Unknown option : " + merge);
+					System.err
+							.println("\"-e\" option must have \"yes\" or \"no\"");
 					System.exit(0);
 				}
 			}
@@ -401,8 +402,9 @@ public class Scorpio extends MetricsTool {
 				} else if (dissolve.equalsIgnoreCase("no")) {
 					Configuration.INSTANCE.setF(DISSOLVE.FALSE);
 				} else {
-					err.println("Unknown option : " + dissolve);
-					err.println("\"-f\" option must have \"yes\" or \"no\"");
+					System.err.println("Unknown option : " + dissolve);
+					System.err
+							.println("\"-f\" option must have \"yes\" or \"no\"");
 					System.exit(0);
 				}
 			}
@@ -414,8 +416,8 @@ public class Scorpio extends MetricsTool {
 				} else if (smallmethod.equalsIgnoreCase("unhashed")) {
 					Configuration.INSTANCE.setM(SMALL_METHOD.UNHASHED);
 				} else {
-					err.println("Unknown option : " + smallmethod);
-					err
+					System.err.println("Unknown option : " + smallmethod);
+					System.err
 							.println("\"-m\" option must have \"hashed\" or \"unhashed\"");
 					System.exit(0);
 				}
@@ -429,8 +431,8 @@ public class Scorpio extends MetricsTool {
 					Configuration.INSTANCE.setP(PDG_TYPE.INTER);
 					Configuration.INSTANCE.setF(DISSOLVE.TRUE); // Interのときは強制的に細粒度PDG
 				} else {
-					err.println("Unknown option : " + pdg);
-					err
+					System.err.println("Unknown option : " + pdg);
+					System.err
 							.println("\"-p\" option must have \"intra\" or \"inter\"");
 					System.exit(0);
 				}
@@ -448,8 +450,8 @@ public class Scorpio extends MetricsTool {
 					} else if (dependency.equalsIgnoreCase("execution")) {
 						Configuration.INSTANCE.addQ(DEPENDENCY_TYPE.EXECUTION);
 					} else {
-						err.println("Unknown option : " + dependency);
-						err
+						System.err.println("Unknown option : " + dependency);
+						System.err
 								.println("\"-q\" option must have \"data\", \"control\", or \"execution\"");
 						System.exit(0);
 					}
@@ -471,8 +473,8 @@ public class Scorpio extends MetricsTool {
 					} else if (slice.equalsIgnoreCase("forward")) {
 						Configuration.INSTANCE.addT(SLICE_TYPE.FORWARD);
 					} else {
-						err.println("Unknown option : " + slice);
-						err
+						System.err.println("Unknown option : " + slice);
+						System.err
 								.println("\"-t\" option must have \"backward\", or \"forward\"");
 						System.exit(0);
 					}
@@ -485,8 +487,9 @@ public class Scorpio extends MetricsTool {
 				} else if (control.equalsIgnoreCase("no")) {
 					Configuration.INSTANCE.setU(CONTROL_FILTER.NO_USE);
 				} else {
-					err.println("Unknown option : " + control);
-					err.println("\"-u\" option must have \"yes\" or \"no\"");
+					System.err.println("Unknown option : " + control);
+					System.err
+							.println("\"-u\" option must have \"yes\" or \"no\"");
 					System.exit(0);
 				}
 			}
@@ -501,8 +504,9 @@ public class Scorpio extends MetricsTool {
 				} else if (verbose.equalsIgnoreCase("no")) {
 					Configuration.INSTANCE.setV(VERBOSE.FALSE);
 				} else {
-					err.println("Unknown option : " + verbose);
-					err.println("\"-v\" option must have \"yes\" or \"no\"");
+					System.err.println("Unknown option : " + verbose);
+					System.err
+							.println("\"-v\" option must have \"yes\" or \"no\"");
 					System.exit(0);
 				}
 			}
@@ -531,8 +535,8 @@ public class Scorpio extends MetricsTool {
 				} else if (text.equalsIgnoreCase("all")) {
 					Configuration.INSTANCE.setPV(VARIABLE_NORMALIZATION.ALL);
 				} else {
-					err.println("Unknown option : " + text);
-					err
+					System.err.println("Unknown option : " + text);
+					System.err
 							.println("\"-pv\" option must have \"no\", \"type\", or \"all\"");
 					System.exit(0);
 				}
@@ -550,8 +554,8 @@ public class Scorpio extends MetricsTool {
 				} else if (text.equalsIgnoreCase("all")) {
 					Configuration.INSTANCE.setPI(CALL_NORMALIZATION.ALL);
 				} else {
-					err.println("Unknown option : " + text);
-					err
+					System.err.println("Unknown option : " + text);
+					System.err
 							.println("\"-pi\" option must have \"no\", \"type_with_arg\", \"type_without_arg\", or \"all\"");
 					System.exit(0);
 				}
@@ -565,8 +569,8 @@ public class Scorpio extends MetricsTool {
 				} else if (text.equalsIgnoreCase("all")) {
 					Configuration.INSTANCE.setPO(OPERATION_NORMALIZATION.ALL);
 				} else {
-					err.println("Unknown option : " + text);
-					err
+					System.err.println("Unknown option : " + text);
+					System.err
 							.println("\"-po\" option must have \"no\", \"type\", or \"all\"");
 					System.exit(0);
 				}
@@ -580,8 +584,8 @@ public class Scorpio extends MetricsTool {
 				} else if (text.equalsIgnoreCase("all")) {
 					Configuration.INSTANCE.setPL(LITERAL_NORMALIZATION.ALL);
 				} else {
-					err.println("Unknown option : " + text);
-					err
+					System.err.println("Unknown option : " + text);
+					System.err
 							.println("\"-pl\" option must have \"no\", \"type\", or \"all\"");
 					System.exit(0);
 				}
@@ -595,8 +599,8 @@ public class Scorpio extends MetricsTool {
 				} else if (text.equalsIgnoreCase("all")) {
 					Configuration.INSTANCE.setPC(CAST_NORMALIZATION.ALL);
 				} else {
-					err.println("Unknown option : " + text);
-					err
+					System.err.println("Unknown option : " + text);
+					System.err
 							.println("\"-pc\" option must have \"no\", \"type\", or \"all\"");
 					System.exit(0);
 				}
@@ -608,10 +612,25 @@ public class Scorpio extends MetricsTool {
 				} else if (text.equalsIgnoreCase("all")) {
 					Configuration.INSTANCE.setPR(REFERENCE_NORMALIZATION.ALL);
 				} else {
-					err.println("Unknown option : " + text);
-					err.println("\"-pr\" option must have \"no\" or \"all\"");
+					System.err.println("Unknown option : " + text);
+					System.err
+							.println("\"-pr\" option must have \"no\" or \"all\"");
 					System.exit(0);
 				}
+			}
+
+			// コマンドライン設定にエラーがあるかどうかを確認
+			if (Configuration.INSTANCE.getP().useInterProceduralPDG()
+					&& Configuration.INSTANCE.getE().isMerge()) {
+				System.err
+						.println("-e option cannot be used in interprocedural PDG mode.");
+				System.exit(0);
+			}
+
+			if (Configuration.INSTANCE.getF().isDissolve()
+					&& Configuration.INSTANCE.getE().isMerge()) {
+				System.err
+						.println("-f and -e options cannot be set as \"yes\" at the same time.");
 			}
 
 		} catch (ParseException e) {
@@ -622,18 +641,8 @@ public class Scorpio extends MetricsTool {
 
 	private static void doSettings() {
 
+		// 情報表示用設定
 		try {
-
-			// 解析用設定
-			Settings.getInstance().setLanguage(Configuration.INSTANCE.getL());
-			for (final String directory : Configuration.INSTANCE.getD()) {
-				Settings.getInstance().addTargetDirectory(directory);
-			}
-			Settings.getInstance().setVerbose(true);
-			Settings.getInstance().setThreadNumber(
-					Configuration.INSTANCE.getW());
-
-			// 情報表示用設定
 			final Class<?> metricstool = MetricsTool.class;
 			final Field out = metricstool.getDeclaredField("out");
 			out.setAccessible(true);
@@ -667,15 +676,26 @@ public class Scorpio extends MetricsTool {
 							}
 						});
 			}
-
 		} catch (NoSuchFieldException e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
+
+		// 解析用設定
+		Settings.getInstance().setLanguage(Configuration.INSTANCE.getL());
+		for (final String directory : Configuration.INSTANCE.getD()) {
+			Settings.getInstance().addTargetDirectory(directory);
+		}
+		Settings.getInstance().setVerbose(true);
+		Settings.getInstance().setThreadNumber(Configuration.INSTANCE.getW());
 	}
 
 	private static final IPDGNodeFactory buildPDGs() {
+
+		// -f yes のときにマルチスレッドでPDGがうまく構築できないため，このような処理を追加している
+		final int threadNumber = Configuration.INSTANCE.getW();
+		Configuration.INSTANCE.setW(1);
 
 		final IPDGNodeFactory pdgNodeFactory = new DefaultPDGNodeFactory();
 		final boolean data = Configuration.INSTANCE.getQ().contains(
@@ -728,6 +748,8 @@ public class Scorpio extends MetricsTool {
 		default:
 			assert false : "Here shouldn't be reached!";
 		}
+
+		Configuration.INSTANCE.setW(threadNumber);
 
 		return pdgNodeFactory;
 	}
