@@ -6,6 +6,7 @@ import java.util.List;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArbitraryTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
@@ -13,6 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExtendsTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalParameterInfo;
@@ -25,6 +27,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.PrimitiveTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SuperTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
@@ -161,6 +164,29 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                         classInfoManager, fieldInfoManager, methodInfoManager);
                 return resolve;
             }
+        }
+
+        // <?>や<? super A>のカッコ内の型の時
+        else if (qualifierType instanceof ArbitraryTypeInfo
+                || qualifierType instanceof SuperTypeInfo) {
+
+            final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
+                    .getClassInfo(new String[] { "java", "lang", "Object" });
+            final MethodCallInfo resolve = this.resolve(usingClass, usingMethod, qualifierUsage,
+                    new ClassTypeInfo(objectClass), methodName, actualParameters, typeArguments,
+                    fromLine, fromColumn, toLine, toColumn, classInfoManager, fieldInfoManager,
+                    methodInfoManager);
+            return resolve;
+        }
+
+        // <? extends B> のカッコ内の型の時
+        else if (qualifierType instanceof ExtendsTypeInfo) {
+
+            final TypeInfo extendsType = ((ExtendsTypeInfo) qualifierType).getExtendsType();
+            final MethodCallInfo resolve = this.resolve(usingClass, usingMethod, qualifierUsage,
+                    extendsType, methodName, actualParameters, typeArguments, fromLine, fromColumn,
+                    toLine, toColumn, classInfoManager, fieldInfoManager, methodInfoManager);
+            return resolve;
         }
 
         // 親が解決できなかった場合はどうしようもない
@@ -351,6 +377,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             }
         }
 
+        assert false : "Here should not be reached!";
         return null;
     }
 
