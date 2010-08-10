@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main;
 
 
+import java.io.File;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -99,13 +100,22 @@ public class Settings {
 
         if (language.equalsIgnoreCase("java") || language.equalsIgnoreCase("java15")) {
             this.language = LANGUAGE.JAVA15;
-            this.libraries.add("./resource/jdk160java.lang.jar");
+            final File file = new File("./resource/jdk160java.lang.jar");
+            if (file.exists()) {
+                this.libraries.add(file.getAbsolutePath());
+            }
         } else if (language.equalsIgnoreCase("java14")) {
             this.language = LANGUAGE.JAVA14;
-            this.libraries.add("./resource/jdk142java.lang.jar");
+            final File file = new File("./resource/jdk142java.lang.jar");
+            if (file.exists()) {
+                this.libraries.add(file.getAbsolutePath());
+            }
         } else if (language.equalsIgnoreCase("java13")) {
             this.language = LANGUAGE.JAVA13;
-            this.libraries.add("./resource/jdk142java.lang.jar");
+            final File file = new File("./resource/jdk142java.lang.jar");
+            if (file.exists()) {
+                this.libraries.add(file.getAbsolutePath());
+            }
             // }else if (language.equalsIgnoreCase("cpp")) {
             // return LANGUAGE.C_PLUS_PLUS;
             // }else if (language.equalsIgnoreCase("csharp")) {
