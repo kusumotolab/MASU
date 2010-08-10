@@ -31,7 +31,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGReturnDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.DefaultPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGParameterNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGParameterInNode;
 
 public class InterProceduralPDG extends PDG {
 
@@ -216,7 +216,7 @@ public class InterProceduralPDG extends PDG {
 				final VariableInfo<?> variable = definitionVariables.get(index);
 
 				final ParameterInfo parameter = parameters.get(index);
-				final PDGParameterNode parameterNode = calleePDG
+				final PDGParameterInNode parameterNode = calleePDG
 						.getParameterNode(parameter);
 				for (final PDGEdge edge : parameterNode.getForwardEdges()) {
 					final PDGNode<?> referenceNode = edge.getToNode();

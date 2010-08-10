@@ -37,7 +37,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGMethodEnterNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNormalNode;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGParameterNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGParameterInNode;
 
 /**
  * 手続き内PDGを表すクラス
@@ -61,7 +61,7 @@ public class IntraProceduralPDG extends PDG {
 	/**
 	 * 引数ノードを管理する変数
 	 */
-	protected final Map<ParameterInfo, PDGParameterNode> parameterNodes;
+	protected final Map<ParameterInfo, PDGParameterInNode> parameterNodes;
 
 	final CallableUnitInfo unit;
 
@@ -131,7 +131,7 @@ public class IntraProceduralPDG extends PDG {
 
 		this.enterNode = PDGMethodEnterNode.createNode(unit);
 		this.exitNodes = new TreeSet<PDGNode<?>>();
-		this.parameterNodes = new HashMap<ParameterInfo, PDGParameterNode>();
+		this.parameterNodes = new HashMap<ParameterInfo, PDGParameterInNode>();
 
 		this.unit = unit;
 
@@ -255,7 +255,7 @@ public class IntraProceduralPDG extends PDG {
 		return Collections.unmodifiableSortedSet(this.exitNodes);
 	}
 
-	public final PDGParameterNode getParameterNode(final ParameterInfo parameter) {
+	public final PDGParameterInNode getParameterNode(final ParameterInfo parameter) {
 		return this.parameterNodes.get(parameter);
 	}
 
@@ -300,7 +300,7 @@ public class IntraProceduralPDG extends PDG {
 		// unitの引数を処理
 		for (final ParameterInfo parameter : this.unit.getParameters()) {
 
-			final PDGParameterNode pdgParameterNode = PDGParameterNode
+			final PDGParameterInNode pdgParameterNode = PDGParameterInNode
 					.getInstance(parameter);
 			this.pdgNodeFactory.addNode(pdgParameterNode);
 			this.nodes.add(pdgParameterNode);
