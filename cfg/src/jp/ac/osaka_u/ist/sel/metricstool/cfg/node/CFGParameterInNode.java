@@ -14,9 +14,9 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterUsageInfo;
  * @author higo
  * 
  */
-public class CFGParameterNode extends CFGNormalNode<ParameterUsageInfo> {
+public class CFGParameterInNode extends CFGNormalNode<ParameterUsageInfo> {
 
-    public static CFGParameterNode getInstance(final ParameterInfo parameter) {
+    public static CFGParameterInNode getInstance(final ParameterInfo parameter) {
 
         if (null == parameter) {
             throw new IllegalArgumentException();
@@ -31,10 +31,10 @@ public class CFGParameterNode extends CFGNormalNode<ParameterUsageInfo> {
         final ParameterUsageInfo usage = ParameterUsageInfo.getInstance(parameter, false, true,
                 ownerUnit, fromLine, fromColumn, toLine, toColumn);
 
-        return new CFGParameterNode(usage);
+        return new CFGParameterInNode(usage);
     }
 
-    private CFGParameterNode(final ParameterUsageInfo parameterUsage) {
+    private CFGParameterInNode(final ParameterUsageInfo parameterUsage) {
         super(parameterUsage);
     }
 

@@ -109,7 +109,7 @@ public class DefaultCFGNodeFactory implements ICFGNodeFactory {
 		}
 
 		else if (element instanceof ParameterInfo) {
-			node = CFGParameterNode.getInstance((ParameterInfo) element);
+			node = CFGParameterInNode.getInstance((ParameterInfo) element);
 		}
 
 		else if (element instanceof ExecutableElementInfo) {
