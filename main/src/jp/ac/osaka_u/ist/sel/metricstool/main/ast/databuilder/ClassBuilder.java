@@ -4,10 +4,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 import java.util.Stack;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ClassDefinitionStateManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ClassDefinitionStateManager.CLASS_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ModifiersDefinitionStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.NameStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ClassDefinitionStateManager.CLASS_STATE_CHANGE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
@@ -79,8 +79,8 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
         if (type.equals(CLASS_STATE_CHANGE.ENTER_CLASS_DEF)) {
             //クラス定義に入ったら，とりあえず新しいクラス定義を登録しに行く
             final AstVisitEvent trigger = event.getTrigger();
-            this.startClassDefinition(trigger.getStartLine(), trigger.getStartColumn(), trigger
-                    .getEndLine(), trigger.getEndColumn());
+            this.startClassDefinition(trigger.getStartLine(), trigger.getStartColumn(),
+                    trigger.getEndLine(), trigger.getEndColumn());
 
         } else if (type.equals(CLASS_STATE_CHANGE.EXIT_CLASS_DEF)) {
             //クラス定義部から出たので，データ構築を終了して後始末を行う．
@@ -175,8 +175,8 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
      */
     protected void startClassDefinition(final int startLine, final int startColumn,
             final int endLine, final int endColumn) {
-        final FileInfo currentFile = DataManager.getInstance().getFileInfoManager().getCurrentFile(
-                Thread.currentThread());
+        final FileInfo currentFile = DataManager.getInstance().getFileInfoManager()
+                .getCurrentFile(Thread.currentThread());
         assert null != currentFile : "Illegal state: the file information was not registered to FileInfoManager";
 
         final UnresolvedClassInfo classInfo = new UnresolvedClassInfo(currentFile,
@@ -215,6 +215,16 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
      */
     protected void registClassName(final String[] name) {
         if (this.hasBuildingClassInfo() && 0 < name.length) {
+            final int classStackSize = this.buildingClassStack.size();
+
+            if (classStackSize > 1
+                    && !(this.buildManager.getOuterUnit() instanceof UnresolvedClassInfo)) {
+
+                // 外側がメソッドのインナークラスの場合，外側のクラスをから見て何番目のインナークラスかを示すIDを振る
+                final int id = this.buildingClassStack.get(classStackSize - 2).getInnerClasses()
+                        .size();
+                name[0] = (id + 1) + name[0];
+            }
             this.getBuildingClassInfo().setClassName(name[0]);
         }
     }

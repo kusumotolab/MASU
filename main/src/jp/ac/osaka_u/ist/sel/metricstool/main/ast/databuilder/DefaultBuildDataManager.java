@@ -392,6 +392,13 @@ public class DefaultBuildDataManager implements BuildDataManager {
     public UnresolvedUnitInfo<? extends UnitInfo> getCurrentUnit() {
         return this.unitStack.isEmpty() ? null : this.unitStack.peek();
     }
+    
+    public UnresolvedUnitInfo<? extends UnitInfo> getOuterUnit() {
+        if (this.unitStack.size() < 2){
+            return null;
+        }
+        return this.unitStack.get(this.unitStack.size() - 2);
+    }
 
     @Override
     public UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> getCurrentLocalSpace() {

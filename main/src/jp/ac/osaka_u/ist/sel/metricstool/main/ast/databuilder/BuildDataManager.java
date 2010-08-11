@@ -146,7 +146,9 @@ public interface BuildDataManager {
     public int getAnonymousClassCount(UnresolvedClassInfo classInfo);
 
     public UnresolvedUnitInfo<? extends UnitInfo> getCurrentUnit();
-
+    
+    public UnresolvedUnitInfo<? extends UnitInfo> getOuterUnit();
+    
     public UnresolvedClassInfo getCurrentClass();
 
     public String[] getCurrentNameSpace();
