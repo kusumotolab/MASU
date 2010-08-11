@@ -25,11 +25,11 @@ public class UnresolvedAssertStatementInfo extends
     /**
      * 未解決アサート文を生成
      * 
-     * @param ownerSpace 外側のブロック
+     * @param outerLocalSpace 外側のブロック
      */
     public UnresolvedAssertStatementInfo(
-            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace) {
-        super(ownerSpace);
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerLocalSpace) {
+        super(outerLocalSpace);
     }
 
     @Override
@@ -55,8 +55,8 @@ public class UnresolvedAssertStatementInfo extends
         final int toColumn = this.getToColumn();
 
         // ローカルスペースを解決
-        final UnresolvedLocalSpaceInfo<?> unresolvedOwnerSpace = this.getOwnerSpace();
-        final LocalSpaceInfo ownerSpace = unresolvedOwnerSpace.resolve(usingClass, usingMethod,
+        final UnresolvedLocalSpaceInfo<?> unresolvedOuterLocalSpace = this.getOuterLocalSpace();
+        final LocalSpaceInfo outerLocalSpace = unresolvedOuterLocalSpace.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
         final UnresolvedExpressionInfo<?> unresolvedAssertedExpression = this
@@ -70,7 +70,7 @@ public class UnresolvedAssertStatementInfo extends
                 : unresolvedMessageExpression.resolve(usingClass, usingMethod, classInfoManager,
                         fieldInfoManager, methodInfoManager);
 
-        this.resolvedInfo = new AssertStatementInfo(ownerSpace, assertedExpression,
+        this.resolvedInfo = new AssertStatementInfo(outerLocalSpace, assertedExpression,
                 messageExpression, fromLine, fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }

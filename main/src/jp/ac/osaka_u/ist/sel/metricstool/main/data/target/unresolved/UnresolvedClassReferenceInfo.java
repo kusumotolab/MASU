@@ -18,6 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -619,11 +620,13 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
      * @return –¢‰ðŒˆƒNƒ‰ƒXŽQÆ
      */
     public final static UnresolvedClassReferenceInfo createClassReference(
-            final UnresolvedClassTypeInfo referenceType, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+            final UnresolvedClassTypeInfo referenceType,
+            final UnresolvedUnitInfo<? extends UnitInfo> outerUnit, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         final UnresolvedClassReferenceInfo reference = new UnresolvedClassReferenceInfo(
                 referenceType.getAvailableNamespaces(), referenceType.getReferenceName());
+        reference.setOuterUnit(outerUnit);
         reference.setFromLine(fromLine);
         reference.setFromColumn(fromColumn);
         reference.setToLine(toLine);

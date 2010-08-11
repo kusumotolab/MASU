@@ -19,7 +19,7 @@ public class AssertStatementBuilder extends StateDrivenDataBuilder<UnresolvedAss
     public AssertStatementBuilder(final ExpressionElementManager expressioManager,
             final BuildDataManager buildDataManager) {
         this.expressionManager = expressioManager;
-        this.buildDaraManager = buildDataManager;
+        this.buildDataManager = buildDataManager;
 
         this.stateManager = new AssertStatementStateManager();
         
@@ -46,7 +46,7 @@ public class AssertStatementBuilder extends StateDrivenDataBuilder<UnresolvedAss
         final AstVisitEvent trigger = event.getTrigger();
 
         if (type.equals(this.stateManager.getStatementEnterEventType())) {
-            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = this.buildDaraManager
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> currentLocal = this.buildDataManager
                     .getCurrentLocalSpace();
 
             if (null != currentLocal) {
@@ -56,7 +56,7 @@ public class AssertStatementBuilder extends StateDrivenDataBuilder<UnresolvedAss
                 this.registBuiltData(assertStatement);
             }
         } else if (type.equals(this.stateManager.getStatementExitEventType())) {
-            this.buildDaraManager.getCurrentLocalSpace().addStatement(this.getLastBuildData());
+            this.buildDataManager.getCurrentLocalSpace().addStatement(this.getLastBuildData());
         } else if (type.equals(ASSERT_STATEMENT_STATE_CHANGE.ENTER_ASSERT_EXPRESSION)) {
 
         } else if (type.equals(ASSERT_STATEMENT_STATE_CHANGE.EXIT_ASSERT_EXPRESSION)) {
@@ -78,7 +78,7 @@ public class AssertStatementBuilder extends StateDrivenDataBuilder<UnresolvedAss
 
     private final ExpressionElementManager expressionManager;
 
-    private final BuildDataManager buildDaraManager;
+    private final BuildDataManager buildDataManager;
 
     private final AssertStatementStateManager stateManager;
 }

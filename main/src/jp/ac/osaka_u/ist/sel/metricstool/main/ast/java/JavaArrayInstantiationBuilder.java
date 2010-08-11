@@ -40,8 +40,9 @@ public class JavaArrayInstantiationBuilder extends ExpressionBuilder {
 
             final UnresolvedExpressionInfo<? extends ExpressionInfo> indexExpression = indexExpressions
                     .size() != 0 ? indexExpressions.get(0).getUsage()
-                    : new UnresolvedEmptyExpressionInfo(null, event.getStartLine(), event
-                            .getStartColumn() + 1, event.getStartLine(), event.getStartColumn() + 1);
+                    : new UnresolvedEmptyExpressionInfo(this.buildDataManager.getCurrentUnit(),
+                            event.getStartLine(), event.getStartColumn() + 1, event.getStartLine(),
+                            event.getStartColumn() + 1);
             JavaArrayInstantiationElement array = new JavaArrayInstantiationElement(indexExpression);
 
             pushElement(array);

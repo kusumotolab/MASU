@@ -41,6 +41,7 @@ public class LabelBuilder extends StateDrivenDataBuilder<UnresolvedLabelInfo> {
             final UnresolvedLabelInfo label = new UnresolvedLabelInfo();
             this.buildingDataStack.push(label);
             this.buildDataManager.addLabel(label);
+            label.setOuterUnit(this.buildDataManager.getCurrentUnit());
             this.pushCurrentBuiltStatement();
             
         } else if (type.equals(LABEL_STATE.EXIT_LABEL_DEF)) {

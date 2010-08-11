@@ -45,19 +45,22 @@ public class SingleIdentifierElement extends IdentifierElement {
         final UnresolvedVariableUsageInfo<?> localVariableUsage;
         if (null == usedVariable || usedVariable instanceof UnresolvedFieldInfo) {
             //変数がみつからないので多分どこかのフィールド or 見つかった変数がフィールドだった
-            localVariableUsage = new UnresolvedFieldUsageInfo(UnresolvedMemberImportStatementInfo
-                    .getMemberImportStatements(buildDataManager.getAllAvaliableNames()),
-                    ownerUsage, name, reference, assignment, this.fromLine, this.fromColumn,
-                    this.toLine, this.toColumn);
+            localVariableUsage = new UnresolvedFieldUsageInfo(
+                    UnresolvedMemberImportStatementInfo.getMemberImportStatements(buildDataManager
+                            .getAllAvaliableNames()), ownerUsage, name, reference, assignment,
+                    buildDataManager.getCurrentUnit(), this.fromLine, this.fromColumn, this.toLine,
+                    this.toColumn);
         } else if (usedVariable instanceof UnresolvedParameterInfo) {
             UnresolvedParameterInfo parameter = (UnresolvedParameterInfo) usedVariable;
             localVariableUsage = new UnresolvedParameterUsageInfo(parameter, reference, assignment,
-                    this.fromLine, this.fromColumn, this.toLine, this.toColumn);
+                    buildDataManager.getCurrentUnit(), this.fromLine, this.fromColumn, this.toLine,
+                    this.toColumn);
         } else {
             assert (usedVariable instanceof UnresolvedLocalVariableInfo) : "Illegal state: unexpected VariableInfo";
             UnresolvedLocalVariableInfo localVariable = (UnresolvedLocalVariableInfo) usedVariable;
             localVariableUsage = new UnresolvedLocalVariableUsageInfo(localVariable, reference,
-                    assignment, this.fromLine, this.fromColumn, this.toLine, this.toColumn);
+                    assignment, buildDataManager.getCurrentUnit(), this.fromLine, this.fromColumn,
+                    this.toLine, this.toColumn);
         }
 
         buildDataManager.addVariableUsage(localVariableUsage);

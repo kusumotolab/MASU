@@ -31,8 +31,8 @@ public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<? 
      * @param toColumn I—¹—ñ
      */
     public UnresolvedVariableUsageInfo(final String usedVariableName, final boolean reference,
-            final boolean assignment, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+            final boolean assignment, final UnresolvedUnitInfo<? extends UnitInfo> outerUnit,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         if (null == usedVariableName) {
             throw new IllegalArgumentException("usedVarialbeName is null");
@@ -42,6 +42,7 @@ public abstract class UnresolvedVariableUsageInfo<T extends VariableUsageInfo<? 
         this.reference = reference;
         this.assignment = assignment;
 
+        this.setOuterUnit(outerUnit);
         this.setFromLine(fromLine);
         this.setFromColumn(fromColumn);
         this.setToLine(toLine);

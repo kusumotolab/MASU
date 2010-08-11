@@ -27,6 +27,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
@@ -57,8 +58,9 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
             final List<UnresolvedMemberImportStatementInfo> memberImportStatements,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> qualifierUsage,
             final String fieldName, final boolean reference, final boolean assignment,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
-        super(fieldName, reference, assignment, fromLine, fromColumn, toLine, toColumn);
+            final UnresolvedUnitInfo<? extends UnitInfo> outerUnit, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
+        super(fieldName, reference, assignment, outerUnit, fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if ((null == memberImportStatements) || (null == qualifierUsage) || (null == fieldName)) {
@@ -288,8 +290,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
             final Settings settings = Settings.getInstance();
             if ((settings.getLanguage().equals(LANGUAGE.JAVA15)
                     || settings.getLanguage().equals(LANGUAGE.JAVA14) || settings.getLanguage()
-                    .equals(LANGUAGE.JAVA13))
-                    && fieldName.equals("length")) {
+                    .equals(LANGUAGE.JAVA13)) && fieldName.equals("length")) {
 
                 final FieldUsageInfo resolved = new ArrayLengthUsageInfo(qualifierUsage,
                         (ArrayTypeInfo) qualifierType, usingMethod, fromLine, fromColumn, toLine,

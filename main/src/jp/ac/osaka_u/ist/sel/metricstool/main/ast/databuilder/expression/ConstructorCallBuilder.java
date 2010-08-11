@@ -25,8 +25,8 @@ public class ConstructorCallBuilder extends ExpressionBuilder {
         final AstToken token = event.getToken();
 
         if (token.isInstantiation()) {
-            buildNewConstructorCall(event.getStartLine(), event.getStartColumn(), event
-                    .getEndLine(), event.getEndColumn());
+            buildNewConstructorCall(event.getStartLine(), event.getStartColumn(),
+                    event.getEndLine(), event.getEndColumn());
         }
 
     }
@@ -50,7 +50,8 @@ public class ConstructorCallBuilder extends ExpressionBuilder {
         if (null != type) {
             final UnresolvedClassTypeInfo referenceType = (UnresolvedClassTypeInfo) type.getType();
             final UnresolvedClassConstructorCallInfo constructorCall = new UnresolvedClassConstructorCallInfo(
-                    referenceType, fromLine, fromColumn, toLine, toColumn);
+                    referenceType, this.buildDataManager.getCurrentUnit(), fromLine, fromColumn,
+                    toLine, toColumn);
 
             resolveParameters(constructorCall, parameters);
             pushElement(new UsageElement(constructorCall));
@@ -58,12 +59,12 @@ public class ConstructorCallBuilder extends ExpressionBuilder {
         }
     }
 
-    protected void resolveParameters(final UnresolvedConstructorCallInfo<?,?> constructorCall,
+    protected void resolveParameters(final UnresolvedConstructorCallInfo<?, ?> constructorCall,
             final List<ExpressionElement> elements) {
         for (final ExpressionElement argument : elements) {
             if (argument instanceof IdentifierElement) {
-                constructorCall.addArgument(((IdentifierElement) argument)
-                        .resolveAsVariable(this.buildDataManager, true, false));
+                constructorCall.addArgument(((IdentifierElement) argument).resolveAsVariable(
+                        this.buildDataManager, true, false));
             } else if (argument instanceof TypeArgumentElement) {
                 TypeArgumentElement typeArgument = (TypeArgumentElement) argument;
 

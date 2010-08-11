@@ -23,13 +23,13 @@ public class UnresolvedExpressionStatementInfo extends
 
     /**
      * 式文を構成する式の未解決情報を与えて初期化
-     * @param ownerSpace 式分を直接所有する空間
+     * @param outerLocalSpace 式分を直接所有する空間
      * @param expression 式文を構成する式の未解決情報
      */
     public UnresolvedExpressionStatementInfo(
-            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace,
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerLocalSpace,
             final UnresolvedExpressionInfo<? extends ExpressionInfo> expression) {
-        super(ownerSpace);
+        super(outerLocalSpace);
 
         if (null == expression) {
             throw new IllegalArgumentException("expression is null");
@@ -60,7 +60,7 @@ public class UnresolvedExpressionStatementInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo ownerSpace = this.getOwnerSpace().resolve(usingClass, usingMethod,
+        final LocalSpaceInfo ownerSpace = this.getOuterLocalSpace().resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
         final ExpressionInfo expression = this.expression.resolve(usingClass, usingMethod,

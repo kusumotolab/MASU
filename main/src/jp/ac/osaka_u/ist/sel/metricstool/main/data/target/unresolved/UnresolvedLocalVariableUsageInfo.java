@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -32,9 +33,11 @@ public class UnresolvedLocalVariableUsageInfo extends
      * @param toColumn èIóπóÒ
      */
     public UnresolvedLocalVariableUsageInfo(final UnresolvedLocalVariableInfo usedVariable,
-            boolean reference, final boolean assignment, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
-        super(usedVariable.getName(), reference, assignment, fromLine, fromColumn, toLine, toColumn);
+            boolean reference, final boolean assignment,
+            final UnresolvedUnitInfo<? extends UnitInfo> outerUnit, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
+        super(usedVariable.getName(), reference, assignment, outerUnit, fromLine, fromColumn,
+                toLine, toColumn);
 
         this.usedVariable = usedVariable;
     }

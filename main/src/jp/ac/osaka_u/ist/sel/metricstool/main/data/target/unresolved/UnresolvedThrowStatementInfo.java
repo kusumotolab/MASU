@@ -23,11 +23,11 @@ public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<
     /**
      * 外側のスコープを与えてオブジェクトを初期化
      * 
-     * @param ownerSpace 外側のスコープ
+     * @param outerLocalSpace 外側のスコープ
      */
     public UnresolvedThrowStatementInfo(
-            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace) {
-        super(ownerSpace);
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerLocalSpace) {
+        super(outerLocalSpace);
     }
 
     @Override
@@ -52,13 +52,13 @@ public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo ownerSpace = this.getOwnerSpace().resolve(usingClass, usingMethod,
-                classInfoManager, fieldInfoManager, methodInfoManager);
+        final LocalSpaceInfo outerLocalSpace = this.getOuterLocalSpace().resolve(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         final ExpressionInfo thrownExpression = this.thrownExpression.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
-        this.resolvedInfo = new ThrowStatementInfo(ownerSpace, thrownExpression, fromLine,
+        this.resolvedInfo = new ThrowStatementInfo(outerLocalSpace, thrownExpression, fromLine,
                 fromColumn, toLine, toColumn);
 
         return this.resolvedInfo;

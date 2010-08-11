@@ -20,10 +20,10 @@ public class UnresolvedBreakStatementInfo extends UnresolvedJumpStatementInfo<Br
     }
 
     @Override
-    protected BreakStatementInfo createResolvedInfo(LocalSpaceInfo ownerSpace,
+    protected BreakStatementInfo createResolvedInfo(LocalSpaceInfo outerLocalSpace,
             LabelInfo destinationLabel, int fromLine, int fromColumn, int toLine, int toColumn) {
-        return new BreakStatementInfo(ownerSpace, destinationLabel, fromLine, fromColumn, toLine,
-                toColumn);
+        return new BreakStatementInfo(outerLocalSpace, destinationLabel, fromLine, fromColumn,
+                toLine, toColumn);
     }
 
 }

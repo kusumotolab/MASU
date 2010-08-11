@@ -24,17 +24,17 @@ public class UnresolvedReturnStatementInfo extends
     /**
      * 外側のブロックを与えてオブジェクトを生成
      * 
-     * @param ownerSpace 外側のブロック
+     * @param outerLocalSpace 外側のブロック
      */
     public UnresolvedReturnStatementInfo(
-            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace) {
-        this(ownerSpace, 0, 0, 0, 0);
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerLocalSpace) {
+        this(outerLocalSpace, 0, 0, 0, 0);
     }
 
     public UnresolvedReturnStatementInfo(
-            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace,
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerLocalSpace,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
-        super(ownerSpace, fromLine, fromColumn, toLine, toColumn);
+        super(outerLocalSpace, fromLine, fromColumn, toLine, toColumn);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class UnresolvedReturnStatementInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo ownerSpace = this.getOwnerSpace().resolve(usingClass, usingMethod,
+        final LocalSpaceInfo ownerSpace = this.getOuterLocalSpace().resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
         final ExpressionInfo returnedExpression = null == this.returnedExpression ? null

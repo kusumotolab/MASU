@@ -78,14 +78,15 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     // キャストがあるとおそらくここに到達
                     // TODO UnresolvedReferenceTypeInfoにすべき
                     termTypes[0] = ((UnresolvedClassTypeInfo) typeElement.getType()).getUsage(
-                            typeElement.getFromLine(), typeElement.getFromColumn(), typeElement
-                                    .getToLine(), typeElement.getToColumn());
+                            this.buildDataManager.getCurrentUnit(),
+                            typeElement.getFromLine(), typeElement.getFromColumn(),
+                            typeElement.getToLine(), typeElement.getToColumn());
                 } else if (typeElement.getType() instanceof UnresolvedArrayTypeInfo) {
                     UnresolvedArrayTypeInfo arrayType = (UnresolvedArrayTypeInfo) typeElement
                             .getType();
                     termTypes[0] = new UnresolvedArrayTypeReferenceInfo(arrayType,
-                            typeElement.fromLine, typeElement.fromColumn, typeElement.toLine,
-                            typeElement.toColumn);
+                            this.buildDataManager.getCurrentUnit(), typeElement.fromLine,
+                            typeElement.fromColumn, typeElement.toLine, typeElement.toColumn);
                 } else {
 
                     termTypes[0] = elements[0].getUsage();
@@ -105,15 +106,16 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     TypeElement typeElement = (TypeElement) elements[i];
                     if (typeElement.getType() instanceof UnresolvedClassTypeInfo) {
                         termTypes[i] = ((UnresolvedClassTypeInfo) typeElement.getType()).getUsage(
-                                typeElement.getFromLine(), typeElement.getFromColumn(), typeElement
-                                        .getToLine(), typeElement.getToColumn());
+                                this.buildDataManager.getCurrentUnit(), typeElement.getFromLine(),
+                                typeElement.getFromColumn(), typeElement.getToLine(),
+                                typeElement.getToColumn());
                     } else if (typeElement.getType() instanceof UnresolvedArrayTypeInfo) {
                         // ここに到達するのはinstanceof type[]とき
                         UnresolvedArrayTypeInfo arrayType = (UnresolvedArrayTypeInfo) typeElement
                                 .getType();
                         termTypes[i] = new UnresolvedArrayTypeReferenceInfo(arrayType,
-                                typeElement.fromLine, typeElement.fromColumn, typeElement.toLine,
-                                typeElement.toColumn);
+                                this.buildDataManager.getCurrentUnit(), typeElement.fromLine,
+                                typeElement.fromColumn, typeElement.toLine, typeElement.toColumn);
                     } else {
                         termTypes[i] = elements[i].getUsage();
                     }
@@ -131,6 +133,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
 
                 final UnresolvedBinominalOperationInfo operation = new UnresolvedBinominalOperationInfo(
                         operator, termTypes[0], termTypes[1]);
+                operation.setOuterUnit(this.buildDataManager.getCurrentUnit());
                 operation.setFromLine(termTypes[0].getFromLine());
                 operation.setFromColumn(termTypes[0].getFromColumn());
                 operation.setToLine(termTypes[1].getToLine());
@@ -145,6 +148,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
 
                 final UnresolvedTernaryOperationInfo operation = new UnresolvedTernaryOperationInfo(
                         termTypes[0], termTypes[1], termTypes[2]);
+                operation.setOuterUnit(this.buildDataManager.getCurrentUnit());
                 operation.setFromLine(termTypes[0].getFromLine());
                 operation.setFromColumn(termTypes[0].getFromColumn());
                 operation.setToLine(termTypes[2].getToLine());
@@ -159,7 +163,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     //オペレータによってすでに結果の型が決定している
                     assert null != operator : "Illegal state: operator is null";
                     resultType = new UnresolvedMonominalOperationInfo(termTypes[0], operator);
-
+                    resultType.setOuterUnit(this.buildDataManager.getCurrentUnit());
                     if ((termTypes[0].getFromLine() < event.getStartLine())
                             || (termTypes[0].getFromLine() == event.getStartLine() && termTypes[0]
                                     .getFromColumn() < event.getStartColumn())) {
@@ -176,6 +180,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                 } else if (1 == term
                         && (OPERATOR.MINUS.equals(operator) || OPERATOR.PLUS.equals(operator))) {
                     resultType = new UnresolvedMonominalOperationInfo(termTypes[0], operator);
+                    resultType.setOuterUnit(this.buildDataManager.getCurrentUnit());
                     resultType.setFromLine(event.getStartLine());
                     resultType.setFromColumn(event.getStartColumn());
                     resultType.setToLine(termTypes[0].getToLine());
@@ -190,8 +195,9 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                         ownerType = elements[0].getUsage();
                     }
                     assert null != elements[1] : "Illegal state: expression that show index of array is not found.";
-                    resultType = new UnresolvedArrayElementUsageInfo(ownerType, elements[1]
-                            .getUsage());
+                    resultType = new UnresolvedArrayElementUsageInfo(ownerType,
+                            elements[1].getUsage());
+                    resultType.setOuterUnit(this.buildDataManager.getCurrentUnit());
                     resultType.setFromLine(ownerType.getFromLine());
                     resultType.setFromColumn(ownerType.getFromColumn());
                     resultType.setToLine(event.getEndLine());
@@ -202,6 +208,7 @@ public class OperatorExpressionBuilder extends ExpressionBuilder {
                     final UnresolvedExpressionInfo<? extends ExpressionInfo> castedUsage = elements[1]
                             .getUsage();
                     resultType = new UnresolvedCastUsageInfo(castType, castedUsage);
+                    resultType.setOuterUnit(this.buildDataManager.getCurrentUnit());
                     resultType.setFromLine(event.getStartLine());
                     resultType.setFromColumn(event.getStartColumn());
                     resultType.setToLine(castedUsage.getToLine());

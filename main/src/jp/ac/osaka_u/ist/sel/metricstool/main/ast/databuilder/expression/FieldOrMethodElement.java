@@ -44,7 +44,8 @@ public class FieldOrMethodElement extends IdentifierElement {
         UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(
                 UnresolvedMemberImportStatementInfo.getMemberImportStatements(buildDataManager
                         .getAllAvaliableNames()), this.ownerUsage, this.name, reference,
-                assignment, this.fromLine, this.fromColumn, this.toLine, this.toColumn);
+                assignment, buildDataManager.getCurrentUnit(), this.fromLine, this.fromColumn,
+                this.toLine, this.toColumn);
         buildDataManager.addVariableUsage(fieldUsage);
 
         this.usage = fieldUsage;

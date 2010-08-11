@@ -34,11 +34,11 @@ public class ReturnStatementBuilder extends SingleStatementBuilder<UnresolvedRet
 
     @Override
     protected UnresolvedReturnStatementInfo buildStatement(
-            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace,
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerLocalSpace,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         return new UnresolvedReturnStatementInfo(
-                ownerSpace, fromLine, fromColumn, toLine, toColumn);
+                outerLocalSpace, fromLine, fromColumn, toLine, toColumn);
     }
     
     @Override

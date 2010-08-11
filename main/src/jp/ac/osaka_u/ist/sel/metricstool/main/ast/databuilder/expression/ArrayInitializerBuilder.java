@@ -53,6 +53,7 @@ public class ArrayInitializerBuilder extends ExpressionBuilder {
         if (type.equals(ARRAY_INITILIZER_STATE.ENTER_ARRAY_INIT)) {
             final AstVisitEvent trigger = event.getTrigger();
             final UnresolvedArrayInitializerInfo initializer = new UnresolvedArrayInitializerInfo(
+                    this.buildDataManager.getCurrentUnit(),
                     trigger.getStartLine(), trigger.getStartColumn(), trigger.getEndLine(),
                     trigger.getEndColumn());
             this.buildingInitilizerStack.push(initializer);

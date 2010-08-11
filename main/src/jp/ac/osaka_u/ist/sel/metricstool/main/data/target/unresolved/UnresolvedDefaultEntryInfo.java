@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SwitchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -23,8 +24,9 @@ public final class UnresolvedDefaultEntryInfo extends UnresolvedCaseEntryInfo {
      * 
      * @param correspondingSwitchBlock
      */
-    public UnresolvedDefaultEntryInfo(final UnresolvedSwitchBlockInfo correspondingSwitchBlock) {
-        super(correspondingSwitchBlock);
+    public UnresolvedDefaultEntryInfo(final UnresolvedSwitchBlockInfo correspondingSwitchBlock,
+            final UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
+        super(correspondingSwitchBlock, outerUnit);
     }
 
     /**

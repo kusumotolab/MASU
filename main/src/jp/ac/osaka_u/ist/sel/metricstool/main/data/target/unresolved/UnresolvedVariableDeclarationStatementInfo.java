@@ -41,9 +41,9 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
         if (null == variableDeclaration) {
             throw new IllegalArgumentException("declaredVariable is null");
         }
-
         this.variableDeclaration = variableDeclaration;
         this.initializationExpression = initializationExpression;
+        this.setOuterUnit(variableDeclaration.getOuterUnit());
     }
 
     @Override
@@ -69,7 +69,7 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
         final int toColumn = this.getToColumn();
 
         final UnresolvedUnitInfo<? extends UnitInfo> unresolvedOuterUnit = this.getOuterUnit();
-        final LocalSpaceInfo ownerSpace = (LocalSpaceInfo) unresolvedOuterUnit.resolve(usingClass,
+        final LocalSpaceInfo outerLocalSpace = (LocalSpaceInfo) unresolvedOuterUnit.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final LocalVariableUsageInfo variableDeclaration = this.variableDeclaration.resolve(
                 usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
@@ -77,7 +77,7 @@ public final class UnresolvedVariableDeclarationStatementInfo extends
                 .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                         methodInfoManager)
                 : null;
-        this.resolvedInfo = new VariableDeclarationStatementInfo(ownerSpace, variableDeclaration,
+        this.resolvedInfo = new VariableDeclarationStatementInfo(outerLocalSpace, variableDeclaration,
                 initializationExpression, fromLine, fromColumn, toLine, toColumn);
 
         return this.resolvedInfo;

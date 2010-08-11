@@ -802,7 +802,7 @@ public class MetricsTool {
         }
 
         // 文法誤りのあるファイル一覧を表示
-        // err.println("The following files includes uncorrect syntax.");
+        // err.println("The following files includes incorrect syntax.");
         // err.println("Any metrics of them were not measured");
         for (final TargetFile targetFile : DataManager.getInstance().getTargetFileManager()) {
             if (!targetFile.isCorrectSyntax()) {

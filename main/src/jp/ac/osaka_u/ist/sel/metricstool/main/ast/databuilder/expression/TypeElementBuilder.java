@@ -7,12 +7,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.BuiltinTypeToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.ConstantToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLiteralUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnitInfo;
 
 
 /**
@@ -33,30 +35,33 @@ public abstract class TypeElementBuilder extends ExpressionBuilder {
     protected void afterExited(final AstVisitEvent event) {
         final AstToken token = event.getToken();
 
+        final UnresolvedUnitInfo<? extends UnitInfo> outerUnit = this.buildDataManager
+                .getCurrentUnit();
+        assert outerUnit != null : "outer unit does not be stored";
+
         final int fromLine = event.getStartLine();
         final int fromColumn = event.getStartColumn();
         final int toLine = event.getEndLine();
         final int toColumn = event.getEndColumn();
 
         if (token.isTypeDescription()) {
-            this.buildType(fromLine, fromColumn, toLine, toColumn);
+            this.buildType(outerUnit, fromLine, fromColumn, toLine, toColumn);
         } else if (token.isArrayDeclarator()) {
-            this.buildArrayType(fromLine, fromColumn, toLine, toColumn);
+            this.buildArrayType(outerUnit, fromLine, fromColumn, toLine, toColumn);
         } else if (token.isTypeArgument()) {
             buildTypeArgument();
         } else if (token.isTypeWildcard()) {
-            buildTypeWildCard(fromLine, fromColumn, toLine, toColumn);
+            buildTypeWildCard(outerUnit, fromLine, fromColumn, toLine, toColumn);
         } else if (token instanceof BuiltinTypeToken) {
-            this.buildBuiltinType((BuiltinTypeToken) token);
+            this.buildBuiltinType((BuiltinTypeToken) token, outerUnit);
         } else if (token instanceof ConstantToken) {
-            this
-                    .buildConstantElement((ConstantToken) token, fromLine, fromColumn, toLine,
-                            toColumn);
+            this.buildConstantElement((ConstantToken) token, outerUnit, fromLine, fromColumn,
+                    toLine, toColumn);
         }
     }
 
-    protected void buildArrayType(final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+    protected void buildArrayType(final UnresolvedUnitInfo<? extends UnitInfo> outerUnit,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         final ExpressionElement[] elements = this.getAvailableElements();
 
         assert (elements.length > 0) : "Illegal state: type description was not found.";
@@ -67,10 +72,10 @@ public abstract class TypeElementBuilder extends ExpressionBuilder {
                 final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> referenceType = this
                         .buildReferenceType(elements);
                 typeElement = new TypeElement(UnresolvedArrayTypeInfo.getType(referenceType, 1),
-                        fromLine, fromColumn, toLine, toColumn);
+                        outerUnit, fromLine, fromColumn, toLine, toColumn);
             } else if (elements[0] instanceof TypeElement) {
                 typeElement = ((TypeElement) elements[0]).getArrayDimensionInclementedInstance(
-                        fromLine, fromColumn, toLine, toColumn);
+                        outerUnit, fromLine, fromColumn, toLine, toColumn);
             }
         }
 
@@ -79,16 +84,16 @@ public abstract class TypeElementBuilder extends ExpressionBuilder {
         }
     }
 
-    protected void buildType(final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+    protected void buildType(final UnresolvedUnitInfo<? extends UnitInfo> outerUnit,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         final ExpressionElement[] elements = this.getAvailableElements();
 
         assert (elements.length > 0) : "Illegal state: type description was not found.";
 
         if (elements.length > 0) {
             if (elements[0] instanceof IdentifierElement) {
-                this.pushElement(new TypeElement(this.buildReferenceType(elements), fromLine,
-                        fromColumn, toLine, toColumn));
+                this.pushElement(new TypeElement(this.buildReferenceType(elements), outerUnit,
+                        fromLine, fromColumn, toLine, toColumn));
             } else if (elements[0] instanceof TypeElement) {
                 assert (elements.length == 1) : "Illegal state: unexpected type arguments.";
                 this.pushElement(elements[0]);
@@ -114,8 +119,8 @@ public abstract class TypeElementBuilder extends ExpressionBuilder {
 
             if (element instanceof TypeElement) {
                 //àÍî‘ç≈å„Ç™å^óvëfÇæÇ¡ÇΩÇÁå^à¯êîóvëfÇçÏê¨
-                TypeArgumentElement argument = new TypeArgumentElement(((TypeElement) element)
-                        .getType());
+                TypeArgumentElement argument = new TypeArgumentElement(
+                        ((TypeElement) element).getType());
                 //ÇªÇÍà»äOÇÃóvëfÇëSïîÇ‡Ç∆Ç…ñﬂÇ∑ÅD
                 int size = elements.length - 1;
                 for (int i = 0; i < size; i++) {
@@ -127,13 +132,13 @@ public abstract class TypeElementBuilder extends ExpressionBuilder {
         }
     }
 
-    protected void buildTypeWildCard(final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+    protected void buildTypeWildCard(final UnresolvedUnitInfo<? extends UnitInfo> outerUnit,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> upperBounds = getTypeUpperBounds();
 
         assert (null != upperBounds);
 
-        pushElement(new TypeElement(upperBounds, fromLine, fromColumn, toLine, toColumn));
+        pushElement(new TypeElement(upperBounds, outerUnit, fromLine, fromColumn, toLine, toColumn));
     }
 
     protected UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> getTypeUpperBounds() {
@@ -209,14 +214,17 @@ public abstract class TypeElementBuilder extends ExpressionBuilder {
         return resultType;
     }
 
-    protected void buildBuiltinType(final BuiltinTypeToken token) {
-        this.pushElement(TypeElement.getBuiltinTypeElement(token));
+    protected void buildBuiltinType(final BuiltinTypeToken token,
+            final UnresolvedUnitInfo<?> outerUnit) {
+        this.pushElement(TypeElement.getBuiltinTypeElement(token, outerUnit));
     }
 
-    protected void buildConstantElement(final ConstantToken token, final int fromLine,
+    protected void buildConstantElement(final ConstantToken token,
+            final UnresolvedUnitInfo<? extends UnitInfo> outerUnit, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
         final UnresolvedLiteralUsageInfo literal = new UnresolvedLiteralUsageInfo(token.toString(),
                 token.getType());
+        literal.setOuterUnit(outerUnit);
         literal.setFromLine(fromLine);
         literal.setFromColumn(fromColumn);
         literal.setToLine(toLine);

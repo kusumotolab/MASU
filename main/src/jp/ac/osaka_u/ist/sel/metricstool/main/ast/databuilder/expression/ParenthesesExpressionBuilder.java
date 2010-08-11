@@ -76,6 +76,7 @@ public class ParenthesesExpressionBuilder extends
             expressionManager.popExpressionElement();
             final UnresolvedParenthesesExpressionInfo paren = new UnresolvedParenthesesExpressionInfo(
                     parentheticExpression);
+            paren.setOuterUnit(this.buildDataManager.getCurrentUnit());
             paren.setFromLine(e.getStartLine());
             paren.setFromColumn(e.getStartColumn());
             paren.setToLine(e.getEndLine());

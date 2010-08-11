@@ -19,9 +19,9 @@ public class ContinueStatementBuilder extends JumpStatementBuilder<UnresolvedCon
 
     @Override
     protected UnresolvedContinueStatementInfo buildStatement(
-            UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace, int fromLine,
+            UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerLocalSpace, int fromLine,
             int fromColumn, int toLine, int toColumn) {
-        return new UnresolvedContinueStatementInfo(ownerSpace, fromLine, fromColumn, toLine,
+        return new UnresolvedContinueStatementInfo(outerLocalSpace, fromLine, fromColumn, toLine,
                 toColumn);
     }
 

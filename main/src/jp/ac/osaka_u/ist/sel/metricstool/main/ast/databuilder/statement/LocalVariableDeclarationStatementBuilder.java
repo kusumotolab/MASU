@@ -54,6 +54,7 @@ public class LocalVariableDeclarationStatementBuilder extends
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         final UnresolvedVariableDeclarationStatementInfo declarationStatement = new UnresolvedVariableDeclarationStatementInfo(
                 declarationUsage, initializerExpression);
+        declarationStatement.setOuterUnit(this.buildDataManager.getCurrentUnit());
         // FIXME: this is temporal patch. fix ANTLR grammar file
         final int correctToLine = declarationUsage.getToLine();
         final int correctToColumn = declarationUsage.getToColumn();

@@ -21,6 +21,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterizable;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -492,11 +493,14 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
      * @param toColumn 終了列
      * @return この未解決参照型が表す未解決クラス参照
      */
-    public final UnresolvedClassReferenceInfo getUsage(final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+    public final UnresolvedClassReferenceInfo getUsage(
+            final UnresolvedUnitInfo<? extends UnitInfo> outerUnit, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         UnresolvedClassReferenceInfo usage = new UnresolvedClassReferenceInfo(
                 this.availableNamespaces, this.referenceName);
+
+        usage.setOuterUnit(outerUnit);
         usage.setFromLine(fromLine);
         usage.setFromColumn(fromColumn);
         usage.setToLine(toLine);

@@ -10,8 +10,8 @@ public class UnresolvedContinueStatementInfo extends
         UnresolvedJumpStatementInfo<ContinueStatementInfo> {
 
     public UnresolvedContinueStatementInfo(
-            UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace) {
-        this(ownerSpace, 0, 0, 0, 0);
+            UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerLocalSpace) {
+        this(outerLocalSpace, 0, 0, 0, 0);
     }
 
     public UnresolvedContinueStatementInfo(

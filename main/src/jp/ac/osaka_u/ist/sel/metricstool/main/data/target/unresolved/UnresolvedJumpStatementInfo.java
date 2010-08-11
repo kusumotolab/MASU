@@ -48,7 +48,7 @@ public abstract class UnresolvedJumpStatementInfo<T extends JumpStatementInfo> e
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo ownerSpace = this.getOwnerSpace().resolve(usingClass, usingMethod,
+        final LocalSpaceInfo ownerSpace = this.getOuterLocalSpace().resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         final LabelInfo destinationLabel = null != this.getDestinationLabel() ? this
                 .getDestinationLabel().resolve(usingClass, usingMethod, classInfoManager,

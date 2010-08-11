@@ -17,6 +17,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -50,8 +51,10 @@ public class UnresolvedArrayConstructorCallInfo extends
      * @param toColumn èIóπóÒ
      */
     public UnresolvedArrayConstructorCallInfo(final UnresolvedArrayTypeInfo unresolvedArrayType,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final UnresolvedUnitInfo<? extends UnitInfo> outerUnit, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
         this(unresolvedArrayType);
+        this.setOuterUnit(outerUnit);
         this.setFromLine(fromLine);
         this.setFromColumn(fromColumn);
         this.setToLine(toLine);

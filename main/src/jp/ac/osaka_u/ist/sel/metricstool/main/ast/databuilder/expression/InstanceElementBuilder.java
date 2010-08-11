@@ -30,8 +30,8 @@ public class InstanceElementBuilder extends ExpressionBuilder {
 
             pushElement(thisInstance);
         } else if (token.equals(InstanceToken.NULL)) {
-            pushElement(InstanceSpecificElement.getNullElement(fromLine, fromColumn, toLine,
-                    toColumn));
+            pushElement(InstanceSpecificElement.getNullElement(
+                    this.buildDataManager.getCurrentUnit(), fromLine, fromColumn, toLine, toColumn));
         }
     }
 

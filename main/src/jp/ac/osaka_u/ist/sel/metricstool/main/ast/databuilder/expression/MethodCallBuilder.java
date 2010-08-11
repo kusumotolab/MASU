@@ -41,6 +41,7 @@ public class MethodCallBuilder extends ExpressionBuilder {
                                 .getMemberImportStatements(this.buildDataManager
                                         .getAllAvaliableNames()), callee.getOwnerUsage(), callee
                                 .getName());
+                methodCall.setOuterUnit(this.buildDataManager.getCurrentUnit());
                 // 開始位置はメソッド名の出現位置
                 methodCall.setFromLine(event.getStartLine());
                 methodCall.setFromColumn(event.getStartColumn());

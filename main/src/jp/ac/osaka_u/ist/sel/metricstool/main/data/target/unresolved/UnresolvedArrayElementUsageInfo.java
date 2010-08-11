@@ -32,7 +32,6 @@ public final class UnresolvedArrayElementUsageInfo extends
         if (null == qualifierArrayType) {
             throw new NullPointerException("ownerArrayType is null.");
         }
-
         this.qualifierArrayType = qualifierArrayType;
         this.indexExpression = indexExpression;
         this.resolvedInfo = null;

@@ -20,23 +20,23 @@ public abstract class UnresolvedSingleStatementInfo<T extends SingleStatementInf
         UnresolvedStatementInfo<T> {
 
     protected UnresolvedSingleStatementInfo(
-            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace) {
-        this(ownerSpace, 0, 0, 0, 0);
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerLocalSpace) {
+        this(outerLocalSpace, 0, 0, 0, 0);
     }
 
     protected UnresolvedSingleStatementInfo(
-            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> ownerSpace,
+            final UnresolvedLocalSpaceInfo<? extends LocalSpaceInfo> outerLocalSpace,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         MetricsToolSecurityManager.getInstance().checkAccess();
 
-        this.outerUnit = ownerSpace;
+        this.outerUnit = outerLocalSpace;
         this.setFromLine(fromLine);
         this.setFromColumn(fromColumn);
         this.setToLine(toLine);
         this.setToColumn(toColumn);
     }
 
-    protected UnresolvedLocalSpaceInfo<?> getOwnerSpace() {
+    protected UnresolvedLocalSpaceInfo<?> getOuterLocalSpace() {
         return (UnresolvedLocalSpaceInfo<?>) this.getOuterUnit();
     }
 

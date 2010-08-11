@@ -57,8 +57,8 @@ public class LocalVariableBuilder
                 final AstVisitEvent trigger = this.declarationUsageTriggerStack.pop();
                 final UnresolvedLocalVariableUsageInfo declarationUsage = this
                         .buildDeclarationUsage(this.getLastBuildData(), trigger.getStartLine(),
-                                trigger.getStartColumn(), trigger.getEndLine(), trigger
-                                        .getEndColumn());
+                                trigger.getStartColumn(), trigger.getEndLine(),
+                                trigger.getEndColumn());
 
                 this.declarationUsageStack.push(declarationUsage);
 
@@ -101,7 +101,8 @@ public class LocalVariableBuilder
             final int fromColumn, final int toLine, final int toColumn) {
 
         final UnresolvedLocalVariableUsageInfo declarationUsage = new UnresolvedLocalVariableUsageInfo(
-                declaredVariable, false, true, fromLine, fromColumn, toLine, toColumn);
+                declaredVariable, false, true, this.buildDataManager.getCurrentUnit(), fromLine,
+                fromColumn, toLine, toColumn);
 
         this.buildDataManager.addVariableUsage(declarationUsage);
 

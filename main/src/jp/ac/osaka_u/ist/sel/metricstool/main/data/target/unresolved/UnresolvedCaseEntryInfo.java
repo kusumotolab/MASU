@@ -36,7 +36,6 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
         if ((null == ownerSwitchBlock) || (null == label)) {
             throw new IllegalArgumentException();
         }
-
         this.ownerSwitchBlock = ownerSwitchBlock;
         this.label = label;
     }
@@ -47,7 +46,8 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
      * 
      * @param ownerSwitchBlock 対応する switch ブロック
      */
-    protected UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock) {
+    protected UnresolvedCaseEntryInfo(final UnresolvedSwitchBlockInfo ownerSwitchBlock,
+            final UnresolvedUnitInfo<? extends UnitInfo> outerUnit) {
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -55,6 +55,7 @@ public class UnresolvedCaseEntryInfo extends UnresolvedUnitInfo<CaseEntryInfo> i
             throw new IllegalArgumentException("ownerSwitchBlock is null");
         }
         this.ownerSwitchBlock = ownerSwitchBlock;
+        this.outerUnit = outerUnit;
         this.label = null;
     }
 

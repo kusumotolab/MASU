@@ -23,8 +23,9 @@ public class SingleIdentifierBuilder extends ExpressionBuilder {
             final int toLine = event.getEndLine();
             final int toColumn = event.getEndColumn();
 
-            UnresolvedClassReferenceInfo currentClassReference = buildDataManager.getCurrentClass()
-                    .getClassReference(fromLine, fromColumn, toLine, toColumn);
+            UnresolvedClassReferenceInfo currentClassReference = this.buildDataManager
+                    .getCurrentClass().getClassReference(this.buildDataManager.getCurrentUnit(),
+                            fromLine, fromColumn, toLine, toColumn);
 
             pushElement(new SingleIdentifierElement(token.toString(), currentClassReference,
                     fromLine, fromColumn, toLine, toColumn));

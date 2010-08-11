@@ -63,8 +63,8 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
     protected void buildNewConstructorCall(final int fromLine, final int fromColumn,
             final int toLine, final int toColumn) {
 
-        final ConstructorCallElements elements = new ConstructorCallElements(this
-                .getAvailableElements());
+        final ConstructorCallElements elements = new ConstructorCallElements(
+                this.getAvailableElements());
         assert (elements.getAvailableElements().size() > 0) : "Illegal state: constructor element not found.";
 
         if (elements.isJavaArrayInstantiation()) {
@@ -72,7 +72,8 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
 
             final UnresolvedArrayTypeInfo arrayType = elements.resolveArrayElement();
             final UnresolvedArrayConstructorCallInfo constructorCall = new UnresolvedArrayConstructorCallInfo(
-                    arrayType, fromLine, fromColumn, toLine, toColumn);
+                    arrayType, this.buildDataManager.getCurrentUnit(), fromLine, fromColumn,
+                    toLine, toColumn);
 
             for (final TypeArgumentElement typeArgument : elements.typeArguments) {
                 if (typeArgument.getType() instanceof UnresolvedReferenceTypeInfo) {
@@ -86,8 +87,8 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
             int dimention = 0;
             for (final JavaArrayInstantiationElement instantiationElement : elements
                     .getArrayInstantiationElements()) {
-                constructorCall.addIndexExpression(++dimention, instantiationElement
-                        .getIndexExpression());
+                constructorCall.addIndexExpression(++dimention,
+                        instantiationElement.getIndexExpression());
             }
 
             if (null != elements.getArrayInitilizer()) {
@@ -180,8 +181,8 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         }
 
         UnresolvedArrayTypeInfo resolveArrayElement() {
-            return this.getArrayDimention() > 0 ? UnresolvedArrayTypeInfo.getType(this.typeElement
-                    .getType(), this.getArrayDimention()) : null;
+            return this.getArrayDimention() > 0 ? UnresolvedArrayTypeInfo.getType(
+                    this.typeElement.getType(), this.getArrayDimention()) : null;
         }
 
     }
@@ -191,7 +192,8 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         final UnresolvedClassTypeInfo classType = currentClass.getClassType();
 
         final UnresolvedThisConstructorCallInfo constructorCall = new UnresolvedThisConstructorCallInfo(
-                classType, fromLine, fromColumn, toLine, toColumn);
+                classType, this.buildDataManager.getCurrentUnit(), fromLine, fromColumn, toLine,
+                toColumn);
 
         resolveParameters(constructorCall, Arrays.asList(this.getAvailableElements()));
         pushElement(new UsageElement(constructorCall));
@@ -240,7 +242,8 @@ public class JavaConstructorCallBuilder extends ConstructorCallBuilder {
         assert (null != className) : "Illegal state: unexpected ownerClass type.";
 
         final UnresolvedSuperConstructorCallInfo constructorCall = new UnresolvedSuperConstructorCallInfo(
-                superClass, fromLine, fromColumn, toLine, toColumn);
+                superClass, this.buildDataManager.getCurrentUnit(), fromLine, fromColumn, toLine,
+                toColumn);
 
         List<ExpressionElement> paramters = Arrays.asList(elements);
         resolveParameters(constructorCall, paramters.subList(argStartIndex, paramters.size()));

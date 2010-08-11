@@ -49,8 +49,9 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
         ExpressionElement right = elements[1];
         if (right instanceof JavaExpressionElement && ((JavaExpressionElement) right).isClass()) {
             UnresolvedClassReferenceInfo classReference = UnresolvedClassReferenceInfo
-                    .createClassReference(JAVA_LANG_CLASS, right.getFromLine(), right
-                            .getFromColumn(), right.getToLine(), right.getToColumn());
+                    .createClassReference(JAVA_LANG_CLASS, this.buildDataManager.getCurrentUnit(),
+                            right.getFromLine(), right.getFromColumn(), right.getToLine(),
+                            right.getToColumn());
             pushElement(new UsageElement(classReference));
         } else if (right instanceof InstanceSpecificElement) {
 
@@ -59,7 +60,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                 UnresolvedClassInfo classInfo = getSpecifiedOuterClass((IdentifierElement) left);
 
                 if (classInfo != null) {
-                    pushElement(new UsageElement(classInfo.getClassReference(right.getFromLine(),
+                    pushElement(new UsageElement(classInfo.getClassReference(
+                            this.buildDataManager.getCurrentUnit(), right.getFromLine(),
                             right.getFromColumn(), right.getToLine(), right.getToColumn())));
                 } else {
                     assert (false) : "Illegal state: specified this class "
@@ -77,13 +79,14 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
                 UnresolvedClassTypeInfo superClassType = classInfo.getSuperClasses().iterator()
                         .next();
                 UnresolvedClassReferenceInfo superClassReference = UnresolvedClassReferenceInfo
-                        .createClassReference(superClassType, left.getFromLine(), left
-                                .getFromColumn(), left.getToLine(), left.getToColumn());
+                        .createClassReference(superClassType,
+                                this.buildDataManager.getCurrentUnit(), left.getFromLine(),
+                                left.getFromColumn(), left.getToLine(), left.getToColumn());
 
                 final FieldOrMethodElement fieldOrMethod = new FieldOrMethodElement(
-                        superClassReference, rightIdentifier.getName(), rightIdentifier
-                                .getFromLine(), rightIdentifier.getFromColumn(), rightIdentifier
-                                .getToLine(), rightIdentifier.getToColumn());
+                        superClassReference, rightIdentifier.getName(),
+                        rightIdentifier.getFromLine(), rightIdentifier.getFromColumn(),
+                        rightIdentifier.getToLine(), rightIdentifier.getToColumn());
                 pushElement(fieldOrMethod);
             }
         } else if (right instanceof JavaExpressionElement
@@ -150,8 +153,9 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
             final UnresolvedClassTypeInfo superClassType = classInfo.getSuperClasses().iterator()
                     .next();
             if (superClassType != null) {
-                pushElement(new UsageElement(superClassType.getUsage(right.getFromLine(), right
-                        .getFromColumn(), right.getToLine(), right.getToColumn())));
+                pushElement(new UsageElement(superClassType.getUsage(
+                        this.buildDataManager.getCurrentUnit(), right.getFromLine(),
+                        right.getFromColumn(), right.getToLine(), right.getToColumn())));
             }
         } else {
             super.buildCompoundIdentifierElement(elements);
@@ -180,7 +184,8 @@ public class JavaCompoundIdentifierBuilder extends CompoundIdentifierBuilder {
     }
 
     private final static UnresolvedClassTypeInfo JAVA_LANG_CLASS = new UnresolvedClassTypeInfo(
-            new LinkedList<UnresolvedClassImportStatementInfo>(), new String[] { "java", "lang", "Class" });
+            new LinkedList<UnresolvedClassImportStatementInfo>(), new String[] { "java", "lang",
+                    "Class" });
 
     private final BuildDataManager buildDataManager;
 

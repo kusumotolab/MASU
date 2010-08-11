@@ -8,6 +8,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -25,8 +26,9 @@ public final class UnresolvedArrayTypeReferenceInfo extends
      * 
      * @param referencedType éQè∆Ç≥ÇÍÇƒÇ¢ÇÈñ¢âåàîzóÒå^
      */
-    public UnresolvedArrayTypeReferenceInfo(final UnresolvedArrayTypeInfo referencedType, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+    public UnresolvedArrayTypeReferenceInfo(final UnresolvedArrayTypeInfo referencedType,
+            final UnresolvedUnitInfo<? extends UnitInfo> outerUnit, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == referencedType) {
@@ -35,7 +37,8 @@ public final class UnresolvedArrayTypeReferenceInfo extends
 
         this.referencedType = referencedType;
         this.resolvedInfo = null;
-        
+
+        this.setOuterUnit(outerUnit);
         this.setFromLine(fromLine);
         this.setFromColumn(fromColumn);
         this.setToLine(toLine);

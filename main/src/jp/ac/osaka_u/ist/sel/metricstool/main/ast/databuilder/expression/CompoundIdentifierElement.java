@@ -62,7 +62,8 @@ public class CompoundIdentifierElement extends IdentifierElement {
         final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(
                 UnresolvedMemberImportStatementInfo.getMemberImportStatements(buildDataManager
                         .getAllAvaliableNames()), this.ownerUsage, this.name, reference,
-                assignment, this.fromLine, this.fromColumn, this.toLine, this.toColumn);
+                assignment, buildDataManager.getCurrentUnit(), this.fromLine, this.fromColumn,
+                this.toLine, this.toColumn);
         buildDataManager.addVariableUsage(fieldUsage);
 
         this.usage = fieldUsage;
@@ -79,7 +80,8 @@ public class CompoundIdentifierElement extends IdentifierElement {
             final UnresolvedFieldUsageInfo fieldUsage = new UnresolvedFieldUsageInfo(
                     UnresolvedMemberImportStatementInfo.getMemberImportStatements(buildDataManager
                             .getAllAvaliableNames()), this.ownerUsage, this.name, true, false,
-                    this.fromLine, this.fromColumn, this.toLine, this.toColumn);
+                    buildDataManager.getCurrentUnit(), this.fromLine, this.fromColumn, this.toLine,
+                    this.toColumn);
             buildDataManager.addVariableUsage(fieldUsage);
 
             this.usage = fieldUsage;
@@ -96,7 +98,8 @@ public class CompoundIdentifierElement extends IdentifierElement {
 
         return null != this.ownerUsage ? this.ownerUsage : new UnresolvedUnknownUsageInfo(
                 buildDataManager.getAllAvaliableNames(), this.owner.getQualifiedName(),
-                this.owner.fromLine, this.owner.fromColumn, this.owner.toLine, this.owner.toColumn);
+                buildDataManager.getCurrentUnit(), this.owner.fromLine, this.owner.fromColumn,
+                this.owner.toLine, this.owner.toColumn);
     }
 
     private final IdentifierElement owner;

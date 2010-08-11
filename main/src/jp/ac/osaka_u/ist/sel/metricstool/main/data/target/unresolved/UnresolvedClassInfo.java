@@ -759,8 +759,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
         // コンストラクタが全く定義されていない場合はデフォルトコンストラクタを1つ用意
         if (0 == this.getDefinedConstructors().size()) {
-            final TargetConstructorInfo constructor = new TargetConstructorInfo(Collections
-                    .<ModifierInfo> emptySet(), 0, 0, 0, 0);
+            final TargetConstructorInfo constructor = new TargetConstructorInfo(
+                    Collections.<ModifierInfo> emptySet(), 0, 0, 0, 0);
             constructor.setOuterUnit(this.resolvedInfo);
             this.resolvedInfo.addDefinedConstructor(constructor);
         }
@@ -890,10 +890,12 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * @param toColumn 終了列 
      * @return この未解決クラス定義情報の未解決参照型
      */
-    public UnresolvedClassReferenceInfo getClassReference(final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+    public UnresolvedClassReferenceInfo getClassReference(
+            final UnresolvedUnitInfo<? extends UnitInfo> outerUnit, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
         final UnresolvedClassReferenceInfo classReference = new UnresolvedFullQualifiedNameClassReferenceInfo(
                 this);
+        classReference.setOuterUnit(outerUnit);
         classReference.setFromLine(fromLine);
         classReference.setFromColumn(fromColumn);
         classReference.setToLine(toLine);
