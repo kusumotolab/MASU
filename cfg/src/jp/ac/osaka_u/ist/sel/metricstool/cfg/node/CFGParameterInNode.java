@@ -14,7 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterUsageInfo;
  * @author higo
  * 
  */
-public class CFGParameterInNode extends CFGNormalNode<ParameterUsageInfo> {
+public class CFGParameterInNode extends CFGDataNode<ParameterUsageInfo> {
 
     public static CFGParameterInNode getInstance(final ParameterInfo parameter) {
 

@@ -1,51 +1,52 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg.node;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterUsageInfo;
 
-public class CFGParameterOutNode extends CFGNormalNode<ParameterUsageInfo> {
 
-	public static CFGParameterOutNode getInstance(final ParameterInfo parameter) {
+public class CFGParameterOutNode extends CFGDataNode<ParameterUsageInfo> {
 
-		if (null == parameter) {
-			throw new IllegalArgumentException();
-		}
+    public static CFGParameterOutNode getInstance(final ParameterInfo parameter) {
 
-		final CallableUnitInfo ownerUnit = parameter.getDefinitionUnit();
-		final int fromLine = parameter.getFromLine();
-		final int fromColumn = parameter.getFromColumn();
-		final int toLine = parameter.getToLine();
-		final int toColumn = parameter.getToColumn();
+        if (null == parameter) {
+            throw new IllegalArgumentException();
+        }
 
-		final ParameterUsageInfo usage = ParameterUsageInfo.getInstance(
-				parameter, false, true, ownerUnit, fromLine, fromColumn,
-				toLine, toColumn);
+        final CallableUnitInfo ownerUnit = parameter.getDefinitionUnit();
+        final int fromLine = ownerUnit.getToLine(); // 便宜上，所有ユニットの終了行にしている
+        final int fromColumn = parameter.getFromColumn();
+        final int toLine = ownerUnit.getToLine();
+        final int toColumn = parameter.getToColumn();
 
-		return new CFGParameterOutNode(usage);
-	}
+        final ParameterUsageInfo usage = ParameterUsageInfo.getInstance(parameter, true, false,
+                ownerUnit, fromLine, fromColumn, toLine, toColumn);
 
-	private CFGParameterOutNode(final ParameterUsageInfo parameterUsage) {
-		super(parameterUsage);
-	}
+        return new CFGParameterOutNode(usage);
+    }
 
-	@Override
-	final ExpressionInfo getDissolvingTarget() {
-		return null;
-	}
+    private CFGParameterOutNode(final ParameterUsageInfo parameterUsage) {
+        super(parameterUsage);
+    }
 
-	@Override
-	ParameterUsageInfo makeNewElement(final LocalSpaceInfo ownerSpace,
-			final int fromLine, final int fromColumn, final int toLine,
-			final int toColumn, final ExpressionInfo... requiredExpressions) {
-		return null;
-	}
+    @Override
+    final ExpressionInfo getDissolvingTarget() {
+        return null;
+    }
 
-	@Override
-	ParameterUsageInfo makeNewElement(final LocalSpaceInfo ownerSpace,
-			final ExpressionInfo... requiredExpressions) {
-		return null;
-	}
+    @Override
+    ParameterUsageInfo makeNewElement(final LocalSpaceInfo ownerSpace, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn,
+            final ExpressionInfo... requiredExpressions) {
+        return null;
+    }
+
+    @Override
+    ParameterUsageInfo makeNewElement(final LocalSpaceInfo ownerSpace,
+            final ExpressionInfo... requiredExpressions) {
+        return null;
+    }
 }
