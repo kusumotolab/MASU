@@ -14,6 +14,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGCallDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
@@ -91,14 +92,24 @@ public abstract class PDGNode<T extends CFGNode<? extends ExecutableElementInfo>
      * 
      * @return
      */
-    public abstract SortedSet<VariableInfo<? extends UnitInfo>> getDefinedVariables();
+    public SortedSet<VariableInfo<? extends UnitInfo>> getDefinedVariables() {
+        final SortedSet<VariableInfo<?>> definedVariables = new TreeSet<VariableInfo<?>>();
+        definedVariables.addAll(VariableUsageInfo.getUsedVariables(VariableUsageInfo
+                .getAssignments(this.getCore().getVariableUsages())));
+        return definedVariables;
+    }
 
     /**
      * このノードにて，参照されている変数のSet
      * 
      * @return
      */
-    public abstract SortedSet<VariableInfo<? extends UnitInfo>> getReferencedVariables();
+    public SortedSet<VariableInfo<? extends UnitInfo>> getReferencedVariables() {
+        final SortedSet<VariableInfo<?>> referencedVariables = new TreeSet<VariableInfo<?>>();
+        referencedVariables.addAll(VariableUsageInfo.getUsedVariables(VariableUsageInfo
+                .getReferencees(this.getCore().getVariableUsages())));
+        return referencedVariables;
+    }
 
     /**
      * 引数で与えられた変数がこのノードで定義されているかどうかを返す

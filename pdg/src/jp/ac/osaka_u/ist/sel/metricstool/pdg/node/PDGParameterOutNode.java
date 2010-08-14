@@ -1,22 +1,23 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg.node;
 
+
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGParameterOutNode;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 
-public class PDGParameterOutNode extends PDGNormalNode<CFGParameterOutNode> {
 
-	public static PDGParameterOutNode getInstance(final ParameterInfo parameter) {
+public class PDGParameterOutNode extends PDGDataNode<CFGParameterOutNode> implements PDGDataOutNode {
 
-		if (null == parameter) {
-			throw new IllegalArgumentException();
-		}
+    public static PDGParameterOutNode getInstance(final ParameterInfo parameter) {
 
-		final CFGParameterOutNode cfgNode = CFGParameterOutNode
-				.getInstance(parameter);
-		return new PDGParameterOutNode(cfgNode);
-	}
+        if (null == parameter) {
+            throw new IllegalArgumentException();
+        }
 
-	private PDGParameterOutNode(final CFGParameterOutNode node) {
-		super(node);
-	}
+        final CFGParameterOutNode cfgNode = CFGParameterOutNode.getInstance(parameter);
+        return new PDGParameterOutNode(cfgNode);
+    }
+
+    private PDGParameterOutNode(final CFGParameterOutNode node) {
+        super(node);
+    }
 }
