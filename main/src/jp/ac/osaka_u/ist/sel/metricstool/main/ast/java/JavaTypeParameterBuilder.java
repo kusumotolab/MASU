@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.TypeParameterBuilder;
@@ -34,10 +37,11 @@ public class JavaTypeParameterBuilder extends TypeParameterBuilder {
      * @see jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.TypeParameterBuilder#getUpperBounds()
      */
     @Override
-    protected UnresolvedTypeInfo<? extends TypeInfo> getUpperBounds() {
-        UnresolvedTypeInfo<? extends TypeInfo> extendsTypeInfo = super.getUpperBounds();
+    protected List<UnresolvedTypeInfo<? extends TypeInfo>> getUpperBounds() {
+        List<UnresolvedTypeInfo<? extends TypeInfo>> extendsTypeInfo = super.getUpperBounds();
         if (null == extendsTypeInfo) {
-            return JavaTypeBuilder.JAVA_LANG_OBJECT;
+            ArrayList<UnresolvedTypeInfo<? extends TypeInfo>> object =  new ArrayList<UnresolvedTypeInfo<? extends TypeInfo>>();
+            return object;
         } else {
             return extendsTypeInfo;
         }

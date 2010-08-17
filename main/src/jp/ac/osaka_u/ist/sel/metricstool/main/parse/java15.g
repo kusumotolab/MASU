@@ -221,7 +221,7 @@ tokens {
 	FOREACH_EXPRESSION; ANNOTATION_DEF; ANNOTATION_MEMBER;ANNOTATIONS; ANNOTATION; ANNOTATION_STRING; 
 	ANNOTATION_MEMBER_VALUE_PAIR; ANNOTATION_FIELD_DEF; ANNOTATION_ARRAY_INIT;
 	TYPE_ARGUMENTS; TYPE_ARGUMENT; TYPE_PARAMETERS; TYPE_PARAMETER; WILDCARD_TYPE;
-	TYPE_UPPER_BOUNDS; TYPE_LOWER_BOUNDS; COND_CLAUSE; LOCAL_VARIABLE_DEF_STATE;
+	TYPE_UPPER_BOUNDS; TYPE_LOWER_BOUNDS; TYPE_ADDITIONAL_BOUNDS; COND_CLAUSE; LOCAL_VARIABLE_DEF_STATE;
     PAREN_EXPR; THROWS_CLAUSE;
 }
 
@@ -793,8 +793,14 @@ typeParameter
 typeParameterBounds
 	:
 		"extends"! classOrInterfaceType[true]
-		(BAND! classOrInterfaceType[true])*
+		(typeAdditionalBounds)*
 		{#typeParameterBounds = #(#[TYPE_UPPER_BOUNDS,"TYPE_UPPER_BOUNDS"], #typeParameterBounds);}
+	;
+
+typeAdditionalBounds
+	:
+		BAND! classOrInterfaceType[true]
+		{#typeAdditionalBounds = #(#[TYPE_ADDITIONAL_BOUNDS,"TYPE_ADDITIONAL_BOUNDS"], #typeAdditionalBounds);}
 	;
 
 // This is the body of a class. You can have classFields and extra semicolons.

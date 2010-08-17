@@ -194,6 +194,13 @@ public class DescriptionToken extends AstTokenAdapter {
             return true;
         }
     };
+    
+    public static final DescriptionToken TYPE_ADDITIONAL_BOUNDS = new DescriptionToken("TYPE_ADDITIONAL_BOUNDS"){
+        @Override
+        public boolean isTypeAdditionalBoundsDescription(){
+            return true;
+        }
+    };
 
     /**
      * 型引数記述部を表す定数インスタンス

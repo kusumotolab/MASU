@@ -1,10 +1,13 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder;
 
 
+import java.util.*;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.TypeParameterStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedCallableUnitInfo;
@@ -60,7 +63,7 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
         this.addInnerBuilder(typeBuilder);
 
         //èÛë‘í ímÇéÛÇØéÊÇËÇΩÇ¢Ç‡ÇÃÇìoò^
-        this.addStateManager(new TypeParameterStateManager());
+        this.addStateManager(typeParameterStateManager);
     }
 
     /**
@@ -86,7 +89,7 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
                 this.nameBuilder.deactivate();
                 this.typeBuilder.deactivate();
                 this.lowerBoundsType = null;
-                this.upperBoundsType = null;
+                this.upperBoundsType.clear();
                 this.nameBuilder.clearBuiltData();
                 this.typeBuilder.clearBuiltData();
                 this.inTypeParameterDefinition = false;
@@ -101,8 +104,7 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
                 } else if (type
                         .equals(TypeParameterStateManager.TYPE_PARAMETER.EXIT_TYPE_LOWER_BOUNDS)) {
                     //å^ÇÃâ∫å¿èÓïÒÇç\ízÇ∑ÇÈ
-                    this.lowerBoundsType = this.builtTypeBounds();
-                    
+                    this.lowerBoundsType = this.builtTypeBounds(); 
                 } else */
                 if (type.equals(TypeParameterStateManager.TYPE_PARAMETER.ENTER_TYPE_UPPER_BOUNDS)) {
                     //å^ÇÃè„å¿êÈåæÇ™óàÇΩÇÃÇ≈ç\ízïîÇ™Ç™ÇÒÇŒÇÈ
@@ -111,7 +113,17 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
                 } else if (type
                         .equals(TypeParameterStateManager.TYPE_PARAMETER.EXIT_TYPE_UPPER_BOUNDS)) {
                     //å^ÇÃè„å¿èÓïÒÇç\ízÇ∑ÇÈ
-                    this.upperBoundsType = this.builtTypeBounds();
+                    UnresolvedTypeInfo<?> typeInfo = this.builtTypeBounds();
+                    if (this.typeParameterStateManager.isInTypeParameterDefinition()) {
+                        this.upperBoundsType.add(typeInfo);
+                    }
+                } else if (type
+                        .equals(TypeParameterStateManager.TYPE_PARAMETER.ENTER_TYPE_ADDITIONAL_BOUNDS)) {
+
+                } else if (type
+                        .equals(TypeParameterStateManager.TYPE_PARAMETER.EXIT_TYPE_ADDITIONAL_BOUNDS)) {
+                    UnresolvedTypeInfo<?> typeInfo = this.builtTypeBounds();
+                    this.upperBoundsType.add(typeInfo);
                 }
             }
         }
@@ -137,19 +149,19 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
                 || (ownerUnit instanceof UnresolvedClassInfo) : "Illegal state: not parametrized unit";
 
         //å^ÇÃè„å¿èÓïÒâ∫å¿èÓïÒÇéÊìæ
-        final UnresolvedTypeInfo<? extends TypeInfo> upperBounds = this.getUpperBounds();
+        final List<UnresolvedTypeInfo<? extends TypeInfo>> upperBounds = this.getUpperBounds();
         final UnresolvedTypeInfo<? extends TypeInfo> lowerBounds = this.getLowerBounds();
         final int index = buildDataManager.getCurrentTypeParameterCount();
 
         UnresolvedTypeParameterInfo parameter = null;
 
-        if (null == upperBounds || upperBounds instanceof UnresolvedReferenceTypeInfo
-                && null == lowerBounds || lowerBounds instanceof UnresolvedReferenceTypeInfo) {
-            if (null == lowerBounds) {
-                //â∫å¿Ç™Ç»ÇØÇÍÇŒïÅí Ç…çÏÇÈ
-                parameter = new UnresolvedTypeParameterInfo(ownerUnit, name[0], index,
-                        (UnresolvedReferenceTypeInfo<?>) upperBounds);
+        if (null == upperBounds || upperBounds.isEmpty() || checkUpperBounds()) {
+            List<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>> upperReferenceBounds = new ArrayList<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>>();
+            for (final UnresolvedTypeInfo<? extends TypeInfo> typeInfo : this.getUpperBounds()) {
+                upperReferenceBounds.add((UnresolvedReferenceTypeInfo<?>) typeInfo);
             }
+            parameter = new UnresolvedTypeParameterInfo(ownerUnit, name[0], index,
+                    upperReferenceBounds);
             //            else {
             //                //â∫å¿Ç™Ç†ÇÈèÍçáÇÕÇ±Ç¡ÇøÇçÏÇÈ
             //                parameter = new UnresolvedSuperTypeParameterInfo(ownerUnit, name[0], index,
@@ -166,10 +178,24 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
     }
 
     /**
+     * upperBoundsÇ…äiî[Ç≥ÇÍÇƒÇ¢ÇÈTypeInfoÇ™ëSÇƒReferenceTypeInfoÇ©Ç«Ç§Ç©Çí≤Ç◊ÇÈ
+     * @return upperBoundsÇ…äiî[Ç≥ÇÍÇƒÇ¢ÇÈTypeInfoÇ™ëSÇƒReferenceTypeInfoÇ»ÇÁtrue
+     */
+    private boolean checkUpperBounds() {
+        for (final UnresolvedTypeInfo<?> typeInfo : this.getUpperBounds()) {
+            if (!(typeInfo instanceof UnresolvedReferenceTypeInfo<?>)) {
+                return false;
+            }
+        }
+        return true;
+
+    }
+
+    /**
      * å^ÇÃè„å¿èÓïÒÇï‘Ç∑ÅD
      * @returnÅ@å^ÇÃè„å¿èÓïÒ
      */
-    protected UnresolvedTypeInfo<? extends TypeInfo> getUpperBounds() {
+    protected List<UnresolvedTypeInfo<? extends TypeInfo>> getUpperBounds() {
         return this.upperBoundsType;
     }
 
@@ -186,7 +212,7 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
      * @returnÅ@ç≈å„Ç…ç\ízÇ≥ÇÍÇΩå^
      */
     protected UnresolvedTypeInfo<? extends TypeInfo> builtTypeBounds() {
-        return this.typeBuilder.getLastBuildData();
+        return this.typeBuilder.popLastBuiltData();
     }
 
     /**
@@ -222,8 +248,9 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
 
     /**
      * å^ÉpÉâÉÅÅ[É^ÇÃè„å¿
+     * è„å¿ÇÕï°êîå¬éwíËÇ≈Ç´ÇÈÇÃÇ≈ÉäÉXÉgÇ≈ä«óù
      */
-    private UnresolvedTypeInfo<? extends TypeInfo> upperBoundsType;
+    private List<UnresolvedTypeInfo<? extends TypeInfo>> upperBoundsType = new ArrayList<UnresolvedTypeInfo<? extends TypeInfo>>();
 
     /**
      * å^ÉpÉâÉÅÅ[É^ÇÃâ∫å¿
@@ -235,4 +262,5 @@ public class TypeParameterBuilder extends CompoundDataBuilder<UnresolvedTypePara
      */
     private boolean inTypeParameterDefinition = false;
 
+    private TypeParameterStateManager typeParameterStateManager = new TypeParameterStateManager();
 }

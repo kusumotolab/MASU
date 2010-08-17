@@ -110,7 +110,7 @@ public abstract class CallableUnitBuilder<T extends UnresolvedCallableUnitInfo<?
                         registName();
                         nameBuilder.clearBuiltData();
                     }
-                } else if (!typeParameterStateManager.isInTypeParameterDefinition()
+                } else if (!typeParameterStateManager.isEnterParameterDefinition()
                         && !throwsStateManager.isEntered()) {
                     // •Ô‚è’l‚ÌŒ^
                     if (type.equals(TypeDescriptionStateManager.TYPE_STATE.ENTER_TYPE)) {

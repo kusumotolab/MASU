@@ -334,6 +334,12 @@ public interface AstToken {
     public boolean isTypeLowerBoundsDescription();
     
     /**
+     * トークンが型変数宣言時の複数上限記述部であるかどうかを返す
+     * @return 複数上限記述部であればtrue
+     */
+    public boolean isTypeAdditionalBoundsDescription();
+    
+    /**
      * トークンがワイルドカード型引数を表すかどうかを返す．
      * @return ワイルドカード型引数を表すならtrue
      */

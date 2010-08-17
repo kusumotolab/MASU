@@ -244,6 +244,10 @@ public class AstTokenAdapter implements AstToken {
     public boolean isTypeUpperBoundsDescription() {
         return false;
     }
+    
+    public boolean isTypeAdditionalBoundsDescription(){
+        return false;
+    }
 
     public boolean isTypeWildcard() {
         return false;

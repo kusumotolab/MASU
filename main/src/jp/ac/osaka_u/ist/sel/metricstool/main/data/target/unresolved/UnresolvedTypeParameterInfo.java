@@ -61,7 +61,7 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
      */
     public UnresolvedTypeParameterInfo(final UnresolvedUnitInfo<?> ownerUnit, final String name,
             final int index,
-            final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> extendsType) {
+            final List<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>> extendsType) {
         this(ownerUnit, name, index);
         this.addExtendsType(extendsType);
     }
@@ -156,14 +156,14 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
      * @param extendsType
      */
     public final void addExtendsType(
-            final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> extendsType) {
+            final List<UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo>> extendsType) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == extendsType) {
             throw new IllegalArgumentException();
         }
 
-        this.extendsTypes.add(extendsType);
+        this.extendsTypes.addAll(extendsType);
     }
 
     /**

@@ -24,7 +24,8 @@ public class TypeParameterStateManager extends
      *
      */
     public enum TYPE_PARAMETER implements StateChangeEventType {
-        ENTER_TYPE_PARAMETER_DEF, EXIT_TYPE_PARAMETER_DEF, ENTER_TYPE_UPPER_BOUNDS, EXIT_TYPE_UPPER_BOUNDS, ENTER_TYPE_LOWER_BOUNDS, EXIT_TYPE_LOWER_BOUNDS
+        ENTER_TYPE_PARAMETER_DEF, EXIT_TYPE_PARAMETER_DEF, ENTER_TYPE_UPPER_BOUNDS, EXIT_TYPE_UPPER_BOUNDS, ENTER_TYPE_LOWER_BOUNDS, EXIT_TYPE_LOWER_BOUNDS,
+        ENTER_TYPE_ADDITIONAL_BOUNDS, EXIT_TYPE_ADDITIONAL_BOUNDS
     }
 
     /**
@@ -48,7 +49,10 @@ public class TypeParameterStateManager extends
         } else if (token.isTypeUpperBoundsDescription()) {
             this.setState(STATE.IN_UPPER_BOUNDS);
             fireStateChangeEvent(TYPE_PARAMETER.ENTER_TYPE_UPPER_BOUNDS, event);
+        } else if (token.isTypeAdditionalBoundsDescription()){
+            fireStateChangeEvent(TYPE_PARAMETER.ENTER_TYPE_ADDITIONAL_BOUNDS, event);
         }
+            
     }
 
     /**
@@ -69,6 +73,8 @@ public class TypeParameterStateManager extends
             fireStateChangeEvent(TYPE_PARAMETER.EXIT_TYPE_LOWER_BOUNDS, event);
         } else if (token.isTypeUpperBoundsDescription()) {
             fireStateChangeEvent(TYPE_PARAMETER.EXIT_TYPE_UPPER_BOUNDS, event);
+        } else if (token.isTypeAdditionalBoundsDescription()){
+            fireStateChangeEvent(TYPE_PARAMETER.EXIT_TYPE_ADDITIONAL_BOUNDS, event);
         }
     }
 
@@ -76,15 +82,18 @@ public class TypeParameterStateManager extends
      * ビジターの現在位置が型パラメータ定義部の中かどうかを返す
      * @return　ビジターの現在位置が型パラメータ定義部の中であればtrue
      */
-    public boolean isInTypeParameterDefinition() {
+    public boolean isEnterParameterDefinition() {
         return STATE.OUT != this.getState();
     }
 
-    /*
-    public STATE getState(){
-        return this.getState();
+    /**
+     * ビジターの現在位置が型パラメータ定義部(上界宣言部に入る前)の中かどうかを返す
+     * @return　ビジターの現在位置が型パラメータ定義部(上界宣言部に入る前)の中であればtrue
+     */
+    public boolean isInTypeParameterDefinition(){
+        return STATE.IN_PARAMETER_DEF == this.getState();
     }
-    */
+    
 
     /**
      * 型パラメータ定義部に関連するノードかどうかを判定する
@@ -107,5 +116,6 @@ public class TypeParameterStateManager extends
     protected enum STATE {
         OUT, IN_PARAMETER_DEF, IN_UPPER_BOUNDS, IN_LOWER_BOUNDS
     }
+    
 
 }
