@@ -94,7 +94,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final List<ReferenceTypeInfo> typeArguments = super.resolveTypeArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-
+ 
         // メソッド呼び出しがくっついている型("."の前のやつ)を解決
         final UnresolvedExpressionInfo<?> unresolvedQualifierUsage = this.getQualifierType();
         ExpressionInfo qualifierUsage = unresolvedQualifierUsage.resolve(usingClass, usingMethod,

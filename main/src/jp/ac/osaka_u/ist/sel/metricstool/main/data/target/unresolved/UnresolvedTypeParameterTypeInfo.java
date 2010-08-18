@@ -5,6 +5,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterTypeInfo;
@@ -65,6 +66,12 @@ public class UnresolvedTypeParameterTypeInfo implements
                 .getReferencedTypeParameter();
         final TypeParameterInfo typeParameter = unresolvedTypeParameter.resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+        for (final UnresolvedReferenceTypeInfo<? extends ReferenceTypeInfo> unresolvedExtendsType : unresolvedTypeParameter
+                .getExtendsTypes()) {
+            final ReferenceTypeInfo extendsType = unresolvedExtendsType.resolve(usingClass,
+                    usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
+            typeParameter.addExtendsType(extendsType);
+        }
         this.resolvedInfo = new TypeParameterTypeInfo(typeParameter);
         return this.resolvedInfo;
     }
