@@ -577,14 +577,14 @@ public class MetricsTool {
                 final TypeInfo fieldType = JavaByteCodeNameResolver.resolveType(unresolvedType,
                         null, null);
                 final Set<String> unresolvedModifiers = unresolvedField.getModifiers();
-                final boolean isStatic = unresolvedModifiers
+                final boolean isInstance = !unresolvedModifiers
                         .contains(JavaPredefinedModifierInfo.STATIC_STRING);
                 final Set<ModifierInfo> modifiers = new HashSet<ModifierInfo>();
                 for (final String unresolvedModifier : unresolvedModifiers) {
                     modifiers.add(JavaPredefinedModifierInfo.getModifierInfo(unresolvedModifier));
                 }
                 final ExternalFieldInfo field = new ExternalFieldInfo(modifiers, fieldName,
-                        classInfo, isStatic);
+                        classInfo, isInstance);
                 field.setType(fieldType);
                 classInfo.addDefinedField(field);
             }
