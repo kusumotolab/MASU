@@ -109,8 +109,8 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.INTERFACE_DEF:
             result = JavaAstToken.INTERFACE_DEFINITION;
             break;
-        case Java15TokenTypes.ENUM_DEF://enumはクラスとして扱う
-            result = DefinitionToken.CLASS_DEFINITION;
+        case Java15TokenTypes.ENUM_DEF://enumは以前はクラス同様の扱いであったが別々のトークンとして扱う
+            result = DefinitionToken.ENUM_DEFINITION;
             break;
         case Java15TokenTypes.ENUM_CONSTANT_DEF:
             result = JavaAstToken.ENUM_CONSTANT;

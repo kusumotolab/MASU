@@ -92,7 +92,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         this.staticInitializers = new HashSet<UnresolvedStaticInitializerInfo>();
         this.staticInitializers.add(this.implicitStaticInitializer);
         this.importStatements = new LinkedList<UnresolvedImportStatementInfo<?>>();
-        this.isInterface = false;
+   //     this.isInterface = false;
 
         this.anonymous = false;
 
@@ -640,16 +640,30 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
      * @return インターフェースの場合はtrue, そうでない場合はfalse
      */
     public final boolean isInterface() {
-        return this.isInterface;
+        return CLASS_CATEGORY.INTERFACE == this.classCategory;
+    }
+    
+    /**
+     * 列挙型かどうかを返す
+     * 
+     * @return インターフェースの場合はtrue, そうでない場合はfalse
+     */
+    public final boolean isEnum() {
+        return CLASS_CATEGORY.ENUM == this.classCategory;
     }
 
     /**
-     * インターフェースかどうかをセットする．
-     * @param isInterface インターフェースの場合は true，クラスの場合は false
+     * インターフェースであるという情報をセットする．
+     * 
      */
-    public void setIsInterface(final boolean isInterface) {
-        this.isInterface = isInterface;
+    public void setIsInterface() {
+        this.classCategory = CLASS_CATEGORY.INTERFACE;
     }
+    
+    public void setIsEnum(){
+        this.classCategory = CLASS_CATEGORY.ENUM;
+    }
+    
 
     /**
      * 無名クラスかどうかをセットする
@@ -715,14 +729,14 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             //　インナークラスのとき
             else {
                 this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
-                        this.isInterface, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+                        this.isInterface(), this.fileInfo, fromLine, fromColumn, toLine, toColumn);
             }
         }
 
         // 所有者がない場合は最も外側のクラス
         else {
 
-            this.resolvedInfo = new TargetClassInfo(modifiers, fullQualifiedName, this.isInterface,
+            this.resolvedInfo = new TargetClassInfo(modifiers, fullQualifiedName, this.isInterface(),
                     this.fileInfo, fromLine, fromColumn, toLine, toColumn);
         }
 
@@ -1007,15 +1021,21 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     private final List<UnresolvedImportStatementInfo<?>> importStatements;
 
     /**
-     * インターフェースであるかどうかを保存するための変数
-     */
-    private boolean isInterface;
-
-    /**
      * 無名クラスかどうかを表す変数
      */
     private boolean anonymous;
 
     private UnresolvedClassTypeInfo classType = null;
+    
+    /**
+     * クラスの種類がクラス，インターフェース，列挙のどれかを表す
+     * @author a-saitoh
+     *
+     */
+    public enum CLASS_CATEGORY{
+        CLASS, INTERFACE, ENUM
+    }
+    
+    private CLASS_CATEGORY classCategory = CLASS_CATEGORY.CLASS;
 
 }

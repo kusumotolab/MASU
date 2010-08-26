@@ -84,6 +84,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
         this.modifiers.addAll(modifiers);
 
         this.isInterface = isInterface;
+        
     }
 
     /**
@@ -129,6 +130,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
         this.modifiers.addAll(modifiers);
 
         this.isInterface = isInterface;
+  
     }
 
     /**
@@ -689,4 +691,6 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * インターフェースであるかどうかを保存するための変数
      */
     private final boolean isInterface;
+    
+ 
 }

@@ -70,6 +70,10 @@ public class AstTokenAdapter implements AstToken {
     public boolean isClassDefinition() {
         return false;
     }
+    
+    public boolean isEnumDefinition(){
+        return false;
+    }
 
     public boolean isClassImport() {
         return false;

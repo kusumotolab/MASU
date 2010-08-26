@@ -68,7 +68,7 @@ public class ClassDefinitionStateManager extends DeclaredBlockStateManager {
      */
     @Override
     protected boolean isDefinitionEvent(final AstVisitEvent event) {
-        return event.getToken().isClassDefinition();
+        return event.getToken().isClassDefinition() || event.getToken().isEnumDefinition();
     }
 
     /**

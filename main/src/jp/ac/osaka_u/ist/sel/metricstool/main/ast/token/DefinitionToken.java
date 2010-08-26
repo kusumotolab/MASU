@@ -25,6 +25,21 @@ public class DefinitionToken extends AstTokenAdapter {
     };
 
     /**
+     * enum定義部を表す定数インスタンス.
+     */
+    public static final DefinitionToken ENUM_DEFINITION = new DefinitionToken("ENUM_DEFINITION") {
+        @Override
+        public boolean isEnumDefinition() {
+            return true;
+        }
+
+        @Override
+        public boolean isBlockDefinition() {
+            return true;
+        }
+    };
+
+    /**
      * コンストラクタ定義部を表す定数インスタンス.
      */
     public static final DefinitionToken CONSTRUCTOR_DEFINITION = new DefinitionToken(
@@ -61,7 +76,7 @@ public class DefinitionToken extends AstTokenAdapter {
             return true;
         }
     };
-    
+
     /**
      * インスタンスイニシャライザを表す定数インスタンス
      */
@@ -71,7 +86,7 @@ public class DefinitionToken extends AstTokenAdapter {
         public boolean isInstanceInitializerDefinition() {
             return true;
         }
-    };    
+    };
 
     /**
      * フィールド定義部を表す定数インスタンス.
@@ -145,7 +160,7 @@ public class DefinitionToken extends AstTokenAdapter {
         public boolean isMethodParameterDefinition() {
             return true;
         }
-        
+
         @Override
         public boolean isVariableParameterDefinition() {
             return true;

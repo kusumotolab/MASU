@@ -9,6 +9,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.ModifiersDefiniti
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.NameStateManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.*;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
@@ -79,7 +80,7 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
         if (type.equals(CLASS_STATE_CHANGE.ENTER_CLASS_DEF)) {
             //クラス定義に入ったら，とりあえず新しいクラス定義を登録しに行く
             final AstVisitEvent trigger = event.getTrigger();
-            this.startClassDefinition(trigger.getStartLine(), trigger.getStartColumn(),
+            this.startClassDefinition(event, trigger.getStartLine(), trigger.getStartColumn(),
                     trigger.getEndLine(), trigger.getEndColumn());
 
         } else if (type.equals(CLASS_STATE_CHANGE.EXIT_CLASS_DEF)) {
@@ -173,14 +174,19 @@ public class ClassBuilder extends CompoundDataBuilder<UnresolvedClassInfo> {
      * @param endLine　クラスの終了行番号
      * @param endColumn　クラスの終了列番号
      */
-    protected void startClassDefinition(final int startLine, final int startColumn,
-            final int endLine, final int endColumn) {
-        final FileInfo currentFile = DataManager.getInstance().getFileInfoManager()
-                .getCurrentFile(Thread.currentThread());
+    protected void startClassDefinition(final StateChangeEvent<AstVisitEvent> event,
+            final int startLine, final int startColumn, final int endLine, final int endColumn) {
+        final FileInfo currentFile = DataManager.getInstance().getFileInfoManager().getCurrentFile(
+                Thread.currentThread());
         assert null != currentFile : "Illegal state: the file information was not registered to FileInfoManager";
 
         final UnresolvedClassInfo classInfo = new UnresolvedClassInfo(currentFile,
                 this.buildManager.getCurrentUnit());
+
+        //enum宣言が来た場合はenumであることを登録
+        if (event.getTrigger().getToken().isEnumDefinition()) {
+            classInfo.setIsEnum();
+        }
 
         classInfo.setFromLine(startLine);
         classInfo.setFromColumn(startColumn);

@@ -37,6 +37,7 @@ public class InheritanceBuilder extends CompoundDataBuilder<UnresolvedClassTypeI
 
         this.addStateManager(inheritanceStateManager);
         this.addStateManager(typeStateManager);
+
     }
 
     @Override
@@ -57,7 +58,13 @@ public class InheritanceBuilder extends CompoundDataBuilder<UnresolvedClassTypeI
 
             //Superクラスが空(extendsしてるクラスが存在しない)ならObjectクラスを親クラスとして追加
             UnresolvedClassInfo classInfo = buildDataManager.getCurrentClass();
-            if (!classInfo.isInterface() && classInfo.getSuperClasses().isEmpty()) {
+            if (classInfo.isEnum()) {
+                //String[] enumFullQualifiedName = {"java", "lang", "enum"};
+                UnresolvedClassTypeInfo enumTypeInfo = new UnresolvedClassTypeInfo(
+                        new LinkedList<UnresolvedClassImportStatementInfo>(), new String[] {
+                                "java", "lang", "Enum" });
+                classInfo.addSuperClass(enumTypeInfo);
+            } else if (!classInfo.isInterface() && classInfo.getSuperClasses().isEmpty()) {
                 final String[] fqname = classInfo.getFullQualifiedName();
                 //Objectクラスそのものには追加しない
                 if (3 == fqname.length) {
