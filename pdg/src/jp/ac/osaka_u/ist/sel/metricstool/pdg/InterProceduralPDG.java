@@ -15,6 +15,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
@@ -23,13 +24,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VoidTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGAcrossEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGAcrossExecutionDependenceEdge;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGParameterDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGFieldDataDependenceEdge;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGParameterDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGReturnDataDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.DefaultPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.IPDGNodeFactory;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGFieldInNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGFieldOutNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGParameterInNode;
 
@@ -157,6 +161,9 @@ public class InterProceduralPDG extends PDG {
 				// 引数を介したデータ依存関係を構築
 				this.buildPamareterDataDependency(node);
 
+				// フィールドを介したデータ依存関係を構築
+				this.buildFieldDataDependency(unitPDG, node);
+				
 				// 返り値を介したデータ依存関係を構築
 				this.buildReturnDataDependency(node);
 
@@ -201,6 +208,7 @@ public class InterProceduralPDG extends PDG {
 				}
 			}
 
+			// TODO オーバーライドしているメソッドも考慮しなければならない
 			final CallableUnitInfo callee = call.getCallee();
 			final IntraProceduralPDG calleePDG = this.unitToPDGMap.get(callee);
 			if (null == calleePDG) {
@@ -225,6 +233,61 @@ public class InterProceduralPDG extends PDG {
 					this.acrossEdges.add(acrossEdge);
 					definitionNode.addForwardEdge(acrossEdge);
 					referenceNode.addBackwardEdge(acrossEdge);
+				}
+			}
+		}
+	}
+
+	/**
+	 * 引数で与えられたノードで呼び出されているメソッドとのフィールドを介したデータ依存関係を構築する
+	 * 
+	 * @param unitPDG
+	 * @param node
+	 */
+	private void buildFieldDataDependency(final IntraProceduralPDG unitPDG,
+			final PDGNode<?> node) {
+
+		final Map<FieldInfo, PDGFieldOutNode> fieldOutNodes = Collections
+				.unmodifiableMap(unitPDG.fieldOutNodes);
+
+		final ExecutableElementInfo core = node.getCore();
+		for (final CallInfo<? extends CallableUnitInfo> call : core.getCalls()) {
+
+			final CallableUnitInfo callee = call.getCallee();
+			final IntraProceduralPDG calleePDG = this.unitToPDGMap.get(callee);
+			if (null == calleePDG) {
+				break;
+			}
+
+			final Map<FieldInfo, PDGFieldInNode> fieldInNodes = Collections
+					.unmodifiableMap(calleePDG.fieldInNodes);
+			for (final Entry<FieldInfo, PDGFieldOutNode> fieldOut : fieldOutNodes
+					.entrySet()) {
+				final FieldInfo field = fieldOut.getKey();
+				final PDGFieldOutNode fieldOutNode = fieldOut.getValue();
+				final PDGFieldInNode fieldInNode = fieldInNodes.get(field);
+
+				if (null != fieldInNode) {
+
+					final Set<PDGNode<?>> fromNodes = new HashSet<PDGNode<?>>();
+					for (final PDGEdge edge : fieldOutNode.getBackwardEdges()) {
+						fromNodes.add(edge.getFromNode());
+					}
+
+					final Set<PDGNode<?>> toNodes = new HashSet<PDGNode<?>>();
+					for (final PDGEdge edge : fieldInNode.getForwardEdges()) {
+						toNodes.add(edge.getToNode());
+					}
+
+					for (final PDGNode<?> fromNode : fromNodes) {
+						for (final PDGNode<?> toNode : toNodes) {
+							final PDGFieldDataDependenceEdge acrossEdge = new PDGFieldDataDependenceEdge(
+									fromNode, toNode, field, call);
+							this.acrossEdges.add(acrossEdge);
+							fromNode.addForwardEdge(acrossEdge);
+							toNode.addBackwardEdge(acrossEdge);
+						}
+					}
 				}
 			}
 		}
