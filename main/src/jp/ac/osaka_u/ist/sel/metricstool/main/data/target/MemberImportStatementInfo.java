@@ -15,10 +15,10 @@ public class MemberImportStatementInfo extends ImportStatementInfo<Member> {
      * @param toLine
      * @param toColumn
      */
-    public MemberImportStatementInfo(final Set<Member> importedMembers, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    public MemberImportStatementInfo(final Set<Member> importedMembers, final String[] importName,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(importedMembers, fromLine, fromColumn, toLine, toColumn);
+        super(importedMembers, importName, fromLine, fromColumn, toLine, toColumn);
     }
 
     /**

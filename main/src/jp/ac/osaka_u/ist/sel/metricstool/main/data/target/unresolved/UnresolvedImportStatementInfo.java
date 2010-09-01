@@ -31,8 +31,8 @@ public abstract class UnresolvedImportStatementInfo<T extends ImportStatementInf
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
-        if (null == namespace) {
-            throw new NullPointerException();
+        if (null == namespace || ((!all) && namespace.length == 0)) {
+            throw new IllegalArgumentException();
         }
 
         this.importName = Arrays.<String> copyOf(namespace, namespace.length);

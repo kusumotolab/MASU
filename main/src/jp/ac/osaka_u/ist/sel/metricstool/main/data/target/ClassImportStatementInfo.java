@@ -24,10 +24,10 @@ public class ClassImportStatementInfo extends ImportStatementInfo<ClassInfo> {
      * @param toLine
      * @param toColumn
      */
-    public ClassImportStatementInfo(final Set<ClassInfo> importedClasses, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    public ClassImportStatementInfo(final Set<ClassInfo> importedClasses, final String[] namespace,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(importedClasses, fromLine, fromColumn, toLine, toColumn);
+        super(importedClasses, namespace, fromLine, fromColumn, toLine, toColumn);
     }
 
     /**

@@ -31,7 +31,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedI
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLabelInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalVariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMemberImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeParameterInfo;
@@ -147,21 +146,27 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
     }
 
-    public void addUsingAliase(final String aliase, final String[] realName, final ImportType type) {
+    public void addUsingAlias(final String alias, final UnresolvedImportStatementInfo<?> importStatement){
+        if (null == alias || null == importStatement){
+            throw new IllegalArgumentException("import statement is null");
+        }
         if (!this.scopeStack.isEmpty()) {
             final BlockScope scope = this.scopeStack.peek();
-            scope.addAlias(aliase, realName, type);
+            scope.addAlias(alias, importStatement);
 
             //名前のエイリアス情報が変化したのでキャッシュをリセット
-            aliaseNameSetCache = null;
+            aliasNameSetCache = null;
             allAvaliableNameSetCache = null;
         }
     }
 
-    public void addUsingNameSpace(final String[] nameSpace, final ImportType type) {
+    public void addUsingNameSpace(final UnresolvedImportStatementInfo<?> importStatement) {
+        if (null == importStatement){
+            throw new IllegalArgumentException("import statement is null");
+        }
         if (!this.scopeStack.isEmpty()) {
             final BlockScope scope = this.scopeStack.peek();
-            scope.addUsingNameSpace(nameSpace, type);
+            scope.addUsingNameSpace(importStatement);
 
             //名前空間情報が変化したのでキャッシュをリセット
             availableNameSpaceSetCache = null;
@@ -215,7 +220,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
             nextScopedVariables.clear();
 
             //名前情報キャッシュをリセット
-            aliaseNameSetCache = null;
+            aliasNameSetCache = null;
             availableNameSpaceSetCache = null;
             allAvaliableNameSetCache = null;
         }
@@ -327,6 +332,16 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
         return resultSet;
     }
+    
+    /**
+     * getAllAvailableNamesの結果を，インポート文の出現位置でソートして返す
+     * @return 現在のスコープから見えるインポート文の集合
+     */
+    public List<UnresolvedImportStatementInfo<?>> getAllSortedAvailableNames(){
+        final List<UnresolvedImportStatementInfo<?>> result = this.getAllAvaliableNames();
+        Collections.sort(result);
+        return result;
+    }
 
     public List<UnresolvedImportStatementInfo<?>> getAvailableNameSpaceSet() {
         //nullじゃなければ変化してないのでキャッシュ使いまわし
@@ -358,8 +373,8 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     public List<UnresolvedImportStatementInfo<?>> getAvailableAliasSet() {
         //nullじゃなければ変化してないのでキャッシュ使いまわし
-        if (null != aliaseNameSetCache) {
-            return aliaseNameSetCache;
+        if (null != aliasNameSetCache) {
+            return aliasNameSetCache;
         }
 
         final List<UnresolvedImportStatementInfo<?>> result = new LinkedList<UnresolvedImportStatementInfo<?>>();
@@ -373,7 +388,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
             }
         }
 
-        aliaseNameSetCache = result;
+        aliasNameSetCache = result;
 
         return result;
     }
@@ -582,7 +597,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
         }
     }
 
-    public String[] resolveAliase(String[] name) {
+    public String[] resolveAlias(String[] name) {
         if (name == null) {
             throw new NullPointerException("empty name.");
         }
@@ -654,43 +669,20 @@ public class DefaultBuildDataManager implements BuildDataManager {
             this.variables.put(variable.getName(), variable);
         }
 
-        public void addAlias(final String alias, final String[] name, final ImportType type) {
-            if (null == name || name.length == 0 || null == type) {
-                throw new IllegalArgumentException("Illegal name alias.");
-            }
-
-            final String[] tmp = new String[name.length];
-            System.arraycopy(name, 0, tmp, 0, name.length);
-
-            switch (type) {
-            case Class:
-                this.nameAliases.put(alias, new UnresolvedClassImportStatementInfo(tmp, false));
-                break;
-            case Member:
-                this.nameAliases.put(alias, new UnresolvedMemberImportStatementInfo(tmp, false));
-                break;
-            default:
-                throw new IllegalStateException();
-            }
-        }
-
-        public void addUsingNameSpace(final String[] name, final ImportType type) {
-            if (null == type) {
+        public void addAlias(final String alias, final UnresolvedImportStatementInfo<?> importStatement) {
+            if (null == importStatement) {
                 throw new IllegalArgumentException();
             }
-            final String[] tmp = new String[name.length];
-            System.arraycopy(name, 0, tmp, 0, name.length);
 
-            switch (type) {
-            case Class:
-                this.availableNameSpaces.add(new UnresolvedClassImportStatementInfo(tmp, true));
-                break;
-            case Member:
-                this.availableNameSpaces.add(new UnresolvedMemberImportStatementInfo(tmp, true));
-                break;
-            default:
-                throw new IllegalStateException();
+            this.nameAliases.put(alias, importStatement);
+        }
+
+        public void addUsingNameSpace(final UnresolvedImportStatementInfo<?> importStatement) {
+            if (null == importStatement) {
+                throw new IllegalArgumentException();
             }
+
+            this.availableNameSpaces.add(importStatement);
         }
 
         public List<UnresolvedImportStatementInfo<?>> getAvailableNameSpaces() {
@@ -757,7 +749,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
         this.scopeStack.add(new BlockScope());
 
-        aliaseNameSetCache = null;
+        aliasNameSetCache = null;
         availableNameSpaceSetCache = null;
         allAvaliableNameSetCache = null;
         currentNameSpaceCache = null;
@@ -765,7 +757,7 @@ public class DefaultBuildDataManager implements BuildDataManager {
 
     private static final String[] EMPTY_NAME = new String[0];
 
-    private List<UnresolvedImportStatementInfo<?>> aliaseNameSetCache = null;
+    private List<UnresolvedImportStatementInfo<?>> aliasNameSetCache = null;
 
     private List<UnresolvedImportStatementInfo<?>> availableNameSpaceSetCache = null;
 

@@ -321,17 +321,19 @@ packageDefinition
 
 // Import statement: import followed by a package or class name
 importDefinition
-	:	
-	(    ("import" "static") => h1:memberImportDefinition
-	|    h2:classImportDefinition
-	)
-	{
-		if(null != #h1){
-			#importDefinition = #(#[MEMBER_IMPORT, "import"], #h1);
-		}else{
-			#importDefinition = #(#[CLASS_IMPORT, "import"], #h2);
+	:
+		{pushStartLineColumn();}	
+		(    ("import" "static") => h1:memberImportDefinition
+		|    h2:classImportDefinition
+		)
+		{
+			if(null != #h1){
+				#importDefinition = #(#[MEMBER_IMPORT, "import"], #h1);
+			}else{
+				#importDefinition = #(#[CLASS_IMPORT, "import"], #h2);
+			}
+			registLineColumn(#importDefinition);
 		}
-	}
 	;
 //	options {defaultErrorHandler = true;}
 //	{ boolean isStatic = false; }

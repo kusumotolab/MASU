@@ -803,6 +803,12 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             this.resolvedInfo.addStaticInitializer(initializer);
         }
 
+        // このクラスのインポート文を解決，登録
+        for (final UnresolvedImportStatementInfo<?> unresolvedImport : this.getImportStatements()) {
+            this.resolvedInfo.addImportStatement(unresolvedImport.resolve(usingClass, usingMethod,
+                    classInfoManager, fieldInfoManager, methodInfoManager));
+        }
+
         return this.resolvedInfo;
     }
 

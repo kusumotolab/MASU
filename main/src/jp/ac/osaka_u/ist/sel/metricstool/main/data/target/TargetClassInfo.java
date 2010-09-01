@@ -144,6 +144,7 @@ public class TargetClassInfo extends ClassInfo {
         this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new TreeSet<StaticInitializerInfo>();
         this.staticInitializers.add(this.implicitStaticInitializer);
+        this.importStatements = new TreeSet<ImportStatementInfo<?>>();
 
         this.ownerFile = fileInfo;
     }
@@ -178,6 +179,7 @@ public class TargetClassInfo extends ClassInfo {
         this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new TreeSet<StaticInitializerInfo>();
         this.staticInitializers.add(this.implicitStaticInitializer);
+        this.importStatements = new TreeSet<ImportStatementInfo<?>>();
 
         this.ownerFile = fileInfo;
     }
@@ -208,6 +210,15 @@ public class TargetClassInfo extends ClassInfo {
         }
 
         this.staticInitializers.add(staticInitializer);
+    }
+    
+    public final void addImportStatement(final ImportStatementInfo<?> importStatement){
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == importStatement) {
+            throw new NullPointerException();
+        }
+        
+        this.importStatements.add(importStatement);
     }
 
     /**
@@ -358,6 +369,9 @@ public class TargetClassInfo extends ClassInfo {
      */
     private final StaticInitializerInfo implicitStaticInitializer;
 
+   
+    private final SortedSet<ImportStatementInfo<?>> importStatements;
+    
     /**
      * このクラスを宣言しているファイル情報を保存するための変数
      */

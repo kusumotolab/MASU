@@ -123,9 +123,19 @@ public class UnresolvedMemberImportStatementInfo extends
                 }
             }
         }
-
-        this.resolvedInfo = new MemberImportStatementInfo(importedMembers, fromLine, fromColumn,
-                toLine, toColumn);
+        
+        // fix import name to original text
+        String[] lawImportName;
+        if (this.isAll()){
+            final int length = importName.length;
+            lawImportName = new String[length + 1];
+            System.arraycopy(importName, 0, lawImportName, 0, length);
+            lawImportName[length] = "*";
+        } else {
+            lawImportName = importName;
+        }
+        this.resolvedInfo = new MemberImportStatementInfo(importedMembers, lawImportName,
+                fromLine, fromColumn, toLine, toColumn);
         return this.resolvedInfo;
     }
 }

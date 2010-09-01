@@ -91,7 +91,18 @@ public final class UnresolvedClassImportStatementInfo extends
             accessibleClasses.add(specifiedClass);
         }
 
-        this.resolvedInfo = new ClassImportStatementInfo(accessibleClasses, fromLine, fromColumn,
+        // fix import name to original text
+        final String[] originalImportName = this.getImportName();
+        String[] importName;
+        if (this.isAll()){
+            final int length = originalImportName.length;
+            importName = new String[length + 1];
+            System.arraycopy(originalImportName, 0, importName, 0, length);
+            importName[length] = "*";
+        } else {
+            importName = originalImportName;
+        }
+        this.resolvedInfo = new ClassImportStatementInfo(accessibleClasses, importName, fromLine, fromColumn,
                 toLine, toColumn);
         return this.resolvedInfo;
     }

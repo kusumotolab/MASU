@@ -4,11 +4,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.CompoundDataBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.IdentifierBuilder;
-import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ImportType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.OperatorToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMemberImportStatementInfo;
 
 
 public class JavaMemberImportBuilder extends CompoundDataBuilder<Object> {
@@ -53,21 +53,27 @@ public class JavaMemberImportBuilder extends CompoundDataBuilder<Object> {
             identifierBuilder.activate();
         } else if (type.equals(JavaMemberImportStateManager.IMPORT_STATE_CHANGE.EXIT_MEMBER_IMPORT)) {
             identifierBuilder.deactivate();
-            registImportData();
+            registImportData(event.getTrigger());
         }
     }
 
-    private void registImportData() {
+    private void registImportData(final AstVisitEvent e) {
         String[] importedElement = identifierBuilder.popLastBuiltData();
         int length = importedElement.length;
         if (length > 0) {
+            final String[] tmp = new String[length];
+            System.arraycopy(importedElement, 0, tmp, 0, length);
+            final UnresolvedMemberImportStatementInfo memberImport = new UnresolvedMemberImportStatementInfo(
+                    tmp, lastTokenIsAsterisk);
+            memberImport.setFromLine(e.getStartLine());
+            memberImport.setFromColumn(e.getStartColumn());
+            memberImport.setToLine(e.getEndLine());
+            memberImport.setToColumn(e.getEndColumn());
             if (lastTokenIsAsterisk) {//Using name space
-                String[] tmp = new String[length];
-                System.arraycopy(importedElement, 0, tmp, 0, length);
-                buildDataManager.addUsingNameSpace(tmp, ImportType.Member);
-            } else {//Aliase 
-                String aliase = importedElement[length - 1];
-                buildDataManager.addUsingAliase(aliase, importedElement, ImportType.Member);
+                buildDataManager.addUsingNameSpace(memberImport);
+            } else {//Alias 
+                final String alias = importedElement[length - 1];
+                buildDataManager.addUsingAlias(alias, memberImport);
             }
         }
 

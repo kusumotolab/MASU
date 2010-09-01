@@ -97,19 +97,17 @@ public interface BuildDataManager {
     /**
      * 現在のブロックスコープ内で有効な名前エイリアスを追加する
      * 
-     * @param aliase
-     * @param realName
-     * @param type
+     * @param alias インポート文により置き換えられた名前 
+     * @param importStatement 未解決インポート文
      */
-    public void addUsingAliase(String aliase, String[] realName, ImportType type);
+    public void addUsingAlias(String alias, final UnresolvedImportStatementInfo<?> importStatement);
 
     /**
      * 現在のブロックスコープ内で有効な，名前空間利用情報を追加する
      * 
-     * @param nameSpace
-     * @param type
+     * @param importStatement 未解決インポート文
      */
-    public void addUsingNameSpace(String[] nameSpace, ImportType type);
+    public void addUsingNameSpace(final UnresolvedImportStatementInfo<?> importStatement);
 
     public void addStatement(final UnresolvedStatementInfo<? extends StatementInfo> statement);
 
@@ -170,7 +168,7 @@ public interface BuildDataManager {
 
     public void pushNewNameSpace(String[] nameSpace);
 
-    public String[] resolveAliase(String[] name);
+    public String[] resolveAlias(String[] name);
 
     public void startScopedBlock();
 
