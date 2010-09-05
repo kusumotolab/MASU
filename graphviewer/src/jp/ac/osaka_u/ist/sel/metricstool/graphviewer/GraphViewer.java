@@ -93,8 +93,8 @@ public class GraphViewer extends MetricsTool {
             }
 
             {
-                final Option p = new Option("p", "IntraProceduralProgramDepencenceGraph", true,
-                        "intraprocedural program dependence graph");
+                final Option p = new Option("p", "ProgramDepencenceGraph", true,
+                        "program dependence graph");
                 p.setArgName("file");
                 p.setArgs(1);
                 p.setRequired(false);
@@ -102,12 +102,12 @@ public class GraphViewer extends MetricsTool {
             }
 
             {
-                final Option q = new Option("q", "InterProceduralProgramDepencenceGraph", true,
-                        "interprocedural program dependence graph");
-                q.setArgName("file");
-                q.setArgs(1);
-                q.setRequired(false);
-                options.addOption(q);
+                final Option s = new Option("s", "SystemDepencenceGraph", true,
+                        "system dependence graph");
+                s.setArgName("file");
+                s.setArgs(1);
+                s.setRequired(false);
+                options.addOption(s);
             }
 
             {
@@ -129,11 +129,11 @@ public class GraphViewer extends MetricsTool {
             }
 
             {
-                final Option s = new Option("s", "state", true, "count object state change on PDGs");
-                s.setArgName("boolean");
-                s.setArgs(1);
-                s.setRequired(false);
-                options.addOption(s);
+                final Option t = new Option("t", "state", true, "count object state change on PDGs");
+                t.setArgName("boolean");
+                t.setArgs(1);
+                t.setRequired(false);
+                options.addOption(t);
             }
 
             final CommandLineParser parser = new PosixParser();
@@ -205,8 +205,8 @@ public class GraphViewer extends MetricsTool {
             }
 
             boolean state = false;
-            if (cmd.hasOption("s")) {
-                final String text = cmd.getOptionValue("s");
+            if (cmd.hasOption("t")) {
+                final String text = cmd.getOptionValue("t");
                 if (text.equals("yes")) {
                     state = true;
                 } else if (text.equals("no")) {
@@ -272,10 +272,10 @@ public class GraphViewer extends MetricsTool {
                 writer.close();
             }
 
-            if (cmd.hasOption("q")) {
+            if (cmd.hasOption("s")) {
                 out.println("building and outputing interprocedural PDGs ...");
                 final BufferedWriter writer = new BufferedWriter(new FileWriter(cmd
-                        .getOptionValue("q")));
+                        .getOptionValue("s")));
 
                 writer.write("digraph InterproceduralPDG {");
                 writer.newLine();
