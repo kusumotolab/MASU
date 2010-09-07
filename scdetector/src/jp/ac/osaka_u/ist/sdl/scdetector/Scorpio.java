@@ -64,6 +64,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.DefaultPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGControlNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGDataNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGMethodEnterNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
@@ -801,6 +802,11 @@ public class Scorpio extends MetricsTool {
 				if (pdgNode instanceof PDGControlNode) {
 					continue ALLNODE;
 				}
+			}
+
+			// ÉfÅ[É^ÉmÅ[ÉhÇÕìoò^ÇµÇ»Ç¢
+			if (pdgNode instanceof PDGDataNode<?>) {
+				continue ALLNODE;
 			}
 
 			// è¨Ç≥Ç¢ÉÅÉ\ÉbÉhÇÕìoò^ÇµÇ»Ç¢
