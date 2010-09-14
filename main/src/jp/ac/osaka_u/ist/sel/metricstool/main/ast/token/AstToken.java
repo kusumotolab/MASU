@@ -71,6 +71,13 @@ public interface AstToken {
     public boolean isEnumDefinition();
 
     /**
+     * expression列の開始部ならtrue
+     * Enumのコンストラクタを処理するために仕様
+     * @return
+     */
+    public boolean isExpressionList();
+
+    /**
      * トークンがクラスブロックを表すかどうかを返す.
      * クラスブロックは通常のブロックとは区別されなければならない.
      * @return クラスブロックを表すトークンならtrue

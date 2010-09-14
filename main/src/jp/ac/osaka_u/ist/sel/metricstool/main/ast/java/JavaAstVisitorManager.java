@@ -80,7 +80,7 @@ public class JavaAstVisitorManager<T> implements AstVisitorManager<T> {
         this.builders.add(new ThrowsBuilder(this.buildDataManager, new JavaTypeBuilder(
                 this.buildDataManager)));
         this.builders.add(new JavaAnonymousClassBuilder(this.buildDataManager));
-        this.builders.add(new JavaEnumElementBuilder(this.buildDataManager));
+        this.builders.add(new JavaEnumElementBuilder(this.buildDataManager, this.expressionManager));
         this.builders.add(new JavaIntefaceMarker(this.buildDataManager));
         this.builders.add(new JavaTypeParameterBuilder(this.buildDataManager));
 

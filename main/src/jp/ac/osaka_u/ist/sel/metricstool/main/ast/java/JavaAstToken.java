@@ -56,6 +56,13 @@ public class JavaAstToken extends AstTokenAdapter {
         }
     };
 
+    public static final JavaAstToken EXPR_LIST = new JavaAstToken("ELIST") {
+        @Override
+        public boolean isExpressionList() {
+            return true;
+        }
+    };
+
     /**
      * super記述しを表す定数インスタンス
      */

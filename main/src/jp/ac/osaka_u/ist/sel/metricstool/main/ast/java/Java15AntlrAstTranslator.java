@@ -173,7 +173,7 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.TYPE_LOWER_BOUNDS:
             result = DescriptionToken.TYPE_LOWER_BOUNDS;
             break;
-            
+
         case Java15TokenTypes.TYPE_ADDITIONAL_BOUNDS:
             result = DescriptionToken.TYPE_ADDITIONAL_BOUNDS;
             break;
@@ -415,7 +415,9 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
             result = SyntaxToken.RETURN;
             break;
         //        case Java15TokenTypes.PARAMETERS:
-        //        case Java15TokenTypes.ELIST:
+        case Java15TokenTypes.ELIST:
+            result = JavaAstToken.EXPR_LIST;
+            break;
         case Java15TokenTypes.LITERAL_if:
             result = BlockNameToken.IF_BLOCK;
             break;

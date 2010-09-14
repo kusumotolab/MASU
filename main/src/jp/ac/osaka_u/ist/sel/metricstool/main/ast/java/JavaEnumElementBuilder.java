@@ -6,6 +6,7 @@ import java.util.Stack;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.CompoundDataBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
@@ -25,13 +26,18 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedF
  */
 public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldInfo> {
 
-    public JavaEnumElementBuilder(BuildDataManager buildDataManager) {
+    public JavaEnumElementBuilder(BuildDataManager buildDataManager,
+            ExpressionElementManager expressionManager) {
 
         if (null == buildDataManager) {
             throw new NullPointerException("builderManager is null.");
         }
+        if (null == expressionManager) {
+            throw new NullPointerException("expressionElementManager is null.");
+        }
 
         this.buildManager = buildDataManager;
+        this.expressionManager = expressionManager;
 
         addStateManager(this.stateManager);
         addInnerBuilder(this.nameBuilder);
@@ -45,21 +51,36 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
                 nameBuilder.clearBuiltData();
                 enumClassStack.push(buildManager.getCurrentClass());
                 nameBuilder.activate();
-            } else if (type
-                    .equals(JavaEnumElementStateManager.ENUM_ELEMENT_STATE.EXIT_ENUM_ELEMENT)) {
-                nameBuilder.deactivate();
-                AstVisitEvent trigger = event.getTrigger();
-                buildEnumElement(trigger.getStartLine(), trigger.getStartColumn(), trigger
-                        .getEndLine(), trigger.getEndColumn());
-            } else if (type
-                    .equals(JavaEnumElementStateManager.ENUM_ELEMENT_STATE.ENTER_ENUM_ANONYMOUS_CLASS)) {
-                nameBuilder.deactivate();
+
                 AstVisitEvent trigger = event.getTrigger();
                 buildAnonymousClass(trigger.getStartLine(), trigger.getStartColumn(), trigger
                         .getEndLine(), trigger.getEndColumn());
+
+            } else if (type
+                    .equals(JavaEnumElementStateManager.ENUM_ELEMENT_STATE.EXIT_ENUM_ELEMENT)) {
+                nameBuilder.deactivate();
+                endAnonymousClass();
+                AstVisitEvent trigger = event.getTrigger();
+                buildEnumElement(trigger.getStartLine(), trigger.getStartColumn(), trigger
+                        .getEndLine(), trigger.getEndColumn());
+
+            } else if (type
+                    .equals(JavaEnumElementStateManager.ENUM_ELEMENT_STATE.ENTER_ENUM_ANONYMOUS_CLASS)) {
+
+                //                nameBuilder.deactivate();
+
             } else if (type
                     .equals(JavaEnumElementStateManager.ENUM_ELEMENT_STATE.EXIT_ENUM_ANONYMOUS_CLASS)) {
-                endAnonymousClass();
+
+            } else if (type
+                    .equals(JavaEnumElementStateManager.ENUM_ELEMENT_STATE.ENTER_ENUM_ARGUMENT)) {
+
+                //          System.out.println("test");
+            } else if (type
+                    .equals(JavaEnumElementStateManager.ENUM_ELEMENT_STATE.EXIT_ENUM_ARGUMENT)) {
+                //         System.out.println("hogehoge");
+                //this.expressionManager.getLaterExpressionElements(count)
+
             }
         }
     }
@@ -102,7 +123,7 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
             UnresolvedFieldInfo element = new UnresolvedFieldInfo(elementName,
                     UnresolvedClassTypeInfo.getInstance(enumClass), enumClass, null, startLine,
                     startColumn, endLine, endColumn);
-    //        modifierInterpriter.interprit(defaultModifiers, element, element);
+            //        modifierInterpriter.interprit(defaultModifiers, element, element);
 
             buildManager.addField(element);
             enumClass.addDefinedField(element);
@@ -112,6 +133,8 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
     protected void endAnonymousClass() {
         buildManager.endClassDefinition();
     }
+
+    private final ExpressionElementManager expressionManager;
 
     private final JavaEnumElementStateManager stateManager = new JavaEnumElementStateManager();
 
@@ -127,4 +150,5 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
             JavaPredefinedModifierInfo.getModifierInfo("public"),
             JavaPredefinedModifierInfo.getModifierInfo("static"),
             JavaPredefinedModifierInfo.getModifierInfo("final") };
+
 }

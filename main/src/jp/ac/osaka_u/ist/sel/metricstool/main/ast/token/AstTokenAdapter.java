@@ -70,8 +70,13 @@ public class AstTokenAdapter implements AstToken {
     public boolean isClassDefinition() {
         return false;
     }
-    
-    public boolean isEnumDefinition(){
+
+    public boolean isEnumDefinition() {
+        return false;
+    }
+
+    @Override
+    public boolean isExpressionList() {
         return false;
     }
 
@@ -248,8 +253,8 @@ public class AstTokenAdapter implements AstToken {
     public boolean isTypeUpperBoundsDescription() {
         return false;
     }
-    
-    public boolean isTypeAdditionalBoundsDescription(){
+
+    public boolean isTypeAdditionalBoundsDescription() {
         return false;
     }
 
