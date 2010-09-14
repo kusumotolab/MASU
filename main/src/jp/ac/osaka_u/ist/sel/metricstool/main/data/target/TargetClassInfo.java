@@ -143,7 +143,6 @@ public class TargetClassInfo extends ClassInfo {
         this.instanceInitializers = new TreeSet<InstanceInitializerInfo>();
         this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new TreeSet<StaticInitializerInfo>();
-        this.staticInitializers.add(this.implicitStaticInitializer);
         this.importStatements = new TreeSet<ImportStatementInfo<?>>();
 
         this.ownerFile = fileInfo;
@@ -176,9 +175,7 @@ public class TargetClassInfo extends ClassInfo {
         this.implicitStaticInitializer = new StaticInitializerInfo(0, 0, 0, 0);
         this.implicitStaticInitializer.setOuterUnit(this);
         this.instanceInitializers = new TreeSet<InstanceInitializerInfo>();
-        this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new TreeSet<StaticInitializerInfo>();
-        this.staticInitializers.add(this.implicitStaticInitializer);
         this.importStatements = new TreeSet<ImportStatementInfo<?>>();
 
         this.ownerFile = fileInfo;

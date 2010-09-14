@@ -88,9 +88,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         this.implicitStaticInitializer = new UnresolvedStaticInitializerInfo(this);
         this.implicitInstanceInitializer = new UnresolvedInstanceInitializerInfo(this);
         this.instanceInitializers = new HashSet<UnresolvedInstanceInitializerInfo>();
-        this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new HashSet<UnresolvedStaticInitializerInfo>();
-        this.staticInitializers.add(this.implicitStaticInitializer);
         this.importStatements = new LinkedList<UnresolvedImportStatementInfo<?>>();
    //     this.isInterface = false;
 

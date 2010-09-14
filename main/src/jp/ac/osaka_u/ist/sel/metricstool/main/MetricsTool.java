@@ -39,6 +39,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.InstanceInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.JavaPredefinedModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
@@ -52,6 +54,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalMethodInfo;
@@ -70,16 +73,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageListener;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeNameResolver;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeParser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeUtility;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.DefaultPluginLauncher;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginLauncher;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.DefaultPluginLoader;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.PluginLoadException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -1242,12 +1245,28 @@ public class MetricsTool {
                 final TargetFieldInfo fieldInfo = unresolvedFieldInfo.getResolved();
                 if (null != unresolvedFieldInfo.getInitilizer()) {
                     final CallableUnitInfo initializerUnit = fieldInfo.isInstanceMember() ? classInfo
-                            .getImplicitInstanceInitializer()
-                            : classInfo.getImplicitStaticInitializer();
+                            .getImplicitInstanceInitializer() : classInfo
+                            .getImplicitStaticInitializer();
                     final ExpressionInfo initializerExpression = unresolvedFieldInfo
                             .getInitilizer().resolve(classInfo, initializerUnit, classInfoManager,
                                     fieldInfoManager, methodInfoManager);
                     fieldInfo.setInitializer(initializerExpression);
+
+                    // regist as an initializer
+                    // TODO need more SMART way
+                    final LocalVariableInfo fieldInfoAsLocalVariable = new LocalVariableInfo(
+                            fieldInfo.getModifiers(), fieldInfo.getName(), fieldInfo.getType(),
+                            initializerUnit, fieldInfo.getFromLine(), fieldInfo.getFromColumn(),
+                            fieldInfo.getToLine(), fieldInfo.getToColumn());
+                    final LocalVariableUsageInfo fieldUsage = LocalVariableUsageInfo.getInstance(
+                            fieldInfoAsLocalVariable, false, true, initializerUnit,
+                            fieldInfo.getFromLine(), fieldInfo.getFromColumn(),
+                            fieldInfo.getToLine(), fieldInfo.getToColumn());
+                    final VariableDeclarationStatementInfo implicitInitializerStatement = new VariableDeclarationStatementInfo(
+                            initializerUnit, fieldUsage, initializerExpression,
+                            fieldInfo.getFromLine(), fieldInfo.getFromColumn(),
+                            initializerExpression.getToLine(), initializerExpression.getToColumn());
+                    initializerUnit.addStatement(implicitInitializerStatement);
                 }
             }
 

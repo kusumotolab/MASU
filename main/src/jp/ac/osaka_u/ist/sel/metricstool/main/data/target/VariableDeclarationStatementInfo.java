@@ -170,6 +170,12 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
         return sb.toString();
     }
 
+    @Override
+    public String toString() {
+        return this.getText() + "// (" + this.getFromLine() + ": " + this.getFromColumn() + ", "
+                + this.getToLine() + ": " + this.getToColumn() + ")";
+    }
+
     /**
      * éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ÌŒ^‚ğ•Ô‚·
      * @return éŒ¾‚³‚ê‚Ä‚¢‚é•Ï”‚ÌŒ^
