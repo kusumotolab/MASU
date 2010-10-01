@@ -94,7 +94,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
         final List<ReferenceTypeInfo> typeArguments = super.resolveTypeArguments(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
- 
+
         // メソッド呼び出しがくっついている型("."の前のやつ)を解決
         final UnresolvedExpressionInfo<?> unresolvedQualifierUsage = this.getQualifierType();
         ExpressionInfo qualifierUsage = unresolvedQualifierUsage.resolve(usingClass, usingMethod,
@@ -194,7 +194,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
             final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(methodName);
             final MethodCallInfo resolved = new MethodCallInfo(qualifierType, qualifierUsage,
-                    unknownMethod, usingMethod, fromLine, fromColumn, toLine, toColumn);
+                    unknownMethod, UnknownTypeInfo.getInstance(), usingMethod, fromLine,
+                    fromColumn, toLine, toColumn);
             resolved.addArguments(actualParameters);
             resolved.addTypeArguments(typeArguments);
             return resolved;
@@ -226,12 +227,59 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                         // 呼び出し可能なメソッドが見つかった場合
                         if (availableMethod.canCalledWith(methodName, actualParameters)) {
-                            final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
-                                    qualifierUsage, availableMethod, usingMethod, fromLine,
-                                    fromColumn, toLine, toColumn);
-                            resolved.addArguments(actualParameters);
-                            resolved.addTypeArguments(typeArguments);
-                            return resolved;
+
+                            final TypeInfo returnType = availableMethod.getReturnType();
+
+                            // 返り値が型パラメータの場合
+                            if (returnType instanceof TypeParameterTypeInfo) {
+                                final TypeParameterInfo referencedTypeParameter = ((TypeParameterTypeInfo) returnType)
+                                        .getReferncedTypeParameter();
+                                final TypeInfo typeArgument;
+
+                                // メソッドの型パラメータから検索
+                                if (availableMethod.isDefined(referencedTypeParameter)) {
+                                    final int index = referencedTypeParameter.getIndex();
+                                    if (index < typeArguments.size()) {
+                                        typeArgument = typeArguments.get(index);
+                                    } else {
+                                        final ClassInfo objectClass = classInfoManager
+                                                .getClassInfo(new String[] { "java", "lang",
+                                                        "Object" });
+                                        typeArgument = new ClassTypeInfo(objectClass);
+                                    }
+                                }
+
+                                // クラスの型パラメータから検索
+                                else if (((ClassTypeInfo) qualifierType).getReferencedClass()
+                                        .isDefined(referencedTypeParameter)) {
+                                    typeArgument = ((ClassTypeInfo) qualifierType)
+                                            .getTypeArgument(referencedTypeParameter);
+                                }
+
+                                // 本来はここはエラーを出すべき
+                                else {
+                                    final ClassInfo objectClass = classInfoManager
+                                            .getClassInfo(new String[] { "java", "lang", "Object" });
+                                    typeArgument = new ClassTypeInfo(objectClass);
+                                }
+
+                                final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
+                                        qualifierUsage, availableMethod, typeArgument, usingMethod,
+                                        fromLine, fromColumn, toLine, toColumn);
+                                resolved.addArguments(actualParameters);
+                                resolved.addTypeArguments(typeArguments);
+                                return resolved;
+                            }
+
+                            // 返り値が型パラメータでない場合
+                            else {
+                                final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
+                                        qualifierUsage, availableMethod, returnType, usingMethod,
+                                        fromLine, fromColumn, toLine, toColumn);
+                                resolved.addArguments(actualParameters);
+                                resolved.addTypeArguments(typeArguments);
+                                return resolved;
+                            }
                         }
                     }
                 }
@@ -250,17 +298,61 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                                 // 呼び出し可能なメソッドが見つかった場合
                                 if (importedMethod.canCalledWith(methodName, actualParameters)) {
-                                    final ClassInfo classInfo = importedMethod.getOwnerClass();
-                                    final ClassTypeInfo classType = new ClassTypeInfo(classInfo);
-                                    final ClassReferenceInfo classReference = new ClassReferenceInfo(
-                                            classType, usingMethod, fromLine, fromColumn, fromLine,
-                                            fromColumn);
-                                    final MethodCallInfo resolved = new MethodCallInfo(classType,
-                                            classReference, importedMethod, usingMethod, fromLine,
-                                            fromColumn, toLine, toColumn);
-                                    resolved.addArguments(actualParameters);
-                                    resolved.addTypeArguments(typeArguments);
-                                    return resolved;
+
+                                    final TypeInfo returnType = importedMethod.getReturnType();
+
+                                    // 返り値が型パラメータの場合
+                                    if (returnType instanceof TypeParameterTypeInfo) {
+                                        final TypeParameterInfo referencedTypeParameter = ((TypeParameterTypeInfo) returnType)
+                                                .getReferncedTypeParameter();
+                                        final TypeInfo typeArgument;
+                                        if (importedMethod.isDefined(referencedTypeParameter)) {
+                                            final int index = referencedTypeParameter.getIndex();
+                                            if (index < typeArguments.size()) {
+                                                typeArgument = typeArguments.get(index);
+                                            } else {
+                                                final ClassInfo objectClass = classInfoManager
+                                                        .getClassInfo(new String[] { "java",
+                                                                "lang", "Object" });
+                                                typeArgument = new ClassTypeInfo(objectClass);
+                                            }
+                                        }
+
+                                        // クラスの型パラメータから検索
+                                        else if (((ClassTypeInfo) qualifierType)
+                                                .getReferencedClass().isDefined(
+                                                        referencedTypeParameter)) {
+                                            typeArgument = ((ClassTypeInfo) qualifierType)
+                                                    .getTypeArgument(referencedTypeParameter);
+                                        }
+
+                                        // 本来はここはエラーを出すべき
+                                        else {
+                                            final ClassInfo objectClass = classInfoManager
+                                                    .getClassInfo(new String[] { "java", "lang",
+                                                            "Object" });
+                                            typeArgument = new ClassTypeInfo(objectClass);
+                                        }
+
+                                        final MethodCallInfo resolved = new MethodCallInfo(
+                                                qualifierType, qualifierUsage, importedMethod,
+                                                typeArgument, usingMethod, fromLine, fromColumn,
+                                                toLine, toColumn);
+                                        resolved.addArguments(actualParameters);
+                                        resolved.addTypeArguments(typeArguments);
+                                        return resolved;
+                                    }
+
+                                    // 返り値が型パラメータでない場合
+                                    else {
+                                        final MethodCallInfo resolved = new MethodCallInfo(
+                                                qualifierType, qualifierUsage, importedMethod,
+                                                returnType, usingMethod, fromLine, fromColumn,
+                                                toLine, toColumn);
+                                        resolved.addArguments(actualParameters);
+                                        resolved.addTypeArguments(typeArguments);
+                                        return resolved;
+                                    }
                                 }
                             }
                         }
@@ -283,8 +375,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                         // 外部クラスに新規で外部メソッド変数（ExternalMethodInfo）を追加したので型は不明
                         final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
-                                qualifierUsage, methodInfo, usingMethod, fromLine, fromColumn,
-                                toLine, toColumn);
+                                qualifierUsage, methodInfo, UnknownTypeInfo.getInstance(),
+                                usingMethod, fromLine, fromColumn, toLine, toColumn);
                         resolved.addArguments(actualParameters);
                         resolved.addTypeArguments(typeArguments);
                         return resolved;
@@ -299,8 +391,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                     final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(methodName);
                     final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
-                            qualifierUsage, unknownMethod, usingMethod, fromLine, fromColumn,
-                            toLine, toColumn);
+                            qualifierUsage, unknownMethod, UnknownTypeInfo.getInstance(),
+                            usingMethod, fromLine, fromColumn, toLine, toColumn);
                     resolved.addArguments(actualParameters);
                     resolved.addTypeArguments(typeArguments);
                     return resolved;
@@ -318,7 +410,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                 // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
                 final MethodCallInfo resolved = new MethodCallInfo(qualifierType, qualifierUsage,
-                        methodInfo, usingMethod, fromLine, fromColumn, toLine, toColumn);
+                        methodInfo, UnknownTypeInfo.getInstance(), usingMethod, fromLine,
+                        fromColumn, toLine, toColumn);
                 resolved.addArguments(actualParameters);
                 resolved.addTypeArguments(typeArguments);
                 return resolved;
@@ -345,8 +438,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                     // 外部クラスに新規で外部メソッドを追加したので型は不明
                     final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
-                            qualifierUsage, methodInfo, usingMethod, fromLine, fromColumn, toLine,
-                            toColumn);
+                            qualifierUsage, methodInfo, UnknownTypeInfo.getInstance(), usingMethod,
+                            fromLine, fromColumn, toLine, toColumn);
                     resolved.addArguments(actualParameters);
                     resolved.addTypeArguments(typeArguments);
                     return resolved;
@@ -365,12 +458,59 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                         // 呼び出し可能なメソッドが見つかった場合
                         if (availableMethod.canCalledWith(methodName, actualParameters)) {
-                            final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
-                                    qualifierUsage, availableMethod, usingMethod, fromLine,
-                                    fromColumn, toLine, toColumn);
-                            resolved.addArguments(actualParameters);
-                            resolved.addTypeArguments(typeArguments);
-                            return resolved;
+                            final TypeInfo returnType = availableMethod.getReturnType();
+
+                            // 返り値が型パラメータの場合
+                            if (returnType instanceof TypeParameterTypeInfo) {
+                                final TypeParameterInfo referencedTypeParameter = ((TypeParameterTypeInfo) returnType)
+                                        .getReferncedTypeParameter();
+
+                                final TypeInfo typeArgument;
+
+                                // メソッドの型パラメータから検索
+                                if (availableMethod.isDefined(referencedTypeParameter)) {
+                                    final int index = referencedTypeParameter.getIndex();
+                                    if (index < typeArguments.size()) {
+                                        typeArgument = typeArguments.get(index);
+                                    } else {
+                                        final ClassInfo objectClass = classInfoManager
+                                                .getClassInfo(new String[] { "java", "lang",
+                                                        "Object" });
+                                        typeArgument = new ClassTypeInfo(objectClass);
+                                    }
+                                }
+
+                                // クラスの型パラメータから検索
+                                else if (((ClassTypeInfo) qualifierType).getReferencedClass()
+                                        .isDefined(referencedTypeParameter)) {
+                                    typeArgument = ((ClassTypeInfo) qualifierType)
+                                            .getTypeArgument(referencedTypeParameter);
+                                }
+
+                                // 本来はここはエラーを出すべき
+                                else {
+                                    final ClassInfo objectClass = classInfoManager
+                                            .getClassInfo(new String[] { "java", "lang", "Object" });
+                                    typeArgument = new ClassTypeInfo(objectClass);
+                                }
+
+                                final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
+                                        qualifierUsage, availableMethod, typeArgument, usingMethod,
+                                        fromLine, fromColumn, toLine, toColumn);
+                                resolved.addArguments(actualParameters);
+                                resolved.addTypeArguments(typeArguments);
+                                return resolved;
+                            }
+
+                            // 返り値が型パラメータでない場合
+                            else {
+                                final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
+                                        qualifierUsage, availableMethod, returnType, usingMethod,
+                                        fromLine, fromColumn, toLine, toColumn);
+                                resolved.addArguments(actualParameters);
+                                resolved.addTypeArguments(typeArguments);
+                                return resolved;
+                            }
                         }
                     }
                 }

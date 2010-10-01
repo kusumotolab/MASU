@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -157,13 +158,79 @@ public final class ClassTypeInfo implements ReferenceTypeInfo {
     }
 
     /**
-     * この参照型のインデックスで指定された型引数を返す
+     * この参照型のインデックスで指定された型引数を返す.
      * 
      * @param index 型引数のインデックス
      * @return　この参照型のインデックスで指定された型引数
      */
     public TypeInfo getTypeArgument(final int index) {
-        return this.typeArguments.get(index);
+
+        final ClassInfo referencedClass = this.getReferencedClass();
+        final List<TypeParameterInfo> typeParameters = referencedClass.getTypeParameters();
+
+        // index が型パラメータが定義されている範囲外であれば例外をスロー
+        if ((index < 0) || (typeParameters.size() <= index)) {
+            throw new IllegalArgumentException();
+        }
+
+        // indexが型引数が定義されている範囲内であれば，それを返す
+        if (index < this.typeArguments.size()) {
+            return this.typeArguments.get(index);
+        }
+
+        //indexが型引数が定義されていない範囲であれば，Objectを返す
+        else {
+            final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
+                    .getClassInfo(new String[] { "java", "lang", "Object" });
+            return new ClassTypeInfo(objectClass);
+        }
+    }
+
+    /**
+     * 引数で与えられた型パラメータに対応する型引数を返す
+     * @param typeParameter
+     * @return
+     */
+    public TypeInfo getTypeArgument(final TypeParameterInfo typeParameter) {
+
+        final ClassInfo referencedClass = this.getReferencedClass();
+        final List<TypeParameterInfo> typeParameters = referencedClass.getTypeParameters();
+        if (typeParameters.contains(typeParameter)) {
+            final int index = typeParameter.getIndex();
+            return this.getTypeArgument(index);
+        }
+
+        for (final ClassTypeInfo superClassType : referencedClass.getSuperClasses()) {
+            final TypeInfo superTypeArgumentType = superClassType.getTypeArgument(typeParameter);
+            if (null == superTypeArgumentType) {
+                continue;
+            }
+
+            // 親クラスの型引数の型が型パラメータだった場合
+            if (superTypeArgumentType instanceof TypeParameterTypeInfo) {
+                final TypeParameterInfo superTypeTypeParameter = ((TypeParameterTypeInfo) superTypeArgumentType)
+                        .getReferncedTypeParameter();
+
+                if (typeParameters.contains(superTypeTypeParameter)) {
+                    final int index = typeParameter.getIndex();
+                    return this.getTypeArgument(index);
+                }
+
+                // 本来はエラーを返すべき?
+                else {
+                    final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
+                            .getClassInfo(new String[] { "java", "lang", "Object" });
+                    return new ClassTypeInfo(objectClass);
+                }
+            }
+
+            // 親クラスの型引数の型が型パラメータでなかった場合
+            else {
+                return superTypeArgumentType;
+            }
+        }
+
+        return null;
     }
 
     /**

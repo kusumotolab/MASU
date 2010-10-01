@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -84,7 +83,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
         this.modifiers.addAll(modifiers);
 
         this.isInterface = isInterface;
-        
+
     }
 
     /**
@@ -130,7 +129,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
         this.modifiers.addAll(modifiers);
 
         this.isInterface = isInterface;
-  
+
     }
 
     /**
@@ -473,6 +472,29 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
         return Collections.unmodifiableList(this.typeParameters);
     }
 
+    /**
+     * 引数で与えられた型パラメータがこのクラスおよび親クラスで定義されてものであるかを返す
+     * 
+     * @param typeParameter
+     * @return
+     */
+    public final boolean isDefined(final TypeParameterInfo typeParameter) {
+
+        final List<TypeParameterInfo> typeParameters = this.getTypeParameters();
+        if (typeParameters.contains(typeParameter)) {
+            return true;
+        }
+
+        for (final ClassTypeInfo superClassType : this.getSuperClasses()) {
+            final ClassInfo superClass = superClassType.getReferencedClass();
+            if (superClass.isDefined(typeParameter)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public TypeParameterizable getOuterTypeParameterizableUnit() {
         return null;
@@ -691,6 +713,5 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * インターフェースであるかどうかを保存するための変数
      */
     private final boolean isInterface;
-    
- 
+
 }

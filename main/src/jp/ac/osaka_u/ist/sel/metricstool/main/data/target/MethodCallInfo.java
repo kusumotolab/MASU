@@ -3,14 +3,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
 
 /**
@@ -35,17 +30,19 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
      * @param toColumn 終了列
      */
     public MethodCallInfo(final TypeInfo qualifierType, final ExpressionInfo qualifierExpression,
-            final MethodInfo callee, final CallableUnitInfo ownerMethod, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final MethodInfo callee, final TypeInfo type, final CallableUnitInfo ownerMethod,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(callee, ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
-        if ((null == qualifierType) || (null == callee) || (null == qualifierExpression)) {
+        if ((null == qualifierType) || (null == callee) || (null == type)
+                || (null == qualifierExpression)) {
             throw new NullPointerException();
         }
 
         this.qualifierType = qualifierType;
         this.qualifierExpression = qualifierExpression;
+        this.type = type;
     }
 
     /**
@@ -53,40 +50,40 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
      */
     @Override
     public TypeInfo getType() {
-
-        final MethodInfo callee = this.getCallee();
-        final TypeInfo returnType = callee.getReturnType();
-
-        // 定義の返り値が型パラメータでなければそのまま返せる
-        if (!(returnType instanceof TypeParameterTypeInfo)) {
-            return returnType;
-        }
-
-        //　型パラメータの場合
-        final ClassTypeInfo callOwnerType = (ClassTypeInfo) this.getQualifierType();
-        final List<TypeInfo> typeArguments = callOwnerType.getTypeArguments();
-
-        // 型引数がある場合は，その型を返す
-        if (0 < typeArguments.size()) {
-            final int typeParameterIndex = ((TypeParameterTypeInfo) returnType)
-                    .getReferncedTypeParameter().getIndex();
-            final TypeInfo typeArgument = typeArguments.get(typeParameterIndex);
-            return typeArgument;
-
-            // 型引数がない場合は，特殊な型を返す
-        } else {
-
-            // Java　の場合 (型パラメータは1.5から導入された)
-            if (Settings.getInstance().getLanguage().equals(LANGUAGE.JAVA15)) {
-                final ClassInfo referencedClass = DataManager.getInstance().getClassInfoManager()
-                        .getClassInfo(new String[] { "java", "lang", "Object" });
-                final TypeInfo classType = new ClassTypeInfo(referencedClass);
-                return classType;
-            }
-        }
-
-        assert false : "Here shouldn't be reached!";
-        return null;
+        return this.type;
+        //        final MethodInfo callee = this.getCallee();
+        //        final TypeInfo returnType = callee.getReturnType();
+        //
+        //        // 定義の返り値が型パラメータでなければそのまま返せる
+        //        if (!(returnType instanceof TypeParameterTypeInfo)) {
+        //            return returnType;
+        //        }
+        //
+        //        //　型パラメータの場合
+        //        final ClassTypeInfo callOwnerType = (ClassTypeInfo) this.getQualifierType();
+        //        final List<TypeInfo> typeArguments = callOwnerType.getTypeArguments();
+        //
+        //        // 型引数がある場合は，その型を返す
+        //        if (0 < typeArguments.size()) {
+        //            final int typeParameterIndex = ((TypeParameterTypeInfo) returnType)
+        //                    .getReferncedTypeParameter().getIndex();
+        //            final TypeInfo typeArgument = typeArguments.get(typeParameterIndex);
+        //            return typeArgument;
+        //
+        //            // 型引数がない場合は，特殊な型を返す
+        //        } else {
+        //
+        //            // Java　の場合 (型パラメータは1.5から導入された)
+        //            if (Settings.getInstance().getLanguage().equals(LANGUAGE.JAVA15)) {
+        //                final ClassInfo referencedClass = DataManager.getInstance().getClassInfoManager()
+        //                        .getClassInfo(new String[] { "java", "lang", "Object" });
+        //                final TypeInfo classType = new ClassTypeInfo(referencedClass);
+        //                return classType;
+        //            }
+        //        }
+        //
+        //        assert false : "Here shouldn't be reached!";
+        //        return null;
     }
 
     @Override
@@ -187,6 +184,7 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
         final TypeInfo qualifierType = this.getQualifierType();
         final ExpressionInfo qualifierExpression = this.getQualifierExpression();
         final MethodInfo callee = this.getCallee();
+        final TypeInfo type = this.getType();
         final CallableUnitInfo ownerMethod = this.getOwnerMethod();
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
@@ -194,7 +192,7 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
         final int toColumn = this.getToColumn();
 
         final MethodCallInfo newCall = new MethodCallInfo(qualifierType, qualifierExpression,
-                callee, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+                callee, type, ownerMethod, fromLine, fromColumn, toLine, toColumn);
         for (final ExpressionInfo argument : this.getArguments()) {
             newCall.addArgument((ExpressionInfo) argument.copy());
         }
@@ -222,4 +220,6 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
     private final TypeInfo qualifierType;
 
     private final ExpressionInfo qualifierExpression;
+
+    private final TypeInfo type;
 }

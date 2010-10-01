@@ -28,8 +28,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownEntityUsageInfo
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnknownTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.util.LANGUAGE;
 
@@ -989,8 +989,9 @@ public final class UnresolvedUnknownUsageInfo extends UnresolvedExpressionInfo<E
                         for (final MethodInfo method : ownerClass.getDefinedMethods()) {
                             if (method.getMethodName().equals(name[0])) {
                                 final MethodCallInfo methodCall = new MethodCallInfo(
-                                        new ClassTypeInfo(ownerClass), null, method, usingMethod,
-                                        fromLine, fromColumn, toLine, toColumn);
+                                        new ClassTypeInfo(ownerClass), null, method, method
+                                                .getReturnType(), usingMethod, fromLine,
+                                        fromColumn, toLine, toColumn);
                                 return methodCall;
                             }
                         }

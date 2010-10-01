@@ -502,9 +502,7 @@ public final class NameResolver {
         // オーバーライドにより呼び出し不可となったメソッドは削除
         final List<MethodInfo> deletedMethods = new NonDuplicationLinkedList<MethodInfo>();
         for (final MethodInfo method : availableMethods) {
-            for (final MethodInfo overridee : method.getOverridees()) {
-                deletedMethods.add(overridee);
-            }
+            deletedMethods.addAll(method.getOverridees());
         }
         availableMethods.removeAll(deletedMethods);
 

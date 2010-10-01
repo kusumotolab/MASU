@@ -395,7 +395,23 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     public final List<TypeParameterInfo> getTypeParameters() {
         return Collections.unmodifiableList(this.typeParameters);
     }
+    
+    /**
+     * 引数で与えられた型パラメータがこのユニットで定義されたものであるかを返す
+     * 
+     * @param typeParameter
+     * @return
+     */
+    public final boolean isDefined(final TypeParameterInfo typeParameter) {
 
+        final List<TypeParameterInfo> typeParameters = this.getTypeParameters();
+        if (typeParameters.contains(typeParameter)) {
+            return true;
+        }
+
+        return false;
+    }
+    
     @Override
     public TypeParameterizable getOuterTypeParameterizableUnit() {
         final ClassInfo ownerClass = this.getOwnerClass();
