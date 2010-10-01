@@ -111,6 +111,11 @@ public class UnresolvedTypeParameterInfo implements Resolvable<TypeParameterInfo
             throw new NullPointerException();
         }
 
+        // 既に解決済みである場合は，キャッシュを返す
+        if (this.alreadyResolved()) {
+            return this.getResolved();
+        }
+
         //　型パラメータの所有ユニットを解決
         final UnresolvedUnitInfo<?> unresolvedOwnerUnit = this.getOwnerUnit();
         final TypeParameterizable ownerUnit = (TypeParameterizable) unresolvedOwnerUnit.resolve(
