@@ -937,8 +937,9 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 		if (call instanceof MethodCallInfo) {
 			final MethodCallInfo methodCall = (MethodCallInfo) call;
 			newCall = new MethodCallInfo(newQualifiedExpression.getType(),
-					newQualifiedExpression, methodCall.getCallee(),
-					outerCallableUnit, fromLine, fromColumn, toLine, toColumn);
+					newQualifiedExpression, methodCall.getCallee(), methodCall
+							.getType(), outerCallableUnit, fromLine,
+					fromColumn, toLine, toColumn);
 		} else if (call instanceof ClassConstructorCallInfo) {
 			final ClassConstructorCallInfo classConstructorCall = (ClassConstructorCallInfo) call;
 			newCall = new ClassConstructorCallInfo(classConstructorCall
