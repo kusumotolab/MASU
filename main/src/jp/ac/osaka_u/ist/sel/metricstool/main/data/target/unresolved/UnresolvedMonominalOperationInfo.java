@@ -65,7 +65,7 @@ public final class UnresolvedMonominalOperationInfo extends
         final UnresolvedExpressionInfo<?> unresolvedTerm = this.getOperand();
         final ExpressionInfo term = unresolvedTerm.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
-        final boolean isPreposed = fromColumn < term.getFromColumn() ? true : false;
+        final boolean isPreposed = this.isPreposed();
 
         this.resolvedInfo = new MonominalOperationInfo(term, this.operator, isPreposed,
                 usingMethod, fromLine, fromColumn, toLine, toColumn);
@@ -80,6 +80,10 @@ public final class UnresolvedMonominalOperationInfo extends
      */
     public UnresolvedExpressionInfo<? extends ExpressionInfo> getOperand() {
         return this.operand;
+    }
+
+    public boolean isPreposed() {
+        return this.getFromColumn() < this.operand.getFromColumn() ? true : false;
     }
 
     /**
