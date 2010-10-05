@@ -64,6 +64,10 @@ public class UnresolvedThrowStatementInfo extends UnresolvedSingleStatementInfo<
         return this.resolvedInfo;
     }
 
+    public UnresolvedExpressionInfo<? extends ExpressionInfo> getThrownExpression() {
+        return this.thrownExpression;
+    }
+
     /**
      * throw•¶‚É‚æ‚Á‚Ä“Š‚°‚ç‚ê‚é—áŠO‚Ì–¢‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚é
      * @param thrownExpression throw•¶‚É‚æ‚Á‚Ä“Š‚°‚ç‚ê‚é—áŠO‚Ì–¢‰ğŒˆî•ñ
