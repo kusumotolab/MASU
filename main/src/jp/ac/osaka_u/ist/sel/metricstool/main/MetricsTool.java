@@ -762,27 +762,8 @@ public class MetricsTool {
     public void analyzeTargetFiles() {
 
         // 対象ファイルのASTから未解決クラス，フィールド，メソッド情報を取得
-        {
-            out.println("parsing all target files.");
-            final Thread[] threads = new Thread[Settings.getInstance().getThreadNumber()];
-            final TargetFile[] files = DataManager.getInstance().getTargetFileManager().getFiles()
-                    .toArray(new TargetFile[0]);
-            final AtomicInteger index = new AtomicInteger();
-            for (int i = 0; i < threads.length; i++) {
-                threads[i] = new Thread(new TargetFileParser(files, index, out, err));
-                MetricsToolSecurityManager.getInstance().addPrivilegeThread(threads[i]);
-                threads[i].start();
-            }
-
-            //全てのスレッドが終わるのを待つ
-            for (final Thread thread : threads) {
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        out.println("parsing all target files.");
+        parseTargetFiles();
 
         out.println("resolving definitions and usages.");
         if (Settings.getInstance().isVerbose()) {
@@ -1063,6 +1044,31 @@ public class MetricsTool {
             return "main";
         }
     }, MESSAGE_TYPE.ERROR);
+
+    /**
+     * 対象ファイルのASTから未解決クラス，フィールド，メソッド情報を取得
+     */
+    public void parseTargetFiles() {
+
+        final Thread[] threads = new Thread[Settings.getInstance().getThreadNumber()];
+        final TargetFile[] files = DataManager.getInstance().getTargetFileManager().getFiles()
+                .toArray(new TargetFile[0]);
+        final AtomicInteger index = new AtomicInteger();
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new Thread(new TargetFileParser(files, index, out, err));
+            MetricsToolSecurityManager.getInstance().addPrivilegeThread(threads[i]);
+            threads[i].start();
+        }
+
+        //全てのスレッドが終わるのを待つ
+        for (final Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * クラス，メソッド，フィールドなどの定義を名前解決する．AST パースの後に呼び出さなければならない．
