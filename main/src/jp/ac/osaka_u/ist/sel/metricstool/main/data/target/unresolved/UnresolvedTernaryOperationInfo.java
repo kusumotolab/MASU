@@ -82,6 +82,18 @@ public class UnresolvedTernaryOperationInfo extends UnresolvedExpressionInfo<Ter
         return this.resolvedInfo;
     }
 
+    public UnresolvedConditionInfo<? extends ConditionInfo> getCondition() {
+        return this.condition;
+    }
+
+    public UnresolvedExpressionInfo<? extends ExpressionInfo> getTrueExpression() {
+        return this.trueExpression;
+    }
+
+    public UnresolvedExpressionInfo<? extends ExpressionInfo> getFalseExpression() {
+        return this.falseExpression;
+    }
+
     /**
      * O€‰‰Z‚ÌğŒ®(‘æˆê€)‚Ì‚İ‰ğŒˆî•ñ‚ğ•Û‘¶‚·‚é•Ï”
      */
