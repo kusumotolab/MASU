@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -136,6 +137,14 @@ public final class UnresolvedForBlockInfo extends UnresolvedConditionalBlockInfo
         }
 
         this.iteratorExpressions.add(iteratorExpression);
+    }
+
+    public Set<UnresolvedConditionInfo<? extends ConditionInfo>> getInitializerExpressions() {
+        return Collections.unmodifiableSet(this.initializerExpressions);
+    }
+
+    public Set<UnresolvedExpressionInfo<? extends ExpressionInfo>> getIteratorExpressions() {
+        return Collections.unmodifiableSet(this.iteratorExpressions);
     }
 
     private final Set<UnresolvedConditionInfo<? extends ConditionInfo>> initializerExpressions;
