@@ -98,5 +98,9 @@ public final class UnresolvedSynchronizedBlockInfo extends
         this.synchronizedExpression = synchronizedExpression;
     }
 
+    public UnresolvedExpressionInfo<? extends ExpressionInfo> getSynchronizedExpression() {
+        return this.synchronizedExpression;
+    }
+
     private UnresolvedExpressionInfo<? extends ExpressionInfo> synchronizedExpression;
 }
