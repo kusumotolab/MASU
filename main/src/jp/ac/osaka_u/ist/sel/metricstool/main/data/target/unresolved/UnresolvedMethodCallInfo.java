@@ -96,7 +96,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         // メソッド呼び出しがくっついている型("."の前のやつ)を解決
-        final UnresolvedExpressionInfo<?> unresolvedQualifierUsage = this.getQualifierType();
+        final UnresolvedExpressionInfo<?> unresolvedQualifierUsage = this.getQualifier();
         ExpressionInfo qualifierUsage = unresolvedQualifierUsage.resolve(usingClass, usingMethod,
                 classInfoManager, fieldInfoManager, methodInfoManager);
         assert qualifierUsage != null : "resolveEntityUsage returned null!";
@@ -526,7 +526,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
      * 
      * @return メソッド呼び出しが実行される変数の型
      */
-    public UnresolvedExpressionInfo<?> getQualifierType() {
+    public UnresolvedExpressionInfo<?> getQualifier() {
         return this.qualifierUsage;
     }
 
