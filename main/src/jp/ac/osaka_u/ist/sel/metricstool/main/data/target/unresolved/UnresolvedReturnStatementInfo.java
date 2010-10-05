@@ -59,8 +59,8 @@ public class UnresolvedReturnStatementInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final LocalSpaceInfo ownerSpace = this.getOuterLocalSpace().resolve(usingClass, usingMethod,
-                classInfoManager, fieldInfoManager, methodInfoManager);
+        final LocalSpaceInfo ownerSpace = this.getOuterLocalSpace().resolve(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         final ExpressionInfo returnedExpression = null == this.returnedExpression ? null
                 : this.returnedExpression.resolve(usingClass, usingMethod, classInfoManager,
@@ -70,6 +70,10 @@ public class UnresolvedReturnStatementInfo extends
                 fromColumn, toLine, toColumn);
 
         return this.resolvedInfo;
+    }
+
+    public UnresolvedExpressionInfo<? extends ExpressionInfo> getReturnedExpression() {
+        return this.returnedExpression;
     }
 
     /**
