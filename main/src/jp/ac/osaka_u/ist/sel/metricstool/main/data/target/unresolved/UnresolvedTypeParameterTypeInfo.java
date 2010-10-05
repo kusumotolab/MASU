@@ -47,6 +47,11 @@ public class UnresolvedTypeParameterTypeInfo implements
     }
 
     @Override
+    public String getTypeName() {
+        return this.getReferencedTypeParameter().getName();
+    }
+
+    @Override
     public TypeParameterTypeInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager) {

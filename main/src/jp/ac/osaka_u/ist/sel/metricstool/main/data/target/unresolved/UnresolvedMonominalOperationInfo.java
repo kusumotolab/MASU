@@ -82,6 +82,10 @@ public final class UnresolvedMonominalOperationInfo extends
         return this.operand;
     }
 
+    public OPERATOR getOperator() {
+        return this.operator;
+    }
+
     public boolean isPreposed() {
         return this.getFromColumn() < this.operand.getFromColumn() ? true : false;
     }

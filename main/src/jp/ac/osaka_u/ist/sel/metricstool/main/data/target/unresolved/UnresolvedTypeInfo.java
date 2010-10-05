@@ -46,4 +46,11 @@ public interface UnresolvedTypeInfo<T extends TypeInfo> {
      * @return –¼‘O‰ğŒˆ‚³‚ê‚Ä‚¢‚éê‡‚Í trueC‚»‚¤‚Å‚È‚¢ê‡‚Í false
      */
     boolean alreadyResolved();
+
+    /**
+     * Œ^–¼‚ğ•Ô‚·
+     * 
+     * @return
+     */
+    String getTypeName();
 }

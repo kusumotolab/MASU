@@ -26,6 +26,11 @@ public class UnresolvedArbitraryTypeInfo implements UnresolvedTypeInfo<Arbitrary
     }
 
     @Override
+    public String getTypeName() {
+        return "*";
+    }
+
+    @Override
     public ArbitraryTypeInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager) {

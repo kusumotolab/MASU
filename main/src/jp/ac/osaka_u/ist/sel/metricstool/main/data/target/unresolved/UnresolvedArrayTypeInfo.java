@@ -111,6 +111,15 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
         return this.dimension;
     }
 
+    public final String getTypeName() {
+        final StringBuilder text = new StringBuilder();
+        text.append(this.getElementType().getTypeName());
+        for (int i = 0; i < this.getDimension(); i++) {
+            text.append("[]");
+        }
+        return text.toString();
+    }
+
     /**
      * このインスタンスが表す配列の次元を1大きくした配列を表すインスタンスを返す．
      * 

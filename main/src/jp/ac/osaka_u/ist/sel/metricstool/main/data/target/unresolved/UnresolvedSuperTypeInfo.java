@@ -37,6 +37,14 @@ public class UnresolvedSuperTypeInfo implements UnresolvedTypeInfo<SuperTypeInfo
     }
 
     @Override
+    public String getTypeName() {
+        final StringBuilder text = new StringBuilder();
+        text.append("? super ");
+        text.append(this.superType.getTypeName());
+        return text.toString();
+    }
+
+    @Override
     public SuperTypeInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager) {

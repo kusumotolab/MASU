@@ -37,6 +37,14 @@ public class UnresolvedExtendsTypeInfo implements UnresolvedTypeInfo<ExtendsType
     }
 
     @Override
+    public String getTypeName() {
+        final StringBuilder text = new StringBuilder();
+        text.append("? extends ");
+        text.append(this.extendsType.getTypeName());
+        return text.toString();
+    }
+
+    @Override
     public ExtendsTypeInfo resolve(TargetClassInfo usingClass, CallableUnitInfo usingMethod,
             ClassInfoManager classInfoManager, FieldInfoManager fieldInfoManager,
             MethodInfoManager methodInfoManager) {

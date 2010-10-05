@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
- 
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
@@ -422,6 +422,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
      * 
      * @return ‚±‚ÌŽQÆŒ^‚Ì–¼‘O‚ð•Ô‚·
      */
+    @Override
     public final String getTypeName() {
         return this.referenceName[this.referenceName.length - 1];
     }
