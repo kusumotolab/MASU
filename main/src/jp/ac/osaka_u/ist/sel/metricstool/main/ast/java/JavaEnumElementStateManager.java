@@ -23,9 +23,9 @@ public class JavaEnumElementStateManager extends StackedAstVisitStateManager<Jav
         if (token.equals(JavaAstToken.ENUM_CONSTANT)){
             this.state = STATE.ELEMENT;
             fireStateChangeEvent(ENUM_ELEMENT_STATE.ENTER_ENUM_ELEMENT,event);
-        } /*else if (STATE.ELEMENT == this.state && token.isExpressionList()){
+        } else if (STATE.ELEMENT == this.state && token.isExpressionList()){
             fireStateChangeEvent(ENUM_ELEMENT_STATE.ENTER_ENUM_ARGUMENT,event);  
-        }*/ else if (STATE.ELEMENT == this.state && token.isClassBlock()){
+        } else if (STATE.ELEMENT == this.state && token.isClassBlock()){
             this.state = STATE.ANONYMOUS_CLASS;
             fireStateChangeEvent(ENUM_ELEMENT_STATE.ENTER_ENUM_ANONYMOUS_CLASS,event);
         } 
@@ -39,9 +39,9 @@ public class JavaEnumElementStateManager extends StackedAstVisitStateManager<Jav
         if (token.equals(JavaAstToken.ENUM_CONSTANT)){
             fireStateChangeEvent(ENUM_ELEMENT_STATE.EXIT_ENUM_ELEMENT,event);
 //            this.state = STATE.NOT;
-        }/* else if (STATE.ELEMENT == this.state && token.isExpressionList()){
+        }else if (STATE.ELEMENT == this.state && token.isExpressionList()){
             fireStateChangeEvent(ENUM_ELEMENT_STATE.EXIT_ENUM_ARGUMENT,event);                        
-        }*/ else if (STATE.ELEMENT == this.state && token.isClassBlock()){
+        }else if (STATE.ELEMENT == this.state && token.isClassBlock()){
             fireStateChangeEvent(ENUM_ELEMENT_STATE.EXIT_ENUM_ANONYMOUS_CLASS,event);
         }
     }

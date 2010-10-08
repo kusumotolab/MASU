@@ -1,11 +1,14 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.SortedSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
 
@@ -51,6 +54,17 @@ public class UnresolvedClassInfoManager {
         return Collections.unmodifiableCollection(this.classInfos.values());
     }
 
+    public UnresolvedClassInfo getClassInfo(final String name) {
+
+        // 同じクラス名を持つクラス一覧を取得        
+        for(final UnresolvedClassInfo classInfo : this.getClassInfos()){
+            if(classInfo.getClassName().equals(name)){
+                return classInfo;
+            }
+        }
+        return null;
+    }
+    
     /**
      * 引数なしコンストラクタ
      * 

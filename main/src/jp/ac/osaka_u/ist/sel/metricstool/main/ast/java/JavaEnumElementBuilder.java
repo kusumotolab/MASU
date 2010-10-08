@@ -1,22 +1,28 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.java;
 
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.CompoundDataBuilder;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.NameBuilder;
+import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElement;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.statemanager.StateChangeEvent.StateChangeEventType;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.JavaPredefinedModifierInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassConstructorCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassTypeInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedConstructorCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldInfo;
 
 
@@ -63,11 +69,10 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
                 AstVisitEvent trigger = event.getTrigger();
                 buildEnumElement(trigger.getStartLine(), trigger.getStartColumn(), trigger
                         .getEndLine(), trigger.getEndColumn());
+                this.expressionElementList.clear();
 
             } else if (type
                     .equals(JavaEnumElementStateManager.ENUM_ELEMENT_STATE.ENTER_ENUM_ANONYMOUS_CLASS)) {
-
-                //                nameBuilder.deactivate();
 
             } else if (type
                     .equals(JavaEnumElementStateManager.ENUM_ELEMENT_STATE.EXIT_ENUM_ANONYMOUS_CLASS)) {
@@ -75,12 +80,10 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
             } else if (type
                     .equals(JavaEnumElementStateManager.ENUM_ELEMENT_STATE.ENTER_ENUM_ARGUMENT)) {
 
-                //          System.out.println("test");
             } else if (type
                     .equals(JavaEnumElementStateManager.ENUM_ELEMENT_STATE.EXIT_ENUM_ARGUMENT)) {
-                //         System.out.println("hogehoge");
-                //this.expressionManager.getLaterExpressionElements(count)
-
+                // this.expressionManager.getLaterExpressionElements();
+                this.getExpressionListFromExpressionElementManager();
             }
         }
     }
@@ -120,10 +123,24 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
         if (null != name && name.length > 0 && !enumClassStack.isEmpty() && null != buildManager) {
             String elementName = name[0];
             UnresolvedClassInfo enumClass = enumClassStack.peek();
+            //Enumは列挙子と同じ名前のフィールドを持つをみなす
+            UnresolvedClassConstructorCallInfo _initializer = new UnresolvedClassConstructorCallInfo(
+                    enumClass.getClassType());
+
+            //列挙子に含まれる引数を追加
+            for (final ExpressionElement expressionElement : this.expressionElementList) {
+                _initializer.addArgument(expressionElement.getUsage());
+            }
+
+            //a.addArguments(null);
+            //UnresolvedExpressionInfo<? extends ExpressionInfo> initializer = new UnresolvedClassConstructorCallInfo(enumClass.getClassType());
+
             UnresolvedFieldInfo element = new UnresolvedFieldInfo(elementName,
-                    UnresolvedClassTypeInfo.getInstance(enumClass), enumClass, null, startLine,
-                    startColumn, endLine, endColumn);
-            //        modifierInterpriter.interprit(defaultModifiers, element, element);
+                    UnresolvedClassTypeInfo.getInstance(enumClass), enumClass, _initializer,
+                    startLine, startColumn, endLine, endColumn);
+            //Enumのフィールドはstatic扱い
+            element.addModifier(JavaPredefinedModifierInfo.STATIC);
+            //modifierInterpriter.interprit(defaultModifiers, element, element);
 
             buildManager.addField(element);
             enumClass.addDefinedField(element);
@@ -132,6 +149,17 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
 
     protected void endAnonymousClass() {
         buildManager.endClassDefinition();
+    }
+
+    /**
+     * 列挙子に引数が入っている場合expressionElementListに格納する
+     * 直接ExpressionManagerを触っているのであんまりスマートでない??
+     */
+    private void getExpressionListFromExpressionElementManager() {
+        final int count = this.expressionManager.getExpressionStackSize();
+        for (int i = 0; i < count; i++) {
+            this.expressionElementList.add(this.expressionManager.popExpressionElement());
+        }
     }
 
     private final ExpressionElementManager expressionManager;
@@ -144,11 +172,13 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
 
     private final Stack<UnresolvedClassInfo> enumClassStack = new Stack<UnresolvedClassInfo>();
 
-    //private final JavaModifiersInterpriter modifierInterpriter = new JavaModifiersInterpriter();
+    // private final JavaModifiersInterpriter modifierInterpriter = new JavaModifiersInterpriter();
 
+    private ArrayList<ExpressionElement> expressionElementList = new ArrayList<ExpressionElement>();
+    /*
     private static final ModifierInfo[] defaultModifiers = new ModifierInfo[] {
             JavaPredefinedModifierInfo.getModifierInfo("public"),
             JavaPredefinedModifierInfo.getModifierInfo("static"),
             JavaPredefinedModifierInfo.getModifierInfo("final") };
-
+     */
 }
