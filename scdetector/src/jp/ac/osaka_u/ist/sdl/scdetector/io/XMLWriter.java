@@ -95,6 +95,7 @@ public class XMLWriter {
 			this.writer.write(Configuration.INSTANCE.getO());
 			this.writer.write("\" p=\"");
 			this.writer.write(Configuration.INSTANCE.getP().getText());
+			this.writer.write("\" q=\"");
 			for (final DEPENDENCY_TYPE dependency : Configuration.INSTANCE
 					.getQ()) {
 				this.writer.write(dependency.getText());
