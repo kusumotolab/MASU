@@ -46,12 +46,19 @@ class SlicingThread implements Runnable {
 
 			final PDGNode<?> nodeA = nodepair.nodeA;
 			final PDGNode<?> nodeB = nodepair.nodeB;
-			final HashSet<PDGNode<?>> checkedNodesA = new HashSet<PDGNode<?>>();
-			final HashSet<PDGNode<?>> checkedNodesB = new HashSet<PDGNode<?>>();
 
-			final ProgramSlicing slicing = new ProgramSlicing();
-			final ClonePairInfo clonepair = slicing.getClonePair(nodeA, nodeB,
-					checkedNodesA, checkedNodesB);
+			final Slicing slicing;
+			switch (Configuration.INSTANCE.getP()) {
+			case INTRA:
+				slicing = new ProgramSlicing(nodeA, nodeB);
+				break;
+			case INTER:
+				slicing = new SystemSlicing(nodeA, nodeB);
+				break;
+			default:
+				throw new IllegalStateException();
+			}
+			final ClonePairInfo clonepair = slicing.perform();
 
 			if (Configuration.INSTANCE.getS() <= Math.min(clonepair.codecloneA
 					.length(), clonepair.codecloneB.length())) {

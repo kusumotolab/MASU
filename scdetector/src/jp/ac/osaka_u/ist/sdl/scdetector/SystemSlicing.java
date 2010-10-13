@@ -1,6 +1,9 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.Stack;
@@ -11,7 +14,7 @@ import java.util.concurrent.ConcurrentMap;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.SLICE_TYPE;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGAcrossEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGControlDependenceEdge;
@@ -20,17 +23,43 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
-public class SystemSlicing {
+public class SystemSlicing extends Slicing {
 
-	public ClonePairInfo getClonePair(final PDGNode<?> nodeA,
-			final PDGNode<?> nodeB, final Set<PDGNode<?>> checkedNodesA,
-			final Set<PDGNode<?>> checkedNodesB,
-			final Stack<CallableUnitInfo> methodStackA,
-			final Stack<CallableUnitInfo> methodStackB) {
+	public SystemSlicing(final PDGNode<?> pointA, final PDGNode<?> pointB) {
+		this.pointA = pointA;
+		this.pointB = pointB;
+		this.checkedNodesA = new HashSet<PDGNode<?>>();
+		this.checkedNodesB = new HashSet<PDGNode<?>>();
+		this.callStackA = new Stack<CallInfo<?>>();
+		this.callStackB = new Stack<CallInfo<?>>();
+		this.clonepair = null;
+	}
+
+	public ClonePairInfo perform() {
+		if (null != this.clonepair) {
+			return this.clonepair;
+		} else {
+			this.clonepair = this.perform(this.pointA, this.pointB);
+			return this.clonepair;
+		}
+	}
+
+	final private PDGNode<?> pointA;
+	final private PDGNode<?> pointB;
+
+	final private Set<PDGNode<?>> checkedNodesA;
+	final private Set<PDGNode<?>> checkedNodesB;
+
+	final private Stack<CallInfo<?>> callStackA;
+	final private Stack<CallInfo<?>> callStackB;
+
+	private ClonePairInfo clonepair;
+
+	public ClonePairInfo perform(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
 
 		// このノードをチェック済みノード集合に追加，この処理は再帰呼び出しの前でなければならない
-		checkedNodesA.add(nodeA);
-		checkedNodesB.add(nodeB);
+		this.checkedNodesA.add(nodeA);
+		this.checkedNodesB.add(nodeB);
 
 		// ここから，各エッジの先にあるノードの集合を得るための処理
 		final SortedSet<PDGEdge> backwardEdgesA = nodeA.getBackwardEdges();
@@ -51,48 +80,61 @@ public class SystemSlicing {
 		final SortedSet<PDGControlDependenceEdge> backwardControlEdgesB = PDGControlDependenceEdge
 				.getControlDependenceEdge(backwardEdgesB);
 
+		// メソッド間バックワードスライス用の必要な情報を取得
 		// Data Dependencyに対する後ろ向きスライスは，以下の状態のときは行わない
 		// 1. メソッドスタックが空のとき
-		// 2. メソッドスタックがからでなく，スライス先のノードがスタックの最上部のノードと異なるメソッドにあるとき
-//		if (methodStackA.isEmpty()) {
-//			for (final Iterator<PDGDataDependenceEdge> iterator = backwardDataEdgesA
-//					.iterator(); iterator.hasNext();) {
-//				final PDGDataDependenceEdge edge = iterator.next();
-//				if (edge instanceof PDGAcrossEdge) {
-//					iterator.remove();
-//				}
-//			}
-//		} else {
-//			final CallableUnitInfo method = methodStackA.peek();
-//			for (final Iterator<PDGDataDependenceEdge> iterator = backwardDataEdgesA
-//					.iterator(); iterator.hasNext();) {
-//				final PDGDataDependenceEdge edge = iterator.next();
-//				if (!method.equals(edge.getFromNode().getCore()
-//						.getOwnerMethod())) {
-//					iterator.remove();
-//				}
-//			}
-//		}
-//
-//		if (methodStackB.isEmpty()) {
-//			for (final Iterator<PDGDataDependenceEdge> iterator = backwardDataEdgesB
-//					.iterator(); iterator.hasNext();) {
-//				final PDGDataDependenceEdge edge = iterator.next();
-//				if (edge instanceof PDGAcrossEdge) {
-//					iterator.remove();
-//				}
-//			}
-//		} else {
-//			final CallableUnitInfo method = methodStackB.peek();
-//			for (final Iterator<PDGDataDependenceEdge> iterator = backwardDataEdgesB
-//					.iterator(); iterator.hasNext();) {
-//				final PDGDataDependenceEdge edge = iterator.next();
-//				if (!method.equals(edge.getFromNode().getCore()
-//						.getOwnerMethod())) {
-//					iterator.remove();
-//				}
-//			}
-//		}
+		// 2. メソッドスタックが空でなく，スライス先のノードがスタックの最上部のノードと異なるメソッドにあるとき
+		final Map<PDGNode<?>, CallInfo<?>> acrossBackwardNodesA = new HashMap<PDGNode<?>, CallInfo<?>>();
+		if (this.callStackA.isEmpty()) {
+			for (final Iterator<PDGDataDependenceEdge> iterator = backwardDataEdgesA
+					.iterator(); iterator.hasNext();) {
+				final PDGDataDependenceEdge edge = iterator.next();
+				if (edge instanceof PDGAcrossEdge) {
+					iterator.remove();
+				}
+			}
+		} else {
+			final CallInfo<?> call = this.callStackA.peek();
+			for (final Iterator<PDGDataDependenceEdge> iterator = backwardDataEdgesA
+					.iterator(); iterator.hasNext();) {
+				final PDGDataDependenceEdge edge = iterator.next();
+				if (edge instanceof PDGAcrossEdge) {
+					final PDGAcrossEdge acrossEdge = (PDGAcrossEdge) edge;
+					if (!call.equals(acrossEdge.getHolder())) {
+						iterator.remove();
+					} else {
+						acrossBackwardNodesA.put(edge.getFromNode(), acrossEdge
+								.getHolder());
+					}
+				}
+			}
+		}
+
+		final Map<PDGNode<?>, CallInfo<?>> acrossBackwardNodesB = new HashMap<PDGNode<?>, CallInfo<?>>();
+		if (this.callStackB.isEmpty()) {
+			for (final Iterator<PDGDataDependenceEdge> iterator = backwardDataEdgesB
+					.iterator(); iterator.hasNext();) {
+				final PDGDataDependenceEdge edge = iterator.next();
+				if (edge instanceof PDGAcrossEdge) {
+					iterator.remove();
+				}
+			}
+		} else {
+			final CallInfo<?> call = this.callStackB.peek();
+			for (final Iterator<PDGDataDependenceEdge> iterator = backwardDataEdgesB
+					.iterator(); iterator.hasNext();) {
+				final PDGDataDependenceEdge edge = iterator.next();
+				if (edge instanceof PDGAcrossEdge) {
+					final PDGAcrossEdge acrossEdge = (PDGAcrossEdge) edge;
+					if (!call.equals(acrossEdge.getHolder())) {
+						iterator.remove();
+					} else {
+						acrossBackwardNodesB.put(edge.getFromNode(), acrossEdge
+								.getHolder());
+					}
+				}
+			}
+		}
 
 		final SortedSet<PDGNode<?>> backwardExecutionNodesA = this
 				.getFromNodes(backwardExecutionEdgesA);
@@ -120,6 +162,24 @@ public class SystemSlicing {
 		final SortedSet<PDGControlDependenceEdge> forwardControlEdgesB = PDGControlDependenceEdge
 				.getControlDependenceEdge(forwardEdgesB);
 
+		// メソッド間フォワードスライス用の必要な情報を取得
+		final Map<PDGNode<?>, CallInfo<?>> acrossForwardNodesA = new HashMap<PDGNode<?>, CallInfo<?>>();
+		for (final PDGDataDependenceEdge edge : forwardDataEdgesA) {
+			if (edge instanceof PDGAcrossEdge) {
+				final PDGAcrossEdge acrossEdge = (PDGAcrossEdge) edge;
+				acrossForwardNodesA.put(edge.getToNode(), acrossEdge
+						.getHolder());
+			}
+		}
+		final Map<PDGNode<?>, CallInfo<?>> acrossForwardNodesB = new HashMap<PDGNode<?>, CallInfo<?>>();
+		for (final PDGDataDependenceEdge edge : forwardDataEdgesB) {
+			if (edge instanceof PDGAcrossEdge) {
+				final PDGAcrossEdge acrossEdge = (PDGAcrossEdge) edge;
+				acrossForwardNodesB.put(edge.getToNode(), acrossEdge
+						.getHolder());
+			}
+		}
+
 		final SortedSet<PDGNode<?>> forwardExecutionNodesA = this
 				.getToNodes(forwardExecutionEdgesA);
 		final SortedSet<PDGNode<?>> forwardDataNodesA = this
@@ -139,27 +199,33 @@ public class SystemSlicing {
 		// バックワードスライスを使う設定の場合
 		if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
 			this.enlargeClonePair(clonepair, backwardExecutionNodesA,
-					backwardExecutionNodesB, checkedNodesA, checkedNodesB,
-					methodStackA, methodStackB);
+					backwardExecutionNodesB, acrossBackwardNodesA,
+					acrossBackwardNodesB, acrossForwardNodesA,
+					acrossForwardNodesB);
 			this.enlargeClonePair(clonepair, backwardDataNodesA,
-					backwardDataNodesB, checkedNodesA, checkedNodesB,
-					methodStackA, methodStackB);
+					backwardDataNodesB, acrossBackwardNodesA,
+					acrossBackwardNodesB, acrossForwardNodesA,
+					acrossForwardNodesB);
 			this.enlargeClonePair(clonepair, backwardControlNodesA,
-					backwardControlNodesB, checkedNodesA, checkedNodesB,
-					methodStackA, methodStackB);
+					backwardControlNodesB, acrossBackwardNodesA,
+					acrossBackwardNodesB, acrossForwardNodesA,
+					acrossForwardNodesB);
 		}
 
 		// フォワードスライスを使う設定の場合
 		if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.FORWARD)) {
 			this.enlargeClonePair(clonepair, forwardExecutionNodesA,
-					forwardExecutionNodesB, checkedNodesA, checkedNodesB,
-					methodStackA, methodStackB);
+					forwardExecutionNodesB, acrossBackwardNodesA,
+					acrossBackwardNodesB, acrossForwardNodesA,
+					acrossForwardNodesB);
 			this.enlargeClonePair(clonepair, forwardDataNodesA,
-					forwardDataNodesB, checkedNodesA, checkedNodesB,
-					methodStackA, methodStackB);
+					forwardDataNodesB, acrossBackwardNodesA,
+					acrossBackwardNodesB, acrossForwardNodesA,
+					acrossForwardNodesB);
 			this.enlargeClonePair(clonepair, forwardControlNodesA,
-					forwardControlNodesB, checkedNodesA, checkedNodesB,
-					methodStackA, methodStackB);
+					forwardControlNodesB, acrossBackwardNodesA,
+					acrossBackwardNodesB, acrossForwardNodesA,
+					acrossForwardNodesB);
 		}
 
 		// 現在のノードをクローンペアに追加
@@ -181,16 +247,17 @@ public class SystemSlicing {
 	private void enlargeClonePair(final ClonePairInfo clonepair,
 			final SortedSet<PDGNode<?>> nodesA,
 			final SortedSet<PDGNode<?>> nodesB,
-			final Set<PDGNode<?>> checkedNodesA,
-			final Set<PDGNode<?>> checkedNodesB,
-			final Stack<CallableUnitInfo> methodStackA,
-			final Stack<CallableUnitInfo> methodStackB) {
+			final Map<PDGNode<?>, CallInfo<?>> acrossBackwardNodesA,
+			final Map<PDGNode<?>, CallInfo<?>> acrossBackwardNodesB,
+			final Map<PDGNode<?>, CallInfo<?>> acrossForwardNodesA,
+			final Map<PDGNode<?>, CallInfo<?>> acrossForwardNodesB) {
 
 		for (final PDGNode<?> nodeA : nodesA) {
 
 			// 既にクローンに入ることが確定しているノードのときは調査しない
 			// 相手側のクローンに入っているノードのときも調査しない
-			if (checkedNodesA.contains(nodeA) || checkedNodesB.contains(nodeA)) {
+			if (this.checkedNodesA.contains(nodeA)
+					|| this.checkedNodesB.contains(nodeA)) {
 				continue;
 			}
 
@@ -206,8 +273,8 @@ public class SystemSlicing {
 
 				// 既にクローンに入ることが確定しているノードのときは調査しない
 				// 相手側のクローンに入っているノードのときも調査しない
-				if (checkedNodesB.contains(nodeB)
-						|| checkedNodesA.contains(nodeB)) {
+				if (this.checkedNodesB.contains(nodeB)
+						|| this.checkedNodesA.contains(nodeB)) {
 					continue;
 				}
 
@@ -229,11 +296,44 @@ public class SystemSlicing {
 						continue;
 					}
 
-					final ClonePairInfo priorClonepair = this.getClonePair(
-							nodeA, nodeB, checkedNodesA, checkedNodesB,
-							methodStackA, methodStackB);
+					// メソッドをまたがる場合はコールスタックの更新を行う
+					if (acrossBackwardNodesA.containsKey(nodeA)) {
+						if (!this.callStackA.peek().equals(
+								acrossBackwardNodesA.get(nodeA))) {
+							throw new IllegalStateException();
+						} else {
+							this.callStackA.pop();
+						}
+					} else if (acrossForwardNodesA.containsKey(nodeA)) {
+						this.callStackA.push(acrossForwardNodesA.get(nodeA));
+					}
+					if (acrossBackwardNodesB.containsKey(nodeB)) {
+						if (!this.callStackB.peek().equals(
+								acrossBackwardNodesB.get(nodeB))) {
+							throw new IllegalStateException();
+						} else {
+							this.callStackB.pop();
+						}
+					} else if (acrossForwardNodesB.containsKey(nodeB)) {
+						this.callStackB.push(acrossForwardNodesB.get(nodeB));
+					}
+
+					final ClonePairInfo priorClonepair = this.perform(nodeA,
+							nodeB);
 					clonepair.addAll(priorClonepair.codecloneA.getElements(),
 							priorClonepair.codecloneB.getElements());
+
+					// メソッドをまたがる場合はコーススタックの更新を行う
+					if (acrossBackwardNodesA.containsKey(nodeA)) {
+						this.callStackA.push(acrossBackwardNodesA.get(nodeA));
+					} else if (acrossForwardNodesA.containsKey(nodeA)) {
+						this.callStackA.pop();
+					}
+					if (acrossBackwardNodesB.containsKey(nodeB)) {
+						this.callStackB.push(acrossBackwardNodesB.get(nodeB));
+					} else if (acrossForwardNodesB.containsKey(nodeB)) {
+						this.callStackB.pop();
+					}
 				}
 			}
 		}
