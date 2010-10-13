@@ -1,6 +1,5 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg.edge;
 
-import java.util.Collections;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -30,7 +29,7 @@ public class PDGDataDependenceEdge extends PDGEdge {
 				dataDependenceEdges.add((PDGDataDependenceEdge) edge);
 			}
 		}
-		return Collections.unmodifiableSortedSet(dataDependenceEdges);
+		return dataDependenceEdges;
 	}
 
 	public PDGDataDependenceEdge(final PDGNode<?> fromNode,

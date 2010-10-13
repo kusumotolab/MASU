@@ -19,7 +19,8 @@ abstract class PDGAcrossDataDependenceEdge extends PDGDataDependenceEdge
 	 * 
 	 * @return
 	 */
-	public CallInfo<?> getCall() {
+	@Override
+	public CallInfo<?> getHolder() {
 		return this.call;
 	}
 
