@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder;
@@ -65,36 +66,30 @@ public class ParenthesesExpressionBuilder extends
      * 命令されて実際にUnresolvedParenthesesExpressionInfoをつくる
      */
     protected void buildParenthesesExpressionBuilder(final AstVisitEvent e) {
-        // ExpressionManagerのexpressionAnalyzeStackの頭の要素が，括弧式の直下にくるExpressionElement
-        // ポップする必要があるかわからないのでスタックはいじらない
-        final ExpressionElement parentheticElement = expressionManager.getPeekExpressionElement();
-        final UnresolvedExpressionInfo<? extends ExpressionInfo> parentheticExpression = parentheticElement
+        final ExpressionElement parentheticElement = expressionManager.popExpressionElement();
+        UnresolvedExpressionInfo<? extends ExpressionInfo> parentheticExpression = parentheticElement
                 .getUsage();
+        
+        if (null == parentheticExpression) {
+            if (!(parentheticElement instanceof SingleIdentifierElement)) {
+                throw new NotImplementedException();
+            }
+            // ここにくるのは(a)みたいに括弧式の直下に変数がきているとき．
+            final SingleIdentifierElement identifier = (SingleIdentifierElement) parentheticElement;
 
-        if (null != parentheticExpression) {
-            // expressionAnalyzeStackの頭の要素をポップして，かわりに括弧式をプッシュする
-            expressionManager.popExpressionElement();
-            final UnresolvedParenthesesExpressionInfo paren = new UnresolvedParenthesesExpressionInfo(
-                    parentheticExpression);
-            paren.setOuterUnit(this.buildDataManager.getCurrentUnit());
-            paren.setFromLine(e.getStartLine());
-            paren.setFromColumn(e.getStartColumn());
-            paren.setToLine(e.getEndLine());
-            paren.setToColumn(e.getEndColumn());
-            expressionManager.pushExpressionElement(new UsageElement(paren));
-        } else {
-            // TODO (a)のような場合の括弧もとれるようにする
-            /*
-             * ここにくるのは(a)みたいに括弧式の直下に変数がきているとき．
-             * expressionAnalyzeStackをいじらないため，結果として括弧式がなかったかのような
-             * 振る舞いをする．
-             * 
-             * カッコ式直下に変数がきている場合，ASTの括弧式からexitする時点では
-             * まだ内部の変数のUsageが存在しない．
-             * 変数ElementのresolveAsVariableを呼び出すことでUsageを生成するのだが，
-             * この場所では変数が被代入なのか代入なのかわからないため呼び出せない．
-             */
+            parentheticExpression = identifier.resolveAsVariable(buildDataManager, true,
+                    this.expressionStateManger.inAssignmentee());
         }
+
+        // expressionAnalyzeStackの頭に括弧式をプッシュする
+        final UnresolvedParenthesesExpressionInfo paren = new UnresolvedParenthesesExpressionInfo(
+                parentheticExpression);
+        paren.setOuterUnit(this.buildDataManager.getCurrentUnit());
+        paren.setFromLine(e.getStartLine());
+        paren.setFromColumn(e.getStartColumn());
+        paren.setToLine(e.getEndLine());
+        paren.setToColumn(e.getEndColumn());
+        expressionManager.pushExpressionElement(new UsageElement(paren));
     }
 
     @Override
