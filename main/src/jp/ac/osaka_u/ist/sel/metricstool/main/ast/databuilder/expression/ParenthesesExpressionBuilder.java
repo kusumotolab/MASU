@@ -67,17 +67,17 @@ public class ParenthesesExpressionBuilder extends
      */
     protected void buildParenthesesExpressionBuilder(final AstVisitEvent e) {
         final ExpressionElement parentheticElement = expressionManager.popExpressionElement();
-        UnresolvedExpressionInfo<? extends ExpressionInfo> parentheticExpression = parentheticElement
-                .getUsage();
         
+        UnresolvedExpressionInfo<? extends ExpressionInfo> parentheticExpression = parentheticElement
+                .getUsage();        
         if (null == parentheticExpression) {
-            if (!(parentheticElement instanceof SingleIdentifierElement)) {
+            if (!(parentheticElement instanceof IdentifierElement)) {
                 throw new NotImplementedException();
             }
             // ‚±‚±‚É‚­‚é‚Ì‚Í(a)‚İ‚½‚¢‚ÉŠ‡ŒÊ®‚Ì’¼‰º‚É•Ï”‚ª‚«‚Ä‚¢‚é‚Æ‚«D
-            final SingleIdentifierElement identifier = (SingleIdentifierElement) parentheticElement;
+            final IdentifierElement identifier = (IdentifierElement) parentheticElement;
 
-            parentheticExpression = identifier.resolveAsVariable(buildDataManager, true,
+            parentheticExpression = identifier.resolveAsVariable(buildDataManager, false,
                     this.expressionStateManger.inAssignmentee());
         }
 
