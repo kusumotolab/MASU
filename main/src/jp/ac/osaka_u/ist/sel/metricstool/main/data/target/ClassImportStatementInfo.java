@@ -1,8 +1,10 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 
@@ -18,16 +20,15 @@ public class ClassImportStatementInfo extends ImportStatementInfo<ClassInfo> {
 
     /**
      * オブジェクトを初期化
-     * @param importedClasses
      * @param fromLine 
      * @param fromColumn
      * @param toLine
      * @param toColumn
      */
-    public ClassImportStatementInfo(final Set<ClassInfo> importedClasses, final String[] namespace,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+    public ClassImportStatementInfo(final String[] namespace, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super(importedClasses, namespace, fromLine, fromColumn, toLine, toColumn);
+        super(namespace, fromLine, fromColumn, toLine, toColumn);
     }
 
     /**
@@ -35,20 +36,33 @@ public class ClassImportStatementInfo extends ImportStatementInfo<ClassInfo> {
      * 
      * @return　インポートされたクラスのSortedSet
      */
-    public Set<ClassInfo> getImportedClasses() {
+    @Override
+    public Set<ClassInfo> getImportedUnits() {
 
-        // インポートされているクラスがExternalクラスである場合はそれに対応するターゲットクラスがあるかを調べる
-        final Set<ClassInfo> refreshedImportedClasses = new HashSet<ClassInfo>();
-        for (final ClassInfo importedClass : this.getImportedUnits()) {
-            if (importedClass instanceof ExternalClassInfo) {
-                final String[] importedFQName = importedClass.getFullQualifiedName();
-                final ClassInfo refreshedImportedClass = DataManager.getInstance()
-                        .getClassInfoManager().getClassInfo(importedFQName);
-                refreshedImportedClasses.add(refreshedImportedClass);
-            } else {
-                refreshedImportedClasses.add(importedClass);
-            }
+        final SortedSet<ClassInfo> importedClasses = new TreeSet<ClassInfo>();
+        final ClassInfoManager classManager = DataManager.getInstance().getClassInfoManager();
+        final String[] importName = this.getImportName();
+        if (importName[importName.length - 1].equals("*")) {
+            final NamespaceInfo namespace = this.getNamespace();
+            importedClasses.addAll(classManager.getClassInfos(namespace));
         }
-        return refreshedImportedClasses;
+
+        else {
+            ClassInfo importedClass = classManager.getClassInfo(importName);
+            if (null == importedClass) {
+                importedClass = new ExternalClassInfo(importName);
+                classManager.add(importedClass);
+            }
+            importedClasses.add(importedClass);
+        }
+
+        return importedClasses;
+    }
+
+    @Override
+    public NamespaceInfo getNamespace() {
+        final String[] importName = this.getImportName();
+        final String[] namespace = Arrays.copyOf(importName, importName.length - 1);
+        return new NamespaceInfo(namespace);
     }
 }

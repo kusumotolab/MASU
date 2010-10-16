@@ -291,8 +291,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                         final MemberImportStatementInfo memberImportStatement = unresolvedMemberImportStatement
                                 .resolve(usingClass, usingMethod, classInfoManager,
                                         fieldInfoManager, methodInfoManager);
-                        for (final Member importedMember : memberImportStatement
-                                .getImportedMembers()) {
+                        for (final Member importedMember : memberImportStatement.getImportedUnits()) {
                             if (importedMember instanceof MethodInfo) {
                                 final MethodInfo importedMethod = (MethodInfo) importedMember;
 

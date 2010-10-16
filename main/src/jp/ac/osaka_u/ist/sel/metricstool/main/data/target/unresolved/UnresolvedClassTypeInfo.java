@@ -153,7 +153,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
                 final ClassImportStatementInfo classImportStatement = unresolvedClassImportStatement
                         .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                                 methodInfoManager);
-                for (final ClassInfo importedClass : classImportStatement.getImportedClasses()) {
+                for (final ClassInfo importedClass : classImportStatement.getImportedUnits()) {
                     if (candidateClasses.contains(importedClass)) {
                         final ClassTypeInfo classType = new ClassTypeInfo(importedClass);
                         for (final UnresolvedTypeInfo<? extends TypeInfo> unresolvedTypeArgument : this
@@ -180,7 +180,7 @@ public class UnresolvedClassTypeInfo implements UnresolvedReferenceTypeInfo<Refe
                         .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
                                 methodInfoManager);
 
-                for (final ClassInfo importedClass : classImportStatement.getImportedClasses()) {
+                for (final ClassInfo importedClass : classImportStatement.getImportedUnits()) {
 
                     for (final ClassInfo candidateClass : candidateClasses) {
 

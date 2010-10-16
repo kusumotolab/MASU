@@ -5,14 +5,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassImportStatementInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfoManager;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -75,26 +71,10 @@ public final class UnresolvedClassImportStatementInfo extends
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
 
-        final SortedSet<ClassInfo> accessibleClasses = new TreeSet<ClassInfo>();
-        if (this.isAll()) {
-            final String[] namespace = this.getNamespace();
-            final Collection<ClassInfo> specifiedClasses = classInfoManager
-                    .getClassInfos(namespace);
-            accessibleClasses.addAll(specifiedClasses);
-        } else {
-            final String[] importName = this.getImportName();
-            ClassInfo specifiedClass = classInfoManager.getClassInfo(importName);
-            if (null == specifiedClass) {
-                specifiedClass = new ExternalClassInfo(importName);
-                classInfoManager.add(specifiedClass);
-            }
-            accessibleClasses.add(specifiedClass);
-        }
-
         // fix import name to original text
         final String[] originalImportName = this.getImportName();
         String[] importName;
-        if (this.isAll()){
+        if (this.isAll()) {
             final int length = originalImportName.length;
             importName = new String[length + 1];
             System.arraycopy(originalImportName, 0, importName, 0, length);
@@ -102,8 +82,8 @@ public final class UnresolvedClassImportStatementInfo extends
         } else {
             importName = originalImportName;
         }
-        this.resolvedInfo = new ClassImportStatementInfo(accessibleClasses, importName, fromLine, fromColumn,
-                toLine, toColumn);
+        this.resolvedInfo = new ClassImportStatementInfo(importName, fromLine, fromColumn, toLine,
+                toColumn);
         return this.resolvedInfo;
     }
 

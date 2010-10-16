@@ -205,8 +205,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                         final MemberImportStatementInfo memberImportStatement = unresolvedMemberImportStatement
                                 .resolve(usingClass, usingMethod, classInfoManager,
                                         fieldInfoManager, methodInfoManager);
-                        for (final Member importedMember : memberImportStatement
-                                .getImportedMembers()) {
+                        for (final Member importedMember : memberImportStatement.getImportedUnits()) {
                             if (importedMember instanceof FieldInfo) {
                                 final FieldInfo importedField = (FieldInfo) importedMember;
                                 if (fieldName.equals(importedField.getName())) {
@@ -290,7 +289,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
             final Settings settings = Settings.getInstance();
             if ((settings.getLanguage().equals(LANGUAGE.JAVA15)
                     || settings.getLanguage().equals(LANGUAGE.JAVA14) || settings.getLanguage()
-                    .equals(LANGUAGE.JAVA13)) && fieldName.equals("length")) {
+                    .equals(LANGUAGE.JAVA13))
+                    && fieldName.equals("length")) {
 
                 final FieldUsageInfo resolved = new ArrayLengthUsageInfo(qualifierUsage,
                         (ArrayTypeInfo) qualifierType, usingMethod, fromLine, fromColumn, toLine,

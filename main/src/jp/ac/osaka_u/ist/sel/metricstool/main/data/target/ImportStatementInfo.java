@@ -11,19 +11,17 @@ public abstract class ImportStatementInfo<T> extends UnitInfo {
 
     /**
      * オブジェクトを初期化
-     * @param importedUnits
+     * 
      * @param fromLine 
      * @param fromColumn
      * @param toLine
      * @param toColumn
      */
-    ImportStatementInfo(final Set<T> importedUnits, final String[] importName, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+    ImportStatementInfo(final String[] importName, final int fromLine, final int fromColumn,
+            final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
-        this.importedUnits = new HashSet<T>();
-        this.importedUnits.addAll(importedUnits);
         final int length = importName.length;
         final String[] tmp = new String[length];
         System.arraycopy(importName, 0, tmp, 0, length);
@@ -35,13 +33,13 @@ public abstract class ImportStatementInfo<T> extends UnitInfo {
      * 
      * @return　インポートされたクラスのSortedSet
      */
-    Set<T> getImportedUnits() {
-        return Collections.unmodifiableSet(this.importedUnits);
-    }
-    
-    public final String[] getImportName(){
+    abstract Set<T> getImportedUnits();
+
+    public final String[] getImportName() {
         return this.importName;
     }
+
+    abstract NamespaceInfo getNamespace();
 
     @Override
     final public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
@@ -64,19 +62,17 @@ public abstract class ImportStatementInfo<T> extends UnitInfo {
         return this.getImportedUnits().hashCode() + this.getFromLine() + this.getFromColumn()
                 + this.getToLine() + this.getToColumn();
     }
-    
+
     @Override
-    final public String toString(){
+    final public String toString() {
         final StringBuilder sb = new StringBuilder();
-        for (final String name: this.getImportName()){
+        for (final String name : this.getImportName()) {
             sb.append(name);
             sb.append(".");
         }
         sb.setCharAt(sb.length() - 1, ';');
         return sb.toString();
     }
-    
-    private final Set<T> importedUnits;
-    
+
     private final String[] importName;
 }
