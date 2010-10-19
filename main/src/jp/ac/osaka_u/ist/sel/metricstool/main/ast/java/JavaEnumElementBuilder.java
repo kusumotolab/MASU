@@ -138,8 +138,11 @@ public class JavaEnumElementBuilder extends CompoundDataBuilder<UnresolvedFieldI
             UnresolvedFieldInfo element = new UnresolvedFieldInfo(elementName,
                     UnresolvedClassTypeInfo.getInstance(enumClass), enumClass, _initializer,
                     startLine, startColumn, endLine, endColumn);
-            //Enumのフィールドはstatic扱い
+            //Enumのフィールドはpublic final static扱い
             element.addModifier(JavaPredefinedModifierInfo.STATIC);
+            element.addModifier(JavaPredefinedModifierInfo.PUBLIC);
+            element.addModifier(JavaPredefinedModifierInfo.FINAL);
+            
             //modifierInterpriter.interprit(defaultModifiers, element, element);
 
             buildManager.addField(element);
