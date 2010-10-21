@@ -30,9 +30,10 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
+        final boolean isInParentheses = this.isInParentheses();
 
         final LocalVariableUsageInfo newVariableUsage = getInstance(usedVariable, reference,
-                assignment, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+                assignment, ownerMethod, fromLine, fromColumn, toLine, toColumn, isInParentheses);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newVariableUsage.setOwnerExecutableElement(owner);
@@ -59,10 +60,11 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
      */
     private LocalVariableUsageInfo(final LocalVariableInfo usedLocalVariable,
             final boolean reference, final boolean assignment, final CallableUnitInfo ownerMethod,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
+            final boolean isInParentheses) {
 
         super(usedLocalVariable, reference, assignment, ownerMethod, fromLine, fromColumn, toLine,
-                toColumn);
+                toColumn, isInParentheses);
     }
 
     /**
@@ -80,9 +82,11 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
      */
     public static LocalVariableUsageInfo getInstance(final LocalVariableInfo usedLocalVariable,
             final boolean reference, final boolean assignment, final CallableUnitInfo ownerMethod,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
+            final boolean isInParentheses) {
         final LocalVariableUsageInfo instance = new LocalVariableUsageInfo(usedLocalVariable,
-                reference, assignment, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+                reference, assignment, ownerMethod, fromLine, fromColumn, toLine, toColumn,
+                isInParentheses);
         addLocalVariableUsage(instance);
         return instance;
     }

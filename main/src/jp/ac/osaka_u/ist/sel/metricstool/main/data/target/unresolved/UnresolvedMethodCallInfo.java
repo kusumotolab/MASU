@@ -115,7 +115,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                     referenceType.addTypeArgument(typeArgument);
                 }
                 qualifierUsage = new ClassReferenceInfo(referenceType, usingMethod, fromLine,
-                        fromColumn, toLine, toColumn);
+                        fromColumn, toLine, toColumn, this.isInParentheses());
             }
         }
 
@@ -195,7 +195,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(methodName);
             final MethodCallInfo resolved = new MethodCallInfo(qualifierType, qualifierUsage,
                     unknownMethod, UnknownTypeInfo.getInstance(), usingMethod, fromLine,
-                    fromColumn, toLine, toColumn);
+                    fromColumn, toLine, toColumn, this.isInParentheses());
             resolved.addArguments(actualParameters);
             resolved.addTypeArguments(typeArguments);
             return resolved;
@@ -265,7 +265,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                                 final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
                                         qualifierUsage, availableMethod, typeArgument, usingMethod,
-                                        fromLine, fromColumn, toLine, toColumn);
+                                        fromLine, fromColumn, toLine, toColumn,
+                                        this.isInParentheses());
                                 resolved.addArguments(actualParameters);
                                 resolved.addTypeArguments(typeArguments);
                                 return resolved;
@@ -275,7 +276,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                             else {
                                 final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
                                         qualifierUsage, availableMethod, returnType, usingMethod,
-                                        fromLine, fromColumn, toLine, toColumn);
+                                        fromLine, fromColumn, toLine, toColumn,
+                                        this.isInParentheses());
                                 resolved.addArguments(actualParameters);
                                 resolved.addTypeArguments(typeArguments);
                                 return resolved;
@@ -336,7 +338,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                                         final MethodCallInfo resolved = new MethodCallInfo(
                                                 qualifierType, qualifierUsage, importedMethod,
                                                 typeArgument, usingMethod, fromLine, fromColumn,
-                                                toLine, toColumn);
+                                                toLine, toColumn, this.isInParentheses());
                                         resolved.addArguments(actualParameters);
                                         resolved.addTypeArguments(typeArguments);
                                         return resolved;
@@ -347,7 +349,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                                         final MethodCallInfo resolved = new MethodCallInfo(
                                                 qualifierType, qualifierUsage, importedMethod,
                                                 returnType, usingMethod, fromLine, fromColumn,
-                                                toLine, toColumn);
+                                                toLine, toColumn, this.isInParentheses());
                                         resolved.addArguments(actualParameters);
                                         resolved.addTypeArguments(typeArguments);
                                         return resolved;
@@ -375,7 +377,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                         // 外部クラスに新規で外部メソッド変数（ExternalMethodInfo）を追加したので型は不明
                         final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
                                 qualifierUsage, methodInfo, UnknownTypeInfo.getInstance(),
-                                usingMethod, fromLine, fromColumn, toLine, toColumn);
+                                usingMethod, fromLine, fromColumn, toLine, toColumn,
+                                this.isInParentheses());
                         resolved.addArguments(actualParameters);
                         resolved.addTypeArguments(typeArguments);
                         return resolved;
@@ -391,7 +394,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                     final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(methodName);
                     final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
                             qualifierUsage, unknownMethod, UnknownTypeInfo.getInstance(),
-                            usingMethod, fromLine, fromColumn, toLine, toColumn);
+                            usingMethod, fromLine, fromColumn, toLine, toColumn,
+                            this.isInParentheses());
                     resolved.addArguments(actualParameters);
                     resolved.addTypeArguments(typeArguments);
                     return resolved;
@@ -410,7 +414,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 // 外部クラスに新規で外部メソッド(ExternalMethodInfo)を追加したので型は不明．
                 final MethodCallInfo resolved = new MethodCallInfo(qualifierType, qualifierUsage,
                         methodInfo, UnknownTypeInfo.getInstance(), usingMethod, fromLine,
-                        fromColumn, toLine, toColumn);
+                        fromColumn, toLine, toColumn, this.isInParentheses());
                 resolved.addArguments(actualParameters);
                 resolved.addTypeArguments(typeArguments);
                 return resolved;
@@ -438,7 +442,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                     // 外部クラスに新規で外部メソッドを追加したので型は不明
                     final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
                             qualifierUsage, methodInfo, UnknownTypeInfo.getInstance(), usingMethod,
-                            fromLine, fromColumn, toLine, toColumn);
+                            fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
                     resolved.addArguments(actualParameters);
                     resolved.addTypeArguments(typeArguments);
                     return resolved;
@@ -495,7 +499,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
                                 final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
                                         qualifierUsage, availableMethod, typeArgument, usingMethod,
-                                        fromLine, fromColumn, toLine, toColumn);
+                                        fromLine, fromColumn, toLine, toColumn,
+                                        this.isInParentheses());
                                 resolved.addArguments(actualParameters);
                                 resolved.addTypeArguments(typeArguments);
                                 return resolved;
@@ -505,7 +510,8 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                             else {
                                 final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
                                         qualifierUsage, availableMethod, returnType, usingMethod,
-                                        fromLine, fromColumn, toLine, toColumn);
+                                        fromLine, fromColumn, toLine, toColumn,
+                                        this.isInParentheses());
                                 resolved.addArguments(actualParameters);
                                 resolved.addTypeArguments(typeArguments);
                                 return resolved;

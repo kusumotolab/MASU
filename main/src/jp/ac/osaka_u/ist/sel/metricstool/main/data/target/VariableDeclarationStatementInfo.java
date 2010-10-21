@@ -50,14 +50,15 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
             // ownerSpaceInfoがメソッドまたはコンストラクタの時
             if (ownerSpace instanceof CallableUnitInfo) {
                 this.initializationExpression = new EmptyExpressionInfo(
-                        (CallableUnitInfo) ownerSpace, toLine, toColumn - 1, toLine, toColumn - 1);
+                        (CallableUnitInfo) ownerSpace, toLine, toColumn - 1, toLine, toColumn - 1,
+                        false);
             }
 
             // ownerSpaceInfoがブロック文の時
             else if (ownerSpace instanceof BlockInfo) {
                 final CallableUnitInfo ownerMethod = ((BlockInfo) ownerSpace).getOwnerMethod();
                 this.initializationExpression = new EmptyExpressionInfo(ownerMethod, toLine,
-                        toColumn - 1, toLine, toColumn - 1);
+                        toColumn - 1, toLine, toColumn - 1, false);
             }
 
             // それ以外の時はエラー
@@ -223,8 +224,7 @@ public class VariableDeclarationStatementInfo extends SingleStatementInfo implem
         final LocalVariableUsageInfo variableDeclaration = (LocalVariableUsageInfo) this
                 .getDeclaration().copy();
         final ExpressionInfo initializerExpression = null != this.getInitializationExpression() ? (ExpressionInfo) this
-                .getInitializationExpression().copy()
-                : null;
+                .getInitializationExpression().copy() : null;
         final int fromLine = this.getFromLine();
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();

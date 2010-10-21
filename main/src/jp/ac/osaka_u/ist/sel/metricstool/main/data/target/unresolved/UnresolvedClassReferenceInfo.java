@@ -128,7 +128,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                 if (classReference.getType() instanceof UnknownTypeInfo) {
 
                     this.resolvedInfo = new UnknownEntityUsageInfo(referenceName, usingMethod,
-                            fromLine, fromColumn, toLine, toColumn);
+                            fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
                     /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                     return this.resolvedInfo;
 
@@ -153,7 +153,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                             // TODO 型パラメータ情報を追記する処理が必要
                             final ClassTypeInfo reference = new ClassTypeInfo(innerClassInfo);
                             classReference = new ClassReferenceInfo(reference, usingMethod,
-                                    fromLine, fromColumn, toLine, toColumn);
+                                    fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
                             /*classReference.setOwnerExecutableElement(ownerExecutableElement);*/
                             continue NEXT_NAME;
                         }
@@ -162,7 +162,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                     // 見つからなくても外部クラスの場合はしょうがない
                     if (ownerClass instanceof ExternalClassInfo) {
                         classReference = new UnknownEntityUsageInfo(referenceName, usingMethod,
-                                fromLine, fromColumn, toLine, toColumn);
+                                fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
                         /*classReference.setOwnerExecutableElement(ownerExecutableElement);*/
                         continue NEXT_NAME;
                     }
@@ -190,7 +190,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                 // TODO 型パラメータ情報を追記する処理が必要
                 final ClassTypeInfo reference = new ClassTypeInfo(classInfo);
                 this.resolvedInfo = new ClassReferenceInfo(reference, usingMethod, fromLine,
-                        fromColumn, toLine, toColumn);
+                        fromColumn, toLine, toColumn, this.isInParentheses());
                 /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                 return this.resolvedInfo;
             }
@@ -203,7 +203,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                     // TODO　型パラメータ情報を追記する処理が必要
                     final ClassTypeInfo reference = new ClassTypeInfo(classInfo);
                     this.resolvedInfo = new ClassReferenceInfo(reference, usingMethod, fromLine,
-                            fromColumn, toLine, toColumn);
+                            fromColumn, toLine, toColumn, this.isInParentheses());
                     /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                     return this.resolvedInfo;
                 }
@@ -227,7 +227,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                         // TODO 型パラメータ情報を格納する処理が必要
                         ClassTypeInfo reference = new ClassTypeInfo(innerClassInfo);
                         ExpressionInfo classReference = new ClassReferenceInfo(reference,
-                                usingMethod, fromLine, fromColumn, toLine, toColumn);
+                                usingMethod, fromLine, fromColumn, toLine, toColumn,
+                                this.isInParentheses());
                         /*classReference.setOwnerExecutableElement(ownerExecutableElement);*/
 
                         NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
@@ -236,7 +237,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                             if (classReference.getType() instanceof UnknownTypeInfo) {
 
                                 this.resolvedInfo = new UnknownEntityUsageInfo(referenceName,
-                                        usingMethod, fromLine, fromColumn, toLine, toColumn);
+                                        usingMethod, fromLine, fromColumn, toLine, toColumn,
+                                        this.isInParentheses());
                                 /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
                                 return this.resolvedInfo;
 
@@ -259,7 +261,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                         // TODO　型パラメータ情報を格納する処理が必要
                                         reference = new ClassTypeInfo(innerClass);
                                         classReference = new ClassReferenceInfo(reference,
-                                                usingMethod, fromLine, fromColumn, toLine, toColumn);
+                                                usingMethod, fromLine, fromColumn, toLine,
+                                                toColumn, this.isInParentheses());
                                         /*classReference
                                                 .setOwnerExecutableElement(ownerExecutableElement);*/
                                         continue NEXT_NAME;
@@ -270,7 +273,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                 if (ownerClass instanceof ExternalClassInfo) {
 
                                     classReference = new UnknownEntityUsageInfo(referenceName,
-                                            usingMethod, fromLine, fromColumn, toLine, toColumn);
+                                            usingMethod, fromLine, fromColumn, toLine, toColumn,
+                                            this.isInParentheses());
                                     /*classReference
                                             .setOwnerExecutableElement(ownerExecutableElement);*/
                                     continue NEXT_NAME;
@@ -306,7 +310,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                 // TODO 型パラメータ情報を格納する処理が必要
                                 ClassTypeInfo reference = new ClassTypeInfo(classInfo);
                                 ExpressionInfo classReference = new ClassReferenceInfo(reference,
-                                        usingMethod, fromLine, fromColumn, toLine, toColumn);
+                                        usingMethod, fromLine, fromColumn, toLine, toColumn,
+                                        this.isInParentheses());
                                 /*classReference.setOwnerExecutableElement(ownerExecutableElement);*/
 
                                 NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
@@ -316,7 +321,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                                         this.resolvedInfo = new UnknownEntityUsageInfo(
                                                 referenceName, usingMethod, fromLine, fromColumn,
-                                                toLine, toColumn);
+                                                toLine, toColumn, this.isInParentheses());
                                         /*this.resolvedInfo
                                                 .setOwnerExecutableElement(ownerExecutableElement);*/
                                         return this.resolvedInfo;
@@ -342,7 +347,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                                 reference = new ClassTypeInfo(innerClass);
                                                 classReference = new ClassReferenceInfo(reference,
                                                         usingMethod, fromLine, fromColumn, toLine,
-                                                        toColumn);
+                                                        toColumn, this.isInParentheses());
                                                 /*classReference
                                                         .setOwnerExecutableElement(ownerExecutableElement);*/
                                                 continue NEXT_NAME;
@@ -354,7 +359,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
                                             classReference = new UnknownEntityUsageInfo(
                                                     referenceName, usingMethod, fromLine,
-                                                    fromColumn, toLine, toColumn);
+                                                    fromColumn, toLine, toColumn,
+                                                    this.isInParentheses());
                                             /*classReference
                                                     .setOwnerExecutableElement(ownerExecutableElement);*/
                                             continue NEXT_NAME;
@@ -387,7 +393,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                             // TODO 型パラメータ情報を格納する処理が必要
                             ClassTypeInfo reference = new ClassTypeInfo(specifiedClassInfo);
                             ExpressionInfo classReference = new ClassReferenceInfo(reference,
-                                    usingMethod, fromLine, fromColumn, toLine, toColumn);
+                                    usingMethod, fromLine, fromColumn, toLine, toColumn,
+                                    this.isInParentheses());
                             /*classReference.setOwnerExecutableElement(ownerExecutableElement);*/
 
                             NEXT_NAME: for (int i = 1; i < referenceName.length; i++) {
@@ -396,7 +403,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                 if (classReference.getType() instanceof UnknownTypeInfo) {
 
                                     this.resolvedInfo = new UnknownEntityUsageInfo(referenceName,
-                                            usingMethod, fromLine, fromColumn, toLine, toColumn);
+                                            usingMethod, fromLine, fromColumn, toLine, toColumn,
+                                            this.isInParentheses());
                                     /*this.resolvedInfo
                                             .setOwnerExecutableElement(ownerExecutableElement);*/
                                     return this.resolvedInfo;
@@ -422,7 +430,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                             reference = new ClassTypeInfo(innerClass);
                                             classReference = new ClassReferenceInfo(reference,
                                                     usingMethod, fromLine, fromColumn, toLine,
-                                                    toColumn);
+                                                    toColumn, this.isInParentheses());
                                             /*classReference
                                                     .setOwnerExecutableElement(ownerExecutableElement);*/
                                             continue NEXT_NAME;
@@ -433,7 +441,8 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
                                     if (ownerClass instanceof ExternalClassInfo) {
 
                                         classReference = new UnknownEntityUsageInfo(referenceName,
-                                                usingMethod, fromLine, fromColumn, toLine, toColumn);
+                                                usingMethod, fromLine, fromColumn, toLine,
+                                                toColumn, this.isInParentheses());
                                         /*classReference
                                                 .setOwnerExecutableElement(ownerExecutableElement);*/
                                         continue NEXT_NAME;
@@ -463,7 +472,7 @@ public class UnresolvedClassReferenceInfo extends UnresolvedExpressionInfo<Expre
 
         // 見つからなかった場合は，UknownTypeInfo を返す
         this.resolvedInfo = new UnknownEntityUsageInfo(referenceName, usingMethod, fromLine,
-                fromColumn, toLine, toColumn);
+                fromColumn, toLine, toColumn, this.isInParentheses());
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
         return this.resolvedInfo;
     }

@@ -48,9 +48,10 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
      * @param toColumn 終了列
      */
     CallInfo(final T callee, final CallableUnitInfo ownerMethod, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final int fromColumn, final int toLine, final int toColumn,
+            final boolean isInParentheses) {
 
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, isInParentheses);
 
         this.arguments = new LinkedList<ExpressionInfo>();
         this.typeArguments = new LinkedList<ReferenceTypeInfo>();
@@ -150,7 +151,7 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
         }
         return Collections.unmodifiableSortedSet(variableUsages);
     }
-    
+
     /**
      * この呼び出しで投げられる可能性がある例外のSetを返す
      * 
@@ -159,7 +160,7 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
         final Set<ReferenceTypeInfo> thrownExceptions = new HashSet<ReferenceTypeInfo>();
-        for(final ExpressionInfo parameter : this.getArguments()){
+        for (final ExpressionInfo parameter : this.getArguments()) {
             thrownExceptions.addAll(parameter.getThrownExceptions());
         }
         return Collections.unmodifiableSet(thrownExceptions);

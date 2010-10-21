@@ -29,9 +29,9 @@ public final class CastUsageInfo extends ExpressionInfo {
      */
     public CastUsageInfo(final TypeInfo castType, final ExpressionInfo castedUsage,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+            final int toLine, final int toColumn, final boolean isInParentheses) {
 
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, isInParentheses);
 
         // 不正な呼び出しでないかをチェック
         MetricsToolSecurityManager.getInstance().checkAccess();
@@ -104,7 +104,7 @@ public final class CastUsageInfo extends ExpressionInfo {
         final ExpressionInfo expression = this.getCastedUsage();
         sb.append(expression.getText());
 
-        return sb.toString();
+        return this.getParenthesizedText(sb.toString());
     }
 
     /**
@@ -127,9 +127,10 @@ public final class CastUsageInfo extends ExpressionInfo {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
+        final boolean isInParentheses = this.isInParentheses();
 
         final CastUsageInfo newCastUsage = new CastUsageInfo(castType, castedUsage, ownerMethod,
-                fromLine, fromColumn, toLine, toColumn);
+                fromLine, fromColumn, toLine, toColumn, isInParentheses);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newCastUsage.setOwnerExecutableElement(owner);

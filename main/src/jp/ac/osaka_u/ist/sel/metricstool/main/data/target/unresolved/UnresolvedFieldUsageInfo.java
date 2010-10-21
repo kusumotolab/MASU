@@ -167,7 +167,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
 
             final FieldUsageInfo resolved = FieldUsageInfo.getInstance(qualifierUsage,
                     UnknownTypeInfo.getInstance(), unknownField, reference, assignment,
-                    usingMethod, fromLine, fromColumn, toLine, toColumn);
+                    usingMethod, fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
             return resolved;
 
             //親がクラス型の場合
@@ -192,7 +192,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                             final FieldUsageInfo resolved = FieldUsageInfo.getInstance(
                                     qualifierUsage, qualifierUsage.getType(), availableField,
                                     reference, assignment, usingMethod, fromLine, fromColumn,
-                                    toLine, toColumn);
+                                    toLine, toColumn, this.isInParentheses());
                             return resolved;
                         }
                     }
@@ -213,11 +213,11 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                                     final ClassTypeInfo classType = new ClassTypeInfo(classInfo);
                                     final ClassReferenceInfo classReference = new ClassReferenceInfo(
                                             classType, usingMethod, fromLine, fromColumn, fromLine,
-                                            fromColumn);
+                                            fromColumn, this.isInParentheses());
                                     final FieldUsageInfo resolved = FieldUsageInfo.getInstance(
                                             classReference, classType, importedField, reference,
                                             assignment, usingMethod, fromLine, fromColumn, toLine,
-                                            toColumn);
+                                            toColumn, this.isInParentheses());
                                     return resolved;
                                 }
                             }
@@ -240,10 +240,10 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                             fieldInfoManager.add(fieldInfo);
 
                             // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
-                            final FieldUsageInfo resolved = FieldUsageInfo
-                                    .getInstance(qualifierUsage, qualifierUsage.getType(),
-                                            fieldInfo, reference, assignment, usingMethod,
-                                            fromLine, fromColumn, toLine, toColumn);
+                            final FieldUsageInfo resolved = FieldUsageInfo.getInstance(
+                                    qualifierUsage, qualifierUsage.getType(), fieldInfo, reference,
+                                    assignment, usingMethod, fromLine, fromColumn, toLine,
+                                    toColumn, this.isInParentheses());
                             return resolved;
                         }
 
@@ -262,7 +262,8 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                     final ExternalFieldInfo unknownField = new ExternalFieldInfo(fieldName);
                     final FieldUsageInfo resolved = FieldUsageInfo.getInstance(qualifierUsage,
                             UnknownTypeInfo.getInstance(), unknownField, reference, assignment,
-                            usingMethod, fromLine, fromColumn, toLine, toColumn);
+                            usingMethod, fromLine, fromColumn, toLine, toColumn,
+                            this.isInParentheses());
                     return resolved;
                 }
 
@@ -276,7 +277,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                 // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
                 final FieldUsageInfo resolved = FieldUsageInfo.getInstance(qualifierUsage,
                         qualifierUsage.getType(), fieldInfo, reference, assignment, usingMethod,
-                        fromLine, fromColumn, toLine, toColumn);
+                        fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
                 return resolved;
             }
 
@@ -294,7 +295,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
 
                 final FieldUsageInfo resolved = new ArrayLengthUsageInfo(qualifierUsage,
                         (ArrayTypeInfo) qualifierType, usingMethod, fromLine, fromColumn, toLine,
-                        toColumn);
+                        toColumn, this.isInParentheses());
                 return resolved;
             }
         }

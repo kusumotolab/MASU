@@ -23,10 +23,11 @@ public class ThisConstructorCallInfo extends ClassConstructorCallInfo {
      */
     public ThisConstructorCallInfo(final ClassTypeInfo classType, final ConstructorInfo callee,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
-        super(classType, callee, ownerMethod, fromLine, fromColumn, toLine, toColumn);
+            final int toLine, final int toColumn, final boolean isInParentheses) {
+        super(classType, callee, ownerMethod, fromLine, fromColumn, toLine, toColumn,
+                isInParentheses);
     }
-    
+
     /**
      * このコンストラクタ呼び出しのテキスト表現（型）を返す
      * 
@@ -49,6 +50,6 @@ public class ThisConstructorCallInfo extends ClassConstructorCallInfo {
 
         sb.append(")");
 
-        return sb.toString();
+        return this.getParenthesizedText(sb.toString());
     }
 }

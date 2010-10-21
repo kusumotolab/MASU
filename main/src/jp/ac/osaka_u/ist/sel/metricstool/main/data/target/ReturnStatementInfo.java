@@ -36,14 +36,14 @@ public class ReturnStatementInfo extends SingleStatementInfo {
             // ownerSpaceInfoがメソッドまたはコンストラクタの時
             if (ownerSpace instanceof CallableUnitInfo) {
                 this.returnedExpression = new EmptyExpressionInfo((CallableUnitInfo) ownerSpace,
-                        toLine, toColumn - 1, toLine, toColumn - 1);
+                        toLine, toColumn - 1, toLine, toColumn - 1, false);
             }
 
             // ownerSpaceInfoがブロック文の時            
             else if (ownerSpace instanceof BlockInfo) {
                 final CallableUnitInfo ownerMethod = ((BlockInfo) ownerSpace).getOwnerMethod();
                 this.returnedExpression = new EmptyExpressionInfo(ownerMethod, toLine,
-                        toColumn - 1, toLine, toColumn - 1);
+                        toColumn - 1, toLine, toColumn - 1, false);
             }
 
             // それ以外の時はエラー

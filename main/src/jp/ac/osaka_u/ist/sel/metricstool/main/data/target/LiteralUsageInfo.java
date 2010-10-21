@@ -27,9 +27,9 @@ public final class LiteralUsageInfo extends ExpressionInfo {
      */
     public LiteralUsageInfo(final String literal, final TypeInfo type,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn) {
+            final int toLine, final int toColumn, final boolean isInParentheses) {
 
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, isInParentheses);
 
         this.literal = literal;
         this.type = type;
@@ -80,7 +80,7 @@ public final class LiteralUsageInfo extends ExpressionInfo {
      */
     @Override
     public String getText() {
-        return this.getLiteral();
+        return this.getParenthesizedText(this.getLiteral());
     }
 
     /**
@@ -102,9 +102,10 @@ public final class LiteralUsageInfo extends ExpressionInfo {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
+        final boolean isInParentheses = this.isInParentheses();
 
         final LiteralUsageInfo newLiteralUsage = new LiteralUsageInfo(literal, type, ownerMethod,
-                fromLine, fromColumn, toLine, toColumn);
+                fromLine, fromColumn, toLine, toColumn, isInParentheses);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newLiteralUsage.setOwnerExecutableElement(owner);

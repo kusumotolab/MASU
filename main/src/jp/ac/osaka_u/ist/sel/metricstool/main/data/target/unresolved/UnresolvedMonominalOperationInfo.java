@@ -68,7 +68,7 @@ public final class UnresolvedMonominalOperationInfo extends
         final boolean isPreposed = this.isPreposed();
 
         this.resolvedInfo = new MonominalOperationInfo(term, this.operator, isPreposed,
-                usingMethod, fromLine, fromColumn, toLine, toColumn);
+                usingMethod, fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
 
         return this.resolvedInfo;
     }

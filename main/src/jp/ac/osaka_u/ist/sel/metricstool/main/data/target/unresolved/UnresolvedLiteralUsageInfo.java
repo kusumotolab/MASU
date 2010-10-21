@@ -68,7 +68,7 @@ public final class UnresolvedLiteralUsageInfo extends UnresolvedExpressionInfo<L
                 fieldInfoManager, methodInfoManager);
 
         this.resolvedInfo = new LiteralUsageInfo(literal, type, usingMethod, fromLine, fromColumn,
-                toLine, toColumn);
+                toLine, toColumn, this.isInParentheses());
         return this.resolvedInfo;
     }
 

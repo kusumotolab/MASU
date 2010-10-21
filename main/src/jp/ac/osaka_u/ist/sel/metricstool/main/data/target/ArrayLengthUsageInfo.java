@@ -23,11 +23,12 @@ public final class ArrayLengthUsageInfo extends FieldUsageInfo {
      */
     public ArrayLengthUsageInfo(final ExpressionInfo qualifierExpression,
             final ArrayTypeInfo qualifierType, final CallableUnitInfo ownerMethod,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
+            final boolean isInParentheses) {
 
         super(qualifierExpression, qualifierType,
                 ArrayLengthInfo.getArrayLengthInfo(qualifierType), true, false, ownerMethod,
-                fromLine, fromColumn, toLine, toColumn);
+                fromLine, fromColumn, toLine, toColumn, isInParentheses);
     }
 
     /**
@@ -49,10 +50,11 @@ public final class ArrayLengthUsageInfo extends FieldUsageInfo {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-
+        final boolean isInParentheses = this.isInParentheses();
+        
         final ArrayLengthUsageInfo newArrayLengthUsage = new ArrayLengthUsageInfo(
                 qualifierExpression, qualifierType, ownerMethod, fromLine, fromColumn, toLine,
-                toColumn);
+                toColumn, isInParentheses);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newArrayLengthUsage.setOwnerExecutableElement(owner);
