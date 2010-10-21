@@ -39,10 +39,10 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
             final TypeInfo qualifierType, final FieldInfo usedField, final boolean reference,
             final boolean assignment, final CallableUnitInfo ownerMethod, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn,
-            final boolean isInParentheses) {
+            final int parenthesesCount) {
 
         super(usedField, reference, assignment, ownerMethod, fromLine, fromColumn, toLine,
-                toColumn, isInParentheses);
+                toColumn, parenthesesCount);
 
         this.qualifierExpression = qualifierExpression;
         this.qualifierType = qualifierType;
@@ -131,11 +131,11 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final boolean isInParentheses = this.isInParentheses();
+        final int parenthesesCount = this.getParenthesesCount();
 
         final FieldUsageInfo newFieldUsage = new FieldUsageInfo(qualifierExpression, qualifierType,
                 usedField, reference, assignment, ownerMethod, fromLine, fromColumn, toLine,
-                toColumn, isInParentheses);
+                toColumn, parenthesesCount);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newFieldUsage.setOwnerExecutableElement(owner);
@@ -184,10 +184,10 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
             final TypeInfo qualifierType, final FieldInfo usedField, final boolean reference,
             final boolean assignment, final CallableUnitInfo ownerMethod, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn,
-            final boolean isInParentheses) {
+            final int parenthesesCount) {
         final FieldUsageInfo instance = new FieldUsageInfo(qualifierExpression, qualifierType,
                 usedField, reference, assignment, ownerMethod, fromLine, fromColumn, toLine,
-                toColumn, isInParentheses);
+                toColumn, parenthesesCount);
         addFieldUsage(instance);
         return instance;
     }

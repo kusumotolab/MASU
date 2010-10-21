@@ -23,9 +23,9 @@ public class ThisConstructorCallInfo extends ClassConstructorCallInfo {
      */
     public ThisConstructorCallInfo(final ClassTypeInfo classType, final ConstructorInfo callee,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn, final boolean isInParentheses) {
+            final int toLine, final int toColumn, final int parenthesesCount) {
         super(classType, callee, ownerMethod, fromLine, fromColumn, toLine, toColumn,
-                isInParentheses);
+                parenthesesCount);
     }
 
     /**

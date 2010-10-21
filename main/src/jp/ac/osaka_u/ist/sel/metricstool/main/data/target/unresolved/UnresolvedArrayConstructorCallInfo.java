@@ -99,7 +99,7 @@ public class UnresolvedArrayConstructorCallInfo extends
                 classInfoManager, fieldInfoManager, methodInfoManager);
 
         this.resolvedInfo = new ArrayConstructorCallInfo(arrayType, usingMethod, fromLine,
-                fromColumn, toLine, toColumn, this.isInParentheses());
+                fromColumn, toLine, toColumn, this.getParenthesesCount());
         this.resolvedInfo.addArguments(actualParameters);
         this.resolvedInfo.addTypeArguments(typeArguments);
 
@@ -114,7 +114,7 @@ public class UnresolvedArrayConstructorCallInfo extends
                         classInfoManager, fieldInfoManager, methodInfoManager);
             } else {
                 indexExpression = new EmptyExpressionInfo(usingMethod, fromLine, fromColumn,
-                        toLine, toColumn, this.isInParentheses());
+                        toLine, toColumn, this.getParenthesesCount());
             }
             this.resolvedInfo.addIndexExpression(dimension, indexExpression);
         }

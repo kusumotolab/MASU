@@ -77,14 +77,14 @@ public class UnresolvedClassConstructorCallInfo extends
             if (constructor.canCalledWith(actualParameters)) {
                 if (this instanceof UnresolvedThisConstructorCallInfo) {
                     this.resolvedInfo = new ThisConstructorCallInfo(classType, constructor,
-                            usingMethod, fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
+                            usingMethod, fromLine, fromColumn, toLine, toColumn, this.getParenthesesCount());
                 } else if (this instanceof UnresolvedSuperConstructorCallInfo) {
                     this.resolvedInfo = new SuperConstructorCallInfo(classType, constructor,
-                            usingMethod, fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
+                            usingMethod, fromLine, fromColumn, toLine, toColumn, this.getParenthesesCount());
                 } else {
                     this.resolvedInfo = new ClassConstructorCallInfo(classType, constructor,
                             usingMethod, fromLine, fromColumn, toLine, toColumn,
-                            this.isInParentheses());
+                            this.getParenthesesCount());
                 }
                 this.resolvedInfo.addArguments(actualParameters);
                 this.resolvedInfo.addTypeArguments(typeArguments);
@@ -108,7 +108,7 @@ public class UnresolvedClassConstructorCallInfo extends
                     actualParameters, constructor);
             constructor.addParameters(externalParameters);
             this.resolvedInfo = new ClassConstructorCallInfo(classType, constructor, usingMethod,
-                    fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
+                    fromLine, fromColumn, toLine, toColumn, this.getParenthesesCount());
             this.resolvedInfo.addArguments(actualParameters);
             this.resolvedInfo.addTypeArguments(typeArguments);
             return this.resolvedInfo;

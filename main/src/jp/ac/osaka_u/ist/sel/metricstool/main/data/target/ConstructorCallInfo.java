@@ -30,9 +30,9 @@ public abstract class ConstructorCallInfo<T extends ReferenceTypeInfo> extends
      */
     public ConstructorCallInfo(final T referenceType, final ConstructorInfo callee,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn, final boolean isInParentheses) {
+            final int toLine, final int toColumn, final int parenthesesCount) {
 
-        super(callee, ownerMethod, fromLine, fromColumn, toLine, toColumn, isInParentheses);
+        super(callee, ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
 
         if (null == referenceType) {
             throw new NullPointerException();

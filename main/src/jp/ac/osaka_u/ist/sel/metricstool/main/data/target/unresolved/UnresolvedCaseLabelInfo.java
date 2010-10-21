@@ -143,7 +143,7 @@ public class UnresolvedCaseLabelInfo extends UnresolvedExpressionInfo<Expression
                     }
                     this.resolvedInfo = new ClassReferenceInfo(new ClassTypeInfo(innerClass),
                             ownerMethod, fromLine, fromColumn, toLine, toColumn,
-                            this.isInParentheses());
+                            this.getParenthesesCount());
                     return this.resolvedInfo;
                 }
             }
@@ -160,7 +160,7 @@ public class UnresolvedCaseLabelInfo extends UnresolvedExpressionInfo<Expression
                     classInfoManager.add(innerClass);
                 }
                 this.resolvedInfo = new ClassReferenceInfo(new ClassTypeInfo(innerClass),
-                        ownerMethod, fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
+                        ownerMethod, fromLine, fromColumn, toLine, toColumn, this.getParenthesesCount());
                 return this.resolvedInfo;
             }
 

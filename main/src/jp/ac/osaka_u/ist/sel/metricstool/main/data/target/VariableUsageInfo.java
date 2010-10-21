@@ -87,9 +87,9 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
      */
     VariableUsageInfo(final T usedVariable, final boolean reference, final boolean assignment,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn, final boolean isInParentheses) {
+            final int toLine, final int toColumn, final int parenthesesCount) {
 
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, isInParentheses);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
 
         this.usedVariable = usedVariable;
         this.reference = reference;

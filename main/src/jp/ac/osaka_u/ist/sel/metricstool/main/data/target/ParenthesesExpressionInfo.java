@@ -30,9 +30,9 @@ public final class ParenthesesExpressionInfo extends ExpressionInfo {
      */
     public ParenthesesExpressionInfo(final ExpressionInfo parentheticExpression,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn, final boolean isInParentheses) {
+            final int toLine, final int toColumn, final int parenthesesCount) {
 
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, isInParentheses);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
 
         if (null == parentheticExpression) {
             throw new IllegalArgumentException();
@@ -118,11 +118,11 @@ public final class ParenthesesExpressionInfo extends ExpressionInfo {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final boolean isInParentheses = this.isInParentheses();
+        final int parenthesesCount = this.getParenthesesCount();
 
         final ParenthesesExpressionInfo newParenthesesExpression = new ParenthesesExpressionInfo(
                 parnentheticExpression, ownerMethod, fromLine, fromColumn, toLine, toColumn,
-                isInParentheses);
+                parenthesesCount);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newParenthesesExpression.setOwnerExecutableElement(owner);

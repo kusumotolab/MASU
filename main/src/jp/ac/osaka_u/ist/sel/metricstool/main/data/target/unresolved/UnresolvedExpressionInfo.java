@@ -30,7 +30,7 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
         this.toColumn = toColumn;
 
         this.resolvedInfo = null;
-        this.isInParentheses = false;
+        this.parenthesesCount = 0;
     }
 
     @Override
@@ -202,12 +202,16 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
         this.outerUnit = outerUnit;
     }
     
-    public final void setInParentheses(final boolean isInParentheses){
-        this.isInParentheses = isInParentheses;        
+    public final void incParenthesesCount(){
+        this.parenthesesCount++;
     }
     
-    public final boolean isInParentheses() {
-        return this.isInParentheses;
+    public final void setParenthesesCount(final int parenthesesCount){
+        this.parenthesesCount = parenthesesCount;
+    }
+    
+    public final int getParenthesesCount() {
+        return this.parenthesesCount;
     }
 
     /**
@@ -238,7 +242,7 @@ public abstract class UnresolvedExpressionInfo<T extends ExpressionInfo> impleme
     /**
      * この式がカッコの中にあるかどうかを表す変数
      */
-    private boolean isInParentheses;
+    private int parenthesesCount;
 
     private UnresolvedUnitInfo<? extends UnitInfo> outerUnit;
 }

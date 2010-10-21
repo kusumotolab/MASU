@@ -53,7 +53,7 @@ public class UnresolvedArrayInitializerInfo extends UnresolvedExpressionInfo<Arr
         }
 
         this.resolvedInfo = new ArrayInitializerInfo(elements, usingMethod, this.getFromLine(),
-                this.getFromColumn(), this.getToLine(), this.getToColumn(), this.isInParentheses());
+                this.getFromColumn(), this.getToLine(), this.getToColumn(), this.getParenthesesCount());
         return this.resolvedInfo;
     }
 

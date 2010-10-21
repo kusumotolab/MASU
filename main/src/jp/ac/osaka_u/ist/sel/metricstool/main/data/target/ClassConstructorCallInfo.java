@@ -23,9 +23,9 @@ public class ClassConstructorCallInfo extends ConstructorCallInfo<ClassTypeInfo>
      */
     public ClassConstructorCallInfo(final ClassTypeInfo classType, final ConstructorInfo callee,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn, final boolean isInParentheses) {
+            final int toLine, final int toColumn, final int parenthesesCount) {
         super(classType, callee, ownerMethod, fromLine, fromColumn, toLine, toColumn,
-                isInParentheses);
+                parenthesesCount);
 
     }
 
@@ -69,10 +69,10 @@ public class ClassConstructorCallInfo extends ConstructorCallInfo<ClassTypeInfo>
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final boolean isInParentheses = this.isInParentheses();
+        final int parenthesesCount = this.getParenthesesCount();
 
         final ClassConstructorCallInfo newCall = new ClassConstructorCallInfo(classType, callee,
-                ownerMethod, fromLine, fromColumn, toLine, toColumn, isInParentheses);
+                ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
 
         for (final ExpressionInfo argument : this.getArguments()) {
             newCall.addArgument((ExpressionInfo) argument.copy());

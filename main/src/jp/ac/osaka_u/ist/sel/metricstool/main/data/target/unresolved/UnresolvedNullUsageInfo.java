@@ -64,7 +64,7 @@ public final class UnresolvedNullUsageInfo extends UnresolvedExpressionInfo<Null
                         methodInfoManager);*/
 
         this.resolvedInfo = new NullUsageInfo(usingMethod, fromLine, fromColumn, toLine, toColumn,
-                this.isInParentheses());
+                this.getParenthesesCount());
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
         return this.resolvedInfo;
     }

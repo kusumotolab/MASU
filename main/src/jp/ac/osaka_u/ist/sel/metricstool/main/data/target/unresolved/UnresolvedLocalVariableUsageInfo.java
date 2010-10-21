@@ -36,7 +36,7 @@ public class UnresolvedLocalVariableUsageInfo extends
             boolean reference, final boolean assignment,
             final UnresolvedUnitInfo<? extends UnitInfo> outerUnit, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn) {
-        super(usedVariable.getName(), reference, assignment, outerUnit, fromLine, fromColumn,
+        super(usedVariable.getName(), reference, assignment, outerUnit, fromLine, fromColumn, // 
                 toLine, toColumn);
 
         this.usedVariable = usedVariable;
@@ -66,7 +66,7 @@ public class UnresolvedLocalVariableUsageInfo extends
         final int toColumn = this.getToColumn();
 
         this.resolvedInfo = LocalVariableUsageInfo.getInstance(usedVariable, reference, assignment,
-                usingMethod, fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
+                usingMethod, fromLine, fromColumn, toLine, toColumn, this.getParenthesesCount());
 
         return this.resolvedInfo;
     }

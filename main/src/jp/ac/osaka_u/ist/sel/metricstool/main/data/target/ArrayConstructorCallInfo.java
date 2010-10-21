@@ -35,9 +35,9 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
      */
     public ArrayConstructorCallInfo(final ArrayTypeInfo arrayType,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn, final boolean isInParentheses) {
+            final int toLine, final int toColumn, final int parenthesesCount) {
 
-        super(arrayType, null, ownerMethod, fromLine, fromColumn, toLine, toColumn, isInParentheses);
+        super(arrayType, null, ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
 
         this.indexExpressions = new TreeMap<Integer, ExpressionInfo>();
     }
@@ -145,10 +145,10 @@ public final class ArrayConstructorCallInfo extends ConstructorCallInfo<ArrayTyp
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final boolean isInParentheses = this.isInParentheses();
+        final int parenthesesCount = this.getParenthesesCount();
 
         final ArrayConstructorCallInfo newCall = new ArrayConstructorCallInfo(arrayType,
-                ownerMethod, fromLine, fromColumn, toLine, toColumn, isInParentheses);
+                ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
 
         for (final ExpressionInfo argument : this.getArguments()) {
             newCall.addArgument((ExpressionInfo) argument.copy());

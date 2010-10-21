@@ -58,7 +58,12 @@ public class ParenthesesExpressionBuilder extends
         final AstToken token = e.getToken();
         if (this.isActive() && this.expressionStateManger.inExpression()
                 && token.isParenthesesExpression()) {
-            this.buildParenthesesExpressionBuilder(e);
+            final ExpressionElement parenthesizedElement = this.expressionManager
+                    .getPeekExpressionElement();
+            parenthesizedElement.incParenthesesCount();
+            if (parenthesizedElement.getUsage() != null){
+                parenthesizedElement.getUsage().incParenthesesCount();
+            }
         }
     }
 
@@ -67,9 +72,9 @@ public class ParenthesesExpressionBuilder extends
      */
     protected void buildParenthesesExpressionBuilder(final AstVisitEvent e) {
         final ExpressionElement parentheticElement = expressionManager.popExpressionElement();
-        
+
         UnresolvedExpressionInfo<? extends ExpressionInfo> parentheticExpression = parentheticElement
-                .getUsage();        
+                .getUsage();
         if (null == parentheticExpression) {
             if (!(parentheticElement instanceof IdentifierElement)) {
                 throw new NotImplementedException();

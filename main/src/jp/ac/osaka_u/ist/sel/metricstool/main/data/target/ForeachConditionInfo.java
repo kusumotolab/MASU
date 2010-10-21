@@ -18,9 +18,9 @@ public final class ForeachConditionInfo extends ExpressionInfo {
     public ForeachConditionInfo(final CallableUnitInfo ownerMethod, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn,
             final VariableDeclarationStatementInfo iteratorVariable,
-            final ExpressionInfo iteratorExpression, final boolean isInParentheses) {
+            final ExpressionInfo iteratorExpression, final int parenthesesCount) {
 
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, isInParentheses);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
 
         this.iteratorVariable = iteratorVariable;
         this.iteratorExpression = iteratorExpression;
@@ -84,11 +84,11 @@ public final class ForeachConditionInfo extends ExpressionInfo {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final boolean isInParentheses = this.isInParentheses();
+        final int parenthesesCount = this.getParenthesesCount();
 
         final ForeachConditionInfo newForeachCondition = new ForeachConditionInfo(ownerMethod,
                 fromLine, fromColumn, toLine, toColumn, iteratorVariable, iteratorExpression,
-                isInParentheses);
+                parenthesesCount);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newForeachCondition.setOwnerExecutableElement(owner);

@@ -49,9 +49,9 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
      */
     CallInfo(final T callee, final CallableUnitInfo ownerMethod, final int fromLine,
             final int fromColumn, final int toLine, final int toColumn,
-            final boolean isInParentheses) {
+            final int parenthesesCount) {
 
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, isInParentheses);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
 
         this.arguments = new LinkedList<ExpressionInfo>();
         this.typeArguments = new LinkedList<ReferenceTypeInfo>();

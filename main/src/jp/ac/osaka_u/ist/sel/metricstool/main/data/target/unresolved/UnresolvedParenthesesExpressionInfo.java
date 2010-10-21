@@ -71,7 +71,7 @@ public class UnresolvedParenthesesExpressionInfo extends
                 usingClass, usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         this.resolvedInfo = new ParenthesesExpressionInfo(parentheticExpression, usingMethod,
-                fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
+                fromLine, fromColumn, toLine, toColumn, this.getParenthesesCount());
         return this.resolvedInfo;
     }
 

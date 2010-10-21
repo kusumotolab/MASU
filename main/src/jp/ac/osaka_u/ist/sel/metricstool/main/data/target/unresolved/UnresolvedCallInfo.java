@@ -148,7 +148,7 @@ public abstract class UnresolvedCallInfo<T extends CallInfo<?>> extends Unresolv
                                     methodInfoManager);*/
 
                     parameter = new ClassReferenceInfo(referenceType, usingMethod, fromLine,
-                            fromColumn, toLine, toColumn, this.isInParentheses());
+                            fromColumn, toLine, toColumn, this.getParenthesesCount());
                     /*parameter.setOwnerExecutableElement(ownerExecutableElement);*/
 
                 } else {

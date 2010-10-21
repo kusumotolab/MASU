@@ -19,7 +19,7 @@ public abstract class ExpressionElement {
         this.toLine = usage.getToLine();
         this.toColumn = usage.getToColumn();
         
-        this.isInParentheses = false;
+        this.parenthesesCount = 0;
     }
 
     protected ExpressionElement(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
@@ -30,7 +30,7 @@ public abstract class ExpressionElement {
         this.toLine = toLine;
         this.toColumn = toColumn;
 
-        this.isInParentheses = false;
+        this.parenthesesCount = 0;
     }
     
     protected ExpressionElement() {
@@ -57,12 +57,16 @@ public abstract class ExpressionElement {
         return this.toColumn;
     }
     
-    public final void setInParentheses(final boolean isInParentheses){
-        this.isInParentheses = isInParentheses;
+    public final void incParenthesesCount(){
+        this.parenthesesCount++;
     }
     
-    public final boolean isInParentheses(){
-        return this.isInParentheses;
+    public final void setParenthesesCount(final int parenthesesCount){
+        this.parenthesesCount = parenthesesCount;
+    }
+    
+    public final int getParenthesesCount(){
+        return this.parenthesesCount;
     }
 
     protected UnresolvedExpressionInfo<? extends ExpressionInfo> usage;
@@ -75,5 +79,5 @@ public abstract class ExpressionElement {
 
     protected final int toColumn;
     
-    private boolean isInParentheses;
+    private int parenthesesCount;
 }

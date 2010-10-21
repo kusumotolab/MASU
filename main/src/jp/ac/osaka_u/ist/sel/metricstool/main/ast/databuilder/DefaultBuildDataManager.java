@@ -52,7 +52,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.util.UnitStack;
  * 3. クラス情報，メソッド情報，変数代入，変数参照，メソッド呼び出し情報などの登録作業の代行
  * 
  * @author kou-tngt
- *
+ 
  */
 public class DefaultBuildDataManager implements BuildDataManager {
 

@@ -27,8 +27,8 @@ public final class NullUsageInfo extends ExpressionInfo {
      * @param toColumn èIóπóÒ
      */
     public NullUsageInfo(final CallableUnitInfo ownerMethod, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn, final boolean isInParentheses) {
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, isInParentheses);
+            final int fromColumn, final int toLine, final int toColumn, final int parenthesesCount) {
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
     }
 
     /**
@@ -88,10 +88,10 @@ public final class NullUsageInfo extends ExpressionInfo {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final boolean isInParentheses = this.isInParentheses();        
+        final int parenthesesCount = this.getParenthesesCount();        
         
         final NullUsageInfo newNullUsage = new NullUsageInfo(ownerMethod, fromLine, fromColumn,
-                toLine, toColumn, isInParentheses);
+                toLine, toColumn, parenthesesCount);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newNullUsage.setOwnerExecutableElement(owner);

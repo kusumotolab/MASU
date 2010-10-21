@@ -29,9 +29,9 @@ public final class ClassReferenceInfo extends ExpressionInfo {
      */
     public ClassReferenceInfo(final ClassTypeInfo referenceType,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn, final boolean isInParentheses) {
+            final int toLine, final int toColumn, final int parenthesesCount) {
 
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, isInParentheses);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
 
         if (null == referenceType) {
             throw new NullPointerException();
@@ -109,10 +109,10 @@ public final class ClassReferenceInfo extends ExpressionInfo {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final boolean isInParentheses = this.isInParentheses();
+        final int parenthesesCount = this.getParenthesesCount();
 
         final ClassReferenceInfo newClassReference = new ClassReferenceInfo(classType, ownerMethod,
-                fromLine, fromColumn, toLine, toColumn, isInParentheses);
+                fromLine, fromColumn, toLine, toColumn, parenthesesCount);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newClassReference.setOwnerExecutableElement(owner);

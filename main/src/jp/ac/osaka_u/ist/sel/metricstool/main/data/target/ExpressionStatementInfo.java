@@ -88,9 +88,7 @@ public class ExpressionStatementInfo extends SingleStatementInfo {
         final ExpressionInfo expression = this.getExpression();
         sb.append(expression.getText());
 
-        sb.append(";");
-
-        return sb.toString();
+        return expression.getParenthesizedText(sb.toString()) + ";";
     }
 
     /**

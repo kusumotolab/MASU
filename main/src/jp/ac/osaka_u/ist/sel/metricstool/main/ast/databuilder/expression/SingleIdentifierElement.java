@@ -63,6 +63,7 @@ public class SingleIdentifierElement extends IdentifierElement {
                     this.toLine, this.toColumn);
         }
 
+        localVariableUsage.setParenthesesCount(this.getParenthesesCount());
         buildDataManager.addVariableUsage(localVariableUsage);
 
         this.usage = localVariableUsage;

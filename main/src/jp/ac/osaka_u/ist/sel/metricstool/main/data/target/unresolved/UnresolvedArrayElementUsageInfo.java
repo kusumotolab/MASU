@@ -85,7 +85,7 @@ public final class UnresolvedArrayElementUsageInfo extends
         // 親が特定できない場合も配列の要素使用を作成して返す
         // もしかすると，UnknownEntityUsageInfoを返す方が適切かもしれない
         this.resolvedInfo = new ArrayElementUsageInfo(indexExpression, qualifierUsage, usingMethod,
-                fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
+                fromLine, fromColumn, toLine, toColumn, this.getParenthesesCount());
 
         return this.resolvedInfo;
     }

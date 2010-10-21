@@ -53,6 +53,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
      * @param fromColumn 開始列
      * @param toLine 終了行
      * @param toColumn 終了列
+     * @param isInParentheses 
      */
     public UnresolvedFieldUsageInfo(
             final List<UnresolvedMemberImportStatementInfo> memberImportStatements,
@@ -167,7 +168,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
 
             final FieldUsageInfo resolved = FieldUsageInfo.getInstance(qualifierUsage,
                     UnknownTypeInfo.getInstance(), unknownField, reference, assignment,
-                    usingMethod, fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
+                    usingMethod, fromLine, fromColumn, toLine, toColumn, this.getParenthesesCount());
             return resolved;
 
             //親がクラス型の場合
@@ -192,7 +193,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                             final FieldUsageInfo resolved = FieldUsageInfo.getInstance(
                                     qualifierUsage, qualifierUsage.getType(), availableField,
                                     reference, assignment, usingMethod, fromLine, fromColumn,
-                                    toLine, toColumn, this.isInParentheses());
+                                    toLine, toColumn, this.getParenthesesCount());
                             return resolved;
                         }
                     }
@@ -213,11 +214,11 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                                     final ClassTypeInfo classType = new ClassTypeInfo(classInfo);
                                     final ClassReferenceInfo classReference = new ClassReferenceInfo(
                                             classType, usingMethod, fromLine, fromColumn, fromLine,
-                                            fromColumn, this.isInParentheses());
+                                            fromColumn, this.getParenthesesCount());
                                     final FieldUsageInfo resolved = FieldUsageInfo.getInstance(
                                             classReference, classType, importedField, reference,
                                             assignment, usingMethod, fromLine, fromColumn, toLine,
-                                            toColumn, this.isInParentheses());
+                                            toColumn, this.getParenthesesCount());
                                     return resolved;
                                 }
                             }
@@ -243,7 +244,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                             final FieldUsageInfo resolved = FieldUsageInfo.getInstance(
                                     qualifierUsage, qualifierUsage.getType(), fieldInfo, reference,
                                     assignment, usingMethod, fromLine, fromColumn, toLine,
-                                    toColumn, this.isInParentheses());
+                                    toColumn, this.getParenthesesCount());
                             return resolved;
                         }
 
@@ -263,7 +264,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                     final FieldUsageInfo resolved = FieldUsageInfo.getInstance(qualifierUsage,
                             UnknownTypeInfo.getInstance(), unknownField, reference, assignment,
                             usingMethod, fromLine, fromColumn, toLine, toColumn,
-                            this.isInParentheses());
+                            this.getParenthesesCount());
                     return resolved;
                 }
 
@@ -277,7 +278,7 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
                 // 外部クラスに新規で外部変数(ExternalFieldInfo)を追加したので型は不明．
                 final FieldUsageInfo resolved = FieldUsageInfo.getInstance(qualifierUsage,
                         qualifierUsage.getType(), fieldInfo, reference, assignment, usingMethod,
-                        fromLine, fromColumn, toLine, toColumn, this.isInParentheses());
+                        fromLine, fromColumn, toLine, toColumn, this.getParenthesesCount());
                 return resolved;
             }
 
@@ -290,12 +291,11 @@ public final class UnresolvedFieldUsageInfo extends UnresolvedVariableUsageInfo<
             final Settings settings = Settings.getInstance();
             if ((settings.getLanguage().equals(LANGUAGE.JAVA15)
                     || settings.getLanguage().equals(LANGUAGE.JAVA14) || settings.getLanguage()
-                    .equals(LANGUAGE.JAVA13))
-                    && fieldName.equals("length")) {
+                    .equals(LANGUAGE.JAVA13)) && fieldName.equals("length")) {
 
                 final FieldUsageInfo resolved = new ArrayLengthUsageInfo(qualifierUsage,
                         (ArrayTypeInfo) qualifierType, usingMethod, fromLine, fromColumn, toLine,
-                        toColumn, this.isInParentheses());
+                        toColumn, this.getParenthesesCount());
                 return resolved;
             }
         }

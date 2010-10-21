@@ -35,7 +35,7 @@ public class UnresolvedEmptyExpressionInfo extends UnresolvedExpressionInfo<Empt
         }
 
         this.resolvedInfo = new EmptyExpressionInfo(usingMethod, this.getFromLine(),
-                this.getFromColumn(), this.getToLine(), this.getToColumn(), this.isInParentheses());
+                this.getFromColumn(), this.getToLine(), this.getToColumn(), this.getParenthesesCount());
         return this.resolvedInfo;
     }
 
