@@ -54,7 +54,7 @@ public class CFGForeachControlNode extends CFGControlNode {
 		final ExpressionInfo newIteratorExpression = LocalVariableUsageInfo
 				.getInstance(newStatement.getDeclaredLocalVariable(), true,
 						false, ownerForeachBlock.getOuterCallableUnit(),
-						fromLine, fromColumn, toLine, toColumn);
+						fromLine, fromColumn, toLine, toColumn, 0);
 		final ForeachConditionInfo newCondition = this.makeNewElement(
 				ownerForeachBlock, newIteratorExpression);
 		newCondition.setOwnerConditionalBlock(ownerForeachBlock);
@@ -102,7 +102,7 @@ public class CFGForeachControlNode extends CFGControlNode {
 				: ownerSpace.getOuterCallableUnit();
 
 		return new ForeachConditionInfo(ownerMethod, fromLine, fromColumn,
-				toLine, toColumn, iteratorVariable, requiredExpressions[0]);
+				toLine, toColumn, iteratorVariable, requiredExpressions[0], 0);
 	}
 
 	/**

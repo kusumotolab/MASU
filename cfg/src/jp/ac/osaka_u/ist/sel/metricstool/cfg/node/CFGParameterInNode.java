@@ -29,7 +29,7 @@ public class CFGParameterInNode extends CFGDataNode<ParameterUsageInfo> {
         final int toColumn = parameter.getToColumn();
 
         final ParameterUsageInfo usage = ParameterUsageInfo.getInstance(parameter, false, true,
-                ownerUnit, fromLine, fromColumn, toLine, toColumn);
+                ownerUnit, fromLine, fromColumn, toLine, toColumn, 0);
 
         return new CFGParameterInNode(usage);
     }

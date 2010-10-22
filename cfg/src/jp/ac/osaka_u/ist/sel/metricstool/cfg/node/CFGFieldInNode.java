@@ -28,10 +28,10 @@ public class CFGFieldInNode extends CFGDataNode<FieldUsageInfo> {
 
         final ClassTypeInfo qualifierType = new ClassTypeInfo(field.getDefinitionUnit());
         final ExpressionInfo qualifierExpression = new ClassReferenceInfo(qualifierType, unit,
-                fromLine, fromColumn, toLine, toColumn);
+                fromLine, fromColumn, toLine, toColumn, 0);
 
         final FieldUsageInfo fieldUsage = FieldUsageInfo.getInstance(qualifierExpression,
-                qualifierType, field, false, true, unit, fromLine, fromColumn, toLine, toColumn);
+                qualifierType, field, false, true, unit, fromLine, fromColumn, toLine, toColumn, 0);
 
         return new CFGFieldInNode(fieldUsage);
     }

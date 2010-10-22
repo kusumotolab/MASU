@@ -69,7 +69,7 @@ public class CFGExpressionStatementNode extends CFGStatementNode<ExpressionState
             if (operator.equals(OPERATOR.ASSIGN)) {
                 final BinominalOperationInfo newBinominalOperation = new BinominalOperationInfo(
                         operator, firstOperand, requiredExpressions[0], outerCallableUnit,
-                        fromLine, fromColumn, toLine, toColumn);
+                        fromLine, fromColumn, toLine, toColumn, 0);
                 final ExpressionStatementInfo newStatement = new ExpressionStatementInfo(
                         ownerSpace, newBinominalOperation, fromLine, fromColumn, toLine, toColumn);
                 return newStatement;
