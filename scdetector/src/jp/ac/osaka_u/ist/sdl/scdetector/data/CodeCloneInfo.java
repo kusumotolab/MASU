@@ -152,6 +152,19 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 		return Collections.unmodifiableSortedSet(this.elements);
 	}
 
+	/**
+	 * コードクローンを構成する要素を含むメソッド一覧を返す
+	 * 
+	 * @return
+	 */
+	public SortedSet<CallableUnitInfo> getOwnerCallableUnits() {
+		final SortedSet<CallableUnitInfo> methods = new TreeSet<CallableUnitInfo>();
+		for (final ExecutableElementInfo element : this.getElements()) {
+			methods.add(element.getOwnerMethod());
+		}
+		return methods;
+	}
+
 	@Override
 	public int hashCode() {
 		int hash = 0;

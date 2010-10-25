@@ -76,6 +76,7 @@ public class CodeCloneListView extends JTable implements Observer {
     /**
      * オブザーバパターン用メソッド
      */
+    @Override
     public void update(Observable o, Object arg) {
 
         if (o instanceof SelectedEntities) {

@@ -1,6 +1,5 @@
 package jp.ac.osaka_u.ist.sdl.scdetector.gui.data;
 
-
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -8,127 +7,160 @@ import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.Entity;
 
-
 /**
  * GUIでコードクローンを表すクラス
  * 
  * @author higo
- *
+ * 
  */
 public class CodeCloneInfo implements Entity, Comparable<CodeCloneInfo> {
 
-    /**
-     * コンストラクタ
-     */
-    public CodeCloneInfo() {
-        this.elements = new TreeSet<ElementInfo>();
-    }
+	/**
+	 * コンストラクタ
+	 */
+	public CodeCloneInfo() {
+		this.elements = new TreeSet<ElementInfo>();
+	}
 
-    /**
-     * 要素を加える
-     * 
-     * @param element 加える要素
-     */
-    public void add(final ElementInfo element) {
+	/**
+	 * 要素を加える
+	 * 
+	 * @param element
+	 *            加える要素
+	 */
+	public void add(final ElementInfo element) {
 
-        if (null == element) {
-            throw new IllegalArgumentException();
-        }
+		if (null == element) {
+			throw new IllegalArgumentException();
+		}
 
-        this.elements.add(element);
-    }
+		this.elements.add(element);
+	}
 
-    /**
-     * コードクローンをなす要素のSortedSetを返す
-     * 
-     * @return　コードクローンをなす要素のSortedSet
-     */
-    public SortedSet<ElementInfo> getElements() {
-        return Collections.unmodifiableSortedSet(this.elements);
-    }
+	/**
+	 * コードクローンをなす要素のSortedSetを返す
+	 * 
+	 * @return　コードクローンをなす要素のSortedSet
+	 */
+	public SortedSet<ElementInfo> getElements() {
+		return Collections.unmodifiableSortedSet(this.elements);
+	}
 
-    /**
-     * コードクローンの大きさを返す
-     * 
-     * @return　コードクローンの大きさ
-     */
-    public int getLength() {
-        return this.elements.size();
-    }
+	/**
+	 * コードクローンの大きさを返す
+	 * 
+	 * @return　コードクローンの大きさ
+	 */
+	public int getLength() {
+		return this.elements.size();
+	}
 
-    /**
-     * コードクローンをなす先頭の要素を返す
-     * 
-     * @return コードクローンをなす先頭の要素
-     */
-    public ElementInfo getFirstElement() {
-        return this.elements.first();
-    }
+	/**
+	 * コードクローンをなす先頭の要素を返す
+	 * 
+	 * @return コードクローンをなす先頭の要素
+	 */
+	public ElementInfo getFirstElement() {
+		return this.elements.first();
+	}
 
-    /**
-     * コードクローンをなす最後の要素を返す
-     * 
-     * @return コードクローンをなす最後の要素
-     */
-    public ElementInfo getLastElement() {
-        return this.elements.last();
-    }
+	/**
+	 * コードクローンをなす最後の要素を返す
+	 * 
+	 * @return コードクローンをなす最後の要素
+	 */
+	public ElementInfo getLastElement() {
+		return this.elements.last();
+	}
 
-    /**
-     * ギャップの数を設定する
-     * 
-     * @param gap ギャップの数
-     */
-    public void setNumberOfGapps(final int gap) {
-        this.gap = gap;
-    }
+	public void setID(final int id) {
+		this.id = id;
+	}
 
-    /**
-     * ギャップの数を返す
-     * 
-     * @return　ギャップの数
-     */
-    public int getNumberOfGapps() {
-        return this.gap;
-    }
+	public int getID() {
+		return this.id;
+	}
 
-    /**
-     * 比較関数
-     */
-    @Override
-    public int compareTo(CodeCloneInfo o) {
+	/**
+	 * ギャップの数を設定する
+	 * 
+	 * @param gap
+	 *            ギャップの数
+	 */
+	public void setNumberOfGapps(final int gap) {
+		this.gap = gap;
+	}
 
-        final Iterator<ElementInfo> thisIterator = this.getElements().iterator();
-        final Iterator<ElementInfo> targetIterator = o.getElements().iterator();
+	/**
+	 * ギャップの数を返す
+	 * 
+	 * @return　ギャップの数
+	 */
+	public int getNumberOfGapps() {
+		return this.gap;
+	}
 
-        // 両方の要素がある限り
-        while (thisIterator.hasNext() && targetIterator.hasNext()) {
+	/**
+	 * このコードクローンの要素を含むメソッドの数を設定する
+	 * 
+	 * @param method
+	 */
+	public void setNumberOfMethods(final int method) {
+		this.method = method;
+	}
 
-            final int elementOrder = thisIterator.next().compareTo(targetIterator.next());
-            if (0 != elementOrder) {
-                return elementOrder;
-            }
-        }
+	/**
+	 * このコードクローンの要素を含むメソッドの数を返す
+	 * 
+	 * @param method
+	 */
+	public int getNumberOfMethods() {
+		return this.method;
+	}
 
-        if (!thisIterator.hasNext() && !targetIterator.hasNext()) {
-            return 0;
-        }
+	/**
+	 * 比較関数
+	 */
+	@Override
+	public int compareTo(CodeCloneInfo o) {
 
-        if (!thisIterator.hasNext()) {
-            return -1;
-        }
+		final Iterator<ElementInfo> thisIterator = this.getElements()
+				.iterator();
+		final Iterator<ElementInfo> targetIterator = o.getElements().iterator();
 
-        if (!targetIterator.hasNext()) {
-            return 1;
-        }
+		// 両方の要素がある限り
+		while (thisIterator.hasNext() && targetIterator.hasNext()) {
 
-        assert false : "Here shouldn't be reached!";
-        return 0;
-    }
+			final int elementOrder = thisIterator.next().compareTo(
+					targetIterator.next());
+			if (0 != elementOrder) {
+				return elementOrder;
+			}
+		}
 
-    public static String CODECLONE = new String("CODECLONE");
+		if (!thisIterator.hasNext() && !targetIterator.hasNext()) {
+			return 0;
+		}
 
-    private final SortedSet<ElementInfo> elements;
+		if (!thisIterator.hasNext()) {
+			return -1;
+		}
 
-    private int gap;
+		if (!targetIterator.hasNext()) {
+			return 1;
+		}
+
+		assert false : "Here shouldn't be reached!";
+		return 0;
+	}
+
+	public static String CODECLONE = new String("CODECLONE");
+
+	private final SortedSet<ElementInfo> elements;
+
+	private int id;
+
+	private int gap;
+
+	private int method;
 }

@@ -1069,13 +1069,20 @@ public class Scorpio extends MetricsTool {
 				continue;
 			}
 
-			// コントロールノードでない場合は飛ばす
+			// コントロールノード以外は無視するオプションが付いている場合
 			if (Configuration.INSTANCE.getU().useControlFilter()
 					&& !(nodeList.get(0) instanceof PDGControlNode)) {
 				continue;
 			}
 
+			// ノードの分解が行われている場合は，条件文はスライス基点として用いない
+			if (Configuration.INSTANCE.getF().equals(DISSOLVE.TRUE)
+					&& (nodeList.get(0) instanceof PDGControlNode)) {
+				continue;
+			}
+
 			for (int i = 0; i < nodeList.size(); i++) {
+
 				for (int j = i + 1; j < nodeList.size(); j++) {
 					nodepairs.add(new NodePairInfo(nodeList.get(i), nodeList
 							.get(j)));

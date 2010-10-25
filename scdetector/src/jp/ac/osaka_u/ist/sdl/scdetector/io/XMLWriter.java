@@ -200,6 +200,11 @@ public class XMLWriter {
 							+ codeFragment.getGapsNumber() + "</GAP>");
 					this.writer.newLine();
 
+					this.writer.write("\t\t\t\t<METHOD>"
+							+ codeFragment.getOwnerCallableUnits().size()
+							+ "</METHOD>");
+					this.writer.newLine();
+
 					for (final ExecutableElementInfo element : codeFragment
 							.getElements()) {
 
