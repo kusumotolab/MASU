@@ -56,8 +56,12 @@ public class LocalVariableDeclarationStatementBuilder extends
                 declarationUsage, initializerExpression);
         declarationStatement.setOuterUnit(this.buildDataManager.getCurrentUnit());
         // FIXME: this is temporal patch. fix ANTLR grammar file
-        final int correctToLine = declarationUsage.getToLine();
-        final int correctToColumn = declarationUsage.getToColumn();
+        int correctToLine = declarationUsage.getToLine();
+        int correctToColumn = declarationUsage.getToColumn();
+        if (initializerExpression != null){
+            correctToLine = initializerExpression.getToLine();
+            correctToColumn= initializerExpression.getToColumn();
+        }
         declarationStatement.setFromLine(fromLine);
         declarationStatement.setFromColumn(fromColumn);
         declarationStatement.setToLine(correctToLine);
