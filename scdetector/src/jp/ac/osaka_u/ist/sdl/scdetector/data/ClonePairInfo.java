@@ -1,9 +1,9 @@
 package jp.ac.osaka_u.ist.sdl.scdetector.data;
 
-import java.util.Collection;
 import java.util.Iterator;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 /**
  * クローンペアを表すクラス
@@ -24,48 +24,16 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 		this.id = number++;
 	}
 
-	/**
-	 * コンストラクタ
-	 * 
-	 * @param elementA
-	 *            初期要素A
-	 * @param elementB
-	 *            初期要素B
-	 */
-	public ClonePairInfo(final ExecutableElementInfo elementA,
-			final ExecutableElementInfo elementB) {
+	public ClonePairInfo(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
 
 		this();
 
-		this.add(elementA, elementB);
+		this.add(nodeA, nodeB);
 	}
 
-	/**
-	 * クローンペアに要素を追加する
-	 * 
-	 * @param elementA
-	 *            追加要素A
-	 * @param elementB
-	 *            追加要素B
-	 */
-	public void add(final ExecutableElementInfo elementA,
-			final ExecutableElementInfo elementB) {
-		this.codecloneA.add(elementA);
-		this.codecloneB.add(elementB);
-	}
-
-	/**
-	 * クローンペアに要素の集合を追加する
-	 * 
-	 * @param elementsA
-	 *            要素群A
-	 * @param elementsB
-	 *            要素群B
-	 */
-	public void addAll(final Collection<ExecutableElementInfo> elementsA,
-			final Collection<ExecutableElementInfo> elementsB) {
-		this.codecloneA.addAll(elementsA);
-		this.codecloneB.addAll(elementsB);
+	public void add(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
+		this.codecloneA.add(nodeA);
+		this.codecloneB.add(nodeB);
 	}
 
 	/**
@@ -130,7 +98,8 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 		final ClonePairInfo clonePair = new ClonePairInfo();
 		final CodeCloneInfo cloneA = this.codecloneA;
 		final CodeCloneInfo cloneB = this.codecloneB;
-		clonePair.addAll(cloneA.getElements(), cloneB.getElements());
+		clonePair.codecloneA.addElements(cloneA);
+		clonePair.codecloneB.addElements(cloneB);
 
 		return clonePair;
 	}

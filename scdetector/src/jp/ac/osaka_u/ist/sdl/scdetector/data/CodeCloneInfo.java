@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sdl.scdetector.PDGMergedNode;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
@@ -23,7 +24,11 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGMethodEnterNode.PseudoConditionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGFieldInNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGFieldOutNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGMethodEnterNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGParameterOutNode;
 
 /**
  * コードクローンを表すクラス
@@ -48,9 +53,9 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 * @param element
 	 *            初期要素
 	 */
-	public CodeCloneInfo(final ExecutableElementInfo element) {
+	public CodeCloneInfo(final PDGNode<?> node) {
 		this();
-		this.add(element);
+		this.add(node);
 	}
 
 	/**
@@ -59,34 +64,43 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 * @param elements
 	 *            初期要素群
 	 */
-	public CodeCloneInfo(final SortedSet<ExecutableElementInfo> elements) {
+	public CodeCloneInfo(final Collection<PDGNode<?>> nodes) {
 		this();
-		this.addAll(elements);
+		this.addAll(nodes);
 	}
 
-	/**
-	 * 要素を追加する
-	 * 
-	 * @param element
-	 *            追加する要素
-	 */
-	public void add(final ExecutableElementInfo element) {
-		if (!(element instanceof PseudoConditionInfo)) {
-			this.elements.add(element);
+	public void addElements(final CodeCloneInfo codeclone) {
+		this.elements.addAll(codeclone.getElements());
+	}
+
+	public void add(final PDGNode<?> node) {
+
+		// メソッドエンターノードは追加しない
+		if (node instanceof PDGMethodEnterNode) {
+
+		}
+
+		// データノード（パラメータやフィールドパッシングのための）は追加しない
+		else if (node instanceof PDGParameterOutNode
+				|| node instanceof PDGFieldInNode
+				|| node instanceof PDGFieldOutNode) {
+		}
+
+		// 集約ノードのは，全てのコアを追加
+		else if (node instanceof PDGMergedNode) {
+			final PDGMergedNode mergedNode = (PDGMergedNode) node;
+			this.elements.addAll(mergedNode.getCores());
+		}
+
+		// それ以外の時はコアを追加
+		else {
+			this.elements.add(node.getCore());
 		}
 	}
 
-	/**
-	 * 要素群を追加する
-	 * 
-	 * @param elements
-	 *            追加する要素群
-	 */
-	public void addAll(final Collection<ExecutableElementInfo> elements) {
-		for (final ExecutableElementInfo element : elements) {
-			if (!(element instanceof PseudoConditionInfo)) {
-				this.elements.add(element);
-			}
+	public void addAll(final Collection<PDGNode<?>> nodes) {
+		for (final PDGNode<?> node : nodes) {
+			this.add(node);
 		}
 	}
 

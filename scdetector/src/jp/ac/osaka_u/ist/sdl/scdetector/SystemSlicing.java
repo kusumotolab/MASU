@@ -229,17 +229,7 @@ public class SystemSlicing extends Slicing {
 		}
 
 		// 現在のノードをクローンペアに追加
-		if (nodeA instanceof PDGMergedNode) {
-			clonepair.codecloneA.addAll(((PDGMergedNode) nodeA).getCores());
-		} else {
-			clonepair.codecloneA.add(nodeA.getCore());
-		}
-
-		if (nodeB instanceof PDGMergedNode) {
-			clonepair.codecloneB.addAll(((PDGMergedNode) nodeB).getCores());
-		} else {
-			clonepair.codecloneB.add(nodeB.getCore());
-		}
+		clonepair.add(nodeA, nodeB);
 
 		return clonepair;
 	}
@@ -320,8 +310,8 @@ public class SystemSlicing extends Slicing {
 
 					final ClonePairInfo priorClonepair = this.perform(nodeA,
 							nodeB);
-					clonepair.addAll(priorClonepair.codecloneA.getElements(),
-							priorClonepair.codecloneB.getElements());
+					clonepair.codecloneA.addElements(priorClonepair.codecloneA);
+					clonepair.codecloneB.addElements(priorClonepair.codecloneB);
 
 					// メソッドをまたがる場合はコーススタックの更新を行う
 					if (acrossBackwardNodesA.containsKey(nodeA)) {
