@@ -307,7 +307,9 @@ compilationUnit
 		// Wrapping things up with any number of class or interface
 		// definitions
 		( typeDefinition )*
-
+		
+		//(SL_COMMENT)?
+		
 		EOF!
 	;
 
@@ -2076,7 +2078,10 @@ WS	:	(	' '
 
 // Single-line comments
 SL_COMMENT
-	:	"//"
+	// wrong occur when use "//"
+	// and line comment is written in last line and no line feed 
+
+	: DIV DIV // something wrong with writing "//"
 			(
 				~('\n'|'\r')
 				{
@@ -2085,6 +2090,11 @@ SL_COMMENT
 						newline();
 						return;
 					}
+					/*
+					if(LA(2) == EOF){
+						return;	
+					}
+					*/
 				}
 			)*
 

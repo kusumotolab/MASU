@@ -2,6 +2,9 @@ header {
 	package jp.ac.osaka_u.ist.sel.metricstool.main.parse;
 	
 	import java.util.Stack;
+	import java.util.SortedSet;
+	import java.util.TreeSet;
+	import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.*;
 }
 
 /** Java 1.5 Recognizer
@@ -1768,10 +1771,17 @@ options {
 	/** flag for enabling the "assert" keyword */
 	private boolean assertEnabled = true;
 
+		/** list that stores commentinfo*/
+	private SortedSet<CommentInfo> commentSet = new TreeSet<CommentInfo>();
+
 	/** Enable the "assert" keyword */
 	public void enableAssert(boolean shouldEnable) { assertEnabled = shouldEnable; }
 	/** Query the "assert" keyword state */
 	public boolean isAssertEnabled() { return assertEnabled; }
+	
+	public SortedSet<CommentInfo> getCommentSet(){
+		return commentSet;	
+	}
 	
 	public int getTokenStartColumn(){
 		return inputState.getTokenStartColumn();
@@ -1848,7 +1858,9 @@ WS	:	(	' '
 
 // Single-line comments
 SL_COMMENT
-	:	"//"
+	// wrong occur when "//" is used.
+	// and line comment is written in last line and no line feed 
+	:	DIV DIV
 			(
 				~('\n'|'\r')
 				{
@@ -1859,6 +1871,14 @@ SL_COMMENT
 					}
 				}
 			)* 
+			
+			//regists line comment			 
+			{
+					final CommentInfo lineCommentInfo = new LineCommentInfo(
+						$getText, inputState.getTokenStartLine(), inputState.getTokenStartColumn(), inputState.getColumn() 						
+					);
+					commentSet.add(lineCommentInfo);		
+			}
 			
 			("\r\n" |'\n'|'\r')
 			{$setType(Token.SKIP); newline();}
@@ -1885,8 +1905,51 @@ ML_COMMENT
 		|	~('*'|'\n'|'\r')
 		)*
 		"*/"
+		
+		//regists multi-block comment	
+		{
+				final CommentInfo blockCommentInfo = new BlockCommentInfo(
+					$getText, inputState.getTokenStartLine(), inputState.getTokenStartColumn(),
+					inputState.getLine(), inputState.getColumn() 						
+				);
+				commentSet.add(blockCommentInfo);		
+		}
+			
 		{$setType(Token.SKIP);}
 	;
+	
+// javadoc comments
+DOC_COMMENT
+	:	"/**"
+		(	/*	'\r' '\n' can be matched in one alternative or by matching
+				'\r' in one iteration and '\n' in another. I am trying to
+				handle any flavor of newline that comes in, but the language
+				that allows both "\r\n" and "\r" and "\n" to all be valid
+				newline is ambiguous. Consequently, the resulting grammar
+				must be ambiguous. I'm shutting this warning off.
+			 */
+			options {
+				generateAmbigWarnings=false;
+			}
+		:
+			{ LA(2)!='/' }? '*'
+		|	'\r' '\n'		{newline();}
+		|	'\r'			{newline();}
+		|	'\n'			{newline();}
+		|	~('*'|'\n'|'\r')
+		)*
+		"*/"
+			
+		//regists javadoc comment
+			{
+				final CommentInfo documentCommentInfo = new DocumentCommentInfo(
+					$getText, inputState.getTokenStartLine(), inputState.getTokenStartColumn(),
+					inputState.getLine(), inputState.getColumn() 						
+				);
+				commentSet.add(documentCommentInfo);		
+			}
+		{$setType(Token.SKIP);}
+	;	
 
 
 // character literals

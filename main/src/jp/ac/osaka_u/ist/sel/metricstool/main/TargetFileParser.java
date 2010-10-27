@@ -131,6 +131,7 @@ class TargetFileParser implements Runnable {
                                     .getInstance());
                     java14VisitorManager.visitStart(java14parser.getAST());
 
+                    fileInfo.addAllComments(java14lexer.getCommentSet());
                     fileInfo.setLOC(java14lexer.getLine());
 
                     break;
@@ -153,6 +154,7 @@ class TargetFileParser implements Runnable {
                                     .getInstance());
                     java13VisitorManager.visitStart(java13parser.getAST());
 
+                    fileInfo.addAllComments(java13lexer.getCommentSet());
                     fileInfo.setLOC(java13lexer.getLine());
                     break;
 
