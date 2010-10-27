@@ -64,7 +64,7 @@ public class CloneSetListView extends JTable implements Observer {
      */
     public CloneSetListView(final Set<CloneSetInfo> cloneSets) {
 
-        this.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         this.scrollPane = new JScrollPane();
         this.scrollPane.setViewportView(this);
