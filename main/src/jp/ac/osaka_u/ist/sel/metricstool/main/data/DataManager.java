@@ -119,6 +119,10 @@ public class DataManager {
         return this.targetFileManager;
     }
 
+    public void clearTargetFileManager() {
+        this.targetFileManager = new TargetFileManager();
+    }
+
     /**
      * ClassMetricsInfoManagerÅ@Çï‘Ç∑
      * 
@@ -162,6 +166,10 @@ public class DataManager {
      */
     public UnresolvedClassInfoManager getUnresolvedClassInfoManager() {
         return this.unresolvedClassInfoManager;
+    }
+
+    public void clearUnresolvedClassInfoManager() {
+        this.unresolvedClassInfoManager = new UnresolvedClassInfoManager();
     }
 
     /**
@@ -211,7 +219,6 @@ public class DataManager {
 
     private DataManager() {
         this.targetFileManager = new TargetFileManager();
-
         this.unresolvedClassInfoManager = new UnresolvedClassInfoManager();
 
         this.classMetricsInfoManager = new ClassMetricsInfoManager();
@@ -229,7 +236,7 @@ public class DataManager {
 
     private static DataManager SINGLETON;
 
-    final private TargetFileManager targetFileManager;
+    private TargetFileManager targetFileManager;
 
     final private ClassMetricsInfoManager classMetricsInfoManager;
 
@@ -239,7 +246,7 @@ public class DataManager {
 
     final private MethodMetricsInfoManager methodMetricsInfoManager;
 
-    final private UnresolvedClassInfoManager unresolvedClassInfoManager;
+    private UnresolvedClassInfoManager unresolvedClassInfoManager;
 
     final private ClassInfoManager classInfoManager;
 
