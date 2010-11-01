@@ -1,10 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main;
 
 
-import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.csharp.CSharpAntlrAstTranslator;
@@ -86,12 +87,12 @@ class TargetFileParser implements Runnable {
                 DataManager.getInstance().getFileInfoManager()
                         .add(fileInfo, Thread.currentThread());
 
-                BufferedInputStream stream = new BufferedInputStream(new FileInputStream(
-                        this.files[i].getName()));
+                final BufferedReader reader = new BufferedReader(new InputStreamReader(
+                        new FileInputStream(this.files[i].getName()), "JISAutoDetect"));
 
                 switch (Settings.getInstance().getLanguage()) {
                 case JAVA15:
-                    final Java15Lexer java15lexer = new Java15Lexer(stream);
+                    final Java15Lexer java15lexer = new Java15Lexer(reader);
                     java15lexer.setTabSize(1);
                     final Java15Parser java15parser = new Java15Parser(java15lexer);
 
@@ -114,7 +115,7 @@ class TargetFileParser implements Runnable {
                     break;
 
                 case JAVA14:
-                    final Java14Lexer java14lexer = new Java14Lexer(stream);
+                    final Java14Lexer java14lexer = new Java14Lexer(reader);
                     java14lexer.setTabSize(1);
                     final Java14Parser java14parser = new Java14Parser(java14lexer);
 
@@ -137,7 +138,7 @@ class TargetFileParser implements Runnable {
                     break;
 
                 case JAVA13:
-                    final Java13Lexer java13lexer = new Java13Lexer(stream);
+                    final Java13Lexer java13lexer = new Java13Lexer(reader);
                     java13lexer.setTabSize(1);
                     final Java13Parser java13parser = new Java13Parser(java13lexer);
 
@@ -159,7 +160,7 @@ class TargetFileParser implements Runnable {
                     break;
 
                 case CSHARP:
-                    final CSharpLexer csharpLexer = new CSharpLexer(stream);
+                    final CSharpLexer csharpLexer = new CSharpLexer(reader);
                     csharpLexer.setTabSize(1);
                     final CSharpParser csharpParser = new CSharpParser(csharpLexer);
 
@@ -183,7 +184,7 @@ class TargetFileParser implements Runnable {
                     assert false : "here shouldn't be reached!";
                 }
 
-                stream.close();
+                reader.close();
 
             } catch (FileNotFoundException e) {
                 err.println(e.getMessage());
