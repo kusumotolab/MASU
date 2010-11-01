@@ -80,6 +80,14 @@ public class Settings {
         this.targetDirectories.add(targetDirectory);
     }
 
+    public void setTargetDirectory(final String targetDirectory) {
+        if (null == targetDirectory) {
+            throw new IllegalArgumentException();
+        }
+        this.targetDirectories.clear();
+        this.addTargetDirectory(targetDirectory);
+    }
+
     /**
      * 解析対象ファイルの記述言語を返す
      * 
