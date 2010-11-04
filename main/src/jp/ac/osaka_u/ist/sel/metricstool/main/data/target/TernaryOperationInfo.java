@@ -29,8 +29,8 @@ public class TernaryOperationInfo extends ExpressionInfo {
      */
     public TernaryOperationInfo(final ConditionInfo condtion, ExpressionInfo trueExpression,
             ExpressionInfo falseExpression, final CallableUnitInfo ownerMethod, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn, final int parenthesesCount) {
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+            final int fromColumn, final int toLine, final int toColumn) {
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         if (null == condtion || null == trueExpression || null == falseExpression) {
             throw new IllegalArgumentException();
@@ -122,7 +122,8 @@ public class TernaryOperationInfo extends ExpressionInfo {
         final ExpressionInfo falseExpression = this.getFalseExpression();
         sb.append(falseExpression.getText());
 
-        return this.getParenthesizedText(sb.toString());
+        return sb.toString();
+
     }
 
     /**
@@ -149,11 +150,10 @@ public class TernaryOperationInfo extends ExpressionInfo {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final int parenthesesCount = this.getParenthesesCount();
-        
+
         final TernaryOperationInfo newTernaryOperation = new TernaryOperationInfo(condition,
                 trueExpression, falseExpression, ownerMethod, fromLine, fromColumn, toLine,
-                toColumn, parenthesesCount);
+                toColumn);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newTernaryOperation.setOwnerExecutableElement(owner);

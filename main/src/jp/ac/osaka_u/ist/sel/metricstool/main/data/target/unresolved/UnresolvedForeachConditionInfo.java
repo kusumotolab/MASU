@@ -57,7 +57,7 @@ public class UnresolvedForeachConditionInfo extends UnresolvedExpressionInfo<For
                         methodInfoManager);
 
         this.resolvedInfo = new ForeachConditionInfo(usingMethod, fromLine, fromColumn, toLine,
-                toColumn, iteratorVariable, iteratorExpression, this.getParenthesesCount());
+                toColumn, iteratorVariable, iteratorExpression);
         return this.resolvedInfo;
     }
 

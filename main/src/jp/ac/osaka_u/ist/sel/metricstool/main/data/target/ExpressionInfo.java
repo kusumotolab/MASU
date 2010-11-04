@@ -24,7 +24,7 @@ public abstract class ExpressionInfo implements ConditionInfo {
      * @param toColumn 終了列
      */
     ExpressionInfo(final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn, final int parenthesesCount) {
+            final int toLine, final int toColumn) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
 
@@ -35,7 +35,6 @@ public abstract class ExpressionInfo implements ConditionInfo {
         this.fromColumn = fromColumn;
         this.toLine = toLine;
         this.toColumn = toColumn;
-        this.parenthesesCount = parenthesesCount;
     }
 
     /**
@@ -231,25 +230,6 @@ public abstract class ExpressionInfo implements ConditionInfo {
         return this.getOwnerStatement().getOwnerSpace();
     }
 
-    /**
-     * この式がカッコに直接囲われているかどうかを返す
-     * @return この式を囲っている括弧の数
-     */
-    public final int getParenthesesCount() {
-        return this.parenthesesCount;
-    }
-
-    protected String getParenthesizedText(final String text) {
-        final StringBuilder sbLeft = new StringBuilder();
-        final StringBuilder sbRight = new StringBuilder();
-        for (int i = 0; i < this.parenthesesCount; i++){
-            sbLeft.append("(");
-            sbRight.append(")");
-        }
-
-        return (sbLeft.append(text).append(sbRight.toString())).toString();
-    }
-
     private ExecutableElementInfo ownerExecutableElement;
 
     /**
@@ -282,8 +262,4 @@ public abstract class ExpressionInfo implements ConditionInfo {
      */
     private final int toColumn;
 
-    /**
-     * この式がカッコの中にあるかどうかを表す変数
-     */
-    private final int parenthesesCount;
 }

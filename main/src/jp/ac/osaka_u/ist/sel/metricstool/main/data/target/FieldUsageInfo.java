@@ -38,11 +38,9 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     protected FieldUsageInfo(final ExpressionInfo qualifierExpression,
             final TypeInfo qualifierType, final FieldInfo usedField, final boolean reference,
             final boolean assignment, final CallableUnitInfo ownerMethod, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn,
-            final int parenthesesCount) {
+            final int fromColumn, final int toLine, final int toColumn) {
 
-        super(usedField, reference, assignment, ownerMethod, fromLine, fromColumn, toLine,
-                toColumn, parenthesesCount);
+        super(usedField, reference, assignment, ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         this.qualifierExpression = qualifierExpression;
         this.qualifierType = qualifierType;
@@ -99,7 +97,7 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         final FieldInfo field = this.getUsedVariable();
         sb.append(field.getName());
 
-        return this.getParenthesizedText(sb.toString());
+        return sb.toString();
     }
 
     /**
@@ -131,11 +129,10 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final int parenthesesCount = this.getParenthesesCount();
 
         final FieldUsageInfo newFieldUsage = new FieldUsageInfo(qualifierExpression, qualifierType,
                 usedField, reference, assignment, ownerMethod, fromLine, fromColumn, toLine,
-                toColumn, parenthesesCount);
+                toColumn);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newFieldUsage.setOwnerExecutableElement(owner);
@@ -183,11 +180,10 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
     public static FieldUsageInfo getInstance(final ExpressionInfo qualifierExpression,
             final TypeInfo qualifierType, final FieldInfo usedField, final boolean reference,
             final boolean assignment, final CallableUnitInfo ownerMethod, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn,
-            final int parenthesesCount) {
+            final int fromColumn, final int toLine, final int toColumn) {
         final FieldUsageInfo instance = new FieldUsageInfo(qualifierExpression, qualifierType,
                 usedField, reference, assignment, ownerMethod, fromLine, fromColumn, toLine,
-                toColumn, parenthesesCount);
+                toColumn);
         addFieldUsage(instance);
         return instance;
     }

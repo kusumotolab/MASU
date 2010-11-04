@@ -69,7 +69,7 @@ public final class UnresolvedParameterUsageInfo extends
         final int toColumn = this.getToColumn();
 
         this.resolvedInfo = ParameterUsageInfo.getInstance(usedVariable, reference, assignment,
-                usingMethod, fromLine, fromColumn, toLine, toColumn, this.getParenthesesCount());
+                usingMethod, fromLine, fromColumn, toLine, toColumn);
         /*this.resolvedInfo.setOwnerExecutableElement(ownerExecutableElement);*/
         return this.resolvedInfo;
     }

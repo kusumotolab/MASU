@@ -1267,7 +1267,7 @@ public class MetricsTool {
                     final LocalVariableUsageInfo fieldUsage = LocalVariableUsageInfo.getInstance(
                             fieldInfoAsLocalVariable, false, true, initializerUnit,
                             fieldInfo.getFromLine(), fieldInfo.getFromColumn(),
-                            fieldInfo.getToLine(), fieldInfo.getToColumn(), 0);
+                            fieldInfo.getToLine(), fieldInfo.getToColumn());
                     final VariableDeclarationStatementInfo implicitInitializerStatement = new VariableDeclarationStatementInfo(
                             initializerUnit, fieldUsage, initializerExpression,
                             fieldInfo.getFromLine(), fieldInfo.getFromColumn(),

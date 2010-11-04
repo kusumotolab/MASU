@@ -24,9 +24,8 @@ public final class EmptyExpressionInfo extends ExpressionInfo {
      * @param toColumn èIóπóÒ
      */
     public EmptyExpressionInfo(final CallableUnitInfo ownerMethod, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn,
-            final int parenthesesCount) {
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+            final int fromColumn, final int toLine, final int toColumn) {
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
     }
 
     /**
@@ -87,10 +86,9 @@ public final class EmptyExpressionInfo extends ExpressionInfo {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final int parenthesesCount = this.getParenthesesCount();
 
         final EmptyExpressionInfo newEmptyExpression = new EmptyExpressionInfo(ownerMethod,
-                fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+                fromLine, fromColumn, toLine, toColumn);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newEmptyExpression.setOwnerExecutableElement(owner);

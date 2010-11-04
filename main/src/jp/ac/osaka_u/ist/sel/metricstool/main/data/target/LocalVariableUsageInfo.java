@@ -30,10 +30,9 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final int parenthesesCount = this.getParenthesesCount();
 
         final LocalVariableUsageInfo newVariableUsage = getInstance(usedVariable, reference,
-                assignment, ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+                assignment, ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newVariableUsage.setOwnerExecutableElement(owner);
@@ -60,11 +59,10 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
      */
     private LocalVariableUsageInfo(final LocalVariableInfo usedLocalVariable,
             final boolean reference, final boolean assignment, final CallableUnitInfo ownerMethod,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
-            final int parenthesesCount) {
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(usedLocalVariable, reference, assignment, ownerMethod, fromLine, fromColumn, toLine,
-                toColumn, parenthesesCount);
+                toColumn);
     }
 
     /**
@@ -82,11 +80,9 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
      */
     public static LocalVariableUsageInfo getInstance(final LocalVariableInfo usedLocalVariable,
             final boolean reference, final boolean assignment, final CallableUnitInfo ownerMethod,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
-            final int parenthesesCount) {
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         final LocalVariableUsageInfo instance = new LocalVariableUsageInfo(usedLocalVariable,
-                reference, assignment, ownerMethod, fromLine, fromColumn, toLine, toColumn,
-                parenthesesCount);
+                reference, assignment, ownerMethod, fromLine, fromColumn, toLine, toColumn);
         addLocalVariableUsage(instance);
         return instance;
     }

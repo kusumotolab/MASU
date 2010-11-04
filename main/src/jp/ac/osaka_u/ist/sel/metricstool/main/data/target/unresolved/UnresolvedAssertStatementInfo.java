@@ -66,7 +66,7 @@ public class UnresolvedAssertStatementInfo extends
 
         final UnresolvedExpressionInfo<?> unresolvedMessageExpression = this.getMessageExpression();
         final ExpressionInfo messageExpression = null == unresolvedMessageExpression ? new EmptyExpressionInfo(
-                usingMethod, toLine, toColumn, toLine, toColumn, 0)
+                usingMethod, toLine, toColumn, toLine, toColumn)
                 : unresolvedMessageExpression.resolve(usingClass, usingMethod, classInfoManager,
                         fieldInfoManager, methodInfoManager);
 

@@ -18,8 +18,6 @@ public abstract class ExpressionElement {
         this.fromColumn = usage.getFromColumn();
         this.toLine = usage.getToLine();
         this.toColumn = usage.getToColumn();
-        
-        this.parenthesesCount = 0;
     }
 
     protected ExpressionElement(final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
@@ -29,8 +27,6 @@ public abstract class ExpressionElement {
         this.fromColumn = fromColumn;
         this.toLine = toLine;
         this.toColumn = toColumn;
-
-        this.parenthesesCount = 0;
     }
     
     protected ExpressionElement() {
@@ -56,18 +52,6 @@ public abstract class ExpressionElement {
     public final int getToColumn() {
         return this.toColumn;
     }
-    
-    public final void incParenthesesCount(){
-        this.parenthesesCount++;
-    }
-    
-    public final void setParenthesesCount(final int parenthesesCount){
-        this.parenthesesCount = parenthesesCount;
-    }
-    
-    public final int getParenthesesCount(){
-        return this.parenthesesCount;
-    }
 
     protected UnresolvedExpressionInfo<? extends ExpressionInfo> usage;
 
@@ -78,6 +62,4 @@ public abstract class ExpressionElement {
     protected final int toLine;
 
     protected final int toColumn;
-    
-    private int parenthesesCount;
 }

@@ -29,9 +29,9 @@ public final class ArrayTypeReferenceInfo extends ExpressionInfo {
      */
     public ArrayTypeReferenceInfo(final ArrayTypeInfo arrayType,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn, final int parenthesesCount) {
+            final int toLine, final int toColumn) {
 
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == arrayType) {
@@ -77,7 +77,7 @@ public final class ArrayTypeReferenceInfo extends ExpressionInfo {
     @Override
     public String getText() {
         final TypeInfo type = this.getType();
-        return this.getParenthesizedText(type.getTypeName());
+        return type.getTypeName();
     }
 
     /**
@@ -98,10 +98,9 @@ public final class ArrayTypeReferenceInfo extends ExpressionInfo {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final int parenthesesCount = this.getParenthesesCount();
 
         final ArrayTypeReferenceInfo newArrayTypeReference = new ArrayTypeReferenceInfo(arrayType,
-                ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+                ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newArrayTypeReference.setOwnerExecutableElement(owner);

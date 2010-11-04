@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
-
 
 /**
  * null使用を表すクラス．
@@ -27,8 +25,8 @@ public final class NullUsageInfo extends ExpressionInfo {
      * @param toColumn 終了列
      */
     public NullUsageInfo(final CallableUnitInfo ownerMethod, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn, final int parenthesesCount) {
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+            final int fromColumn, final int toLine, final int toColumn) {
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
     }
 
     /**
@@ -68,7 +66,7 @@ public final class NullUsageInfo extends ExpressionInfo {
      */
     @Override
     public String getText() {
-        return this.getParenthesizedText(NULLSTRING);
+        return NULLSTRING;
     }
 
     /**
@@ -88,10 +86,9 @@ public final class NullUsageInfo extends ExpressionInfo {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final int parenthesesCount = this.getParenthesesCount();        
-        
+
         final NullUsageInfo newNullUsage = new NullUsageInfo(ownerMethod, fromLine, fromColumn,
-                toLine, toColumn, parenthesesCount);
+                toLine, toColumn);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newNullUsage.setOwnerExecutableElement(owner);

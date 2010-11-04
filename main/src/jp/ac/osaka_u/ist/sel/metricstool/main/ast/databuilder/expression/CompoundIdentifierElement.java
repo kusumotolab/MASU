@@ -64,7 +64,6 @@ public class CompoundIdentifierElement extends IdentifierElement {
                         .getAllAvaliableNames()), this.ownerUsage, this.name, reference,
                 assignment, buildDataManager.getCurrentUnit(), this.fromLine, this.fromColumn,
                 this.toLine, this.toColumn);
-        fieldUsage.setParenthesesCount(this.getParenthesesCount());
         buildDataManager.addVariableUsage(fieldUsage);
 
         this.usage = fieldUsage;
@@ -83,7 +82,6 @@ public class CompoundIdentifierElement extends IdentifierElement {
                             .getAllAvaliableNames()), this.ownerUsage, this.name, true, false,
                     buildDataManager.getCurrentUnit(), this.fromLine, this.fromColumn, this.toLine,
                     this.toColumn);
-            fieldUsage.setParenthesesCount(this.getParenthesesCount());
             buildDataManager.addVariableUsage(fieldUsage);
 
             this.usage = fieldUsage;

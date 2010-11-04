@@ -31,10 +31,9 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
      */
     public MethodCallInfo(final TypeInfo qualifierType, final ExpressionInfo qualifierExpression,
             final MethodInfo callee, final TypeInfo type, final CallableUnitInfo ownerMethod,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
-            final int parenthesesCount) {
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(callee, ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+        super(callee, ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         if ((null == qualifierType) || (null == callee) || (null == type)
                 || (null == qualifierExpression)) {
@@ -163,7 +162,7 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
 
         sb.append(")");
 
-        return this.getParenthesizedText(sb.toString());
+        return sb.toString();
     }
 
     /**
@@ -191,10 +190,9 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final int parenthesesCount = this.getParenthesesCount();
-        
+
         final MethodCallInfo newCall = new MethodCallInfo(qualifierType, qualifierExpression,
-                callee, type, ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+                callee, type, ownerMethod, fromLine, fromColumn, toLine, toColumn);
         for (final ExpressionInfo argument : this.getArguments()) {
             newCall.addArgument((ExpressionInfo) argument.copy());
         }

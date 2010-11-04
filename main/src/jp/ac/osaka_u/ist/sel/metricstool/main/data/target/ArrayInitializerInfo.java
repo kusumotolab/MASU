@@ -32,9 +32,8 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
      * @param toColumn èIóπóÒ
      */
     public ArrayInitializerInfo(List<ExpressionInfo> elements, final CallableUnitInfo ownerMethod,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
-            final int parenthesesCount) {
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         if (null == elements) {
             throw new IllegalArgumentException("elements is null");
@@ -79,7 +78,7 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
         }
 
         text.append("}");
-        return this.getParenthesizedText(text.toString());
+        return text.toString();
     }
 
     @Override
@@ -99,8 +98,8 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
             final TypeInfo elementType = elements.get(0).getType();
             if (elementType instanceof ArrayTypeInfo) {
                 final ArrayTypeInfo arrayElementType = (ArrayTypeInfo) elementType;
-                return new ArrayTypeInfo(arrayElementType.getElementType(),
-                        arrayElementType.getDimension() + 1);
+                return new ArrayTypeInfo(arrayElementType.getElementType(), arrayElementType
+                        .getDimension() + 1);
             }
 
             else {
@@ -157,10 +156,9 @@ public final class ArrayInitializerInfo extends ExpressionInfo {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final int parenthesesCount = this.getParenthesesCount();
 
         final ArrayInitializerInfo newArrayInitializer = new ArrayInitializerInfo(newInitializers,
-                ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+                ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newArrayInitializer.setOwnerExecutableElement(owner);

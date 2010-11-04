@@ -87,9 +87,9 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
      */
     VariableUsageInfo(final T usedVariable, final boolean reference, final boolean assignment,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn, final int parenthesesCount) {
+            final int toLine, final int toColumn) {
 
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         this.usedVariable = usedVariable;
         this.reference = reference;
@@ -148,7 +148,7 @@ public abstract class VariableUsageInfo<T extends VariableInfo<? extends UnitInf
     @Override
     public String getText() {
         final T variable = this.getUsedVariable();
-        return this.getParenthesizedText(variable.getName());
+        return variable.getName();
     }
 
     /**

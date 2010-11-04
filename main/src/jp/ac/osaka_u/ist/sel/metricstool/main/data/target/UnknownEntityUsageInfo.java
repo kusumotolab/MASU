@@ -32,8 +32,8 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
      */
     public UnknownEntityUsageInfo(final String[] referencedName,
             final CallableUnitInfo ownerMethod, final int fromLine, final int fromColumn,
-            final int toLine, final int toColumn, final int parenthesesCount) {
-        super(ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+            final int toLine, final int toColumn) {
+        super(ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         if (null == referencedName) {
             throw new IllegalArgumentException();
@@ -70,7 +70,7 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
             text.append(".");
         }
         text.deleteCharAt(text.length() - 1);
-        return this.getParenthesizedText(text.toString());
+        return text.toString();
     }
 
     /**
@@ -100,10 +100,9 @@ public final class UnknownEntityUsageInfo extends ExpressionInfo {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final int parenthesesCount = this.getParenthesesCount();
-        
+
         final UnknownEntityUsageInfo newEntityUsage = new UnknownEntityUsageInfo(referencedName,
-                ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+                ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newEntityUsage.setOwnerExecutableElement(owner);

@@ -30,11 +30,9 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
-        final int parenthesesCount = this.getParenthesesCount();
 
         final ParameterUsageInfo newParameterUsage = new ParameterUsageInfo(usedParameter,
-                reference, assignment, ownerMethod, fromLine, fromColumn, toLine, toColumn,
-                parenthesesCount);
+                reference, assignment, ownerMethod, fromLine, fromColumn, toLine, toColumn);
 
         final ExecutableElementInfo owner = this.getOwnerExecutableElement();
         newParameterUsage.setOwnerExecutableElement(owner);
@@ -61,11 +59,10 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
      */
     private ParameterUsageInfo(final ParameterInfo usedParameter, final boolean reference,
             final boolean assignment, final CallableUnitInfo ownerMethod, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn,
-            final int parenthesesCount) {
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(usedParameter, reference, assignment, ownerMethod, fromLine, fromColumn, toLine,
-                toColumn, parenthesesCount);
+                toColumn);
     }
 
     /**
@@ -83,10 +80,9 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
      */
     public static ParameterUsageInfo getInstance(final ParameterInfo usedParameter,
             final boolean reference, final boolean assingment, final CallableUnitInfo ownerMethod,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn,
-            final int parenthesesCount) {
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
         final ParameterUsageInfo instance = new ParameterUsageInfo(usedParameter, reference,
-                assingment, ownerMethod, fromLine, fromColumn, toLine, toColumn, parenthesesCount);
+                assingment, ownerMethod, fromLine, fromColumn, toLine, toColumn);
         addParameterUsage(instance);
         return instance;
     }
