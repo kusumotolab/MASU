@@ -65,7 +65,6 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
         if (elements.length == 2) {
             ExpressionElement left = elements[0];
             ExpressionElement right = elements[1];
-
             if (right instanceof SingleIdentifierElement) {
                 //âEë§ÇÕïÅí ÇÕíPàÍÇÃéØï éqÇÃÇÕÇ∏
 
@@ -73,8 +72,10 @@ public class CompoundIdentifierBuilder extends ExpressionBuilder {
                 String rightName = rightIdentifier.getName();
 
                 UnresolvedExpressionInfo<? extends ExpressionInfo> leftElementType = null;
-
-                if (left instanceof FieldOrMethodElement) {
+                if (left instanceof ParenthesizedIdentifierElement) {
+                    final ParenthesizedIdentifierElement leftIdentifier = (ParenthesizedIdentifierElement) left;
+                    leftElementType = leftIdentifier.resolveAsVariable(buildDataManager, true, false);
+                } else if (left instanceof FieldOrMethodElement) {
                     IdentifierElement leftIdentifier = (IdentifierElement) left;
                     leftElementType = leftIdentifier.resolveAsVariable(this.buildDataManager, true,
                             false);

@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.ASTParseException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.StateDrivenDataBuilder;
@@ -67,30 +66,31 @@ public class ParenthesesExpressionBuilder extends
      */
     protected void buildParenthesesExpressionBuilder(final AstVisitEvent e) {
         final ExpressionElement parentheticElement = expressionManager.popExpressionElement();
-        
-        UnresolvedExpressionInfo<? extends ExpressionInfo> parentheticExpression = parentheticElement
-                .getUsage();        
-        if (null == parentheticExpression) {
-            if (!(parentheticElement instanceof IdentifierElement)) {
-                throw new NotImplementedException();
-            }
-            // ここにくるのは(a)みたいに括弧式の直下に変数がきているとき．
-            final IdentifierElement identifier = (IdentifierElement) parentheticElement;
+        final UnresolvedExpressionInfo<? extends ExpressionInfo> parentheticExpression = parentheticElement
+                .getUsage();
 
-            parentheticExpression = identifier.resolveAsVariable(buildDataManager, false,
-                    this.expressionStateManger.inAssignmentee());
+        if (null != parentheticExpression) {
+            // expressionAnalyzeStackの頭の要素をポップして，かわりに括弧式をプッシュする
+            final UnresolvedParenthesesExpressionInfo paren = new UnresolvedParenthesesExpressionInfo(
+                    parentheticExpression);
+            paren.setOuterUnit(this.buildDataManager.getCurrentUnit());
+            paren.setFromLine(e.getStartLine());
+            paren.setFromColumn(e.getStartColumn());
+            paren.setToLine(e.getEndLine());
+            paren.setToColumn(e.getEndColumn());
+            expressionManager.pushExpressionElement(new UsageElement(paren));
+        } else if (parentheticElement instanceof IdentifierElement) {
+            // (a) のように識別子のみを囲む括弧の場合，Usageが未解決であるため括弧Elementを作りpushする
+            expressionManager.pushExpressionElement(new ParenthesizedIdentifierElement(
+                    (IdentifierElement) parentheticElement, e.getStartLine(), e.getStartColumn(), e
+                            .getEndLine(), e.getEndColumn()));
+        } else {
+            // here shouldn't be reached
+            throw new IllegalStateException();
         }
-
-        // expressionAnalyzeStackの頭に括弧式をプッシュする
-        final UnresolvedParenthesesExpressionInfo paren = new UnresolvedParenthesesExpressionInfo(
-                parentheticExpression);
-        paren.setOuterUnit(this.buildDataManager.getCurrentUnit());
-        paren.setFromLine(e.getStartLine());
-        paren.setFromColumn(e.getStartColumn());
-        paren.setToLine(e.getEndLine());
-        paren.setToColumn(e.getEndColumn());
-        expressionManager.pushExpressionElement(new UsageElement(paren));
     }
+
+    //public UnresolvedExpressionInfo<? extends ExpressionInfo> resolveAsVariableIfPoss
 
     @Override
     public void stateChanged(StateChangeEvent<AstVisitEvent> event) {

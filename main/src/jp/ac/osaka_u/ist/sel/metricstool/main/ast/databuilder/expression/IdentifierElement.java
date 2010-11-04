@@ -3,11 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
 
 public abstract class IdentifierElement extends ExpressionElement {
@@ -38,7 +34,7 @@ public abstract class IdentifierElement extends ExpressionElement {
         return this.ownerUsage;
     }
 
-    public abstract UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsVariable(
+    public abstract UnresolvedExpressionInfo<? extends ExpressionInfo> resolveAsVariable(
             BuildDataManager buildDataManager, final boolean reference, final boolean assignment);
 
     public abstract IdentifierElement resolveAsCalledMethod(BuildDataManager buildDataManager);

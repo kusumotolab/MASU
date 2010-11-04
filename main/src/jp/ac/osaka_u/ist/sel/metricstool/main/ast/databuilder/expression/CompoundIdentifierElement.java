@@ -4,16 +4,11 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedClassImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedFieldUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedMemberImportStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedUnknownUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedVariableUsageInfo;
 
 
 /**
@@ -55,7 +50,7 @@ public class CompoundIdentifierElement extends IdentifierElement {
     }
 
     @Override
-    public UnresolvedVariableUsageInfo<? extends VariableUsageInfo<? extends VariableInfo<? extends UnitInfo>>> resolveAsVariable(
+    public UnresolvedExpressionInfo<? extends ExpressionInfo> resolveAsVariable(
             final BuildDataManager buildDataManager, final boolean reference,
             final boolean assignment) {
         this.ownerUsage = this.resolveOwner(buildDataManager);

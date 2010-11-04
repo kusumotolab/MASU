@@ -35,7 +35,6 @@ public class MethodCallBuilder extends ExpressionBuilder {
                 IdentifierElement callee = (IdentifierElement) elements[0];
 
                 callee = callee.resolveAsCalledMethod(this.buildDataManager);
-
                 final UnresolvedMethodCallInfo methodCall = new UnresolvedMethodCallInfo(
                         UnresolvedMemberImportStatementInfo
                                 .getMemberImportStatements(this.buildDataManager

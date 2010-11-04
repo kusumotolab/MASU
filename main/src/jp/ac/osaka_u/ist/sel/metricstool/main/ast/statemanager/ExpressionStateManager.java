@@ -32,7 +32,7 @@ public class ExpressionStateManager extends
     public static enum EXPR_STATE implements StateChangeEventType {
         ENTER_EXPR, EXIT_EXPR
     }
-    
+
     /**
      * ビジターがASTノードの中に入った時のイベント通知を受け取り，
      * そのノードが式記述部や式が継続しないノードであれば，
@@ -52,11 +52,6 @@ public class ExpressionStateManager extends
             this.setState(STATE.NOT);
             this.fireStateChangeEvent(EXPR_STATE.EXIT_EXPR, event);
         }
-        if (this.inExpression()){
-            if (token.isAssignmentOperator()){
-                this.setState(STATE.IN_ASSIGNMENTEE);
-            }
-        }
     }
 
     /**
@@ -73,13 +68,8 @@ public class ExpressionStateManager extends
         final AstToken token = event.getToken();
         if (token.isExpression()) {
             this.fireStateChangeEvent(EXPR_STATE.EXIT_EXPR, event);
-        } else if (this.isExpressionInsulator(token) && STATE.NOT != this.getState()) {
+        } else if (this.isExpressionInsulator(token) && STATE.IN == this.getState()) {
             this.fireStateChangeEvent(EXPR_STATE.ENTER_EXPR, event);
-        }
-        if (this.inExpression()){
-            if (token.isAssignmentOperator()){
-                this.setState(STATE.IN_ASSIGNMENTEE);
-            }
         }
     }
 
@@ -88,14 +78,7 @@ public class ExpressionStateManager extends
      * @return　式の中に居る場合はtrue
      */
     public boolean inExpression() {
-        return STATE.NOT != this.getState();
-    }
-    
-    /**
-     * 非代入項にいるかどうかを返すメソッド
-     */
-    public boolean inAssignmentee() {
-        return STATE.IN_ASSIGNMENTEE == this.getState();
+        return STATE.IN == this.getState();
     }
 
     /**
@@ -129,8 +112,8 @@ public class ExpressionStateManager extends
      *
      */
     protected static enum STATE {
-        NOT, IN, IN_ASSIGNMENTEE;
-        }
+        NOT, IN,
+    }
 
 
 }
