@@ -29,28 +29,9 @@ public class ReturnStatementInfo extends SingleStatementInfo {
             int toColumn) {
         super(ownerSpace, fromLine, fromColumn, toLine, toColumn);
 
-        if (null != returnedExpression) {
-            this.returnedExpression = returnedExpression;
-        } else {
-
-            // ownerSpaceInfoがメソッドまたはコンストラクタの時
-            if (ownerSpace instanceof CallableUnitInfo) {
-                this.returnedExpression = new EmptyExpressionInfo((CallableUnitInfo) ownerSpace,
-                        toLine, toColumn - 1, toLine, toColumn - 1);
-            }
-
-            // ownerSpaceInfoがブロック文の時            
-            else if (ownerSpace instanceof BlockInfo) {
-                final CallableUnitInfo ownerMethod = ((BlockInfo) ownerSpace).getOwnerMethod();
-                this.returnedExpression = new EmptyExpressionInfo(ownerMethod, toLine,
-                        toColumn - 1, toLine, toColumn - 1);
-            }
-
-            // それ以外の時はエラー
-            else {
-                throw new IllegalStateException();
-            }
-        }
+        assert null != returnedExpression: "returnedExpression must not be null";
+        
+        this.returnedExpression = returnedExpression;
         this.returnedExpression.setOwnerExecutableElement(this);
     }
 

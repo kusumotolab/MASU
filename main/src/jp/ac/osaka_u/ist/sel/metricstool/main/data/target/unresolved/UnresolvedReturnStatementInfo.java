@@ -61,10 +61,11 @@ public class UnresolvedReturnStatementInfo extends
 
         final LocalSpaceInfo ownerSpace = this.getOuterLocalSpace().resolve(usingClass,
                 usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
-
-        final ExpressionInfo returnedExpression = null == this.returnedExpression ? null
-                : this.returnedExpression.resolve(usingClass, usingMethod, classInfoManager,
-                        fieldInfoManager, methodInfoManager);
+        
+        assert this.getReturnedExpression() != null: "return expression must not be null";
+        
+        final ExpressionInfo returnedExpression = this.returnedExpression.resolve(usingClass,
+                usingMethod, classInfoManager, fieldInfoManager, methodInfoManager);
 
         this.resolvedInfo = new ReturnStatementInfo(ownerSpace, returnedExpression, fromLine,
                 fromColumn, toLine, toColumn);
