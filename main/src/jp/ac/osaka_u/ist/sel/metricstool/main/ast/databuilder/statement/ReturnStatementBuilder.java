@@ -6,8 +6,10 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.BuildDataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.databuilder.expression.ExpressionElementManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.token.AstToken;
 import jp.ac.osaka_u.ist.sel.metricstool.main.ast.visitor.AstVisitEvent;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedEmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedLocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.UnresolvedReturnStatementInfo;
@@ -53,11 +55,18 @@ public class ReturnStatementBuilder extends SingleStatementBuilder<UnresolvedRet
 
                 // TODO ‚¢‚¯‚Ä‚È‚¢.SingleStatementBuilder‚ðStatetDrivenDataBuilder‚ðŒp³‚·‚é‚æ‚¤‚É•ÏX‚·‚×‚«
                 if (null != returnedExpression
-                        && (returnedExpression.getToLine() < buildingStatement.getFromLine() || returnedExpression
-                                .getToLine() == buildingStatement.getFromLine()
-                                && returnedExpression.getToColumn() < buildingStatement
-                                        .getFromColumn())) {
-                    buildingStatement.setReturnedExpression(null);
+                        && (returnedExpression.getToLine() < buildingStatement.getFromLine() 
+                                || returnedExpression.getToLine() == buildingStatement.getFromLine()
+                                && returnedExpression.getToColumn() < buildingStatement.getFromColumn())) {
+                    buildingStatement.setReturnedExpression(
+                            new UnresolvedEmptyExpressionInfo(
+                                    buildingStatement.getOuterUnit(), 
+                                    e.getEndLine(), e.getEndColumn() - 1, e.getEndLine(), e.getEndColumn() - 1));
+                } else if (null == returnedExpression){
+                    buildingStatement.setReturnedExpression(
+                            new UnresolvedEmptyExpressionInfo(
+                                    buildingStatement.getOuterUnit(), 
+                                    e.getEndLine(), e.getEndColumn() - 1, e.getEndLine(), e.getEndColumn() - 1));
                 } else {
                     buildingStatement.setReturnedExpression(returnedExpression);
                 }
