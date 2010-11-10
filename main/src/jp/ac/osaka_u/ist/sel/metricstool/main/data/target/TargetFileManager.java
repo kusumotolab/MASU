@@ -1,11 +1,11 @@
 package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -31,12 +31,13 @@ public final class TargetFileManager implements Iterable<TargetFile> {
             throw new NullPointerException();
         }
 
-        this.targetFiles.add(targetFile);
+        final String filename = targetFile.getName();
+        this.targetFiles.put(filename, targetFile);
     }
 
+    @Override
     public Iterator<TargetFile> iterator() {
-        Set<TargetFile> unmodifiableTargetFiles = Collections.unmodifiableSet(this.targetFiles);
-        return unmodifiableTargetFiles.iterator();
+        return this.getFiles().iterator();
     }
 
     /**
@@ -61,7 +62,19 @@ public final class TargetFileManager implements Iterable<TargetFile> {
      * @return 登録されている対象ファイルのSortedSet
      */
     public SortedSet<TargetFile> getFiles() {
-        return Collections.unmodifiableSortedSet(this.targetFiles);
+        final SortedSet<TargetFile> files = new TreeSet<TargetFile>();
+        files.addAll(this.targetFiles.values());
+        return files;
+    }
+
+    /**
+     * 引数で与えられたパスのファイルを返す
+     * 
+     * @param filepath
+     * @return
+     */
+    public TargetFile getFile(final String filepath) {
+        return this.targetFiles.get(filepath);
     }
 
     /**
@@ -70,12 +83,12 @@ public final class TargetFileManager implements Iterable<TargetFile> {
      * 以前は HashSet を用いていたが，同じディレクトリのファイルはまとめて返すほうがよいので，TreeSet に変更した．
      */
     public TargetFileManager() {
-        this.targetFiles = new TreeSet<TargetFile>();
+        this.targetFiles = new ConcurrentHashMap<String, TargetFile>();
     }
 
     /**
      * 
      * 対象ファイル (TargetFile) を格納する変数．
      */
-    private final SortedSet<TargetFile> targetFiles;
+    private final ConcurrentMap<String, TargetFile> targetFiles;
 }
