@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -24,14 +23,15 @@ public final class FileInfoManager {
      * 
      * @param fileInfo 追加するクラス情報
      */
-    public synchronized void add(final FileInfo fileInfo, final Thread thread) {
+    public void add(final FileInfo fileInfo, final Thread thread) {
 
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == fileInfo || null == thread) {
             throw new IllegalArgumentException();
         }
 
-        this.fileInfos.add(fileInfo);
+        final String filename = fileInfo.getName();
+        this.fileInfos.put(filename, fileInfo);
 
         List<FileInfo> files = this.threadMap.get(thread);
         if (null == files) {
@@ -57,9 +57,21 @@ public final class FileInfoManager {
      * @return ファイル情報の SortedSet
      */
     public SortedSet<FileInfo> getFileInfos() {
-        return Collections.unmodifiableSortedSet(this.fileInfos);
+        final SortedSet<FileInfo> files = new TreeSet<FileInfo>();
+        files.addAll(this.fileInfos.values());
+        return files;
     }
 
+    /**
+     * 引数で与えられたパスのファイルを返す
+     * 
+     * @param filepath
+     * @return
+     */
+    public FileInfo getFile(final String filepath){
+        return this.fileInfos.get(filepath);
+    }
+    
     /**
      * 情報を持っているファイルの個数を返す
      * 
@@ -94,7 +106,7 @@ public final class FileInfoManager {
      * コンストラクタ． シングルトンパターンで実装しているために private がついている．
      */
     public FileInfoManager() {
-        this.fileInfos = new TreeSet<FileInfo>();
+        this.fileInfos = new ConcurrentHashMap<String, FileInfo>();
         this.threadMap = new ConcurrentHashMap<Thread, List<FileInfo>>();
     }
 
@@ -102,7 +114,7 @@ public final class FileInfoManager {
      * 
      * ファイル情報 (FileInfo) を格納する変数．
      */
-    private final SortedSet<FileInfo> fileInfos;
+    private final ConcurrentMap<String, FileInfo> fileInfos;
 
     /**
      * スレッドと登録されたファイルの対応関係を保存するための変数
