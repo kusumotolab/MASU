@@ -71,7 +71,7 @@ public class IntraProceduralPDG extends PDG {
     /**
      * ˆø”Outƒm[ƒh‚ğŠÇ—‚·‚é•Ï”
      */
-    protected final Map<ParameterInfo, PDGParameterOutNode> parameterOutNode;
+    protected final Map<ParameterInfo, PDGParameterOutNode> parameterOutNodes;
 
     protected final Map<FieldInfo, PDGFieldInNode> fieldInNodes;
 
@@ -147,7 +147,7 @@ public class IntraProceduralPDG extends PDG {
         this.enterNode = PDGMethodEnterNode.createNode(unit);
         this.exitNodes = new TreeSet<PDGNode<?>>();
         this.parameterInNodes = new HashMap<ParameterInfo, PDGParameterInNode>();
-        this.parameterOutNode = new HashMap<ParameterInfo, PDGParameterOutNode>();
+        this.parameterOutNodes = new HashMap<ParameterInfo, PDGParameterOutNode>();
         this.fieldInNodes = new HashMap<FieldInfo, PDGFieldInNode>();
         this.fieldOutNodes = new HashMap<FieldInfo, PDGFieldOutNode>();
         this.unit = unit;
@@ -315,7 +315,7 @@ public class IntraProceduralPDG extends PDG {
                         .getInstance(parameter);
                 this.pdgNodeFactory.addNode(parameterOutNode);
                 this.nodes.add(parameterOutNode);
-                this.parameterOutNode.put(parameter, parameterOutNode);
+                this.parameterOutNodes.put(parameter, parameterOutNode);
             }
 
             if (null != cfgEnterNode) {
@@ -370,7 +370,7 @@ public class IntraProceduralPDG extends PDG {
         }
 
         // ParameterOutNode‚Æ‚ÌˆË‘¶ŠÖŒW‚ğ\’z
-        for (final Entry<ParameterInfo, PDGParameterOutNode> entry : this.parameterOutNode
+        for (final Entry<ParameterInfo, PDGParameterOutNode> entry : this.parameterOutNodes
                 .entrySet()) {
             final ParameterInfo parameter = entry.getKey();
             final PDGParameterOutNode parameterOutNode = entry.getValue();
