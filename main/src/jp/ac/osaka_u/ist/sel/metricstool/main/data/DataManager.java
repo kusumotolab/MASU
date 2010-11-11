@@ -199,6 +199,10 @@ public class DataManager {
         return this.fileInfoManager;
     }
 
+    public void clearFileInfoManager() {
+        this.fileInfoManager.clear();
+    }
+
     /**
      * MethodInfoManager@‚ğ•Ô‚·
      * 
