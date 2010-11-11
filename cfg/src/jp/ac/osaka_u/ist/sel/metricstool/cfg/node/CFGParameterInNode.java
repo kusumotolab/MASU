@@ -22,11 +22,11 @@ public class CFGParameterInNode extends CFGDataNode<ParameterUsageInfo> {
             throw new IllegalArgumentException();
         }
 
-        final CallableUnitInfo ownerUnit = parameter.getDefinitionUnit();
         final int fromLine = parameter.getFromLine();
         final int fromColumn = parameter.getFromColumn();
         final int toLine = parameter.getToLine();
         final int toColumn = parameter.getToColumn();
+        final CallableUnitInfo ownerUnit = parameter.getDefinitionUnit();
 
         final ParameterUsageInfo usage = ParameterUsageInfo.getInstance(parameter, false, true,
                 ownerUnit, fromLine, fromColumn, toLine, toColumn);
