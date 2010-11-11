@@ -652,7 +652,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 						.get(index++) : indexExpression,
 				qualifiedExpressionIsDissolved ? dissolvedVariableUsageList
 						.get(index++) : qualifiedExpression, outerCallableUnit,
-				fromLine, fromColumn, toLine, toColumn, 0);
+				fromLine, fromColumn, toLine, toColumn);
 		newArrayElementUsage.setOwnerConditionalBlock(ownerConditionalBlock);
 		newArrayElementUsage.setOwnerExecutableElement(ownerExecutableElement);
 		final ExecutableElementInfo newElement = this.makeNewElement(
@@ -735,7 +735,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 
 		final ArrayInitializerInfo newArrayInitializer = new ArrayInitializerInfo(
 				newInitializers, outerCallableUnit, fromLine, fromColumn,
-				toLine, toColumn, 0);
+				toLine, toColumn);
 		newArrayInitializer.setOwnerConditionalBlock(ownerConditionalBlock);
 		newArrayInitializer.setOwnerExecutableElement(ownerExecutableElement);
 		final ExecutableElementInfo newElement = this.makeNewElement(
@@ -822,7 +822,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 						.get(index++) : firstOperand,
 				secondOperandIsDissolved ? dissolvedVariableUsageList
 						.get(index++) : secondOperand, outerCallableUnit,
-				fromLine, fromColumn, toLine, toColumn, 0);
+				fromLine, fromColumn, toLine, toColumn);
 		newBinominalOperation.setOwnerConditionalBlock(ownerConditionalBlock);
 		newBinominalOperation.setOwnerExecutableElement(ownerExecutableElement);
 		final ExecutableElementInfo newElement = this.makeNewElement(
@@ -939,17 +939,17 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 			newCall = new MethodCallInfo(newQualifiedExpression.getType(),
 					newQualifiedExpression, methodCall.getCallee(), methodCall
 							.getType(), outerCallableUnit, fromLine,
-					fromColumn, toLine, toColumn, 0);
+					fromColumn, toLine, toColumn);
 		} else if (call instanceof ClassConstructorCallInfo) {
 			final ClassConstructorCallInfo classConstructorCall = (ClassConstructorCallInfo) call;
 			newCall = new ClassConstructorCallInfo(classConstructorCall
 					.getType(), classConstructorCall.getCallee(),
-					outerCallableUnit, fromLine, fromColumn, toLine, toColumn, 0);
+					outerCallableUnit, fromLine, fromColumn, toLine, toColumn);
 		} else if (call instanceof ArrayConstructorCallInfo) {
 			final ArrayConstructorCallInfo arrayConstructorCall = (ArrayConstructorCallInfo) call;
 			newCall = new ArrayConstructorCallInfo(arrayConstructorCall
 					.getType(), outerCallableUnit, fromLine, fromColumn,
-					toLine, toColumn, 0);
+					toLine, toColumn);
 
 			for (final Entry<Integer, ExpressionInfo> entry : newIndexExpressions
 					.entrySet()) {
@@ -1032,7 +1032,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 		// 新しいCastUsageInfoおよびそれを右辺として持つ代入文を作成
 		final CastUsageInfo newCastUsage = new CastUsageInfo(castUsage
 				.getType(), dissolvedVariableUsageList.getFirst(),
-				outerCallableUnit, fromLine, fromColumn, toLine, toColumn, 0);
+				outerCallableUnit, fromLine, fromColumn, toLine, toColumn);
 		newCastUsage.setOwnerConditionalBlock(ownerConditionalBlock);
 		newCastUsage.setOwnerExecutableElement(ownerExecutableElement);
 		final ExecutableElementInfo newElement = this.makeNewElement(
@@ -1100,7 +1100,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 		// 新しい二項演算オブジェクトおよびそれを右辺として持つ代入文を作成
 		final MonominalOperationInfo newOperation = new MonominalOperationInfo(
 				dissolvedVariableUsageList.getFirst(), operator, isPreposed,
-				outerCallableUnit, fromLine, fromColumn, toLine, toColumn, 0);
+				outerCallableUnit, fromLine, fromColumn, toLine, toColumn);
 		newOperation.setOwnerConditionalBlock(ownerConditionalBlock);
 		newOperation.setOwnerExecutableElement(ownerExecutableElement);
 		final ExecutableElementInfo newElement = this.makeNewElement(
@@ -1166,7 +1166,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 		// 新しい括弧式オブジェクトおよびそれを右辺として持つ代入文を作成
 		final ParenthesesExpressionInfo newInnerExpression = new ParenthesesExpressionInfo(
 				dissolvedVariableUsageList.getFirst(), outerCallableUnit,
-				fromLine, fromColumn, toLine, toColumn, 0);
+				fromLine, fromColumn, toLine, toColumn);
 		newInnerExpression.setOwnerConditionalBlock(ownerConditionalBlock);
 		newInnerExpression.setOwnerExecutableElement(ownerExecutableElement);
 		final ExecutableElementInfo newElement = this.makeNewElement(
@@ -1373,11 +1373,11 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 		final VariableDeclarationStatementInfo dummyVariableDeclarationStatement = new VariableDeclarationStatementInfo(
 				ownerSpace, LocalVariableUsageInfo.getInstance(dummyVariable,
 						false, true, outerCallableUnit, fromLine, fromColumn,
-						toLine, fromColumn, 0), originalExpression, fromLine, // わざとfromColumnにしている
+						toLine, fromColumn), originalExpression, fromLine, // わざとfromColumnにしている
 				fromColumn, toLine, toColumn);
 		final LocalVariableUsageInfo dummyVariableUsage = LocalVariableUsageInfo
 				.getInstance(dummyVariable, true, false, outerCallableUnit,
-						fromLine, fromColumn, toLine, toColumn, 0);
+						fromLine, fromColumn, toLine, toColumn);
 
 		final CFGNode<?> newNode = nodeFactory
 				.makeNormalNode(dummyVariableDeclarationStatement);
@@ -1509,7 +1509,7 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 		// わざとfromColumnにしている
 		final LocalVariableUsageInfo variableUsage = LocalVariableUsageInfo
 				.getInstance(dummyVariable, false, true, outerCallableUnit,
-						fromLine, fromColumn, toLine, fromColumn, 0);
+						fromLine, fromColumn, toLine, fromColumn);
 
 		final VariableDeclarationStatementInfo statement = new VariableDeclarationStatementInfo(
 				ownerSpace, variableUsage, expression, fromLine, fromColumn,

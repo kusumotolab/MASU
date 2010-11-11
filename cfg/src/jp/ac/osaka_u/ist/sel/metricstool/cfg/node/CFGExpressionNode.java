@@ -54,7 +54,7 @@ public class CFGExpressionNode extends CFGNormalNode<ExpressionInfo> {
 				final BinominalOperationInfo newExpression = new BinominalOperationInfo(
 						operator, firstOperand, requiredExpressions[0],
 						outerCallableUnit, fromLine, fromColumn, toLine,
-						toColumn, 0);
+						toColumn);
 				return newExpression;
 			}
 		}

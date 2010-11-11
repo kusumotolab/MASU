@@ -28,10 +28,10 @@ public class CFGFieldOutNode extends CFGDataNode<FieldUsageInfo> {
 
         final ClassTypeInfo qualifierType = new ClassTypeInfo(field.getDefinitionUnit());
         final ExpressionInfo qualifierExpression = new ClassReferenceInfo(qualifierType, unit,
-                fromLine, fromColumn, toLine, toColumn, 0);
+                fromLine, fromColumn, toLine, toColumn);
 
         final FieldUsageInfo fieldUsage = FieldUsageInfo.getInstance(qualifierExpression,
-                qualifierType, field, false, true, unit, fromLine, fromColumn, toLine, toColumn, 0);
+                qualifierType, field, false, true, unit, fromLine, fromColumn, toLine, toColumn);
 
         return new CFGFieldOutNode(fieldUsage);
     }

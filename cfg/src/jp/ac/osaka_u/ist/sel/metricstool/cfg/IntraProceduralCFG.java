@@ -848,7 +848,7 @@ public class IntraProceduralCFG extends CFG {
 				final LocalVariableUsageInfo exceptionUsage = LocalVariableUsageInfo
 						.getInstance(exception, false, true, catchBlock
 								.getOwnerMethod(), fromLine, fromColumn,
-								toLine, toColumn, 0);
+								toLine, toColumn);
 				declarationStatement = new VariableDeclarationStatementInfo(
 						catchBlock, exceptionUsage, null, fromLine, fromColumn,
 						toLine, toColumn);
