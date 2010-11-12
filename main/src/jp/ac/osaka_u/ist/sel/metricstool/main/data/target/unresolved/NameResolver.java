@@ -251,9 +251,9 @@ public final class NameResolver {
      */
     public static synchronized List<ClassInfo> getAvailableClasses(final ClassInfo usingClass) {
 
-//        if (CLASS_CACHE.containsKey(usingClass)) {
-//            return CLASS_CACHE.get(usingClass);
-//        } else {
+        if (CLASS_CACHE.containsKey(usingClass)) {
+            return CLASS_CACHE.get(usingClass);
+        } else {
             final List<ClassInfo> _SAME_CLASS = new NonDuplicationLinkedList<ClassInfo>();
             final List<ClassInfo> _INHERITANCE = new NonDuplicationLinkedList<ClassInfo>();
             final List<ClassInfo> _SAME_NAMESPACE = new NonDuplicationLinkedList<ClassInfo>();
@@ -273,7 +273,7 @@ public final class NameResolver {
                     outestClass.getNamespace()));
             CLASS_CACHE.put(usingClass, availableClasses);
             return Collections.unmodifiableList(availableClasses);
-//        }
+        }
     }
 
     private static void getAvailableClasses(final ClassInfo usedClass, final ClassInfo usingClass,
@@ -416,8 +416,8 @@ public final class NameResolver {
             final ClassInfo outestUsingClass = usingClass instanceof InnerClassInfo ? TargetInnerClassInfo
                     .getOutestClass((InnerClassInfo) usingClass)
                     : usingClass;
-                    
-                    //usedとusingが同じクラス（内）のとき                    
+
+            //usedとusingが同じクラス（内）のとき                    
             if (outestUsingClass.equals(usedClass)) {
                 _SAME_CLASS.add(usedClass);
                 return true;
@@ -427,11 +427,11 @@ public final class NameResolver {
                 _SAME_NAMESPACE.add(usedClass);
                 return true;
             }
-            
-            if(outestUsingClass.isSubClass(usedClass)){
+
+            if (outestUsingClass.isSubClass(usedClass)) {
                 _INHERITANCE.add(usedClass);
                 return true;
-            }                        
+            }
         }
 
         return false;
