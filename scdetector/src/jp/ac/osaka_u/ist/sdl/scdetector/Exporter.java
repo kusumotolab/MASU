@@ -3,6 +3,8 @@ package jp.ac.osaka_u.ist.sdl.scdetector;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.CodeCloneController;
@@ -33,7 +35,7 @@ public class Exporter {
 			i.setRequired(true);
 			options.addOption(i);
 
-			final Option o = new Option("o", "output", true, "output file");
+			final Option o = new Option("o", "output file", true, "output file");
 			o.setArgName("output");
 			o.setArgs(1);
 			o.setRequired(true);
@@ -44,7 +46,8 @@ public class Exporter {
 
 			XMLReader.read(cmd.getOptionValue("i"), Exporter.ID);
 
-			export(cmd.getOptionValue("o"));
+			exportCodeClone(cmd.getOptionValue("o"));
+			exportCloneSet();
 
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -52,7 +55,7 @@ public class Exporter {
 		}
 	}
 
-	private static void export(final String output) {
+	private static void exportCodeClone(final String output) {
 
 		try {
 
@@ -76,5 +79,40 @@ public class Exporter {
 		} catch (IOException e) {
 
 		}
+	}
+
+	private static void exportCloneSet() {
+
+		int type1 = 0;
+		int type2 = 0;
+		int type3 = 0;
+
+		CLONESET: for (final CloneSetInfo cloneset : CodeCloneController
+				.getInstance(Exporter.ID).getCloneSets()) {
+
+			final List<Integer> list = new LinkedList<Integer>();
+			for (final CodeCloneInfo codeclone : cloneset.getCodeclones()) {
+				final int method = codeclone.getNumberOfMethods();
+				list.add(method);
+			}
+
+			int value = list.get(0).intValue();
+			for (final Integer integer : list) {
+				if (value != integer.intValue()) {
+					type3++;
+					continue CLONESET;
+				}
+			}
+
+			if (value == 1) {
+				type1++;
+			} else {
+				type2++;
+			}
+		}
+
+		System.out.println("type1: " + type1);
+		System.out.println("type2: " + type2);
+		System.out.println("type3: " + type3);
 	}
 }
