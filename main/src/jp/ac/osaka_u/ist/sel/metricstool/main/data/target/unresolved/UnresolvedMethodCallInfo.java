@@ -213,192 +213,177 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
                 ownerClass = ((ClassTypeInfo) qualifierType).getReferencedClass();
             }
 
-            if (ownerClass instanceof TargetClassInfo) {
+            // まずは利用可能なメソッドから検索
+            {
+                // 利用可能なメソッド一覧を取得
+                final List<MethodInfo> availableMethods = NameResolver.getAvailableMethods(
+                        ownerClass, usingClass);
 
-                // まずは利用可能なメソッドから検索
-                {
-                    // 利用可能なメソッド一覧を取得
-                    final List<MethodInfo> availableMethods = NameResolver.getAvailableMethods(
-                            (TargetClassInfo) ownerClass, usingClass);
+                // 利用可能なメソッドから，未解決メソッドと一致するものを検索
+                // メソッド名，引数の型のリストを用いて，このメソッドの呼び出しであるかどうかを判定
+                for (final MethodInfo availableMethod : availableMethods) {
 
-                    // 利用可能なメソッドから，未解決メソッドと一致するものを検索
-                    // メソッド名，引数の型のリストを用いて，このメソッドの呼び出しであるかどうかを判定
-                    for (final MethodInfo availableMethod : availableMethods) {
+                    // 呼び出し可能なメソッドが見つかった場合
+                    if (availableMethod.canCalledWith(methodName, actualParameters)) {
 
-                        // 呼び出し可能なメソッドが見つかった場合
-                        if (availableMethod.canCalledWith(methodName, actualParameters)) {
+                        final TypeInfo returnType = availableMethod.getReturnType();
 
-                            final TypeInfo returnType = availableMethod.getReturnType();
+                        // 返り値が型パラメータの場合
+                        if (returnType instanceof TypeParameterTypeInfo) {
+                            final TypeParameterInfo referencedTypeParameter = ((TypeParameterTypeInfo) returnType)
+                                    .getReferncedTypeParameter();
+                            final TypeInfo typeArgument;
 
-                            // 返り値が型パラメータの場合
-                            if (returnType instanceof TypeParameterTypeInfo) {
-                                final TypeParameterInfo referencedTypeParameter = ((TypeParameterTypeInfo) returnType)
-                                        .getReferncedTypeParameter();
-                                final TypeInfo typeArgument;
-
-                                // メソッドの型パラメータから検索
-                                if (availableMethod.isDefined(referencedTypeParameter)) {
-                                    final int index = referencedTypeParameter.getIndex();
-                                    if (index < typeArguments.size()) {
-                                        typeArgument = typeArguments.get(index);
-                                    } else {
-                                        final ClassInfo objectClass = classInfoManager
-                                                .getClassInfo(new String[] { "java", "lang",
-                                                        "Object" });
-                                        typeArgument = new ClassTypeInfo(objectClass);
-                                    }
-                                }
-
-                                // クラスの型パラメータから検索
-                                else if (((ClassTypeInfo) qualifierType).getReferencedClass()
-                                        .isDefined(referencedTypeParameter)) {
-                                    typeArgument = ((ClassTypeInfo) qualifierType)
-                                            .getTypeArgument(referencedTypeParameter);
-                                }
-
-                                // 本来はここはエラーを出すべき
-                                else {
+                            // メソッドの型パラメータから検索
+                            if (availableMethod.isDefined(referencedTypeParameter)) {
+                                final int index = referencedTypeParameter.getIndex();
+                                if (index < typeArguments.size()) {
+                                    typeArgument = typeArguments.get(index);
+                                } else {
                                     final ClassInfo objectClass = classInfoManager
                                             .getClassInfo(new String[] { "java", "lang", "Object" });
                                     typeArgument = new ClassTypeInfo(objectClass);
                                 }
-
-                                final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
-                                        qualifierUsage, availableMethod, typeArgument, usingMethod,
-                                        fromLine, fromColumn, toLine, toColumn);
-                                resolved.addArguments(actualParameters);
-                                resolved.addTypeArguments(typeArguments);
-                                return resolved;
                             }
 
-                            // 返り値が型パラメータでない場合
+                            // クラスの型パラメータから検索
+                            else if (((ClassTypeInfo) qualifierType).getReferencedClass()
+                                    .isDefined(referencedTypeParameter)) {
+                                typeArgument = ((ClassTypeInfo) qualifierType)
+                                        .getTypeArgument(referencedTypeParameter);
+                            }
+
+                            // 本来はここはエラーを出すべき
                             else {
-                                final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
-                                        qualifierUsage, availableMethod, returnType, usingMethod,
-                                        fromLine, fromColumn, toLine, toColumn);
-                                resolved.addArguments(actualParameters);
-                                resolved.addTypeArguments(typeArguments);
-                                return resolved;
+                                final ClassInfo objectClass = classInfoManager
+                                        .getClassInfo(new String[] { "java", "lang", "Object" });
+                                typeArgument = new ClassTypeInfo(objectClass);
                             }
+
+                            final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
+                                    qualifierUsage, availableMethod, typeArgument, usingMethod,
+                                    fromLine, fromColumn, toLine, toColumn);
+                            resolved.addArguments(actualParameters);
+                            resolved.addTypeArguments(typeArguments);
+                            return resolved;
+                        }
+
+                        // 返り値が型パラメータでない場合
+                        else {
+                            final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
+                                    qualifierUsage, availableMethod, returnType, usingMethod,
+                                    fromLine, fromColumn, toLine, toColumn);
+                            resolved.addArguments(actualParameters);
+                            resolved.addTypeArguments(typeArguments);
+                            return resolved;
                         }
                     }
                 }
+            }
 
-                // スタティックインポートされているメソッドを探す
-                {
-                    for (final UnresolvedMemberImportStatementInfo unresolvedMemberImportStatement : this
-                            .getImportStatements()) {
-                        final MemberImportStatementInfo memberImportStatement = unresolvedMemberImportStatement
-                                .resolve(usingClass, usingMethod, classInfoManager,
-                                        fieldInfoManager, methodInfoManager);
-                        for (final Member importedMember : memberImportStatement.getImportedUnits()) {
-                            if (importedMember instanceof MethodInfo) {
-                                final MethodInfo importedMethod = (MethodInfo) importedMember;
+            // スタティックインポートされているメソッドを探す
+            {
+                for (final UnresolvedMemberImportStatementInfo unresolvedMemberImportStatement : this
+                        .getImportStatements()) {
+                    final MemberImportStatementInfo memberImportStatement = unresolvedMemberImportStatement
+                            .resolve(usingClass, usingMethod, classInfoManager, fieldInfoManager,
+                                    methodInfoManager);
+                    for (final Member importedMember : memberImportStatement.getImportedUnits()) {
+                        if (importedMember instanceof MethodInfo) {
+                            final MethodInfo importedMethod = (MethodInfo) importedMember;
 
-                                // 呼び出し可能なメソッドが見つかった場合
-                                if (importedMethod.canCalledWith(methodName, actualParameters)) {
+                            // 呼び出し可能なメソッドが見つかった場合
+                            if (importedMethod.canCalledWith(methodName, actualParameters)) {
 
-                                    final TypeInfo returnType = importedMethod.getReturnType();
+                                final TypeInfo returnType = importedMethod.getReturnType();
 
-                                    // 返り値が型パラメータの場合
-                                    if (returnType instanceof TypeParameterTypeInfo) {
-                                        final TypeParameterInfo referencedTypeParameter = ((TypeParameterTypeInfo) returnType)
-                                                .getReferncedTypeParameter();
-                                        final TypeInfo typeArgument;
-                                        if (importedMethod.isDefined(referencedTypeParameter)) {
-                                            final int index = referencedTypeParameter.getIndex();
-                                            if (index < typeArguments.size()) {
-                                                typeArgument = typeArguments.get(index);
-                                            } else {
-                                                final ClassInfo objectClass = classInfoManager
-                                                        .getClassInfo(new String[] { "java",
-                                                                "lang", "Object" });
-                                                typeArgument = new ClassTypeInfo(objectClass);
-                                            }
-                                        }
-
-                                        // クラスの型パラメータから検索
-                                        else if (((ClassTypeInfo) qualifierType)
-                                                .getReferencedClass().isDefined(
-                                                        referencedTypeParameter)) {
-                                            typeArgument = ((ClassTypeInfo) qualifierType)
-                                                    .getTypeArgument(referencedTypeParameter);
-                                        }
-
-                                        // 本来はここはエラーを出すべき
-                                        else {
+                                // 返り値が型パラメータの場合
+                                if (returnType instanceof TypeParameterTypeInfo) {
+                                    final TypeParameterInfo referencedTypeParameter = ((TypeParameterTypeInfo) returnType)
+                                            .getReferncedTypeParameter();
+                                    final TypeInfo typeArgument;
+                                    if (importedMethod.isDefined(referencedTypeParameter)) {
+                                        final int index = referencedTypeParameter.getIndex();
+                                        if (index < typeArguments.size()) {
+                                            typeArgument = typeArguments.get(index);
+                                        } else {
                                             final ClassInfo objectClass = classInfoManager
                                                     .getClassInfo(new String[] { "java", "lang",
                                                             "Object" });
                                             typeArgument = new ClassTypeInfo(objectClass);
                                         }
-
-                                        final MethodCallInfo resolved = new MethodCallInfo(
-                                                qualifierType, qualifierUsage, importedMethod,
-                                                typeArgument, usingMethod, fromLine, fromColumn,
-                                                toLine, toColumn);
-                                        resolved.addArguments(actualParameters);
-                                        resolved.addTypeArguments(typeArguments);
-                                        return resolved;
                                     }
 
-                                    // 返り値が型パラメータでない場合
+                                    // クラスの型パラメータから検索
+                                    else if (((ClassTypeInfo) qualifierType).getReferencedClass()
+                                            .isDefined(referencedTypeParameter)) {
+                                        typeArgument = ((ClassTypeInfo) qualifierType)
+                                                .getTypeArgument(referencedTypeParameter);
+                                    }
+
+                                    // 本来はここはエラーを出すべき
                                     else {
-                                        final MethodCallInfo resolved = new MethodCallInfo(
-                                                qualifierType, qualifierUsage, importedMethod,
-                                                returnType, usingMethod, fromLine, fromColumn,
-                                                toLine, toColumn);
-                                        resolved.addArguments(actualParameters);
-                                        resolved.addTypeArguments(typeArguments);
-                                        return resolved;
+                                        final ClassInfo objectClass = classInfoManager
+                                                .getClassInfo(new String[] { "java", "lang",
+                                                        "Object" });
+                                        typeArgument = new ClassTypeInfo(objectClass);
                                     }
+
+                                    final MethodCallInfo resolved = new MethodCallInfo(
+                                            qualifierType, qualifierUsage, importedMethod,
+                                            typeArgument, usingMethod, fromLine, fromColumn,
+                                            toLine, toColumn);
+                                    resolved.addArguments(actualParameters);
+                                    resolved.addTypeArguments(typeArguments);
+                                    return resolved;
+                                }
+
+                                // 返り値が型パラメータでない場合
+                                else {
+                                    final MethodCallInfo resolved = new MethodCallInfo(
+                                            qualifierType, qualifierUsage, importedMethod,
+                                            returnType, usingMethod, fromLine, fromColumn, toLine,
+                                            toColumn);
+                                    resolved.addArguments(actualParameters);
+                                    resolved.addTypeArguments(typeArguments);
+                                    return resolved;
                                 }
                             }
                         }
                     }
                 }
+            }
 
-                // 利用可能なメソッドが見つからなかった場合は，外部クラスである親クラスがあるはず．
-                // そのクラスのメソッドを使用しているとみなす
-                {
-                    final ExternalClassInfo externalSuperClass = NameResolver
-                            .getExternalSuperClass(ownerClass);
-                    if (null != externalSuperClass) {
+            // 利用可能なメソッドが見つからなかった場合は，外部クラスである親クラスがあるはず．
+            // そのクラスのメソッドを使用しているとみなす
+            {
+                final ExternalClassInfo externalSuperClass = NameResolver
+                        .getExternalSuperClass(ownerClass);
+                if (null != externalSuperClass) {
 
-                        final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName());
-                        methodInfo.setOuterUnit(externalSuperClass);
-                        final List<ParameterInfo> dummyParameters = ExternalParameterInfo
-                                .createParameters(actualParameters, methodInfo);
-                        methodInfo.addParameters(dummyParameters);
-                        methodInfoManager.add(methodInfo);
+                    final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName());
+                    methodInfo.setOuterUnit(externalSuperClass);
+                    final List<ParameterInfo> dummyParameters = ExternalParameterInfo
+                            .createParameters(actualParameters, methodInfo);
+                    methodInfo.addParameters(dummyParameters);
+                    methodInfoManager.add(methodInfo);
 
-                        // 外部クラスに新規で外部メソッド変数（ExternalMethodInfo）を追加したので型は不明
-                        final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
-                                qualifierUsage, methodInfo, UnknownTypeInfo.getInstance(),
-                                usingMethod, fromLine, fromColumn, toLine, toColumn);
-                        resolved.addArguments(actualParameters);
-                        resolved.addTypeArguments(typeArguments);
-                        return resolved;
-                    }
-                }
-
-                // 見つからなかった処理を行う
-                {
-                    err.println("Resolved as an external element, \"" + this.getName() + "\""
-                            + " line:" + this.getFromLine() + " column:" + this.getFromColumn()
-                            + " on \"" + usingClass.getOwnerFile().getName() + "\"");
-
-                    final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(methodName);
+                    // 外部クラスに新規で外部メソッド変数（ExternalMethodInfo）を追加したので型は不明
                     final MethodCallInfo resolved = new MethodCallInfo(qualifierType,
-                            qualifierUsage, unknownMethod, UnknownTypeInfo.getInstance(),
-                            usingMethod, fromLine, fromColumn, toLine, toColumn);
+                            qualifierUsage, methodInfo, UnknownTypeInfo.getInstance(), usingMethod,
+                            fromLine, fromColumn, toLine, toColumn);
                     resolved.addArguments(actualParameters);
                     resolved.addTypeArguments(typeArguments);
                     return resolved;
                 }
+            }
 
-                // 親が外部クラス（ExternalClassInfo）だった場合
-            } else if (ownerClass instanceof ExternalClassInfo) {
+            // 親が外部クラス（ExternalClassInfo）だった場合
+            if (ownerClass instanceof ExternalClassInfo) {
+
+                err.println("Resolved as an external element, \"" + this.getName() + "\""
+                        + " line:" + this.getFromLine() + " column:" + this.getFromColumn()
+                        + " on \"" + usingClass.getOwnerFile().getName() + "\"");
 
                 final ExternalMethodInfo methodInfo = new ExternalMethodInfo(this.getName());
                 methodInfo.setOuterUnit(ownerClass);
