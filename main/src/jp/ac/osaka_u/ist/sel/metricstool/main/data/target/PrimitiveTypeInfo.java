@@ -49,6 +49,55 @@ public class PrimitiveTypeInfo implements TypeInfo, UnresolvedTypeInfo<Primitive
     }
 
     /**
+     * 引数で与えられたクラス型と対応するプリミティブ型を返す.
+     * 与えられたクラス型が不正なものである場合は，nullを返す．
+     * 
+     * @param classType
+     * @return
+     */
+    public static PrimitiveTypeInfo getPrimitiveType(final ClassTypeInfo classType) {
+
+        final ClassInfo referencedClass = classType.getReferencedClass();
+
+        final ClassInfo booleanClass = DataManager.getInstance().getClassInfoManager()
+                .getClassInfo(new String[] { "java", "lang", "Boolean" });
+        final ClassInfo byteClass = DataManager.getInstance().getClassInfoManager().getClassInfo(
+                new String[] { "java", "lang", "Byte" });
+        final ClassInfo characterClass = DataManager.getInstance().getClassInfoManager()
+                .getClassInfo(new String[] { "java", "lang", "Character" });
+        final ClassInfo doubleClass = DataManager.getInstance().getClassInfoManager().getClassInfo(
+                new String[] { "java", "lang", "Double" });
+        final ClassInfo floatClass = DataManager.getInstance().getClassInfoManager().getClassInfo(
+                new String[] { "java", "lang", "Float" });
+        final ClassInfo integerClass = DataManager.getInstance().getClassInfoManager()
+                .getClassInfo(new String[] { "java", "lang", "Integer" });
+        final ClassInfo longClass = DataManager.getInstance().getClassInfoManager().getClassInfo(
+                new String[] { "java", "lang", "Long" });
+        final ClassInfo shortClass = DataManager.getInstance().getClassInfoManager().getClassInfo(
+                new String[] { "java", "lang", "Short" });
+
+        if (referencedClass.equals(booleanClass)) {
+            return BOOLEAN;
+        } else if (referencedClass.equals(byteClass)) {
+            return BYTE;
+        } else if (referencedClass.equals(characterClass)) {
+            return CHAR;
+        } else if (referencedClass.equals(doubleClass)) {
+            return DOUBLE;
+        } else if (referencedClass.equals(floatClass)) {
+            return FLOAT;
+        } else if (referencedClass.equals(integerClass)) {
+            return INT;
+        } else if (referencedClass.equals(longClass)) {
+            return LONG;
+        } else if (referencedClass.equals(shortClass)) {
+            return SHORT;
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * プリミティブ型の各要素を表すための列挙型
      * 
      * @author higo

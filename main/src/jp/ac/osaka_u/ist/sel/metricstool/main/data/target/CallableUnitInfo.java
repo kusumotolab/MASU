@@ -212,6 +212,16 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
                 }
             }
 
+            // AutoBoxing, InBoxingの可能性を考慮
+            if (PrimitiveTypeInfo.isJavaWrapperType((ClassTypeInfo) dummyType)
+                    && actualType instanceof PrimitiveTypeInfo) {
+                if (PrimitiveTypeInfo.getPrimitiveType((ClassTypeInfo) dummyType) == actualType) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
             if (!(actualType instanceof ClassTypeInfo)) {
                 return false;
             }
@@ -262,6 +272,16 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
             // 実引数の型がUnknownTypeInfoのときはどうしようもないのでOKにする
             if (actualType instanceof UnknownTypeInfo) {
                 return true;
+            }
+
+            // autoboxing, inboxingの可能性を考慮
+            if (actualType instanceof ClassTypeInfo
+                    && PrimitiveTypeInfo.isJavaWrapperType((ClassTypeInfo) actualType)) {
+                if (PrimitiveTypeInfo.getPrimitiveType((ClassTypeInfo) actualType) == dummyType) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
 
             // 実引数がプリミティブ型でない場合は呼び出し不可
@@ -395,7 +415,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
     public final List<TypeParameterInfo> getTypeParameters() {
         return Collections.unmodifiableList(this.typeParameters);
     }
-    
+
     /**
      * 引数で与えられた型パラメータがこのユニットで定義されたものであるかを返す
      * 
@@ -411,7 +431,7 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
 
         return false;
     }
-    
+
     @Override
     public TypeParameterizable getOuterTypeParameterizableUnit() {
         final ClassInfo ownerClass = this.getOwnerClass();
