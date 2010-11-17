@@ -3,12 +3,12 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -240,5 +240,5 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         return Collections.unmodifiableSet(fieldUsages);
     }
 
-    private static final Map<FieldInfo, Set<FieldUsageInfo>> USAGE_MAP = new HashMap<FieldInfo, Set<FieldUsageInfo>>();
+    private static final ConcurrentMap<FieldInfo, Set<FieldUsageInfo>> USAGE_MAP = new ConcurrentHashMap<FieldInfo, Set<FieldUsageInfo>>();
 }
