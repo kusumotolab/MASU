@@ -204,7 +204,8 @@ public class FieldUsageInfo extends VariableUsageInfo<FieldInfo> {
         if (USAGE_MAP.containsKey(usedField)) {
             USAGE_MAP.get(usedField).add(fieldUsage);
         } else {
-            final Set<FieldUsageInfo> usages = new HashSet<FieldUsageInfo>();
+            final Set<FieldUsageInfo> usages = Collections
+                    .synchronizedSet(new HashSet<FieldUsageInfo>());
             usages.add(fieldUsage);
             USAGE_MAP.put(usedField, usages);
         }
