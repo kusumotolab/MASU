@@ -3,10 +3,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -103,7 +103,8 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
         if (USAGE_MAP.containsKey(usedLocalVariable)) {
             USAGE_MAP.get(usedLocalVariable).add(localVariableUsage);
         } else {
-            final Set<LocalVariableUsageInfo> usages = new HashSet<LocalVariableUsageInfo>();
+            final Set<LocalVariableUsageInfo> usages = Collections
+                    .synchronizedSet(new HashSet<LocalVariableUsageInfo>());
             usages.add(localVariableUsage);
             USAGE_MAP.put(usedLocalVariable, usages);
         }
@@ -139,5 +140,5 @@ public final class LocalVariableUsageInfo extends VariableUsageInfo<LocalVariabl
         return Collections.unmodifiableSet(localVariableUsages);
     }
 
-    private static final Map<LocalVariableInfo, Set<LocalVariableUsageInfo>> USAGE_MAP = new HashMap<LocalVariableInfo, Set<LocalVariableUsageInfo>>();
+    private static final ConcurrentMap<LocalVariableInfo, Set<LocalVariableUsageInfo>> USAGE_MAP = new ConcurrentHashMap<LocalVariableInfo, Set<LocalVariableUsageInfo>>();
 }

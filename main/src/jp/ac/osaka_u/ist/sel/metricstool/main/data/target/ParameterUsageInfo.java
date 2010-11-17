@@ -3,10 +3,10 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 
@@ -103,7 +103,8 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
         if (USAGE_MAP.containsKey(usedParameter)) {
             USAGE_MAP.get(usedParameter).add(parameterUsage);
         } else {
-            final Set<ParameterUsageInfo> usages = new HashSet<ParameterUsageInfo>();
+            final Set<ParameterUsageInfo> usages = Collections
+                    .synchronizedSet(new HashSet<ParameterUsageInfo>());
             usages.add(parameterUsage);
             USAGE_MAP.put(usedParameter, usages);
         }
@@ -139,5 +140,5 @@ public final class ParameterUsageInfo extends VariableUsageInfo<ParameterInfo> {
         return Collections.unmodifiableSet(parameterUsages);
     }
 
-    private static final Map<ParameterInfo, Set<ParameterUsageInfo>> USAGE_MAP = new HashMap<ParameterInfo, Set<ParameterUsageInfo>>();
+    private static final ConcurrentMap<ParameterInfo, Set<ParameterUsageInfo>> USAGE_MAP = new ConcurrentHashMap<ParameterInfo, Set<ParameterUsageInfo>>();
 }
