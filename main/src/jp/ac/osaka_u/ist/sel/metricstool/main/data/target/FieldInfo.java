@@ -54,8 +54,8 @@ public abstract class FieldInfo extends VariableInfo<ClassInfo> implements Metri
         this.instance = instance;
 
         this.ownerClass = definitionClass;
-        this.referencers = new TreeSet<CallableUnitInfo>();
-        this.assignmenters = new TreeSet<CallableUnitInfo>();
+        this.referencers = Collections.synchronizedSortedSet(new TreeSet<CallableUnitInfo>());
+        this.assignmenters = Collections.synchronizedSortedSet(new TreeSet<CallableUnitInfo>());
     }
 
     /**
