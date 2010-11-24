@@ -109,12 +109,12 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
 
     /**
      * このローカルスペースの直内の文情報の SortedSet を返す．
-     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfoなど，SubsequentialBlockInfoを含む
+     * ElseBlockInfo, CatchBlockInfo, FinallyBlockInfoなど，SubsequentialBlockInfoは含まない
      * 
      * @return このローカルスペースの内のSubsequentialBlockを含む文情報の SortedSet
      */
     public SortedSet<StatementInfo> getStatements() {
-        return getStatementsWithSubsequencialBlocks();
+        return this.getStatementsWithoutSubsequencialBlocks();
     }
 
     /**
@@ -124,7 +124,30 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
      * @return このローカルスペースの内のSubsequentialBlockを含む文情報の SortedSet
      */
     public SortedSet<StatementInfo> getStatementsWithSubsequencialBlocks() {
-        return Collections.unmodifiableSortedSet(this.statements);
+        final SortedSet<StatementInfo> statements = new TreeSet<StatementInfo>();
+        for (final StatementInfo statement : this.statements) {
+
+            statements.add(statement);
+
+            if (statement instanceof IfBlockInfo) {
+                final IfBlockInfo ifBlock = (IfBlockInfo) statement;
+                if (ifBlock.hasElseBlock()) {
+                    statements.add(ifBlock.getSequentElseBlock());
+                }
+            }
+
+            else if (statement instanceof TryBlockInfo) {
+                final TryBlockInfo tryBlock = (TryBlockInfo) statement;
+                for (final CatchBlockInfo catchBlock : tryBlock.getSequentCatchBlocks()) {
+                    statements.add(catchBlock);
+                }
+                if (tryBlock.hasFinallyBlock()) {
+                    statements.add(tryBlock.getSequentFinallyBlock());
+                }
+            }
+        }
+
+        return statements;
     }
 
     /** 
@@ -135,13 +158,8 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
      */
     public SortedSet<StatementInfo> getStatementsWithoutSubsequencialBlocks() {
         final SortedSet<StatementInfo> statements = new TreeSet<StatementInfo>();
-        for (final StatementInfo statementInfo : this.statements) {
-            if (!(statementInfo instanceof SubsequentialBlockInfo<?>)) {
-                statements.add(statementInfo);
-            }
-        }
-
-        return Collections.unmodifiableSortedSet(statements);
+        statements.addAll(this.statements);
+        return statements;
     }
 
     /**
@@ -160,6 +178,7 @@ public abstract class LocalSpaceInfo extends UnitInfo implements HavingOuterUnit
      * @param localSpace ローカルスペース
      * @return 与えられたLocalSpace内に存在している全てのStatementInfoのSortedSet
      */
+    @Deprecated
     public static SortedSet<StatementInfo> getAllStatements(final LocalSpaceInfo localSpace) {
 
         if (null == localSpace) {
