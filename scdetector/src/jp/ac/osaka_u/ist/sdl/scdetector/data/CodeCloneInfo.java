@@ -12,6 +12,7 @@ import jp.ac.osaka_u.ist.sdl.scdetector.PDGMergedNode;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
@@ -19,16 +20,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalConstructorInf
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExternalMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LabelInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGFieldInNode;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGFieldOutNode;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGDataNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGMethodEnterNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGParameterOutNode;
 
 /**
  * コードクローンを表すクラス
@@ -77,13 +78,10 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 
 		// メソッドエンターノードは追加しない
 		if (node instanceof PDGMethodEnterNode) {
-
 		}
 
 		// データノード（パラメータやフィールドパッシングのための）は追加しない
-		else if (node instanceof PDGParameterOutNode
-				|| node instanceof PDGFieldInNode
-				|| node instanceof PDGFieldOutNode) {
+		else if (node instanceof PDGDataNode<?>) {
 		}
 
 		// 集約ノードのは，全てのコアを追加
@@ -306,12 +304,43 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 							.getConditionalClause().getCondition();
 					allElements.add(condition);
 
+					// for文だった場合
 					if (innerStatement instanceof ForBlockInfo) {
-						allElements.addAll(((ForBlockInfo) innerStatement)
+
+						final ForBlockInfo innerForBlock = (ForBlockInfo) innerStatement;
+						allElements.addAll(innerForBlock
 								.getInitializerExpressions());
-						allElements.addAll(((ForBlockInfo) innerStatement)
+						allElements.addAll(innerForBlock
 								.getIteratorExpressions());
 					}
+
+					// if文だった場合
+					else if (innerStatement instanceof IfBlockInfo) {
+
+						final IfBlockInfo innerIfBlock = (IfBlockInfo) innerStatement;
+						if (innerIfBlock.hasElseBlock()) {
+							allElements
+									.addAll(getAllExecutableElements(innerIfBlock
+											.getSequentElseBlock()));
+						}
+					}
+
+					else if (innerStatement instanceof TryBlockInfo) {
+
+						final TryBlockInfo innerTryBlock = (TryBlockInfo) innerStatement;
+						for (final CatchBlockInfo catchBlock : innerTryBlock
+								.getSequentCatchBlocks()) {
+							allElements
+									.addAll(getAllExecutableElements(catchBlock));
+						}
+
+						if (innerTryBlock.hasFinallyBlock()) {
+							allElements
+									.addAll(getAllExecutableElements(innerTryBlock
+											.getSequentFinallyBlock()));
+						}
+					}
+
 				}
 
 				allElements
