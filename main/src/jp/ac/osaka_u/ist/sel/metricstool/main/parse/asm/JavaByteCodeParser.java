@@ -134,8 +134,7 @@ public class JavaByteCodeParser implements ClassVisitor {
     @Override
     public void visitInnerClass(final String name, final String outerName, final String innerName,
             final int value) {
-        // TODO Auto-generated method stub
-
+        // 内部クラスを追加する処理が必要
     }
 
     @Override
