@@ -502,7 +502,13 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
         }
 
         assert false : "Here should not be reached!";
-        return null;
+        final ExternalMethodInfo unknownMethod = new ExternalMethodInfo(methodName);
+        final MethodCallInfo resolved = new MethodCallInfo(qualifierType, qualifierUsage,
+                unknownMethod, UnknownTypeInfo.getInstance(), usingMethod, fromLine, fromColumn,
+                toLine, toColumn);
+        resolved.addArguments(actualParameters);
+        resolved.addTypeArguments(typeArguments);
+        return resolved;
     }
 
     /**
