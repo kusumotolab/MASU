@@ -25,7 +25,7 @@ public class PDGControlDependenceEdge extends PDGEdge {
 			final Set<PDGEdge> edges) {
 		final SortedSet<PDGControlDependenceEdge> controlDependenceEdges = new TreeSet<PDGControlDependenceEdge>();
 		for (final PDGEdge edge : edges) {
-			if (edge instanceof PDGControlDependenceEdge) {
+			if (PDG_EDGE_TYPE.CONTROL == edge.type) {
 				controlDependenceEdges.add((PDGControlDependenceEdge) edge);
 			}
 		}
@@ -34,7 +34,7 @@ public class PDGControlDependenceEdge extends PDGEdge {
 
 	public PDGControlDependenceEdge(final PDGControlNode fromNode,
 			final PDGNode<?> toNode, final boolean trueDependence) {
-		super(fromNode, toNode);
+		super(PDG_EDGE_TYPE.CONTROL, fromNode, toNode);
 
 		this.trueDependence = trueDependence;
 

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.DISSOLUTION;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.DefaultCFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
@@ -139,7 +140,8 @@ public class InterProceduralPDG extends PDG {
 					this.pdgNodeFactory, this.cfgNodeFactory,
 					this.buildDataDependency, this.buildControlDependency,
 					this.buildExecutionDependency, this.countObjectStateChange,
-					this.optimize, true, this.dataDependencyDistance,
+					this.optimize, DISSOLUTION.TRUE,
+					this.dataDependencyDistance,
 					this.controlDependencyDistance,
 					this.executionDependencyDistance);
 			this.unitToPDGMap.put(method, pdg);

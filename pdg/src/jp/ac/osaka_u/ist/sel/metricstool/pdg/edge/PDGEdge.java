@@ -8,11 +8,15 @@ public abstract class PDGEdge implements Comparable<PDGEdge> {
 
 	private final PDGNode<?> toNode;
 
-	public PDGEdge(PDGNode<?> fromNode, final PDGNode<?> toNode) {
+	public final PDG_EDGE_TYPE type;
+
+	public PDGEdge(final PDG_EDGE_TYPE type, final PDGNode<?> fromNode,
+			final PDGNode<?> toNode) {
 		if (null == fromNode || null == toNode) {
 			throw new IllegalArgumentException();
 		}
 
+		this.type = type;
 		this.fromNode = fromNode;
 		this.toNode = toNode;
 	}

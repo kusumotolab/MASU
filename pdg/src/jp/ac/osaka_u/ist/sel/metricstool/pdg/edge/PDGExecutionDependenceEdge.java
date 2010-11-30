@@ -24,7 +24,7 @@ public class PDGExecutionDependenceEdge extends PDGEdge {
 			final Set<PDGEdge> edges) {
 		final SortedSet<PDGExecutionDependenceEdge> executionDependenceEdges = new TreeSet<PDGExecutionDependenceEdge>();
 		for (final PDGEdge edge : edges) {
-			if (edge instanceof PDGExecutionDependenceEdge) {
+			if (PDG_EDGE_TYPE.EXECUTION == edge.type) {
 				executionDependenceEdges.add((PDGExecutionDependenceEdge) edge);
 			}
 		}
@@ -33,7 +33,7 @@ public class PDGExecutionDependenceEdge extends PDGEdge {
 
 	public PDGExecutionDependenceEdge(final PDGNode<?> fromNode,
 			final PDGNode<?> toNode) {
-		super(fromNode, toNode);
+		super(PDG_EDGE_TYPE.EXECUTION, fromNode, toNode);
 	}
 
 	@Override

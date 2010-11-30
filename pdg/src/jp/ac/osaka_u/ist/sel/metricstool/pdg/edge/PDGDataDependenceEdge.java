@@ -25,7 +25,7 @@ public class PDGDataDependenceEdge extends PDGEdge {
 			final Set<PDGEdge> edges) {
 		final SortedSet<PDGDataDependenceEdge> dataDependenceEdges = new TreeSet<PDGDataDependenceEdge>();
 		for (final PDGEdge edge : edges) {
-			if (edge instanceof PDGDataDependenceEdge) {
+			if (PDG_EDGE_TYPE.DATA == edge.type) {
 				dataDependenceEdges.add((PDGDataDependenceEdge) edge);
 			}
 		}
@@ -34,7 +34,7 @@ public class PDGDataDependenceEdge extends PDGEdge {
 
 	public PDGDataDependenceEdge(final PDGNode<?> fromNode,
 			final PDGNode<?> toNode, final VariableInfo<?> data) {
-		super(fromNode, toNode);
+		super(PDG_EDGE_TYPE.DATA, fromNode, toNode);
 
 		this.data = data;
 	}
