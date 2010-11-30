@@ -76,7 +76,7 @@ public class IntraProceduralCFG extends CFG {
 	 */
 	public IntraProceduralCFG(final CallableUnitInfo unit,
 			final ICFGNodeFactory nodeFactory) {
-		this(unit, nodeFactory, true, false);
+		this(unit, nodeFactory, true, DISSOLUTION.FALSE);
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class IntraProceduralCFG extends CFG {
 	 */
 	public IntraProceduralCFG(final CallableUnitInfo unit,
 			final ICFGNodeFactory nodeFactory, final boolean optimize,
-			final boolean dissolve) {
+			final DISSOLUTION dissolve) {
 
 		super(nodeFactory);
 
@@ -116,7 +116,7 @@ public class IntraProceduralCFG extends CFG {
 			this.optimizeCFG();
 		}
 
-		if (dissolve) {
+		if (dissolve == DISSOLUTION.TRUE) {
 			this.dissolveCFG();
 		}
 	}
