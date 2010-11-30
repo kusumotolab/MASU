@@ -1,7 +1,6 @@
 package jp.ac.osaka_u.ist.sdl.scdetector.data;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -39,13 +38,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
  */
 public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 
-	final private SortedSet<ExecutableElementInfo> elements;
+	final private SortedSet<ExecutableElementInfo> allElements;
+	final private SortedSet<ExecutableElementInfo> realElements;
 
 	/**
 	 * コンストラクタ
 	 */
 	public CodeCloneInfo() {
-		this.elements = new TreeSet<ExecutableElementInfo>();
+		this.allElements = new TreeSet<ExecutableElementInfo>();
+		this.realElements = new TreeSet<ExecutableElementInfo>();
 	}
 
 	/**
@@ -62,7 +63,7 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	/**
 	 * コンストラクタ
 	 * 
-	 * @param elements
+	 * @param allElements
 	 *            初期要素群
 	 */
 	public CodeCloneInfo(final Collection<PDGNode<?>> nodes) {
@@ -71,7 +72,8 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	}
 
 	public void addElements(final CodeCloneInfo codeclone) {
-		this.elements.addAll(codeclone.getElements());
+		this.allElements.addAll(codeclone.getAllElements());
+		this.realElements.addAll(codeclone.getRealElements());
 	}
 
 	public void add(final PDGNode<?> node) {
@@ -87,12 +89,14 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 		// 集約ノードのは，全てのコアを追加
 		else if (node instanceof PDGMergedNode) {
 			final PDGMergedNode mergedNode = (PDGMergedNode) node;
-			this.elements.addAll(mergedNode.getCores());
+			for (final ExecutableElementInfo element : mergedNode.getCores()) {
+				this.add(element);
+			}
 		}
 
 		// それ以外の時はコアを追加
 		else {
-			this.elements.add(node.getCore());
+			this.add(node.getCore());
 		}
 	}
 
@@ -100,6 +104,19 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 		for (final PDGNode<?> node : nodes) {
 			this.add(node);
 		}
+	}
+
+	private void add(final ExecutableElementInfo element) {
+
+		if (null == element) {
+			return;
+		}
+
+		if (element.getFromLine() != element.getToLine()
+				|| element.getFromColumn() != element.getToColumn()) {
+			this.realElements.add(element);
+		}
+		this.allElements.add(element);
 	}
 
 	/**
@@ -110,11 +127,11 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 * @return　含まれる場合はtrue,　そうでない場合はfalse
 	 */
 	public boolean contain(final ExecutableElementInfo element) {
-		return this.elements.contains(element);
+		return this.allElements.contains(element);
 	}
 
 	public FileInfo getOwnerFile() {
-		return ((TargetClassInfo) this.elements.first().getOwnerMethod()
+		return ((TargetClassInfo) this.realElements.first().getOwnerMethod()
 				.getOwnerClass()).getOwnerFile();
 	}
 
@@ -124,7 +141,7 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 * @return　コードクローンの長さ
 	 */
 	public int length() {
-		return this.elements.size();
+		return this.getRealElements().size();
 	}
 
 	/**
@@ -135,8 +152,9 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 * @return 包含される場合はtrue, そうでない場合はfalse
 	 */
 	public boolean subsumedBy(final CodeCloneInfo codeclone) {
-		return codeclone.getElements().containsAll(this.getElements())
-				&& (this.elements.size() < codeclone.getElements().size());
+		return codeclone.getRealElements().containsAll(this.getRealElements())
+				&& !this.getRealElements().containsAll(
+						codeclone.getRealElements());
 	}
 
 	@Override
@@ -151,8 +169,8 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 		}
 
 		final CodeCloneInfo target = (CodeCloneInfo) o;
-		return this.getElements().containsAll(target.getElements())
-				&& target.getElements().containsAll(this.getElements());
+		return this.getRealElements().containsAll(target.getRealElements())
+				&& target.getRealElements().containsAll(this.getRealElements());
 	}
 
 	/**
@@ -160,8 +178,21 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 * 
 	 * @return　コードクローンを構成する要素群
 	 */
+	@Deprecated
 	public SortedSet<ExecutableElementInfo> getElements() {
-		return Collections.unmodifiableSortedSet(this.elements);
+		return this.getRealElements();
+	}
+
+	public SortedSet<ExecutableElementInfo> getAllElements() {
+		final SortedSet<ExecutableElementInfo> elements = new TreeSet<ExecutableElementInfo>();
+		elements.addAll(this.allElements);
+		return elements;
+	}
+
+	public SortedSet<ExecutableElementInfo> getRealElements() {
+		final SortedSet<ExecutableElementInfo> elements = new TreeSet<ExecutableElementInfo>();
+		elements.addAll(this.realElements);
+		return elements;
 	}
 
 	/**

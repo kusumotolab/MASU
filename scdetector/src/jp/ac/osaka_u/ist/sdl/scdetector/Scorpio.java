@@ -39,6 +39,7 @@ import jp.ac.osaka_u.ist.sdl.scdetector.settings.SLICE_TYPE;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.SMALL_METHOD;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.VARIABLE_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.VERBOSE;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.DISSOLUTION;
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
@@ -399,9 +400,11 @@ public class Scorpio extends MetricsTool {
 			if (cmd.hasOption("f")) {
 				final String dissolve = cmd.getOptionValue("f");
 				if (dissolve.equalsIgnoreCase("yes")) {
-					Configuration.INSTANCE.setF(DISSOLVE.TRUE);
+					Configuration.INSTANCE.setF(DISSOLUTION.TRUE);
+				} else if (dissolve.equalsIgnoreCase("partly")) {
+					Configuration.INSTANCE.setF(DISSOLUTION.PARTLY);
 				} else if (dissolve.equalsIgnoreCase("no")) {
-					Configuration.INSTANCE.setF(DISSOLVE.FALSE);
+					Configuration.INSTANCE.setF(DISSOLUTION.FALSE);
 				} else {
 					System.err.println("Unknown option : " + dissolve);
 					System.err
@@ -430,7 +433,7 @@ public class Scorpio extends MetricsTool {
 					Configuration.INSTANCE.setP(PDG_TYPE.INTRA);
 				} else if (pdg.equalsIgnoreCase("inter")) {
 					Configuration.INSTANCE.setP(PDG_TYPE.INTER);
-					Configuration.INSTANCE.setF(DISSOLVE.TRUE); // Interのときは強制的に細粒度PDG
+					Configuration.INSTANCE.setF(DISSOLUTION.TRUE); // Interのときは強制的に細粒度PDG
 				} else {
 					System.err.println("Unknown option : " + pdg);
 					System.err
@@ -628,7 +631,8 @@ public class Scorpio extends MetricsTool {
 				System.exit(0);
 			}
 
-			if (Configuration.INSTANCE.getF().isDissolve()
+			if ((Configuration.INSTANCE.getF() == DISSOLUTION.TRUE || Configuration.INSTANCE
+					.getF() == DISSOLUTION.PARTLY)
 					&& Configuration.INSTANCE.getE().isMerge()) {
 				System.err
 						.println("-f and -e options cannot be set as \"yes\" at the same time.");
@@ -705,7 +709,7 @@ public class Scorpio extends MetricsTool {
 				DEPENDENCY_TYPE.CONTROL);
 		final boolean execution = Configuration.INSTANCE.getQ().contains(
 				DEPENDENCY_TYPE.EXECUTION);
-		final boolean dissolve = Configuration.INSTANCE.getF().isDissolve();
+		final DISSOLUTION dissolve = Configuration.INSTANCE.getF();
 		final int dataDistance = Configuration.INSTANCE.getX();
 		final int controlDistance = Configuration.INSTANCE.getY();
 		final int executionDistance = Configuration.INSTANCE.getZ();
@@ -758,7 +762,7 @@ public class Scorpio extends MetricsTool {
 	private static <T extends CallableUnitInfo> void buildPDGs(
 			final T[] methods, final IPDGNodeFactory pdgNodeFactory,
 			final boolean data, final boolean control, final boolean execution,
-			final boolean dissolve, final int dataDistance,
+			final DISSOLUTION dissolve, final int dataDistance,
 			final int controlDistance, final int executionDistance) {
 
 		final AtomicInteger index = new AtomicInteger(0);
@@ -798,7 +802,8 @@ public class Scorpio extends MetricsTool {
 			}
 
 			// 細粒度の時はControlノードは登録しない
-			if (Configuration.INSTANCE.getF().isDissolve()) {
+			if (Configuration.INSTANCE.getF() == DISSOLUTION.TRUE
+					|| Configuration.INSTANCE.getF() == DISSOLUTION.PARTLY) {
 				if (pdgNode instanceof PDGControlNode) {
 					continue ALLNODE;
 				}

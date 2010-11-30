@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.DISSOLUTION;
+
 public final class Configuration {
 
 	public static Configuration INSTANCE = new Configuration();
@@ -14,7 +16,7 @@ public final class Configuration {
 		this.l = null;
 		this.m = SMALL_METHOD.UNHASHED;
 		this.e = MERGE.FALSE;
-		this.f = DISSOLVE.FALSE;
+		this.f = DISSOLUTION.FALSE;
 		this.o = null;
 		this.p = PDG_TYPE.INTRA;
 		this.q = new HashSet<DEPENDENCY_TYPE>();
@@ -63,11 +65,11 @@ public final class Configuration {
 		this.e = e;
 	}
 
-	public DISSOLVE getF() {
+	public DISSOLUTION getF() {
 		return this.f;
 	}
 
-	public void setF(final DISSOLVE f) {
+	public void setF(final DISSOLUTION f) {
 		this.f = f;
 	}
 
@@ -249,7 +251,7 @@ public final class Configuration {
 	/**
 	 * 文や式を細粒度まで分解するかどうかを指定するためのオプション
 	 */
-	private DISSOLVE f;
+	private DISSOLUTION f;
 
 	/**
 	 * 解析対象プログラミング言語を指定するためのオプション

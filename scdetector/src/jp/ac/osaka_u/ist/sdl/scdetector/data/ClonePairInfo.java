@@ -97,7 +97,7 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 
 		final ClonePairInfo clonePair = new ClonePairInfo();
 		final CodeCloneInfo cloneA = this.codecloneA;
-		final CodeCloneInfo cloneB = this.codecloneB;
+		final CodeCloneInfo cloneB = this.codecloneB;		
 		clonePair.codecloneA.addElements(cloneA);
 		clonePair.codecloneB.addElements(cloneB);
 
