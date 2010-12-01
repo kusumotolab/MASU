@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFG;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.DISSOLUTION;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.IntraProceduralCFG;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.edge.CFGEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGControlNode;
@@ -205,13 +206,15 @@ public class GraphViewer extends MetricsTool {
 				}
 			}
 
-			boolean dissolve = false;
+			DISSOLUTION dissolve = DISSOLUTION.FALSE;
 			if (cmd.hasOption("a")) {
 				final String text = cmd.getOptionValue("a");
 				if (text.equals("yes")) {
-					dissolve = true;
+					dissolve = DISSOLUTION.TRUE;
+				} else if (text.equals("partly")) {
+					dissolve = DISSOLUTION.PARTLY;
 				} else if (text.equals("no")) {
-					dissolve = false;
+					dissolve = DISSOLUTION.FALSE;
 				}
 			}
 
@@ -330,7 +333,8 @@ public class GraphViewer extends MetricsTool {
 
 	static private void writeMethodCFG(final CallableUnitInfo unit,
 			final int createdGraphNumber, final BufferedWriter writer,
-			final boolean optimize, final boolean dissolve) throws IOException {
+			final boolean optimize, final DISSOLUTION dissolve)
+			throws IOException {
 
 		final IntraProceduralCFG cfg = new IntraProceduralCFG(unit,
 				new DefaultCFGNodeFactory(), optimize, dissolve);
