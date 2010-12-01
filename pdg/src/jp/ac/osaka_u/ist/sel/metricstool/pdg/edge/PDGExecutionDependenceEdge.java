@@ -20,7 +20,7 @@ public class PDGExecutionDependenceEdge extends PDGEdge {
 	 * @param edges
 	 * @return
 	 */
-	public static SortedSet<PDGExecutionDependenceEdge> getExecutionDependenceEdge(
+	public static SortedSet<PDGExecutionDependenceEdge> extractExecutionDependenceEdge(
 			final Set<PDGEdge> edges) {
 		final SortedSet<PDGExecutionDependenceEdge> executionDependenceEdges = new TreeSet<PDGExecutionDependenceEdge>();
 		for (final PDGEdge edge : edges) {

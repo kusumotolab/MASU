@@ -21,7 +21,7 @@ public class PDGDataDependenceEdge extends PDGEdge {
 	 * @param edges
 	 * @return
 	 */
-	public static SortedSet<PDGDataDependenceEdge> getDataDependenceEdge(
+	public static SortedSet<PDGDataDependenceEdge> extractDataDependenceEdge(
 			final Set<PDGEdge> edges) {
 		final SortedSet<PDGDataDependenceEdge> dataDependenceEdges = new TreeSet<PDGDataDependenceEdge>();
 		for (final PDGEdge edge : edges) {

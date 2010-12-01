@@ -21,7 +21,7 @@ public class PDGControlDependenceEdge extends PDGEdge {
 	 * @param edges
 	 * @return
 	 */
-	public static SortedSet<PDGControlDependenceEdge> getControlDependenceEdge(
+	public static SortedSet<PDGControlDependenceEdge> extractControlDependenceEdge(
 			final Set<PDGEdge> edges) {
 		final SortedSet<PDGControlDependenceEdge> controlDependenceEdges = new TreeSet<PDGControlDependenceEdge>();
 		for (final PDGEdge edge : edges) {
