@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sdl.scdetector.data;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -141,7 +142,7 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 * @return　コードクローンの長さ
 	 */
 	public int length() {
-		return this.getRealElements().size();
+		return this.realElements.size();
 	}
 
 	/**
@@ -184,15 +185,19 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	}
 
 	public SortedSet<ExecutableElementInfo> getAllElements() {
-		final SortedSet<ExecutableElementInfo> elements = new TreeSet<ExecutableElementInfo>();
-		elements.addAll(this.allElements);
-		return elements;
+		// final SortedSet<ExecutableElementInfo> elements = new
+		// TreeSet<ExecutableElementInfo>();
+		// elements.addAll(this.allElements);
+		// return elements;
+		return Collections.unmodifiableSortedSet(this.allElements);
 	}
 
 	public SortedSet<ExecutableElementInfo> getRealElements() {
-		final SortedSet<ExecutableElementInfo> elements = new TreeSet<ExecutableElementInfo>();
-		elements.addAll(this.realElements);
-		return elements;
+		// final SortedSet<ExecutableElementInfo> elements = new
+		// TreeSet<ExecutableElementInfo>();
+		// elements.addAll(this.realElements);
+		// return elements;
+		return Collections.unmodifiableSortedSet(this.realElements);
 	}
 
 	/**

@@ -114,7 +114,7 @@ public class Scorpio extends MetricsTool {
 
 		// ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
 		out.println("detecting code clones from PDGs ... ");
-		final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonepairGroups = detectClonePairs(equivalenceGroups);
+		final Collection<SortedSet<ClonePairInfo>> clonepairGroups = detectClonePairs(equivalenceGroups);
 
 		// 他のクローンに完全に含まれているクローンを取り除く
 		out.println("filtering out unnecessary clone pairs ...");
@@ -899,7 +899,7 @@ public class Scorpio extends MetricsTool {
 		}
 	}
 
-	private static Map<TwoClassHash, SortedSet<ClonePairInfo>> detectClonePairs(
+	private static Collection<SortedSet<ClonePairInfo>> detectClonePairs(
 			final SortedMap<Integer, List<PDGNode<?>>> equivalenceGroups) {
 
 		final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonepairs = new HashMap<TwoClassHash, SortedSet<ClonePairInfo>>();
@@ -923,16 +923,16 @@ public class Scorpio extends MetricsTool {
 			}
 		}
 
-		return clonepairs;
+		return clonepairs.values();
 	}
 
 	private static SortedSet<ClonePairInfo> refineClonePairs(
-			final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonepairGroups) {
+			final Collection<SortedSet<ClonePairInfo>> clonepairGroups) {
 
 		final SortedSet<ClonePairInfo> clonepairs = Collections
 				.synchronizedSortedSet(new TreeSet<ClonePairInfo>());
 		final List<Thread> threads = new LinkedList<Thread>();
-		for (final SortedSet<ClonePairInfo> pairs : clonepairGroups.values()) {
+		for (final SortedSet<ClonePairInfo> pairs : clonepairGroups) {
 
 			final Thread thread = new Thread(new CloneFilteringThread(pairs,
 					clonepairs));
