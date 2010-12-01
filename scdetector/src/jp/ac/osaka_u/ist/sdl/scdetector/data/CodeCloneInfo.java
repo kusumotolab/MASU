@@ -170,8 +170,19 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 		}
 
 		final CodeCloneInfo target = (CodeCloneInfo) o;
-		return this.getRealElements().containsAll(target.getRealElements())
-				&& target.getRealElements().containsAll(this.getRealElements());
+		if (target.length() != this.length()) {
+			return false;
+		}
+
+		if (!this.getRealElements().containsAll(target.getRealElements())) {
+			return false;
+		}
+
+		if (target.getRealElements().containsAll(this.getRealElements())) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

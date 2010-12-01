@@ -58,17 +58,17 @@ public class ProgramSlicing extends Slicing {
 		final SortedSet<PDGEdge> forwardEdgesB = nodeB.getForwardEdges();
 
 		final SortedSet<PDGExecutionDependenceEdge> backwardExecutionEdgesA = PDGExecutionDependenceEdge
-				.getExecutionDependenceEdge(backwardEdgesA);
+				.extractExecutionDependenceEdge(backwardEdgesA);
 		final SortedSet<PDGDataDependenceEdge> backwardDataEdgesA = PDGDataDependenceEdge
-				.getDataDependenceEdge(backwardEdgesA);
+				.extractDataDependenceEdge(backwardEdgesA);
 		final SortedSet<PDGControlDependenceEdge> backwardControlEdgesA = PDGControlDependenceEdge
-				.getControlDependenceEdge(backwardEdgesA);
+				.extractControlDependenceEdge(backwardEdgesA);
 		final SortedSet<PDGExecutionDependenceEdge> backwardExecutionEdgesB = PDGExecutionDependenceEdge
-				.getExecutionDependenceEdge(backwardEdgesB);
+				.extractExecutionDependenceEdge(backwardEdgesB);
 		final SortedSet<PDGDataDependenceEdge> backwardDataEdgesB = PDGDataDependenceEdge
-				.getDataDependenceEdge(backwardEdgesB);
+				.extractDataDependenceEdge(backwardEdgesB);
 		final SortedSet<PDGControlDependenceEdge> backwardControlEdgesB = PDGControlDependenceEdge
-				.getControlDependenceEdge(backwardEdgesB);
+				.extractControlDependenceEdge(backwardEdgesB);
 
 		final SortedSet<PDGNode<?>> backwardExecutionNodesA = this
 				.getFromNodes(backwardExecutionEdgesA);
@@ -84,17 +84,17 @@ public class ProgramSlicing extends Slicing {
 				.getFromNodes(backwardControlEdgesB);
 
 		final SortedSet<PDGExecutionDependenceEdge> forwardExecutionEdgesA = PDGExecutionDependenceEdge
-				.getExecutionDependenceEdge(forwardEdgesA);
+				.extractExecutionDependenceEdge(forwardEdgesA);
 		final SortedSet<PDGDataDependenceEdge> forwardDataEdgesA = PDGDataDependenceEdge
-				.getDataDependenceEdge(forwardEdgesA);
+				.extractDataDependenceEdge(forwardEdgesA);
 		final SortedSet<PDGControlDependenceEdge> forwardControlEdgesA = PDGControlDependenceEdge
-				.getControlDependenceEdge(forwardEdgesA);
+				.extractControlDependenceEdge(forwardEdgesA);
 		final SortedSet<PDGExecutionDependenceEdge> forwardExecutionEdgesB = PDGExecutionDependenceEdge
-				.getExecutionDependenceEdge(forwardEdgesB);
+				.extractExecutionDependenceEdge(forwardEdgesB);
 		final SortedSet<PDGDataDependenceEdge> forwardDataEdgesB = PDGDataDependenceEdge
-				.getDataDependenceEdge(forwardEdgesB);
+				.extractDataDependenceEdge(forwardEdgesB);
 		final SortedSet<PDGControlDependenceEdge> forwardControlEdgesB = PDGControlDependenceEdge
-				.getControlDependenceEdge(forwardEdgesB);
+				.extractControlDependenceEdge(forwardEdgesB);
 
 		final SortedSet<PDGNode<?>> forwardExecutionNodesA = this
 				.getToNodes(forwardExecutionEdgesA);

@@ -1,16 +1,16 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.NodePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 class SlicingThread implements Runnable {
@@ -19,21 +19,20 @@ class SlicingThread implements Runnable {
 
 	private final AtomicInteger index;
 
-	private final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs;
+	private final ConcurrentMap<ExecutableElementInfo, Set<ClonePairInfo>> clonepairs;
 
-	SlicingThread(final List<NodePairInfo> nodepairs,
+	SlicingThread(
+			final List<NodePairInfo> nodepairs,
 			final AtomicInteger index,
-			final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs) {
+			final ConcurrentMap<ExecutableElementInfo, Set<ClonePairInfo>> clonepairs) {
 
 		this.nodepairs = nodepairs;
 		this.index = index;
-		this.clonePairs = clonePairs;
+		this.clonepairs = clonepairs;
 	}
 
 	@Override
 	public void run() {
-
-		final Set<ClonePairInfo> pairs = new HashSet<ClonePairInfo>();
 
 		while (true) {
 
@@ -62,27 +61,33 @@ class SlicingThread implements Runnable {
 
 			if (Configuration.INSTANCE.getS() <= Math.min(clonepair.codecloneA
 					.length(), clonepair.codecloneB.length())) {
-				pairs.add(clonepair);
+				this.addClonepair(clonepair);
 			}
 
 			increaseNumberOfPairs();
 		}
-
-		addClonePairs(this.clonePairs, pairs);
 	}
 
-	synchronized static void addClonePairs(
-			Map<TwoClassHash, SortedSet<ClonePairInfo>> clonePairs,
-			Set<ClonePairInfo> detectedPairs) {
+	private void addClonepair(final ClonePairInfo clonepair) {
 
-		for (final ClonePairInfo detectedPair : detectedPairs) {
-			SortedSet<ClonePairInfo> pairs = clonePairs.get(new TwoClassHash(
-					detectedPair));
-			if (null == pairs) {
-				pairs = new TreeSet<ClonePairInfo>();
-				clonePairs.put(new TwoClassHash(detectedPair), pairs);
+		for (final ExecutableElementInfo element : clonepair.codecloneA
+				.getRealElements()) {
+			Set<ClonePairInfo> set = this.clonepairs.get(element);
+			if (null == set) {
+				set = Collections.synchronizedSet(new HashSet<ClonePairInfo>());
+				this.clonepairs.put(element, set);
 			}
-			pairs.add(detectedPair);
+			set.add(clonepair);
+		}
+
+		for (final ExecutableElementInfo element : clonepair.codecloneB
+				.getRealElements()) {
+			Set<ClonePairInfo> set = this.clonepairs.get(element);
+			if (null == set) {
+				set = Collections.synchronizedSet(new HashSet<ClonePairInfo>());
+				this.clonepairs.put(element, set);
+			}
+			set.add(clonepair);
 		}
 	}
 

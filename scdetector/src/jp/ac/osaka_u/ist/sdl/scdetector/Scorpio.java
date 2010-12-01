@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +15,8 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
@@ -114,11 +115,11 @@ public class Scorpio extends MetricsTool {
 
 		// ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
 		out.println("detecting code clones from PDGs ... ");
-		final Collection<SortedSet<ClonePairInfo>> clonepairGroups = detectClonePairs(equivalenceGroups);
+		final ConcurrentMap<ExecutableElementInfo, Set<ClonePairInfo>> clonepairs = detectClonePairs(equivalenceGroups);
 
 		// 他のクローンに完全に含まれているクローンを取り除く
 		out.println("filtering out unnecessary clone pairs ...");
-		final SortedSet<ClonePairInfo> refinedClonePairs = refineClonePairs(clonepairGroups);
+		final Set<ClonePairInfo> refinedClonePairs = refineClonePairs(clonepairs);
 
 		// クローンペアからクローンセットに変換
 		out.println("converting clone pairs to clone sets ...");
@@ -886,23 +887,23 @@ public class Scorpio extends MetricsTool {
 			text.append("the number of dependency is ");
 			text.append(edges.size());
 			text.append(" (data:");
-			text.append(PDGDataDependenceEdge.getDataDependenceEdge(edges)
+			text.append(PDGDataDependenceEdge.extractDataDependenceEdge(edges)
 					.size());
 			text.append(", control:");
 			text.append(PDGControlDependenceEdge
-					.getControlDependenceEdge(edges).size());
+					.extractControlDependenceEdge(edges).size());
 			text.append(", execution:");
-			text.append(PDGExecutionDependenceEdge.getExecutionDependenceEdge(
+			text.append(PDGExecutionDependenceEdge.extractExecutionDependenceEdge(
 					edges).size());
 			text.append(").");
 			out.println(text.toString());
 		}
 	}
 
-	private static Collection<SortedSet<ClonePairInfo>> detectClonePairs(
+	private static ConcurrentMap<ExecutableElementInfo, Set<ClonePairInfo>> detectClonePairs(
 			final SortedMap<Integer, List<PDGNode<?>>> equivalenceGroups) {
 
-		final Map<TwoClassHash, SortedSet<ClonePairInfo>> clonepairs = new HashMap<TwoClassHash, SortedSet<ClonePairInfo>>();
+		final ConcurrentMap<ExecutableElementInfo, Set<ClonePairInfo>> clonepairs = new ConcurrentHashMap<ExecutableElementInfo, Set<ClonePairInfo>>();
 		final Thread[] threads = new Thread[Configuration.INSTANCE.getW()];
 		final List<NodePairInfo> nodepairs = makeNodePairs(equivalenceGroups
 				.values());
@@ -923,25 +924,32 @@ public class Scorpio extends MetricsTool {
 			}
 		}
 
-		return clonepairs.values();
+		return clonepairs;
 	}
 
-	private static SortedSet<ClonePairInfo> refineClonePairs(
-			final Collection<SortedSet<ClonePairInfo>> clonepairGroups) {
+	private static Set<ClonePairInfo> refineClonePairs(
+			final ConcurrentMap<ExecutableElementInfo, Set<ClonePairInfo>> clonepairs) {
 
-		final SortedSet<ClonePairInfo> clonepairs = Collections
-				.synchronizedSortedSet(new TreeSet<ClonePairInfo>());
-		final List<Thread> threads = new LinkedList<Thread>();
-		for (final SortedSet<ClonePairInfo> pairs : clonepairGroups) {
+		// フィルタリング後のクローンを入れる変数
+		final Set<ClonePairInfo> refined = Collections
+				.synchronizedSet(new HashSet<ClonePairInfo>());
 
-			final Thread thread = new Thread(new CloneFilteringThread(pairs,
-					clonepairs));
-			threads.add(thread);
-			thread.start();
-
-			while (Configuration.INSTANCE.getW() < Thread.activeCount())
-				;
+		// フィルタリングに用いるための変数，クローンペアの集合と配列である
+		final Set<ClonePairInfo> set = new HashSet<ClonePairInfo>();
+		for (final Set<ClonePairInfo> pairs : clonepairs.values()) {
+			set.addAll(pairs);
 		}
+		final ClonePairInfo[] array = set.toArray(new ClonePairInfo[0]);
+
+		// フィルタリング処理はマルチスレッドで行う
+		final Thread[] threads = new Thread[Configuration.INSTANCE.getW()];
+		final AtomicInteger index = new AtomicInteger(0);
+		for (int i = 0; i < threads.length; i++) {
+			threads[i] = new Thread(new CloneFilteringThread(array, set,
+					clonepairs, index, refined));
+			threads[i].start();
+		}
+
 		// 全てのスレッドが終わるのを待つ
 		for (final Thread thread : threads) {
 			try {
@@ -951,11 +959,11 @@ public class Scorpio extends MetricsTool {
 			}
 		}
 
-		return clonepairs;
+		return refined;
 	}
 
 	private static SortedSet<CloneSetInfo> convert(
-			final SortedSet<ClonePairInfo> clonepairs) {
+			final Set<ClonePairInfo> clonepairs) {
 
 		final Map<CodeCloneInfo, CloneSetInfo> cloneSetBag = new HashMap<CodeCloneInfo, CloneSetInfo>();
 

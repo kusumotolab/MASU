@@ -36,7 +36,7 @@ public class PDGMergedNode extends PDGNormalNode<CFGNormalNode<?>> {
             // 制御ノードの次がノーマルノードであれば圧縮可能かどうかを調べる
             if (node instanceof PDGControlNode) {
                 for (final PDGEdge edge : PDGExecutionDependenceEdge
-                        .getExecutionDependenceEdge(node.getForwardEdges())) {
+                        .extractExecutionDependenceEdge(node.getForwardEdges())) {
                     final PDGNode<?> toNode = edge.getToNode();
                     if (toNode instanceof PDGNormalNode<?>) {
                         findMergedNodes(pdg, (PDGNormalNode<?>) toNode, pdgNodeFactory);
@@ -58,7 +58,7 @@ public class PDGMergedNode extends PDGNormalNode<CFGNormalNode<?>> {
         final PDGMergedNode mergedNode = new PDGMergedNode(node);
 
         final SortedSet<PDGExecutionDependenceEdge> toEdges = PDGExecutionDependenceEdge
-                .getExecutionDependenceEdge(node.getForwardEdges());
+                .extractExecutionDependenceEdge(node.getForwardEdges());
         if (toEdges.isEmpty()) {
             return;
         }
@@ -72,7 +72,7 @@ public class PDGMergedNode extends PDGNormalNode<CFGNormalNode<?>> {
         while (hash == toHash) {
             mergedNode.addNode((PDGNormalNode<?>) toNode);
             final SortedSet<PDGExecutionDependenceEdge> forwardEdges = PDGExecutionDependenceEdge
-                    .getExecutionDependenceEdge(toNode.getForwardEdges());
+                    .extractExecutionDependenceEdge(toNode.getForwardEdges());
             if (forwardEdges.isEmpty()) {
                 insertMergedNode(pdg, mergedNode, pdgNodeFactory);
                 return;
@@ -112,7 +112,7 @@ public class PDGMergedNode extends PDGNormalNode<CFGNormalNode<?>> {
 
                 // オリジナルノードを削除
                 for (final PDGEdge previousEdge : PDGExecutionDependenceEdge
-                        .getExecutionDependenceEdge(previousNode.getForwardEdges())) {
+                        .extractExecutionDependenceEdge(previousNode.getForwardEdges())) {
                     if (previousEdge.getToNode().equals(startNode)) {
                         previousNode.removeForwardEdge(previousEdge);
                     }
@@ -139,7 +139,7 @@ public class PDGMergedNode extends PDGNormalNode<CFGNormalNode<?>> {
 
                 // オリジナルノードを削除
                 for (final PDGEdge postiousEdge : PDGExecutionDependenceEdge
-                        .getExecutionDependenceEdge(postiousNode.getBackwardEdges())) {
+                        .extractExecutionDependenceEdge(postiousNode.getBackwardEdges())) {
                     if (postiousEdge.getFromNode().equals(endNode)) {
                         postiousNode.removeBackwardEdge(postiousEdge);
                     }
@@ -169,7 +169,7 @@ public class PDGMergedNode extends PDGNormalNode<CFGNormalNode<?>> {
         for (final PDGNode<?> originalNode : originalNodes) {
 
             for (final PDGDataDependenceEdge edge : PDGDataDependenceEdge
-                    .getDataDependenceEdge(originalNode.getBackwardEdges())) {
+                    .extractDataDependenceEdge(originalNode.getBackwardEdges())) {
 
                 final PDGNode<?> fromNode = edge.getFromNode();
                 if (!originalNodes.contains(fromNode)) {
@@ -183,7 +183,7 @@ public class PDGMergedNode extends PDGNormalNode<CFGNormalNode<?>> {
             }
 
             for (final PDGDataDependenceEdge edge : PDGDataDependenceEdge
-                    .getDataDependenceEdge(originalNode.getForwardEdges())) {
+                    .extractDataDependenceEdge(originalNode.getForwardEdges())) {
 
                 final PDGNode<?> toNode = edge.getToNode();
                 if (!originalNodes.contains(toNode)) {
@@ -197,7 +197,7 @@ public class PDGMergedNode extends PDGNormalNode<CFGNormalNode<?>> {
             }
 
             for (final PDGControlDependenceEdge edge : PDGControlDependenceEdge
-                    .getControlDependenceEdge(originalNode.getBackwardEdges())) {
+                    .extractControlDependenceEdge(originalNode.getBackwardEdges())) {
 
                 final PDGControlNode fromNode = (PDGControlNode) edge.getFromNode();
                 if (!originalNodes.contains(fromNode)) {
