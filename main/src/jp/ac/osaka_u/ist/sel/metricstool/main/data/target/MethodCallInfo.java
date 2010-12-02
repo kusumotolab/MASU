@@ -124,8 +124,8 @@ public final class MethodCallInfo extends CallInfo<MethodInfo> {
      * @return åƒÇ—èoÇµÇÃSet
      */
     @Override
-    public Set<CallInfo<?>> getCalls() {
-        final Set<CallInfo<?>> calls = new HashSet<CallInfo<?>>();
+    public Set<CallInfo<? extends CallableUnitInfo>> getCalls() {
+        final Set<CallInfo<? extends CallableUnitInfo>> calls = new HashSet<CallInfo<? extends CallableUnitInfo>>();
         calls.add(this);
         final ExpressionInfo quantifierExpression = this.getQualifierExpression();
         calls.addAll(quantifierExpression.getCalls());

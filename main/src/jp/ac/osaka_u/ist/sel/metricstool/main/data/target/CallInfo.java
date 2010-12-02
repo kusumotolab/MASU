@@ -29,7 +29,7 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
      * @param calls 呼び出しのCollection
      * @return 呼び出されているユニットのSet
      */
-    public static Set<CallableUnitInfo> getCallees(Collection<CallInfo<?>> calls) {
+    public static Set<CallableUnitInfo> getCallees(Collection<CallInfo<? extends CallableUnitInfo>> calls) {
 
         final Set<CallableUnitInfo> callees = new HashSet<CallableUnitInfo>();
         for (final CallInfo<?> call : calls) {
