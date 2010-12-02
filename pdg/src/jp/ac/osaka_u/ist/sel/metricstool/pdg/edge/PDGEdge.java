@@ -1,5 +1,7 @@
 package jp.ac.osaka_u.ist.sel.metricstool.pdg.edge;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 public abstract class PDGEdge implements Comparable<PDGEdge> {
@@ -10,6 +12,10 @@ public abstract class PDGEdge implements Comparable<PDGEdge> {
 
 	public final PDG_EDGE_TYPE type;
 
+	public final long id;
+
+	private static final AtomicLong MAKE_ID = new AtomicLong(0);
+
 	public PDGEdge(final PDG_EDGE_TYPE type, final PDGNode<?> fromNode,
 			final PDGNode<?> toNode) {
 		if (null == fromNode || null == toNode) {
@@ -19,6 +25,7 @@ public abstract class PDGEdge implements Comparable<PDGEdge> {
 		this.type = type;
 		this.fromNode = fromNode;
 		this.toNode = toNode;
+		this.id = MAKE_ID.getAndIncrement();
 	}
 
 	public abstract String getDependenceString();
@@ -40,20 +47,26 @@ public abstract class PDGEdge implements Comparable<PDGEdge> {
 
 	@Override
 	public boolean equals(Object arg) {
-		if (this.getClass() == arg.getClass()) {
-			PDGEdge edge = (PDGEdge) arg;
-			return this.fromNode.equals(edge.getFromNode())
-					&& this.toNode.equals(edge.getToNode());
-		} else {
+
+		if (null == arg) {
 			return false;
 		}
+
+		if (!(arg instanceof PDGEdge)) {
+			return false;
+		}
+
+		PDGEdge edge = (PDGEdge) arg;
+		return this.id == edge.id;
 	}
 
 	@Override
 	public int hashCode() {
-		final int fromHash = this.fromNode.hashCode();
-		final int toHash = this.toNode.hashCode();
-		return fromHash + toHash;
+		if ((Integer.MIN_VALUE < this.id) && (this.id < Integer.MAX_VALUE)) {
+			return (int) this.id;
+		} else {
+			return (int) (this.id % Integer.MAX_VALUE);
+		}
 	}
 
 	@Override
@@ -63,17 +76,12 @@ public abstract class PDGEdge implements Comparable<PDGEdge> {
 			throw new IllegalArgumentException();
 		}
 
-		final int fromOrder = this.getFromNode().compareTo(edge.getFromNode());
-		if (0 != fromOrder) {
-			return fromOrder;
+		if (this.id < edge.id) {
+			return 1;
+		} else if (this.id > edge.id) {
+			return -1;
+		} else {
+			return 0;
 		}
-
-		final int toOrder = this.getToNode().compareTo(edge.getToNode());
-		if (0 != toOrder) {
-			return toOrder;
-		}
-
-		return this.getDependenceTypeString().compareTo(
-				edge.getDependenceTypeString());
 	}
 }
