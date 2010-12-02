@@ -57,8 +57,8 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 		if (this.codecloneA.length() <= clonepair.codecloneA.length()
 				&& this.codecloneB.length() <= clonepair.codecloneB.length()) {
 
-			boolean subsumed = this.codecloneA.subsumedBy(codecloneA)
-					&& this.codecloneB.subsumedBy(codecloneB);
+			boolean subsumed = this.codecloneA.subsumedBy(clonepair.codecloneA)
+					&& this.codecloneB.subsumedBy(clonepair.codecloneB);
 			if (subsumed) {
 				return true;
 			}
@@ -66,8 +66,8 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 		} else if (this.codecloneA.length() <= clonepair.codecloneB.length()
 				&& this.codecloneB.length() <= clonepair.codecloneA.length()) {
 
-			boolean subsumed = this.codecloneA.subsumedBy(codecloneB)
-					&& this.codecloneB.subsumedBy(codecloneA);
+			boolean subsumed = this.codecloneA.subsumedBy(clonepair.codecloneB)
+					&& this.codecloneB.subsumedBy(clonepair.codecloneA);
 			if (subsumed) {
 				return true;
 			}

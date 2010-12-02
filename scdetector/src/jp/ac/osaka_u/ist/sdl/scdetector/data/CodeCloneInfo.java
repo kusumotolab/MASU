@@ -156,9 +156,13 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 * @return •ïŠÜ‚³‚ê‚éê‡‚Ítrue, ‚»‚¤‚Å‚È‚¢ê‡‚Ífalse
 	 */
 	public boolean subsumedBy(final CodeCloneInfo codeclone) {
-		return codeclone.getRealElements().containsAll(this.getRealElements())
-				&& !this.getRealElements().containsAll(
-						codeclone.getRealElements());
+
+		// this.‚Ì•û‚ª‘å‚«‚¢‚Ì‚Å•ïŠÜ‚³‚ê‚Ä‚¢‚é‚Í‚¸‚ª‚È‚¢
+		if (codeclone.length() <= this.length()) {
+			return false;
+		}
+
+		return codeclone.getRealElements().containsAll(this.getRealElements());
 	}
 
 	@Override
