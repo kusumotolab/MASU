@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -13,7 +14,7 @@ public class CloneFilteringThread implements Runnable {
 	public CloneFilteringThread(
 			final ClonePairInfo[] clonepairarray,
 			final Set<ClonePairInfo> clonepairset,
-			final ConcurrentMap<ExecutableElementInfo, Set<ClonePairInfo>> clonepairs,
+			final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairs,
 			final AtomicInteger index,
 			final Set<ClonePairInfo> refinedClonepairs) {
 		this.clonepairarray = clonepairarray;
@@ -39,17 +40,13 @@ public class CloneFilteringThread implements Runnable {
 			final Set<ClonePairInfo> matched = new HashSet<ClonePairInfo>(
 					this.clonepairset);
 
-			int count = 0;
-
 			// codecloneA‚É‚Â‚¢‚Ä‚Ìˆ—
 			for (final ExecutableElementInfo element : clonepair.codecloneA
 					.getRealElements()) {
-				final Set<ClonePairInfo> obtained = this.clonepairs
+				final List<ClonePairInfo> obtained = this.clonepairs
 						.get(element);
 				matched.retainAll(obtained);
-				count++;
 				if (1 == matched.size()) {
-					System.out.println(count);
 					this.refinedClonepairs.add(clonepair);
 					continue NEXT;
 				}
@@ -58,18 +55,14 @@ public class CloneFilteringThread implements Runnable {
 			// codecloneB‚É‚Â‚¢‚Ä‚Ìˆ—
 			for (final ExecutableElementInfo element : clonepair.codecloneB
 					.getRealElements()) {
-				final Set<ClonePairInfo> obtained = this.clonepairs
+				final List<ClonePairInfo> obtained = this.clonepairs
 						.get(element);
 				matched.retainAll(obtained);
-				count++;
 				if (1 == matched.size()) {
-					System.out.println(count);
 					this.refinedClonepairs.add(clonepair);
 					continue NEXT;
 				}
 			}
-
-			System.out.println("filtered: " + count);
 		}
 	}
 
@@ -77,7 +70,7 @@ public class CloneFilteringThread implements Runnable {
 
 	private final Set<ClonePairInfo> clonepairset;
 
-	private final ConcurrentMap<ExecutableElementInfo, Set<ClonePairInfo>> clonepairs;
+	private final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairs;
 
 	private final AtomicInteger index;
 

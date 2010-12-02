@@ -115,7 +115,7 @@ public class Scorpio extends MetricsTool {
 
 		// ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
 		out.println("detecting code clones from PDGs ... ");
-		final ConcurrentMap<ExecutableElementInfo, Set<ClonePairInfo>> clonepairs = detectClonePairs(equivalenceGroups);
+		final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairs = detectClonePairs(equivalenceGroups);
 
 		// 他のクローンに完全に含まれているクローンを取り除く
 		out.println("filtering out unnecessary clone pairs ...");
@@ -890,20 +890,20 @@ public class Scorpio extends MetricsTool {
 			text.append(PDGDataDependenceEdge.extractDataDependenceEdge(edges)
 					.size());
 			text.append(", control:");
-			text.append(PDGControlDependenceEdge
-					.extractControlDependenceEdge(edges).size());
-			text.append(", execution:");
-			text.append(PDGExecutionDependenceEdge.extractExecutionDependenceEdge(
+			text.append(PDGControlDependenceEdge.extractControlDependenceEdge(
 					edges).size());
+			text.append(", execution:");
+			text.append(PDGExecutionDependenceEdge
+					.extractExecutionDependenceEdge(edges).size());
 			text.append(").");
 			out.println(text.toString());
 		}
 	}
 
-	private static ConcurrentMap<ExecutableElementInfo, Set<ClonePairInfo>> detectClonePairs(
+	private static ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> detectClonePairs(
 			final SortedMap<Integer, List<PDGNode<?>>> equivalenceGroups) {
 
-		final ConcurrentMap<ExecutableElementInfo, Set<ClonePairInfo>> clonepairs = new ConcurrentHashMap<ExecutableElementInfo, Set<ClonePairInfo>>();
+		final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairs = new ConcurrentHashMap<ExecutableElementInfo, List<ClonePairInfo>>();
 		final Thread[] threads = new Thread[Configuration.INSTANCE.getW()];
 		final List<NodePairInfo> nodepairs = makeNodePairs(equivalenceGroups
 				.values());
@@ -928,7 +928,7 @@ public class Scorpio extends MetricsTool {
 	}
 
 	private static Set<ClonePairInfo> refineClonePairs(
-			final ConcurrentMap<ExecutableElementInfo, Set<ClonePairInfo>> clonepairs) {
+			final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairs) {
 
 		// フィルタリング後のクローンを入れる変数
 		final Set<ClonePairInfo> refined = Collections
@@ -936,7 +936,7 @@ public class Scorpio extends MetricsTool {
 
 		// フィルタリングに用いるための変数，クローンペアの集合と配列である
 		final Set<ClonePairInfo> set = new HashSet<ClonePairInfo>();
-		for (final Set<ClonePairInfo> pairs : clonepairs.values()) {
+		for (final List<ClonePairInfo> pairs : clonepairs.values()) {
 			set.addAll(pairs);
 		}
 		final ClonePairInfo[] array = set.toArray(new ClonePairInfo[0]);

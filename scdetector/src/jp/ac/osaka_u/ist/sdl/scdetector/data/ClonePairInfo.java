@@ -86,6 +86,14 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 		}
 
 		final ClonePairInfo target = (ClonePairInfo) o;
+
+		if (((this.codecloneA.hashCode() != target.codecloneA.hashCode()) || (this.codecloneB
+				.hashCode() != target.codecloneB.hashCode()))
+				&& ((this.codecloneA.hashCode() != target.codecloneB.hashCode()) || (this.codecloneB
+						.hashCode() != target.codecloneB.hashCode()))) {
+			return false;
+		}
+
 		return (this.codecloneA.equals(target.codecloneA) && this.codecloneB
 				.equals(target.codecloneB))
 				|| (this.codecloneA.equals(target.codecloneB) && this.codecloneB
@@ -97,7 +105,7 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 
 		final ClonePairInfo clonePair = new ClonePairInfo();
 		final CodeCloneInfo cloneA = this.codecloneA;
-		final CodeCloneInfo cloneB = this.codecloneB;		
+		final CodeCloneInfo cloneB = this.codecloneB;
 		clonePair.codecloneA.addElements(cloneA);
 		clonePair.codecloneB.addElements(cloneB);
 

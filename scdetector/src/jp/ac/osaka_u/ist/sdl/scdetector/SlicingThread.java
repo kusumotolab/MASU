@@ -1,9 +1,8 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,12 +18,12 @@ class SlicingThread implements Runnable {
 
 	private final AtomicInteger index;
 
-	private final ConcurrentMap<ExecutableElementInfo, Set<ClonePairInfo>> clonepairs;
+	private final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairs;
 
 	SlicingThread(
 			final List<NodePairInfo> nodepairs,
 			final AtomicInteger index,
-			final ConcurrentMap<ExecutableElementInfo, Set<ClonePairInfo>> clonepairs) {
+			final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairs) {
 
 		this.nodepairs = nodepairs;
 		this.index = index;
@@ -72,22 +71,24 @@ class SlicingThread implements Runnable {
 
 		for (final ExecutableElementInfo element : clonepair.codecloneA
 				.getRealElements()) {
-			Set<ClonePairInfo> set = this.clonepairs.get(element);
-			if (null == set) {
-				set = Collections.synchronizedSet(new HashSet<ClonePairInfo>());
-				this.clonepairs.put(element, set);
+			List<ClonePairInfo> list = this.clonepairs.get(element);
+			if (null == list) {
+				list = Collections
+						.synchronizedList(new ArrayList<ClonePairInfo>());
+				this.clonepairs.put(element, list);
 			}
-			set.add(clonepair);
+			final boolean added = list.add(clonepair);
 		}
 
 		for (final ExecutableElementInfo element : clonepair.codecloneB
 				.getRealElements()) {
-			Set<ClonePairInfo> set = this.clonepairs.get(element);
-			if (null == set) {
-				set = Collections.synchronizedSet(new HashSet<ClonePairInfo>());
-				this.clonepairs.put(element, set);
+			List<ClonePairInfo> list = this.clonepairs.get(element);
+			if (null == list) {
+				list = Collections
+						.synchronizedList(new ArrayList<ClonePairInfo>());
+				this.clonepairs.put(element, list);
 			}
-			set.add(clonepair);
+			final boolean added = list.add(clonepair);
 		}
 	}
 

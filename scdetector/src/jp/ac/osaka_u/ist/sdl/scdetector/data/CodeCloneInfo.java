@@ -42,12 +42,15 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	final private SortedSet<ExecutableElementInfo> allElements;
 	final private SortedSet<ExecutableElementInfo> realElements;
 
+	private int hash;
+
 	/**
 	 * コンストラクタ
 	 */
 	public CodeCloneInfo() {
 		this.allElements = new TreeSet<ExecutableElementInfo>();
 		this.realElements = new TreeSet<ExecutableElementInfo>();
+		this.hash = 0;
 	}
 
 	/**
@@ -178,7 +181,7 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 			return false;
 		}
 
-		if (target.getRealElements().containsAll(this.getRealElements())) {
+		if (!target.getRealElements().containsAll(this.getRealElements())) {
 			return false;
 		}
 
@@ -226,11 +229,23 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 
 	@Override
 	public int hashCode() {
-		int hash = 0;
-		for (final ExecutableElementInfo element : this.getElements()) {
+
+		if (0 != this.hash) {
+			return this.hash;
+		}
+
+		long hash = 0;
+		for (final ExecutableElementInfo element : this.realElements) {
 			hash += element.hashCode();
 		}
-		return hash;
+
+		if (Integer.MIN_VALUE < hash && hash < Integer.MAX_VALUE) {
+			this.hash = (int) hash;
+		} else {
+			this.hash = (int) (hash % Integer.MAX_VALUE);
+		}
+
+		return this.hash;
 	}
 
 	public float density() {
@@ -254,10 +269,10 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 			return 0;
 		}
 
-		final Iterator<ExecutableElementInfo> thisIterator = this.getElements()
-				.iterator();
-		final Iterator<ExecutableElementInfo> targetIterator = o.getElements()
-				.iterator();
+		final Iterator<ExecutableElementInfo> thisIterator = this
+				.getRealElements().iterator();
+		final Iterator<ExecutableElementInfo> targetIterator = o
+				.getRealElements().iterator();
 
 		// 両方の要素がある限り
 		while (thisIterator.hasNext() && targetIterator.hasNext()) {
