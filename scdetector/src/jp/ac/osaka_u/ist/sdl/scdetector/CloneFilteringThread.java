@@ -1,6 +1,6 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
@@ -12,14 +12,12 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 public class CloneFilteringThread implements Runnable {
 
 	public CloneFilteringThread(
-			final ClonePairInfo[] clonepairarray,
-			final Set<ClonePairInfo> clonepairset,
-			final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairs,
+			final List<ClonePairInfo> clonepairList,
+			final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairListGroup,
 			final AtomicInteger index,
 			final Set<ClonePairInfo> refinedClonepairs) {
-		this.clonepairarray = clonepairarray;
-		this.clonepairset = clonepairset;
-		this.clonepairs = clonepairs;
+		this.clonepairList = clonepairList;
+		this.clonepairListGroup = clonepairListGroup;
 		this.index = index;
 		this.refinedClonepairs = refinedClonepairs;
 	}
@@ -30,47 +28,48 @@ public class CloneFilteringThread implements Runnable {
 		NEXT: while (true) {
 
 			int i = this.index.getAndIncrement();
-			if (!(i < this.clonepairarray.length)) {
+			if (!(i < this.clonepairList.size())) {
 				break;
 			}
 
-			final ClonePairInfo clonepair = this.clonepairarray[i];
+			final ClonePairInfo clonepair = this.clonepairList.get(i);
 
-			// matchedを初期化
-			final Set<ClonePairInfo> matched = new HashSet<ClonePairInfo>(
-					this.clonepairset);
-
-			// codecloneAについての処理
+			// フィルタリングするかどうかを調査するための対象クローンペアリストを取得
+			final List<List<ClonePairInfo>> candidateList = new ArrayList<List<ClonePairInfo>>();
 			for (final ExecutableElementInfo element : clonepair.codecloneA
 					.getRealElements()) {
-				final List<ClonePairInfo> obtained = this.clonepairs
+				final List<ClonePairInfo> candidate = this.clonepairListGroup
 						.get(element);
-				matched.retainAll(obtained);
-				if (1 == matched.size()) {
-					this.refinedClonepairs.add(clonepair);
+				candidateList.add(candidate);
+			}
+			for (final ExecutableElementInfo element : clonepair.codecloneA
+					.getRealElements()) {
+				final List<ClonePairInfo> candidate = this.clonepairListGroup
+						.get(element);
+				candidateList.add(candidate);
+			}
+			List<ClonePairInfo> target = candidateList.get(0);
+			for (int index = 1; index < candidateList.size(); index++) {
+				final List<ClonePairInfo> candidate = candidateList.get(index);
+				if (candidate.size() < target.size()) {
+					target = candidate;
+				}
+			}
+
+			// 対象クローンペアリストにおいて，clonepairを包含しているものがあるかを調査
+			for (final ClonePairInfo another : target) {
+				if (clonepair.subsumedBy(another)) {
 					continue NEXT;
 				}
 			}
 
-			// codecloneBについての処理
-			for (final ExecutableElementInfo element : clonepair.codecloneB
-					.getRealElements()) {
-				final List<ClonePairInfo> obtained = this.clonepairs
-						.get(element);
-				matched.retainAll(obtained);
-				if (1 == matched.size()) {
-					this.refinedClonepairs.add(clonepair);
-					continue NEXT;
-				}
-			}
+			this.refinedClonepairs.add(clonepair);
 		}
 	}
 
-	private final ClonePairInfo[] clonepairarray;
+	private final List<ClonePairInfo> clonepairList;
 
-	private final Set<ClonePairInfo> clonepairset;
-
-	private final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairs;
+	private final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairListGroup;
 
 	private final AtomicInteger index;
 

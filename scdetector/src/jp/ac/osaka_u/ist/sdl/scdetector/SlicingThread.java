@@ -1,15 +1,11 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.data.NodePairInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 class SlicingThread implements Runnable {
@@ -18,16 +14,14 @@ class SlicingThread implements Runnable {
 
 	private final AtomicInteger index;
 
-	private final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairs;
+	private final List<ClonePairInfo> clonepairList;
 
-	SlicingThread(
-			final List<NodePairInfo> nodepairs,
-			final AtomicInteger index,
-			final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairs) {
+	SlicingThread(final List<NodePairInfo> nodepairs,
+			final AtomicInteger index, final List<ClonePairInfo> clonepairList) {
 
 		this.nodepairs = nodepairs;
 		this.index = index;
-		this.clonepairs = clonepairs;
+		this.clonepairList = clonepairList;
 	}
 
 	@Override
@@ -60,35 +54,9 @@ class SlicingThread implements Runnable {
 
 			if (Configuration.INSTANCE.getS() <= Math.min(clonepair.codecloneA
 					.length(), clonepair.codecloneB.length())) {
-				this.addClonepair(clonepair);
+				this.clonepairList.add(clonepair);
+				increaseNumberOfPairs();
 			}
-
-			increaseNumberOfPairs();
-		}
-	}
-
-	private void addClonepair(final ClonePairInfo clonepair) {
-
-		for (final ExecutableElementInfo element : clonepair.codecloneA
-				.getRealElements()) {
-			List<ClonePairInfo> list = this.clonepairs.get(element);
-			if (null == list) {
-				list = Collections
-						.synchronizedList(new ArrayList<ClonePairInfo>());
-				this.clonepairs.put(element, list);
-			}
-			final boolean added = list.add(clonepair);
-		}
-
-		for (final ExecutableElementInfo element : clonepair.codecloneB
-				.getRealElements()) {
-			List<ClonePairInfo> list = this.clonepairs.get(element);
-			if (null == list) {
-				list = Collections
-						.synchronizedList(new ArrayList<ClonePairInfo>());
-				this.clonepairs.put(element, list);
-			}
-			final boolean added = list.add(clonepair);
 		}
 	}
 

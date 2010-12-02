@@ -115,11 +115,11 @@ public class Scorpio extends MetricsTool {
 
 		// ハッシュ値が同じ2つのStatementInfoを基点にしてコードクローンを検出
 		out.println("detecting code clones from PDGs ... ");
-		final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairs = detectClonePairs(equivalenceGroups);
+		final List<ClonePairInfo> clonepairList = detectClonePairs(equivalenceGroups);
 
 		// 他のクローンに完全に含まれているクローンを取り除く
 		out.println("filtering out unnecessary clone pairs ...");
-		final Set<ClonePairInfo> refinedClonePairs = refineClonePairs(clonepairs);
+		final Set<ClonePairInfo> refinedClonePairs = refineClonePairs(clonepairList);
 
 		// クローンペアからクローンセットに変換
 		out.println("converting clone pairs to clone sets ...");
@@ -900,10 +900,11 @@ public class Scorpio extends MetricsTool {
 		}
 	}
 
-	private static ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> detectClonePairs(
+	private static List<ClonePairInfo> detectClonePairs(
 			final SortedMap<Integer, List<PDGNode<?>>> equivalenceGroups) {
 
-		final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairs = new ConcurrentHashMap<ExecutableElementInfo, List<ClonePairInfo>>();
+		final List<ClonePairInfo> clonepairList = Collections
+				.synchronizedList(new ArrayList<ClonePairInfo>());
 		final Thread[] threads = new Thread[Configuration.INSTANCE.getW()];
 		final List<NodePairInfo> nodepairs = makeNodePairs(equivalenceGroups
 				.values());
@@ -911,7 +912,7 @@ public class Scorpio extends MetricsTool {
 
 		for (int i = 0; i < threads.length; i++) {
 			threads[i] = new Thread(new SlicingThread(nodepairs, index,
-					clonepairs));
+					clonepairList));
 			threads[i].start();
 		}
 
@@ -924,29 +925,48 @@ public class Scorpio extends MetricsTool {
 			}
 		}
 
-		return clonepairs;
+		return clonepairList;
 	}
 
 	private static Set<ClonePairInfo> refineClonePairs(
-			final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairs) {
+			final List<ClonePairInfo> clonepairList) {
+
+		// クローンペアリストのグループを生成，これはフィルタリングに使用
+		ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairListGroup = new ConcurrentHashMap<ExecutableElementInfo, List<ClonePairInfo>>();
+		for (final ClonePairInfo clonepair : clonepairList) {
+			for (final ExecutableElementInfo element : clonepair.codecloneA
+					.getRealElements()) {
+				List<ClonePairInfo> list = clonepairListGroup.get(element);
+				if (null == list) {
+					list = Collections
+							.synchronizedList(new ArrayList<ClonePairInfo>());
+					clonepairListGroup.put(element, list);
+				}
+				list.add(clonepair);
+			}
+
+			for (final ExecutableElementInfo element : clonepair.codecloneB
+					.getRealElements()) {
+				List<ClonePairInfo> list = clonepairListGroup.get(element);
+				if (null == list) {
+					list = Collections
+							.synchronizedList(new ArrayList<ClonePairInfo>());
+					clonepairListGroup.put(element, list);
+				}
+				list.add(clonepair);
+			}
+		}
 
 		// フィルタリング後のクローンを入れる変数
 		final Set<ClonePairInfo> refined = Collections
 				.synchronizedSet(new HashSet<ClonePairInfo>());
 
-		// フィルタリングに用いるための変数，クローンペアの集合と配列である
-		final Set<ClonePairInfo> set = new HashSet<ClonePairInfo>();
-		for (final List<ClonePairInfo> pairs : clonepairs.values()) {
-			set.addAll(pairs);
-		}
-		final ClonePairInfo[] array = set.toArray(new ClonePairInfo[0]);
-
 		// フィルタリング処理はマルチスレッドで行う
 		final Thread[] threads = new Thread[Configuration.INSTANCE.getW()];
 		final AtomicInteger index = new AtomicInteger(0);
 		for (int i = 0; i < threads.length; i++) {
-			threads[i] = new Thread(new CloneFilteringThread(array, set,
-					clonepairs, index, refined));
+			threads[i] = new Thread(new CloneFilteringThread(clonepairList,
+					clonepairListGroup, index, refined));
 			threads[i].start();
 		}
 

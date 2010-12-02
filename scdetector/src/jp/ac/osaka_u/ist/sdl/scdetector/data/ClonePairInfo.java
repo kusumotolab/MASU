@@ -52,12 +52,28 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 	 *            対象クローンペア
 	 * @return 包含される場合はtrue, そうでない場合はfalse
 	 */
-	public boolean subsumedBy(final ClonePairInfo clonePair) {
+	public boolean subsumedBy(final ClonePairInfo clonepair) {
 
-		return (this.codecloneA.subsumedBy(clonePair.codecloneA) && this.codecloneB
-				.subsumedBy(clonePair.codecloneB))
-				|| (this.codecloneB.subsumedBy(clonePair.codecloneA) && this.codecloneA
-						.subsumedBy(clonePair.codecloneB));
+		if (this.codecloneA.length() <= clonepair.codecloneA.length()
+				&& this.codecloneB.length() <= clonepair.codecloneB.length()) {
+
+			boolean subsumed = this.codecloneA.subsumedBy(codecloneA)
+					&& this.codecloneB.subsumedBy(codecloneB);
+			if (subsumed) {
+				return true;
+			}
+
+		} else if (this.codecloneA.length() <= clonepair.codecloneB.length()
+				&& this.codecloneB.length() <= clonepair.codecloneA.length()) {
+
+			boolean subsumed = this.codecloneA.subsumedBy(codecloneB)
+					&& this.codecloneB.subsumedBy(codecloneA);
+			if (subsumed) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
