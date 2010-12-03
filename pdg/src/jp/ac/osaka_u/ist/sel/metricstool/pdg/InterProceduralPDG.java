@@ -214,6 +214,7 @@ public class InterProceduralPDG extends PDG {
 			for (final CallableUnitInfo callee : callees) {
 				final IntraProceduralPDG calleePDG = this.unitToPDGMap
 						.get(callee);
+
 				if (null == calleePDG) {
 					break;
 				}
@@ -229,6 +230,13 @@ public class InterProceduralPDG extends PDG {
 							.get(index);
 
 					final ParameterInfo parameter = parameters.get(index);
+
+					// variable と parameter が等しい時は，
+					// 再帰呼び出しの時であり，データ依存関係を構築しない
+					if (variable.equals(parameter)) {
+						continue;
+					}
+
 					final PDGParameterInNode parameterNode = calleePDG
 							.getParameterNode(parameter);
 					for (final PDGEdge edge : parameterNode.getForwardEdges()) {

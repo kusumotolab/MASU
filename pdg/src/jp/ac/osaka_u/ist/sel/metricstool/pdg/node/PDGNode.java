@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.pdg.node;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicLong;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.CFGUtility;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGControlNode;
@@ -67,6 +68,10 @@ public abstract class PDGNode<T extends CFGNode<? extends ExecutableElementInfo>
 
 	protected final String text;
 
+	public final long id;
+
+	private static final AtomicLong MAKE_INDEX = new AtomicLong(0);
+
 	/**
 	 * ƒm[ƒh‚ÌŠj‚Æ‚È‚éî•ñ‚ğ—^‚¦‚Ä‰Šú‰»
 	 * 
@@ -82,8 +87,11 @@ public abstract class PDGNode<T extends CFGNode<? extends ExecutableElementInfo>
 		this.cfgNode = node;
 		this.text = node.getCore().getText() + " <"
 				+ node.getCore().getFromLine() + ">";
-		this.forwardEdges = new TreeSet<PDGEdge>();
-		this.backwardEdges = new TreeSet<PDGEdge>();
+		this.forwardEdges = Collections
+				.synchronizedSortedSet(new TreeSet<PDGEdge>());
+		this.backwardEdges = Collections
+				.synchronizedSortedSet(new TreeSet<PDGEdge>());
+		this.id = MAKE_INDEX.getAndIncrement();
 	}
 
 	/**
@@ -280,26 +288,13 @@ public abstract class PDGNode<T extends CFGNode<? extends ExecutableElementInfo>
 			throw new IllegalArgumentException();
 		}
 
-		final int methodOrder = this.getCore().getOwnerMethod().compareTo(
-				node.getCore().getOwnerMethod());
-		if (0 != methodOrder) {
-			return methodOrder;
-		}
-
-		final int coreOrder = this.getCore().compareTo(node.getCore());
-		if (0 != coreOrder) {
-			return coreOrder;
-		}
-
-		// 1‚Â‚Ìcore‚©‚çInƒm[ƒh‚ÆOutƒm[ƒh‚ª¶¬‚³‚ê‚é‚±‚Æ‚É‘Î‰
-		if (node instanceof PDGDataInNode && this instanceof PDGDataOutNode) {
-			return -1;
-		} else if (this instanceof PDGDataInNode
-				&& node instanceof PDGDataOutNode) {
+		if (this.id < node.id) {
 			return 1;
+		} else if (this.id > node.id) {
+			return -1;
+		} else {
+			return 0;
 		}
-
-		return 0;
 	}
 
 	/**
