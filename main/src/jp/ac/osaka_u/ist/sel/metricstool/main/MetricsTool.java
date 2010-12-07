@@ -128,7 +128,7 @@ public class MetricsTool {
         };
         final MessageListener errListener = new MessageListener() {
             public void messageReceived(MessageEvent event) {
-                System.out.print(event.getSource().getMessageSourceName() + " > "
+                System.err.print(event.getSource().getMessageSourceName() + " > "
                         + event.getMessage());
             }
         };
