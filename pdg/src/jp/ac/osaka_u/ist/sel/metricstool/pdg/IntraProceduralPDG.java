@@ -836,13 +836,13 @@ public class IntraProceduralPDG extends PDG {
 			}
 
 			// バックワードノードがない場合は，ParameterInNodeから依存辺を引く必要がある可能性あり
-			if (0 == cfgNode.getBackwardNodes().size()) {
-				final PDGParameterInNode parameterInNode = this.parameterInNodes
-						.get(variable);
-				if (null != parameterInNode) {
-					parameterInNode.addDataDependingNode(toPDGNode, variable);
-				}
-			}
+//			if (0 == cfgNode.getBackwardNodes().size()) {
+//				final PDGParameterInNode parameterInNode = this.parameterInNodes
+//						.get(variable);
+//				if (null != parameterInNode) {
+//					parameterInNode.addDataDependingNode(toPDGNode, variable);
+//				}
+//			}
 		}
 	}
 
