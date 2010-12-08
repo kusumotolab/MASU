@@ -24,6 +24,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MonominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.OPERATOR;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParenthesesExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TernaryOperationInfo;
@@ -484,6 +485,15 @@ public class Conversion {
 
 			text.append("NULL");
 
+		} else if (expression instanceof ParenthesesExpressionInfo) {
+
+			text.append("(");
+
+			final ParenthesesExpressionInfo parentheses = (ParenthesesExpressionInfo) expression;
+			text.append(Conversion.getNormalizedString(parentheses));
+
+			text.append(")");
+
 		} else if (expression instanceof TernaryOperationInfo) {
 
 			final TernaryOperationInfo operation = (TernaryOperationInfo) expression;
@@ -549,6 +559,10 @@ public class Conversion {
 			default:
 				assert false : "Here shouldn't be reached!";
 			}
+		}
+
+		else {
+			assert false : "Here shouldn't be reached!";
 		}
 
 		converted = text.toString();
