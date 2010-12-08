@@ -20,6 +20,14 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 public class ProgramSlicing extends Slicing {
 
+	final private PDGNode<?> pointA;
+	final private PDGNode<?> pointB;
+
+	final private Set<PDGNode<?>> checkedNodesA;
+	final private Set<PDGNode<?>> checkedNodesB;
+
+	private ClonePairInfo clonepair;
+	
 	public ProgramSlicing(final PDGNode<?> pointA, final PDGNode<?> pointB) {
 		this.pointA = pointA;
 		this.pointB = pointB;
@@ -29,22 +37,12 @@ public class ProgramSlicing extends Slicing {
 	}
 
 	public ClonePairInfo perform() {
-		if (null != this.clonepair) {
-			return this.clonepair;
-		} else {
+		if (null == this.clonepair) {
 			this.clonepair = new ClonePairInfo();
 			this.perform(this.pointA, this.pointB);
-			return this.clonepair;
 		}
+		return this.clonepair;
 	}
-
-	final private PDGNode<?> pointA;
-	final private PDGNode<?> pointB;
-
-	final private Set<PDGNode<?>> checkedNodesA;
-	final private Set<PDGNode<?>> checkedNodesB;
-
-	private ClonePairInfo clonepair;
 
 	private void perform(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
 
@@ -138,7 +136,8 @@ public class ProgramSlicing extends Slicing {
 
 			// 既にクローンに入ることが確定しているノードのときは調査しない
 			// 相手側のクローンに入っているノードのときも調査しない
-			if (checkedNodesA.contains(nodeA) || checkedNodesB.contains(nodeA)) {
+			if (this.checkedNodesA.contains(nodeA)
+					|| this.checkedNodesB.contains(nodeA)) {
 				continue;
 			}
 
@@ -159,8 +158,8 @@ public class ProgramSlicing extends Slicing {
 
 				// 既にクローンに入ることが確定しているノードのときは調査しない
 				// 相手側のクローンに入っているノードのときも調査しない
-				if (checkedNodesB.contains(nodeB)
-						|| checkedNodesA.contains(nodeB)) {
+				if (this.checkedNodesB.contains(nodeB)
+						|| this.checkedNodesA.contains(nodeB)) {
 					continue;
 				}
 

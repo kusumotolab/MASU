@@ -25,6 +25,17 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 public class SystemSlicing extends Slicing {
 
+	final private PDGNode<?> pointA;
+	final private PDGNode<?> pointB;
+
+	final private Set<PDGNode<?>> checkedNodesA;
+	final private Set<PDGNode<?>> checkedNodesB;
+
+	final private Stack<CallInfo<?>> callStackA;
+	final private Stack<CallInfo<?>> callStackB;
+
+	private ClonePairInfo clonepair;
+	
 	public SystemSlicing(final PDGNode<?> pointA, final PDGNode<?> pointB) {
 		this.pointA = pointA;
 		this.pointB = pointB;
@@ -36,25 +47,12 @@ public class SystemSlicing extends Slicing {
 	}
 
 	public ClonePairInfo perform() {
-		if (null != this.clonepair) {
-			return this.clonepair;
-		} else {
+		if (null == this.clonepair) {
 			this.clonepair = new ClonePairInfo();
 			this.perform(this.pointA, this.pointB);
-			return this.clonepair;
 		}
+		return this.clonepair;
 	}
-
-	final private PDGNode<?> pointA;
-	final private PDGNode<?> pointB;
-
-	final private Set<PDGNode<?>> checkedNodesA;
-	final private Set<PDGNode<?>> checkedNodesB;
-
-	final private Stack<CallInfo<?>> callStackA;
-	final private Stack<CallInfo<?>> callStackB;
-
-	private ClonePairInfo clonepair;
 
 	public void perform(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
 
@@ -194,8 +192,6 @@ public class SystemSlicing extends Slicing {
 		final SortedSet<PDGNode<?>> forwardControlNodesB = this
 				.getToNodes(forwardControlEdgesB);
 
-		final ClonePairInfo clonepair = new ClonePairInfo();
-
 		// 各ノードの集合に対してその先にあるクローンペアの構築
 		// バックワードスライスを使う設定の場合
 		if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
@@ -226,7 +222,7 @@ public class SystemSlicing extends Slicing {
 		}
 
 		// 現在のノードをクローンペアに追加
-		clonepair.add(nodeA, nodeB);
+		this.clonepair.add(nodeA, nodeB);
 	}
 
 	private void enlargeClonePair(final SortedSet<PDGNode<?>> nodesA,
