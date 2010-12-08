@@ -5,16 +5,21 @@ import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayElementUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayInitializerInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayTypeReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.AssertStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BinominalOperationInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CastUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ContinueStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.DefaultEntryInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LiteralUsageInfo;
@@ -50,7 +55,7 @@ public class Conversion {
 	 * @param o
 	 * @return
 	 */
-	public static String getNormalizedString(final Object o) {
+	public static String getNormalizedElement(final Object o) {
 
 		String converted = ORIGINAL_TO_CONVERTED_MAP.get(o);
 		if (null != converted) {
@@ -58,17 +63,17 @@ public class Conversion {
 		}
 
 		if (o instanceof SingleStatementInfo) {
-			converted = getNormalizedString((SingleStatementInfo) o);
+			converted = getNormalizedStatement((SingleStatementInfo) o);
 			ORIGINAL_TO_CONVERTED_MAP.put(o, converted);
 			return converted;
 
 		} else if (o instanceof ExpressionInfo) {
-			converted = getNormalizedString((ExpressionInfo) o);
+			converted = getNormalizedExpression((ExpressionInfo) o);
 			ORIGINAL_TO_CONVERTED_MAP.put(o, converted);
 			return converted;
 
 		} else if (o instanceof ConditionInfo) {
-			converted = getNormalizedString((ConditionInfo) o);
+			converted = getNormalizedCondition((ConditionInfo) o);
 			ORIGINAL_TO_CONVERTED_MAP.put(o, converted);
 			return converted;
 
@@ -81,7 +86,7 @@ public class Conversion {
 				text.append("case ");
 
 				final ExpressionInfo label = ((CaseEntryInfo) o).getLabel();
-				final String labelString = getNormalizedString(label);
+				final String labelString = getNormalizedExpression(label);
 				text.append(labelString);
 
 				text.append(":");
@@ -102,7 +107,8 @@ public class Conversion {
 	 * @param statement
 	 * @return
 	 */
-	public static String getNormalizedString(final SingleStatementInfo statement) {
+	public static String getNormalizedStatement(
+			final SingleStatementInfo statement) {
 
 		String converted = ORIGINAL_TO_CONVERTED_MAP.get(statement);
 		if (null != converted) {
@@ -118,14 +124,26 @@ public class Conversion {
 			final ExpressionInfo expression = ((AssertStatementInfo) statement)
 					.getAssertedExpression();
 			final String expressionString = Conversion
-					.getNormalizedString(expression);
+					.getNormalizedExpression(expression);
 			text.append(expressionString);
+
+			text.append(";");
+
+		} else if (statement instanceof BreakStatementInfo) {
+
+			text.append("break;");
+
+		} else if (statement instanceof ContinueStatementInfo) {
+
+			text.append("continue;");
 
 		} else if (statement instanceof ExpressionStatementInfo) {
 
 			final ExpressionInfo expression = ((ExpressionStatementInfo) statement)
 					.getExpression();
-			text.append(Conversion.getNormalizedString(expression));
+			text.append(Conversion.getNormalizedExpression(expression));
+
+			text.append(";");
 
 		} else if (statement instanceof ReturnStatementInfo) {
 
@@ -134,8 +152,10 @@ public class Conversion {
 			final ExpressionInfo expression = ((ReturnStatementInfo) statement)
 					.getReturnedExpression();
 			final String expressionString = Conversion
-					.getNormalizedString(expression);
+					.getNormalizedExpression(expression);
 			text.append(expressionString);
+
+			text.append(";");
 
 		} else if (statement instanceof ThrowStatementInfo) {
 
@@ -144,13 +164,20 @@ public class Conversion {
 			final ExpressionInfo expression = ((ThrowStatementInfo) statement)
 					.getThrownExpression();
 			final String expressionString = Conversion
-					.getNormalizedString(expression);
+					.getNormalizedExpression(expression);
 			text.append(expressionString);
+
+			text.append(";");
 
 		} else if (statement instanceof VariableDeclarationStatementInfo) {
 
 			text.append(Conversion
-					.getNormalizedString((ConditionInfo) statement));
+					.getNormalizedCondition((ConditionInfo) statement));
+
+			text.append(";");
+
+		} else {
+			assert false : "Here shouldn't be reached!";
 		}
 
 		converted = text.toString();
@@ -164,7 +191,7 @@ public class Conversion {
 	 * @param condition
 	 * @return
 	 */
-	public static String getNormalizedString(final ConditionInfo condition) {
+	public static String getNormalizedCondition(final ConditionInfo condition) {
 
 		String converted = ORIGINAL_TO_CONVERTED_MAP.get(condition);
 		if (null != converted) {
@@ -200,11 +227,11 @@ public class Conversion {
 
 			if (declarationStatement.isInitialized()) {
 
-				text.append(" = ");
+				text.append("=");
 				final ExpressionInfo expression = declarationStatement
 						.getInitializationExpression();
 				final String expressionString = Conversion
-						.getNormalizedString(expression);
+						.getNormalizedExpression(expression);
 				text.append(expressionString);
 			}
 
@@ -215,7 +242,7 @@ public class Conversion {
 		} else if (condition instanceof ExpressionInfo) {
 
 			converted = Conversion
-					.getNormalizedString((ExpressionInfo) condition);
+					.getNormalizedExpression((ExpressionInfo) condition);
 			ORIGINAL_TO_CONVERTED_MAP.put(condition, converted);
 			return converted;
 
@@ -236,7 +263,7 @@ public class Conversion {
 	 * @param expression
 	 * @return
 	 */
-	public static String getNormalizedString(final ExpressionInfo expression) {
+	public static String getNormalizedExpression(final ExpressionInfo expression) {
 
 		String converted = ORIGINAL_TO_CONVERTED_MAP.get(expression);
 		if (null != converted) {
@@ -250,20 +277,37 @@ public class Conversion {
 			final ExpressionInfo ownerExpression = ((ArrayElementUsageInfo) expression)
 					.getQualifierExpression();
 			final String ownerExpressionString = Conversion
-					.getNormalizedString(ownerExpression);
+					.getNormalizedExpression(ownerExpression);
 			text.append(ownerExpressionString);
 
 			text.append("[");
 			final ExpressionInfo indexExpression = ((ArrayElementUsageInfo) expression)
 					.getIndexExpression();
 			final String indexExpressionString = Conversion
-					.getNormalizedString(indexExpression);
+					.getNormalizedExpression(indexExpression);
 			text.append(indexExpressionString);
 			text.append("]");
 
+		} else if (expression instanceof ArrayInitializerInfo) {
+
+			final ArrayInitializerInfo initializer = (ArrayInitializerInfo) expression;
+
+			text.append("{");
+
+			for (final ExpressionInfo element : initializer
+					.getElementInitializers()) {
+				text.append(Conversion.getNormalizedExpression(element));
+				text.append(",");
+			}
+
+			text.deleteCharAt(text.length() - 1);
+			text.append("}");
+
 		} else if (expression instanceof ArrayTypeReferenceInfo) {
 
-			text.append("TYPE[]");
+			final ArrayTypeReferenceInfo reference = (ArrayTypeReferenceInfo) expression;
+			final ArrayTypeInfo arrayType = (ArrayTypeInfo) reference.getType();
+			text.append(arrayType.getTypeName());
 
 		} else if (expression instanceof BinominalOperationInfo) {
 
@@ -274,7 +318,7 @@ public class Conversion {
 			case NO: // 演算をそのまま用いる
 				final ExpressionInfo firstOperand = operation.getFirstOperand();
 				final String firstOperandString = Conversion
-						.getNormalizedString(firstOperand);
+						.getNormalizedExpression(firstOperand);
 				text.append(firstOperandString);
 
 				final OPERATOR operator = operation.getOperator();
@@ -284,7 +328,7 @@ public class Conversion {
 				final ExpressionInfo secondOperand = operation
 						.getSecondOperand();
 				final String secondOperandString = Conversion
-						.getNormalizedString(secondOperand);
+						.getNormalizedExpression(secondOperand);
 				text.append(secondOperandString);
 				break;
 
@@ -310,7 +354,7 @@ public class Conversion {
 					&& (((ClassReferenceInfo) qualifier).getReferencedClass()
 							.equals(ownerClass))) {
 			} else {
-				text.append(Conversion.getNormalizedString(qualifier));
+				text.append(Conversion.getNormalizedExpression(qualifier));
 				text.append(".");
 			}
 
@@ -321,11 +365,13 @@ public class Conversion {
 				text.append("(");
 				for (final ExpressionInfo argument : methodCall.getArguments()) {
 					final String argumentString = Conversion
-							.getNormalizedString(argument);
+							.getNormalizedExpression(argument);
 					text.append(argumentString);
 					text.append(",");
 				}
-				text.deleteCharAt(text.length() - 1);
+				if (0 < methodCall.getArguments().size()) {
+					text.deleteCharAt(text.length() - 1);
+				}
 				text.append(")");
 				break;
 			case TYPE_WITH_ARG: // 正規化レベル1，メソッド名を返り値の型名に正規化する，引数情報も用いる
@@ -333,11 +379,13 @@ public class Conversion {
 				text.append("(");
 				for (final ExpressionInfo argument : methodCall.getArguments()) {
 					final String argumentString = Conversion
-							.getNormalizedString(argument);
+							.getNormalizedExpression(argument);
 					text.append(argumentString);
 					text.append(",");
 				}
-				text.deleteCharAt(text.length() - 1);
+				if (0 < methodCall.getArguments().size()) {
+					text.deleteCharAt(text.length() - 1);
+				}
 				text.append(")");
 				break;
 			case TYPE_WITHOUT_ARG: // 正規化レベル1，メソッド名を返り値の型名に正規化する，引数情報は用いない
@@ -366,11 +414,13 @@ public class Conversion {
 				for (final ExpressionInfo argument : constructorCall
 						.getArguments()) {
 					final String argumentString = Conversion
-							.getNormalizedString(argument);
+							.getNormalizedExpression(argument);
 					text.append(argumentString);
 					text.append(",");
 				}
-				text.deleteCharAt(text.length() - 1);
+				if (0 < constructorCall.getArguments().size()) {
+					text.deleteCharAt(text.length() - 1);
+				}
 				text.append(")");
 				break;
 			case TYPE_WITH_ARG: // 正規化レベル1，コンストラクタ呼び出しを型に正規化する(new
@@ -380,11 +430,13 @@ public class Conversion {
 				for (final ExpressionInfo argument : constructorCall
 						.getArguments()) {
 					final String argumentString = Conversion
-							.getNormalizedString(argument);
+							.getNormalizedExpression(argument);
 					text.append(argumentString);
 					text.append(",");
 				}
-				text.deleteCharAt(text.length() - 1);
+				if (0 < constructorCall.getArguments().size()) {
+					text.deleteCharAt(text.length() - 1);
+				}
 				text.append(")");
 				break;
 			case TYPE_WITHOUT_ARG: // 正規化レベル2，コンストラクタ呼び出しを型に正規化する（new
@@ -412,7 +464,7 @@ public class Conversion {
 
 				final ExpressionInfo castedExpression = cast.getCastedUsage();
 				final String castedExpressionString = Conversion
-						.getNormalizedString(castedExpression);
+						.getNormalizedExpression(castedExpression);
 				text.append(castedExpressionString);
 				break;
 
@@ -437,6 +489,10 @@ public class Conversion {
 				text.append("TOKEN");
 				break;
 			}
+
+		} else if (expression instanceof EmptyExpressionInfo) {
+
+			// 何もする必要がない
 
 		} else if (expression instanceof LiteralUsageInfo) {
 
@@ -468,7 +524,7 @@ public class Conversion {
 				final ExpressionInfo operand = ((MonominalOperationInfo) expression)
 						.getOperand();
 				final String operandString = Conversion
-						.getNormalizedString(operand);
+						.getNormalizedExpression(operand);
 				text.append(operandString);
 				break;
 
@@ -490,7 +546,8 @@ public class Conversion {
 			text.append("(");
 
 			final ParenthesesExpressionInfo parentheses = (ParenthesesExpressionInfo) expression;
-			text.append(Conversion.getNormalizedString(parentheses));
+			text.append(Conversion.getNormalizedExpression(parentheses
+					.getParnentheticExpression()));
 
 			text.append(")");
 
@@ -504,7 +561,7 @@ public class Conversion {
 
 				final ConditionInfo condition = operation.getCondition();
 				final String conditionExpressionString = Conversion
-						.getNormalizedString(condition);
+						.getNormalizedCondition(condition);
 				text.append(conditionExpressionString);
 
 				text.append("?");
@@ -512,7 +569,7 @@ public class Conversion {
 				final ExpressionInfo trueExpression = operation
 						.getTrueExpression();
 				String trueExpressionString = Conversion
-						.getNormalizedString(trueExpression);
+						.getNormalizedExpression(trueExpression);
 				text.append(trueExpressionString);
 
 				text.append(":");
@@ -520,7 +577,7 @@ public class Conversion {
 				final ExpressionInfo falseExpression = operation
 						.getFalseExpression();
 				String falseExpressionString = Conversion
-						.getNormalizedString(falseExpression);
+						.getNormalizedExpression(falseExpression);
 				text.append(falseExpressionString);
 				break;
 

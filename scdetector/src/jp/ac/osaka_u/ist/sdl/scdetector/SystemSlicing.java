@@ -35,7 +35,7 @@ public class SystemSlicing extends Slicing {
 	final private Stack<CallInfo<?>> callStackB;
 
 	private ClonePairInfo clonepair;
-	
+
 	public SystemSlicing(final PDGNode<?> pointA, final PDGNode<?> pointB) {
 		this.pointA = pointA;
 		this.pointB = pointB;
@@ -245,7 +245,7 @@ public class SystemSlicing extends Slicing {
 			Integer hashA = NODE_TO_HASH_MAP.get(nodeA);
 			if (null == hashA) {
 				final ExecutableElementInfo coreA = nodeA.getCore();
-				hashA = Conversion.getNormalizedString(coreA).hashCode();
+				hashA = Conversion.getNormalizedElement(coreA).hashCode();
 				NODE_TO_HASH_MAP.put(nodeA, hashA);
 			}
 
@@ -262,7 +262,7 @@ public class SystemSlicing extends Slicing {
 				Integer hashB = NODE_TO_HASH_MAP.get(nodeB);
 				if (null == hashB) {
 					final ExecutableElementInfo coreB = nodeB.getCore();
-					hashB = Conversion.getNormalizedString(coreB).hashCode();
+					hashB = Conversion.getNormalizedElement(coreB).hashCode();
 					NODE_TO_HASH_MAP.put(nodeB, hashB);
 				}
 

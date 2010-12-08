@@ -27,7 +27,7 @@ public class ProgramSlicing extends Slicing {
 	final private Set<PDGNode<?>> checkedNodesB;
 
 	private ClonePairInfo clonepair;
-	
+
 	public ProgramSlicing(final PDGNode<?> pointA, final PDGNode<?> pointB) {
 		this.pointA = pointA;
 		this.pointB = pointB;
@@ -150,7 +150,7 @@ public class ProgramSlicing extends Slicing {
 			Integer hashA = NODE_TO_HASH_MAP.get(nodeA);
 			if (null == hashA) {
 				final ExecutableElementInfo coreA = nodeA.getCore();
-				hashA = Conversion.getNormalizedString(coreA).hashCode();
+				hashA = Conversion.getNormalizedElement(coreA).hashCode();
 				NODE_TO_HASH_MAP.put(nodeA, hashA);
 			}
 
@@ -172,7 +172,7 @@ public class ProgramSlicing extends Slicing {
 				Integer hashB = NODE_TO_HASH_MAP.get(nodeB);
 				if (null == hashB) {
 					final ExecutableElementInfo coreB = nodeB.getCore();
-					hashB = Conversion.getNormalizedString(coreB).hashCode();
+					hashB = Conversion.getNormalizedElement(coreB).hashCode();
 					NODE_TO_HASH_MAP.put(nodeB, hashB);
 				}
 

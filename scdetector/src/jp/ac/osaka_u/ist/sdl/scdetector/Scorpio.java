@@ -878,7 +878,8 @@ public class Scorpio extends MetricsTool {
 			}
 
 			final ExecutableElementInfo element = pdgNode.getCore();
-			final int hash = Conversion.getNormalizedString(element).hashCode();
+			final String converted = Conversion.getNormalizedElement(element);
+			final int hash = converted.hashCode();
 			List<PDGNode<?>> group = equivalenceGroups.get(hash);
 			if (null == group) {
 				group = new ArrayList<PDGNode<?>>();
@@ -931,6 +932,29 @@ public class Scorpio extends MetricsTool {
 		if (Configuration.INSTANCE.getH() == HEURISTICS.ON) {
 			equivalenceGroups.remove(1495279981); // String a = xxx + yyy;
 			equivalenceGroups.remove(543405271); // throw b;
+			equivalenceGroups.remove(-171241314); // boolean = char != char;
+			equivalenceGroups.remove(-150415074); // byte = byte;
+			equivalenceGroups.remove(1184753016); // int = int - int;
+			equivalenceGroups.remove(1738296198); // boolean = boolean &&
+													// boolean;
+			equivalenceGroups.remove(1195742790); // boolean = boolean ||
+													// boolean;
+			equivalenceGroups.remove(-559365657); // int = (int);
+			equivalenceGroups.remove(-126711475); // int += int;
+			equivalenceGroups.remove(1182905974); // int = int + int;
+			equivalenceGroups.remove(891031693); // byte = (byte);
+			equivalenceGroups.remove(-1862771686); // long += int;
+			equivalenceGroups.remove(1372165340); // int = byte & int;
+			equivalenceGroups.remove(-1308890455); // byte = byte << int;
+			equivalenceGroups.remove(680348921); // boolean = long > int;
+			equivalenceGroups.remove(533202266); // int = int;
+			equivalenceGroups.remove(362302760); // boolean = boolean;
+			equivalenceGroups.remove(-613140729); // boolean = (boolean);
+			equivalenceGroups.remove(1738296198); // boolean = boolean &&
+													// boolean;
+			equivalenceGroups.remove(-1090942022); // boolean = char == char;
+			equivalenceGroups.remove(-203438341); // boolean = char >= char;
+			equivalenceGroups.remove(-1978445703); // boolean = char <= char;
 		}
 
 		final List<ClonePairInfo> clonepairList = Collections
@@ -1119,7 +1143,7 @@ public class Scorpio extends MetricsTool {
 			final Collection<List<PDGNode<?>>> nodeListSet) {
 
 		final List<NodePairInfo> nodepairs = new ArrayList<NodePairInfo>();
-		
+
 		for (final List<PDGNode<?>> nodeList : nodeListSet) {
 
 			// メソッド入口ノードの場合は読み飛ばす
