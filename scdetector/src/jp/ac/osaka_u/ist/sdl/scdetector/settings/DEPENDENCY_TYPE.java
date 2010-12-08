@@ -13,7 +13,7 @@ public enum DEPENDENCY_TYPE {
     CONTROL {
         @Override
         public String getText() {
-            return "conrtol";
+            return "control";
         }
     },
 

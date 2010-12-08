@@ -23,8 +23,8 @@ public class ProgramSlicing extends Slicing {
 	public ProgramSlicing(final PDGNode<?> pointA, final PDGNode<?> pointB) {
 		this.pointA = pointA;
 		this.pointB = pointB;
-		checkedNodesA = new HashSet<PDGNode<?>>();
-		checkedNodesB = new HashSet<PDGNode<?>>();
+		this.checkedNodesA = new HashSet<PDGNode<?>>();
+		this.checkedNodesB = new HashSet<PDGNode<?>>();
 		this.clonepair = null;
 	}
 
@@ -32,7 +32,8 @@ public class ProgramSlicing extends Slicing {
 		if (null != this.clonepair) {
 			return this.clonepair;
 		} else {
-			this.clonepair = this.perform(this.pointA, this.pointB);
+			this.clonepair = new ClonePairInfo();
+			this.perform(this.pointA, this.pointB);
 			return this.clonepair;
 		}
 	}
@@ -45,11 +46,11 @@ public class ProgramSlicing extends Slicing {
 
 	private ClonePairInfo clonepair;
 
-	private ClonePairInfo perform(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
+	private void perform(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
 
 		// このノードをチェック済みノード集合に追加，この処理は再帰呼び出しの前でなければならない
-		checkedNodesA.add(nodeA);
-		checkedNodesB.add(nodeB);
+		this.checkedNodesA.add(nodeA);
+		this.checkedNodesB.add(nodeB);
 
 		// ここから，各エッジの先にあるノードの集合を得るための処理
 		final SortedSet<PDGEdge> backwardEdgesA = nodeA.getBackwardEdges();
@@ -109,37 +110,28 @@ public class ProgramSlicing extends Slicing {
 		final SortedSet<PDGNode<?>> forwardControlNodesB = this
 				.getToNodes(forwardControlEdgesB);
 
-		final ClonePairInfo clonepair = new ClonePairInfo();
-
 		// 各ノードの集合に対してその先にあるクローンペアの構築
 		// バックワードスライスを使う設定の場合
 		if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
-			this.enlargeClonePair(clonepair, backwardExecutionNodesA,
+			this.enlargeClonePair(backwardExecutionNodesA,
 					backwardExecutionNodesB);
-			this.enlargeClonePair(clonepair, backwardDataNodesA,
-					backwardDataNodesB);
-			this.enlargeClonePair(clonepair, backwardControlNodesA,
-					backwardControlNodesB);
+			this.enlargeClonePair(backwardDataNodesA, backwardDataNodesB);
+			this.enlargeClonePair(backwardControlNodesA, backwardControlNodesB);
 		}
 
 		// フォワードスライスを使う設定の場合
 		if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.FORWARD)) {
-			this.enlargeClonePair(clonepair, forwardExecutionNodesA,
+			this.enlargeClonePair(forwardExecutionNodesA,
 					forwardExecutionNodesB);
-			this.enlargeClonePair(clonepair, forwardDataNodesA,
-					forwardDataNodesB);
-			this.enlargeClonePair(clonepair, forwardControlNodesA,
-					forwardControlNodesB);
+			this.enlargeClonePair(forwardDataNodesA, forwardDataNodesB);
+			this.enlargeClonePair(forwardControlNodesA, forwardControlNodesB);
 		}
 
 		// 現在のノードをクローンペアに追加
-		clonepair.add(nodeA, nodeB);
-
-		return clonepair;
+		this.clonepair.add(nodeA, nodeB);
 	}
 
-	private void enlargeClonePair(final ClonePairInfo clonepair,
-			final SortedSet<PDGNode<?>> nodesA,
+	private void enlargeClonePair(final SortedSet<PDGNode<?>> nodesA,
 			final SortedSet<PDGNode<?>> nodesB) {
 
 		for (final PDGNode<?> nodeA : nodesA) {
@@ -195,10 +187,7 @@ public class ProgramSlicing extends Slicing {
 						continue;
 					}
 
-					final ClonePairInfo priorClonepair = this.perform(nodeA,
-							nodeB);
-					clonepair.codecloneA.addElements(priorClonepair.codecloneA);
-					clonepair.codecloneB.addElements(priorClonepair.codecloneB);
+					this.perform(nodeA, nodeB);
 				}
 			}
 		}

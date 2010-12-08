@@ -162,7 +162,7 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 			return false;
 		}
 
-		return codeclone.getRealElements().containsAll(this.getRealElements());
+		return codeclone.realElements.containsAll(this.realElements);
 	}
 
 	@Override
@@ -181,11 +181,11 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 			return false;
 		}
 
-		if (!this.getRealElements().containsAll(target.getRealElements())) {
+		if (!this.realElements.containsAll(target.realElements)) {
 			return false;
 		}
 
-		if (!target.getRealElements().containsAll(this.getRealElements())) {
+		if (!target.realElements.containsAll(this.realElements)) {
 			return false;
 		}
 

@@ -39,7 +39,8 @@ public class SystemSlicing extends Slicing {
 		if (null != this.clonepair) {
 			return this.clonepair;
 		} else {
-			this.clonepair = this.perform(this.pointA, this.pointB);
+			this.clonepair = new ClonePairInfo();
+			this.perform(this.pointA, this.pointB);
 			return this.clonepair;
 		}
 	}
@@ -55,7 +56,7 @@ public class SystemSlicing extends Slicing {
 
 	private ClonePairInfo clonepair;
 
-	public ClonePairInfo perform(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
+	public void perform(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
 
 		// このノードをチェック済みノード集合に追加，この処理は再帰呼び出しの前でなければならない
 		this.checkedNodesA.add(nodeA);
@@ -198,57 +199,50 @@ public class SystemSlicing extends Slicing {
 		// 各ノードの集合に対してその先にあるクローンペアの構築
 		// バックワードスライスを使う設定の場合
 		if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
-			this.enlargeClonePair(clonepair, backwardExecutionNodesA,
+			this.enlargeClonePair(backwardExecutionNodesA,
 					backwardExecutionNodesB, acrossBackwardNodesA,
 					acrossBackwardNodesB, acrossForwardNodesA,
 					acrossForwardNodesB);
-			this.enlargeClonePair(clonepair, backwardDataNodesA,
-					backwardDataNodesB, acrossBackwardNodesA,
-					acrossBackwardNodesB, acrossForwardNodesA,
-					acrossForwardNodesB);
-			this.enlargeClonePair(clonepair, backwardControlNodesA,
-					backwardControlNodesB, acrossBackwardNodesA,
-					acrossBackwardNodesB, acrossForwardNodesA,
-					acrossForwardNodesB);
+			this.enlargeClonePair(backwardDataNodesA, backwardDataNodesB,
+					acrossBackwardNodesA, acrossBackwardNodesB,
+					acrossForwardNodesA, acrossForwardNodesB);
+			this.enlargeClonePair(backwardControlNodesA, backwardControlNodesB,
+					acrossBackwardNodesA, acrossBackwardNodesB,
+					acrossForwardNodesA, acrossForwardNodesB);
 		}
 
 		// フォワードスライスを使う設定の場合
 		if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.FORWARD)) {
-			this.enlargeClonePair(clonepair, forwardExecutionNodesA,
+			this.enlargeClonePair(forwardExecutionNodesA,
 					forwardExecutionNodesB, acrossBackwardNodesA,
 					acrossBackwardNodesB, acrossForwardNodesA,
 					acrossForwardNodesB);
-			this.enlargeClonePair(clonepair, forwardDataNodesA,
-					forwardDataNodesB, acrossBackwardNodesA,
-					acrossBackwardNodesB, acrossForwardNodesA,
-					acrossForwardNodesB);
-			this.enlargeClonePair(clonepair, forwardControlNodesA,
-					forwardControlNodesB, acrossBackwardNodesA,
-					acrossBackwardNodesB, acrossForwardNodesA,
-					acrossForwardNodesB);
+			this.enlargeClonePair(forwardDataNodesA, forwardDataNodesB,
+					acrossBackwardNodesA, acrossBackwardNodesB,
+					acrossForwardNodesA, acrossForwardNodesB);
+			this.enlargeClonePair(forwardControlNodesA, forwardControlNodesB,
+					acrossBackwardNodesA, acrossBackwardNodesB,
+					acrossForwardNodesA, acrossForwardNodesB);
 		}
 
 		// 現在のノードをクローンペアに追加
 		clonepair.add(nodeA, nodeB);
-
-		return clonepair;
 	}
 
-	private void enlargeClonePair(final ClonePairInfo clonepair,
-			final SortedSet<PDGNode<?>> nodesA,
+	private void enlargeClonePair(final SortedSet<PDGNode<?>> nodesA,
 			final SortedSet<PDGNode<?>> nodesB,
 			final Map<PDGNode<?>, CallInfo<?>> acrossBackwardNodesA,
 			final Map<PDGNode<?>, CallInfo<?>> acrossBackwardNodesB,
 			final Map<PDGNode<?>, CallInfo<?>> acrossForwardNodesA,
 			final Map<PDGNode<?>, CallInfo<?>> acrossForwardNodesB) {
 
-		for (final PDGNode<?> nodeA : nodesA) {
+		NODEA: for (final PDGNode<?> nodeA : nodesA) {
 
 			// 既にクローンに入ることが確定しているノードのときは調査しない
 			// 相手側のクローンに入っているノードのときも調査しない
 			if (this.checkedNodesA.contains(nodeA)
 					|| this.checkedNodesB.contains(nodeA)) {
-				continue;
+				continue NODEA;
 			}
 
 			// ノードのハッシュ値を得る
@@ -259,13 +253,13 @@ public class SystemSlicing extends Slicing {
 				NODE_TO_HASH_MAP.put(nodeA, hashA);
 			}
 
-			for (final PDGNode<?> nodeB : nodesB) {
+			NODEB: for (final PDGNode<?> nodeB : nodesB) {
 
 				// 既にクローンに入ることが確定しているノードのときは調査しない
 				// 相手側のクローンに入っているノードのときも調査しない
 				if (this.checkedNodesB.contains(nodeB)
 						|| this.checkedNodesA.contains(nodeB)) {
-					continue;
+					continue NODEB;
 				}
 
 				// ノードのハッシュ値を得る
@@ -279,11 +273,11 @@ public class SystemSlicing extends Slicing {
 				SlicingThread.increaseNumberOfComparison();
 
 				// ノードのハッシュ値が等しい場合は，そのノードペアの先をさらに調査
-				if (hashA.equals(hashB)) {
+				if (hashA.intValue() == hashB.intValue()) {
 
 					// ノードが同じ場合は調査しない
 					if (nodeA == nodeB) {
-						continue;
+						continue NODEB;
 					}
 
 					// メソッドをまたがる場合はコールスタックの更新を行う
@@ -308,12 +302,9 @@ public class SystemSlicing extends Slicing {
 						this.callStackB.push(acrossForwardNodesB.get(nodeB));
 					}
 
-					final ClonePairInfo priorClonepair = this.perform(nodeA,
-							nodeB);
-					clonepair.codecloneA.addElements(priorClonepair.codecloneA);
-					clonepair.codecloneB.addElements(priorClonepair.codecloneB);
+					this.perform(nodeA, nodeB);
 
-					// メソッドをまたがる場合はコーススタックの更新を行う
+					// メソッドをまたがる場合はコールスタックの更新を行う（後処理として必要）
 					if (acrossBackwardNodesA.containsKey(nodeA)) {
 						this.callStackA.push(acrossBackwardNodesA.get(nodeA));
 					} else if (acrossForwardNodesA.containsKey(nodeA)) {

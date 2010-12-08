@@ -31,6 +31,7 @@ import jp.ac.osaka_u.ist.sdl.scdetector.settings.CONTROL_FILTER;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.DEPENDENCY_TYPE;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.DISSOLVE;
+import jp.ac.osaka_u.ist.sdl.scdetector.settings.HEURISTICS;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.LITERAL_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.MERGE;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.OPERATION_NORMALIZATION;
@@ -203,6 +204,15 @@ public class Scorpio extends MetricsTool {
 			}
 
 			{
+				final Option h = new Option("h", "heuristics", true,
+						"heuristics");
+				h.setArgName("heuristics");
+				h.setArgs(1);
+				h.setRequired(false);
+				options.addOption(h);
+			}
+
+			{
 				final Option m = new Option("m", "method", true, "small method");
 				m.setArgName("method");
 				m.setArgs(1);
@@ -358,6 +368,7 @@ public class Scorpio extends MetricsTool {
 			{
 				final Option pr = new Option("pr", false,
 						"parameterize class references");
+				pr.setArgs(1);
 				pr.setRequired(false);
 				options.addOption(pr);
 			}
@@ -410,6 +421,19 @@ public class Scorpio extends MetricsTool {
 					System.err.println("Unknown option : " + dissolve);
 					System.err
 							.println("\"-f\" option must have \"yes\" or \"no\"");
+					System.exit(0);
+				}
+			}
+			if (cmd.hasOption("h")) {
+				final String heuristics = cmd.getOptionValue("h");
+				if (heuristics.equalsIgnoreCase("on")) {
+					Configuration.INSTANCE.setH(HEURISTICS.ON);
+				} else if (heuristics.equalsIgnoreCase("off")) {
+					Configuration.INSTANCE.setH(HEURISTICS.OFF);
+				} else {
+					System.err.println("Unknown option : " + heuristics);
+					System.err
+							.println("\"-h\" option must have \"on\" or \"off\"");
 					System.exit(0);
 				}
 			}
@@ -794,8 +818,8 @@ public class Scorpio extends MetricsTool {
 
 		ALLNODE: for (final PDGNode<?> pdgNode : pdgNodeFactory.getAllNodes()) {
 
-			// case エントリは登録しない
 			{
+				// case エントリは登録しない
 				final ExecutableElementInfo core = pdgNode.getCore();
 				if (core instanceof CaseEntryInfo) {
 					continue ALLNODE;
@@ -902,6 +926,12 @@ public class Scorpio extends MetricsTool {
 
 	private static List<ClonePairInfo> detectClonePairs(
 			final SortedMap<Integer, List<PDGNode<?>>> equivalenceGroups) {
+
+		// 経験則により，必要のないと思われるノードを取り除く
+		if (Configuration.INSTANCE.getH() == HEURISTICS.ON) {
+			equivalenceGroups.remove(1495279981); // String a = xxx + yyy;
+			equivalenceGroups.remove(543405271); // throw b;
+		}
 
 		final List<ClonePairInfo> clonepairList = Collections
 				.synchronizedList(new ArrayList<ClonePairInfo>());
@@ -1089,7 +1119,7 @@ public class Scorpio extends MetricsTool {
 			final Collection<List<PDGNode<?>>> nodeListSet) {
 
 		final List<NodePairInfo> nodepairs = new ArrayList<NodePairInfo>();
-
+		
 		for (final List<PDGNode<?>> nodeList : nodeListSet) {
 
 			// メソッド入口ノードの場合は読み飛ばす
