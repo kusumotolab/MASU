@@ -35,6 +35,7 @@ import jp.ac.osaka_u.ist.sdl.scdetector.settings.HEURISTICS;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.LITERAL_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.MERGE;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.OPERATION_NORMALIZATION;
+import jp.ac.osaka_u.ist.sdl.scdetector.settings.OUTPUT_FORMAT;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.PDG_TYPE;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.REFERENCE_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.SLICE_TYPE;
@@ -201,6 +202,14 @@ public class Scorpio extends MetricsTool {
 				f.setArgs(1);
 				f.setRequired(false);
 				options.addOption(f);
+			}
+
+			{
+				final Option g = new Option("g", "format", true, "format");
+				g.setArgName("format");
+				g.setArgs(1);
+				g.setRequired(false);
+				options.addOption(g);
 			}
 
 			{
@@ -421,6 +430,19 @@ public class Scorpio extends MetricsTool {
 					System.err.println("Unknown option : " + dissolve);
 					System.err
 							.println("\"-f\" option must have \"yes\" or \"no\"");
+					System.exit(0);
+				}
+			}
+			if (cmd.hasOption("g")) {
+				final String format = cmd.getOptionValue("g");
+				if (format.equalsIgnoreCase("set")) {
+					Configuration.INSTANCE.setG(OUTPUT_FORMAT.SET);
+				} else if (format.equalsIgnoreCase("pair")) {
+					Configuration.INSTANCE.setG(OUTPUT_FORMAT.PAIR);
+				} else {
+					System.err.println("Unknown option : " + format);
+					System.err
+							.println("\"-g\" option must have \"set\" or \"pair\"");
 					System.exit(0);
 				}
 			}
@@ -936,9 +958,9 @@ public class Scorpio extends MetricsTool {
 			equivalenceGroups.remove(-150415074); // byte = byte;
 			equivalenceGroups.remove(1184753016); // int = int - int;
 			equivalenceGroups.remove(1738296198); // boolean = boolean &&
-													// boolean;
+			// boolean;
 			equivalenceGroups.remove(1195742790); // boolean = boolean ||
-													// boolean;
+			// boolean;
 			equivalenceGroups.remove(-559365657); // int = (int);
 			equivalenceGroups.remove(-126711475); // int += int;
 			equivalenceGroups.remove(1182905974); // int = int + int;
@@ -951,7 +973,7 @@ public class Scorpio extends MetricsTool {
 			equivalenceGroups.remove(362302760); // boolean = boolean;
 			equivalenceGroups.remove(-613140729); // boolean = (boolean);
 			equivalenceGroups.remove(1738296198); // boolean = boolean &&
-													// boolean;
+			// boolean;
 			equivalenceGroups.remove(-1090942022); // boolean = char == char;
 			equivalenceGroups.remove(-203438341); // boolean = char >= char;
 			equivalenceGroups.remove(-1978445703); // boolean = char <= char;
@@ -1039,70 +1061,90 @@ public class Scorpio extends MetricsTool {
 	private static SortedSet<CloneSetInfo> convert(
 			final Set<ClonePairInfo> clonepairs) {
 
-		final Map<CodeCloneInfo, CloneSetInfo> cloneSetBag = new HashMap<CodeCloneInfo, CloneSetInfo>();
+		if (Configuration.INSTANCE.getG() == OUTPUT_FORMAT.SET) {
 
-		for (final ClonePairInfo clonePair : clonepairs) {
+			final Map<CodeCloneInfo, CloneSetInfo> cloneSetBag = new HashMap<CodeCloneInfo, CloneSetInfo>();
 
-			final CodeCloneInfo cloneA = clonePair.codecloneA;
-			final CodeCloneInfo cloneB = clonePair.codecloneB;
+			for (final ClonePairInfo clonePair : clonepairs) {
 
-			final CloneSetInfo cloneSetA = cloneSetBag.get(cloneA);
-			final CloneSetInfo cloneSetB = cloneSetBag.get(cloneB);
+				final CodeCloneInfo cloneA = clonePair.codecloneA;
+				final CodeCloneInfo cloneB = clonePair.codecloneB;
 
-			// コード片A，Bともすでに登録されている場合
-			if ((null != cloneSetA) && (null != cloneSetB)) {
+				final CloneSetInfo cloneSetA = cloneSetBag.get(cloneA);
+				final CloneSetInfo cloneSetB = cloneSetBag.get(cloneB);
 
-				// A と Bの所属するクローンセットが違う場合は，統合する
-				if (cloneSetA != cloneSetB) {
-					final CloneSetInfo cloneSetC = new CloneSetInfo();
-					cloneSetC.addAll(cloneSetA.getCodeClones());
-					cloneSetC.addAll(cloneSetB.getCodeClones());
+				// コード片A，Bともすでに登録されている場合
+				if ((null != cloneSetA) && (null != cloneSetB)) {
 
-					for (final CodeCloneInfo codeFragment : cloneSetA
-							.getCodeClones()) {
-						cloneSetBag.remove(codeFragment);
+					// A と Bの所属するクローンセットが違う場合は，統合する
+					if (cloneSetA != cloneSetB) {
+						final CloneSetInfo cloneSetC = new CloneSetInfo();
+						cloneSetC.addAll(cloneSetA.getCodeClones());
+						cloneSetC.addAll(cloneSetB.getCodeClones());
+
+						for (final CodeCloneInfo codeFragment : cloneSetA
+								.getCodeClones()) {
+							cloneSetBag.remove(codeFragment);
+						}
+						for (final CodeCloneInfo codeFragment : cloneSetB
+								.getCodeClones()) {
+							cloneSetBag.remove(codeFragment);
+						}
+
+						for (final CodeCloneInfo codeFragment : cloneSetC
+								.getCodeClones()) {
+							cloneSetBag.put(codeFragment, cloneSetC);
+						}
 					}
-					for (final CodeCloneInfo codeFragment : cloneSetB
-							.getCodeClones()) {
-						cloneSetBag.remove(codeFragment);
-					}
 
-					for (final CodeCloneInfo codeFragment : cloneSetC
-							.getCodeClones()) {
-						cloneSetBag.put(codeFragment, cloneSetC);
-					}
+				} else if ((null != cloneSetA) && (null == cloneSetB)) {
+
+					cloneSetA.add(cloneB);
+					cloneSetBag.put(cloneB, cloneSetA);
+
+				} else if ((null == cloneSetA) && (null != cloneSetB)) {
+
+					cloneSetB.add(cloneA);
+					cloneSetBag.put(cloneA, cloneSetB);
+
+				} else {
+
+					final CloneSetInfo cloneSet = new CloneSetInfo();
+					cloneSet.add(cloneA);
+					cloneSet.add(cloneB);
+
+					cloneSetBag.put(cloneA, cloneSet);
+					cloneSetBag.put(cloneB, cloneSet);
+
 				}
-
-			} else if ((null != cloneSetA) && (null == cloneSetB)) {
-
-				cloneSetA.add(cloneB);
-				cloneSetBag.put(cloneB, cloneSetA);
-
-			} else if ((null == cloneSetA) && (null != cloneSetB)) {
-
-				cloneSetB.add(cloneA);
-				cloneSetBag.put(cloneA, cloneSetB);
-
-			} else {
-
-				final CloneSetInfo cloneSet = new CloneSetInfo();
-				cloneSet.add(cloneA);
-				cloneSet.add(cloneB);
-
-				cloneSetBag.put(cloneA, cloneSet);
-				cloneSetBag.put(cloneB, cloneSet);
-
 			}
+
+			final SortedSet<CloneSetInfo> cloneSets = new TreeSet<CloneSetInfo>();
+			for (final CloneSetInfo cloneSet : cloneSetBag.values()) {
+				if (1 < cloneSet.getNumberOfCodeclones()) {
+					cloneSets.add(cloneSet);
+				}
+			}
+
+			return cloneSets;
+
+		} else if (Configuration.INSTANCE.getG() == OUTPUT_FORMAT.PAIR) {
+
+			final SortedSet<CloneSetInfo> clonesets = new TreeSet<CloneSetInfo>();
+			for (final ClonePairInfo clonepair : clonepairs) {
+				final CloneSetInfo cloneset = new CloneSetInfo();
+				cloneset.add(clonepair.codecloneA);
+				cloneset.add(clonepair.codecloneB);
+				clonesets.add(cloneset);
+			}
+
+			return clonesets;
 		}
 
-		final SortedSet<CloneSetInfo> cloneSets = new TreeSet<CloneSetInfo>();
-		for (final CloneSetInfo cloneSet : cloneSetBag.values()) {
-			if (1 < cloneSet.getNumberOfCodeclones()) {
-				cloneSets.add(cloneSet);
-			}
+		else {
+			assert false : "Here shouldn't be reached!";
+			return null;
 		}
-
-		return cloneSets;
 	}
 
 	private static void write(final SortedSet<CloneSetInfo> clonesets,

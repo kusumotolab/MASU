@@ -22,6 +22,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.DefaultEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.EmptyExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionStatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForeachConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LiteralUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
@@ -493,6 +494,15 @@ public class Conversion {
 		} else if (expression instanceof EmptyExpressionInfo) {
 
 			// ‰½‚à‚·‚é•K—v‚ª‚È‚¢
+
+		} else if (expression instanceof ForeachConditionInfo) {
+
+			final ForeachConditionInfo foreach = (ForeachConditionInfo) expression;
+			text.append(Conversion.getNormalizedCondition(foreach
+					.getIteratorVariable()));
+			text.append(":");
+			text.append(Conversion.getNormalizedExpression(foreach
+					.getIteratorExpression()));
 
 		} else if (expression instanceof LiteralUsageInfo) {
 

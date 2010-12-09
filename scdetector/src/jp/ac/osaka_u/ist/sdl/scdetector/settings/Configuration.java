@@ -17,6 +17,7 @@ public final class Configuration {
 		this.m = SMALL_METHOD.UNHASHED;
 		this.e = MERGE.FALSE;
 		this.f = DISSOLUTION.FALSE;
+		this.g = OUTPUT_FORMAT.SET;
 		this.h = HEURISTICS.ON;
 		this.o = null;
 		this.p = PDG_TYPE.INTRA;
@@ -72,6 +73,14 @@ public final class Configuration {
 
 	public void setF(final DISSOLUTION f) {
 		this.f = f;
+	}
+
+	public OUTPUT_FORMAT getG() {
+		return this.g;
+	}
+
+	public void setG(final OUTPUT_FORMAT g) {
+		this.g = g;
 	}
 
 	public HEURISTICS getH() {
@@ -261,6 +270,11 @@ public final class Configuration {
 	 * 文や式を細粒度まで分解するかどうかを指定するためのオプション
 	 */
 	private DISSOLUTION f;
+
+	/**
+	 * 出力形式を指定するためのオプション
+	 */
+	private OUTPUT_FORMAT g;
 
 	/**
 	 * 経験則に基づくフィルタリングを行うかどうかを指定するためのオプション

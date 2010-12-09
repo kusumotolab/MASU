@@ -54,22 +54,91 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 	 */
 	public boolean subsumedBy(final ClonePairInfo clonepair) {
 
-		if (this.codecloneA.length() <= clonepair.codecloneA.length()
-				&& this.codecloneB.length() <= clonepair.codecloneB.length()) {
+		// this.codecloneA が clonepair.codecloneA よりも小さいとき
+		if (this.codecloneA.length() < clonepair.codecloneA.length()) {
 
-			boolean subsumed = this.codecloneA.subsumedBy(clonepair.codecloneA)
-					&& this.codecloneB.subsumedBy(clonepair.codecloneB);
-			if (subsumed) {
-				return true;
+			// this.codecloneA　が clonepair.codecloneA　に包含されているかを調査
+			if (this.codecloneA.subsumedBy(clonepair.codecloneA)) {
+
+				// this.codecloneB が clonepair.codecloneB よりも小さいとき
+				if (this.codecloneB.length() < clonepair.codecloneB.length()) {
+
+					// this.codecloneB が clonepair.codecloneB　に包含されているかを調査
+					if (this.codecloneB.subsumedBy(clonepair.codecloneB)) {
+						return true;
+					}
+				}
+
+				// this.codecloneB が clonepair.codecloneB と同じ大きさのとき
+				else if (this.codecloneB.length() == clonepair.codecloneB
+						.length()) {
+
+					// this.codecloneB が clonepair.codecloneB と等しいかを調査
+					if (this.codecloneB.equals(clonepair.codecloneB)) {
+						return true;
+					}
+				}
 			}
+		}
 
-		} else if (this.codecloneA.length() <= clonepair.codecloneB.length()
-				&& this.codecloneB.length() <= clonepair.codecloneA.length()) {
+		// this.codecloneA が clonepair.codecloneA と同じ大きさのとき
+		else if (this.codecloneA.length() == clonepair.codecloneA.length()) {
 
-			boolean subsumed = this.codecloneA.subsumedBy(clonepair.codecloneB)
-					&& this.codecloneB.subsumedBy(clonepair.codecloneA);
-			if (subsumed) {
-				return true;
+			// this.codecloneA が clonepair.codecloneA と等しいかを調査
+			if (this.codecloneA.equals(clonepair.codecloneA)) {
+
+				// this.codecloneB が clonepair.codecloneB よりも小さいとき
+				if (this.codecloneB.length() < clonepair.codecloneB.length()) {
+
+					// this.codecloneB が clonepair.codecloneB に包含されていうかを調査
+					if (this.codecloneB.subsumedBy(clonepair.codecloneB)) {
+						return true;
+					}
+				}
+			}
+		}
+
+		// this.codecloneA が clonepair.codecloneB よりも小さいとき
+		if (this.codecloneA.length() < clonepair.codecloneB.length()) {
+
+			// this.codecloneA　が clonepair.codecloneB　に包含されているかを調査
+			if (this.codecloneA.subsumedBy(clonepair.codecloneB)) {
+
+				// this.codecloneB が clonepair.codecloneA よりも小さいとき
+				if (this.codecloneB.length() < clonepair.codecloneA.length()) {
+
+					// this.codecloneB が clonepair.codecloneA　に包含されているかを調査
+					if (this.codecloneB.subsumedBy(clonepair.codecloneA)) {
+						return true;
+					}
+				}
+
+				// this.codecloneB が clonepair.codecloneA と同じ大きさのとき
+				else if (this.codecloneB.length() == clonepair.codecloneA
+						.length()) {
+
+					// this.codecloneB が clonepair.codecloneA と等しいかを調査
+					if (this.codecloneB.equals(clonepair.codecloneA)) {
+						return true;
+					}
+				}
+			}
+		}
+
+		// this.codecloneA が clonepair.codecloneB と同じ大きさのとき
+		else if (this.codecloneA.length() == clonepair.codecloneB.length()) {
+
+			// this.codecloneA が clonepair.codecloneB と等しいかを調査
+			if (this.codecloneA.equals(clonepair.codecloneB)) {
+
+				// this.codecloneB が clonepair.codecloneA よりも小さいとき
+				if (this.codecloneB.length() < clonepair.codecloneA.length()) {
+
+					// this.codecloneB が clonepair.codecloneA に包含されていうかを調査
+					if (this.codecloneB.subsumedBy(clonepair.codecloneA)) {
+						return true;
+					}
+				}
 			}
 		}
 
