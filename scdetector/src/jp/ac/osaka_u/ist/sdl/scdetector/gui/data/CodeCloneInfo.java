@@ -154,6 +154,32 @@ public class CodeCloneInfo implements Entity, Comparable<CodeCloneInfo> {
 		return 0;
 	}
 
+	@Override
+	public int hashCode() {
+		long total = 0;
+		for (final ElementInfo element : this.getElements()) {
+			total += element.hashCode();
+		}
+		return (int) total / this.getLength();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+
+		if (null == o) {
+			return false;
+		}
+
+		if (!(o instanceof CodeCloneInfo)) {
+			return false;
+		}
+
+		final CodeCloneInfo target = (CodeCloneInfo) o;
+
+		return this.elements.containsAll(target.elements)
+				&& target.elements.containsAll(this.elements);
+	}
+
 	public static String CODECLONE = new String("CODECLONE");
 
 	private final SortedSet<ElementInfo> elements;

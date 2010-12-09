@@ -5,6 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scdetector.gui.data.CodeCloneController;
@@ -57,21 +59,24 @@ public class Exporter {
 
 	private static void exportCodeClone(final String output) {
 
+		final SortedSet<CodeCloneInfo> codeclones = new TreeSet<CodeCloneInfo>();
+		for (final CloneSetInfo cloneset : CodeCloneController.getInstance(
+				Exporter.ID).getCloneSets()) {
+			codeclones.addAll(cloneset.getCodeclones());
+		}
+
 		try {
 
 			final BufferedWriter writer = new BufferedWriter(new FileWriter(
 					output));
 
-			for (final CloneSetInfo cloneset : CodeCloneController.getInstance(
-					Exporter.ID).getCloneSets()) {
-				for (final CodeCloneInfo codeclone : cloneset.getCodeclones()) {
-					final int size = codeclone.getLength();
-					final int method = codeclone.getNumberOfMethods();
-					writer.write(Integer.toString(size));
-					writer.write(",");
-					writer.write(Integer.toString(method));
-					writer.newLine();
-				}
+			for (final CodeCloneInfo codeclone : codeclones) {
+				final int size = codeclone.getLength();
+				final int method = codeclone.getNumberOfMethods();
+				writer.write(Integer.toString(size));
+				writer.write(",");
+				writer.write(Integer.toString(method));
+				writer.newLine();
 			}
 
 			writer.close();
