@@ -954,29 +954,27 @@ public class Scorpio extends MetricsTool {
 		if (Configuration.INSTANCE.getH() == HEURISTICS.ON) {
 			equivalenceGroups.remove(1495279981); // String a = xxx + yyy;
 			equivalenceGroups.remove(543405271); // throw b;
-			equivalenceGroups.remove(-171241314); // boolean = char != char;
-			equivalenceGroups.remove(-150415074); // byte = byte;
-			equivalenceGroups.remove(1184753016); // int = int - int;
-			equivalenceGroups.remove(1738296198); // boolean = boolean &&
-			// boolean;
-			equivalenceGroups.remove(1195742790); // boolean = boolean ||
-			// boolean;
-			equivalenceGroups.remove(-559365657); // int = (int);
-			equivalenceGroups.remove(-126711475); // int += int;
-			equivalenceGroups.remove(1182905974); // int = int + int;
-			equivalenceGroups.remove(891031693); // byte = (byte);
-			equivalenceGroups.remove(-1862771686); // long += int;
-			equivalenceGroups.remove(1372165340); // int = byte & int;
-			equivalenceGroups.remove(-1308890455); // byte = byte << int;
-			equivalenceGroups.remove(680348921); // boolean = long > int;
-			equivalenceGroups.remove(533202266); // int = int;
-			equivalenceGroups.remove(362302760); // boolean = boolean;
-			equivalenceGroups.remove(-613140729); // boolean = (boolean);
-			equivalenceGroups.remove(1738296198); // boolean = boolean &&
-			// boolean;
-			equivalenceGroups.remove(-1090942022); // boolean = char == char;
-			equivalenceGroups.remove(-203438341); // boolean = char >= char;
-			equivalenceGroups.remove(-1978445703); // boolean = char <= char;
+			equivalenceGroups.remove("boolean=boolean".hashCode());
+			equivalenceGroups.remove("boolean=boolean&boolean".hashCode());
+			equivalenceGroups.remove("boolean=boolean&&boolean".hashCode());
+			equivalenceGroups.remove("boolean=boolean||boolean".hashCode());
+			equivalenceGroups.remove("boolean=char!=char".hashCode());
+			equivalenceGroups.remove("boolean=char==char".hashCode());
+			equivalenceGroups.remove("boolean=char>=char".hashCode());
+			equivalenceGroups.remove("boolean=char<=char".hashCode());
+			equivalenceGroups.remove("boolean=long>int".hashCode());
+			equivalenceGroups.remove("boolean=(boolean)".hashCode());
+			equivalenceGroups.remove("byte=byte".hashCode());
+			equivalenceGroups.remove("byte=byte<<int".hashCode());
+			equivalenceGroups.remove("byte=(byte)".hashCode());
+			equivalenceGroups.remove("int=byte&int".hashCode());
+			equivalenceGroups.remove("int=int".hashCode());
+			equivalenceGroups.remove("int=int-int".hashCode());
+			equivalenceGroups.remove("int=byte&int".hashCode());
+			equivalenceGroups.remove("int=(int)".hashCode());
+			equivalenceGroups.remove("int=int+int".hashCode());
+			equivalenceGroups.remove("int+=int".hashCode());
+			equivalenceGroups.remove("long+=int".hashCode());
 		}
 
 		final List<ClonePairInfo> clonepairList = Collections
@@ -1008,26 +1006,24 @@ public class Scorpio extends MetricsTool {
 			final List<ClonePairInfo> clonepairList) {
 
 		// クローンペアリストのグループを生成，これはフィルタリングに使用
-		ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairListGroup = new ConcurrentHashMap<ExecutableElementInfo, List<ClonePairInfo>>();
+		ConcurrentMap<PDGNode<?>, List<ClonePairInfo>> clonepairListGroup = new ConcurrentHashMap<PDGNode<?>, List<ClonePairInfo>>();
 		for (final ClonePairInfo clonepair : clonepairList) {
-			for (final ExecutableElementInfo element : clonepair.codecloneA
-					.getRealElements()) {
-				List<ClonePairInfo> list = clonepairListGroup.get(element);
+			for (final PDGNode<?> node : clonepair.codecloneA.getRealElements()) {
+				List<ClonePairInfo> list = clonepairListGroup.get(node);
 				if (null == list) {
 					list = Collections
 							.synchronizedList(new ArrayList<ClonePairInfo>());
-					clonepairListGroup.put(element, list);
+					clonepairListGroup.put(node, list);
 				}
 				list.add(clonepair);
 			}
 
-			for (final ExecutableElementInfo element : clonepair.codecloneB
-					.getRealElements()) {
-				List<ClonePairInfo> list = clonepairListGroup.get(element);
+			for (final PDGNode<?> node : clonepair.codecloneB.getRealElements()) {
+				List<ClonePairInfo> list = clonepairListGroup.get(node);
 				if (null == list) {
 					list = Collections
 							.synchronizedList(new ArrayList<ClonePairInfo>());
-					clonepairListGroup.put(element, list);
+					clonepairListGroup.put(node, list);
 				}
 				list.add(clonepair);
 			}
@@ -1152,7 +1148,7 @@ public class Scorpio extends MetricsTool {
 
 		final XMLWriter writer = new XMLWriter(Configuration.INSTANCE.getO(),
 				DataManager.getInstance().getFileInfoManager().getFileInfos(),
-				clonesets, pdgNodeFactory);
+				clonesets);
 
 		/*
 		 * final BellonWriter writer = new BellonWriter(Configuration.INSTANCE

@@ -2,7 +2,6 @@ package jp.ac.osaka_u.ist.sdl.scdetector.data;
 
 import java.util.Iterator;
 
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 /**
@@ -219,10 +218,10 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 
 		// コードクローンAの位置情報で比較
 		{
-			Iterator<ExecutableElementInfo> thisIterator = thisCodeA
-					.getElements().iterator();
-			Iterator<ExecutableElementInfo> targetIterator = targetCodeA
-					.getElements().iterator();
+			Iterator<PDGNode<?>> thisIterator = thisCodeA.getElements()
+					.iterator();
+			Iterator<PDGNode<?>> targetIterator = targetCodeA.getElements()
+					.iterator();
 			while (thisIterator.hasNext() && targetIterator.hasNext()) {
 				int order = thisIterator.next()
 						.compareTo(targetIterator.next());
@@ -234,10 +233,10 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 
 		// コードクローンBの位置情報で比較
 		{
-			Iterator<ExecutableElementInfo> thisIterator = thisCodeB
-					.getElements().iterator();
-			Iterator<ExecutableElementInfo> targetIterator = targetCodeB
-					.getElements().iterator();
+			Iterator<PDGNode<?>> thisIterator = thisCodeB.getElements()
+					.iterator();
+			Iterator<PDGNode<?>> targetIterator = targetCodeB.getElements()
+					.iterator();
 			while (thisIterator.hasNext() && targetIterator.hasNext()) {
 				int order = thisIterator.next()
 						.compareTo(targetIterator.next());

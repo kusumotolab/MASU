@@ -7,13 +7,13 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import jp.ac.osaka_u.ist.sdl.scdetector.data.ClonePairInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 public class CloneFilteringThread implements Runnable {
 
 	public CloneFilteringThread(
 			final List<ClonePairInfo> clonepairList,
-			final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairListGroup,
+			final ConcurrentMap<PDGNode<?>, List<ClonePairInfo>> clonepairListGroup,
 			final AtomicInteger index,
 			final Set<ClonePairInfo> refinedClonepairs) {
 		this.clonepairList = clonepairList;
@@ -36,16 +36,14 @@ public class CloneFilteringThread implements Runnable {
 
 			// フィルタリングするかどうかを調査するための対象クローンペアリストを取得
 			final List<List<ClonePairInfo>> candidateList = new ArrayList<List<ClonePairInfo>>();
-			for (final ExecutableElementInfo element : clonepair.codecloneA
-					.getRealElements()) {
+			for (final PDGNode<?> node : clonepair.codecloneA.getRealElements()) {
 				final List<ClonePairInfo> candidate = this.clonepairListGroup
-						.get(element);
+						.get(node);
 				candidateList.add(candidate);
 			}
-			for (final ExecutableElementInfo element : clonepair.codecloneA
-					.getRealElements()) {
+			for (final PDGNode<?> node : clonepair.codecloneB.getRealElements()) {
 				final List<ClonePairInfo> candidate = this.clonepairListGroup
-						.get(element);
+						.get(node);
 				candidateList.add(candidate);
 			}
 			List<ClonePairInfo> target = candidateList.get(0);
@@ -69,7 +67,7 @@ public class CloneFilteringThread implements Runnable {
 
 	private final List<ClonePairInfo> clonepairList;
 
-	private final ConcurrentMap<ExecutableElementInfo, List<ClonePairInfo>> clonepairListGroup;
+	private final ConcurrentMap<PDGNode<?>, List<ClonePairInfo>> clonepairListGroup;
 
 	private final AtomicInteger index;
 

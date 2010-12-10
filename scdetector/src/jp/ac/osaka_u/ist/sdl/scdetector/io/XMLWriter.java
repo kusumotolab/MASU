@@ -19,18 +19,15 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
-import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.IPDGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 public class XMLWriter {
 
 	public XMLWriter(final String outputFile, final SortedSet<FileInfo> files,
-			final SortedSet<CloneSetInfo> cloneSets,
-			IPDGNodeFactory pdgNodeFactory) {
+			final SortedSet<CloneSetInfo> cloneSets) {
 
 		this.files = files;
 		this.cloneSets = cloneSets;
-		this.pdgNodeFactory = pdgNodeFactory;
 
 		try {
 			this.writer = new BufferedWriter(new FileWriter(outputFile));
@@ -56,16 +53,15 @@ public class XMLWriter {
 			}
 			for (final CloneSetInfo cloneSet : this.cloneSets) {
 				for (final CodeCloneInfo codeclone : cloneSet.getCodeClones()) {
-					for (final ExecutableElementInfo element : codeclone
-							.getElements()) {
+					for (final PDGNode<?> node : codeclone.getRealElements()) {
+
+						final ExecutableElementInfo element = node.getCore();
 						final FileInfo ownerFile = ((TargetClassInfo) element
 								.getOwnerMethod().getOwnerClass())
 								.getOwnerFile();
 						final Set<PDGNode<?>> nodes = fileToNodeMap
 								.get(ownerFile);
 						assert null != nodes : "Illegal State!";
-						final PDGNode<?> node = this.pdgNodeFactory
-								.getNode(element);
 						nodes.add(node);
 					}
 				}
@@ -205,12 +201,12 @@ public class XMLWriter {
 							+ "</METHOD>");
 					this.writer.newLine();
 
-					for (final ExecutableElementInfo element : codeFragment
-							.getElements()) {
+					for (final PDGNode<?> node : codeFragment.getRealElements()) {
 
 						this.writer.write("\t\t\t\t<ELEMENT>");
 						this.writer.newLine();
 
+						final ExecutableElementInfo element = node.getCore();
 						final FileInfo ownerFile = ((TargetClassInfo) element
 								.getOwnerMethod().getOwnerClass())
 								.getOwnerFile();
@@ -289,6 +285,4 @@ public class XMLWriter {
 	final Set<CloneSetInfo> cloneSets;
 
 	final SortedSet<FileInfo> files;
-
-	final IPDGNodeFactory pdgNodeFactory;
 }

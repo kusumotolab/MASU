@@ -13,6 +13,7 @@ import jp.ac.osaka_u.ist.sdl.scdetector.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 public class BellonWriter {
 
@@ -40,28 +41,29 @@ public class BellonWriter {
 						.toArray(new CodeCloneInfo[0]);
 				for (int i = 0; i < codeclones.length; i++) {
 					final ExecutableElementInfo firstI = codeclones[i]
-							.getElements().first();
+							.getRealElements().first().getCore();
 					final ExecutableElementInfo lastI = codeclones[i]
-							.getElements().last();
+							.getRealElements().last().getCore();
 					final String filenameI = ((TargetClassInfo) firstI
 							.getOwnerMethod().getOwnerClass()).getOwnerFile()
 							.getName();
 					for (int j = i + 1; j < codeclones.length; j++) {
 
 						{ // 共通要素を持っている場合はクローンペアにしない
-							final Set<ExecutableElementInfo> commonElements = new HashSet<ExecutableElementInfo>();
-							commonElements.addAll(codeclones[i].getElements());
+							final Set<PDGNode<?>> commonElements = new HashSet<PDGNode<?>>();
+							commonElements.addAll(codeclones[i]
+									.getRealElements());
 							commonElements.retainAll(codeclones[j]
-									.getElements());
+									.getRealElements());
 							if (!commonElements.isEmpty()) {
 								continue;
 							}
 						}
 
 						final ExecutableElementInfo firstJ = codeclones[j]
-								.getElements().first();
+								.getRealElements().first().getCore();
 						final ExecutableElementInfo lastJ = codeclones[j]
-								.getElements().last();
+								.getRealElements().last().getCore();
 						final String filenameJ = ((TargetClassInfo) firstJ
 								.getOwnerMethod().getOwnerClass())
 								.getOwnerFile().getName();

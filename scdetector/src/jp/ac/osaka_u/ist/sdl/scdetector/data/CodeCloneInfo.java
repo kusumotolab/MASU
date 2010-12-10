@@ -39,8 +39,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
  */
 public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 
-	final private SortedSet<ExecutableElementInfo> allElements;
-	final private SortedSet<ExecutableElementInfo> realElements;
+	final private SortedSet<PDGNode<?>> allElements;
+	final private SortedSet<PDGNode<?>> realElements;
 
 	private int hash;
 
@@ -48,8 +48,8 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 * コンストラクタ
 	 */
 	public CodeCloneInfo() {
-		this.allElements = new TreeSet<ExecutableElementInfo>();
-		this.realElements = new TreeSet<ExecutableElementInfo>();
+		this.allElements = new TreeSet<PDGNode<?>>();
+		this.realElements = new TreeSet<PDGNode<?>>();
 		this.hash = 0;
 	}
 
@@ -82,8 +82,13 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 
 	public void add(final PDGNode<?> node) {
 
+		if (null == node) {
+			return;
+		}
+
 		// メソッドエンターノードは追加しない
-		if (node instanceof PDGMethodEnterNode) {
+		else if (node instanceof PDGMethodEnterNode) {
+			return;
 		}
 
 		// データノード（パラメータやフィールドパッシングのための）は追加しない
@@ -93,14 +98,20 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 		// 集約ノードのは，全てのコアを追加
 		else if (node instanceof PDGMergedNode) {
 			final PDGMergedNode mergedNode = (PDGMergedNode) node;
-			for (final ExecutableElementInfo element : mergedNode.getCores()) {
-				this.add(element);
+			for (final PDGNode<?> originalNode : mergedNode.getOriginalNodes()) {
+				this.add(originalNode);
 			}
 		}
 
 		// それ以外の時はコアを追加
 		else {
-			this.add(node.getCore());
+
+			final ExecutableElementInfo core = node.getCore();
+			if (core.getFromLine() != core.getToLine()
+					|| core.getFromColumn() != core.getToColumn()) {
+				this.realElements.add(node);
+			}
+			this.allElements.add(node);
 		}
 	}
 
@@ -108,19 +119,6 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 		for (final PDGNode<?> node : nodes) {
 			this.add(node);
 		}
-	}
-
-	private void add(final ExecutableElementInfo element) {
-
-		if (null == element) {
-			return;
-		}
-
-		if (element.getFromLine() != element.getToLine()
-				|| element.getFromColumn() != element.getToColumn()) {
-			this.realElements.add(element);
-		}
-		this.allElements.add(element);
 	}
 
 	/**
@@ -135,8 +133,8 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	}
 
 	public FileInfo getOwnerFile() {
-		return ((TargetClassInfo) this.realElements.first().getOwnerMethod()
-				.getOwnerClass()).getOwnerFile();
+		return ((TargetClassInfo) this.realElements.first().getCore()
+				.getOwnerMethod().getOwnerClass()).getOwnerFile();
 	}
 
 	/**
@@ -198,11 +196,11 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 * @return　コードクローンを構成する要素群
 	 */
 	@Deprecated
-	public SortedSet<ExecutableElementInfo> getElements() {
+	public SortedSet<PDGNode<?>> getElements() {
 		return this.getRealElements();
 	}
 
-	public SortedSet<ExecutableElementInfo> getAllElements() {
+	public SortedSet<PDGNode<?>> getAllElements() {
 		// final SortedSet<ExecutableElementInfo> elements = new
 		// TreeSet<ExecutableElementInfo>();
 		// elements.addAll(this.allElements);
@@ -210,7 +208,7 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 		return Collections.unmodifiableSortedSet(this.allElements);
 	}
 
-	public SortedSet<ExecutableElementInfo> getRealElements() {
+	public SortedSet<PDGNode<?>> getRealElements() {
 		// final SortedSet<ExecutableElementInfo> elements = new
 		// TreeSet<ExecutableElementInfo>();
 		// elements.addAll(this.realElements);
@@ -225,8 +223,8 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	 */
 	public SortedSet<CallableUnitInfo> getOwnerCallableUnits() {
 		final SortedSet<CallableUnitInfo> methods = new TreeSet<CallableUnitInfo>();
-		for (final ExecutableElementInfo element : this.getElements()) {
-			methods.add(element.getOwnerMethod());
+		for (final PDGNode<?> node : this.getElements()) {
+			methods.add(node.getCore().getOwnerMethod());
 		}
 		return methods;
 	}
@@ -239,8 +237,8 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 		}
 
 		long hash = 0;
-		for (final ExecutableElementInfo element : this.realElements) {
-			hash += element.hashCode();
+		for (final PDGNode<?> node : this.realElements) {
+			hash += node.hashCode();
 		}
 
 		if (Integer.MIN_VALUE < hash && hash < Integer.MAX_VALUE) {
@@ -254,15 +252,15 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 
 	public float density() {
 		final Set<Integer> duplication = new HashSet<Integer>();
-		for (final ExecutableElementInfo element : this.getElements()) {
-			for (int line = element.getFromLine(); line <= element
-					.getToColumn(); line++) {
+		for (final PDGNode<?> node : this.getElements()) {
+			for (int line = node.getCore().getFromLine(); line <= node
+					.getCore().getToColumn(); line++) {
 				duplication.add(new Integer(line));
 			}
 		}
 		return (float) duplication.size()
-				/ (float) (this.getElements().last().getToLine()
-						- this.getElements().first().getFromLine() + 1);
+				/ (float) (this.getElements().last().getCore().getToLine()
+						- this.getElements().first().getCore().getFromLine() + 1);
 	}
 
 	@Override
@@ -273,10 +271,10 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 			return 0;
 		}
 
-		final Iterator<ExecutableElementInfo> thisIterator = this
-				.getRealElements().iterator();
-		final Iterator<ExecutableElementInfo> targetIterator = o
-				.getRealElements().iterator();
+		final Iterator<PDGNode<?>> thisIterator = this.getRealElements()
+				.iterator();
+		final Iterator<PDGNode<?>> targetIterator = o.getRealElements()
+				.iterator();
 
 		// 両方の要素がある限り
 		while (thisIterator.hasNext() && targetIterator.hasNext()) {
@@ -312,22 +310,23 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	public int getGapsNumber() {
 		int gap = 0;
 
-		final CallableUnitInfo ownerMethod = this.getElements().first()
-				.getOwnerMethod();
+		final CallableUnitInfo ownerMethod = this.getRealElements().first()
+				.getCore().getOwnerMethod();
 		final SortedSet<ExecutableElementInfo> elements = getAllExecutableElements(ownerMethod);
 		final ExecutableElementInfo[] elementArray = elements
 				.toArray(new ExecutableElementInfo[0]);
 
-		final ExecutableElementInfo[] clonedElementArray = this.getElements()
-				.toArray(new ExecutableElementInfo[0]);
+		final PDGNode<?>[] clonedElementArray = this.getRealElements().toArray(
+				new PDGNode<?>[0]);
 		CLONE: for (int i = 0; i < clonedElementArray.length - 1; i++) {
 			for (int j = 0; j < elementArray.length - 1; j++) {
 
 				// i番目とj番目の要素が等しいかをチェック
-				if (equals(clonedElementArray[i], elementArray[j])) {
+				if (equals(clonedElementArray[i].getCore(), elementArray[j])) {
 
 					// i+1番目とj+1番目が等しくないのであれば，ギャップあり
-					if (!equals(clonedElementArray[i + 1], elementArray[j + 1])) {
+					if (!equals(clonedElementArray[i + 1].getCore(),
+							elementArray[j + 1])) {
 						gap++;
 					}
 
