@@ -499,8 +499,8 @@ public class MetricsTool {
                 modifiers.add(JavaPredefinedModifierInfo.getModifierInfo(unresolvedModifier));
             }
             final ExternalClassInfo classInfo = unresolvedClassInfo.isInner() ? new ExternalInnerClassInfo(
-                    modifiers, name, isInterface)
-                    : new ExternalClassInfo(modifiers, name, isInterface);
+                    modifiers, name, isInterface) : new ExternalClassInfo(modifiers, name,
+                    isInterface);
             classInfoManager.add(classInfo);
         }
 
@@ -566,9 +566,11 @@ public class MetricsTool {
 
             // 親クラス,インターフェースを解決
             for (final String unresolvedSuperType : unresolvedClassInfo.getSuperTypes()) {
-                final TypeInfo superType = JavaByteCodeNameResolver.resolveType(
-                        unresolvedSuperType, null, classInfo);
-                classInfo.addSuperClass((ClassTypeInfo) superType);
+                final ClassTypeInfo superType = (ClassTypeInfo) JavaByteCodeNameResolver
+                        .resolveType(unresolvedSuperType, null, classInfo);
+                classInfo.addSuperClass(superType);
+                final ClassInfo superClass = superType.getReferencedClass();
+                superClass.addSubClass(classInfo);
             }
 
             // フィールドの解決            
@@ -987,8 +989,7 @@ public class MetricsTool {
         } catch (final SecurityException e) {
             // 既にセットされているセキュリティマネージャによって，新たなセキュリティマネージャの登録が許可されなかった．
             // システムのセキュリティマネージャとして使わなくても，特別権限スレッドのアクセス制御は問題なく動作するのでとりあえず無視する
-            err
-                    .println("Failed to set system security manager. MetricsToolsecurityManager works only to manage privilege threads.");
+            err.println("Failed to set system security manager. MetricsToolsecurityManager works only to manage privilege threads.");
         }
     }
 
