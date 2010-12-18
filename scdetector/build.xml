@@ -7,7 +7,11 @@
 	<property name="resource.dir" value="resource" />
 		
 	<property name="cli.jar" value="lib/commons-cli-1.1.jar" />
-	<property name="antlr.jar" value="lib/antlr.jar" />
+	<property name="antlr.jar" value="../main/lib/antlr.jar" />
+	<property name="asm.jar" value="../main/lib/asm-all-3.3.jar" />
+	<property name="masu.jar" value="../main/masu/bin/masu.jar" />
+	<property name="cfg.jar" value="../cfg/cfg/bin/cfg.jar" />
+	<property name="pdg.jar" value="../pdg/pdg/bin/pdg.jar" />
 	<property name="icca.dir" location="../icca" />
 	<property name="masu.dir" location="../main" />
 	<property name="cfg.dir" location="../cfg" />
@@ -26,19 +30,30 @@
 	<property name="zip.src.name" value="${TOOL.NAME}src${DSTAMP}${TSTAMP}.zip" />
 
 	<target name="compile">
+		<ant antfile="../main/build.xml" target="compile" inheritall="false"/>
+		<ant antfile="../cfg/build.xml" target="compile" inheritall="false"/>
+		<ant antfile="../pdg/build.xml" target="compile" inheritall="false"/>
 		<mkdir dir="${CLS.DIR}" />
 		<javac classpath="${cli.jar};${icca.cls.dir};${masu.cls.dir};${cfg.cls.dir};${pdg.cls.dir}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
 	</target>
 
 	<target name="build" depends="compile">
+		<ant antfile="../main/build.xml" target="build" inheritall="false"/>
+		<ant antfile="../cfg/build.xml" target="build" inheritall="false"/>
+		<ant antfile="../pdg/build.xml" target="build" inheritall="false"/>
 		<mkdir dir="${PACKAGE.DIR}" />
 		<mkdir dir="${PACKAGE.BIN.DIR}" />
 		<jar basedir="${CLS.DIR}" jarfile="${PACKAGE.BIN.DIR}/scorpio.jar" manifest="${scorpio.manifest}" />
 		<jar basedir="${CLS.DIR}" jarfile="${PACKAGE.BIN.DIR}/scorpioui.jar" manifest="${scorpioui.manifest}" />	
 		<copy file="${cli.jar}" todir="${PACKAGE.BIN.DIR}" />
 		<copy file="${antlr.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${asm.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${masu.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${cfg.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${pdg.jar}" todir="${PACKAGE.BIN.DIR}" />
 		<copy file="${license.txt}" todir="${PACKAGE.BIN.DIR}" />
 		<copy file="${readmej.txt}" todir="${PACKAGE.BIN.DIR}" />
+		<property name="masu.jar" value="../main/masu/bin/masu.jar" />
 		<mkdir dir="${PACKAGE.BIN.DIR}/${resource.dir}" />
 		<copy todir="${PACKAGE.BIN.DIR}/${resource.dir}" >
 			<fileset dir="${resource.dir}" />
@@ -62,6 +77,9 @@
 	</target>
 
 	<target name="clean">
+		<ant antfile="../main/build.xml" target="clean" inheritall="false"/>
+		<ant antfile="../cfg/build.xml" target="clean" inheritall="false"/>
+		<ant antfile="../pdg/build.xml" target="clean" inheritall="false"/>
 		<delete dir="${CLS.DIR}" />
 		<delete dir="${PACKAGE.DIR}" />
 		<delete verbose="true">
