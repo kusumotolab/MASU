@@ -382,6 +382,15 @@ public class Java15AntlrAstTranslator implements AstTokenTranslator<AST> {
         case Java15TokenTypes.STRING_LITERAL:
             final ClassInfo stringClass = DataManager.getInstance().getClassInfoManager()
                     .getClassInfo(new String[] { "java", "lang", "String" });
+            if (null == stringClass) {
+                final StringBuilder text = new StringBuilder();
+                text.append("Class java.lang.String cannot be detected in your setting.");
+                text.append(System.getProperty("line.separator"));
+                text.append("Please use -b option to specify jar file");
+                text.append(" where java.lang.String is included.");
+                System.getProperty("line.separator");
+                throw new IllegalStateException(text.toString());
+            }
             return new ConstantToken(node.getText(), new ClassTypeInfo(stringClass));
         case Java15TokenTypes.NUM_FLOAT:
             return new ConstantToken(node.getText(), PrimitiveTypeInfo.FLOAT);
