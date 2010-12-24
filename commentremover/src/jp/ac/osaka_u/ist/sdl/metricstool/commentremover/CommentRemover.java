@@ -234,12 +234,6 @@ public class CommentRemover {
 				text.append((char) c);
 			}
 
-			/*
-			 * final BufferedReader reader = new BufferedReader(new FileReader(
-			 * file)); while (reader.ready()) { String line = reader.readLine();
-			 * text.append(line); text.append(LINE_SEPARATOR); }
-			 */
-
 			return text.toString();
 
 		} catch (IOException e) {
@@ -252,30 +246,28 @@ public class CommentRemover {
 	/**
 	 * ラインコメントを削除
 	 */
-	public static String deleteLineComment(String src) {
+	public static String deleteLineComment(final String src) {
 
 		StringBuilder buf = new StringBuilder();
 
-		boolean isLineComment = false;
-		boolean isString = false;
-		boolean isChar = false;
+		State currentState = State.CODE;
 
 		for (int i = 0; i < src.length(); i++) {
 			final char prev = 0 < i ? src.charAt(i - 1) : '0';
 			final char ch = src.charAt(i);
 			final char next = (i < src.length() - 1) ? src.charAt(i + 1) : '0';
 
-			// ラインコメントの中にいるとき
-			if (isLineComment) {
+			// lineコメントの中にいるとき
+			if (State.LINECOMMENT == currentState) {
 				// if (ch == LINE_SEPARATOR.charAt(0)) {
 				if (ch == '\n' || ((ch != '\n') && (prev == '\r'))) {
-					isLineComment = false;
+					currentState = State.CODE;
 					buf.append(LINE_SEPARATOR);
 				}
 			}
 
 			// String型のリテラルの中にいるとき
-			else if (isString) {
+			else if (State.STRING == currentState) {
 				buf.append(ch);
 
 				// エスケープシーケンスだったら次の文字も追加
@@ -285,12 +277,12 @@ public class CommentRemover {
 
 				// リテラルを抜ける
 				else if (ch == '\"') {
-					isString = false;
+					currentState = State.CODE;
 				}
 			}
 
 			// charのリテラルの中にいるとき
-			else if (isChar) {
+			else if (State.CHAR == currentState) {
 				buf.append(ch);
 
 				// エスケープシーケンスだったら次の文字も追加
@@ -300,24 +292,24 @@ public class CommentRemover {
 
 				// リテラルを抜ける
 				else if (ch == '\'') {
-					isChar = false;
+					currentState = State.CODE;
 				}
 			}
 
 			// ラインコメント開始
 			else if (ch == '/' && next == '/') {
-				isLineComment = true;
+				currentState = State.LINECOMMENT;
 			}
 
 			// Stringのリテラル開始
 			else if (ch == '\"') {
-				isString = true;
+				currentState = State.STRING;
 				buf.append(ch);
 			}
 
 			// charの開始
 			else if (ch == '\'') {
-				isChar = true;
+				currentState = State.CHAR;
 				buf.append(ch);
 			}
 
@@ -333,7 +325,7 @@ public class CommentRemover {
 	/**
 	 * ブロックコメントを削除
 	 */
-	public static String deleteBlockComment(String src) {
+	public static String deleteBlockComment(final String src) {
 
 		StringBuilder buf = new StringBuilder();
 
@@ -379,7 +371,7 @@ public class CommentRemover {
 					isChar = false;
 				}
 			}
-			
+
 			// ブロックコメントに入る
 			else if (ch == '/' && src.charAt(i + 1) == '*') {
 				isBlockComment = true;
@@ -410,7 +402,7 @@ public class CommentRemover {
 	/**
 	 * 空白行を削除
 	 */
-	public static String deleteBlankLine(String src) throws IOException {
+	public static String deleteBlankLine(final String src) throws IOException {
 
 		StringBuilder buf = new StringBuilder();
 		BufferedReader reader = new BufferedReader(new StringReader(src));
@@ -429,7 +421,7 @@ public class CommentRemover {
 	/**
 	 * 中括弧のみの行を削除
 	 */
-	public static String deleteBracketLine(String src) {
+	public static String deleteBracketLine(final String src) {
 
 		final String OPEN_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[{][ \t]*"
 				+ LINE_SEPARATOR;
@@ -467,7 +459,7 @@ public class CommentRemover {
 	/**
 	 * インデントを削除
 	 */
-	public static String deleteIndent(String src) {
+	public static String deleteIndent(final String src) {
 		return src.replaceAll(LINE_SEPARATOR + "[ \t]+", LINE_SEPARATOR);
 	}
 
