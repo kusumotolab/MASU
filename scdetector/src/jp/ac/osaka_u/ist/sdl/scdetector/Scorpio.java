@@ -594,7 +594,9 @@ public class Scorpio extends MetricsTool {
 			}
 			if (cmd.hasOption("pi")) {
 				final String text = cmd.getOptionValue("pi");
-				if (text.equalsIgnoreCase("no")) {
+				if (text.equalsIgnoreCase("fqn")) {
+					Configuration.INSTANCE.setPI(CALL_NORMALIZATION.FQN);
+				} else if (text.equalsIgnoreCase("no")) {
 					Configuration.INSTANCE.setPI(CALL_NORMALIZATION.NO);
 				} else if (text.equalsIgnoreCase("type_with_arg")) {
 					Configuration.INSTANCE

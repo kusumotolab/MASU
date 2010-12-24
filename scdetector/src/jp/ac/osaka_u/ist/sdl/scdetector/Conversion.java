@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sdl.scdetector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import jp.ac.osaka_u.ist.sdl.scdetector.settings.CALL_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scdetector.settings.Configuration;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayElementUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ArrayInitializerInfo;
@@ -13,7 +14,6 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BinominalOperationInfo
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CastUsageInfo;
-import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassReferenceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConstructorCallInfo;
@@ -349,15 +349,17 @@ public class Conversion {
 			final ExpressionInfo qualifier = methodCall
 					.getQualifierExpression();
 
-			final ClassInfo ownerClass = methodCall.getOwnerMethod()
-					.getOwnerClass();
-			if ((qualifier instanceof ClassReferenceInfo)
-					&& (((ClassReferenceInfo) qualifier).getReferencedClass()
-							.equals(ownerClass))) {
-			} else {
-				text.append(Conversion.getNormalizedExpression(qualifier));
-				text.append(".");
-			}
+			if (CALL_NORMALIZATION.FQN == Configuration.INSTANCE.getPI()) {
+//				final ClassInfo ownerClass = methodCall.getOwnerMethod()
+//						.getOwnerClass();
+//				if ((qualifier instanceof ClassReferenceInfo)
+//						&& (((ClassReferenceInfo) qualifier)
+//								.getReferencedClass().equals(ownerClass))) {
+//				} else {
+					text.append(Conversion.getNormalizedExpression(qualifier));
+					text.append(".");
+//				}
+			}			
 
 			switch (Configuration.INSTANCE.getPI()) {
 
