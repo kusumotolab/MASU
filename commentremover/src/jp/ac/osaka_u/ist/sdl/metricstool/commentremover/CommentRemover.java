@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -257,8 +258,17 @@ public class CommentRemover {
 			final char ch = src.charAt(i);
 			final char next = (i < src.length() - 1) ? src.charAt(i + 1) : '0';
 
+			if (State.BLOCKCOMMENT == currentState) {
+
+				buf.append(ch);
+
+				if (prev == '*' && ch == '/') {
+					currentState = State.CODE;
+				}
+			}
+
 			// lineコメントの中にいるとき
-			if (State.LINECOMMENT == currentState) {
+			else if (State.LINECOMMENT == currentState) {
 				// if (ch == LINE_SEPARATOR.charAt(0)) {
 				if (ch == '\n' || ((ch != '\n') && (prev == '\r'))) {
 					currentState = State.CODE;
@@ -296,6 +306,13 @@ public class CommentRemover {
 				}
 			}
 
+			// ブロックコメント開始
+			else if (ch == '/' && next == '*') {
+				currentState = State.BLOCKCOMMENT;
+				buf.append("/*");
+				i++; // '*' を二重読みしないための処理
+			}
+
 			// ラインコメント開始
 			else if (ch == '/' && next == '/') {
 				currentState = State.LINECOMMENT;
@@ -329,21 +346,31 @@ public class CommentRemover {
 
 		StringBuilder buf = new StringBuilder();
 
-		boolean isBlockComment = false;
-		boolean isString = false;
-		boolean isChar = false;
+		State currentState = State.CODE;
+
 		for (int i = 0; i < src.length(); i++) {
-			char ch = src.charAt(i);
+			final char prev = 0 < i ? src.charAt(i - 1) : '0';
+			final char ch = src.charAt(i);
+			final char next = (i < src.length() - 1) ? src.charAt(i + 1) : '0';
 
 			// ブロックコメントの中にいるとき
-			if (isBlockComment) {
-				if (ch == '/' && src.charAt(i - 1) == '*') {
-					isBlockComment = false;
+			if (State.BLOCKCOMMENT == currentState) {
+				if (prev == '*' && ch == '/') {
+					currentState = State.CODE;
+				}
+			} 
+
+			// ラインコメントの中にいるとき
+			else if (State.LINECOMMENT == currentState) {
+				buf.append(ch);
+
+				if (ch == '\n' || ((ch != '\n') && (prev == '\r'))) {
+					currentState = State.CODE;
 				}
 			}
 
 			// String型のリテラルの中にいるとき
-			else if (isString) {
+			else if (State.STRING == currentState) {
 				buf.append(ch);
 
 				// エスケープシーケンスだったら次の文字も追記
@@ -353,12 +380,12 @@ public class CommentRemover {
 
 				// リテラルを抜ける
 				else if (ch == '\"') {
-					isString = false;
+					currentState = State.CODE;
 				}
 			}
 
 			// charのリテラルの中にいるとき
-			else if (isChar) {
+			else if (State.CHAR == currentState) {
 				buf.append(ch);
 
 				// エスケープシーケンスだったら次の文字も追加
@@ -368,25 +395,25 @@ public class CommentRemover {
 
 				// リテラルを抜ける
 				else if (ch == '\'') {
-					isChar = false;
+					currentState = State.CODE;
 				}
 			}
 
 			// ブロックコメントに入る
-			else if (ch == '/' && src.charAt(i + 1) == '*') {
-				isBlockComment = true;
-				i++;
+			else if (ch == '/' && next == '*') {
+				currentState = State.BLOCKCOMMENT;
+				i++; // '*'を読み飛ばすための処理
 			}
 
 			// Stringのリテラル開始
 			else if (ch == '\"') {
-				isString = true;
+				currentState = State.STRING;
 				buf.append(ch);
 			}
 
 			// charの開始
 			else if (ch == '\'') {
-				isChar = true;
+				currentState = State.CHAR;
 				buf.append(ch);
 			}
 
@@ -423,37 +450,30 @@ public class CommentRemover {
 	 */
 	public static String deleteBracketLine(final String src) {
 
-		final String OPEN_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[{][ \t]*"
-				+ LINE_SEPARATOR;
-		final String CLOSE_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[}][ \t]*"
-				+ LINE_SEPARATOR;
+		final StringBuilder text = new StringBuilder();
+		for (final StringTokenizer tokenizer = new StringTokenizer(src,
+				LINE_SEPARATOR); tokenizer.hasMoreTokens();) {
 
-		// final String OPEN_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[{]";
-		// final String CLOSE_BRACKET_LINE = LINE_SEPARATOR + "[ \t]*[}]";
+			final String line = tokenizer.nextToken();
+			if (line.matches("[ \t]*[{][ \t]*")) {
+				text.append("{");
+			}
 
-		String text1 = src;
-		while (true) {
-			final String before = text1;
-			text1 = text1.replaceFirst(OPEN_BRACKET_LINE, "{" + LINE_SEPARATOR);
-			final String after = text1;
-			if (before.equals(after)) {
-				break;
+			else if (line.matches("[ \t]*[}][ \t]*")) {
+				text.append("}");
+			}
+
+			else {
+
+				// textの長さが0でなければ，行を分けるためのセパレータを挿入
+				if (0 < text.length()) {
+					text.append(LINE_SEPARATOR);
+				}
+				text.append(line);
 			}
 		}
 
-		String text2 = text1;
-		while (true) {
-			final String before = text2;
-			text2 = text2
-					.replaceFirst(CLOSE_BRACKET_LINE, "}" + LINE_SEPARATOR);
-			final String after = text2;
-			if (before.equals(after)) {
-				break;
-			}
-		}
-
-		return text2.replaceFirst(LINE_SEPARATOR + "[ \t]*[}][ \t]*$", "}"
-				+ LINE_SEPARATOR);
+		return text.toString();
 	}
 
 	/**
