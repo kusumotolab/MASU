@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sdl.scdetector.data;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -25,6 +26,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LabelInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SynchronizedBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGDataNode;
@@ -316,8 +318,17 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 		final ExecutableElementInfo[] elementArray = elements
 				.toArray(new ExecutableElementInfo[0]);
 
-		final PDGNode<?>[] clonedElementArray = this.getRealElements().toArray(
-				new PDGNode<?>[0]);
+		final SortedSet<PDGNode<?>> clonedElements = new TreeSet<PDGNode<?>>(
+				new Comparator<PDGNode<?>>() {
+					@Override
+					public int compare(final PDGNode<?> node1,
+							final PDGNode<?> node2) {
+						return node1.getCore().compareTo(node2.getCore());
+					}
+				});
+		clonedElements.addAll(this.getRealElements());
+		final PDGNode<?>[] clonedElementArray = clonedElements
+				.toArray(new PDGNode<?>[0]);
 		CLONE: for (int i = 0; i < clonedElementArray.length - 1; i++) {
 			for (int j = 0; j < elementArray.length - 1; j++) {
 
@@ -406,6 +417,10 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 						}
 					}
 
+				} else if (innerStatement instanceof SynchronizedBlockInfo) {
+
+					allElements.add(((SynchronizedBlockInfo) innerStatement)
+							.getSynchronizedExpression());
 				}
 
 				allElements
