@@ -409,11 +409,13 @@ public class GraphViewer extends MetricsTool {
 		for (final CFGEdge edge : edges) {
 			writer.write(Integer.toString(createdGraphNumber));
 			writer.write(".");
-			writer.write(Integer.toString(nodeLabels.get(edge.getFromNode())));
+			final CFGNode<?> fromNode = edge.getFromNode();
+			writer.write(Integer.toString(nodeLabels.get(fromNode)));
 			writer.write(" -> ");
 			writer.write(Integer.toString(createdGraphNumber));
 			writer.write(".");
-			writer.write(Integer.toString(nodeLabels.get(edge.getToNode())));
+			final CFGNode<?> toNode = edge.getToNode();
+			writer.write(Integer.toString(nodeLabels.get(toNode)));
 			writer.write(" [style = solid, label=\""
 					+ edge.getDependenceString() + "\"];");
 			writer.newLine();
