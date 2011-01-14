@@ -605,8 +605,10 @@ public class IntraProceduralPDG extends PDG {
 				else {
 					final CFGNode<?> cfgNode = this.cfgNodeFactory
 							.getNode(innerStatement);
-					final PDGNode<?> toPDGNode = this.makeNode(cfgNode);
-					toPDGNodes.add(toPDGNode);
+					if (null != cfgNode) {
+						final PDGNode<?> toPDGNode = this.makeNode(cfgNode);
+						toPDGNodes.add(toPDGNode);
+					}
 				}
 
 				// fromノードとtoノードの距離が閾値以内であればエッジを引く
@@ -658,8 +660,11 @@ public class IntraProceduralPDG extends PDG {
 						else {
 							final CFGNode<?> cfgNode = this.cfgNodeFactory
 									.getNode(condition);
-							final PDGNode<?> toPDGNode = this.makeNode(cfgNode);
-							toPDGNodes.add(toPDGNode);
+							if (null != cfgNode) {
+								final PDGNode<?> toPDGNode = this
+										.makeNode(cfgNode);
+								toPDGNodes.add(toPDGNode);
+							}
 						}
 
 						// fromノードとtoノードの距離が閾値以内であればエッジを引く
@@ -705,9 +710,11 @@ public class IntraProceduralPDG extends PDG {
 							else {
 								final CFGNode<?> cfgNode = this.cfgNodeFactory
 										.getNode(expression);
-								final PDGNode<?> toPDGNode = this
-										.makeNode(cfgNode);
-								toPDGNodes.add(toPDGNode);
+								if (null != cfgNode) {
+									final PDGNode<?> toPDGNode = this
+											.makeNode(cfgNode);
+									toPDGNodes.add(toPDGNode);
+								}
 							}
 
 							// fromノードとtoノードの距離が閾値以内であればエッジを引く
@@ -780,8 +787,10 @@ public class IntraProceduralPDG extends PDG {
 				else {
 					final CFGNode<?> cfgNode = this.cfgNodeFactory
 							.getNode(expression);
-					final PDGNode<?> toPDGNode = this.makeNode(cfgNode);
-					toPDGNodes.add(toPDGNode);
+					if (null != cfgNode) {
+						final PDGNode<?> toPDGNode = this.makeNode(cfgNode);
+						toPDGNodes.add(toPDGNode);
+					}
 				}
 
 				// fromノードとtoノードの距離が閾値以内であればエッジを引く
@@ -836,17 +845,21 @@ public class IntraProceduralPDG extends PDG {
 			}
 
 			// バックワードノードがない場合は，ParameterInNodeから依存辺を引く必要がある可能性あり
-//			if (0 == cfgNode.getBackwardNodes().size()) {
-//				final PDGParameterInNode parameterInNode = this.parameterInNodes
-//						.get(variable);
-//				if (null != parameterInNode) {
-//					parameterInNode.addDataDependingNode(toPDGNode, variable);
-//				}
-//			}
+			// if (0 == cfgNode.getBackwardNodes().size()) {
+			// final PDGParameterInNode parameterInNode = this.parameterInNodes
+			// .get(variable);
+			// if (null != parameterInNode) {
+			// parameterInNode.addDataDependingNode(toPDGNode, variable);
+			// }
+			// }
 		}
 	}
 
 	private PDGNode<?> makeNode(final CFGNode<?> cfgNode) {
+
+		if (null == cfgNode) {
+			throw new IllegalArgumentException();
+		}
 
 		if (cfgNode instanceof CFGControlNode) {
 			return this.makeControlNode((CFGControlNode) cfgNode);
