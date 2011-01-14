@@ -206,7 +206,7 @@ public abstract class ExpressionInfo implements ConditionInfo {
     @Override
     public void setOwnerConditionalBlock(final ConditionalBlockInfo ownerConditionalBlock) {
         MetricsToolSecurityManager.getInstance().checkAccess();
-        assert null == this.ownerConditionalBlock : "this.ownerConditionalBlock must be null!";
+        //assert null == this.ownerConditionalBlock : "this.ownerConditionalBlock must be null!";
         this.ownerConditionalBlock = ownerConditionalBlock;
     }
 
