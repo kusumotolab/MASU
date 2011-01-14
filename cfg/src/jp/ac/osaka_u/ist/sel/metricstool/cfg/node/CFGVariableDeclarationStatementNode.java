@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sel.metricstool.cfg.node;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.edge.CFGEdge;
@@ -28,6 +30,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodCallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MonominalOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.NullUsageInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParenthesesExpressionInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReturnStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TernaryOperationInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ThrowStatementInfo;
@@ -94,11 +97,17 @@ public class CFGVariableDeclarationStatementNode extends
 				toColumn, requiredExpression);
 	}
 
-	public void removeIfPossible(final ICFGNodeFactory nodeFactory) {
+	public boolean removeIfPossible(final ICFGNodeFactory nodeFactory) {
 
+		// 右辺がメソッド呼び出しだった場合は集約せずにこのメソッドを抜ける
 		final VariableDeclarationStatementInfo statement = this.getCore();
 		final LocalVariableInfo variable = statement.getDeclaration()
 				.getUsedVariable();
+		final ExpressionInfo initializer = statement
+				.getInitializationExpression();
+		if (null != initializer && initializer instanceof MethodCallInfo) {
+			return false;
+		}
 
 		final Set<CFGNode<?>> referenceNodes = new HashSet<CFGNode<?>>();
 		final Set<CFGNode<?>> checkedNodes = new HashSet<CFGNode<?>>();
@@ -120,17 +129,20 @@ public class CFGVariableDeclarationStatementNode extends
 				}
 			}
 
-			// 削除する変数宣言文より右辺を抽出
-			final ExpressionInfo rightExpression = statement
-					.getInitializationExpression();
-
-			final CFGNode<?> referenceNode = referenceNodes
+			final CFGNode<? extends ExecutableElementInfo> referenceNode = referenceNodes
 					.toArray(new CFGNode<?>[0])[0];
-			final ExecutableElementInfo oldElement = (ExecutableElementInfo) referenceNode
+			final ExecutableElementInfo element = (ExecutableElementInfo) referenceNode
 					.getCore();
+			final ExecutableElementInfo newElement = createPackedElement(
+					element, variable, initializer);
+			referenceNode.setCore(newElement);
+
+			return true;
 		}
+
+		return false;
 	}
-	/*
+
 	private static ExecutableElementInfo createPackedElement(
 			final ExecutableElementInfo element,
 			final VariableInfo<? extends UnitInfo> variable,
@@ -138,6 +150,12 @@ public class CFGVariableDeclarationStatementNode extends
 
 		if (null == element) {
 			return null;
+		}
+
+		// MethodCallInfoのときは集約してはいけないので，そのまま返す
+		// removeIfPossibleでちゃんとはじいているのであれば，この条件はいらないはず
+		else if (expression instanceof MethodCallInfo) {
+			return element;
 		}
 
 		else if (element instanceof AssertStatementInfo) {
@@ -355,7 +373,24 @@ public class CFGVariableDeclarationStatementNode extends
 			final ExpressionInfo expression) {
 
 		final ExpressionInfo indexExpression = element.getIndexExpression();
-		final ExpressionInfo qualifierExpression = element.getQualifierExpression();
+		final ExpressionInfo qualifierExpression = element
+				.getQualifierExpression();
+
+		final ExpressionInfo newIndexExpression = (ExpressionInfo) createPackedElement(
+				indexExpression, variable, expression);
+		final ExpressionInfo newQualifierExpression = (ExpressionInfo) createPackedElement(
+				qualifierExpression, variable, expression);
+
+		final ArrayElementUsageInfo newArrayElementUsage = new ArrayElementUsageInfo(
+				newIndexExpression, newQualifierExpression, element
+						.getOwnerMethod(), element.getFromLine(), element
+						.getFromColumn(), element.getToLine(), element
+						.getToColumn());
+		newArrayElementUsage.setOwnerConditionalBlock(element
+				.getOwnerConditionalBlock());
+		newArrayElementUsage.setOwnerExecutableElement(element
+				.getOwnerExecutableElement());
+		return newArrayElementUsage;
 	}
 
 	private static ArrayInitializerInfo createPackedArrayInitializer(
@@ -363,6 +398,23 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		final List<ExpressionInfo> newElementInitializers = new ArrayList<ExpressionInfo>();
+		for (final ExpressionInfo elementInitializer : element
+				.getElementInitializers()) {
+			final ExpressionInfo newElementInitializer = (ExpressionInfo) createPackedElement(
+					elementInitializer, variable, expression);
+			newElementInitializers.add(newElementInitializer);
+		}
+
+		final ArrayInitializerInfo newArrayInitializer = new ArrayInitializerInfo(
+				newElementInitializers, element.getOwnerMethod(), element
+						.getFromLine(), element.getFromColumn(), element
+						.getToLine(), element.getToColumn());
+		newArrayInitializer.setOwnerConditionalBlock(element
+				.getOwnerConditionalBlock());
+		newArrayInitializer.setOwnerExecutableElement(element
+				.getOwnerExecutableElement());
+		return newArrayInitializer;
 	}
 
 	private static ArrayTypeReferenceInfo createPackedArrayTypeReference(
@@ -370,6 +422,7 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		return element;
 	}
 
 	private static BinominalOperationInfo createPackedBinominalOperation(
@@ -377,6 +430,24 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		final ExpressionInfo firstOperand = element.getFirstOperand();
+		final ExpressionInfo secondOperand = element.getSecondOperand();
+
+		final ExpressionInfo newFirstOperand = (ExpressionInfo) createPackedElement(
+				firstOperand, variable, expression);
+		final ExpressionInfo newSecondOperand = (ExpressionInfo) createPackedElement(
+				secondOperand, variable, expression);
+
+		final BinominalOperationInfo newBinominalOperation = new BinominalOperationInfo(
+				element.getOperator(), newFirstOperand, newSecondOperand,
+				element.getOwnerMethod(), element.getFromLine(), element
+						.getFromColumn(), element.getToLine(), element
+						.getToColumn());
+		newBinominalOperation.setOwnerConditionalBlock(element
+				.getOwnerConditionalBlock());
+		newBinominalOperation.setOwnerExecutableElement(element
+				.getOwnerExecutableElement());
+		return newBinominalOperation;
 	}
 
 	private static ArrayConstructorCallInfo createPackedArrayConstructorCall(
@@ -384,6 +455,15 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		final ArrayConstructorCallInfo newArrayConstructorCall = new ArrayConstructorCallInfo(
+				element.getType(), element.getOwnerMethod(), element
+						.getFromLine(), element.getFromColumn(), element
+						.getToLine(), element.getToColumn());
+		newArrayConstructorCall.setOwnerConditionalBlock(element
+				.getOwnerConditionalBlock());
+		newArrayConstructorCall.setOwnerExecutableElement(element
+				.getOwnerExecutableElement());
+		return newArrayConstructorCall;
 	}
 
 	private static ClassConstructorCallInfo createPackedClassConstructorCall(
@@ -391,6 +471,27 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		final ClassConstructorCallInfo newConstructor = new ClassConstructorCallInfo(
+				element.getType(), element.getCallee(), element
+						.getOwnerMethod(), element.getFromLine(), element
+						.getFromColumn(), element.getToLine(), element
+						.getToColumn());
+
+		for (final ExpressionInfo argument : element.getArguments()) {
+			final ExpressionInfo newArgument = (ExpressionInfo) createPackedElement(
+					argument, variable, expression);
+			newConstructor.addArgument(newArgument);
+		}
+
+		for (final ReferenceTypeInfo typeArgument : element.getTypeArguments()) {
+			newConstructor.addTypeArgument(typeArgument);
+		}
+
+		newConstructor.setOwnerConditionalBlock(element
+				.getOwnerConditionalBlock());
+		newConstructor.setOwnerExecutableElement(element
+				.getOwnerExecutableElement());
+		return newConstructor;
 	}
 
 	private static MethodCallInfo createPackedMethodCall(
@@ -398,6 +499,33 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		final ExpressionInfo qualifierExpression = element
+				.getQualifierExpression();
+		final ExpressionInfo newQualifierExpression = (ExpressionInfo) createPackedElement(
+				qualifierExpression, variable, expression);
+
+		final MethodCallInfo newMethodCall = new MethodCallInfo(
+				newQualifierExpression.getType(), newQualifierExpression,
+				element.getCallee(), element.getType(), element
+						.getOwnerMethod(), element.getFromLine(), element
+						.getFromColumn(), element.getToLine(), element
+						.getToColumn());
+
+		for (final ExpressionInfo argument : element.getArguments()) {
+			final ExpressionInfo newArgument = (ExpressionInfo) createPackedElement(
+					argument, variable, expression);
+			newMethodCall.addArgument(newArgument);
+		}
+
+		for (final ReferenceTypeInfo typeArgument : element.getTypeArguments()) {
+			newMethodCall.addTypeArgument(typeArgument);
+		}
+
+		newMethodCall.setOwnerConditionalBlock(element
+				.getOwnerConditionalBlock());
+		newMethodCall.setOwnerExecutableElement(element
+				.getOwnerExecutableElement());
+		return newMethodCall;
 	}
 
 	private static CastUsageInfo createPackedCastUsage(
@@ -405,6 +533,19 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		final ExpressionInfo castedUsage = element.getCastedUsage();
+		final ExpressionInfo newCastedUsage = (ExpressionInfo) createPackedElement(
+				castedUsage, variable, expression);
+
+		final CastUsageInfo newCastUsage = new CastUsageInfo(element.getType(),
+				newCastedUsage, element.getOwnerMethod(),
+				element.getFromLine(), element.getFromColumn(), element
+						.getToLine(), element.getToColumn());
+		newCastUsage.setOwnerConditionalBlock(element
+				.getOwnerConditionalBlock());
+		newCastUsage.setOwnerExecutableElement(element
+				.getOwnerExecutableElement());
+		return newCastUsage;
 	}
 
 	private static ClassReferenceInfo createPackedClassReference(
@@ -412,6 +553,7 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		return element;
 	}
 
 	private static EmptyExpressionInfo createPackedEmptyExpression(
@@ -419,6 +561,7 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		return element;
 	}
 
 	private static ForeachConditionInfo createPackedForeachCondition(
@@ -426,6 +569,21 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		final ExpressionInfo iteratorExpression = element
+				.getIteratorExpression();
+		final ExpressionInfo newIteratorExpression = (ExpressionInfo) createPackedElement(
+				iteratorExpression, variable, expression);
+
+		final ForeachConditionInfo newForeachCondition = new ForeachConditionInfo(
+				element.getOwnerMethod(), element.getFromLine(), element
+						.getFromColumn(), element.getToLine(), element
+						.getToColumn(), element.getIteratorVariable(),
+				newIteratorExpression);
+		newForeachCondition.setOwnerConditionalBlock(element
+				.getOwnerConditionalBlock());
+		newForeachCondition.setOwnerExecutableElement(element
+				.getOwnerExecutableElement());
+		return newForeachCondition;
 	}
 
 	private static LiteralUsageInfo createPackedLiteralUsage(
@@ -433,6 +591,7 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		return element;
 	}
 
 	private static MonominalOperationInfo createPackedMonominalOperation(
@@ -440,6 +599,20 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		final ExpressionInfo operand = element.getOperand();
+		final ExpressionInfo newOperand = (ExpressionInfo) createPackedElement(
+				operand, variable, expression);
+
+		final MonominalOperationInfo newMonominalOperation = new MonominalOperationInfo(
+				newOperand, element.getOperator(), element.isPreposed(),
+				element.getOwnerMethod(), element.getFromLine(), element
+						.getFromColumn(), element.getToLine(), element
+						.getToColumn());
+		newMonominalOperation.setOwnerConditionalBlock(element
+				.getOwnerConditionalBlock());
+		newMonominalOperation.setOwnerExecutableElement(element
+				.getOwnerExecutableElement());
+		return newMonominalOperation;
 	}
 
 	private static NullUsageInfo createPackedNullUsage(
@@ -447,6 +620,7 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		return element;
 	}
 
 	private static ParenthesesExpressionInfo createPackedParenthesesExpression(
@@ -454,6 +628,20 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		final ExpressionInfo parentheticExpression = element
+				.getParnentheticExpression();
+		final ExpressionInfo newParentheticExpression = (ExpressionInfo) createPackedElement(
+				parentheticExpression, variable, expression);
+
+		final ParenthesesExpressionInfo newParenthesesExpression = new ParenthesesExpressionInfo(
+				newParentheticExpression, element.getOwnerMethod(), element
+						.getFromLine(), element.getFromColumn(), element
+						.getToLine(), element.getToColumn());
+		newParenthesesExpression.setOwnerConditionalBlock(element
+				.getOwnerConditionalBlock());
+		newParenthesesExpression.setOwnerExecutableElement(element
+				.getOwnerExecutableElement());
+		return newParenthesesExpression;
 	}
 
 	private static TernaryOperationInfo createPackedTernaryOperation(
@@ -461,6 +649,28 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		final ExpressionInfo condition = (ExpressionInfo) element
+				.getCondition();
+		final ExpressionInfo trueExpression = element.getTrueExpression();
+		final ExpressionInfo falseExpression = element.getFalseExpression();
+
+		final ExpressionInfo newCondition = (ExpressionInfo) createPackedElement(
+				condition, variable, expression);
+		final ExpressionInfo newTrueExpression = (ExpressionInfo) createPackedElement(
+				trueExpression, variable, expression);
+		final ExpressionInfo newFalseExpression = (ExpressionInfo) createPackedElement(
+				falseExpression, variable, expression);
+
+		final TernaryOperationInfo newTernaryOperation = new TernaryOperationInfo(
+				newCondition, newTrueExpression, newFalseExpression, element
+						.getOwnerMethod(), element.getFromLine(), element
+						.getFromColumn(), element.getToLine(), element
+						.getToColumn());
+		newTernaryOperation.setOwnerConditionalBlock(element
+				.getOwnerConditionalBlock());
+		newTernaryOperation.setOwnerExecutableElement(element
+				.getOwnerExecutableElement());
+		return newTernaryOperation;
 	}
 
 	private static UnknownEntityUsageInfo createPackedUnknownEntityUsage(
@@ -468,14 +678,25 @@ public class CFGVariableDeclarationStatementNode extends
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
+		return element;
 	}
 
-	private static VariableUsageInfo<?> createPackedVariableUsage(
+	private static ExpressionInfo createPackedVariableUsage(
 			final VariableUsageInfo<?> element,
 			final VariableInfo<? extends UnitInfo> variable,
 			final ExpressionInfo expression) {
 
-	}*/
+		final VariableInfo<?> usedVariable = element.getUsedVariable();
+		if (variable.equals(usedVariable)) {
+			expression.setOwnerConditionalBlock(element
+					.getOwnerConditionalBlock());
+			expression.setOwnerExecutableElement(element
+					.getOwnerExecutableElement());
+			return expression;
+		} else {
+			return element;
+		}
+	}
 
 	/**
 	 * 第二引数で与えられた変数を使用しているCFGノードを第三引数に追加する．

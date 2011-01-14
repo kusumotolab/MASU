@@ -97,12 +97,12 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 	/**
 	 * この頂点のテキスト表現
 	 */
-	private final String text;
+	private String text;
 
 	/**
 	 * このノードに対応する文
 	 */
-	private final T core;
+	private T core;
 
 	/**
 	 * 核となるプログラム要素を与えてCFGを初期化
@@ -111,25 +111,10 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 	 */
 	protected CFGNode(final T core) {
 
-		if (null == core) {
-			throw new IllegalArgumentException("core is null");
-		}
-		this.core = core;
 		this.forwardEdges = new HashSet<CFGEdge>();
 		this.backwardEdges = new HashSet<CFGEdge>();
 
-		final StringBuilder text = new StringBuilder();
-		text.append(core.getText());
-		text.append(" <");
-		text.append(core.getFromLine());
-		text.append(".");
-		text.append(core.getFromColumn());
-		text.append(" - ");
-		text.append(core.getToLine());
-		text.append(".");
-		text.append(core.getToColumn());
-		text.append("> ");
-		this.text = text.toString();
+		this.setCore(core);
 	}
 
 	/**
@@ -262,6 +247,28 @@ public abstract class CFGNode<T extends ExecutableElementInfo> implements
 			final CFGEdge newEdge = edge.replaceFromNode(node);
 			forwardNode.addBackwardEdge(newEdge);
 		}
+	}
+
+	void setCore(final ExecutableElementInfo core) {
+
+		if (null == core) {
+			throw new IllegalArgumentException("core is null");
+		}
+
+		this.core = (T) core;
+
+		final StringBuilder text = new StringBuilder();
+		text.append(core.getText());
+		text.append(" <");
+		text.append(core.getFromLine());
+		text.append(".");
+		text.append(core.getFromColumn());
+		text.append(" - ");
+		text.append(core.getToLine());
+		text.append(".");
+		text.append(core.getToColumn());
+		text.append("> ");
+		this.text = text.toString();
 	}
 
 	/**

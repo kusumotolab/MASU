@@ -18,6 +18,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGControlNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGNormalNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGReturnStatementNode;
+import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.CFGVariableDeclarationStatementNode;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.DefaultCFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
@@ -116,8 +117,12 @@ public class IntraProceduralCFG extends CFG {
 			this.optimizeCFG();
 		}
 
-		if (dissolve == DISSOLUTION.TRUE) {
+		if (dissolve == DISSOLUTION.TRUE || dissolve == DISSOLUTION.PARTLY) {
 			this.dissolveCFG();
+		}
+
+		if (dissolve == DISSOLUTION.PARTLY) {
+			this.packCFG();
 		}
 	}
 
@@ -1153,6 +1158,29 @@ public class IntraProceduralCFG extends CFG {
 
 				// 新しいノードを追加
 				this.nodes.addAll(dissolvedCFG.getAllNodes());
+			}
+		}
+	}
+
+	private void packCFG() {
+
+		// 全てのノードを取得
+		final Set<CFGNode<? extends ExecutableElementInfo>> allNodes = new HashSet<CFGNode<? extends ExecutableElementInfo>>();
+		allNodes.addAll(this.getAllNodes());
+
+		for (final CFGNode<? extends ExecutableElementInfo> node : allNodes) {
+
+			if (node instanceof CFGVariableDeclarationStatementNode) {
+				final CFGVariableDeclarationStatementNode declarationNode = (CFGVariableDeclarationStatementNode) node;
+				final boolean removed = declarationNode
+						.removeIfPossible(this.nodeFactory);
+				if (removed) {
+					this.nodes.remove(node);
+					if (node == this.enterNode) {
+						this.enterNode = node.getForwardNodes().toArray(
+								new CFGNode<?>[0])[0];
+					}
+				}
 			}
 		}
 	}
