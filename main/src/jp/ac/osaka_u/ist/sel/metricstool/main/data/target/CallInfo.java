@@ -29,7 +29,8 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
      * @param calls 呼び出しのCollection
      * @return 呼び出されているユニットのSet
      */
-    public static Set<CallableUnitInfo> getCallees(Collection<CallInfo<? extends CallableUnitInfo>> calls) {
+    public static Set<CallableUnitInfo> getCallees(
+            Collection<CallInfo<? extends CallableUnitInfo>> calls) {
 
         final Set<CallableUnitInfo> callees = new HashSet<CallableUnitInfo>();
         for (final CallInfo<?> call : calls) {
@@ -138,6 +139,15 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
     }
 
     /**
+     * この呼び出しの型引数のListを返す．
+     * 
+     * @return この呼び出しの型引数のList
+     */
+    public List<ReferenceTypeInfo> getTypeArguments() {
+        return Collections.unmodifiableList(this.typeArguments);
+    }
+
+    /**
      * この呼び出しにおける変数使用群を返す
      * 
      * @return この呼び出しにおける変数使用群
@@ -150,7 +160,7 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
         }
         return Collections.unmodifiableSortedSet(variableUsages);
     }
-    
+
     /**
      * この呼び出しで投げられる可能性がある例外のSetを返す
      * 
@@ -159,7 +169,7 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
         final Set<ReferenceTypeInfo> thrownExceptions = new HashSet<ReferenceTypeInfo>();
-        for(final ExpressionInfo parameter : this.getArguments()){
+        for (final ExpressionInfo parameter : this.getArguments()) {
             thrownExceptions.addAll(parameter.getThrownExceptions());
         }
         return Collections.unmodifiableSet(thrownExceptions);
