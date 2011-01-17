@@ -586,6 +586,12 @@ public class IntraProceduralPDG extends PDG {
 				// innerStatementが複数のCFGノードに分割されていた場合
 				if (null != dissolvedCFGNodes) {
 					for (final CFGNode<? extends ExecutableElementInfo> dissolvedCFGNode : dissolvedCFGNodes) {
+
+						// 分解されたノードがCFGに含まれていないとき（ノード集約によりなくなったとき）はなにもしない
+						if (!this.cfg.getAllNodes().contains(dissolvedCFGNode)) {
+							continue;
+						}
+
 						final ExecutableElementInfo core = dissolvedCFGNode
 								.getCore();
 						// 分解されたSingleStatementInfoのouterUnitがblockでない場合は，
@@ -641,6 +647,13 @@ public class IntraProceduralPDG extends PDG {
 						// innerStatementが複数のCFGノードに分割されていた場合
 						if (null != dissolvedCFGNodes) {
 							for (final CFGNode<? extends ExecutableElementInfo> dissolvedCFGNode : dissolvedCFGNodes) {
+
+								// 分解されたノードがCFGに含まれていないとき（ノード集約によりなくなったとき）はなにもしない
+								if (!this.cfg.getAllNodes().contains(
+										dissolvedCFGNode)) {
+									continue;
+								}
+
 								final ExecutableElementInfo core = dissolvedCFGNode
 										.getCore();
 								// 分解されたSingleStatementInfoのouterUnitがblockでない場合は，
@@ -691,6 +704,13 @@ public class IntraProceduralPDG extends PDG {
 							// innerStatementが複数のCFGノードに分割されていた場合
 							if (null != dissolvedCFGNodes) {
 								for (final CFGNode<? extends ExecutableElementInfo> dissolvedCFGNode : dissolvedCFGNodes) {
+
+									// 分解されたノードがCFGに含まれていないとき（ノード集約によりなくなったとき）はなにもしない
+									if (!this.cfg.getAllNodes().contains(
+											dissolvedCFGNode)) {
+										continue;
+									}
+
 									final ExecutableElementInfo core = dissolvedCFGNode
 											.getCore();
 									// 分解されたSingleStatementInfoのouterUnitがblockでない場合は，
@@ -768,6 +788,13 @@ public class IntraProceduralPDG extends PDG {
 				// innerStatementが複数のCFGノードに分割されていた場合
 				if (null != dissolvedCFGNodes) {
 					for (final CFGNode<? extends ExecutableElementInfo> dissolvedCFGNode : dissolvedCFGNodes) {
+						
+						// 分解されたノードがCFGに含まれていないとき（ノード集約によりなくなったとき）はなにもしない
+						if (!this.cfg.getAllNodes().contains(
+								dissolvedCFGNode)) {
+							continue;
+						}
+						
 						final ExecutableElementInfo core = dissolvedCFGNode
 								.getCore();
 						// 分解されたSingleStatementInfoのouterUnitがblockでない場合は，
