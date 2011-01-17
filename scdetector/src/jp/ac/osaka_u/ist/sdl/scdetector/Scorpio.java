@@ -480,7 +480,10 @@ public class Scorpio extends MetricsTool {
 					Configuration.INSTANCE.setP(PDG_TYPE.INTRA);
 				} else if (pdg.equalsIgnoreCase("inter")) {
 					Configuration.INSTANCE.setP(PDG_TYPE.INTER);
-					Configuration.INSTANCE.setF(DISSOLUTION.TRUE); // InterÇÃÇ∆Ç´ÇÕã≠êßìIÇ…ç◊ó±ìxPDG
+					if (DISSOLUTION.FALSE == Configuration.INSTANCE.getF()) {
+						Configuration.INSTANCE.setF(DISSOLUTION.PARTLY);
+					}
+
 				} else {
 					System.err.println("Unknown option : " + pdg);
 					System.err
