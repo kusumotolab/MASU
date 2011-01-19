@@ -1,17 +1,11 @@
 package jp.ac.osaka_u.ist.sdl.scorpio;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import jp.ac.osaka_u.ist.sdl.scorpio.data.ClonePairInfo;
-import jp.ac.osaka_u.ist.sdl.scorpio.settings.Configuration;
-import jp.ac.osaka_u.ist.sdl.scorpio.settings.SLICE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGControlDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
@@ -39,6 +33,13 @@ public class MethodSlicing extends Slicing {
 			final Set<PDGNode<?>> predecessorsB = new HashSet<PDGNode<?>>();
 			this.clonepair = this.perform(this.pointA, this.pointB,
 					predecessorsA, predecessorsB);
+
+			// 共通部分を取り除く処理
+			final SortedSet<PDGNode<?>> commonNodes = new TreeSet<PDGNode<?>>();
+			commonNodes.addAll(this.clonepair.codecloneA.getAllElements());
+			commonNodes.retainAll(this.clonepair.codecloneB.getAllElements());
+			this.clonepair.codecloneA.removeAll(commonNodes);
+			this.clonepair.codecloneB.removeAll(commonNodes);
 		}
 		return this.clonepair;
 	}
@@ -117,8 +118,7 @@ public class MethodSlicing extends Slicing {
 		// 各ノードの集合に対してその先にあるクローンペアの構築
 		final ClonePairInfo clonepair = new ClonePairInfo();
 
-		// バックワードスライスを使う設定の場合
-		if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
+		{ // バックワードスライスを使う設定の場合
 			final ClonePairInfo successor1 = this.enlargeClonePair(
 					backwardExecutionNodesA, backwardExecutionNodesB,
 					predecessorsA, predecessorsB);
@@ -133,8 +133,7 @@ public class MethodSlicing extends Slicing {
 			clonepair.add(successor3);
 		}
 
-		// フォワードスライスを使う設定の場合
-		if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.FORWARD)) {
+		{ // フォワードスライスを使う設定の場合
 			final ClonePairInfo successor1 = this.enlargeClonePair(
 					forwardExecutionNodesA, forwardExecutionNodesB,
 					predecessorsA, predecessorsB);
@@ -226,63 +225,5 @@ public class MethodSlicing extends Slicing {
 		}
 
 		return clonepair;
-	}
-
-	private SortedSet<PDGNode<?>> getFromNodes(
-			final SortedSet<? extends PDGEdge> edges) {
-
-		final SortedSet<PDGNode<?>> fromNodes = new TreeSet<PDGNode<?>>();
-
-		for (final PDGEdge edge : edges) {
-			fromNodes.add(edge.getFromNode());
-		}
-
-		return fromNodes;
-	}
-
-	private SortedSet<PDGNode<?>> getToNodes(
-			final SortedSet<? extends PDGEdge> edges) {
-
-		final SortedSet<PDGNode<?>> toNodes = new TreeSet<PDGNode<?>>();
-
-		for (final PDGEdge edge : edges) {
-			toNodes.add(edge.getToNode());
-		}
-
-		return toNodes;
-	}
-
-	private static ConcurrentMap<PDGNode<?>, Integer> NODE_TO_HASH_MAP = new ConcurrentHashMap<PDGNode<?>, Integer>();
-
-	private static NodePairCache NODE_PAIR_CACHE = new NodePairCache();
-
-	static class NodePairCache {
-
-		final private Map<PDGNode<?>, Set<PDGNode<?>>> nodes;
-
-		NodePairCache() {
-			this.nodes = new HashMap<PDGNode<?>, Set<PDGNode<?>>>();
-		}
-
-		boolean cached(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
-
-			final Set<PDGNode<?>> nodes = this.nodes.get(nodeA);
-			if (null == nodes) {
-				return false;
-			}
-
-			return nodes.contains(nodeB);
-		}
-
-		void add(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
-
-			Set<PDGNode<?>> nodes = this.nodes.get(nodeA);
-			if (null == nodes) {
-				nodes = new HashSet<PDGNode<?>>();
-				this.nodes.put(nodeA, nodes);
-			}
-
-			nodes.add(nodeB);
-		}
 	}
 }

@@ -26,10 +26,6 @@ public final class Configuration {
 		this.q.add(DEPENDENCY_TYPE.CONTROL);
 		this.q.add(DEPENDENCY_TYPE.EXECUTION);
 		this.s = 7;
-		this.t = new HashSet<SLICE_TYPE>();
-		this.t.add(SLICE_TYPE.BACKWARD);
-		this.t.add(SLICE_TYPE.FORWARD);
-		this.u = CONTROL_FILTER.NO_USE;
 		this.v = VERBOSE.FALSE;
 		this.w = 1;
 		this.x = Integer.MAX_VALUE;
@@ -141,26 +137,6 @@ public final class Configuration {
 
 	public void setS(final int s) {
 		this.s = s;
-	}
-
-	public Set<SLICE_TYPE> getT() {
-		return Collections.unmodifiableSet(this.t);
-	}
-
-	public void addT(SLICE_TYPE t) {
-		this.t.add(t);
-	}
-
-	public void resetT() {
-		this.t.clear();
-	}
-
-	public CONTROL_FILTER getU() {
-		return this.u;
-	}
-
-	public void setU(CONTROL_FILTER u) {
-		this.u = u;
 	}
 
 	public VERBOSE getV() {
@@ -310,16 +286,6 @@ public final class Configuration {
 	 * 出力するコードクローンのサイズの下限を指定するためのオプション． 大きさは文の数を表す．
 	 */
 	private int s;
-
-	/**
-	 * 用いるスライスのタイプを指定するためのオプション
-	 */
-	private Set<SLICE_TYPE> t;
-
-	/**
-	 * コントロールノードのみをスライス基点にするかどうかのオブジョン
-	 */
-	private CONTROL_FILTER u;
 
 	/**
 	 * 冗長な出力を行うためのオプション

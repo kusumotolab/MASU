@@ -112,9 +112,9 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 			if (core.getFromLine() != core.getToLine()
 					|| core.getFromColumn() != core.getToColumn()) {
 				boolean a = this.realElements.add(node);
-//				if(!a){
-//					System.out.println("aaa");
-//				}
+				// if(!a){
+				// System.out.println("aaa");
+				// }
 			}
 			this.allElements.add(node);
 		}
@@ -123,6 +123,18 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	public void addAll(final Collection<PDGNode<?>> nodes) {
 		for (final PDGNode<?> node : nodes) {
 			this.add(node);
+		}
+	}
+
+	public void remove(final PDGNode<?> node) {
+		this.allElements.remove(node);
+		this.realElements.remove(node);
+		this.hash = 0;
+	}
+
+	public void removeAll(final Collection<PDGNode<?>> nodes) {
+		for (final PDGNode<?> node : nodes) {
+			this.remove(node);
 		}
 	}
 

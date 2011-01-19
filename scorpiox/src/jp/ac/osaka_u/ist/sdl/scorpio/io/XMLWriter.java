@@ -99,13 +99,6 @@ public class XMLWriter {
 			}
 			this.writer.write("\" s=\"");
 			this.writer.write(String.valueOf(Configuration.INSTANCE.getS()));
-			this.writer.write("\" t=\"");
-			for (final SLICE_TYPE slice : Configuration.INSTANCE.getT()) {
-				this.writer.write(slice.getText());
-				this.writer.write(",");
-			}
-			this.writer.write("\" u=\"");
-			this.writer.write(Configuration.INSTANCE.getU().getText());
 			this.writer.write("\" pc=\"");
 			this.writer.write(String.valueOf(Configuration.INSTANCE.getPC()
 					.getText()));

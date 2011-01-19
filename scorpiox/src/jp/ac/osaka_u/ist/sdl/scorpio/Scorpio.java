@@ -27,7 +27,6 @@ import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.PDGController;
 import jp.ac.osaka_u.ist.sdl.scorpio.io.XMLWriter;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.CALL_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.CAST_NORMALIZATION;
-import jp.ac.osaka_u.ist.sdl.scorpio.settings.CONTROL_FILTER;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.Configuration;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.DEPENDENCY_TYPE;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.DISSOLVE;
@@ -38,7 +37,6 @@ import jp.ac.osaka_u.ist.sdl.scorpio.settings.OPERATION_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.OUTPUT_FORMAT;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.PDG_TYPE;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.REFERENCE_NORMALIZATION;
-import jp.ac.osaka_u.ist.sdl.scorpio.settings.SLICE_TYPE;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.SMALL_METHOD;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.VARIABLE_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.VERBOSE;
@@ -516,37 +514,6 @@ public class Scorpio extends MetricsTool {
 				Configuration.INSTANCE.setS(Integer.valueOf(cmd
 						.getOptionValue("s")));
 			}
-			if (cmd.hasOption("t")) {
-				Configuration.INSTANCE.resetT();
-				final StringTokenizer tokenizer = new StringTokenizer(cmd
-						.getOptionValue("t"), ",");
-				while (tokenizer.hasMoreTokens()) {
-					final String slice = tokenizer.nextToken();
-					if (slice.equalsIgnoreCase("backward")) {
-						Configuration.INSTANCE.addT(SLICE_TYPE.BACKWARD);
-					} else if (slice.equalsIgnoreCase("forward")) {
-						Configuration.INSTANCE.addT(SLICE_TYPE.FORWARD);
-					} else {
-						System.err.println("Unknown option : " + slice);
-						System.err
-								.println("\"-t\" option must have \"backward\", or \"forward\"");
-						System.exit(0);
-					}
-				}
-			}
-			if (cmd.hasOption("u")) {
-				final String control = cmd.getOptionValue("u");
-				if (control.equalsIgnoreCase("yes")) {
-					Configuration.INSTANCE.setU(CONTROL_FILTER.USE);
-				} else if (control.equalsIgnoreCase("no")) {
-					Configuration.INSTANCE.setU(CONTROL_FILTER.NO_USE);
-				} else {
-					System.err.println("Unknown option : " + control);
-					System.err
-							.println("\"-u\" option must have \"yes\" or \"no\"");
-					System.exit(0);
-				}
-			}
 			if (cmd.hasOption("s")) {
 				Configuration.INSTANCE.setS(Integer.valueOf(cmd
 						.getOptionValue("s")));
@@ -984,7 +951,8 @@ public class Scorpio extends MetricsTool {
 
 		final List<ClonePairInfo> clonepairList = Collections
 				.synchronizedList(new ArrayList<ClonePairInfo>());
-		final Thread[] threads = new Thread[Configuration.INSTANCE.getW()];
+		// final Thread[] threads = new Thread[Configuration.INSTANCE.getW()];
+		final Thread[] threads = new Thread[1];
 		final List<NodePairInfo> nodepairs = makeNodePairs(equivalenceGroups
 				.values());
 		final AtomicInteger index = new AtomicInteger(0);
@@ -1196,12 +1164,6 @@ public class Scorpio extends MetricsTool {
 
 			// 閾値以上一致するノードがある場合は読み飛ばす
 			if (Configuration.INSTANCE.getC() <= nodeList.size()) {
-				continue;
-			}
-
-			// コントロールノード以外は無視するオプションが付いている場合
-			if (Configuration.INSTANCE.getU().useControlFilter()
-					&& !(nodeList.get(0) instanceof PDGControlNode)) {
 				continue;
 			}
 
