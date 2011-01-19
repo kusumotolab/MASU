@@ -42,7 +42,7 @@ class SlicingThread implements Runnable {
 			final Slicing slicing;
 			switch (Configuration.INSTANCE.getP()) {
 			case INTRA:
-				slicing = new MethodSlicing(nodeA, nodeB);
+				slicing = new ProgramSlicing(nodeA, nodeB);
 				break;
 			case INTER:
 				slicing = new SystemSlicing(nodeA, nodeB);

@@ -34,6 +34,11 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 		this.codecloneA.add(nodeA);
 		this.codecloneB.add(nodeB);
 	}
+	
+	public void add(final ClonePairInfo clonepair){
+		this.codecloneA.addElements(clonepair.codecloneA);
+		this.codecloneB.addElements(clonepair.codecloneB);
+	}
 
 	/**
 	 *　クローンペアの長さを返す

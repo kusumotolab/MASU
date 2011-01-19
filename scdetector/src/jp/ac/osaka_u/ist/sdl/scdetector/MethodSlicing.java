@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sdl.scdetector;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -44,6 +46,11 @@ public class MethodSlicing extends Slicing {
 	private ClonePairInfo perform(final PDGNode<?> nodeA,
 			final PDGNode<?> nodeB, final Set<PDGNode<?>> predecessorsA,
 			final Set<PDGNode<?>> predecessorsB) {
+
+		// すでに利用されたノードのペアかどうかをチェック
+		if (NODE_PAIR_CACHE.cached(nodeA, nodeB)) {
+			return new ClonePairInfo();
+		}
 
 		// このノードを前任者セットに追加，この処理は再帰呼び出しの前でなければならない
 		predecessorsA.add(nodeA);
@@ -108,22 +115,22 @@ public class MethodSlicing extends Slicing {
 				.getToNodes(forwardControlEdgesB);
 
 		// 各ノードの集合に対してその先にあるクローンペアの構築
-		final Set<ClonePairInfo> successors = new HashSet<ClonePairInfo>();
+		final ClonePairInfo clonepair = new ClonePairInfo();
 
 		// バックワードスライスを使う設定の場合
 		if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
 			final ClonePairInfo successor1 = this.enlargeClonePair(
 					backwardExecutionNodesA, backwardExecutionNodesB,
 					predecessorsA, predecessorsB);
-			successors.add(successor1);
+			clonepair.add(successor1);
 			final ClonePairInfo successor2 = this.enlargeClonePair(
 					backwardDataNodesA, backwardDataNodesB, predecessorsA,
 					predecessorsB);
-			successors.add(successor2);
+			clonepair.add(successor2);
 			final ClonePairInfo successor3 = this.enlargeClonePair(
 					backwardControlNodesA, backwardControlNodesB,
 					predecessorsA, predecessorsB);
-			successors.add(successor3);
+			clonepair.add(successor3);
 		}
 
 		// フォワードスライスを使う設定の場合
@@ -131,26 +138,20 @@ public class MethodSlicing extends Slicing {
 			final ClonePairInfo successor1 = this.enlargeClonePair(
 					forwardExecutionNodesA, forwardExecutionNodesB,
 					predecessorsA, predecessorsB);
-			successors.add(successor1);
+			clonepair.add(successor1);
 			final ClonePairInfo successor2 = this.enlargeClonePair(
 					forwardDataNodesA, forwardDataNodesB, predecessorsA,
 					predecessorsB);
-			successors.add(successor2);
+			clonepair.add(successor2);
 			final ClonePairInfo successor3 = this.enlargeClonePair(
 					forwardControlNodesA, forwardControlNodesB, predecessorsA,
 					predecessorsB);
-			successors.add(successor3);
+			clonepair.add(successor3);
 		}
 
-		ClonePairInfo largestSuccessor = new ClonePairInfo();
-		for (final ClonePairInfo successor : successors) {
-			if (largestSuccessor.length() < successor.length()) {
-				largestSuccessor = successor;
-			}
-		}
-
-		largestSuccessor.add(nodeA, nodeB);
-		return largestSuccessor;
+		NODE_PAIR_CACHE.add(nodeA, nodeB);
+		clonepair.add(nodeA, nodeB);
+		return clonepair;
 	}
 
 	private ClonePairInfo enlargeClonePair(final SortedSet<PDGNode<?>> nodesA,
@@ -158,7 +159,7 @@ public class MethodSlicing extends Slicing {
 			final Set<PDGNode<?>> predecessorsA,
 			final Set<PDGNode<?>> predecessorsB) {
 
-		final Set<ClonePairInfo> successors = new HashSet<ClonePairInfo>();
+		final ClonePairInfo clonepair = new ClonePairInfo();
 
 		NODEA: for (final PDGNode<?> nodeA : nodesA) {
 
@@ -219,19 +220,12 @@ public class MethodSlicing extends Slicing {
 							predecessorsB);
 					final ClonePairInfo successor = this.perform(nodeA, nodeB,
 							newPredicessorsA, newPredicessorsB);
-					successors.add(successor);
+					clonepair.add(successor);
 				}
 			}
 		}
 
-		ClonePairInfo largestSuccessor = new ClonePairInfo();
-		for (final ClonePairInfo successor : successors) {
-			if (largestSuccessor.length() < successor.length()) {
-				largestSuccessor = successor;
-			}
-		}
-
-		return largestSuccessor;
+		return clonepair;
 	}
 
 	private SortedSet<PDGNode<?>> getFromNodes(
@@ -259,4 +253,36 @@ public class MethodSlicing extends Slicing {
 	}
 
 	private static ConcurrentMap<PDGNode<?>, Integer> NODE_TO_HASH_MAP = new ConcurrentHashMap<PDGNode<?>, Integer>();
+
+	private static NodePairCache NODE_PAIR_CACHE = new NodePairCache();
+
+	static class NodePairCache {
+
+		final private Map<PDGNode<?>, Set<PDGNode<?>>> nodes;
+
+		NodePairCache() {
+			this.nodes = new HashMap<PDGNode<?>, Set<PDGNode<?>>>();
+		}
+
+		boolean cached(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
+
+			final Set<PDGNode<?>> nodes = this.nodes.get(nodeA);
+			if (null == nodes) {
+				return false;
+			}
+
+			return nodes.contains(nodeB);
+		}
+
+		void add(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
+
+			Set<PDGNode<?>> nodes = this.nodes.get(nodeA);
+			if (null == nodes) {
+				nodes = new HashSet<PDGNode<?>>();
+				this.nodes.put(nodeA, nodes);
+			}
+
+			nodes.add(nodeB);
+		}
+	}
 }
