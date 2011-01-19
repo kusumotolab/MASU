@@ -111,7 +111,10 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 			final ExecutableElementInfo core = node.getCore();
 			if (core.getFromLine() != core.getToLine()
 					|| core.getFromColumn() != core.getToColumn()) {
-				this.realElements.add(node);
+				boolean a = this.realElements.add(node);
+//				if(!a){
+//					System.out.println("aaa");
+//				}
 			}
 			this.allElements.add(node);
 		}

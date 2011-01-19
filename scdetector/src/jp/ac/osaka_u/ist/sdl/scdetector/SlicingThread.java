@@ -42,7 +42,7 @@ class SlicingThread implements Runnable {
 			final Slicing slicing;
 			switch (Configuration.INSTANCE.getP()) {
 			case INTRA:
-				slicing = new ProgramSlicing(nodeA, nodeB);
+				slicing = new MethodSlicing(nodeA, nodeB);
 				break;
 			case INTER:
 				slicing = new SystemSlicing(nodeA, nodeB);
@@ -56,7 +56,7 @@ class SlicingThread implements Runnable {
 					.length(), clonepair.codecloneB.length())) {
 				this.clonepairList.add(clonepair);
 			}
-			
+
 			increaseNumberOfPairs();
 		}
 	}

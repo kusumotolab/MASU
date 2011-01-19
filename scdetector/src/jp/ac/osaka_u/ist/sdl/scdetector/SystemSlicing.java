@@ -57,8 +57,8 @@ public class SystemSlicing extends Slicing {
 	public void perform(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
 
 		// このノードをチェック済みノード集合に追加，この処理は再帰呼び出しの前でなければならない
-		this.checkedNodesA.add(nodeA);
-		this.checkedNodesB.add(nodeB);
+		boolean a = this.checkedNodesA.add(nodeA);
+		boolean b = this.checkedNodesB.add(nodeB);
 
 		// ここから，各エッジの先にあるノードの集合を得るための処理
 		final SortedSet<PDGEdge> backwardEdgesA = nodeA.getBackwardEdges();
@@ -250,6 +250,14 @@ public class SystemSlicing extends Slicing {
 			}
 
 			NODEB: for (final PDGNode<?> nodeB : nodesB) {
+
+				// 既にクローンに入ることが確定しているノードのときは調査しない
+				// 相手側のクローンに入っているノードのときも調査しない
+				// ここでモコの処理は必要！
+				if (this.checkedNodesA.contains(nodeA)
+						|| this.checkedNodesB.contains(nodeA)) {
+					continue NODEA;
+				}
 
 				// 既にクローンに入ることが確定しているノードのときは調査しない
 				// 相手側のクローンに入っているノードのときも調査しない

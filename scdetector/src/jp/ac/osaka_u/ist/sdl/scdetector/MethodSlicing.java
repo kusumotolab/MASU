@@ -18,37 +18,36 @@ import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGExecutionDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGDataNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
-public class ProgramSlicing extends Slicing {
+public class MethodSlicing extends Slicing {
 
 	final private PDGNode<?> pointA;
 	final private PDGNode<?> pointB;
 
-	final private Set<PDGNode<?>> checkedNodesA;
-	final private Set<PDGNode<?>> checkedNodesB;
-
 	private ClonePairInfo clonepair;
 
-	public ProgramSlicing(final PDGNode<?> pointA, final PDGNode<?> pointB) {
+	public MethodSlicing(final PDGNode<?> pointA, final PDGNode<?> pointB) {
 		this.pointA = pointA;
 		this.pointB = pointB;
-		this.checkedNodesA = new HashSet<PDGNode<?>>();
-		this.checkedNodesB = new HashSet<PDGNode<?>>();
 		this.clonepair = null;
 	}
 
 	public ClonePairInfo perform() {
 		if (null == this.clonepair) {
-			this.clonepair = new ClonePairInfo();
-			this.perform(this.pointA, this.pointB);
+			final Set<PDGNode<?>> predecessorsA = new HashSet<PDGNode<?>>();
+			final Set<PDGNode<?>> predecessorsB = new HashSet<PDGNode<?>>();
+			this.clonepair = this.perform(this.pointA, this.pointB,
+					predecessorsA, predecessorsB);
 		}
 		return this.clonepair;
 	}
 
-	private void perform(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
+	private ClonePairInfo perform(final PDGNode<?> nodeA,
+			final PDGNode<?> nodeB, final Set<PDGNode<?>> predecessorsA,
+			final Set<PDGNode<?>> predecessorsB) {
 
-		// このノードをチェック済みノード集合に追加，この処理は再帰呼び出しの前でなければならない
-		this.checkedNodesA.add(nodeA);
-		this.checkedNodesB.add(nodeB);
+		// このノードを前任者セットに追加，この処理は再帰呼び出しの前でなければならない
+		predecessorsA.add(nodeA);
+		predecessorsB.add(nodeB);
 
 		// ここから，各エッジの先にあるノードの集合を得るための処理
 		final SortedSet<PDGEdge> backwardEdgesA = nodeA.getBackwardEdges();
@@ -109,35 +108,63 @@ public class ProgramSlicing extends Slicing {
 				.getToNodes(forwardControlEdgesB);
 
 		// 各ノードの集合に対してその先にあるクローンペアの構築
+		final Set<ClonePairInfo> successors = new HashSet<ClonePairInfo>();
+
 		// バックワードスライスを使う設定の場合
 		if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.BACKWARD)) {
-			this.enlargeClonePair(backwardExecutionNodesA,
-					backwardExecutionNodesB);
-			this.enlargeClonePair(backwardDataNodesA, backwardDataNodesB);
-			this.enlargeClonePair(backwardControlNodesA, backwardControlNodesB);
+			final ClonePairInfo successor1 = this.enlargeClonePair(
+					backwardExecutionNodesA, backwardExecutionNodesB,
+					predecessorsA, predecessorsB);
+			successors.add(successor1);
+			final ClonePairInfo successor2 = this.enlargeClonePair(
+					backwardDataNodesA, backwardDataNodesB, predecessorsA,
+					predecessorsB);
+			successors.add(successor2);
+			final ClonePairInfo successor3 = this.enlargeClonePair(
+					backwardControlNodesA, backwardControlNodesB,
+					predecessorsA, predecessorsB);
+			successors.add(successor3);
 		}
 
 		// フォワードスライスを使う設定の場合
 		if (Configuration.INSTANCE.getT().contains(SLICE_TYPE.FORWARD)) {
-			this.enlargeClonePair(forwardExecutionNodesA,
-					forwardExecutionNodesB);
-			this.enlargeClonePair(forwardDataNodesA, forwardDataNodesB);
-			this.enlargeClonePair(forwardControlNodesA, forwardControlNodesB);
+			final ClonePairInfo successor1 = this.enlargeClonePair(
+					forwardExecutionNodesA, forwardExecutionNodesB,
+					predecessorsA, predecessorsB);
+			successors.add(successor1);
+			final ClonePairInfo successor2 = this.enlargeClonePair(
+					forwardDataNodesA, forwardDataNodesB, predecessorsA,
+					predecessorsB);
+			successors.add(successor2);
+			final ClonePairInfo successor3 = this.enlargeClonePair(
+					forwardControlNodesA, forwardControlNodesB, predecessorsA,
+					predecessorsB);
+			successors.add(successor3);
 		}
 
-		// 現在のノードをクローンペアに追加
-		this.clonepair.add(nodeA, nodeB);
+		ClonePairInfo largestSuccessor = new ClonePairInfo();
+		for (final ClonePairInfo successor : successors) {
+			if (largestSuccessor.length() < successor.length()) {
+				largestSuccessor = successor;
+			}
+		}
+
+		largestSuccessor.add(nodeA, nodeB);
+		return largestSuccessor;
 	}
 
-	private void enlargeClonePair(final SortedSet<PDGNode<?>> nodesA,
-			final SortedSet<PDGNode<?>> nodesB) {
+	private ClonePairInfo enlargeClonePair(final SortedSet<PDGNode<?>> nodesA,
+			final SortedSet<PDGNode<?>> nodesB,
+			final Set<PDGNode<?>> predecessorsA,
+			final Set<PDGNode<?>> predecessorsB) {
+
+		final Set<ClonePairInfo> successors = new HashSet<ClonePairInfo>();
 
 		NODEA: for (final PDGNode<?> nodeA : nodesA) {
 
 			// 既にクローンに入ることが確定しているノードのときは調査しない
 			// 相手側のクローンに入っているノードのときも調査しない
-			if (this.checkedNodesA.contains(nodeA)
-					|| this.checkedNodesB.contains(nodeA)) {
+			if (predecessorsA.contains(nodeA) || predecessorsB.contains(nodeA)) {
 				continue NODEA;
 			}
 
@@ -150,16 +177,8 @@ public class ProgramSlicing extends Slicing {
 
 				// 既にクローンに入ることが確定しているノードのときは調査しない
 				// 相手側のクローンに入っているノードのときも調査しない
-				// ここでもこの処理は必要！
-				if (this.checkedNodesA.contains(nodeA)
-						|| this.checkedNodesB.contains(nodeA)) {
-					continue NODEA;
-				}
-
-				// 既にクローンに入ることが確定しているノードのときは調査しない
-				// 相手側のクローンに入っているノードのときも調査しない
-				if (this.checkedNodesB.contains(nodeB)
-						|| this.checkedNodesA.contains(nodeB)) {
+				if (predecessorsB.contains(nodeB)
+						|| predecessorsA.contains(nodeB)) {
 					continue NODEB;
 				}
 
@@ -194,10 +213,25 @@ public class ProgramSlicing extends Slicing {
 						continue;
 					}
 
-					this.perform(nodeA, nodeB);
+					final Set<PDGNode<?>> newPredicessorsA = new HashSet<PDGNode<?>>(
+							predecessorsA);
+					final Set<PDGNode<?>> newPredicessorsB = new HashSet<PDGNode<?>>(
+							predecessorsB);
+					final ClonePairInfo successor = this.perform(nodeA, nodeB,
+							newPredicessorsA, newPredicessorsB);
+					successors.add(successor);
 				}
 			}
 		}
+
+		ClonePairInfo largestSuccessor = new ClonePairInfo();
+		for (final ClonePairInfo successor : successors) {
+			if (largestSuccessor.length() < successor.length()) {
+				largestSuccessor = successor;
+			}
+		}
+
+		return largestSuccessor;
 	}
 
 	private SortedSet<PDGNode<?>> getFromNodes(

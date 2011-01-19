@@ -182,13 +182,25 @@ public class XMLWriter {
 			this.writer.newLine();
 
 			for (final CloneSetInfo cloneSet : this.cloneSets) {
-
+				
+//				boolean a = false;
+//				for (final CodeCloneInfo codeFragment : cloneSet
+//						.getCodeClones()) {
+//					if(2 == codeFragment.getOwnerCallableUnits().size()){
+//						a = true;
+//					}
+//				}
+//				if(!a){
+//					continue;
+//				}
+				
 				this.writer.write("\t\t<CLONESET>");
 				this.writer.newLine();
 
 				for (final CodeCloneInfo codeFragment : cloneSet
 						.getCodeClones()) {
 
+					
 					this.writer.write("\t\t\t<CLONE>");
 					this.writer.newLine();
 
