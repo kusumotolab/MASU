@@ -717,9 +717,10 @@ public class Scorpio extends MetricsTool {
 
 	private static final IPDGNodeFactory buildPDGs() {
 
+		// TODO 実際のところ，下記のコメントが正しいのか不明　2011-01-21
 		// -f yes のときにマルチスレッドでPDGがうまく構築できないため，このような処理を追加している
-		final int threadNumber = Configuration.INSTANCE.getW();
-		Configuration.INSTANCE.setW(1);
+		// final int threadNumber = Configuration.INSTANCE.getW();
+		// Configuration.INSTANCE.setW(1);
 
 		final IPDGNodeFactory pdgNodeFactory = new DefaultPDGNodeFactory();
 		final boolean data = Configuration.INSTANCE.getQ().contains(
@@ -773,7 +774,7 @@ public class Scorpio extends MetricsTool {
 			assert false : "Here shouldn't be reached!";
 		}
 
-		Configuration.INSTANCE.setW(threadNumber);
+		// Configuration.INSTANCE.setW(threadNumber);
 
 		return pdgNodeFactory;
 	}

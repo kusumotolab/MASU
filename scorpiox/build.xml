@@ -66,7 +66,7 @@
 
 	<target name="srcpackage" depends="build">
 		<mkdir dir="${PACKAGE.DOC.DIR}" />
-		<javadoc packagenames="jp.ac.osaka_u.ist.sdl.scdetector.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" encoding="Windows-31J">
+		<javadoc packagenames="jp.ac.osaka_u.ist.sdl.scorpio.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" encoding="Windows-31J">
 			<classpath path="${cli.jar};${masu.dir};${cfg.cls.dir};${pdg.cls.dir}" />
 		</javadoc>
 		<copy todir="${PACKAGE.SRC.DIR}">

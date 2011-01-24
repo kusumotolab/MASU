@@ -1,2 +1,2 @@
-Main-class: jp/ac/osaka_u/ist/sdl/scdetector/Scorpioui
+Main-class: jp/ac/osaka_u/ist/sdl/scorpio/Scorpioui
 Class-path: ./commons-cli-1.1.jar ./masu.jar ./cfg.jar ./pdg.jar
