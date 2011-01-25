@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sdl.scorpio.gui.sourcecode;
+package jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.sourcecode;
 
 
 import java.awt.Color;

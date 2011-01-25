@@ -6,7 +6,7 @@ import java.util.Stack;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import jp.ac.osaka_u.ist.sdl.scorpio.Scorpioui;
+import jp.ac.osaka_u.ist.sdl.scorpio.ScorpioGUI;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneController;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneInfo;
@@ -41,8 +41,8 @@ public class XMLReader extends DefaultHandler {
 	 */
 	@Override
 	public void startDocument() {
-		FileController.getInstance(Scorpioui.ID).clear();
-		CodeCloneController.getInstance(Scorpioui.ID).clear();
+		FileController.getInstance(ScorpioGUI.ID).clear();
+		CodeCloneController.getInstance(ScorpioGUI.ID).clear();
 	}
 
 	/**

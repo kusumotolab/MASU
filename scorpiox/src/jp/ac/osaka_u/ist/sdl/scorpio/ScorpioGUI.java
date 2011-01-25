@@ -4,7 +4,7 @@ package jp.ac.osaka_u.ist.sdl.scorpio;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import jp.ac.osaka_u.ist.sdl.scorpio.gui.MainWindow;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.IntraCloneViewPanel;
 import jp.ac.osaka_u.ist.sdl.scorpio.io.XMLReader;
 
 import org.apache.commons.cli.CommandLine;
@@ -15,7 +15,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
 
-public class Scorpioui {
+public class ScorpioGUI {
 
     public static void main(String[] args) {
 
@@ -33,8 +33,8 @@ public class Scorpioui {
             final CommandLineParser parser = new PosixParser();
             final CommandLine cmd = parser.parse(options, args);
 
-            XMLReader.read(cmd.getOptionValue("i"), Scorpioui.ID);
-            final MainWindow mainWindow = new MainWindow();
+            XMLReader.read(cmd.getOptionValue("i"), ScorpioGUI.ID);
+            final IntraCloneViewPanel mainWindow = new IntraCloneViewPanel();
             Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
             mainWindow.setSize(new Dimension(d.width - 5, d.height - 27));
             mainWindow.setVisible(true);

@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sdl.scorpio.gui.codeclone;
+package jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.codeclone;
 
 
 import java.util.Observable;

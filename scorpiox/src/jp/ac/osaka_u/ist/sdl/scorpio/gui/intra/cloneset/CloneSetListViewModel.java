@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sdl.scorpio.gui.cloneset;
+package jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.cloneset;
 
 
 import java.util.Set;

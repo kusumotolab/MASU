@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sdl.scorpio.gui;
+package jp.ac.osaka_u.ist.sdl.scorpio.gui.intra;
 
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
@@ -9,14 +9,14 @@ import javax.swing.JSplitPane;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import jp.ac.osaka_u.ist.sdl.scorpio.Scorpioui;
-import jp.ac.osaka_u.ist.sdl.scorpio.gui.cloneset.CloneSetListView;
-import jp.ac.osaka_u.ist.sdl.scorpio.gui.codeclone.CodeCloneListView;
+import jp.ac.osaka_u.ist.sdl.scorpio.ScorpioGUI;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.SelectedEntities;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneController;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneInfo;
-import jp.ac.osaka_u.ist.sdl.scorpio.gui.element.ElementListView;
-import jp.ac.osaka_u.ist.sdl.scorpio.gui.sourcecode.SourceCodeView;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.cloneset.CloneSetListView;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.codeclone.CodeCloneListView;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.sourcecode.SourceCodeView;
 
 /**
  * GUIのメインウィンドウ
@@ -24,12 +24,12 @@ import jp.ac.osaka_u.ist.sdl.scorpio.gui.sourcecode.SourceCodeView;
  * @author higo
  * 
  */
-public class MainWindow extends JFrame {
+public class IntraCloneViewPanel extends JFrame {
 
-	public MainWindow() {
+	public IntraCloneViewPanel() {
 
 		final CloneSetListView clonesetListView = new CloneSetListView(
-				CodeCloneController.getInstance(Scorpioui.ID).getCloneSets());
+				CodeCloneController.getInstance(ScorpioGUI.ID).getCloneSets());
 		SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET)
 				.addObserver(clonesetListView);
 		SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE)
@@ -45,30 +45,18 @@ public class MainWindow extends JFrame {
 		codecloneListView.scrollPane.setBorder(new TitledBorder(new LineBorder(
 				java.awt.Color.black), "Code Clone List"));
 
-		final ElementListView elementListView = new ElementListView();
-		SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET)
-				.addObserver(elementListView);
-		SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE)
-				.addObserver(elementListView);
-		elementListView.scrollPane.setBorder(new TitledBorder(new LineBorder(
-				java.awt.Color.black), "Element List"));
-
 		final SourceCodeView sourceCodeView = new SourceCodeView();
 		SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET)
 				.addObserver(sourceCodeView);
 		SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE)
 				.addObserver(sourceCodeView);
 
-		final JSplitPane westPanel1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		westPanel1.setTopComponent(codecloneListView.scrollPane);
-		westPanel1.setBottomComponent(elementListView.scrollPane);
-
-		final JSplitPane westPanel2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		westPanel2.setTopComponent(clonesetListView.scrollPane);
-		westPanel2.setBottomComponent(westPanel1);
+		final JSplitPane westPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		westPanel.setTopComponent(clonesetListView.scrollPane);
+		westPanel.setBottomComponent(codecloneListView.scrollPane);
 
 		this.getContentPane().setLayout(new BorderLayout());
-		this.getContentPane().add(westPanel2, BorderLayout.WEST);
+		this.getContentPane().add(westPanel, BorderLayout.WEST);
 		this.getContentPane().add(sourceCodeView, BorderLayout.CENTER);
 
 		this.addWindowListener(new WindowAdapter() {

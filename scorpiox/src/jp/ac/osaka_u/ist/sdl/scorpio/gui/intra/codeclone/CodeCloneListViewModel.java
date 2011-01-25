@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sdl.scorpio.gui.codeclone;
+package jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.codeclone;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -62,8 +62,6 @@ class CodeCloneListViewModel extends AbstractTableModel {
 			return this.codeclones[row].getID();
 		case COL_ELEMENTS:
 			return this.codeclones[row].getElements().size();
-		case COL_METHODS:
-			return this.codeclones[row].getNumberOfMethods();
 		case COL_GAPS:
 			return this.codeclones[row].getNumberOfGapps();
 		default:
@@ -124,12 +122,9 @@ class CodeCloneListViewModel extends AbstractTableModel {
 
 	static final int COL_ELEMENTS = 1;
 
-	static final int COL_METHODS = 2;
+	static final int COL_GAPS = 2;
 
-	static final int COL_GAPS = 3;
-
-	static final String[] TITLES = new String[] { "ID", "# of Elements",
-			"# of Involved Methods", "GAPS" };
+	static final String[] TITLES = new String[] { "ID", "# of Elements", "GAPS" };
 
 	final private CodeCloneInfo[] codeclones;
 

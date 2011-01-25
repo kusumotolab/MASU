@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sdl.scorpio.gui.sourcecode;
+package jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.sourcecode;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,7 +17,7 @@ import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
-import jp.ac.osaka_u.ist.sdl.scorpio.Scorpioui;
+import jp.ac.osaka_u.ist.sdl.scorpio.ScorpioGUI;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.ElementInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.FileController;
@@ -101,7 +101,7 @@ class SourceCodePanel extends JPanel {
 		for (final ElementInfo element : codeclone.getElements()) {
 
 			final int fileID = element.getFileID();
-			final FileInfo file = FileController.getInstance(Scorpioui.ID)
+			final FileInfo file = FileController.getInstance(ScorpioGUI.ID)
 					.getFile(fileID);
 			if (this.file == file) {
 
@@ -141,7 +141,7 @@ class SourceCodePanel extends JPanel {
 		ElementInfo element = null;
 		for (final ElementInfo e : codeclone.getElements()) {
 			final int fileID = e.getFileID();
-			final FileInfo file = FileController.getInstance(Scorpioui.ID)
+			final FileInfo file = FileController.getInstance(ScorpioGUI.ID)
 					.getFile(fileID);
 			if (file == this.file) {
 				element = e;
