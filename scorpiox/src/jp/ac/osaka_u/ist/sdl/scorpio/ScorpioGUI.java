@@ -1,9 +1,9 @@
 package jp.ac.osaka_u.ist.sdl.scorpio;
 
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneController;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.IntraCloneViewPanel;
 import jp.ac.osaka_u.ist.sdl.scorpio.io.XMLReader;
 
@@ -14,36 +14,50 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
-
 public class ScorpioGUI {
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 
-        try {
+		try {
 
-            //　コマンドライン引数を処理
-            final Options options = new Options();
+			// 　コマンドライン引数を処理
+			final Options options = new Options();
 
-            final Option i = new Option("i", "input", true, "input file");
-            i.setArgName("language");
-            i.setArgs(1);
-            i.setRequired(true);
-            options.addOption(i);
+			final Option i = new Option("i", "input", true, "input file");
+			i.setArgName("language");
+			i.setArgs(1);
+			i.setRequired(true);
+			options.addOption(i);
 
-            final CommandLineParser parser = new PosixParser();
-            final CommandLine cmd = parser.parse(options, args);
+			final CommandLineParser parser = new PosixParser();
+			final CommandLine cmd = parser.parse(options, args);
 
-            XMLReader.read(cmd.getOptionValue("i"), ScorpioGUI.ID);
-            final IntraCloneViewPanel mainWindow = new IntraCloneViewPanel();
-            Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-            mainWindow.setSize(new Dimension(d.width - 5, d.height - 27));
-            mainWindow.setVisible(true);
+			XMLReader.read(cmd.getOptionValue("i"), ScorpioGUI.ID);
 
-        } catch (ParseException e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
-    }
+			switch (CodeCloneController.getInstance(ScorpioGUI.ID)
+					.getDetectionType()) {
+			case intra: {
+				final IntraCloneViewPanel mainWindow = new IntraCloneViewPanel();
+				Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+				mainWindow.setSize(new Dimension(d.width - 5, d.height - 27));
+				mainWindow.setVisible(true);
+				break;
+			}
 
-    public static final String ID = "SCVISUALIZER";
+			case inter: {
+				break;
+			}
+
+			default: {
+				System.out.println("invalid input file.");
+			}
+			}
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+	}
+
+	public static final String ID = "SCVISUALIZER";
 }

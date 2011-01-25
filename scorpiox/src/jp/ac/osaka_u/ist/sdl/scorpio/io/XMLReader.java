@@ -7,6 +7,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import jp.ac.osaka_u.ist.sdl.scorpio.ScorpioGUI;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.DETECTION_TYPE;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneController;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneInfo;
@@ -57,6 +58,8 @@ public class XMLReader extends DefaultHandler {
 
 		switch (state) {
 		case RESULT:
+			break;
+		case DETECTIONTYPE:
 			break;
 		case FILEINFO:
 			break;
@@ -111,6 +114,10 @@ public class XMLReader extends DefaultHandler {
 		final STATE state = this.stateStack.peek();
 		switch (state) {
 		case RESULT:
+			break;
+		case DETECTIONTYPE:
+			this.detectionType = DETECTION_TYPE.create(new String(ch, offset,
+					length));
 			break;
 		case FILEINFO:
 			break;
@@ -184,6 +191,10 @@ public class XMLReader extends DefaultHandler {
 		switch (state) {
 		case RESULT:
 			break;
+		case DETECTIONTYPE:
+			CodeCloneController.getInstance(this.id).setDetectionType(
+					this.detectionType);
+			break;
 		case FILEINFO:
 			break;
 		case FILE:
@@ -244,6 +255,8 @@ public class XMLReader extends DefaultHandler {
 
 		if (tagname.equals("RESULT")) {
 			return STATE.RESULT;
+		} else if (tagname.equals("DETECTIONTYPE")) {
+			return STATE.DETECTIONTYPE;
 		} else if (tagname.equals("FILEINFO")) {
 			return STATE.FILEINFO;
 		} else if (tagname.equals("FILE")) {
@@ -287,6 +300,8 @@ public class XMLReader extends DefaultHandler {
 
 	private final Stack<STATE> stateStack;
 
+	private DETECTION_TYPE detectionType;
+
 	private FileInfo file;
 
 	private ElementInfo element;
@@ -298,7 +313,6 @@ public class XMLReader extends DefaultHandler {
 	private final String id;
 
 	private enum STATE {
-		RESULT, FILEINFO, FILE, FILEID, FILELOC, PDGNODE, DUPLICATEDRATIO, FILEPATH, CLONEINFO, CLONESET, CLONE, GAP, METHOD, ELEMENT, OWNERFILEID, FROMLINE, FROMCOLUMN, TOLINE, TOCOLUMN, ;
-
+		RESULT, DETECTIONTYPE, FILEINFO, FILE, FILEID, FILELOC, PDGNODE, DUPLICATEDRATIO, FILEPATH, CLONEINFO, CLONESET, CLONE, GAP, METHOD, ELEMENT, OWNERFILEID, FROMLINE, FROMCOLUMN, TOLINE, TOCOLUMN, ;
 	}
 }

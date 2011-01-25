@@ -1,82 +1,93 @@
 package jp.ac.osaka_u.ist.sdl.scorpio.gui.data;
 
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.DETECTION_TYPE;
 
 /**
  * GUIでクローンセットを管理するためのクラス
  * 
  * @author higo
- *
+ * 
  */
 public class CodeCloneController {
 
-    private CodeCloneController() {
-        this.clonesets = new TreeSet<CloneSetInfo>();
-    }
+	private CodeCloneController() {
+		this.clonesets = new TreeSet<CloneSetInfo>();
+	}
 
-    /**
-     * クローンセットを追加する
-     * 
-     * @param cloneset 追加するクローンセット
-     */
-    public void add(final CloneSetInfo cloneset) {
+	public void setDetectionType(final DETECTION_TYPE detectionType) {
+		this.detectionType = detectionType;
+	}
 
-        if (null == cloneset) {
-            throw new IllegalArgumentException();
-        }
+	public DETECTION_TYPE getDetectionType() {
+		return this.detectionType;
+	}
 
-        this.clonesets.add(cloneset);
-    }
+	/**
+	 * クローンセットを追加する
+	 * 
+	 * @param cloneset
+	 *            追加するクローンセット
+	 */
+	public void add(final CloneSetInfo cloneset) {
 
-    /**
-     * クローンセットのSortedSetを返す
-     * 
-     * @return クローンセットのSortedSet
-     */
-    public SortedSet<CloneSetInfo> getCloneSets() {
-        return Collections.unmodifiableSortedSet(this.clonesets);
-    }
+		if (null == cloneset) {
+			throw new IllegalArgumentException();
+		}
 
-    /**
-     * クローンセットの数を返す
-     * 
-     * @return　クローンセットの数
-     */
-    public int getNumberOfClonesets() {
-        return this.clonesets.size();
-    }
+		this.clonesets.add(cloneset);
+	}
 
-    /**
-     * クローンセットをすべて消す
-     */
-    public void clear() {
-        this.clonesets.clear();
-    }
+	/**
+	 * クローンセットのSortedSetを返す
+	 * 
+	 * @return クローンセットのSortedSet
+	 */
+	public SortedSet<CloneSetInfo> getCloneSets() {
+		return Collections.unmodifiableSortedSet(this.clonesets);
+	}
 
-    private SortedSet<CloneSetInfo> clonesets;
+	/**
+	 * クローンセットの数を返す
+	 * 
+	 * @return　クローンセットの数
+	 */
+	public int getNumberOfClonesets() {
+		return this.clonesets.size();
+	}
 
-    /**
-     * 指定されたCodeCloneControllerを返す
-     * 
-     * @param id
-     * @return
-     */
-    public static CodeCloneController getInstance(final String id) {
+	/**
+	 * クローンセットをすべて消す
+	 */
+	public void clear() {
+		this.clonesets.clear();
+	}
 
-        CodeCloneController controller = map.get(id);
-        if (null == controller) {
-            controller = new CodeCloneController();
-            map.put(id, controller);
-        }
+	private SortedSet<CloneSetInfo> clonesets;
 
-        return controller;
-    }
+	/**
+	 * 指定されたCodeCloneControllerを返す
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public static CodeCloneController getInstance(final String id) {
 
-    private static final Map<String, CodeCloneController> map = new HashMap<String, CodeCloneController>();
+		CodeCloneController controller = map.get(id);
+		if (null == controller) {
+			controller = new CodeCloneController();
+			map.put(id, controller);
+		}
+
+		return controller;
+	}
+
+	private static final Map<String, CodeCloneController> map = new HashMap<String, CodeCloneController>();
+
+	private DETECTION_TYPE detectionType;
 }

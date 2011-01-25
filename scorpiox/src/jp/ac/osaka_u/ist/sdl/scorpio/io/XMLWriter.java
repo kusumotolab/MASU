@@ -14,7 +14,6 @@ import jp.ac.osaka_u.ist.sdl.scorpio.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.PDGController;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.Configuration;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.DEPENDENCY_TYPE;
-import jp.ac.osaka_u.ist.sdl.scorpio.settings.SLICE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -123,6 +122,15 @@ public class XMLWriter {
 			e.printStackTrace();
 		}
 
+		// 検出タイプを出力
+		try {
+			this.writer.write("<DETECTIONTYPE>");
+			this.writer.write(Configuration.INSTANCE.getP().getText());
+			this.writer.write("</DETECTIONTYPE>");
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+
 		// ファイル情報を出力
 		try {
 			this.writer.write("\t<FILEINFO>");
@@ -175,25 +183,24 @@ public class XMLWriter {
 			this.writer.newLine();
 
 			for (final CloneSetInfo cloneSet : this.cloneSets) {
-				
-//				boolean a = false;
-//				for (final CodeCloneInfo codeFragment : cloneSet
-//						.getCodeClones()) {
-//					if(2 == codeFragment.getOwnerCallableUnits().size()){
-//						a = true;
-//					}
-//				}
-//				if(!a){
-//					continue;
-//				}
-				
+
+				// boolean a = false;
+				// for (final CodeCloneInfo codeFragment : cloneSet
+				// .getCodeClones()) {
+				// if(2 == codeFragment.getOwnerCallableUnits().size()){
+				// a = true;
+				// }
+				// }
+				// if(!a){
+				// continue;
+				// }
+
 				this.writer.write("\t\t<CLONESET>");
 				this.writer.newLine();
 
 				for (final CodeCloneInfo codeFragment : cloneSet
 						.getCodeClones()) {
 
-					
 					this.writer.write("\t\t\t<CLONE>");
 					this.writer.newLine();
 
