@@ -2,6 +2,9 @@ package jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.sourcecode;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
@@ -30,6 +34,40 @@ import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.FileInfo;
  * 
  */
 class SourceCodePanel extends JPanel {
+
+	class HighlightedBackgroundBorder implements Border {
+
+		final FileInfo file;
+		final CodeCloneInfo codeclone;
+
+		public HighlightedBackgroundBorder(final FileInfo file,
+				final CodeCloneInfo codeclone) {
+			this.file = file;
+			this.codeclone = codeclone;
+		}
+
+		public void paintBorder(Component c, Graphics g, int x, int y,
+				int width, int height) {
+
+			g.setColor(HIGHLIGHT_COLOR);
+			for (final ElementInfo element : this.codeclone.getElements()) {
+				final int fromLine = element.getFromLine();
+				final int toLine = element.getToLine();
+				final int startY = fromLine * height / this.file.getLOC();
+				final int lengthY = (toLine - fromLine) * height
+						/ this.file.getLOC() + 1;
+				g.drawRect(0, startY, width, lengthY);
+			}
+		}
+
+		public Insets getBorderInsets(Component c) {
+			return new Insets(0, 0, 0, 0);
+		}
+
+		public boolean isBorderOpaque() {
+			return true;
+		}
+	}
 
 	SourceCodePanel(final FileInfo file) {
 
@@ -97,7 +135,7 @@ class SourceCodePanel extends JPanel {
 	void addHighlight(final CodeCloneInfo codeclone) {
 
 		final DefaultHighlightPainter highlightPainter = new DefaultHighlightPainter(
-				new Color(180, 180, 180, 125));
+				HIGHLIGHT_COLOR);
 		for (final ElementInfo element : codeclone.getElements()) {
 
 			final int fileID = element.getFileID();
@@ -126,6 +164,10 @@ class SourceCodePanel extends JPanel {
 				}
 			}
 		}
+
+		// スクロールバーをハイライト表示
+		this.sourceCodeScrollPane.getVerticalScrollBar().setBorder(
+				new HighlightedBackgroundBorder(this.file, codeclone));
 	}
 
 	/**
@@ -184,4 +226,6 @@ class SourceCodePanel extends JPanel {
 	final private JTextArea sourceCodeArea;
 
 	final private JScrollPane sourceCodeScrollPane;
+
+	final private static Color HIGHLIGHT_COLOR = new Color(255, 200, 0, 125);
 }
