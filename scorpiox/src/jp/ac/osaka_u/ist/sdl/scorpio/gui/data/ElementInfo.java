@@ -22,10 +22,12 @@ public class ElementInfo implements Comparable<ElementInfo> {
 	 * @param toColumn
 	 *            終了列
 	 */
-	public ElementInfo(final int fileID, final int fromLine,
-			final int fromColumn, final int toLine, final int toColumn) {
+	public ElementInfo(final int fileID, final int methodID,
+			final int fromLine, final int fromColumn, final int toLine,
+			final int toColumn) {
 
 		this.fileID = fileID;
+		this.methodID = methodID;
 		this.fromLine = fromLine;
 		this.fromColumn = fromColumn;
 		this.toLine = toLine;
@@ -46,6 +48,19 @@ public class ElementInfo implements Comparable<ElementInfo> {
 
 	public void setFileID(final int fileID) {
 		this.fileID = fileID;
+	}
+
+	/**
+	 * メソッドのIDを返す
+	 * 
+	 * @return ファイルのID
+	 */
+	public int getMethodID() {
+		return this.methodID;
+	}
+
+	public void setMethodID(final int methodID) {
+		this.methodID = methodID;
 	}
 
 	/**
@@ -181,6 +196,8 @@ public class ElementInfo implements Comparable<ElementInfo> {
 	}
 
 	private int fileID;
+
+	private int methodID;
 
 	private int fromLine;
 

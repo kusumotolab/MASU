@@ -1122,6 +1122,9 @@ public class Scorpio extends MetricsTool {
 
 		final XMLWriter writer = new XMLWriter(Configuration.INSTANCE.getO(),
 				DataManager.getInstance().getFileInfoManager().getFileInfos(),
+				DataManager.getInstance().getMethodInfoManager()
+						.getTargetMethodInfos(), DataManager.getInstance()
+						.getMethodInfoManager().getTargetConstructorInfos(),
 				clonesets);
 
 		/*

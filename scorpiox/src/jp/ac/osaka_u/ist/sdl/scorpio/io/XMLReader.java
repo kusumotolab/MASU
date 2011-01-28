@@ -14,6 +14,8 @@ import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.ElementInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.FileController;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.FileInfo;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.MethodController;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.MethodInfo;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
@@ -70,6 +72,19 @@ public class XMLReader extends DefaultHandler {
 			break;
 		case FILELOC:
 			break;
+		case METHODINFO:
+			break;
+		case METHOD:
+			this.method = new MethodInfo();
+			break;
+		case METHODNAME:
+			break;
+		case METHODID:
+			break;
+		case METHODFROMLINE:
+			break;
+		case METHODTOLINE:
+			break;
 		case PDGNODE:
 			break;
 		case DUPLICATEDRATIO:
@@ -86,7 +101,7 @@ public class XMLReader extends DefaultHandler {
 			break;
 		case GAP:
 			break;
-		case METHOD:
+		case SPREAD:
 			break;
 		case ELEMENT:
 			this.element = new ElementInfo();
@@ -130,6 +145,23 @@ public class XMLReader extends DefaultHandler {
 			this.file
 					.setLOC((Integer.parseInt(new String(ch, offset, length))));
 			break;
+		case METHODINFO:
+			break;
+		case METHOD:
+			break;
+		case METHODNAME:
+			break;
+		case METHODID:
+			this.method.setID(Integer.parseInt(new String(ch, offset, length)));
+			break;
+		case METHODFROMLINE:
+			this.method.setFromLine(Integer.parseInt(new String(ch, offset,
+					length)));
+			break;
+		case METHODTOLINE:
+			this.method.setToLine(Integer.parseInt(new String(ch, offset,
+					length)));
+			break;
 		case PDGNODE:
 			this.file.setNumberOfPDGNodes((Integer.parseInt(new String(ch,
 					offset, length))));
@@ -149,7 +181,7 @@ public class XMLReader extends DefaultHandler {
 			this.codeclone.setNumberOfGapps(Integer.parseInt(new String(ch,
 					offset, length)));
 			break;
-		case METHOD:
+		case SPREAD:
 			this.codeclone.setNumberOfMethods(Integer.parseInt(new String(ch,
 					offset, length)));
 			break;
@@ -157,6 +189,10 @@ public class XMLReader extends DefaultHandler {
 			break;
 		case OWNERFILEID:
 			this.element.setFileID(Integer.parseInt(new String(ch, offset,
+					length)));
+			break;
+		case OWNERMETHODID:
+			this.element.setMethodID(Integer.parseInt(new String(ch, offset,
 					length)));
 			break;
 		case FROMLINE:
@@ -205,6 +241,20 @@ public class XMLReader extends DefaultHandler {
 			break;
 		case FILELOC:
 			break;
+		case METHODINFO:
+			break;
+		case METHODNAME:
+			break;
+		case METHODID:
+			break;
+		case METHOD:
+			MethodController.getInstance(this.id).add(this.method);
+			this.method = null;
+			break;
+		case METHODFROMLINE:
+			break;
+		case METHODTOLINE:
+			break;
 		case PDGNODE:
 			break;
 		case DUPLICATEDRATIO:
@@ -223,13 +273,15 @@ public class XMLReader extends DefaultHandler {
 			break;
 		case GAP:
 			break;
-		case METHOD:
+		case SPREAD:
 			break;
 		case ELEMENT:
 			this.codeclone.add(this.element);
 			this.element = null;
 			break;
 		case OWNERFILEID:
+			break;
+		case OWNERMETHODID:
 			break;
 		case FROMLINE:
 			break;
@@ -263,6 +315,18 @@ public class XMLReader extends DefaultHandler {
 			return STATE.FILE;
 		} else if (tagname.equals("FILEID")) {
 			return STATE.FILEID;
+		} else if (tagname.equals("METHODINFO")) {
+			return STATE.METHODINFO;
+		} else if (tagname.equals("METHOD")) {
+			return STATE.METHOD;
+		} else if (tagname.equals("METHODNAME")) {
+			return STATE.METHODNAME;
+		} else if (tagname.equals("METHODID")) {
+			return STATE.METHODID;
+		} else if (tagname.equals("METHODFROMLINE")) {
+			return STATE.METHODFROMLINE;
+		} else if (tagname.equals("METHODTOLINE")) {
+			return STATE.METHODTOLINE;
 		} else if (tagname.equals("PDGNODE")) {
 			return STATE.PDGNODE;
 		} else if (tagname.equals("DUPLICATEDRADIO")) {
@@ -279,12 +343,14 @@ public class XMLReader extends DefaultHandler {
 			return STATE.CLONE;
 		} else if (tagname.equals("GAP")) {
 			return STATE.GAP;
-		} else if (tagname.equals("METHOD")) {
-			return STATE.METHOD;
+		} else if (tagname.equals("SPREAD")) {
+			return STATE.SPREAD;
 		} else if (tagname.equals("ELEMENT")) {
 			return STATE.ELEMENT;
 		} else if (tagname.equals("OWNERFILEID")) {
 			return STATE.OWNERFILEID;
+		} else if (tagname.equals("OWNERMETHODID")) {
+			return STATE.OWNERMETHODID;
 		} else if (tagname.equals("FROMLINE")) {
 			return STATE.FROMLINE;
 		} else if (tagname.equals("FROMCOLUMN")) {
@@ -304,6 +370,8 @@ public class XMLReader extends DefaultHandler {
 
 	private FileInfo file;
 
+	private MethodInfo method;
+
 	private ElementInfo element;
 
 	private CodeCloneInfo codeclone;
@@ -313,6 +381,6 @@ public class XMLReader extends DefaultHandler {
 	private final String id;
 
 	private enum STATE {
-		RESULT, DETECTIONTYPE, FILEINFO, FILE, FILEID, FILELOC, PDGNODE, DUPLICATEDRATIO, FILEPATH, CLONEINFO, CLONESET, CLONE, GAP, METHOD, ELEMENT, OWNERFILEID, FROMLINE, FROMCOLUMN, TOLINE, TOCOLUMN, ;
+		RESULT, DETECTIONTYPE, FILEINFO, FILE, FILEID, FILELOC, METHODINFO, METHOD, METHODNAME, METHODID, METHODFROMLINE, METHODTOLINE, PDGNODE, DUPLICATEDRATIO, FILEPATH, CLONEINFO, CLONESET, CLONE, GAP, SPREAD, ELEMENT, OWNERFILEID, OWNERMETHODID, FROMLINE, FROMCOLUMN, TOLINE, TOCOLUMN, ;
 	}
 }

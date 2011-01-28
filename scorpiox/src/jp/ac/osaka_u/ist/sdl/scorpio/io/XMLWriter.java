@@ -14,18 +14,27 @@ import jp.ac.osaka_u.ist.sdl.scorpio.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.PDGController;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.Configuration;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.DEPENDENCY_TYPE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 public class XMLWriter {
 
 	public XMLWriter(final String outputFile, final SortedSet<FileInfo> files,
+			final SortedSet<TargetMethodInfo> methods,
+			final SortedSet<TargetConstructorInfo> constructors,
 			final SortedSet<CloneSetInfo> cloneSets) {
 
 		this.files = files;
+		this.methods = methods;
+		this.constructors = constructors;
 		this.cloneSets = cloneSets;
 
 		try {
@@ -65,6 +74,17 @@ public class XMLWriter {
 					}
 				}
 			}
+		}
+
+		// MethodInfoとメソッド番号のマップを作成
+		final Map<CallableUnitInfo, Integer> methodToIntegerMap = new HashMap<CallableUnitInfo, Integer>();
+		for (final TargetMethodInfo method : this.methods) {
+			final int value = methodToIntegerMap.size();
+			methodToIntegerMap.put(method, value);
+		}
+		for (final TargetConstructorInfo constructor : this.constructors) {
+			final int value = methodToIntegerMap.size();
+			methodToIntegerMap.put(constructor, value);
 		}
 
 		// XMLのヘッダを出力
@@ -177,6 +197,47 @@ public class XMLWriter {
 			e.printStackTrace();
 		}
 
+		// メソッド情報を出力
+		try {
+			this.writer.write("\t<METHODINFO>");
+			this.writer.newLine();
+
+			for (final Map.Entry<CallableUnitInfo, Integer> entry : methodToIntegerMap
+					.entrySet()) {
+
+				final CallableUnitInfo unit = entry.getKey();
+
+				this.writer.write("\t\t<METHOD>");
+				this.writer.newLine();
+
+				this.writer.write("\t\t\t<METHODNAME>"
+						+ (unit instanceof MethodInfo ? ((MethodInfo) unit)
+								.getMethodName() : "_init_") + "</METHODNAME>");
+				this.writer.newLine();
+
+				this.writer.write("\t\t\t<METHODID>" + entry.getValue()
+						+ "</METHODID>");
+				this.writer.newLine();
+
+				this.writer.write("\t\t\t<METHODFROMLINE>"
+						+ entry.getKey().getFromLine() + "</METHODFROMLINE>");
+				this.writer.newLine();
+
+				this.writer.write("\t\t\t<METHODTOLINE>"
+						+ entry.getKey().getToLine() + "</METHODTOLINE>");
+				this.writer.newLine();
+
+				this.writer.write("\t\t</METHOD>");
+				this.writer.newLine();
+			}
+
+			this.writer.write("\t</METHODINFO>");
+			this.writer.newLine();
+
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+
 		// クローン情報を出力
 		try {
 			this.writer.write("\t<CLONEINFO>");
@@ -219,13 +280,22 @@ public class XMLWriter {
 						this.writer.newLine();
 
 						final ExecutableElementInfo element = node.getCore();
-						final FileInfo ownerFile = ((TargetClassInfo) element
-								.getOwnerMethod().getOwnerClass())
+						final CallableUnitInfo ownerMethod = element
+								.getOwnerMethod();
+						final ClassInfo ownerClass = ownerMethod
+								.getOwnerClass();
+						final FileInfo ownerFile = ((TargetClassInfo) ownerClass)
 								.getOwnerFile();
-						final int id = fileToIntegerMap.get(ownerFile);
+						final int fileID = fileToIntegerMap.get(ownerFile);
+						final int methodID = methodToIntegerMap
+								.get(ownerMethod);
 
-						this.writer.write("\t\t\t\t\t<OWNERFILEID>" + id
+						this.writer.write("\t\t\t\t\t<OWNERFILEID>" + fileID
 								+ "</OWNERFILEID>");
+						this.writer.newLine();
+
+						this.writer.write("\t\t\t\t\t<OWNERMETHODID>"
+								+ methodID + "</OWNERMETHODID>");
 						this.writer.newLine();
 
 						this.writer.write("\t\t\t\t\t<FROMLINE>"
@@ -295,6 +365,10 @@ public class XMLWriter {
 	}
 
 	final Set<CloneSetInfo> cloneSets;
+
+	final Set<TargetMethodInfo> methods;
+
+	final Set<TargetConstructorInfo> constructors;
 
 	final SortedSet<FileInfo> files;
 }

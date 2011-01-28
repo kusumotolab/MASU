@@ -118,6 +118,9 @@ public class CodeCloneInfo implements Entity, Comparable<CodeCloneInfo> {
 		return this.method;
 	}
 
+//	public SortedSet<MethodInfo> getOwnerMethods() {
+//	}
+
 	/**
 	 * î‰ärä÷êî
 	 */

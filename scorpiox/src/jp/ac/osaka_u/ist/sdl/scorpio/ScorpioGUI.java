@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneController;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.inter.InterCloneViewPanel;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.IntraCloneViewPanel;
 import jp.ac.osaka_u.ist.sdl.scorpio.io.XMLReader;
 
@@ -45,6 +46,10 @@ public class ScorpioGUI {
 			}
 
 			case inter: {
+				final InterCloneViewPanel mainWindow = new InterCloneViewPanel();
+				Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+				mainWindow.setSize(new Dimension(d.width - 5, d.height - 27));
+				mainWindow.setVisible(true);
 				break;
 			}
 

@@ -1,6 +1,7 @@
-package jp.ac.osaka_u.ist.sdl.scorpio.gui.intra;
+package jp.ac.osaka_u.ist.sdl.scorpio.gui.inter;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -14,9 +15,9 @@ import jp.ac.osaka_u.ist.sdl.scorpio.gui.SelectedEntities;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneController;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneInfo;
-import jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.cloneset.CloneSetListView;
-import jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.codeclone.CodeCloneListView;
-import jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.sourcecode.SourceCodeView;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.inter.cloneset.CloneSetListView;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.inter.codeclone.CodeCloneListView;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.inter.method.MethodGraphView;
 
 /**
  * GUIのメインウィンドウ
@@ -24,12 +25,12 @@ import jp.ac.osaka_u.ist.sdl.scorpio.gui.intra.sourcecode.SourceCodeView;
  * @author higo
  * 
  */
-public class IntraCloneViewPanel extends JFrame {
+public class InterCloneViewPanel extends JFrame {
 
-	public IntraCloneViewPanel() {
+	public InterCloneViewPanel() {
 
-		this.setTitle("ScorpioGUI for Intraprocedural Code Clones");
-		
+		this.setTitle("ScorpioGUI for Interprocedural Code Clones");
+
 		final CloneSetListView clonesetListView = new CloneSetListView(
 				CodeCloneController.getInstance(ScorpioGUI.ID).getCloneSets());
 		SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET)
@@ -37,7 +38,7 @@ public class IntraCloneViewPanel extends JFrame {
 		SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE)
 				.addObserver(clonesetListView);
 		clonesetListView.scrollPane.setBorder(new TitledBorder(new LineBorder(
-				java.awt.Color.black), "Clone Set List"));
+				Color.black), "Clone Set List"));
 
 		final CodeCloneListView codecloneListView = new CodeCloneListView();
 		SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET)
@@ -45,21 +46,29 @@ public class IntraCloneViewPanel extends JFrame {
 		SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE)
 				.addObserver(codecloneListView);
 		codecloneListView.scrollPane.setBorder(new TitledBorder(new LineBorder(
-				java.awt.Color.black), "Code Clone List"));
+				Color.black), "Code Clone List"));
 
-		final SourceCodeView sourceCodeView = new SourceCodeView();
-		SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET)
-				.addObserver(sourceCodeView);
-		SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE)
-				.addObserver(sourceCodeView);
+		final MethodGraphView methodGraphView = new MethodGraphView();
+		methodGraphView.setBorder(new TitledBorder(new LineBorder(Color.black),
+				"Method Graph"));
 
-		final JSplitPane westPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		westPanel.setTopComponent(clonesetListView.scrollPane);
-		westPanel.setBottomComponent(codecloneListView.scrollPane);
+		// final SourceCodeView sourceCodeView = new SourceCodeView();
+		// SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET)
+		// .addObserver(sourceCodeView);
+		// SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE)
+		// .addObserver(sourceCodeView);
+
+		final JSplitPane westPanel1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		westPanel1.setTopComponent(codecloneListView.scrollPane);
+		westPanel1.setBottomComponent(methodGraphView);
+
+		final JSplitPane westPanel2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		westPanel2.setTopComponent(clonesetListView.scrollPane);
+		westPanel2.setBottomComponent(westPanel1);
 
 		this.getContentPane().setLayout(new BorderLayout());
-		this.getContentPane().add(westPanel, BorderLayout.WEST);
-		this.getContentPane().add(sourceCodeView, BorderLayout.CENTER);
+		this.getContentPane().add(westPanel2, BorderLayout.WEST);
+		// this.getContentPane().add(sourceCodeView, BorderLayout.CENTER);
 
 		this.addWindowListener(new WindowAdapter() {
 			@Override
