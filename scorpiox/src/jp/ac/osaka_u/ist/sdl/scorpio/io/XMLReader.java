@@ -6,7 +6,6 @@ import java.util.Stack;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import jp.ac.osaka_u.ist.sdl.scorpio.ScorpioGUI;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.DETECTION_TYPE;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneController;
@@ -44,8 +43,9 @@ public class XMLReader extends DefaultHandler {
 	 */
 	@Override
 	public void startDocument() {
-		FileController.getInstance(ScorpioGUI.ID).clear();
-		CodeCloneController.getInstance(ScorpioGUI.ID).clear();
+		FileController.getInstance(this.id).clear();
+		MethodController.getInstance(this.id).clear();
+		CodeCloneController.getInstance(this.id).clear();
 	}
 
 	/**
@@ -83,6 +83,8 @@ public class XMLReader extends DefaultHandler {
 			break;
 		case METHODFROMLINE:
 			break;
+		case DEFINITIONFILEID:
+			break;
 		case METHODTOLINE:
 			break;
 		case PDGNODE:
@@ -108,13 +110,15 @@ public class XMLReader extends DefaultHandler {
 			break;
 		case OWNERFILEID:
 			break;
-		case FROMLINE:
+		case OWNERMETHODID:
 			break;
-		case FROMCOLUMN:
+		case ELEMENTFROMLINE:
 			break;
-		case TOLINE:
+		case ELEMENTFROMCOLUMN:
 			break;
-		case TOCOLUMN:
+		case ELEMENTTOLINE:
+			break;
+		case ELEMENTTOCOLUMN:
 			break;
 		default:
 			throw new IllegalStateException();
@@ -150,6 +154,11 @@ public class XMLReader extends DefaultHandler {
 		case METHOD:
 			break;
 		case METHODNAME:
+			this.method.setName(new String(ch, offset, length));
+			break;
+		case DEFINITIONFILEID:
+			this.method.setFileID(Integer.parseInt(new String(ch, offset,
+					length)));
 			break;
 		case METHODID:
 			this.method.setID(Integer.parseInt(new String(ch, offset, length)));
@@ -195,19 +204,19 @@ public class XMLReader extends DefaultHandler {
 			this.element.setMethodID(Integer.parseInt(new String(ch, offset,
 					length)));
 			break;
-		case FROMLINE:
+		case ELEMENTFROMLINE:
 			this.element.setFromLine(Integer.parseInt(new String(ch, offset,
 					length)));
 			break;
-		case FROMCOLUMN:
+		case ELEMENTFROMCOLUMN:
 			this.element.setFromColumn(Integer.parseInt(new String(ch, offset,
 					length)));
 			break;
-		case TOLINE:
+		case ELEMENTTOLINE:
 			this.element.setToLine(Integer.parseInt(new String(ch, offset,
 					length)));
 			break;
-		case TOCOLUMN:
+		case ELEMENTTOCOLUMN:
 			this.element.setToColumn(Integer.parseInt(new String(ch, offset,
 					length)));
 			break;
@@ -243,13 +252,15 @@ public class XMLReader extends DefaultHandler {
 			break;
 		case METHODINFO:
 			break;
-		case METHODNAME:
-			break;
-		case METHODID:
-			break;
 		case METHOD:
 			MethodController.getInstance(this.id).add(this.method);
 			this.method = null;
+			break;
+		case METHODNAME:
+			break;
+		case DEFINITIONFILEID:
+			break;
+		case METHODID:
 			break;
 		case METHODFROMLINE:
 			break;
@@ -283,13 +294,13 @@ public class XMLReader extends DefaultHandler {
 			break;
 		case OWNERMETHODID:
 			break;
-		case FROMLINE:
+		case ELEMENTFROMLINE:
 			break;
-		case FROMCOLUMN:
+		case ELEMENTFROMCOLUMN:
 			break;
-		case TOLINE:
+		case ELEMENTTOLINE:
 			break;
-		case TOCOLUMN:
+		case ELEMENTTOCOLUMN:
 			break;
 		default:
 			throw new IllegalStateException();
@@ -321,6 +332,8 @@ public class XMLReader extends DefaultHandler {
 			return STATE.METHOD;
 		} else if (tagname.equals("METHODNAME")) {
 			return STATE.METHODNAME;
+		} else if (tagname.equals("DEFINITIONFILEID")) {
+			return STATE.DEFINITIONFILEID;
 		} else if (tagname.equals("METHODID")) {
 			return STATE.METHODID;
 		} else if (tagname.equals("METHODFROMLINE")) {
@@ -351,14 +364,14 @@ public class XMLReader extends DefaultHandler {
 			return STATE.OWNERFILEID;
 		} else if (tagname.equals("OWNERMETHODID")) {
 			return STATE.OWNERMETHODID;
-		} else if (tagname.equals("FROMLINE")) {
-			return STATE.FROMLINE;
-		} else if (tagname.equals("FROMCOLUMN")) {
-			return STATE.FROMCOLUMN;
-		} else if (tagname.equals("TOLINE")) {
-			return STATE.TOLINE;
-		} else if (tagname.equals("TOCOLUMN")) {
-			return STATE.TOCOLUMN;
+		} else if (tagname.equals("ELEMENTFROMLINE")) {
+			return STATE.ELEMENTFROMLINE;
+		} else if (tagname.equals("ELEMENTFROMCOLUMN")) {
+			return STATE.ELEMENTFROMCOLUMN;
+		} else if (tagname.equals("ELEMENTTOLINE")) {
+			return STATE.ELEMENTTOLINE;
+		} else if (tagname.equals("ELEMENTTOCOLUMN")) {
+			return STATE.ELEMENTTOCOLUMN;
 		} else {
 			throw new IllegalStateException();
 		}
@@ -381,6 +394,6 @@ public class XMLReader extends DefaultHandler {
 	private final String id;
 
 	private enum STATE {
-		RESULT, DETECTIONTYPE, FILEINFO, FILE, FILEID, FILELOC, METHODINFO, METHOD, METHODNAME, METHODID, METHODFROMLINE, METHODTOLINE, PDGNODE, DUPLICATEDRATIO, FILEPATH, CLONEINFO, CLONESET, CLONE, GAP, SPREAD, ELEMENT, OWNERFILEID, OWNERMETHODID, FROMLINE, FROMCOLUMN, TOLINE, TOCOLUMN, ;
+		RESULT, DETECTIONTYPE, FILEINFO, FILE, FILEID, FILELOC, METHODINFO, METHOD, METHODNAME, DEFINITIONFILEID, METHODID, METHODFROMLINE, METHODTOLINE, PDGNODE, DUPLICATEDRATIO, FILEPATH, CLONEINFO, CLONESET, CLONE, GAP, SPREAD, ELEMENT, OWNERFILEID, OWNERMETHODID, ELEMENTFROMLINE, ELEMENTFROMCOLUMN, ELEMENTTOLINE, ELEMENTTOCOLUMN, ;
 	}
 }

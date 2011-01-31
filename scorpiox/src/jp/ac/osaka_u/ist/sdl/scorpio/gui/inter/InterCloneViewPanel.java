@@ -49,6 +49,10 @@ public class InterCloneViewPanel extends JFrame {
 				Color.black), "Code Clone List"));
 
 		final MethodGraphView methodGraphView = new MethodGraphView();
+		SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET)
+				.addObserver(methodGraphView);
+		SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE)
+				.addObserver(methodGraphView);
 		methodGraphView.setBorder(new TitledBorder(new LineBorder(Color.black),
 				"Method Graph"));
 

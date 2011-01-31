@@ -219,6 +219,14 @@ public class XMLWriter {
 						+ "</METHODID>");
 				this.writer.newLine();
 
+				this.writer.write("\t\t\t<DEFINITIONFILEID>");
+				final FileInfo ownerFile = ((TargetClassInfo) unit
+						.getOwnerClass()).getOwnerFile();
+				final int fileID = fileToIntegerMap.get(ownerFile);
+				this.writer.write(Integer.toString(fileID));
+				this.writer.write("</DEFINITIONFILEID>");
+				this.writer.newLine();
+
 				this.writer.write("\t\t\t<METHODFROMLINE>"
 						+ entry.getKey().getFromLine() + "</METHODFROMLINE>");
 				this.writer.newLine();
@@ -298,20 +306,21 @@ public class XMLWriter {
 								+ methodID + "</OWNERMETHODID>");
 						this.writer.newLine();
 
-						this.writer.write("\t\t\t\t\t<FROMLINE>"
-								+ element.getFromLine() + "</FROMLINE>");
+						this.writer.write("\t\t\t\t\t<ELEMENTFROMLINE>"
+								+ element.getFromLine() + "</ELEMENTFROMLINE>");
 						this.writer.newLine();
 
-						this.writer.write("\t\t\t\t\t<FROMCOLUMN>"
-								+ element.getFromColumn() + "</FROMCOLUMN>");
+						this.writer.write("\t\t\t\t\t<ELEMENTFROMCOLUMN>"
+								+ element.getFromColumn()
+								+ "</ELEMENTFROMCOLUMN>");
 						this.writer.newLine();
 
-						this.writer.write("\t\t\t\t\t<TOLINE>"
-								+ element.getToLine() + "</TOLINE>");
+						this.writer.write("\t\t\t\t\t<ELEMENTTOLINE>"
+								+ element.getToLine() + "</ELEMENTTOLINE>");
 						this.writer.newLine();
 
-						this.writer.write("\t\t\t\t\t<TOCOLUMN>"
-								+ element.getToColumn() + "</TOCOLUMN>");
+						this.writer.write("\t\t\t\t\t<ELEMENTTOCOLUMN>"
+								+ element.getToColumn() + "</ELEMENTTOCOLUMN>");
 						this.writer.newLine();
 
 						this.writer.write("\t\t\t\t</ELEMENT>");

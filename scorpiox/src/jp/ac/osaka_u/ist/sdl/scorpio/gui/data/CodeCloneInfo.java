@@ -6,6 +6,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sdl.scorpio.Entity;
+import jp.ac.osaka_u.ist.sdl.scorpio.ScorpioGUI;
 
 /**
  * GUIでコードクローンを表すクラス
@@ -118,8 +119,21 @@ public class CodeCloneInfo implements Entity, Comparable<CodeCloneInfo> {
 		return this.method;
 	}
 
-//	public SortedSet<MethodInfo> getOwnerMethods() {
-//	}
+	/**
+	 * このクローンに含まれる要素を所有するメソッドの集合を返す
+	 * 
+	 * @return
+	 */
+	public SortedSet<MethodInfo> getOwnerMethods() {
+		final SortedSet<MethodInfo> ownerMethods = new TreeSet<MethodInfo>();
+		for (final ElementInfo element : this.elements) {
+			final int methodID = element.getMethodID();
+			final MethodInfo ownerMethod = MethodController.getInstance(
+					ScorpioGUI.ID).getMethod(methodID);
+			ownerMethods.add(ownerMethod);
+		}
+		return ownerMethods;
+	}
 
 	/**
 	 * 比較関数

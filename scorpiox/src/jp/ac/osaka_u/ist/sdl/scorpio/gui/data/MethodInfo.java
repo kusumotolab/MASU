@@ -2,10 +2,11 @@ package jp.ac.osaka_u.ist.sdl.scorpio.gui.data;
 
 public class MethodInfo implements Comparable<MethodInfo> {
 
-	public MethodInfo(final String name, final int id, final int fromLine,
-			final int toLine) {
+	public MethodInfo(final String name, final int id, final int fileID,
+			final int fromLine, final int toLine) {
 		this.name = name;
 		this.id = id;
+		this.fileID = fileID;
 		this.fromLine = fromLine;
 		this.toLine = toLine;
 	}
@@ -49,6 +50,25 @@ public class MethodInfo implements Comparable<MethodInfo> {
 	 */
 	public void setID(final int id) {
 		this.id = id;
+	}
+
+	/**
+	 * ファイルのIDを返す
+	 * 
+	 * @return　ファイルのID
+	 */
+	public int getFileID() {
+		return this.fileID;
+	}
+
+	/**
+	 * ファイルのIDを設定する
+	 * 
+	 * @param id
+	 *            設定するファイルID
+	 */
+	public void setFileID(final int fileID) {
+		this.fileID = fileID;
 	}
 
 	/**
@@ -100,8 +120,21 @@ public class MethodInfo implements Comparable<MethodInfo> {
 		}
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder label = new StringBuilder();
+		label.append(this.name);
+		label.append("()");
+		// label.append("#");
+		// final FileInfo file = FileController.getInstance(ScorpioGUI.ID)
+		// .getFile(this.fileID);
+		// label.append(file.getName());
+		return label.toString();
+	}
+
 	private String name;
 	private int id;
+	private int fileID;
 	private int fromLine;
 	private int toLine;
 }
