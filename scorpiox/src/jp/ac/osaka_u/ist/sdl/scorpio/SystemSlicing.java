@@ -337,12 +337,20 @@ public class SystemSlicing extends Slicing {
 					if (acrossBackwardNodesA.containsKey(nodeA)) {
 						this.callStackA.push(acrossBackwardNodesA.get(nodeA));
 					} else if (acrossForwardNodesA.containsKey(nodeA)) {
-						this.callStackA.pop();
+						final CallInfo<?> call = this.callStackA.pop();
+						// successorの大きさが0でないならば，該当するメソッド呼び出しをクローンに追加
+						if (0 < successor.codecloneA.length()) {
+							clonepair.codecloneA.addCall(call);
+						}
 					}
 					if (acrossBackwardNodesB.containsKey(nodeB)) {
 						this.callStackB.push(acrossBackwardNodesB.get(nodeB));
 					} else if (acrossForwardNodesB.containsKey(nodeB)) {
-						this.callStackB.pop();
+						final CallInfo<?> call = this.callStackB.pop();
+						// successorの大きさが0でないならば，該当するメソッド呼び出しをクローンに追加
+						if (0 < successor.codecloneB.length()) {
+							clonepair.codecloneB.addCall(call);
+						}
 					}
 				}
 			}

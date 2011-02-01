@@ -21,6 +21,7 @@ public class CodeCloneInfo implements Entity, Comparable<CodeCloneInfo> {
 	 */
 	public CodeCloneInfo() {
 		this.elements = new TreeSet<ElementInfo>();
+		this.calls = new TreeSet<MethodCallInfo>();
 	}
 
 	/**
@@ -45,6 +46,14 @@ public class CodeCloneInfo implements Entity, Comparable<CodeCloneInfo> {
 	 */
 	public SortedSet<ElementInfo> getElements() {
 		return Collections.unmodifiableSortedSet(this.elements);
+	}
+
+	public void add(final MethodCallInfo call) {
+		this.calls.add(call);
+	}
+
+	public SortedSet<MethodCallInfo> getCalls() {
+		return new TreeSet<MethodCallInfo>(this.calls);
 	}
 
 	/**
@@ -200,6 +209,8 @@ public class CodeCloneInfo implements Entity, Comparable<CodeCloneInfo> {
 	public static String CODECLONE = new String("CODECLONE");
 
 	private final SortedSet<ElementInfo> elements;
+
+	private final SortedSet<MethodCallInfo> calls;
 
 	private int id;
 

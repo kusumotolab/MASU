@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sdl.scorpio.PDGMergedNode;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CaseEntryInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
@@ -44,6 +45,8 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	final private SortedSet<PDGNode<?>> allElements;
 	final private SortedSet<PDGNode<?>> realElements;
 
+	final private SortedSet<CallInfo<?>> calls;
+
 	private int hash;
 
 	/**
@@ -52,6 +55,7 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 	public CodeCloneInfo() {
 		this.allElements = new TreeSet<PDGNode<?>>();
 		this.realElements = new TreeSet<PDGNode<?>>();
+		this.calls = new TreeSet<CallInfo<?>>();
 		this.hash = 0;
 	}
 
@@ -136,6 +140,18 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 		for (final PDGNode<?> node : nodes) {
 			this.remove(node);
 		}
+	}
+
+	public void addCall(final CallInfo<?> call) {
+		this.calls.add(call);
+	}
+
+	public void addCalls(final Collection<CallInfo<?>> calls) {
+		this.calls.addAll(calls);
+	}
+
+	public SortedSet<CallInfo<?>> getCalls() {
+		return new TreeSet<CallInfo<?>>(this.calls);
 	}
 
 	/**

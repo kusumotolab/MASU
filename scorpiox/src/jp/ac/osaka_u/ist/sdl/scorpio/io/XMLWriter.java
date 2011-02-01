@@ -14,6 +14,7 @@ import jp.ac.osaka_u.ist.sdl.scorpio.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.PDGController;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.Configuration;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.DEPENDENCY_TYPE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
@@ -277,9 +278,9 @@ public class XMLWriter {
 							+ codeFragment.getGapsNumber() + "</GAP>");
 					this.writer.newLine();
 
-					this.writer.write("\t\t\t\t<METHOD>"
+					this.writer.write("\t\t\t\t<SPREAD>"
 							+ codeFragment.getOwnerCallableUnits().size()
-							+ "</METHOD>");
+							+ "</SPREAD>");
 					this.writer.newLine();
 
 					for (final PDGNode<?> node : codeFragment.getRealElements()) {
@@ -325,6 +326,50 @@ public class XMLWriter {
 
 						this.writer.write("\t\t\t\t</ELEMENT>");
 						this.writer.newLine();
+					}
+
+					for (final CallInfo<? extends CallableUnitInfo> call : codeFragment
+							.getCalls()) {
+
+						final CallableUnitInfo callee = call.getCallee();
+						if (null != callee
+								&& methodToIntegerMap.containsKey(callee)) {
+							this.writer.write("\t\t\t\t<CALLSITE>");
+							this.writer.newLine();
+
+							final int calleeID = methodToIntegerMap.get(callee);
+							final CallableUnitInfo caller = call
+									.getOwnerMethod();
+							final int callerID = methodToIntegerMap.get(caller);
+
+							this.writer.write("\t\t\t\t\t<CALLERID>" + callerID
+									+ "</CALLERID>");
+							this.writer.newLine();
+
+							this.writer.write("\t\t\t\t\t<CALLEEID>" + calleeID
+									+ "</CALLEEID>");
+							this.writer.newLine();
+
+							this.writer.write("\t\t\t\t\t<CALLFROMLINE>"
+									+ call.getFromLine() + "</CALLFROMLINE>");
+							this.writer.newLine();
+
+							this.writer.write("\t\t\t\t\t<CALLFROMCOLUMN>"
+									+ call.getFromColumn()
+									+ "</CALLFROMCOLUMN>");
+							this.writer.newLine();
+
+							this.writer.write("\t\t\t\t\t<CALLTOLINE>"
+									+ call.getToLine() + "</CALLTOLINE>");
+							this.writer.newLine();
+
+							this.writer.write("\t\t\t\t\t<CALLTOCOLUMN>"
+									+ call.getToColumn() + "</CALLTOCOLUMN>");
+							this.writer.newLine();
+
+							this.writer.write("</CALLSITE>");
+							this.writer.newLine();
+						}
 					}
 
 					this.writer.write("\t\t\t</CLONE>");

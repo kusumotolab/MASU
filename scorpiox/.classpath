@@ -7,5 +7,11 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/cfg"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/main"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jung2-2_0_1/jung-algorithms-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/jung2-2_0_1/jung-api-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/jung2-2_0_1/jung-graph-impl-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/jung2-2_0_1/jung-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/jung2-2_0_1/jung-jai-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/jung2-2_0_1/jung-visualization-2.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

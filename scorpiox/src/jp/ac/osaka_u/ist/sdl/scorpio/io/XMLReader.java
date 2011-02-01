@@ -7,6 +7,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.DETECTION_TYPE;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.MethodCallInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneController;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneInfo;
@@ -120,6 +121,21 @@ public class XMLReader extends DefaultHandler {
 			break;
 		case ELEMENTTOCOLUMN:
 			break;
+		case CALLSITE:
+			this.call = new MethodCallInfo();
+			break;
+		case CALLERID:
+			break;
+		case CALLEEID:
+			break;
+		case CALLFROMLINE:
+			break;
+		case CALLFROMCOLUMN:
+			break;
+		case CALLTOLINE:
+			break;
+		case CALLTOCOLUMN:
+			break;
 		default:
 			throw new IllegalStateException();
 		}
@@ -220,6 +236,32 @@ public class XMLReader extends DefaultHandler {
 			this.element.setToColumn(Integer.parseInt(new String(ch, offset,
 					length)));
 			break;
+		case CALLSITE:
+			break;
+		case CALLERID:
+			this.call.setCallerID(Integer.parseInt(new String(ch, offset,
+					length)));
+			break;
+		case CALLEEID:
+			this.call.setCalleeID(Integer.parseInt(new String(ch, offset,
+					length)));
+			break;
+		case CALLFROMLINE:
+			this.call.setFromLine(Integer.parseInt(new String(ch, offset,
+					length)));
+			break;
+		case CALLFROMCOLUMN:
+			this.call.setFromColumn(Integer.parseInt(new String(ch, offset,
+					length)));
+			break;
+		case CALLTOLINE:
+			this.call.setToLine(Integer
+					.parseInt(new String(ch, offset, length)));
+			break;
+		case CALLTOCOLUMN:
+			this.call.setToColumn(Integer.parseInt(new String(ch, offset,
+					length)));
+			break;
 		default:
 			throw new IllegalStateException();
 		}
@@ -302,6 +344,22 @@ public class XMLReader extends DefaultHandler {
 			break;
 		case ELEMENTTOCOLUMN:
 			break;
+		case CALLSITE:
+			this.codeclone.add(this.call);
+			this.call = null;
+			break;
+		case CALLERID:
+			break;
+		case CALLEEID:
+			break;
+		case CALLFROMLINE:
+			break;
+		case CALLFROMCOLUMN:
+			break;
+		case CALLTOLINE:
+			break;
+		case CALLTOCOLUMN:
+			break;
 		default:
 			throw new IllegalStateException();
 		}
@@ -372,6 +430,20 @@ public class XMLReader extends DefaultHandler {
 			return STATE.ELEMENTTOLINE;
 		} else if (tagname.equals("ELEMENTTOCOLUMN")) {
 			return STATE.ELEMENTTOCOLUMN;
+		} else if (tagname.equals("CALLSITE")) {
+			return STATE.CALLSITE;
+		} else if (tagname.equals("CALLERID")) {
+			return STATE.CALLERID;
+		} else if (tagname.equals("CALLEEID")) {
+			return STATE.CALLEEID;
+		} else if (tagname.equals("CALLFROMLINE")) {
+			return STATE.CALLFROMLINE;
+		} else if (tagname.equals("CALLFROMCOLUMN")) {
+			return STATE.CALLFROMCOLUMN;
+		} else if (tagname.equals("CALLTOLINE")) {
+			return STATE.CALLTOLINE;
+		} else if (tagname.equals("CALLTOCOLUMN")) {
+			return STATE.CALLTOCOLUMN;
 		} else {
 			throw new IllegalStateException();
 		}
@@ -387,6 +459,8 @@ public class XMLReader extends DefaultHandler {
 
 	private ElementInfo element;
 
+	private MethodCallInfo call;
+
 	private CodeCloneInfo codeclone;
 
 	private CloneSetInfo cloneset;
@@ -394,6 +468,6 @@ public class XMLReader extends DefaultHandler {
 	private final String id;
 
 	private enum STATE {
-		RESULT, DETECTIONTYPE, FILEINFO, FILE, FILEID, FILELOC, METHODINFO, METHOD, METHODNAME, DEFINITIONFILEID, METHODID, METHODFROMLINE, METHODTOLINE, PDGNODE, DUPLICATEDRATIO, FILEPATH, CLONEINFO, CLONESET, CLONE, GAP, SPREAD, ELEMENT, OWNERFILEID, OWNERMETHODID, ELEMENTFROMLINE, ELEMENTFROMCOLUMN, ELEMENTTOLINE, ELEMENTTOCOLUMN, ;
+		RESULT, DETECTIONTYPE, FILEINFO, FILE, FILEID, FILELOC, METHODINFO, METHOD, METHODNAME, DEFINITIONFILEID, METHODID, METHODFROMLINE, METHODTOLINE, PDGNODE, DUPLICATEDRATIO, FILEPATH, CLONEINFO, CLONESET, CLONE, GAP, SPREAD, ELEMENT, OWNERFILEID, OWNERMETHODID, ELEMENTFROMLINE, ELEMENTFROMCOLUMN, ELEMENTTOLINE, ELEMENTTOCOLUMN, CALLSITE, CALLERID, CALLEEID, CALLFROMLINE, CALLFROMCOLUMN, CALLTOLINE, CALLTOCOLUMN;
 	}
 }
