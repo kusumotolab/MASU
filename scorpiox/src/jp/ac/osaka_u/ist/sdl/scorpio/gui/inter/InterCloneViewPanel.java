@@ -15,9 +15,11 @@ import jp.ac.osaka_u.ist.sdl.scorpio.gui.SelectedEntities;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneController;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.CodeCloneInfo;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.MethodInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.inter.cloneset.CloneSetListView;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.inter.codeclone.CodeCloneListView;
 import jp.ac.osaka_u.ist.sdl.scorpio.gui.inter.method.MethodGraphView;
+import jp.ac.osaka_u.ist.sdl.scorpio.gui.inter.sourcecode.SourceCodeView;
 
 /**
  * GUIのメインウィンドウ
@@ -37,6 +39,8 @@ public class InterCloneViewPanel extends JFrame {
 				.addObserver(clonesetListView);
 		SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE)
 				.addObserver(clonesetListView);
+		SelectedEntities.<MethodInfo> getInstance(MethodInfo.METHOD)
+				.addObserver(clonesetListView);
 		clonesetListView.scrollPane.setBorder(new TitledBorder(new LineBorder(
 				Color.black), "Clone Set List"));
 
@@ -44,6 +48,8 @@ public class InterCloneViewPanel extends JFrame {
 		SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET)
 				.addObserver(codecloneListView);
 		SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE)
+				.addObserver(codecloneListView);
+		SelectedEntities.<MethodInfo> getInstance(MethodInfo.METHOD)
 				.addObserver(codecloneListView);
 		codecloneListView.scrollPane.setBorder(new TitledBorder(new LineBorder(
 				Color.black), "Code Clone List"));
@@ -53,14 +59,18 @@ public class InterCloneViewPanel extends JFrame {
 				.addObserver(methodGraphView);
 		SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE)
 				.addObserver(methodGraphView);
+		SelectedEntities.<MethodInfo> getInstance(MethodInfo.METHOD)
+				.addObserver(methodGraphView);
 		methodGraphView.setBorder(new TitledBorder(new LineBorder(Color.black),
 				"Method Graph"));
 
-		// final SourceCodeView sourceCodeView = new SourceCodeView();
-		// SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET)
-		// .addObserver(sourceCodeView);
-		// SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE)
-		// .addObserver(sourceCodeView);
+		final SourceCodeView sourceCodeView = new SourceCodeView();
+		SelectedEntities.<CloneSetInfo> getInstance(CloneSetInfo.CLONESET)
+				.addObserver(sourceCodeView);
+		SelectedEntities.<CodeCloneInfo> getInstance(CodeCloneInfo.CODECLONE)
+				.addObserver(sourceCodeView);
+		SelectedEntities.<MethodInfo> getInstance(MethodInfo.METHOD)
+				.addObserver(sourceCodeView);
 
 		final JSplitPane westPanel1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		westPanel1.setTopComponent(codecloneListView.scrollPane);
@@ -72,7 +82,7 @@ public class InterCloneViewPanel extends JFrame {
 
 		this.getContentPane().setLayout(new BorderLayout());
 		this.getContentPane().add(westPanel2, BorderLayout.WEST);
-		// this.getContentPane().add(sourceCodeView, BorderLayout.CENTER);
+		this.getContentPane().add(sourceCodeView, BorderLayout.CENTER);
 
 		this.addWindowListener(new WindowAdapter() {
 			@Override

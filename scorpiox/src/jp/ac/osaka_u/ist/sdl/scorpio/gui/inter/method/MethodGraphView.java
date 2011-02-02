@@ -2,8 +2,13 @@ package jp.ac.osaka_u.ist.sdl.scorpio.gui.inter.method;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 import java.util.SortedSet;
 
 import javax.swing.ButtonGroup;
@@ -79,15 +84,54 @@ public class MethodGraphView extends JPanel implements Observer {
 
 					this.viewer = new VisualizationViewer<MethodInfo, MethodCallInfo>(
 							layout);
-
-					DefaultModalGraphMouse<MethodInfo, MethodCallInfo> gm = new DefaultModalGraphMouse<MethodInfo, MethodCallInfo>();
-					gm.setMode(ModalGraphMouse.Mode.TRANSFORMING); 
-					this.viewer.setGraphMouse(gm);
+					this.setGraphMode();
 
 					this.viewer.getRenderContext().setVertexLabelTransformer(
 							new ToStringLabeller<MethodInfo>());
 					this.viewer.getRenderContext().setEdgeLabelTransformer(
 							new ToStringLabeller<MethodCallInfo>());
+
+					this.viewer.addMouseListener(new MouseListener() {
+
+						@Override
+						public void mouseReleased(MouseEvent e) {
+							final Set<MethodInfo> methods = MethodGraphView.this.viewer
+									.getPickedVertexState().getPicked();
+
+							// コードクローンの情報をセット
+							for (final MethodInfo method : methods) {
+								method.setCodeClone(codeclone);
+							}
+
+							SelectedEntities.<MethodInfo> getInstance(
+									MethodInfo.METHOD).setAll(methods,
+									MethodGraphView.this);
+						}
+
+						@Override
+						public void mousePressed(MouseEvent e) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void mouseExited(MouseEvent e) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void mouseEntered(MouseEvent e) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							// TODO Auto-generated method stub
+
+						}
+					});
 
 					this.add(this.viewer, BorderLayout.CENTER);
 					this.validate();
@@ -98,21 +142,56 @@ public class MethodGraphView extends JPanel implements Observer {
 	}
 
 	public MethodGraphView() {
-		final JRadioButton transforming = new JRadioButton("TRANSFORMING");
-		final JRadioButton picking = new JRadioButton("PICKING");
+		this.transformingButton = new JRadioButton("TRANSFORMING");
+		this.pickingButton = new JRadioButton("PICKING");
 		final ButtonGroup group = new ButtonGroup();
-		group.add(transforming);
-		group.add(picking);
-		transforming.setSelected(true);
+		group.add(this.transformingButton);
+		group.add(this.pickingButton);
+		this.pickingButton.setSelected(true);
 		final JPanel buttonPanel = new JPanel();
-		buttonPanel.add(transforming);
-		buttonPanel.add(picking);
+		buttonPanel.add(this.transformingButton);
+		buttonPanel.add(this.pickingButton);
 		this.setLayout(new BorderLayout());
 		this.add(buttonPanel, BorderLayout.NORTH);
 		this.viewer = null;
-		
-		
+
+		this.transformingButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MethodGraphView.this.setGraphMode();
+			}
+		});
+
+		this.pickingButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MethodGraphView.this.setGraphMode();
+			}
+		});
+	}
+
+	private void setGraphMode() {
+		if (this.transformingButton.isSelected()) {
+			if (null != MethodGraphView.this.viewer) {
+				DefaultModalGraphMouse<MethodInfo, MethodCallInfo> gm = new DefaultModalGraphMouse<MethodInfo, MethodCallInfo>();
+				gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+				MethodGraphView.this.viewer.setGraphMouse(gm);
+			}
+		} else if (this.pickingButton.isSelected()) {
+			if (null != MethodGraphView.this.viewer) {
+				DefaultModalGraphMouse<MethodInfo, MethodCallInfo> gm = new DefaultModalGraphMouse<MethodInfo, MethodCallInfo>();
+				gm.setMode(ModalGraphMouse.Mode.PICKING);
+				MethodGraphView.this.viewer.setGraphMouse(gm);
+			}
+		}
 	}
 
 	private VisualizationViewer<MethodInfo, MethodCallInfo> viewer;
+
+	private final JRadioButton transformingButton;
+
+	private final JRadioButton pickingButton;
+
 }

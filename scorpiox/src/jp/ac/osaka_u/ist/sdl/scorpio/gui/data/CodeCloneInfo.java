@@ -48,6 +48,23 @@ public class CodeCloneInfo implements Entity, Comparable<CodeCloneInfo> {
 		return Collections.unmodifiableSortedSet(this.elements);
 	}
 
+	/**
+	 * 引数で指定されたメソッドに含まれる要素のSortedSetを返す
+	 * 
+	 * @param methodID
+	 * @return
+	 */
+	public SortedSet<ElementInfo> getElements(final int methodID) {
+
+		final SortedSet<ElementInfo> elements = new TreeSet<ElementInfo>();
+		for (final ElementInfo element : this.getElements()) {
+			if (element.getMethodID() == methodID) {
+				elements.add(element);
+			}
+		}
+		return elements;
+	}
+
 	public void add(final MethodCallInfo call) {
 		this.calls.add(call);
 	}

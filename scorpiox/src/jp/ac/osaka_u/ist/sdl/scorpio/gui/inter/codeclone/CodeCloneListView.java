@@ -62,7 +62,7 @@ public class CodeCloneListView extends JTable implements Observer {
      */
     public CodeCloneListView() {
 
-        this.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         this.scrollPane = new JScrollPane();
         this.scrollPane.setViewportView(this);

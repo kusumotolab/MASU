@@ -1,6 +1,8 @@
 package jp.ac.osaka_u.ist.sdl.scorpio.gui.data;
 
-public class MethodInfo implements Comparable<MethodInfo> {
+import jp.ac.osaka_u.ist.sdl.scorpio.Entity;
+
+public class MethodInfo implements Entity, Comparable<MethodInfo> {
 
 	public MethodInfo(final String name, final int id, final int fileID,
 			final int fromLine, final int toLine) {
@@ -9,9 +11,11 @@ public class MethodInfo implements Comparable<MethodInfo> {
 		this.fileID = fileID;
 		this.fromLine = fromLine;
 		this.toLine = toLine;
+		this.codeclone = null;
 	}
 
 	public MethodInfo() {
+		this(null, 0, 0, 0, 0);
 	}
 
 	/**
@@ -120,6 +124,18 @@ public class MethodInfo implements Comparable<MethodInfo> {
 		}
 	}
 
+	public void setCodeClone(final CodeCloneInfo codeclone) {
+		this.codeclone = codeclone;
+	}
+
+	public void removeCodeClone() {
+		this.codeclone = null;
+	}
+
+	public CodeCloneInfo getCodeClone() {
+		return this.codeclone;
+	}
+
 	@Override
 	public String toString() {
 		final StringBuilder label = new StringBuilder();
@@ -132,9 +148,13 @@ public class MethodInfo implements Comparable<MethodInfo> {
 		return label.toString();
 	}
 
+	public static String METHOD = new String("METHOD");
+
 	private String name;
 	private int id;
 	private int fileID;
 	private int fromLine;
 	private int toLine;
+
+	private CodeCloneInfo codeclone;
 }
