@@ -9,6 +9,9 @@
 	<property name="cli.jar" value="lib/commons-cli-1.1.jar" />
 	<property name="antlr.jar" value="../main/lib/antlr.jar" />
 	<property name="asm.jar" value="../main/lib/asm-all-3.3.jar" />
+	<property name="jung-algorithm.jar" value="lib/jung2-2_0_1/jung-algorithms-2.0.1.jar" />
+	<property name="jung-visualization.jar" value="lib/jung2-2_0_1/jung-visualization-2.0.1.jar" />
+	<property name="jung-graph.jar" value="lib/jung2-2_0_1/jung-graph-impl-2.0.1.jar" />
 	<property name="masu.jar" value="../main/masu/bin/masu.jar" />
 	<property name="cfg.jar" value="../cfg/cfg/bin/cfg.jar" />
 	<property name="pdg.jar" value="../pdg/pdg/bin/pdg.jar" />
@@ -34,7 +37,7 @@
 		<ant antfile="../cfg/build.xml" target="compile" inheritall="false"/>
 		<ant antfile="../pdg/build.xml" target="compile" inheritall="false"/>
 		<mkdir dir="${CLS.DIR}" />
-		<javac classpath="${cli.jar};${icca.cls.dir};${masu.cls.dir};${cfg.cls.dir};${pdg.cls.dir}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
+		<javac classpath="${cli.jar};${jung-algorithm.jar};${jung-visualization.jar};${jung-graph.jar};${icca.cls.dir};${masu.cls.dir};${cfg.cls.dir};${pdg.cls.dir}" srcdir="${SRC.DIR}" destdir="${CLS.DIR}" encoding="Windows-31J" debug="${DEBUG}" />
 	</target>
 
 	<target name="build" depends="compile">
