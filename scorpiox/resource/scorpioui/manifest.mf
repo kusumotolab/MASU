@@ -1,2 +1,2 @@
 Main-class: jp/ac/osaka_u/ist/sdl/scorpio/Scorpioui
-Class-path: ./commons-cli-1.1.jar ./masu.jar ./cfg.jar ./pdg.jar
+Class-path: ./commons-cli-1.1.jar ./masu.jar ./cfg.jar ./pdg.jar ./jung-algorithms-2.0.1.jar ./jung-visualization-2.0.1.jar ./jung-graph-impl-2.0.1.jar

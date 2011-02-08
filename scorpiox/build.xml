@@ -54,6 +54,10 @@
 		<copy file="${masu.jar}" todir="${PACKAGE.BIN.DIR}" />
 		<copy file="${cfg.jar}" todir="${PACKAGE.BIN.DIR}" />
 		<copy file="${pdg.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${jung-algorithm.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${jung-visualization.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${jung-graph.jar}" todir="${PACKAGE.BIN.DIR}" />
+		<copy file="${pdg.jar}" todir="${PACKAGE.BIN.DIR}" />
 		<copy file="${license.txt}" todir="${PACKAGE.BIN.DIR}" />
 		<copy file="${readmej.txt}" todir="${PACKAGE.BIN.DIR}" />
 		<property name="masu.jar" value="../main/masu/bin/masu.jar" />
@@ -70,7 +74,7 @@
 	<target name="srcpackage" depends="build">
 		<mkdir dir="${PACKAGE.DOC.DIR}" />
 		<javadoc packagenames="jp.ac.osaka_u.ist.sdl.scorpio.*" sourcepath="${SRC.DIR}" destdir="${PACKAGE.API.DIR}" public="true" encoding="Windows-31J">
-			<classpath path="${cli.jar};${masu.dir};${cfg.cls.dir};${pdg.cls.dir}" />
+			<classpath path="${cli.jar};${jung-algorithm.jar};${jung-visualization.jar};${jung-graph.jar};${masu.dir};${cfg.cls.dir};${pdg.cls.dir}" />
 		</javadoc>
 		<copy todir="${PACKAGE.SRC.DIR}">
 			<fileset dir="${SRC.DIR}" />
