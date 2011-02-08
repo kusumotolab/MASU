@@ -23,7 +23,6 @@ import jp.ac.osaka_u.ist.sdl.scorpio.data.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.data.NodePairInfo;
-import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.PDGController;
 import jp.ac.osaka_u.ist.sdl.scorpio.io.XMLWriter;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.CALL_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.CAST_NORMALIZATION;

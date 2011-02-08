@@ -1,4 +1,4 @@
-package jp.ac.osaka_u.ist.sdl.scorpio.gui.data;
+package jp.ac.osaka_u.ist.sdl.scorpio;
 
 import java.util.Collection;
 import java.util.Collections;

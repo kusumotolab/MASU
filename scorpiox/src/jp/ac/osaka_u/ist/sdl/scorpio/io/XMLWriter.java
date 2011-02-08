@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
+import jp.ac.osaka_u.ist.sdl.scorpio.PDGController;
 import jp.ac.osaka_u.ist.sdl.scorpio.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.data.CodeCloneInfo;
-import jp.ac.osaka_u.ist.sdl.scorpio.gui.data.PDGController;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.Configuration;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.DEPENDENCY_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
