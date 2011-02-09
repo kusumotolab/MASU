@@ -357,8 +357,9 @@ public class CommentRemover {
 			if (State.BLOCKCOMMENT == currentState) {
 				if (prev == '*' && ch == '/') {
 					currentState = State.CODE;
+					buf.append(" ");
 				}
-			} 
+			}
 
 			// ƒ‰ƒCƒ“ƒRƒƒ“ƒg‚Ì’†‚É‚¢‚é‚Æ‚«
 			else if (State.LINECOMMENT == currentState) {
