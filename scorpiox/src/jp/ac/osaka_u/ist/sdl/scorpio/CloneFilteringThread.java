@@ -55,10 +55,10 @@ public class CloneFilteringThread implements Runnable {
 			}
 
 			// 対象クローンペアリストにおいて，clonepairを包含しているものがあるかを調査
-			for (final ClonePairInfo another : target) {				
+			for (final ClonePairInfo another : target) {
 				if (clonepair.subsumedBy(another)) {
-//					System.out.println("@@@");
-//					continue NEXT;
+					// System.out.println("@@@");
+					// continue NEXT;
 				}
 			}
 

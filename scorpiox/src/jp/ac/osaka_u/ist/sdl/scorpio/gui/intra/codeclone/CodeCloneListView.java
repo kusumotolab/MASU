@@ -91,7 +91,8 @@ public class CodeCloneListView extends JTable implements Observer {
                 this.setModel(model);
                 final RowSorter<CodeCloneListViewModel> sorter = new TableRowSorter<CodeCloneListViewModel>(
                         model);
-                this.setRowSorter(sorter);
+                this.setRowSorter(sorter);                
+                this.setRowSelectionInterval(0, 1); //‚ ‚Á‚½‚Ù‚¤‚ª•Ö—˜
             }
         }
 

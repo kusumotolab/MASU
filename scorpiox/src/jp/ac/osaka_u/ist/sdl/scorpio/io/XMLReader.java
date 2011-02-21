@@ -317,7 +317,7 @@ public class XMLReader extends DefaultHandler {
 		case CLONEINFO:
 			break;
 		case CLONESET:
-			CodeCloneController.getInstance(this.id).add(this.cloneset);
+			CodeCloneController.getInstance(this.id).add(this.cloneset);			
 			this.cloneset = null;
 			break;
 		case CLONE:

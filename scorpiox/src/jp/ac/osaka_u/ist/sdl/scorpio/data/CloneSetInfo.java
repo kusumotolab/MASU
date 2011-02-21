@@ -2,6 +2,7 @@ package jp.ac.osaka_u.ist.sdl.scorpio.data;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -103,8 +104,37 @@ public class CloneSetInfo implements Comparable<CloneSetInfo> {
 	}
 
 	@Override
-	public int compareTo(CloneSetInfo o) {		
-		return this.codeclones.first().compareTo(o.getCodeClones().first());
+	public int compareTo(CloneSetInfo o) {
+
+		final Iterator<CodeCloneInfo> thisIterator = this.getCodeClones()
+				.iterator();
+		final Iterator<CodeCloneInfo> targetIterator = o.getCodeClones()
+				.iterator();
+
+		// —¼•û‚Ì—v‘f‚ª‚ ‚éŒÀ‚è
+		while (thisIterator.hasNext() && targetIterator.hasNext()) {
+
+			final int elementOrder = thisIterator.next().compareTo(
+					targetIterator.next());
+			if (0 != elementOrder) {
+				return elementOrder;
+			}
+		}
+
+		if (!thisIterator.hasNext() && !targetIterator.hasNext()) {
+			return 0;
+		}
+
+		if (!thisIterator.hasNext()) {
+			return -1;
+		}
+
+		if (!targetIterator.hasNext()) {
+			return 1;
+		}
+
+		assert false : "Here shouldn't be reached!";
+		return 0;
 	}
 
 	final private SortedSet<CodeCloneInfo> codeclones;
