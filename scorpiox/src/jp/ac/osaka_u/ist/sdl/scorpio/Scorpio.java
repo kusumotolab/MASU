@@ -789,7 +789,7 @@ public class Scorpio extends MetricsTool {
 		for (int i = 0; i < threads.length; i++) {
 
 			threads[i] = new Thread(new PDGBuildingThread<T>(methods, index,
-					pdgNodeFactory, data, control, execution, true, dissolve,
+					pdgNodeFactory, data, control, execution, false, dissolve,
 					dataDistance, controlDistance, executionDistance));
 			MetricsToolSecurityManager.getInstance().addPrivilegeThread(
 					threads[i]);
