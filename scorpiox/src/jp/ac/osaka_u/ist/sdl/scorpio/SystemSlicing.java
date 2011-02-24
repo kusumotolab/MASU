@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.Stack;
-import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sdl.scorpio.data.ClonePairInfo;
+import jp.ac.osaka_u.ist.sdl.scorpio.data.NodePairInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGAcrossEdge;
@@ -45,11 +45,12 @@ public class SystemSlicing extends Slicing {
 					predecessorsA, predecessorsB);
 
 			// 共通部分を取り除く処理
-			final SortedSet<PDGNode<?>> commonNodes = new TreeSet<PDGNode<?>>();
-			commonNodes.addAll(this.clonepair.codecloneA.getAllElements());
-			commonNodes.retainAll(this.clonepair.codecloneB.getAllElements());
-			this.clonepair.codecloneA.removeAll(commonNodes);
-			this.clonepair.codecloneB.removeAll(commonNodes);
+			// final SortedSet<PDGNode<?>> commonNodes = new
+			// TreeSet<PDGNode<?>>();
+			// commonNodes.addAll(this.clonepair.codecloneA.getAllElements());
+			// commonNodes.retainAll(this.clonepair.codecloneB.getAllElements());
+			// this.clonepair.codecloneA.removeAll(commonNodes);
+			// this.clonepair.codecloneB.removeAll(commonNodes);
 		}
 		return this.clonepair;
 	}
@@ -244,7 +245,7 @@ public class SystemSlicing extends Slicing {
 
 		// 現在のノードをクローンペアに追加
 		NODE_PAIR_CACHE.add(nodeA, nodeB);
-		clonepair.add(nodeA, nodeB);
+		clonepair.add(NodePairInfo.getInstance(nodeA, nodeB));
 		return clonepair;
 	}
 
@@ -339,8 +340,8 @@ public class SystemSlicing extends Slicing {
 					} else if (acrossForwardNodesA.containsKey(nodeA)) {
 						final CallInfo<?> call = this.callStackA.pop();
 						// successorの大きさが0でないならば，該当するメソッド呼び出しをクローンに追加
-						if (0 < successor.codecloneA.length()) {
-							clonepair.codecloneA.addCall(call);
+						if (0 < successor.length()) {
+							clonepair.addCallA(call);
 						}
 					}
 					if (acrossBackwardNodesB.containsKey(nodeB)) {
@@ -348,8 +349,8 @@ public class SystemSlicing extends Slicing {
 					} else if (acrossForwardNodesB.containsKey(nodeB)) {
 						final CallInfo<?> call = this.callStackB.pop();
 						// successorの大きさが0でないならば，該当するメソッド呼び出しをクローンに追加
-						if (0 < successor.codecloneB.length()) {
-							clonepair.codecloneB.addCall(call);
+						if (0 < successor.length()) {
+							clonepair.addCallB(call);
 						}
 					}
 				}

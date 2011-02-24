@@ -283,6 +283,10 @@ public class CodeCloneInfo implements Comparable<CodeCloneInfo> {
 		return this.hash;
 	}
 
+	public boolean contains(final PDGNode<?> node) {
+		return this.allElements.contains(node);
+	}
+
 	public float density() {
 		final Set<Integer> duplication = new HashSet<Integer>();
 		for (final PDGNode<?> node : this.getElements()) {

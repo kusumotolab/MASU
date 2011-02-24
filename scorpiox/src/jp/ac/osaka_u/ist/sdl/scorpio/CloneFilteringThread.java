@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import jp.ac.osaka_u.ist.sdl.scorpio.data.ClonePairInfo;
+import jp.ac.osaka_u.ist.sdl.scorpio.data.NodePairInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 public class CloneFilteringThread implements Runnable {
@@ -36,16 +37,15 @@ public class CloneFilteringThread implements Runnable {
 
 			// フィルタリングするかどうかを調査するための対象クローンペアリストを取得
 			final List<List<ClonePairInfo>> candidateList = new ArrayList<List<ClonePairInfo>>();
-			for (final PDGNode<?> node : clonepair.codecloneA.getRealElements()) {
-				final List<ClonePairInfo> candidate = this.clonepairListGroup
-						.get(node);
-				candidateList.add(candidate);
+			for (final NodePairInfo nodepair : clonepair.getRealNodePairs()) {
+				final List<ClonePairInfo> candidateA = this.clonepairListGroup
+						.get(nodepair.nodeA);
+				candidateList.add(candidateA);
+				final List<ClonePairInfo> candidateB = this.clonepairListGroup
+						.get(nodepair.nodeB);
+				candidateList.add(candidateB);
 			}
-			for (final PDGNode<?> node : clonepair.codecloneB.getRealElements()) {
-				final List<ClonePairInfo> candidate = this.clonepairListGroup
-						.get(node);
-				candidateList.add(candidate);
-			}
+
 			List<ClonePairInfo> target = candidateList.get(0);
 			for (int index = 1; index < candidateList.size(); index++) {
 				final List<ClonePairInfo> candidate = candidateList.get(index);

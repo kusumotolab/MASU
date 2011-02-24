@@ -981,24 +981,26 @@ public class Scorpio extends MetricsTool {
 		// クローンペアリストのグループを生成，これはフィルタリングに使用
 		ConcurrentMap<PDGNode<?>, List<ClonePairInfo>> clonepairListGroup = new ConcurrentHashMap<PDGNode<?>, List<ClonePairInfo>>();
 		for (final ClonePairInfo clonepair : clonepairList) {
-			for (final PDGNode<?> node : clonepair.codecloneA.getRealElements()) {
-				List<ClonePairInfo> list = clonepairListGroup.get(node);
-				if (null == list) {
-					list = Collections
-							.synchronizedList(new ArrayList<ClonePairInfo>());
-					clonepairListGroup.put(node, list);
-				}
-				list.add(clonepair);
-			}
 
-			for (final PDGNode<?> node : clonepair.codecloneB.getRealElements()) {
-				List<ClonePairInfo> list = clonepairListGroup.get(node);
-				if (null == list) {
-					list = Collections
+			for (final NodePairInfo nodepair : clonepair.getRealNodePairs()) {
+
+				List<ClonePairInfo> listA = clonepairListGroup
+						.get(nodepair.nodeA);
+				if (null == listA) {
+					listA = Collections
 							.synchronizedList(new ArrayList<ClonePairInfo>());
-					clonepairListGroup.put(node, list);
+					clonepairListGroup.put(nodepair.nodeA, listA);
 				}
-				list.add(clonepair);
+				listA.add(clonepair);
+
+				List<ClonePairInfo> listB = clonepairListGroup
+						.get(nodepair.nodeB);
+				if (null == listB) {
+					listB = Collections
+							.synchronizedList(new ArrayList<ClonePairInfo>());
+					clonepairListGroup.put(nodepair.nodeB, listB);
+				}
+				listB.add(clonepair);
 			}
 		}
 
@@ -1034,10 +1036,10 @@ public class Scorpio extends MetricsTool {
 
 			final Map<CodeCloneInfo, CloneSetInfo> cloneSetBag = new HashMap<CodeCloneInfo, CloneSetInfo>();
 
-			for (final ClonePairInfo clonePair : clonepairs) {
+			for (final ClonePairInfo clonepair : clonepairs) {
 
-				final CodeCloneInfo cloneA = clonePair.codecloneA;
-				final CodeCloneInfo cloneB = clonePair.codecloneB;
+				final CodeCloneInfo cloneA = clonepair.getCodeCloneA();
+				final CodeCloneInfo cloneB = clonepair.getCodeCloneB();
 
 				final CloneSetInfo cloneSetA = cloneSetBag.get(cloneA);
 				final CloneSetInfo cloneSetB = cloneSetBag.get(cloneB);
@@ -1102,8 +1104,10 @@ public class Scorpio extends MetricsTool {
 			final SortedSet<CloneSetInfo> clonesets = new TreeSet<CloneSetInfo>();
 			for (final ClonePairInfo clonepair : clonepairs) {
 				final CloneSetInfo cloneset = new CloneSetInfo();
-				cloneset.add(clonepair.codecloneA);
-				cloneset.add(clonepair.codecloneB);
+				final CodeCloneInfo codecloneA = clonepair.getCodeCloneA();
+				final CodeCloneInfo codecloneB = clonepair.getCodeCloneB();
+				cloneset.add(codecloneA);
+				cloneset.add(codecloneB);
 				clonesets.add(cloneset);
 			}
 
@@ -1179,8 +1183,8 @@ public class Scorpio extends MetricsTool {
 			for (int i = 0; i < nodeList.size(); i++) {
 
 				for (int j = i + 1; j < nodeList.size(); j++) {
-					nodepairs.add(new NodePairInfo(nodeList.get(i), nodeList
-							.get(j)));
+					nodepairs.add(NodePairInfo.getInstance(nodeList.get(i),
+							nodeList.get(j)));
 				}
 			}
 		}

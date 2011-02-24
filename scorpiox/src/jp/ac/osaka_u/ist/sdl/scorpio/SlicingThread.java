@@ -52,8 +52,7 @@ class SlicingThread implements Runnable {
 			}
 			final ClonePairInfo clonepair = slicing.perform();
 
-			if (Configuration.INSTANCE.getS() <= Math.min(clonepair.codecloneA
-					.length(), clonepair.codecloneB.length())) {
+			if (Configuration.INSTANCE.getS() <= clonepair.length()) {
 				this.clonepairList.add(clonepair);
 			}
 

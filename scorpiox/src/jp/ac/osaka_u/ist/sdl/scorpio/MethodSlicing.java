@@ -3,9 +3,9 @@ package jp.ac.osaka_u.ist.sdl.scorpio;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 import jp.ac.osaka_u.ist.sdl.scorpio.data.ClonePairInfo;
+import jp.ac.osaka_u.ist.sdl.scorpio.data.NodePairInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGControlDependenceEdge;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.edge.PDGDataDependenceEdge;
@@ -35,11 +35,12 @@ public class MethodSlicing extends Slicing {
 					predecessorsA, predecessorsB);
 
 			// ã§í ïîï™ÇéÊÇËèúÇ≠èàóù
-			final SortedSet<PDGNode<?>> commonNodes = new TreeSet<PDGNode<?>>();
-			commonNodes.addAll(this.clonepair.codecloneA.getAllElements());
-			commonNodes.retainAll(this.clonepair.codecloneB.getAllElements());
-			this.clonepair.codecloneA.removeAll(commonNodes);
-			this.clonepair.codecloneB.removeAll(commonNodes);
+			// final SortedSet<PDGNode<?>> commonNodes = new
+			// TreeSet<PDGNode<?>>();
+			// commonNodes.addAll(this.clonepair.codecloneA.getAllElements());
+			// commonNodes.retainAll(this.clonepair.codecloneB.getAllElements());
+			// this.clonepair.codecloneA.removeAll(commonNodes);
+			// this.clonepair.codecloneB.removeAll(commonNodes);
 		}
 		return this.clonepair;
 	}
@@ -149,7 +150,7 @@ public class MethodSlicing extends Slicing {
 		}
 
 		NODE_PAIR_CACHE.add(nodeA, nodeB);
-		clonepair.add(nodeA, nodeB);
+		clonepair.add(NodePairInfo.getInstance(nodeA, nodeB));
 		return clonepair;
 	}
 

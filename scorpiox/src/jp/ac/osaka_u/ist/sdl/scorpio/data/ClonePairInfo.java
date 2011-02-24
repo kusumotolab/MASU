@@ -1,7 +1,15 @@
 package jp.ac.osaka_u.ist.sdl.scorpio.data;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicLong;
 
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 /**
@@ -16,30 +24,59 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 	 * コンストラクタ
 	 */
 	public ClonePairInfo() {
-
-		this.codecloneA = new CodeCloneInfo();
-		this.codecloneB = new CodeCloneInfo();
-
-		this.id = number++;
+		this.realNodepairs = new TreeSet<NodePairInfo>();
+		this.allNodepairs = new TreeSet<NodePairInfo>();
+		this.nodes = new HashSet<PDGNode<?>>();
+		this.callsA = new TreeSet<CallInfo<?>>();
+		this.callsB = new TreeSet<CallInfo<?>>();
+		this.id = ID_GENERATOR.getAndIncrement();
 	}
 
-	public ClonePairInfo(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
+	public ClonePairInfo(final NodePairInfo nodepair) {
 
 		this();
 
-		this.add(nodeA, nodeB);
+		this.add(nodepair);
 	}
 
-	public void add(final PDGNode<?> nodeA, final PDGNode<?> nodeB) {
-		this.codecloneA.add(nodeA);
-		this.codecloneB.add(nodeB);
+	public void add(final NodePairInfo nodepair) {
+		if (this.nodes.contains(nodepair.nodeA)
+				|| this.nodes.contains(nodepair.nodeB)) {
+			return;
+		}
+
+		final ExecutableElementInfo coreA = nodepair.nodeA.getCore();
+		final ExecutableElementInfo coreB = nodepair.nodeB.getCore();
+
+		if ((coreA.getFromLine() != coreA.getToLine() || coreA.getFromColumn() != coreA
+				.getToColumn())
+				&& (coreB.getFromLine() != coreB.getToLine() || coreB
+						.getFromColumn() != coreB.getToColumn())) {
+			this.realNodepairs.add(nodepair);
+		}
+		this.allNodepairs.add(nodepair);
+		this.nodes.add(nodepair.nodeA);
+		this.nodes.add(nodepair.nodeB);
+	}
+
+	public void addAll(final Collection<NodePairInfo> nodepairs) {
+		for (final NodePairInfo nodepair : nodepairs) {
+			this.add(nodepair);
+		}
 	}
 
 	public void add(final ClonePairInfo clonepair) {
-		this.codecloneA.addElements(clonepair.codecloneA);
-		this.codecloneB.addElements(clonepair.codecloneB);
-		this.codecloneA.addCalls(clonepair.codecloneA.getCalls());
-		this.codecloneB.addCalls(clonepair.codecloneB.getCalls());
+		this.addAll(clonepair.getAllNodePairs());
+		this.addCallsA(clonepair.getCallsA());
+		this.addCallsB(clonepair.getCallsB());
+	}
+
+	public SortedSet<NodePairInfo> getAllNodePairs() {
+		return new TreeSet<NodePairInfo>(this.allNodepairs);
+	}
+
+	public SortedSet<NodePairInfo> getRealNodePairs() {
+		return new TreeSet<NodePairInfo>(this.realNodepairs);
 	}
 
 	/**
@@ -48,7 +85,7 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 	 * @return　クローンペアの長さ
 	 */
 	public int length() {
-		return (this.codecloneA.length() + this.codecloneB.length()) / 2;
+		return this.realNodepairs.size();
 	}
 
 	/**
@@ -60,109 +97,59 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 	 */
 	public boolean subsumedBy(final ClonePairInfo clonepair) {
 
-		// this.codecloneA が clonepair.codecloneA よりも小さいとき
-		if (this.codecloneA.length() < clonepair.codecloneA.length()) {
-
-			// this.codecloneA　が clonepair.codecloneA　に包含されているかを調査
-			if (this.codecloneA.subsumedBy(clonepair.codecloneA)) {
-
-				// this.codecloneB が clonepair.codecloneB よりも小さいとき
-				if (this.codecloneB.length() < clonepair.codecloneB.length()) {
-
-					// this.codecloneB が clonepair.codecloneB　に包含されているかを調査
-					if (this.codecloneB.subsumedBy(clonepair.codecloneB)) {
-						return true;
-					}
-				}
-
-				// this.codecloneB が clonepair.codecloneB と同じ大きさのとき
-				else if (this.codecloneB.length() == clonepair.codecloneB
-						.length()) {
-
-					// this.codecloneB が clonepair.codecloneB と等しいかを調査
-					if (this.codecloneB.equals(clonepair.codecloneB)) {
-						return true;
-					}
-				}
-			}
+		if (this.length() <= clonepair.length()
+				&& this.realNodepairs.containsAll(clonepair.realNodepairs)) {
+			return true;
+		} else {
+			return false;
 		}
-
-		// this.codecloneA が clonepair.codecloneA と同じ大きさのとき
-		else if (this.codecloneA.length() == clonepair.codecloneA.length()) {
-
-			// this.codecloneA が clonepair.codecloneA と等しいかを調査
-			if (this.codecloneA.equals(clonepair.codecloneA)) {
-
-				// this.codecloneB が clonepair.codecloneB よりも小さいとき
-				if (this.codecloneB.length() < clonepair.codecloneB.length()) {
-
-					// this.codecloneB が clonepair.codecloneB に包含されていうかを調査
-					if (this.codecloneB.subsumedBy(clonepair.codecloneB)) {
-						return true;
-					}
-				}
-			}
-		}
-
-		// this.codecloneA が clonepair.codecloneB よりも小さいとき
-		if (this.codecloneA.length() < clonepair.codecloneB.length()) {
-
-			// this.codecloneA　が clonepair.codecloneB　に包含されているかを調査
-			if (this.codecloneA.subsumedBy(clonepair.codecloneB)) {
-
-				// this.codecloneB が clonepair.codecloneA よりも小さいとき
-				if (this.codecloneB.length() < clonepair.codecloneA.length()) {
-
-					// this.codecloneB が clonepair.codecloneA　に包含されているかを調査
-					if (this.codecloneB.subsumedBy(clonepair.codecloneA)) {
-						return true;
-					}
-				}
-
-				// this.codecloneB が clonepair.codecloneA と同じ大きさのとき
-				else if (this.codecloneB.length() == clonepair.codecloneA
-						.length()) {
-
-					// this.codecloneB が clonepair.codecloneA と等しいかを調査
-					if (this.codecloneB.equals(clonepair.codecloneA)) {
-						return true;
-					}
-				}
-			}
-		}
-
-		// this.codecloneA が clonepair.codecloneB と同じ大きさのとき
-		else if (this.codecloneA.length() == clonepair.codecloneB.length()) {
-
-			// this.codecloneA が clonepair.codecloneB と等しいかを調査
-			if (this.codecloneA.equals(clonepair.codecloneB)) {
-
-				// this.codecloneB が clonepair.codecloneA よりも小さいとき
-				if (this.codecloneB.length() < clonepair.codecloneA.length()) {
-
-					// this.codecloneB が clonepair.codecloneA に包含されていうかを調査
-					if (this.codecloneB.subsumedBy(clonepair.codecloneA)) {
-						return true;
-					}
-				}
-			}
-		}
-
-		return false;
 	}
 
-	/**
-	 * クローンペアのIDを返す
-	 * 
-	 * @return クローンペアのID
-	 */
-	public int getID() {
-		return this.id;
+	public void addCallA(final CallInfo<?> callA) {
+		this.callsA.add(callA);
+	}
+
+	public void addCallB(final CallInfo<?> callB) {
+		this.callsB.add(callB);
+	}
+
+	public void addCallsA(final Collection<CallInfo<?>> callsA) {
+		this.callsA.addAll(callsA);
+	}
+
+	public void addCallsB(final Collection<CallInfo<?>> callsB) {
+		this.callsB.addAll(callsB);
+	}
+
+	public SortedSet<CallInfo<?>> getCallsA() {
+		return new TreeSet<CallInfo<?>>(this.callsA);
+	}
+
+	public SortedSet<CallInfo<?>> getCallsB() {
+		return new TreeSet<CallInfo<?>>(this.callsB);
 	}
 
 	@Override
 	public int hashCode() {
-		return this.codecloneA.hashCode() + this.codecloneB.hashCode();
+		return (int) (this.id % Integer.MAX_VALUE);
+	}
+
+	public CodeCloneInfo getCodeCloneA() {
+		final CodeCloneInfo codeclone = new CodeCloneInfo();
+		for (final NodePairInfo nodepair : this.allNodepairs) {
+			codeclone.add(nodepair.nodeA);
+		}
+		codeclone.addCalls(this.getCallsA());
+		return codeclone;
+	}
+
+	public CodeCloneInfo getCodeCloneB() {
+		final CodeCloneInfo codeclone = new CodeCloneInfo();
+		for (final NodePairInfo nodepair : this.allNodepairs) {
+			codeclone.add(nodepair.nodeB);
+		}
+		codeclone.addCalls(this.getCallsB());
+		return codeclone;
 	}
 
 	@Override
@@ -172,95 +159,58 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 			return false;
 		}
 
-		if (!(o instanceof ClonePairInfo)) {
-			return false;
-		}
-
-		final ClonePairInfo target = (ClonePairInfo) o;
-
-		if (((this.codecloneA.hashCode() != target.codecloneA.hashCode()) || (this.codecloneB
-				.hashCode() != target.codecloneB.hashCode()))
-				&& ((this.codecloneA.hashCode() != target.codecloneB.hashCode()) || (this.codecloneB
-						.hashCode() != target.codecloneB.hashCode()))) {
-			return false;
-		}
-
-		return (this.codecloneA.equals(target.codecloneA) && this.codecloneB
-				.equals(target.codecloneB))
-				|| (this.codecloneA.equals(target.codecloneB) && this.codecloneB
-						.equals(target.codecloneA));
+		final ClonePairInfo clonepair = (ClonePairInfo) o;
+		return this.realNodepairs.containsAll(clonepair.realNodepairs)
+				&& clonepair.realNodepairs.containsAll(this.realNodepairs);
 	}
 
 	@Override
 	public ClonePairInfo clone() {
 
-		final ClonePairInfo clonePair = new ClonePairInfo();
-		final CodeCloneInfo cloneA = this.codecloneA;
-		final CodeCloneInfo cloneB = this.codecloneB;
-		clonePair.codecloneA.addElements(cloneA);
-		clonePair.codecloneB.addElements(cloneB);
+		final ClonePairInfo clonepair = new ClonePairInfo();
+		clonepair.add(this);
 
-		return clonePair;
+		return clonepair;
 	}
 
 	@Override
-	public int compareTo(final ClonePairInfo clonePair) {
+	public int compareTo(final ClonePairInfo clonepair) {
 
-		if (null == clonePair) {
+		if (null == clonepair) {
 			throw new IllegalArgumentException();
 		}
 
-		final CodeCloneInfo thisCodeA = this.codecloneA;
-		final CodeCloneInfo thisCodeB = this.codecloneB;
-		final CodeCloneInfo targetCodeA = clonePair.codecloneA;
-		final CodeCloneInfo targetCodeB = clonePair.codecloneB;
-
-		/*
-		 * // コードクローンを構成する要素数で比較 if (thisCodeA.length() > targetCodeA.length())
-		 * { return 1; } else if (thisCodeA.length() < targetCodeA.length()) {
-		 * return -1; } else if (thisCodeB.length() > targetCodeB.length()) {
-		 * return 1; } else if (thisCodeB.length() < targetCodeB.length()) {
-		 * return -1; }
-		 */
-
-		// コードクローンAの位置情報で比較
-		{
-			Iterator<PDGNode<?>> thisIterator = thisCodeA.getElements()
-					.iterator();
-			Iterator<PDGNode<?>> targetIterator = targetCodeA.getElements()
-					.iterator();
-			while (thisIterator.hasNext() && targetIterator.hasNext()) {
-				int order = thisIterator.next()
-						.compareTo(targetIterator.next());
-				if (0 != order) {
-					return order;
-				}
+		final Iterator<NodePairInfo> thisIterator = this.realNodepairs
+				.iterator();
+		final Iterator<NodePairInfo> targetIterator = clonepair.realNodepairs
+				.iterator();
+		while (thisIterator.hasNext() && targetIterator.hasNext()) {
+			int order = thisIterator.next().compareTo(targetIterator.next());
+			if (0 != order) {
+				return order;
 			}
 		}
 
-		// コードクローンBの位置情報で比較
-		{
-			Iterator<PDGNode<?>> thisIterator = thisCodeB.getElements()
-					.iterator();
-			Iterator<PDGNode<?>> targetIterator = targetCodeB.getElements()
-					.iterator();
-			while (thisIterator.hasNext() && targetIterator.hasNext()) {
-				int order = thisIterator.next()
-						.compareTo(targetIterator.next());
-				if (0 != order) {
-					return order;
-				}
-			}
+		if (thisIterator.hasNext() && !targetIterator.hasNext()) {
+			return -1;
+		} else if (!thisIterator.hasNext() && targetIterator.hasNext()) {
+			return 1;
+		} else {
+			return 0;
 		}
-
-		return 0;
 	}
 
-	final public CodeCloneInfo codecloneA;
+	final private SortedSet<NodePairInfo> realNodepairs;
 
-	final public CodeCloneInfo codecloneB;
+	final private SortedSet<NodePairInfo> allNodepairs;
 
-	final private int id;
+	final private Set<PDGNode<?>> nodes;
 
-	private static int number = 0;
+	final private SortedSet<CallInfo<?>> callsA;
+
+	final private SortedSet<CallInfo<?>> callsB;
+
+	final public long id;
+
+	private static AtomicLong ID_GENERATOR = new AtomicLong();
 }
