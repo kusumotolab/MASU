@@ -34,9 +34,9 @@ public class NodePairInfo implements Comparable<NodePairInfo> {
 	public static NodePairInfo getInstance(final PDGNode<?> nodeA,
 			final PDGNode<?> nodeB) {
 
-		if (nodeA.id > nodeB.id) {
-			return getInstance(nodeB, nodeA);
-		}
+//		if (nodeA.id > nodeB.id) {
+//			return getInstance(nodeB, nodeA);
+//		}
 
 		Map<Long, NodePairInfo> map = INSTANCE_MAP.get(nodeA.id);
 		if (null == map) {

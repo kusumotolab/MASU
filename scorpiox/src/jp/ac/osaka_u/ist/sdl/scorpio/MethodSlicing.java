@@ -50,7 +50,8 @@ public class MethodSlicing extends Slicing {
 			final Set<PDGNode<?>> predecessorsB) {
 
 		// すでに利用されたノードのペアかどうかをチェック
-		if (NODE_PAIR_CACHE.cached(nodeA, nodeB)) {
+		final NodePairInfo nodepair = NodePairInfo.getInstance(nodeA, nodeB);
+		if (NODE_PAIR_CACHE.contains(nodepair)) {
 			return new ClonePairInfo();
 		}
 
@@ -120,18 +121,18 @@ public class MethodSlicing extends Slicing {
 		final ClonePairInfo clonepair = new ClonePairInfo();
 
 		{ // バックワードスライスを使う設定の場合
-			final ClonePairInfo successor1 = this.enlargeClonePair(
+			final ClonePairInfo predicessor1 = this.enlargeClonePair(
 					backwardExecutionNodesA, backwardExecutionNodesB,
 					predecessorsA, predecessorsB);
-			clonepair.add(successor1);
-			final ClonePairInfo successor2 = this.enlargeClonePair(
+			clonepair.add(predicessor1);
+			final ClonePairInfo predicessor2 = this.enlargeClonePair(
 					backwardDataNodesA, backwardDataNodesB, predecessorsA,
 					predecessorsB);
-			clonepair.add(successor2);
-			final ClonePairInfo successor3 = this.enlargeClonePair(
+			clonepair.add(predicessor2);
+			final ClonePairInfo predicessor3 = this.enlargeClonePair(
 					backwardControlNodesA, backwardControlNodesB,
 					predecessorsA, predecessorsB);
-			clonepair.add(successor3);
+			clonepair.add(predicessor3);
 		}
 
 		{ // フォワードスライスを使う設定の場合
@@ -149,8 +150,8 @@ public class MethodSlicing extends Slicing {
 			clonepair.add(successor3);
 		}
 
-		NODE_PAIR_CACHE.add(nodeA, nodeB);
-		clonepair.add(NodePairInfo.getInstance(nodeA, nodeB));
+		NODE_PAIR_CACHE.add(nodepair);
+		clonepair.add(nodepair);
 		return clonepair;
 	}
 

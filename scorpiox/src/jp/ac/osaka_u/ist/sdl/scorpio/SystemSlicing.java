@@ -60,7 +60,8 @@ public class SystemSlicing extends Slicing {
 			final Set<PDGNode<?>> predecessorsB) {
 
 		// すでに利用されたノードのペアかどうかをチェック
-		if (NODE_PAIR_CACHE.cached(nodeA, nodeB)) {
+		final NodePairInfo nodepair = NodePairInfo.getInstance(nodeA, nodeB);
+		if (NODE_PAIR_CACHE.contains(nodepair)) {
 			return new ClonePairInfo();
 		}
 
@@ -244,8 +245,8 @@ public class SystemSlicing extends Slicing {
 		}
 
 		// 現在のノードをクローンペアに追加
-		NODE_PAIR_CACHE.add(nodeA, nodeB);
-		clonepair.add(NodePairInfo.getInstance(nodeA, nodeB));
+		NODE_PAIR_CACHE.add(nodepair);
+		clonepair.add(nodepair);
 		return clonepair;
 	}
 

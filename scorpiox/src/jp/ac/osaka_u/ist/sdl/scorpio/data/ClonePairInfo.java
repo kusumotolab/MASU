@@ -52,6 +52,21 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 				.getToColumn())
 				&& (coreB.getFromLine() != coreB.getToLine() || coreB
 						.getFromColumn() != coreB.getToColumn())) {
+
+			for (final PDGNode<?> node : this.getCodeCloneA().getAllElements()) {
+				if (!node.getCore().getOwnerMethod().equals(
+						nodepair.nodeA.getCore().getOwnerMethod())) {
+					System.out.println("A");
+				}
+			}
+			
+			for (final PDGNode<?> node : this.getCodeCloneB().getAllElements()) {
+				if (!node.getCore().getOwnerMethod().equals(
+						nodepair.nodeB.getCore().getOwnerMethod())) {
+					System.out.println("B");
+				}
+			}
+
 			this.realNodepairs.add(nodepair);
 		}
 		this.allNodepairs.add(nodepair);
