@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGDataNode;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.node.PDGNode;
 
 /**
@@ -48,27 +49,20 @@ public class ClonePairInfo implements Cloneable, Comparable<ClonePairInfo> {
 		final ExecutableElementInfo coreA = nodepair.nodeA.getCore();
 		final ExecutableElementInfo coreB = nodepair.nodeB.getCore();
 
-		if ((coreA.getFromLine() != coreA.getToLine() || coreA.getFromColumn() != coreA
+		// コアの開始位置と終了位置が同じ場合はrealnodepairには追加しない
+		if ((coreA.getFromLine() == coreA.getToLine() && coreA.getFromColumn() == coreA
 				.getToColumn())
-				&& (coreB.getFromLine() != coreB.getToLine() || coreB
-						.getFromColumn() != coreB.getToColumn())) {
-
-			for (final PDGNode<?> node : this.getCodeCloneA().getAllElements()) {
-				if (!node.getCore().getOwnerMethod().equals(
-						nodepair.nodeA.getCore().getOwnerMethod())) {
-					System.out.println("A");
-				}
-			}
-			
-			for (final PDGNode<?> node : this.getCodeCloneB().getAllElements()) {
-				if (!node.getCore().getOwnerMethod().equals(
-						nodepair.nodeB.getCore().getOwnerMethod())) {
-					System.out.println("B");
-				}
-			}
-
+				&& (coreB.getFromLine() == coreB.getToLine() && coreB
+						.getFromColumn() == coreB.getToColumn())) {
+		} 
+		
+		// データノードである場合も追加しない
+		else if (nodepair.nodeA instanceof PDGDataNode<?>
+				|| nodepair.nodeB instanceof PDGDataNode<?>) {
+		} else {
 			this.realNodepairs.add(nodepair);
 		}
+
 		this.allNodepairs.add(nodepair);
 		this.nodes.add(nodepair.nodeA);
 		this.nodes.add(nodepair.nodeB);
