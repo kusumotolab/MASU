@@ -23,7 +23,7 @@ import jp.ac.osaka_u.ist.sdl.scorpio.data.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.data.NodePairInfo;
-import jp.ac.osaka_u.ist.sdl.scorpio.io.XMLWriter;
+import jp.ac.osaka_u.ist.sdl.scorpio.io.BellonWriter;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.CALL_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.CAST_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.Configuration;
@@ -1124,18 +1124,17 @@ public class Scorpio extends MetricsTool {
 	private static void write(final SortedSet<CloneSetInfo> clonesets,
 			final IPDGNodeFactory pdgNodeFactory) {
 
-		final XMLWriter writer = new XMLWriter(Configuration.INSTANCE.getO(),
-				DataManager.getInstance().getFileInfoManager().getFileInfos(),
-				DataManager.getInstance().getMethodInfoManager()
-						.getTargetMethodInfos(), DataManager.getInstance()
-						.getMethodInfoManager().getTargetConstructorInfos(),
-				clonesets);
-
 		/*
-		 * final BellonWriter writer = new BellonWriter(Configuration.INSTANCE
-		 * .getO(), DataManager.getInstance().getFileInfoManager()
-		 * .getFileInfos(), cloneSets);
+		 * final XMLWriter writer = new XMLWriter(Configuration.INSTANCE.getO(),
+		 * DataManager.getInstance().getFileInfoManager().getFileInfos(),
+		 * DataManager.getInstance().getMethodInfoManager()
+		 * .getTargetMethodInfos(), DataManager.getInstance()
+		 * .getMethodInfoManager().getTargetConstructorInfos(), clonesets);
 		 */
+
+		final BellonWriter writer = new BellonWriter(Configuration.INSTANCE
+				.getO(), DataManager.getInstance().getFileInfoManager()
+				.getFileInfos(), clonesets);
 
 		writer.write();
 		writer.close();
