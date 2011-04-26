@@ -19,6 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.cfg.node.ICFGNodeFactory;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.BreakStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CallableUnitInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.CatchBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ConditionalBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ContinueStatementInfo;
@@ -27,6 +28,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExecutableElementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ExpressionInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FieldUsageInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FinallyBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ForBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.IfBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalSpaceInfo;
@@ -34,6 +36,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.SingleStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StatementInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TryBlockInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableUsageInfo;
@@ -758,10 +761,28 @@ public class IntraProceduralPDG extends PDG {
 
 				}
 
-				// ConditionalBlockInfo出ない場合は，単純に一つ潜る．
+				// ConditionalBlockInfoでない場合は，単純に一つ潜る．
 				else {
 					this.buildControlDependence(fromPDGNode,
 							(BlockInfo) innerStatement);
+
+					// try文の場合は，catch文, finally文にも依存辺を引く
+					if (innerStatement instanceof TryBlockInfo) {
+						final SortedSet<CatchBlockInfo> catchBlocks = ((TryBlockInfo) innerStatement)
+								.getSequentCatchBlocks();
+						for (final CatchBlockInfo catchBlock : catchBlocks) {
+							this
+									.buildControlDependence(fromPDGNode,
+											catchBlock);
+						}
+
+						final FinallyBlockInfo finallyBlock = ((TryBlockInfo) innerStatement)
+								.getSequentFinallyBlock();
+						if (null != finallyBlock) {
+							this.buildControlDependence(fromPDGNode,
+									finallyBlock);
+						}
+					}
 				}
 			}
 		}
