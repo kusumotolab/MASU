@@ -581,11 +581,24 @@ public final class NameResolver {
             }
         }
 
-        // usingがusedのサブクラスであれば,protected以外のメソッドが使用可能
+        // usingがusedのサブクラスであれば,public以外のメソッドが使用可能
         if (usingClass.isSubClass(usedClass)) {
             for (final MethodInfo method : usedClass.getDefinedMethods()) {
                 if (method.isInheritanceVisible()) {
                     availableMethods.add(method);
+                }
+            }
+        }
+
+        // usingの親クラスがusedのサブクラスであっても，public以外のメソッドを使用可能
+        if (usingClass instanceof InnerClassInfo) {
+            final ClassInfo outestUsingClass = TargetInnerClassInfo
+                    .getOutestClass((InnerClassInfo) usingClass);
+            if (outestUsingClass.isSubClass(usedClass)) {
+                for (final MethodInfo method : usedClass.getDefinedMethods()) {
+                    if (method.isInheritanceVisible()) {
+                        availableMethods.add(method);
+                    }
                 }
             }
         }
