@@ -28,6 +28,9 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
     public static CatchBlockInfo getCorrespondingCatchBlock(final ExecutableElementInfo element,
             final ReferenceTypeInfo exception) {
 
+        assert exception instanceof ClassTypeInfo : "exception must be an instance of ClassTypeInfo";
+        final ClassInfo exceptionClass = ((ClassTypeInfo) exception).getReferencedClass();
+
         for (LocalSpaceInfo ownerSpace = element.getOwnerSpace(); ownerSpace instanceof BlockInfo; ownerSpace = ((BlockInfo) ownerSpace)
                 .getOwnerSpace()) {
 
@@ -35,7 +38,13 @@ public final class CatchBlockInfo extends BlockInfo implements SubsequentialBloc
                 for (final CatchBlockInfo catchBlock : ((TryBlockInfo) ownerSpace)
                         .getSequentCatchBlocks()) {
                     final VariableInfo<?> caughtVariable = catchBlock.getCaughtException();
-                    if (exception.equals(caughtVariable.getType())) {
+
+                    assert caughtVariable.getType() instanceof ClassTypeInfo : "caughtVariable.getType() must return an instance of ClassTypeInfo";
+                    final ClassInfo variableClass = ((ClassTypeInfo) caughtVariable.getType())
+                            .getReferencedClass();
+
+                    if (exceptionClass.equals(variableClass)
+                            || exceptionClass.isSubClass(variableClass)) {
                         return catchBlock;
                     }
                 }
