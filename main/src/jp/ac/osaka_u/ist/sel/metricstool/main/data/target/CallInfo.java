@@ -169,6 +169,8 @@ public abstract class CallInfo<T extends CallableUnitInfo> extends ExpressionInf
     @Override
     public Set<ReferenceTypeInfo> getThrownExceptions() {
         final Set<ReferenceTypeInfo> thrownExceptions = new HashSet<ReferenceTypeInfo>();
+        final T callee = this.getCallee();
+        thrownExceptions.addAll(callee.getThrownExceptions());
         for (final ExpressionInfo parameter : this.getArguments()) {
             thrownExceptions.addAll(parameter.getThrownExceptions());
         }
