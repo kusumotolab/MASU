@@ -29,6 +29,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetConstructorInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFieldInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetInnerClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.UnitInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.Visualizable;
@@ -90,7 +91,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         this.instanceInitializers = new HashSet<UnresolvedInstanceInitializerInfo>();
         this.staticInitializers = new HashSet<UnresolvedStaticInitializerInfo>();
         this.importStatements = new LinkedList<UnresolvedImportStatementInfo<?>>();
-   //     this.isInterface = false;
+        //     this.isInterface = false;
 
         this.anonymous = false;
 
@@ -640,7 +641,7 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     public final boolean isInterface() {
         return CLASS_CATEGORY.INTERFACE == this.classCategory;
     }
-    
+
     /**
      * 列挙型かどうかを返す
      * 
@@ -657,11 +658,10 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     public void setIsInterface() {
         this.classCategory = CLASS_CATEGORY.INTERFACE;
     }
-    
-    public void setIsEnum(){
+
+    public void setIsEnum() {
         this.classCategory = CLASS_CATEGORY.ENUM;
     }
-    
 
     /**
      * 無名クラスかどうかをセットする
@@ -726,16 +726,16 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
             //　インナークラスのとき
             else {
-                this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
-                        this.isInterface(), this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+                this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName, this
+                        .isInterface(), this.fileInfo, fromLine, fromColumn, toLine, toColumn);
             }
         }
 
         // 所有者がない場合は最も外側のクラス
         else {
 
-            this.resolvedInfo = new TargetClassInfo(modifiers, fullQualifiedName, this.isInterface(),
-                    this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+            this.resolvedInfo = new TargetClassInfo(modifiers, fullQualifiedName, this
+                    .isInterface(), this.fileInfo, fromLine, fromColumn, toLine, toColumn);
         }
 
         // 内部クラスを解決
@@ -771,8 +771,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
         // コンストラクタが全く定義されていない場合はデフォルトコンストラクタを1つ用意
         if (0 == this.getDefinedConstructors().size()) {
-            final TargetConstructorInfo constructor = new TargetConstructorInfo(
-                    Collections.<ModifierInfo> emptySet(), 0, 0, 0, 0);
+            final TargetConstructorInfo constructor = new TargetConstructorInfo(Collections
+                    .<ModifierInfo> emptySet(), 0, 0, 0, 0);
             constructor.setOuterUnit(this.resolvedInfo);
             this.resolvedInfo.addDefinedConstructor(constructor);
         }
@@ -838,7 +838,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
     /**
      * 未解決スーパークラス情報を解決する．
-     * すでにresolveメソッドが呼び出された状態で用いなければならない
+     * すでにresolveメソッドが呼び出された状態で用いなければならない．
+     * 型パラメータの情報も構築する．
      * 
      * @param classInfoManager
      * @return
@@ -858,10 +859,11 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
             // スーパークラスを設定
             final ReferenceTypeInfo superType = unresolvedSuperType.resolveAsSuperType(resolved,
                     null, classInfoManager, null, null);
-            resolved.addSuperClass((ClassTypeInfo) superType);
+            final ClassTypeInfo superClassType = (ClassTypeInfo) superType;
+            resolved.addSuperClass(superClassType);
 
             // サブクラスを設定
-            final ClassInfo superClass = ((ClassTypeInfo) superType).getReferencedClass();
+            final ClassInfo superClass = superClassType.getReferencedClass();
             superClass.addSubClass(resolved);
         }
 
@@ -893,6 +895,61 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
                 final ReferenceTypeInfo extendsType = unresolvedExtendsType.resolve(resolved, null,
                         classInfoManager, null, null);
                 typeParameter.addExtendsType(extendsType);
+            }
+        }
+
+        return resolved;
+    }
+
+    public TargetClassInfo resolveAvailableTypeParameters(final ClassInfoManager classInfoManager) {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        if (null == classInfoManager) {
+            throw new IllegalArgumentException();
+        }
+
+        final TargetClassInfo resolved = this.getResolved();
+
+        if (resolved.getClassName().equals("UnresolvedArrayConstructorCallInfo")) {
+            System.out.println();
+        }
+
+        for (final UnresolvedClassTypeInfo unresolvedSuperType : this.getSuperClasses()) {
+
+            // スーパークラスを取得
+            final ReferenceTypeInfo superType = unresolvedSuperType.resolveAsSuperType(resolved,
+                    null, classInfoManager, null, null);
+            final ClassTypeInfo superClassType = (ClassTypeInfo) superType;
+            final ClassInfo superClass = superClassType.getReferencedClass();
+
+            // 型パラメータ情報を構築
+            if (superClass instanceof TargetClassInfo) {
+
+                final List<TypeInfo> typeArguments = superClassType.getTypeArguments();
+                for (int index = 0; index < typeArguments.size(); index++) {
+                    final TypeInfo type = typeArguments.get(index);
+                    final TypeParameterInfo typeParameter = superClass.getTypeParameter(index);
+                    resolved.addAvailableTypeParameter(typeParameter, type);
+                }
+            }
+        }
+
+        return resolved;
+    }
+
+    public TargetClassInfo resolveAvailableTypeParameters() {
+
+        // 不正な呼び出しでないかをチェック
+        MetricsToolSecurityManager.getInstance().checkAccess();
+
+        final TargetClassInfo resolved = this.getResolved();
+
+        for (final ClassTypeInfo superType : resolved.getSuperClasses()) {
+            final ClassInfo superClass = superType.getReferencedClass();
+            if (superClass instanceof TargetClassInfo) {
+                resolved.addAvailableTypeParameters(((TargetClassInfo) superClass)
+                        .getAvailableTypeParameters());
             }
         }
 
@@ -1030,16 +1087,16 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
     private boolean anonymous;
 
     private UnresolvedClassTypeInfo classType = null;
-    
+
     /**
      * クラスの種類がクラス，インターフェース，列挙のどれかを表す
      * @author a-saitoh
      *
      */
-    public enum CLASS_CATEGORY{
+    public enum CLASS_CATEGORY {
         CLASS, INTERFACE, ENUM
     }
-    
+
     private CLASS_CATEGORY classCategory = CLASS_CATEGORY.CLASS;
 
 }

@@ -2,7 +2,9 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target;
 
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -144,6 +146,7 @@ public class TargetClassInfo extends ClassInfo {
         this.instanceInitializers.add(this.implicitInstanceInitializer);
         this.staticInitializers = new TreeSet<StaticInitializerInfo>();
         this.importStatements = new TreeSet<ImportStatementInfo<?>>();
+        this.availableTypeParameters = new HashMap<TypeParameterInfo, TypeInfo>();
 
         this.ownerFile = fileInfo;
     }
@@ -177,6 +180,7 @@ public class TargetClassInfo extends ClassInfo {
         this.instanceInitializers = new TreeSet<InstanceInitializerInfo>();
         this.staticInitializers = new TreeSet<StaticInitializerInfo>();
         this.importStatements = new TreeSet<ImportStatementInfo<?>>();
+        this.availableTypeParameters = new HashMap<TypeParameterInfo, TypeInfo>();
 
         this.ownerFile = fileInfo;
     }
@@ -208,13 +212,13 @@ public class TargetClassInfo extends ClassInfo {
 
         this.staticInitializers.add(staticInitializer);
     }
-    
-    public final void addImportStatement(final ImportStatementInfo<?> importStatement){
+
+    public final void addImportStatement(final ImportStatementInfo<?> importStatement) {
         MetricsToolSecurityManager.getInstance().checkAccess();
         if (null == importStatement) {
             throw new NullPointerException();
         }
-        
+
         this.importStatements.add(importStatement);
     }
 
@@ -338,6 +342,29 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     /**
+     * このクラスにおける利用可能な型パラメータとその実際の型を登録する
+     * 
+     * @param map
+     */
+    public void addAvailableTypeParameters(final Map<TypeParameterInfo, TypeInfo> map) {
+        MetricsToolSecurityManager.getInstance().checkAccess();
+        this.availableTypeParameters.putAll(map);
+    }
+
+    /**
+     * このクラスにおける利用可能な型パラメータとその実際の型を登録する
+     * 
+     * @param map
+     */
+    public void addAvailableTypeParameter(final TypeParameterInfo typeParameter, TypeInfo type) {
+        this.availableTypeParameters.put(typeParameter, type);
+    }
+
+    public Map<TypeParameterInfo, TypeInfo> getAvailableTypeParameters() {
+        return Collections.unmodifiableMap(this.availableTypeParameters);
+    }
+
+    /**
      * このクラスを宣言しているファイル情報を返す
      * 
      * @return このクラスを宣言しているファイル情報
@@ -366,11 +393,15 @@ public class TargetClassInfo extends ClassInfo {
      */
     private final StaticInitializerInfo implicitStaticInitializer;
 
-   
     private final SortedSet<ImportStatementInfo<?>> importStatements;
-    
+
     /**
      * このクラスを宣言しているファイル情報を保存するための変数
      */
     private final FileInfo ownerFile;
+
+    /**
+     * このクラスで利用している型パラメータの実際の型情報を保存するための変数
+     */
+    private final Map<TypeParameterInfo, TypeInfo> availableTypeParameters;
 }

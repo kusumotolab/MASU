@@ -73,16 +73,16 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageListener;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeNameResolver;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeParser;
 import jp.ac.osaka_u.ist.sel.metricstool.main.parse.asm.JavaByteCodeUtility;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin;
-import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.DefaultPluginLauncher;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginLauncher;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.PluginManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.AbstractPlugin.PluginInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.DefaultPluginLoader;
 import jp.ac.osaka_u.ist.sel.metricstool.main.plugin.loader.PluginLoadException;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
@@ -440,6 +440,7 @@ public class MetricsTool {
             out.println("analyzed lines of code: " + loc);
 
         }
+
         MessagePool.getInstance(MESSAGE_TYPE.OUT).removeMessageListener(outListener);
         MessagePool.getInstance(MESSAGE_TYPE.ERROR).removeMessageListener(errListener);
     }
@@ -499,8 +500,8 @@ public class MetricsTool {
                 modifiers.add(JavaPredefinedModifierInfo.getModifierInfo(unresolvedModifier));
             }
             final ExternalClassInfo classInfo = unresolvedClassInfo.isInner() ? new ExternalInnerClassInfo(
-                    modifiers, name, isInterface) : new ExternalClassInfo(modifiers, name,
-                    isInterface);
+                    modifiers, name, isInterface)
+                    : new ExternalClassInfo(modifiers, name, isInterface);
             classInfoManager.add(classInfo);
         }
 
@@ -989,7 +990,8 @@ public class MetricsTool {
         } catch (final SecurityException e) {
             // 既にセットされているセキュリティマネージャによって，新たなセキュリティマネージャの登録が許可されなかった．
             // システムのセキュリティマネージャとして使わなくても，特別権限スレッドのアクセス制御は問題なく動作するのでとりあえず無視する
-            err.println("Failed to set system security manager. MetricsToolsecurityManager works only to manage privilege threads.");
+            err
+                    .println("Failed to set system security manager. MetricsToolsecurityManager works only to manage privilege threads.");
         }
     }
 
@@ -1115,17 +1117,31 @@ public class MetricsTool {
                 .getUnresolvedClassInfoManager();
         final ClassInfoManager classInfoManager = DataManager.getInstance().getClassInfoManager();
 
-        // 先に superTypだけ解決
+        // 先に superTypeだけ解決
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
             unresolvedClassInfo.resolveSuperClass(classInfoManager);
         }
 
+        // 型パラメータを解決
+        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+                .getClassInfos()) {
+            unresolvedClassInfo.resolveTypeParameter(classInfoManager);
+        }
+
+        // 利用可能な型パラメータを解決（この処理は2つのループが必要）
+        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+                .getClassInfos()) {
+            unresolvedClassInfo.resolveAvailableTypeParameters(classInfoManager);
+        }
+        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+                .getClassInfos()) {
+            unresolvedClassInfo.resolveAvailableTypeParameters();
+        }
+
         // 残りのTypeを解決
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
                 .getClassInfos()) {
-
-            unresolvedClassInfo.resolveTypeParameter(classInfoManager);
 
             for (final UnresolvedMethodInfo unresolvedMethod : unresolvedClassInfo
                     .getDefinedMethods()) {
@@ -1252,8 +1268,8 @@ public class MetricsTool {
                 final TargetFieldInfo fieldInfo = unresolvedFieldInfo.getResolved();
                 if (null != unresolvedFieldInfo.getInitilizer()) {
                     final CallableUnitInfo initializerUnit = fieldInfo.isInstanceMember() ? classInfo
-                            .getImplicitInstanceInitializer() : classInfo
-                            .getImplicitStaticInitializer();
+                            .getImplicitInstanceInitializer()
+                            : classInfo.getImplicitStaticInitializer();
                     final ExpressionInfo initializerExpression = unresolvedFieldInfo
                             .getInitilizer().resolve(classInfo, initializerUnit, classInfoManager,
                                     fieldInfoManager, methodInfoManager);
@@ -1266,12 +1282,12 @@ public class MetricsTool {
                             initializerUnit, fieldInfo.getFromLine(), fieldInfo.getFromColumn(),
                             fieldInfo.getToLine(), fieldInfo.getToColumn());
                     final LocalVariableUsageInfo fieldUsage = LocalVariableUsageInfo.getInstance(
-                            fieldInfoAsLocalVariable, false, true, initializerUnit,
-                            fieldInfo.getFromLine(), fieldInfo.getFromColumn(),
-                            fieldInfo.getToLine(), fieldInfo.getToColumn());
+                            fieldInfoAsLocalVariable, false, true, initializerUnit, fieldInfo
+                                    .getFromLine(), fieldInfo.getFromColumn(), fieldInfo
+                                    .getToLine(), fieldInfo.getToColumn());
                     final VariableDeclarationStatementInfo implicitInitializerStatement = new VariableDeclarationStatementInfo(
-                            initializerUnit, fieldUsage, initializerExpression,
-                            fieldInfo.getFromLine(), fieldInfo.getFromColumn(),
+                            initializerUnit, fieldUsage, initializerExpression, fieldInfo
+                                    .getFromLine(), fieldInfo.getFromColumn(),
                             initializerExpression.getToLine(), initializerExpression.getToColumn());
                     initializerUnit.addStatement(implicitInitializerStatement);
                 }

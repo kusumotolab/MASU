@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
@@ -129,7 +130,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
 
     private MethodCallInfo resolve(final TargetClassInfo usingClass,
             final CallableUnitInfo usingMethod, final ExpressionInfo qualifierUsage,
-            final TypeInfo qualifierType, final String methodName,
+            TypeInfo qualifierType, final String methodName,
             final List<ExpressionInfo> actualParameters,
             final List<ReferenceTypeInfo> typeArguments, final int fromLine, final int fromColumn,
             final int toLine, final int toColumn, final ClassInfoManager classInfoManager,
@@ -138,37 +139,58 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
         // 型パラメータの場合はその継承型を求める
         if (qualifierType instanceof TypeParameterTypeInfo) {
 
-            final TypeParameterInfo qualifierParameterType = ((TypeParameterTypeInfo) qualifierType)
+            TypeParameterInfo qualifierParameterType = ((TypeParameterTypeInfo) qualifierType)
                     .getReferncedTypeParameter();
 
-            // extends がある場合
-            if (qualifierParameterType.hasExtendsType()) {
-                for (final TypeInfo extendsType : qualifierParameterType.getExtendsTypes()) {
-                    final MethodCallInfo resolve = this.resolve(usingClass, usingMethod,
-                            qualifierUsage, extendsType, methodName, actualParameters,
-                            typeArguments, fromLine, fromColumn, toLine, toColumn,
-                            classInfoManager, fieldInfoManager, methodInfoManager);
-                    if (null != resolve) {
-                        return resolve;
-                    }
+            if (this.methodName.equals("addIndexExpression")) {
+                System.out.println();
+            }
+
+            // このメソッドのコンテキストから，利用可能な型パラメータとその実際の型のペアに該当するかを調べる
+            final Map<TypeParameterInfo, TypeInfo> availableTypeParameters = usingClass
+                    .getAvailableTypeParameters();
+
+            while (availableTypeParameters.containsKey(qualifierParameterType)) {
+                qualifierType = availableTypeParameters.get(qualifierParameterType);
+                if (qualifierType instanceof TypeParameterTypeInfo) {
+                    qualifierParameterType = ((TypeParameterTypeInfo) qualifierType)
+                            .getReferncedTypeParameter();
+                } else {
+                    // 型パラメータ型でなくなった場合には，下のクラス型の場合に処理をゆだねる
+                    break;
                 }
             }
 
-            // extends がない場合
-            else {
-                final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
-                        .getClassInfo(new String[] { "java", "lang", "Object" });
-                final MethodCallInfo resolve = this.resolve(usingClass, usingMethod,
-                        qualifierUsage, new ClassTypeInfo(objectClass), methodName,
-                        actualParameters, typeArguments, fromLine, fromColumn, toLine, toColumn,
-                        classInfoManager, fieldInfoManager, methodInfoManager);
-                return resolve;
+            if (qualifierType instanceof TypeParameterTypeInfo) {
+
+                // 上記ではなく，extends がある場合
+                if (qualifierParameterType.hasExtendsType()) {
+                    for (final TypeInfo extendsType : qualifierParameterType.getExtendsTypes()) {
+                        final MethodCallInfo resolve = this.resolve(usingClass, usingMethod,
+                                qualifierUsage, extendsType, methodName, actualParameters,
+                                typeArguments, fromLine, fromColumn, toLine, toColumn,
+                                classInfoManager, fieldInfoManager, methodInfoManager);
+                        if (null != resolve) {
+                            return resolve;
+                        }
+                    }
+                }
+
+                // extends がない場合
+                else {
+                    final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
+                            .getClassInfo(new String[] { "java", "lang", "Object" });
+                    final MethodCallInfo resolve = this.resolve(usingClass, usingMethod,
+                            qualifierUsage, new ClassTypeInfo(objectClass), methodName,
+                            actualParameters, typeArguments, fromLine, fromColumn, toLine,
+                            toColumn, classInfoManager, fieldInfoManager, methodInfoManager);
+                    return resolve;
+                }
             }
         }
 
         // <?>や<? super A>のカッコ内の型の時
-        else if (qualifierType instanceof ArbitraryTypeInfo
-                || qualifierType instanceof SuperTypeInfo) {
+        if (qualifierType instanceof ArbitraryTypeInfo || qualifierType instanceof SuperTypeInfo) {
 
             final ClassInfo objectClass = DataManager.getInstance().getClassInfoManager()
                     .getClassInfo(new String[] { "java", "lang", "Object" });
