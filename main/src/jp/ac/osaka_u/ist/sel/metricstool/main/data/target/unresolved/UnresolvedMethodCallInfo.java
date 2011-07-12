@@ -142,9 +142,9 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
             TypeParameterInfo qualifierParameterType = ((TypeParameterTypeInfo) qualifierType)
                     .getReferncedTypeParameter();
 
-            if (this.methodName.equals("addIndexExpression")) {
-                System.out.println();
-            }
+//            if (this.methodName.equals("setSequentElseBlock")) {
+//                System.out.println();
+//            }
 
             // このメソッドのコンテキストから，利用可能な型パラメータとその実際の型のペアに該当するかを調べる
             final Map<TypeParameterInfo, TypeInfo> availableTypeParameters = usingClass

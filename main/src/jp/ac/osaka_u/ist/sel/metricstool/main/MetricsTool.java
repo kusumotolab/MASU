@@ -1134,10 +1134,10 @@ public class MetricsTool {
                 .getClassInfos()) {
             unresolvedClassInfo.resolveAvailableTypeParameters(classInfoManager);
         }
-        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
-                .getClassInfos()) {
-            unresolvedClassInfo.resolveAvailableTypeParameters();
-        }
+//        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+//                .getClassInfos()) {
+//            unresolvedClassInfo.resolveAvailableTypeParameters();
+//        }
 
         // Žc‚è‚ÌType‚ð‰ðŒˆ
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager

@@ -361,7 +361,17 @@ public class TargetClassInfo extends ClassInfo {
     }
 
     public Map<TypeParameterInfo, TypeInfo> getAvailableTypeParameters() {
-        return Collections.unmodifiableMap(this.availableTypeParameters);
+
+        final Map<TypeParameterInfo, TypeInfo> map = new HashMap<TypeParameterInfo, TypeInfo>();
+        for (final ClassTypeInfo superClassType : this.getSuperClasses()) {
+            final ClassInfo superClass = superClassType.getReferencedClass();
+            if (superClass instanceof TargetClassInfo) {
+                map.putAll(((TargetClassInfo) superClass).getAvailableTypeParameters());
+            }
+        }
+        map.putAll(this.availableTypeParameters);
+
+        return map;
     }
 
     /**
