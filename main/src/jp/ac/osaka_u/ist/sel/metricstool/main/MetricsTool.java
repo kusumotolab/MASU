@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -44,6 +45,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.LocalVariableUsageInfo
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.MethodInfoManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ModifierInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ParameterInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.ReferenceTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.StaticInitializerInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetClassInfo;
@@ -54,6 +56,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetFileManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TargetMethodInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterInfo;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.TypeParameterTypeInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.VariableDeclarationStatementInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalClassInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.unresolved.JavaUnresolvedExternalFieldInfo;
@@ -1134,10 +1137,10 @@ public class MetricsTool {
                 .getClassInfos()) {
             unresolvedClassInfo.resolveAvailableTypeParameters(classInfoManager);
         }
-//        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
-//                .getClassInfos()) {
-//            unresolvedClassInfo.resolveAvailableTypeParameters();
-//        }
+        //        for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
+        //                .getClassInfos()) {
+        //            unresolvedClassInfo.resolveAvailableTypeParameters();
+        //        }
 
         // 残りのTypeを解決
         for (final UnresolvedClassInfo unresolvedClassInfo : unresolvedClassInfoManager
@@ -1219,15 +1222,37 @@ public class MetricsTool {
             throw new IllegalArgumentException();
         }
 
-        for (final MethodInfo methodInfo : classInfo.getDefinedMethods()) {
+        METHOD: for (final MethodInfo methodInfo : classInfo.getDefinedMethods()) {
 
             // メソッド名が違う場合はオーバーライドされない
             if (!methodInfo.getMethodName().equals(overrider.getMethodName())) {
-                continue;
+                continue METHOD;
             }
 
-            if (0 != methodInfo.compareArgumentsTo(overrider)) {
-                continue;
+            // 引数の数を比較
+            final List<ParameterInfo> overriderParameters = overrider.getParameters();
+            final List<ParameterInfo> methodParameters = methodInfo.getParameters();
+            if (overriderParameters.size() != methodParameters.size()) {
+                continue METHOD;
+            }
+
+            // 引数の型で比較．第一引数から順番に．
+            final Iterator<ParameterInfo> overriderIterator = overriderParameters.iterator();
+            final Iterator<ParameterInfo> methodIterator = methodParameters.iterator();
+            while (overriderIterator.hasNext() && methodIterator.hasNext()) {
+                final ParameterInfo overriderParameter = overriderIterator.next();
+                final ParameterInfo methodParameter = methodIterator.next();
+                if (methodParameter.getType() instanceof TypeParameterTypeInfo) {
+                    // 引数が型引数型だったばあいはぶっとおし
+                } else {
+                    final String overriderParameterType = overriderParameter.getType()
+                            .getTypeName();
+                    final String methodParameterType = methodParameter.getType().getTypeName();
+
+                    if (methodParameterType.equals(overriderParameterType)) {
+                        continue METHOD;
+                    }
+                }
             }
 
             // オーバーライド関係を登録する

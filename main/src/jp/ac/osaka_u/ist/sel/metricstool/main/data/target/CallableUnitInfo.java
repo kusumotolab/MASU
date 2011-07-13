@@ -97,35 +97,6 @@ public abstract class CallableUnitInfo extends LocalSpaceInfo implements Visuali
         return this.getFromLine() + this.getFromColumn() + this.getToLine() + this.getToColumn();
     }
 
-    public int compareArgumentsTo(final CallableUnitInfo target) {
-        // 引数の個数で比較
-        final int parameterNumber = this.getParameterNumber();
-        final int correspondParameterNumber = target.getParameterNumber();
-        if (parameterNumber < correspondParameterNumber) {
-            return 1;
-        } else if (parameterNumber > correspondParameterNumber) {
-            return -1;
-        } else {
-
-            // 引数の型で比較．第一引数から順番に．
-            final Iterator<ParameterInfo> parameterIterator = this.getParameters().iterator();
-            final Iterator<ParameterInfo> correspondParameterIterator = target.getParameters()
-                    .iterator();
-            while (parameterIterator.hasNext() && correspondParameterIterator.hasNext()) {
-                final ParameterInfo parameter = parameterIterator.next();
-                final ParameterInfo correspondParameter = correspondParameterIterator.next();
-                final String typeName = parameter.getType().getTypeName();
-                final String correspondTypeName = correspondParameter.getType().getTypeName();
-                final int typeOrder = typeName.compareTo(correspondTypeName);
-                if (typeOrder != 0) {
-                    return typeOrder;
-                }
-            }
-
-            return 0;
-        }
-    }
-
     /**
      * このオブジェクトが，引数で与えられた情報を使って呼び出すことができるかどうかを判定する．
      * 
