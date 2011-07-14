@@ -1249,7 +1249,7 @@ public class MetricsTool {
                             .getTypeName();
                     final String methodParameterType = methodParameter.getType().getTypeName();
 
-                    if (methodParameterType.equals(overriderParameterType)) {
+                    if (!methodParameterType.equals(overriderParameterType)) {
                         continue METHOD;
                     }
                 }
