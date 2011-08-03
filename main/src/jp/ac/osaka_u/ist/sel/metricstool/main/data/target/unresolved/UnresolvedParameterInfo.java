@@ -82,13 +82,13 @@ public class UnresolvedParameterInfo
         final Set<ModifierInfo> modifiers = this.getModifiers();
         final String name = this.getName();
         final int index = this.getIndex();
-        final UnresolvedTypeInfo<?> unresolvedParameterType = this.getType();
-        final TypeInfo type = unresolvedParameterType.resolve(ownerClass, ownerMethod,
-                classInfoManager, fieldInfoManager, methodInfoManager);
         final int parameterFromLine = this.getFromLine();
         final int parameterFromColumn = this.getFromColumn();
         final int parameterToLine = this.getToLine();
         final int parameterToColumn = this.getToColumn();
+        final UnresolvedTypeInfo<?> unresolvedParameterType = this.getType();
+        final TypeInfo type = unresolvedParameterType.resolve(ownerClass, ownerMethod,
+                classInfoManager, fieldInfoManager, methodInfoManager);
 
         final CallableUnitInfo ownerCallableUnit = this.getDefinitionUnit().getResolved();
 
