@@ -554,7 +554,7 @@ public final class UnresolvedMethodCallInfo extends UnresolvedCallInfo<MethodCal
     /**
      * ƒƒ\ƒbƒh–¼‚ð•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
      */
-    protected String methodName;
+    private String methodName;
 
     public List<UnresolvedMemberImportStatementInfo> getImportStatements() {
         return this.memberImportStatements;

@@ -190,7 +190,7 @@ public class UnresolvedArrayTypeInfo implements UnresolvedReferenceTypeInfo<Arra
     /**
      * 解決済み配列使用を保存するための変数
      */
-    ArrayTypeInfo resolvedInfo;
+    private ArrayTypeInfo resolvedInfo;
 
     /**
      * UnresolvedArrayTypeInfo オブジェクトを一元管理するための Map．オブジェクトはファクトリメソッドで生成される．

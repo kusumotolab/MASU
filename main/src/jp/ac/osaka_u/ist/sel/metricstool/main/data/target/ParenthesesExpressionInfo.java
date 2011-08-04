@@ -133,5 +133,5 @@ public final class ParenthesesExpressionInfo extends ExpressionInfo {
         return newParenthesesExpression;
     }
 
-    final ExpressionInfo parentheticExpression;
+    final private ExpressionInfo parentheticExpression;
 }

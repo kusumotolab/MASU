@@ -78,5 +78,5 @@ public class UnresolvedParenthesesExpressionInfo extends
     /**
      *@Š‡ŒÊ“à‚Ì®‚ğ•Û‘¶‚·‚é‚½‚ß‚Ì•Ï”
      */
-    final UnresolvedExpressionInfo<?> parentheticExpression;
+    final private UnresolvedExpressionInfo<?> parentheticExpression;
 }
