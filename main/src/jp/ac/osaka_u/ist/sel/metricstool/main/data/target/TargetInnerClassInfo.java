@@ -42,11 +42,12 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
      * @param toColumn èIóπóÒ
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
-            final String className, final boolean isInterface, final FileInfo fileInfo,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final String className, final boolean isInterface, final boolean isEnum,
+            final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
-        super(modifiers, namespace, className, isInterface, fileInfo, fromLine, fromColumn, toLine,
-                toColumn);
+        super(modifiers, namespace, className, isInterface, isEnum, fileInfo, fromLine, fromColumn,
+                toLine, toColumn);
 
         this.outerUnit = null;
     }
@@ -64,11 +65,12 @@ public class TargetInnerClassInfo extends TargetClassInfo implements InnerClassI
      * @param toColumn èIóπóÒ
      */
     public TargetInnerClassInfo(final Set<ModifierInfo> modifiers,
-            final String[] fullQualifiedName, final boolean isInterface, final FileInfo fileInfo,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final String[] fullQualifiedName, final boolean isInterface, final boolean isEnum,
+            final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
-        super(modifiers, fullQualifiedName, isInterface, fileInfo, fromLine, fromColumn, toLine,
-                toColumn);
+        super(modifiers, fullQualifiedName, isInterface, isEnum, fileInfo, fromLine, fromColumn,
+                toLine, toColumn);
 
         this.outerUnit = null;
     }

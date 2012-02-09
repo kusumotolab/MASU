@@ -129,10 +129,12 @@ public class TargetClassInfo extends ClassInfo {
      * @param toColumn èIóπóÒ
      */
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
-            final String className, final boolean isInterface, final FileInfo fileInfo,
-            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
+            final String className, final boolean isInterface, final boolean isEnum,
+            final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
+            final int toColumn) {
 
-        super(modifiers, namespace, className, isInterface, fromLine, fromColumn, toLine, toColumn);
+        super(modifiers, namespace, className, isInterface, isEnum, fromLine, fromColumn, toLine,
+                toColumn);
 
         if (null == modifiers) {
             throw new NullPointerException();
@@ -164,10 +166,11 @@ public class TargetClassInfo extends ClassInfo {
      * @param toColumn èIóπóÒ
      */
     public TargetClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
-            final boolean isInterface, final FileInfo fileInfo, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final boolean isInterface, final boolean isEnum, final FileInfo fileInfo,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(modifiers, fullQualifiedName, isInterface, fromLine, fromColumn, toLine, toColumn);
+        super(modifiers, fullQualifiedName, isInterface, isEnum, fromLine, fromColumn, toLine,
+                toColumn);
 
         if (null == modifiers || null == fileInfo) {
             throw new NullPointerException();

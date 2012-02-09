@@ -710,6 +710,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
         final int fromColumn = this.getFromColumn();
         final int toLine = this.getToLine();
         final int toColumn = this.getToColumn();
+        final boolean isInterface = this.isInterface();
+        final boolean isEnum = this.isEnum();
 
         // ClassInfo オブジェクトを作成し，ClassInfoManagerに登録
 
@@ -726,16 +728,16 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
             //　インナークラスのとき
             else {
-                this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName, this
-                        .isInterface(), this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+                this.resolvedInfo = new TargetInnerClassInfo(modifiers, fullQualifiedName,
+                        isInterface, isEnum, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
             }
         }
 
         // 所有者がない場合は最も外側のクラス
         else {
 
-            this.resolvedInfo = new TargetClassInfo(modifiers, fullQualifiedName, this
-                    .isInterface(), this.fileInfo, fromLine, fromColumn, toLine, toColumn);
+            this.resolvedInfo = new TargetClassInfo(modifiers, fullQualifiedName, isInterface,
+                    isEnum, this.fileInfo, fromLine, fromColumn, toLine, toColumn);
         }
 
         // 内部クラスを解決
@@ -771,8 +773,8 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
         // コンストラクタが全く定義されていない場合はデフォルトコンストラクタを1つ用意
         if (0 == this.getDefinedConstructors().size()) {
-            final TargetConstructorInfo constructor = new TargetConstructorInfo(Collections
-                    .<ModifierInfo> emptySet(), 0, 0, 0, 0);
+            final TargetConstructorInfo constructor = new TargetConstructorInfo(
+                    Collections.<ModifierInfo> emptySet(), 0, 0, 0, 0);
             constructor.setOuterUnit(this.resolvedInfo);
             this.resolvedInfo.addDefinedConstructor(constructor);
         }
@@ -911,12 +913,12 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
         final TargetClassInfo resolved = this.getResolved();
 
-//        if (resolved.getClassName().equals("UnresolvedIfBlockInfo")
-//                || resolved.getClassName().equals("UnresolvedStatementInfo")
-//                || resolved.getClassName().equals("UnresolvedBlockInfo")
-//                || resolved.getClassName().equals("UnresolvedLocalSpaceInfo")) {
-//            System.out.println();
-//        }
+        //        if (resolved.getClassName().equals("UnresolvedIfBlockInfo")
+        //                || resolved.getClassName().equals("UnresolvedStatementInfo")
+        //                || resolved.getClassName().equals("UnresolvedBlockInfo")
+        //                || resolved.getClassName().equals("UnresolvedLocalSpaceInfo")) {
+        //            System.out.println();
+        //        }
 
         for (final UnresolvedClassTypeInfo unresolvedSuperType : this.getSuperClasses()) {
 
@@ -940,24 +942,25 @@ public final class UnresolvedClassInfo extends UnresolvedUnitInfo<TargetClassInf
 
         return resolved;
     }
-//
-//    public TargetClassInfo resolveAvailableTypeParameters() {
-//
-//        // 不正な呼び出しでないかをチェック
-//        MetricsToolSecurityManager.getInstance().checkAccess();
-//
-//        final TargetClassInfo resolved = this.getResolved();
-//
-//        for (final ClassTypeInfo superType : resolved.getSuperClasses()) {
-//            final ClassInfo superClass = superType.getReferencedClass();
-//            if (superClass instanceof TargetClassInfo) {
-//                resolved.addAvailableTypeParameters(((TargetClassInfo) superClass)
-//                        .getAvailableTypeParameters());
-//            }
-//        }
-//
-//        return resolved;
-//    }
+
+    //
+    //    public TargetClassInfo resolveAvailableTypeParameters() {
+    //
+    //        // 不正な呼び出しでないかをチェック
+    //        MetricsToolSecurityManager.getInstance().checkAccess();
+    //
+    //        final TargetClassInfo resolved = this.getResolved();
+    //
+    //        for (final ClassTypeInfo superType : resolved.getSuperClasses()) {
+    //            final ClassInfo superClass = superType.getReferencedClass();
+    //            if (superClass instanceof TargetClassInfo) {
+    //                resolved.addAvailableTypeParameters(((TargetClassInfo) superClass)
+    //                        .getAvailableTypeParameters());
+    //            }
+    //        }
+    //
+    //        return resolved;
+    //    }
 
     /**
      * この未解決クラス定義情報の未解決参照型を返す

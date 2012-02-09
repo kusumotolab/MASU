@@ -503,8 +503,8 @@ public class MetricsTool {
                 modifiers.add(JavaPredefinedModifierInfo.getModifierInfo(unresolvedModifier));
             }
             final ExternalClassInfo classInfo = unresolvedClassInfo.isInner() ? new ExternalInnerClassInfo(
-                    modifiers, name, isInterface)
-                    : new ExternalClassInfo(modifiers, name, isInterface);
+                    modifiers, name, isInterface, false) : new ExternalClassInfo(modifiers, name,
+                    isInterface, false);
             classInfoManager.add(classInfo);
         }
 
@@ -993,8 +993,7 @@ public class MetricsTool {
         } catch (final SecurityException e) {
             // 既にセットされているセキュリティマネージャによって，新たなセキュリティマネージャの登録が許可されなかった．
             // システムのセキュリティマネージャとして使わなくても，特別権限スレッドのアクセス制御は問題なく動作するのでとりあえず無視する
-            err
-                    .println("Failed to set system security manager. MetricsToolsecurityManager works only to manage privilege threads.");
+            err.println("Failed to set system security manager. MetricsToolsecurityManager works only to manage privilege threads.");
         }
     }
 
@@ -1293,8 +1292,8 @@ public class MetricsTool {
                 final TargetFieldInfo fieldInfo = unresolvedFieldInfo.getResolved();
                 if (null != unresolvedFieldInfo.getInitilizer()) {
                     final CallableUnitInfo initializerUnit = fieldInfo.isInstanceMember() ? classInfo
-                            .getImplicitInstanceInitializer()
-                            : classInfo.getImplicitStaticInitializer();
+                            .getImplicitInstanceInitializer() : classInfo
+                            .getImplicitStaticInitializer();
                     final ExpressionInfo initializerExpression = unresolvedFieldInfo
                             .getInitilizer().resolve(classInfo, initializerUnit, classInfoManager,
                                     fieldInfoManager, methodInfoManager);
@@ -1307,12 +1306,12 @@ public class MetricsTool {
                             initializerUnit, fieldInfo.getFromLine(), fieldInfo.getFromColumn(),
                             fieldInfo.getToLine(), fieldInfo.getToColumn());
                     final LocalVariableUsageInfo fieldUsage = LocalVariableUsageInfo.getInstance(
-                            fieldInfoAsLocalVariable, false, true, initializerUnit, fieldInfo
-                                    .getFromLine(), fieldInfo.getFromColumn(), fieldInfo
-                                    .getToLine(), fieldInfo.getToColumn());
+                            fieldInfoAsLocalVariable, false, true, initializerUnit,
+                            fieldInfo.getFromLine(), fieldInfo.getFromColumn(),
+                            fieldInfo.getToLine(), fieldInfo.getToColumn());
                     final VariableDeclarationStatementInfo implicitInitializerStatement = new VariableDeclarationStatementInfo(
-                            initializerUnit, fieldUsage, initializerExpression, fieldInfo
-                                    .getFromLine(), fieldInfo.getFromColumn(),
+                            initializerUnit, fieldUsage, initializerExpression,
+                            fieldInfo.getFromLine(), fieldInfo.getFromColumn(),
                             initializerExpression.getToLine(), initializerExpression.getToColumn());
                     initializerUnit.addStatement(implicitInitializerStatement);
                 }

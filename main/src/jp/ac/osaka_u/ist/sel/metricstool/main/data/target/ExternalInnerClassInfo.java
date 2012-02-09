@@ -15,9 +15,9 @@ public class ExternalInnerClassInfo extends ExternalClassInfo implements InnerCl
     }
 
     public ExternalInnerClassInfo(final Set<ModifierInfo> modifiers,
-            final String[] fullQualifiedName, final boolean isInterface) {
+            final String[] fullQualifiedName, final boolean isInterface, final boolean isEnum) {
 
-        super(modifiers, fullQualifiedName, isInterface);
+        super(modifiers, fullQualifiedName, isInterface, isEnum);
     }
 
     /**

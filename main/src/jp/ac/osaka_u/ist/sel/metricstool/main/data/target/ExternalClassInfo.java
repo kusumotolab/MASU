@@ -22,7 +22,7 @@ public class ExternalClassInfo extends ClassInfo {
      */
     public ExternalClassInfo(final NamespaceInfo namespace, final String className) {
 
-        super(new HashSet<ModifierInfo>(), namespace, className, false, 0, 0, 0, 0);
+        super(new HashSet<ModifierInfo>(), namespace, className, false, false, 0, 0, 0, 0);
     }
 
     /**
@@ -31,9 +31,9 @@ public class ExternalClassInfo extends ClassInfo {
      * @param fullQualifiedName Š®‘SŒÀ’è–¼
      */
     public ExternalClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
-            final boolean isInterface) {
+            final boolean isInterface, final boolean isEnum) {
 
-        super(modifiers, fullQualifiedName, isInterface, 0, 0, 0, 0);
+        super(modifiers, fullQualifiedName, isInterface, isEnum, 0, 0, 0, 0);
     }
 
     /**
@@ -43,7 +43,7 @@ public class ExternalClassInfo extends ClassInfo {
      */
     public ExternalClassInfo(final String[] fullQualifiedName) {
 
-        super(new HashSet<ModifierInfo>(), fullQualifiedName, false, 0, 0, 0, 0);
+        super(new HashSet<ModifierInfo>(), fullQualifiedName, false, false, 0, 0, 0, 0);
     }
 
     /**
@@ -52,7 +52,8 @@ public class ExternalClassInfo extends ClassInfo {
      * @param className ƒNƒ‰ƒX–¼
      */
     public ExternalClassInfo(final String className) {
-        super(new HashSet<ModifierInfo>(), NamespaceInfo.UNKNOWN, className, false, 0, 0, 0, 0);
+        super(new HashSet<ModifierInfo>(), NamespaceInfo.UNKNOWN, className, false, false, 0, 0, 0,
+                0);
     }
 
     /**

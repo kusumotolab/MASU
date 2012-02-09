@@ -29,7 +29,7 @@ public final class TargetAnonymousClassInfo extends TargetInnerClassInfo impleme
             final FileInfo fileInfo, final int fromLine, final int fromColumn, final int toLine,
             final int toColumn) {
 
-        super(new HashSet<ModifierInfo>(), namespace, className, false, fileInfo, fromLine,
+        super(new HashSet<ModifierInfo>(), namespace, className, false, false, fileInfo, fromLine,
                 fromColumn, toLine, toColumn);
     }
 
@@ -46,7 +46,7 @@ public final class TargetAnonymousClassInfo extends TargetInnerClassInfo impleme
     public TargetAnonymousClassInfo(final String[] fullQualifiedName, final FileInfo fileInfo,
             final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
-        super(new HashSet<ModifierInfo>(), fullQualifiedName, false, fileInfo, fromLine,
+        super(new HashSet<ModifierInfo>(), fullQualifiedName, false, false, fileInfo, fromLine,
                 fromColumn, toLine, toColumn);
     }
 }

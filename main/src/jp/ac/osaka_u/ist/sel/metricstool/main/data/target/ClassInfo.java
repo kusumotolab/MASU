@@ -56,8 +56,8 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * @param toColumn 終了列
      */
     ClassInfo(final Set<ModifierInfo> modifiers, final NamespaceInfo namespace,
-            final String className, final boolean isInterface, final int fromLine,
-            final int fromColumn, final int toLine, final int toColumn) {
+            final String className, final boolean isInterface, final boolean isEnum,
+            final int fromLine, final int fromColumn, final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
@@ -83,7 +83,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
         this.modifiers.addAll(modifiers);
 
         this.isInterface = isInterface;
-
+        this.isEnum = isEnum;
     }
 
     /**
@@ -97,8 +97,8 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      * @param toColumn 終了列
      */
     public ClassInfo(final Set<ModifierInfo> modifiers, final String[] fullQualifiedName,
-            final boolean isInterface, final int fromLine, final int fromColumn, final int toLine,
-            final int toColumn) {
+            final boolean isInterface, final boolean isEnum, final int fromLine,
+            final int fromColumn, final int toLine, final int toColumn) {
 
         super(fromLine, fromColumn, toLine, toColumn);
 
@@ -129,7 +129,7 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
         this.modifiers.addAll(modifiers);
 
         this.isInterface = isInterface;
-
+        this.isEnum = isEnum;
     }
 
     /**
@@ -660,6 +660,15 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
     }
 
     /**
+     * 列挙型かどうかを返す．
+     * 
+     * @return 列挙型の場合 true，そうでない場合は false
+     */
+    public final boolean isEnum() {
+        return this.isEnum;
+    }
+
+    /**
      * クラス名を保存するための変数
      */
     private final String className;
@@ -714,4 +723,8 @@ public abstract class ClassInfo extends UnitInfo implements MetricMeasurable, Mo
      */
     private final boolean isInterface;
 
+    /**
+     * 列挙型かどうかを保存するための変数
+     */
+    private final boolean isEnum;
 }
