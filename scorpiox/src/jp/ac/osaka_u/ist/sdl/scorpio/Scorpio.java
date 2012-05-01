@@ -8,13 +8,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,7 +23,7 @@ import jp.ac.osaka_u.ist.sdl.scorpio.data.ClonePairInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.data.CloneSetInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.data.CodeCloneInfo;
 import jp.ac.osaka_u.ist.sdl.scorpio.data.NodePairInfo;
-import jp.ac.osaka_u.ist.sdl.scorpio.io.BellonWriter;
+import jp.ac.osaka_u.ist.sdl.scorpio.io.XMLWriter;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.CALL_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.CAST_NORMALIZATION;
 import jp.ac.osaka_u.ist.sdl.scorpio.settings.Configuration;
@@ -52,8 +52,8 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageEvent;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageListener;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
+import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.InterProceduralPDG;
 import jp.ac.osaka_u.ist.sel.metricstool.pdg.IntraProceduralPDG;
@@ -383,8 +383,8 @@ public class Scorpio extends MetricsTool {
 			final CommandLine cmd = parser.parse(options, args);
 
 			if (cmd.hasOption("b")) {
-				final StringTokenizer tokenizer = new StringTokenizer(cmd
-						.getOptionValue("b"), ",");
+				final StringTokenizer tokenizer = new StringTokenizer(
+						cmd.getOptionValue("b"), ",");
 				while (tokenizer.hasMoreElements()) {
 					final String library = tokenizer.nextToken();
 					Settings.getInstance().addLibrary(library);
@@ -395,8 +395,8 @@ public class Scorpio extends MetricsTool {
 						.getOptionValue("c")));
 			}
 			{
-				final StringTokenizer tokenizer = new StringTokenizer(cmd
-						.getOptionValue("d"), ",");
+				final StringTokenizer tokenizer = new StringTokenizer(
+						cmd.getOptionValue("d"), ",");
 				while (tokenizer.hasMoreElements()) {
 					final String directory = tokenizer.nextToken();
 					Configuration.INSTANCE.addD(directory);
@@ -491,8 +491,8 @@ public class Scorpio extends MetricsTool {
 			}
 			if (cmd.hasOption("q")) {
 				Configuration.INSTANCE.resetQ();
-				final StringTokenizer tokenizer = new StringTokenizer(cmd
-						.getOptionValue("q"), ",");
+				final StringTokenizer tokenizer = new StringTokenizer(
+						cmd.getOptionValue("q"), ",");
 				while (tokenizer.hasMoreTokens()) {
 					final String dependency = tokenizer.nextToken();
 					if (dependency.equalsIgnoreCase("data")) {
@@ -688,7 +688,8 @@ public class Scorpio extends MetricsTool {
 							public void messageReceived(MessageEvent event) {
 								System.out.print(event.getSource()
 										.getMessageSourceName()
-										+ " > " + event.getMessage());
+										+ " > "
+										+ event.getMessage());
 							}
 						});
 				MessagePool.getInstance(MESSAGE_TYPE.ERROR).addMessageListener(
@@ -696,7 +697,8 @@ public class Scorpio extends MetricsTool {
 							public void messageReceived(MessageEvent event) {
 								System.err.print(event.getSource()
 										.getMessageSourceName()
-										+ " > " + event.getMessage());
+										+ " > "
+										+ event.getMessage());
 							}
 						});
 			}
@@ -736,15 +738,15 @@ public class Scorpio extends MetricsTool {
 
 		// 各メソッドのPDGを構築
 		final TargetMethodInfo[] methods = DataManager.getInstance()
-				.getMethodInfoManager().getTargetMethodInfos().toArray(
-						new TargetMethodInfo[0]);
+				.getMethodInfoManager().getTargetMethodInfos()
+				.toArray(new TargetMethodInfo[0]);
 		buildPDGs(methods, pdgNodeFactory, data, control, execution, dissolve,
 				dataDistance, controlDistance, executionDistance);
 
 		// 各コンストラクタのPDGを構築
 		final TargetConstructorInfo[] constructors = DataManager.getInstance()
-				.getMethodInfoManager().getTargetConstructorInfos().toArray(
-						new TargetConstructorInfo[0]);
+				.getMethodInfoManager().getTargetConstructorInfos()
+				.toArray(new TargetConstructorInfo[0]);
 		buildPDGs(constructors, pdgNodeFactory, data, control, execution,
 				dissolve, dataDistance, controlDistance, executionDistance);
 
@@ -1124,17 +1126,18 @@ public class Scorpio extends MetricsTool {
 	private static void write(final SortedSet<CloneSetInfo> clonesets,
 			final IPDGNodeFactory pdgNodeFactory) {
 
-		/*
-		 * final XMLWriter writer = new XMLWriter(Configuration.INSTANCE.getO(),
-		 * DataManager.getInstance().getFileInfoManager().getFileInfos(),
-		 * DataManager.getInstance().getMethodInfoManager()
-		 * .getTargetMethodInfos(), DataManager.getInstance()
-		 * .getMethodInfoManager().getTargetConstructorInfos(), clonesets);
-		 */
+		final XMLWriter writer = new XMLWriter(Configuration.INSTANCE.getO(),
+				DataManager.getInstance().getFileInfoManager().getFileInfos(),
+				DataManager.getInstance().getMethodInfoManager()
+						.getTargetMethodInfos(), DataManager.getInstance()
+						.getMethodInfoManager().getTargetConstructorInfos(),
+				clonesets);
 
-		final BellonWriter writer = new BellonWriter(Configuration.INSTANCE
-				.getO(), DataManager.getInstance().getFileInfoManager()
-				.getFileInfos(), clonesets);
+		/*
+		 * final BellonWriter writer = new BellonWriter(Configuration.INSTANCE
+		 * .getO(), DataManager.getInstance().getFileInfoManager()
+		 * .getFileInfos(), clonesets);
+		 */
 
 		writer.write();
 		writer.close();

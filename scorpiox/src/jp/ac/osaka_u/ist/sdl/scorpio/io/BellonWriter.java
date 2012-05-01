@@ -38,7 +38,7 @@ public class BellonWriter {
 			// このforループは出力がペア形式であることが前提
 			for (final CloneSetInfo cloneset : this.cloneSets) {
 
-				assert cloneset.getCodeClones().size() == 2 : "format must be \"papr\"!";
+				assert cloneset.getCodeClones().size() == 2 : "format must be \"pair\"!";
 
 				final CodeCloneInfo codecloneA = cloneset.getCodeClones()
 						.first();

@@ -63,6 +63,10 @@ public class CloneSetInfo implements Comparable<CloneSetInfo> {
 	public int getID() {
 		return this.id;
 	}
+	
+	public int getHash(){
+		return 0 == this.codeclones.size()?0:this.codeclones.first().hashCode();
+	}
 
 	/**
 	 * クローンセットに含まれるコードクローンの数を返す

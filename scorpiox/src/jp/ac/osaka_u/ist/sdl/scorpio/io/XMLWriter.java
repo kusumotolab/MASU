@@ -265,8 +265,12 @@ public class XMLWriter {
 				// continue;
 				// }
 
-				this.writer.write("\t\t<CLONESET>");
+				this.writer.write("\t\t<CLONESET>");				
 				this.writer.newLine();
+				
+				this.writer.write("\t\t\t<HASH>");
+				this.writer.write(Integer.toString(cloneSet.getHash()));
+				this.writer.write("</HASH>");
 
 				for (final CodeCloneInfo codeFragment : cloneSet
 						.getCodeClones()) {
