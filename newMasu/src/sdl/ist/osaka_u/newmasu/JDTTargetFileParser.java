@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
+import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter;
 import jp.ac.osaka_u.ist.sel.metricstool.main.security.MetricsToolSecurityManager;
 //import antlr.ASTFactory;
@@ -37,7 +39,7 @@ public class JDTTargetFileParser{
 		final String[] sources = javaPaths.toArray(new String[javaPaths.size()]);
 		
 		
-		for(String file: javaPaths)
+		for(String filePath: javaPaths)
 		{
 //			try {
 //
@@ -53,7 +55,7 @@ public class JDTTargetFileParser{
 //					this.out.println(text.toString());
 //				}
 //
-//				final FileInfo fileInfo = new FileInfo(this.files[i].getName());
+//				final FileInfo fileInfo = new FileInfo(filePath);
 //				DataManager.getInstance().getFileInfoManager()
 //						.add(fileInfo, Thread.currentThread());
 //

@@ -1,4 +1,4 @@
-package sdl.ist.osaka_u.newmasu;
+﻿package sdl.ist.osaka_u.newmasu;
 
 import java.lang.reflect.Field;
 import java.nio.file.Files;
