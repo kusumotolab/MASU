@@ -18,7 +18,7 @@ public class ASTRequestor extends FileASTRequestor {
 		
 		System.out.println(" ** parsing ... " + path);
 
-		TestAstVisitor visitor = new TestAstVisitor(fileInfo);
+		ASTVisitorImpl visitor = new ASTVisitorImpl(path);
 //		IProblem[] problem = ast.getProblems();
 //		if (problem.length != 0) {
 //			System.out.println("------ " + problem.length

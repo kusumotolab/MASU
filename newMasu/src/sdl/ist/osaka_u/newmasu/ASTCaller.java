@@ -43,30 +43,4 @@ public class ASTCaller {
 		parser.createASTs(sources, null, new String[] {}, new ASTRequestor(),
 				new NullProgressMonitor());
 	}
-	
-//	
-//
-//	/**
-//	 * Converts .java file to char[]
-//	 */
-//	private char[] convSource(String path) {
-//		try {
-//			final BufferedReader in = new BufferedReader(new InputStreamReader(
-//					new FileInputStream(path)));
-//			String source = "";
-//			String line = "";
-//			while ((line = in.readLine()) != null) {
-//				source += line + System.getProperty("line.separator");
-//			}
-//			in.close();
-//			return source.toCharArray();
-//		} catch (FileNotFoundException e) {
-//			System.err.print("Input source file could not found!");
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
-
 }

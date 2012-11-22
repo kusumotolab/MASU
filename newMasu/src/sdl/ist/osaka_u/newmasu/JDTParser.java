@@ -19,6 +19,7 @@ import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -90,13 +91,12 @@ public class JDTParser extends MetricsTool {
 			options.addOption(OptionBuilder
 					.withArgName("MethodMetricsFile")
 					.hasArg()
-					.isRequired()
 					.withDescription(
 							"specify file that measured METHOD metrics were stored into")
 					.create("M"));
 
 			options.addOption(OptionBuilder.withArgName("Library directory")
-					.hasArg()
+					.hasArgs()
 					.withDescription("specify directory that stored libraries")
 					.create("L"));
 		}
@@ -107,6 +107,9 @@ public class JDTParser extends MetricsTool {
 			final CommandLineParser parser = new BasicParser();
 			cmd = parser.parse(options, args);
 		} catch (ParseException e) {
+			HelpFormatter f = new HelpFormatter();
+			f.printHelp("OptionsTip", options);
+
 			e.printStackTrace();
 			return;
 		}
@@ -156,15 +159,20 @@ public class JDTParser extends MetricsTool {
 	 * Settingsの中にライブラリファイルを登録する． デフォルトのディレクトリは./resource
 	 */
 	public void addLibraries(final CommandLine cmd) {
-		Path path = Paths.get("./resource");
+		String[] libPaths = new String[1];
+		libPaths[0] = "./resource";
+
 		if (cmd.hasOption("L"))
-			path = Paths.get(cmd.getOptionValue("L"));
+			libPaths = cmd.getOptionValues("L");
 
-		if (Files.exists(path)) {
-			ArrayList<String> jarList = ListFiles.list("jar", path);
+		for (String arg : libPaths) {
+			Path path = Paths.get(arg);
+			if (Files.exists(path)) {
+				ArrayList<String> jarList = ListFiles.list("jar", path);
 
-			for (String p : jarList) {
-				Settings.getInstance().addLibrary(p);
+				for (String p : jarList) {
+					Settings.getInstance().addLibrary(p);
+				}
 			}
 		}
 	}
