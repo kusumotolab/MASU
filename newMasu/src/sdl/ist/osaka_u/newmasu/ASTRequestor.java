@@ -1,11 +1,14 @@
 package sdl.ist.osaka_u.newmasu;
 
+import java.util.HashSet;
+
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.DataManager;
 import jp.ac.osaka_u.ist.sel.metricstool.main.data.target.FileInfo;
 
-import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
+
+import sdl.ist.osaka_u.newmasu.util.Pair;
 
 public class ASTRequestor extends FileASTRequestor {
 
@@ -29,5 +32,14 @@ public class ASTRequestor extends FileASTRequestor {
 //			System.out.println("---------------------------");
 //		}
 		ast.accept(visitor);
+		
+
+		System.out.println("----------------------------------");
+		HashSet<Pair<String, String>> set = visitor.callHierachy.getRelations();
+		for( Pair<String, String> p : set )
+		{
+			System.out.println(p);
+		}
+		System.out.println("----------------------------------");
 	}
 }
