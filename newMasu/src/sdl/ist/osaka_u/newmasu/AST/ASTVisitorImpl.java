@@ -1,7 +1,8 @@
-package sdl.ist.osaka_u.newmasu;
+package sdl.ist.osaka_u.newmasu.AST;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IMethodBinding;
@@ -10,7 +11,8 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
-import sdl.ist.osaka_u.newmasu.callhierachy.CallHierachy;
+import sdl.ist.osaka_u.newmasu.dataManager.AnonymousIDManager;
+import sdl.ist.osaka_u.newmasu.dataManager.CallHierachy;
 import sdl.ist.osaka_u.newmasu.util.Pair;
 
 /**
@@ -23,12 +25,11 @@ public class ASTVisitorImpl extends ASTVisitor {
 
 	private CompilationUnit unit = null;
 	private String filePath = null;
-	
+	private CallHierachy callHierachy = null;
 
-	final CallHierachy callHierachy = new CallHierachy();
-
-	public ASTVisitorImpl(String path) {
-		filePath = path;
+	public ASTVisitorImpl(String path, CallHierachy callHierachy) {
+		this.filePath = path;
+		this.callHierachy = callHierachy;
 	}
 
 	@Override
@@ -42,14 +43,14 @@ public class ASTVisitorImpl extends ASTVisitor {
 
 	@Override
 	public boolean visit(MethodInvocation node) {
-		
+
 		IMethodBinding binding = node.resolveMethodBinding();
-		
-		if( binding == null ) {
-			System.err.println("Unresolved bindings : " + node );
-		}
-		else{
-			callHierachy.addRelation(getFullQualifiedNameFromBinding(binding), getParentDeclaration(node));
+
+		if (binding == null) {
+			System.err.println("Unresolved bindings : " + node);
+		} else {
+			callHierachy.addRelation(getFullQualifiedNameFromBinding(binding),
+					getParentDeclaration(node));
 		}
 
 		return super.visit(node);
@@ -57,8 +58,40 @@ public class ASTVisitorImpl extends ASTVisitor {
 
 	@Override
 	public boolean visit(TypeDeclaration node) {
+
+		//
 		// final ITypeBinding bind = node.resolveBinding();
 		// System.out.println(bind.getQualifiedName());
+
+		return super.visit(node);
+	}
+
+	@Override
+	public boolean visit(AnonymousClassDeclaration node) {
+		ITypeBinding binding = node.resolveBinding();
+		IMethodBinding mBind = null;
+
+		String name = "";
+		while (binding != null) {
+			
+			String className = binding.getQualifiedName();
+			if (binding.isAnonymous()) {
+				className = "." + AnonymousIDManager.getID(binding);
+			}
+			name = className + name;
+			
+			mBind = binding.getDeclaringMethod();
+			if (mBind != null)
+				name = "#" + mBind.getName() + name;
+
+			binding = binding.getDeclaringClass();
+		}
+
+		System.out.println(name);
+		//
+		// final ITypeBinding bind = node.resolveBinding();
+		// System.out.println(bind.getQualifiedName());
+
 		return super.visit(node);
 	}
 
@@ -98,7 +131,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 	 */
 	private String getFullQualifiedNameFromBinding(IMethodBinding binding) {
 		StringBuilder buf = new StringBuilder();
-		// メソッドを宣言する型を文字列へ変換して追加
+		// メソッドを定義しているクラスを取得
 		ITypeBinding erasure = binding.getDeclaringClass().getErasure();
 		String typeName = erasure.getQualifiedName();
 		buf.append(typeName);
