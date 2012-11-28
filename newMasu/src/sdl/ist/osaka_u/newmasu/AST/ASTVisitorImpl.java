@@ -50,7 +50,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 			System.err.println("Unresolved bindings : " + node);
 		} else {
 			callHierachy.addRelation(getFullQualifiedNameFromBinding(binding),
-					getParentDeclaration(node));
+					getFullQualifiedName(node));
 		}
 
 		return super.visit(node);
@@ -68,18 +68,110 @@ public class ASTVisitorImpl extends ASTVisitor {
 
 	@Override
 	public boolean visit(AnonymousClassDeclaration node) {
+		// ITypeBinding binding = node.resolveBinding();
+		// IMethodBinding mBind = null;
+		//
+		// String name = "";
+		// while (binding != null) {
+		// String className = binding.getQualifiedName().equals("") ? "."
+		// + binding.getName() : binding.getQualifiedName();
+		// if (binding.isAnonymous()) {
+		// className = "." + AnonymousIDManager.getID(binding);
+		// }
+		// name = className + name;
+		//
+		// mBind = binding.getDeclaringMethod();
+		// if (mBind != null)
+		// name = "#" + mBind.getName() + name;
+		//
+		// binding = binding.getDeclaringClass();
+		// }
+		//
+		// System.out.println(name);
+		// //
+		// // final ITypeBinding bind = node.resolveBinding();
+		// // System.out.println(bind.getQualifiedName());
+
+//		String str = getFullQualifiedName(node, "");
+//		System.out.println(str);
+
+		return super.visit(node);
+	}
+	
+
+	@Override
+	public boolean visit(MethodDeclaration node) {
+		String str = getFullQualifiedName(node, "");
+		System.out.println(str);
+		
+		return super.visit(node);
+	}
+
+	// ////////////////////////////////////////////////////////
+
+	private String getFullQualifiedName(ASTNode node, String str) {
+
+		if (node == null)
+			return str;
+
+		switch (node.getNodeType()) {
+		case ASTNode.ANONYMOUS_CLASS_DECLARATION: {
+			AnonymousClassDeclaration anon = (AnonymousClassDeclaration) node;
+			ITypeBinding binding = anon.resolveBinding();
+			if (binding != null)
+				str = "." + AnonymousIDManager.getID(binding) + str;
+			break;
+		}
+
+		case ASTNode.METHOD_DECLARATION: {
+			MethodDeclaration md = (MethodDeclaration) node;
+			IMethodBinding binding = md.resolveBinding();
+			if (binding != null)
+				str = "#" + binding.getName() + str;
+			break;
+		}
+
+		case ASTNode.TYPE_DECLARATION: {
+			TypeDeclaration type = (TypeDeclaration) node;
+			ITypeBinding binding = type.resolveBinding();
+
+			// 匿名クラス内のクラスはgetQualifiedName()が""になるので，getName()で取得
+			if (binding != null)
+				str = binding.getQualifiedName().equals("") ? "."
+						+ binding.getName() : binding.getQualifiedName() + str;
+			break;
+		}
+
+		default:
+			// None
+			break;
+		}
+
+		return getFullQualifiedName(node.getParent(), str);
+	}
+
+	private String getFullQualifiedName(MethodDeclaration node) {
+		IMethodBinding bind = node.resolveBinding();
+		if (bind == null) {
+			System.err.println("Unable to get parent method bindings");
+			return null;
+		}
+		return getFullQualifiedNameFromBinding(bind);
+	}
+
+	private String getFullQualifiedName(AnonymousClassDeclaration node) {
 		ITypeBinding binding = node.resolveBinding();
 		IMethodBinding mBind = null;
 
 		String name = "";
 		while (binding != null) {
-			
-			String className = binding.getQualifiedName();
+			String className = binding.getQualifiedName().equals("") ? "."
+					+ binding.getName() : binding.getQualifiedName();
 			if (binding.isAnonymous()) {
 				className = "." + AnonymousIDManager.getID(binding);
 			}
 			name = className + name;
-			
+
 			mBind = binding.getDeclaringMethod();
 			if (mBind != null)
 				name = "#" + mBind.getName() + name;
@@ -88,28 +180,49 @@ public class ASTVisitorImpl extends ASTVisitor {
 		}
 
 		System.out.println(name);
-		//
-		// final ITypeBinding bind = node.resolveBinding();
-		// System.out.println(bind.getQualifiedName());
-
-		return super.visit(node);
+		return name;
 	}
 
+	// private String getFullQualifiedName(TypeDeclaration node) {
+	//
+	// ITypeBinding bind = node.resolveBinding();
+	//
+	// if (bind == null) {
+	// if (bind.isAnonymous()) {
+	// if (bind)
+	// return getFullQualifiedName(bind);
+	// } else if (bind.isInterface()) {
+	// return bind.getQualifiedName();
+	// } else { // enumとかも
+	// return bind.getQualifiedName();
+	// }
+	// }
+	// return node.getName();
+	// }
+
 	/**
-	 * MethodDeclaration型か，FieldDeclaration型になるまでさかのぼる
+	 * ASTNodeの完全修飾名を取得
 	 */
-	private String getParentDeclaration(ASTNode element) {
+	private String getFullQualifiedName(ASTNode element) {
 		ASTNode node = element;
 		while (true) {
 			node = node.getParent();
 			if (node == null) {
 				System.err.println("Unable to get parent method");
 				return null;
-			} else if (node.getNodeType() == ASTNode.TYPE_DECLARATION) {
+			}
+
+			else if (node.getNodeType() == ASTNode.ANNOTATION_TYPE_DECLARATION) {
+
+			}
+
+			else if (node.getNodeType() == ASTNode.TYPE_DECLARATION) {
 				TypeDeclaration td = (TypeDeclaration) node;
 				ITypeBinding bind = td.resolveBinding();
 				return bind.getQualifiedName();
-			} else if (node.getNodeType() == ASTNode.METHOD_DECLARATION) {
+			}
+
+			else if (node.getNodeType() == ASTNode.METHOD_DECLARATION) {
 				MethodDeclaration md = (MethodDeclaration) node;
 				IMethodBinding bind = md.resolveBinding();
 				if (bind == null) {
@@ -117,13 +230,49 @@ public class ASTVisitorImpl extends ASTVisitor {
 					return null;
 				}
 				return getFullQualifiedNameFromBinding(bind);
-			} else if (node.getNodeType() == ASTNode.FIELD_DECLARATION) {
+			}
+
+			else if (node.getNodeType() == ASTNode.FIELD_DECLARATION) {
 				FieldDeclaration fd = (FieldDeclaration) node;
-				String className = getParentDeclaration(fd);
+				String className = getFullQualifiedName(fd);
 				return className + "." + node;
 			}
 		}
 	}
+
+	// /**
+	// * ASTNodeの完全修飾名を取得
+	// */
+	// private String getFullQualifiedName(ASTNode element) {
+	// ASTNode node = element;
+	// while (true) {
+	// node = node.getParent();
+	// if (node == null) {
+	// System.err.println("Unable to get parent method");
+	// return null;
+	// } else if (node.getNodeType() == ASTNode.TYPE_DECLARATION) {
+	// TypeDeclaration td = (TypeDeclaration) node;
+	// ITypeBinding bind = td.resolveBinding();
+	// return bind.getQualifiedName();
+	// }
+	//
+	// else if (node.getNodeType() == ASTNode.METHOD_DECLARATION) {
+	// MethodDeclaration md = (MethodDeclaration) node;
+	// IMethodBinding bind = md.resolveBinding();
+	// if (bind == null) {
+	// System.err.println("Unable to get parent method bindings");
+	// return null;
+	// }
+	// return getFullQualifiedNameFromBinding(bind);
+	// }
+	//
+	// else if (node.getNodeType() == ASTNode.FIELD_DECLARATION) {
+	// FieldDeclaration fd = (FieldDeclaration) node;
+	// String className = getFullQualifiedName(fd);
+	// return className + "." + node;
+	// }
+	// }
+	// }
 
 	/**
 	 * 呼び出し対象のメソッドを一意に特定するキーを生成する <class-name> "#" <method-name> "(" ( <type> (

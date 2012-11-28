@@ -25,9 +25,8 @@ ITypeBinding.getQualifiedName()で取得
 sample : java.lang.String
 
 #### 匿名クラス
-
-
-定義されているクラスのfullQualifiedName + ( メソッド名 ) +  "." + ID
+定義されているクラスのfullQualifiedName + ( メソッド名 ) +  "." + ID  
+IDは登場順の番号
 
 sample: 1個目はフィールド
 

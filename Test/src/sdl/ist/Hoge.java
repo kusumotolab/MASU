@@ -11,11 +11,16 @@ public class Hoge {
 		}
 	};
 	
+	public static void totet()
+	{
+		class HHHH{}	
+		HHHH h = new HHHH();
+	}
+	
 	class Fuga {
 
 		private int a = 9;
 		public void ffff(){
-			
 		}
 	}
 	
@@ -31,14 +36,30 @@ public class Hoge {
 						// TODO Auto-generated method stub
 						Tokumei tok = new Tokumei(){
 							@Override
-							public void toku() {
+							public void toku2() {
 								// TODO Auto-generated method stub
 								Tokumei tok = new Tokumei(){
 									@Override
-									public void toku() {
+									public void toku3() {
 										// TODO Auto-generated method stub
 										
+										
 									}
+									class HHHH{
+										Tokumei tok = new Tokumei(){
+											
+											
+											
+											@Override
+											public void toku4() {
+												// TODO Auto-generated method stub
+												
+												
+											}					
+
+										};
+									}							
+
 								};
 								
 							}
