@@ -11,14 +11,15 @@ public class CallHierachy {
 		return relations;
 	}
 
-	public final static void addRelation(String invocatedMethodName, String parentName) {
-		relations.add(new Pair<String, String>(invocatedMethodName, parentName));
+	public final static void addRelation(String from, String to) {
+		relations.add(new Pair<String, String>(from, to));
 	}
 	
 	public static HashSet<String> getCallHierachy(String methodName){
 		
-		return new HashSet<String>();
+//		HashSet<String>
 		
+		return new HashSet<String>();
 	}
 
 }
