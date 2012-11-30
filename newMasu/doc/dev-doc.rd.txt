@@ -3,6 +3,14 @@
 
 
 
+ASTNodeから名前の取得
+---------------------------------
+
+ClassDeclarationのbindingに対してgetQualifiedName()をすると，パッケージ名も含めた完全修飾名が取得される．
+内部クラスでも同様．
+ただし，匿名クラス中のClassDeclarationのbindingでは，getQualifiedName()は空が返り，getName()はクラスの名前が返ってくる．
+
+
 完全修飾名
 ---------------------------------
 
@@ -32,33 +40,9 @@ sample: 1個目はフィールド
 
 sdl.ist.Hoge.1
 sdl.ist.Hoge#Hoge.2
-sdl.ist.Hoge#Hoge.2#toku.3
-sdl.ist.Hoge#Hoge.2#toku.3#toku.4
-sdl.ist.Hoge#Hoge.2#toku.3#toku.4#toku.5
-sdl.ist.Hoge#Hoge.6
-sdl.ist.Hoge#Fugaaa.7
-sdl.ist.Hoge#Fugaaa.8
 
 
 #### メソッド
-* <full-qualified-class-name>
-ITypeBinding erasure = binding.getDeclaringClass().getErasure();
-String typeName = erasure.getQualifiedName();
-
-* <method-name>
-IMethodBinding.getName()
-
-* <type>
-ITypeBinding[] params = binding.getParameterTypes();
-if (params.length > 0) {
-	buf.append(params[0].getErasure().getQualifiedName());
-	for (int i = 1; i < params.length; i++) {
-		buf.append(',');
-		buf.append(params[i].getErasure().getQualifiedName());
-	}
-}
-
-
 <full-qualified-class-name> "#" <method-name> "(" ( <type> (* "," <type> )* )? ")"  
 
 sample : java.lang.String#equals(java.lang.String)
@@ -73,35 +57,11 @@ sample : java.lang.String#equals(java.lang.String)
 sample : sdl.ist.osaka.u.Hoge$hog
 
 
+### 完全修飾名の取得方法
 
+#### ASTNode
+ASTNodeの親を再帰的にたどってゆき，それぞれの名前を取得．
+トップの要素はTypeDeclarationであるはずなので，それに対してはgetQualifiedName()する．
 
-
-	/**
-	 * 呼び出し対象のメソッドを一意に特定するキーを生成する <class-name> "#" <method-name> "(" ( <type> (
-	 * "," <type> )* )? ")"
-	 */
-	private String getFullQualifiedNameFromBinding(IMethodBinding binding) {
-		StringBuilder buf = new StringBuilder();
-		// メソッドを宣言する型を文字列へ変換して追加
-		ITypeBinding erasure = binding.getDeclaringClass().getErasure();
-		String typeName = erasure.getQualifiedName();
-		buf.append(typeName);
-		// 型とメソッド名の区切り文字を追加 ("#")
-		buf.append('#');
-		// メソッド名を追加
-		buf.append(binding.getName());
-		// メソッド名と引数一覧の区切り文字を追加 ("(")
-		buf.append('(');
-		// 引数の型一覧を追加
-		ITypeBinding[] params = binding.getParameterTypes();
-		if (params.length > 0) {
-			buf.append(params[0].getErasure().getQualifiedName());
-			for (int i = 1; i < params.length; i++) {
-				buf.append(',');
-				buf.append(params[i].getErasure().getQualifiedName());
-			}
-		}
-		buf.append(')');
-
-		return buf.toString();
-	}
+#### IBinding
+各bindingごとに親が異なるので，種類ごとに親を取得し，ASTNodeと同様再帰的に処理．
