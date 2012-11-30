@@ -7,3 +7,5 @@ public abstract class AbC {
 	public void hheout(){}
 
 }
+
+

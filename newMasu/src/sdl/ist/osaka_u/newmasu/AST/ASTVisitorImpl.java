@@ -1,5 +1,6 @@
 package sdl.ist.osaka_u.newmasu.AST;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -18,6 +19,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 import sdl.ist.osaka_u.newmasu.dataManager.AnonymousIDManager;
 import sdl.ist.osaka_u.newmasu.dataManager.ClassManager;
+import sdl.ist.osaka_u.newmasu.dataManager.FileManager;
 import sdl.ist.osaka_u.newmasu.dataManager.MethodManager;
 import sdl.ist.osaka_u.newmasu.dataManager.VariableManager;
 import sdl.ist.osaka_u.newmasu.util.Output;
@@ -31,15 +33,17 @@ import sdl.ist.osaka_u.newmasu.util.Output;
 public class ASTVisitorImpl extends ASTVisitor {
 
 	private CompilationUnit unit = null;
-	private String filePath = null;
+	private Path filePath = null;
 
-	public ASTVisitorImpl(String path) {
+	public ASTVisitorImpl(final Path path) {
 		this.filePath = path;
 	}
 
 	@Override
 	public boolean visit(CompilationUnit node) {
 		this.unit = node;
+		 FileManager.addClass(filePath, node);
+		
 		return super.visit(node);
 	}
 
@@ -87,9 +91,6 @@ public class ASTVisitorImpl extends ASTVisitor {
 			MethodManager.addRelation(getFullQualifiedName(node),
 					getFullQualifiedName(binding));
 		}
-		System.out.println("    to:  " + getFullQualifiedName(binding));
-		System.out.println("  from:  " + getFullQualifiedName(node));
-
 		return super.visit(node);
 	}
 	
@@ -189,23 +190,17 @@ public class ASTVisitorImpl extends ASTVisitor {
 
 		case IBinding.METHOD: {
 			final IMethodBinding mbind = (IMethodBinding) bind;
-			if (mbind != null) {
-				bindList.add(mbind);
-				recursiveName(mbind.getDeclaringClass(), bindList);
-			} else
-				Output.cannotResolve(bind.getName());
+			bindList.add(mbind);
+			recursiveName(mbind.getDeclaringClass(), bindList);
 			break;
 		}
 
 		case IBinding.VARIABLE: {
 			final IVariableBinding vbind = (IVariableBinding) bind;
 
-			if (vbind != null) {
-				bindList.add(vbind);
-				recursiveName(vbind.getDeclaringClass(), bindList);
-				recursiveName(vbind.getDeclaringMethod(), bindList);
-			} else
-				Output.cannotResolve(bind.getName());
+			bindList.add(vbind);
+			recursiveName(vbind.getDeclaringClass(), bindList);
+			recursiveName(vbind.getDeclaringMethod(), bindList);
 			break;
 		}
 

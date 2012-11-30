@@ -44,48 +44,6 @@ public class JDTTargetFileParser {
 				.toArray(new String[javaPaths.size()]);
 
 		for (String filePath : javaPaths) {
-			// try {
-			//
-			// if (Settings.getInstance().isVerbose()) {
-			// final StringBuilder text = new StringBuilder();
-			// text.append("parsing ");
-			// text.append(file.getName());
-			// text.append(" [");
-			// text.append(i + 1);
-			// text.append("/");
-			// text.append(file.length);
-			// text.append("]");
-			// this.out.println(text.toString());
-			// }
-			//
-			// final FileInfo fileInfo = new FileInfo(filePath);
-			// DataManager.getInstance().getFileInfoManager()
-			// .add(fileInfo, Thread.currentThread());
-			//
-			// final BufferedReader reader = new BufferedReader(
-			// new InputStreamReader(new FileInputStream(
-			// this.files[i].getName()), "JISAutoDetect"));
-
-			// reader.close();
-
-			// } catch (FileNotFoundException e) {
-			// err.println(e.getMessage());
-			// }
-			// // catch (RecognitionException e) {
-			// // this.files[i].setCorrectSytax(false);
-			// // err.println(e.getMessage());
-			// // // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
-			// // } catch (TokenStreamException e) {
-			// // this.files[i].setCorrectSytax(false);
-			// // err.println(e.getMessage());
-			// // // TODO エラーが起こったことを TargetFileData などに通知する処理が必要
-			// // }
-			// // catch (ASTParseException e) {
-			// // err.println(e.getMessage());
-			// // }
-			// catch (IOException e) {
-			// err.println(e.getMessage());
-			// }
 		}
 
 		switch (Settings.getInstance().getLanguage()) {
