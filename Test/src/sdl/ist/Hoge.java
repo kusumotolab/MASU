@@ -11,7 +11,7 @@ public class Hoge {
 		}
 	};
 	
-	public static void totet()
+	public  void totet()
 	{
 		class HHHH{}	
 		HHHH h = new HHHH();
@@ -78,6 +78,8 @@ public class Hoge {
 				
 			}
 		} );
+		
+		totet();
 	}
 	
 	
@@ -98,7 +100,13 @@ public class Hoge {
 			}
 		};
 		
-		
+		Tokume( new Tokumei(){
+			@Override
+			public void toku() {
+				// TODO Auto-generated method stub
+				
+			}
+		} );
 		
 	}
 	

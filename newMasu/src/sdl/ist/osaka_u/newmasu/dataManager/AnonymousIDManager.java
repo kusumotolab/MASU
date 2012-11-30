@@ -2,7 +2,6 @@ package sdl.ist.osaka_u.newmasu.dataManager;
 
 import java.util.HashSet;
 
-import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 
 import sdl.ist.osaka_u.newmasu.util.Pair;

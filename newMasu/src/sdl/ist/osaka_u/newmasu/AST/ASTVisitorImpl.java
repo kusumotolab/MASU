@@ -12,11 +12,14 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 import sdl.ist.osaka_u.newmasu.dataManager.AnonymousIDManager;
-import sdl.ist.osaka_u.newmasu.dataManager.CallHierachy;
+import sdl.ist.osaka_u.newmasu.dataManager.ClassManager;
+import sdl.ist.osaka_u.newmasu.dataManager.MethodManager;
+import sdl.ist.osaka_u.newmasu.dataManager.VariableManager;
 import sdl.ist.osaka_u.newmasu.util.Output;
 
 /**
@@ -29,31 +32,59 @@ public class ASTVisitorImpl extends ASTVisitor {
 
 	private CompilationUnit unit = null;
 	private String filePath = null;
-	private CallHierachy callHierachy = null;
 
-	public ASTVisitorImpl(String path, CallHierachy callHierachy) {
+	public ASTVisitorImpl(String path) {
 		this.filePath = path;
-		this.callHierachy = callHierachy;
 	}
 
 	@Override
 	public boolean visit(CompilationUnit node) {
 		this.unit = node;
+		return super.visit(node);
+	}
 
-		// System.out.println("[[[ " + node.);
+	@Override
+	public boolean visit(TypeDeclaration node) {
+		String str = getFullQualifiedName(node);
+		ClassManager.addClass(str, node);
+		return super.visit(node);
+	}
 
+	@Override
+	public boolean visit(AnonymousClassDeclaration node) {
+		String str = getFullQualifiedName(node);
+		ClassManager.addClass(str, node);
+		return super.visit(node);
+	}
+
+	@Override
+	public boolean visit(MethodDeclaration node) {
+		String str = getFullQualifiedName(node);
+		MethodManager.addMethod(str, node);
+		return super.visit(node);
+	}
+	
+	@Override
+	public boolean visit(SingleVariableDeclaration node){
+		String str = getFullQualifiedName(node);
+		VariableManager.addVariable(str, node);
+		return super.visit(node);
+	}
+	
+	@Override
+	public boolean visit(VariableDeclarationFragment node){
+		String str = getFullQualifiedName(node);
+		VariableManager.addVariable(str, node);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(MethodInvocation node) {
-
 		IMethodBinding binding = node.resolveMethodBinding();
-
 		if (binding == null) {
-			System.err.println("Unresolved bindings : " + node);
+			Output.cannotResolve(node.getName().getFullyQualifiedName());
 		} else {
-			callHierachy.addRelation(getFullQualifiedName(node),
+			MethodManager.addRelation(getFullQualifiedName(node),
 					getFullQualifiedName(binding));
 		}
 		System.out.println("    to:  " + getFullQualifiedName(binding));
@@ -61,57 +92,9 @@ public class ASTVisitorImpl extends ASTVisitor {
 
 		return super.visit(node);
 	}
-
-	@Override
-	public boolean visit(TypeDeclaration node) {
-
-		//
-		// final ITypeBinding bind = node.resolveBinding();
-		// System.out.println(bind.getQualifiedName());
-
-		return super.visit(node);
-	}
-
-	@Override
-	public boolean visit(AnonymousClassDeclaration node) {
-		// ITypeBinding binding = node.resolveBinding();
-		// IMethodBinding mBind = null;
-		//
-		// String name = "";
-		// while (binding != null) {
-		// String className = binding.getQualifiedName().equals("") ? "."
-		// + binding.getName() : binding.getQualifiedName();
-		// if (binding.isAnonymous()) {
-		// className = "." + AnonymousIDManager.getID(binding);
-		// }
-		// name = className + name;
-		//
-		// mBind = binding.getDeclaringMethod();
-		// if (mBind != null)
-		// name = "#" + mBind.getName() + name;
-		//
-		// binding = binding.getDeclaringClass();
-		// }
-		//
-		// System.out.println(name);
-		// //
-		// // final ITypeBinding bind = node.resolveBinding();
-		// // System.out.println(bind.getQualifiedName());
-
-		// String str = getFullQualifiedName(node, "");
-		// System.out.println(str);
-
-		return super.visit(node);
-	}
-
-	@Override
-	public boolean visit(MethodDeclaration node) {
-		String str = getFullQualifiedName(node);
-		System.out.println(str);
-
-		return super.visit(node);
-	}
-
+	
+	
+//////////////////////////////////////////////
 	private String getFullQualifiedName(final ASTNode __node) {
 
 		ASTNode tmpNode = __node;
@@ -198,12 +181,9 @@ public class ASTVisitorImpl extends ASTVisitor {
 		switch (bind.getKind()) {
 		case IBinding.TYPE: {
 			final ITypeBinding type = (ITypeBinding) bind;
-			if (type != null) {
-				bindList.add(type);
-				recursiveName(type.getDeclaringClass(), bindList);
-				recursiveName(type.getDeclaringMethod(), bindList);
-			} else
-				Output.cannotResolve(bind.getName());
+			bindList.add(type);
+			recursiveName(type.getDeclaringClass(), bindList);
+			recursiveName(type.getDeclaringMethod(), bindList);
 			break;
 		}
 
