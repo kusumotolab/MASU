@@ -30,14 +30,22 @@ public class MethodManager {
 	}
 
 	public static HashSet<String> getCallHierachy(String to) {
-
 		HashSet<String> results = new HashSet<String>();
 		for (Pair<String, String> p : relations) {
 			if (p.getSecond().equals(to)) {
 				results.add(p.getFirst());
 			}
 		}
-
+		return results;
+	}
+	
+	public static HashSet<String> getAllInvokedMethod(String from) {
+		HashSet<String> results = new HashSet<String>();
+		for (Pair<String, String> p : relations) {
+			if (p.getFirst().equals(from)) {
+				results.add(p.getSecond());
+			}
+		}
 		return results;
 	}
 	

@@ -1,6 +1,5 @@
 ﻿package sdl.ist.osaka_u.newmasu;
 
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,12 +8,6 @@ import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
 import jp.ac.osaka_u.ist.sel.metricstool.main.Settings;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.DefaultMessagePrinter;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageEvent;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageListener;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePool;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessagePrinter.MESSAGE_TYPE;
-import jp.ac.osaka_u.ist.sel.metricstool.main.io.MessageSource;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -32,46 +25,6 @@ public class JDTParser extends MetricsTool {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
-		// 情報表示用設定
-		try {
-			final Class<?> metricstool = MetricsTool.class;
-			Field out;
-			out = metricstool.getDeclaredField("out");
-			out.setAccessible(true);
-			out.set(null, new DefaultMessagePrinter(new MessageSource() {
-				public String getMessageSourceName() {
-					return "jdtparser";
-				}
-			}, MESSAGE_TYPE.OUT));
-			final Field err = metricstool.getDeclaredField("err");
-			err.setAccessible(true);
-			err.set(null, new DefaultMessagePrinter(new MessageSource() {
-				public String getMessageSourceName() {
-					return "jdtparser";
-				}
-			}, MESSAGE_TYPE.ERROR));
-			MessagePool.getInstance(MESSAGE_TYPE.OUT).addMessageListener(
-					new MessageListener() {
-						public void messageReceived(MessageEvent event) {
-							System.out.print(event.getSource()
-									.getMessageSourceName()
-									+ " > "
-									+ event.getMessage());
-						}
-					});
-			MessagePool.getInstance(MESSAGE_TYPE.ERROR).addMessageListener(
-					new MessageListener() {
-						public void messageReceived(MessageEvent event) {
-							System.err.print(event.getSource()
-									.getMessageSourceName()
-									+ " > "
-									+ event.getMessage());
-						}
-					});
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
 		// コマンドライン引数を処理
 		final Options options = new Options();
@@ -141,7 +94,7 @@ public class JDTParser extends MetricsTool {
 			viewer.writeMetrics();
 		}
 
-		out.println("successfully finished.");
+		System.out.println("successfully finished.");
 	}
 
 	/**
@@ -149,7 +102,7 @@ public class JDTParser extends MetricsTool {
 	 */
 	@Override
 	public void parseTargetFiles() {
-		final JDTTargetFileParser parser = new JDTTargetFileParser(out, err);
+		final JDTTargetFileParser parser = new JDTTargetFileParser();
 
 		// final TargetFile[] files = DataManager.getInstance()
 		// .getTargetFileManager().getFiles().toArray(new TargetFile[0]);

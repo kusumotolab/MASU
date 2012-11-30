@@ -17,10 +17,8 @@ public class FileManager {
 	}
 	
 	public final static int getLOC(Path path){
-//		System.out.println(
-//				node.getLineNumber(node.getLength()-1) + 1
-//				);
-		return 0;
+		CompilationUnit unit = classes.get(path);
+		return unit.getLineNumber(unit.getLength()-1) + 1;
 	}
 
 	// インスタンスの生成を防ぐ
