@@ -15,11 +15,11 @@ public class AnonymousIDManager {
 	}
 
 	final private static HashSet<Pair<ITypeBinding, String>> relations = new HashSet<Pair<ITypeBinding, String>>();
-	public final static HashSet<Pair<ITypeBinding, String>> getRelations() {
+	public static HashSet<Pair<ITypeBinding, String>> getRelations() {
 		return relations;
 	}
 
-	public final static void addRelation(ITypeBinding annoClass) {
+	public static void addRelation(ITypeBinding annoClass) {
 		String name = getUniqueID();
 		relations.add(new Pair<ITypeBinding, String>(annoClass, name));
 	}

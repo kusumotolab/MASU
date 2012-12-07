@@ -11,26 +11,26 @@ public class MethodManager {
 
 	final private static HashMap<String, MethodDeclaration> methods = new HashMap<String, MethodDeclaration>();
 
-	public final static HashMap<String, MethodDeclaration> getMethods() {
+	public static HashMap<String, MethodDeclaration> getMethods() {
 		return methods;
 	}
 
-	public final static void addMethod(String name, MethodDeclaration node) {
+	public static void addMethod(String name, MethodDeclaration node) {
 		methods.put(name, node);
 	}
 
 	final private static HashSet<Pair<String, String>> relations = new HashSet<Pair<String, String>>();
 
-	public final static HashSet<Pair<String, String>> getRelations() {
+	public static HashSet<Pair<String, String>> getRelations() {
 		return relations;
 	}
 
-	public final static void addRelation(String from, String to) {
+	public static void addRelation(String from, String to) {
 		relations.add(new Pair<String, String>(from, to));
 	}
 
 	public static HashSet<String> getCallHierachy(String to) {
-		HashSet<String> results = new HashSet<String>();
+		final HashSet<String> results = new HashSet<String>();
 		for (Pair<String, String> p : relations) {
 			if (p.getSecond().equals(to)) {
 				results.add(p.getFirst());
@@ -40,7 +40,7 @@ public class MethodManager {
 	}
 	
 	public static HashSet<String> getAllInvokedMethod(String from) {
-		HashSet<String> results = new HashSet<String>();
+		final HashSet<String> results = new HashSet<String>();
 		for (Pair<String, String> p : relations) {
 			if (p.getFirst().equals(from)) {
 				results.add(p.getSecond());

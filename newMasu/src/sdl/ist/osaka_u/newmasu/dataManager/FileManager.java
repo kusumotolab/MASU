@@ -8,15 +8,15 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 public class FileManager {
 	final private static HashMap<Path, CompilationUnit> classes = new HashMap<Path, CompilationUnit>();
 
-	public final static HashMap<Path, CompilationUnit> getClasses() {
+	public static HashMap<Path, CompilationUnit> getClasses() {
 		return classes;
 	}
 
-	public final static void addClass(Path path, CompilationUnit node) {
+	public static void addClass(Path path, CompilationUnit node) {
 		classes.put(path, node);
 	}
 	
-	public final static int getLOC(Path path){
+	public static int getLOC(Path path){
 		CompilationUnit unit = classes.get(path);
 		return unit.getLineNumber(unit.getLength()-1) + 1;
 	}

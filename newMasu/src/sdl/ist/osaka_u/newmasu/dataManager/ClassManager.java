@@ -7,11 +7,11 @@ import org.eclipse.jdt.core.dom.ASTNode;
 public class ClassManager {
 	final private static HashMap<String, ASTNode> classes = new HashMap<String, ASTNode>();
 
-	public final static HashMap<String, ASTNode> getClasses() {
+	public static HashMap<String, ASTNode> getClasses() {
 		return classes;
 	}
 
-	public final static void addClass(String name, ASTNode node) {
+	public static void addClass(String name, ASTNode node) {
 		classes.put(name, node);
 	}
 
