@@ -3,15 +3,16 @@ package sdl.ist.osaka_u.newmasu.dataManager;
 import java.util.HashMap;
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 
 public class ClassManager {
-	final private static HashMap<String, ASTNode> classes = new HashMap<String, ASTNode>();
+	final private static HashMap<ITypeBinding, ASTNode> classes = new HashMap<ITypeBinding, ASTNode>();
 
-	public static HashMap<String, ASTNode> getClasses() {
+	public static HashMap<ITypeBinding, ASTNode> getClasses() {
 		return classes;
 	}
 
-	public static void addClass(String name, ASTNode node) {
+	public static void addClass(ITypeBinding name, ASTNode node) {
 		classes.put(name, node);
 	}
 

@@ -3,35 +3,36 @@ package sdl.ist.osaka_u.newmasu.dataManager;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 import sdl.ist.osaka_u.newmasu.util.Pair;
 
 public class MethodManager {
 
-	final private static HashMap<String, MethodDeclaration> methods = new HashMap<String, MethodDeclaration>();
+	final private static HashMap<IMethodBinding, MethodDeclaration> methods = new HashMap<IMethodBinding, MethodDeclaration>();
 
-	public static HashMap<String, MethodDeclaration> getMethods() {
+	public static HashMap<IMethodBinding, MethodDeclaration> getMethods() {
 		return methods;
 	}
 
-	public static void addMethod(String name, MethodDeclaration node) {
+	public static void addMethod(IMethodBinding name, MethodDeclaration node) {
 		methods.put(name, node);
 	}
 
-	final private static HashSet<Pair<String, String>> relations = new HashSet<Pair<String, String>>();
+	final private static HashSet<Pair<IMethodBinding, IMethodBinding>> relations = new HashSet<Pair<IMethodBinding, IMethodBinding>>();
 
-	public static HashSet<Pair<String, String>> getRelations() {
+	public static HashSet<Pair<IMethodBinding, IMethodBinding>> getRelations() {
 		return relations;
 	}
 
-	public static void addRelation(String from, String to) {
-		relations.add(new Pair<String, String>(from, to));
+	public static void addRelation(IMethodBinding from, IMethodBinding to) {
+		relations.add(new Pair<IMethodBinding, IMethodBinding>(from, to));
 	}
 
-	public static HashSet<String> getCallHierachy(String to) {
-		final HashSet<String> results = new HashSet<String>();
-		for (Pair<String, String> p : relations) {
+	public static HashSet<IMethodBinding> getCallHierachy(IMethodBinding to) {
+		final HashSet<IMethodBinding> results = new HashSet<IMethodBinding>();
+		for (Pair<IMethodBinding, IMethodBinding> p : relations) {
 			if (p.getSecond().equals(to)) {
 				results.add(p.getFirst());
 			}
@@ -39,9 +40,9 @@ public class MethodManager {
 		return results;
 	}
 	
-	public static HashSet<String> getAllInvokedMethod(String from) {
-		final HashSet<String> results = new HashSet<String>();
-		for (Pair<String, String> p : relations) {
+	public static HashSet<IMethodBinding> getAllInvokedMethod(IMethodBinding from) {
+		final HashSet<IMethodBinding> results = new HashSet<IMethodBinding>();
+		for (Pair<IMethodBinding, IMethodBinding> p : relations) {
 			if (p.getFirst().equals(from)) {
 				results.add(p.getSecond());
 			}

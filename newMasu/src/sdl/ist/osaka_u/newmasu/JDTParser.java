@@ -4,8 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import jp.ac.osaka_u.ist.sel.metricstool.main.MetricsTool;
@@ -18,9 +16,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.eclipse.jdt.core.dom.VariableDeclaration;
 
-import sdl.ist.osaka_u.newmasu.dataManager.VariableManager;
 import sdl.ist.osaka_u.newmasu.util.ListFiles;
 
 public class JDTParser extends MetricsTool {
@@ -99,19 +95,6 @@ public class JDTParser extends MetricsTool {
 		}
 
 		System.out.println("successfully finished.");
-		
-		for(Map.Entry<String,VariableDeclaration> pair : VariableManager.getVariables().entrySet()){
-			System.out.println(pair.getKey());
-		}
-		
-		System.out.println("-------------");
-		
-		HashMap<String, VariableDeclaration> map = VariableManager.getVariableInName("sdl.ist.Hoge");
-		for(Map.Entry<String,VariableDeclaration> pair : map.entrySet()){
-			System.out.println(pair.getKey());
-		}		
-		
-		
 	}
 
 	/**
