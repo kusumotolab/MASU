@@ -1,6 +1,6 @@
 package sdl.ist;
 
-public class Tokumei {
+public class Tokumei implements IHoge, ITest {
 	
 	public void toku(){};
 	public void toku1(){};

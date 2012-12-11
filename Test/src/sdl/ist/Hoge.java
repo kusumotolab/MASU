@@ -1,6 +1,6 @@
 package sdl.ist;
 
-public class Hoge {
+public class Hoge extends Tokumei {
 
 	private Integer a = new Integer(6);
 	Tokumei tokkkk = new Tokumei(){

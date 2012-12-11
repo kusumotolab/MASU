@@ -2,7 +2,6 @@ package sdl.ist.osaka_u.newmasu.AST;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -18,7 +17,6 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 import sdl.ist.osaka_u.newmasu.dataManager.AnonymousIDManager;
 import sdl.ist.osaka_u.newmasu.dataManager.ClassManager;
@@ -45,46 +43,53 @@ public class ASTVisitorImpl extends ASTVisitor {
 	@Override
 	public boolean visit(CompilationUnit node) {
 		this.unit = node;
-		 FileManager.addClass(filePath, node);
-		
+		FileManager.addClass(filePath, node);
+
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(TypeDeclaration node) {
-//		String str = getFullQualifiedName(node);
-		ClassManager.addClass(node.resolveBinding(), node);
+		// String str = getFullQualifiedName(node);
+		ITypeBinding bind = node.resolveBinding();
+		ClassManager.addClass(bind, node);
+		
+		ClassManager.addInjeritance(bind, bind.getSuperclass());
+		
+		ITypeBinding[] interfaces = bind.getInterfaces();
+		for(int i=0; i<interfaces.length; i++){
+			ClassManager.addInjeritance(bind, interfaces[i]);
+		}
+		
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(AnonymousClassDeclaration node) {
-//		String str = getFullQualifiedName(node);
+		// String str = getFullQualifiedName(node);
 		ClassManager.addClass(node.resolveBinding(), node);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(MethodDeclaration node) {
-//		String str = getFullQualifiedName(node);
+		// String str = getFullQualifiedName(node);
 		MethodManager.addMethod(node.resolveBinding(), node);
 		return super.visit(node);
 	}
-	
+
 	@Override
-	public boolean visit(SingleVariableDeclaration node){
-//		String str = getFullQualifiedName(node);
+	public boolean visit(SingleVariableDeclaration node) {
+		// String str = getFullQualifiedName(node);
 		IBinding nameBinding = node.getName().resolveBinding();
 		VariableManager.addVariableDec(nameBinding, node);
-		
+
 		// visit expression
-		if(node.getInitializer() != null)
+		if (node.getInitializer() != null)
 			node.getInitializer().accept(this);
-		
+
 		return false;
 	}
-	
-
 
 	@Override
 	public boolean visit(MethodInvocation node) {
@@ -92,27 +97,26 @@ public class ASTVisitorImpl extends ASTVisitor {
 		if (binding == null) {
 			Output.cannotResolve(node.getName().getFullyQualifiedName());
 		} else {
-			MethodManager.addRelation(node.resolveMethodBinding(),
-					binding);
+			MethodManager.addRelation(node.resolveMethodBinding(), binding);
 		}
 		return super.visit(node);
 	}
-	
-	///// Variables 
-	
+
+	// /// Variables
+
 	@Override
-	public boolean visit(VariableDeclarationFragment node){
-//		String str = getFullQualifiedName(node);
+	public boolean visit(VariableDeclarationFragment node) {
+		// String str = getFullQualifiedName(node);
 		IBinding nameBinding = node.getName().resolveBinding();
 		VariableManager.addVariableDec(nameBinding, node.getParent());
-		
-		// visit expression		
-		if(node.getInitializer() != null)
+
+		// visit expression
+		if (node.getInitializer() != null)
 			node.getInitializer().accept(this);
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public boolean visit(SimpleName node) {
 		IBinding binding = node.resolveBinding();
@@ -124,9 +128,7 @@ public class ASTVisitorImpl extends ASTVisitor {
 		return super.visit(node);
 	}
 
-	
-	
-//////////////////////////////////////////////
+	// ////////////////////////////////////////////
 	private String getFullQualifiedName(final ASTNode __node) {
 
 		ASTNode tmpNode = __node;
