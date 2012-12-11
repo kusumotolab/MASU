@@ -6,9 +6,13 @@ import java.util.HashSet;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
+import sdl.ist.osaka_u.newmasu.util.IshrDualMap;
 import sdl.ist.osaka_u.newmasu.util.Pair;
 
 public class MethodManager {
+	
+	final public static IshrDualMap rel = new IshrDualMap();
+	
 
 	final private static HashMap<IMethodBinding, MethodDeclaration> methods = new HashMap<IMethodBinding, MethodDeclaration>();
 

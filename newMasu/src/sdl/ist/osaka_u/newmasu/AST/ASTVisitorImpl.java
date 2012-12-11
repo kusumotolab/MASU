@@ -94,6 +94,11 @@ public class ASTVisitorImpl extends ASTVisitor {
 	@Override
 	public boolean visit(MethodInvocation node) {
 		IMethodBinding binding = node.resolveMethodBinding();
+		
+		
+		MethodManager.rel.AddRelation(node, binding);
+		
+		
 		if (binding == null) {
 			Output.cannotResolve(node.getName().getFullyQualifiedName());
 		} else {
