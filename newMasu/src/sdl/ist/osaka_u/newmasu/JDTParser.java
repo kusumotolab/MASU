@@ -17,6 +17,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import sdl.ist.osaka_u.newmasu.test.DrawPDG;
 import sdl.ist.osaka_u.newmasu.util.ListFiles;
 
 public class JDTParser extends MetricsTool {
@@ -93,6 +94,9 @@ public class JDTParser extends MetricsTool {
 			viewer.launchPlugins();
 			viewer.writeMetrics();
 		}
+		
+		// for test
+//		final DrawPDG testPDG = new DrawPDG(); 
 
 		System.out.println("successfully finished.");
 	}
@@ -142,6 +146,7 @@ public class JDTParser extends MetricsTool {
 			for (String file : files)
 				Settings.getInstance().addListFile(file);
 		}
+		
 	}
 
 }

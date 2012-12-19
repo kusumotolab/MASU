@@ -21,7 +21,7 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 
 import sdl.ist.osaka_u.newmasu.dataManager.ClassManager;
 import sdl.ist.osaka_u.newmasu.dataManager.MethodManager;
-import sdl.ist.osaka_u.newmasu.util.IshrDualMap;
+import sdl.ist.osaka_u.newmasu.util.IshrSingleMap;
 import sdl.ist.osaka_u.newmasu.util.Pair;
 
 public class ASTRequestor extends FileASTRequestor {
@@ -44,13 +44,13 @@ public class ASTRequestor extends FileASTRequestor {
 		}
 		ast.accept(visitor);
 
-		 System.out.println("----------------------------------");
-		 HashSet<Pair<IMethodBinding, IMethodBinding>> set = MethodManager.getRelations();
-		 for( Pair<IMethodBinding, IMethodBinding> p : set )
-		 {
-		 System.out.println(p);
-		 }
-		 System.out.println("----------------------------------");
+//		 System.out.println("----------------------------------");
+//		 HashSet<Pair<IMethodBinding, IMethodBinding>> set = MethodManager.getRelations();
+//		 for( Pair<IMethodBinding, IMethodBinding> p : set )
+//		 {
+//		 System.out.println(p);
+//		 }
+//		 System.out.println("----------------------------------");
 
 //		System.out.println("----------------------------------");
 //		HashMap<ITypeBinding, ASTNode> set = ClassManager.getClasses();

@@ -6,6 +6,11 @@ import java.util.HashMap;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
 public class FileManager {
+	
+	
+	
+	
+	
 	final private static HashMap<Path, CompilationUnit> classes = new HashMap<Path, CompilationUnit>();
 
 	public static HashMap<Path, CompilationUnit> getClasses() {
