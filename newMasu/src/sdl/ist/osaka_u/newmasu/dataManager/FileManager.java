@@ -1,29 +1,18 @@
 package sdl.ist.osaka_u.newmasu.dataManager;
 
 import java.nio.file.Path;
-import java.util.HashMap;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
+import sdl.ist.osaka_u.newmasu.util.DualHashMap;
+
 public class FileManager {
-	
-	
-	
-	
-	
-	final private static HashMap<Path, CompilationUnit> classes = new HashMap<Path, CompilationUnit>();
 
-	public static HashMap<Path, CompilationUnit> getClasses() {
-		return classes;
-	}
+	final public static DualHashMap<Path, CompilationUnit> rel = new DualHashMap<Path, CompilationUnit>();
 
-	public static void addClass(Path path, CompilationUnit node) {
-		classes.put(path, node);
-	}
-	
-	public static int getLOC(Path path){
-		CompilationUnit unit = classes.get(path);
-		return unit.getLineNumber(unit.getLength()-1) + 1;
+	public static int getLOC(Path path) {
+		CompilationUnit unit = rel.getCallerMap().get(path);
+		return unit.getLineNumber(unit.getLength() - 1) + 1;
 	}
 
 	// インスタンスの生成を防ぐ

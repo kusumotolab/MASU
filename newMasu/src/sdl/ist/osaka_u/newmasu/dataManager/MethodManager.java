@@ -1,25 +1,21 @@
 package sdl.ist.osaka_u.newmasu.dataManager;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.IBinding;
-import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import sdl.ist.osaka_u.newmasu.util.IshrSingleMap;
 import sdl.ist.osaka_u.newmasu.util.Output;
-import sdl.ist.osaka_u.newmasu.util.Pair;
 
 public class MethodManager {
 
-	final public static IshrSingleMap<IBinding, ASTNode, MethodInvocation> rel = new IshrSingleMap<IBinding, ASTNode, MethodInvocation>() {
+	final public static IshrSingleMap<IBinding, ASTNode, MethodInvocation> rel = 
+			new IshrSingleMap<IBinding, ASTNode, MethodInvocation>() {
 
 		@Override
-		protected ASTNode getNode(final MethodInvocation node) {
+		protected ASTNode getCalleeType(final MethodInvocation node) {
 			ASTNode n = node;
 			while (n.getNodeType() != ASTNode.METHOD_DECLARATION
 					&& n.getNodeType() != ASTNode.TYPE_DECLARATION)
@@ -28,7 +24,7 @@ public class MethodManager {
 		}
 
 		@Override
-		protected IBinding getBind(final ASTNode md) {
+		protected IBinding getCallerType(final ASTNode md) {
 			IBinding bind = null;
 			if (md.getNodeType() == ASTNode.METHOD_DECLARATION)
 				bind = ((MethodDeclaration) md).resolveBinding();

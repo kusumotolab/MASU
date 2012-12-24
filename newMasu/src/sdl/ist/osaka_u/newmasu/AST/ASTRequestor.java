@@ -1,28 +1,10 @@
 package sdl.ist.osaka_u.newmasu.AST;
 
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
-import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.eclipse.jdt.core.compiler.IProblem;
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
-import org.eclipse.jdt.core.dom.IBinding;
-import org.eclipse.jdt.core.dom.IMethodBinding;
-import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.MethodInvocation;
-
-import sdl.ist.osaka_u.newmasu.dataManager.ClassManager;
-import sdl.ist.osaka_u.newmasu.dataManager.MethodManager;
-import sdl.ist.osaka_u.newmasu.util.IshrSingleMap;
-import sdl.ist.osaka_u.newmasu.util.Pair;
 
 public class ASTRequestor extends FileASTRequestor {
 
@@ -65,15 +47,15 @@ public class ASTRequestor extends FileASTRequestor {
 //			System.out.println("2: " + p.getSecond());
 //		}
 //		
-		System.out.println("----------------------------------");
-		Set<Entry<IBinding, Collection<ASTNode>>> set2 = MethodManager.rel.calleeMap.entrySet();
-		for (Entry<IBinding, Collection<ASTNode>>  p : set2) {
-			System.out.println("1: " + p.getKey());
-			System.out.println("2: " + p.getValue());
-			for(ASTNode n : p.getValue())
-				if(n!=null && n.getNodeType() == ASTNode.METHOD_DECLARATION )
-					System.out.println(((MethodDeclaration)n).getName());
-		}
+//		System.out.println("----------------------------------");
+//		Set<Entry<IBinding, Collection<ASTNode>>> set2 = MethodManager.rel.getCalleeMap().entrySet();
+//		for (Entry<IBinding, Collection<ASTNode>>  p : set2) {
+//			System.out.println("1: " + p.getKey());
+//			System.out.println("2: " + p.getValue());
+//			for(ASTNode n : p.getValue())
+//				if(n!=null && n.getNodeType() == ASTNode.METHOD_DECLARATION )
+//					System.out.println(((MethodDeclaration)n).getName());
+//		}
 
 	}
 }

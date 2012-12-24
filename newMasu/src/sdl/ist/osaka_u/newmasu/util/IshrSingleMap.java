@@ -4,25 +4,26 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.commons.collections15.multimap.MultiHashMap;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.IBinding;
 
-public abstract class IshrSingleMap<T extends IBinding, E extends ASTNode, F extends ASTNode> {
+public abstract class IshrSingleMap<T_CALLER, T_CALLEE, T_NODE> {
 
-	public final MultiHashMap<T, E> calleeMap = new MultiHashMap<T, E>();
+	private final MultiHashMap<T_CALLER, T_CALLEE> calleeMap = new MultiHashMap<T_CALLER, T_CALLEE>();
 
-	public Collection<E> getRelation(final T bind) {
-		final Collection<E> callElem = calleeMap.get(bind);
+	public MultiHashMap<T_CALLER, T_CALLEE> getCalleeMap() {
+		return calleeMap;
+	}
+	public Collection<T_CALLEE> getRelation(final T_CALLER bind) {
+		final Collection<T_CALLEE> callElem = calleeMap.get(bind);
 		return callElem;
 	}
 
-	public void AddRelation(final F caller, final T callee) {
+	public void AddRelation(final T_NODE passValue, final T_CALLER callee) {
 
-		E md = getNode(caller);
-		T bind = getBind(md);
+		T_CALLEE md = getCalleeType(passValue);
+		T_CALLER bind = getCallerType(md);
 
 		if (calleeMap.containsKey(bind) && isRemoveNull(bind)){
-			final Collection<E> callElem = calleeMap.get(bind);
+			final Collection<T_CALLEE> callElem = calleeMap.get(bind);
 			if(callElem.size() != 1)		// if calleeMap already have null value
 				calleeMap.remove(bind, null);
 		}
@@ -34,9 +35,9 @@ public abstract class IshrSingleMap<T extends IBinding, E extends ASTNode, F ext
 			calleeMap.remove(callee, null);
 	}
 
-	private boolean isRemoveNull(T key) {
-		final Collection<E> callElem = calleeMap.get(key);
-		final Iterator<E> iter = callElem.iterator();
+	private boolean isRemoveNull(T_CALLER key) {
+		final Collection<T_CALLEE> callElem = calleeMap.get(key);
+		final Iterator<T_CALLEE> iter = callElem.iterator();
 		for (; iter.hasNext();) {
 			if (iter.next() == null) {
 				return true;
@@ -46,14 +47,14 @@ public abstract class IshrSingleMap<T extends IBinding, E extends ASTNode, F ext
 	}
 
 
-	protected abstract E getNode(final F node);
+	protected abstract T_CALLEE getCalleeType(final T_NODE node);
 	/*
 	 * { while(node.getNodeType() != ASTNode.METHOD_DECLARATION &&
 	 * node.getNodeType() != ASTNode.TYPE_DECLARATION) node = node.getParent();
 	 * return node; }
 	 */
 
-	protected abstract T getBind(final E md);
+	protected abstract T_CALLER getCallerType(final T_CALLEE md);
 	/*
 	 * {
 	 * 
