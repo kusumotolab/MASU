@@ -1,81 +1,36 @@
 package sdl.ist.osaka_u.newmasu.dataManager;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.IBinding;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.IMethodBinding;
 
-import sdl.ist.osaka_u.newmasu.util.IshrSingleMap;
-import sdl.ist.osaka_u.newmasu.util.Output;
+import sdl.ist.osaka_u.newmasu.util.DualMultiMap;
 
 public class MethodManager {
+	
+	final private static DualMultiMap<ASTNode, IMethodBinding> rel = new DualMultiMap<>();
+	
+	
+//	// 呼び出し元→呼び出し先
+//	final private static MultiHashMap<ASTNode, IMethodBinding> calleeToCaller = new MultiHashMap<>();
+//	public static final MultiHashMap<ASTNode, IMethodBinding> getCalleetocaller() {
+//		return calleeToCaller;
+//	}
+//
+//	// 呼び出し先→呼び出し元
+//	final private static MultiHashMap<IMethodBinding, ASTNode> callerToCaller = new MultiHashMap<>();
+//	public static final MultiHashMap<IMethodBinding, ASTNode> getCallertocallee() {
+//		return callerToCaller;
+//	}
+//	
+//	public static void addRelation(final MethodInvocation node, final IMethodBinding bind){
+//		calleeToCaller.put(node, bind);
+//		callerToCaller.put(bind, node);
+//	}
 
-	final public static IshrSingleMap<IBinding, ASTNode, MethodInvocation> rel = 
-			new IshrSingleMap<IBinding, ASTNode, MethodInvocation>() {
+	public static final DualMultiMap<ASTNode, IMethodBinding> getRel() {
+		return rel;
+	}
 
-		@Override
-		protected ASTNode getCalleeType(final MethodInvocation node) {
-			ASTNode n = node;
-			while (n.getNodeType() != ASTNode.METHOD_DECLARATION
-					&& n.getNodeType() != ASTNode.TYPE_DECLARATION)
-				n = n.getParent();
-			return n;
-		}
-
-		@Override
-		protected IBinding getCallerType(final ASTNode md) {
-			IBinding bind = null;
-			if (md.getNodeType() == ASTNode.METHOD_DECLARATION)
-				bind = ((MethodDeclaration) md).resolveBinding();
-			else if (md.getNodeType() == ASTNode.TYPE_DECLARATION)
-				bind = ((TypeDeclaration) md).resolveBinding();
-			else
-				Output.err("Undefined Node Type in IDM");
-			return bind;
-		}
-	};
-
-//	final private static HashMap<IMethodBinding, MethodDeclaration> methods = new HashMap<IMethodBinding, MethodDeclaration>();
-//
-//	public static HashMap<IMethodBinding, MethodDeclaration> getMethods() {
-//		return methods;
-//	}
-//
-//	public static void addMethod(IMethodBinding name, MethodDeclaration node) {
-//		methods.put(name, node);
-//	}
-//
-//	final private static HashSet<Pair<IMethodBinding, IMethodBinding>> relations = new HashSet<Pair<IMethodBinding, IMethodBinding>>();
-//
-//	public static HashSet<Pair<IMethodBinding, IMethodBinding>> getRelations() {
-//		return relations;
-//	}
-//
-//	public static void addRelation(IMethodBinding from, IMethodBinding to) {
-//		relations.add(new Pair<IMethodBinding, IMethodBinding>(from, to));
-//	}
-//
-//	public static HashSet<IMethodBinding> getCallHierachy(IMethodBinding to) {
-//		final HashSet<IMethodBinding> results = new HashSet<IMethodBinding>();
-//		for (Pair<IMethodBinding, IMethodBinding> p : relations) {
-//			if (p.getSecond().equals(to)) {
-//				results.add(p.getFirst());
-//			}
-//		}
-//		return results;
-//	}
-//
-//	public static HashSet<IMethodBinding> getAllInvokedMethod(
-//			IMethodBinding from) {
-//		final HashSet<IMethodBinding> results = new HashSet<IMethodBinding>();
-//		for (Pair<IMethodBinding, IMethodBinding> p : relations) {
-//			if (p.getFirst().equals(from)) {
-//				results.add(p.getSecond());
-//			}
-//		}
-//		return results;
-//	}
 
 	// インスタンスの生成を防ぐ
 	private MethodManager() {

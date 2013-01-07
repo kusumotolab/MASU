@@ -1,95 +1,35 @@
 package sdl.ist.osaka_u.newmasu.dataManager;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.IBinding;
-import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 import sdl.ist.osaka_u.newmasu.util.DualMultiMap;
-import sdl.ist.osaka_u.newmasu.util.Output;
 
 public class VariableManager {
-
-	// Declaration: name binding - VariableDeclarationExpression
-
-	final public static DualMultiMap<IBinding, VariableDeclarationStatement> dec = new DualMultiMap<>();
-
-	public static DualMultiMap<IBinding, VariableDeclarationStatement> getDec() {
-		return dec;
-	}
-
-	// Use : name binding - Expression
-
-	final public static DualMultiMap<IBinding, ExpressionStatement> use = new DualMultiMap<>();
-
-	public static DualMultiMap<IBinding, ExpressionStatement> getUse() {
-		return use;
-	}
 	
-	// TODO: cannot get Expression for mismatching of type
-	public static VariableDeclarationStatement getVDExpression(ASTNode node){
-		while(true){
-			if(node == null){
-				Output.err("cannot get variable declaration node");
-				break;
-			}
-			else if(node.getNodeType()==ASTNode.VARIABLE_DECLARATION_STATEMENT 
-//					|| node.getNodeType() == ASTNode.FIELD_DECLARATION
-					)
-				return (VariableDeclarationStatement)node;
-			else
-				node = node.getParent();
-		}
-		return null;
-	}
+	final private static DualMultiMap<ASTNode, IBinding> rel = new DualMultiMap<>();
 	
-	public static ExpressionStatement getExpression(ASTNode node){
-		while(true){
-			if(node == null){
-				Output.err("cannot get expression node");
-				break;
-			}
-			else if(node.getNodeType()==ASTNode.EXPRESSION_STATEMENT)
-				return (ExpressionStatement)node;
-			else
-				node = node.getParent();
-		}
-		return null;
+	public static final DualMultiMap<ASTNode, IBinding> getRel() {
+		return rel;
 	}
-
-	// final private static HashMap<IBinding, ASTNode> variableDec = new
-	// HashMap<IBinding, ASTNode>();
-	//
-	// public final static HashMap<IBinding, ASTNode> getVariableDec() {
-	// return variableDec;
-	// }
-	//
-	// public final static void addVariableDec(IBinding bind, ASTNode node) {
-	// variableDec.put(bind, node);
-	// }
-	//
-	// final private static HashMap<Name, IBinding> variableUse = new
-	// HashMap<Name, IBinding>();
-	//
-	// public final static HashMap<Name, IBinding> getVariableUses() {
-	// return variableUse;
-	// }
-	//
-	// public final static void addVariableUse(Name name, IBinding bind) {
-	// variableUse.put(name, bind);
-	// }
-	//
-	// // public final static HashMap<IBinding, VariableDeclaration>
-	// getVariableInName(IBinding name){
-	// // final HashMap<IBinding, VariableDeclaration> result = new
-	// HashMap<IBinding, VariableDeclaration>();
-	// // for(Map.Entry<IBinding,VariableDeclaration> pair :
-	// variableDec.entrySet()){
-	// // if(pair.getKey().contains(name + "$"))
-	// // result.put(pair.getKey(), pair.getValue());
-	// // }
-	// // return result;
-	// // }
+//
+//	// 呼び出し元→呼び出し先
+//	final private static MultiHashMap<ASTNode, IBinding> calleeToCaller = new MultiHashMap<>();
+//	public static final MultiHashMap<ASTNode, IBinding> getCalleetocaller() {
+//		return calleeToCaller;
+//	}
+//
+//	// 呼び出し先→呼び出し元
+//	final private static MultiHashMap<IBinding, ASTNode> callerToCaller = new MultiHashMap<>();
+//	public static final MultiHashMap<IBinding, ASTNode> getCallertocallee() {
+//		return callerToCaller;
+//	}
+//	
+//	public static void addRelation(final ASTNode node, final IBinding bind){
+//		calleeToCaller.put(node, bind);
+//		callerToCaller.put(bind, node);
+//	}
+	
 
 	// インスタンスの生成を防ぐ
 	private VariableManager() {

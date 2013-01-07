@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 import sdl.ist.osaka_u.newmasu.dataManager.AnonymousIDManager;
+import sdl.ist.osaka_u.newmasu.dataManager.ClassManager;
 import sdl.ist.osaka_u.newmasu.dataManager.FileManager;
 import sdl.ist.osaka_u.newmasu.dataManager.MethodManager;
 import sdl.ist.osaka_u.newmasu.dataManager.VariableManager;
@@ -47,21 +48,20 @@ public class ASTVisitorImpl extends ASTVisitor {
 		return super.visit(node);
 	}
 
-//	@Override
-//	public boolean visit(TypeDeclaration node) {
-//		// String str = getFullQualifiedName(node);
-//		ITypeBinding bind = node.resolveBinding();
-//		ClassManager.addClass(bind, node);
-//
-//		ClassManager.addInjeritance(bind, bind.getSuperclass());
-//
-//		ITypeBinding[] interfaces = bind.getInterfaces();
-//		for (int i = 0; i < interfaces.length; i++) {
-//			ClassManager.addInjeritance(bind, interfaces[i]);
-//		}
-//
-//		return super.visit(node);
-//	}
+	@Override
+	public boolean visit(TypeDeclaration node) {
+		// String str = getFullQualifiedName(node);
+		ITypeBinding bind = node.resolveBinding();
+
+		ClassManager.getRel().AddRelation(bind, bind.getSuperclass());
+
+		ITypeBinding[] interfaces = bind.getInterfaces();
+		for (int i = 0; i < interfaces.length; i++) {
+			ClassManager.getRel().AddRelation(bind, interfaces[i]);
+		}
+
+		return super.visit(node);
+	}
 
 //	@Override
 //	public boolean visit(AnonymousClassDeclaration node) {
@@ -73,16 +73,21 @@ public class ASTVisitorImpl extends ASTVisitor {
 //	@Override
 //	public boolean visit(MethodDeclaration node) {
 //		// String str = getFullQualifiedName(node);
-//		MethodManager.addMethod(node.resolveBinding(), node);
+//		MethodManager.addRelation(node, node.resolveBinding());
 //		return super.visit(node);
 //	}
-
+	
+	@Override
+	public boolean visit(MethodInvocation node) {
+		IMethodBinding binding = node.resolveMethodBinding();
+		MethodManager.getRel().AddRelation(node, binding);
+		
+		return super.visit(node);
+	}
+	
+	
 	@Override
 	public boolean visit(SingleVariableDeclaration node) {
-		IBinding nameBinding = node.getName().resolveBinding();
-//		VariableManager.addVariableDec(nameBinding, node);
-		VariableManager.dec.AddRelation(nameBinding, VariableManager.getVDExpression(node));
-
 		// visit expression
 		if (node.getInitializer() != null)
 			node.getInitializer().accept(this);
@@ -90,29 +95,8 @@ public class ASTVisitorImpl extends ASTVisitor {
 		return false;
 	}
 
-	@Override
-	public boolean visit(MethodInvocation node) {
-		IMethodBinding binding = node.resolveMethodBinding();
-		MethodManager.rel.AddRelation(node, binding);
-
-//		if (binding == null) {
-//			Output.cannotResolve(node.getName().getFullyQualifiedName());
-//		} else {
-//			MethodManager.addRelation(node.resolveMethodBinding(), binding);
-//		}
-		return super.visit(node);
-	}
-
-	// /// Variables
-
-	@Override
+//	@Override
 	public boolean visit(VariableDeclarationFragment node) {
-		// String str = getFullQualifiedName(node);
-		IBinding nameBinding = node.getName().resolveBinding();
-		// VariableManager.addVariableDec(nameBinding, node.getParent());
-		VariableManager.dec.AddRelation(nameBinding,
-				VariableManager.getVDExpression(node));
-
 		// visit expression
 		if (node.getInitializer() != null)
 			node.getInitializer().accept(this);
@@ -125,9 +109,8 @@ public class ASTVisitorImpl extends ASTVisitor {
 		IBinding binding = node.resolveBinding();
 		if (binding == null) {
 			Output.cannotResolve(node.getFullyQualifiedName());
-		} else {
-//			VariableManager.addVariableUse(node, binding);
-			VariableManager.use.AddRelation(binding, VariableManager.getExpression(node));
+		} else if(binding.getKind() == IBinding.VARIABLE) {
+			VariableManager.getRel().AddRelation(node, binding);
 		}
 		return super.visit(node);
 	}

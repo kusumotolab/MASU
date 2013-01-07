@@ -1,71 +1,70 @@
-//package sdl.ist.osaka_u.newmasu.dataManager;
+package sdl.ist.osaka_u.newmasu.dataManager;
+
+import java.util.Collection;
+
+import org.apache.commons.collections15.multimap.MultiHashMap;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.IBinding;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
+
+import sdl.ist.osaka_u.newmasu.util.DualMultiMap;
+
+public class ClassManager {
+	
+	final private static DualMultiMap<ITypeBinding, ITypeBinding> rel = new DualMultiMap<>();
+	
+	public static final DualMultiMap<ITypeBinding, ITypeBinding> getRel() {
+		return rel;
+	}
+
+//	// 継承元→継承先
+//	final private static MultiHashMap<ITypeBinding, ITypeBinding> fromTo = new MultiHashMap<>();
 //
-//import java.util.HashMap;
-//import java.util.HashSet;
-//
-//import org.eclipse.jdt.core.dom.ASTNode;
-//import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
-//import org.eclipse.jdt.core.dom.IBinding;
-//import org.eclipse.jdt.core.dom.ITypeBinding;
-//import org.eclipse.jdt.core.dom.MethodDeclaration;
-//import org.eclipse.jdt.core.dom.TypeDeclaration;
-//
-//import sdl.ist.osaka_u.newmasu.util.IshrSingleMap;
-//import sdl.ist.osaka_u.newmasu.util.Output;
-//import sdl.ist.osaka_u.newmasu.util.Pair;
-//
-//public class ClassManager {
-//	final private static HashMap<ITypeBinding, ASTNode> classes = new HashMap<ITypeBinding, ASTNode>();
-//
-//	public static HashMap<ITypeBinding, ASTNode> getClasses() {
-//		return classes;
+//	public static final MultiHashMap<ITypeBinding, ITypeBinding> getFromTo() {
+//		return fromTo;
 //	}
 //
-//	public static void addClass(ITypeBinding name, ASTNode node) {
-//		classes.put(name, node);
-//	}
-//	
-//	
-//	final private static HashSet<Pair<ITypeBinding, ITypeBinding>> inheritances = new HashSet<Pair<ITypeBinding, ITypeBinding>>();
+//	// 継承先→継承元
+//	final private static MultiHashMap<ITypeBinding, ITypeBinding> toFrom = new MultiHashMap<>();
 //
-//	public static HashSet<Pair<ITypeBinding, ITypeBinding>> getInjeritances() {
-//		return inheritances;
+//	public static final MultiHashMap<ITypeBinding, ITypeBinding> getToFrom() {
+//		return toFrom;
 //	}
 //
-//	public static void addInjeritance(ITypeBinding child, ITypeBinding parent) {
-//		inheritances.add(new Pair<ITypeBinding, ITypeBinding>(child, parent));
+//	public static void addRelation(final ITypeBinding from,
+//			final ITypeBinding to) {
+//		fromTo.put(from, to);
+//		toFrom.put(to, from);
 //	}
-//	
-//	
-//	
-//	final public static IshrSingleMap<ITypeBinding, ASTNode, AbstractTypeDeclaration> rel
-//	= new IshrSingleMap<ITypeBinding, ASTNode, AbstractTypeDeclaration>() {
-//
-//		@Override
-//		protected ITypeBinding getCallerType(final ASTNode md) {
-//			IBinding bind = null;
-//			if (md.getNodeType() == ASTNode.METHOD_DECLARATION)
-//				bind = ((MethodDeclaration) md).resolveBinding();
-//			else if (md.getNodeType() == ASTNode.TYPE_DECLARATION)
-//				bind = ((TypeDeclaration) md).resolveBinding();
-//			else
-//				Output.err("Undefined Node Type in IDM");
-//			return bind;
-//		}
-//
-//		@Override
-//		protected ASTNode getCalleeType(AbstractTypeDeclaration node) {
-//			ASTNode n = node;
-//			while (n.getNodeType() != ASTNode.METHOD_DECLARATION
-//					&& n.getNodeType() != ASTNode.TYPE_DECLARATION)
-//				n = n.getParent();
-//			return n;
-//		}
-//	};
-//	
-//	
-//
-//	// インスタンスの生成を防ぐ
-//	private ClassManager() {
-//	}
-//}
+
+	public static IMethodBinding getOverrideMethod(IMethodBinding bind){
+		ITypeBinding classBind = bind.getDeclaringClass();
+		return rec(bind, classBind);
+	}
+	
+	private static IMethodBinding rec(final IMethodBinding bind, final ITypeBinding classBind){
+		if(classBind==null)
+			return null;
+		final IMethodBinding[] declaringMethods = classBind.getDeclaredMethods();
+		for(IMethodBinding mb : declaringMethods)
+		{				
+			if(bind.overrides(mb))
+				return mb;
+		}
+		
+		final Collection<ITypeBinding> inh = rel.getCallerMap().getCollection(classBind);
+		if(inh==null)
+			return null;
+		for(ITypeBinding t : inh){
+			final IMethodBinding b = rec(bind,t);
+			if(b != null)
+				return b;
+		}
+		return null;
+	}
+
+	// インスタンスの生成を防ぐ
+	private ClassManager() {
+	}
+}

@@ -96,7 +96,7 @@ public class JDTParser extends MetricsTool {
 		}
 		
 		// for test
-//		final DrawPDG testPDG = new DrawPDG(); 
+		final DrawPDG testPDG = new DrawPDG(); 
 
 		System.out.println("successfully finished.");
 	}

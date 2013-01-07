@@ -41,7 +41,7 @@ public class JDTTargetFileParser {
 			break;
 
 		case CSHARP:
-			assert false : "The new MASU cannot solve C# files";
+			assert false : "The new MASU cannot resolve C# files";
 		default:
 			assert false : "here shouldn't be reached!";
 		}

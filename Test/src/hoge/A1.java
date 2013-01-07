@@ -1,13 +1,13 @@
 package hoge;
 
 public class A1 {
-	int a = 0;
+	int A1a = 0;
 	
 	void test(){
-		a++;
+		A1a++;
 	}
 	
 	void test2(){
-		a--;
+		A1a--;
 	}
 }

@@ -65,3 +65,33 @@ ASTNodeの親を再帰的にたどってゆき，それぞれの名前を取得�
 
 #### IBinding
 各bindingごとに親が異なるので，種類ごとに親を取得し，ASTNodeと同様再帰的に処理．
+
+
+
+
+
+## Manager	
+
+### FileManager
+Fileの絶対パス - CompilationUnit
+1:1
+key1 : java.nio.file.Path  -  ファイルの絶対パス
+key2 : CompilationUnit  -  そのファイルが保持するCompilationUnit
+双方向検索が可能
+
+
+### MethodManager
+呼び出し先と呼び出し元を結びつける
+呼び出し元は，Statement
+IBinding - MethodInvocation
+1:1
+key
+
+
+### VariableManager
+定義とそのbindingを結びつける
+IBinding - VariableDeclarationStatement
+
+使用
+IBinding - ExpressionStatement
+
